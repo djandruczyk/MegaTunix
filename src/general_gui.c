@@ -95,7 +95,7 @@ int build_general(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-			"This box shows you the MegaSquirt Version number returned from the ECU. NOTE: The V1 MegaSquirt processors (first public release from around 2000/2001) do NOT return a version number so we display it as v1.0",NULL);
+			"This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you seem feedback about how the MS responds to various commands and suggestes what it thinks is the closest match.",NULL);
 
 	frame = gtk_frame_new("MegaSquirt ECU Information");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
