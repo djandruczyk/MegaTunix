@@ -209,9 +209,13 @@ void writeto_ecu(void *ptr)
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n"),CRITICAL);
 	else
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
+
 	g_usleep(5000);
 
 	g_free(write_cmd);
+
+	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change) && (page > 0)) 
+		set_ms_page(0);
 
 	g_static_mutex_unlock(&mutex);
 	return;
