@@ -50,15 +50,15 @@ union engine
         struct
         {
                 guchar reserved	:1;
-                guchar mapaen	:1;     /* 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
+                guchar mapaccel	:1;     /* 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
                                                   
-                guchar tpsden	:1;     /* 0 = not in deacceleration mode 1 = in deacceleration mode */
+                guchar tpsdecel	:1;     /* 0 = not in deacceleration mode 1 = in deacceleration mode */
                                                   
-                guchar tpsaen	:1;     /* 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
+                guchar tpsaccel	:1;     /* 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
                                                   
                 guchar warmup	:1;     /* 0 = not in warmup 1 = in warmup */
                                                   
-                guchar startw	:1;     /* 0 = not in startup warmup 1 =in warmup enrichment */
+                guchar ase	:1;     /* 0 = not in afterstart enrich 1 = in afterstart enrichment */
                                                   
                 guchar crank	:1;     /* 0 = engine not cranking 1 = engine cranking */
                                                   
@@ -66,13 +66,6 @@ union engine
                                                   
         } bit;
 };
-#define MAPACCEL_BIT	1 << 1
-#define DECEL_BIT	1 << 2
-#define ACCEL_BIT	1 << 3
-#define WARMUP_BIT	1 << 4
-#define ASE_BIT		1 << 5
-#define CRANK_BIT	1 << 6
-#define RUNNING_BIT	1 << 7
 
 /* Big endian systems (MSB) */
 union config11
@@ -228,24 +221,17 @@ union engine
         guchar      value;
         struct
         {
-                guchar running   :1;     /* 0 = engine not running 1 = running */
-                guchar crank     :1;     /* 0 = engine not cranking 1 = engine cranking */
-                guchar startw    :1;     /* 0 = not in startup warmup 1 = in warmup enrichment */
-                guchar warmup    :1;     /* 0 = not in warmup 1 = in warmup */
-                guchar tpsaen    :1;     /* 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
-                guchar tpsden    :1;     /* 0 = not in deacceleration mode 1 = in deacceleration mode */
-                guchar mapaen    :1;     /* 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
+                guchar running	:1;     /* 0 = engine not running 1 = running */
+                guchar crank	:1;     /* 0 = engine not cranking 1 = engine cranking */
+                guchar ase	:1;     /* 0 = not in afterstart enrich 1 = in afterstart enrichment */
+                guchar warmup	:1;     /* 0 = not in warmup 1 = in warmup */
+                guchar tpsaccel	:1;     /* 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
+                guchar tpsdecel	:1;     /* 0 = not in deacceleration mode 1 = in deacceleration mode */
+                guchar mapaccel	:1;     /* 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
 
                 guchar reserved  :1;
         } bit;
 };
-#define RUNNING_BIT	1 << 0
-#define CRANK_BIT	1 << 1
-#define ASE_BIT		1 << 2
-#define WARMUP_BIT	1 << 3
-#define ACCEL_BIT	1 << 4
-#define DECEL_BIT	1 << 5
-#define MAPACCEL_BIT	1 << 6
 
 /* Little Endian systems (LSB), intel x86) */
 union config11

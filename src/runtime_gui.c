@@ -55,8 +55,8 @@ gboolean update_runtime_vars()
 	static gfloat *history = NULL;
 	static gint hist_max = 0;
 	gint last_engine_entry = 0;
-	unsigned char engine_val = 0;
-	static unsigned char last_engine_val;
+	union engine engine_val = {0};
+	static union engine last_engine_val;
 
 
 	if (!eng_obj)
@@ -80,7 +80,7 @@ gboolean update_runtime_vars()
 			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 	}
 
-	engine_val = (unsigned char)history[last_engine_entry];
+	engine_val = (union engine)(guchar)history[last_engine_entry];
 
 	/* Update all the dynamic RT controls */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
@@ -91,25 +91,25 @@ gboolean update_runtime_vars()
 		/* "Connected" */
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
 				
-		if ((forced_update) || (engine_val != last_engine_val))
+		if ((forced_update) || (engine_val.value != last_engine_val.value))
 		{
 			/* Cranking */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_cranking_label"),engine_val & CRANK_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_cranking_label"),engine_val.bit.crank);
 					
 			/* Running */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_running_label"),engine_val & RUNNING_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_running_label"),engine_val.bit.running);
 					
 			/* Warmup */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_warmup_label"),engine_val & WARMUP_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_warmup_label"),engine_val.bit.warmup);
 					
 			/* Afterstart Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_ase_label"),engine_val & ASE_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_ase_label"),engine_val.bit.ase);
 					
 			/* Accel Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_accel_label"),engine_val & ACCEL_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_accel_label"),engine_val.bit.tpsaccel);
 					
 			/* Decel Enleanment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_decel_label"),engine_val & DECEL_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_decel_label"),engine_val.bit.tpsdecel);
 					
 
 			
@@ -129,25 +129,25 @@ gboolean update_runtime_vars()
 		/* "Connected" */
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
 				
-		if ((forced_update) || (engine_val != last_engine_val))
+		if ((forced_update) || (engine_val.value != last_engine_val.value))
 		{
 			/* Cranking */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_cranking_label"),engine_val & CRANK_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_cranking_label"),engine_val.bit.crank);
 					
 			/* Running */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_running_label"),engine_val & RUNNING_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_running_label"),engine_val.bit.running);
 					
 			/* Warmup */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_warmup_label"),engine_val & WARMUP_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_warmup_label"),engine_val.bit.warmup);
 					
 			/* Afterstart Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_ase_label"),engine_val & ASE_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_ase_label"),engine_val.bit.ase);
 					
 			/* Accel Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_accel_label"),engine_val & ACCEL_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_accel_label"),engine_val.bit.tpsaccel);
 					
 			/* Decel Enleanment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_decel_label"),engine_val & DECEL_BIT);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_decel_label"),engine_val.bit.tpsdecel);
 					
 		}
 		last_coolant = coolant;
