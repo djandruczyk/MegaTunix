@@ -35,18 +35,20 @@ static struct
 	gchar *frame_name;
 	gint identifier;
 	gchar *tab_name;
+	gboolean enabled;
 } notebook_tabs[] = { 
-{ "About MegaTunix", ABOUT_PAGE, "About"},
-{ "General MegaTunix Settings", GENERAL_PAGE, "General"},
-{ "MegaSquirt Communications Parameters", COMMS_PAGE, "Communications"},
-{ "MegaSquirt Constants", CONSTANTS_PAGE, "Constants"},
-{ "MegaSquirt Enrichments", ENRICHMENTS_PAGE, "Enrichments"},
-{ "MegaSquirt VE Table(s)", VETABLES_PAGE, "VE Tables"},
-{ "MegaSquirt Runtime Display", RUNTIME_PAGE, "Runtime Disp."},
-{ "MegaSquirt Tuning", TUNING_PAGE, "Tuning"},
-{ "MegaSquirt Tools", TOOLS_PAGE, "Tools"},
-{ "MegaSquirt Advanced Diagnostics", LOWLEVEL_PAGE, "Low-Level"},
-{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "DataLogging"}
+{ "About MegaTunix", ABOUT_PAGE, "About",TRUE},
+{ "General MegaTunix Settings", GENERAL_PAGE, "General",TRUE},
+{ "MegaSquirt Communications Parameters", COMMS_PAGE, "Communications",TRUE},
+{ "MegaSquirt Constants", CONSTANTS_PAGE, "Constants",TRUE},
+{ "MegaSquirt Enrichments", ENRICHMENTS_PAGE, "Enrichments",TRUE},
+{ "MegaSquirt VE Table(s)", VETABLES_PAGE, "VE Tables",TRUE},
+{ "MegaSquirt Ignition Settings", IGNITION_PAGE, "Ignition Setings",FALSE},
+{ "MegaSquirt Runtime Display", RUNTIME_PAGE, "Runtime Disp.",TRUE},
+{ "MegaSquirt Tuning", TUNING_PAGE, "Tuning",TRUE},
+{ "MegaSquirt Tools", TOOLS_PAGE, "Tools",TRUE},
+{ "MegaSquirt Advanced Diagnostics", LOWLEVEL_PAGE, "Low-Level",TRUE},
+{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "DataLogging",TRUE}
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -89,10 +91,13 @@ int setup_gui()
 		frame = gtk_frame_new (notebook_tabs[i].frame_name);
 	        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 
-		framebuild_dispatch(frame,notebook_tabs[i].identifier);
+		framebuild_dispatch(frame,notebook_tabs[i].identifier, notebook_tabs[i].enabled);
 
 	        label = gtk_label_new (notebook_tabs[i].tab_name);
+		if (notebook_tabs[i].enabled == FALSE)
+			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
 	        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
+
 	}
 
 	button = gtk_button_new_with_label("Exit");
@@ -110,7 +115,7 @@ int setup_gui()
 	return TRUE;
 }
 
-int framebuild_dispatch(GtkWidget *frame, gint data)
+int framebuild_dispatch(GtkWidget *frame, gint data, gboolean enabled)
 {
 	switch (data)
 	{
@@ -148,5 +153,7 @@ int framebuild_dispatch(GtkWidget *frame, gint data)
 			build_datalogging(frame);
 			break;
 	}
+	if (status == FALSE)
+		gtk_widget_set_sensitive(frame,FALSE);
 	return TRUE;
 }

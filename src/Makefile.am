@@ -27,6 +27,7 @@ megatunix_SOURCES = \
 	enrichments_gui.c \
 	general_gui.c \
 	gui_handlers.c \
+	ignition.c \
 	init.c \
 	lowlevel_gui.c \
 	main.c \

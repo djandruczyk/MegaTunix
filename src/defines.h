@@ -42,6 +42,7 @@
 #define TOOLS_PAGE		0x09
 #define DATALOGGING_PAGE	0x0a
 #define LOWLEVEL_PAGE		0x0b
+#define IGNITION_PAGE		0x0c
 
 /* Serial I/O READ case handling */
 #define REALTIME_VARS		0x20
