@@ -351,35 +351,58 @@ end_of_loop:
 	 * command to the I/O routines...  Looks ugly but should (hopefully)
 	 * be more flexible in the long run....
 	 */
-	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->rt_cmd_key);
-	if (cmd != NULL)
+
+	if (potential->rt_cmd_key != NULL)
 	{
+		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->rt_cmd_key);
 		cmds->realtime_cmd = g_strdup(cmd->string);
 		cmds->rt_cmd_len = cmd->len;
 	}
-
-	/* VE/Constants */
-	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
-	if (cmd != NULL)
+	else
 	{
+		dbg_func("Realtime Read cmd is NOT defined in interrogation profile, using hardcoded default\n",CRITICAL);
+		cmds->realtime_cmd = g_strdup("A");
+		cmds->rt_cmd_len = 1;
+	}
+	/* VE/Constants */
+	if (potential->ve_cmd_key != NULL)
+	{
+		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
 		cmds->veconst_cmd = g_strdup(cmd->string);
 		cmds->ve_cmd_len = cmd->len;
 	}
-
-	/* Ignition vars */
-	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
-	if (cmd != NULL)
+	else
 	{
+		dbg_func("VE/Constants Read cmd is NOT defined in interrogation profile, using hardcoded default\n",CRITICAL);
+		cmds->veconst_cmd = g_strdup("V");
+		cmds->ve_cmd_len = 1;
+	}
+	/* Ignition vars */
+	if (potential->ign_cmd_key != NULL)
+	{
+		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
 		cmds->ignition_cmd = g_strdup(cmd->string);
 		cmds->ign_cmd_len = cmd->len;
 	}
+	else
+	{
+		dbg_func("Ignition Read cmd is NOT defined in interrogation profile, using hardcoded default\n",CRITICAL);
+		cmds->ignition_cmd = g_strdup("I");
+		cmds->ign_cmd_len = 1;
+	}
 
 	/* Raw memory */
-	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->raw_mem_cmd_key);
-	if (cmd != NULL)
+	if (potential->raw_mem_cmd_key != NULL)
 	{
+		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->raw_mem_cmd_key);
 		cmds->raw_mem_cmd = g_strdup(cmd->string);
 		cmds->raw_mem_cmd_len = cmd->len;
+	}
+	else
+	{
+		dbg_func("Raw Memory Read cmd is NOT defined in interrogation profile, using hardcoded default\n",CRITICAL);
+		cmds->raw_mem_cmd = g_strdup("F");
+		cmds->raw_mem_cmd_len = 1;
 	}
 
 

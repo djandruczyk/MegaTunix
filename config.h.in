@@ -6,12 +6,6 @@
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
 
-/* Define to 1 if you have the <gdk-pixbuf/gdk-pixdata.h> header file. */
-#undef HAVE_GDK_PIXBUF_GDK_PIXDATA_H
-
-/* Define to 1 if you have the <gtk/gtkgl.h> header file. */
-#undef HAVE_GTK_GTKGL_H
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
