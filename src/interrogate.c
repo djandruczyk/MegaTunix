@@ -78,8 +78,8 @@ static struct Canidate
 	{ {22,1,1,125,125,0,0,99,0,255,255},NULL,NULL,NULL,NULL,13,
 			"MegaSquirt'N'Spark Extended 3.0.1\0",
 			S_N_SPARK|LAUNCH_CTRL|RAW_MEMORY},
-	{ {26,1,1,128,128,21,0,128,255,0,0},NULL,NULL,"Enhanced-V0.5\0",NULL,30,
-			"MegaSquirtnSpark Enhanced v0.5\0",
+	{ {27,1,1,128,128,30,0,128,0,0,0},NULL,NULL,"Enhanced-V0.63\0",NULL,30,
+			"MegaSquirtnSpark Enhanced V0.63\0",
 			S_N_SPARK|ENHANCED}
 };
 
@@ -99,7 +99,7 @@ static struct
 	{ 0,"S", "Signature Echo", 1, FALSE },
 	{ 0,"?", "Extended Version", 1, FALSE },
 	{ 0,"I", "Ignition Vars", 1, FALSE },
-	{ 0,"Y", "Big Block of Vars", 1, FALSE },
+	{ 0,"y", "Combined VE/Spark table (V+I)", 1, FALSE },
 	{ 0,"F0", "Memory readback 1st 256 bytes", 2, FALSE },
 	{ 0,"F1", "Memory readback 2nd 256 bytes", 2, FALSE }
 };
@@ -114,7 +114,7 @@ typedef enum
 	CMD_S,
 	CMD_QUEST,
 	CMD_I,
-	CMD_Y,
+	CMD_y,
 	CMD_F0,
 	CMD_F1
 }TestCmds;

@@ -1205,7 +1205,9 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 	static struct timeval now;
 	static struct timeval last = {0,0};
 	extern GdkColor red;
-	extern GdkColor black;
+	static GdkColor old_bg;
+	static GdkColor text_color;
+	static GtkStyle *style;
 
 	if (event->button != 1) // Left button click 
 		return FALSE;
@@ -1229,15 +1231,16 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 	if (marked[index])
 	{
 		marked[index] = FALSE;
-		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_fg(widget,GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&old_bg);
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&text_color);
 	}
 	else
 	{
 		marked[index] = TRUE;
+		style = gtk_widget_get_style(widget);
+		old_bg = style->bg[GTK_STATE_NORMAL];
+		text_color = style->text[GTK_STATE_NORMAL];
 		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_fg(widget,GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	}
 
