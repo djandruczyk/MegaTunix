@@ -38,6 +38,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	GtkWidget *label;
 	GtkWidget *frame;
 	GtkWidget *table;
+	GtkWidget *basetable;
 	GtkWidget *ebox;
 	GtkWidget *spinner;
 	GtkWidget *tmpspin;
@@ -55,13 +56,25 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Injection Control");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox),1);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
+
+	basetable = gtk_table_new(1,4,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(basetable),0);
+	gtk_container_set_border_width(GTK_CONTAINER(basetable),1);
+	gtk_container_add(GTK_CONTAINER(frame),basetable);
+
+	/* filler to make things line up.  Donno why things don't line
+	 * up normally,  bug in GTK perhaps?
+	 */
+	label = gtk_label_new(NULL);
+	gtk_table_attach (GTK_TABLE (basetable), label, 3, 4, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 6, 0);
 
 	/* Injection Control Section */
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
+	gtk_table_attach (GTK_TABLE (basetable), vbox2, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
 
 	/* Fuel Injection Control Strategy */
 	ebox = gtk_event_box_new();
@@ -254,10 +267,14 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	/* Vertical Seperator between halves of the screen */
 	sep = gtk_vseparator_new();
-	gtk_box_pack_start(GTK_BOX(hbox),sep,FALSE,TRUE,0);
+	gtk_table_attach (GTK_TABLE (basetable), sep, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
+	gtk_table_attach (GTK_TABLE (basetable), vbox2, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
 
 	/* MAP Sensor Type selectors */
 	ebox = gtk_event_box_new();
@@ -402,11 +419,11 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
-	hbox = gtk_hbox_new(FALSE,5);
+	hbox = gtk_hbox_new(TRUE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);

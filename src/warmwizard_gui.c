@@ -354,7 +354,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
-	table = gtk_table_new(1,4,FALSE);
+	table = gtk_table_new(1,4,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
@@ -365,7 +365,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(START_REALTIME));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
@@ -373,7 +373,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(STOP_REALTIME));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	button = gtk_button_new_with_label("Get Data from ECU");
@@ -381,7 +381,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			"Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
 
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
@@ -392,7 +392,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),

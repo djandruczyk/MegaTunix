@@ -113,7 +113,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
 	frame = gtk_frame_new("Data Log File Selection");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
 	file_selection = hbox;
@@ -151,7 +151,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 
 	j = 0;	
 	k = 0;
@@ -187,7 +187,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	}
 
 	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(vbox),vbox3,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),vbox3,FALSE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
