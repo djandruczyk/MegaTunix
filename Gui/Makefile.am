@@ -51,10 +51,14 @@ gui_files = 	template.glade \
 		vetable_12x12s-E_1.datamap \
 		vetable_12x12s-E_2.datamap \
 		vetable_12x12s-E_3.datamap \
+		vetable_12x12s-022E_1.datamap \
+		vetable_12x12s-022E_2.datamap \
 		vetable_12x12e.glade \
 		vetable_12x12e-E_1.datamap \
 		vetable_12x12e-E_2.datamap \
 		vetable_12x12e-E_3.datamap \
+		vetable_12x12e-022E_1.datamap \
+		vetable_12x12e-022E_2.datamap \
 		vetable_8x8e.glade \
 		vetable_8x8e-BnG.datamap \
 		vetable_8x8e-DT_2.datamap \
