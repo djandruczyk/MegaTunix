@@ -136,7 +136,6 @@ table=0
 row=3
 source=mapkpa
 
-
 [ve3d_slider_0]
 slider_name=ve3d_rpm
 table=0

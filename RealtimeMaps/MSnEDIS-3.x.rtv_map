@@ -1,7 +1,7 @@
 [realtime_map]
 applicable_firmwares=MegaSquirtnEDIS v3.008,MegaSquirtnEDIS v3.007,MegaSquirtnEDIS v3.005
 raw_total=22
-derived_total=38
+derived_total=39
 raw_list=raw_secl,barocount,barovolt,barokpa,mapcount,mapvolt,mapkpa,matcount,matvolt,matdeg,cltcount,cltvolt,cltdeg,tpscount,tpsvolt,tpspercent,battcount,battvolt,o2count,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
 
 [derived_0]
@@ -600,10 +600,24 @@ internal_name=sparkangle
 dlog_gui_name=Spark Adv.
 dlog_field_name=SPKADVANCE
 offset=21
-lower_limit=0
-upper_limit=90
-dl_conv_expr=x*2.84
-ul_conv_expr=x/2.84
+lower_limit=-10
+upper_limit=80
+dl_conv_expr=(x+10)*2.84
+ul_conv_expr=(x/2.84)-10
 is_float=TRUE
 tooltip="Spark Adv." is the Current spark advance being run.
+
+[derived_38]
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
+internal_name=raw_sparkangle
+dlog_gui_name=Raw Spark Adv.
+dlog_field_name=RAWSPKADVANCE
+offset=21
+lower_limit=0
+upper_limit=255
+dl_conv_expr=x*1
+ul_conv_expr=x/1
+is_float=TRUE
+tooltip="Raw Spark Adv." is the Raw value of spark advance from the ECU without conversion
 
