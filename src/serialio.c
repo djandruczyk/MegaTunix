@@ -213,8 +213,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			 * buffer...
 			 */
 			count = 44;	/* Arbritrary number */
-			//while (poll(&ufds,1,serial_params.poll_timeout))
-			while (poll(&ufds,1,100))
+			while (poll(&ufds,1,serial_params.poll_timeout))
 				res = read(serial_params.fd,&buf,count);
 
 			g_snprintf(buff,60,"ECU Comms Test Successfull");

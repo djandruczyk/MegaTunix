@@ -24,7 +24,6 @@
 
 
 pthread_t raw_input_thread;			/* thread handle */
-pthread_t starter;				/* thread handle */
 gboolean raw_reader_running;			/* flag for thread */
 gboolean raw_reader_stopped;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
@@ -110,7 +109,7 @@ int stop_serial_thread()
 	return 0;
 }
 		
-void *reset_reader_locks(void)
+void *reset_reader_locks(void * arg)
 {
 	raw_reader_running = FALSE;
 	raw_reader_stopped = TRUE;
@@ -121,10 +120,11 @@ void *raw_reader_thread(void *params)
 {
 	struct pollfd ufds;
 	int res = 0;
+	void * arg = 0;
 
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
-	pthread_cleanup_push(reset_reader_locks, NULL);
+	pthread_cleanup_push(reset_reader_locks, (void *)arg);
 
 	raw_reader_running = TRUE; /* make sure it starts */
 	raw_reader_stopped = FALSE;	/* set opposite flag */

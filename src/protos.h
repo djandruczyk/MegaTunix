@@ -183,11 +183,10 @@ void burn_flash(void);
 /* serialio.c */
 
 /* threads.c */
-void * serial_raw_thread_starter(void *); /* bootstrap function to get IO started */
-void * serial_raw_thread_stopper(void *); /* Realtime thread stopper */
 void * raw_reader_thread(void *); /* Serial raw reader thread */
 int stop_serial_thread();	/* cancels reader thread */
 void start_serial_thread(void);	/*bootstrp function fopr above */
+void *reset_reader_locks(void *);
 /* threads.c */
 
 /* tools_gui.c */
