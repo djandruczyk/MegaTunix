@@ -21,7 +21,7 @@
 
 struct Conversion_Chart
 {
-	gchar *conv_type[128];
+	gint conv_type[128];
 	gfloat conv_factor[128];
 };
 

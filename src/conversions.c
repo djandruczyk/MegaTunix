@@ -48,46 +48,38 @@
 
 extern unsigned char * ve_const_arr;
 struct Conversion_Chart std_conversions;
+extern GtkWidget * veconst_widgets_1[];
+extern GtkWidget * veconst_widgets_2[];
 
 gboolean read_conversions(char *filename)
 {
-	ConfigFile *cfgfile;
-        gchar *conv_file;
-	gint conv_major;
-	gint conv_minor;
-	gint conv_micro;
-	gchar *section;
 	gint i = 0;
-        conv_file = g_strconcat(g_get_home_dir(), 
-			"/.MegaTunix/", filename, NULL);
-        cfgfile = cfg_open_file(conv_file);
-	if (cfgfile)
-	{
-		cfg_read_int(cfgfile, "VERSION", "major_ver", &conv_major);
-		cfg_read_int(cfgfile, "VERSION", "minor_ver", &conv_minor);
-		cfg_read_int(cfgfile, "VERSION", "micro_ver", &conv_micro);
-		
-		for(i=0;i<VEBLOCK_SIZE;i++)
-		{
-			section = g_strconcat( "Offset ",g_strdup_printf("%i",i),NULL);
-			cfg_read_string(cfgfile, section,"conv_type",\
-					&std_conversions.conv_type[i]);
-					
-			cfg_read_float(cfgfile, section,"conv_factor",\
-					&std_conversions.conv_factor[i]);
-		}
-		g_free(section);
-		cfg_free(cfgfile);
-		g_free(conv_file);
-		return TRUE;
-	}
-	else
-	{
-		no_conversions_warning();
-		printf("Conversions file NOT found, CRITICAL ERROR!!!\n");
-		return FALSE; /* FAILURE opening file */
-	}
-	return FALSE;	/* Assume a problem if we get here... */
+	gint dl_type;
+
+	for (i=0;i<VEBLOCK_SIZE;i++)
+        {
+                if (GTK_IS_OBJECT(veconst_widgets_1[i]))
+                {
+			dl_type = (gint)g_object_get_data(
+                                G_OBJECT(veconst_widgets_1[i]),"dl_type");
+                        if (dl_type == IMMEDIATE)
+			{
+				std_conversions.conv_type[i] = 
+						(gint)g_object_get_data(
+						G_OBJECT(veconst_widgets_1[i]),
+						"conv_type");
+				std_conversions.conv_factor[i] = 
+						(gfloat)((gint)
+						g_object_get_data(
+						G_OBJECT(veconst_widgets_1[i]),
+						"conv_factor*100"))
+						/100.0;
+			}
+                                
+                }
+        }
+
+	return TRUE;
 }
 
 gint convert_before_download(gint offset, gfloat value)
@@ -96,38 +88,29 @@ gint convert_before_download(gint offset, gfloat value)
 	gint tmp_val = (gint)(value+0.001);
 	gfloat factor = std_conversions.conv_factor[offset];
 
-//	printf("offset provided, %i\n",offset);
-	if(std_conversions.conv_type[offset] == NULL)
-	{	/* return the Integer version of value */
-		ve_const_arr[offset]=tmp_val;
-		return tmp_val;
-	}
-	else
+	switch (std_conversions.conv_type[offset])
 	{
-		if ((strcmp(std_conversions.conv_type[offset],"ADD")) == 0 )
-		{	/* Addition of conv_factor to valueR*/
-			return_value = tmp_val+factor;
-		}
-		else if((strcmp(std_conversions.conv_type[offset],"SUB")) == 0)
-		{	/* Subtraction of conv_factor from value */
-			return_value = tmp_val-factor;
-		}
-		else if((strcmp(std_conversions.conv_type[offset],"MULT")) == 0)
-		{	/* Multiplication of value by conv_factor */
-			return_value = (gint)((value*factor)+0.001);
-		}
-		else if((strcmp(std_conversions.conv_type[offset],"DIV")) == 0)
-		{	/* Division of value by conv_factor */
-			return_value = (gint)((value/factor)+0.001);
-		}
-		else
-		{
-			printf("ERROR\n");
-		}
-		ve_const_arr[offset] = return_value; 
-		return (return_value);
+		case (ADD):
+			return_value = tmp_val + factor;
+			break;
+		case (SUB):
+			return_value = tmp_val - factor;
+			break;
+		case (MULT):
+			return_value = (gint)((value*factor) + 0.001);
+			break;
+		case (DIV):
+			return_value = (gint)((value/factor) + 0.001);
+			break;
+		default:
+			return_value = tmp_val;
+			break;
 	}
-	return -1;	/* will get caught by burn routine as error */
+	/* Store value in veconst_struct (accessing it via array syntax as 
+	 * it's friggin easier).... 
+	 */
+	ve_const_arr[offset] = return_value; 
+	return (return_value);
 }
 
 gfloat convert_after_upload(gint offset)
@@ -135,38 +118,29 @@ gfloat convert_after_upload(gint offset)
 	gfloat return_value = 0.0;
 	gfloat factor = std_conversions.conv_factor[offset];
 
-//	printf("offset provided, %i\n",offset);
-	if(std_conversions.conv_type[offset] == NULL)
-	{	/* return the Integer version of value */
-		return_value = ve_const_arr[offset];
-		//printf("no conversion on file... returning %f\n",return_value);
-		return return_value;
+	/* Since this is the upload we actually do the CONVERSE mathematical 
+	 * operation since the algorithm was designed for the download side, 
+	 * On upload we need to "un-convert" from MS values to Gui friendly
+	 * versions....
+	 */
+	switch (std_conversions.conv_type[offset])
+	{
+		case (ADD):
+			return_value = ve_const_arr[offset] - factor;
+			break;
+		case (SUB):
+			return_value = ve_const_arr[offset] + factor;
+			break;
+		case (MULT):
+			return_value = (gfloat)ve_const_arr[offset] / factor;
+			break;
+		case (DIV):
+			return_value = (gfloat)ve_const_arr[offset] * factor;
+			break;
+		default:
+			return_value = ve_const_arr[offset];
+			break;
+
 	}
-	else
-	{	/* On upload we use the CONVERSE function to translate BACK */
-		//printf("input value %u\n",ve_const_arr[offset]);
-		if ((strcmp(std_conversions.conv_type[offset],"ADD")) == 0 )
-		{	/* subtraction of conv_factor to valueR*/
-			return_value = ve_const_arr[offset]-factor;
-		}
-		else if((strcmp(std_conversions.conv_type[offset],"SUB")) == 0)
-		{	/* Addition of conv_factor from value */
-			return_value = ve_const_arr[offset]+factor;
-		}
-		else if((strcmp(std_conversions.conv_type[offset],"MULT")) == 0)
-		{	/* Division of value by conv_factor */
-			return_value = (gfloat)ve_const_arr[offset]/factor;
-		}
-		else if((strcmp(std_conversions.conv_type[offset],"DIV")) == 0)
-		{	/* Multiplication of value by conv_factor */
-			return_value = (gfloat)ve_const_arr[offset]*factor;
-		}
-		else
-		{
-			printf("ERROR\n");
-		}
-		//printf("conversion complete... returning %f\n",return_value);
-		return (return_value);
-	}
-	return -1;	/* will get caught by burn routine as error */
+	return (return_value);
 }

@@ -75,6 +75,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(64));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -98,6 +101,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(65));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -121,6 +127,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(119));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -157,6 +166,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(66));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -180,6 +192,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(67));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -223,6 +238,10 @@ int build_enrichments(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(WARMUP_BINS_OFFSET+i));
+		g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+				GINT_TO_POINTER(1*100));
+		g_object_set_data(G_OBJECT(spinner),"conv_type",
+				GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner), "dl_type", 
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -275,6 +294,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner), "offset", 
 			GINT_TO_POINTER(83));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER((gint)(5.12*100)));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	g_object_set_data(G_OBJECT(spinner), "dl_type", 
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -299,6 +321,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(84));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -323,6 +348,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(82));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -347,6 +375,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(123));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -389,6 +420,10 @@ int build_enrichments(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(ACCEL_BINS_OFFSET+i));
+		g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+				GINT_TO_POINTER(10*100));
+		g_object_set_data(G_OBJECT(spinner),"conv_type",
+				GINT_TO_POINTER(MULT));
 		g_object_set_data(G_OBJECT(spinner), "dl_type", 
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -421,6 +456,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(85));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -517,6 +555,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(86));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(40*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -542,6 +583,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(120));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(100*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(DIV));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -566,6 +610,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(122));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(51*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -590,6 +637,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(88));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -614,6 +664,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(87));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -638,6 +691,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(89));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",

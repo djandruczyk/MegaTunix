@@ -80,6 +80,11 @@
 #define NUM_INJECTORS		0x51
 #define GENERIC			0x52
 
+/* Conversions */
+#define ADD			0x60
+#define SUB			0x61
+#define MULT			0x62
+#define DIV			0x63
 /* text entries */
 #define MS_RESET_COUNT		0x7a
 #define MS_SER_ERRCOUNT		0x7b

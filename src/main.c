@@ -54,6 +54,7 @@ int main(int argc, char ** argv)
 		open_serial(serial_params.comm_port);
 
 	setup_serial_params();	/* Setup the serial port for I/O */
+
 	read_conversions("std_conversions");
 	
 
