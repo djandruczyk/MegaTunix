@@ -25,18 +25,15 @@
 #include <tabloader.h>
 #include <timeout_handlers.h>
 
-static gint tcount = 0;	/* used to draw_infotext to know where to put the text*/
 static gint info_width = 120;
 static gint max_viewables = 0;
-static gint active_viewables = 0;
-static GtkWidget *lv_darea = NULL; //for scroller  :( 
 static gboolean adj_scale = TRUE;
 static gboolean blocked = FALSE;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
 static gfloat hue_angle = -60.0;
 static gfloat saturation = 1.0;
 
-static GHashTable *active_traces = NULL;
+static struct Logview_Data *lv_data = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
 gboolean playback_mode = FALSE;
 extern struct Log_Info *log_info;
@@ -71,7 +68,7 @@ void present_viewer_choices(void)
 	extern struct Rtv_Map *rtv_map;
 
 	darea = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
-	lv_darea = darea;
+	lv_data->darea = darea;
 
 	if (!darea)
 	{
@@ -114,8 +111,8 @@ void present_viewer_choices(void)
 
 	table_rows = ceil((float)max_viewables/(float)table_cols);
 	table = gtk_table_new(table_rows,table_cols,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,FALSE,0);
 
@@ -267,8 +264,11 @@ void populate_viewer()
 	 * and adds them to the list, also checks if entires are removed and
 	 * pulls them from the hashtable and de-allocates them...
 	 */
-	if (active_traces == NULL)
-		active_traces = g_hash_table_new(g_str_hash,g_str_equal);
+	if (lv_data == NULL)
+	{
+		lv_data = g_new0(struct Logview_Data,1);
+		lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
+	}
 
 	/* check to see if it's already in the table, if so ignore, if not
 	 * malloc datastructure, populate it's values and insert a pointer
@@ -300,23 +300,25 @@ void populate_viewer()
 
 		being_viewed = (gboolean)g_object_get_data(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/
-		if (g_hash_table_lookup(active_traces,name)==NULL)
+		if (g_hash_table_lookup(lv_data->traces,name)==NULL)
 		{
 			if (being_viewed)	/* Marked viewable widget */
 			{
 				/* Call the build routine, feed it the drawing_area*/
-				v_value = build_v_value(lv_darea,object);
+				v_value = build_v_value(object);
 				// store location of master
-				g_hash_table_insert(active_traces,
+				g_hash_table_insert(lv_data->traces,
 						g_strdup(name),
 						(gpointer)v_value);
+				lv_data->tlist = g_list_append(lv_data->tlist,(gpointer)v_value);
 			}
 		}
 		else
 		{	/* If in table but now de-selected, remove it */
 			if (!being_viewed)
 			{
-				v_value = (struct Viewable_Value *)g_hash_table_lookup(active_traces,name);
+				v_value = (struct Viewable_Value *)g_hash_table_lookup(lv_data->traces,name);
+				lv_data->tlist = g_list_remove(lv_data->tlist,(gpointer)v_value);
 				if ((hue_angle > 0) && ((gint)hue_angle%780 == 0))
 				{
 					hue_angle-= 30;
@@ -330,7 +332,7 @@ void populate_viewer()
 				hue_angle -=60;
 
 				/* Remove entry in from hash table */
-				g_hash_table_remove(active_traces,name);
+				g_hash_table_remove(lv_data->traces,name);
 
 				/* Free all resources of the datastructure 
 				 * before de-allocating it... 
@@ -344,12 +346,12 @@ void populate_viewer()
 			}
 		}
 	}
-	active_viewables = g_hash_table_size(active_traces);
+	lv_data->active_traces = g_hash_table_size(lv_data->traces);
 	/* If traces selected, emit a configure_Event to clear the window
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
 	g_static_mutex_unlock(&update_mutex);
-	if ((active_traces) && (g_hash_table_size(active_traces) >= 0))
+	if ((lv_data->traces) && (g_list_length(lv_data->tlist) >= 0))
 		lv_configure_event(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"),NULL,NULL);
 
 	return; 
@@ -363,8 +365,6 @@ void populate_viewer()
  */
 void reset_logviewer_state()
 {
-	extern GHashTable *dynamic_widgets;
-	GtkWidget * widget = NULL;
 	extern struct Rtv_Map *rtv_map;
 	extern struct Log_Info *log_info;
 	gint i = 0 ;
@@ -372,10 +372,6 @@ void reset_logviewer_state()
 
 	if (playback_mode)
 	{
-		stop_logviewer_playback();
-		widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
-		if (GTK_IS_RANGE(widget))
-			gtk_range_set_value(GTK_RANGE(widget),1.0);
 		if (!log_info)
 			return;
 		for (i=0;i<log_info->field_count;i++)
@@ -393,9 +389,6 @@ void reset_logviewer_state()
 			object = g_array_index(rtv_map->rtv_list,GObject *,i);
 			g_object_set_data(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
-		widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
-		if (GTK_IS_RANGE(widget))
-			gtk_range_set_value(GTK_RANGE(widget),100.0);
 	}
 	populate_viewer();
 
@@ -405,17 +398,16 @@ void reset_logviewer_state()
 /*!
  \brief build_v_value() allocates a viewable_value structure and populates
  it with sane defaults and returns it to the caller
- \param d_area (GtkWidget *) pointer to the main drawing area
  \param object (GObject *) objet to get soem of the data from
  \returns a newly allocated and populated Viewable_Value structure
  */
-struct Viewable_Value * build_v_value(GtkWidget * d_area, GObject *object)
+struct Viewable_Value * build_v_value(GObject *object)
 {
 	struct Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
 	GArray *tmp_array = NULL;
 
-	pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(d_area),"pixmap");
+	pixmap = lv_data->pixmap;
 
 	v_value = g_malloc(sizeof(struct Viewable_Value));		
 
@@ -445,9 +437,8 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, GObject *object)
 		 */
 		v_value->data_array = (GArray *)g_object_get_data(object,"history");
 	}
-	/* Store pointer to d_area, but DO NOT FREE THIS on v_value destruction
+	/* Store pointer to object, but DO NOT FREE THIS on v_value destruction
 	 * as its the SAME one used for all Viewable_Values */
-	v_value->d_area = d_area;
 	v_value->object = object;
 	v_value->lower = (gint)g_object_get_data(object,"lower_limit");
 	v_value->upper = (gint)g_object_get_data(object,"upper_limit");
@@ -608,60 +599,114 @@ GdkColor get_colors_from_hue(gfloat hue_angle, gfloat sat)
 
 
 /*!
- \brief draw_infotext() draws the textual data for the trace on the left
- hand side of the logviewer
- \param v_value (struct Viewable_Value *) pointer to the viewable value
+ \brief draw_infotext() draws the static textual data for the trace on 
+ the left hand side of the logviewer
  */
-void draw_infotext(struct Viewable_Value *v_value)
+void draw_infotext()
 {
 	// Draws the textual (static) info on the left side of the window..
 
-	gint last_index = 0;
-	gfloat val = 0.0;
-	gint name_x = 10;
+	gfloat spread = 0.0;
+	gint name_x = 0;
 	gint name_y = 0;
+	gint info_ctr = 0;
 	gint h = 0;
-	gint val_x_offset = 10;
-	gint val_y_offset = 14;
-	static PangoFontDescription *font_desc = NULL;
+	gint i = 0;
+	struct Viewable_Value *v_value = NULL;
 	PangoLayout *layout;
-	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),"pixmap");
+	GdkPixmap *pixmap = lv_data->pixmap;
 
-	h = v_value->d_area->allocation.height;
-	if (tcount == 0)  /*clear text area */
-	{
-		gdk_draw_rectangle(pixmap,
-				v_value->d_area->style->black_gc,
-				TRUE, 0,0,
-				info_width,h);
-	}
-	if (!font_desc)
-		font_desc = pango_font_description_from_string("courier 11");
-	
-	name_y = (gint) (((float)h/(float)(active_viewables+1))*(tcount+1));
-	name_y -= 15;
-	last_index = v_value->last_index;
-	val = g_array_index(v_value->data_array,gfloat,last_index);
-
-//	font_desc = pango_font_description_from_string("courier 11");
-	layout = gtk_widget_create_pango_layout(v_value->d_area,NULL);
-	pango_layout_set_markup(layout,v_value->vname,-1);
-	pango_layout_set_font_description(layout,font_desc);
-	gdk_draw_layout(pixmap,v_value->trace_gc,name_x,name_y,layout);
+	h = lv_data->darea->allocation.height;
 
 	gdk_draw_rectangle(pixmap,
-			v_value->d_area->style->black_gc,
-			TRUE,
-			name_x+val_x_offset,name_y+val_y_offset,
-			info_width-(name_x+val_x_offset),15);
-	if (v_value->is_float)
-		layout = gtk_widget_create_pango_layout(v_value->d_area,g_strdup_printf("%.2f",val));
-	else
-		layout = gtk_widget_create_pango_layout(v_value->d_area,g_strdup_printf("%i",(gint)val));
+			lv_data->darea->style->black_gc,
+			TRUE, 0,0,
+			info_width,h);
 
-	pango_layout_set_font_description(layout,font_desc);
-	gdk_draw_layout(pixmap,v_value->font_gc,name_x+val_x_offset,name_y+val_y_offset,layout);
-	tcount++;
+	if (!lv_data->font_desc)
+		lv_data->font_desc = pango_font_description_from_string("courier 11");
+	
+	spread = (gint)((float)h/(float)lv_data->active_traces);
+	name_x = 10;
+	for (i=0;i<lv_data->active_traces;i++)
+	{
+		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+		info_ctr = (spread * (i+1))- (spread/2);
+		name_y = info_ctr - 15;
+
+		layout = gtk_widget_create_pango_layout(lv_data->darea,NULL);
+		pango_layout_set_markup(layout,v_value->vname,-1);
+		pango_layout_set_font_description(layout,lv_data->font_desc);
+		gdk_draw_layout(pixmap,v_value->trace_gc,name_x,name_y,layout);
+
+		gdk_draw_rectangle(pixmap,
+				lv_data->darea->style->white_gc,
+				FALSE, 0,info_ctr-(spread/2),
+				info_width-1,spread);
+	}
+
+}
+
+
+/*!
+ \brief draw_valtext() draws the dynamic values for the traces on 
+ the left hand side of the logviewer. This is optimized so that if the value
+ becomes temporarily static, it won't keep blindly updating the screen and
+ wasting CPU time.
+ \param force_draw (gboolean) when true to write the values to screen for
+ all controls no matter if hte previous value is the same or not.
+ */
+void draw_valtext(gboolean force_draw)
+{
+	gint last_index = 0;
+	gfloat val = 0.0;
+	gfloat last_val = 0.0;
+	gfloat spread = 0.0;
+	gint val_x = 0;
+	gint val_y = 0;
+	gint info_ctr = 0;
+	gint h = 0;
+	gint i = 0;
+	struct Viewable_Value *v_value = NULL;
+	PangoLayout *layout;
+	GdkPixmap *pixmap = lv_data->pixmap;
+
+	h = lv_data->darea->allocation.height;
+
+	if (!lv_data->font_desc)
+		lv_data->font_desc = pango_font_description_from_string("courier 11");
+	
+	spread = (gint)((float)h/(float)lv_data->active_traces);
+	val_x = 25;
+	for (i=0;i<lv_data->active_traces;i++)
+	{
+		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+		info_ctr = (spread * (i+1))- (spread/2);
+		val_y = info_ctr + 1;
+
+		last_index = v_value->last_index;
+		val = g_array_index(v_value->data_array,gfloat,last_index);
+		if (v_value->data_array->len > 1)
+			last_val = g_array_index(v_value->data_array,gfloat,last_index-1);
+		/* IF this value matches the last one,  don't bother
+		 * updating the text as there's no point... */
+		if ((val == last_val) && (!force_draw))
+			continue;
+		
+		gdk_draw_rectangle(pixmap,
+				lv_data->darea->style->black_gc,
+				TRUE,
+				val_x,val_y,
+				info_width-(val_x)-1,12);
+
+		if (v_value->is_float)
+			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%.2f",val));
+		else
+			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%i",(gint)val));
+
+		pango_layout_set_font_description(layout,lv_data->font_desc);
+		gdk_draw_layout(pixmap,v_value->font_gc,val_x,val_y,layout);
+	}
 
 }
 
@@ -678,11 +723,11 @@ gboolean rt_update_logview_traces(gboolean force_redraw)
 
 	if (playback_mode)
 		return TRUE;
-	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
+	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
 		g_static_mutex_lock(&update_mutex);
-		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(force_redraw));
+		trace_update(force_redraw);
 		g_static_mutex_unlock(&update_mutex);
 		scroll_logviewer_traces();
 	}
@@ -703,11 +748,11 @@ gboolean pb_update_logview_traces(gboolean force_redraw)
 
 	if (!playback_mode)
 		return TRUE;
-	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
+	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
 		g_static_mutex_lock(&update_mutex);
-		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(force_redraw));
+		trace_update(force_redraw);
 		g_static_mutex_unlock(&update_mutex);
 		scroll_logviewer_traces();
 	}
@@ -723,7 +768,7 @@ gboolean pb_update_logview_traces(gboolean force_redraw)
  \param value (gpointer) pointer to the Viewable_Value struct for this trace
  \param redraw_All (gpointer) flag to redraw all or jsut recent data
  */
-void trace_update(gpointer key, gpointer value, gpointer redraw_all)
+void trace_update(gboolean redraw_all)
 {
 	GdkPixmap * pixmap = NULL;
 	gint w = 0;
@@ -739,162 +784,171 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 	gint total = 0;
 	gint last_index = 0;
 	gint i = 0;
+	gint x = 0;
 	gfloat log_pos = 0.0;
 	gfloat newpos = 0.0;
-	static gulong sig_id = 0;
 	GdkPoint pts[2048]; // Bad idea as static...
+	struct Viewable_Value *v_value = NULL;
+	static gulong sig_id = 0;
 	static GtkWidget *scale = NULL;
-	struct Viewable_Value * v_value = NULL;
 	extern GHashTable *dynamic_widgets;
 
-	v_value = (struct Viewable_Value *) value;
-	if (v_value == NULL)
-	{
-		printf("no traces, exiting...\n");
-		return;
-	}
-	pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),
-			"pixmap");
+	pixmap = lv_data->pixmap;
+
 	if (sig_id == 0)
 		sig_id = g_signal_handler_find(g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale"),G_SIGNAL_MATCH_FUNC,0,0,NULL,logviewer_log_position_change,NULL);
 
 	if (!scale)
 		scale = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
-	w = v_value->d_area->allocation.width;
-	h = v_value->d_area->allocation.height;
+	w = lv_data->darea->allocation.width;
+	h = lv_data->darea->allocation.height;
 
-	log_pos = (gfloat)((gint)g_object_get_data(G_OBJECT(v_value->d_area),"log_pos_x100"))/100.0;
+	log_pos = (gfloat)((gint)g_object_get_data(G_OBJECT(lv_data->darea),"log_pos_x100"))/100.0;
 	//printf("log_pos is %f\n",log_pos);
+	/* Full screen redraw, only with configure events (usually) */
 	if ((gboolean)redraw_all)
 	{
-		lo_width = v_value->d_area->allocation.width-info_width;
-		len = v_value->data_array->len;
-		if (len == 0)	/* If empty */
-			return;
-		//		printf("length is %i\n", len);
-		len *= (log_pos/100.0);
-		//		printf("length after is  %i\n", len);
-
-		/* Determine total number of points that'll fit on the window
-		 * taking into account the scroll amount
-		 */
-		total = len < lo_width/lv_zoom ? len : lo_width/lv_zoom;
-
-		// Draw is reverse order, from right to left, 
-		// easier to think out in my head... :) 
-		//
-		for (i=0;i<total;i++)
+		lo_width = lv_data->darea->allocation.width-info_width;
+		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
-			val = g_array_index(v_value->data_array,gfloat,len-1-i);
-			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
-			pts[i].x = w-(i*lv_zoom)-1;
-			pts[i].y = (gint) (percent*(h-2))+1;
+			v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+			len = v_value->data_array->len;
+			if (len == 0)	/* If empty */
+				return;
+			//		printf("length is %i\n", len);
+			len *= (log_pos/100.0);
+			//		printf("length after is  %i\n", len);
+			/* Determine total number of points that'll fit on the window
+			 * taking into account the scroll amount
+			 */
+			total = len < lo_width/lv_zoom ? len : lo_width/lv_zoom;
+
+
+			// Draw is reverse order, from right to left, 
+			// easier to think out in my head... :) 
+			//
+			for (x=0;x<total;x++)
+			{
+				val = g_array_index(v_value->data_array,gfloat,len-1-x);
+				percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+				pts[x].x = w-(x*lv_zoom)-1;
+				pts[x].y = (gint) (percent*(h-2))+1;
+			}
+			gdk_draw_lines(pixmap,
+					v_value->trace_gc,
+					pts,
+					total);
+
+			v_value->last_y = pts[0].y;
+			v_value->last_index = len;
+
+			//printf ("last index displayed was %i from %i,%i to %i,%i\n",v_value->last_index,pts[1].x,pts[1].y, pts[0].x,pts[0].y );
 		}
-		gdk_draw_lines(pixmap,
-				v_value->trace_gc,
-				pts,
-				total);
-
-		v_value->last_y = pts[0].y;
-		v_value->last_index = len;
-
-		//printf ("last index displayed was %i from %i,%i to %i,%i\n",v_value->last_index,pts[1].x,pts[1].y, pts[0].x,pts[0].y );
-		draw_infotext(v_value);
+		draw_valtext(TRUE);
 		//printf("redraw complete\n");
 		return;
 	}
-	/* we don't get data from the new infrastructure in playback mode... */
+	/* Playback mode, playing from logfile.... */
 	if (playback_mode)
 	{
-		last_index = v_value->last_index;
-		if(last_index >= v_value->data_array->len)
-			return;
+		for (i=0;i<g_list_length(lv_data->tlist);i++)
+		{
+			v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+			last_index = v_value->last_index;
+			if(last_index >= v_value->data_array->len)
+				return;
 
-		//printf("got data from array at index %i\n",last_index+1);
-		val = g_array_index(v_value->data_array,gfloat,last_index+1);
-		percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+			//printf("got data from array at index %i\n",last_index+1);
+			val = g_array_index(v_value->data_array,gfloat,last_index+1);
+			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+			if (val > (v_value->max))
+				v_value->max = val;
+			if (val < (v_value->min))
+				v_value->min = val;
+
+			gdk_draw_line(pixmap,
+					v_value->trace_gc,
+					w-lv_zoom-1,v_value->last_y,
+					w-1,(gint)(percent*(h-2))+1);
+			//printf("drawing from %i,%i to %i,%i\n",w-lv_zoom-1,v_value->last_y,w-1,(gint)(percent*(h-2))+1);
+
+			v_value->last_y = (gint)((percent*(h-2))+1);
+
+			v_value->last_index = last_index + 1;
+			if (adj_scale)
+			{
+				newpos = 100.0*((gfloat)(v_value->last_index)/(gfloat)v_value->data_array->len);
+				blocked=TRUE;
+				gtk_range_set_value(GTK_RANGE(scale),newpos);
+				blocked=FALSE;
+				g_object_set_data(G_OBJECT(lv_data->darea),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
+				adj_scale = FALSE;
+				if (newpos >= 100)
+					stop_logviewer_playback();
+				//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
+			}
+		}
+		draw_valtext(FALSE);
+		return;
+	}
+
+	/* REALTIME mode... all traces updated at once.. */
+	for (i=0;i<g_list_length(lv_data->tlist);i++)
+	{
+		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+		history = v_value->data_array;
+		current_index = (gint)g_object_get_data(v_value->object,"current_index");
+		val = g_array_index(history,gfloat, current_index);
+
 		if (val > (v_value->max))
 			v_value->max = val;
 		if (val < (v_value->min))
 			v_value->min = val;
 
-		gdk_draw_line(pixmap,
-				v_value->trace_gc,
-				w-lv_zoom-1,v_value->last_y,
-				w-1,(gint)(percent*(h-2))+1);
-		//printf("drawing from %i,%i to %i,%i\n",w-lv_zoom-1,v_value->last_y,w-1,(gint)(percent*(h-2))+1);
+		if (v_value->last_y == -1)
+			v_value->last_y = (gint)((percent*(h-2))+1);
 
+		/* If watching at the edge (full realtime) */
+		if (log_pos == 100)
+		{
+			v_value->last_index = v_value->data_array->len-1;
+			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+			gdk_draw_line(pixmap,
+					v_value->trace_gc,
+					w-lv_zoom-1,v_value->last_y,
+					w-1,(gint)(percent*(h-2))+1);
+		}
+		else
+		{	/* Watching somewhat behind realtime... */
+			last_index = v_value->last_index;
+
+			last_val = g_array_index(v_value->data_array,gfloat,last_index);
+			last_percent = 1.0-(last_val/(float)(v_value->upper-v_value->lower));
+			val = g_array_index(v_value->data_array,gfloat,last_index+1);
+			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+
+			v_value->last_index = last_index + 1;
+			gdk_draw_line(pixmap,
+					v_value->trace_gc,
+					w-lv_zoom-1,(last_percent*(h-2))+1,
+					w-1,(gint)(percent*(h-2))+1);
+			if (adj_scale)
+			{
+				newpos = 100.0*((gfloat)v_value->last_index/(gfloat)v_value->data_array->len);
+				blocked = TRUE;
+				gtk_range_set_value(GTK_RANGE(scale),newpos);
+				blocked = FALSE;
+				g_object_set_data(G_OBJECT(lv_data->darea),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
+				adj_scale = FALSE;
+			}
+		}
+		/* Draw the data.... */
 		v_value->last_y = (gint)((percent*(h-2))+1);
 
-		v_value->last_index = last_index + 1;
-		if (adj_scale)
-		{
-			newpos = 100.0*((gfloat)(v_value->last_index)/(gfloat)v_value->data_array->len);
-			blocked=TRUE;
-			gtk_range_set_value(GTK_RANGE(scale),newpos);
-			blocked=FALSE;
-			g_object_set_data(G_OBJECT(v_value->d_area),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
-			adj_scale = FALSE;
-			if (newpos >= 100)
-				stop_logviewer_playback();
-			//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
-		}
-		draw_infotext(v_value);
-		return;
+
 	}
-
-	history = v_value->data_array;
-	current_index = (gint)g_object_get_data(v_value->object,"current_index");
-	val = g_array_index(history,gfloat, current_index);
-
-	if (val > (v_value->max))
-		v_value->max = val;
-	if (val < (v_value->min))
-		v_value->min = val;
-
-	if (v_value->last_y == -1)
-		v_value->last_y = (gint)((percent*(h-2))+1);
-
-	/* If watching at the edge (full realtime) */
-	if (log_pos == 100)
-	{
-		v_value->last_index = v_value->data_array->len-1;
-		percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
-		gdk_draw_line(pixmap,
-				v_value->trace_gc,
-				w-lv_zoom-1,v_value->last_y,
-				w-1,(gint)(percent*(h-2))+1);
-	}
-	else
-	{	/* Watching somewhat behind realtime... */
-		last_index = v_value->last_index;
-
-		last_val = g_array_index(v_value->data_array,gfloat,last_index);
-		last_percent = 1.0-(last_val/(float)(v_value->upper-v_value->lower));
-		val = g_array_index(v_value->data_array,gfloat,last_index+1);
-		percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
-
-		v_value->last_index = last_index + 1;
-		gdk_draw_line(pixmap,
-				v_value->trace_gc,
-				w-lv_zoom-1,(last_percent*(h-2))+1,
-				w-1,(gint)(percent*(h-2))+1);
-		if (adj_scale)
-		{
-			newpos = 100.0*((gfloat)v_value->last_index/(gfloat)v_value->data_array->len);
-			blocked = TRUE;
-			gtk_range_set_value(GTK_RANGE(scale),newpos);
-			blocked = FALSE;
-			g_object_set_data(G_OBJECT(v_value->d_area),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
-			adj_scale = FALSE;
-		}
-	}
-	/* Draw the data.... */
-	v_value->last_y = (gint)((percent*(h-2))+1);
-
-
 	/* Update textual data */
-	draw_infotext(v_value);
+	draw_valtext(FALSE);
 
 }
 
@@ -915,7 +969,7 @@ void scroll_logviewer_traces()
 	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
 	if (!widget)
 		return;
-	pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(widget),"pixmap");
+	pixmap = lv_data->pixmap;
 	if (!pixmap)
 		return;
 
@@ -937,7 +991,6 @@ void scroll_logviewer_traces()
 			w-lv_zoom,0,
 			lv_zoom,h);
 
-	tcount = 0;
 	gdk_window_clear(widget->window);
 }
 
@@ -957,7 +1010,7 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 	gint h = 0;
 
 	/* Get pointer to backing pixmap ... */
-	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
+	pixmap = lv_data->pixmap;
 			
 	if (widget->window)
 	{
@@ -974,13 +1027,12 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 				TRUE, 0,0,
 				w,h);
 		gdk_window_set_back_pixmap(widget->window,pixmap,0);
-		g_object_set_data(G_OBJECT(widget),"pixmap",pixmap);
+		lv_data->pixmap = pixmap;
 
-		if ((active_traces) && (g_hash_table_size(active_traces) > 0))
+		if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 		{
-			tcount = 0;
-			g_hash_table_foreach(active_traces, trace_update, GINT_TO_POINTER(TRUE));
-			tcount = 0;
+			draw_infotext();
+			trace_update(TRUE);
 		}
 		gdk_window_clear(widget->window);
 	}
@@ -1000,7 +1052,7 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
-	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
+	pixmap = lv_data->pixmap;
 
 	/* Expose event handler... */
 	gdk_draw_drawable(widget->window,
@@ -1059,6 +1111,8 @@ EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 		g_object_set_data(G_OBJECT(darea),"log_pos_x100",GINT_TO_POINTER((gint)(val*100)));
 	lv_configure_event(darea,NULL,NULL);
 	scroll_logviewer_traces();
+	if ((val >= 100.0) && (playback_mode))
+		stop_logviewer_playback();
 	return TRUE;
 }
 
@@ -1069,6 +1123,7 @@ EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 void set_playback_mode(void)
 {
 	extern GHashTable *dynamic_widgets;
+	GtkWidget *widget;
 
 	reset_logviewer_state();
 	free_log_info();
@@ -1077,6 +1132,9 @@ void set_playback_mode(void)
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), TRUE);
 	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
 	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+	if (GTK_IS_RANGE(widget))
+		gtk_range_set_value(GTK_RANGE(widget),0.0);
 	hue_angle = -60.0;
 	saturation = 1.0;
 }
@@ -1088,7 +1146,9 @@ void set_playback_mode(void)
 void set_realtime_mode(void)
 {
 	extern GHashTable *dynamic_widgets;
+	GtkWidget *widget;
 
+	stop_logviewer_playback();
 	reset_logviewer_state();
 	free_log_info();
 	playback_mode = FALSE;
@@ -1096,6 +1156,9 @@ void set_realtime_mode(void)
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
 	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
 	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+	if (GTK_IS_RANGE(widget))
+		gtk_range_set_value(GTK_RANGE(widget),100.0);
 	hue_angle = -60.0;
 	saturation = 1.0;
 }

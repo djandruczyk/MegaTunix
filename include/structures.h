@@ -71,6 +71,7 @@ struct Firmware_Details
 	struct Req_Fuel_Params **rf_params;/*! req_fuel params */
 };
 
+
 /*! 
  Controls for the Required Fuel Calculator... 
  \brief The Req_Fuel struct contains jsut about all widgets for the rewuired
@@ -109,6 +110,7 @@ struct Io_File
 	FileIoType iotype;
 };
 
+
 /*!
  \brief Viewable_Value is the datastructure bound 
  to every trace viewed in the logviewer. 
@@ -117,7 +119,6 @@ struct Viewable_Value
 {
 	GdkGC *font_gc;			/*! GC used for the fonts */
 	GdkGC *trace_gc;		/*! GC used for the trace */
-	GtkWidget *d_area;		/*! Drawing Area */
 	GObject *object;		/*! object */
 	gchar *vname;			/*! Name of widget being logged */
 	gboolean is_float;		/*! TRUE or FALSE */
@@ -133,6 +134,7 @@ struct Viewable_Value
 	struct Log_Info *log_info;	/*! important */
 };
 	
+
 /*! 
  \brief The Rt_Slider struct contains info on the runtime display tab sliders
  as they are now stored in the config file and adjustable in position
@@ -173,6 +175,7 @@ struct Default_Limits
 	gfloat upper;		/*! Upper Limit */
 };
 
+
 /*! 
  \brief The Log_Info datastructure is populated when a datalog file is opened
  for viewing in the Datalog viewer.
@@ -182,9 +185,8 @@ struct Log_Info
 	gint field_count;	/*! How many fields in the logfile */
 	gchar *delimiter;	/*! delimiter between fields for this logfile */
 	GArray *log_list;	/*! List of objects */
-	gint active_viewables;	/*! Number of active traces.. */
-	gfloat global_position;	/*! Where we are in the logviewer (playback) */
 };
+
 
 /*! 
  \brief The Page_Params structure contains fields defining the size of the 
@@ -391,6 +393,7 @@ struct Io_Cmds
 	gint raw_mem_cmd_len;	/*! length in bytes of raw_mem_cmd */
 };
 
+
 /*! 
  \brief Output_Data A simple wrapper struct to pass data to the output 
  function which makes the function a lot simpler.
@@ -556,6 +559,24 @@ struct Vex_Import
 	gboolean got_load;	/* Flag */
 	gboolean got_ve;	/* Flag */
 	
+};
+
+
+/*!
+ \brief The Logview_Data struct is a ontainer used within the logviewer_gui.c
+ file used to store settigns specific to the logviewer including th pointer to
+ the drawing area, and a hashtable and list of pointers to the trace 
+ datastructures.
+ */
+struct Logview_Data
+{
+	GtkWidget *darea;	/*! Trace drawing area... */
+	GdkPixmap *pixmap;	/*! pointer to backing pixmap... */
+	GHashTable *traces;	/*! Hash table of v_values key'd by name */
+	GList *tlist;		/*! Doubly linked lists of v_Values*/
+	GList *used_colors;	/*! List of colors in use.... */
+	gint active_traces;	/*! how many are active */
+	PangoFontDescription *font_desc; /*! Font used for text... */
 };
 
 #endif
