@@ -112,6 +112,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
         gtk_widget_add_events (drawing_area,
                         GDK_BUTTON1_MOTION_MASK |
                         GDK_BUTTON2_MOTION_MASK |
+                        GDK_BUTTON3_MOTION_MASK |
                         GDK_BUTTON_PRESS_MASK   |
                         GDK_KEY_PRESS_MASK              |
                         GDK_KEY_RELEASE_MASK    |
@@ -226,6 +227,8 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->sdepth = 7.533;
 	ve_view->zNear = 0.8;
 	ve_view->zFar = 23;
+	ve_view->h_strafe = 0;
+	ve_view->v_strafe = 0;
 	ve_view->aspect = 1.333;
 	ve_configure_event(ve_view->drawing_area, NULL,NULL);
 	ve_expose_event(ve_view->drawing_area, NULL,NULL);
@@ -311,7 +314,7 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	glTranslatef(0.0,0.0,-ve_view->sdepth);
 	glRotatef(-ve_view->stheta, 1.0, 0.0, 0.0);
 	glRotatef(ve_view->sphi, 0.0, 0.0, 1.0);
-	glTranslatef(-(float)((grid)/2-0.3), -(float)((grid)/2-1), -2.0);
+	glTranslatef(-(float)((grid/2)-0.3)-ve_view->h_strafe, -(float)((grid)/2-1)-ve_view->v_strafe, -2.0);
 
 	ve_calculate_scaling(ve_view);
 	ve_draw_ve_grid(ve_view);
@@ -339,14 +342,23 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 
+	// Left Button
 	if (event->state & GDK_BUTTON1_MASK)
 	{
 		ve_view->sphi += (float)(event->x - ve_view->beginX) / 4.0;
 		ve_view->stheta += (float)(ve_view->beginY - event->y) / 4.0;
 		redraw = TRUE;
 	}
-
+	// Middle button (or both buttons for two button mice)
 	if (event->state & GDK_BUTTON2_MASK)
+	{
+		ve_view->h_strafe -= (float)(event->x -ve_view->beginX) / 40.0;
+		ve_view->v_strafe += (float)(event->y -ve_view->beginY) / 40.0;
+//		printf("h_strafe %f, v_strafe %f\n",ve_view->h_strafe,ve_view->v_strafe);
+		redraw = TRUE;
+	}
+	// Right Button
+	if (event->state & GDK_BUTTON3_MASK)
 	{
 		ve_view->sdepth -= ((event->y - ve_view->beginY)/(widget->allocation.height))*(grid);
 		redraw = TRUE;
@@ -366,14 +378,7 @@ gboolean ve_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointe
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 	gtk_widget_grab_focus (widget);
 	
-	if (event->button == 1)
-	{
-		ve_view->beginX = event->x;
-		ve_view->beginY = event->y;
-		return TRUE;
-	}
-
-	if (event->button == 2)
+	if (event->button != 0)
 	{
 		ve_view->beginX = event->x;
 		ve_view->beginY = event->y;

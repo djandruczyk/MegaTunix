@@ -73,6 +73,8 @@ struct Ve_View_3D
 	gfloat rpm_div;
 	gfloat load_div;
 	gfloat ve_div;
+	gfloat h_strafe;
+	gfloat v_strafe;
 	gint rpm_max;
 	gint load_max;
 	gint ve_max;
