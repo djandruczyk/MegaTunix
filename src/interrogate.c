@@ -620,7 +620,7 @@ void load_profile_details(void *ptr)
 			{	
 
 				if (!cfg_read_string(cfgfile,"lookuptables",list[i],&tmpbuf))
-					dbg_func(__FILE__": load_profile_details()\n\t\"lookuptables\" key name not found in interrogation profile, ERROR\n",CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_profile_details()\n\t\"%s\" key name not found in \"[lookuptables]\"\n\t section of interrogation profile, ERROR\n",list[i]),CRITICAL);
 				else
 				{
 					g_hash_table_insert(canidate->lookuptables,list[i],g_strdup(tmpbuf));

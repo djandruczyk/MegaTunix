@@ -104,7 +104,7 @@ gfloat lookup_data(GObject *object, gint offset)
 	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
 	//assert(lookuptable);
 	if (!lookuptable)
-		return 0;
+		return 0.0;
 	return lookuptable[offset];
 }
 

@@ -3,6 +3,8 @@ lookuptablesdir = $(datadir)/MegaTunix/$(LOOKUPTABLE_DATA_DIR)
 lookuptables =	cltfactor.inc \
 		matfactor.inc \
 		kpafactor.inc \
+		barofactor4115.inc \
+		barofactor4250.inc \
 		InnoLM1_1_2V.inc \
 		InnoLM1_0_5V.inc \
 		TEWBLin.inc \

@@ -29,18 +29,18 @@ void load_lookuptables(void *ptr)
 	g_hash_table_foreach(canidate->lookuptables,get_table,NULL);
 }
 
-void get_table(gpointer table, gpointer fname, gpointer user_data)
+void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
 	gboolean status = FALSE;
 	gchar * filename = NULL;
 	
 	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,"/",(gchar *)fname,NULL));
 	if (filename)
-		status = load_table(table,filename);
+		status = load_table(table_name,filename);
 	g_free(filename);
 	if (!status)
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table_name),CRITICAL);
 		exit (-2);
 	}
 

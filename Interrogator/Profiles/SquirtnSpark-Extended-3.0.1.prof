@@ -44,8 +44,10 @@ CMD_F_0=255
 LoadTabs=B_n_G_constants,enrichments_BnG,vetable_8x8_1,msns-3.01-ext_ignition,sparktable_8x8_1
 
 [lookuptables]
-tables=mat_table,clt_table,afr_table,kpa_table
+tables=mat_table,clt_table,afr_table,kpa_table,115_map,250_map
 mat_table=matfactor.inc
 clt_table=cltfactor.inc
 afr_table=NBafr100.inc
 kpa_table=kpafactor.inc
+115_map=barofactor4115.inc
+250_map=barofactor4250.inc
