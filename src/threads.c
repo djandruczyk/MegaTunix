@@ -81,7 +81,7 @@ void *serial_raw_thread_starter(void *params)
 	if (retcode == 0)
 	{
 		/* SUCCESS */
-                g_snprintf(buff,60,"Successful Start of Realtime Reader Thread");
+                g_snprintf(buff,60,"Successfull Start of Realtime Reader Thread");
                 /* Thread started successfully */
 		gdk_threads_enter();
 		update_statusbar(ser_statbar,ser_context_id,buff);
