@@ -30,7 +30,6 @@ gchar *vex_comment;
 extern struct DynamicButtons buttons;
 extern struct Tools tools;
 extern GtkWidget *tools_view;
-extern gboolean dualtable;
 static gint import_page = -1; 
 
 
@@ -101,6 +100,7 @@ gboolean vetable_export(void *ptr)
 	gint index = 0;
 	extern unsigned char * ms_data;
 	unsigned char * ve_const_arr = NULL;
+	extern unsigned int ecu_flags;
 	gchar * tmpbuf;
 	gchar *buffer; 
 	gint pos = 0;
@@ -155,7 +155,7 @@ gboolean vetable_export(void *ptr)
 		}
 		pos += g_sprintf(buffer+pos,"\n");
 	}
-	if (dualtable == TRUE)
+	if (ecu_flags & DUALTABLE)
 	{
 		pos += g_sprintf(buffer+pos, "Page 1\n");
 		pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");

@@ -15,14 +15,13 @@
 
 #include <config.h>
 #include <defines.h>
+#include <enums.h>
 #include <lookuptables.h>
 #include <ms_structures.h>
 #include <post_process.h>
 
 extern unsigned char *kpa_conversion;
 extern gboolean fahrenheit;
-extern gboolean dualtable;
-extern gboolean ign_variant;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
 
@@ -33,6 +32,8 @@ void post_process(void *input, void *output)
 	 * choose below which ones to take based on whether
 	 * dualtable is set or not..
 	 */
+	extern unsigned char *ms_data;
+	extern unsigned int ecu_flags;
 	gint stroke = 0;
 	gint cyls = 0;
 	gfloat ign_int = 0.0;
@@ -40,12 +41,11 @@ void post_process(void *input, void *output)
 	struct Raw_Runtime_Dualtable *in_dt = input;
 	struct Runtime_Common *out = output;
 	struct Raw_Runtime_Ignition *ign_in = input;
-	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
-	if (dualtable)
+	if (ecu_flags & DUALTABLE)
 	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
@@ -94,13 +94,19 @@ void post_process(void *input, void *output)
 	out->egocorr = in->egocorr;
 	out->aircorr = in->aircorr;
 	out->warmcorr = in->warmcorr;
-	if (!ign_variant)
-		out->rpm = in->rpm * 100;
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
 
-	if (ign_variant)
+	/* NON Spark variants.... */
+	if (!(ecu_flags & (S_N_SPARK|S_N_EDIS)))
+	{
+		out->rpm = in->rpm * 100;
+		out->bspot1 = in->bspot1;
+		out->bspot2 = in->bspot2;
+		out->bspot3 = in->bspot3;
+	}
+	else	 /* Spark variants,  SquirtnSpark and SquirtnEDIS */
 	{
 		/* Funky high resolution RPM output from MegaSquirtnSpark */
 		cyls = ve_const->config11.bit.cylinders+1;
@@ -118,13 +124,8 @@ void post_process(void *input, void *output)
 
 		out->sparkangle = ign_in->sparkangle;
 	}
-	else
-	{
-		out->bspot1 = in->bspot1;
-		out->bspot2 = in->bspot2;
-		out->bspot3 = in->bspot3;
-	}
-	if (!dualtable)
+
+	if (!(ecu_flags & DUALTABLE))
 	{	/* Std B&G Code */
 		if ((ve_const->divider == 0) || ((ve_const->config11.bit.cylinders+1)%ve_const->divider))
 		{

@@ -16,8 +16,23 @@
 #include <defines.h>
 #include <mode_select.h>
 #include <serialio.h>
+#include <structures.h>
 
 extern gboolean fahrenheit;
+
+void parse_ecu_flags(unsigned int ecu_flags)
+{
+	extern struct DynamicButtons buttons;
+	set_ignition_mode(ecu_flags & (S_N_SPARK|S_N_EDIS));
+	set_iac_mode(ecu_flags & (IAC_PWM|IAC_STEPPER));
+	set_dualtable_mode(ecu_flags & DUALTABLE);
+	if (ecu_flags & IAC_STEPPER)
+		gtk_button_set_label(GTK_BUTTON(buttons.pwm_idle_but),
+				"Stepper Controlled");
+	else
+		gtk_button_set_label(GTK_BUTTON(buttons.pwm_idle_but),
+				"PWM Controlled");
+}
 
 void set_dt_table_mapping_state(gboolean state)
 {
@@ -27,10 +42,9 @@ void set_dt_table_mapping_state(gboolean state)
 
 void set_ignition_mode(gboolean state)
 {
-	extern gboolean ign_variant;
         extern GList *ign_widgets;
         extern GList *inv_ign_widgets;
-        ign_variant = state;
+	printf("setting ign mode to %i\n",state);
         g_list_foreach(ign_widgets, set_widget_state,(gpointer)state);
         g_list_foreach(inv_ign_widgets, set_widget_state,(gpointer)(!state));
         reset_temps(GINT_TO_POINTER(fahrenheit));
@@ -38,19 +52,19 @@ void set_ignition_mode(gboolean state)
 
 void set_iac_mode(gboolean state)
 {
+        extern GList *iac_idle_widgets;
         extern GList *enh_idle_widgets;
-	extern gboolean using_pwm_idle;
-        using_pwm_idle = state;
+	printf("setting iac mode to %i\n",state);
         g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
+        g_list_foreach(iac_idle_widgets, set_widget_state,(gpointer)state);
 }
 
 void set_dualtable_mode(gboolean state)
 {
         extern GList *dt_widgets;
         extern GList *inv_dt_widgets;
-	extern gboolean dualtable;
-        dualtable = state;
 
+	printf("setting dt mode to %i\n",state);
         g_list_foreach(dt_widgets, set_widget_state,(gpointer)state);
         g_list_foreach(inv_dt_widgets, set_widget_state,(gpointer)(!state));
 

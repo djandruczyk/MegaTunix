@@ -162,5 +162,17 @@ typedef enum
 	RPM
 }TableType;
 
+typedef enum
+{	/* up to 32 Capability flags.... */
+	/* No capabilities == Standard B&G code with no modifications */
+	DUALTABLE	= 1<<0,
+	S_N_SPARK	= 1<<1,
+	S_N_EDIS	= 1<<2,
+	IAC_PWM		= 1<<3,
+	IAC_STEPPER	= 1<<4,
+	BOOST_CTRL	= 1<<5,
+	OVERBOOST_SFTY	= 1<<6,
+	LAUNCH_CTRL	= 1<<7
+}Capabilities;
 
 #endif

@@ -28,9 +28,7 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-gboolean dualtable = FALSE;		/* Talking to a dualtable MS ?? */
-gboolean ign_variant = FALSE;	/* Talking to a EDIS/spark MS ?? */
-gboolean iac_variant = FALSE;	/* Talking to a enhanced IAC capable MS ?? */
+unsigned int ecu_flags = 0;	/* Assume stock B&G code */
 unsigned char *kpa_conversion; 
 extern unsigned char turbo_map[];
 extern unsigned char na_map[];
@@ -86,7 +84,6 @@ void init()
 	serial_params->read_wait = 100;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
-	dualtable = FALSE;
 	raw_reader_running = FALSE;  /* We're not reading raw data yet... */
 	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */

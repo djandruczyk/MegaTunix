@@ -62,7 +62,6 @@ extern struct Runtime_Common *runtime;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern GdkColor white;
-extern gboolean dualtable;
 
 void build_datalogging(GtkWidget *parent_frame)
 {

@@ -34,8 +34,6 @@
 #include <vex_support.h>
 
 extern gboolean interrogated;
-extern gboolean dualtable;
-extern gboolean iac_variant;
 extern gboolean connected;
 extern gboolean raw_reader_running;
 extern gchar *delim;
@@ -69,7 +67,6 @@ static gint update_rate = 24;
 static gint runtime_id = -1;
 static gint logviewer_id = -1;
 static gint hilite_id = -1;
-gboolean using_pwm_idle;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean fahrenheit;
@@ -309,13 +306,14 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint dl_type = -1;
 	gint single = -1;
 	extern unsigned char *ms_data;
+	extern unsigned int ecu_flags;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 	//struct Ignition_Table *ign_table = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
 
-	if (dualtable)
+	if (ecu_flags & DUALTABLE)
 	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
@@ -344,7 +342,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 		switch (offset)
 		{
 			case 92: /* alternate OR tblcnf (firmware dependant) */
-				if (dualtable)
+				if (ecu_flags & DUALTABLE)
 				{
 					tmp = ve_const_dt1->tblcnf.value;
 					tmp = tmp & ~bitmask;	/*clears bits */
@@ -398,7 +396,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				check_config13(dload_val);
 				break;
 			case 247: // Boost Controller (DT only)
-				if (!dualtable)
+				if (!(ecu_flags & DUALTABLE))
 					break;
 				tmp = ve_const_dt2->bcfreq.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
@@ -532,6 +530,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	gint tmp = 0;
 	gfloat value = 0.0;
 	extern unsigned char * ms_data;
+	extern unsigned int ecu_flags;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
@@ -545,7 +544,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	if ((paused_handlers) || (!ready))
 		return TRUE;
 
-	if (dualtable)
+	if (ecu_flags & DUALTABLE)
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
@@ -762,6 +761,7 @@ void update_ve_const()
 	gfloat value = 0.0;
 	gboolean temp_dep = FALSE;
 	extern unsigned char *ms_data;
+	extern unsigned int ecu_flags;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
@@ -788,7 +788,7 @@ void update_ve_const()
 	 *
 	
 	 */
-	if (dualtable)
+	if (ecu_flags & DUALTABLE)
 	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
@@ -1034,8 +1034,8 @@ void update_ve_const()
 				GTK_TOGGLE_BUTTON(buttons.multi_port_but),
 				TRUE);
 
-	/* B&G idle or PWM */
-	if ((dualtable) || (iac_variant))
+	/* B&G idle or PWM/Stepper */
+	if (ecu_flags & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 	{
 		if (ve_const->config13.bit.idle_policy)
 			gtk_toggle_button_set_active(
@@ -1051,7 +1051,7 @@ void update_ve_const()
 				TRUE);
 
 
-	if (!dualtable)
+	if (!(ecu_flags & DUALTABLE))
 	{
 		if (ve_const->alternate > 0)
 			gtk_toggle_button_set_active(
@@ -1141,6 +1141,7 @@ void check_config11(unsigned char tmp)
 void check_config13(unsigned char tmp)
 {
 	GtkWidget *label;
+	extern GList *enh_idle_widgets;
 	/* checks bits of the confgi13 bitfield and forces
 	 * gui to update/adapt as necessary...
 	 */
@@ -1186,19 +1187,19 @@ void check_config13(unsigned char tmp)
 	}
 
 	/* Check Idle method */
-	if (((tmp >> 4)&0x1) == 1)
+	if (((tmp >> 4)&0x1) == 1) /* If Set turn idle controls, else turn off */
 	{
-		// Brian Fielding PWM method, enable controls
-		using_pwm_idle = TRUE;
-		set_iac_mode(TRUE);
+		g_list_foreach(enh_idle_widgets, 
+				set_widget_state,(gpointer)TRUE);
 		reset_temps(GINT_TO_POINTER(fahrenheit));
 	}
 	else
 	{
-		using_pwm_idle = FALSE;
-		set_iac_mode(FALSE);
+		g_list_foreach(enh_idle_widgets, 
+				set_widget_state,(gpointer)FALSE);
 		reset_temps(GINT_TO_POINTER(fahrenheit));
 	}
+      
 		
 }
 

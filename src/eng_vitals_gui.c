@@ -26,6 +26,7 @@ struct DynamicButtons buttons;
 extern GtkWidget *ve_widgets[];
 extern GdkColor black;
 GList *enh_idle_widgets = NULL;
+GList *iac_idle_widgets = NULL;
 GList *inv_ign_widgets = NULL;
 GList *ign_widgets = NULL;
 
@@ -445,6 +446,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"PWM Controlled");
 	buttons.pwm_idle_but = button;
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)button);
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
@@ -550,6 +552,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	/* Fast Idle Speed */
 	label = gtk_label_new("Fast Idle Speed (RPM)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
@@ -560,6 +563,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         spinner = gtk_spin_button_new(adj,0,0);
         ve_widgets[125] = spinner;
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -580,6 +584,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	label = gtk_label_new("Slow Idle Temp (\302\260 F.)");
         labels.slow_idle_temp_lab = label;
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
@@ -590,6 +595,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         adjustments.slow_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         spinners.slow_idle_temp_spin = spinner;
         ve_widgets[124] = spinner;
@@ -613,6 +619,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	/* Slow Idle Speed */
 	label = gtk_label_new("Slow Idle Speed (RPM)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
@@ -622,6 +629,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(900.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         ve_widgets[126] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
@@ -644,6 +652,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	 */
 	label = gtk_label_new("Idle Threshold (TPS%)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
@@ -653,6 +662,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(10.0,0.0,100.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         ve_widgets[127] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);

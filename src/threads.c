@@ -29,7 +29,6 @@
 
 
 GThread *raw_input_thread;			/* thread handle */
-extern gboolean dualtable;
 gboolean raw_reader_running;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern GtkWidget * comms_view;

@@ -406,7 +406,7 @@ void check_req_fuel_limits()
 	gint lim_flag = 0;
 	gint dload_val = 0;
 	gint offset = 0;
-	extern gboolean dualtable;
+	extern unsigned int ecu_flags;
 	extern gboolean paused_handlers;
 	extern GHashTable * interdep_vars_1;
 	extern GHashTable * interdep_vars_2;
@@ -416,7 +416,7 @@ void check_req_fuel_limits()
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 
 
-	if (dualtable)
+	if (ecu_flags & DUALTABLE)
 	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *)ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);

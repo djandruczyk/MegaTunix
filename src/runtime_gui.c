@@ -714,10 +714,10 @@ gboolean update_runtime_vars()
 	static gint count = 0;
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
+	extern unsigned int ecu_flags;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
 	extern GtkWidget *ve_widgets[];
-	extern gboolean dualtable;
 
 	gdk_threads_enter();
 
@@ -946,7 +946,7 @@ gboolean update_runtime_vars()
 		g_free(tmpbuf);
 	}
 
-	if (dualtable)
+	if (ecu_flags & DUALTABLE)
 	{
 		/* Color the boxes on the VEtable closest to the operating point */
 
