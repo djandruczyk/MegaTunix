@@ -121,33 +121,34 @@ table_name
   Used to help the user differentiate which tabel they are editing at any one
   time...
 
-rpm_page
-  - Integer, lists the page number that the rpm array lives in
+x_page
+  - Integer, lists the page number that the X axis (RPM) array lives in
 
-load_page
-  - Integer, lists the page number that the load array lives in
+y_page
+  - Integer, lists the page number that the Y Axis (MAP/TPS)load array lives in
 
 tbl_page
   - Integer, lists the page number that the tbl array lives in
 
 tbl_base_offset
   - Integer, The offset from the base of page (above) that this table starts
-  at.  The total length of the table is rpm_bincount*load_bincount, and is 
+  at.  The total length of the table is x_bincount*y_bincount, and is 
   sequentially addressed.
 
-rpm_base_offset
-  - Integer, The offset from the pase of page (Above) that the RPM array 
-  starts at.  Length of this array is rpm_bincount
+x_base_offset
+  - Integer, The offset from the pase of page (Above) that the X Axis (RPM) 
+  array starts at.  Length of this array is x_bincount
+ 
 
-load_base_offset
-  - Integer, The offset from the pase of page (Above) that the LOAD array 
-  starts at.  Length of this array is load_bincount
+y_base_offset
+  - Integer, The offset from the pase of page (Above) that the Y Axis (LOAD)
+  array starts at.  Length of this array is y_bincount. 
+ 
+x_bincount
+  - Integer, the size of the X Axis (RPM) array
 
-rpm_bincount
-  - Integer, the size of the RPM array
-
-load_bincount
-  - Integer, the size of the LOAD array
+y_bincount
+  - Integer, the size of the Y Axis (LOAD) array
 
 
 [page_x] sections, 1 per page as defined by TotalPages
@@ -203,4 +204,4 @@ lookuptables can be loaded. Adjsut the "tables=" line as needed to load
 additional tables..
 
 
-Revised 1/17/2005, DJA
+Revised 2/09/2005, DJA
