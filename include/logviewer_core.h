@@ -18,8 +18,10 @@
 
 /* Prototypes */
 void load_logviewer_file(void * );
-void read_logviewer_header(GIOChannel *, void * );
+void read_log_header(GIOChannel *, void * );
+void read_log_data(GIOChannel *, void * );
 void initialize_log_info(void *);
+void allocate_buffers(void *);
 /* Prototypes */
 
 #endif

@@ -124,6 +124,9 @@ void build_logviewer(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(REALTIME_VIEW));
+	g_signal_connect(G_OBJECT(button), "toggled",
+			G_CALLBACK(reset_viewables),
+			NULL);
 
 	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	button = gtk_radio_button_new_with_label(group,"Playback Mode");
@@ -131,6 +134,9 @@ void build_logviewer(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(PLAYBACK_VIEW));
+	g_signal_connect(G_OBJECT(button), "toggled",
+			G_CALLBACK(reset_viewables),
+			NULL);
 
 	/* Holds the Select Button */
 	vbox3 = gtk_vbox_new(FALSE,0);
@@ -246,6 +252,7 @@ void present_viewer_choices(void *ptr)
 		max_viewables = log_info->field_count;
 	else
 		max_viewables = sizeof(logable_names)/sizeof(gchar *);
+
 	table_rows = ceil((float)max_viewables/(float)table_cols);
 	table = gtk_table_new(table_rows,table_cols,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -264,10 +271,12 @@ void present_viewer_choices(void *ptr)
 			
 		
 		button = gtk_check_button_new_with_label(name);
-		if (valid_logables[i] == FALSE)
-			gtk_widget_set_sensitive(button,FALSE);
 		if (!logviewer_mode)
+		{
+			if (valid_logables[i] == FALSE)
+				gtk_widget_set_sensitive(button,FALSE);
 			gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
+		}
 		if (viewables.index[i] == TRUE)
         		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
 			
@@ -325,7 +334,6 @@ gboolean populate_viewer(GtkWidget * d_area)
 {
 	struct Viewable_Value *v_value = NULL;
 	gint i = 0;
-
         total_viewables = 0;
 	/* Reget to total Viewables count */
         for (i=0;i<max_viewables;i++)
@@ -396,35 +404,54 @@ gboolean populate_viewer(GtkWidget * d_area)
 struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 {
 	struct Viewable_Value *v_value = NULL;
-	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(d_area),
-				"pixmap");
+	GdkPixmap *pixmap =  NULL;
+	struct Log_Info *log_info = NULL; 
+	GArray *tmp_array = NULL;
+
+	pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(d_area),"pixmap");
+	log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(d_area),"log_info");
 
 	v_value = g_malloc(sizeof(struct Viewable_Value));		
 
-	/* Store pointer to d_area, but DO NOT FEE THIS on v_Value destruction
+	/* Store pointer to d_area, but DO NOT FREE THIS on v_value destruction
 	 * as its the SAME one used for all Viewable_Values */
 	v_value->d_area = d_area;
 
 	/* Set limits of this variable. (it's ranges, used for scaling */
-	v_value->lower = limits[offset].lower;
-	v_value->upper = limits[offset].upper;
+	if (logviewer_mode)
+	{
+		v_value->lower = 0.0;
+		v_value->upper = 255.0;
+		v_value->runtime_offset = -1; // INVALID for playback
+		v_value->size = -1; // ??? INVALID for playback (maybe)
+		/* textual name of the variable we're viewing.. */
+		v_value->vname = g_strdup(log_info->fields[offset]);
+		/* data was already read from file and stored, copy pointer
+		 * over to v_value so it can be drawn...
+		 */
+		tmp_array = g_array_index(log_info->fields_data,GArray *, offset);
+		v_value->data_array = tmp_array;
+	}
+	else
+	{
+		v_value->lower = limits[offset].lower;
+		v_value->upper = limits[offset].upper;
+		/* Tell where we get the data from */
+		v_value->runtime_offset = logging_offset_map[offset];
+		/* How big the data is (needed when indexing into the data */
+		v_value->size = logging_datasizes_map[offset];
+		/* textual name of the variable we're viewing.. */
+		v_value->vname = g_strdup(logable_names[offset]);
+		/* Array to keep history for resize/redraw and export 
+		 * to datalog we use the _sized_ version to give a big 
+		 * enough size to prevent reallocating memory too often. 
+		 * (more initial mem usage,  but less calls to malloc...
+		 */
+		v_value->data_array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+	}
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
-
-	/* Tell where we get the data from */
-	v_value->runtime_offset = logging_offset_map[offset];
-	/* How big the data is (needed when indexing into the datablock */
-	v_value->size = logging_datasizes_map[offset];
-	/* textual name of the variable we're viewing.. */
-	v_value->vname = g_strdup(logable_names[offset]);
-
-	/* Array to keep history for resize/redraw and export to datalog
-	 * we use the _sized_ version to give a big enough size to prevent
-	 * reallocating memory too often. (more initial mem usage,  but less
-	 * calls to malloc...
-	 */
-	v_value->data_array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-
+	
 	/* User adjustable scales... */
 	v_value->cur_low = v_value->lower;
 	v_value->cur_high = v_value->upper;
@@ -795,7 +822,7 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 		gdk_window_set_back_pixmap(widget->window,pixmap,0);
 		g_object_set_data(G_OBJECT(widget),"pixmap",pixmap);
 
-		if (active_traces)
+		if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 		{
 			tcount = 0;
 			g_hash_table_foreach(active_traces, trace_update, (gpointer)TRUE);
@@ -823,4 +850,18 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 
 //	g_printf("expose event....\n");
 	return TRUE;
+}
+
+gboolean reset_viewables(GtkWidget *widget, gpointer data)
+{
+	gint i = 0;
+
+	/* disables all controls and de-allocates memory cleanly */
+        for (i=0;i<max_viewables;i++)
+                viewables.index[i] = FALSE;	
+	populate_viewer(NULL);
+	//g_signal_emit_by_name(lv_darea,"configure_event",NULL);
+
+	return FALSE;
+	
 }

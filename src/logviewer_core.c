@@ -41,9 +41,10 @@ void load_logviewer_file(void *ptr)
         }
 	log_info = g_malloc0(sizeof(struct Log_Info));
 	initialize_log_info(log_info);
-	read_logviewer_header(iofile->iochannel, log_info);
+	read_log_header(iofile->iochannel, log_info);
+	allocate_buffers(log_info);
+	read_log_data(iofile->iochannel, log_info);
 	close_file(iofile);
-	printf("Not quite implemented yet....\n");
 	return;
 }
 
@@ -53,9 +54,9 @@ void initialize_log_info(void *ptr)
 	struct Log_Info *log_info;
 	log_info = ptr;
 	log_info->field_count = 0;
-	log_info->fields_hash = g_hash_table_new(NULL,NULL);
 	log_info->delim = NULL;
 	log_info->fields = NULL;
+	log_info->fields_data = g_array_new(FALSE,FALSE,sizeof(GArray *));
 	return;
 }
 
@@ -66,7 +67,7 @@ void initialize_log_info(void *ptr)
  * how to discern thespace inthe name with the space in between variable names
  * This may be UGLY...
  */
-void read_logviewer_header(GIOChannel *iochannel, void *ptr)
+void read_log_header(GIOChannel *iochannel, void *ptr)
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus  status = G_IO_STATUS_ERROR;
@@ -106,3 +107,49 @@ void read_logviewer_header(GIOChannel *iochannel, void *ptr)
 	g_free(delim);
 	
 }
+
+void allocate_buffers(void *ptr)
+{
+	gint i = 0;
+	struct Log_Info *log_info = ptr;
+	GArray *data_array;
+	
+	/* This looks weird but it should work pretty well.
+	 * On Log_Info initialization we create a GArray. This 
+	 * array contains pointers to the arrays of data for EACH variable
+	 * in the logfile.  This makes it pretty easy to insert things
+	 * and should be pretty fast. (well I hope so..)
+	 */
+	for (i=0;i<log_info->field_count;i++)
+	{
+		data_array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+		g_array_insert_val(log_info->fields_data,i,data_array);
+	}
+}
+
+void read_log_data(GIOChannel *iochannel, void *ptr)
+{
+	GString *a_line = g_string_new("\0");
+	GIOStatus  status = G_IO_STATUS_ERROR;
+	struct Log_Info *log_info = ptr;
+	gchar **data;
+	gint i = 0;
+	GArray *tmp_array;
+	gfloat val = 0.0;
+
+	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) 
+			== G_IO_STATUS_NORMAL) 
+	{
+		data = g_strsplit(a_line->str,log_info->delim,0);
+		for (i=0;i<(log_info->field_count);i++)
+		{
+			tmp_array = g_array_index(log_info->fields_data,GArray *,i);
+			val = (gfloat)g_ascii_strtod(g_strdup(data[i]),NULL);
+			g_array_append_val(tmp_array,val);
+
+			//printf("data[%i]=%s\n",i,data[i]);
+		}
+		g_strfreev(data);
+	}
+}
+	

@@ -24,6 +24,7 @@ gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean view_value_set(GtkWidget *, gpointer );
 gboolean populate_viewer(GtkWidget * );
+gboolean reset_viewables(GtkWidget *, gpointer );
 struct Viewable_Value * build_v_value(GtkWidget *, gint );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 GdkColor get_colors_from_hue(gfloat);
