@@ -48,7 +48,6 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 	extern guchar *ms_data_last[MAX_SUPPORTED_PAGES];
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
-	extern struct Runtime_Common *runtime;
 
 	dbg_func("\n"__FILE__": handle_ms_data()\tENTERED...\n\n",IO_PROCESS);
 
@@ -156,9 +155,6 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			post_process_realtime_vars((void *)buf,(void *)runtime);
-			// NEW dynamic rt vars processor. Above soon to be
-			// deprecated...
 			process_rt_vars((void *)buf);
 			break;
 

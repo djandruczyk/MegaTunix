@@ -27,6 +27,7 @@
 #include <gtk/gtkgl.h>
 #include <ms_structures.h>
 #include <notifications.h>
+#include <rtv_processor.h>
 #include <serialio.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -35,7 +36,6 @@
 
 static GLuint font_list_base;
 
-extern struct Runtime_Common *runtime;
 
 #define DEFAULT_WIDTH  475
 #define DEFAULT_HEIGHT 320                                                                                  
@@ -599,27 +599,35 @@ void ve_draw_runtime_indicator(void *ptr)
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)ptr;
-	guchar actual_ve = 0;
+	gfloat actual_ve = 0.0;
+	gfloat rpm = 0.0;
+	gfloat map = 0.0;
 
 	dbg_func(__FILE__": ve_draw_runtime_indicator()\n",OPENGL);
 
 	if (ve_view->page == 0) /* all std code derivatives..*/
-		actual_ve = runtime->vecurr1;
+		lookup_current_value("vecurr",&actual_ve);
 	else if ((ve_view->page == 1) && (!(ve_view->is_spark)))
-		actual_ve = runtime->vecurr2;
+		lookup_current_value("vecurr2",&actual_ve);
 	else if (ve_view->is_spark)
-		actual_ve = runtime->sparkangle;
+		lookup_current_value("sparkangle",&actual_ve);
 	else
 		dbg_func("\tProblem, ve_draw_runtime_indicator(), page out of range..\n",CRITICAL);
+
+	if (!lookup_current_value("raw_rpm",&rpm))
+		dbg_func(__FILE__": ve_draw_runtime_indicator()\n\t Failed finding \"raw_rpm\" datasource...\n",CRITICAL);
+
+	if (!lookup_current_value("mapkpa",&map))
+		dbg_func(__FILE__": ve_draw_runtime_indicator()\n\t Failed finding \"mapkpa\" datasource...\n",CRITICAL);
 
 	/* Render a green dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(0.0,1.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
-			(gfloat)(runtime->rpm)/100/ve_view->rpm_div,
-			(gfloat)(runtime->map)/ve_view->load_div,	
-			(gfloat)(actual_ve)/ve_view->ve_div);
+			rpm/ve_view->rpm_div,
+			map/ve_view->load_div,	
+			actual_ve/ve_view->ve_div);
 	glEnd();
 }
 

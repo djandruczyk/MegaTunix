@@ -42,7 +42,7 @@ CMD_F_0=0
 
 [gui]
 ControlMapFile=std-firmware
-LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,msns-3.0_ignition,sparktable_8x8_1,tools
+LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,msns-3.0_ignition,sparktable_8x8_1,tools,warmupwizard
 RealtimeMapFile=SquirtnSpark-3.x_rtv_map
 
 [lookuptables]

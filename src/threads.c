@@ -456,6 +456,15 @@ void comms_test()
 void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct OutputData *output = NULL;
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern gboolean paused_handlers;
+
+	if (g_list_length(ve_widgets[page][offset]) > 1)
+	{
+		paused_handlers = TRUE;
+		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+		paused_handlers = FALSE;
+	}
 
 	dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm),SERIAL_WR);
 	output = g_new0(struct OutputData,1);

@@ -55,7 +55,6 @@ struct Serial_Params *serial_params;
 guchar *ms_data[MAX_SUPPORTED_PAGES];
 guchar *ms_data_last[MAX_SUPPORTED_PAGES];
 guchar *ms_data_backup[MAX_SUPPORTED_PAGES];
-struct Runtime_Common *runtime;
 GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
@@ -230,9 +229,6 @@ void mem_alloc()
 			ve_widgets[i][j] = NULL;
 	}
 
-	runtime = g_malloc0(sizeof(struct Runtime_Common));
-
-
 	cmds = g_malloc0(sizeof(struct IoCmds));
 
 }
@@ -265,7 +261,6 @@ void mem_dealloc()
 		g_free(ms_data_last[i]);
 		g_free(ms_data_backup[i]);
 	}
-	g_free(runtime);
 	g_hash_table_destroy(interdep_vars_1);
 	g_hash_table_destroy(interdep_vars_2);
 }

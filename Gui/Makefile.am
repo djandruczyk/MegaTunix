@@ -30,7 +30,9 @@ gui_files = 	template.glade \
 		vetable_8x8_1.glade \
 		vetable_8x8_1.datamap \
 		vetable_8x8_2.glade \
-		vetable_8x8_2.datamap 
+		vetable_8x8_2.datamap \
+		warmupwizard.datamap \
+		warmupwizard.glade 
 
 gui_DATA = $(gui_files)
 

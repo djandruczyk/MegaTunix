@@ -20,7 +20,7 @@
 
 /* Prototypes */
 void load_controls(void );
-void add_control(gchar *, gint, gint, gchar *);
+void add_control(gchar *, gint, gint, gchar *,PageIdent );
 /* Prototypes */
 
 

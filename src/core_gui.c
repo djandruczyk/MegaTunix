@@ -20,7 +20,6 @@
 #include <general_gui.h>
 #include <gui_handlers.h>
 #include <tuning_gui.h>
-#include <warmwizard_gui.h>
 
 
 
@@ -47,7 +46,6 @@ static struct
 { "General MegaTunix Settings", build_general, "_General",STANDARD,GENERAL_PAGE},
 { "MegaSquirt Communications Parameters", build_comms, "_Communications",STANDARD,COMMS_PAGE},
 //{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
-//{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD,WARMUP_WIZ_PAGE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);

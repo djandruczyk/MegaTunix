@@ -19,7 +19,6 @@
 #include <ms_structures.h>
 
 /* Prototypes */
-void post_process_realtime_vars(void *, void * );
 void post_process_raw_memory(void *, gint);
 void update_raw_memory_view(ToggleButton, gint);
 gchar * get_bin(gint );

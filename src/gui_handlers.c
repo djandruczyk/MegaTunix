@@ -744,7 +744,6 @@ void update_ve_const()
 	/* Point to Table0 (stock MS ) data... */
 	ve_const = (struct Ve_Const_Std *) ms_data[0];
 
-	check_config11(ve_const->config11.value);
 	check_config13(ve_const->config13.value);
 
 

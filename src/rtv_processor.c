@@ -316,3 +316,19 @@ gfloat handle_special(GObject *object,gchar *handler_name)
 		dbg_func(g_strdup_printf(__FILE__": handle_special()\n\t handler name is not recognized, \"%s\"\n",handler_name),CRITICAL);
 	return 0.0;
 }
+
+gboolean lookup_current_value(gchar *internal_name, gfloat *value)
+{
+	extern struct RtvMap *rtv_map;
+	GObject * object = NULL;
+	gfloat * history = NULL;
+	gint last_entry = 0;
+	
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	history = (gfloat *)g_object_get_data(object,"history");
+	last_entry = (gint)g_object_get_data(object,"last_entry");
+	*value = history[last_entry];
+	return TRUE;
+}

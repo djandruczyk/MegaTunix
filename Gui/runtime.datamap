@@ -3,7 +3,6 @@
 [global]
 description=Object data map for MegaSquirt Runtime Display
 tab_name=_Runtime Display
-page_ident=_RUNTIME_PAGE_
 
 #----- Buttons ---------------------------------------------------------------
 [runtime_start_realtime_button]

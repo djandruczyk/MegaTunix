@@ -35,7 +35,7 @@ CMD_F_0=0
 [gui]
 RealtimeMapFile=B_and_G_1.x.rtv_map
 ControlMapFile=std-firmware
-LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,tools
+LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,tools,warmupwizard
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map

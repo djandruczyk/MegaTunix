@@ -17,7 +17,6 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void check_config11(guchar);
 void check_config13(guchar);
 /* Prototypes */
 

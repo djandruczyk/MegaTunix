@@ -21,50 +21,13 @@
 #include <timeout_handlers.h>
 
 
-void check_config11(guchar tmp)
-{
-	extern gfloat map_pbar_divisor;
-	extern guchar *kpa_conversion;
-	extern guchar na_map[];
-	extern guchar turbo_map[];
-
-	/* checks some of the bits in the config11 variable and 
-	 * adjusts some important things as necessary....
-	 */
-	if ((tmp &0x3) == 0)	
-	{
-		kpa_conversion = na_map;
-		map_pbar_divisor = 115.0;
-	}
-	if ((tmp &0x3) == 1)	
-	{
-		kpa_conversion = turbo_map;
-		map_pbar_divisor = 255.0;
-	}
-}
-
 void check_config13(guchar tmp)
 {
 	GtkWidget *label;
-	extern gfloat ego_pbar_divisor;
 	extern GHashTable * dynamic_widgets;
 	/* checks bits of the confgi13 bitfield and forces
 	 * gui to update/adapt as necessary...
 	 */
-
-
-	/* check O2 sensor bit and adjust factor
-	   so runtime display has a sane scale... */
-	if (((tmp >> 1)&0x1) == 1)
-	{
-		ego_pbar_divisor = 5.0;
-		force_an_update();
-	}
-	else
-	{
-		ego_pbar_divisor = 1.2;
-		force_an_update();
-	}
 
 	/* Check SD/Alpha-N button and adjust VEtable labels
 	 * to suit

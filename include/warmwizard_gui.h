@@ -17,7 +17,6 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void build_warmwizard(GtkWidget *);
 void warmwizard_update_status(gfloat );
 /* Prototypes */
 

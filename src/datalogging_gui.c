@@ -36,8 +36,6 @@ gboolean begin = TRUE;
 
 /* External global vars */
 extern gint ready;
-extern struct Runtime_Common *runtime;
-extern GdkColor white;
 extern struct RtvMap *rtv_map;
 
 /* Static vars to all functions in this file... */

@@ -66,6 +66,13 @@ union engine
                                                   
         } bit;
 };
+#define MAPACCEL_BIT	1 << 1
+#define DECEL_BIT	1 << 2
+#define ACCEL_BIT	1 << 3
+#define WARMUP_BIT	1 << 4
+#define ASE_BIT		1 << 5
+#define CRANK_BIT	1 << 6
+#define RUNNING_BIT	1 << 7
 
 /* Big endian systems (MSB) */
 union config11
@@ -232,6 +239,14 @@ union engine
                 guchar reserved  :1;
         } bit;
 };
+#define MAPACCEL_BIT	1 << 6
+#define DECEL_BIT	1 << 5
+#define ACCEL_BIT	1 << 4
+#define WARMUP_BIT	1 << 3
+#define ASE_BIT		1 << 2
+#define CRANK_BIT	1 << 1
+#define RUNNING_BIT	1 << 0
+
 /* Little Endian systems (LSB), intel x86) */
 union config11
 {

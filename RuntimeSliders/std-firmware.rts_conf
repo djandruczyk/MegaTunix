@@ -1,106 +1,131 @@
 [global]
 description=Runtime Slider definitions for std firmwares (B&G code)
-total_sliders=17
+rt_total_sliders=17
+ww_total_sliders=4
 
-[slider_0]
+[rt_slider_0]
 control_name=Clock
 table=0
 row=0
 source=raw_secl
 
-[slider_1]
+[rt_slider_1]
 control_name=batt_volts
 table=0
 row=1
 source=battvolt
 
-[slider_2]
+[rt_slider_2]
 control_name=rpmx100
 table=0
 row=2
 source=rpmx100
 
-[slider_3]
+[rt_slider_3]
 control_name=pw
 table=0
 row=3
 source=pw
 
-[slider_4]
+[rt_slider_4]
 control_name=dutycycle
 table=0
 row=4
 source=dcycle
 
-[slider_5]
+[rt_slider_5]
 control_name=o2_volts
 table=1
 row=0
 source=o2volt
 
-[slider_6]
+[rt_slider_6]
 control_name=tps_percent
 table=1
 row=1
 source=tpspercent
 
-[slider_7]
+[rt_slider_7]
 control_name=map
 table=1
 row=2
 source=mapkpa
 
-[slider_8]
+[rt_slider_8]
 control_name=clt
 table=1
 row=3
 source=cltdeg
 
-[slider_9]
+[rt_slider_9]
 control_name=mat
 table=1
 row=4
 source=matdeg
 
-[slider_10]
+[rt_slider_10]
 control_name=aircorr
 table=2
 row=0
 source=aircorr
 
-[slider_11]
+[rt_slider_11]
 control_name=warmcorr
 table=2
 row=1
 source=warmcorr
 
-[slider_12]
+[rt_slider_12]
 control_name=egocorr
 table=2
 row=2
 source=egocorr
 
-[slider_13]
+[rt_slider_13]
 control_name=barocorr
 table=2
 row=3
 source=barocorr
 
-[slider_14]
+[rt_slider_14]
 control_name=gammae
 table=3
 row=0
 source=gammae
 
-[slider_15]
+[rt_slider_15]
 control_name=ve
 table=3
 row=1
 source=vecurr
 
-[slider_16]
+[rt_slider_16]
 control_name=tpsaccel
 table=3
 row=2
 source=tpsaccel
+
+[ww_slider_0]
+control_name=ww_clt
+table=0
+row=0
+source=cltdeg
+
+[ww_slider_1]
+control_name=ww_warmcorr
+table=0
+row=1
+source=warmcorr
+
+[ww_slider_2]
+control_name=ww_o2volt
+table=0
+row=2
+source=o2volt
+
+[ww_slider_3]
+control_name=ww_map
+table=0
+row=3
+source=mapkpa
 
