@@ -27,25 +27,30 @@ int build_about(GtkWidget *frame)
 {
 	char *buffer;
 	GtkWidget *label;
-	GtkWidget *box;
+	GtkWidget *vbox;
+	GtkWidget *alignment;
 	GdkPixbuf *pixbuf;
 	GtkWidget *drawing_area;
-	GError *error;
 	gint w,h;
 
-	box = gtk_vbox_new(FALSE,10);
-	gtk_container_add (GTK_CONTAINER (frame), box);
+	vbox = gtk_vbox_new(FALSE,10);
+	gtk_container_add (GTK_CONTAINER (frame), vbox);
 	buffer = g_strdup_printf("MegaTunix %s Tuning Software for Unix/Linux\n\tdesigned by David J. Andruczyk",VERSION);
 	label = gtk_label_new(buffer);
 	g_free(buffer);
-	gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
+
+	alignment = gtk_alignment_new(0.5,0.5,0,0);
+	gtk_box_pack_start(GTK_BOX(vbox),alignment,TRUE,FALSE,0);
 
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
+
 	drawing_area = gtk_drawing_area_new();
-	gtk_box_pack_start(GTK_BOX(box),drawing_area,TRUE,TRUE,0);
 	w = gdk_pixbuf_get_width (pixbuf);
         h = gdk_pixbuf_get_height (pixbuf);
 	gtk_widget_set_size_request (GTK_WIDGET (drawing_area), w, h);
+
+	gtk_container_add (GTK_CONTAINER (alignment), drawing_area);
 
 	g_signal_connect (drawing_area, "expose_event",
                           G_CALLBACK (expose_event), NULL);
@@ -53,10 +58,7 @@ int build_about(GtkWidget *frame)
                           G_CALLBACK (config_event), NULL);
 
 	g_object_set_data (G_OBJECT (drawing_area), "pixbuf", pixbuf);
-	g_object_set_data (G_OBJECT (drawing_area), "parent", box);
-
-
-        gtk_widget_show_all (box);
+	g_object_set_data (G_OBJECT (drawing_area), "parent", vbox);
 
 
 	return(0);

@@ -1008,7 +1008,7 @@ expose_event (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 	if (style->bg_pixmap[GTK_STATE_NORMAL])
 		printf("background is pixmapped\n");
 	else
-		printf("background is colored r %i g %i b %i pixel %x color %x\n",style->bg[0].red,style->bg[0].green,style->bg[0].blue, style->bg[0].pixel,color);
+//		printf("background is colored r %i g %i b %i pixel %x color %x\n",style->bg[0].red,style->bg[0].green,style->bg[0].blue, style->bg[0].pixel,color);
 
 	if (gdk_pixbuf_get_has_alpha (pixbuf)) {
 		GdkPixbuf *dest;
