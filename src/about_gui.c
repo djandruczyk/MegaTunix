@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <gdk-pixbuf/gdk-pixdata.h>
 #include <config.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -18,26 +19,32 @@
 #include <protos.h>
 #include <defines.h>
 #include <globals.h>
-#include <MegaTunix.xpm>
+#include <logo.h>
 
 
 
 int build_about(GtkWidget *frame)
 {
-	char buffer[100];
+	char *buffer;
 	GtkWidget *label;
 	GtkWidget *box;
-	GdkPixbuf *pbuf;
-	GtkWidget *darea;
+	GdkPixbuf *pixbuf;
+	GtkWidget *image;
+	GError *error;
 
-	box = gtk_vbox_new(TRUE,10);
+	box = gtk_vbox_new(FALSE,10);
 	gtk_container_add (GTK_CONTAINER (frame), box);
-	sprintf(buffer,"MegaTunix %s Tuning Software for Unix/Linux\n\tdesigned by David J. Andruczyk",VERSION);
+	buffer = g_strdup_printf("MegaTunix %s Tuning Software for Unix/Linux\n\tdesigned by David J. Andruczyk",VERSION);
 	label = gtk_label_new(buffer);
+	g_free(buffer);
 	gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,0);
+
+	pixbuf = gdk_pixbuf_from_pixdata(&Logo,FALSE,&error);
+	image = gtk_image_new_from_pixbuf(pixbuf);
+	gtk_box_pack_start(GTK_BOX(box),image,TRUE,TRUE,0);
+
         gtk_widget_show_all (box);
 
-	pbuf = gdk_pixbuf_new_from_xpm_data((char *)MegaTunix_xpm);
 
 	return(0);
 }

@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p6 from Makefile.am
 
 # Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
@@ -79,7 +79,7 @@ INCLUDES = @PACKAGE_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJ
 
 bin_PROGRAMS = megatunix
 
-megatunix_SOURCES =  	Makefile 	c_gauge.h 	configfile.h 	constants.h 	datalogging.h 	defines.h 	globals.h 	lookuptables.h 	protos.h 	runtime_gui.h 	about_gui.c 	c_gauge.c 	comms_gui.c 	configfile.c 	constants_gui.c 	core_gui.c 	dataio.c 	datalogging_gui.c 	enrichments_gui.c 	general_gui.c 	gui_handlers.c 	init.c 	lowlevel_gui.c 	main.c 	ms_constants.c 	notifications.c 	req_fuel.c 	runtime_gui.c 	serialio.c 	threads.c 	tools_gui.c 	tuning_gui.c 	vetable_gui.c 
+megatunix_SOURCES =  	Makefile 	c_gauge.h 	configfile.h 	constants.h 	datalogging.h 	defines.h 	globals.h 	lookuptables.h 	protos.h 	runtime_gui.h 	Logo.h 	about_gui.c 	c_gauge.c 	comms_gui.c 	configfile.c 	constants_gui.c 	core_gui.c 	dataio.c 	datalogging_gui.c 	enrichments_gui.c 	general_gui.c 	gui_handlers.c 	init.c 	lowlevel_gui.c 	main.c 	ms_constants.c 	notifications.c 	req_fuel.c 	runtime_gui.c 	serialio.c 	threads.c 	tools_gui.c 	tuning_gui.c 	vetable_gui.c 
 
 
 megatunix_LDADD = @PACKAGE_LIBS@
