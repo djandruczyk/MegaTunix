@@ -789,9 +789,15 @@ gboolean spinbutton_handler(GtkWidget *widget, gpointer data)
 			break;
 	 
 		case GENERIC:	/* Handles almost ALL other variables */
-			temp_dep = (gboolean)g_object_get_data(
-					G_OBJECT(ve_widgets[offset]),
+			if (ign_parm)
+				temp_dep = (gboolean)g_object_get_data(
+						G_OBJECT(ign_widgets[offset]),
 						"temp_dep");
+			else
+				temp_dep = (gboolean)g_object_get_data(
+						G_OBJECT(ve_widgets[offset]),
+						"temp_dep");
+
 			if (temp_dep)
 			{
 				if (temp_units == FAHRENHEIT)
