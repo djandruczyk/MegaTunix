@@ -15,8 +15,8 @@
 #include <configfile.h>
 #include <conversions.h>
 #include <defines.h>
-#include <globals.h>
 #include <init.h>
+#include <ms_structures.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <structures.h>

@@ -17,7 +17,6 @@
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <enums.h>
-#include <globals.h>
 #include <notifications.h>
 #include <runtime_gui.h>
 #include <serialio.h>

@@ -15,9 +15,9 @@
 #include <datalogging_const.h>
 #include <defines.h>
 #include <enums.h>
-#include <globals.h>
 #include <gui_handlers.h>
 #include <logviewer_gui.h>
+#include <ms_structures.h>
 #include <structures.h>
 
 static gint max_viewables = 0;

@@ -18,10 +18,10 @@
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
-#include <globals.h>
 #include <glib.h>
 #include <gui_handlers.h>
 #include <math.h>
+#include <ms_structures.h>
 #include <notifications.h>
 #include <stdio.h>
 #include <string.h>

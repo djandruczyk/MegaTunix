@@ -15,7 +15,6 @@
 #include <conversions.h>
 #include <defines.h>
 #include <enums.h>
-#include <globals.h>
 #include <stdio.h>
 #include <structures.h>
 

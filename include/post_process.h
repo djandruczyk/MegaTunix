@@ -15,7 +15,7 @@
 #define __POST_PROCESS_H__
 
 #include <gtk/gtk.h>
-#include <globals.h>
+#include <ms_structures.h>
 
 /* Prototypes */
 void post_process(void *, void * );

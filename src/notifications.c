@@ -13,7 +13,6 @@
 
 #include <defines.h>
 #include <fileio.h>
-#include <globals.h>
 #include <gtk/gtk.h>
 #include <notifications.h>
 #include <structures.h>

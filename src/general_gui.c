@@ -15,7 +15,6 @@
 #include <defines.h>
 #include <enums.h>
 #include <general_gui.h>
-#include <globals.h>
 #include <gui_handlers.h>
 #include <interrogate.h>
 #include <structures.h>

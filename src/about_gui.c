@@ -14,7 +14,6 @@
 #include <about_gui.h>
 #include <config.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
-#include <globals.h>
 #include <logo.h>
 
 

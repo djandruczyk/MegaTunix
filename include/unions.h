@@ -125,6 +125,22 @@ union config13
         unsigned char      value;
         struct
         {
+                unsigned char unused:4;         /* Last 4 bits... */
+                unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
+                                                /* 1 = Enrichment on  */
+                unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
+                unsigned char ego_type  :1;     /* 0 = narrow, 1=wide */
+                unsigned char firing    :1;     /* 0 = normal, 1=odd fire */
+
+        } bit;
+};
+
+/* Big endian systems (MSB) */
+union dt_config13
+{
+        unsigned char      value;
+        struct
+        {
                 unsigned char unused:3;         /* Last 3 bits... */
                 /*DUALTABLE CODE SPECIFIC*/
                 unsigned char idle_policy:1;    /* 0 = B%G style, */
@@ -136,6 +152,35 @@ union config13
                 unsigned char firing    :1;     /* 0 = normal, 1=odd fire */
 
         } bit;
+};
+
+/* Big Endian systems (MSB) */
+union tblcnf
+{
+	unsigned char 	value;
+	struct
+	{
+		unsigned char unused	:1;	/* not used */
+		unsigned char gammae2	:1;	/* 0 Gammae NOT applied to 
+						 * Injector channel 2 */
+						/* 1 Gammae applied to inj 2 */
+		unsigned char gammae1	:1;	/* 0 Gammae NOT applied to 
+						 * Injector channel 1 */
+						/* 1 Gammae applied to inj 1 */
+		unsigned char inj2	:2;	/* 00 injector 2 not driven */
+						/* 01 driven from table 1 */
+						/* 10 driven from table 2 */
+						/* 11 undefined */
+		unsigned char inj1	:2;	/* 00 injector 1 not drivem */
+						/* 01 driven from table 1 */
+						/* 10 driven from table 2 */
+						/* 11 undefined */
+		unsigned char simul	:1;	/* 0 both injectors controlled
+						 * from table 1, rest of byte
+						 * ignored */
+						/* 1 additional modes activated
+						 * as bits 1-7 */
+	}bit;
 };
 
 #else
@@ -236,12 +281,55 @@ union config13
                 unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
                 unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
                                                 /* 1 = Enrichment on  */
-                /*DUALTABLE CODE SPECIFIC*/
+                unsigned char unused:4;         /* Last 4 bits... */
+        } bit;
+};
+
+/* Little Endian systems (LSB), intel x86) */
+union dt_config13
+{
+        unsigned char      value;
+        struct
+        {
+                unsigned char firing    :1;     /* 0 = normal, 1=odd fire */
+                unsigned char ego_type  :1;     /* 0 = narrow, 1=wide */
+                unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
+                unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
+                                                /* 1 = Enrichment on  */
                 unsigned char idle_policy:1;    /* 0 = B%G style, */
                                                 /* 1 = Brian fielding PWM */
 
                 unsigned char unused:3;         /* Last 3 bits... */
         } bit;
+};
+
+/* Little Endian systems (LSB), intel x86) */
+union tblcnf
+{
+	unsigned char 	value;
+	struct
+	{
+		unsigned char simul	:1;	/* 0 both injectors controlled
+						 * from table 1, rest of byte
+						 * ignored */
+						/* 1 additional modes activated
+						 * as bits 1-7 */
+		unsigned char inj1	:2;	/* 00 injector 1 not drivem */
+						/* 01 driven from table 1 */
+						/* 10 driven from table 2 */
+						/* 11 undefined */
+		unsigned char inj2	:2;	/* 00 injector 2 not driven */
+						/* 01 driven from table 1 */
+						/* 10 driven from table 2 */
+						/* 11 undefined */
+		unsigned char gammae1	:1;	/* 0 Gammae NOT applied to 
+						 * Injector channel 1 */
+						/* 1 Gammae applied to inj 1 */
+		unsigned char gammae2	:1;	/* 0 Gammae NOT applied to 
+						 * Injector channel 2 */
+						/* 1 Gammae applied to inj 2 */
+		unsigned char unused	:1;	/* not used */
+	}bit;
 };
 #endif
 

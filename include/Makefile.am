@@ -15,7 +15,6 @@ headers = \
 	enums.h \
 	fileio.h \
 	general_gui.h \
-        globals.h \
         gui_handlers.h \
         ignition_gui.h \
         init.h \
@@ -25,6 +24,7 @@ headers = \
         lookuptables.h \
         lowlevel_gui.h \
         main.h \
+        ms_structures.h \
         notifications.h \
         post_process.h \
         req_fuel.h \

@@ -15,8 +15,8 @@
 
 #include <config.h>
 #include <defines.h>
-#include <globals.h>
 #include <lookuptables.h>
+#include <ms_structures.h>
 #include <post_process.h>
 
 extern unsigned char *kpa_conversion;

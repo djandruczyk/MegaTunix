@@ -15,7 +15,6 @@
 #include <defines.h>
 #include <enrichments_gui.h>
 #include <enums.h>
-#include <globals.h>
 #include <gui_handlers.h>
 #include <structures.h>
 

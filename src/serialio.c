@@ -16,7 +16,6 @@
 #include <defines.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <globals.h>
 #include <notifications.h>
 #include <runtime_gui.h>
 #include <serialio.h>

@@ -13,7 +13,6 @@
 
 #include <config.h>
 #include <defines.h>
-#include <globals.h>
 #include <lowlevel_gui.h>
 
 void build_lowlevel(GtkWidget *parent_frame)

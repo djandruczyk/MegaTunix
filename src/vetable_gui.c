@@ -15,7 +15,6 @@
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
-#include <globals.h>
 #include <gui_handlers.h>
 #include <structures.h>
 #include <vetable_gui.h>

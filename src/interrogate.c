@@ -16,11 +16,11 @@
 #include <config.h>
 #include <defines.h>
 #include <errno.h>
-#include <globals.h>
 #include <gui_handlers.h>
 #include <interrogate.h>
 #include <notifications.h>
 #include <serialio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>

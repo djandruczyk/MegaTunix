@@ -16,9 +16,10 @@
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
-#include <globals.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
+#include <math.h>
+#include <ms_structures.h>
 #include <req_fuel.h>
 #include <serialio.h>
 #include <structures.h>

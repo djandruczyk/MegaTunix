@@ -15,7 +15,7 @@
 #include <dataio.h>
 #include <defines.h>
 #include <enums.h>
-#include <globals.h>
+#include <ms_structures.h>
 #include <post_process.h>
 #include <pthread.h>
 #include <serialio.h>

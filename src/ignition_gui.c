@@ -13,7 +13,6 @@
 
 #include <config.h>
 #include <defines.h>
-#include <globals.h>
 #include <ignition_gui.h>
 
 

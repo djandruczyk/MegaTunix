@@ -21,7 +21,6 @@
 #include <enrichments_gui.h>
 #include <enums.h>
 #include <general_gui.h>
-#include <globals.h>
 #include <gui_handlers.h>
 #include <ignition_gui.h>
 #include <logviewer_gui.h>
