@@ -589,13 +589,16 @@ gboolean update_logview_traces()
 	/* Called from one of two possible places:
 	 * 1. a GTK timeout used when playing back a log...
 	 * 2. as a hook onto the update_realtime stats box...
+	 *
+	 * If table does NOT exist or table is empty do NOTHING
 	 */
 	
-	if (active_traces)
+	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 	{
 		g_hash_table_foreach(active_traces, trace_update,NULL);
 		scroll_logviewer_traces();
 	}
+
 	return TRUE;
 }
 
