@@ -20,7 +20,7 @@
 
 extern unsigned char *kpa_conversion;
 
-void post_process(struct ms_raw_data_v1_and_v2 *in, struct ms_data_v1_and_v2 *out)
+void post_process(struct raw_runtime_std *in, struct runtime_std *out)
 {
 	out->secl = in->secl;
 	out->squirt.value = in->squirt.value;

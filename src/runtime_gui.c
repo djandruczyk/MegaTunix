@@ -533,8 +533,8 @@ void update_runtime_vars()
 {
 	char buff[120];
 	gfloat tmpf;
-	extern struct ms_data_v1_and_v2 *runtime;
-	extern struct ms_data_v1_and_v2 *runtime_last;
+	extern struct runtime_std *runtime;
+	extern struct runtime_std *runtime_last;
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?

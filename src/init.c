@@ -48,11 +48,11 @@ extern gint interval_step;
 extern gint interval_max;
 extern gint tips_in_use;
 extern GtkWidget *main_window;
-struct ms_ve_constants_v1_and_v2 *ve_constants;
-struct ms_ve_constants_v1_and_v2 *ve_const_tmp;
-struct ms_raw_data_v1_and_v2 *raw_runtime;
-struct ms_data_v1_and_v2 *runtime;
-struct ms_data_v1_and_v2 *runtime_last;
+struct ve_const_std *ve_constants;
+struct ve_const_std *ve_const_tmp;
+struct raw_runtime_std *raw_runtime;
+struct runtime_std *runtime;
+struct runtime_std *runtime_last;
 
 void init()
 {
@@ -176,11 +176,11 @@ void make_megasquirt_dirs(void)
 void mem_alloc()
 {
 
-	ve_const_tmp = malloc(sizeof(struct ms_ve_constants_v1_and_v2));
-	ve_constants = malloc(sizeof(struct ms_ve_constants_v1_and_v2));
-	raw_runtime = malloc(sizeof(struct ms_raw_data_v1_and_v2));
-	runtime = malloc(sizeof(struct ms_data_v1_and_v2));
-	runtime_last = malloc(sizeof(struct ms_data_v1_and_v2));
+	ve_const_tmp = malloc(sizeof(struct ve_const_std));
+	ve_constants = malloc(sizeof(struct ve_const_std));
+	raw_runtime = malloc(sizeof(struct raw_runtime_std));
+	runtime = malloc(sizeof(struct runtime_std));
+	runtime_last = malloc(sizeof(struct runtime_std));
 	
 	//	printf("Allocating memory \n");
 }

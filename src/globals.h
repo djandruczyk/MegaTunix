@@ -119,7 +119,7 @@ union engine
 };
 #endif
  
-struct ms_raw_data_v1_and_v2 
+struct raw_runtime_std
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
 	 * and fed into ms_data_v1_and_v2 (struct)
@@ -148,7 +148,7 @@ struct ms_raw_data_v1_and_v2
 	unsigned char   bspot3;		/* Offset 21 */
 };
 
-struct ms_raw_data_dualtable 
+struct raw_runtime_dualtable 
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
 	 * and fed into ms_data_v1_and_v2 (struct)
@@ -177,7 +177,7 @@ struct ms_raw_data_dualtable
 	unsigned char   idleDC;		/* Offset 21 */
 };
 
-struct ms_data_v1_and_v2 
+struct runtime_std 
 {      
         unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
         union squirt    squirt;		/* Event variable bit field for Injector Firing */
@@ -207,7 +207,7 @@ struct ms_data_v1_and_v2
         unsigned char   bspot3;		/* Blank Spot 3 */
 };
 
-struct ms_data_dualtable 
+struct runtime_dualtable 
 {      
         unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
         union squirt    squirt;		/* Event variable bit field for Injector Firing */
@@ -301,7 +301,7 @@ union config13
         } bit;
 };
 
-struct ms_ve_constants_v1_and_v2
+struct ve_const_std
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char   ve_bins[64];            /* 0, VE table, 64 bytes */
@@ -348,7 +348,7 @@ struct ms_ve_constants_v1_and_v2
         unsigned char   pad3;                   /* 126, Padding to 128 bytes */
         unsigned char   pad4;                   /* 127, Padding to 128 bytes */
 }; 
-struct ms_ve_constants_dualtable
+struct ve_const_dualtable
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char   ve_bins[64];            /* 0, VE table, 64 bytes */

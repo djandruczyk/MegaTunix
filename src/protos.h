@@ -24,7 +24,7 @@
 /* Function Prototypes for all objects/source files */
 
 /* ms_constants.c */
-void post_process(struct ms_raw_data_v1_and_v2 *, struct ms_data_v1_and_v2 *);
+void post_process(struct raw_runtime_std *, struct runtime_std * );
 /* ms_constants.c */
 
 /* serialio.c */
@@ -100,6 +100,9 @@ int classed_spinner_changed(GtkWidget *, gpointer);
 void check_req_fuel_limits(void);
 void check_config11(gint);
 void check_config13(gint);
+void expose_event (GtkWidget *, GdkEventExpose *, gpointer);
+void config_event (GtkWidget *, GdkEventConfigure *, gpointer);
+
 /* gui_handlers.c */
 
 /* req_fuel.c */

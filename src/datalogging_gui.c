@@ -26,11 +26,15 @@
 #include <globals.h>
 #include <datalogging.h>
 
-#define TABLE_COLS 5
+#define TABLE_COLS 6
 #define MAX_LOGABLES 32
+#define STD_LOGABLES 18
+#define DUALTABLE_LOGABLES 21
+#define DUALTABLE 64
 
+gint ms_type = 0;
 extern gint ready;
-extern struct ms_raw_data_v1_and_v2 *raw_runtime;
+extern struct raw_runtime_std *raw_runtime;
 gint log_opened=FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;
@@ -61,22 +65,20 @@ struct Logables logables;
 static gint offset_list[MAX_LOGABLES];
 const gchar *logable_names[] = 
 {
-	"Hi-Res Clock", "MS Clock", "RPM", "TPS", "BATT",
-	"MAP","BARO","O2","MAT","CLT",
-	"VE","BaroCorr","EGOCorr","MATCorr","CLTCorr",
-	"PW","EngineBits","GammaE"
+	"Hi-Res Clock", "MS Clock", "RPM", "TPS", "BATT","MAP","BARO","O2","MAT","CLT",	"VE","BaroCorr","EGOCorr","MATCorr","CLTCorr","PW","EngineBits","GammaE","PW2","VE2","IdleDC"
+	
 };
-/* logging_offset_map is a mapping between the logable list above and the 
- * byte offset into the ms_raw_data_v1_and_v2 datastructure. The index
+/* logging_offset_map is a mapping between the logable_names[] list above and 
+ * the byte offset into the raw_runtime_std datastructure. The index 
  * is the index number of the logable variable from above, The value at that
  * index point is the offset into the struct for the data. Offset 0
  * is the first value in the struct (secl), offset 99 is a special case
  * for the Hi-Res clock which isn't stored in the structure...
  */
 const gint logging_offset_map[] = 
-{ 99,0,13,7,8,4,3,9,5,6,18,16,10,11,12,14,2,17 }; 
+{ 99,0,13,7,8,4,3,9,5,6,18,16,10,11,12,14,2,17,19,20,21 }; 
 
-/* classic[] is an array of the bit POSIONS that correspond with the names
+/* classic[] is an array of the bit POSITIONS that correspond with the names
  * in the above list. When applying the "classic" array to the bitfield of
  * logable variables, we end up selecting all the stuff that MegaTune uses
  * for its "Classic" style datalog...  The is NOT the way I wanted to do 
@@ -157,7 +159,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
 	logables_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),15);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
         gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,0);
 
@@ -167,6 +169,8 @@ int build_datalogging(GtkWidget *parent_frame)
 	{
 		button = gtk_check_button_new_with_label(logable_names[i]);
 		logables.widgets[i] = button;
+		if ((ms_type != DUALTABLE) && (i >= STD_LOGABLES))
+			gtk_widget_set_sensitive(button,FALSE);
 		g_object_set_data(G_OBJECT(button),"bit_pos",
 				GINT_TO_POINTER(i));
 		g_object_set_data(G_OBJECT(button),"bitmask",

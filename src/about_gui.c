@@ -29,8 +29,9 @@ int build_about(GtkWidget *frame)
 	GtkWidget *label;
 	GtkWidget *box;
 	GdkPixbuf *pixbuf;
-	GtkWidget *image;
+	GtkWidget *drawing_area;
 	GError *error;
+	gint w,h;
 
 	box = gtk_vbox_new(FALSE,10);
 	gtk_container_add (GTK_CONTAINER (frame), box);
@@ -39,9 +40,21 @@ int build_about(GtkWidget *frame)
 	g_free(buffer);
 	gtk_box_pack_start(GTK_BOX(box),label,FALSE,FALSE,0);
 
-	pixbuf = gdk_pixbuf_from_pixdata(&Logo,FALSE,&error);
-	image = gtk_image_new_from_pixbuf(pixbuf);
-	gtk_box_pack_start(GTK_BOX(box),image,TRUE,TRUE,0);
+	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
+	drawing_area = gtk_drawing_area_new();
+	gtk_box_pack_start(GTK_BOX(box),drawing_area,TRUE,TRUE,0);
+	w = gdk_pixbuf_get_width (pixbuf);
+        h = gdk_pixbuf_get_height (pixbuf);
+	gtk_widget_set_size_request (GTK_WIDGET (drawing_area), w, h);
+
+	g_signal_connect (drawing_area, "expose_event",
+                          G_CALLBACK (expose_event), NULL);
+        g_signal_connect (drawing_area, "configure_event",
+                          G_CALLBACK (config_event), NULL);
+
+	g_object_set_data (G_OBJECT (drawing_area), "pixbuf", pixbuf);
+	g_object_set_data (G_OBJECT (drawing_area), "parent", box);
+
 
         gtk_widget_show_all (box);
 

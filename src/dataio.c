@@ -26,11 +26,11 @@ gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
-extern struct ms_raw_data_v1_and_v2 *raw_runtime;
-extern struct ms_data_v1_and_v2 *runtime;
-extern struct ms_data_v1_and_v2 *runtime_last;
-extern struct ms_ve_constants_v1_and_v2 *ve_constants;
-extern struct ms_ve_constants_v1_and_v2 *ve_const_tmp;
+extern struct raw_runtime_std *raw_runtime;
+extern struct runtime_std *runtime;
+extern struct runtime_std *runtime_last;
+extern struct ve_const_std *ve_constants;
+extern struct ve_const_std *ve_const_tmp;
 //char * test_ptr;
        
 int handle_ms_data(int which_data)
@@ -78,7 +78,7 @@ int handle_ms_data(int which_data)
 			 * use elsewhere (datalogging)
 			 */
 			memcpy(raw_runtime,buf,
-					sizeof(struct ms_raw_data_v1_and_v2));
+					sizeof(struct raw_runtime_std));
 
 			/* Test for MS reset */
 			if (just_starting)
@@ -103,7 +103,7 @@ int handle_ms_data(int which_data)
 
 			/* copy last round to runtime_last for checking */
 			memcpy(runtime_last,runtime,
-					sizeof(struct ms_data_v1_and_v2));
+					sizeof(struct runtime_std));
 			post_process(raw_runtime,runtime);
 
 			break;
@@ -136,8 +136,8 @@ int handle_ms_data(int which_data)
 			/* Two copies, working copy and temp for comparison
 			 * against to know if we have to burn stuff to flash
 			 */
-			memcpy(ve_constants,buf,sizeof(struct ms_ve_constants_v1_and_v2));
-			memcpy(ve_const_tmp,buf,sizeof(struct ms_ve_constants_v1_and_v2));
+			memcpy(ve_constants,buf,sizeof(struct ve_const_std));
+			memcpy(ve_const_tmp,buf,sizeof(struct ve_const_std));
 			//test_ptr = (char *)ve_constants;
 			//printf("cr_pulse via array manip at -40 = %i\n",test_ptr[64]);
                         ms_ve_goodread_count++;

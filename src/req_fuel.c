@@ -23,7 +23,7 @@ gint req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;
 static GtkWidget *popup;
 struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,0,19,14.7};
-extern struct ms_ve_constants_v1_and_v2 *ve_constants;
+extern struct ve_const_std *ve_constants;
 extern struct v1_2_Constants constants;
 extern gint num_cylinders;
 
