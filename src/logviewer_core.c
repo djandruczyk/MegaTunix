@@ -14,9 +14,9 @@
 #include <config.h>
 #include <defines.h>
 #include <default_limits.h>
+#include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <logviewer_core.h>
 #include <logviewer_gui.h>
@@ -39,7 +39,7 @@ void load_logviewer_file(void *ptr)
 		iofile = (struct Io_File*) ptr;
 	else
         {
-                g_fprintf(stderr,__FILE__": load_logviewer_file() pointer null\n");
+                dbg_func(__FILE__": load_logviewer_file() pointer null\n",CRITICAL);
                 return;
         }
 	log_info = g_malloc0(sizeof(struct Log_Info));
@@ -95,7 +95,7 @@ void get_limits(gchar *target_field, void *ptr, gint position)
 	{
 		lower = 0.0;
 		upper = 255.0;
-		g_fprintf(stderr,__FILE__": get_limits(), Field \"%s\" NOT found in internal list, assuming limits bound of 0.0<-%s->255.0, send the datalog you're trying to open to the Author for analysis\n",target_field,target_field);
+		dbg_func(g_strdup_printf(__FILE__": get_limits(), Field \"%s\" NOT found in internal list, assuming limits bound of 0.0<-%s->255.0, send the datalog you're trying to open to the Author for analysis\n",target_field,target_field),CRITICAL);
 	}
 	g_array_insert_val(log_info->lowers,
 			position,def_limits[i].lower);

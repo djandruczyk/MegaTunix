@@ -15,11 +15,11 @@
 #include <datalogging_const.h>
 #include <datalogging_gui.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
 #include <glib.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <ms_structures.h>
@@ -488,7 +488,7 @@ void write_log_header(void *ptr)
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
 	else
-		g_fprintf(stderr,__FILE__": write_log_header() iofile pointer was undefined...\n");
+		dbg_func(__FILE__": write_log_header() iofile pointer was undefined...\n",CRITICAL);
 		
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
@@ -571,7 +571,7 @@ void run_datalog(void)
 	if (data != NULL)
 		iofile = (struct Io_File *)data;
 	else
-		g_fprintf(stderr,__FILE__": run_datalog, iofile undefined\n");
+		dbg_func(__FILE__": run_datalog(), iofile undefined\n",CRITICAL);
 
 
 	output = g_string_sized_new(64); /*64 char initial size */
@@ -626,7 +626,7 @@ void run_datalog(void)
 							output,"%i",(unsigned char)uchar_ptr[offset]);
 						break;
 					default:
-						g_fprintf(stderr,__FILE__": SIZE not defined (%i)\n",i);
+						dbg_func(g_strdup_printf(__FILE__": run_datalog(), SIZE not defined (%i)\n",i),CRITICAL);
 						break;
 				}
 

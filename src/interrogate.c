@@ -19,7 +19,6 @@
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
-#include <glib/gprintf.h>
 #include <interrogate.h>
 #include <mode_select.h>
 #include <notifications.h>

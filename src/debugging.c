@@ -19,6 +19,7 @@
 
 
 gint dbg_lvl = 0;
+//gint dbg_lvl = 0xff;
 
 void dbg_func(gchar *str, Dbg_Class class)
 {

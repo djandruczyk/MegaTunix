@@ -15,7 +15,7 @@
 #include <configfile.h>
 #include <conversions.h>
 #include <defines.h>
-#include <glib/gprintf.h>
+#include <debugging.h>
 #include <init.h>
 #include <ms_structures.h>
 #include <structures.h>
@@ -132,7 +132,7 @@ int read_config(void)
 	else
 	{
 		serial_params->port_name = g_strdup("/dev/tt???");
-		g_fprintf(stderr,__FILE__": Config file not found, using defaults\n");
+		dbg_func(__FILE__": read_config(), Config file not found, using defaults\n",CRITICAL);
 		g_free(filename);
 		save_config();
 		return (-1);	/* No file found */

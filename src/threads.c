@@ -19,7 +19,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <interrogate.h>
 #include <logviewer_gui.h>
@@ -190,7 +189,7 @@ void *serial_io_handler(gpointer data)
 				interrogate_ecu();
 				break;
 			case COMMS_TEST:
-				dbg_func(__FILE__": serial_io_handler() comms_test requested\n",SERIAL_GEN);
+				dbg_func(__FILE__": serial_io_handler() comms_test requested \n",SERIAL_GEN);
 				comms_test();
 				break;
 			case READ_CMD:
@@ -207,8 +206,10 @@ void *serial_io_handler(gpointer data)
 				break;
 
 		}
-		/* If dispatch funcs are defined, push them down the
-		 * queue back to the main GUI to be fired of... :)
+		/* If dispatch funcs are defined, run them from the thread
+		 * context. NOTE wrapping with gdk_threads_enter/leave, as 
+		 * that is NECESSARY to to do when making gtk calls inside
+		 * the thread....
 		 */
 		if (message->funcs != NULL)
 		{
@@ -253,8 +254,6 @@ void *serial_io_handler(gpointer data)
 					case UPD_DATALOGGER:
 						run_datalog();
 						break;
-						
-
 				}
 			}
 		}
@@ -268,6 +267,9 @@ void readfrom_ecu(void *ptr)
 	gint result;
 	extern gint ecu_caps;
 
+	if(serial_params->open == FALSE)
+		return;
+
 	ufds.fd = serial_params->fd;
         ufds.events = POLLIN;
 
@@ -279,14 +281,16 @@ void readfrom_ecu(void *ptr)
         result = write(serial_params->fd,
 			message->out_str,
 			message->out_len);
-	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu() Send %s to the ECU\n",message->out_str),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu() Sent %s to the ECU\n",message->out_str),SERIAL_WR);
 	// If reading raw_memory, need a second arg for the offset... 
 	if (message->handler == RAW_MEMORY_DUMP)
 		result = write(serial_params->fd,&message->offset,1);
-        result = poll (&ufds,1,serial_params->poll_timeout);
+
+	/* check for data,,,, */
+        result = poll (&ufds,1,5*serial_params->poll_timeout);
         if (result == 0)   /* Error */
         {
-                dbg_func(__FILE__": failure reading Data from ECU\n",CRITICAL);
+                dbg_func(__FILE__": readfrom_ecu(), failure reading Data from ECU\n",CRITICAL);
                 serial_params->errcount++;
                 connected = FALSE;
         }
@@ -310,12 +314,15 @@ void comms_test()
 	gint result = -1;
 	gchar * tmpbuf = NULL;
 
+
 	if (serial_params->open == FALSE)
 	{
-		dbg_func(__FILE__": Seial Port is NOT opened can't check ecu communications\n",CRITICAL);
+                connected = FALSE;
+		dbg_func(__FILE__": comms_test(), Serial Port is NOT opened can NOT check ecu comms...\n",CRITICAL);
 		gdk_threads_enter();
 		no_ms_connection();
 		gdk_threads_leave();
+		return;
 	}
 
 	ufds.fd = serial_params->fd;
@@ -325,7 +332,7 @@ void comms_test()
 	while (write(serial_params->fd,"C",1) != 1)
 	{
 		usleep(1000);
-		dbg_func(__FILE__": Error writing \"C\" to the ecu in check_ecu_comms()\n",CRITICAL);
+		dbg_func(__FILE__": Error writing \"C\" to the ecu in comms_test()\n",CRITICAL);
 	}
 	dbg_func(__FILE__": check_ecu_comms() Requesting MS Clock (\"C\" cmd)\n",SERIAL_RD);
 	result = poll (&ufds,1,serial_params->poll_timeout*5);
@@ -336,7 +343,7 @@ void comms_test()
 
 		tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 		/* COMMS test succeeded */
-		dbg_func(tmpbuf,SERIAL_RD);
+		dbg_func(__FILE__": comms_test(), ECU Comms Test Successfull\n",SERIAL_RD);
 		gdk_threads_enter();
 		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
@@ -352,7 +359,7 @@ void comms_test()
 		connected = FALSE;
 		tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 		/* An I/O Error occurred with the MegaSquirt ECU */
-		dbg_func(tmpbuf,CRITICAL);
+		dbg_func(__FILE__": comms_test(), I/O with ECU Timeout\n",CRITICAL);
 		gdk_threads_enter();
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
@@ -496,7 +503,6 @@ void burn_ms_flash()
         g_static_mutex_lock(&mutex);
 
         tcflush(serial_params->fd, TCIOFLUSH);
-	printf("burning to ECU\n");
 
         /* doing this may NOT be necessary,  but who knows... */
         if (ecu_caps & DUALTABLE)

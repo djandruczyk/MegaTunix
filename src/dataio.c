@@ -16,7 +16,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <ms_structures.h>
 #include <post_process.h>
 #include <pthread.h>

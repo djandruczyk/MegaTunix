@@ -17,6 +17,7 @@
 #include <gui_handlers.h>
 #include <runtime_gui.h>
 #include <logviewer_gui.h>
+#include <notifications.h>
 #include <structures.h>
 #include <timeout_handlers.h>
 #include <threads.h>
@@ -29,10 +30,35 @@ static gint update_rate = 24;
 
 void start_realtime_tickler()
 {
+	extern GtkWidget *comms_view;
 	extern struct Serial_Params *serial_params;
+
 	if (realtime_id == 0)
+	{
 		realtime_id = g_timeout_add(serial_params->read_wait,
 				(GtkFunction)signal_read_rtvars,NULL);
+		update_logbar(comms_view,NULL,"Realtime Reader started\n",TRUE,FALSE);
+	}
+	else
+	{
+		dbg_func(__FILE__": start_realtime_tickler(), Tickler already running\n",CRITICAL);
+		update_logbar(comms_view,"warning","Realtime Reader ALREADY started\n",TRUE,FALSE);
+	}
+}
+void stop_realtime_tickler()
+{
+	extern GtkWidget * comms_view;
+	if (realtime_id)
+	{
+		g_source_remove(realtime_id);
+		update_logbar(comms_view,NULL,"Realtime Reader stopped\n",TRUE,FALSE);
+		realtime_id = 0;
+	}
+	else
+	{
+		dbg_func(__FILE__": stop_realtime_tickler(), Tickler already stopped...\n",CRITICAL);
+		update_logbar(comms_view,"warning","Realtime Reader ALREADY stopped\n",TRUE,FALSE);
+	}
 }
 
 gboolean signal_read_rtvars()
@@ -53,12 +79,7 @@ gboolean signal_read_rtvars()
 
 	return TRUE;	/* Keep going.... */
 }
-void stop_realtime_tickler()
-{
-	if (realtime_id)
-		g_source_remove(realtime_id);
-	realtime_id = 0;
-}
+
 void force_an_update()
 {
       extern gboolean forced_update;

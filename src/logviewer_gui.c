@@ -15,8 +15,8 @@
 #include <datalogging_const.h>
 #include <defines.h>
 #include <default_limits.h>
+#include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
@@ -220,7 +220,7 @@ void present_viewer_choices(void *ptr)
 	if (ptr != NULL)
 		hand_me_down = (GtkWidget *)ptr;
 	else
-		g_printf("pointer fed was NULL (present_viewer_choices)\n");
+		dbg_func(__FILE__": present_viewer_choices(), pointer fed was NULL\n",CRITICAL);
 
 	/* basty hack to prevent a compiler warning... */
 	max_viewables = sizeof(mt_classic_names)/sizeof(gchar *);
@@ -382,11 +382,9 @@ gboolean populate_viewer(GtkWidget * d_area)
 		{
 			if (viewables.index[i])	/* Marked viewable widget */
 			{
-				//g_printf("allocating struct and putting into table\n");
 				/* Call the build routine, feed it the drawing_area*/
 				v_value = build_v_value(d_area,i);
 					
-//				g_printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
 				g_hash_table_insert(active_traces,
 						GINT_TO_POINTER(i),
 						(gpointer)v_value);
@@ -863,7 +861,6 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 		gdk_window_clear(widget->window);
 	}
 
-//	g_printf("configure event....\n");
 	return TRUE;
 }
 
@@ -880,7 +877,6 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
                         event->area.x, event->area.y,
                         event->area.width, event->area.height);
 
-//	g_printf("expose event....\n");
 	return TRUE;
 }
 

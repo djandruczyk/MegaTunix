@@ -13,10 +13,10 @@
 
 #include <config.h>
 #include <datalogging_gui.h>
+#include <debugging.h>
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
-#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <logviewer_core.h>
 #include <notifications.h>
@@ -28,7 +28,6 @@
 #include <vex_support.h>
 
 
-FILE *io_file;
 extern gchar * vex_comment;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;
@@ -205,7 +204,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case DATALOG_EXPORT:
 			if (dlog_open)
 			{
-				g_fprintf(stderr,__FILE__": Datalog already open,  should not open it twice...BUG!!!\n");
+				dbg_func(__FILE__": check_filename(), Datalog already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -225,7 +224,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case DATALOG_IMPORT:
 			if (logview_open)
 			{
-				g_fprintf(stderr,__FILE__": Datalog viewfile already open,  should not open it twice...BUG!!!\n");
+				dbg_func(__FILE__": check_filename(), Datalog viewfile already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -239,7 +238,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case FULL_BACKUP:
 			if (backup_open)
 			{
-				g_fprintf(stderr,__FILE__": Settings Backup file already open,  should not open it twice...BUG!!!\n");
+				dbg_func(__FILE__": check_filename(), Settings Backup file already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -250,7 +249,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case FULL_RESTORE:
 			if (restore_open)
 			{
-				g_fprintf(stderr,__FILE__": Settings Restore file already open,  should not open it twice...BUG!!!\n");
+				dbg_func(__FILE__": check_filename(), Settings Restore file already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -262,7 +261,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_EXPORT:
 			if (vex_open)
 			{
-				g_fprintf(stderr,__FILE__": VEX File already open,  should not open it twice...BUG!!!\n");
+				dbg_func(__FILE__": check_filename(), VEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -281,7 +280,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_IMPORT:
 			if (vex_open)
 			{
-				g_fprintf(stderr,__FILE__": VEX File already open,  should not open it twice...BUG!!!\n");
+				dbg_func(__FILE__": check_filename(), VEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -294,7 +293,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			close_file (iofile);
 			break;
 		default:
-			g_fprintf(stderr,__FILE__": ERROR in check_filename()\n");
+			dbg_func(__FILE__": ERROR in check_filename()\n",CRITICAL);
 			break;
 	}
 }
@@ -309,7 +308,7 @@ void close_file(void *ptr)
 		iofile = (struct Io_File *)ptr;
 	else
 	{
-		g_fprintf(stderr,__FILE__": close_file() pointer null\n");
+		dbg_func(__FILE__": close_file() iofile pointer is NULL!!\n",CRITICAL);
 		return;
 	}
 
@@ -317,7 +316,7 @@ void close_file(void *ptr)
 	{
 		status = g_io_channel_shutdown(iofile->iochannel,TRUE,NULL);
 		if (status != G_IO_STATUS_NORMAL)
-			g_fprintf(stderr,__FILE__": Error closing iochannel\n");
+			dbg_func(__FILE__": close_file(), Error closing iochannel\n",CRITICAL);
 	}
 	
 	switch (iofile->iotype)
@@ -397,7 +396,7 @@ void truncate_file(FileIoType filetype, gchar *filename)
 			g_free(tmpbuf);
 			break;
 		default:
-			g_printf("truncating nothing, iotype was %i\n",filetype);
+			dbg_func(g_strdup_printf(__FILE__": truncate_file(), truncating nothing, iotype was %i\n",filetype),CRITICAL);
 			break;
 
 	}
@@ -405,24 +404,12 @@ void truncate_file(FileIoType filetype, gchar *filename)
 
 void backup_all_ms_settings(void *ptr)
 {
-	g_fprintf(stderr,__FILE__": backup all MS settings to file isn't written yet...\n");
+	dbg_func(__FILE__": backup all MS settings to file isn't written yet...\n",CRITICAL);
 
 }
 
 void restore_all_ms_settings(void *ptr)
 {
-/*
-	GIOChannel *iochannel;
-	struct Ve_Const_Std *local_buffer;
-
-	local_buffer = g_malloc(MS_PAGE_SIZE);
-	// Backup currently active parameters into backup structure 
-	
-	g_fprintf(stderr,__FILE__": restore all MS settings from file isn't written yet\n");
-	g_fprintf(stderr,__FILE__": should restore from %s\n",filename);
-	iochannel = g_io_channel_new_file(filename, "w", NULL);
-
-	g_io_channel_close(iochannel);
-*/
+	dbg_func(__FILE__": restore all MS settings to file isn't written yet...\n",CRITICAL);
 	
 }

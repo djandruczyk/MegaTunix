@@ -20,7 +20,6 @@
 #include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <init.h>
 #include <interrogate.h>
@@ -157,14 +156,10 @@ gint comm_port_change(GtkEditable *editable)
 	if (result)
 	{
 		open_serial(port);
-		if (serial_params->port_name != NULL)
-			g_free(serial_params->port_name);
-		serial_params->port_name = g_strdup(port);
 		setup_serial_params();
 	}
 	else
 	{
-		dbg_func(__FILE__": comm_port_change(), File not found\n",CRITICAL);
 		update_logbar(comms_view,"warning",g_strdup_printf("\"%s\" File not found\n",port),TRUE,FALSE);
 	}
 
@@ -293,7 +288,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			case 85:
 				if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
 				{
-					g_fprintf(stderr,__FILE__": Setting spark_config1 but NOT using spark capable firmware...\n");	
+					dbg_func(__FILE__": bitmask_button_handler() Setting spark_config1 but NOT using spark capable firmware...\n",CRITICAL);	
 					break;
 				}
 					tmp = ign_table->spark_config1.value;
@@ -351,7 +346,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			case 247: // Boost Controller (DT only)
 				if (!(ecu_caps & DUALTABLE))
 				{
-					g_fprintf(stderr,__FILE__": Attempted modification of boost controller variable,  but not running Dualtable firmware, contact Author with contents of the ECU interrogation window in the general tab\n");
+					dbg_func(__FILE__": Attempted modification of boost controller variable,  but not running Dualtable firmware!!!\n",CRITICAL);
 					break;
 				}
 				tmp = ve_const_dt2->bcfreq.value;
@@ -368,7 +363,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				dbg_lvl = tmp32;
 				break;
 			default:
-				g_printf(" Toggle button NOT handled ERROR!!, contact author\n");
+				dbg_func(__FILE__": toggle_button_handler() Toggle button NOT handled ERROR!!, contact author\n",CRITICAL);
 				return FALSE;
 				break;
 
@@ -719,7 +714,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case TRIGGER_ANGLE:
 			if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
-				fprintf(stderr,__FILE__": ERROR, Trigger angle set but not using Ignition Firmware\n");
+				dbg_func(__FILE__": ERROR, Trigger angle set but not using Ignition Firmware\n",CRITICAL);
 			if (value > 112.15)	/* Extra long trigger needed */	
 			{
 				tmp = ign_parms->spark_config1.value;
@@ -770,7 +765,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
-			g_printf("ERROR spinbutton not handled\b\n");
+			dbg_func(__FILE__": spin_button_handler(), ERROR spinbutton not handled\n",CRITICAL);
 			dl_type = 0;  
 			break;
 	}

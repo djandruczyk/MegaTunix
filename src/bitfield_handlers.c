@@ -14,8 +14,8 @@
 #include <config.h>
 #include <bitfield_handlers.h>
 #include <conversions.h>
+#include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <mode_select.h>
 #include <structures.h>
 #include <timeout_handlers.h>
@@ -195,7 +195,7 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 					TRUE);
 			break;
 		default:
-			g_fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
+			dbg_func(__FILE__": check_tblcnf(), bits 1-2 in tblcnf invalid\n",CRITICAL);
 	}
 	val = (tmp >> 3)&0x3;  //(interested in bits 3-4) 
 	switch (val)
@@ -216,7 +216,7 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 					TRUE);
 			break;
 		default:
-			g_fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
+			dbg_func(__FILE__": check_tblcnf(), bits 1-2 in tblcnf invalid\n",CRITICAL);
 	}
 	/* Gammae for injection channel 1 */
 	val = (tmp >> 5)&0x1;

@@ -23,7 +23,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <ms_structures.h>
 #include <notifications.h>
@@ -91,7 +90,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 		g_object_set_data(G_OBJECT(ign_widgets[0]),
 				"data",(gpointer)ve_view);
 	else
-		fprintf(stderr,__FILE__": table sent is invalid (%i)\n",tbl);
+		dbg_func(g_strdup_printf(__FILE__": create_3d_view(), table sent is invalid (%i)\n",tbl),CRITICAL);
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(reset_3d_winstat),

@@ -18,7 +18,6 @@
 #include <debugging.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <glib/gprintf.h>
 #include <notifications.h>
 #include <runtime_gui.h>
 #include <serialio.h>
@@ -44,8 +43,8 @@ void open_serial(gchar * port_name)
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
 	gint fd = -1;
-	gchar *tmpbuf;
-	gchar *device;	/* temporary unix name of the serial port */
+	gchar *device = NULL;	/* temporary unix name of the serial port */
+	gchar * err_text = NULL;
 	serial_params->port_name = g_strdup(port_name); 
 
 	device = g_strdup(port_name);
@@ -53,7 +52,7 @@ void open_serial(gchar * port_name)
 	//fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 	/* Blocking mode... */
 	fd = open(device, O_RDWR | O_NOCTTY );
-	if (fd)
+	if (fd > 0)
 	{
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
@@ -61,29 +60,29 @@ void open_serial(gchar * port_name)
 		serial_params->fd = fd;
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
-		tmpbuf = g_strdup_printf("%s Opened Successfully\n",device);
-		dbg_func(tmpbuf,SERIAL_GEN);
-		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
+		dbg_func(g_strdup_printf(__FILE__" open_serial(), %s Opened Successfully\n",device),SERIAL_GEN);
+		update_logbar(comms_view,NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 	}
 	else
 	{
 		/* FAILURE */
 		/* An Error occurred opening the port */
 		serial_params->open = FALSE;
-		tmpbuf = g_strdup_printf("Error Opening %s Error Code: %s\n",
-				device,g_strerror(errno));
-		dbg_func(tmpbuf,CRITICAL);
-		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": open_serial(),\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
+
+		update_logbar(comms_view,"warning",g_strdup_printf("Error Opening %s Error Code: %s \n",device,err_text),TRUE,FALSE);
+		g_free(err_text);
 	}
 
 	g_free(device);
 	return;
 }
 	
-int setup_serial_params()
+void setup_serial_params()
 {
+	if (serial_params->open == FALSE)
+		return;
 	/* Sets up serial port for the modes we want to use. 
 	 * NOTE: Original serial tio params are stored and restored 
 	 * in the open_serial() and close_serial() functions.
@@ -137,20 +136,16 @@ int setup_serial_params()
 
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 
-	/* No hurt in checking to see if the MS is present, if it is
-	 * It'll update the serial status log, and set the "Connected" flag
-	 * which is visible in the Runtime screen 
-	 */
-
-	return 0;
+	return;
 }
 
 void close_serial()
 {
-	gchar *tmpbuf;
-
+	if (serial_params->open == FALSE)
+		return;
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
 	close(serial_params->fd);
+	serial_params->fd = -1;
 	serial_params->open = FALSE;
 	connected = FALSE;
 	gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
@@ -158,11 +153,9 @@ void close_serial()
 	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 			connected);
 
-	tmpbuf = g_strdup_printf("COM Port Closed\n");
 	/* An Closing the comm port */
-	dbg_func(tmpbuf,SERIAL_GEN);
-	update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
-	g_free(tmpbuf);
+	dbg_func(__FILE__": close_serial(), COM Port Closed\n",SERIAL_GEN);
+	update_logbar(comms_view,NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
 }
 
 void set_ms_page(gint ms_page)

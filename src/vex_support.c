@@ -17,7 +17,6 @@
 #include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <notifications.h>
 #include <stdio.h>
@@ -104,111 +103,101 @@ gboolean vetable_export(void *ptr)
 	unsigned char * ve_const_arr = NULL;
 	extern unsigned int ecu_caps;
 	gchar * tmpbuf;
-	gchar *buffer; 
-	gint pos = 0;
 	GIOStatus status;
+	GString *output;
 	struct Io_File *iofile = (struct Io_File *)ptr;
 
-	buffer = g_malloc(8192); /* 8k buffer */
 	t = g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	if (vex_comment == NULL)
 		vex_comment = g_strdup("No comment given");
 
-	pos += g_sprintf(buffer+pos, "EVEME 1.0\n");
-	pos += g_sprintf(buffer+pos, "UserRev: 1.00\n");
-	pos += g_sprintf(buffer+pos, "UserComment: %s\n",vex_comment);
-	pos += g_sprintf(buffer+pos, "Date: %i-%.2i-%i\n",
-			1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year));
-	pos += g_sprintf(buffer+pos, "Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min);
-	pos += g_sprintf(buffer+pos, "Page 0\n");
-	pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");
+	output = g_string_sized_new(64); /*pre-allocate 64 chars */
+	output = g_string_append(output, "EVEME 1.0\n");
+	output = g_string_append(output, "UserRev: 1.00\n");
+	output = g_string_append(output, g_strdup_printf("UserComment: %s\n",vex_comment));
+	output = g_string_append(output, g_strdup_printf("Date: %i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year)));
+			
+	output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
+	output = g_string_append(output, "Page 0\n");
+	output = g_string_append(output, "VE Table RPM Range              [ 8]\n");
 	ve_const_arr = (unsigned char *)ms_data;
 	for (i=0;i<8;i++)
-	{
-		pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
-				i,ve_const_arr[i+VE1_RPM_BINS_OFFSET]);
-	}
-	pos += g_sprintf(buffer+pos, "VE Table Load Range (MAP)       [ 8]\n");
+		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE1_RPM_BINS_OFFSET]));
+				
+	output = g_string_append(output, "VE Table Load Range (MAP)       [ 8]\n");
 	for (i=0;i<8;i++)
-	{
-		pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
-				i,ve_const_arr[i+VE1_KPA_BINS_OFFSET]);
-	}
-	pos += g_sprintf(buffer+pos, "VE Table                        [  8][  8]\n");
-	pos += g_sprintf(buffer+pos, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
+		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE1_KPA_BINS_OFFSET]));
+				
+	output = g_string_append(output, "VE Table                        [  8][  8]\n");
+	output = g_string_append(output, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
 	index = 0;
 	for (i=0;i<8;i++)
 	{
-		pos += g_sprintf(buffer+pos,"   [%3d] =",i);
+		output = g_string_append(output,g_strdup_printf("   [%3d] =",i));
 		for (j=0;j<8;j++)
 		{
 			if (j == 0)
-				pos += g_sprintf (buffer+pos, "  %3d",
+				output = g_string_append (output,
+						g_strdup_printf("  %3d",
 						ve_const_arr[index
-						+VE1_TABLE_OFFSET]);
+						+VE1_TABLE_OFFSET]));
                                                 
 			else
-				pos += g_sprintf (buffer+pos, "   %3d",
+				output = g_string_append (output,
+						g_strdup_printf("   %3d",
 						ve_const_arr[index
-						+VE1_TABLE_OFFSET]);
+						+VE1_TABLE_OFFSET]));
 			index++;
 		}
-		pos += g_sprintf(buffer+pos,"\n");
+		output = g_string_append(output,"\n");
 	}
 	if (ecu_caps & DUALTABLE)
 	{
-		pos += g_sprintf(buffer+pos, "Page 1\n");
-		pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");
+		output = g_string_append(output, "Page 1\n");
+		output = g_string_append(output, "VE Table RPM Range              [ 8]\n");
 		for (i=0;i<8;i++)
-		{
-			pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
-					i,ve_const_arr[i+VE2_RPM_BINS_OFFSET]);
-		}
-		pos += g_sprintf(buffer+pos, "VE Table Load Range (MAP)       [ 8]\n");
+			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE2_RPM_BINS_OFFSET]));
+					
+		output = g_string_append(output, "VE Table Load Range (MAP)       [ 8]\n");
 		for (i=0;i<8;i++)
-		{
-			pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
-					i,ve_const_arr[i+VE2_KPA_BINS_OFFSET]);
-		}
-		pos += g_sprintf(buffer+pos, "VE Table                        [  8][  8]\n");
-		pos += g_sprintf(buffer+pos, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
+			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE2_KPA_BINS_OFFSET]));
+					
+		output = g_string_append(output, "VE Table                        [  8][  8]\n");
+		output = g_string_append(output, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
 		index = 0;
 		for (i=0;i<8;i++)
 		{
-			pos += g_sprintf(buffer+pos,"   [%3d] =",i);
+			output = g_string_append(output,g_strdup_printf("   [%3d] =",i));
 			for (j=0;j<8;j++)
 			{
 				if (j == 0)
-					pos += g_sprintf (buffer+pos, "  %3d",
+					output = g_string_append (output,
+							g_strdup_printf("  %3d",
 							ve_const_arr[index
-							+VE2_TABLE_OFFSET]);
+							+VE2_TABLE_OFFSET]));
 				else
-					pos += g_sprintf (buffer+pos, "   %3d",
+					output = g_string_append (output,
+							g_strdup_printf("   %3d",
 							ve_const_arr[index
-							+VE2_TABLE_OFFSET]);
+							+VE2_TABLE_OFFSET]));
 				index++;
 			}
-			pos += g_sprintf(buffer+pos,"\n");
+			output = g_string_append(output,"\n");
 		}
 	}
 	status = g_io_channel_write_chars(
-				iofile->iochannel,buffer,pos,&count,NULL);
+				iofile->iochannel,output->str,output->len,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		g_fprintf(stderr,__FILE__": Error exporting VEX file\n");
-
-//	dbg_func(g_strdup_printf(__FILE__": vetable_export() count of bytes written: %i\n",(gint)count),VETABLE);
+		dbg_func(__FILE__": vetable_export(), Error exporting VEX file\n",CRITICAL);
+	g_string_free(output,TRUE);
 
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
 	update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 
-	if (buffer)
-		g_free(buffer);
 	if (tmpbuf)
 		g_free(tmpbuf);
-//	if (t)
-//		g_free(t);
 	if (vex_comment)
 		g_free(vex_comment);
 	vex_comment = NULL;
@@ -225,13 +214,13 @@ gboolean vetable_import(void *ptr)
 		iofile = (struct Io_File *)ptr;
 	else
 	{
-		g_fprintf(stderr,__FILE__": vetable_import, iofile undefined\n");
-		exit(-1);
+		dbg_func(__FILE__": vetable_import(), iofile undefined\n",CRITICAL);
+		return FALSE;
 	}
 	reset_import_flags();
 	status = g_io_channel_seek_position(iofile->iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		g_fprintf(stderr,__FILE__": Eror seeking to beginning of the file\n");
+		dbg_func(__FILE__": vetable_import() Eror seeking to beginning of the file\n",CRITICAL);
 	/* process lines while we can */
 	while (go)
 	{
@@ -256,7 +245,7 @@ gboolean vetable_import(void *ptr)
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		g_fprintf(stderr,__FILE__": Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve);
+		dbg_func(g_strdup_printf(__FILE__": vetable_import(), Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve),CRITICAL);
 		return FALSE;
 	}
 	return TRUE;
@@ -277,7 +266,7 @@ GIOStatus process_vex_line(GIOChannel *iochannel)
 			{
 				status = handler_dispatch(import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
-					g_fprintf(stderr,__FILE__": VEX_line parsing ERROR\n");
+					dbg_func(__FILE__": process_vex_line(), VEX_line parsing ERROR\n",CRITICAL);
 				goto breakout;
 			}
 		}

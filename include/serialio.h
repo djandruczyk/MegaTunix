@@ -20,7 +20,7 @@
 /* Prototypes */
 void open_serial(gchar *);
 void close_serial(void);
-int setup_serial_params(void);
+void setup_serial_params(void);
 void set_ms_page(gint);
 /* Prototypes */
 

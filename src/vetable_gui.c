@@ -16,7 +16,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <structures.h>
 #include <vetable_gui.h>
@@ -535,7 +534,7 @@ void get_indexes(TableType type, gint value, void *ptr,gint table)
 		start = VE1_RPM_BINS_OFFSET;
 	else
 	{
-		g_fprintf(stderr,__FILE__": Invalid TableType passed to get_indexes()\n");
+		dbg_func(__FILE__": get_indexes(), Invalid TableType passed to get_indexes()\n",CRITICAL);
 		index->low = -1;
 		index->high = -1;
 		return;

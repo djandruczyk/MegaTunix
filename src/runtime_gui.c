@@ -17,8 +17,8 @@
 #include <datalogging_const.h>
 #include <defines.h>
 #include <default_limits.h>
+#include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <ms_structures.h>
 #include <runtime_gui.h>
@@ -491,7 +491,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		}
 	}
 	else
-		g_fprintf(stderr,__FILE__": MAJOR error, rt_update_values(), size invalid: %i\n",control->size);
+		dbg_func(g_strdup_printf(__FILE__": MAJOR error, rt_update_values(), size invalid: %i\n",control->size),CRITICAL);
 
 	return;
 }
