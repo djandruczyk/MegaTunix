@@ -797,9 +797,9 @@ void ve_load_font_metrics(void)
 
 	dbg_func(__FILE__": 3D View Load Font Metrics\n",OPENGL);
 
-	font_list_base = glGenLists (128);
+	font_list_base = (GLuint) glGenLists (128);
 	font_desc = pango_font_description_from_string (font_string);
-	font = gdk_gl_font_use_pango_font (font_desc, 0, 128, font_list_base);
+	font = gdk_gl_font_use_pango_font (font_desc, 0, 128, (int)font_list_base);
 	if (font == NULL)
 	{
 		dbg_func(g_strdup_printf(__FILE__": 3D View, Can't load font '%s'\n",font_string),CRITICAL);
