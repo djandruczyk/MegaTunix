@@ -467,6 +467,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = -1;
 	gfloat value = 0.0;
 	GtkWidget * info = NULL;
+	extern gint realtime_id;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern gint lv_scroll;
@@ -503,8 +504,11 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
-			stop_realtime_tickler();
-			start_realtime_tickler();
+			if (realtime_id > 0)
+			{
+				stop_realtime_tickler();
+				start_realtime_tickler();
+			}
 			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;

@@ -23,7 +23,7 @@
 #include <threads.h>
 
 GAsyncQueue *dispatcher = NULL;
-static gint realtime_id = 0;
+gint realtime_id = 0;
 static gint forced_id = 0;
 static gint update_rate = 24;
 
