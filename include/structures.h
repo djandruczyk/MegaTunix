@@ -328,19 +328,19 @@ struct Command
 {
 	gint page;		/* ms page in memory where it resides */
 	gchar *string;		/* command to get the data */
-	gchar *desc;		/* command description */
+	gint len;		/* Command length in chars to send */
 	gboolean multipart;	/* Multipart command? (raw_memory) */
 	gint cmd_int_arg;	/* multipart arg, integer */
-	gint len;		/* Command length in chars to send */
-	gboolean store_data;	/* Store returned data */
+	gchar *desc;		/* command description */
+	gboolean store_data;	/* Store returned data ? */
 	StoreType store_type;	/* Store data where */
 };
 
 struct Io_Message
 {
 	CmdType command;	/* Command type */
-	gint page;		/* dualtable specific */
 	gchar *out_str;		/* Data sent to the ECU  for READ_CMD's */
+	gint page;		/* multipage firmware specific */
 	gint out_len;		/* number of bytes in out_str */
 	gint offset;		/* used for RAW_MEMORY and more */
 	GArray *funcs;		/* List of functiosn to be dispatched... */
