@@ -1,5 +1,5 @@
 
-MegaTunix 0.0.x designed and written by Dave J. Andruczyk
+MegaTunix x.y.z. designed and written by Dave J. Andruczyk
 
 Insiration for this code came from Bruce Bowling and Al Grippo, 
 designers of the MegaSquirt DIY Fuel injection ECU. This code is 
@@ -7,17 +7,10 @@ modelled slightly after Bruce and Al's MegaSquirt PCC tuning software
 for MS-Windows.  Inspiration also came from Eric Fahlgrens' MegaTune,
 also for windows.
 
-Right now the code is NON-function for everyday use.  What is working 
-is basic serial input,  selection of serial port, testing MS comms works
-Realtime data readback from the MS works.  Saving of comm port
-selection and windows position/size is saved automatically between runs
-and is stored in ~/.MegaTunix/config.
+Currently all Serial I/O is working. Reading of Realtime vars works.  
+Reading of VEtable/Constants works fine.  Changing any var checks for limits
+and sends right to the MS (new as of 5/25/2003). Flash burn works..
 
-Serial I/O threads are pretty well tested, but since the MS has no form of
-checksummarker in its output, it is possible to get out of sync causing the
-realtime vars to scramble.  Every effort has been taken to catch this condition
-and reinitialize the serial port.  If you have problems please contact me
-<djandrucyk at yahoo dot com> and I'll see what I can do to get things 
-behaving...
-
+The only things not done yet are the Tuning gui (guages, VEtable graphical
+editor..) and the datalogging/tools pages.
 

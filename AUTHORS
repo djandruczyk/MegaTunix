@@ -20,5 +20,13 @@ Joe Mitchel <comicfu at yahoo dot com>
 	Provided SourceForge Developer level access to the "MegaSquirt"
 	project areas.
 
-
+Eric Fahlgren <Eric.Fahlgren at mscsoftware dot com>
+	Provided MegaTune source code and various assistance
+	along the way...
 	
+Richard Barrington <rich_b_nz at users dot sourceforge dot net>
+	Submitted bug reports,suggested tying cyls in reqd_fuel calc to
+	the cylinders spinbutton in the main gui..  Various other suggestions
+
+YOU could be here!!  Submit patches, assistance and suggestions and you'll
+make the list, and all the prestige that comes with it... :)

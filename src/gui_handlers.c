@@ -160,7 +160,6 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			paused_handlers = FALSE;
 			break;
 		case WRITE_TO_MS:
-			printf("burning flash\n");
 			burn_flash();
 			break;
 	}
@@ -384,7 +383,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			dload_val = ve_constants->divider;
 			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
 			{
-				printf("SQUIRT Adding to list\n");
 				offsets = g_list_append(offsets,
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
@@ -393,7 +391,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				printf("SQUIRT updating data in list\n");
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
@@ -437,7 +434,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			dload_val = tmp;
 			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
 			{
-				printf("CYL Adding to list\n");
 				offsets = g_list_append(offsets,
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
@@ -446,7 +442,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				printf("CYL updating data in list\n");
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
@@ -487,7 +482,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			dload_val = tmp;
 			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
 			{
-				printf("INJ Adding to list\n");
 				offsets = g_list_append(offsets,
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
@@ -496,7 +490,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				printf("INJ Updating entry in list\n");
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
@@ -853,7 +846,6 @@ void check_req_fuel_limits()
 		 */
 		dload_val = (gint)(req_fuel_dl);
 		offset = 90;
-		printf("writing req_fuel entry %i\n",dload_val);
 		write_ve_const(dload_val, offset);
 		for (index=0;index<g_list_length(offsets);index++)
 		{
@@ -862,7 +854,6 @@ void check_req_fuel_limits()
 			offset = GPOINTER_TO_INT(g_list_nth_data(offsets,index));
 			data = offset_data[g_list_index(offsets,
 					g_list_nth_data(offsets,index))];
-			printf("writing offset %i, data %i\n",offset,data);
 			write_ve_const(data, offset);
 		}
 		g_list_free(offsets);

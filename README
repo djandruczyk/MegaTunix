@@ -1,0 +1,16 @@
+
+MegaTunix x.y.z. designed and written by Dave J. Andruczyk
+
+Insiration for this code came from Bruce Bowling and Al Grippo, 
+designers of the MegaSquirt DIY Fuel injection ECU. This code is 
+modelled slightly after Bruce and Al's MegaSquirt PCC tuning software 
+for MS-Windows.  Inspiration also came from Eric Fahlgrens' MegaTune,
+also for windows.
+
+Currently all Serial I/O is working. Reading of Realtime vars works.  
+Reading of VEtable/Constants works fine.  Changing any var checks for limits
+and sends right to the MS (new as of 5/25/2003). Flash burn works..
+
+The only things not done yet are the Tuning gui (guages, VEtable graphical
+editor..) and the datalogging/tools pages.
+
