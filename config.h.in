@@ -63,9 +63,6 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Port base name, i.e. /dev/ttyS */
-#undef PORT_BASE
-
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 

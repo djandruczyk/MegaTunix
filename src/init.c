@@ -123,8 +123,8 @@ int read_config(void)
 	}
 	else
 	{
-		serial_params->port_name = g_strdup_printf(PORT_BASE"0");
-		printf("Config file not found, using defaults\n");
+		serial_params->port_name = g_strdup("/dev/tt???");
+		fprintf(stderr,__FILE__": Config file not found, using defaults\n");
 		g_free(filename);
 		return (-1);	/* No file found */
 	}
@@ -219,5 +219,4 @@ void mem_dealloc()
 	g_free(runtime_last);
 	g_free(conversions);
 	g_free(ve_widgets);
-	//	printf("Deallocating memory \n");
 }
