@@ -29,6 +29,7 @@
 extern gboolean raw_reader_running;
 extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
+extern GtkWidget *ms_ecu_revision_entry;
 char buff[60];
 gfloat ecu_version;
 static gboolean burn_needed = FALSE;
@@ -189,8 +190,8 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		res = poll (&ufds,1,serial_params.poll_timeout);
 		if (res == 0)
 		{
-			printf("Failure to respond to \"C\" command\n");
-			printf("Attempting alternate test, (might be V1 ECU)\n");
+			//printf("Failure to respond to \"C\" command\n");
+			//printf("Attempting alternate test, (might be V1 ECU)\n");
 			res = write(serial_params.fd,"A",1);
 			res = poll (&ufds,1,serial_params.poll_timeout);
 			if (res)
@@ -198,12 +199,14 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 				count = 22;
 				while (count > 0)
 				{
-					printf("atempting to read %i bytes from MS\n",count);
+					//printf("atempting to read %i bytes from MS\n",count);
 					count -= read(serial_params.fd,&buf,count);
 				}
 
 
-				printf("MS is V1 and responded to runtime cmd\n");
+				//printf("MS is V1 and responded to runtime cmd\n");
+				g_snprintf(buff,60,"v1.0x");
+				gtk_entry_set_text(GTK_ENTRY(ms_ecu_revision_entry),buff);
 				g_snprintf(buff,60,"ECU Comms Test Successfull");
 				/* COMMS test succeeded */
 				update_statusbar(ser_statbar,ser_context_id,buff);
@@ -230,7 +233,9 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			res = poll(&ufds,1,serial_params.poll_timeout);
 			res = read(serial_params.fd,&buf,1);
 			ecu_version = (gfloat)buf[0]/10.0;
-			printf("result of reading ecu version is %f\n",ecu_version);
+			g_snprintf(buff,60,"v%.2f",ecu_version);
+			gtk_entry_set_text(GTK_ENTRY(ms_ecu_revision_entry),buff);
+			//printf("result of reading ecu version is %f\n",ecu_version);
 
 			g_snprintf(buff,60,"ECU Comms Test Successfull");
 			/* COMMS test succeeded */

@@ -21,10 +21,12 @@
 
 extern gboolean tips_in_use;
 extern gboolean fahrenheit;
+extern GdkColor black;
+GtkWidget *ms_ecu_revision_entry;
 
 int build_general(GtkWidget *parent_frame)
 {
-//        extern GtkTooltips *tip;
+        extern GtkTooltips *tip;
         GtkWidget *vbox;
  //       GtkWidget *vbox2;
   //      GtkWidget *label;
@@ -33,6 +35,9 @@ int build_general(GtkWidget *parent_frame)
         GtkWidget *hbox2;
         GtkWidget *button;
         GtkWidget *table;
+        GtkWidget *label;
+        GtkWidget *entry;
+        GtkWidget *ebox;
 	GSList *group;
 
         vbox = gtk_vbox_new(FALSE,0);
@@ -84,10 +89,38 @@ int build_general(GtkWidget *parent_frame)
                         G_CALLBACK(toggle_button_handler),
                         GINT_TO_POINTER(CELSIUS));
 
-	frame = gtk_frame_new("MegaSquirt Type Selection");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	ebox = gtk_event_box_new();
+        gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+        gtk_tooltips_set_tip(tip,ebox,
+        "This box shows you the MegaSquirt Version number returned from the ECU. NOTE: The V1 MegaSquirt processors (first public release from around 2000/2001) do NOT return a version number so we display it as v1.0",NULL);
+
+	frame = gtk_frame_new("MegaSquirt ECU Information");
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
+        hbox = gtk_hbox_new(TRUE,0);
+        gtk_container_add(GTK_CONTAINER(frame),hbox);
+
+        table = gtk_table_new(2,4,FALSE);
+        gtk_table_set_row_spacings(GTK_TABLE(table),7);
+        gtk_table_set_col_spacings(GTK_TABLE(table),5);
+        gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
+
+        label = gtk_label_new("ECU Revision Number");
+        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        entry = gtk_entry_new();
+	ms_ecu_revision_entry = entry;
+        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+        gtk_widget_set_sensitive(entry,FALSE);
+        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	
-//	table = gtk_table_new(	
 
 
 
