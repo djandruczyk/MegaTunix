@@ -31,7 +31,6 @@ int build_about(GtkWidget *frame)
 	GtkWidget *alignment;
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
-	gint w,h;
 
 	vbox = gtk_vbox_new(FALSE,10);
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
