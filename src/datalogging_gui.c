@@ -19,7 +19,7 @@
 #include <errno.h>
 #include <fileio.h>
 #include <globals.h>
-#include <glib/gprintf.h>
+#include <glib.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <notifications.h>
@@ -484,16 +484,15 @@ void write_log_header(void *ptr)
 	gint j = 0;
 	gint total_logables = 0;
 	gint count = 0;
-	gint pos = 0;
-	gchar *tmpbuf;
+	GString *output;
 	struct Io_File *iofile = NULL;
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
 	else
 		fprintf(stderr,__FILE__": iofile pointer was undefined...\n");
 		
+	output = g_string_new("");
 
-	tmpbuf = malloc(1024);
 	for (i=0;i<max_logables;i++)
 	{
 		if (logables.index[i])/* If bit is set, increment counter */
@@ -508,22 +507,18 @@ void write_log_header(void *ptr)
 			size_list[j] = logging_datasizes_map[i];
 			j++;
 			if ((logging_mode == MT_CLASSIC_LOG) || (logging_mode == MT_FULL_LOG))
-				pos = g_sprintf(tmpbuf, "%s",mt_compat_names[i]);
+				output = g_string_append(output, 
+						mt_compat_names[i]);
 			else
-				pos = g_sprintf(tmpbuf, "\"%s\"",logable_names[i]);
-			g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
-			g_free(tmpbuf);
+				output = g_string_append(output, 
+						logable_names[i]);
 
 			if (j < (total_logables))
-			{
-				pos = g_sprintf(tmpbuf,"%s",delim);
-				g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
-				g_free(tmpbuf);
-			}
+				output = g_string_append(output,delim);
 		}
 	}
-	pos = g_sprintf(tmpbuf,"\n");
-	g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
-	g_free(tmpbuf);
+	output = g_string_append(output,"\n");
+	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_string_free(output,TRUE);
 
 }
