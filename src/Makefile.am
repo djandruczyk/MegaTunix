@@ -18,7 +18,6 @@ megatunix_SOURCES = \
 	dataio.c \
 	datalogging_gui.c \
 	debugging.c \
-	eng_vitals_gui.c \
 	fileio.c \
 	general_gui.c \
 	gui_handlers.c \

@@ -44,8 +44,8 @@ struct Logables logables;
 /* External global vars */
 extern gint ready;
 extern struct Runtime_Common *runtime;
-extern struct DynamicButtons buttons;
-extern struct DynamicLabels labels;
+struct DynamicButtons buttons;
+struct DynamicLabels labels;
 extern GdkColor white;
 
 /* Static vars to all functions in this file... */

@@ -163,8 +163,15 @@ gint comm_port_change(GtkEditable *editable)
 
 gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *object_data = g_object_get_data(G_OBJECT(widget),"data");
-	gint handler = (ToggleButton)g_object_get_data(G_OBJECT(widget),"handler");
+	GtkWidget *obj_data = NULL;
+	gint handler = 0; 
+
+	if (GTK_IS_OBJECT(widget))
+	{
+		obj_data = g_object_get_data(G_OBJECT(widget),"data");
+		handler = (ToggleButton)g_object_get_data(G_OBJECT(widget),"handler");
+	}
+
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
 		switch ((ToggleButton)handler)
@@ -204,7 +211,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, TRUE);
 				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, TRUE);
 				logviewer_mode = FALSE;
-				g_signal_emit_by_name(G_OBJECT(object_data),"configure_event",NULL);
+				g_signal_emit_by_name(G_OBJECT(obj_data),"configure_event",NULL);
 				break;
 			case PLAYBACK_VIEW:
 				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, FALSE);
@@ -212,12 +219,12 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, FALSE);
 				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, FALSE);
 				logviewer_mode = TRUE;
-				g_signal_emit_by_name(G_OBJECT(object_data),"configure_event",NULL);
+				g_signal_emit_by_name(G_OBJECT(obj_data),"configure_event",NULL);
 				break;
 			case HEX_VIEW:
 			case DECIMAL_VIEW:
 			case BINARY_VIEW:
-				update_raw_memory_view((ToggleButton)handler,(gint)object_data);
+				update_raw_memory_view((ToggleButton)handler,(gint)obj_data);
 				break;	
 		}
 	}
@@ -258,18 +265,21 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (paused_handlers)
 		return TRUE;
 
-	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-	dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
-	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
-	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
-	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
-	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
-	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
+	if (GTK_IS_OBJECT(widget))
+	{
+		ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
+		page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+		offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+		dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
+		bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
+		bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
+		bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
+		handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+		toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
 				"toggle_group");
-	swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
+		swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
 				"swap_label");
+	}
 
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
@@ -340,13 +350,13 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
-	void *object_data = NULL;
+	void *obj_data = NULL;
 	gint handler = -1;
 	static gboolean queue_referenced =  FALSE;
 	extern GAsyncQueue *io_queue;
 	if (GTK_IS_OBJECT(widget))
 	{
-		object_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
+		obj_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 		handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
 	}
 	if (queue_referenced == FALSE)
@@ -398,7 +408,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			}
 			else
-				io_cmd(IO_READ_RAW_MEMORY,(gpointer)object_data);
+				io_cmd(IO_READ_RAW_MEMORY,(gpointer)obj_data);
 			break;
 		case CHECK_ECU_COMMS:
 			io_cmd(IO_COMMS_TEST,NULL);
@@ -407,14 +417,14 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			io_cmd(IO_BURN_MS_FLASH,NULL);
 			break;
 		case SELECT_DLOG_EXP:
-			present_filesavebox(DATALOG_EXPORT);
+			present_filesavebox(DATALOG_EXPORT,(gpointer)widget);
 			break;
 		case SELECT_DLOG_IMP:
-			present_filesavebox(DATALOG_IMPORT);
+			present_filesavebox(DATALOG_IMPORT,(gpointer)widget);
 			break;
 		case CLOSE_LOGFILE:
 			stop_datalogging();
-			close_file(object_data);
+			close_file(obj_data);
 			break;
 		case START_DATALOGGING:
 			start_datalogging();
@@ -423,22 +433,22 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			stop_datalogging();
 			break;
 		case EXPORT_VETABLE:
-			present_filesavebox(VE_EXPORT);
+			present_filesavebox(VE_EXPORT,(gpointer)widget);
 			break;
 		case IMPORT_VETABLE:
-			present_filesavebox(VE_IMPORT);
+			present_filesavebox(VE_IMPORT,(gpointer)widget);
 			break;
 		case REVERT_TO_BACKUP:
 			revert_to_previous_data();
 			break;
 		case BACKUP_ALL:
-			present_filesavebox(FULL_BACKUP);
+			present_filesavebox(FULL_BACKUP,(gpointer)widget);
 			break;
 		case RESTORE_ALL:
-			present_filesavebox(FULL_RESTORE);
+			present_filesavebox(FULL_RESTORE,(gpointer)widget);
 			break;
 		case SELECT_PARAMS:
-			present_viewer_choices(object_data);
+			present_viewer_choices(obj_data);
 			break;
 		case REQ_FUEL_POPUP:
 			reqd_fuel_popup(widget);
@@ -474,27 +484,28 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data[0];
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
-	if (GTK_IS_WIDGET(widget))
-		reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(
-				G_OBJECT(widget),"reqd_fuel");
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
 
+	if (GTK_IS_WIDGET(widget))
+	{
+		reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(
+				G_OBJECT(widget),"reqd_fuel");
+		handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
+		info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
+		ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
+		offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
+		dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
+		spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
+		page = (gint) g_object_get_data(G_OBJECT(widget),"page");
+		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
+		value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	}
+
 	if (ecu_caps & DUALTABLE)
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 
-
-	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
-	info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
-	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
-	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
-	spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
-	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
-	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
-
-	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	tmpi = (int)(value+.001);
 
 	switch ((SpinButton)handler)

@@ -17,7 +17,6 @@
 #include <core_gui.h>
 #include <datalogging_gui.h>
 #include <defines.h>
-#include <eng_vitals_gui.h>
 #include <enums.h>
 #include <general_gui.h>
 #include <gui_handlers.h>
@@ -53,8 +52,6 @@ static struct
 { "About MegaTunix", build_about, "_About",STANDARD,ABOUT_PAGE},
 { "General MegaTunix Settings", build_general, "_General",STANDARD,GENERAL_PAGE},
 { "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STANDARD,COMMS_PAGE},
-//{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD,ENG_VITALS_PAGE},
-//{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD,CONSTANTS_PAGE},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
 { "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
 { "MegaSquirt Tools", build_tools, "T_ools",STANDARD,TOOLS_PAGE},

@@ -42,7 +42,7 @@ static gchar *vexfile;
 static gchar *dlogfile;
 static gchar *logviewfile;
 
-void present_filesavebox(FileIoType iotype)
+void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 {
 	/* The idea is to present a filesavebox and bind the datatype
 	 * we want to handle to it.  The box handler (check_filename) 
@@ -83,6 +83,8 @@ void present_filesavebox(FileIoType iotype)
 		g_free(title);
 	g_object_set_data(G_OBJECT(file_selector),"iotype",
 			GINT_TO_POINTER(iotype));
+	g_object_set_data(G_OBJECT(file_selector),"dest_widget",
+			GINT_TO_POINTER(dest_widget));
 
 	/* Only allow one file to be selected.. */
 	gtk_file_selection_set_select_multiple(

@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void present_filesavebox(FileIoType );
+void present_filesavebox(FileIoType, gpointer );
 void truncate_file(FileIoType, gchar *);
 void close_file(void * );
 void check_filename(GtkWidget *, GtkFileSelection *);
