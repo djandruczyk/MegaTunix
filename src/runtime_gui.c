@@ -389,7 +389,7 @@ void update_runtime_vars()
 	}
 	if (runtime->tpsaccel != runtime_last->tpsaccel)
 	{
-		g_snprintf(buff,10,"%i",runtime->tpsaccel);
+		g_snprintf(buff,10,"%.1f",runtime->tpsaccel/10.0);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.tpsaccel_ent),buff);
 	}
 	gdk_threads_leave();

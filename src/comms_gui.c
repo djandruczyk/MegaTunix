@@ -63,6 +63,8 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 
 	ser_statbar = gtk_statusbar_new();
+	gtk_widget_set_name(ser_statbar, "statusbar");
+	gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(ser_statbar),FALSE);
 	gtk_box_pack_start(GTK_BOX(vbox2),ser_statbar,TRUE,TRUE,0);
 	ser_context_id = gtk_statusbar_get_context_id(
 			GTK_STATUSBAR(ser_statbar),

@@ -150,7 +150,6 @@ int build_vetable(GtkWidget *parent_frame)
 	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),50);
 	gtk_container_add(GTK_CONTAINER(frame),table);
-	gtk_container_set_border_width(GTK_CONTAINER(frame),5);
 
 	button = gtk_button_new_with_label("Get Data from ECU");
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,

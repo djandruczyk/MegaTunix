@@ -10,11 +10,14 @@
 # widget <widget_set> style <style_name>
 # widget_class <widget_class_set> style <style_name>
 
-# this file gets included from testgtkrc
-
 style "defaultfont"
 {
   font_name = "fixed 12"
+}
+
+style "statusfont"
+{
+  font_name = "fixed 14"
 }
 
 style 'main_buttons'
@@ -22,7 +25,8 @@ style 'main_buttons'
   bg[PRELIGHT] = { 1.0, 0.80, 0.80 }
 }
 
-widget "main window.*GtkButton*" style "main_buttons"
-
+	# Sets default font....
 class "GtkWidget" style "defaultfont"
+	# Sets the onmouseover backgrond for buttons to light red 
+widget_class "*GtkButton*" style "main_buttons"
 

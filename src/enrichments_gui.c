@@ -340,14 +340,14 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	constants.decel_cut_ent = entry;
 
-	label = gtk_label_new("Decel Fuel Cut\n(Percent)");
+	label = gtk_label_new("Decel Fuel Cut(%)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 
-	frame = gtk_frame_new("Exaust Gas Oxygen Feedback Settings");
+	frame = gtk_frame_new("Exhaust O2 Feedback Settings");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	table = gtk_table_new(6,2,FALSE);
