@@ -1,0 +1,85 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(src/main.c)
+
+MEGASQUIRT_LIN_MAJOR_VERSION=0
+MEGASQUIRT_LIN_MINOR_VERSION=0
+MEGASQUIRT_LIN_MICRO_VERSION=4
+
+MEGASQUIRT_LIN_VERSION=$MEGASQUIRT_LIN_MAJOR_VERSION.$MEGASQUIRT_LIN_MINOR_VERSION.$MEGASQUIRT_LIN_MICRO_VERSION
+
+AM_INIT_AUTOMAKE(megasquirt, ${MEGASQUIRT_LIN_VERSION})
+
+AM_CONFIG_HEADER(config.h)
+AM_MAINTAINER_MODE
+
+
+
+dnl Checks for programs.
+dnl AM_PROG_LIBTOOL
+AC_PROG_AWK
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_CC
+AC_PROG_MAKE_SET
+AM_PATH_GTK(1.2.0, , AC_MSG_ERROR([** GTK 1.2.0 not installed or broken **]),gthread)
+AM_PATH_GLIB(1.2.0, , AC_MSG_ERROR([** GLIB 1.2.0 not installed or broken **]),gthread)
+
+
+dnl Checks for libraries.
+
+
+dnl Replace `main' with a function in -lpthread:
+AC_CHECK_LIB(pthread, main)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h sys/ioctl.h sys/time.h unistd.h pthread.h)
+
+
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_TIME
+
+dnl Checks for library functions.
+
+CFLAGS="-O2"
+AC_SUBST(CFLAGS)
+
+EXTRA_LIBS=""
+AC_SUBST(EXTRA_LIBS)
+
+dnl ===============
+dnl Debugging stuff
+dnl ===============
+
+dnl General Debugging code
+AC_ARG_ENABLE(debug,
+[  --enable-debug         enable debugging [default=no]],, enable_debug=no)
+
+if test "$enable_debug" = yes; then
+DFLAGS="$DFLAGS -g -DDEBUG"
+fi
+AC_SUBST(DFLAGS)
+
+dnl ==============
+dnl profiling
+dnl =============
+
+AC_ARG_ENABLE(profiling,
+[  --enable-profiling     enable profiling ],, enable_profiling=no)
+
+if test "$enable_profiling" = yes; then
+PFLAGS="-pg"
+fi
+AC_SUBST(PFLAGS)
+
+
+
+AC_SUBST(MEGASQUIRT_LIN_MAJOR_VERSION)
+AC_SUBST(MEGASQUIRT_LIN_MINOR_VERSION)
+AC_SUBST(MEGASQUIRT_LIN_MICRO_VERSION)
+AC_SUBST(MEGASQUIRT_LIN_VERSION)
+AC_OUTPUT([
+Makefile 
+src/Makefile
+VERSION])

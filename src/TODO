@@ -1,0 +1,20 @@
+
+
+Write the gui routines for 
+constants,
+runtime display (data gathering works, but is not handled for display yet)
+enrichments display/retrieval
+ve table retrieval/display
+tuning displays
+Tools (reqd fuel calc, memory editor, TPS guage calibrator)
+Datalogging gui and necessaru I/O functions. (will draw upon eXtace code)
+
+
+Also not written yet is serial routines for VEtable/constants retrieval, 
+as I don't have a map of how the data is laid out. (will use a struct once
+I get the info...)
+
+serial output routines for buring changes to the MS need to be written.
+have not had time to research this yet..
+
+

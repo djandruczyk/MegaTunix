@@ -1,0 +1,17 @@
+
+MegaTunix 0.0.x designed and written by Dave J. Andruczyk
+
+Insiration for this code came from Bruce Bowling and Al Grippo, 
+designers of the MegaSquirt DIY Fuel injection ECU. This code is 
+modelled slight after Bruce and Al's MegaSquirt PCC tuning software 
+for MS-Windows.  Inspiration also came from Eric Fahlgreens' MegaTune
+also for windows.
+
+Right now the code is NON-function for everyday use.  What is working 
+is basic serial input,  selection of serial port, testing MS comms works
+Realtime data readback from the MS works. (but only dumps to console at
+the moment as the gui has not caught up yet..). Saving of comm port
+selection and windows position/size is saved automatically between runs
+and is stored in ~/.MegaTunix/config.
+
+
