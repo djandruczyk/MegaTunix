@@ -175,6 +175,7 @@ gint comm_port_change(GtkEditable *editable)
 
 gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
+	GtkWidget *obj_data = g_object_get_data(G_OBJECT(widget),"obj_data");
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
 		switch ((ToggleButton)data)
@@ -208,6 +209,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, TRUE);
 				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, TRUE);
 				logviewer_mode = FALSE;
+				g_signal_emit_by_name(G_OBJECT(obj_data),"configure_event",NULL);
 				break;
 			case PLAYBACK_VIEW:
 				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, FALSE);
@@ -215,6 +217,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, FALSE);
 				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, FALSE);
 				logviewer_mode = TRUE;
+				g_signal_emit_by_name(G_OBJECT(obj_data),"configure_event",NULL);
 				break;
 		}
 	}

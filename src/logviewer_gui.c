@@ -120,6 +120,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 
 	button = gtk_radio_button_new_with_label(NULL,"Realtime Mode");
+	g_object_set_data(G_OBJECT(button),"obj_data",(gpointer)d_area);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(toggle_button_handler),
@@ -130,6 +131,7 @@ void build_logviewer(GtkWidget *parent_frame)
 
 	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	button = gtk_radio_button_new_with_label(group,"Playback Mode");
+	g_object_set_data(G_OBJECT(button),"obj_data",(gpointer)d_area);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(toggle_button_handler),
@@ -221,15 +223,23 @@ void present_viewer_choices(void *ptr)
 	max_viewables = sizeof(mt_full_names)/sizeof(gchar *);
 	max_viewables = sizeof(logable_names)/sizeof(gchar *);
 
-
-	if (logviewer_mode)
-		log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(hand_me_down),"log_info");
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window),575,300);
 	if (logviewer_mode)
-		gtk_window_set_title(GTK_WINDOW(window),"Playback Mode: Logviewer Choices");
+	{
+		log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(hand_me_down),"log_info");
+		gtk_window_set_title(GTK_WINDOW(window),
+				"Playback Mode: Logviewer Choices");
+		frame = gtk_frame_new("Select Variables to playback from the list below...");
+		max_viewables = log_info->field_count;
+	}
 	else
-		gtk_window_set_title(GTK_WINDOW(window),"Realtime Mode: Logviewer Choices");
+	{
+		gtk_window_set_title(GTK_WINDOW(window),
+				"Realtime Mode: Logviewer Choices");
+		frame = gtk_frame_new("Select Realtime Variables to view from the list below...");
+		max_viewables = sizeof(logable_names)/sizeof(gchar *);
+	}
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -238,20 +248,11 @@ void present_viewer_choices(void *ptr)
 			(gpointer)window);
 
 	gtk_container_set_border_width(GTK_CONTAINER(window),5);
-	if (logviewer_mode)
-		frame = gtk_frame_new("Select Variables to playback from the list below...");
-	else
-		frame = gtk_frame_new("Select Realtime Variables to view from the list below...");
 	gtk_container_add(GTK_CONTAINER(window),frame);
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox);
-
-	if (logviewer_mode)
-		max_viewables = log_info->field_count;
-	else
-		max_viewables = sizeof(logable_names)/sizeof(gchar *);
 
 	table_rows = ceil((float)max_viewables/(float)table_cols);
 	table = gtk_table_new(table_rows,table_cols,TRUE);
@@ -397,7 +398,12 @@ gboolean populate_viewer(GtkWidget * d_area)
 			}
 		}
 	}
-		
+	/* If traces selected, emit a configure_Event to clear the window
+	 * and draw the traces (IF ONLY reading a log for playback)
+	 */
+	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
+		g_signal_emit_by_name(G_OBJECT(d_area),"configure_event",NULL);
+	
 	return FALSE; /* want other handlers to run... */
 }
 
@@ -494,7 +500,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
 					GDK_GC_FOREGROUND);
-			hue_angle += 80;
+			hue_angle += 75;
 			if (hue_angle >= 360)
 				hue_angle -= 360.0;
 			break;
@@ -593,10 +599,12 @@ void draw_infotext(void *data)
 
 	h = v_value->d_area->allocation.height;
 	if (tcount == 0)  /*clear text area */
+	{
 		gdk_draw_rectangle(pixmap,
 				v_value->d_area->style->black_gc,
 				TRUE, 0,0,
 				info_width,h);
+	}
 
 	name_y = (gint) (((float)h/(float)(total_viewables+1))*(tcount+1));
 	name_y -= 15;
@@ -671,6 +679,7 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 
 	if ((gboolean)data == TRUE)
 	{
+		draw_infotext(v_value);
 		lo_width = v_value->d_area->allocation.width-info_width;
 		len = v_value->data_array->len;
 		if (len == 0)	/* If empty */
@@ -706,8 +715,6 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 				v_value->trace_gc,
 				pts,
 				total);
-
-		draw_infotext(v_value);
 		return;
 	}
 
