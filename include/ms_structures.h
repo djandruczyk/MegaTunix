@@ -256,8 +256,8 @@ struct Ve_Const_DT_2
         unsigned short	rpmk;			/* 226, 12K/ncyl */
         unsigned char	rpm_bins[8];		/* 228, VEtable RPM bins */
         unsigned char	load_bins[8];		/* 236, VEtable KPA bins */
-	unsigned char	unused244;		/* 244, unused */
-	unsigned char	unused245;		/* 245, unused */
+        union	config11 config11;		/* 244, Config for PC Config */
+        union	config12 config12;		/* 245, Config for PC Config */
 	unsigned char	unused246;		/* 246, unused */
 	unsigned char	bcFreqDiv;		/* 247, PWM rate for boost */
 						/* 0-ERROR, 1=39hz, 2=19 Hz */
@@ -266,10 +266,10 @@ struct Ve_Const_DT_2
 						 * controller algorithm */
 	unsigned char	bcPgain;		/* 249, proportional Gain % */
 	unsigned char	bcDgain;		/* 250, derivative Gain % */
-	unsigned char	revlimit;		/* 251, rev limit (rpm/100) */ 
-	unsigned char	unused126;		/* 252, unused */
-	unsigned char	unused127;		/* 253, unused */
-	unsigned char	unused128;		/* 254, unused */
+	unsigned char	revlimit;		/* 251, maxrev limit rpm/100 */ 
+	unsigned char	launchlimit;		/* 252, launch control revlim */
+	unsigned char	shiftlo;		/* 253, lo shift light thresh */
+	unsigned char	shifthi;		/* 254, hi shift light thresh */
 	unsigned char	crank_rpm;		/* 255, rpm/100 */
 };
 

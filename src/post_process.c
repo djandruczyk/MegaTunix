@@ -40,6 +40,7 @@ void post_process(void *input, void *output)
 	gint divider = 0;
 	gint nsquirts = 0;
 	gfloat cycletime = 0.0;
+	gfloat possible_inj_time = 0.0;
 
 	out->secl = in->secl;
 	out->squirt.value = in->squirt.value;
@@ -81,16 +82,15 @@ void post_process(void *input, void *output)
 	out->aircorr = in->aircorr;
 	out->warmcorr = in->warmcorr;
 	out->rpm = in->rpm * 100;
-	out->pw1 = (float)in->pw1 / 10.0;
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
-	out->vecurr1 = in->vecurr1;
-	//out->dcycle1 = (float) out->pw1 / (1200.0 / (float) out->rpm);
-	/* Hopefully correct dutycycle calc from Eric Fahlgren */
 	nsquirts = (ve_const_p0->config11.bit.cylinders+1)/ve_const_p0->divider;
+
 	if (!dualtable)
-	{
+	{	/* Std B&G Code */
+		out->pw1 = (float)in->pw1 / 10.0;
+		out->vecurr1 = in->vecurr1;
 		if (ve_const_p0->alternate)
 			divider = 2;
 		else
@@ -100,33 +100,38 @@ void post_process(void *input, void *output)
 		else
 			cycletime = 1200.0 /(float) in->rpm;
 
-		out->dcycle1 = 100.0 *nsquirts/divider* (float) out->pw1 / cycletime;
+		out->dcycle1 = 100.0 
+				* (nsquirts/divider)
+				* ((float) out->pw1 / cycletime);
 		out->bspot1 = in->bspot1;
 		out->bspot2 = in->bspot2;
 		out->bspot3 = in->bspot3;
 	}
 	else
 	{	/* Dualtable code.... */
-
-		out->vecurr2 = in_dt->vecurr2;
+		out->pw1 = (float)in_dt->pw1 / 10.0;
 		out->pw2 = (float)in_dt->pw2 / 10.0;
-		/* we use the config11bit  from page0 as it DOES NOT EXIST 
-		 * in page 1, yet we use the "divider" from page 1 */
-		nsquirts = (ve_const_p0->config11.bit.cylinders+1)/ve_const_p1->divider;
-/*
-	This needs work/input from Eric F 
-		if (ve_const_p1->tblcnf)
-			divider = 2;
-		else
-			divider = 1;
-*/
+		out->vecurr1 = in_dt->vecurr1;
+		out->vecurr2 = in_dt->vecurr2;
+
+		nsquirts = (int) 0.00001 
+				+ (float)(ve_const_p0->config11.bit.cylinders+1)
+				/ (float)ve_const_p0->divider;
 		if (ve_const_p0->config11.bit.eng_type == 1)
 			cycletime = 600.0 /(float) in->rpm;
 		else
 			cycletime = 1200.0 /(float) in->rpm;
 
-		//out->dcycle2 = (float) out->pw2 / (1200.0 / (float) out->rpm);
-		out->dcycle2 = 100.0 *nsquirts/divider* (float) out->pw1 / cycletime;
+		possible_inj_time = (float)cycletime/(float)nsquirts;
+		out->dcycle1 =  (float) out->pw1 / possible_inj_time;
+
+		// Page 1
+		nsquirts = (int) 0.00001 
+				+ (float)(ve_const_p1->config11.bit.cylinders+1)
+				/ (float)ve_const_p1->divider;
+		possible_inj_time = (float)cycletime/(float)nsquirts;
+		out->dcycle2 =  (float) out->pw2 / possible_inj_time;
+
 		out->idleDC = in_dt->idleDC;
 	}
 }

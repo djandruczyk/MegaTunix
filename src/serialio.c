@@ -50,7 +50,7 @@ void open_serial(gchar * port_name)
 
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY in nonblock mode */
-	result = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
+	result = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 	if (result >= 0)
 	{
 		/* SUCCESS */

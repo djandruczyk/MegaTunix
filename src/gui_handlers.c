@@ -1019,18 +1019,14 @@ void check_config13(int tmp)
 
 void set_dualtable_mode(gboolean state)
 {
+		dualtable = state;
+		gtk_widget_set_sensitive(misc.vetable2,state);
+		gtk_widget_set_sensitive(buttons.alternate_but,!state);
+		gtk_widget_set_sensitive(buttons.simul_but,!state);
 	if (state)
-	{
-		dualtable = TRUE;
-		gtk_widget_set_sensitive(misc.vetable2,TRUE);
 		printf("enabling dualtable mode controls\n");
-	}
 	else
-	{
-		dualtable = FALSE;
-		gtk_widget_set_sensitive(misc.vetable2,FALSE);
 		printf("disabling dualtable mode controls\n");
-	}
 }
 
 void start_runtime_display()

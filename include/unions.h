@@ -144,9 +144,9 @@ union dt_config13
                 unsigned char unused:3;         /* Last 3 bits... */
                 /*DUALTABLE CODE SPECIFIC*/
                 unsigned char idle_policy:1;    /* 0 = B%G style, */
+						/* 1 = Brian Fielding PWM */
                 unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
                                                 /* 1 = Enrichment on  */
-                                                /* 1 = Brian fielding PWM */
                 unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
                 unsigned char ego_type  :1;     /* 0 = narrow, 1=wide */
                 unsigned char firing    :1;     /* 0 = normal, 1=odd fire */
