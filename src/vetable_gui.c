@@ -20,15 +20,17 @@
 #include <globals.h>
 
 extern struct v1_2_Constants constants;
-extern struct ms_ve_constants ve_constants;
+extern struct ms_ve_constants_v1_and_v2 ve_constants;
 extern struct Buttons buttons;
 GtkWidget *map_tps_frame;
 GtkWidget *map_tps_label;
 
 int build_vetable(GtkWidget *parent_frame)
 {
+        GtkWidget *sep;
         GtkWidget *vbox;
         GtkWidget *vbox2;
+        GtkWidget *vbox3;
         GtkWidget *hbox;
         GtkWidget *label;
         GtkWidget *table;
@@ -41,25 +43,35 @@ int build_vetable(GtkWidget *parent_frame)
 	gint index;
 	extern GtkTooltips *tip;
 
-	swin = gtk_scrolled_window_new(NULL,NULL);
-        gtk_container_add(GTK_CONTAINER(parent_frame),swin);
-
         vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin),
-			vbox);
+        gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
-	hbox = gtk_hbox_new(FALSE,5);
-        gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+	swin = gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
+			GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC);
+        gtk_box_pack_start(GTK_BOX(vbox),swin,TRUE,TRUE,0);
 
         vbox2 = gtk_vbox_new(FALSE,0);
-        gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin),
+			vbox2);
+
+	label = gtk_label_new("Vetable 1 (All MS Variants)");
+        gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
+
+	hbox = gtk_hbox_new(FALSE,5);
+        gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,TRUE,0);
+
+        vbox3 = gtk_vbox_new(FALSE,0);
+        gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+
 
 	frame = gtk_frame_new(NULL);
 	label = gtk_label_new("MAP Bins");
 	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+        gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
 	map_tps_frame = frame;
 
 	table = gtk_table_new(9,1,FALSE);
@@ -84,10 +96,10 @@ int build_vetable(GtkWidget *parent_frame)
 				NULL);
 		/* Bind data to object for handlers */
 		g_object_set_data(G_OBJECT(spinner),"class", 
-				GINT_TO_POINTER(KPA));
+				GINT_TO_POINTER(VE1_KPA));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
-				GINT_TO_POINTER(KPA_BINS_OFFSET+index));
-		constants.kpa_bins_spin[y] = spinner;
+				GINT_TO_POINTER(VE1_KPA_BINS_OFFSET+index));
+		constants.ve1_kpa_bins_spin[y] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, y+1, y+2,
 				(GtkAttachOptions) (GTK_EXPAND),
@@ -97,11 +109,11 @@ int build_vetable(GtkWidget *parent_frame)
 	}
 
 
-	vbox2 = gtk_vbox_new(FALSE,0);
-        gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	vbox3 = gtk_vbox_new(FALSE,0);
+        gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
 
 	frame = gtk_frame_new("Volumetric Efficiency (%)");
-        gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+        gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
 	
 	table = gtk_table_new(9,8,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -124,14 +136,14 @@ int build_vetable(GtkWidget *parent_frame)
 					1.0,1.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
 			g_object_set_data(G_OBJECT(spinner),"class", 
-					GINT_TO_POINTER(VE));
+					GINT_TO_POINTER(VE1));
 			g_object_set_data(G_OBJECT(spinner),"offset", 
-					GINT_TO_POINTER(VE_TABLE_OFFSET+index));
+					GINT_TO_POINTER(VE1_TABLE_OFFSET+index));
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
 					G_CALLBACK (classed_spinner_changed),
 					NULL);
 			/* Bind data to object for handlers */
-			constants.ve_bins_spin[index] = spinner;
+			constants.ve1_bins_spin[index] = spinner;
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), 
 					FALSE);
 			gtk_table_attach (GTK_TABLE (table), spinner, 
@@ -144,7 +156,7 @@ int build_vetable(GtkWidget *parent_frame)
 
 	/* RPM Table */
 	frame = gtk_frame_new("RPM Bins");
-        gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+        gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
 
 	table = gtk_table_new(1,8,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),1);
@@ -162,16 +174,152 @@ int build_vetable(GtkWidget *parent_frame)
 				NULL);
 		/* Bind data to object for handlers */
 		g_object_set_data(G_OBJECT(spinner),"class", 
-				GINT_TO_POINTER(RPM));
+				GINT_TO_POINTER(VE1_RPM));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
-				GINT_TO_POINTER(RPM_BINS_OFFSET+x));
-		constants.rpm_bins_spin[x] = spinner;
+				GINT_TO_POINTER(VE1_RPM_BINS_OFFSET+x));
+		constants.ve1_rpm_bins_spin[x] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 
 	}
+	/* VEtable 2 *DUAL TABLE ONLY* */
+	label = gtk_label_new("\n");
+        gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
+
+	sep = gtk_hseparator_new();
+        gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+	label = gtk_label_new("Vetable 2 (Dualtable ONLY)");
+        gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
+	sep = gtk_hseparator_new();
+        gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_widget_set_sensitive(hbox,FALSE);
+        gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,TRUE,0);
+
+        vbox3 = gtk_vbox_new(FALSE,0);
+        gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+
+	frame = gtk_frame_new(NULL);
+	label = gtk_label_new("MAP Bins");
+	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	map_tps_frame = frame;
+
+	table = gtk_table_new(9,1,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_container_add(GTK_CONTAINER(frame),table);
+
+	/* KPA spinbuttons */
+	map_tps_label = gtk_label_new("Kpa");
+	gtk_table_attach (GTK_TABLE (table), map_tps_label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	index = 0;
+	for (y=0;y<8;y++)
+	{
+		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
+		spinner = gtk_spin_button_new(adj,1,0);
+		gtk_widget_set_size_request(spinner,45,-1);
+		g_signal_connect (G_OBJECT(spinner), "value_changed",
+				G_CALLBACK (classed_spinner_changed),
+				NULL);
+		/* Bind data to object for handlers */
+		g_object_set_data(G_OBJECT(spinner),"class", 
+				GINT_TO_POINTER(VE2_KPA));
+		g_object_set_data(G_OBJECT(spinner),"offset", 
+				GINT_TO_POINTER(VE2_KPA_BINS_OFFSET+index));
+		constants.ve2_kpa_bins_spin[y] = spinner;
+		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+		gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, y+1, y+2,
+				(GtkAttachOptions) (GTK_EXPAND),
+				(GtkAttachOptions) (0), 0, 0);
+		index++;
+
+	}
+
+
+	vbox3 = gtk_vbox_new(FALSE,0);
+        gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+
+	frame = gtk_frame_new("Volumetric Efficiency (%)");
+        gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	
+	table = gtk_table_new(9,8,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_container_add(GTK_CONTAINER(frame),table);
+
+	/* VeTable spinbuttons */
+	label = gtk_label_new(" ");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 8, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	index = 0;
+	for (y=0;y<8;y++)
+	{
+		for (x=0;x<8;x++)
+		{
+			adj =  (GtkAdjustment *) gtk_adjustment_new(
+					1.0,1.0,255,1,10,0);
+			spinner = gtk_spin_button_new(adj,1,0);
+			g_object_set_data(G_OBJECT(spinner),"class", 
+					GINT_TO_POINTER(VE2));
+			g_object_set_data(G_OBJECT(spinner),"offset", 
+					GINT_TO_POINTER(VE2_TABLE_OFFSET+index));
+					
+			g_signal_connect (G_OBJECT(spinner), "value_changed",
+					G_CALLBACK (classed_spinner_changed),
+					NULL);
+			/* Bind data to object for handlers */
+			constants.ve2_bins_spin[index] = spinner;
+			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), 
+					FALSE);
+			gtk_table_attach (GTK_TABLE (table), spinner, 
+					x, x+1, y+1, y+2,
+					(GtkAttachOptions) (GTK_EXPAND),
+					(GtkAttachOptions) (0), 0, 0);
+			index++;
+		}
+	}
+
+	/* RPM Table */
+	frame = gtk_frame_new("RPM Bins");
+        gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+
+	table = gtk_table_new(1,8,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),1);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_container_add(GTK_CONTAINER(frame),table);
+
+	for(x=0;x<8;x++)
+	{
+		adj =  (GtkAdjustment *) gtk_adjustment_new(100.0,100.0,25500,100,100,0);
+		spinner = gtk_spin_button_new(adj,1,0);
+		gtk_widget_set_size_request(spinner,54,-1);
+		g_signal_connect (G_OBJECT(spinner), "value_changed",
+				G_CALLBACK (classed_spinner_changed),
+				NULL);
+		/* Bind data to object for handlers */
+		g_object_set_data(G_OBJECT(spinner),"class", 
+				GINT_TO_POINTER(VE2_RPM));
+		g_object_set_data(G_OBJECT(spinner),"offset", 
+				GINT_TO_POINTER(VE2_RPM_BINS_OFFSET+x));
+		constants.ve2_rpm_bins_spin[x] = spinner;
+		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,
+				(GtkAttachOptions) (GTK_EXPAND),
+				(GtkAttachOptions) (0), 0, 0);
+	}
+
 
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,TRUE,0);

@@ -33,8 +33,8 @@ char buff[60];
 static gint burn_needed = FALSE;
 gint connected;
 extern struct v1_2_Runtime_Gui runtime_data;
-extern struct ms_ve_constants *ve_constants;
-extern struct ms_ve_constants *ve_const_tmp;
+extern struct ms_ve_constants_v1_and_v2 *ve_constants;
+extern struct ms_ve_constants_v1_and_v2 *ve_const_tmp;
        
 int open_serial(int port_num)
 {
@@ -322,7 +322,7 @@ void write_ve_const(gint value, gint offset)
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
-	res = memcmp(ve_const_tmp,ve_constants,sizeof(struct ms_ve_constants));
+	res = memcmp(ve_const_tmp,ve_constants,sizeof(struct ms_ve_constants_v1_and_v2));
 	if (res == 0)
 	{
 		set_store_black();
@@ -346,7 +346,7 @@ void burn_flash()
 	write (serial_params.fd,"B",1);	/* Send Burn command */
 
 	/* sync temp buffer with current VE_constants */
-	memcpy(ve_const_tmp,ve_constants,sizeof(struct ms_ve_constants));
+	memcpy(ve_const_tmp,ve_constants,sizeof(struct ms_ve_constants_v1_and_v2));
 	/* Take away the red on the "Store" button */
 	set_store_black();
 	burn_needed = FALSE;

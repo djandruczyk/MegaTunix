@@ -147,6 +147,36 @@ struct ms_raw_data_v1_and_v2
 	unsigned char   bspot2;		/* Offset 20 */
 	unsigned char   bspot3;		/* Offset 21 */
 };
+
+struct ms_raw_data_dualtable 
+{       /* This is RAW data that comes in via serial from the MegaSquirt
+	 * these values will be modified by post_process():
+	 * and fed into ms_data_v1_and_v2 (struct)
+	 */
+	unsigned char   secl;		/* Offset 0 */
+	union squirt    squirt;		/* Offset 1 */
+	union engine    engine;		/* Offset 2 */
+	unsigned char   baro;		/* Offset 3 */
+	unsigned char   map;		/* Offset 4 */
+	unsigned char   mat;		/* Offset 5 */
+	unsigned char   clt;		/* Offset 6 */
+	unsigned char   tps;		/* Offset 7 */
+	unsigned char   batt;		/* Offset 8 */
+	unsigned char   ego;		/* Offset 9 */
+	unsigned char   egocorr;	/* Offset 10 */
+	unsigned char   aircorr;	/* Offset 11 */
+	unsigned char   warmcorr;	/* Offset 12 */
+	unsigned char   rpm;		/* Offset 13 */
+	unsigned char   pw;		/* Offset 14 */
+	unsigned char   tpsaccel;	/* Offset 15 */
+	unsigned char   barocorr;	/* Offset 16 */
+	unsigned char   gammae;		/* Offset 17 */
+	unsigned char   vecurr;		/* Offset 18 */
+	unsigned char   pw2;		/* Offset 19 */
+	unsigned char   vecurr2;	/* Offset 20 */
+	unsigned char   idleDC;		/* Offset 21 */
+};
+
 struct ms_data_v1_and_v2 
 {      
         unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
@@ -176,6 +206,37 @@ struct ms_data_v1_and_v2
         unsigned char   bspot2;		/* Blank Spot 2 */
         unsigned char   bspot3;		/* Blank Spot 3 */
 };
+
+struct ms_data_dualtable 
+{      
+        unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
+        union squirt    squirt;		/* Event variable bit field for Injector Firing */
+        union engine    engine;		/* Variable bit-field to hold engine current status */
+        unsigned char   baro;		/* Barometer ADC Raw Reading - KPa (0 - 255) */
+        unsigned char   map;		/* Manifold Absolute Pressure ADC Raw Reading - KPa (0 - 255) */
+        unsigned char   mat;		/* Manifold Air Temp converted via lookuptable */
+        unsigned char   mat_volt;	/* Manifold Air Temp ADC voltage(0-5) */
+        unsigned char   clt;		/* Coolant Temperature converted via lookuptable */
+        unsigned char   clt_volt;	/* Coolant Temp ADC voltage (0-5) */
+        unsigned char   tps;		/* Throttle Position Sensor open percentage (0-100) */
+        unsigned char   tps_volt;	/* Throttle Pos ADC voltage (0-5) */
+        float           batt;		/* Battery Voltage ADC Raw Reading - converted to volts */
+        float           ego;		/* Exhaust Gas Oxygen ADC Raw Reading - converted to volts */
+        unsigned char   egocorr;	/* Oxygen Sensor Correction */
+        unsigned char   aircorr;	/* Air Density Correction lookup - percent */
+        unsigned char   warmcorr;	/* Total Warmup Correction - percent */
+        unsigned short  rpm;		/* Computed engine RPM - rpm */
+        float           pw;		/* injector squirt time in millesec (0 to 25.5 millisec) - applied */
+	float		dcycle;		/* Injector duty cycle */
+        unsigned char   tpsaccel;	/* Acceleration enrichment - percent */
+        unsigned char   barocorr;	/* Barometer Lookup Correction - percent */
+        unsigned char   gammae;		/* Total Gamma Enrichments - percent */
+        unsigned char   vecurr;		/* Current VE value from lookup table - percent */
+        unsigned char   pw2;		/* injector squirt time in ms. */
+        unsigned char   vecurr2;	/* current VE table from VEtable 2 */
+        unsigned char   idleDC;		/* IdlePWM dutycycle */
+};
+
 union config11 
 {
         unsigned char      value;
@@ -240,7 +301,7 @@ union config13
         } bit;
 };
 
-struct ms_ve_constants
+struct ms_ve_constants_v1_and_v2
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char   ve_bins[64];            /* 0, VE table, 64 bytes */
@@ -286,6 +347,53 @@ struct ms_ve_constants
         unsigned char   pad2;                   /* 125, Padding to 128 bytes */
         unsigned char   pad3;                   /* 126, Padding to 128 bytes */
         unsigned char   pad4;                   /* 127, Padding to 128 bytes */
+}; 
+struct ms_ve_constants_dualtable
+{
+        /* TYPE          Variable              Offset,  Comment */
+        unsigned char   ve_bins[64];            /* 0, VE table, 64 bytes */
+        unsigned char   cr_pulse_neg40;         /* 64, cr pulse at -40 deg F */
+        unsigned char   cr_pulse_pos170;        /* 65, cr pulse at 170 deg F */
+        unsigned char   as_enrich;              /* 66, Enrich over base (%) */
+        unsigned char   as_num_cycles;          /* 67, enrich for X cycles */
+        unsigned char   warmup_bins[10];        /* 68, Warmup bins  */
+        unsigned char   accel_bins[4];          /* 78, TPS Accel bins */
+        unsigned char   cold_accel_addon;       /* 82, Accel addon at -40deg */
+        unsigned char   tps_trig_thresh;        /* 83, TPS trig thr in V/sec */
+        unsigned char   accel_duration;         /* 84, Accel duration(secs) */
+        unsigned char   decel_cut;              /* 85, decel fuel cut % */
+        unsigned char   ego_temp_active;        /* 86, EGO activation pt */
+        unsigned char   ego_events;             /* 87, ign events betw steps */
+        unsigned char   ego_step;               /* 88, correction % */
+        unsigned char   ego_limit;              /* 89, +/- limit */
+        unsigned char   req_fuel;		/* 90, require fuel */
+        unsigned char   divider;                /* 91, IRQ / factor for pulse*/
+        unsigned char   alternate;              /* 92, alternate inj drivers */
+        unsigned char   inj_open_time;          /* 93, inj open time */
+        unsigned char   inj_ocfuel;             /* 94, PW-correlated amount of 
+						 * fuel injected during open 
+                                                 */
+        unsigned char   pwm_curr_lim;           /* 95, curr limit PWM duty 
+						 * cycle
+ 						 */
+        unsigned char   pwm_time_max;           /* 96, Peak hold time */
+        unsigned char   batt_corr;              /* 97, Batt Voltage Corr */
+        unsigned short  rpmk;                   /* 98, 12K/ncyl */
+        unsigned char   rpm_bins[8];            /* 100, VEtable RPM bins */
+        unsigned char   kpa_bins[8];            /* 108, VEtable KPA bins */
+
+        union   config11 config11;              /* 116, Config for PC Config */
+        union   config12 config12;              /* 117, Config for PC Config */
+        union   config13 config13;              /* 118, Config for PC Config */
+        unsigned char   cr_priming_pulse;       /* 119, priming pulse b4 start*/
+        unsigned char   ego_rpm_active;         /* 120, EGO RPM trigger volt  */
+        unsigned char   fast_idle_thresh;       /* 121, fast idle temp thresh */
+        unsigned char   ego_sw_voltage;         /* 122, EGO flip pt voltage */
+        unsigned char   cold_accel_mult;        /* 123, Cold Accel * factor */
+        unsigned char   slowidle;               /* 124, Dualtable */
+        unsigned char   fastidlespd;            /* 125, Fast idle speed RPM/10 */
+        unsigned char   slowidlespd;            /* 126, Slow idle speed RPM/10 */
+        unsigned char   idlethresh;             /* 127, TPS A/D count threshold BELOW which idle PWM is used */
 }; 
 
 #endif

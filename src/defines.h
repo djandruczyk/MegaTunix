@@ -21,11 +21,14 @@
 /* Definitions */
 
 /* Memroy offsets */
-#define VE_TABLE_OFFSET		0
+#define VE1_TABLE_OFFSET	0
+#define VE2_TABLE_OFFSET	200	/* Intentianally WRONG  for now.. */
 #define WARMUP_BINS_OFFSET	68
 #define ACCEL_BINS_OFFSET	78
-#define RPM_BINS_OFFSET		100
-#define KPA_BINS_OFFSET		108
+#define VE1_RPM_BINS_OFFSET	100
+#define VE2_RPM_BINS_OFFSET	200	/* Intentianally WRONG  for now.. */
+#define VE1_KPA_BINS_OFFSET	108
+#define VE2_KPA_BINS_OFFSET	208	/* Intentianally WRONG  for now.. */
 
 /* Gui frames */
 #define ABOUT_PAGE		0x01
@@ -104,10 +107,13 @@
 /* Group classes */
 /* Classes are used for widget groups, i.e. the VEtable, RPM bins, etc... */
 #define	ACCEL			0x80
-#define RPM			0x81
-#define KPA			0x82
-#define VE			0x83
-#define WARMUP			0x84
+#define VE1_RPM			0x81
+#define VE1_KPA			0x82
+#define VE1			0x83
+#define VE2_RPM			0x84
+#define VE2_KPA			0x85
+#define VE2			0x86
+#define WARMUP			0x87
 
 /* Download modes */
 #define IMMEDIATE		0x90

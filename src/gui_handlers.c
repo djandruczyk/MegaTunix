@@ -34,7 +34,7 @@ static gint constants_loaded = FALSE;
 extern gint raw_reader_running;
 extern gint raw_reader_stopped;
 extern gint read_wait_time;
-extern struct ms_ve_constants *ve_constants;
+extern struct ms_ve_constants_v1_and_v2 *ve_constants;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
@@ -272,18 +272,18 @@ int classed_spinner_changed(GtkWidget *widget, gpointer data)
 				= (gint)value;
 			write_ve_const((gint)value, offset);
 			break;
-		case RPM:
-			ve_constants->rpm_bins[offset-RPM_BINS_OFFSET] 
+		case VE1_RPM:
+			ve_constants->rpm_bins[offset-VE1_RPM_BINS_OFFSET] 
 				= (gint)value/100.0;
 			write_ve_const((gint)value/100.0, offset);
 			break;
-		case KPA:
-			ve_constants->kpa_bins[offset-KPA_BINS_OFFSET] 
+		case VE1_KPA:
+			ve_constants->kpa_bins[offset-VE1_KPA_BINS_OFFSET] 
 				= (gint)value;
 			write_ve_const((gint)value, offset);
 			break;
-		case VE:
-			ve_constants->ve_bins[offset-VE_TABLE_OFFSET] 
+		case VE1:
+			ve_constants->ve_bins[offset-VE1_TABLE_OFFSET] 
 				= (gint)value;
 			write_ve_const((gint)value, offset);
 			break;
@@ -716,7 +716,7 @@ void update_ve_const()
 	for (i=0;i<64;i++)
 	{
 		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(constants.ve_bins_spin[i]),
+				GTK_SPIN_BUTTON(constants.ve1_bins_spin[i]),
 				ve_constants->ve_bins[i]);
 	}
 
@@ -724,7 +724,7 @@ void update_ve_const()
 	for (i=0;i<8;i++)
 	{
 		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(constants.kpa_bins_spin[i]),
+				GTK_SPIN_BUTTON(constants.ve1_kpa_bins_spin[i]),
 				ve_constants->kpa_bins[i]);
 	}
 
@@ -732,7 +732,7 @@ void update_ve_const()
 	for (i=0;i<8;i++)
 	{
 		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(constants.rpm_bins_spin[i]),
+				GTK_SPIN_BUTTON(constants.ve1_rpm_bins_spin[i]),
 				ve_constants->rpm_bins[i]*100);
 	}
 	/* CONFIG11-13 related buttons */
