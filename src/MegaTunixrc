@@ -15,11 +15,6 @@ style "defaultfont"
   font_name = "fixed 12"
 }
 
-style "statusfont"
-{
-  font_name = "fixed 14"
-}
-
 style 'main_buttons'
 {
   bg[PRELIGHT] = { 1.0, 0.80, 0.80 }

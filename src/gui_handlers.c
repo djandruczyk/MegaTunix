@@ -28,9 +28,7 @@ static int paused_handlers = FALSE;
 static int rpmk_offset = 99;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
-extern int ser_context_id;
 extern int read_wait_time;
-extern GtkWidget *ser_statbar;
 extern struct v1_2_Constants constants;
 struct 
 {
@@ -152,7 +150,6 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 	 * Fairly generic, should work for multiple statusbars
 	 *
 	 */
-
 
 	gtk_statusbar_pop(GTK_STATUSBAR(status_bar),
 			context_id);
@@ -500,13 +497,13 @@ void update_const_ve()
 	/* accel enrichments */
 	for (i=0;i<4;i++)
 	{
-		g_snprintf(buff,10,"%i",ve_constants->accel_bins[i]);
+		g_snprintf(buff,10,"%.1f",ve_constants->accel_bins[i]/10.0);
 		gtk_entry_set_text(GTK_ENTRY(constants.accel_bins_ent[i]),
 				buff);
 	}
 
 	/* TPS Trigger Threshold */
-	g_snprintf(buff,10,"%.1f",ve_constants->tps_trig_thresh/10.0);
+	g_snprintf(buff,10,"%.1f",ve_constants->tps_trig_thresh/5.0);
 	gtk_entry_set_text(GTK_ENTRY(constants.tps_trig_thresh_ent),
 			buff);
 
@@ -531,7 +528,7 @@ void update_const_ve()
 			buff);
 
 	/* EGO coolant activation temp */
-	g_snprintf(buff,10,"%i",ve_constants->ego_temp_active);
+	g_snprintf(buff,10,"%i",ve_constants->ego_temp_active-40);
 	gtk_entry_set_text(GTK_ENTRY(constants.ego_temp_active_ent),
 			buff);
 

@@ -123,7 +123,7 @@ void handle_ms_data(int which_data)
 
 		
 /* direct to console debugging output 
- *	printf("counter RAW:%i,\tActual %i\n", raw->secl,out.secl);
+ *	printf("counter RAW:%i,\tActual %i\n", raw->secl,runtime->secl);
  *	printf("baro RAW:%i,\t\tActual %i\n", raw->baro,out.baro);
  *	printf("map RAW:%i,\t\tActual %i\n", raw->map,out.map);
  *	printf("mat RAW:%i,\t\tActual %.2f\n", raw->mat,out.mat);

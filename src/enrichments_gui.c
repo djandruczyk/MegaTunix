@@ -310,7 +310,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	{
 		entry = gtk_entry_new ();
 		gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-		gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+		gtk_entry_set_max_length(GTK_ENTRY (entry), 4);
 		gtk_object_set_data(G_OBJECT(entry),"offset",
 				GINT_TO_POINTER(accel_bins_offset+i));
 		gtk_table_attach (GTK_TABLE (table), entry, i, i+1, 1, 2,

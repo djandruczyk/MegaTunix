@@ -24,7 +24,7 @@ static GtkWidget *ms_reset_entry;	/* MS reset count */
 static GtkWidget *ms_sioerr_entry;	/* MS Serial I/O error count */
 static GtkWidget *ms_readcount_entry;	/* MS Good read counter */
 static GtkWidget *ms_ve_readcount_entry;	/* MS Good read counter */
-int ser_context_id;			/* for ser_statbar */
+gint ser_context_id;			/* for ser_statbar */
 GtkWidget *ser_statbar;			/* serial statusbar */ 
 extern int read_wait_time;
 extern int raw_reader_running;
@@ -63,7 +63,6 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 
 	ser_statbar = gtk_statusbar_new();
-	gtk_widget_set_name(ser_statbar, "statusbar");
 	gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(ser_statbar),FALSE);
 	gtk_box_pack_start(GTK_BOX(vbox2),ser_statbar,TRUE,TRUE,0);
 	ser_context_id = gtk_statusbar_get_context_id(

@@ -16,6 +16,7 @@
 #define __PROTOS_H__
 
 #include <config.h>
+#include "globals.h"
 #include "defines.h"
 #include <gtk/gtk.h>
 

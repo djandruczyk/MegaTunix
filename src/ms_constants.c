@@ -25,9 +25,9 @@ void post_process(struct ms_raw_data_v1_and_v2 *in, struct ms_data_v1_and_v2 *ou
 	out->engine.value = in->engine.value;
 	out->baro = in->baro;
 	out->map = in->map;
-//	out->mat = in->mat * 0.0197;
-//	out->clt = in->clt * 0.0197;
-//	out->tps = in->tps * 0.0197;
+	out->mat_volt = in->mat*0.0197;
+	out->clt_volt = in->clt*0.0197;
+	out->tps_volt = in->tps*0.0197;
 	out->mat = thermfactor[in->mat];
 	out->clt = thermfactor[in->clt];
 	out->tps = (in->tps/255.0)*100.0; /* Convert to percent of full scale */
