@@ -44,6 +44,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	GtkWidget *label;
 	GtkWidget *table;
 	GtkWidget *ebox;
+	gchar *string;
 	GSList *group;
 	GtkAdjustment *adj;
 	GtkWidget *spinner;
@@ -58,7 +59,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The Cranking Pulsewidth determines how many milliseconds the injectors are pulsed open ONLY during engine crank-over.  Currently the ms is hardcoded to consider cranking to be from 0-300 RPM, above that it considers the engine running and uses the VEtable entries instead.  There are two fields, the enrichment at -40deg Fahreheit (-40Deg C as well) and at 170deg F (76.6 deg C).  At temperatures between these extremes the MS code interpolates the value.  The priming pulse is a one time pulse upon bootup of the MS unit.  This is similar in concept to pumping the gas pedel on an old carbureted car to get the accel pump to shoot at little extra in to assist with starting though the MS only does this once at startup.  Some engines need this more than others. (rotary engines especially)  You may not need thie priming pulse...",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   The Cranking Pulsewidth determines how many milliseconds the injectors are pulsed open ONLY during engine crank-over.  Currently the ms is hardcoded to consider cranking to be from 0-300 RPM, above that it considers the engine running and uses the VEtable entries instead.  There are two fields, the enrichment at -40deg Fahreheit (-40\302\260 C as well) and at 170deg F (76.6 deg C).  At temperatures between these extremes the MS code interpolates the value.  The priming pulse is a one time pulse upon bootup of the MS unit.  This is similar in concept to pumping the gas pedel on an old carbureted car to get the accel pump to shoot at little extra in to assist with starting though the MS only does this once at startup.  Some engines need this more than others. (rotary engines especially)  You may not need thie priming pulse...",NULL);
 	frame = gtk_frame_new("Cranking Pulsewidth (ms)");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -89,7 +90,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("-40 Deg. F");
+	label = gtk_label_new("-40 \302\260 F.");
 	labels.cr_pulse_lowtemp_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -115,7 +116,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("170 Deg. F");
+	label = gtk_label_new("170 \302\260 F.");
 	labels.cr_pulse_hightemp_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -215,7 +216,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	/* Warmup enrichments */
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The Warmup enrichments are a longer term enrichment to assist engine performance when starting up cold.  The values are in percentage, a value of 100, means no enrichment a value of 150 means 1.5 times more fuel.  (255 is the maximum you can select) There are ten bins from the -40 Deg F (-40 Deg C.). to 160 Deg F (71.1 Dec C).  At temperatures between this the MS box interpolates the correct amount of enrichment.  See the FAQ for tuning tips and recommendations.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   The Warmup enrichments are a longer term enrichment to assist engine performance when starting up cold.  The values are in percentage, a value of 100, means no enrichment a value of 150 means 1.5 times more fuel.  (255 is the maximum you can select) There are ten bins from the -40 \302\260 F (-40 \302\260 C.). to 160 \302\260 F (71.1 \302\260 C).  At temperatures between this the MS box interpolates the correct amount of enrichment.  See the FAQ for tuning tips and recommendations.",NULL);
 	frame = gtk_frame_new("Warmup Enrichment Bins (Percent)");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -252,7 +253,9 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 
-		label = gtk_label_new (F_warmup_labels[i]);
+		string = g_strdup_printf("%s\302\260",F_warmup_labels[i]);
+		label = gtk_label_new (string);
+		g_free(string);
 		labels.warmup_bins_lab[i]=label;
 		gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 		gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
@@ -571,7 +574,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Coolant Temp\nActivation(Deg F.)");
+	label = gtk_label_new("Coolant Temp\nActivation(\302\260 F.)");
 	labels.ego_temp_lab = label;
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,

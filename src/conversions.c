@@ -207,6 +207,7 @@ void reset_temps(gpointer type)
 	gint i;
 	gfloat value;
 	gfloat upper;
+	gchar * string;
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
 	switch ((gint)type)
@@ -214,36 +215,42 @@ void reset_temps(gpointer type)
 		case FAHRENHEIT:
 			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_lowtemp_lab),
-					"-40 Deg. F");
+					"-40\302\260 F.");
 			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
-					"170 Deg. F");
+					"170\302\260 F.");
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmup_lab),
 					"Engine Temp in Degrees Fahrenheit");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
-					"Coolant Temp\nActivation(Deg F.)");
+					"Coolant Temp\nActivation(\302\260 F.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.fastidletemp_lab),
-					"Fast Idle Threshold\n(Degrees F.)");
+					"Fast Idle Threshold (\302\260 F.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmwiz_clt_lab),
-					"Coolant (F)");
+					"Coolant (\302\260 F.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_clt_lab),
-					"Coolant (F)");
+					"Coolant (\302\260 F.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_mat_lab),
-					"MAT (F)");
+					"MAT (\302\260 F.)");
 			for (i=0;i<10;i++)
 			{
+				string = g_strdup_printf("%s\302\260",
+						F_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmup_bins_lab[i]),
+						string);
+				g_free(string);
+				string = g_strdup_printf("%s\302\260 F.",
 						F_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmwizard_lab[i]),
-						F_warmup_labels[i]);
+						string);
+				g_free(string);
 			}
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper < 215) /* if so it was celsius, if not skip*/
@@ -276,36 +283,42 @@ void reset_temps(gpointer type)
 		case CELSIUS:
 			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_lowtemp_lab),
-					"-40 Deg. C");
+					"-40\302\260 C.");
 			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
-					"77 Deg. C");
+					"77\302\260 C.");
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmup_lab),
 					"Engine Temp in Degrees Celsius");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
-					"Coolant Temp\nActivation(Deg C.)");
+					"Coolant Temp\nActivation(\302\260 C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.fastidletemp_lab),
-					"Fast Idle Threshold\n(Degrees C.)");
+					"Fast Idle Threshold (\302\260 C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_clt_lab),
-					"Coolant (C)");
+					"Coolant (\302\260 C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmwiz_clt_lab),
-					"Coolant (C)");
+					"Coolant (\302\260 C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_mat_lab),
-					"MAT (C)");
+					"MAT (\302\260 C.)");
 			for (i=0;i<10;i++)
 			{
+				string = g_strdup_printf("%s\302\260",
+						C_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmup_bins_lab[i]),
+						string);
+				g_free(string);
+				string = g_strdup_printf("%s\302\260 C.",
 						C_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmwizard_lab[i]),
-						C_warmup_labels[i]);
+						string);
+				g_free(string);
 			}
 
 			upper = adjustments.fast_idle_temp_adj->upper;

@@ -284,7 +284,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Fast Idle Threshold\n(Degrees F.)");
+	label = gtk_label_new("Fast Idle Threshold (\302\260 F.)");
 	labels.fastidletemp_lab = label;
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 2,
