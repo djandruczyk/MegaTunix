@@ -29,13 +29,16 @@
 #include <unistd.h>
 
 
+extern gboolean dualtable;
 extern gboolean raw_reader_running;
+extern gint last_page;
 extern GtkWidget *comms_view;
 extern struct DynamicMisc misc;
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p0_tmp;
 extern struct Ve_Const_Std *ve_const_p1;
 extern struct Ve_Const_Std *ve_const_p1_tmp;
+extern gint last_page;
 struct Serial_Params *serial_params;
 gboolean connected;
 static gboolean burn_needed = FALSE;
@@ -211,6 +214,8 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request one batch of realtime vars */
+		if (last_page != 0)
+			set_ms_page(0);
 		res = write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
@@ -287,6 +292,8 @@ void read_ve_const()
 	/* Flush serial port... */
 	tcflush(serial_params->fd, TCIFLUSH);
 
+	if (last_page != 0)
+		set_ms_page(0);
 	res = write(serial_params->fd,"V",1);
 	res = poll (&ufds,1,serial_params->poll_timeout);
 	if (res == 0)	/* Error */
@@ -300,24 +307,24 @@ void read_ve_const()
 		res = handle_ms_data(VE_AND_CONSTANTS_1);
 
 	}
-	/*	 Dualtable not ready yet... 
-		 if (dualtable)
-		 {
-		 res = write(serial_params->fd,"P1V",3);
-		 res = poll (&ufds,1,serial_params->poll_timeout);
-		 if (res == 0)	// Error 
-		 {
-		 serial_params->errcount++;
-		 connected = FALSE;
-		 }
-		 else		// Data arrived 
-		 {
-		 connected = TRUE;
-		 res = handle_ms_data(VE_AND_CONSTANTS_2);
+	if (dualtable)
+	{
+		if (last_page != 1)
+			set_ms_page(1);
+		res = write(serial_params->fd,"V",1);
+		res = poll (&ufds,1,serial_params->poll_timeout);
+		if (res == 0)	// Error 
+		{
+			serial_params->errcount++;
+			connected = FALSE;
+		}
+		else		// Data arrived 
+		{
+			connected = TRUE;
+			res = handle_ms_data(VE_AND_CONSTANTS_2);
 
-		 }
-		 }
-	 */
+		}
+	}
 	gtk_widget_set_sensitive(misc.status[CONNECTED],
 			connected);
 	gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
@@ -328,11 +335,23 @@ void read_ve_const()
 	tcflush(serial_params->fd, TCIFLUSH);
 
 	if (restart_reader)
-	{
 		start_serial_thread();
-	}
 
 	return;
+}
+
+void set_ms_page(gint ms_page)
+{
+	gint res = 0;
+	gchar buf = ms_page & 0x01;
+#ifdef DEBUG
+	fprintf(stderr,__FILE__": Changing page on MS to %i\n",ms_page);
+#endif
+	res = write(serial_params->fd,"P",1);
+	res = write(serial_params->fd,&buf,1);
+	if (res != 1)
+		fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);
+	last_page = ms_page;	
 }
 
 void write_ve_const(gint value, gint offset, gint page)
@@ -377,19 +396,14 @@ void write_ve_const(gint value, gint offset, gint page)
 		lbuff[1]=value;
 		count = 2;
 	}
-	if (page == 0)
-	{
-		res = write (serial_params->fd,"W",1);	/* Send write command */
-		res = write (serial_params->fd,lbuff,count);	/* Send write command */
-	}
-	else if (page == 1)
-	{	/* DUAL Table code only thus far.... */
-		printf("DualTable write operation...\n");
-		res = write (serial_params->fd,"P1",2);	/* Send write command */
-		res = write (serial_params->fd,"W",1);	/* Send write command */
-		res = write (serial_params->fd,lbuff,count);	/* Send write command */
+	if (page != last_page)
+		set_ms_page(page);
 
-	}
+	res = write (serial_params->fd,"W",1);	/* Send write command */
+	res = write (serial_params->fd,lbuff,count);	/* Send write command */
+
+	if (page == 1)
+		printf("DualTable write operation...\n");
 
 	/* We check to see if the last burn copy of the MS VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.
@@ -417,6 +431,10 @@ void burn_flash()
 		no_ms_connection();
 		return;		/* can't burn if disconnected */
 	}
+	/* doing this may NOT be necessary,  but who knows... */
+	set_ms_page(1);
+	write (serial_params->fd,"B",1);	/* Send Burn command */
+	set_ms_page(0);
 	write (serial_params->fd,"B",1);	/* Send Burn command */
 
 	/* sync temp buffer with current VE_constants */

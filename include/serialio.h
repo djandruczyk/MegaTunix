@@ -27,6 +27,7 @@ void read_ve_const(void);
 void update_ve_const(void);
 void write_ve_const(gint, gint, gint);
 void burn_flash(void);
+void set_ms_page(gint);
 /* Prototypes */
 
 #endif

@@ -29,6 +29,7 @@
 #include <threads.h>
 #include <unistd.h>
 
+extern gboolean dualtable;
 extern gboolean connected;
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
@@ -37,25 +38,25 @@ extern struct Serial_Params *serial_params;
 gboolean interrogated = FALSE;
 gfloat ecu_version;
 gboolean dualtable;
-
 static struct 
 {
-	gchar *cmd_string;
-	gchar *cmd_desc;
-	gint cmd_len;
-	gint count;
-	unsigned char *buffer;
+	gint page;		/* ms page in memory where it resides */
+	gchar *cmd_string;	/* command to get the data */
+	gchar *cmd_desc;	/* command description */
+	gint cmd_len;		/* Command length in chars to send */
+	gint count;		/* number of bytes returned */
+	unsigned char *buffer;	/* buffer to store returned data... */
 } commands[] = {
-	{ "A", "Runtime Vars", 1, 0,NULL },
-	{ "C", "MS Clock", 1, 0,NULL },
-	{ "Q", "MS Revision", 1, 0,NULL },
-	{ "V", "Ve/Constants", 1, 0,NULL },
-	{ "F0", "Memory readback first 256 bytes ", 2, 0,NULL },
-	{ "P1V", "Ve/Constants (page1)", 3, 0,NULL },
-	{ "F1", "Memory readback second 256 bytes ", 2, 0,NULL },
-	{ "S", "Signature Echo", 1, 0,NULL },
-	{ "I", "Ignition Vars", 1, 0,NULL },
-	{ "?", "Extended Version", 1, 0,NULL }
+	{ 0,"A", "Runtime Vars", 1, 0,NULL },
+	{ 0,"C", "MS Clock", 1, 0,NULL },
+	{ 0,"Q", "MS Revision", 1, 0,NULL },
+	{ 0,"V", "Ve/Constants (page0)", 1, 0,NULL },
+	{ 1,"V", "Ve/Constants (page1)", 1, 0,NULL },
+	{ 0,"S", "Signature Echo", 1, 0,NULL },
+	{ 0,"I", "Ignition Vars", 1, 0,NULL },
+	{ 0,"?", "Extended Version", 1, 0,NULL },
+	{ 0,"F0", "Memory readback 1st 256 bytes ", 2, 0,NULL },
+	{ 0,"F1", "Memory readback 2nd 256 bytes ", 2, 0,NULL }
 };
 /*
  * The Various MegaSquirt variants that MegaTunix attempts to support
@@ -105,9 +106,9 @@ void interrogate_ecu()
 	unsigned char buf[size];
 	unsigned char *ptr = buf;
 	gint res = 0;
+	gint tmppage = -1;
 	gint count = 0;
 	gint i = 0;
-	gint j = 0;
 	gint len = 0;
 	gint total = 0;
 	gint table0_index = 0;
@@ -154,24 +155,27 @@ void interrogate_ecu()
 		memset (buf,0,size);
 
 		ptr = buf;
-		string = g_strdup(commands[i].cmd_string);
 		len = commands[i].cmd_len;
+		/* check page and reset */
+		if (tmppage != commands[i].page)
+		{
+			set_ms_page(commands[i].page);
+			tmppage = commands[i].page;
+		}
+		string = g_strdup(commands[i].cmd_string);
 		res = write(serial_params->fd,string,len);
 		if (res != len)
 			fprintf(stderr,__FILE__": Error writing data to the ECU\n");
 		res = poll (&ufds,1,10);
 		if (res)
 		{	
-			printf("command %s returned ",string);
+			//printf("command %s returned ",string);
 			while (poll(&ufds,1,10))
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
 				//printf("count %i, total %i\n",count,total);
 			}
-			printf("%i bytes\n",total);
-			
-			for (j=0;j<total;j++)
-				printf("buffer [%i]= %i\n",j,buf[j]);
+			//printf("%i bytes\n",total);
 			
 			ptr = buf;
 			/* copy data from tmp buffer to struct pointer */
@@ -180,31 +184,32 @@ void interrogate_ecu()
 		g_free(string);
 		commands[i].count = total;
 	}
-//	tcflush(serial_params->fd, TCIFLUSH);
-//	tcflush(serial_params->fd, TCIFLUSH);
+	/* Reset page to 0 just to be 100% sure... */
+	set_ms_page(0);
+	/* flush serial port */
+	tcflush(serial_params->fd, TCIFLUSH);
 
-	res = memcmp(commands[3].buffer, commands[5].buffer,128);
-	printf("result of comparing 3 to 5 is %i\n",res);
-	for (i=0;i<128;i++)
-	{
-		printf("buffer 3[%i]= %i, 5[%i]= %i\n",i,commands[3].buffer[i],i,commands[5].buffer[i]);
+//	for (i=0;i<128;i++)
+//		printf("buffer 3[%i]= %i, 4[%i]= %i\n",i,commands[3].buffer[i],i,commands[4].buffer[i]);
 		
-	}
+	res = memcmp(commands[3].buffer, commands[4].buffer,128);
+	if (res != 0)
+		dualtable = TRUE;
 
 	for (i=0;i<tests_to_run;i++)
 	{
 		/* Per command section */
-		if (strstr(commands[i].cmd_string,"P1V"))
-		{
-			serial_params->table1_size = commands[i].count;
-			v1_bytes = commands[i].count;
-			table1_index = i;
-		}
-		else if (strstr(commands[i].cmd_string,"V"))
+		if ((strstr(commands[i].cmd_string,"V") && (commands[i].page == 0)))
 		{
 			serial_params->table0_size = commands[i].count;
 			v0_bytes = commands[i].count;
 			table0_index = i;
+		}
+		else if ((strstr(commands[i].cmd_string,"V") && (commands[i].page == 1)))
+		{
+			serial_params->table1_size = commands[i].count;
+			v1_bytes = commands[i].count;
+			table1_index = i;
 		}
 		else if (strstr(commands[i].cmd_string,"A"))
 			serial_params->rtvars_size = commands[i].count;
@@ -215,15 +220,26 @@ void interrogate_ecu()
 		else if (strstr(commands[i].cmd_string,"?"))
 			quest_bytes = commands[i].count;
 
-		if ((v1_bytes == v0_bytes ) && (v0_bytes == 125))
+		if (!dualtable)	/* table 1 not used in std code */
 			commands[table1_index].count = 0;
 
 		if (commands[i].count > 0)
 		{
-			tmpbuf = g_strdup_printf(
+			if (strstr(commands[i].cmd_string,"V"))
+			{
+				tmpbuf = g_strdup_printf(
+					"Command %s (page %i), returned %i bytes\n",
+					commands[i].cmd_string, 
+					commands[i].page,
+					commands[i].count);
+			}
+			else
+			{
+				tmpbuf = g_strdup_printf(
 					"Command %s, returned %i bytes\n",
 					commands[i].cmd_string, 
 					commands[i].count);
+			}
 			/* Store counts for VE/realtime readback... */
 				
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);

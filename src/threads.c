@@ -21,6 +21,7 @@
 #include <notifications.h>
 #include <pthread.h>
 #include <runtime_gui.h>
+#include <serialio.h>
 #include <stdio.h>
 #include <string.h>
 #include <structures.h>
@@ -32,6 +33,7 @@
 pthread_t raw_input_thread;			/* thread handle */
 gboolean raw_reader_running;			/* flag for thread */
 gboolean raw_reader_stopped;			/* flag for thread */
+extern gint last_page;
 extern gboolean connected;			/* valid connection with MS */
 extern GtkWidget * comms_view;
 extern struct DynamicMisc misc;
@@ -155,6 +157,8 @@ void *raw_reader_thread(void *params)
 	while(raw_reader_running == TRUE) 
 	{
 		pthread_testcancel();
+		if (last_page != 0)
+			set_ms_page(0);
 		write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)
