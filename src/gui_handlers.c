@@ -36,10 +36,7 @@ struct {
 void leave(GtkWidget *widget, gpointer *data)
 {
         save_config();
-        raw_reader_running = 0;	/*causes realtime var reader thread to die */
-	while (raw_reader_stopped == 0)
-		usleep(10000);	/*wait for thread to die cleanly*/
-
+	stop_serial_thread();
         /* Free all buffers */
 	close_serial();
         mem_dealloc();
