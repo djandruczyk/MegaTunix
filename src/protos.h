@@ -167,6 +167,8 @@ void set_store_black(void);
 void update_statusbar(GtkWidget *, int, gchar *);
 void no_ms_connection(void);
 void warn_user(gchar *);
+void squirt_cyl_inj_red(void);
+void squirt_cyl_inj_black(void);
 /* notifications.c */
 
 #endif

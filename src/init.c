@@ -45,6 +45,7 @@ extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
 struct ms_ve_constants *ve_constants;
+struct ms_ve_constants *ve_const_tmp;
 struct ms_data_v1_and_v2 *runtime;
 struct ms_data_v1_and_v2 *runtime_last;
 
@@ -166,6 +167,7 @@ void make_megasquirt_dirs(void)
 void mem_alloc()
 {
 
+	ve_const_tmp = malloc(sizeof(struct ms_ve_constants));
 	ve_constants = malloc(sizeof(struct ms_ve_constants));
 	runtime = malloc(sizeof(struct ms_data_v1_and_v2));
 	runtime_last = malloc(sizeof(struct ms_data_v1_and_v2));
@@ -176,6 +178,7 @@ void mem_alloc()
 void mem_dealloc()
 {
 
+	free(ve_const_tmp);
 	free(ve_constants);
 	free(runtime);
 	free(runtime_last);

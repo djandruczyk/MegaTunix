@@ -393,26 +393,12 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = 1;
-				gtk_widget_modify_fg(labels.squirts_lab,
-						GTK_STATE_NORMAL,&red);
-				gtk_widget_modify_fg(labels.cylinders_lab,
-						GTK_STATE_NORMAL,&red);
-				gtk_widget_modify_text(constants.cylinders_spin,
-						GTK_STATE_NORMAL,&red);
-				gtk_widget_modify_text(constants.inj_per_cycle_spin,
-						GTK_STATE_NORMAL,&red);
+				squirt_cyl_inj_red();
 			}
 			else
 			{
 				err_flag = 0;
-				gtk_widget_modify_fg(labels.squirts_lab,
-						GTK_STATE_NORMAL,&black);
-				gtk_widget_modify_fg(labels.cylinders_lab,
-						GTK_STATE_NORMAL,&black);
-				gtk_widget_modify_text(constants.cylinders_spin,
-						GTK_STATE_NORMAL,&black);
-				gtk_widget_modify_text(constants.inj_per_cycle_spin,
-						GTK_STATE_NORMAL,&black);
+				squirt_cyl_inj_black();
 				check_req_fuel_limits();
 			}
 			break;
@@ -444,27 +430,13 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = 1;
-				gtk_widget_modify_fg(labels.squirts_lab,
-						GTK_STATE_NORMAL,&red);
-				gtk_widget_modify_fg(labels.cylinders_lab,
-						GTK_STATE_NORMAL,&red);
-				gtk_widget_modify_text(constants.cylinders_spin,
-						GTK_STATE_NORMAL,&red);
-				gtk_widget_modify_text(constants.inj_per_cycle_spin,
-						GTK_STATE_NORMAL,&red);
+				squirt_cyl_inj_red();
 			}
 			else
 			{
 				err_flag = 0;
-				gtk_widget_modify_fg(labels.squirts_lab,
-						GTK_STATE_NORMAL,&black);
-				gtk_widget_modify_fg(labels.cylinders_lab,
-						GTK_STATE_NORMAL,&black);
-				gtk_widget_modify_text(constants.cylinders_spin,
-						GTK_STATE_NORMAL,&black);
-				gtk_widget_modify_text(constants.inj_per_cycle_spin,
-						GTK_STATE_NORMAL,&black);
-			check_req_fuel_limits();
+				squirt_cyl_inj_black();
+				check_req_fuel_limits();
 			}
 			break;
 		case NUM_INJECTORS:

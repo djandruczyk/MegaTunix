@@ -79,7 +79,7 @@ INCLUDES = @PACKAGE_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJ
 
 bin_PROGRAMS = megatunix
 
-megatunix_SOURCES =  	Makefile 	configfile.h 	globals.h 	defines.h 	protos.h 	constants.h 	lookuptables.h 	c_gauge.h 	notifications.c 	c_gauge.c 	core_gui.c 	req_fuel.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
+megatunix_SOURCES =  	Makefile 	c_gauge.h 	configfile.h 	constants.h 	defines.h 	globals.h 	lookuptables.h 	protos.h 	runtime_gui.h 	about_gui.c 	c_gauge.c 	comms_gui.c 	configfile.c 	constants_gui.c 	core_gui.c 	dataio.c 	datalogging_gui.c 	enrichments_gui.c 	general_gui.c 	gui_handlers.c 	init.c 	main.c 	ms_constants.c 	notifications.c 	req_fuel.c 	runtime_gui.c 	serialio.c 	threads.c 	tools_gui.c 	tuning_gui.c 	vetable_gui.c 
 
 
 megatunix_LDADD = @PACKAGE_LIBS@
@@ -102,11 +102,11 @@ PROGRAMS =  $(bin_PROGRAMS)
 DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
-megatunix_OBJECTS =  notifications.o c_gauge.o core_gui.o req_fuel.o \
-gui_handlers.o about_gui.o comms_gui.o main.o serialio.o dataio.o \
-threads.o configfile.o init.o constants_gui.o runtime_gui.o \
-enrichments_gui.o vetable_gui.o tuning_gui.o tools_gui.o general_gui.o \
-datalogging_gui.o ms_constants.o
+megatunix_OBJECTS =  about_gui.o c_gauge.o comms_gui.o configfile.o \
+constants_gui.o core_gui.o dataio.o datalogging_gui.o enrichments_gui.o \
+general_gui.o gui_handlers.o init.o main.o ms_constants.o \
+notifications.o req_fuel.o runtime_gui.o serialio.o threads.o \
+tools_gui.o tuning_gui.o vetable_gui.o
 megatunix_DEPENDENCIES = 
 megatunix_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)

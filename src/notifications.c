@@ -21,6 +21,8 @@
 extern GdkColor red;
 extern GdkColor black;
 extern struct Buttons buttons;
+extern struct Labels labels;
+extern struct v1_2_Constants constants;
 
 
 void set_store_red()
@@ -106,5 +108,29 @@ void warn_user(gchar *message)
 
 	gtk_widget_show_all(dialog);
 
+}
+
+void squirt_cyl_inj_red(void)
+{
+	gtk_widget_modify_fg(labels.squirts_lab,
+			GTK_STATE_NORMAL,&red);
+	gtk_widget_modify_fg(labels.cylinders_lab,
+			GTK_STATE_NORMAL,&red);
+	gtk_widget_modify_text(constants.cylinders_spin,
+			GTK_STATE_NORMAL,&red);
+	gtk_widget_modify_text(constants.inj_per_cycle_spin,
+			GTK_STATE_NORMAL,&red);
+}
+
+void squirt_cyl_inj_black(void)
+{
+	gtk_widget_modify_fg(labels.squirts_lab,
+			GTK_STATE_NORMAL,&black);
+	gtk_widget_modify_fg(labels.cylinders_lab,
+			GTK_STATE_NORMAL,&black);
+	gtk_widget_modify_text(constants.cylinders_spin,
+			GTK_STATE_NORMAL,&black);
+	gtk_widget_modify_text(constants.inj_per_cycle_spin,
+			GTK_STATE_NORMAL,&black);
 }
 

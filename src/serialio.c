@@ -29,9 +29,11 @@ extern gint raw_reader_running;
 extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
 char buff[60];
-static gint burn_needed = 0;
+static gint burn_needed = FALSE;
 gint connected;
 extern struct v1_2_Runtime_Gui runtime_data;
+extern struct ms_ve_constants *ve_constants;
+extern struct ms_ve_constants *ve_const_tmp;
        
 int open_serial(int port_num)
 {
@@ -315,11 +317,23 @@ void write_ve_const(gint value, gint offset)
 	}
 	res = write (serial_params.fd,"W",1);	/* Send write command */
 	res = write (serial_params.fd,buff,count);	/* Send write command */
-	if (!burn_needed)
+
+	/* We check to see if the last burn copy of the MS VE/constants matches 
+	 * the currently set, if so take away the "burn now" notification.
+	 * avoid unnecessary burns to the FLASH 
+	 */
+	res = memcmp(ve_const_tmp,ve_constants,sizeof(struct ms_ve_constants));
+	if (res == 0)
+	{
+		set_store_black();
+		burn_needed = FALSE;
+	}
+	else
 	{
 		set_store_red();
-		burn_needed = 1;
+		burn_needed = TRUE;
 	}
+	
 }
 
 void burn_flash()
@@ -331,8 +345,10 @@ void burn_flash()
 	}
 	write (serial_params.fd,"B",1);	/* Send Burn command */
 
+	/* sync temp buffer with current VE_constants */
+	memcpy(ve_const_tmp,ve_constants,sizeof(struct ms_ve_constants));
 	/* Take away the red on the "Store" button */
 	set_store_black();
-	burn_needed = 0;
+	burn_needed = FALSE;
 }
 

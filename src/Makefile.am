@@ -5,36 +5,36 @@ bin_PROGRAMS = megatunix
 
 megatunix_SOURCES = \
 	Makefile \
-	configfile.h \
-	globals.h \
-	defines.h \
-	protos.h \
-	constants.h \
-	lookuptables.h \
 	c_gauge.h \
-	notifications.c \
-	c_gauge.c \
-	core_gui.c \
-	req_fuel.c \
-	gui_handlers.c \
-	about_gui.c \
-	comms_gui.c \
-	main.c \
-	serialio.c \
-	dataio.c \
-	threads.c \
-	configfile.c \
-	init.c \
-	constants_gui.c \
-	runtime_gui.c \
+	configfile.h \
+	constants.h \
+	defines.h \
+	globals.h \
+	lookuptables.h \
+	protos.h \
 	runtime_gui.h \
-	enrichments_gui.c \
-	vetable_gui.c \
-	tuning_gui.c \
-	tools_gui.c \
-	general_gui.c \
+	about_gui.c \
+	c_gauge.c \
+	comms_gui.c \
+	configfile.c \
+	constants_gui.c \
+	core_gui.c \
+	dataio.c \
 	datalogging_gui.c \
-	ms_constants.c
+	enrichments_gui.c \
+	general_gui.c \
+	gui_handlers.c \
+	init.c \
+	main.c \
+	ms_constants.c \
+	notifications.c \
+	req_fuel.c \
+	runtime_gui.c \
+	serialio.c \
+	threads.c \
+	tools_gui.c \
+	tuning_gui.c \
+	vetable_gui.c 
 
 megatunix_LDADD = @PACKAGE_LIBS@
 
