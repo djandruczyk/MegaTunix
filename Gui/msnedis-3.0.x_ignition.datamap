@@ -7,10 +7,11 @@ tab_name=_Ignition Params
 
 #----- Buttons ---------------------------------------------------------------
 [ign_get_data_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,bind_to_list
+key_types=_ENUM_,_INT_,_STRING_
 handler=_READ_VE_CONST_
 page=0
+bind_to_list=get_data_buttons
 
 [ign_burn_button]
 keys=handler,page,bind_to_list

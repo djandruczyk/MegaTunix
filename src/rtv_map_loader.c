@@ -55,7 +55,6 @@ gboolean load_realtime_map(void )
 
 	rtvars_loaded = FALSE;
 
-
 	if (!interrogated)
 		return FALSE;
 	rtv_map = g_new0(struct Rtv_Map, 1);

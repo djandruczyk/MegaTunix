@@ -39,6 +39,7 @@ GAsyncQueue *io_queue = NULL;
 GAsyncQueue *dispatch_queue = NULL;
 gboolean raw_reader_running;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
+extern gboolean offline;			/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern GtkWidget * comms_view;
 extern struct Serial_Params *serial_params;
@@ -216,14 +217,15 @@ void *serial_io_handler(gpointer data)
 				break;
 			case WRITE_CMD:
 				dbg_func(__FILE__": serial_io_handler()\n\twrite_command requested\n",SERIAL_WR|THREADS);
-				if (connected)
+				printf("offline is %i, connected is %i\n",offline,connected);
+				if ((connected) || (offline))
 					writeto_ecu(message);
 				else
 					dbg_func(__FILE__": serial_io_handler()\n\twriteto_ecu skipped, NOT Connected!!\n",CRITICAL);
 				break;
 			case BURN_CMD:
 				dbg_func(__FILE__": serial_io_handler()\n\tburn_command requested\n",SERIAL_WR|THREADS);
-				if (connected)
+				if ((connected) || (offline))
 					burn_ms_flash();
 				else
 					dbg_func(__FILE__": serial_io_handler()\n\tburn_ms_flash skipped, NOT Connected!!\n",CRITICAL);

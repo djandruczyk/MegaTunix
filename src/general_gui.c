@@ -179,32 +179,51 @@ void build_general(GtkWidget *parent_frame)
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	table = gtk_table_new(4,5,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),7);
+	table = gtk_table_new(5,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),3);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
 
+	hbox = gtk_hbox_new(TRUE,30);
+	gtk_table_attach (GTK_TABLE (table), hbox, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
 	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
 			"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, so we offer the choice to select the API to use below",NULL);
-	gtk_table_attach (GTK_TABLE (table), ebox, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
 	button = gtk_button_new_with_label("Interrogate ECU capabilities");
+	register_widget("interrogate_button",button);
 	gtk_container_add(GTK_CONTAINER(ebox),button);
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(INTERROGATE_ECU));
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler),
 			NULL);
 
-	hbox = gtk_hbox_new(FALSE,18);
-	gtk_table_attach (GTK_TABLE (table), hbox, 3, 5, 0, 1,
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,
+			"This button Enables \"Offline Mode\" so that you can load tabs specific to an ECU and set settings, modify maps without doing any Serial I/O. This will allow you to modify maps offline when not connected to the vehicle/ECU.",NULL);
+	button = gtk_button_new_with_label("Use Offline Mode");
+	register_widget("offline_button",button);
+	gtk_container_add(GTK_CONTAINER(ebox),button);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(OFFLINE_MODE));
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler),
+			NULL);
+
+
+	label = gtk_label_new("ECU Revision Number");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("ECU Revision Number");
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), hbox, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
 	register_widget("ecu_revision_entry",entry);
@@ -214,44 +233,35 @@ void build_general(GtkWidget *parent_frame)
 
 	label = gtk_label_new("Extended Revision");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_table_attach (GTK_TABLE (table), hbox, 1, 5, 1, 2,
-			(GtkAttachOptions) (GTK_SHRINK|GTK_FILL|GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	entry = gtk_entry_new();
-	register_widget("ext_revision_entry",entry);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 64);
-	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
-	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);
-
-
-	label = gtk_label_new("ECU Signature");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_table_attach (GTK_TABLE (table), hbox, 1, 5, 2, 3,
+	entry = gtk_entry_new();
+	register_widget("ext_revision_entry",entry);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK|GTK_FILL|GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("ECU Signature");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
 	register_widget("ecu_signature_entry",entry);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 64);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
-	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 3, 4,
+			(GtkAttachOptions) (GTK_SHRINK|GTK_FILL|GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
 			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100\% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"?\" command (Extend version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU, This is only supported on some firmware and is used for debugging and manipulating features that do NOT have gui controls yet.  As of April 2004 MegaTunix does NOT yet support raw memory viewing/editing.",NULL);
 
-	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 3, 4,
+	gtk_table_attach (GTK_TABLE (table), ebox, 0, 2, 4, 5,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL), 0, 0);
 

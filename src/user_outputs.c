@@ -45,7 +45,7 @@ void build_model_and_view(GtkWidget * widget)
 
 	if (!rtvars_loaded)
 	{
-		dbg_func(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
+		dbg_func(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
 		return;
 	}
 

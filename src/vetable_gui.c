@@ -24,7 +24,6 @@
 
 void rescale_table(GtkWidget * widget)
 {
-	extern GHashTable *dynamic_widgets;
 	extern struct Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	gint page = -1;

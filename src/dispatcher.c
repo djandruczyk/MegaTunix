@@ -39,6 +39,7 @@
 
 extern GAsyncQueue *dispatch_queue;
 extern gboolean connected;			/* valid connection with MS */
+extern gboolean offline;			/* Offline mode */
 extern gboolean interrogated;			/* valid connection with MS */
 
 gboolean dispatcher()
@@ -65,7 +66,7 @@ trypop:
 	/* NOTE if !connected we ABORT All dispatchers as they all
 	 * depend on a "connected" status.
 	 */
-	if (!connected) // Raise error window.... 
+	if ((!connected) && (!offline)) // Raise error window.... 
 		no_ms_connection();
 
 	if (message->funcs != NULL)

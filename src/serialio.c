@@ -155,6 +155,7 @@ void close_serial()
 	/* An Closing the comm port */
 	dbg_func(__FILE__": close_serial()\n\tCOM Port Closed\n",SERIAL_RD|SERIAL_WR);
 	update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
+	return;
 }
 
 void set_ms_page(gint ms_page)

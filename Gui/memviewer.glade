@@ -386,7 +386,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkRadioButton" id="memviewer_tab1_hex_radio_buton">
+				<widget class="GtkRadioButton" id="memviewer_tab1_hex_radio_button">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Hex</property>
@@ -414,7 +414,7 @@
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">memviewer_tab1_hex_radio_buton</property>
+				  <property name="group">memviewer_tab1_hex_radio_button</property>
 				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
 				</widget>
 				<packing>
@@ -434,7 +434,7 @@
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">memviewer_tab1_hex_radio_buton</property>
+				  <property name="group">memviewer_tab1_hex_radio_button</property>
 				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
 				</widget>
 				<packing>
@@ -629,7 +629,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkRadioButton" id="memviewer_tab2_hex_radio_buton">
+				<widget class="GtkRadioButton" id="memviewer_tab2_hex_radio_button">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">Hex</property>
@@ -657,7 +657,7 @@
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">memviewer_tab2_hex_radio_buton</property>
+				  <property name="group">memviewer_tab2_hex_radio_button</property>
 				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
 				</widget>
 				<packing>
@@ -677,7 +677,7 @@
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">memviewer_tab2_hex_radio_buton</property>
+				  <property name="group">memviewer_tab2_hex_radio_button</property>
 				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Mon, 29 Nov 2004 18:38:27 GMT"/>
 				</widget>
 				<packing>

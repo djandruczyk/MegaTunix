@@ -25,6 +25,7 @@
 #include <init.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
+#include <offline.h>
 #include <mode_select.h>
 #include <ms_structures.h>
 #include <notifications.h>
@@ -45,7 +46,6 @@
 
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
-extern gboolean connected;
 extern gboolean playback_mode;
 extern gchar *delimiter;
 extern gint ready;
@@ -112,9 +112,12 @@ void leave(GtkWidget *widget, gpointer data)
 		stop_realtime_tickler();
 	realtime_id = 0;
 
-	if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
-		iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
-				
+	if (dynamic_widgets)
+	{
+		if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
+			iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
+	}
+
 	stop_datalogging();
 	save_config();
 	close_serial();
@@ -158,6 +161,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = 0; 
 	extern gint preferred_delimiter;
 	extern GHashTable *dynamic_widgets;
+	extern gchar *offline_firmware_choice;
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -169,6 +173,11 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* It's pressed (or checked) */
 		switch ((ToggleButton)handler)
 		{
+			case OFFLINE_FIRMWARE_CHOICE:
+				if(offline_firmware_choice)
+					g_free(offline_firmware_choice);
+				offline_firmware_choice = g_strdup(g_object_get_data(G_OBJECT(widget),"filename"));	
+				break;
 			case TOOLTIPS_STATE:
 				gtk_tooltips_enable(tip);
 				tips_in_use = TRUE;
@@ -363,6 +372,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	static gboolean queue_referenced =  FALSE;
 	extern GAsyncQueue *io_queue;
 	extern gboolean no_update;
+	extern gboolean offline;
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
@@ -384,6 +394,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case START_REALTIME:
+			if (offline)
+				break;
 			no_update = FALSE;
 			if (!interrogated)
 				io_cmd(IO_INTERROGATE_ECU, NULL);
@@ -393,35 +405,51 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			force_an_update();
 			break;
 		case STOP_REALTIME:
+			if (offline)
+				break;
 			stop_realtime_tickler();
 			no_update = TRUE;
 			break;
 		case READ_VE_CONST:
+			if (offline)
+				break;
 			io_cmd(IO_READ_VE_CONST, NULL);
 			break;
 		case READ_RAW_MEMORY:
+			if (offline)
+				break;
 			io_cmd(IO_READ_RAW_MEMORY,(gpointer)obj_data);
 			break;
 		case CHECK_ECU_COMMS:
+			if (offline)
+				break;
 			io_cmd(IO_COMMS_TEST,NULL);
 			break;
 		case BURN_MS_FLASH:
 			io_cmd(IO_BURN_MS_FLASH,NULL);
 			break;
 		case SELECT_DLOG_EXP:
+			if (offline)
+				break;
 			present_filesavebox(DATALOG_EXPORT,(gpointer)widget);
 			break;
 		case SELECT_DLOG_IMP:
 			present_filesavebox(DATALOG_IMPORT,(gpointer)widget);
 			break;
 		case CLOSE_LOGFILE:
+			if (offline)
+				break;
 			stop_datalogging();
 			close_file(obj_data);
 			break;
 		case START_DATALOGGING:
+			if (offline)
+				break;
 			start_datalogging();
 			break;
 		case STOP_DATALOGGING:
+			if (offline)
+				break;
 			stop_datalogging();
 			break;
 		case EXPORT_VETABLE:
@@ -456,6 +484,11 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			reqd_fuel_popup(widget);
 			req_fuel_change(widget);
 			break;
+		case OFFLINE_MODE:
+			set_offline_mode();
+			break;
+		default:
+			dbg_func(__FILE__": std_button_handler()\n\t Standard button not handled properly, BUG detected\n",CRITICAL);
 	}		
 	return TRUE;
 }

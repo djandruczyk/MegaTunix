@@ -178,8 +178,9 @@ void save_config(void)
 		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
-	cfg_write_string(cfgfile, "Serial", "port_name", 
-			serial_params->port_name);
+	if (serial_params->port_name)
+		cfg_write_string(cfgfile, "Serial", "port_name", 
+				serial_params->port_name);
 	cfg_write_int(cfgfile, "Serial", "read_delay", 
 			serial_params->read_wait);
 	cfg_write_int(cfgfile, "Logviewer", "scroll_speed", lv_scroll);
@@ -316,6 +317,8 @@ void mem_dealloc()
 		g_free(ms_data_backup);
 	}
 
-	g_hash_table_destroy(interdep_vars_1);
+	if (interdep_vars_1)
+		g_hash_table_destroy(interdep_vars_1);
+	if (interdep_vars_2)
 	g_hash_table_destroy(interdep_vars_2);
 }

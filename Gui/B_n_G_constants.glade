@@ -65,7 +65,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.1 0 25.5 0.1 1 1</property>
+			      <property name="adjustment">0 0 25.5 0.1 1 1</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:26:01 GMT"/>
 			    </widget>
 			    <packing>
@@ -487,7 +487,7 @@ Limit (%)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 -40 215 1 10 10</property>
+			      <property name="adjustment">0 -40 215 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:33:15 GMT"/>
 			    </widget>
 			    <packing>

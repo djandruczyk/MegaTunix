@@ -66,7 +66,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:46:32 GMT"/>
 			    </widget>
 			    <packing>
@@ -89,7 +89,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:20 GMT"/>
 			    </widget>
 			    <packing>
@@ -112,7 +112,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:04 GMT"/>
 			    </widget>
 			    <packing>
@@ -135,7 +135,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:33 GMT"/>
 			    </widget>
 			    <packing>
@@ -158,7 +158,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:41 GMT"/>
 			    </widget>
 			    <packing>
@@ -181,7 +181,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:48 GMT"/>
 			    </widget>
 			    <packing>
@@ -204,7 +204,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:55 GMT"/>
 			    </widget>
 			    <packing>
@@ -227,7 +227,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:45:02 GMT"/>
 			    </widget>
 			    <packing>
@@ -250,7 +250,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:45:08 GMT"/>
 			    </widget>
 			    <packing>
@@ -273,7 +273,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 255 1 10 10</property>
+			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:45:14 GMT"/>
 			    </widget>
 			    <packing>
@@ -672,7 +672,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0.1 25.5 0.1 1 1</property>
+				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:57:03 GMT"/>
 				</widget>
 				<packing>
@@ -695,7 +695,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0.1 25.5 0.1 1 1</property>
+				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:57:10 GMT"/>
 				</widget>
 				<packing>
@@ -718,7 +718,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0.1 25.5 0.1 1 1</property>
+				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:57:32 GMT"/>
 				</widget>
 				<packing>
@@ -862,7 +862,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">0 0 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 01:18:54 GMT"/>
 				</widget>
 				<packing>
@@ -885,7 +885,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">0 0 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 01:18:46 GMT"/>
 				</widget>
 				<packing>

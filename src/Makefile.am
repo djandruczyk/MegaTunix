@@ -37,6 +37,7 @@ megatunix_SOURCES = \
 	memory_gui.c \
 	mode_select.c \
 	notifications.c \
+	offline.c \
 	post_process.c \
 	req_fuel.c \
 	rtv_map_loader.c \

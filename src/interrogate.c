@@ -56,6 +56,7 @@ void interrogate_ecu()
 	 */
 	struct Command *cmd = NULL;
 	struct Canidate *canidate = NULL;
+	extern GHashTable *dynamic_widgets;
 	gint size = 4096;
 	gint res = 0;
 	gint count = 0;
@@ -90,8 +91,6 @@ void interrogate_ecu()
 
 	cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
 
-	/* Build table of strings to enum values */
-	build_string_2_enum_table();
 	/* Load tests from config files */
 	cmd_array = validate_and_load_tests(cmd_details);
 	/* how many tests.... */
@@ -169,6 +168,8 @@ void interrogate_ecu()
 	}
 
 	interrogated = determine_ecu(canidate,cmd_array,cmd_details);	
+	if (interrogated)
+		set_widget_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),FALSE);
 
 	if (canidate)
 		g_free(canidate);
@@ -199,7 +200,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL));	
 	if (!filenames)
 	{
-		dbg_func(g_strdup_printf(__FILE__": determine_ecu()\n\t NO Interrogatin profiles found,  was MegaTunix installed properly?\n\n"),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"),CRITICAL);
 		return FALSE;
 	}
 
@@ -213,6 +214,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		}
 		i++;
 	}
+	g_strfreev(filenames);
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
 	{
@@ -551,7 +553,6 @@ void * load_potential_match(GArray * cmd_array, gchar * filename)
 			dbg_func(g_strdup_printf(__FILE__": load_potential_match()\n\t\"VerNumber\" NOT found in interrogation profile, ERROR\n"),CRITICAL);
 
 		cfg_free(cfgfile);
-		g_free(filename);
 
 	}
 	else

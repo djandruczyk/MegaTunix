@@ -22,6 +22,7 @@
 #include <init.h>
 #include <main.h>
 #include <serialio.h>
+#include <stringmatch.h>
 #include <structures.h>
 #include <threads.h>
 #include <timeout_handlers.h>
@@ -53,6 +54,8 @@ gint main(gint argc, gchar ** argv)
 
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
+	/* Build table of strings to enum values */
+	build_string_2_enum_table();
 
 	read_config();
 	setup_gui();		

@@ -142,11 +142,12 @@ void writeto_ecu(void *ptr)
 	gchar * write_cmd = NULL;
 	extern struct Firmware_Details *firmware;
 	extern struct Serial_Params *serial_params;
+	extern gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
 
-	if (!connected)
+	if ((!connected) || (offline))
 	{
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */
@@ -229,10 +230,20 @@ void burn_ms_flash()
 	extern gint ecu_caps;
 	extern struct Firmware_Details * firmware;
 	extern struct Serial_Params *serial_params;
+	extern gboolean offline;
+	extern gboolean connected;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
 
+	if (offline)
+		goto copyover;
+
+	if (!connected)
+	{
+		dbg_func(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n",CRITICAL);
+		return;
+	}
 	tcflush(serial_params->fd, TCIOFLUSH);
 
 	/* doing this may NOT be necessary,  but who knows... */
@@ -251,11 +262,11 @@ void burn_ms_flash()
 
 	dbg_func(__FILE__": burn_ms_flash()\n\tBurn to Flash\n",SERIAL_WR);
 
+	tcflush(serial_params->fd, TCIOFLUSH);
+copyover:
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
 		memcpy(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->size);
-
-	tcflush(serial_params->fd, TCIOFLUSH);
 
 	g_static_mutex_unlock(&mutex);
 	return;
@@ -271,8 +282,12 @@ void readfrom_ecu(void *ptr)
 	static gint seqerrcount = 0;
 	extern gboolean connected;
 	extern gchar *handler_types[];
+	extern gboolean offline;
 
 	if(serial_params->open == FALSE)
+		return;
+
+	if (offline)
 		return;
 
 	/* Flush serial port... */
