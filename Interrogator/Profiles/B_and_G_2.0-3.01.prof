@@ -49,5 +49,5 @@ mat_table=matfactor.inc
 clt_table=cltfactor.inc
 nbo2_table=NBafr100.inc
 wbo2_table=DIYWB.inc
-115_map=barofactor4115.inc
-250_map=barofactor4250.inc
+115_map=kpafactor.inc
+250_map=kpafactor.inc
