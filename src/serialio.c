@@ -31,14 +31,12 @@
 
 extern gboolean dualtable;
 extern gboolean raw_reader_running;
-extern gint last_page;
 extern GtkWidget *comms_view;
 extern struct DynamicMisc misc;
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p0_tmp;
 extern struct Ve_Const_Std *ve_const_p1;
 extern struct Ve_Const_Std *ve_const_p1_tmp;
-extern gint last_page;
 struct Serial_Params *serial_params;
 gboolean connected;
 static gboolean burn_needed = FALSE;
@@ -214,7 +212,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request one batch of realtime vars */
-		if (last_page != 0)
+		if (dualtable)
 			set_ms_page(0);
 		res = write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
@@ -292,7 +290,7 @@ void read_ve_const()
 	/* Flush serial port... */
 	tcflush(serial_params->fd, TCIFLUSH);
 
-	if (last_page != 0)
+	if (dualtable)
 		set_ms_page(0);
 	res = write(serial_params->fd,"V",1);
 	res = poll (&ufds,1,serial_params->poll_timeout);
@@ -309,8 +307,7 @@ void read_ve_const()
 	}
 	if (dualtable)
 	{
-		if (last_page != 1)
-			set_ms_page(1);
+		set_ms_page(1);
 		res = write(serial_params->fd,"V",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)	// Error 
@@ -324,6 +321,7 @@ void read_ve_const()
 			res = handle_ms_data(VE_AND_CONSTANTS_2);
 
 		}
+		set_ms_page(0);
 	}
 	gtk_widget_set_sensitive(misc.status[CONNECTED],
 			connected);
@@ -355,7 +353,6 @@ void set_ms_page(gint ms_page)
 	res = write(serial_params->fd,&buf,1);
 	if (res != 1)
 		fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);
-	last_page = ms_page;	
 }
 
 void write_ve_const(gint value, gint offset, gint page)
@@ -401,7 +398,8 @@ void write_ve_const(gint value, gint offset, gint page)
 		count = 2;
 	}
 
-	set_ms_page(page);
+	if (dualtable)
+		set_ms_page(page);
 
 	res = write (serial_params->fd,"W",1);	/* Send write command */
 	res = write (serial_params->fd,lbuff,count);	/* Send write command */
@@ -433,9 +431,6 @@ void burn_flash()
 		return;		/* can't burn if disconnected */
 	}
 	/* doing this may NOT be necessary,  but who knows... */
-	set_ms_page(1);
-	write (serial_params->fd,"B",1);	/* Send Burn command */
-	set_ms_page(0);
 	write (serial_params->fd,"B",1);	/* Send Burn command */
 
 	/* sync temp buffer with current VE_constants */

@@ -28,7 +28,6 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-gint last_page = -1;	/* force a page set on first read/write operation*/
 gint dualtable = FALSE;	/* Talking to a dualtable MS ?? */
 unsigned char *kpa_conversion; 
 extern gboolean dualtable;
