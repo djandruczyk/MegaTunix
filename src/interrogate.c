@@ -30,7 +30,6 @@
 #include <string.h>
 #include <stringmatch.h>
 #include <sys/stat.h>
-#include <sys/poll.h>
 #include <threads.h>
 #include <unistd.h>
 
@@ -55,22 +54,22 @@ void interrogate_ecu()
 	 * So we use the approach of querying which commands respond to 
 	 * try and get as close as possible.
 	 */
-	struct pollfd ufds;
 	struct Command *cmd = NULL;
 	struct Canidate *canidate = NULL;
 	gint size = 1024;
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
-	gint total = 0;
 	gint last_page = 0;
 	gint tests_to_run = 0;
+	gint total_read = 0;
+	gint total_wanted = 0;
+	gint zerocount = 0;
 	gchar *string = NULL;
 	gchar * tmpbuf = NULL;
 	GArray *cmd_array = NULL;
 	guchar buf[size];
 	guchar *ptr = buf;
-	gboolean keep_polling=FALSE;
 	GHashTable *cmd_details = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -100,15 +99,12 @@ void interrogate_ecu()
 	/* how many tests.... */
 	tests_to_run = cmd_array->len;
 
-	/* Configure port for polled IO and flush I/O buffer */
-	ufds.fd = serial_params->fd;
-	ufds.events = POLLIN;
+	/* Flush the toilet.... */
 	tcflush(serial_params->fd, TCIOFLUSH);
 
 	for (i=0;i<tests_to_run;i++)
 	{
 		count = 0;
-		total = 0;
 		cmd = g_array_index(cmd_array,struct Command *, i);
 
 		/* flush buffer to known state.. */
@@ -124,58 +120,61 @@ void interrogate_ecu()
 		res = write(serial_params->fd,string,cmd->len);
 		if (res != cmd->len)
 			dbg_func(__FILE__": interrogate_ecu()\n\tError writing data to the ECU\n",CRITICAL);
-		dbg_func(g_strdup_printf("\tSent command \"%s\"\n",string),INTERROGATOR);
+		else
+			dbg_func(g_strdup_printf("\tSent command \"%s\"\n",string),INTERROGATOR);
 		if (cmd->multipart)
 		{
 			res = write(serial_params->fd,&cmd->cmd_int_arg,1);
 			if (res != 1)
 				dbg_func(__FILE__": interrogate_ecu()\n\tError writing data to the ECU\n",CRITICAL);
-			dbg_func(g_strdup_printf("\tSent argument \"%i\"\n",cmd->cmd_int_arg),INTERROGATOR);
+			else
+				dbg_func(g_strdup_printf("\tSent argument \"%i\"\n",cmd->cmd_int_arg),INTERROGATOR);
 		}
 		g_free(string);
-		res = poll (&ufds,1,25);
-		if (res > 0)
-		{	
-			keep_polling = TRUE;
-			while (keep_polling)
-			{
-				res = poll(&ufds,1,50);
-				if (res == 0) /* Timeout, we're done */
-					keep_polling=FALSE;
-				else if (res < 0) /* Error */
-					dbg_func(g_strdup_printf(__FILE__": interrogate_ecu()\n\t, Polling error %s\n",g_strerror(errno)),CRITICAL);
-				else
-					total += count = read(serial_params->fd,ptr+total,64);
-			}
-			dbg_func(g_strdup_printf("\tReceived %i bytes\n",total),INTERROGATOR);
-			ptr = buf;
 
-			/* copy data from tmp buffer to struct pointer */
-			switch (cmd->store_type)
-			{
-				case SIG:
-					canidate->sig_str = g_strndup(buf,total);
-					break;
-				case EXTVER:
-					canidate->quest_str = g_strndup(buf,total);
-					break;
-				case VNUM:
-					memcpy(&(canidate->ver_num),buf,total);
-					break;
-				default:
-					break;
-			}
+		total_read = 0;
+		total_wanted = 1024;
+		zerocount = 0;
+		while (total_read < total_wanted )
+		{
+			dbg_func(g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",cmd->string,total_wanted-total_read),INTERROGATOR);
+			total_read += res = read(serial_params->fd,
+					ptr+total_read,
+					total_wanted-total_read);
+
+			dbg_func(g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",cmd->string,res,total_read),INTERROGATOR);
+			// If we get nothing back (i.e. timeout, assume done)
+			if (res == 0)
+				break;
+		}
+		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);
+		ptr = buf;
+
+		/* copy data from tmp buffer to struct pointer */
+		switch (cmd->store_type)
+		{
+			case SIG:
+				canidate->sig_str = g_strndup(buf,total_read);
+				break;
+			case EXTVER:
+				canidate->quest_str = g_strndup(buf,total_read);
+				break;
+			case VNUM:
+				memcpy(&(canidate->ver_num),buf,total_read);
+				break;
+			default:
+				break;
 		}
 
 		/* store number of bytes received in counter variable */
 		tmpbuf = g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page);
 		g_hash_table_insert(canidate->bytecounts,g_strdup(tmpbuf),
-				GINT_TO_POINTER(total));
+				GINT_TO_POINTER(total_read));
 		g_free(tmpbuf);
 	}
 	/* Reset page to 0 just to be 100% sure... */
 	set_ms_page(0);
-	/* flush serial port */
+	/* Flush the toilet.... */
 	tcflush(serial_params->fd, TCIOFLUSH);
 
 	interrogated = TRUE;
