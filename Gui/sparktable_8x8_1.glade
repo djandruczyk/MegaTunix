@@ -86,7 +86,7 @@
 			      <property name="column_spacing">2</property>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_8">
+				<widget class="GtkSpinButton" id="SP1_load_spin_1">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -110,7 +110,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_7">
+				<widget class="GtkSpinButton" id="SP1_load_spin_2">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -134,7 +134,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_6">
+				<widget class="GtkSpinButton" id="SP1_load_spin_3">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -158,7 +158,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_5">
+				<widget class="GtkSpinButton" id="SP1_load_spin_4">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -182,7 +182,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_4">
+				<widget class="GtkSpinButton" id="SP1_load_spin_5">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -206,7 +206,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_3">
+				<widget class="GtkSpinButton" id="SP1_load_spin_6">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -230,7 +230,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_2">
+				<widget class="GtkSpinButton" id="SP1_load_spin_7">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -254,7 +254,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="SP1_load_spin_1">
+				<widget class="GtkSpinButton" id="SP1_load_spin_8">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2339,7 +2339,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="SP1_sparktable_label">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="no">Spark Advance (deg. BTDC)</property>
+			      <property name="label" translatable="yes">Spark Advance (deg. BTDC)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
