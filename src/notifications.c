@@ -77,7 +77,7 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 void no_ms_connection(void)
 {
 	gchar *buff;
-	buff = g_strdup("The MegaSquirt ECU seems to be currently disconnected.  This means that either one of the following occurred:\n   1. Wrong Comm port is selected on the Communications Tab\n   2. The MS serial link is not plugged in\n   3. The MS ECU does not have adequate power.\n\nSuggest checking the serial settings on the Communications page first, and then check the Serial Statusbar at the bottom of that page.");
+	buff = g_strdup("The MegaSquirt ECU appears to be currently disconnected.  This means that either one of the following occurred:\n   1. Wrong Comm port is selected on the Communications Tab\n   2. The MegaSquirt serial link is not plugged in\n   3. The MegaSquirt ECU does not have adequate power.\n\nSuggest checking the serial settings on the Communications page first, and then check the Serial Statusbar at the bottom of that page. If the Serial StatusBar says \"I/O with MegaSquirt Timeout\", it means that the Comm port you selected exists, but the MegaSquirt failed to respond. (check cable/power to the ECU. If it says \"Serial Port NOT Opened, Can NOT Test ECU Communications\", this can mean one of two things:\n   1. The COMM port doesn't exist on your computer,\n\t\t\t\t\tOR\n   2. You don't have permission to open the port. (/dev/ttySx).\nChange the permissions on /dev/ttyS* to 666 (chmod 666 /dev/ttyS*), NOTE: This has potential security implications. Check the Unix/Linux system documentation regarding \"security\" for more information...");
 	warn_user(buff);
 	g_free(buff);
 }
