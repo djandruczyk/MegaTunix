@@ -32,6 +32,7 @@ extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
 extern gint connected;
+extern gint force_status_update;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
@@ -90,6 +91,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ve_constants->config12.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
 				tmp = tmp | (bit_val << (bit_pos-1));
+				ve_constants->config12.value = tmp;
 				dload_val = tmp;
 				offset = 117;
 				break;
@@ -97,6 +99,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ve_constants->config13.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
 				tmp = tmp | (bit_val << (bit_pos-1));
+				ve_constants->config13.value = tmp;
 				dload_val = tmp;
 				offset = 118;
 				break;
@@ -154,6 +157,7 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 		case STOP_REALTIME:
 			stop_serial_thread();
 			reset_runtime_status();
+			force_status_update=1;
 			break;
 		case REQD_FUEL_POPUP:
 			if (!req_fuel_popup)

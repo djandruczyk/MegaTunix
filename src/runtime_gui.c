@@ -23,7 +23,8 @@
 
 struct v1_2_Runtime_Gui runtime_data;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
-				"AFTERSTART","ACCEL","DECEL"};
+				"AS_ENRICH","ACCEL","DECEL"};
+gint force_status_update=1;
 extern gint connected;
 
 int build_runtime(GtkWidget *parent_frame)
@@ -290,7 +291,7 @@ int build_runtime(GtkWidget *parent_frame)
 	
 	
 	/* Duty Cycle */
-	label = gtk_label_new("Duty Cyc(%)");
+	label = gtk_label_new("Duty Cycle (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 5, 6,
@@ -351,7 +352,7 @@ int build_runtime(GtkWidget *parent_frame)
 	
 	
 	/* Air Den Cycle */
-	label = gtk_label_new("AirDen (%)");
+	label = gtk_label_new("Air Density (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
@@ -400,7 +401,7 @@ int build_runtime(GtkWidget *parent_frame)
 	
 	
 	/* Ve  */
-	label = gtk_label_new("VE (%)");
+	label = gtk_label_new("Volumetric Eff. (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
@@ -502,7 +503,7 @@ int build_runtime(GtkWidget *parent_frame)
         vbox2 = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(frame),vbox2);
         gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
-	hbox = gtk_hbox_new(TRUE,5);
+	hbox = gtk_hbox_new(TRUE,3);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
 	for (i=0;i<7;i++)
 	{
@@ -682,20 +683,29 @@ void update_runtime_vars()
 				tmpf);
 	}
 
+	/* Connected */
 	gtk_widget_set_sensitive(runtime_data.status[0],
 			connected);
-	if (runtime->engine.value != runtime_last->engine.value)
+		
+	if ((force_status_update == 1 ) || (runtime->engine.value != runtime_last->engine.value))
 	{
+		force_status_update = 0;
+		/* Cranking */
 		gtk_widget_set_sensitive(runtime_data.status[1],
 				runtime->engine.bit.crank);
+		/* Running */
 		gtk_widget_set_sensitive(runtime_data.status[2],
 				runtime->engine.bit.running);
+		/* Warmup */
 		gtk_widget_set_sensitive(runtime_data.status[3],
 				runtime->engine.bit.warmup);
+		/* Afterstart Enrichment */
 		gtk_widget_set_sensitive(runtime_data.status[4],
 				runtime->engine.bit.startw);
+		/* Accel Enrichment */
 		gtk_widget_set_sensitive(runtime_data.status[5],
 				runtime->engine.bit.tpsaen);
+		/* Decel Enleanment */
 		gtk_widget_set_sensitive(runtime_data.status[6],
 				runtime->engine.bit.tpsden);
 		
