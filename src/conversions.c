@@ -228,6 +228,9 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.fastidletemp_lab),
 					"Fast Idle Threshold\n(Degrees F.)");
 			gtk_label_set_text(
+					GTK_LABEL(labels.warmwiz_clt_lab),
+					"Coolant (F)");
+			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_clt_lab),
 					"Coolant (F)");
 			gtk_label_set_text(
@@ -288,6 +291,9 @@ void reset_temps(gpointer type)
 					"Fast Idle Threshold\n(Degrees C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_clt_lab),
+					"Coolant (C)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.warmwiz_clt_lab),
 					"Coolant (C)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_mat_lab),
