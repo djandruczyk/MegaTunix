@@ -24,7 +24,9 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <interrogate.h>
+#include <listmgmt.h>
 #include <logviewer_gui.h>
+#include <mode_select.h>
 #include <notifications.h>
 #include <serialio.h>
 #include <stdlib.h>
@@ -61,6 +63,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 	extern struct Firmware_Details * firmware;
 	extern GHashTable *dynamic_widgets;
 	extern GAsyncQueue *io_queue;
+	static gboolean just_starting = TRUE;
 	gint tmp = -1;
 	gint i = 0;
 
@@ -109,8 +112,6 @@ void io_cmd(Io_Command cmd, gpointer data)
 				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_REENABLE_INTERROGATE_BUTTON;
 				g_array_append_val(message->funcs,tmp);
-			//	tmp = UPD_START_REALTIME;
-			//	g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;
 			g_array_append_val(message->funcs,tmp);
@@ -133,6 +134,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 		case IO_READ_VE_CONST:
 			if (!firmware)
 				break;
+			g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 			for (i=0;i<firmware->total_pages;i++)
 			{
 				message = initialize_io_message();
@@ -159,6 +161,14 @@ void io_cmd(Io_Command cmd, gpointer data)
 					g_array_append_val(message->funcs,tmp);
 					tmp = UPD_SET_STORE_BLACK;
 					g_array_append_val(message->funcs,tmp);
+					tmp = UPD_REENABLE_GET_DATA_BUTTONS;
+					g_array_append_val(message->funcs,tmp);
+					if (just_starting)
+					{
+						tmp = UPD_START_REALTIME;
+						g_array_append_val(message->funcs,tmp);
+						just_starting = FALSE;
+					}
 				}
 				g_async_queue_push(io_queue,(gpointer)message);
 			}

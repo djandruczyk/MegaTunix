@@ -171,6 +171,9 @@ trypop:
 				case UPD_REENABLE_INTERROGATE_BUTTON:
 					gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
 					break;
+				case UPD_REENABLE_GET_DATA_BUTTONS:
+					g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
+					break;
 				case UPD_START_REALTIME:
 					if (connected)
 						start_realtime_tickler();
