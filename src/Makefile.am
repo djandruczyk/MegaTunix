@@ -29,6 +29,7 @@ megatunix_SOURCES = \
 	ignition_gui.c \
 	init.c \
 	interrogate.c \
+	logviewer_gui.c \
 	lowlevel_gui.c \
 	main.c \
 	notifications.c \

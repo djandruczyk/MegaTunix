@@ -21,6 +21,7 @@ headers = \
         init.h \
         interrogate.h \
         logo.h \
+        logviewer_gui.h \
         lookuptables.h \
         lowlevel_gui.h \
         main.h \

@@ -24,6 +24,7 @@
 #include <globals.h>
 #include <gui_handlers.h>
 #include <ignition_gui.h>
+#include <logviewer_gui.h>
 #include <lowlevel_gui.h>
 #include <runtime_gui.h>
 #include <tuning_gui.h>
@@ -61,8 +62,9 @@ static struct
 { "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE},
 { "MegaSquirt Tools", build_tools, "T_ools",TRUE},
 { "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE},
+{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE},
 { "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE},
-{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE}
+{ "MegaSquirt DataLog Viewer", build_logviewer, "Log _Playback",TRUE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
