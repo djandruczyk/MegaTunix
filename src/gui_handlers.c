@@ -12,6 +12,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <config.h>
@@ -22,6 +23,9 @@
 
 extern int raw_reader_running;
 extern int raw_reader_stopped;
+extern int ser_context_id;
+extern int read_wait_time;
+extern GtkWidget *ser_statbar;
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -36,3 +40,48 @@ void leave(GtkWidget *widget, gpointer *data)
         gtk_main_quit();
 }
 
+void text_entry_handler(GtkWidget * widget, gpointer *data)
+{
+        gchar *entry_text;
+	gint tmp = 0;
+	gchar buff[10];
+        entry_text = gtk_entry_get_text(GTK_ENTRY(widget));
+	switch ((gint)data)
+	{
+		case SER_POLL_TIMEO:
+			tmp = atoi(entry_text);
+			if (tmp < poll_min)
+				tmp = poll_min;
+			else if (tmp > poll_max)
+				tmp = poll_max;
+			serial_params.poll_timeout = tmp;
+			break;
+		case SER_INTERVAL_DELAY:
+			tmp = atoi(entry_text);
+			if (tmp < interval_min)
+				tmp = interval_min;
+			else if (tmp > interval_max)
+				tmp = interval_max;
+			read_wait_time = tmp;
+			break;
+	}
+	/* update the widget in case data was out of bounds */
+	sprintf(buff,"%i",tmp);
+	gtk_entry_set_text(GTK_ENTRY(widget),buff);
+}
+
+
+
+int std_button_handler(GtkWidget *widget, gpointer *data)
+{
+	switch ((gint)data)
+	{
+		case START_REALTIME:
+			serial_raw_thread_starter();
+			break;
+		case STOP_REALTIME:
+			serial_raw_thread_stopper();
+			break;
+	}
+	return TRUE;
+}

@@ -24,9 +24,9 @@
 
 
 extern int raw_reader_running;
-extern int raw_reader_stopped;
 extern GtkWidget *ser_statbar;
 extern int ser_context_id;
+char buff[60];
        
 int open_serial(int port_num)
 {
@@ -36,16 +36,32 @@ int open_serial(int port_num)
 	 */
 	char devicename[11]; /* temporary unix name of the serial port */
 	serial_params.comm_port = port_num;
-	snprintf(devicename,11,"/dev/ttyS%i",port_num-1);
+	g_snprintf(devicename,11,"/dev/ttyS%i",port_num-1);
 	serial_params.fd = open(devicename, O_RDWR | O_NOCTTY);
 	if (serial_params.fd < 0)
 	{
-		//perror(devicename);
+		/* FAILURE */
 		serial_params.open = 0;
+		g_snprintf(buff,60,"Error Opening COM%i",port_num);
+		/* An Error occurred opening the port */
+		gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
+				ser_context_id);
+		gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
+				ser_context_id,
+				buff);
 	}
 	else
 	{
+		/* SUCCESS */
 		serial_params.open = 1;
+		g_snprintf(buff,60,"COM%i opened successfully",port_num);
+		/* An Error occurred opening the port */
+		gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
+				ser_context_id);
+		gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
+				ser_context_id,
+				buff);
+
 	}
 	return serial_params.fd;
 }
@@ -119,9 +135,18 @@ int setup_serial_params()
 
 void close_serial()
 {
+
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.oldtio);
 	close(serial_params.fd);
 	serial_params.open = 0;
+
+	g_snprintf(buff,60,"COM port closed ");
+	/* An Error occurred opening the port */
+	gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
+			ser_context_id);
+	gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
+			ser_context_id,
+			buff);
 }
 
 int check_ecu_comms(GtkWidget *widget, gpointer data)
@@ -136,14 +161,9 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         {
                 if (raw_reader_running)
                 {
-        //              printf("realtime reader thread running, stopping it\n");
                         raw_reader_running = 0;
                         restart_thread = 1;
-                }
-                while (raw_reader_stopped == 0)
-                {
-        //              printf("Waiting for thread to die\n");
-                        usleep(1000);
+			serial_raw_thread_stopper(); /* stops realtime read */
                 }
 
                 ufds.fd = serial_params.fd;
@@ -182,12 +202,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
                 tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
                 if (restart_thread)
-                {
-        //              printf("restarting thread\n");
                         serial_raw_thread_starter();
-                }
-
-
         }
         else
         {

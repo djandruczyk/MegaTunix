@@ -21,6 +21,7 @@ megasquirt_SOURCES = \
 	init.c \
 	constants_gui.c \
 	runtime_gui.c \
+	runtime_gui.h \
 	enrichments_gui.c \
 	vetable_gui.c \
 	tuning_gui.c \

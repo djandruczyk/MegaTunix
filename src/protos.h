@@ -32,8 +32,9 @@ int check_ecu_comms(GtkWidget *, gpointer);
 /* serialio.c */
 
 /* threads.c */
-int serial_raw_thread_starter(void); /*botstrap function to get IO started */
-void * raw_reader_thread(void *); /*Serial raw reader thread */
+int serial_raw_thread_starter(void); /* bootstrap function to get IO started */
+int serial_raw_thread_stopper(void); /* Realtime thread stopper */
+void * raw_reader_thread(void *); /* Serial raw reader thread */
 /* threads.c */
 
 /* Configfile.c function protos, derived from XMMS */
@@ -75,9 +76,14 @@ void mem_dealloc(void);
 
 /* core_gui.c */
 int setup_gui(void);
-void leave(GtkWidget *, gpointer *);
 int framebuild_dispatch(GtkWidget *, int);
 /* core_gui.c */
+
+/* gui_handlers.c */
+void leave(GtkWidget *, gpointer *);
+int std_button_handler(GtkWidget *, gpointer *);
+void text_entry_handler(GtkWidget *, gpointer *);
+/* gui_handlers.c */
 
 /* for each of the *_gui.c files will be  a main core function called 
  * int build_****(Gtkwidget *).  The "****" will be that core function 
@@ -101,6 +107,7 @@ int build_constants(GtkWidget *);
 
 /* runtime_gui.c */
 int build_runtime(GtkWidget *);
+void update_runtime_vars(void);
 /* runtime_gui.c */
 
 /* enrichments_gui.c */

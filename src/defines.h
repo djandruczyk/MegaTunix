@@ -159,6 +159,14 @@ struct ms_data_v1_and_v2 {
 #define REALTIME_VARS		0x20
 #define VE_AND_CONSTANTS	0x21
  
+/* Buttons */
+#define START_REALTIME		0x30
+#define STOP_REALTIME		0x31
+
+/* text entries */
+#define	SER_POLL_TIMEO		0x40
+#define	SER_INTERVAL_DELAY	0x41
+
 /* Configfile structs. (derived from an older version of XMMS) */
 
 #ifndef MEGASQUIRT_LIN_CONFIGFILE_H

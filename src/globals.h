@@ -32,5 +32,11 @@ struct Serial_Params
 
 /* Data storage */
 struct ms_data_v1_and_v2 out;		/* processed data structure */
+struct ms_data_v1_and_v2 out_last;		/* processed data structure */
 struct ms_raw_data_v1_and_v2 *raw;	/* RAW data pointer */
 
+/* constants */
+int poll_min;			/* 5 millisecond minimum poll delay */
+int poll_max;			/* 500 millisecond maximum poll delay */
+int interval_min;		/* 25 millisecond minimum interval delay */
+int interval_max;		/* 1000 millisecond maximum interval  delay */

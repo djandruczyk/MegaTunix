@@ -24,6 +24,7 @@ int def_comm_port;
 
 int main(int argc, char ** argv)
 {
+	int cfg_result;
 
 	g_thread_init(NULL);
         gtk_init(&argc, &argv);
@@ -31,16 +32,16 @@ int main(int argc, char ** argv)
 	init();			/* initialize global vars */
 	make_megasquirt_dirs();	/*Create config file dirs if missing */
 	 
-	if (read_config() < 0)		/* read config files */
+	cfg_result = read_config();
+	setup_gui();		
+
+	if (cfg_result < 0)
 		open_serial(def_comm_port);
 	else	
 		open_serial(serial_params.comm_port);
 
 	setup_serial_params();	/* Setup the serial port for I/O */
-	//serial_raw_thread_starter(); /*kicks off the loop */	
 
-	setup_gui();		/* THIS DOES NOT return until you close
-				 * the program!!! */
 	gtk_main();
 	return (0) ;
 }

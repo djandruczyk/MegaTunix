@@ -75,10 +75,14 @@ void handle_ms_data(int which_data)
 			}
 			lastcount = raw->secl;
 
+			/* copy last round to out_last for checking */
+			out_last = out;
 			post_process(raw,&out);
 			break;
+
 		case VE_AND_CONSTANTS:
 			/* Not written yet */
+			printf("VEtable/constants came in\n");
 			break;
 	}
 

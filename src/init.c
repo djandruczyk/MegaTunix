@@ -39,12 +39,19 @@ extern GtkWidget *main_window;
 
 void init()
 {
+	/* defaults */
+	poll_min = 5;		/* 5 millisecond minimum poll delay */
+	poll_max = 500;		/* 500 millisecond maximum poll delay */
+	interval_min = 25;	/* 25 millisecond minimum interval delay */
+	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
+
+
 	/* initialize all global variables to known states */
 	serial_params.fd = 0; /* serial port file-descriptor */
 	def_comm_port = 1; /* DOS/WIN32 style, COM1 default */
 	serial_params.errcount = 0; /* I/O error count */
 	serial_params.poll_timeout = 40; /* poll wait time in milliseconds */
-		/* default for MS V 1.1 and 2.2 */
+	/* default for MS V 1.1 and 2.2 */
 	serial_params.raw_bytes = 22; /* number of bytes for realtime vars */
 	raw_reader_running = 0;  /* We're not reading raw data yet... */
 	raw_reader_stopped = 1;  /* We're not reading raw data yet... */
@@ -56,7 +63,7 @@ void init()
 	main_x_origin = 160;	/* offset from left edge of screen */
 	main_y_origin = 120;	/* offset from top edge of screen */
 
-	
+
 }
 
 int read_config(void)
@@ -70,21 +77,13 @@ int read_config(void)
 		cfg_read_int(cfgfile, "Global", "major_ver", &major_ver);
 		cfg_read_int(cfgfile, "Global", "minor_ver", &minor_ver);
 		cfg_read_int(cfgfile, "Global", "micro_ver", &micro_ver);
-/*		if (major_ver == 0)
- *		{
- *			printf("Config file structure changed. using defaults. \nClosing eXtace will save your NEW settings.\n");
- *			cfg_free(cfgfile);
- *			unlink(filename);
- *			g_free(filename);
- *			return;
- *
- *		}
- */
 		cfg_read_int(cfgfile, "Window", "width", &width);
 		cfg_read_int(cfgfile, "Window", "height", &height);
 		cfg_read_int(cfgfile, "Window", "main_x_origin", &main_x_origin);
 		cfg_read_int(cfgfile, "Window", "main_y_origin", &main_y_origin);
 		cfg_read_int(cfgfile, "Serial", "comm_port", &serial_params.comm_port);
+		cfg_read_int(cfgfile, "Serial", "polling_timeout", &serial_params.poll_timeout);
+		cfg_read_int(cfgfile, "Serial", "read_delay", &read_wait_time);
 		cfg_free(cfgfile);
 		g_free(filename);
 		return(0);
@@ -118,6 +117,8 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 	cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 	cfg_write_int(cfgfile, "Serial", "comm_port", serial_params.comm_port);
+	cfg_write_int(cfgfile, "Serial", "polling_timeout", serial_params.poll_timeout);
+	cfg_write_int(cfgfile, "Serial", "read_delay", read_wait_time);
 
 
 	cfg_write_file(cfgfile, filename);

@@ -82,7 +82,7 @@ INCLUDES = @GTK_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGASQUIRT_LIN_MAJOR_
 
 bin_PROGRAMS = megasquirt
 
-megasquirt_SOURCES =  	Makefile 	globals.h 	defines.h 	protos.h 	lookuptables.h 	core_gui.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
+megasquirt_SOURCES =  	Makefile 	globals.h 	defines.h 	protos.h 	lookuptables.h 	core_gui.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
 
 
 megasquirt_LDADD = @GTK_LIBS@ @EXTRA_LIBS@
