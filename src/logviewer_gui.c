@@ -188,9 +188,6 @@ void present_viewer_choices(void)
 
 	button = gtk_button_new_with_label("Close");
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,TRUE,0);
-	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK(populate_viewer),
-			NULL);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -202,17 +199,80 @@ void present_viewer_choices(void)
 gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	GObject *object = NULL;
-        gboolean state = FALSE;
+	gboolean state = FALSE;
+	struct Viewable_Value *v_value = NULL;
+	gchar * name = NULL;
 
-        state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
 
-        /* get object from widget */
-        object = (GObject *)g_object_get_data(G_OBJECT(widget),"object");
+	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
+
+	/* get object from widget */
+	object = (GObject *)g_object_get_data(G_OBJECT(widget),"object");
 	if (!object)
 		printf("object was null during view_value_set()\n");
-        g_object_set_data(object,"being_viewed",GINT_TO_POINTER(state));
+	g_object_set_data(object,"being_viewed",GINT_TO_POINTER(state));
 
-        return TRUE;
+	/* Checks if hash is created, if not, makes one, allocates data
+	 * for strcutres defining each viewable element., sets those attribute
+	 * and adds them to the list, also checks if entires are removed and
+	 * pulls them from the hashtable and de-allocates them...
+	 */
+	if (active_traces == NULL)
+		active_traces = g_hash_table_new(g_str_hash,g_str_equal);
+
+	/* check to see if it's already in the table, if so ignore, if not
+	 * malloc datastructure, populate it's values and insert a pointer
+	 * into the table for it..
+	 */
+	if (playback_mode)
+		name = g_strdup(g_object_get_data(object,"lview_name"));
+	else
+		name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
+	if (!name)
+		printf("ERROR, name is NULL\n");
+
+	/* if not found in table check to see if we need to insert*/
+	if (g_hash_table_lookup(active_traces,name)==NULL)
+	{
+		if (state)	/* Marked viewable widget */
+		{
+			/* Call the build routine, feed it the drawing_area*/
+			v_value = build_v_value(lv_darea,object);
+			// store location of master
+			g_hash_table_insert(active_traces,
+					g_strdup(name),
+					(gpointer)v_value);
+		}
+	}
+	else
+	{	/* If in table but now de-selected, remove it */
+		if (!state)
+		{
+			v_value = (struct Viewable_Value *)g_hash_table_lookup(active_traces,name);
+			/* Remove entry in from hash table */
+			g_hash_table_remove(active_traces,name);
+
+			/* Free all resources of the datastructure 
+			 * before de-allocating it... 
+			 */
+			if (!playback_mode)
+				g_array_free(v_value->data_array,TRUE);
+
+			g_object_unref(v_value->trace_gc);
+			g_object_unref(v_value->font_gc);
+			g_free(v_value->vname);
+			g_free(v_value);
+			v_value = NULL;
+		}
+	}
+	active_viewables = g_hash_table_size(active_traces);
+	/* If traces selected, emit a configure_Event to clear the window
+	 * and draw the traces (IF ONLY reading a log for playback)
+	 */
+	if ((active_traces) && (g_hash_table_size(active_traces) >= 0))
+		lv_configure_event(lv_darea,NULL,NULL);
+
+	return FALSE; /* want other handlers to run... */
 }
 
 void reset_logviewer_state()
@@ -240,97 +300,7 @@ void reset_logviewer_state()
 			g_object_set_data(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
-	populate_viewer();
 		
-}
-
-gboolean populate_viewer()
-{
-	struct Viewable_Value *v_value = NULL;
-	gint i = 0;
-	gint total = 0;
-	GObject * object = NULL;
-	gchar * name = NULL;
-	gboolean being_viewed = FALSE;
-	extern struct Rtv_Map *rtv_map;
-
-//	log_info = (struct Log_Info *) g_object_get_data(G_OBJECT(d_area),"log_info");
-
-	/* Checks if hash is created, if not, makes one, allocates data
-	 * for strcutres defining each viewable element., sets those attribute
-	 * and adds them to the list, also checks if entires are removed and
-	 * pulls them from the hashtable and de-allocates them...
-	 */
-	if (active_traces == NULL)
-		active_traces = g_hash_table_new(g_str_hash,g_str_equal);
-
-	/* check to see if it's already in the table, if so ignore, if not
-	 * malloc datastructure, populate it's values and insert a pointer
-	 * into the table for it..
-	 */
-	if (playback_mode)
-		total = log_info->field_count;
-	else
-		total = rtv_map->derived_total;
-
-	for (i=0;i<total;i++)
-	{
-		if (playback_mode)
-		{
-			object = g_array_index(log_info->log_list,GObject *, i);	
-			name = g_strdup(g_object_get_data(object,"lview_name"));
-		}
-		else
-		{
-			object = g_array_index(rtv_map->rtv_list,GObject *, i);	
-			name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
-		}
-		if (!name)
-			printf("ERROR, name is NULL\n");
-		being_viewed = (gboolean)g_object_get_data(object,"being_viewed");
-		/* if not found in table check to see if we need to insert*/
-		if (g_hash_table_lookup(active_traces,name)==NULL)
-		{
-			if (being_viewed)	/* Marked viewable widget */
-			{
-				/* Call the build routine, feed it the drawing_area*/
-				v_value = build_v_value(lv_darea,object);
-				// store location of master
-				g_hash_table_insert(active_traces,
-						g_strdup(name),
-						(gpointer)v_value);
-			}
-		}
-		else
-		{	/* If in table but now de-selected, remove it */
-			if (!being_viewed)
-			{
-				v_value = (struct Viewable_Value *)g_hash_table_lookup(active_traces,name);
-				/* Remove entry in from hash table */
-				g_hash_table_remove(active_traces,name);
-
-				/* Free all resources of the datastructure 
-				 * before de-allocating it... 
-				 */
-				if (!playback_mode)
-					g_array_free(v_value->data_array,TRUE);
-				
-				g_object_unref(v_value->trace_gc);
-				g_object_unref(v_value->font_gc);
-				g_free(v_value->vname);
-				g_free(v_value);
-				v_value = NULL;
-			}
-		}
-	}
-	active_viewables = g_hash_table_size(active_traces);
-	/* If traces selected, emit a configure_Event to clear the window
-	 * and draw the traces (IF ONLY reading a log for playback)
-	 */
-	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
-		lv_configure_event(lv_darea,NULL,NULL);
-
-	return FALSE; /* want other handlers to run... */
 }
 
 struct Viewable_Value * build_v_value(GtkWidget * d_area, GObject *object)
@@ -666,9 +636,8 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 
 	gdk_draw_line(pixmap,
 			v_value->trace_gc,
-			w-lv_scroll,v_value->last_y,
-			w,(gint)(percent*(h-2))+1);
-	printf("width = %i, line from x1 %i to x2 %i\n",w,w-lv_scroll-1,w-1);
+			w-lv_scroll-1,v_value->last_y,
+			w-1,(gint)(percent*(h-2))+1);
 
 	//	printf("drawing line from (%i,%i) to (%i,%i)\n",w-lv_scroll,v_value->last_y,w,(gint)(percent*(h-2))+1);
 
