@@ -257,7 +257,7 @@ void interrogate_ecu()
 					commands[i].count);
 			/* Store counts for VE/realtime readback... */
 
-			update_logbar(interr_view,NULL,tmpbuf,FALSE);
+			update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
 			g_free(tmpbuf);
 		}
 		else
@@ -265,7 +265,7 @@ void interrogate_ecu()
 			tmpbuf = g_strdup_printf("Command \"%s\" (%s), isn't supported...\n",
 					commands[i].cmd_string,
 					commands[i].cmd_desc);
-			update_logbar(interr_view,NULL,tmpbuf,FALSE);
+			update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
 			g_free(tmpbuf);
 		}
 	}
@@ -311,18 +311,18 @@ void interrogate_ecu()
 
 	if (v0_bytes > 125)
 	{
-		update_logbar(interr_view,"warning","Code is DualTable version: ",FALSE);
+		update_logbar(interr_view,"warning","Code is DualTable version: ",FALSE,FALSE);
 		if (s_bytes == 0)
-			update_logbar(interr_view,"warning","0.90, 0.99b, or 1.00\n",FALSE);
+			update_logbar(interr_view,"warning","0.90, 0.99b, or 1.00\n",FALSE,FALSE);
 		if (s_bytes == 18)
-			update_logbar(interr_view,"warning","1.01\n",FALSE);
+			update_logbar(interr_view,"warning","1.01\n",FALSE,FALSE);
 		if (s_bytes == 19)
-			update_logbar(interr_view,"warning","1.02\n",FALSE);
+			update_logbar(interr_view,"warning","1.02\n",FALSE,FALSE);
 	}
 	else
 	{
 		if (quest_bytes > 0)
-			update_logbar(interr_view,"warning","Code is MegaSquirtnEDIS v3.05 code\n",FALSE);
+			update_logbar(interr_view,"warning","Code is MegaSquirtnEDIS v3.05 code\n",FALSE,FALSE);
 
 
 		else
@@ -330,16 +330,16 @@ void interrogate_ecu()
 			switch (i_bytes)
 			{
 				case 0:
-					update_logbar(interr_view,"warning","Code is Standard B&G 2.x code\n",FALSE);
+					update_logbar(interr_view,"warning","Code is Standard B&G 2.x code\n",FALSE,FALSE);
 					break;
 				case 83:
-					update_logbar(interr_view,"warning","Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n",FALSE);
+					update_logbar(interr_view,"warning","Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n",FALSE,FALSE);
 					break;
 				case 95:
-					update_logbar(interr_view,"warning","Code is SquirtnSpark 3.0\n",FALSE);
+					update_logbar(interr_view,"warning","Code is SquirtnSpark 3.0\n",FALSE,FALSE);
 					break;
 				default:
-					update_logbar(interr_view,"warning","Code is not recognized\n Contact author!!!\n",FALSE);
+					update_logbar(interr_view,"warning","Code is not recognized\n Contact author!!!\n",FALSE,FALSE);
 					break;
 			}
 		}

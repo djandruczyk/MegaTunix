@@ -118,6 +118,18 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
+	entry = gtk_entry_new();
+	//entries.comms_port = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 16);
+	gtk_entry_set_text(GTK_ENTRY(entry),serial_params->port_name);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), TRUE);
+	g_signal_connect (G_OBJECT(entry), "changed",
+			G_CALLBACK (comm_port_change),
+			GINT_TO_POINTER(SET_SER_PORT));
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+/*
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -126,9 +138,7 @@ void build_comms(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SET_SER_PORT));
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+*/
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);

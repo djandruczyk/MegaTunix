@@ -87,7 +87,7 @@ int handle_ms_data(InputData which_data)
 				 */
 				//printf("warning serial data read error (%i bytes)\n",res);
 				close_serial();
-				open_serial(serial_params->comm_port);
+				open_serial(serial_params->port_name);
 
 				/* The raw_reader_running flag MUST be reset 
 				 * to prevent a deadlock in check_ecu_comms 

@@ -27,7 +27,7 @@
 struct Serial_Params
 {
         int fd;                 /* File descriptor */
-        int comm_port;          /* DOS/Windows COM port number, 1-8 typically */
+        gchar *port_name;          /* textual name of comm port */
         gboolean open;		/* flag, TRUE for open FALSE for closed */
         int poll_timeout;       /* Pollng interval in MILLISECONDS */
         int read_wait;          /* time delay between each read */

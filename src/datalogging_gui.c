@@ -333,7 +333,7 @@ void start_datalogging(void)
 	header_needed = TRUE;
 	logging = TRUE;
 	tmpbuf = g_strdup_printf("DataLogging Started...\n");
-	update_logbar(dlog_view,NULL,tmpbuf,TRUE);
+	update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 	std_button_handler(NULL,GINT_TO_POINTER(START_REALTIME));
 	return;
@@ -351,7 +351,7 @@ void stop_datalogging()
 	gtk_widget_set_sensitive(format_table,TRUE);
 	gtk_widget_set_sensitive(file_selection,TRUE);
 	tmpbuf = g_strdup_printf("DataLogging Stopped...\n");
-	update_logbar(dlog_view,NULL,tmpbuf,TRUE);
+	update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 	return;
 }

@@ -202,7 +202,7 @@ gboolean vetable_export(void *ptr)
 #endif
 
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
-	update_logbar(tools_view,NULL,tmpbuf,TRUE);
+	update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 
 	if (buffer)
 		g_free(buffer);
@@ -324,27 +324,27 @@ GIOStatus process_header(ImportParserArg arg, gchar * string)
 		case EVEME:
 			vex_import.version = g_strdup(result);
 			tmpbuf = g_strdup_printf("VEX Header: EVEME %s",result);
-			update_logbar(tools_view, NULL, tmpbuf,TRUE);
+			update_logbar(tools_view, NULL, tmpbuf,TRUE,FALSE);
 			break;
 		case USER_REV:	
 			vex_import.revision = g_strdup(result);
 			tmpbuf = g_strdup_printf("VEX Header: Revision %s",result);
-			update_logbar(tools_view, NULL, tmpbuf,TRUE);
+			update_logbar(tools_view, NULL, tmpbuf,TRUE,FALSE);
 			break;
 		case USER_COMMENT:	
 			vex_import.comment = g_strdup(result);
 			tmpbuf = g_strdup_printf("VEX Header: File Comment %s",result);
-			update_logbar(tools_view, NULL, tmpbuf,TRUE);
+			update_logbar(tools_view, NULL, tmpbuf,TRUE,FALSE);
 			break;
 		case DATE:	
 			vex_import.date = g_strdup(result);
 			tmpbuf = g_strdup_printf("VEX Header: Date %s",result);
-			update_logbar(tools_view, NULL, tmpbuf,TRUE);
+			update_logbar(tools_view, NULL, tmpbuf,TRUE,FALSE);
 			break;
 		case TIME:	
 			vex_import.time = g_strdup(result);
 			tmpbuf = g_strdup_printf("VEX Header: Time %s",result);
-			update_logbar(tools_view, NULL, tmpbuf,TRUE);
+			update_logbar(tools_view, NULL, tmpbuf,TRUE,FALSE);
 			break;
 		default:
 			break;
@@ -379,7 +379,7 @@ GIOStatus process_page(gchar *string)
 
 	}
 
-	update_logbar(tools_view,msg_type,tmpbuf,TRUE);
+	update_logbar(tools_view,msg_type,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 	if (msg_type)
 		g_free(msg_type);
@@ -474,7 +474,7 @@ GIOStatus process_vex_range(ImportParserArg arg, gchar * string, GIOChannel *ioc
 				break;
 		}
 	}
-	update_logbar(tools_view,msg_type,tmpbuf,TRUE);
+	update_logbar(tools_view,msg_type,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 	if (msg_type)
 		g_free(msg_type);
@@ -522,7 +522,7 @@ GIOStatus process_vex_table(gchar * string, GIOChannel *iochannel)
 	{
 		g_string_free(a_line, TRUE);
 		tmpbuf = g_strdup_printf("VEX Import: VE-Table I/O Read problem, file may be incomplete <---ERROR\n");
-		update_logbar(tools_view,"warning",tmpbuf,TRUE);
+		update_logbar(tools_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 		return status;
 	}
@@ -568,7 +568,7 @@ GIOStatus process_vex_table(gchar * string, GIOChannel *iochannel)
 		g_string_free(a_line, TRUE);
 	}
 breakout:
-	update_logbar(tools_view,msg_type,tmpbuf,TRUE);
+	update_logbar(tools_view,msg_type,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 	if (msg_type)
 		g_free(msg_type);
@@ -586,7 +586,7 @@ gint vex_comment_parse(GtkWidget *widget, gpointer data)
 	 */
 	vex_comment = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 	tmpbuf = g_strdup_printf("VEX Comment Stored\n");
-	update_logbar(tools_view,NULL,tmpbuf,TRUE);
+	update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 
 	return TRUE;
@@ -681,7 +681,7 @@ void feed_import_data_to_ms()
 		update_ve_const();	
 		tmpbuf = g_strdup_printf("VEX Import: VEtable on page 1 updated with data from the VEX file\n");
 	}
-	update_logbar(tools_view,NULL,tmpbuf,TRUE);
+	update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 	if (tmpbuf)
 		g_free(tmpbuf);
 }
@@ -696,7 +696,7 @@ void revert_to_previous_data()
 	update_ve_const();
 	gtk_widget_set_sensitive(buttons.tools_revert_but,FALSE);
 	tmpbuf = g_strdup("Reverting to previous settings....\n");
-	update_logbar(tools_view,"warning",tmpbuf,TRUE);
+	update_logbar(tools_view,"warning",tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 }
 

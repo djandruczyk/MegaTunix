@@ -38,7 +38,7 @@ struct Serial_Params *serial_params;
 gboolean connected;
 static gboolean burn_needed = FALSE;
        
-void open_serial(int port_num)
+void open_serial(gchar * port_name)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
@@ -46,15 +46,12 @@ void open_serial(int port_num)
 	 */
 	gint result = -1;
 	gchar *tmpbuf;
-	gchar *devicename;	/* temporary unix name of the serial port */
-	serial_params->comm_port = port_num; /* DOS/Win32 semantics here */
+	gchar *device;	/* temporary unix name of the serial port */
+	serial_params->port_name = g_strdup(port_name); 
 
-	/* Unix port names are always 1 lower than the DOS/Win32 semantics. 
-	 * Thus com1 = /dev/ttyS0 on unix 
-	 */
-	devicename = g_strdup_printf("%s%i",PORT_BASE,port_num-1);
-	/* Open Read/Write and NOT as the controlling TTY */
-	result = open(devicename, O_RDWR | O_NOCTTY | O_NDELAY);
+	device = g_strdup(port_name);
+	/* Open Read/Write and NOT as the controlling TTY in nonblock mode */
+	result = open(device, O_RDWR | O_NOCTTY | O_NDELAY);
 	if (result >= 0)
 	{
 		/* SUCCESS */
@@ -63,8 +60,8 @@ void open_serial(int port_num)
 		serial_params->fd = result;
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
-		tmpbuf = g_strdup_printf("COM%i Opened Successfully\n",port_num);
-		update_logbar(comms_view,NULL,tmpbuf,TRUE);
+		tmpbuf = g_strdup_printf("%s Opened Successfully\n",device);
+		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
 	else
@@ -72,13 +69,13 @@ void open_serial(int port_num)
 		/* FAILURE */
 		/* An Error occurred opening the port */
 		serial_params->open = FALSE;
-		tmpbuf = g_strdup_printf("Error Opening COM%i Error Code: %s\n",
-				port_num,strerror(errno));
-		update_logbar(comms_view,"warning",tmpbuf,TRUE);
+		tmpbuf = g_strdup_printf("Error Opening %s Error Code: %s\n",
+				device,strerror(errno));
+		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
 
-	g_free(devicename);
+	g_free(device);
 	return;
 }
 	
@@ -170,7 +167,7 @@ void close_serial()
 
 	tmpbuf = g_strdup_printf("COM Port Closed\n");
 	/* An Closing the comm port */
-	update_logbar(comms_view,NULL,tmpbuf,TRUE);
+	update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 }
 
@@ -221,7 +218,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 
 			tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 			/* COMMS test succeeded */
-			update_logbar(comms_view,NULL,tmpbuf,TRUE);
+			update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			connected = TRUE;
 			gtk_widget_set_sensitive(misc.status[CONNECTED],
@@ -233,7 +230,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		{
 			tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 			/* An I/O Error occurred with the MegaSquirt ECU */
-			update_logbar(comms_view,"warning",tmpbuf,TRUE);
+			update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			connected = FALSE;
 			gtk_widget_set_sensitive(misc.status[CONNECTED],
@@ -254,7 +251,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	{
 		tmpbuf = g_strdup_printf("Serial Port NOT Opened, Can NOT Test ECU Communications\n");
 		/* Serial port not opened, can't test */
-		update_logbar(comms_view,"warning",tmpbuf,TRUE);
+		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
 	locked = FALSE;

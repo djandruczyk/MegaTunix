@@ -25,7 +25,6 @@
 #include <structures.h>
 
 
-gint def_comm_port;
 extern gboolean fahrenheit;
 extern struct Serial_Params *serial_params;
 gboolean ready = FALSE;
@@ -51,10 +50,7 @@ int main(int argc, char ** argv)
 	cfg_result = read_config();
 	setup_gui();		
 
-	if (cfg_result < 0)
-		open_serial(def_comm_port);
-	else	
-		open_serial(serial_params->comm_port);
+	open_serial(serial_params->port_name);
 
 	setup_serial_params();	/* Setup the serial port for I/O */
 

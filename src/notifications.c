@@ -54,15 +54,20 @@ void set_button_color(gpointer button, gpointer state)
 }
 
 void 
- update_logbar(GtkWidget *view, gchar * tagname, gchar * message,gboolean count)
+ update_logbar(
+		GtkWidget *view, 
+		gchar * tagname, 
+		gchar * message,
+		gboolean count,
+		gboolean clear)
 {
 	GtkTextIter iter;
-	GtkTextBuffer * textbuffer;
-	GtkWidget *parent;
-	GtkAdjustment * adj;
-	gint counter;
-	gchar *tmpbuf;
-	gpointer result;
+	GtkTextBuffer * textbuffer = NULL;
+	GtkWidget *parent = NULL;
+	GtkAdjustment * adj = NULL;
+	gint counter = -1;
+	gchar *tmpbuf = NULL;
+	gpointer result = NULL;
 
 	/* Add the message to the end of the textview */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
@@ -223,19 +228,19 @@ void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
                         function = g_strdup("VE Table Load");
                         choice = g_strdup("\"Import VE Table (s)\"");
 			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nImporting a VE Table requires a valid VEX file\n",filename);
-			update_logbar(tools_view,"warning",lbar_msg,TRUE);
+			update_logbar(tools_view,"warning",lbar_msg,TRUE,FALSE);
                         break;
                 case DATALOG_IMPORT:
                         function = g_strdup("DataLog Load");
                         choice = g_strdup("\"Select Log File\"");
 			lbar_msg = g_strdup_printf("The selected file %s does NOPT exist\nImporting a DataLog for viewing requires a valid datalog file\n",filename);
-			update_logbar(dlog_view,"warning",lbar_msg,TRUE);
+			update_logbar(dlog_view,"warning",lbar_msg,TRUE,FALSE);
                         break;
                 case FULL_RESTORE:
                         function = g_strdup("MegaSquirt Restore");
                         choice = g_strdup("\"Restore All MS Parameters\"");
 			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nA Full restore of MegaSquirt parameters requires a valid backup file\n",filename);
-			update_logbar(tools_view,"warning",lbar_msg,TRUE);
+			update_logbar(tools_view,"warning",lbar_msg,TRUE,FALSE);
                         break;
                 default:
                         break;

@@ -136,6 +136,39 @@ void leave(GtkWidget *widget, gpointer data)
 	return;
 }
 
+gint comm_port_change(GtkEditable *editable)
+{
+	gchar *port;
+	gboolean result;
+
+	port = gtk_editable_get_chars(editable,0,-1);
+//	printf("comm_port_change, port %s\n",port);
+	if(serial_params->open)
+	{
+		if (raw_reader_running)
+			stop_serial_thread();
+		close_serial();
+	}
+	result = g_file_test(port,G_FILE_TEST_EXISTS);
+	if (result)
+	{
+//		printf("port exists...\n");
+		open_serial(port);
+		if (serial_params->port_name != NULL)
+			g_free(serial_params->port_name);
+		serial_params->port_name = g_strdup(port);
+		setup_serial_params();
+	}
+/*	else
+	{
+		printf("file not found...\n");	
+	}
+*/
+
+	g_free(port);
+	return TRUE;
+}
+
 gint toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
@@ -475,6 +508,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 
 	switch ((SpinButton)data)
 	{
+/*
 		case SET_SER_PORT:
 			if(serial_params->open)
 			{
@@ -485,6 +519,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			open_serial((int)value);
 			setup_serial_params();
 			break;
+*/
 		case SER_POLL_TIMEO:
 			serial_params->poll_timeout = (gint)value;
 			break;

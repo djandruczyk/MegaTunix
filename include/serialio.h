@@ -18,7 +18,7 @@
 #include <enums.h>
 
 /* Prototypes */
-void open_serial(int);
+void open_serial(gchar *);
 int setup_serial_params(void);
 void close_serial(void);
 int handle_ms_data(InputData);

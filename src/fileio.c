@@ -133,7 +133,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	if (g_file_test(selected_filename,G_FILE_TEST_IS_DIR))
 	{
 		tmpbuf=g_strdup_printf("You Selected a Directory, you need to select a file!!!\n");
-		update_logbar(tools_view,"warning",tmpbuf,TRUE);
+		update_logbar(tools_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 		return;
 	}
@@ -165,12 +165,12 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				if (iotype == DATALOG_EXPORT)
 				{
 					tmpbuf = g_strdup("File chosen for datalog already contained data, user chose not to over-write it...\n");
-					update_logbar(dlog_view,"warning",tmpbuf,TRUE);
+					update_logbar(dlog_view,"warning",tmpbuf,TRUE,FALSE);
 				}
 				else
 				{
 					tmpbuf = g_strdup("File chosen already had data, user chose not to over-write it...\n");
-					update_logbar(tools_view,"warning",tmpbuf,TRUE);
+					update_logbar(tools_view,"warning",tmpbuf,TRUE,FALSE);
 				}
 				g_free(tmpbuf);
 				return;
@@ -189,9 +189,9 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	{
 		tmpbuf = g_strdup_printf("File Open Failure\n");
 		if (iotype == DATALOG_EXPORT)
-			update_logbar(dlog_view,NULL,tmpbuf,TRUE);
+			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 		else
-			update_logbar(tools_view,NULL,tmpbuf,TRUE);
+			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 		g_free(iofile->filename);
 		g_free(iofile);
@@ -218,7 +218,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 						labels.dlog_file_lab),
 					selected_filename);
 			tmpbuf = g_strdup_printf("DataLog File Opened\n");
-			update_logbar(dlog_view,NULL,tmpbuf,TRUE);
+			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			break;
 		case FULL_BACKUP:
@@ -258,7 +258,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			else
 				tmpbuf = g_strdup_printf("VEX File Opened, VEX Comment already stored\n");
 
-			update_logbar(tools_view,NULL,tmpbuf,TRUE);
+			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			vetable_export(iofile);
 			close_file (iofile);
@@ -273,7 +273,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			vexfile = g_strdup(selected_filename);
 			vex_open = TRUE;
 			tmpbuf = g_strdup_printf("VEX File Opened.\n");
-			update_logbar(tools_view,NULL,tmpbuf,TRUE);
+			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			vetable_import(iofile);
 			close_file (iofile);
@@ -312,7 +312,7 @@ void close_file(void *ptr)
 						labels.dlog_file_lab),
 					"No Log Selected Yet");
 			tmpbuf = g_strdup_printf("Logfile Closed\n");
-			update_logbar(dlog_view,NULL,tmpbuf,TRUE);
+			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 			gtk_widget_set_sensitive(									buttons.stop_dlog_but,FALSE);
 			gtk_widget_set_sensitive(
 					buttons.start_dlog_but,FALSE);
@@ -322,13 +322,13 @@ void close_file(void *ptr)
 			break;
 		case FULL_BACKUP:
 			tmpbuf = g_strdup_printf("Full Backup File Closed\n");
-			update_logbar(tools_view,NULL,tmpbuf,TRUE);
+			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 			backup_open = FALSE;
 			break;
 
 		case FULL_RESTORE:
 			tmpbuf = g_strdup_printf("Full Restore File Closed\n");
-			update_logbar(tools_view,NULL,tmpbuf,TRUE);
+			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 			restore_open = FALSE;
 			break;
 
@@ -337,7 +337,7 @@ void close_file(void *ptr)
 		case VE_EXPORT: /* Fall Through */
 		case VE_IMPORT: /* VE Export/import.. */
 			tmpbuf = g_strdup_printf("VEX File Closed\n");
-			update_logbar(tools_view,NULL,tmpbuf,TRUE);
+			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 			gtk_entry_set_text(GTK_ENTRY(
 						entries.vex_comment_entry),"");
 			vex_open = FALSE;
@@ -366,7 +366,7 @@ void truncate_file(FileIoType filetype, gchar *filename)
 				tmpbuf = g_strdup_printf("DataLog Truncation successful\n");
 			else
 				tmpbuf = g_strdup_printf("DataLog Truncation FAILED\n");
-			update_logbar(dlog_view,NULL,tmpbuf,TRUE);
+			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			break;
 		case VE_EXPORT:
@@ -374,7 +374,7 @@ void truncate_file(FileIoType filetype, gchar *filename)
 				tmpbuf = g_strdup_printf("VE Export file Truncated successfully\n");
 			else
 				tmpbuf = g_strdup_printf("File Truncation FAILED\n");
-			update_logbar(tools_view,NULL,tmpbuf,TRUE);
+			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			break;
 		default:

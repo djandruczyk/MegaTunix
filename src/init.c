@@ -33,7 +33,6 @@ unsigned char *kpa_conversion;
 extern gboolean dualtable;
 extern unsigned char turbo_map[];
 extern unsigned char na_map[];
-extern gint def_comm_port;
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
@@ -75,7 +74,6 @@ void init()
 	main_y_origin = 120;	/* offset from top edge of screen */
 
 	/* initialize all global variables to known states */
-	def_comm_port = 1; /* DOS/WIN32 style, COM1 default */
 	serial_params->fd = 0; /* serial port file-descriptor */
 	serial_params->errcount = 0; /* I/O error count */
 	serial_params->poll_timeout = 40; /* poll wait time in milliseconds */
@@ -112,8 +110,8 @@ int read_config(void)
 				&main_x_origin);
 		cfg_read_int(cfgfile, "Window", "main_y_origin", 
 				&main_y_origin);
-		cfg_read_int(cfgfile, "Serial", "comm_port", 
-				&serial_params->comm_port);
+		cfg_read_string(cfgfile, "Serial", "port_name", 
+				&serial_params->port_name);
 		cfg_read_int(cfgfile, "Serial", "polling_timeout", 
 				&serial_params->poll_timeout);
 		cfg_read_int(cfgfile, "Serial", "read_delay", 
@@ -124,6 +122,7 @@ int read_config(void)
 	}
 	else
 	{
+		serial_params->port_name = g_strdup_printf(PORT_BASE"0");
 		printf("Config file not found, using defaults\n");
 		g_free(filename);
 		return (-1);	/* No file found */
@@ -153,8 +152,8 @@ void save_config(void)
 	gdk_window_get_position(main_window->window,&x,&y);
 	cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 	cfg_write_int(cfgfile, "Window", "main_y_origin", y);
-	cfg_write_int(cfgfile, "Serial", "comm_port", 
-			serial_params->comm_port);
+	cfg_write_string(cfgfile, "Serial", "port_name", 
+			serial_params->port_name);
 	cfg_write_int(cfgfile, "Serial", "polling_timeout", 
 			serial_params->poll_timeout);
 	cfg_write_int(cfgfile, "Serial", "read_delay", 

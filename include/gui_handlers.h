@@ -18,6 +18,7 @@
 
 /* Prototypes */
 void leave(GtkWidget *, gpointer);
+gint comm_port_change(GtkEditable *);
 gint std_button_handler(GtkWidget *, gpointer);
 gint toggle_button_handler(GtkWidget *, gpointer);
 gint bitmask_button_handler(GtkWidget *, gpointer);
