@@ -64,7 +64,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	initialize_ve_view((void *)ve_view);
 	ve_view->table = tbl;
 
-	tmpbuf = g_strdup_printf("3D VE-Table for table %i\n",tbl);
+	tmpbuf = g_strdup_printf("3D VE-Table for table %i",tbl);
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), tmpbuf);
 	g_free(tmpbuf);
