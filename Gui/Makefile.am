@@ -20,7 +20,9 @@ gui_files = 	template.glade \
 		msnedis-3.0.x_ignition.glade \
 		msnedis-3.0.x_ignition.datamap \
 		sparktable_8x8_1.glade \
-		sparktable_8x8_1.datamap 
+		sparktable_8x8_1.datamap \
+		datalogging.glade \
+		datalogging.datamap 
 
 gui_DATA = $(gui_files)
 

@@ -59,7 +59,7 @@ void open_serial(gchar * port_name)
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
 		dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
-		update_logbar(comms_view,NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
+		update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 	}
 	else
 	{
@@ -69,7 +69,7 @@ void open_serial(gchar * port_name)
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
 
-		update_logbar(comms_view,"warning",g_strdup_printf("Error Opening %s Error Code: %s \n",device,err_text),TRUE,FALSE);
+		update_logbar("comms_view","warning",g_strdup_printf("Error Opening %s Error Code: %s \n",device,err_text),TRUE,FALSE);
 		g_free(err_text);
 	}
 
@@ -152,7 +152,7 @@ void close_serial()
 
 	/* An Closing the comm port */
 	dbg_func(__FILE__": close_serial()\n\tCOM Port Closed\n",SERIAL_RD|SERIAL_WR);
-	update_logbar(comms_view,NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
+	update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
 }
 
 void set_ms_page(gint ms_page)

@@ -16,6 +16,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <structures.h>
+#include <tabloader.h>
 #include <tools_gui.h>
 #include <vex_support.h>
 
@@ -23,7 +24,6 @@ extern GdkColor white;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern struct DynamicEntries entries;
-GtkWidget *tools_view;
 
 void build_tools(GtkWidget *parent_frame)
 {
@@ -58,7 +58,7 @@ void build_tools(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),sw,TRUE,TRUE,5);
 
 	view = gtk_text_view_new();
-	tools_view = view;
+	register_widget("tools_view",view);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	gtk_text_buffer_create_tag(textbuffer,

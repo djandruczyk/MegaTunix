@@ -63,7 +63,6 @@ struct DynamicMisc
 	GtkWidget *warmwizard_table;
         GtkWidget *status[7];           /* Status boxes */
         GtkWidget *ww_status[7];           /* Status boxes */
-	GtkWidget *tbl1_reqd_fuel_frame;
 };
 
 /* this is required so we keep track of the gui controls so we
@@ -114,9 +113,6 @@ struct DynamicLabels
 struct DynamicButtons
 {
 	GtkWidget *tools_revert_but;		/* revert to old data */
-	GtkWidget *stop_dlog_but;		/* Stop DataLogging */
-	GtkWidget *start_dlog_but;		/* Start DataLogging */
-	GtkWidget *close_dlog_but;		/* Close DataLog file */
 	GtkWidget *logplay_sel_log_but;		/* Select playback log */
 	GtkWidget *logplay_sel_parm_but;	/* Select rt parms for play */
 	GtkWidget *logplay_start_rt_but;	/* Logplay star realtime */
@@ -329,6 +325,7 @@ struct RtvMap
 	GTimeVal *ts_array;	/* Timestamp array */
 	gint ts_position;	/* Latest timestamp marker position.. */
 	gint ts_max;		/* # elements in the timestamp array */
+	GArray *rtv_list;	/* List of derived vars IN ORDER */
 	GHashTable *rtv_hash;	/* Hashtable of rtv derived values indexed by
 				 * it's internal name */
 };

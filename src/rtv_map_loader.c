@@ -86,6 +86,7 @@ gboolean load_realtime_map(void )
 		dbg_func(__FILE__": load_realtime_map()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
 	rtv_map->rtv_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
+	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GObject *));
 	rtv_map->rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);
 	rtv_map->raw_total = raw_total;
 	rtv_map->derived_total = derived_total;
@@ -212,6 +213,7 @@ gboolean load_realtime_map(void )
 		rtv_map->rtv_array = g_array_remove_index(rtv_map->rtv_array,offset);
 		list = g_list_append(list,(gpointer)object);
 		g_array_insert_val(rtv_map->rtv_array,offset,list);
+		g_array_append_val(rtv_map->rtv_list,object);
 
 		g_free(section);
 		g_free(keytypes);

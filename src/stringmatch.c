@@ -67,10 +67,12 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_BOOL_",
 			GINT_TO_POINTER(MTX_BOOL));
 
+	/* Variable handling */
 	g_hash_table_insert(str_2_enum,"_IMMEDIATE_",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_hash_table_insert(str_2_enum,"_DEFERRED_",
 			GINT_TO_POINTER(DEFERRED));
+
 	/* Complex Expressions (RT Vars)*/
 	g_hash_table_insert(str_2_enum,"_VE_EMB_BIT_",
 			GINT_TO_POINTER(VE_EMB_BIT));
@@ -111,7 +113,27 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(READ_VE_CONST));
 	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",
 			GINT_TO_POINTER(BURN_MS_FLASH));
-	/* mappings to lists of controls */
+	g_hash_table_insert(str_2_enum,"_START_DATALOGGING_",
+			GINT_TO_POINTER(START_DATALOGGING));
+	g_hash_table_insert(str_2_enum,"_STOP_DATALOGGING_",
+			GINT_TO_POINTER(STOP_DATALOGGING));
+	g_hash_table_insert(str_2_enum,"_SELECT_DLOG_EXP_",
+			GINT_TO_POINTER(SELECT_DLOG_EXP));
+	g_hash_table_insert(str_2_enum,"_CLOSE_LOGFILE_",
+			GINT_TO_POINTER(CLOSE_LOGFILE));
+	/* Datalogging */
+	g_hash_table_insert(str_2_enum,"_COMMA_",
+			GINT_TO_POINTER(COMMA));
+	g_hash_table_insert(str_2_enum,"_TAB_",
+			GINT_TO_POINTER(TAB));
+	g_hash_table_insert(str_2_enum,"_SPACE_",
+			GINT_TO_POINTER(SPACE));
+	g_hash_table_insert(str_2_enum,"_MT_CLASSIC_LOG_",
+			GINT_TO_POINTER(MT_CLASSIC_LOG));
+	g_hash_table_insert(str_2_enum,"_MT_FULL_LOG_",
+			GINT_TO_POINTER(MT_FULL_LOG));
+	g_hash_table_insert(str_2_enum,"_CUSTOM_LOG_",
+			GINT_TO_POINTER(CUSTOM_LOG));
 
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 

@@ -239,7 +239,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
                                 cmd->desc,
                                 (gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page))),INTERROGATOR);
 		gdk_threads_enter();
-		update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
+		update_logbar("interr_view",NULL,tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();
 		g_free(tmpbuf);
 		if (cmd->store_type == VNUM)
@@ -288,7 +288,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, Expect MegaTunix to NOT behave properly \nContact the author with the contents of this window\n");
 		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, send contents of the interrogation window\n\tand the firmware details to the MegaTunix author\n"),CRITICAL);
 		gdk_threads_enter();
-		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
+		update_logbar("interr_view","warning",tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();
 		g_free(tmpbuf);
 		goto cleanup;
@@ -405,7 +405,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 
 	dbg_func(g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",potential->name),INTERROGATOR);
 	gdk_threads_enter();
-	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
+	update_logbar("interr_view","warning",tmpbuf,FALSE,FALSE);
 	gdk_threads_leave();
 	g_free(tmpbuf);
 	goto freeup;

@@ -18,7 +18,7 @@
 
 
 /* Prototypes */
-void build_datalogging(GtkWidget *);
+void populate_dlog_choices(void);
 void start_datalogging(void);
 void stop_datalogging(void);
 void clear_logables(void);

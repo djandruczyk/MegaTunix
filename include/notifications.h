@@ -22,7 +22,7 @@ void set_store_buttons_state(GuiState);
 void set_interdep_state(GuiState, gchar * );
 void set_reqfuel_state(GuiState, gint );
 void set_widget_color(gpointer, gpointer );
-void update_logbar(GtkWidget *, gchar *, gchar *, gboolean, gboolean);
+void update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
 void no_ms_connection(void);
 void warn_user(gchar *);
 void warn_input_file_not_exist(FileIoType, gchar *);

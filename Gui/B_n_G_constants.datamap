@@ -1,4 +1,4 @@
-# Dual Table Parameters data map, DT 0.9-1.02
+# Bowling/Grippo Constants For most MS versions EXCEPT DT and MSnS-Extra
 
 [global]
 description=Object data map for B&G Constants (most firmwares except DT... )

@@ -46,18 +46,16 @@ extern struct Runtime_Common *runtime;
 struct DynamicButtons buttons;
 struct DynamicLabels labels;
 extern GdkColor white;
+extern struct RtvMap *rtv_map;
 
 /* Static vars to all functions in this file... */
 static gint total_logables = 0;
-static gint delim_char = SPACE;
 static gint offset_list[MAX_LOGABLES];
 static gint size_list[MAX_LOGABLES];
 static gboolean logging_active = FALSE;
 static gboolean header_needed = FALSE;
 static GtkWidget *file_selection;
 static GtkWidget *format_table;
-static GtkWidget *comma_delimiter_button;
-static GtkWidget *space_delimiter_button;
 static GHashTable *custom_ord_hash;
 static GHashTable *classic_ord_hash;
 static GHashTable *full_ord_hash;
@@ -94,128 +92,45 @@ static const gboolean mt_full[] =
 	TRUE,	FALSE,	FALSE,	FALSE,	TRUE,	
 	TRUE,	TRUE 
 }; 
-void build_datalogging(GtkWidget *parent_frame)
+
+
+void populate_dlog_choices()
 {
 	gint i,j,k;
 	GtkWidget *vbox;
-	GtkWidget *vbox2;
-	GtkWidget *vbox3;
-	GtkWidget *hbox;
 	GtkWidget *table;
-	GtkWidget *frame;
 	GtkWidget *button;
 	GtkWidget *label;
-	GtkWidget *sw;
-	GtkWidget *view;
-	GtkTextBuffer *textbuffer;
-	extern GtkTooltips *tip;
-	GSList  *group;
 	gint table_rows = 0;
+	GObject * object = NULL;
+	gchar * dlog_name = NULL;
+	extern GHashTable *dynamic_widgets;
 
-	custom_ord_hash = g_hash_table_new(NULL,NULL);
-	classic_ord_hash = g_hash_table_new(NULL,NULL);
-	full_ord_hash = g_hash_table_new(NULL,NULL);
-
-	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-
-	frame = gtk_frame_new("DataLogging Status Messages");
-	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-
-	sw = gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-			GTK_POLICY_AUTOMATIC,
-			GTK_POLICY_AUTOMATIC);
-	gtk_widget_set_size_request(sw,0,40);
-	gtk_box_pack_start(GTK_BOX(hbox),sw,TRUE,TRUE,5);
-
-	view = gtk_text_view_new();
-	dlog_view = view;
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
-	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-	gtk_text_buffer_create_tag(textbuffer,
-			"warning",
-			"foreground",
-			"red", NULL);
-	gtk_container_add(GTK_CONTAINER(sw),view);
-
-	frame = gtk_frame_new("Data Log File Selection");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
-
-	hbox = gtk_hbox_new(FALSE,0);
-	file_selection = hbox;
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-
-	button = gtk_button_new_with_label("Select Log File");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(SELECT_DLOG_EXP));
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler),
-			NULL);
-
-	label = gtk_label_new("No Log Selected Yet");
-	labels.dlog_file_lab = label;
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,30);
-
-	button = gtk_button_new_with_label("Close Log File");
-	buttons.close_dlog_but = button;
-	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(CLOSE_LOGFILE));
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler),
-			NULL);
-
-	frame = gtk_frame_new("Logable Variables");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
-
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox2), 5);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-
-	max_logables = sizeof(logable_names)/sizeof(gchar *);
+	vbox = g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1");
+	max_logables = rtv_map->derived_total;
 	table_rows = ceil((float)max_logables/(float)TABLE_COLS);
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
-	logables_table = table;
+//	logables_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
 
 	j = 0;	
 	k = 0;
 	for (i=0;i<max_logables;i++)
 	{
-		button = gtk_check_button_new_with_label(logable_names[i]);
-		gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
-		logables.widgets[i] = button;
-		//		if ((dualtable) && (i >= STD_LOGABLES))
-		//			gtk_widget_set_sensitive(button,FALSE);
-		/*
-		   if (dlog_caps[i] == DUALTABLE)
-		   dt_controls = g_list_append(dt_controls,
-		   (gpointer)button);
-		   if (dlog_caps[i] == IAC_PWM)
-		   iac_idle_controls = g_list_append(iac_idle_controls,
-		   (gpointer)button);
-		   if (dlog_caps[i] == (S_N_SPARK|S_N_EDIS))
-		   ign_controls = g_list_append(ign_controls,
-		   (gpointer)button);
-		 */
+		object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		dlog_name = (gchar *)g_object_get_data(object,"dlog_gui_name");
+		button = gtk_check_button_new_with_label(dlog_name);
+		//button = gtk_check_button_new();
+		//label = gtk_label_new(NULL);
+		//gtk_label_set_markup(GTK_LABEL(label),dlog_name);
+		//gtk_button_set_label(GTK_BUTTON(button),gtk_label_get_label(GTK_LABEL(label)));
+		//gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
 
-		g_object_set_data(G_OBJECT(button),"index",
-				GINT_TO_POINTER(i));
-		g_object_set_data(G_OBJECT(button),"mt_classic_order",
-				GINT_TO_POINTER(mt_classic_order[i]));
-		g_object_set_data(G_OBJECT(button),"mt_full_order",
-				GINT_TO_POINTER(mt_full_order[i]));
-		g_object_set_data(G_OBJECT(button),"size",
-				GINT_TO_POINTER(logging_datasizes_map[i]));
+		g_object_set_data(G_OBJECT(button),"object",
+				(gpointer)object);
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
 				NULL);
@@ -231,155 +146,7 @@ void build_datalogging(GtkWidget *parent_frame)
 			j = 0;
 		} 
 	}
-
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(vbox),vbox3,FALSE,TRUE,0);
-
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
-	gtk_box_pack_start(GTK_BOX(vbox3),hbox,TRUE,TRUE,0);
-
-	frame = gtk_frame_new("Logging Format ");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
-
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox2), 5);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-
-	table = gtk_table_new(1,3,FALSE);
-	format_table = table;
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),15);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
-
-	button = gtk_radio_button_new_with_label(NULL,"MT \"Classic\"");
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(set_logging_mode),
-			GINT_TO_POINTER(MT_CLASSIC_LOG));
-	if (logging_mode == MT_CLASSIC_LOG)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-
-	button = gtk_radio_button_new_with_label(group,"MT \"Full\"");
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(set_logging_mode),
-			GINT_TO_POINTER(MT_FULL_LOG));
-	if (logging_mode == MT_FULL_LOG)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-
-	button = gtk_radio_button_new_with_label(group,"Custom ");
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(set_logging_mode),
-			GINT_TO_POINTER(CUSTOM_LOG));
-	if (logging_mode == CUSTOM_LOG)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-
-	frame = gtk_frame_new("Logging Delimiter");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
-
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox2), 5);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-
-	table = gtk_table_new(1,3,FALSE);
-	delim_table = table;
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),15);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Comma");
-	comma_delimiter_button = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(COMMA));
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
-			NULL);
-	if (delim_char == COMMA)
-	{
-		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON
-				(button),
-				TRUE);
-		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(COMMA));
-	}
-
-	button = gtk_radio_button_new_with_label(group,"Tab");
-	tab_delimiter_button = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(TAB));
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
-			NULL);
-	if (delim_char == TAB)
-	{
-		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON
-				(button),
-				TRUE);
-		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(TAB));
-	}
-
-	button = gtk_radio_button_new_with_label(group,"Space");
-	space_delimiter_button = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(SPACE));
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
-			NULL);
-	if (delim_char == SPACE)
-	{
-		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON
-				(button),
-				TRUE);
-		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(SPACE));
-	}
-
-	frame = gtk_frame_new("DataLogging Operations");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
-
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-
-	button = gtk_button_new_with_label("Start Datalogging");
-	buttons.start_dlog_but = button;
-	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
-	gtk_widget_set_sensitive(button,FALSE);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_DATALOGGING));	
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler),
-			NULL);
-	button = gtk_button_new_with_label("Stop Datalogging");
-	buttons.stop_dlog_but = button;
-	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
-	gtk_widget_set_sensitive(button,FALSE);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_DATALOGGING));	
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler),
-			NULL);
+	gtk_widget_show_all(vbox);
 	return;
 }
 
@@ -397,7 +164,7 @@ void start_datalogging(void)
 	header_needed = TRUE;
 	logging_active = TRUE;
 	tmpbuf = g_strdup_printf("DataLogging Started...\n");
-	update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
+	update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 	widget = gtk_button_new();
 	g_object_set_data(G_OBJECT(widget),"handler",
@@ -419,7 +186,7 @@ void stop_datalogging()
 	gtk_widget_set_sensitive(format_table,TRUE);
 	gtk_widget_set_sensitive(file_selection,TRUE);
 	tmpbuf = g_strdup_printf("DataLogging Stopped...\n");
-	update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
+	update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 	return;
 }
@@ -575,11 +342,12 @@ void run_datalog(void)
 	guchar * uchar_ptr = (guchar *)runtime;
 	gshort * short_ptr = (gshort *)runtime;
 	gfloat * float_ptr = (gfloat *)runtime;
+	extern GHashTable *dynamic_widgets;
 
 	if (!logging_active) /* Logging isn't enabled.... */
 		return;
 
-	data =  g_object_get_data(G_OBJECT(buttons.close_dlog_but),"data");
+	data =  g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
 	if (data != NULL)
 		iofile = (struct Io_File *)data;
 	else
@@ -661,14 +429,19 @@ void run_datalog(void)
 
 gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 {
-	gint i = 0;
+	gint handler = 0;
+
+	if (GTK_IS_OBJECT(widget))
+                handler = (ToggleButton)g_object_get_data(G_OBJECT(widget),"handler");
 	if (!ready)
 		return FALSE;
+
 	if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
 	{
-		switch((LoggingMode)data)
+		switch((ToggleButton)handler)
 		{
 			case MT_CLASSIC_LOG:
+/*
 				logging_mode = MT_CLASSIC_LOG;
 				clear_logables();
 				gtk_widget_set_sensitive(
@@ -690,8 +463,10 @@ gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 								TRUE);
 					}
 				}
+*/
 				break;
 			case MT_FULL_LOG:
+/*
 				logging_mode = MT_FULL_LOG;
 				clear_logables();
 				gtk_widget_set_sensitive(
@@ -713,14 +488,19 @@ gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 								TRUE);
 					}
 				}
+*/
 				break;
 			case CUSTOM_LOG:
+/*
 				logging_mode = CUSTOM_LOG;
 				clear_logables();
 				gtk_widget_set_sensitive(
 						logables_table,TRUE);
 				gtk_widget_set_sensitive(
 						delim_table,TRUE);
+*/
+				break;
+			default:
 				break;
 		}
 	}

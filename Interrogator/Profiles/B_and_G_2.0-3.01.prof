@@ -33,8 +33,8 @@ CMD_I_0=0
 CMD_F_0=0
 
 [gui]
-LoadTabs=B_n_G_constants,enrichments_BnG,vetable_8x8_1
 RealtimeMapFile=B_and_G_2.0-3.01
+LoadTabs=datalogging,B_n_G_constants,enrichments_BnG,vetable_8x8_1
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map

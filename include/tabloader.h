@@ -18,6 +18,7 @@
 
 /* Prototypes */
 gboolean load_gui_tabs(void);
+void register_widget(gchar *, GtkWidget *);
 void bind_data(GtkWidget *, gpointer );
 void populate_master(GtkWidget *, gpointer );
 gchar ** parse_keys(gchar * , gint * );

@@ -20,10 +20,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <structures.h>
+#include <tabloader.h>
 #include <unistd.h>
 
 struct DynamicEntries entries;
-GtkWidget *comms_view;
 extern gint read_wait_time;
 extern gint raw_reader_running;
 extern gint ms_reset_count;
@@ -78,7 +78,8 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(ebox),sw);
 
 	view = gtk_text_view_new();
-	comms_view = view;
+	register_widget("comms_view",view);
+
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	gtk_text_buffer_create_tag(textbuffer,

@@ -104,13 +104,15 @@ static gboolean err_flag = FALSE;
 
 void leave(GtkWidget *widget, gpointer data)
 {
+	extern GHashTable *dynamic_widgets;
+
 	if (statuscounts_id)
 		gtk_timeout_remove(statuscounts_id);
 	statuscounts_id = 0;
 
 	struct Io_File * iofile = NULL;
 	iofile = (struct Io_File *) g_object_get_data(
-			G_OBJECT(buttons.close_dlog_but),"data");
+			G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
 
 	stop_datalogging();
 	save_config();
@@ -127,7 +129,6 @@ gint comm_port_change(GtkEditable *editable)
 {
 	gchar *port;
 	gboolean result;
-	extern GtkWidget *comms_view;
 
 	port = gtk_editable_get_chars(editable,0,-1);
 	if(serial_params->open)
@@ -142,7 +143,7 @@ gint comm_port_change(GtkEditable *editable)
 	}
 	else
 	{
-		update_logbar(comms_view,"warning",g_strdup_printf("\"%s\" File not found\n",port),TRUE,FALSE);
+		update_logbar("comms_view","warning",g_strdup_printf("\"%s\" File not found\n",port),TRUE,FALSE);
 	}
 
 
@@ -180,16 +181,19 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				force_an_update();
 				break;
 			case COMMA:
+				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Comma\"\n",TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup(",");
 				break;
 			case TAB:
+				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Tab\"\n",TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup("\t");
 				break;
 			case SPACE:
+				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Space\"\n",TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup(" ");

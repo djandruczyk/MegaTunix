@@ -127,6 +127,17 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s already exists in master table\n",name),CRITICAL);
 }
 
+
+void register_widget(gchar *name, GtkWidget * widget)
+{
+	if(!dynamic_widgets)
+		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
+	if (g_hash_table_lookup(dynamic_widgets,name))
+		dbg_func(g_strdup_printf(__FILE__": register_widget()\n\tWidget named \"%s\" already exists in master table\n",name),CRITICAL);
+	else
+		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
+}
+
 void bind_data(GtkWidget *widget, gpointer user_data)
 {
 	ConfigFile *cfgfile = (ConfigFile *)user_data;

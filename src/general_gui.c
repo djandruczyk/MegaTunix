@@ -19,6 +19,7 @@
 #include <interrogate.h>
 #include <math.h>
 #include <structures.h>
+#include <tabloader.h>
 
 extern gboolean tips_in_use;
 extern gint temp_units;
@@ -26,7 +27,6 @@ extern struct DynamicEntries entries;
 extern GdkColor black;
 extern guint dbg_lvl;
 GtkWidget *ms_ecu_revision_entry;
-GtkWidget *interr_view;
 
 GtkTextBuffer *textbuffer;
 
@@ -270,7 +270,7 @@ void build_general(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),sw,TRUE,TRUE,5);
 
 	view = gtk_text_view_new ();
-	interr_view = view;
+	register_widget("interr_view",view);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	gtk_text_buffer_create_tag(textbuffer,

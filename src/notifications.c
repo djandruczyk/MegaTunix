@@ -103,8 +103,15 @@ void set_widget_color(gpointer widget, gpointer state)
 }
 
 void 
- update_logbar(
+ /*update_logbar(
 		GtkWidget *view, 
+		gchar * tagname, 
+		gchar * message,
+		gboolean count,
+		gboolean clear)
+*/
+ update_logbar(
+		gchar * view_name, 
 		gchar * tagname, 
 		gchar * message,
 		gboolean count,
@@ -117,11 +124,20 @@ void
 	gint counter = -1;
 	gchar *tmpbuf = NULL;
 	gpointer result = NULL;
+	GtkWidget * widget = NULL;
+	extern GHashTable *dynamic_widgets;
+
+	widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,view_name);
+	if (!GTK_IS_OBJECT(widget))
+	{
+		dbg_func(g_strdup_printf(__FILE__": update_logbar()\n\t Textview name passed: \"%s\" wasn't registered, not updating\n",view_name),CRITICAL);
+		return;
+	}
 
 	/* Add the message to the end of the textview */
-	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
-	result = g_object_get_data(G_OBJECT(view),"counter");	
+	result = g_object_get_data(G_OBJECT(widget),"counter");	
 	if (result == NULL)
 		counter = 0;
 	else
@@ -131,7 +147,7 @@ void
 	{
 		counter++;
 		tmpbuf = g_strdup_printf(" %i. ",counter);
-		g_object_set_data(G_OBJECT(view),"counter",GINT_TO_POINTER(counter));	
+		g_object_set_data(G_OBJECT(widget),"counter",GINT_TO_POINTER(counter));	
 	}
 
 	if (tagname == NULL)
@@ -153,7 +169,7 @@ void
 	/* Get it's parent (the scrolled window) and slide it to the
 	 * bottom so the new message is visible... 
 	 */
-	parent = gtk_widget_get_parent(view);
+	parent = gtk_widget_get_parent(widget);
 	if (parent != NULL)
 	{
 		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
@@ -217,19 +233,19 @@ void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
 			function = g_strdup("VE Table Load");
 			choice = g_strdup("\"Import VE Table (s)\"");
 			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nImporting a VE Table requires a valid VEX file\n",filename);
-			update_logbar(tools_view,"warning",lbar_msg,TRUE,FALSE);
+			update_logbar("tools_view","warning",lbar_msg,TRUE,FALSE);
 			break;
 		case DATALOG_IMPORT:
 			function = g_strdup("DataLog Load");
 			choice = g_strdup("\"Select Log File\"");
 			lbar_msg = g_strdup_printf("The selected file %s does NOPT exist\nImporting a DataLog for viewing requires a valid datalog file\n",filename);
-			update_logbar(dlog_view,"warning",lbar_msg,TRUE,FALSE);
+			update_logbar("dlog_view","warning",lbar_msg,TRUE,FALSE);
 			break;
 		case FULL_RESTORE:
 			function = g_strdup("MegaSquirt Restore");
 			choice = g_strdup("\"Restore All MS Parameters\"");
 			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nA Full restore of MegaSquirt parameters requires a valid backup file\n",filename);
-			update_logbar(tools_view,"warning",lbar_msg,TRUE,FALSE);
+			update_logbar("tools_view","warning",lbar_msg,TRUE,FALSE);
 			break;
 		default:
 			break;

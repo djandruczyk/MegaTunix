@@ -89,9 +89,11 @@ void io_cmd(IoCommand cmd, gpointer data)
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
 			if (!tabs_loaded)
 			{
+				tmp = UPD_LOAD_REALTIME_MAP;
+				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_LOAD_GUI_TABS;
 				g_array_append_val(message->funcs,tmp);
-				tmp = UPD_LOAD_REALTIME_MAP;
+				tmp = UPD_POPULATE_DLOGGER;
 				g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;
@@ -254,6 +256,11 @@ void *serial_io_handler(gpointer data)
 						UpdateFunction, i);
 				switch ((UpdateFunction)val)
 				{
+					case UPD_POPULATE_DLOGGER:
+						gdk_threads_enter();
+						populate_dlog_choices();
+						gdk_threads_leave();
+						break;
 					case UPD_LOAD_REALTIME_MAP:
 						gdk_threads_enter();
 						if (!load_realtime_map())
@@ -414,7 +421,7 @@ void comms_test()
 		connected = TRUE;
 		dbg_func(__FILE__": comms_test()\n\tECU Comms Test Successfull\n",SERIAL_RD);
 		gdk_threads_enter();
-		update_logbar(comms_view,NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
+		update_logbar("comms_view",NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
 		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
 		//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
@@ -427,7 +434,7 @@ void comms_test()
 		connected = FALSE;
 		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
 		gdk_threads_enter();
-		update_logbar(comms_view,"warning","I/O with MegaSquirt Timeout\n",TRUE,FALSE);
+		update_logbar("comms_view","warning","I/O with MegaSquirt Timeout\n",TRUE,FALSE);
 		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
 //		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
