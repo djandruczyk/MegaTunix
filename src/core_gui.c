@@ -22,7 +22,6 @@
 #include <enums.h>
 #include <general_gui.h>
 #include <gui_handlers.h>
-#include <ignition_gui.h>
 #include <logviewer_gui.h>
 #include <memory_gui.h>
 #include <runtime_gui.h>
@@ -55,10 +54,8 @@ static struct
 { "About MegaTunix", build_about, "_About",STANDARD,ABOUT_PAGE},
 { "General MegaTunix Settings", build_general, "_General",STANDARD,GENERAL_PAGE},
 { "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STANDARD,COMMS_PAGE},
-{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD,ENG_VITALS_PAGE},
-{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD,CONSTANTS_PAGE},
-//{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE,DT_PARAMS_PAGE},
-//{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS,IGNITON_PAGE},
+//{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD,ENG_VITALS_PAGE},
+//{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD,CONSTANTS_PAGE},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
 { "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
 { "MegaSquirt Tools", build_tools, "T_ools",STANDARD,TOOLS_PAGE},
@@ -77,7 +74,6 @@ int setup_gui()
 	GtkWidget *hbox;
 	GtkWidget *vbox;
 	GtkWidget *button;
-	extern GList *dt_controls;
 	extern GList *raw_mem_controls;
 	extern GList *ign_controls;
 	gint i=0;
@@ -120,13 +116,6 @@ int setup_gui()
 			raw_mem_controls = g_list_append(raw_mem_controls, 
 					(gpointer)frame);
 			raw_mem_controls = g_list_append(raw_mem_controls, 
-					(gpointer)label);
-		}
-		if (notebook_tabs[i].capabilities & DUALTABLE)
-		{
-			dt_controls = g_list_append(dt_controls, 
-					(gpointer)frame);
-			dt_controls = g_list_append(dt_controls, 
 					(gpointer)label);
 		}
 		if (notebook_tabs[i].capabilities & (S_N_SPARK|S_N_EDIS))

@@ -42,9 +42,9 @@ void set_store_buttons_state(GuiState state)
 void set_interdep_state(GuiState state, gint table)
 {
 	if (table == 1)
-		g_list_foreach(interdep_1_controls, set_widget_color,(gpointer)state);
+		g_list_foreach(get_list("interdep_1_ctrl"), set_widget_color,(gpointer)state);
 	else if (table == 2)
-		g_list_foreach(interdep_2_controls, set_widget_color,(gpointer)state);
+		g_list_foreach(get_list("interdep_2_ctrl"), set_widget_color,(gpointer)state);
 	else
 		dbg_func(g_strdup_printf(__FILE__": set_interdep_state(), invalid table number %i\n",table),CRITICAL);
 }
@@ -52,9 +52,9 @@ void set_interdep_state(GuiState state, gint table)
 void set_reqfuel_state(GuiState state, gint table)
 {
 	if (table == 1)
-		g_list_foreach(reqfuel_1_controls, set_widget_color,(gpointer)state);
+		g_list_foreach(get_list("reqfuel_1_ctrl"), set_widget_color,(gpointer)state);
 	else if (table == 2)
-		g_list_foreach(reqfuel_2_controls, set_widget_color,(gpointer)state);
+		g_list_foreach(get_list("reqfuel_2_ctrl"), set_widget_color,(gpointer)state);
 	else
 		dbg_func(g_strdup_printf(__FILE__": set_reqfuel_state(), invalid table number %i\n",table),CRITICAL);
 }

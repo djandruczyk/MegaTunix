@@ -25,9 +25,7 @@ gchar *states[] = {"FALSE","TRUE"};
 void parse_ecu_capabilities(gint ecu_caps)
 {
 	set_dualtable_mode((ecu_caps & DUALTABLE) == 0 ? FALSE:TRUE);
-	set_enhanced_mode((ecu_caps & ENHANCED) == 0 ? FALSE:TRUE);
 	set_iac_mode((ecu_caps & (IAC_PWM|IAC_STEPPER)) == 0 ? FALSE:TRUE);
-	set_launch_ctrl_mode((ecu_caps & LAUNCH_CTRL) == 0 ? FALSE:TRUE);
 	set_raw_memory_mode((ecu_caps & RAW_MEMORY) == 0 ? FALSE:TRUE);
 }
 
@@ -36,20 +34,6 @@ void set_raw_memory_mode(gboolean state)
         extern GList *raw_mem_controls;
 	dbg_func(g_strdup_printf(__FILE__": set_raw_memory_mode()\n\tSetting RAW Memory controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(raw_mem_controls, set_widget_state,(gpointer)state);
-}
-
-void set_enhanced_mode(gboolean state)
-{
-        extern GList *enhanced_controls;
-	dbg_func(g_strdup_printf(__FILE__": set_enhanced_mode()\n\tSetting Enhanced controls state to %s\n",states[state]),INTERROGATOR);
-        g_list_foreach(enhanced_controls, set_widget_state,(gpointer)state);
-}
-
-void set_launch_ctrl_mode(gboolean state)
-{
-        extern GList *launch_controls;
-	dbg_func(g_strdup_printf(__FILE__": set_launch_ctrl_mode()\n\tSetting Launch-Ctrl controls state to %s\n",states[state]),INTERROGATOR);
-        g_list_foreach(launch_controls, set_widget_state,(gpointer)state);
 }
 
 void set_iac_mode(gboolean state)

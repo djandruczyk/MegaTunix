@@ -50,28 +50,68 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(LAUNCH_CTRL));
 	
 	/* Storage Types for reading interrogation tests */
-	g_hash_table_insert(str_2_enum,"_SIG_",GINT_TO_POINTER(SIG));
-	g_hash_table_insert(str_2_enum,"_VNUM_",GINT_TO_POINTER(VNUM));
-	g_hash_table_insert(str_2_enum,"_EXTVER_",GINT_TO_POINTER(EXTVER));
+	g_hash_table_insert(str_2_enum,"_SIG_",
+			GINT_TO_POINTER(SIG));
+	g_hash_table_insert(str_2_enum,"_VNUM_",
+			GINT_TO_POINTER(VNUM));
+	g_hash_table_insert(str_2_enum,"_EXTVER_",
+			GINT_TO_POINTER(EXTVER));
 
 	/* Data Types for glade data binder.... */
-	g_hash_table_insert(str_2_enum,"_INT_",GINT_TO_POINTER(MTX_INT));
-	g_hash_table_insert(str_2_enum,"_ENUM_",GINT_TO_POINTER(MTX_ENUM));
-	g_hash_table_insert(str_2_enum,"_STRING_",GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"_BOOL_",GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"_INT_",
+			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"_ENUM_",
+			GINT_TO_POINTER(MTX_ENUM));
+	g_hash_table_insert(str_2_enum,"_STRING_",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"_BOOL_",
+			GINT_TO_POINTER(MTX_BOOL));
 
-	g_hash_table_insert(str_2_enum,"_NOTHING_",GINT_TO_POINTER(CONV_NOTHING));
-	g_hash_table_insert(str_2_enum,"_MULTIPLY_",GINT_TO_POINTER(CONV_MULT));
-	g_hash_table_insert(str_2_enum,"_DIVIDE_",GINT_TO_POINTER(CONV_DIV));
-	g_hash_table_insert(str_2_enum,"_ADD_",GINT_TO_POINTER(CONV_ADD));
-	g_hash_table_insert(str_2_enum,"_SUBTRACT_",GINT_TO_POINTER(CONV_SUB));
-	g_hash_table_insert(str_2_enum,"_IMMEDIATE_",GINT_TO_POINTER(IMMEDIATE));
-	g_hash_table_insert(str_2_enum,"_DEFERRED_",GINT_TO_POINTER(DEFERRED));
+	g_hash_table_insert(str_2_enum,"_NOTHING_",
+			GINT_TO_POINTER(CONV_NOTHING));
+	g_hash_table_insert(str_2_enum,"_MULTIPLY_",
+			GINT_TO_POINTER(CONV_MULT));
+	g_hash_table_insert(str_2_enum,"_DIVIDE_",
+			GINT_TO_POINTER(CONV_DIV));
+	g_hash_table_insert(str_2_enum,"_ADD_",
+			GINT_TO_POINTER(CONV_ADD));
+	g_hash_table_insert(str_2_enum,"_SUBTRACT_",
+			GINT_TO_POINTER(CONV_SUB));
+	g_hash_table_insert(str_2_enum,"_IMMEDIATE_",
+			GINT_TO_POINTER(IMMEDIATE));
+	g_hash_table_insert(str_2_enum,"_DEFERRED_",
+			GINT_TO_POINTER(DEFERRED));
 	/* Signal handler mapping */
-	g_hash_table_insert(str_2_enum,"_GENERIC_",GINT_TO_POINTER(GENERIC));
-	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",GINT_TO_POINTER(TRIGGER_ANGLE));
-	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",GINT_TO_POINTER(READ_VE_CONST));
-	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",GINT_TO_POINTER(BURN_MS_FLASH));
+	g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
+			GINT_TO_POINTER(ALT_SIMUL));
+	g_hash_table_insert(str_2_enum,"_GENERIC_",
+			GINT_TO_POINTER(GENERIC));
+	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
+			GINT_TO_POINTER(TRIGGER_ANGLE));
+	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_1_",
+			GINT_TO_POINTER(NUM_SQUIRTS_1));
+	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_2_",
+			GINT_TO_POINTER(NUM_SQUIRTS_2));
+	g_hash_table_insert(str_2_enum,"_NUM_CYLINDERS_1_",
+			GINT_TO_POINTER(NUM_CYLINDERS_1));
+	g_hash_table_insert(str_2_enum,"_NUM_CYLINDERS_2_",
+			GINT_TO_POINTER(NUM_CYLINDERS_2));
+	g_hash_table_insert(str_2_enum,"_NUM_INJECTORS_1_",
+			GINT_TO_POINTER(NUM_INJECTORS_1));
+	g_hash_table_insert(str_2_enum,"_NUM_INJECTORS_2_",
+			GINT_TO_POINTER(NUM_INJECTORS_2));
+	g_hash_table_insert(str_2_enum,"_REQ_FUEL_1_",
+			GINT_TO_POINTER(REQ_FUEL_1));
+	g_hash_table_insert(str_2_enum,"_REQ_FUEL_2_",
+			GINT_TO_POINTER(REQ_FUEL_2));
+	g_hash_table_insert(str_2_enum,"_REQ_FUEL_POPUP_",
+			GINT_TO_POINTER(REQ_FUEL_POPUP));
+	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
+			GINT_TO_POINTER(TRIGGER_ANGLE));
+	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",
+			GINT_TO_POINTER(READ_VE_CONST));
+	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",
+			GINT_TO_POINTER(BURN_MS_FLASH));
 	/* mappings to lists of controls */
 
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);

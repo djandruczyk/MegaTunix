@@ -23,7 +23,6 @@ megatunix_SOURCES = \
 	fileio.c \
 	general_gui.c \
 	gui_handlers.c \
-	ignition_gui.c \
 	init.c \
 	interrogate.c \
 	logviewer_core.c \

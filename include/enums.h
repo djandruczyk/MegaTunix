@@ -46,7 +46,7 @@ typedef enum
 	BACKUP_ALL,
 	RESTORE_ALL,
 	SELECT_PARAMS,
-	REQD_FUEL_POPUP,
+	REQ_FUEL_POPUP,
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -95,7 +95,8 @@ typedef enum
 	TRIGGER_ANGLE,
 	LOGVIEW_SCROLL,
 	DEBUG_LEVEL,
-	GENERIC
+	GENERIC,
+	ALT_SIMUL,
 }SpinButton;
 
 /* Conversions for download, converse on upload.. */
@@ -207,7 +208,7 @@ typedef enum
 	SERIAL_GEN	= 1<<6,
 	IO_PROCESS	= 1<<7,
 	THREADS		= 1<<8,
-	REQD_FUEL	= 1<<9,
+	REQ_FUEL	= 1<<9,
 	TABLOADER	= 1<<10,
 	CRITICAL	= 1<<11
 }Dbg_Class;

@@ -31,8 +31,6 @@
 #include <threads.h>
 
 static gint rpmk_offset = 98;
-extern struct DynamicSpinners spinners;
-extern struct DynamicAdjustments adjustments;
 extern GdkColor red;
 extern GdkColor black;
 gint num_squirts_1 = 1;
@@ -60,11 +58,11 @@ void req_fuel_change(void *ptr)
 	reqd_fuel->actual_inj_flow = ((double)reqd_fuel->rated_inj_flow *
 			sqrt((double)reqd_fuel->actual_pressure / (double)reqd_fuel->rated_pressure));
 
-	dbg_func(g_strdup_printf(__FILE__": Rated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow),REQD_FUEL);
-	dbg_func(g_strdup_printf(__FILE__": Rated fuel pressure is %f bar\n",reqd_fuel->rated_pressure),REQD_FUEL);
-	dbg_func(g_strdup_printf(__FILE__": Actual fuel pressure is %f bar\n",reqd_fuel->actual_pressure),REQD_FUEL);
-	dbg_func(g_strdup_printf(__FILE__": Calculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow),REQD_FUEL);
-	dbg_func(g_strdup_printf(__FILE__": Target AFR is %f lbs/hr\n",reqd_fuel->target_afr),REQD_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Rated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow),REQ_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Rated fuel pressure is %f bar\n",reqd_fuel->rated_pressure),REQ_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Actual fuel pressure is %f bar\n",reqd_fuel->actual_pressure),REQ_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Calculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow),REQ_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Target AFR is %f lbs/hr\n",reqd_fuel->target_afr),REQ_FUEL);
 
 	tmp1 = 36.0*((double)reqd_fuel->disp)*4.27793;
 	tmp2 = ((double) reqd_fuel->cyls) \
@@ -350,7 +348,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 		ve_const = (struct Ve_Const_Std *) ms_data[1];
 	else
 	{
-		dbg_func(g_strdup_printf(__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table),REQD_FUEL);
+		dbg_func(g_strdup_printf(__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table),REQ_FUEL);
 		return FALSE;
 	}	
 
@@ -416,16 +414,15 @@ void check_req_fuel_limits()
 	gint dload_val = 0;
 	gint offset = 0;
 	gint page = -1;
-	GtkWidget *widget = NULL;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
 	extern GHashTable * interdep_vars_1;
 	extern GHashTable * interdep_vars_2;
+	extern GHashTable *dynamic_widgets;
         extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
 
 	if (ecu_caps & DUALTABLE)
@@ -466,8 +463,9 @@ void check_req_fuel_limits()
 				lim_flag = 1;
 		}
 		/* Required Fuel per SQUIRT */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-					spinners.req_fuel_per_squirt_1_spin),
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+					(g_hash_table_lookup(dynamic_widgets,
+					"req_fuel_per_squirt_1_spin")),
 				req_fuel_per_squirt/10.0);
 
 		/* Throw warning if an issue */
@@ -480,10 +478,7 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90;
-			widget = g_list_nth_data(ve_widgets[page][offset],0);
-			dload_val = convert_before_download(widget,
-					req_fuel_per_squirt);
-			write_ve_const(page, offset, dload_val, FALSE);
+			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));
 					
@@ -506,8 +501,9 @@ void check_req_fuel_limits()
 		}
 
 		/* Required Fuel per SQUIRT */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-					spinners.req_fuel_per_squirt_2_spin),
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+					(g_hash_table_lookup(dynamic_widgets,
+					"req_fuel_per_squirt_2_spin")),
 				req_fuel_per_squirt/10);
 
 		/* Throw warning if an issue */
@@ -538,10 +534,8 @@ void check_req_fuel_limits()
 			write_ve_const(1, rpmk_offset, dload_val, FALSE);
 
 			offset = 90;
-			widget = g_list_nth_data(ve_widgets[page][offset],0);
-			dload_val = convert_before_download(widget,
-					req_fuel_per_squirt);
-			write_ve_const(page, offset, dload_val, FALSE);
+					
+			write_ve_const(page, offset,req_fuel_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(1));
 					
 		}
@@ -574,7 +568,7 @@ void check_req_fuel_limits()
 		page = 0;
 		tmp =	((float)(num_injectors_1))/((float)ve_const->divider*(float)(ve_const->alternate+1));
 
-		/* This is 1 tenth the value as the one screen stuff is 1/10th 
+		/* This is 1/10 the value as the on screen stuff is 1/10th 
 		 * for the ms variable,  it gets converted farther down, just 
 		 * before download to the MS
 		 */
@@ -590,8 +584,9 @@ void check_req_fuel_limits()
 				lim_flag = 1;
 		}
 		/* req-fuel info box  */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-					spinners.req_fuel_per_squirt_1_spin),
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+					(g_hash_table_lookup(dynamic_widgets,
+					"req_fuel_per_squirt_1_spin")),
 				req_fuel_per_squirt/10.0);
 
 		if (lim_flag)
@@ -625,10 +620,7 @@ void check_req_fuel_limits()
 
 			/* Send reqd_fuel_per_squirt */
 			offset = 90;
-			widget = g_list_nth_data(ve_widgets[page][offset],0);
-			dload_val = convert_before_download(widget,
-					req_fuel_per_squirt);
-			write_ve_const(page, offset, dload_val, FALSE);
+			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));
 		}
 	} // End B&G style Req Fuel check 

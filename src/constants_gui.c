@@ -247,7 +247,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	
 	button = gtk_button_new_with_label("Calculate Required Fuel");
 	g_object_set_data(G_OBJECT(button),"reqd_fuel",(gpointer)reqd_fuel_1);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REQD_FUEL_POPUP));
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REQ_FUEL_POPUP));
         g_signal_connect(G_OBJECT(button),"clicked",
                         G_CALLBACK(std_button_handler),
 			NULL);
@@ -633,7 +633,7 @@ void build_constants_1(GtkWidget *parent_frame)
 
         button = gtk_button_new_with_label("Calculate Required Fuel");
         g_object_set_data(G_OBJECT(button),"reqd_fuel",(gpointer)reqd_fuel_2);
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REQD_FUEL_POPUP));
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REQ_FUEL_POPUP));
         g_signal_connect(G_OBJECT(button),"clicked",
                         G_CALLBACK(std_button_handler),
 			NULL);

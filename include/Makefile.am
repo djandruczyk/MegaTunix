@@ -20,7 +20,6 @@ headers = \
 	fileio.h \
 	general_gui.h \
         gui_handlers.h \
-        ignition_gui.h \
         init.h \
         interrogate.h \
         logo.h \
