@@ -81,10 +81,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 				GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset",
 				GINT_TO_POINTER(WARMUP_BINS_OFFSET+i));
-		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-				GINT_TO_POINTER(1*100));
-		g_object_set_data(G_OBJECT(spinner),"conv_type",
-				GINT_TO_POINTER(CONV_NOTHING));
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
 		gtk_widget_set_size_request(spinner,45,-1);
@@ -157,10 +153,10 @@ void build_warmwizard(GtkWidget *parent_frame)
 			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(119));
-	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-			GINT_TO_POINTER(10*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",
-			GINT_TO_POINTER(CONV_MULT));
+	g_object_set_data(G_OBJECT(spinner),"dl_conv_expr",
+			(gpointer)"x*10");
+	g_object_set_data(G_OBJECT(spinner),"ul_conv_expr",
+			(gpointer)"x/10");
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -178,10 +174,10 @@ void build_warmwizard(GtkWidget *parent_frame)
 			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(64));
-	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-			GINT_TO_POINTER(10*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",
-			GINT_TO_POINTER(CONV_MULT));
+	g_object_set_data(G_OBJECT(spinner),"dl_conv_expr",
+			(gpointer)"x*10");
+	g_object_set_data(G_OBJECT(spinner),"ul_conv_expr",
+			(gpointer)"x/10");
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -199,10 +195,10 @@ void build_warmwizard(GtkWidget *parent_frame)
 			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(65));
-	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-			GINT_TO_POINTER(10*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",
-			GINT_TO_POINTER(CONV_MULT));
+	g_object_set_data(G_OBJECT(spinner),"dl_conv_expr",
+			(gpointer)"x*10");
+	g_object_set_data(G_OBJECT(spinner),"ul_conv_expr",
+			(gpointer)"x/10");
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
@@ -247,10 +243,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(66));
-	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",
-			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -268,10 +260,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(67));
-	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",
-			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);

@@ -99,16 +99,6 @@ typedef enum
 	ALT_SIMUL,
 }SpinButton;
 
-/* Conversions for download, converse on upload.. */
-typedef enum
-{
-	CONV_ADD=0x80,
-	CONV_SUB,
-	CONV_MULT,
-	CONV_DIV,
-	CONV_NOTHING
-}Conversions;
-
 /* Runtime Status flags */
 typedef enum 
 {       

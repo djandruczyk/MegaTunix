@@ -67,16 +67,6 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_BOOL_",
 			GINT_TO_POINTER(MTX_BOOL));
 
-	g_hash_table_insert(str_2_enum,"_NOTHING_",
-			GINT_TO_POINTER(CONV_NOTHING));
-	g_hash_table_insert(str_2_enum,"_MULTIPLY_",
-			GINT_TO_POINTER(CONV_MULT));
-	g_hash_table_insert(str_2_enum,"_DIVIDE_",
-			GINT_TO_POINTER(CONV_DIV));
-	g_hash_table_insert(str_2_enum,"_ADD_",
-			GINT_TO_POINTER(CONV_ADD));
-	g_hash_table_insert(str_2_enum,"_SUBTRACT_",
-			GINT_TO_POINTER(CONV_SUB));
 	g_hash_table_insert(str_2_enum,"_IMMEDIATE_",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_hash_table_insert(str_2_enum,"_DEFERRED_",

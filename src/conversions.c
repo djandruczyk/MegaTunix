@@ -22,21 +22,6 @@
 #include <structures.h>
 #include <tabloader.h>
 
-/* Conversions.c
- * 
- * conv_Type has one of 4 possibles, CONV_ADD,CONV_SUB,CONV_MULT and CONV_DIV, 
- * for addition subtraction, multiplication and division respectivlely.  
- * These mathematical operaands use the conv_factor and perform the 
- * requested Op on the value from the gui BEFORE downloading to the MS.  
- * On upload, the converse operation is performed (if CONV_ADD used on 
- * downlaod,  CONV_SUB will be used on upload), likewise for multiplication 
- * and division.
- * 
- */
-
-extern struct DynamicLabels labels;
-extern struct DynamicAdjustments adjustments;
-extern struct DynamicSpinners spinners;
 
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {
