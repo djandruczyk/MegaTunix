@@ -25,28 +25,35 @@
 static int req_fuel_popup = FALSE;
 static GtkWidget *popup;
 static int paused_handlers = FALSE;
+static int rpmk_offset = 99;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
 extern int ser_context_id;
 extern int read_wait_time;
 extern GtkWidget *ser_statbar;
 extern struct v1_2_Constants constants;
-struct {
-	GtkAdjustment *displacement;	/* Engine size  1-1000 Cu-in */
-	GtkAdjustment *cyls;		/* # of Cylinders  1-16 */
-	GtkAdjustment *inj_rate;	/* injector slow rate (lbs/hr) */
-	GtkAdjustment *afr;		/* Air fuel ratio 10-25.5 */
+struct 
+{
+	GtkWidget *disp_spin;	/* Engine size  1-1000 Cu-in */
+	GtkWidget *cyls_spin;	/* # of Cylinders  1-16 */
+	GtkWidget *inj_rate_spin;	/* injector slow rate (lbs/hr) */
+	GtkWidget *afr_spin;		/* Air fuel ratio 10-25.5 */
+	gint disp;
+	gint cyls;
+	gint inj_rate;
+	gfloat afr;
 } reqd_fuel;
+
 extern struct ms_ve_constants *ve_constants;
 
 void leave(GtkWidget *widget, gpointer *data)
 {
-        save_config();
+	save_config();
 	stop_serial_thread();
-        /* Free all buffers */
+	/* Free all buffers */
 	close_serial();
-        mem_dealloc();
-        gtk_main_quit();
+	mem_dealloc();
+	gtk_main_quit();
 }
 
 int text_entry_handler(GtkWidget * widget, gpointer *data)
@@ -145,7 +152,7 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 	 * Fairly generic, should work for multiple statusbars
 	 *
 	 */
-	
+
 
 	gtk_statusbar_pop(GTK_STATUSBAR(status_bar),
 			context_id);
@@ -153,7 +160,6 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 			context_id,
 			message);
 }
-
 	
 int reqd_fuel_popup()
 {
@@ -167,6 +173,10 @@ int reqd_fuel_popup()
 	GtkAdjustment *adj;
 
 	req_fuel_popup=TRUE;
+	//	reqd_fuel.disp = 350;
+	reqd_fuel.cyls = 4;
+	//	reqd_fuel.inj_rate = 19;
+	reqd_fuel.afr = 14.7;
 	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(popup),"Required Fuel Calc");
 	gtk_container_set_border_width(GTK_CONTAINER(popup),10);
@@ -182,88 +192,92 @@ int reqd_fuel_popup()
 	gtk_container_add(GTK_CONTAINER(popup),vbox);
 	frame = gtk_frame_new("Constants for your vehicle");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-	
+
 	table =gtk_table_new(4,3,FALSE);	
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	
+
 	label = gtk_label_new("Engine Displacement (CID)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Number of Cylinders");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Injector Flow (lbs/hr)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Air-Fuel Ratio");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	/* Engine Displacement */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(350.0,1.0,1000,1.0,10.0,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_widget_set_size_request(spinner,65,-1);
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-                        GINT_TO_POINTER(REQ_FUEL_DISP));
-        reqd_fuel.displacement = adj;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.disp,1.0,1000,
+			1.0,10.0,0);
+	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_widget_set_size_request(spinner,65,-1);
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(REQ_FUEL_DISP));
+	reqd_fuel.disp_spin = spinner;
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	/* Number of Cylinders */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(8.0,1.0,16,1,1,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_widget_set_size_request(spinner,65,-1);
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-                        GINT_TO_POINTER(REQ_FUEL_CYLS));
-        reqd_fuel.cyls = adj;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.cyls,1.0,16,
+			1.0,1.0,0);
+	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_widget_set_size_request(spinner,65,-1);
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(REQ_FUEL_CYLS));
+	reqd_fuel.cyls_spin = spinner;
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	/* Fuel injector flow rate in lbs/hr */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(19.0,1.0,100.0,1.0,1.0,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_widget_set_size_request(spinner,65,-1);
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-                        GINT_TO_POINTER(REQ_FUEL_INJ_RATE));
-        reqd_fuel.inj_rate = adj;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.inj_rate,1.0,100.0,
+			1.0,1.0,0);
+	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_widget_set_size_request(spinner,65,-1);
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(REQ_FUEL_INJ_RATE));
+	reqd_fuel.inj_rate_spin = spinner;
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	/* Target Air Fuel Ratio */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(14.7,10.0,25.5,0.1,0.1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,65,-1);
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-                        GINT_TO_POINTER(REQ_FUEL_AFR));
-        reqd_fuel.afr = adj;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.afr,10.0,25.5,
+			0.1,0.1,0);
+	spinner = gtk_spin_button_new(adj,0,1);
+	gtk_widget_set_size_request(spinner,65,-1);
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(REQ_FUEL_AFR));
+	reqd_fuel.afr_spin = spinner;
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 3, 4,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
-	
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	hbox = gtk_hbox_new(TRUE,0);
@@ -274,7 +288,7 @@ int reqd_fuel_popup()
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(update_reqd_fuel),
-			 NULL);
+			NULL);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK (close_popup),
 			NULL);
@@ -286,7 +300,7 @@ int reqd_fuel_popup()
 			NULL);
 
 	gtk_widget_show_all(popup);
-	
+
 	return TRUE;
 }
 
@@ -296,9 +310,23 @@ int close_popup(GtkWidget *widget, gpointer *data)
 	req_fuel_popup=FALSE;
 	return TRUE;
 }
+
 int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 {
-	printf("update required fuel\n");
+	gfloat tmp1,tmp2;
+
+	tmp1 = 36.0*((double)reqd_fuel.disp)*4.27793;
+	tmp2 = ((double) reqd_fuel.cyls) \
+		* ((double)(reqd_fuel.afr)) \
+		* ((double)(reqd_fuel.inj_rate));
+
+	ve_constants->req_fuel_1 = 10.0*(tmp1/tmp2);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_1_spin),
+			ve_constants->req_fuel_1/10.0);
+
+	ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
+	write_ve_const(ve_constants->rpmk, rpmk_offset);
+
 	return TRUE;
 }
 
@@ -310,7 +338,6 @@ int ve_spinner_changed(GtkWidget *widget, gpointer *data)
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = GPOINTER_TO_INT(data);
-	printf("spinner value: %.1f ,offset %i\n",value,offset);
 
 	ve_constants->ve_bins[offset] = (gint)value;
 	write_ve_const(value, offset);
@@ -325,7 +352,6 @@ int rpm_spinner_changed(GtkWidget *widget, gpointer *data)
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = GPOINTER_TO_INT(data);
-	printf("spinner value: %.1f ,offset %i\n",value,offset);
 
 	ve_constants->rpm_bins[offset] = (gint)value;
 	write_ve_const(value, offset);
@@ -340,7 +366,6 @@ int kpa_spinner_changed(GtkWidget *widget, gpointer *data)
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = GPOINTER_TO_INT(data);
-	printf("spinner value: %.1f ,offset %i\n",value,offset);
 
 	ve_constants->kpa_bins[offset] = (gint)value;
 	write_ve_const(value, offset);
@@ -362,7 +387,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
 	printf("spinner value: %.1f ,offset %i\n",value,offset);
-	
+
 	switch ((gint)data)
 	{
 		case SET_SER_PORT:
@@ -380,6 +405,18 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			break;
 		case SER_INTERVAL_DELAY:
 			serial_params.read_wait = (gint)value;
+			break;
+		case REQ_FUEL_DISP:
+			reqd_fuel.disp = (gint)value;
+			break;
+		case REQ_FUEL_CYLS:
+			reqd_fuel.cyls = (gint)value;
+			break;
+		case REQ_FUEL_INJ_RATE:
+			reqd_fuel.inj_rate = (gint)value;
+			break;
+		case REQ_FUEL_AFR:
+			reqd_fuel.afr = value;
 			break;
 		case INJ_OPEN_TIME:
 			/* This funny conversion is needed cause of 
@@ -523,7 +560,7 @@ void update_const_ve()
 	gtk_entry_set_text(GTK_ENTRY(constants.ego_limit_ent),
 			buff);
 
-		/* VE table entries */
+	/* VE table entries */
 	for (i=0;i<64;i++)
 	{
 		gtk_spin_button_set_value(
@@ -531,7 +568,7 @@ void update_const_ve()
 				ve_constants->ve_bins[i]);
 	}
 
-		/* KPA axis VE table entries */
+	/* KPA axis VE table entries */
 	for (i=0;i<8;i++)
 	{
 		gtk_spin_button_set_value(
@@ -539,7 +576,7 @@ void update_const_ve()
 				ve_constants->kpa_bins[i]);
 	}
 
-		/* RPM axis VE table entries */
+	/* RPM axis VE table entries */
 	for (i=0;i<8;i++)
 	{
 		gtk_spin_button_set_value(
