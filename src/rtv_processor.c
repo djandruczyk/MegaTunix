@@ -19,8 +19,10 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <glade/glade.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_processor.h>
+#include <stdlib.h>
 #include <structures.h>
 
 
@@ -57,6 +59,15 @@ void process_rt_vars(void *incoming)
 		for (j=0;j<g_list_length(list);j++)
 		{
 			object=(GObject *)g_list_nth_data(list,j);
+			evaluator = (void *)g_object_get_data(object,"evaluator");
+			if (!evaluator)
+			{
+				evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
+				assert(evaluator);
+				g_object_set_data(object,"evaluator",evaluator);
+			}
+			else
+				assert(evaluator);
 			offset = (gint)g_object_get_data(object,"offset");
 			if (g_object_get_data(object,"complex_expr"))
 			{
@@ -70,8 +81,7 @@ void process_rt_vars(void *incoming)
 			else
 				x = raw_realtime[offset];
 
-			evaluator = (void *)g_object_get_data(object,"evaluator");
-			assert(evaluator);
+
 			tmpf = evaluator_evaluate_x(evaluator,x);
 			if (temp_units == CELSIUS)
 				result = (tmpf-32)*(5.0/9.0);
@@ -147,6 +157,7 @@ gdouble handle_complex_expr(GObject *object, void * incoming)
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)(((ms_data[page][offset])&bitmask) >> bitshift);
+				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]),COMPLEX_EXPR);
 				break;
 			case VE_VAR:
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
@@ -157,6 +168,7 @@ gdouble handle_complex_expr(GObject *object, void * incoming)
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)ms_data[page][offset];
+				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]),COMPLEX_EXPR);
 				break;
 			case RAW_VAR:
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
@@ -164,11 +176,24 @@ gdouble handle_complex_expr(GObject *object, void * incoming)
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)raw_data[offset];
+				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]),COMPLEX_EXPR);
 		}
 
 	}
 	evaluator = g_object_get_data(object,"evaluator");
-	assert(evaluator);
+	if (!evaluator)
+	{
+		evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
+		if (!evaluator)
+		{
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t evaluator missing for %s,\n\texpression is %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object)),(gchar *)g_object_get_data(object,"conv_expr")),CRITICAL);
+			exit (-1);
+		}
+		else
+			g_object_set_data(object,"evaluator",evaluator);
+	}
+	else
+		assert(evaluator);
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
 	for (i=0;i<total_symbols;i++)
 	{

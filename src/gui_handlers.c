@@ -42,22 +42,11 @@
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
 extern gboolean connected;
-extern gboolean raw_reader_running;
 extern gboolean logviewer_mode;
 extern gchar *delimiter;
 extern gint statuscounts_id;
 extern gint ready;
-extern gint logging_mode;
-extern gint read_wait_time;
-extern gfloat ego_pbar_divisor;
-extern gfloat map_pbar_divisor;
 extern GtkTooltips *tip;
-extern GtkWidget *tab_delimiter_button;
-extern GtkWidget *delim_button;
-extern GtkWidget *delim_table;
-extern guchar *kpa_conversion;
-extern guchar na_map[];
-extern guchar turbo_map[];
 extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern struct DynamicButtons buttons;
 extern struct Serial_Params *serial_params;
@@ -480,6 +469,8 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint offset = -1;
 	gint dload_val = -1;
 	gint page = -1;
+	gint bitmask = -1;
+	gint bit_pos = -1;
 	gint spconfig = 0;
 	gboolean ign_parm = FALSE;
 	gboolean temp_dep = FALSE;
@@ -506,10 +497,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
 		info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
 		ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-		offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
-		dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
 		spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
+		dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
 		page = (gint) g_object_get_data(G_OBJECT(widget),"page");
+		offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
+		bitmask = (gint) g_object_get_data(G_OBJECT(widget),"bitmask");
+		bit_pos = (gint) g_object_get_data(G_OBJECT(widget),"bit_pos");
 		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
 		value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	}
@@ -600,10 +593,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_CYLINDERS_1:
 			/* Updates a shared bitfield */
 			num_cylinders_1 = tmpi;
-			tmp = ve_const->config11.value;
-			tmp = tmp & ~0xf0;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << 4);
-			ve_const->config11.value = tmp;
+			tmp = ms_data[page][offset];
+			tmp = tmp & ~bitmask;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << bit_pos);
+			ms_data[page][offset] = tmp;
 			ve_const->divider = 
 				(gint)(((float)num_cylinders_1/
 					(float)num_squirts_1)+0.001);
@@ -631,10 +624,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_INJECTORS_1:
 			/* Updates a shared bitfield */
 			num_injectors_1 = tmpi;
-			tmp = ve_const->config12.value;
-			tmp = tmp & ~0xf0;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << 4);
-			ve_const->config12.value = tmp;
+			tmp = ms_data[page][offset];
+			tmp = tmp & ~bitmask;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << bit_pos);
+			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_1,
 					GINT_TO_POINTER(offset),
@@ -667,10 +660,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
 			num_cylinders_2 = tmpi;
-			tmp = ve_const_dt2->config11.value;
-			tmp = tmp & ~0xf0;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << 4);
-			ve_const_dt2->config11.value = tmp;
+			tmp = ms_data[page][offset];
+			tmp = tmp & ~bitmask;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << bit_pos);
+			ms_data[page][offset] = tmp;
 			ve_const_dt2->divider = 
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
@@ -698,10 +691,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_INJECTORS_2:
 			/* Updates a shared bitfield */
 			num_injectors_2 = tmpi;
-			tmp = ve_const_dt2->config12.value;
-			tmp = tmp & ~0xf0;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << 4);
-			ve_const_dt2->config12.value = tmp;
+			tmp = ms_data[page][offset];
+			tmp = tmp & ~bitmask;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << bit_pos);
+			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_2,
 					GINT_TO_POINTER(offset),
@@ -773,7 +766,6 @@ void update_ve_const()
 	gfloat tmp = 0.0;
 	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
-	extern GHashTable *dynamic_widgets;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
@@ -813,100 +805,40 @@ void update_ve_const()
 		  ve_const_dt1->divider);
 		 */
 		/* Table 1 */
-		tmp =	(float)(ve_const_dt1->config12.bit.injectors+1) /
-			(float)(ve_const_dt1->divider);
-		tmp *= (float)ve_const_dt1->req_fuel;
-		tmp /= 10.0;
-		req_fuel_total_1 = tmp;
+                tmp =   (float)(ve_const_dt1->config12.bit.injectors+1) /
+                        (float)(ve_const_dt1->divider);
+                tmp *= (float)ve_const_dt1->req_fuel;
+                tmp /= 10.0;
+                req_fuel_total_1 = tmp;
 
-		/* Req Fuel total per cycle */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_cycle_1_spin")),
-				tmp);
-
-		/* Req Fuel per SQUIRT */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),
-				ve_const_dt1->req_fuel/10.0);
+		/* Table 2 */
+                tmp =   (float)(ve_const_dt2->config12.bit.injectors+1) /
+                        (float)(ve_const_dt2->divider);
+                tmp *= (float)ve_const_dt2->req_fuel;
+                tmp /= 10.0;
+                req_fuel_total_2 = tmp;
 
 		/* Config11 bits */
-		/* Cylinders */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"num_cylinders_1_spin")),
-				ve_const_dt1->config11.bit.cylinders+1);
 		num_cylinders_1 = ve_const_dt1->config11.bit.cylinders+1;
-		//		g_printf("cyls DT1 set to %i\n",num_cylinders_1);
-
+		num_cylinders_2 = ve_const_dt2->config11.bit.cylinders+1;
 		/* Config12 bits */
-		/* Number of injectors */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"num_injectors_1_spin")),
-				ve_const_dt1->config12.bit.injectors+1);
-		num_injectors_1 = ve_const_dt1->config12.bit.injectors+1;
-		//		g_printf("injs DT1 set to %i\n",num_injectors_1);
+                num_injectors_1 = ve_const_dt1->config12.bit.injectors+1;
+                num_injectors_2 = ve_const_dt2->config12.bit.injectors+1;
 
-		/* Config11 bits */
 		/* Injections per cycle */
 		tmp =	(float)(ve_const_dt1->config11.bit.cylinders+1) /
 			(float)(ve_const_dt1->divider);
 		num_squirts_1 = (gint)tmp;
 		if (num_squirts_1 < 1 )
 			num_squirts_1 = 1;
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"inj_per_cycle_1_spin")),
-				num_squirts_1);
-		//		g_printf("sqrts DT1 set to %i\n",num_squirts_1);
 
-
-		/* Table 2 */
-		tmp =	(float)(ve_const_dt2->config12.bit.injectors+1) /
-			(float)(ve_const_dt2->divider);
-		tmp *= (float)ve_const_dt2->req_fuel;
-		tmp /= 10.0;
-		req_fuel_total_2 = tmp;
-
-		/* Total Req Fuel per CYCLE */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_cycle_2_spin")),
-				tmp);
-
-		/* Req Fuel per SQUIRT */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_2_spin")),
-				ve_const_dt2->req_fuel/10.0);
-
-		/* Config11 bits */
-		/* Cylinders */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"num_cylinders_2_spin")),
-				ve_const_dt2->config11.bit.cylinders+1);
-		num_cylinders_2 = ve_const_dt2->config11.bit.cylinders+1;
-
-		/* Config12 bits */
-		/* Number of injectors */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"num_injectors_2_spin")),
-				ve_const_dt2->config12.bit.injectors+1);
-		num_injectors_2 = ve_const_dt2->config12.bit.injectors+1;
-
-		/* Config11 bits */
-		/* Injections per cycle */
 		tmp =	(float)(ve_const_dt2->config11.bit.cylinders+1) /
 			(float)(ve_const_dt2->divider);
 		num_squirts_2 = (gint)tmp;
 		if (num_squirts_2 < 1 )
 			num_squirts_2 = 1;
 
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"inj_per_cycle_2_spin")),
-				num_squirts_2);
-
 		set_reqfuel_state(BLACK,page);
-		set_reqfuel_state(BLACK,page);
-		//		check_req_fuel_limits();
-
-		//check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
-		//check_bcfreq(ve_const_dt2->bcfreq.value,TRUE);
 	}
 	else
 	{
@@ -931,49 +863,15 @@ void update_ve_const()
 		tmp /= 10.0;
 		req_fuel_total_1 = tmp;
 
-		/*		 g_printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i, alt %i\n",
-				 ve_const->req_fuel,
-				 ve_const->config12.bit.injectors+1,
-				 ve_const->config11.bit.cylinders+1,
-				 ve_const->divider, 
-				 ve_const->alternate);
-		 */
-
-		/* Total Req Fuel per CYCLE */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_cycle_1_spin")),
-				tmp);
-
-		/* Req Fuel per SQUIRT */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),
-				ve_const->req_fuel/10.0);
-
-		/* Config11 bits */
-		/* Cylinders */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"num_cylinders_1_spin")),
-				ve_const->config11.bit.cylinders+1);
 		num_cylinders_1 = ve_const->config11.bit.cylinders+1;
-
-		/* Config12 bits */
-		/* Number of injectors */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"num_injectors_1_spin")),
-				ve_const->config12.bit.injectors+1);
 		num_injectors_1 = ve_const->config12.bit.injectors+1;
 
-		/* Config11 bits */
 		/* Injections per cycle */
 		tmp =	(float)(ve_const->config11.bit.cylinders+1) /
 			(float)(ve_const->divider);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,"inj_per_cycle_1_spin")),
-				tmp);
 		num_squirts_1 = (gint)tmp;
 
 		set_reqfuel_state(BLACK,page);
-		//		check_req_fuel_limits();
 	}	// End of B&G specific code...
 
 
@@ -997,7 +895,6 @@ void update_widget(gpointer object, gpointer user_data)
 	GtkWidget * widget = object;
 	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
-	gboolean dont_update = FALSE;
 	gint tmpi = -1;
 	gint page = -1;
 	gint offset = -1;
@@ -1009,14 +906,9 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_label = NULL;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 
 	if (GTK_IS_OBJECT(widget))
 	{
-		dont_update = (gboolean)g_object_get_data(G_OBJECT(widget),"dont_update");
-		if (dont_update)
-			return;
-
 		dl_type = (gint)g_object_get_data(G_OBJECT(widget),
 				"dl_type");
 		page = (gint)g_object_get_data(G_OBJECT(widget),
@@ -1038,10 +930,7 @@ void update_widget(gpointer object, gpointer user_data)
 		swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
 				"swap_label");
 
-		if (dl_type == IMMEDIATE)
-			value = convert_after_upload(widget);  
-		else
-			value = ms_data[page][offset];
+		value = convert_after_upload(widget);  
 
 		if (temp_dep)
 		{

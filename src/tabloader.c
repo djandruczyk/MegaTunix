@@ -18,6 +18,8 @@
 #include <enums.h>
 #include <getfiles.h>
 #include <glade/glade.h>
+#include <rtv_map_loader.h>
+#include <string.h>
 #include <stringmatch.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -227,6 +229,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							GINT_TO_POINTER(tmpi));	
+					if (strstr(keys[i],"ul_complex"))
+						load_complex_params(G_OBJECT(widget),cfgfile,section);
 				}
 				else
 					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);

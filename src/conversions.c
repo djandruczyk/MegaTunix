@@ -19,6 +19,7 @@
 #include <enums.h>
 #include <notifications.h>
 #include "../mtxmatheval/mtxmatheval.h"
+#include <rtv_processor.h>
 #include <stdio.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -62,10 +63,18 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gfloat return_value = 0.0;
 	guchar *ve_const_arr;
 	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
-	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-	gint offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	gchar * conv_expr;
 	void *evaluator = NULL;
+	gint page = -1;
+	gint offset = -1;
+	gboolean ul_complex = FALSE;
+
+	ul_complex = (gboolean)g_object_get_data(G_OBJECT(widget),"ul_complex");
+	if (ul_complex)
+		return handle_complex_expr(G_OBJECT(widget),NULL);
+
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"ul_conv_expr");
 	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"ul_evaluator");
 

@@ -123,10 +123,13 @@ void io_cmd(IoCommand cmd, gpointer data)
 				}
 				message->handler = VE_BLOCK;
 				message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-				tmp = UPD_VE_CONST;
-				g_array_append_val(message->funcs,tmp);
-				tmp = UPD_STORE_BLACK;
-				g_array_append_val(message->funcs,tmp);
+				if (i == (firmware->total_pages-1))
+				{
+					tmp = UPD_VE_CONST;
+					g_array_append_val(message->funcs,tmp);
+					tmp = UPD_STORE_BLACK;
+					g_array_append_val(message->funcs,tmp);
+				}
 				g_async_queue_push(io_queue,(gpointer)message);
 			}
 			break;

@@ -48,7 +48,6 @@ gboolean load_realtime_map(void )
 	gchar * section = NULL;
 	GObject * object = NULL;
 	GList * list = NULL;
-	void * evaluator = NULL;
 	GArray * history = NULL;
 
 	rtv_map = g_new0(struct RtvMap, 1);
@@ -191,18 +190,6 @@ gboolean load_realtime_map(void )
 								g_strdup(tmpbuf));
 						if (strstr(keys[j],"internal_name") != NULL)
 							g_hash_table_insert(rtv_map->rtv_hash,g_strdup(tmpbuf),(gpointer)object);
-						if (strstr(keys[j],"conv_expr") != NULL)
-						{
-							evaluator = evaluator_create(tmpbuf);
-							assert(evaluator);
-							if (evaluator)
-								g_object_set_data(object,"evaluator",evaluator);
-							else
-								dbg_func(g_strdup_printf(__FILE__": load_realtime_map() Failure creating evaluator for expression \"%s\"\n",tmpbuf),CRITICAL);
-							evaluator = NULL;
-						}
-
-
 						g_free(tmpbuf);
 					}
 					else
