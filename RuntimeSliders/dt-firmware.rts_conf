@@ -2,6 +2,7 @@
 description=Runtime Slider definitions for DualTable firmwares (GH&EF)
 rt_total_sliders=21
 ww_total_sliders=4
+ve3d_total_sliders=4
 
 [rt_slider_0]
 slider_name=Clock
@@ -152,4 +153,28 @@ slider_name=ww_map
 table=0
 row=3
 source=mapkpa
+
+[ve3d_slider_0]
+slider_name=ve3d_rpmx100
+table=0
+row=0
+source=rpmx100
+
+[ve3d_slider_1]
+slider_name=ve3d_o2volt
+table=0
+row=1
+source=o2volt
+
+[ve3d_slider_2]
+slider_name=ve3d_map
+table=1
+row=0
+source=mapkpa
+
+[ve3d_slider_3]
+slider_name=ve3d_clt
+table=1
+row=1
+source=cltdeg
 

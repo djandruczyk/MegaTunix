@@ -56,12 +56,14 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *button;
 	GtkWidget *vbox2;
 	GtkWidget *hbox;
+	GtkWidget *table;
 	GtkWidget *drawing_area;
 	GtkObject * object = NULL;
 	GdkGLConfig *gl_config;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
 	extern struct Firmware_Details *firmware;
+	extern GHashTable *dynamic_widgets;
 	gchar *tmpbuf = NULL;
 	gint table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 
@@ -210,6 +212,22 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer) window);
+
+
+	frame = gtk_frame_new("Real-Time Variables");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(frame),0);
+
+	hbox = gtk_hbox_new(TRUE,5);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
+
+	table = g_hash_table_lookup(dynamic_widgets,"ve3d_rt_table0");
+	if (GTK_IS_WIDGET(table))
+		gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+
+	table = g_hash_table_lookup(dynamic_widgets,"ve3d_rt_table1");
+	if (GTK_IS_WIDGET(table))
+		gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
 	gtk_widget_show_all(window);
 

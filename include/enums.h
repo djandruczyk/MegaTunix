@@ -275,6 +275,7 @@ typedef enum
 	WARMUP_WIZ_PAGE,
 	DATALOGGING_PAGE,
 	LOGVIEWER_PAGE,
+	VE3D_VIEWER_PAGE,
 }PageIdent;
 
 typedef enum
