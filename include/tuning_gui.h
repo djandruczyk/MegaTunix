@@ -23,6 +23,9 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <pango/pangoft2.h>
+#include <gdk/gdkkeysyms.h>
+#include <gdk/gdkkeysyms.h>
+#include <gdk/gdkkeysyms.h>
 
 /* Prototypes */
 int build_tuning(GtkWidget *);
@@ -30,8 +33,11 @@ GdkGLConfig* get_gl_config(void);
 void tuning_gui_realize (GtkWidget *widget, gpointer data);
 gboolean tuning_gui_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data);
 gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
+gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data);
 gboolean tuning_gui_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data);
+gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data);
 gboolean tuning_gui_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
+gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data);
 void tuning_gui_draw_ve_grid(void);
 void tuning_gui_reset_ve_grid(void);
 void tuning_gui_normalize(float v[3]);

@@ -21,6 +21,7 @@
                                                                                                                             
 int grid = 8;
 int beginX, beginY;
+int active_map, active_rpm = 0;
   
 float dt = 0.008;
 float sphi = 30.0; 
@@ -65,6 +66,9 @@ int build_tuning(GtkWidget *parent_frame)
 					G_CALLBACK (tuning_gui_motion_notify_event), NULL);	
   	g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
 		    		G_CALLBACK (tuning_gui_button_press_event), NULL);	
+  	
+	g_signal_connect_swapped (G_OBJECT (parent_frame), "key_press_event",
+			    	G_CALLBACK (tuning_gui_key_press_event), drawing_area);	
 	
 	/* Size the drawing area to fill the available space */
 	gtk_box_pack_start(GTK_BOX(vbox),drawing_area,TRUE,TRUE,0);
@@ -120,7 +124,7 @@ gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoin
 {
   GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
   GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
-                                                                                                                             
+	
   /*** OpenGL BEGIN ***/
   if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
     return FALSE;
@@ -230,13 +234,13 @@ void tuning_gui_realize (GtkWidget *widget, gpointer data)
   	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
   	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   	glEnable(GL_DEPTH_TEST);
-                                                                                                                             
+
 	gdk_gl_drawable_gl_end (gldrawable);
   	/*** OpenGL END ***/
 }
 void tuning_gui_draw_ve_grid(void)
 {
-	int i=0, j=0, rpm_max=0, kpa_max=0, ve_max=0;
+	int i=0,  rpm_max=0, kpa_max=0, ve_max=0;
 	int rpm=0, map=0;
 	float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
 	
@@ -286,5 +290,57 @@ void tuning_gui_draw_ve_grid(void)
 		}
 		glEnd();
 	}
+	
+	glPointSize(10.0);
+	glBegin(GL_POINTS);
+		glVertex3f(
+			(float)(ve_const_p0->rpm_bins[active_rpm])/rpm_div,	
+		  	(float)(ve_const_p0->kpa_bins[active_map])/kpa_div,		  
+		  	(float)(ve_const_p0->ve_bins[(active_rpm*8)+active_map])/ve_div);
+	glEnd();
+		
 }
 
+
+gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	switch (event->keyval)
+	{
+		case GDK_Up:
+			if (active_map < 8)
+			active_map += 1;
+			break;
+		
+		case GDK_Down:
+			if (active_map > 0)
+				active_map -= 1;
+			break;				
+		
+		case GDK_Left:
+			if (active_rpm > 0)
+				active_rpm -= 1;
+			break;					
+		
+		case GDK_Right:
+			if (active_rpm < 8)
+				active_rpm += 1;
+			break;				
+		
+		case GDK_plus:
+			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] < 255)
+				ve_const_p0->ve_bins[(active_rpm*8)+active_map] += 1;
+			break;				
+			
+		case GDK_minus:
+			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] > 0)
+				ve_const_p0->ve_bins[(active_rpm*8)+active_map] -= 1;
+			break;							
+			
+	default:
+    	return FALSE;
+	}
+
+	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
+	
+  	return TRUE;
+}
