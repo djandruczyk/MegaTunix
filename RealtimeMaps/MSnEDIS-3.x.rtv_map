@@ -597,7 +597,7 @@ tooltip="Ctime H" is the lower byte of the High Res RPM Calculation specific to 
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
 internal_name=sparkangle
-dlog_gui_name=Spark Advance
+dlog_gui_name=Spark Adv.
 dlog_field_name=SPKADVANCE
 offset=21
 lower_limit=0
@@ -605,5 +605,5 @@ upper_limit=90
 dl_conv_expr=x*2.84
 ul_conv_expr=x/2.84
 is_float=TRUE
-tooltip="Spark Advance" is the Current spark advance being run.
+tooltip="Spark Adv." is the Current spark advance being run.
 

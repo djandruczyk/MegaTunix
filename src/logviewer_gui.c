@@ -198,6 +198,9 @@ void present_viewer_choices(void)
 	button = gtk_button_new_with_label("Close");
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,TRUE,0);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
+			G_CALLBACK(reenable_select_log_button),
+			NULL);
+	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
 
@@ -205,6 +208,14 @@ void present_viewer_choices(void)
 	return;
 }
 
+
+gboolean reenable_select_log_button(GtkWidget *widget)
+{
+	extern GHashTable *dynamic_widgets;
+	gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button")),TRUE);
+	return FALSE;
+
+}
 
 /*!
  \brief view_value_set() is called when a value to be viewed is selected

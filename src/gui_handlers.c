@@ -511,6 +511,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	extern gboolean no_update;
 	extern gboolean offline;
 	extern gboolean forced_update;
+	extern GHashTable *dynamic_widgets;
 
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
@@ -627,6 +628,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case SELECT_PARAMS:
 			if (!interrogated)
 				break;
+			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button")),FALSE);
 			present_viewer_choices();
 			break;
 		case REQ_FUEL_POPUP:

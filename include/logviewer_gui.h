@@ -37,6 +37,7 @@ void set_realtime_mode(void);
 void set_playback_mode(void);
 void finish_logviewer(void);
 void populate_viewer(void);
+gboolean reenable_select_log_button(GtkWidget *);
 
 /* Prototypes */
 
