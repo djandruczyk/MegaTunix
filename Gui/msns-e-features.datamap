@@ -29,6 +29,18 @@ key_types=_INT_,_STRING_
 page=0
 bind_to_list=dt_features
 
+[variable_launch_feature_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_control
+
+[nos_antilag_feature_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=nos_controls
+
 #------ Radio Buttons --------------------------------------------------------
 
 [ms_persona]
@@ -242,16 +254,16 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Disable the use of ADC6 as a secondary EGO input for DT mode ONLY
 
-
-
 [n2o_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=11
 bitval=1
 bitshift=7
 bitmask=128
+toggle_groups=nos_controls
+group_states=DISABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through hte main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
@@ -317,13 +329,15 @@ handler=_GENERIC_
 tooltip=The shift light feature gives the user a level of feedback useful for drag racing or other performance needs. 
 
 [launch_ctrl_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitval=1
 bitshift=2
 bitmask=4
+toggle_groups=launch_control
+group_states=TRUE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
@@ -339,6 +353,59 @@ bitmask=4
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
+
+[variable_launch_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=46
+bitval=1
+bitshift=1
+bitmask=2
+bind_to_list=launch_control
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The variable launch is used to allow the user to set to rpm limit for launching by and external input.  The user brings the car to the target limit rpm and triggers the launch input and the ecu records that RPM and uses it for the launch revlimit
+
+
+[variable_launch_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=46
+bitval=0
+bitshift=1
+bitmask=2
+bind_to_list=launch_control
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The variable launch is used to allow the user to set to rpm limit for launching by and external input.  The user brings the car to the target limit rpm and triggers the launch input and the ecu records that RPM and uses it for the launch revlimit
+
+[nos_antilag_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=1
+bitshift=6
+bitmask=64
+bind_to_list=nos_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
+
+[nos_antilag_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=0
+bitshift=6
+bitmask=64
+bind_to_list=nos_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
 
 [pwm_idle_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
