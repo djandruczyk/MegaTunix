@@ -42,27 +42,6 @@ extern struct Serial_Params *serial_params;
 extern struct DynamicEntries entries;
 gboolean interrogated = FALSE;
 
-static struct Canidate
-{
-	GHashTable *bytecounts;	/* byte count for each of the 10 test cmds */
-	gchar *sig_str;		/* Signature string to search for */
-	gchar *quest_str;	/* Ext Version string to search for */
-	gint ver_num;		/* Version number to search for */
-	gchar *firmware_name;	/* Name of this firmware */
-	Capabilities capabilities;	/* Bitmask of capabilities.... */
-};
-
-static struct Command
-{
-	gint page;		/* ms page in memory where it resides */
-	gchar *string;		/* command to get the data */
-	gchar *desc;		/* command description */
-	gchar *handle;		/* command description */
-	gint len;		/* Command length in chars to send */
-	gboolean store_data;	/* Store returned data */
-	StoreType store_type;	/* Store data where */
-};
-
 void interrogate_ecu()
 {
 	/* As of 10/26/2003 several MegaSquirt variants have arrived, the 

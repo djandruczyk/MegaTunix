@@ -100,11 +100,11 @@ typedef enum
 /* Conversions for download, converse on upload.. */
 typedef enum
 {
-	ADD,
-	SUB,
-	MULT,
-	DIV,
-	NOTHING
+	CONV_ADD,
+	CONV_SUB,
+	CONV_MULT,
+	CONV_DIV,
+	CONV_NOTHING
 }Conversions;
 
 /* Runtime Status flags */

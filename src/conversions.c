@@ -22,17 +22,14 @@
 
 /* Conversions.c
  * 
- * conv_Type has one of 4 possibles, ADD,SUB,MULT and DIV, for addition
- * subtraction, multiplication and division respectivlely.  These mathematical
- * operaands use the conv_factor and perform the requested Op on the value from
- * the gui BEFORE downloading to the MS.  On upload, the converse operation
- * is performed (if ADD used on downlaod, SUB will be used on upload), likewise
- * for multiplication and division.
+ * conv_Type has one of 4 possibles, CONV_ADD,CONV_SUB,CONV_MULT and CONV_DIV, 
+ * for addition subtraction, multiplication and division respectivlely.  
+ * These mathematical operaands use the conv_factor and perform the 
+ * requested Op on the value from the gui BEFORE downloading to the MS.  
+ * On upload, the converse operation is performed (if CONV_ADD used on 
+ * downlaod,  CONV_SUB will be used on upload), likewise for multiplication 
+ * and division.
  * 
- * As of 09/02/2003 (sept 2nd 2003), The external file has been dropped in 
- * favor of coding the conversions internally.  This makes it easier for the
- * user to install as they don't have to worry about a conversions table to 
- * put in the right place to be loaded...
  */
 
 extern struct Conversion_Chart *std_conversions;
@@ -87,7 +84,7 @@ void read_conversions(void)
 		}
 		if (i == 90)	/* Required fuel special case */
 		{
-			conv_chart->conv_type[i] = NOTHING;
+			conv_chart->conv_type[i] = CONV_NOTHING;
 			conv_chart->conv_factor[i] = 1.0;
 		}
 
@@ -150,19 +147,19 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 
 	switch ((Conversions)conv_chart->conv_type[offset])
 	{
-		case (ADD):
+		case (CONV_ADD):
 			return_value = tmp_val + factor;
 			break;
-		case (SUB):
+		case (CONV_SUB):
 			return_value = tmp_val - factor;
 			break;
-		case (MULT):
+		case (CONV_MULT):
 			return_value = (gint)((value*factor) + 0.001);
 			break;
-		case (DIV):
+		case (CONV_DIV):
 			return_value = (gint)((value/factor) + 0.001);
 			break;
-		case (NOTHING):
+		case (CONV_NOTHING):
 			return_value = tmp_val;
 			break;
 		default:
@@ -220,19 +217,19 @@ gfloat convert_after_upload(gint offset, gboolean ign_var)
 	 */
 	switch ((Conversions)conv_chart->conv_type[offset])
 	{
-		case (ADD):
+		case (CONV_ADD):
 			return_value = ve_const_arr[index] - factor;
 			break;
-		case (SUB):
+		case (CONV_SUB):
 			return_value = ve_const_arr[index] + factor;
 			break;
-		case (MULT):
+		case (CONV_MULT):
 			return_value = (gfloat)ve_const_arr[index] / factor;
 			break;
-		case (DIV):
+		case (CONV_DIV):
 			return_value = (gfloat)ve_const_arr[index] * factor;
 			break;
-		case (NOTHING):
+		case (CONV_NOTHING):
 			return_value = ve_const_arr[index];
 			break;
 		default:

@@ -122,7 +122,7 @@ void post_process_realtime_vars(void *input, void *output)
 		if (ign_in->rpm < 5)
 			out->rpm = ign_in->rpm*100;
 		else
-			out->rpm = 1000000*60.0/(float)(ign_int*(stroke/cyls*2));
+			out->rpm = 1000000*60.0/(float)(ign_int*((float)stroke/(float)cyls*2));
 			if (out->rpm > 25500)
 				out->rpm = 25500;
 

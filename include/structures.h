@@ -307,4 +307,26 @@ struct Log_Info
 	GArray *uppers;		/* Array of upper limits for each field */
 };
 
+	/* Interrogator structures.... */
+struct Canidate
+{
+	GHashTable *bytecounts;	/* byte count for each of the 10 test cmds */
+	gchar *sig_str;		/* Signature string to search for */
+	gchar *quest_str;	/* Ext Version string to search for */
+	gint ver_num;		/* Version number to search for */
+	gchar *firmware_name;	/* Name of this firmware */
+	Capabilities capabilities;	/* Bitmask of capabilities.... */
+};
+
+struct Command
+{
+	gint page;		/* ms page in memory where it resides */
+	gchar *string;		/* command to get the data */
+	gchar *desc;		/* command description */
+	gchar *handle;		/* command description */
+	gint len;		/* Command length in chars to send */
+	gboolean store_data;	/* Store returned data */
+	StoreType store_type;	/* Store data where */
+};
+
 #endif

@@ -507,7 +507,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(40*100));
-        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_ADD));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -591,7 +592,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(125));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(10*100));
-        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(DIV));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_DIV));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -625,7 +627,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(124));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(40*100));
-        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_ADD));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -657,7 +660,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(126));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(10*100));
-        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(DIV));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_DIV));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -691,7 +695,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(1*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
-			GINT_TO_POINTER(NOTHING));
+			GINT_TO_POINTER(CONV_NOTHING));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
