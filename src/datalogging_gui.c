@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <fileio.h>
 #include <globals.h>
+#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <notifications.h>
@@ -41,7 +42,6 @@ extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern GdkColor white;
 extern gboolean dualtable;
-gboolean log_opened = FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;
 gint logging_mode = CUSTOM_LOG;
@@ -62,8 +62,6 @@ GtkWidget *dlog_view;
 GtkWidget *logables_table;
 GtkWidget *delim_table;
 GtkWidget *tab_delim_button;
-extern FILE * io_file;			/* DataLog File Handle*/
-gchar * io_file_name;			/* log file pathname */
 struct Logables logables;
 
 
@@ -137,16 +135,11 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,30);
 
 	button = gtk_button_new_with_label("Close Log File");
+	buttons.close_dlog_but = button;
 	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(CLOSE_LOGFILE));
-
-	button = gtk_button_new_with_label("Truncate Log File");
-	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(TRUNCATE_LOGFILE));
 
 	frame = gtk_frame_new("Logable Variables");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
@@ -315,7 +308,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("Start Datalogging");
 	buttons.start_dlog_but = button;
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
-	gtk_widget_set_sensitive(button,log_opened);
+	gtk_widget_set_sensitive(button,FALSE);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(START_DATALOGGING));
@@ -323,31 +316,29 @@ int build_datalogging(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("Stop Datalogging");
 	buttons.stop_dlog_but = button;
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
-	gtk_widget_set_sensitive(button,log_opened);
+	gtk_widget_set_sensitive(button,FALSE);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(STOP_DATALOGGING));
 	return TRUE;
 }
 
-void start_datalogging()
+void start_datalogging(void)
 {
 	gchar * tmpbuf;
 	if (logging)
 		return;   /* Logging already running ... */
-	else
-	{
-		std_button_handler(NULL,GINT_TO_POINTER(START_REALTIME));
-		gtk_widget_set_sensitive(logables_table,FALSE);
-		gtk_widget_set_sensitive(delim_table,FALSE);
-		gtk_widget_set_sensitive(format_table,FALSE);
-		gtk_widget_set_sensitive(file_selection,FALSE);
-		header_needed = TRUE;
-		logging = TRUE;
-		tmpbuf = g_strdup_printf("DataLogging Started...\n");
-		update_logbar(dlog_view,NULL,tmpbuf,TRUE);
-		g_free(tmpbuf);
-	}
+
+	gtk_widget_set_sensitive(logables_table,FALSE);
+	gtk_widget_set_sensitive(delim_table,FALSE);
+	gtk_widget_set_sensitive(format_table,FALSE);
+	gtk_widget_set_sensitive(file_selection,FALSE);
+	header_needed = TRUE;
+	logging = TRUE;
+	tmpbuf = g_strdup_printf("DataLogging Started...\n");
+	update_logbar(dlog_view,NULL,tmpbuf,TRUE);
+	g_free(tmpbuf);
+	std_button_handler(NULL,GINT_TO_POINTER(START_REALTIME));
 	return;
 }
 
@@ -407,17 +398,29 @@ void run_datalog(void)
 	gint offset = 0;
 	gint size = 0;
 	gint begin = FALSE;
+	gint pos = 0;
+	gint count = 0;
+	void *data;
+	gchar * tmpbuf;
+	struct Io_File *iofile = NULL;
 	unsigned char * uchar_ptr = (unsigned char *)runtime;
 	short * short_ptr = (short *)runtime;
 	float * float_ptr = (float *)runtime;
+
 	if (!logging) /* Logging isn't enabled.... */
 		return;
 	else
 	{
+		tmpbuf = malloc(4096);
+		data =  g_object_get_data(G_OBJECT(buttons.close_dlog_but),"data");
+		if (data != NULL)
+			iofile = (struct Io_File *)data;
+		else
+			fprintf(stderr,__FILE__": run_datalog, iofile undefined\n");
 
 		if (header_needed)
 		{
-			write_log_header();
+			write_log_header((void *)iofile);
 			begin = TRUE;
 			header_needed = FALSE;
 		}
@@ -435,7 +438,7 @@ void run_datalog(void)
 						last.tv_sec = now.tv_sec;
 						last.tv_usec = now.tv_usec;
 						begin = FALSE;
-						fprintf(io_file,"%.3f",0.0);
+						pos += g_sprintf(tmpbuf+pos,"%.3f",0.0);
 					}
 					else
 					{
@@ -445,45 +448,57 @@ void run_datalog(void)
 							 1000000.0);
 						last.tv_sec = now.tv_sec;
 						last.tv_usec = now.tv_usec;
-						fprintf(io_file,"%.3f",cumulative);
+						pos += g_sprintf(tmpbuf+pos,"%.3f",cumulative);
 					}
 					break;
 				default:
 					switch (size)
 					{
 						case FLOAT:
-							fprintf(io_file,"%.3f",(float)float_ptr[offset/FLOAT]);
+							pos += g_sprintf(tmpbuf+pos,"%.3f",(float)float_ptr[offset/FLOAT]);
 							break;
 						case UCHAR:
-							fprintf(io_file,"%i",(unsigned char)uchar_ptr[offset]);
+							pos += g_sprintf(tmpbuf+pos,"%i",(unsigned char)uchar_ptr[offset]);
 							break;
 						case SHORT:
-							fprintf(io_file,"%i",short_ptr[offset/SHORT]);
+							pos += g_sprintf(tmpbuf+pos,"%i",short_ptr[offset/SHORT]);
 							break;
 						default:
 							printf("SIZE not defiend\n");
 							break;
 					}
-					
+
 					break;
 			}
 			/* Print delimiter to log here so there isnt an extra
 			 * char at the end fo the line 
 			 */
 			if (i < (total_logables-1))
-				fprintf(io_file,"%s",delim);
+				pos += g_sprintf(tmpbuf+pos,"%s",delim);
 		}
-		fprintf(io_file,"\n");
+		pos += g_sprintf(tmpbuf+pos,"\n");
+		g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
+		g_free(tmpbuf);
+
 	}
 }
 
-void write_log_header(void)
+void write_log_header(void *ptr)
 {
 	gint i = 0;
 	gint j = 0;
 	gint total_logables = 0;
+	gint count = 0;
+	gint pos = 0;
+	gchar *tmpbuf;
+	struct Io_File *iofile = NULL;
+	if (ptr != NULL)
+		iofile = (struct Io_File *)ptr;
+	else
+		fprintf(stderr,__FILE__": iofile pointer was undefined...\n");
+		
 
-
+	tmpbuf = malloc(1024);
 	for (i=0;i<max_logables;i++)
 	{
 		if (logables.index[i])/* If bit is set, increment counter */
@@ -497,11 +512,17 @@ void write_log_header(void)
 			offset_list[j] = logging_offset_map[i];
 			size_list[j] = logging_datasizes_map[i];
 			j++;
-			fprintf(io_file, "\"%s\"",logable_names[i]);
+			pos = g_sprintf(tmpbuf, "\"%s\"",logable_names[i]);
+			g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
 			if (j < (total_logables))
-				fprintf(io_file,"%s",delim);
+			{
+				pos = g_sprintf(tmpbuf,"%s",delim);
+				g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
+			}
 		}
 	}
-	fprintf(io_file,"\n");
+	pos = g_sprintf(tmpbuf,"\n");
+	g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
+	g_free(tmpbuf);
 
 }

@@ -16,13 +16,13 @@
 #include <defines.h>
 #include <enums.h>
 #include <fileio.h>
+#include <glib/gprintf.h>
 #include <globals.h>
 #include <notifications.h>
 #include <stdio.h>
 #include <structures.h>
 #include <time.h>
 #include <vex_support.h>
-#include <glib.h>
 #include <string.h>
 #include <stdlib.h>
 #include <serialio.h>
@@ -30,13 +30,10 @@
 gchar *vex_comment;
 extern struct DynamicButtons buttons;
 extern struct Tools tools;
-extern FILE * io_file;
-extern gchar * io_file_name;
 extern GtkWidget *tools_view;
 extern gboolean dualtable;
 static gint import_page = -1; 
 
-GIOChannel *gio_channel;
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
 
@@ -97,123 +94,151 @@ static struct
 	{ "VE Table\0", TABLE, NONE}
 };
 
-gboolean vetable_export()
+gboolean vetable_export(void *ptr)
 {
 	struct tm *tm;
 	time_t *t;
 	gint i = 0;
 	gint j = 0;
+	gint count = 0;
 	unsigned char * ve_const_arr;
 	gchar * tmpbuf;
+	gchar *buffer; 
+	gint pos = 0;
+	GIOStatus status;
+	struct Io_File *iofile = (struct Io_File *)ptr;
 
-	tm = g_malloc(sizeof(struct tm));
+	buffer = g_malloc(8192); /* 8k buffer */
 	t = g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	if (vex_comment == NULL)
 		vex_comment = g_strdup("No comment given");
-	fprintf(io_file, "EVEME 1.0\n");
-	fprintf(io_file, "UserRev: 1.00\n");
-	fprintf(io_file, "UserComment: %s\n",vex_comment);
-	fprintf(io_file, "Date: %i-%.2i-%i\n",
+
+	pos += g_sprintf(buffer+pos, "EVEME 1.0\n");
+	pos += g_sprintf(buffer+pos, "UserRev: 1.00\n");
+	pos += g_sprintf(buffer+pos, "UserComment: %s\n",vex_comment);
+	pos += g_sprintf(buffer+pos, "Date: %i-%.2i-%i\n",
 			1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year));
-	fprintf(io_file, "Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min);
-	fprintf(io_file, "Page 0\n");
-	fprintf(io_file, "VE Table RPM Range              [ 8]\n");
+	pos += g_sprintf(buffer+pos, "Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min);
+	pos += g_sprintf(buffer+pos, "Page 0\n");
+	pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");
 	ve_const_arr = (unsigned char *)ve_const_p0;
 	for (i=0;i<8;i++)
 	{
-		fprintf(io_file,"   [%3d] = %3d\n",
+		pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
 				i,ve_const_arr[i+VE1_RPM_BINS_OFFSET]);
 	}
-	fprintf(io_file, "VE Table Load Range (MAP)       [ 8]\n");
+	pos += g_sprintf(buffer+pos, "VE Table Load Range (MAP)       [ 8]\n");
 	for (i=0;i<8;i++)
 	{
-		fprintf(io_file,"   [%3d] = %3d\n",
+		pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
 				i,ve_const_arr[i+VE1_KPA_BINS_OFFSET]);
 	}
-	fprintf(io_file, "VE Table                        [  8][  8]\n");
-	fprintf(io_file, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
+	pos += g_sprintf(buffer+pos, "VE Table                        [  8][  8]\n");
+	pos += g_sprintf(buffer+pos, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
 	for (i=1;i<=8;i++)
 	{
-		fprintf(io_file,"   [%3d] =",i-1);
+		pos += g_sprintf(buffer+pos,"   [%3d] =",i-1);
 		for (j=1;j<=8;j++)
 		{
 			if (j == 1)
 			{
-				fprintf (io_file, "  %3d",
+				pos += g_sprintf (buffer+pos, "  %3d",
 						ve_const_arr[((i*j)-1)
 						+VE1_TABLE_OFFSET]);
 			}
 			else
 			{
-				fprintf (io_file, "   %3d",
+				pos += g_sprintf (buffer+pos, "   %3d",
 						ve_const_arr[((i*j)-1)
 						+VE1_TABLE_OFFSET]);
 			}
 		}
-		fprintf(io_file,"\n");
+		pos += g_sprintf(buffer+pos,"\n");
 	}
 	if (dualtable == TRUE)
 	{
 		ve_const_arr = (unsigned char *)ve_const_p1;
-		fprintf(io_file, "Page 1\n");
-		fprintf(io_file, "VE Table RPM Range              [ 8]\n");
+		pos += g_sprintf(buffer+pos, "Page 1\n");
+		pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");
 		for (i=0;i<8;i++)
 		{
-			fprintf(io_file,"   [%3d] = %3d\n",
+			pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
 					i,ve_const_arr[i+VE2_RPM_BINS_OFFSET]);
 		}
-		fprintf(io_file, "VE Table Load Range (MAP)       [ 8]\n");
+		pos += g_sprintf(buffer+pos, "VE Table Load Range (MAP)       [ 8]\n");
 		for (i=0;i<8;i++)
 		{
-			fprintf(io_file,"   [%3d] = %3d\n",
+			pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
 					i,ve_const_arr[i+VE2_KPA_BINS_OFFSET]);
 		}
-		fprintf(io_file, "VE Table                        [  8][  8]\n");
-		fprintf(io_file, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
+		pos += g_sprintf(buffer+pos, "VE Table                        [  8][  8]\n");
+		pos += g_sprintf(buffer+pos, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
 		for (i=1;i<=8;i++)
 		{
-			fprintf(io_file,"   [%3d] =",i-1);
+			pos += g_sprintf(buffer+pos,"   [%3d] =",i-1);
 			for (j=1;j<=8;j++)
 			{
 				if (j == 1)
 				{
-					fprintf (io_file, "  %3d",
+					pos += g_sprintf (buffer+pos, "  %3d",
 							ve_const_arr[((i*j)-1)
 							+VE2_TABLE_OFFSET]);
 				}
 				else
 				{
-					fprintf (io_file, "   %3d",
+					pos += g_sprintf (buffer+pos, "   %3d",
 							ve_const_arr[((i*j)-1)
 							+VE2_TABLE_OFFSET]);
 				}
 			}
-			fprintf(io_file,"\n");
+			pos += g_sprintf(buffer+pos,"\n");
 		}
 	}
+	status = g_io_channel_write_chars(
+				iofile->iochannel,buffer,pos,&count,NULL);
+	if (status != G_IO_STATUS_NORMAL)
+		fprintf(stderr,__FILE__": Error exporting VEX file\n");
+
+	fprintf(stderr,__FILE__": count of bytes written: %i\n",count);
+
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
 	update_logbar(tools_view,NULL,tmpbuf,TRUE);
 
-	g_free(tmpbuf);
-	g_free(tm);
-	g_free(t);
-	g_free(vex_comment);
+	if (buffer)
+		g_free(buffer);
+	if (tmpbuf)
+		g_free(tmpbuf);
+//	if (t)
+//		g_free(t);
+	if (vex_comment)
+		g_free(vex_comment);
 	vex_comment = NULL;
 	return TRUE; /* return TRUE on success, FALSE on failure */
 }
 
-gboolean vetable_import()
+gboolean vetable_import(void *ptr)
 {
+	struct Io_File *iofile = NULL;
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
-	gio_channel = g_io_channel_new_file(io_file_name, "r", NULL);
+
+	if (ptr != NULL)
+		iofile = (struct Io_File *)ptr;
+	else
+	{
+		fprintf(stderr,__FILE__": vetable_import, iofile undefined\n");
+		exit;
+	}
 	reset_import_flags();
+	status = g_io_channel_seek_position(iofile->iochannel,0,G_SEEK_SET,NULL);
+	if (status != G_IO_STATUS_NORMAL)
+		fprintf(stderr,__FILE__": Eror seeking to beginning of the file\n");
 	/* process lines while we can */
 	while (go)
 	{
-		status = process_vex_line();
+		status = process_vex_line(iofile->iochannel);
 		if (status == G_IO_STATUS_EOF)
 		{
 			go = FALSE;
@@ -229,13 +254,9 @@ gboolean vetable_import()
 			reset_tmp_bins();
 		}
 	}
-		
-	/* we're done - good or bad */
-	g_io_channel_close(gio_channel);
 
 	gtk_widget_set_sensitive(buttons.tools_revert_but,TRUE);
-		return TRUE;
-	 
+
 	if (status == G_IO_STATUS_ERROR)
 	{
 		printf("Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve);
@@ -244,10 +265,10 @@ gboolean vetable_import()
 	return TRUE;
 }
 
-GIOStatus process_vex_line()
+GIOStatus process_vex_line(GIOChannel *iochannel)
 {
 	GString *a_line = g_string_new("\0");
-	GIOStatus status = g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+	GIOStatus status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
 	gint i = 0;
 	gint num_tests = sizeof(import_handlers)/sizeof(import_handlers[0]);
 	if (status == G_IO_STATUS_NORMAL) 
@@ -255,9 +276,9 @@ GIOStatus process_vex_line()
 		for (i=0;i<num_tests;i++)
 		{
 			if (g_strrstr(a_line->str,
-					import_handlers[i].import_tag) != NULL)
+						import_handlers[i].import_tag) != NULL)
 			{
-				status = handler_dispatch(import_handlers[i].function, import_handlers[i].parsetag,a_line->str);
+				status = handler_dispatch(import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
 					printf("VEX_line parsing ERROR\n");
 				goto breakout;
@@ -270,7 +291,7 @@ breakout:
 }
 
 
-GIOStatus handler_dispatch(ImportParserFunc function, ImportParserArg arg, gchar * string)
+GIOStatus handler_dispatch(ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	switch (function)
@@ -282,10 +303,10 @@ GIOStatus handler_dispatch(ImportParserFunc function, ImportParserArg arg, gchar
 			status = process_page(string);
 			break;
 		case RANGE:
-			status = process_vex_range(arg, string);
+			status = process_vex_range(arg, string, iochannel);
 			break;
 		case TABLE:
-			status = process_vex_table(string);
+			status = process_vex_table(string, iochannel);
 			break;
 	}
 	return status;
@@ -296,7 +317,7 @@ GIOStatus process_header(ImportParserArg arg, gchar * string)
 	gchar ** str_array;
 	gchar *result;
 	gchar *tmpbuf = NULL;;
-	
+
 	str_array = g_strsplit(string, " ", 2);
 	result = g_strdup(str_array[1]);	
 	g_strfreev(str_array);
@@ -329,11 +350,11 @@ GIOStatus process_header(ImportParserArg arg, gchar * string)
 			break;
 		default:
 			break;
-			
+
 	}
 	g_free(tmpbuf);
 	return G_IO_STATUS_NORMAL;
-			
+
 }
 
 GIOStatus process_page(gchar *string)
@@ -357,9 +378,9 @@ GIOStatus process_page(gchar *string)
 		status = G_IO_STATUS_NORMAL;
 		vex_import.got_page = TRUE;
 		tmpbuf = g_strdup_printf("VEX Import: Page %i\n",import_page);
-	
+
 	}
-	
+
 	update_logbar(tools_view,msg_type,tmpbuf,TRUE);
 	g_free(tmpbuf);
 	if (msg_type)
@@ -367,13 +388,13 @@ GIOStatus process_page(gchar *string)
 	return status;
 }
 
-GIOStatus read_number_from_line(gint *dest)
+GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
 {
 	GIOStatus status;
 	gchar ** str_array;
 	gchar * result;
 	GString *a_line = g_string_new("\0");
-	status = g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+	status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
 	if (status != G_IO_STATUS_NORMAL) 
 	{
 		return status;
@@ -394,7 +415,7 @@ GIOStatus read_number_from_line(gint *dest)
 	return status;
 }
 
-GIOStatus process_vex_range(ImportParserArg arg, gchar * string)
+GIOStatus process_vex_range(ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gint i;
@@ -411,12 +432,12 @@ GIOStatus process_vex_range(ImportParserArg arg, gchar * string)
 	g_strfreev(str_array);
 	str_array = g_strsplit(result, "]", 2);
 	result = g_strdup(str_array[0]);	
-	
+
 	num_bins = atoi(result);
-	
+
 	for (i=0; i<num_bins; i++) 
 	{
-		status = read_number_from_line(&value);
+		status = read_number_from_line(&value,iochannel);
 		if (status != G_IO_STATUS_NORMAL) 
 		{
 			tmpbuf = g_strdup_printf("VEX Import: File I/O Read problem, file may be incomplete <---ERROR\n");
@@ -462,7 +483,7 @@ GIOStatus process_vex_range(ImportParserArg arg, gchar * string)
 	return status;
 }
 
-GIOStatus process_vex_table(gchar * string)
+GIOStatus process_vex_table(gchar * string, GIOChannel *iochannel)
 {
 	gint i, j;
 	GString *a_line;
@@ -498,7 +519,7 @@ GIOStatus process_vex_table(gchar * string)
 
 	/* Need to skip down one line to the actual data.... */
 	a_line = g_string_new("\0");
-	status = g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+	status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
 	if (status != G_IO_STATUS_NORMAL) 
 	{
 		g_string_free(a_line, TRUE);
@@ -508,11 +529,11 @@ GIOStatus process_vex_table(gchar * string)
 		return status;
 	}
 	g_string_free(a_line, TRUE);
-	
+
 	/* iterate over table */
 	for (i=0; i<y_bins; i++) {
 		a_line = g_string_new("\0");
-		status = g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+		status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
 		if (status != G_IO_STATUS_NORMAL) 
 		{
 			g_string_free(a_line, TRUE);
@@ -557,7 +578,7 @@ breakout:
 		vex_import.got_ve = TRUE;
 	return status;
 }
-			
+
 
 gint vex_comment_parse(GtkWidget *widget, gpointer data)
 {
@@ -646,7 +667,7 @@ void feed_import_data_to_ms()
 
 		update_ve_const();	
 		tmpbuf = g_strdup_printf("VEX Import: VEtable on page 0 updated with data from the VEX file\n");
-		
+
 	}
 	else	/* Page 1, dualtable and ignition variants... */
 	{

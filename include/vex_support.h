@@ -18,15 +18,15 @@
 #include <enums.h>
 
 /* Prototypes */
-gboolean vetable_export(void);
-gboolean vetable_import(void);
+gboolean vetable_export(void *);
+gboolean vetable_import(void *);
 GIOStatus process_vex_line();
-GIOStatus process_vex_range(ImportParserArg, gchar * );
-GIOStatus process_vex_table(gchar * );
-GIOStatus read_number_from_line(gint *);
+GIOStatus process_vex_range(ImportParserArg, gchar *, GIOChannel * );
+GIOStatus process_vex_table(gchar *, GIOChannel * );
+GIOStatus read_number_from_line(gint *, GIOChannel *);
 GIOStatus process_header(ImportParserArg , gchar *);
 GIOStatus process_page(gchar * );
-GIOStatus handler_dispatch(ImportParserFunc , ImportParserArg , gchar * );
+GIOStatus handler_dispatch(ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
 void reset_import_flags(void);
 void reset_tmp_bins(void);
 void feed_import_data_to_ms(void);

@@ -116,11 +116,16 @@ static gint page_data[5]; /* Only 4 interdependant vars... */
 
 void leave(GtkWidget *widget, gpointer data)
 {
+	struct Io_File * iofile = NULL;
+	iofile = (struct Io_File *) g_object_get_data(
+			G_OBJECT(buttons.close_dlog_but),"data");
+
 	stop_datalogging();
 	save_config();
 	stop_serial_thread();
 	close_serial();
-	close_file(ANY);
+	if (iofile)	
+		close_file(iofile);
 	/* Free all buffers */
 	mem_dealloc();
 	gtk_main_quit();
@@ -345,6 +350,10 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 gint std_button_handler(GtkWidget *widget, gpointer data)
 {
+	/* get any datastructures attached to the widget */
+	void *w_data = NULL;
+	if (GTK_IS_OBJECT(widget))
+		w_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 	switch ((StdButton)data)
 	{
 		case START_REALTIME:
@@ -394,12 +403,9 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case SELECT_LOGFILE:
 			present_filesavebox(DATALOG_EXPORT);
 			break;
-		case TRUNCATE_LOGFILE:
-			truncate_file(DATALOG_EXPORT);
-			break;
 		case CLOSE_LOGFILE:
 			stop_datalogging();
-			close_file(DATALOG_EXPORT);
+			close_file(w_data);
 			break;
 		case START_DATALOGGING:
 			start_datalogging();
@@ -415,9 +421,6 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case REVERT_TO_BACKUP:
 			revert_to_previous_data();
-			break;
-		case TRUNCATE_VEXFILE:
-			truncate_file(VE_EXPORT);
 			break;
 		case BACKUP_ALL:
 			present_filesavebox(FULL_BACKUP);

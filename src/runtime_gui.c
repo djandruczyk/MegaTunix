@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <3d_vetable.h>
 #include <comms_gui.h>
 #include <config.h>
 #include <defines.h>
@@ -631,6 +632,18 @@ void update_runtime_vars()
 	gfloat tmpf;
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
+	struct Ve_View_3D * ve_view0 = NULL;
+	struct Ve_View_3D * ve_view1 = NULL;
+	extern struct Ve_Widgets *page0_widgets;
+	extern struct Ve_Widgets *page1_widgets;
+
+
+	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
+				G_OBJECT(page0_widgets->widget[0]),"data");
+	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
+				G_OBJECT(page1_widgets->widget[0]),"data");
+	if (ve_view0 == NULL)
+		printf("runtime, ve_view0 undefined\n");
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?

@@ -95,14 +95,6 @@ int build_tools(GtkWidget *parent_frame)
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(EXPORT_VETABLE));
 
-	button = gtk_button_new_with_label("Truncate File");
-	buttons.tools_clear_but = button;
-	gtk_widget_set_sensitive(button,FALSE);
-	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(TRUNCATE_VEXFILE));
-
 	button = gtk_button_new_with_label("Revert to Last");
 	buttons.tools_revert_but = button;
 	gtk_widget_set_sensitive(button,FALSE);
@@ -110,14 +102,6 @@ int build_tools(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(REVERT_TO_BACKUP));
-
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
-
-	label = gtk_label_new("No VEX File Selected Yet");
-	labels.vex_file_lab = label;
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);

@@ -23,7 +23,7 @@ void start_datalogging(void);
 void stop_datalogging(void);
 void clear_logables(void);
 int log_value_set(GtkWidget *, gpointer);
-void write_log_header(void);
+void write_log_header(void *);
 void run_datalog(void);
 /* Prototypes */
 

@@ -19,11 +19,11 @@
 
 /* Prototypes */
 void present_filesavebox(FileIoType );
-void truncate_file(FileIoType );
-void close_file(FileIoType );
+void truncate_file(FileIoType, gchar *);
+void close_file(void * );
 void check_filename(GtkWidget *, GtkFileSelection *);
-void backup_all_ms_settings(gchar *);
-void restore_all_ms_settings(gchar *);
+void backup_all_ms_settings(void *);
+void restore_all_ms_settings(void *);
 /* Prototypes */
 
 #endif

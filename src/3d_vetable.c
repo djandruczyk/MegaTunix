@@ -69,6 +69,8 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
         GdkGLConfig *gl_config;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
+	extern struct Ve_Widgets *page0_widgets;
+	extern struct Ve_Widgets *page1_widgets;
 	gchar *tmpbuf;
 	gint tbl = (gint)data;
 
@@ -89,6 +91,20 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	gtk_container_set_border_width(GTK_CONTAINER(window),0);
 	ve_view->window = window;
 	g_object_set_data(G_OBJECT(window),"data",(gpointer)ve_view);
+	/* Bind pointer to veview to an object for retrieval elsewhere */
+	if (tbl == 0)
+	{
+		printf("binding data to page0 widgets\n");
+		g_object_set_data(G_OBJECT(page0_widgets->widget[0]),
+				"data",(gpointer)ve_view);
+	}
+	else
+	{
+		printf("binding data to page1 widgets\n");
+		g_object_set_data(G_OBJECT(page1_widgets->widget[0]),
+				"data",(gpointer)ve_view);
+	}
+
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(reset_3d_winstat),
 			(gpointer) window);
@@ -191,13 +207,28 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 gint reset_3d_winstat(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
+	gint tbl = -1;
+	extern struct Ve_Widgets *page0_widgets;
+	extern struct Ve_Widgets *page1_widgets;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
+	tbl = ve_view->table;
 	winstat[ve_view->table] = FALSE;
-	g_free(ve_view);/* free up the memory */
+	free(ve_view);/* free up the memory */
 	ve_view = NULL;
+	if (tbl == 0)
+	{
+		g_object_set_data(G_OBJECT(page0_widgets->widget[0]),
+				"data",NULL);
+		printf("setting page0 widgets data to NULL\n");
+	}
+	else
+	{
+		g_object_set_data(G_OBJECT(page1_widgets->widget[0]),
+				"data",NULL);
+		printf("setting page1 widgets data to NULL\n");
+	}
 	return FALSE;  /* MUST return false otherwise 
-			* other handlers WILL NOT run.
-			*/
+			* other handlers WILL NOT run. */
 }
 	
 void reset_3d_view(GtkWidget * widget)
@@ -280,10 +311,6 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	
 	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
-	
-	#ifdef GLDEBUG
-	//printf("%i Got Expose\n", clock());
-	#endif
 	
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
@@ -415,9 +442,9 @@ void ve_calculate_scaling(void *ptr)
 	struct Ve_View_3D *ve_view;
 
 	ve_view = (struct Ve_View_3D *)ptr;
-	if (ve_view->table == 1) /* all std code derivatives..*/
+	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (ve_view->table == 2)
+	else if (ve_view->table == 1)
 		ve_ptr = ve_const_p1;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_calculate_scaling(), table out of range..\n");
@@ -455,9 +482,9 @@ void ve_draw_ve_grid(void *ptr)
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	if (ve_view->table == 1) /* all std code derivatives..*/
+	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (ve_view->table == 2)	/* DT code */
+	else if (ve_view->table == 1)	/* DT code */
 		ve_ptr = ve_const_p1;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_ve_grid(), table out of range..\n");
@@ -499,9 +526,9 @@ void ve_draw_active_indicator(void *ptr)
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	if (ve_view->table == 1) /* all std code derivatives..*/
+	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (ve_view->table == 2)
+	else if (ve_view->table == 1)
 		ve_ptr = ve_const_p1;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_active_indicator(), table out of range..\n");
@@ -526,9 +553,9 @@ void ve_draw_axis(void *ptr)
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	if (ve_view->table == 1) /* all std code derivatives..*/
+	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (ve_view->table == 2)
+	else if (ve_view->table == 1)
 		ve_ptr = ve_const_p1;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_axis(), table out of range..\n");
@@ -691,12 +718,12 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	struct Ve_Widgets *widget_ptr = NULL;
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
-	if (ve_view->table == 1) /* all std code derivatives..*/
+	if (ve_view->table == 0) /* all std code derivatives..*/
 	{
 		ve_ptr = ve_const_p0;
 		widget_ptr = page0_widgets;
 	}
-	else if (ve_view->table == 2)
+	else if (ve_view->table == 1)
 	{
 		ve_ptr = ve_const_p1;
 		widget_ptr = page1_widgets;
@@ -817,3 +844,41 @@ void initialize_ve_view(void *ptr)
 	ve_view->ve_max = 0;
 	return;
 }
+
+void ve_draw_runtime_indicator(void *ptr)
+{
+	extern struct Runtime_Common *runtime;
+        struct Ve_View_3D *ve_view = NULL;
+        float runtime_rpm = 0.0;
+        float runtime_load = 0.0;
+        float runtime_ve = 0.0;
+
+	ve_view = (struct Ve_View_3D *)ptr;
+	if (ve_view == NULL)
+	{
+		fprintf(stderr,__FILE__": runtime_indicator, struct undefined\n");
+		return;
+	} 
+
+        /* Get data from runtime */
+        runtime_rpm = runtime->rpm;
+        runtime_load = runtime->map;
+        if (ve_view->table == 0) { /* all std code derivatives..*/
+                runtime_ve = runtime->vecurr1;
+        } else if (ve_view->table == 1) {
+                runtime_ve = runtime->vecurr2;
+        } else
+                fprintf(stderr,__FILE__": Problem,ve_draw_runtime_indicator(), table out of range..\n");
+
+        /* Render a green dot at the active VE map position */
+        glPointSize(8.0);
+        glColor3f(0.0,1.0,0.0);
+                                                                                                                            
+        glBegin(GL_POINTS);
+        glVertex3f(
+                        (float)runtime_rpm/100/ve_view->rpm_div,
+                        (float)runtime_load/ve_view->load_div,
+                        (float)runtime_ve/ve_view->ve_div);
+        glEnd();
+}
+

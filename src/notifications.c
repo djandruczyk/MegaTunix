@@ -12,6 +12,7 @@
  */
 
 #include <defines.h>
+#include <fileio.h>
 #include <globals.h>
 #include <gtk/gtk.h>
 #include <notifications.h>
@@ -301,49 +302,54 @@ void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
 		g_free(choice);
 	return;
 }
-void warn_file_not_empty(FileIoType iotype,gchar * filename)
+gboolean warn_file_not_empty(FileIoType iotype,gchar * filename)
 {
+	GtkWidget *dialog;
 	gchar *buff = NULL;
 	gchar *filetype = NULL;
-	gchar *button = NULL;
-	gchar *choice = NULL;
-	gchar *lbar_msg = NULL;
+	gint result = 0;
+	gboolean truncated = FALSE;
+
 	switch (iotype)
 	{
 		case DATALOG_EXPORT:
 			filetype = g_strdup("DataLog");
-			button = g_strdup("\"Truncate Log File\"");
-			choice = g_strdup("\"Select Log File\"");
-			lbar_msg = g_strdup_printf("The selected file %s is NOY empty\nsuggest an alternate name or press \"Truncate Log File\" and retry\n",filename);
-			update_logbar(dlog_view,"warning",lbar_msg,TRUE);
 			break;
 		case FULL_BACKUP:
 			filetype = g_strdup("MegaSquirt Backup");
-			button = g_strdup("\"Truncate File\"");
-			choice = g_strdup("\"Backup All MS Parameters\"");
-			lbar_msg =  g_strdup_printf("The selected file %s is NOT empty,\n suggest alternate name or press \"Truncate File\" and retry\n",filename);
-			update_logbar(tools_view,"warning",lbar_msg,TRUE);
 			break;
 		case VE_EXPORT:
 			filetype = g_strdup("VE Table Export");
-			button = g_strdup("\"Truncate File\"");
-			choice = g_strdup("\"Export VE Table(s)\"");
-			lbar_msg =  g_strdup_printf("The selected file %s is NOT empty,\n suggest alternate name or press \"Truncate File\" and retry\n",filename);
-			update_logbar(tools_view,"warning",lbar_msg,TRUE);
 			break;
 		default:
 			break;
 	}
-		
-	buff = g_strdup_printf("The %s file you selected already exists and contains data.  If you wish to overwrite this file, just hit \"Close\" to dismiss this warning, and select the %s button and then select the %s button.",filetype,button,choice);
-	warn_user(buff);
-	if (lbar_msg)
-		g_free(lbar_msg);
+
+	buff = g_strdup_printf("The %s file (%s) you selected already exists and contains data.  If you wish to overwrite this file, just hit \"Truncate\" to overwrite this file, otherwise select \"Cancel\"",filetype, filename);
+
+	dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_MODAL,
+			GTK_MESSAGE_ERROR,
+			GTK_BUTTONS_NONE,buff);
+
+	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			"Truncate File",iotype,
+			GTK_STOCK_CANCEL,GTK_RESPONSE_NONE,NULL);
+
+	gtk_widget_show_all(dialog);
+
+	if (buff)
+		g_free(buff);
 	if (filetype)
 		g_free(filetype);
-	if (button)
-		g_free(button);
-	if (choice)
-		g_free(choice);
-	return;
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	if (result >= 0)
+	{
+		truncate_file(result,filename);
+		truncated = TRUE;
+	}
+	else
+		truncated = FALSE;
+	gtk_widget_destroy(dialog);
+
+	return truncated;
 }

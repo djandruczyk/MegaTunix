@@ -277,15 +277,34 @@ void interrogate_ecu()
 		gtk_entry_set_text(GTK_ENTRY(entries.ecu_revision_entry),tmpbuf);
 		g_free(tmpbuf);
 	}
+	else
+	{
+		tmpbuf = g_strdup("");
+		gtk_entry_set_text(GTK_ENTRY(entries.ecu_revision_entry),tmpbuf);
+		g_free(tmpbuf);
+	}
+
 	if (s_bytes > 0) /* ECU reponded to basic version query */
 	{
 		tmpbuf = g_strdup(commands[s_index].buffer);
 		gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
 		g_free(tmpbuf);
 	}
+	else
+	{
+		tmpbuf = g_strdup("");
+		gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
+		g_free(tmpbuf);
+	}
 	if (quest_bytes > 0) /* ECU reponded to basic version query */
 	{
 		tmpbuf = g_strdup(commands[quest_index].buffer);
+		gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
+		g_free(tmpbuf);
+	}
+	else
+	{
+		tmpbuf = g_strdup("");
 		gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
 		g_free(tmpbuf);
 	}

@@ -212,7 +212,7 @@ int build_vetable(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("3D View");
 	g_signal_connect (G_OBJECT(button), "clicked",
 			G_CALLBACK (create_3d_view),
-			GINT_TO_POINTER(1));
+			GINT_TO_POINTER(0));
 	gtk_table_attach (GTK_TABLE (basetable), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -380,7 +380,7 @@ int build_vetable(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("3D View");
 	g_signal_connect (G_OBJECT(button), "clicked",
 			G_CALLBACK (create_3d_view),
-			GINT_TO_POINTER(2));
+			GINT_TO_POINTER(1));
 	gtk_table_attach (GTK_TABLE (basetable), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);

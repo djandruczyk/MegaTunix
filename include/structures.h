@@ -17,6 +17,7 @@
 #define __STRUCTURES_H__
 
 #include <defines.h>
+#include <enums.h>
 #include <gtk/gtk.h>
 #include <termios.h>
 #include <unistd.h>
@@ -189,10 +190,10 @@ struct DynamicButtons
 	GtkWidget *baro_disa_but;		/* Toggle button */
 	GtkWidget *nbo2_but;			/* Toggle button */
 	GtkWidget *wbo2_but;			/* Toggle button */
-	GtkWidget *tools_clear_but;		/* Clear file (truncate)*/
 	GtkWidget *tools_revert_but;		/* revert to old data */
 	GtkWidget *stop_dlog_but;		/* Stop DataLogging */
 	GtkWidget *start_dlog_but;		/* Start DataLogging */
+	GtkWidget *close_dlog_but;		/* Close DataLog file */
 };
 
 /* Simple struct to store the pointers to the entry and button
@@ -234,6 +235,14 @@ struct Logables
 	GtkWidget *widgets[64];
 	gboolean index[64];
 };
+
+struct Io_File
+{
+	GIOChannel *iochannel;
+	gchar *filename;
+	FileIoType iotype;
+};
+
 
 	
 #endif

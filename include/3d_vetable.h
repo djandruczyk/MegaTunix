@@ -52,6 +52,7 @@ void ve_drawtext(char* text, float x, float y, float z);
 void ve_load_font_metrics(void);
 void reset_3d_view(GtkWidget *);
 void initialize_ve_view(void *);
+void ve_draw_runtime_indicator(void *ptr);
 
 /* Prototypes */
 

@@ -25,8 +25,9 @@ void warn_user(gchar *);
 void squirt_cyl_inj_set_state(GuiState);
 void interdep_state(GuiState, gint );
 void warn_input_file_not_exist(FileIoType, gchar *);
-void warn_file_not_empty(FileIoType,gchar *);
+gboolean warn_file_not_empty(FileIoType,gchar *);
 gint close_dialog(GtkWidget *, gpointer);
+gint dialog_response(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif
