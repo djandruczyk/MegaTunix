@@ -651,20 +651,10 @@ void ve_draw_runtime_indicator(void *ptr)
 	glPointSize(8.0);
 	glColor3f(0.0,1.0,0.0);
 	glBegin(GL_POINTS);
-	if (ve_view->table != 3)	// Std VE table
-	{
-		glVertex3f(	
-				(float)(runtime->rpm)/100/ve_view->rpm_div,
-				(float)(runtime->map)/ve_view->load_div,	
-				(float)(actual_ve)/ve_view->ve_div);
-	}
-	else
-	{
-		glVertex3f(	
-				(float)(runtime->rpm)/100/ve_view->rpm_div,
-				(float)(runtime->map)/ve_view->load_div,	
-				((float)(actual_ve)/2.84)/ve_view->ve_div);
-	}
+	glVertex3f(	
+			(float)(runtime->rpm)/100/ve_view->rpm_div,
+			(float)(runtime->map)/ve_view->load_div,	
+			(float)(actual_ve)/ve_view->ve_div);
 	glEnd();
 }
 

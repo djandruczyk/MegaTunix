@@ -125,7 +125,7 @@ void post_process(void *input, void *output)
 			if (out->rpm > 25500)
 				out->rpm = 25500;
 
-		out->sparkangle = ign_in->sparkangle;
+		out->sparkangle = (gint)((float)ign_in->sparkangle/2.84);
 	}
 
 	if (!(ecu_caps & DUALTABLE))
