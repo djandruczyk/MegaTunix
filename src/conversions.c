@@ -175,6 +175,7 @@ void convert_temps(gpointer widget, gpointer units)
 	gchar *text = NULL;
 	gchar *depend_on = NULL;
 	gboolean state = FALSE;
+	extern GdkColor black;
 
 	/* If this widgt depends on anything call check_dependancy which will
 	 * return TRUE/FALSE.  True if what it depends on is in the matching
@@ -193,6 +194,8 @@ void convert_temps(gpointer widget, gpointer units)
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
 			gtk_label_set_text(GTK_LABEL(widget),text);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+
 		}
 
 		if (GTK_IS_SPIN_BUTTON(widget))
@@ -210,6 +213,7 @@ void convert_temps(gpointer widget, gpointer units)
 				gtk_spin_button_set_value(
 						GTK_SPIN_BUTTON(widget),
 						adj->value);
+				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			}
 		}
 
@@ -223,6 +227,7 @@ void convert_temps(gpointer widget, gpointer units)
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");
 			gtk_label_set_text(GTK_LABEL(widget),text);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		}
 
 		if (GTK_IS_SPIN_BUTTON(widget))
@@ -239,6 +244,7 @@ void convert_temps(gpointer widget, gpointer units)
 				gtk_spin_button_set_value(
 						GTK_SPIN_BUTTON(widget),
 						adj->value);
+				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			}
 		}
 	}

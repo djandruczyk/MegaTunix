@@ -261,6 +261,7 @@ void mem_alloc()
 		ve_widgets = g_new0(GList **, firmware->total_pages);
 	if (!widget_group_states)
 		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
 	if (!interdep_vars)
 		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
