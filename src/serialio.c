@@ -50,7 +50,9 @@ void open_serial(gchar * port_name)
 
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY in nonblock mode */
-	fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	//fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	/* Blocking mode... */
+	fd = open(device, O_RDWR | O_NOCTTY );
 	if (fd >= 0)
 	{
 		/* SUCCESS */
@@ -104,14 +106,8 @@ int setup_serial_params()
 	/* Set additional flags, note |= syntax.. */
 	serial_params->newtio.c_cflag |= CLOCAL | CREAD;
 	/* Mask and set to 8N1 mode... */
-	serial_params->newtio.c_cflag &= ~PARENB;
-	serial_params->newtio.c_cflag &= ~CSTOPB;
-	serial_params->newtio.c_cflag &= ~CSIZE;
+	serial_params->newtio.c_cflag &= ~(PARENB | CSTOPB | CSIZE);
 	serial_params->newtio.c_cflag |= CS8;
-
-	/* Disable hardware flow control */
-	//serial_params->newtio.c_cflag &= ~CNEW_RTS_CTS;
-	
 
 	/* RAW Input */
 	serial_params->newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
@@ -121,8 +117,6 @@ int setup_serial_params()
 	
 	/* Set raw output */
 	serial_params->newtio.c_oflag &= ~OPOST;
-
-	cfmakeraw(&serial_params->newtio);
 
 	/* 
 	   initialize all control characters 
@@ -135,12 +129,10 @@ int setup_serial_params()
 	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
-//	serial_params->newtio.c_cc[VEOL2]    = 0;     /* '\0' */
-	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
-	serial_params->newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
+	serial_params->newtio.c_cc[VMIN]     = 0;     /* blocking read until 1 character arrives */
+	serial_params->newtio.c_cc[VTIME]    = 1;     /* inter-character timer unused */
 
-	tcflush(serial_params->fd, TCIOFLUSH);
-	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
+	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 
 	/* No hurt in checking to see if the MS is present, if it is
 	 * It'll update the serial status log, and set the "Connected" flag
@@ -155,7 +147,7 @@ void close_serial()
 {
 	gchar *tmpbuf;
 
-	tcsetattr(serial_params->fd,TCSANOW,&serial_params->oldtio);
+	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
 	close(serial_params->fd);
 	serial_params->open = FALSE;
 	connected = FALSE;
@@ -172,13 +164,10 @@ void close_serial()
 
 int check_ecu_comms(GtkWidget *widget, gpointer data)
 {
-	gint tmp;
 	gint res;
 	struct pollfd ufds;
-	char buf[1024];
 	gint restart_reader = FALSE;
 	static gboolean locked;
-	gint total = 0;
 	gchar *tmpbuf;
 
 	if (locked)
@@ -198,15 +187,12 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		ufds.fd = serial_params->fd;
 		ufds.events = POLLIN;
 		/* save state */
-		tmp = serial_params->newtio.c_cc[VMIN];
-		serial_params->newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
 		tcflush(serial_params->fd, TCIOFLUSH);
-		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request one batch of realtime vars */
 		while (write(serial_params->fd,"A",1) != 1)
 		{
-			usleep(100);
+			usleep(1000);
 			fprintf(stderr,__FILE__": Error writing \"A\" to the ecu in check_ecu_comms()\n");
 		}
 			
@@ -216,11 +202,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			/* Command succeeded,  but we still need to drain the
 			 * buffer...
 			 */
-			while (poll(&ufds,1,serial_params->poll_timeout))
-				total += res = read(serial_params->fd,&buf,64);
-
-			if (total != 22)
-				goto test_failed;
+			tcflush(serial_params->fd, TCIOFLUSH);
 
 			tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 			/* COMMS test succeeded */
@@ -235,7 +217,6 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			test_failed:
 			tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 			/* An I/O Error occurred with the MegaSquirt ECU */
 			update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
@@ -248,9 +229,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 
 		}
 
-		serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
 		tcflush(serial_params->fd, TCIOFLUSH);
-		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		if (restart_reader)
 			start_serial_thread();

@@ -36,15 +36,16 @@ gint just_starting;
 int handle_ms_data(InputData which_data)
 {
 	gint res = 0;
-	gint total = 0;
-	gint count = 0;
+	gint total_read = 0;
+	gint total_wanted = 0;
+	gint zerocount = 0;
+	gboolean bad_read = FALSE;
 	unsigned char buf[255];
 	unsigned char *ptr = buf;
 	struct pollfd ufds;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
-	extern gboolean raw_reader_running;
 	extern struct Serial_Params *serial_params;
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
@@ -59,163 +60,154 @@ int handle_ms_data(InputData which_data)
 	switch (which_data)
 	{
 		case REALTIME_VARS:
-			while (poll(&ufds,1,serial_params->poll_timeout))
+			/* Data arrived,  drain buffer until we receive
+			 * serial->params->rtvars_size, or readcount
+			 * exceeded... 
+			 */
+			total_read = 0;
+			total_wanted = serial_params->rtvars_size;
+			zerocount = 0;
+
+			while (total_read < total_wanted )
 			{
-				count++;
-				total += res = read(serial_params->fd,ptr+total,
-						serial_params->rtvars_size); 
-				//printf("Realtime read %i, total %i\n",res,total);
-				if (count > serial_params->rtvars_size + 10)
+				//printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				// Increment bad read counter....
+				if (res == 0)
+					zerocount++;
+
+				//printf("read %i bytes, count %i\n",res,count);
+				if (zerocount == 3)  // 3 bad reads, abort
 				{
-					/* waited too long, break out */
+					bad_read = TRUE;
 					break;
 				}
 			}
-			//printf("REALTIME_VARS: polled %i times\n",count);
-			count = 0;
-			/* the number of bytes expected for raw data read */
-			if (total > serial_params->rtvars_size) 
+			if (bad_read)
 			{
-				/* Serial I/O problem, resetting port 
-				 * This problem can occur if the MS is 
-				 * resetting due to power spikes, or other 
-				 * problems with the serial interface, 
-				 * perhaps even a very slow machine
-				 * The problem is part of the data is lost, 
-				 * and since we read in rtvars_size
-				 * blocks, the data is now offset, the damn 
-				 * problem is that there is no formatting so 
-				 * the datastream which is now out of sync by
-				 * an unknown amount which tends to hose 
-				 * things all to hell.  The solution is to 
-				 * close the port, re-open it and reinitialize 
-				 * it, then continue.  We CAN do this here 
-				 * because the serial I/O thread depends on 
-				 * this function and blocks until we return.
-				 */
-				//printf("warning serial data read error (%i bytes)\n",res);
-				close_serial();
-				open_serial(serial_params->port_name);
-
-				/* The raw_reader_running flag MUST be reset 
-				 * to prevent a deadlock in check_ecu_comms 
-				 * which will attempt to kill the thread that 
-				 * we are executing under. By flipping this 
-				 * flag we prevent the thread kill 
-				 * (and deadlock) and just make sure to 
-				 * set it back to normal afterwards....
-				 */
-				raw_reader_running = FALSE;
-				setup_serial_params();
-				raw_reader_running = TRUE;
-				return FALSE;
+				serial_params->errcount++;
+				break;
 			}
-			else
+
+			raw_runtime = (struct Raw_Runtime_Std *)buf;
+			/* Test for MS reset */
+			if (just_starting)
 			{
-
-				raw_runtime = (struct Raw_Runtime_Std *)buf;
-				/* Test for MS reset */
-				if (just_starting)
-				{
-					lastcount = raw_runtime->secl;
-					just_starting = FALSE;
-				}
-				/* Check for clock jump from the MS, a 
-				 * jump in time from the MS clock indicates 
-				 * a reset due to power and/or noise.
-				 */
-				if ((lastcount - raw_runtime->secl > 1) && \
-					(lastcount - raw_runtime->secl != 255))
-					ms_reset_count++;
-				else
-					ms_goodread_count++;
-
 				lastcount = raw_runtime->secl;
-
-				/* copy last round to runtime_last */
-				memcpy(runtime_last,runtime,
-						sizeof(struct Runtime_Common));
-
-				/* Feed raw buffer over to post_process()
-				 * as a void * and pass it a pointer to the new
-				 * area for the parsed data...
-				 */
-				post_process((void *)buf,(void *)runtime);
+				just_starting = FALSE;
 			}
+			/* Check for clock jump from the MS, a 
+			 * jump in time from the MS clock indicates 
+			 * a reset due to power and/or noise.
+			 */
+			if ((lastcount - raw_runtime->secl > 1) && \
+					(lastcount - raw_runtime->secl != 255))
+				ms_reset_count++;
+			else
+				ms_goodread_count++;
+
+			lastcount = raw_runtime->secl;
+
+			/* copy last round to runtime_last */
+			memcpy(runtime_last,runtime,
+					sizeof(struct Runtime_Common));
+
+			/* Feed raw buffer over to post_process()
+			 * as a void * and pass it a pointer to the new
+			 * area for the parsed data...
+			 */
+			post_process((void *)buf,(void *)runtime);
 
 			break;
 
 		case VE_AND_CONSTANTS_1:
-			while (poll(&ufds,1,serial_params->poll_timeout))
+			total_read = 0;
+			total_wanted = serial_params->table0_size;
+			zerocount = 0;
+
+			while (total_read < total_wanted )
 			{
-				count++;
-				total += res = read(serial_params->fd,ptr+total,
-						serial_params->table0_size); 
-//				printf("polling VE/Const read %i, total %i\n",res,total);
-				if (count > serial_params->table0_size + 30)
+				//printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				// Increment bad read counter....
+				if (res == 0)
+					zerocount++;
+
+				//printf("read %i bytes, count %i\n",res,count);
+				if (zerocount == 3)  // 3 bad reads, abort
 				{
-					/* waited too long, break out */
+					bad_read = TRUE;
 					break;
 				}
 			}
-			//printf("VE_AND_CONSTANTS_1: polled %i times\n",count);
-			count = 0;
 			/* the number of bytes expected for raw data read */
-			if (total != serial_params->table0_size) 
+			if (bad_read)
 			{
 				fprintf(stderr,__FILE__":  Error reading VE/Constants for page 0\n");
 				serial_params->errcount++;
+				break;
 			}
-			else
-			{
-				/* Two copies, working copy and temp for 
-				 * comparison against to know if we have 
-				 * to burn stuff to flash.
-				 */
-				memcpy(ms_data,buf,
-						sizeof(struct Ve_Const_Std));
-				memcpy(ms_data_last,buf,
-						sizeof(struct Ve_Const_Std));
+			/* Two copies, working copy and temp for 
+			 * comparison against to know if we have 
+			 * to burn stuff to flash.
+			 */
+			memcpy(ms_data,buf,
+					sizeof(struct Ve_Const_Std));
+			memcpy(ms_data_last,buf,
+					sizeof(struct Ve_Const_Std));
 
-				ms_ve_goodread_count++;
-			}
+			ms_ve_goodread_count++;
 			break;
 
 		case VE_AND_CONSTANTS_2:
-			while (poll(&ufds,1,serial_params->poll_timeout) )
+			total_read = 0;
+			total_wanted = serial_params->table1_size;
+			zerocount = 0;
+
+			while (total_read < total_wanted )
 			{
-				count++;
-				total += res = read(serial_params->fd,ptr+total,
-						serial_params->table1_size); 
-//				printf("polling VE/Const read %i, total %i\n",res,total);
-				if (count > serial_params->table1_size + 30)
+				//printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				// Increment bad read counter....
+				if (res == 0)
+					zerocount++;
+
+				//printf("read %i bytes, count %i\n",res,count);
+				if (zerocount == 3)  // 3 bad reads, abort
 				{
-					/* waited too long, break out */
+					bad_read = TRUE;
 					break;
 				}
 			}
-			//printf("VE_AND_CONSTANTS_2: polled %i times\n",count);
-			count = 0;
 			/* the number of bytes expected for raw data read */
-			if (total != serial_params->table1_size) 
+			if (bad_read)
 			{
-				fprintf(stderr,__FILE__":  Error reading VE/Constants for page 1\n");
+				fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
 				serial_params->errcount++;
+				break;
 			}
-			else
-			{
-				/* Two copies, working copy and temp for 
-				 * comparison against to know if we have 
-				 * to burn stuff to flash.
-				 */
-				memcpy(ms_data+MS_PAGE_SIZE,buf,
-						sizeof(struct Ve_Const_DT_2));
-				memcpy(ms_data_last+MS_PAGE_SIZE,buf,
-						sizeof(struct Ve_Const_DT_2));
+			/* Two copies, working copy and temp for 
+			 * comparison against to know if we have 
+			 * to burn stuff to flash.
+			 */
+			memcpy(ms_data+MS_PAGE_SIZE,buf,
+					sizeof(struct Ve_Const_DT_2));
+			memcpy(ms_data_last+MS_PAGE_SIZE,buf,
+					sizeof(struct Ve_Const_DT_2));
 
-				ms_ve_goodread_count++;
-			}
-			//printf("Dualtable not supported yet.. \n");
+			ms_ve_goodread_count++;
 			break;
 
 		case IGNITION_VARS:
