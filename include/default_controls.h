@@ -30,8 +30,8 @@ static struct Default_Control all_controls[] = {
 {"Inj_1_DC",0,6,"Ch. 1 DC (%)",34,28,FLOAT,TRUE,0},
 {"GammaE",1,0,"GammaE (%)",22,61,UCHAR,TRUE,0},
 {"MAP",1,1,"MAP (kPa)",16,60,UCHAR,TRUE,0},	/* Special,  scale varies based on ECU*/
-{"Coolant",1,2,"Coolant (\302\260 F.)",19,48,SHORT,TRUE,TEMP_DEP}, /* Temp SPECIAL!!! */
-{"MAT",1,3,"MAT (\302\260 F.)",18,50,SHORT,TRUE,TEMP_DEP},	/* Temp SPECIAL!!! */
+{"Coolant",1,2,"Coolant (\302\260 .)",19,48,SHORT,TRUE,0}, /* Temp SPECIAL!!! */
+{"MAT",1,3,"MAT (\302\260 .)",18,50,SHORT,TRUE,0},	/* Temp SPECIAL!!! */
 {"Idle_DC",1,4,"Idle DC (%)",4,74,UCHAR,TRUE,DUALTABLE|IAC_PWM|IAC_STEPPER},
 {"Inj_2_PW",1,5,"Ch. 2 PW (ms)",33,40,FLOAT,TRUE,DUALTABLE},
 {"Inj_2_DC",1,6,"Ch. 2 DC (%)",35,32,FLOAT,TRUE,DUALTABLE},
