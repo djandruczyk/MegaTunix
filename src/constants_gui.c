@@ -22,40 +22,21 @@
 
 extern struct v1_2_Constants constants;
 
-/* arrays of the info for the combo boxes... */
-const gchar *control_strategy[] = {"Speed-Density", "Alpha-N"};
-const gchar *inj_per_cycle[] = {"1-Squirt", "2-Squirts","3-Squirts","4-Squirts",
-			       "5-Squirts","6-Squirts","7-Squirts","8-Squirts"};
-const gchar *inj_staging[] = {"Simultaneous","Alternating"};
-const gchar *engine_stroke[] = {"Four-Stroke","Two-Stroke"};
-const gchar *num_of_cyls[] = {"1","2","3", "4", "5", "6",
-			      "7","8","9","10","11","12"};
-const gchar *inject_type[] = {"Multi-Port","Throttle-Body"};
-const gchar *num_of_injectors[] = {"1","2","3", "4", "5", "6",
-				   "7","8","9","10","11","12"};
-const gchar *map_type[] = {"115 KPa","250 KPa"};
-const gchar *engine_type[] = {"Even-Fire","Odd-Fire"};
-const gchar *o2_sensor_type[] = {"NarrowBand","WideBand"};
-const gchar *baro_correction[] = {"Disabled","Enabled"};
-
-
 int build_constants(GtkWidget *parent_frame)
 {
-	gint i;
-	gint total;
 	GtkWidget *sep;
 	GtkWidget *button;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
 	GtkWidget *vbox3;
 	GtkWidget *hbox;
+	GtkWidget *hbox2;
 	GtkWidget *label;
 	GtkWidget *frame;
 	GtkWidget *table;
 	GtkWidget *spinner;
-	GtkWidget *combo;
 	GtkAdjustment *adj;
-	GList *items = NULL;
+	GSList	*group;
 	
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -249,263 +230,370 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 
-	frame = gtk_frame_new("Fuel Injection Control Strategy");
-	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
-
-	/* Injection Strategy Section */
-	table = gtk_table_new(2,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
-	gtk_container_add(GTK_CONTAINER(frame),table);
-
-	total = sizeof(control_strategy)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)control_strategy[i]);
-		//g_object_set_data(G_OBJECT(items),"value",GINT_TO_POINTER(i));
-	}
-
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,125,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
+
 	frame = gtk_frame_new("Injection Control");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
 	/* Injection Control Section */
+	vbox3 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox3);
 
-	table = gtk_table_new(14,2,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),15);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
-	gtk_container_add(GTK_CONTAINER(frame),table);
-//	gtk_table_set_row_spacing(GTK_TABLE(table),1,0);
-//	gtk_table_set_row_spacing(GTK_TABLE(table),3,0);
-//	gtk_table_set_row_spacing(GTK_TABLE(table),5,0);
-//	gtk_table_set_row_spacing(GTK_TABLE(table),7,0);
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
 	
-	items = NULL;
-	total = sizeof(inj_per_cycle)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)inj_per_cycle[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 0, 1,
+	/* Fuel Injection Control Strategy */
+	label = gtk_label_new("Fuel Injection Control Strategy");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("# of Injections\nPer Engine Cycle");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+	button = gtk_radio_button_new_with_label(NULL,"Speed Density");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	constants.speed_den_but = button;
+
+	button = gtk_radio_button_new_with_label(group,"Alpha-N");
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	constants.alpha_n_but = button;
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+	/* Injection Type selectors */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+
+	label = gtk_label_new("Injection Type");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"Multi-Port");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+	/* Engine stroke selectors */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+	
+	label = gtk_label_new("Engine Stroke");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"Four-Stroke");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+	/* Engine Firing Type selectors */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+
+	label = gtk_label_new("Engine Type");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"Even Fire");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	button = gtk_radio_button_new_with_label(group,"Odd Fire");
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+	/* MAP Sensor Type selectors */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+
+	label = gtk_label_new("MAP Sensor Type");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"115 kPa");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	button = gtk_radio_button_new_with_label(group,"250 kPa");
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+	/* O2 Sensor Type selectors */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+
+	label = gtk_label_new("O2 Sensor Type");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"Narrow-Band");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	button = gtk_radio_button_new_with_label(group,"Wide-Band");
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+	/* Baro Correction Selectors */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+
+	label = gtk_label_new("Baro Correction");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"Enabled");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	button = gtk_radio_button_new_with_label(group,"Disabled");
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+	/* Injector Staging */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),0);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+
+	label = gtk_label_new("Injector Staging");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"Simultaneous");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+	button = gtk_radio_button_new_with_label(group,"Alternate");
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(toggle_button_handler),
+			NULL);
+
+	/* Injection Control cyls/injectors, etc.. */
+	frame = gtk_frame_new("Cylinder/Injection Configuration");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
+	table = gtk_table_new(2,3,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	spinner = gtk_spin_button_new(adj,1,0);
+        gtk_widget_set_size_request(spinner,60,-1);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+			NULL);
+//			GINT_TO_POINTER(INJ_PER_CYCLE));
+        constants.inj_per_cycle_spin = spinner;
+//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+	label = gtk_label_new("# of Injections per Cycle");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	items = NULL;
-	total = sizeof(inj_staging)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)inj_staging[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 0, 1,
+	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	spinner = gtk_spin_button_new(adj,1,0);
+        gtk_widget_set_size_request(spinner,60,-1);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+			NULL);
+//			GINT_TO_POINTER(NUM_INJECTORS));
+        constants.injectors_spin = spinner;
+//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Injector Staging");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+	label = gtk_label_new("# of Fuel Injectors");
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	sep = gtk_hseparator_new();
-	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 2, 3,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
-	items = NULL;
-	total = sizeof(engine_stroke)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)engine_stroke[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 3, 4,
+	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	spinner = gtk_spin_button_new(adj,1,0);
+        gtk_widget_set_size_request(spinner,60,-1);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+			NULL);
+//			GINT_TO_POINTER(NUM_CYLINDERS));
+        constants.cylinders_spin = spinner;
+//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Engine Stroke");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	items = NULL;
-	total = sizeof(num_of_cyls)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)num_of_cyls[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 3, 4,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
 	label = gtk_label_new("# of Cylinders");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	sep = gtk_hseparator_new();
-	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 5, 6,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
-	items = NULL;
-	total = sizeof(inject_type)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)inject_type[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 6, 7,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Injection Type");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 7, 8,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	items = NULL;
-	total = sizeof(num_of_injectors)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)num_of_injectors[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 6, 7,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("# of Injectors");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 7, 8,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	sep = gtk_hseparator_new();
-	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 8, 9,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
-	items = NULL;
-	total = sizeof(map_type)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)map_type[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 9, 10,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("MAP Type");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 10, 11,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	items = NULL;
-	total = sizeof(engine_type)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)engine_type[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 9, 10,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Engine Type");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 10, 11,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	sep = gtk_hseparator_new();
-	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 11, 12,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
-	items = NULL;
-	total = sizeof(o2_sensor_type)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)o2_sensor_type[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 12, 13,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("O2 Sensor Type");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 13, 14,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	items = NULL;
-	total = sizeof(baro_correction)/sizeof(gpointer);
-	for (i=0;i<total;i++)
-	{
-		items = g_list_append(items, (gpointer)baro_correction[i]);
-	}
-	combo = gtk_combo_new();
-	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
-	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
-        gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 12, 13,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Baro Correction");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 13, 14,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
+	/* Commands frame */
 	frame = gtk_frame_new("Commands");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);

@@ -42,6 +42,27 @@ void leave(GtkWidget *widget, gpointer *data)
 	gtk_main_quit();
 }
 
+int toggle_button_handler(GtkWidget *widget, gpointer *data)
+{
+	gint config_num,bit_pos,bit_val;
+	config_num = (gint)g_object_get_data(G_OBJECT(widget),"config_num");
+	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
+	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
+	{
+		/* If control reaches here, the toggle button is down */
+		printf("config_num %i, bit_pos %i, bit_val %i\n",config_num,bit_pos,bit_val);		
+
+	} 
+	else 
+	{
+
+		/* If control reaches here, the toggle button is up */
+	}
+	return TRUE;
+}
+
 int std_button_handler(GtkWidget *widget, gpointer *data)
 {
 	switch ((gint)data)
@@ -421,6 +442,19 @@ void update_const_ve()
 		gtk_spin_button_set_value(
 				GTK_SPIN_BUTTON(constants.rpm_bins_spin[i]),
 				ve_constants->rpm_bins[i]*100);
+	}
+	/* CONFIG11-13 related buttons */
+	if (ve_constants->config13.bit.inj_strat)
+	{
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.alpha_n_but),
+                                TRUE);
+	}
+	else
+	{
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.speed_den_but),
+                                TRUE);
 	}
 
 }

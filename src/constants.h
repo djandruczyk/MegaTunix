@@ -55,6 +55,25 @@ struct v1_2_Constants
 	GtkWidget *ego_step_spin;		/* Spinner */
 	GtkWidget *ego_events_spin;		/* Spinner */
 	GtkWidget *ego_limit_spin;		/* Spinner */
+	GtkWidget *inj_per_cycle_spin;		/* Spinner */
+	GtkWidget *injectors_spin;		/* Spinner */
+	GtkWidget *cylinders_spin;		/* Spinner */
+	GtkWidget *speed_den_but;		/* Toggle button */
+	GtkWidget *alpha_n_but;			/* Toggle button */
+	GtkWidget *two_stroke_but;		/* Toggle button */
+	GtkWidget *four_stroke_but;		/* Toggle button */
+	GtkWidget *multi_port_but;		/* Toggle button */
+	GtkWidget *tbi_but;			/* Toggle button */
+	GtkWidget *map_115_but;			/* Toggle button */
+	GtkWidget *map_250_but;			/* Toggle button */
+	GtkWidget *even_fire_but;		/* Toggle button */
+	GtkWidget *odd_fire_but;		/* Toggle button */
+	GtkWidget *nbo2_but;			/* Toggle button */
+	GtkWidget *wb02_but;			/* Toggle button */
+	GtkWidget *simul_but;			/* Toggle button */
+	GtkWidget *alternate_but;		/* Toggle button */
+	GtkWidget *baro_ena_but;		/* Toggle button */
+	GtkWidget *baro_disa_but;		/* Toggle button */
 };
 
 struct Reqd_Fuel
