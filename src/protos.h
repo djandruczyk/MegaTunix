@@ -153,6 +153,12 @@ int build_tools(GtkWidget *);
 
 /* datalogging_gui.c */
 int build_datalogging(GtkWidget *);
+void create_dlog_filesel(void);
+void check_filename(GtkWidget *, GtkFileSelection *);
+void truncate_log(void);
+void start_datalogging(void);
+void stop_datalogging(void);
+void close_datalog(void);
 /* datalogging_gui.c */
 
 /* general_gui.c */

@@ -49,6 +49,10 @@
 #define REQD_FUEL_POPUP		0x32
 #define READ_FROM_MS		0x33
 #define WRITE_TO_MS		0x34
+#define SELECT_LOGFILE		0x35
+#define TRUNCATE_LOGFILE	0x36
+#define START_DATALOGGING	0x37
+#define STOP_DATALOGGING	0x38
 
 /* Spinbuttons */
 #define REQ_FUEL_DISP		0x40

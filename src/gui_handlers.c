@@ -53,6 +53,7 @@ void leave(GtkWidget *widget, gpointer data)
 	stop_serial_thread();
 	/* Free all buffers */
 	close_serial();
+	close_datalog();
 	usleep(100000); /* make sure thread dies cleanly.. */
 	mem_dealloc();
 	gtk_main_quit();
@@ -168,6 +169,8 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 				paused_handlers = FALSE;
 				constants_loaded = TRUE;
 			}
+			if (!connected)
+				check_ecu_comms(NULL,NULL);
 			start_serial_thread();
 			break;
 		case STOP_REALTIME:
@@ -194,6 +197,18 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case WRITE_TO_MS:
 			burn_flash();
+			break;
+		case SELECT_LOGFILE:
+			create_dlog_filesel();
+			break;
+		case TRUNCATE_LOGFILE:
+			truncate_log();
+			break;
+		case START_DATALOGGING:
+			start_datalogging();
+			break;
+		case STOP_DATALOGGING:
+			stop_datalogging();
 			break;
 	}
 	return TRUE;
