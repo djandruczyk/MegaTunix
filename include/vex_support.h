@@ -27,8 +27,8 @@ GIOStatus read_number_from_line(gint *, GIOChannel *);
 GIOStatus process_header(void *, ImportParserArg , gchar *);
 GIOStatus process_page(void *, gchar * );
 GIOStatus handler_dispatch(void *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
-void dealloc_ve_struct(void *);
-void feed_import_data_to_ms(void *);
+void dealloc_vex_struct(void *);
+void feed_import_data_to_ecu(void *);
 void revert_to_previous_data();
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */

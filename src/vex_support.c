@@ -25,13 +25,11 @@
 #include <vex_support.h>
 #include <string.h>
 #include <stdlib.h>
+#include <threads.h>
 #include <serialio.h>
 
 gchar *vex_comment;
-extern GtkWidget *tools_view;
 
-
-	/* Datastructure for VE table import fields.  */
 /*!
  \brief The Vex_Import structure holds all fields (lots) needed to load and
  process a VEX (VEtabalt eXport file) and load it into megatunix.
@@ -345,7 +343,7 @@ GIOStatus handler_dispatch(void *ptr, ImportParserFunc function, ImportParserArg
  and populates the Vex_Import datastructure for this Table
  \param ptr (void *) pointer to the Vex_Import structure
  \param arg (ImportPArserArg) enumeration of header portion to process
- \param stricg (gchar *) text of the header line to process
+ \param string (gchar *) text of the header line to process
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
 GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
@@ -737,6 +735,7 @@ void feed_import_data_to_ecu(void *ptr)
 {
 	gint i = 0;
 	extern gint ** ms_data;
+	extern gint ** ms_data_last;
 	extern gint ** ms_data_backup;
 	gchar * tmpbuf = NULL;
 	gint page = -1;
@@ -776,7 +775,11 @@ void feed_import_data_to_ecu(void *ptr)
 		ms_data[page][firmware->table_params[page]->tbl_base + i] =
 			vex_import->ve_bins[i];
 
-	update_ve_const();	
+	for (i=0;i<firmware->page_params[page]->length;i++)
+		if (ms_data[page][i] != ms_data_last[page][i])
+			write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+
+	//update_ve_const();	
 	tmpbuf = g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex_import->page);
 
 	update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
@@ -792,6 +795,7 @@ void feed_import_data_to_ecu(void *ptr)
 void revert_to_previous_data()
 {
 	gint i=0;
+	gint j=0;
 	/* Called to back out a load of a VEtable from VEX import */
 	extern gint ** ms_data;
 	extern gint ** ms_data_backup;
@@ -803,7 +807,7 @@ void revert_to_previous_data()
 	    for (j = 0;j<firmware->page_params[i]->length;j++)
 	    {
 		if (ms_data_backup[i][j] != ms_data[i][j])
-		    write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark)
+		    write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark);
 	    }
 	    memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->length);
 	}
