@@ -1,0 +1,72 @@
+[interrogation_tests]
+testcount=10
+
+[test_00]
+raw_cmd="A"
+cmd_description="Runtime Vars"
+cmd_length=1
+page_required=FALSE
+page=0
+
+[test_01]
+raw_cmd="C"
+cmd_description="MS Clock"
+cmd_length=1
+page_required=FALSE
+page=0
+
+[test_02]
+raw_cmd="Q"
+cmd_description="MS Revision"
+cmd_length=1
+page_required=FALSE
+page=0
+
+[test_03]
+raw_cmd="V"
+cmd_description="VE/Constants page0"
+cmd_length=1
+page_required=TRUE
+page=0
+
+[test_04]
+raw_cmd="V"
+cmd_description="VE/Constants page1"
+cmd_length=1
+page_required=TRUE
+page=1
+
+[test_05]
+raw_cmd="S"
+cmd_description="Signature Echo"
+cmd_length=1
+page_required=FALSE
+page=0
+
+[test_06]
+raw_cmd="?"
+cmd_description="Extended Revision"
+cmd_length=1
+page_required=FALSE
+page=0
+
+[test_07]
+raw_cmd="I"
+cmd_description="Ignition Variables"
+cmd_length=1
+page_required=FALSE
+page=0
+
+[test_08]
+raw_cmd="F0"
+cmd_description="Memory Readback 1st 256 bytes"
+cmd_length=2
+page_required=FALSE
+page=0
+
+[test_09]
+raw_cmd="F1"
+cmd_description="Memory Readback 2nd 256 bytes"
+cmd_length=2
+page_required=FALSE
+page=0

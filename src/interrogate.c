@@ -41,7 +41,7 @@ gboolean interrogated = FALSE;
 
 static struct Canidate
 {
-	gint bytes[11];		/* byte count for each of the 11 test cmds */
+	gint bytes[10];		/* byte count for each of the 10 test cmds */
 	gchar *sig_str;		/* Signature string to search for */
 	gchar *quest_str;	/* Ext Version string to search for */
 	gint ver_num;		/* Version number to search for */
@@ -49,34 +49,34 @@ static struct Canidate
 	Capabilities capabilities;	/* Bitmask of capabilities.... */
 } canidates[] = 
 {
-	{ {22,0,0,125,125,0,0,0,0,0,0},NULL,NULL,0,
+	{ {22,0,0,125,125,0,0,0,0,0},NULL,NULL,0,
 			"Old Bowling & Grippo 1.0\0",STD},
-	{ {22,1,1,125,125,0,0,0,0,0,0},NULL,NULL,20,
+	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,20,
 			"Standard Bowling & Grippo (2.0-3.01)\0",
 			STD},
-	{ {22,1,1,128,128,0,0,0,0,255,255}, NULL,NULL,1,
+	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,1,
 			"Dualtable 0.90-1.0\0",DUALTABLE|RAW_MEMORY},
-	{ {22,1,1,128,128,18,0,0,0,255,255},"v.1.01\0",NULL,1,
+	{ {22,1,1,128,128,18,0,0,255,255},"v.1.01\0",NULL,1,
 			"Dualtable 1.01\0",DUALTABLE|RAW_MEMORY},
-	{ {22,1,1,128,128,19,0,0,0,255,255},"v.1.02\0",NULL,1,
+	{ {22,1,1,128,128,19,0,0,255,255},"v.1.02\0",NULL,1,
 			"Dualtable 1.02\0",DUALTABLE|IAC_PWM|RAW_MEMORY},
-	{ {22,1,1,128,128,17,0,0,0,0,0},"Rover IAC\0",NULL,30,
+	{ {22,1,1,128,128,17,0,0,0,0},"Rover IAC\0",NULL,30,
 			"MS-3.0 Rover IAC (3.0.4)\0",IAC_STEPPER},
-	{ {22,1,1,128,128,16,0,0,0,0,0},"Rover IAC\0",NULL,30,
+	{ {22,1,1,128,128,16,0,0,0,0},"Rover IAC\0",NULL,30,
 			"MS-3.0 Rover IAC (3.0.5)\0",IAC_STEPPER},
-	{ {22,1,1,125,125,0,0,83,0,0,0},NULL,NULL,20,
+	{ {22,1,1,125,125,0,0,83,0,0},NULL,NULL,20,
 			"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0",
 			S_N_EDIS},
-	{ {22,1,1,125,125,0,0,95,0,0,0},NULL,NULL,30,
+	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,30,
 			"SquirtnSpark 3.0\0",S_N_SPARK},
-	{ {22,1,1,125,125,0,32,95,0,0,0},NULL,"EDIS v3.005\0",30,
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,"EDIS v3.005\0",30,
 			"MegaSquirtnEDIS 3.005\0",S_N_EDIS},
-	{ {22,1,1,125,125,0,32,95,0,0,0},NULL,"EDIS v3.007\0",30,
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,"EDIS v3.007\0",30,
 			"MegaSquirtnEDIS 3.007\0",S_N_EDIS},
-	{ {22,1,1,125,125,0,0,99,0,255,255},NULL,NULL,13,
+	{ {22,1,1,125,125,0,0,99,255,255},NULL,NULL,13,
 			"MegaSquirt'N'Spark Extended 3.0.1\0",
 			S_N_SPARK|LAUNCH_CTRL|RAW_MEMORY},
-	{ {27,1,1,128,128,30,0,128,0,0,0},"Enhanced-V0.63\0",NULL,30,
+	{ {27,1,1,128,128,30,0,128,0,0},"Enhanced-V0.63\0",NULL,30,
 			"MegaSquirtnSpark Enhanced V0.63\0",
 			S_N_SPARK|ENHANCED}
 };
@@ -97,7 +97,6 @@ static struct
 	{ 0,"S", "Signature Echo", 1, FALSE },
 	{ 0,"?", "Extended Version", 1, FALSE },
 	{ 0,"I", "Ignition Vars", 1, FALSE },
-	{ 0,"y", "Combined VE/Spark table (V+I)", 1, FALSE },
 	{ 0,"F0", "Memory readback 1st 256 bytes", 2, FALSE },
 	{ 0,"F1", "Memory readback 2nd 256 bytes", 2, FALSE }
 };
@@ -112,7 +111,6 @@ typedef enum
 	CMD_S,
 	CMD_QUEST,
 	CMD_I,
-	CMD_y,
 	CMD_F0,
 	CMD_F1
 }TestCmds;
