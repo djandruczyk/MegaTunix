@@ -39,24 +39,12 @@ struct v1_2_Constants
 	GtkAdjustment *crank_priming_pulse;	/* Adjustment */
 	GtkAdjustment *afterstart_enrich;	/* Adjustment */
 	GtkAdjustment *afterstart_num_cycles;	/* Adjustment */
-	GtkWidget *warmup_neg_40;		/* Text Entry */
-	GtkWidget *warmup_neg_20;		/* Text Entry */
-	GtkWidget *warmup_0;			/* Text Entry */
-	GtkWidget *warmup_20;			/* Text Entry */
-	GtkWidget *warmup_40;			/* Text Entry */
-	GtkWidget *warmup_60;			/* Text Entry */
-	GtkWidget *warmup_80;			/* Text Entry */
-	GtkWidget *warmup_100;			/* Text Entry */
-	GtkWidget *warmup_130;			/* Text Entry */
-	GtkWidget *warmup_160;			/* Text Entry */	
+	GtkWidget *warmup_entries[8];		/* Text Entries */
 	GtkWidget *tps_trig_thresh;		/* Text Entry */
 	GtkWidget *accel_duration;		/* Text Entry */
 	GtkWidget *cold_accel_addon;		/* Text Entry */
 	GtkWidget *cold_accel_mult;		/* Text Entry */
-	GtkWidget *accel_2v_sec;		/* Text Entry */
-	GtkWidget *accel_4v_sec;		/* Text Entry */
-	GtkWidget *accel_8v_sec;		/* Text Entry */
-	GtkWidget *accel_15v_sec;		/* Text Entry */
+	GtkWidget *accel_bins[4];		/* Text Entries */
 	GtkWidget *decel_cut;			/* Text Entry */
 	GtkWidget *ego_temp_active;		/* Text Entry */
 	GtkWidget *ego_rpm_active;		/* Text Entry */

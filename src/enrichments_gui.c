@@ -21,9 +21,13 @@
 #include "constants.h"
 
 struct v1_2_Constants constants;
+const gchar *warmup_labels[] = {"-40","-20",  "0", "20", "40",
+			         "60", "80","100","130","160"};
+const gchar *accel_labels[] = {"2V/Sec","4V/sec","8V/Sec","15V/Sec"};
 
 int build_enrichments(GtkWidget *parent_frame)
 {
+	gint i;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
 	GtkWidget *hbox;
@@ -149,155 +153,23 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 10);
 
-	/* -40 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_neg_40 = entry;
+	/* Warmup enrichment bins */
+	for (i=0;i<10;i++)
+	{
+		entry = gtk_entry_new ();
+		gtk_table_attach (GTK_TABLE (table), entry, i, i+1, 0, 1,
+				(GtkAttachOptions) (GTK_EXPAND),
+				(GtkAttachOptions) (0), 0, 0);
+		gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
+		constants.warmup_entries[i] = entry;
 
-	/* -20 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_neg_20 = entry;
-
-	/* 0 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_0 = entry;
-
-	/* 20 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_20 = entry;
-
-	/* 40 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_40 = entry;
-
-	/* 60 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 5, 6, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_60 = entry;
-
-	/* 80 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 6, 7, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_80 = entry;
-
-	/* 100 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 7, 8, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_100 = entry;
-
-	/* 130 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 8, 9, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_130 = entry;
-
-	/* 160 deg entry */
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 9, 10, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-	constants.warmup_160 = entry;
-
-	label = gtk_label_new ("-40");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("-20");
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("0");
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("20");
-	gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("40");
-	gtk_table_attach (GTK_TABLE (table), label, 4, 5, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("60");
-	gtk_table_attach (GTK_TABLE (table), label, 5, 6, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("80");
-	gtk_table_attach (GTK_TABLE (table), label, 6, 7, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("100");
-	gtk_table_attach (GTK_TABLE (table), label, 7, 8, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("130");
-	gtk_table_attach (GTK_TABLE (table), label, 8, 9, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-
-	label = gtk_label_new ("160");
-	gtk_table_attach (GTK_TABLE (table), label, 9, 10, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
+		label = gtk_label_new (warmup_labels[i]);
+		gtk_table_attach (GTK_TABLE (table), label, i, i+1, 1, 2,
+				(GtkAttachOptions) (GTK_FILL),
+				(GtkAttachOptions) (0), 0, 0);
+		gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+		gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
+	}
 
 	label = gtk_label_new ("Engine Temperature");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 10, 2, 3,
@@ -389,57 +261,22 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.accel_2v_sec = entry;
-	
-	label = gtk_label_new("2 V/Sec");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+	/* Acceleration Enrichment Bins (4) */
+	for(i=0;i<4;i++)
+	{
+		entry = gtk_entry_new ();
+		gtk_table_attach (GTK_TABLE (table), entry, i, i+1, 1, 2,
+				(GtkAttachOptions) (GTK_EXPAND),
+				(GtkAttachOptions) (0), 0, 0);
+		gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+		constants.accel_bins[i] = entry;
 
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.accel_4v_sec = entry;
-
-	label = gtk_label_new("4 V/Sec");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.accel_8v_sec = entry;
-
-	label = gtk_label_new("8 V/Sec");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	entry = gtk_entry_new ();
-	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.accel_15v_sec = entry;
-
-	label = gtk_label_new("15 V/Sec");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 3, 4, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+		label = gtk_label_new(accel_labels[i]);
+		gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+		gtk_table_attach (GTK_TABLE (table), label, i, i+1, 2, 3,
+				(GtkAttachOptions) (GTK_FILL),
+				(GtkAttachOptions) (0), 0, 0);
+	}
 
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
