@@ -275,7 +275,7 @@ struct Ve_Const_DT_2
 	unsigned char   unused[26];		/* 192, unused... */
         unsigned char	req_fuel;		/* 218, require fuel */
         unsigned char	divider;		/* 219, IRQ / factor for pulse*/
-        union tblcnf	tblcnf;			/* 220, inj config per table */
+        unsigned char	unused_220;		/* 220, inj config per table */
         unsigned char	inj_open_time;		/* 221, inj open time */
         unsigned char	inj_ocfuel;		/* 222, PW-correlated amount of 
 						 * fuel injected during open 
@@ -291,11 +291,10 @@ struct Ve_Const_DT_2
         union config11 	config11;		/* 244, Config for PC Config */
         union config12  config12;		/* 245, Config for PC Config */
 	unsigned char 	unused246;		/* 246, Unused  */
-	unsigned char	bcfreqdiv;		/* 247, PWM rate for boost */
+	union bcfreq	bcfreq;			/* 247, pwm rate for boost */ 
 						/* 0-ERROR, 1=39hz, 2=19 Hz */
 						/* 3 = 10 Hz */
-	union bcfreq	bcfreq;			/* 248, milliseconds count for 
-						 * controller algorithm */
+	unsigned char	bcfreqdiv;		/* 248, ??????? */
 	unsigned char	bcpgain;		/* 249, proportional Gain % */
 	unsigned char	bcdgain;		/* 250, derivative Gain % */
 	unsigned char	revlimit;		/* 251, maxrev limit rpm/100 */ 

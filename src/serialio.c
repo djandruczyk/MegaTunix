@@ -401,15 +401,14 @@ void write_ve_const(gint value, gint offset)
 		offset -= MS_PAGE_SIZE;
 		if (dualtable)
 			set_ms_page(1);
-//		if (igntion_variant)
-//			write_cmd = g_strdup("I");
+		else
+			fprintf(stderr,__FILE__": High offset (%i), but no DT flag\n",offset+MS_PAGE_SIZE);
 	
 	}
-	else
-	{
-		if (dualtable)
-			set_ms_page(0);
-	}
+	/* NOT high offset, but if using DT switch page back to 0 */
+	else if (dualtable)
+		set_ms_page(0);
+
 	write_cmd = g_strdup("W");
 
 	lbuff[0]=offset;
@@ -428,6 +427,8 @@ void write_ve_const(gint value, gint offset)
 
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	res = write (serial_params->fd,lbuff,count);	/* Send write command */
+	if (dualtable)
+		set_ms_page(0);
 	g_free(write_cmd);
 
 	/* We check to see if the last burn copy of the MS VE/constants matches 
@@ -454,6 +455,7 @@ void burn_flash()
 {
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
+	gint res = 0;
 	gboolean restart_reader = FALSE;
 
 	if (!connected)
@@ -467,7 +469,13 @@ void burn_flash()
 		stop_serial_thread();
 	}
 	/* doing this may NOT be necessary,  but who knows... */
-	write (serial_params->fd,"B",1);	/* Send Burn command */
+	res = write (serial_params->fd,"B",1);	/* Send Burn command */
+	if (res != 1)
+		fprintf(stderr,__FILE__": Burn Failure, write command failed %i\n",res);
+
+#ifdef DEBUG
+	fprintf(stderr,__FILE__": Burn to Flash\n");
+#endif
 
 	/* sync temp buffer with current burned settings */
 	memcpy(ms_data_last,ms_data,2*MS_PAGE_SIZE);

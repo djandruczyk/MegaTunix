@@ -767,23 +767,11 @@ void update_ve_const()
 
 	/* Point to Table0 (stock MS ) data... */
 	ve_const = (struct Ve_Const_Std *) ms_data;
-	if (dualtable)
-	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
-		check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
-		check_bcfreq(ve_const_dt2->bcfreq.value,TRUE);
-	}
 
 	check_config11(ve_const->config11.value);
 	check_config13(ve_const->config13.value);
 	
 
-	/* This formula is ONLY VALID for NON-Dualtable variants..
-	 * Dualtable no longer has an "Alternate" variable thus all this
-	 * shit breaks...  New version is in progress and is buggy 
-	 * 02-16-2004
-	 */
 	/* DualTable Fuel Calculations
 	 * DT code no longer uses the "alternate" firing mode as each table
 	 * is pretty much independant from the other,  so the calcs are a 
@@ -801,6 +789,10 @@ void update_ve_const()
 	 */
 	if (dualtable)
 	{
+		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+
+//		printf("updating screen, ptr addy for table 1 %p, table2 %p\n",ve_const_dt1,ve_const_dt2);
 		/*printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
 				ve_const_dt1->req_fuel,
 				ve_const_dt1->config12.bit.injectors+1,
@@ -830,16 +822,7 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.cylinders_1_spin),
 				ve_const_dt1->config11.bit.cylinders+1);
 		num_cylinders_1 = ve_const_dt1->config11.bit.cylinders+1;
-
-		/* Injections per cycle */
-		tmp =	(float)(ve_const_dt1->config11.bit.cylinders+1) /
-			(float)(ve_const_dt1->divider);
-		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
-				tmp);
-		num_squirts_1 = (gint)tmp;
-		if (num_squirts_1 < 1 )
-			num_squirts_1 = 1;
+//		printf("cyls DT1 set to %i\n",num_cylinders_1);
 
 		/* Config12 bits */
 		/* Number of injectors */
@@ -847,6 +830,19 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.injectors_1_spin),
 				ve_const_dt1->config12.bit.injectors+1);
 		num_injectors_1 = ve_const_dt1->config12.bit.injectors+1;
+//		printf("injs DT1 set to %i\n",num_injectors_1);
+
+		/* Config11 bits */
+		/* Injections per cycle */
+		tmp =	(float)(ve_const_dt1->config11.bit.cylinders+1) /
+			(float)(ve_const_dt1->divider);
+		num_squirts_1 = (gint)tmp;
+		if (num_squirts_1 < 1 )
+			num_squirts_1 = 1;
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
+				num_squirts_1);
+//		printf("sqrts DT1 set to %i\n",num_squirts_1);
 
 
 		/* Table 2 */
@@ -873,16 +869,6 @@ void update_ve_const()
 				ve_const_dt2->config11.bit.cylinders+1);
 		num_cylinders_2 = ve_const_dt2->config11.bit.cylinders+1;
 
-		/* Injections per cycle */
-		tmp =	(float)(ve_const_dt2->config11.bit.cylinders+1) /
-			(float)(ve_const_dt2->divider);
-		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(spinners.inj_per_cycle_2_spin),
-				tmp);
-		num_squirts_2 = (gint)tmp;
-		if (num_squirts_2 < 1 )
-			num_squirts_2 = 1;
-
 		/* Config12 bits */
 		/* Number of injectors */
 		gtk_spin_button_set_value(
@@ -890,10 +876,24 @@ void update_ve_const()
 				ve_const_dt2->config12.bit.injectors+1);
 		num_injectors_2 = ve_const_dt2->config12.bit.injectors+1;
 
+		/* Config11 bits */
+		/* Injections per cycle */
+		tmp =	(float)(ve_const_dt2->config11.bit.cylinders+1) /
+			(float)(ve_const_dt2->divider);
+		num_squirts_2 = (gint)tmp;
+		if (num_squirts_2 < 1 )
+			num_squirts_2 = 1;
+
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.inj_per_cycle_2_spin),
+				num_squirts_2);
+
 		set_reqfuel_state(BLACK,1);
 		set_reqfuel_state(BLACK,2);
-		check_req_fuel_limits();
+//		check_req_fuel_limits();
 
+		check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
+		check_bcfreq(ve_const_dt2->bcfreq.value,TRUE);
 	}
 	else
 	{
@@ -942,6 +942,14 @@ void update_ve_const()
 				ve_const->config11.bit.cylinders+1);
 		num_cylinders_1 = ve_const->config11.bit.cylinders+1;
 
+		/* Config12 bits */
+		/* Number of injectors */
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.injectors_1_spin),
+				ve_const->config12.bit.injectors+1);
+		num_injectors_1 = ve_const->config12.bit.injectors+1;
+
+		/* Config11 bits */
 		/* Injections per cycle */
 		tmp =	(float)(ve_const->config11.bit.cylinders+1) /
 			(float)(ve_const->divider);
@@ -950,15 +958,8 @@ void update_ve_const()
 				tmp);
 		num_squirts_1 = (gint)tmp;
 
-		/* Config12 bits */
-		/* Number of injectors */
-		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(spinners.injectors_1_spin),
-				ve_const->config12.bit.injectors+1);
-		num_injectors_1 = ve_const->config12.bit.injectors+1;
-
 		set_reqfuel_state(BLACK,1);
-		check_req_fuel_limits();
+//		check_req_fuel_limits();
 	}	// End of B&G specific code...
 
 	/* Speed Density or Alpha-N */
@@ -1223,9 +1224,11 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 	{
 		set_dt_table_mapping_state(TRUE);
 		if (update)
+		{
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
 					(buttons.dt_mode),
 					TRUE);
+		}
 	}
 	if (update == FALSE)
 		return;

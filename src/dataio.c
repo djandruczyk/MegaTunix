@@ -147,7 +147,9 @@ int handle_ms_data(InputData which_data)
 						serial_params->table0_size); 
 //				printf("polling VE/Const read %i, total %i\n",res,total);
 				if (count > 30)
+				{
 					break;
+				}
 			}
 			count = 0;
 			/* the number of bytes expected for raw data read */
@@ -174,9 +176,16 @@ int handle_ms_data(InputData which_data)
 		case VE_AND_CONSTANTS_2:
 			while (poll(&ufds,1,serial_params->poll_timeout) )
 			{
+				count++;
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->table1_size); 
+//				printf("polling VE/Const read %i, total %i\n",res,total);
+				if (count > 30)
+				{
+					break;
+				}
 			}
+			count = 0;
 			/* the number of bytes expected for raw data read */
 			if (total != serial_params->table1_size) 
 			{
@@ -190,9 +199,9 @@ int handle_ms_data(InputData which_data)
 				 * to burn stuff to flash.
 				 */
 				memcpy(ms_data+MS_PAGE_SIZE,buf,
-						sizeof(struct Ve_Const_Std));
+						sizeof(struct Ve_Const_DT_2));
 				memcpy(ms_data_last+MS_PAGE_SIZE,buf,
-						sizeof(struct Ve_Const_Std));
+						sizeof(struct Ve_Const_DT_2));
 
 				ms_ve_goodread_count++;
 			}

@@ -24,6 +24,7 @@ extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
 extern GtkWidget *ve_widgets[];
 extern GdkColor black;
+extern GdkColor white;
 GList *inv_dt_widgets = NULL;
 GList *dt_widgets = NULL;
 
@@ -293,6 +294,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
 	gtk_widget_set_sensitive(spinner,FALSE);
 	gtk_widget_modify_text(spinner,GTK_STATE_INSENSITIVE,&black);
+	gtk_widget_modify_base(spinner,GTK_STATE_INSENSITIVE,&white);
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
@@ -654,6 +656,7 @@ void build_constants_1(GtkWidget *parent_frame)
         interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
         gtk_widget_set_sensitive(spinner,FALSE);
         gtk_widget_modify_text(spinner,GTK_STATE_INSENSITIVE,&black);
+	gtk_widget_modify_base(spinner,GTK_STATE_INSENSITIVE,&white);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,

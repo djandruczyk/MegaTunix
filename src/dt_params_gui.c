@@ -305,7 +305,7 @@ void build_dt_params(GtkWidget *parent_frame)
 
 	/* Cranking Threshold */
         adj = (GtkAdjustment *) gtk_adjustment_new(
-			300.0,100.0,1500,100,100,1.0);
+			300.0,100.0,1500,100,100,10.0);
         spinner = gtk_spin_button_new(adj,1,0);
 	ve_widgets[255] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
@@ -327,7 +327,7 @@ void build_dt_params(GtkWidget *parent_frame)
 
 	/* Hard RevLimit */
         adj = (GtkAdjustment *) gtk_adjustment_new(
-			8500.0,100.0,25500,100,100,1.0);
+			8500.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
 	ve_widgets[251] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
@@ -369,7 +369,7 @@ void build_dt_params(GtkWidget *parent_frame)
 
 	/* Launch RevLimit */
         adj = (GtkAdjustment *) gtk_adjustment_new(
-			5000.0,100.0,25500,100,1000,1.0);
+			5000.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
 	ve_widgets[252] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
@@ -397,7 +397,7 @@ void build_dt_params(GtkWidget *parent_frame)
 
 	/* Shift Lite lower threshold */
         adj = (GtkAdjustment *) gtk_adjustment_new(
-			6000.0,100.0,25500,100,1000,1.0);
+			6000.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
 	ve_widgets[253] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
@@ -425,7 +425,7 @@ void build_dt_params(GtkWidget *parent_frame)
 
 	/* Shift Lite upper threshold */
         adj = (GtkAdjustment *) gtk_adjustment_new(
-			6500.0,100.0,25500,100,1000,1.0);
+			6500.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
 	ve_widgets[254] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);

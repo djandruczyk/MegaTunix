@@ -463,7 +463,6 @@ void hilite_ve_entries(gint rpm, gint map, gint table)
 	extern GdkColor red;
 	extern GdkColor white;
 	struct Ve_Const_Std *ve_const = NULL;
-	struct Ve_Const_Dt2 *ve_const_dt2 = NULL;
 	static struct Indexes kpa_index[2],rpm_index[2];
 	static struct Indexes l_kpa_index[2],l_rpm_index[2];
 	static gint index[2][4] = {{-1,-1,-1,-1},{-1,-1,-1,-1}};
@@ -473,11 +472,7 @@ void hilite_ve_entries(gint rpm, gint map, gint table)
 
 	ve_const = (struct Ve_Const_Std *) ms_data;
 	if (table == 2)
-	{
-		ve_const_dt2 = (struct Ve_Const_Dt2 *) (ms_data+MS_PAGE_SIZE);
 		offset = MS_PAGE_SIZE;
-	}
-
 
 	get_indexes(KPA,map, &kpa_index[table],table);
 	get_indexes(RPM,rpm/100, &rpm_index[table],table);
