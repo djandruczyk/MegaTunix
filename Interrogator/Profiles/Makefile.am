@@ -13,6 +13,7 @@ profiles = B_and_G_1.x.prof \
 	SquirtnSpark-2.02.prof \
 	SquirtnSpark-3.0.prof \
 	SquirtnSpark-Enhanced-v0.63.prof \
+	SquirtnSpark-Enhanced-v0.73.prof \
 	SquirtnSpark-Extended-3.0.1.prof
 
 profiles_DATA = $(profiles)

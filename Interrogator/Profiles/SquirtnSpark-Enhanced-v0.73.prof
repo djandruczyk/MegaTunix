@@ -1,0 +1,9 @@
+[interrogation_profile]
+name=MegaSquirtnSpark Enhanced v0.73
+
+[parameters]
+bytecounts=29,1,1,128,128,29,0,128,0,0
+SignatureQueryString=Enhanced-V0.7
+ExtVerQueryString=
+VerNumber=30
+Capabilities=_S_N_SPARK_,_ENHANCED_
