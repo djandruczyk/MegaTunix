@@ -24,7 +24,7 @@
 /* logable_names[] is an array of textual names corresponding to all logable
  * variables from the MS
  */
-const gchar *logable_names[] = 
+static const gchar *logable_names[] = 
 {
 "HR Clock",	"MS Clock",	"RPM",		"EngineBits",	"IdleDC",
 "TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
@@ -36,7 +36,7 @@ const gchar *logable_names[] =
 "INJ-2 Dcycle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 
-const gchar *mt_compat_names[] = 
+static const gchar *mt_compat_names[] = 
 {
 "HR Clock",	"Seconds",	"RPM",		"EngineBit",	"IdleDC",
 "TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
@@ -49,7 +49,7 @@ const gchar *mt_compat_names[] =
 };
 
 /* Tooltips for each of the above.... */
-const gchar * logable_names_tips[] = 
+static const gchar * logable_names_tips[] = 
 {
 "\"HR Clock\" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond (stored in seconds)",
 "\"MS Clock\" is the MegaSquirt clock returned by the ECU, this runs from 0-255 and recylcles indefinitely, resolution 1 second.",
@@ -98,7 +98,7 @@ const gchar * logable_names_tips[] =
  * is the first value in the struct (secl), offset 99 is a special case
  * for the Hi-Res clock which isn't stored in the structure...
  */
-const gint logging_offset_map[] =
+static const gint logging_offset_map[] =
 {
         99,54,52,56,74,
         24,16, 0,20, 8,
@@ -120,7 +120,7 @@ const gint logging_offset_map[] =
  * The values in this array correspond to the size of the referenced
  * variable in that Runtime_Common struct.
  */
-const gint logging_datasizes_map[] =
+static const gint logging_datasizes_map[] =
 {
         FLOAT,UCHAR,SHORT,UCHAR,UCHAR,
         FLOAT,FLOAT,FLOAT,FLOAT,FLOAT,

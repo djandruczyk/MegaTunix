@@ -72,6 +72,7 @@ int main(int argc, char ** argv)
 		reset_temps(GINT_TO_POINTER(CELSIUS));
 
 	ready = TRUE;
+	/* Startup status counters timeout handler... */
 	statuscounts_id = gtk_timeout_add(33,(GtkFunction)update_errcounts,NULL);
 	gdk_threads_enter();
 	gtk_main();

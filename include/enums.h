@@ -42,7 +42,8 @@ typedef enum
 	REVERT_TO_BACKUP,
 	IMPORT_VETABLE,
 	BACKUP_ALL,
-	RESTORE_ALL
+	RESTORE_ALL,
+	SEL_PARAMS
 }StdButton;
 
 /* Toggle/Radio buttons */

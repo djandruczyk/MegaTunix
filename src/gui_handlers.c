@@ -436,6 +436,9 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case RESTORE_ALL:
 			present_filesavebox(FULL_RESTORE);
 			break;
+		case SEL_PARAMS:
+			present_lviewer_choices();
+			break;
 	}
 	return TRUE;
 }

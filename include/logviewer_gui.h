@@ -18,6 +18,8 @@
 
 /* Prototypes */
 void build_logviewer(GtkWidget *);
+void present_lviewer_choices(void);
+gboolean view_value_set(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif
