@@ -28,9 +28,9 @@
 #include <runtime_gui.h>
 #include <rtv_map_loader.h>
 #include <serialio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <structures.h>
-#include <sys/poll.h>
 #include <tabloader.h>
 #include <threads.h>
 #include <unistd.h>
@@ -304,16 +304,12 @@ void dealloc_message(void * ptr)
 
 void readfrom_ecu(void *ptr)
 {
-	struct pollfd ufds;
 	struct Io_Message *message = (struct Io_Message *)ptr;
 	gint result = 0;
 	extern gint ecu_caps;
 
 	if(serial_params->open == FALSE)
 		return;
-
-	ufds.fd = serial_params->fd;
-	ufds.events = POLLIN;
 
 	/* Flush serial port... */
 	tcflush(serial_params->fd, TCIOFLUSH);
@@ -336,26 +332,25 @@ void readfrom_ecu(void *ptr)
 			dbg_func(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n",CRITICAL);
 	}
 
-
-	// check for data,,,, 
-	result = poll (&ufds,1,5*serial_params->poll_timeout);
-	if (result < 0)	   // Error 
-		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError polling for data: %s\n",g_strerror(errno)),CRITICAL);
-	else if (result == 0)   // Timeout 
+	if (message->handler != -1)
+		result = handle_ms_data(message->handler,message);
+	else
 	{
-		dbg_func(__FILE__": readfrom_ecu()\n\tTimeout reading Data from ECU\n",CRITICAL);
-		serial_params->errcount++;
-		connected = FALSE;
+		dbg_func(__FILE__": readfrom_ecu()\n\t message->handler is -1, bad things, EXITING!\n",CRITICAL);
+		exit (-1);
 	}
-	else            // Data arrived 
+	if (result)
 	{
 		connected = TRUE;
-		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tReading %s\n",
-					handler_types[message->handler]),SERIAL_RD);
-		if (message->handler != -1)
-			handle_ms_data(message->handler,message);
-
-	}	
+		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tDone Reading %s\n",handler_types[message->handler]),SERIAL_RD);
+					
+	}
+	else
+	{
+		connected = FALSE;
+		serial_params->errcount++;
+		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),CRITICAL);
+	}
 }
 
 /* Called from a THREAD ONLY so gdk_threads_enter/leave are REQUIRED on any
@@ -363,9 +358,7 @@ void readfrom_ecu(void *ptr)
  */
 void comms_test()
 {
-//	struct pollfd ufds;
 	gboolean result = FALSE;
-
 
 	if (serial_params->open == FALSE)
 	{
@@ -377,8 +370,6 @@ void comms_test()
 		return;
 	}
 
-//	ufds.fd = serial_params->fd;
-//	ufds.events = POLLIN;
 	/* Flush the toilet.... */
 	tcflush(serial_params->fd, TCIOFLUSH);	
 	while (write(serial_params->fd,"C",1) != 1)
