@@ -30,7 +30,11 @@ void build_dt_params(GtkWidget *parent_frame)
 	GtkWidget *label;
 	GtkWidget *frame;
 	GtkWidget *table;
+	GtkWidget *spinner;
+	GtkAdjustment *adj;
 	GSList *group = NULL;
+
+	extern struct Ve_Widgets *ve_widgets;
 	extern GList *store_widgets;
 	extern struct DynamicButtons buttons;
 	extern GtkTooltips *tip;
@@ -274,6 +278,84 @@ void build_dt_params(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 3, 4,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 20, 0);
+
+	frame = gtk_frame_new("Cranking and Revlimiter");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)frame);
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	
+	table = gtk_table_new(3,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),20);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_table_set_row_spacing(GTK_TABLE(table),1,0);
+	gtk_container_set_border_width(GTK_CONTAINER(table), 10);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	label = gtk_label_new("Cranking Threshold");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Hard RevLimit");
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("RPM");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("RPM");
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	/* Cranking Threshold */
+        adj = (GtkAdjustment *) gtk_adjustment_new(
+			300.0,100.0,1500,100,100,1.0);
+        spinner = gtk_spin_button_new(adj,1,0);
+	ve_widgets->widget[255] = spinner;
+        dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(255));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER(100*100));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",
+                        GINT_TO_POINTER(DIV));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	/* Hard RevLimit */
+        adj = (GtkAdjustment *) gtk_adjustment_new(
+			8500.0,100.0,25500,100,100,1.0);
+        spinner = gtk_spin_button_new(adj,1,0);
+	ve_widgets->widget[251] = spinner;
+        dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(251));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER(100*100));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",
+                        GINT_TO_POINTER(DIV));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+
 
 	frame = gtk_frame_new("Commands");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);

@@ -776,6 +776,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 					value = (value*(9.0/5.0))+32;
 			}
 			dload_val = convert_before_download(offset,value);
+			printf("GENERIC, value %f, offset %i, dloa %i\n",value,offset,dload_val);
 					
 			break;
 		default:
@@ -1178,7 +1179,7 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90;
-			dload_val = convert_before_download(offset,(gint)req_fuel_per_squirt);
+			dload_val = convert_before_download(offset,req_fuel_per_squirt);
 			write_ve_const(dload_val, offset);
 			for (index=0;index<g_list_length(offsets_1);index++)
 			{
@@ -1223,7 +1224,7 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90 + MS_PAGE_SIZE;
-			dload_val = convert_before_download(offset,(gint)req_fuel_per_squirt);
+			dload_val = convert_before_download(offset,req_fuel_per_squirt);
 			write_ve_const(dload_val, offset);
 			for (index=0;index<g_list_length(offsets_2);index++)
 			{
@@ -1304,7 +1305,7 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90;
-			dload_val = convert_before_download(offset,(gint)req_fuel_per_squirt);
+			dload_val = convert_before_download(offset,req_fuel_per_squirt);
 			write_ve_const(dload_val, offset);
 			for (index=0;index<g_list_length(offsets_1);index++)
 			{
@@ -1425,7 +1426,7 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 		}
 		set_table_mapping_state(FALSE);
 		/* all other bits don't matter, quit now... */
-		return;
+		//return;
 	}
 	else
 	{
