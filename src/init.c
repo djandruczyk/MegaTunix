@@ -53,7 +53,7 @@ extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
-extern struct Serial_Params *serial_params;
+struct Serial_Params *serial_params;
 struct Ve_Const_Std *backup_ve_const_p0;
 struct Ve_Const_Std *backup_ve_const_p1;
 struct Ve_Const_Std *ve_const_p0;
@@ -227,7 +227,7 @@ void mem_alloc()
 
 void mem_dealloc()
 {
-
+	/* Allocate memory blocks */
 	g_free(serial_params);
 	g_free(backup_ve_const_p0);
 	g_free(backup_ve_const_p1);
