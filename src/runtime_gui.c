@@ -22,7 +22,7 @@
 
 
 struct Runtime_Widgets runtime_data;
-extern struct DynamicCounts counts;
+extern struct DynamicEntries entries;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
 gboolean force_status_update = TRUE;
@@ -519,7 +519,7 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
         entry = gtk_entry_new();
-        counts.runtime_ve_readcount_entry = entry;
+        entries.runtime_ve_readcount_entry = entry;
         gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
         gtk_widget_set_sensitive(entry,FALSE);
         gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
@@ -535,7 +535,7 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
         entry = gtk_entry_new();
-        counts.runtime_readcount_entry = entry;
+        entries.runtime_readcount_entry = entry;
         gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
         gtk_widget_set_sensitive(entry,FALSE);
         gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
@@ -550,7 +550,7 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
         entry = gtk_entry_new();
-        counts.runtime_reset_entry = entry;
+        entries.runtime_reset_entry = entry;
         gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
         gtk_widget_set_sensitive(entry,FALSE);
         gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
@@ -565,7 +565,7 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
         entry = gtk_entry_new();
-        counts.runtime_sioerr_entry = entry;
+        entries.runtime_sioerr_entry = entry;
         gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
         gtk_widget_set_sensitive(entry,FALSE);
         gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);

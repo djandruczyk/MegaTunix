@@ -14,17 +14,17 @@
 #ifndef __NOTIFICATIONS_H__
 #define __NOTIFICATIONS_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void set_store_red(void);
-void set_store_black(void);
+void set_store_buttons_state(GuiState);
 void update_statusbar(GtkWidget *, int, gchar *);
 void no_ms_connection(void);
 void warn_user(gchar *);
-void squirt_cyl_inj_red(void);
-void squirt_cyl_inj_black(void);
-void warn_datalog_not_empty(void);
+void squirt_cyl_inj_set_state(GuiState);
+void interdep_state(GuiState, gint );
+void warn_file_not_empty(void);
 gint close_dialog(GtkWidget *, gpointer);
 /* Prototypes */
 

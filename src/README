@@ -1,7 +1,7 @@
 
 MegaTunix designed and written by David J. Andruczyk
 
-Inspiration for this code came from Bruce Bowling and Al Grippo, 
+	Inspiration for this code came from Bruce Bowling and Al Grippo, 
 designers of the MegaSquirt DIY Fuel Injection ECU.  This code is 
 modelled slightly after Bruce and Al's MegaSquirt PCC tuning software 
 for Windows.  Inspiration also came from Eric Fahlgrens' MegaTune,
@@ -28,9 +28,13 @@ should be readable by mstweek3K (mstweek3k only runs under windows
 unfortunately). It can also log any of the runtime variables along with the 
 addition of a high resolution clock which can be used to track things 
 precisely in time...
+	As of 11/14/2003 The VE Export tool is functional.  VE Import might be
+a bit as the format of the file sucks (IMHO), and is whitespace delimited..
+(XML would have been a much better choice..)
 
 The only things not done yet are the Tuning gui (guages, VEtable graphical
-editor..) and the low-level and tools pages.
+editor..) and the low-level pages.
 
 Suggestions are welcomed for improving the functionality of MegaTunix...
+Send suggestion (SPAM not welcome) at djandruczyk <at> yahoo <dot> com
 

@@ -25,37 +25,52 @@ extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
 
 
-void set_store_red()
+void set_store_buttons_state(GuiState state)
 {
-	/* Let user know to burn vars byt turnign button text red */
-	gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-			GTK_STATE_PRELIGHT,&red);
-	gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-			GTK_STATE_PRELIGHT,&red);
-	gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-			GTK_STATE_PRELIGHT,&red);
-}
-
-void set_store_black()
-{
-	gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-			GTK_STATE_PRELIGHT,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-			GTK_STATE_PRELIGHT,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-			GTK_STATE_PRELIGHT,&black);
+	switch (state)
+	{
+		case RED:
+			/* Let user know to burn vars byt turnign button text red */
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.const_store_but)->child,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.const_store_but)->child,
+					GTK_STATE_PRELIGHT,&red);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.enrich_store_but)->child,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.enrich_store_but)->child,
+					GTK_STATE_PRELIGHT,&red);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.vetable_store_but)->child,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.vetable_store_but)->child,
+					GTK_STATE_PRELIGHT,&red);
+			break;
+		case BLACK:
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.const_store_but)->child,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.const_store_but)->child,
+					GTK_STATE_PRELIGHT,&black);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.enrich_store_but)->child,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.enrich_store_but)->child,
+					GTK_STATE_PRELIGHT,&black);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.vetable_store_but)->child,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(GTK_BIN(
+					buttons.vetable_store_but)->child,
+					GTK_STATE_PRELIGHT,&black);
+			break;
+	}
 }
 
 
@@ -116,34 +131,82 @@ gint close_dialog(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-void squirt_cyl_inj_red(void)
+void squirt_cyl_inj_set_state(GuiState state)
 {
-	gtk_widget_modify_fg(labels.squirts_lab,
-			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_fg(labels.cylinders_lab,
-			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_text(spinners.cylinders_spin,
-			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-			GTK_STATE_NORMAL,&red);
+	switch (state)
+	{
+		case RED:
+			gtk_widget_modify_fg(labels.squirts_lab,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(labels.cylinders_lab,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_text(spinners.cylinders_spin,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
+					GTK_STATE_NORMAL,&red);
+			break;
+		case BLACK:
+			gtk_widget_modify_fg(labels.squirts_lab,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(labels.cylinders_lab,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(spinners.cylinders_spin,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
+					GTK_STATE_NORMAL,&black);
+			break;
+	}
+}
+void interdep_state(GuiState state, gint page)
+{
+	switch (state)
+	{
+		case RED:
+			gtk_widget_modify_fg(labels.squirts_lab,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(labels.injectors_lab,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(labels.cylinders_lab,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_text(spinners.req_fuel_total_spin,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_text(spinners.cylinders_spin,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_text(spinners.injectors_spin,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_text(
+					spinners.req_fuel_per_squirt_spin,
+					GTK_STATE_INSENSITIVE,&red);
+			break;
+		case BLACK:
+			gtk_widget_modify_fg(labels.squirts_lab,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(labels.injectors_lab,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(labels.cylinders_lab,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(spinners.req_fuel_total_spin,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(spinners.cylinders_spin,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(spinners.injectors_spin,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(
+					spinners.req_fuel_per_squirt_spin,
+					GTK_STATE_INSENSITIVE,&black);
+
+			break;
+	}
 }
 
-void squirt_cyl_inj_black(void)
-{
-	gtk_widget_modify_fg(labels.squirts_lab,
-			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_fg(labels.cylinders_lab,
-			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_text(spinners.cylinders_spin,
-			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-			GTK_STATE_NORMAL,&black);
-}
-
-void warn_datalog_not_empty(void)
+void warn_file_not_empty(void)
 {
 	gchar *buff;
-	buff = g_strdup("The Logfile you selected is NOT empty.  If you wish to overwrite this file, just hit \"Close\" to dismiss this warning, and select \"Clear Log File\" button.  If you do NOT clear out the logfile, the information already present in it will most likely confuse whatever program you use to process it.  If you do NOT wish to use this logfile, Close this warning and click on \"Select Logfile\" and either select a new empty file, or type in the name of your choice.");
+	buff = g_strdup("The Log/VEX file you selected is NOT empty.  If you wish to overwrite this file, just hit \"Close\" to dismiss this warning, and select \"Clear Log/VEX File\" button.  If you do NOT clear out the logfile, the information already present in it will most likely confuse whatever program you use to process it.  If you do NOT wish to use this logfile, Close this warning and click on \"Select Logfile\" and either select a new empty file, or type in the name of your choice.");
 	warn_user(buff);
 	g_free(buff);
 }

@@ -58,9 +58,10 @@ typedef enum
 	CLOSE_LOGFILE,
 	START_DATALOGGING,
 	STOP_DATALOGGING,
-	CLEAR_VEXFILE,
+	SELECT_VEXFILE,
 	EXPORT_VETABLE,
-	IMPORT_VETABLE
+	IMPORT_VETABLE,
+	TRUNCATE_VEXFILE
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -130,5 +131,10 @@ typedef enum
 }FileIoType;
 
 
+typedef enum
+{	
+	RED,
+	BLACK
+}GuiState;
 
 #endif

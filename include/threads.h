@@ -20,7 +20,7 @@
 void * raw_reader_thread(void *); /* Serial raw reader thread */
 int stop_serial_thread();       /* cancels reader thread */
 void start_serial_thread(void); /*bootstrp function fopr above */
-void *reset_reader_locks(void *);
+void reset_reader_locks(void *);
 /* Prototypes */
 
 #endif

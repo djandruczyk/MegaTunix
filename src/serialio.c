@@ -395,12 +395,12 @@ void write_ve_const(gint value, gint offset, gint page)
 	memcmp(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
 	if (res == 0)
 	{
-		set_store_black();
+		set_store_buttons_state(BLACK);
 		burn_needed = FALSE;
 	}
 	else
 	{
-		set_store_red();
+		set_store_buttons_state(RED);
 		burn_needed = TRUE;
 	}
 	
@@ -419,7 +419,7 @@ void burn_flash()
 	memcpy(ve_const_p0_tmp,ve_const_p0,sizeof(struct Ve_Const_Std));
 	memcpy(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
 	/* Take away the red on the "Store" button */
-	set_store_black();
+	set_store_buttons_state(BLACK);
 	burn_needed = FALSE;
 }
 

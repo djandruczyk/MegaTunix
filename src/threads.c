@@ -119,22 +119,26 @@ int stop_serial_thread()
 	return 0;
 }
 		
-void *reset_reader_locks(void * arg)
+void reset_reader_locks(void * arg)
 {
+	/* Sets flags to "happy happy" state to prevent a deadlock.
+	 * My implementation of this thread crap is probably wrong, so
+	 * DO NOT model this code if you value your career as a 
+	 * programmer...  (I'm not a programmer...)
+	 */
 	raw_reader_running = FALSE;
 	raw_reader_stopped = TRUE;
-	return 0;
+	return ;
 }
 
 void *raw_reader_thread(void *params)
 {
 	struct pollfd ufds;
 	int res = 0;
-	void * arg = 0;
 
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
-	pthread_cleanup_push(reset_reader_locks, (void *)arg);
+	pthread_cleanup_push(reset_reader_locks, NULL);
 
 	raw_reader_running = TRUE; /* make sure it starts */
 	raw_reader_stopped = FALSE;	/* set opposite flag */

@@ -1,12 +1,12 @@
 Primary developer:
 	Dave J. Andruczyk <djandruczyk at yahoo dot com>
 
-
 Assistance provided by:
 
 Bruce Bowling <bbowling at earthlink dot net> 
 	WWW-> http://bgsoflex.com/megasquirt.html
-	Provided PCC sourcecode
+	Provided PCC sourcecode designed (with Al Grippo) the MegaSquirt
+	DIY Fuel Injection ECU.
 
 Perry Harrington < pedward at apsoft dot com> 
 	WWW-> http://www.dainst.com
@@ -15,6 +15,7 @@ Perry Harrington < pedward at apsoft dot com>
 
 Dale Anderson <dale_anderson at yahoo dot com
 	Logo Designer, (damn cool logo too..)  Gui suggestions
+	Helped a lot with testing and moral support.
 
 Joe Mitchel <comicfu at yahoo dot com>
 	Provided SourceForge Developer level access to the "MegaSquirt"
@@ -27,6 +28,8 @@ Eric Fahlgren <Eric.Fahlgren at mscsoftware dot com>
 Richard Barrington <rich_b_nz at users dot sourceforge dot net>
 	Submitted bug reports,suggested tying cyls in reqd_fuel calc to
 	the cylinders spinbutton in the main gui..  Various other suggestions
+	Submitted patch for Req_Fuel for running injectors at non-std 
+	pressures.
 
 YOU could be here!!  Submit patches, assistance and suggestions and you'll
 make the list, and all the prestige that comes with it... :)

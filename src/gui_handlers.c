@@ -331,7 +331,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 				paused_handlers = TRUE;
 				read_ve_const();
 				update_ve_const();
-				set_store_black();
+				set_store_buttons_state(BLACK);
 				paused_handlers = FALSE;
 				constants_loaded = TRUE;
 			}
@@ -357,7 +357,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 				paused_handlers = TRUE;
 				read_ve_const();
 				update_ve_const();
-				set_store_black();
+				set_store_buttons_state(BLACK);
 				paused_handlers = FALSE;
 				constants_loaded = TRUE;
 			}
@@ -381,14 +381,19 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case STOP_DATALOGGING:
 			stop_datalogging();
 			break;
-		case CLEAR_VEXFILE:
-			truncate_file(VE_EXPORT);
-			break;
-		case EXPORT_VETABLE:
+		case SELECT_VEXFILE:
 			present_filesavebox(VE_EXPORT);
 			break;
+		case EXPORT_VETABLE:
+			vetable_export();
+			close_file(VE_EXPORT);
+			break;
 		case IMPORT_VETABLE:
-			present_filesavebox(VE_IMPORT);
+			vetable_import();
+			close_file(VE_IMPORT);
+			break;
+		case TRUNCATE_VEXFILE:
+			truncate_file(VE_EXPORT);
 			break;
 	}
 	return TRUE;
@@ -483,12 +488,12 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = TRUE;
-				squirt_cyl_inj_red();
+				squirt_cyl_inj_set_state(RED);
 			}
 			else
 			{
 				err_flag = FALSE;
-				squirt_cyl_inj_black();
+				squirt_cyl_inj_set_state(BLACK);
 				check_req_fuel_limits();
 			}
 			break;
@@ -526,12 +531,12 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = TRUE;
-				squirt_cyl_inj_red();
+				squirt_cyl_inj_set_state(RED);
 			}
 			else
 			{
 				err_flag = FALSE;
-				squirt_cyl_inj_black();
+				squirt_cyl_inj_set_state(BLACK);
 				check_req_fuel_limits();
 			}
 			break;
@@ -828,54 +833,24 @@ void check_req_fuel_limits()
 			lim_flag = 1;
 	}
 		/* req-fuel info box  */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_per_squirt_spin),
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+			spinners.req_fuel_per_squirt_spin),
 			req_fuel_per_squirt);
+		page = 0;
 	if (lim_flag)
 	{	/*
 		 * ERROR, something is out of bounds 
 		 * change the color of the potential offenders onscreen to
 		 * let the user know something is wrong..
 		 */
-		gtk_widget_modify_fg(labels.squirts_lab,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_fg(labels.injectors_lab,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_fg(labels.cylinders_lab,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_text(spinners.req_fuel_total_spin,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_text(spinners.cylinders_spin,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_text(spinners.injectors_spin,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_text(spinners.req_fuel_per_squirt_spin,
-				GTK_STATE_INSENSITIVE,&red);
-
+		interdep_state(RED, page);
 	}
 	else
 	{	/*
 		 * Everything is OK with all inter-dependant variables.
 		 * settings all previous gui enties to normal state...
 		 */
-
-		gtk_widget_modify_fg(labels.squirts_lab,
-				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_fg(labels.injectors_lab,
-				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_fg(labels.cylinders_lab,
-				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(spinners.req_fuel_total_spin,
-				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(spinners.cylinders_spin,
-				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(spinners.injectors_spin,
-				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(spinners.req_fuel_per_squirt_spin,
-				GTK_STATE_INSENSITIVE,&black);
+		interdep_state(BLACK, page);
 
 		/* All Tested succeeded, download Required fuel, 
 		 * then iterate through the list of offsets of changed
@@ -890,7 +865,6 @@ void check_req_fuel_limits()
 		if (paused_handlers)
 			return;
 		offset = 90;
-		page = 0;
 		dload_val = convert_before_download(offset,req_fuel_per_squirt,page);
 		write_ve_const(dload_val, offset, page);
 		for (index=0;index<g_list_length(offsets);index++)

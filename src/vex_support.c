@@ -17,15 +17,18 @@
 #include <enums.h>
 #include <fileio.h>
 #include <globals.h>
+#include <notifications.h>
 #include <stdio.h>
 #include <structures.h>
 #include <time.h>
 #include <vex_support.h>
 
+gchar *vex_comment;
 extern struct Tools tools;
 extern FILE * io_file;
 extern gchar * io_file_name;
-gchar *vex_comment;
+extern GtkWidget *tools_statbar;
+extern gint tools_context_id;
 
 gboolean vetable_export()
 {
@@ -41,7 +44,8 @@ gboolean vetable_export()
 	t = g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
-	printf("export VEtable\n");
+	if (vex_comment == NULL)
+		vex_comment = g_strdup("No comment given");
 	fprintf(io_file, "EVEME 1.0\n");
 	fprintf(io_file, "UserRev: 1.00\n");
 	fprintf(io_file, "UserComment: %s\n",vex_comment);
@@ -125,23 +129,25 @@ gboolean vetable_export()
 	
 	g_free(tm);
 	g_free(t);
-	close_file(VE_EXPORT);
-	
+	g_free(vex_comment);
+	vex_comment = NULL;
 	return TRUE; /* return TRUE on success, FALSE on failure */
 }
 
 gboolean vetable_import()
 {
-	printf("import VEtable\n");
 	return TRUE; /* return TRUE on success, FALSE on failure */
 }
 
 gint vex_comment_parse(GtkWidget *widget, gpointer data)
 {
-	/* Gets data from VEX comment fiedl in tools gui and stores it 
+	gchar buff[100];
+	/* Gets data from VEX comment field in tools gui and stores it 
 	 * so that it gets written to the vex file 
 	 */
 	vex_comment = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-	gtk_widget_set_sensitive(tools.export_but,TRUE);
+	g_snprintf(buff,100,"VEX Comment Stored");
+	update_statusbar(tools_statbar,tools_context_id,buff);
+
 	return TRUE;
 }

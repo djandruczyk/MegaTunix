@@ -20,6 +20,7 @@
 #include <notifications.h>
 #include <stdio.h>
 #include <string.h>
+#include <structures.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -27,16 +28,17 @@
 #include <vex_support.h>
 
 
+FILE *io_file;
+extern gchar * vex_comment;
 extern gboolean log_opened;
-extern FILE *io_file;
 extern gchar * io_file_name;
-extern GtkWidget *stop_button;
-extern GtkWidget *start_button;
-extern GtkWidget *file_label;
 extern GtkWidget *dlog_statbar;
 extern gint dlog_context_id;
 extern GtkWidget *tools_statbar;
 extern gint tools_context_id;
+extern struct DynamicLabels labels;
+extern struct DynamicButtons buttons;
+extern struct DynamicEntries entries;
 gboolean vex_opened;
 
 
@@ -109,11 +111,10 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 	else /* Now see if it DOES exist.. */
 	{
-		if ((iotype == DATALOG_EXPORT)) //|| (iotype == VE_EXPORT))
+		if ((iotype == DATALOG_EXPORT) || (iotype == VE_EXPORT))
 		{
-			printf("filetype is dlog or ve export\n");
 			if (status.st_size > 0)
-				warn_datalog_not_empty();
+				warn_file_not_empty();
 		}
 		/* Open in Append mode, create if it doesn't exist */
 		io_file = fopen(selected_filename,"a"); 
@@ -129,10 +130,11 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case DATALOG_EXPORT:
 			if (opened == TRUE)
 			{
-				gtk_widget_set_sensitive(stop_button,TRUE);
-				gtk_widget_set_sensitive(start_button,TRUE);
+				gtk_widget_set_sensitive(buttons.stop_dlog_but,TRUE);
+				gtk_widget_set_sensitive(buttons.start_dlog_but,TRUE);
 				io_file_name = g_strdup(selected_filename);
-				gtk_label_set_text(GTK_LABEL(file_label),
+				gtk_label_set_text(GTK_LABEL(
+						labels.dlog_file_lab),
 						selected_filename);
 				g_snprintf(buff,100,"DataLog File Opened");
 				update_statusbar(dlog_statbar,
@@ -143,8 +145,9 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			{
 				log_opened = FALSE;
 				opened = FALSE;
-				gtk_widget_set_sensitive(stop_button,FALSE);
-				gtk_widget_set_sensitive(start_button,FALSE);
+				gtk_widget_set_sensitive(									buttons.stop_dlog_but,FALSE);
+				gtk_widget_set_sensitive(
+						buttons.start_dlog_but,FALSE);
 				g_snprintf(buff,100,"Failure opening DataLog File, Error Code: %s",strerror(errno));
 				update_statusbar(dlog_statbar,
 						dlog_context_id,buff);
@@ -154,18 +157,22 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			if (opened == TRUE)
 			{
 				vex_opened = TRUE;
-				if(vetable_export())
-				{
-					g_snprintf(buff,100,"VE_Export Success!");
-					update_statusbar(tools_statbar,
-							tools_context_id,buff);
-				}
+				io_file_name = g_strdup(selected_filename);
+				gtk_label_set_text(GTK_LABEL(
+							labels.vex_file_lab),
+						selected_filename);
+				gtk_widget_set_sensitive(
+						buttons.ve_export_but,TRUE);
+				gtk_widget_set_sensitive(
+						buttons.ve_clear_vex_but,TRUE);
+				if (vex_comment == NULL)
+					g_snprintf(buff,100,"VEX File Opened. Suggest setting a comment to describe the file above...");
 				else
-				{
-					g_snprintf(buff,100,"VE_Export FAILED!!");
-					update_statusbar(tools_statbar,
-							tools_context_id,buff);
-				}
+					g_snprintf(buff,100,"VEX File Opened, VEX Comment already stored");
+
+				update_statusbar(tools_statbar,
+						tools_context_id,buff);
+
 			}
 			else
 			{
@@ -179,18 +186,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			if (opened == TRUE)
 			{
 				vex_opened = TRUE;
-				if (vetable_import())
-				{
-					g_snprintf(buff,100,"VE_Import Success!");
-					update_statusbar(tools_statbar,
-							tools_context_id,buff);
-				}
-				else
-				{
-					g_snprintf(buff,100,"VE_Import Failure,  File not compliant!!!");
-					update_statusbar(tools_statbar,
-							tools_context_id,buff);
-				}
+				io_file_name = g_strdup(selected_filename);
 			}
 			else
 			{
@@ -218,15 +214,16 @@ void close_file(FileIoType filetype)
 			{
 				fclose(io_file);
 				g_free(io_file_name);
-				gtk_label_set_text(GTK_LABEL(file_label),"No Log Selected Yet");
-				log_opened = FALSE;
-				g_free(io_file);
+				gtk_label_set_text(GTK_LABEL(
+						labels.dlog_file_lab),
+						"No Log Selected Yet");
 				g_snprintf(buff,100,"Logfile Closed");
-				update_statusbar(dlog_statbar,dlog_context_id,buff);
-				gtk_widget_set_sensitive(stop_button,FALSE);
-				gtk_widget_set_sensitive(start_button,FALSE);
-
-
+				update_statusbar(dlog_statbar,
+						dlog_context_id,buff);
+				gtk_widget_set_sensitive(									buttons.stop_dlog_but,FALSE);
+				gtk_widget_set_sensitive(
+						buttons.start_dlog_but,FALSE);
+				log_opened = FALSE;
 			}
 			break;
 		default: /* Everything else.. */
@@ -234,7 +231,20 @@ void close_file(FileIoType filetype)
 			{
 				fclose(io_file);
 				g_free(io_file_name);
-				g_free(io_file);
+				gtk_label_set_text(GTK_LABEL(
+						labels.vex_file_lab),
+						"No VEX File Selected Yet");
+				g_snprintf(buff,100,"VEX File Closed");
+				update_statusbar(tools_statbar,
+						tools_context_id,buff);
+       				gtk_entry_set_text(GTK_ENTRY(
+						entries.vex_comment_entry),
+						"");
+				gtk_widget_set_sensitive(
+						buttons.ve_export_but,FALSE);
+				gtk_widget_set_sensitive(
+						buttons.ve_clear_vex_but,FALSE);
+				vex_opened = FALSE;
 			}
 			break;
 
@@ -260,7 +270,12 @@ void truncate_file(FileIoType filetype)
 			break;
 		default:
 			if (vex_opened == TRUE)
+			{
 				truncate(io_file_name,0);
+				g_snprintf(buff,100,"VEX File Truncated");
+				update_statusbar(tools_statbar,
+						tools_context_id,buff);
+			}
 			break;
 
 	}

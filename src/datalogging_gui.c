@@ -25,6 +25,7 @@
 #include <notifications.h>
 #include <stdio.h>
 #include <string.h>
+#include <structures.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -38,42 +39,40 @@
 #define DUALTABLE 64
 /* Local #defines */
 
-gint ms_type = 0;
 extern gint ready;
 extern struct Raw_Runtime_Std *raw_runtime;
+extern struct DynamicButtons buttons;
+extern struct DynamicLabels labels;
+extern GdkColor white;
 gboolean log_opened = FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;
-extern GdkColor white;
-struct timeval now;
-struct timeval last;
+gint ms_type = 0;
 gint dlog_context_id;
-static gint total_logables = 0;
 gint logging_mode = CUSTOM_LOG;
+static gint total_logables = 0;
 static gint delimiter = SPACE;
 static gboolean logging = FALSE;
 static gboolean header_needed = FALSE;
-GtkWidget *logables_table;
-GtkWidget *delim_table;
-GtkWidget *tab_delim_button;
 static GtkWidget *file_selection;
 static GtkWidget *format_table;
 static GtkWidget *comma_delim_button;
 static GtkWidget *space_delim_button;
-GtkWidget *dlog_statbar;
-GtkWidget *file_label;
-GtkWidget *stop_button;
-GtkWidget *start_button;
-FILE * io_file;				/* DataLog File Handle*/
-gchar * io_file_name;			/* log pathname */
 static gchar buff[100];				/* General purpose buffer */
 static gint max_logables = 0;
-struct Logables logables;
 static gint offset_list[MAX_LOGABLES];
+struct timeval now;
+struct timeval last;
+GtkWidget *dlog_statbar;
+GtkWidget *logables_table;
+GtkWidget *delim_table;
+GtkWidget *tab_delim_button;
+extern FILE * io_file;				/* DataLog File Handle*/
+gchar * io_file_name;			/* log pathname */
+struct Logables logables;
 const gchar *logable_names[] = 
 {
-	"Hi-Res Clock", "MS Clock", "RPM", "TPS", "BATT","MAP","BARO","O2","MAT","CLT",	"VE","BaroCorr","EGOCorr","MATCorr","CLTCorr","PW","EngineBits","GammaE","PW2","VE2","IdleDC"
-	
+"Hi-Res Clock", "MS Clock", "RPM", "TPS", "BATT","MAP","BARO","O2","MAT","CLT",	"VE","BaroCorr","EGOCorr","MATCorr","CLTCorr","PW","EngineBits","GammaE","PW2","VE2","IdleDC"
 };
 /* logging_offset_map is a mapping between the logable_names[] list above and 
  * the byte offset into the raw_runtime_std datastructure. The index 
@@ -95,6 +94,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	GtkWidget *frame;
 	GtkWidget *button;
 	GtkWidget *ebox;
+	GtkWidget *label;
         GSList  *group;
 	gint table_rows = 0;
 
@@ -136,8 +136,9 @@ int build_datalogging(GtkWidget *parent_frame)
                         G_CALLBACK (std_button_handler), \
                         GINT_TO_POINTER(SELECT_LOGFILE));
 
-	file_label = gtk_label_new("No Log Selected Yet");
-	gtk_box_pack_start(GTK_BOX(hbox),file_label,FALSE,FALSE,30);
+	label = gtk_label_new("No Log Selected Yet");
+	labels.dlog_file_lab = label;
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,30);
 
 	button = gtk_button_new_with_label("Close Log File");
 	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
@@ -317,7 +318,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	button = gtk_button_new_with_label("Start Datalogging");
-	start_button = button;
+	buttons.start_dlog_but = button;
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
 	gtk_widget_set_sensitive(button,log_opened);
 	g_signal_connect(G_OBJECT (button), "clicked",
@@ -325,7 +326,7 @@ int build_datalogging(GtkWidget *parent_frame)
                         GINT_TO_POINTER(START_DATALOGGING));
 
 	button = gtk_button_new_with_label("Stop Datalogging");
-	stop_button = button;
+	buttons.stop_dlog_but = button;
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
 	gtk_widget_set_sensitive(button,log_opened);
 	g_signal_connect(G_OBJECT (button), "clicked",

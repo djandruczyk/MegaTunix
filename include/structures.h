@@ -16,7 +16,10 @@
 #ifndef __STRUCTURES_H__
 #define __STRUCTURES_H__
 
+#include <defines.h>
 #include <gtk/gtk.h>
+#include <termios.h>
+#include <unistd.h>
 
 
 struct Serial_Params
@@ -133,6 +136,8 @@ struct DynamicLabels
 	GtkWidget *runtime_mat_lab;
 	GtkWidget *p0_map_tps_lab;
 	GtkWidget *p1_map_tps_lab;
+	GtkWidget *vex_file_lab;
+	GtkWidget *dlog_file_lab;
 };
 
 /* These are defined as they are semi-dynamic and are modified
@@ -169,6 +174,10 @@ struct DynamicButtons
 	GtkWidget *baro_disa_but;		/* Toggle button */
 	GtkWidget *nbo2_but;			/* Toggle button */
 	GtkWidget *wbo2_but;			/* Toggle button */
+	GtkWidget *ve_export_but;
+	GtkWidget *ve_clear_vex_but;
+	GtkWidget *stop_dlog_but;		/* Stop DataLogging */
+	GtkWidget *start_dlog_but;		/* Start DataLogging */
 };
 
 /* Simple struct to store hte pointers to the entry and button
@@ -183,7 +192,7 @@ struct Tools
 /* These are defined here instead of the individual .c files as
  * we manipulate their attributes to give feedback to the user
  */
-struct DynamicCounts
+struct DynamicEntries
 {
 	GtkWidget *comms_reset_entry;
 	GtkWidget *runtime_reset_entry;
@@ -193,6 +202,7 @@ struct DynamicCounts
 	GtkWidget *runtime_readcount_entry;
 	GtkWidget *comms_ve_readcount_entry;
 	GtkWidget *runtime_ve_readcount_entry;
+	GtkWidget *vex_comment_entry;
 };
 
 /* Datastructure the holds the expected responses for the data
