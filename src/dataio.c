@@ -81,7 +81,7 @@ int handle_ms_data(InputData which_data)
 					zerocount++;
 
 				//g_printf("read %i bytes, count %i\n",res,count);
-				if (zerocount == 3)  // 3 bad reads, abort
+				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
 					goto jumpout;
@@ -148,7 +148,7 @@ int handle_ms_data(InputData which_data)
 #ifdef DEBUG
 				g_printf("read %i bytes, count %i\n",res,total_read);
 #endif
-				if (zerocount == 3)  // 3 bad reads, abort
+				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
 					goto jumpout;
