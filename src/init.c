@@ -46,6 +46,7 @@ extern gint interval_max;
 extern GtkWidget *main_window;
 struct ms_ve_constants *ve_constants;
 struct ms_ve_constants *ve_const_tmp;
+struct ms_raw_data_v1_and_v2 *raw_runtime;
 struct ms_data_v1_and_v2 *runtime;
 struct ms_data_v1_and_v2 *runtime_last;
 
@@ -169,6 +170,7 @@ void mem_alloc()
 
 	ve_const_tmp = malloc(sizeof(struct ms_ve_constants));
 	ve_constants = malloc(sizeof(struct ms_ve_constants));
+	raw_runtime = malloc(sizeof(struct ms_raw_data_v1_and_v2));
 	runtime = malloc(sizeof(struct ms_data_v1_and_v2));
 	runtime_last = malloc(sizeof(struct ms_data_v1_and_v2));
 	
@@ -180,6 +182,7 @@ void mem_dealloc()
 
 	free(ve_const_tmp);
 	free(ve_constants);
+	free(raw_runtime);
 	free(runtime);
 	free(runtime_last);
 	//	printf("Deallocating memory \n");

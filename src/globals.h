@@ -124,28 +124,28 @@ struct ms_raw_data_v1_and_v2
 	 * these values will be modified by post_process():
 	 * and fed into ms_data_v1_and_v2 (struct)
 	 */
-	unsigned char   secl;
-	union squirt    squirt;
-	union engine    engine;
-	unsigned char   baro;
-	unsigned char   map;
-	unsigned char   mat;
-	unsigned char   clt;
-	unsigned char   tps;
-	unsigned char   batt;
-	unsigned char   ego;
-	unsigned char   egocorr;
-	unsigned char   aircorr;
-	unsigned char   warmcorr;
-	unsigned char   rpm;
-	unsigned char   pw;
-	unsigned char   tpsaccel;
-	unsigned char   barocorr;
-	unsigned char   gammae;
-	unsigned char   vecurr;
-	unsigned char   bspot1;
-	unsigned char   bspot2;
-	unsigned char   bspot3;
+	unsigned char   secl;		/* Offset 0 */
+	union squirt    squirt;		/* Offset 1 */
+	union engine    engine;		/* Offset 2 */
+	unsigned char   baro;		/* Offset 3 */
+	unsigned char   map;		/* Offset 4 */
+	unsigned char   mat;		/* Offset 5 */
+	unsigned char   clt;		/* Offset 6 */
+	unsigned char   tps;		/* Offset 7 */
+	unsigned char   batt;		/* Offset 8 */
+	unsigned char   ego;		/* Offset 9 */
+	unsigned char   egocorr;	/* Offset 10 */
+	unsigned char   aircorr;	/* Offset 11 */
+	unsigned char   warmcorr;	/* Offset 12 */
+	unsigned char   rpm;		/* Offset 13 */
+	unsigned char   pw;		/* Offset 14 */
+	unsigned char   tpsaccel;	/* Offset 15 */
+	unsigned char   barocorr;	/* Offset 16 */
+	unsigned char   gammae;		/* Offset 17 */
+	unsigned char   vecurr;		/* Offset 18 */
+	unsigned char   bspot1;		/* Offset 19 */
+	unsigned char   bspot2;		/* Offset 20 */
+	unsigned char   bspot3;		/* Offset 21 */
 };
 struct ms_data_v1_and_v2 
 {      

@@ -19,19 +19,27 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <errno.h>
+#include <sys/time.h>
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
-#include <errno.h>
 #include <datalogging.h>
 
 #define TABLE_COLS 5
+#define MAX_LOGABLES 32
 
 extern gint ready;
+extern struct ms_raw_data_v1_and_v2 *raw_runtime;
 gint log_opened=FALSE;
 gchar *delim;
+gfloat cumulative = 0.0;
+struct timeval now;
+struct timeval last;
 static gint dlog_context_id;
+static gint total_logables = 0;
 static gint mode = CUSTOM_LOG;
+static gint delimiter = SPACE;
 static gint logging=FALSE;
 static gint header_needed=FALSE;
 static GtkWidget *logables_table;
@@ -39,28 +47,43 @@ static GtkWidget *file_selection;
 static GtkWidget *delim_table;
 static GtkWidget *format_table;
 static GtkWidget *tab_delim_button;
+static GtkWidget *comma_delim_button;
+static GtkWidget *space_delim_button;
 static GtkWidget *dlog_statbar;
 static GtkWidget *file_label;
 static GtkWidget *stop_button;
 static GtkWidget *start_button;
-static int logfile;	/* DataLog File Handle*/
-static gchar * log_file_name;
-static gchar buff[100];
-static gint total_logables = 0;
+static FILE * logfile;				/* DataLog File Handle*/
+static gchar * log_file_name;			/* log pathname */
+static gchar buff[100];				/* General purpose buffer */
+static gint max_logables = 0;
 struct Logables logables;
-const gchar *log_names[] = 
+static gint offset_list[MAX_LOGABLES];
+const gchar *logable_names[] = 
 {
 	"Hi-Res Clock", "MS Clock", "RPM", "TPS", "BATT",
 	"MAP","BARO","O2","MAT","CLT",
 	"VE","BaroCorr","EGOCorr","MATCorr","CLTCorr",
-	"PW","INJ DutyCycle","EngineBits","GammaE"
+	"PW","EngineBits","GammaE"
 };
-/* index numbers of above array of things logged in a classic datalog.
- * I did NOT want to do it this way, as it's very inflexible...  Hopefully
- * I'll come up with a better idea later.... :|
+/* logging_offset_map is a mapping between the logable list above and the 
+ * byte offset into the ms_raw_data_v1_and_v2 datastructure. The index
+ * is the index number of the logable variable from above, The value at that
+ * index point is the offset into the struct for the data. Offset 0
+ * is the first value in the struct (secl), offset 99 is a special case
+ * for the Hi-Res clock which isn't stored in the structure...
+ */
+const gint logging_offset_map[] = 
+{ 99,0,13,7,8,4,3,9,5,6,18,16,10,11,12,14,2,17 }; 
+
+/* classic[] is an array of the bit POSIONS that correspond with the names
+ * in the above list. When applying the "classic" array to the bitfield of
+ * logable variables, we end up selecting all the stuff that MegaTune uses
+ * for its "Classic" style datalog...  The is NOT the way I wanted to do 
+ * this, but it works as it is.  Someday I'll do this "The Right Way"...
  */
 const gint classic[] =
-{ 1,2,5,7,9,10,11,12,13,14,17,18 };
+{ 1,2,5,7,9,10,11,12,13,14,16,17 };
 
 int build_datalogging(GtkWidget *parent_frame)
 {
@@ -129,8 +152,8 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_container_set_border_width (GTK_CONTAINER (vbox2), 5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	total_logables = sizeof(log_names)/sizeof(gchar *);
-	table_rows = ceil((float)total_logables/(float)TABLE_COLS);
+	max_logables = sizeof(logable_names)/sizeof(gchar *);
+	table_rows = ceil((float)max_logables/(float)TABLE_COLS);
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
 	logables_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -140,9 +163,9 @@ int build_datalogging(GtkWidget *parent_frame)
 
 	j = 0;	
 	k = 0;
-	for (i=0;i<total_logables;i++)
+	for (i=0;i<max_logables;i++)
 	{
-		button = gtk_check_button_new_with_label(log_names[i]);
+		button = gtk_check_button_new_with_label(logable_names[i]);
 		logables.widgets[i] = button;
 		g_object_set_data(G_OBJECT(button),"bit_pos",
 				GINT_TO_POINTER(i));
@@ -214,6 +237,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Comma Delimited");
+	comma_delim_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -221,6 +245,14 @@ int build_datalogging(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(set_logging_delimiter),
                         GINT_TO_POINTER(COMMA));
+	if (delimiter == COMMA)
+	{
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON
+				(button),
+				TRUE);
+		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(COMMA));
+	}
 
 	button = gtk_radio_button_new_with_label(group,"Tab Delimited");
 	tab_delim_button = button;
@@ -231,9 +263,17 @@ int build_datalogging(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(set_logging_delimiter),
                         GINT_TO_POINTER(TAB));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+	if (delimiter == TAB)
+	{
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON
+				(button),
+				TRUE);
+		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(TAB));
+	}
 
 	button = gtk_radio_button_new_with_label(group,"Space Delimited");
+	space_delim_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -241,7 +281,14 @@ int build_datalogging(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(set_logging_delimiter),
                         GINT_TO_POINTER(SPACE));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+	if (delimiter == SPACE)
+	{
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON
+				(button),
+				TRUE);
+		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(SPACE));
+	}
 
 	frame = gtk_frame_new("DataLogging Operations");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
@@ -319,9 +366,13 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	/* Test to see if it exists or not */
 	if (lstat(selected_filename, &status) == -1)
 	{
-		logfile = open(selected_filename,
-				O_CREAT|O_APPEND|O_RDWR, /* Create, append mode */
-				S_IRUSR|S_IWUSR); /* User RW access */
+		//logfile = open(selected_filename,
+		//		O_CREAT|O_APPEND|O_RDWR, /* Create, append mode */
+		//		S_IRUSR|S_IWUSR); /* User RW access */
+
+		/* Append, create if not exists */
+		logfile = fopen(selected_filename,"a"); 
+				
 		if(!logfile)
 		{
 			log_opened=FALSE;
@@ -349,9 +400,12 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			warn_datalog_not_empty();
 		}
 
-		logfile = open(selected_filename,
-				O_CREAT|O_APPEND|O_RDWR, 
-				S_IRUSR|S_IWUSR); /* User RW access */
+		//logfile = open(selected_filename,
+		//		O_CREAT|O_APPEND|O_RDWR, 
+		//		S_IRUSR|S_IWUSR); /* User RW access */
+		/* Append, create if not exists */
+		logfile = fopen(selected_filename,"a"); 
+				
 		if(!logfile)
 		{
 			log_opened=FALSE;
@@ -382,7 +436,7 @@ void close_logfile(void)
 {
 	if (log_opened == TRUE)
 	{
-		close(logfile); 
+		fclose(logfile); 
 		g_free(log_file_name);
 		gtk_label_set_text(GTK_LABEL(file_label),"No Log Selected Yet");
 		log_opened = FALSE;
@@ -398,16 +452,13 @@ void close_logfile(void)
 
 void truncate_log()
 {
-	gint result;
-	/* Not written yet */
 	if (log_opened == TRUE)
 	{
-		result = ftruncate(logfile,0);
-		if (result < 0)
-			g_snprintf(buff,100,"Truncation error: %s", strerror(errno));
+		truncate(log_file_name,0);
+		if (errno)
+			g_snprintf(buff,100,"DataLog Truncation Error: %s",strerror(errno));
 		else
 			g_snprintf(buff,100,"DataLog Truncation successful");
-
 		update_statusbar(dlog_statbar,
 				dlog_context_id,buff);
 		
@@ -420,12 +471,15 @@ void start_datalogging()
 		return;   /* Logging already running ... */
 	else
 	{
+		std_button_handler(NULL,GINT_TO_POINTER(START_REALTIME));
 		gtk_widget_set_sensitive(logables_table,FALSE);
 		gtk_widget_set_sensitive(delim_table,FALSE);
 		gtk_widget_set_sensitive(format_table,FALSE);
 		gtk_widget_set_sensitive(file_selection,FALSE);
 		header_needed = TRUE;
 		logging = TRUE;
+		g_snprintf(buff,100,"DataLogging Started...");
+		update_statusbar(dlog_statbar,dlog_context_id,buff);
 	}
 	return;
 }
@@ -440,6 +494,8 @@ void stop_datalogging()
 	}
 	gtk_widget_set_sensitive(format_table,TRUE);
 	gtk_widget_set_sensitive(file_selection,TRUE);
+	g_snprintf(buff,100,"DataLogging Stopped...");
+	update_statusbar(dlog_statbar,dlog_context_id,buff);
 	return;
 }
 
@@ -491,7 +547,7 @@ void clear_logables(void)
 {
 	gint i = 0;
 	/* Uncheck all logable choices */
-	for (i=0;i<total_logables;i++)
+	for (i=0;i<max_logables;i++)
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(logables.widgets[i]),
 				FALSE);
@@ -499,8 +555,6 @@ void clear_logables(void)
 
 gint set_logging_delimiter(GtkWidget *widget, gpointer data)
 {
-	if (!ready)
-		return FALSE;
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{
 
@@ -528,6 +582,7 @@ gint log_value_set(GtkWidget * widget, gpointer data)
 	gint bit_val = 0;
 	gint bitmask = 0;
 	gint tmp = 0;
+	gint i = 0;
 
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
@@ -541,48 +596,84 @@ gint log_value_set(GtkWidget * widget, gpointer data)
 	tmp = tmp & ~bitmask;
 	tmp = tmp |(bit_val << bit_pos);
 	logables.logbits.value = tmp;
+	
+	total_logables = 0;
+	for (i=0;i<max_logables;i++)
+	{
+//		if ((tmp >> i) &0x1)
+//			printf("Logging %s\n",logable_names[i]);
+		total_logables += (tmp >> i) &0x1;
+	}
+
+//	printf("Total number of variables logged %i\n",total_logables);
 		
-/*
-	printf("logables.logbits.bit.hr_clock = %i\n",logables.logbits.bit.hr_clock);
-	printf("logables.logbits.bit.ms_clock = %i\n",logables.logbits.bit.ms_clock);
-	printf("logables.logbits.bit.rpm = %i\n",logables.logbits.bit.rpm);
-	printf("logables.logbits.bit.tps = %i\n",logables.logbits.bit.tps);
-	printf("logables.logbits.bit.batt = %i\n",logables.logbits.bit.batt);
-	printf("logables.logbits.bit.map = %i\n",logables.logbits.bit.map);
-	printf("logables.logbits.bit.baro = %i\n",logables.logbits.bit.baro);
-	printf("logables.logbits.bit.o2 = %i\n",logables.logbits.bit.o2);
-	printf("logables.logbits.bit.mat = %i\n",logables.logbits.bit.mat);
-	printf("logables.logbits.bit.clt = %i\n",logables.logbits.bit.clt);
-	printf("logables.logbits.bit.ve = %i\n",logables.logbits.bit.ve);
-	printf("logables.logbits.bit.barocorr = %i\n",logables.logbits.bit.barocorr);
-	printf("logables.logbits.bit.egocorr = %i\n",logables.logbits.bit.egocorr);
-	printf("logables.logbits.bit.matcorr = %i\n",logables.logbits.bit.matcorr);
-	printf("logables.logbits.bit.cltcorr = %i\n",logables.logbits.bit.cltcorr);
-	printf("logables.logbits.bit.pw = %i\n",logables.logbits.bit.pw);
-	printf("logables.logbits.bit.dcycle = %i\n",logables.logbits.bit.dcycle);
-	printf("logables.logbits.bit.engbits = %i\n",logables.logbits.bit.engbits);
-	printf("logables.logbits.bit.gammae = %i\n",logables.logbits.bit.gammae);
-*/
 	return TRUE;
 }
 
 void run_datalog(void)
 {
+	gint i = 0;
+	gint offset = 0;
+	gint begin = FALSE;
+	unsigned char * log_ptr;
 	if (logging == FALSE) /* Logging isn't enabled.... */
 		return;
 	else
 	{
+		log_ptr = (unsigned char *)raw_runtime;
 		if (header_needed)
 		{
 			write_log_header();
+			begin = TRUE;
 			header_needed = FALSE;
 		}
-		
+		for(i=0;i<total_logables;i++)
+		{
+			offset = offset_list[i];
+			if (offset == 99 )
+			{
+				/* Special Hi-Res clock to be logged */
+				if (begin == TRUE)
+				{	
+					gettimeofday(&now,NULL);
+					last.tv_sec = now.tv_sec;
+					last.tv_usec = now.tv_usec;
+					begin = FALSE;
+					fprintf(logfile,"%f%s",0.0,delim);
+				}
+				else
+				{
+					gettimeofday(&now,NULL);
+					cumulative += (now.tv_sec-last.tv_sec)+
+					((double)(now.tv_usec-last.tv_usec)/
+					1000000.0);
+					last.tv_sec = now.tv_sec;
+					last.tv_usec = now.tv_usec;
+					fprintf(logfile,"%f%s",cumulative,delim);
+				}
+			}
+			else
+				fprintf(logfile,"%i%s",log_ptr[offset],delim);
+		}
+		fprintf(logfile,"\n");
 	}
-
 }
 
 void write_log_header(void)
 {
+	gint i = 0;
+	gint j = 0;
+	gint tmp = logables.logbits.value;
+	
+	for (i=0;i<max_logables;i++)
+	{
+		if ((tmp >> i) &0x1) /* If bit is set, we log this variable */
+		{
+			offset_list[j] = logging_offset_map[i];
+			j++;
+			fprintf(logfile, "\"%s\"%s",logable_names[i],delim);
+		}
+	}
+	fprintf(logfile,"\n");
 	
 }

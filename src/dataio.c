@@ -26,6 +26,7 @@ gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
+extern struct ms_raw_data_v1_and_v2 *raw_runtime;
 extern struct ms_data_v1_and_v2 *runtime;
 extern struct ms_data_v1_and_v2 *runtime_last;
 extern struct ms_ve_constants *ve_constants;
@@ -37,7 +38,6 @@ int handle_ms_data(int which_data)
 	int res = 0;
 	unsigned char buf[255];
 	char *ptr = buf;
-	struct ms_raw_data_v1_and_v2 *raw;
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
@@ -74,20 +74,24 @@ int handle_ms_data(int which_data)
 				return FALSE;
 			}
 
-			raw = (struct ms_raw_data_v1_and_v2 *) buf;
+			/* copy data out of temp buffer into struct for 
+			 * use elsewhere (datalogging)
+			 */
+			memcpy(raw_runtime,buf,
+					sizeof(struct ms_raw_data_v1_and_v2));
 
 			/* Test for MS reset */
 			if (just_starting)
 			{
-				lastcount = raw->secl;
+				lastcount = raw_runtime->secl;
 				just_starting = 0;
 			}
 			/* Check for clock jump from the MS, a jump in time
 			 * from the MS clock indicates a reset due to power
 			 * and/or noise.
 			 */
-			if ((lastcount - raw->secl > 1) \
-					&& (lastcount - raw->secl != 255))
+			if ((lastcount - raw_runtime->secl > 1) \
+					&& (lastcount - raw_runtime->secl != 255))
 			{
 				ms_reset_count++;
 			}
@@ -95,12 +99,12 @@ int handle_ms_data(int which_data)
 			{
                         	ms_goodread_count++;
 			}
-			lastcount = raw->secl;
+			lastcount = raw_runtime->secl;
 
 			/* copy last round to runtime_last for checking */
 			memcpy(runtime_last,runtime,
 					sizeof(struct ms_data_v1_and_v2));
-			post_process(raw,runtime);
+			post_process(raw_runtime,runtime);
 
 			break;
 
