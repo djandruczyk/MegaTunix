@@ -41,7 +41,7 @@ float aspect = 1.0;
 float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
 int rpm_max=0, kpa_max=0, ve_max=0;
 GtkWidget *drawing_area;
-gchar font_string[] = "nimbus sans 10";
+gchar font_string[] = "sans 10";
 GLuint font_list_base;
 gint font_height;
 gchar label[6];
@@ -381,7 +381,7 @@ void tuning_gui_draw_ve_grid(void)
 
 void tuning_gui_draw_active_indicator(void)
 {
-	glPointSize(10.0);
+	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(
