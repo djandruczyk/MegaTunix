@@ -587,9 +587,10 @@ void * load_potential_match(GArray * cmd_array, gchar * filename)
 void load_profile_details(void *ptr)
 {
 	ConfigFile *cfgfile;
-	gchar * tmpbuf;
-	gchar * filename;
-	gchar * section;
+	gchar * tmpbuf = NULL;
+	gchar * filename = NULL;
+	gchar * section = NULL;
+	gchar ** list = NULL;
 	gint i = 0;
 	struct Canidate *canidate = ptr;
 
@@ -631,15 +632,31 @@ void load_profile_details(void *ptr)
 		if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
 				&canidate->rtv_map_file))
 			dbg_func(__FILE__": load_profile_details(), \"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-		if (!cfg_read_string(cfgfile,"lookuptables","mat",
-				&canidate->mat_tbl_name))
-			dbg_func(__FILE__": load_profile_details(), \"MAT\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);
-		if(!cfg_read_string(cfgfile,"lookuptables","clt",
-				&canidate->clt_tbl_name))
-			dbg_func(__FILE__": load_profile_details(), \"CLT\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);
+		if (!cfg_read_string(cfgfile,"lookuptables","tables",
+				&tmpbuf))
+			dbg_func(__FILE__": load_profile_details(), \"tables\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);
+		else
+		{
+			list = g_strsplit(tmpbuf,",",0);
+			g_free(tmpbuf);
+			if (!canidate->lookuptables)
+				canidate->lookuptables = g_hash_table_new(g_str_hash,g_str_equal);
+			i = 0;
+			while (list[i] != NULL)
+			{	
+				
+				if (!cfg_read_string(cfgfile,"lookuptables",list[i],&tmpbuf))
+					dbg_func(__FILE__": load_profile_details(), \"lookuptables entry\" key name not found in interrogation profile, ERROR\n",CRITICAL);
+				else
+				{
+					g_hash_table_insert(canidate->lookuptables,list[i],g_strdup(tmpbuf));
+					g_free(tmpbuf);
+				}
+				i++;
+			}
+		}
 
-
-		/* Allocate space Table Offsets structures.... */
+		/* Allocate space for Table Offsets structures.... */
 		for (i=0;i<canidate->total_pages;i++)
 		{
 			canidate->page_params[i] = g_new0(struct Page_Params,1);

@@ -156,13 +156,6 @@ typedef enum
 }GcType;
 
 typedef enum
-{
-	MAT=0xf0,
-	CLT,
-	AFR
-}TableType;
-
-typedef enum
 {	/* up to 32 Capability flags.... */
 	/* No capabilities == Standard B&G code with no modifications */
 	STANDARD	= 1<<0,

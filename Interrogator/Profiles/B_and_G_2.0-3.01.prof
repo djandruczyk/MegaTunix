@@ -37,5 +37,8 @@ LoadTabs=B_n_G_constants,enrichments_BnG,vetable_8x8_1
 RealtimeMapFile=B_and_G_2.0-3.01
 
 [lookuptables]
-mat=matfactor.inc
-clt=cltfactor.inc
+tables=mat_table,clt_table,afr_table,kpa_table
+mat_table=matfactor.inc
+clt_table=cltfactor.inc
+afr_table=afrtable.inc
+kpa_table=kpafactor.inc

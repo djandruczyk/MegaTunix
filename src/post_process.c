@@ -24,9 +24,8 @@
 extern unsigned char *kpa_conversion;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
-gint matfactor[256];
-gint cltfactor[256];
 static GArray * raw_memory_data;
+extern GHashTable *lookuptables;
 
 
 void post_process_realtime_vars(void *input, void *output)
@@ -39,12 +38,13 @@ void post_process_realtime_vars(void *input, void *output)
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern gint temp_units;
+	gint *matfactor = (gint *)g_hash_table_lookup(lookuptables,"mat_table");
+	gint *cltfactor = (gint *)g_hash_table_lookup(lookuptables,"clt_table");
 	gfloat ign_int = 0.0;
 	gint rpmconstant = 0;
 	gint cyls = 0;
 	struct Raw_Runtime_Std *in = input;
 	struct Raw_Runtime_Dualtable *in_dt = input;
-//	struct Raw_Runtime_Enhanced *in_enh = input;
 	struct Runtime_Common *out = output;
 	struct Raw_Runtime_Ignition *ign_in = input;
 	struct Ve_Const_Std *ve_const = NULL;

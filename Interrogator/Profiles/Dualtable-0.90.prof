@@ -45,5 +45,8 @@ LoadTabs=Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8_1,vetable_8x8
 RealtimeMapFile=Dualtable-0.90
 
 [lookuptables]
-mat=matfactor.inc
-clt=cltfactor.inc
+tables=mat_table,clt_table,afr_table,kpa_table
+mat_table=matfactor.inc
+clt_table=cltfactor.inc
+afr_table=afrtable.inc
+kpa_table=kpafactor.inc

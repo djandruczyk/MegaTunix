@@ -307,8 +307,7 @@ struct Canidate
 	gchar * raw_mem_cmd_key;/* string key to hashtable for RAW command */
 	gboolean multi_page;	/* Multi-page firmware ??? */
 	gint total_pages;	/* how many pages do we handle? */
-	gchar * mat_tbl_name;	/* MAT lookup table filename */
-	gchar * clt_tbl_name;	/* CLT lookup table filename */
+	GHashTable *lookuptables;/* Lookuptables hashtable... */
 	struct Page_Params *page_params[8];/* details on ve/rpm/load tables*/
 };
 

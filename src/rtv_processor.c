@@ -28,10 +28,16 @@ void process_rt_vars(void *incoming)
 {
 	extern struct RtvMap *rtv_map;
 	extern struct Firmware_Details *firmware;
+	unsigned char *raw_realtime = incoming;
+	GObject * object = NULL;
 	gint len =  0;
 	GList * list= NULL;
 	gint i = 0;
 	gint j = 0;
+	gfloat x = 0;
+	gint offset = 0;
+	gfloat result = 0.0;
+	void *evaluator = NULL;
 	
 	len = firmware->rtvars_size;
 	if (len != rtv_map->raw_total)
@@ -48,8 +54,43 @@ void process_rt_vars(void *incoming)
 		list = g_list_first(list);
 		for (j=0;j<g_list_length(list);j++)
 		{
-			
+			object=(GObject *)g_list_nth_data(list,j);
+			offset = (gint)g_object_get_data(object,"offset");
+			if (g_object_get_data(object,"complex_expr"))
+			{
+				handle_complex_expr(object);
+				break;
+			}
+
+			if (g_object_get_data(object,"lookuptable"))
+				x = lookup_data(object,offset);
+			else
+				x = raw_realtime[offset];
+
+			evaluator = (void *)g_object_get_data(object,"evaluator");
+			assert(evaluator);
+			result = evaluator_evaluate_x(evaluator,x);
 		}
 	}
 	return;
 }
+
+gfloat lookup_data(GObject *object, gint offset)
+{
+	extern GHashTable *lookuptables;
+	gint *lookuptable = NULL;
+	gchar *table = NULL;
+
+	table = (gchar *)g_object_get_data(object,"lookuptable");
+	printf("Looking for table %s\n",table);
+	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+	assert(lookuptable);
+	
+	return lookuptable[offset];
+}
+
+void handle_complex_expr(GObject *object)
+{
+	return;
+}
+

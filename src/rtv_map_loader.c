@@ -193,7 +193,7 @@ gboolean load_realtime_map(void )
 							evaluator = evaluator_create(tmpbuf);
 							assert(evaluator);
 							if (evaluator)
-								g_object_set_data(object,"evaulator",evaluator);
+								g_object_set_data(object,"evaluator",evaluator);
 							else
 								dbg_func(g_strdup_printf(__FILE__": load_realtime_map() Failure creating evaluator for expression \"%s\"\n",tmpbuf),CRITICAL);
 							evaluator = NULL;

@@ -20,42 +20,34 @@
 #include <stdlib.h>
 #include <structures.h>
 
+GHashTable *lookuptables = NULL;
 
 void load_lookuptables(void *ptr)
 {
 	struct Canidate *canidate = ptr;
-	gchar * filename = NULL;
-	gboolean status = FALSE;;
+	g_hash_table_foreach(canidate->lookuptables,get_table,NULL);
+}
 
-	/* MAT table first... */
-	filename = g_strconcat(DATA_DIR,"/",LOOKUPTABLE_DIR,"/",canidate->mat_tbl_name,NULL);
-	if (g_file_test(filename,G_FILE_TEST_IS_REGULAR))
-		status = load_table(MAT,filename);
+void get_table(gpointer table, gpointer filename, gpointer user_data)
+{
+	gchar * fullpath = NULL;
+	gboolean status = FALSE;
+
+	fullpath = g_strconcat(DATA_DIR,"/",LOOKUPTABLE_DIR,"/",filename,NULL);
+	if (g_file_test(fullpath,G_FILE_TEST_IS_REGULAR))
+		status = load_table(table,fullpath);
 	if (!status)
 	{
-		filename = g_strconcat(g_get_home_dir(),"/.MegaTunix/",LOOKUPTABLE_DIR,"/",canidate->mat_tbl_name,NULL);
-		if (g_file_test(filename,G_FILE_TEST_IS_REGULAR))
-			status = load_table(MAT,filename);
+		fullpath = g_strconcat(g_get_home_dir(),"/.MegaTunix/",LOOKUPTABLE_DIR,"/",filename,NULL);
+		if (g_file_test(fullpath,G_FILE_TEST_IS_REGULAR))
+			status = load_table(table,fullpath);
 	}
 	if (!status)
-		dbg_func(__FILE__": load_lookuptables(), FAILURE loading MAT lookuptable\n",CRITICAL);
-
-	/* CLT table next... */
-	filename = g_strconcat(DATA_DIR,"/",LOOKUPTABLE_DIR,"/",canidate->clt_tbl_name,NULL);
-	if (g_file_test(filename,G_FILE_TEST_IS_REGULAR))
-		status = load_table(CLT,filename);
-	if (!status)
-	{
-		filename = g_strconcat(g_get_home_dir(),"/.MegaTunix/",LOOKUPTABLE_DIR,"/",canidate->clt_tbl_name,NULL);
-		if (g_file_test(filename,G_FILE_TEST_IS_REGULAR))
-			status = load_table(CLT,filename);
-	}
-	if (!status)
-		dbg_func(__FILE__": load_lookuptables(), FAILURE loading CLT lookuptable\n",CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_lookuptables(), FAILURE loading \"%s\" lookuptable\n",(gchar *)table),CRITICAL);
 
 }
 
-gboolean load_table(TableType ttype,gchar * filename)
+gboolean load_table(gchar *table_name, gchar *filename)
 {
 	GIOStatus status;
 	GIOChannel *iochannel;
@@ -64,15 +56,14 @@ gboolean load_table(TableType ttype,gchar * filename)
 	gchar * tmp = NULL;
 	gchar * end = NULL;
 	GString *a_line; 
-	extern gint matfactor[];
-	extern gint cltfactor[];
+	gint *array = NULL;
 	gint tmparray[256];
 	gint i = 0;
 
 	iochannel = g_io_channel_new_file(filename,"r", NULL);
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(__FILE__": load_lookuptables() Eror seeking to beginning of the file\n",CRITICAL);
+		dbg_func(__FILE__": load_lookuptables() Error seeking to beginning of the file\n",CRITICAL);
 	while (go)	
 	{
 		a_line = g_string_new("\0");
@@ -93,17 +84,11 @@ gboolean load_table(TableType ttype,gchar * filename)
 		}
 		g_string_free(a_line,TRUE);
 	}
-	if (ttype == MAT)
-		for (i=0;i<256;i++)
-			matfactor[i]=tmparray[i];
-	else if (ttype == CLT)
-		for (i=0;i<256;i++)
-			cltfactor[i]=tmparray[i];
-	else
-	{
-		dbg_func(__FILE__": load_table() table type is out of range\n",CRITICAL);
-		return FALSE;
-	}
+		
+	array = g_memdup(&tmparray,256);
+	if (!lookuptables)
+		lookuptables = g_hash_table_new(g_str_hash,g_str_equal);
+	g_hash_table_insert(lookuptables,table_name,array);
 
 	return TRUE;
 }

@@ -21,6 +21,7 @@
 #include <enums.h>
 
 void load_lookuptables(void *);
-gboolean load_table(TableType,gchar *);
+gboolean load_table(gchar *, gchar *);
+void get_table(gpointer, gpointer, gpointer );
 
 #endif

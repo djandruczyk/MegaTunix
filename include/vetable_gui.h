@@ -20,7 +20,7 @@
 /* Prototypes */
 
 void hilite_ve_entries(gint, gint, gint);
-void get_indexes(TableType, gint, void *, gint);
+//void get_indexes(TableType, gint, void *, gint);
 /* Prototypes */
 
 struct Indexes

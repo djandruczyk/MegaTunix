@@ -154,7 +154,7 @@ internal_name=mapkpa
 dlog_gui_name=MAP KpA
 dlog_field_name=MAPKPA
 offset=4
-lookuptable=kpa_coversion
+lookuptable=kpa_table
 conv_expr=x*1
 
 [derived_17]
@@ -164,7 +164,7 @@ internal_name=barokpa
 dlog_gui_name=BARO KpA
 dlog_field_name=BAROKPA
 offset=3
-lookuptable=kpa_coversion
+lookuptable=kpa_table
 conv_expr=x*1
 
 [derived_18]
@@ -174,7 +174,7 @@ internal_name=matdeg
 dlog_gui_name=MAT (\302\260)
 dlog_field_name=MATDEG
 offset=5
-lookuptable=matfactor
+lookuptable=mat_table
 conv_expr=x-40
 temp_dep=TRUE
 
@@ -185,7 +185,7 @@ internal_name=cltdeg
 dlog_gui_name=CLT (\302\260)
 dlog_field_name=CLTDEG
 offset=6
-lookuptable=cltfactor
+lookuptable=clt_table
 conv_expr=x-40
 
 [derived_20]
@@ -213,7 +213,7 @@ internal_name=afr
 dlog_gui_name=AFR
 dlog_field_name=AFR
 offset=9
-lookuptable=afrtable
+lookuptable=afr_table
 conv_expr=x*1
 
 [derived_23]
