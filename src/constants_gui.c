@@ -606,7 +606,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Injection Control cyls/injectors, etc.. */
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   You can select the number of times to inject fuel per cycle. A cycle refers to one complete engine cycle (2 revs of a crank on a 4 stroke piston engine). The number of injectors and the number of cylinders.  These choices determine how long each injector pulse is. (don't get too low), and how often they are fired. You wil probably find that more or less squirts (depending on the engine and injection type (Multi-point or TBI) can significantly affect your idle quality.  The MS FAQ describes this better and offers suggestions as to the best optiosn to choose.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   You can select the number of times to inject fuel per cycle. A cycle refers to one complete engine cycle (2 revs of a crank on a 4 stroke piston engine). The number of injectors and the number of cylinders.  These choices determine how long each injector pulse is. (don't get too low), and how often they are fired. You will probably find that more or less squirts (depending on the engine and injection type (Multi-point or TBI) can significantly affect your idle quality.  The MS FAQ describes this better and offers suggestions as to the best optiosn to choose.",NULL);
 	frame = gtk_frame_new("Cylinder/Injection Configuration");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -715,7 +715,5 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(WRITE_TO_MS));
-	
-	/* Not written yet */
 	return TRUE;
 }

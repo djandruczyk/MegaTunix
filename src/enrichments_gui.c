@@ -39,6 +39,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	GtkWidget *frame;
 	GtkWidget *label;
 	GtkWidget *table;
+	GtkWidget *ebox;
 	GSList *group;
 	GtkAdjustment *adj;
 	GtkWidget *spinner;
@@ -51,8 +52,11 @@ int build_enrichments(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,"   The Cranking Pulsewidth determines how many milliseconds the injectors are pulsed open ONLY during engine crank-over.  Currently the ms is hardcoded to consider cranking to be from 0-300 RPM, above that it considers the engine running and no longer adds this enrichment.  There are two fields, the enrichment at -40deg Fahreheit and at 170deg F.  At temperatures between these extremes the MS code interpolates the value.  The priming pulse is a one time pulse upon bootup of the MS unit.  This is similar in concept to pumping the gas pedel on an old carbureted car to get the accel pump to shoot at little extra in to assist with starting Though the MS only does this once at startup.  You may not need thie priming pulse...",NULL);
 	frame = gtk_frame_new("Cranking Pulsewidth (ms)");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	table = gtk_table_new(2,3,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -124,8 +128,11 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_FILL),
 				(GtkAttachOptions) (0), 0, 0);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,"   The Afterstart enrichment is a short term enrichment that increases the delivered fuel to the engine by the Enirchment percentage for a certain number of ignition cycles. The enrichment tapers down for each cycle. (ignition pulse inputted into the MS ecu).  This can be shown on the runtime page after engine startup, the Warmup enrichment bar tapers down during the afterstart enrichment period. (and the AS_ENRICH box is \"lit\") A max of 255 cycles can be entered for the Afterstart enrichment.",NULL);
 	frame = gtk_frame_new("Afterstart Enrich");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	table = gtk_table_new(2,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -178,12 +185,11 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Warmup enrichments */
-	frame = gtk_frame_new(NULL);
-	label = gtk_label_new ("Warmup Enrichment Bins (Percent)");
-	gtk_frame_set_label_widget (GTK_FRAME (frame), label);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,"   The Warmup enrichments are a longer term enrichment to assist and engine starting up cold.  The values are in percentage, a value of 100, means no enrichment a value of 150 means 1.5 times more fuel.  There are ten bins from the -40 Deg F. to 160 Deg F. At temperatures between this the MS box interpolates the correct amount of enrichment.  See the FAQ for tuning tips and recommendations.",NULL);
+	frame = gtk_frame_new("Warmup Enrichment Bins (Percent)");
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
@@ -230,8 +236,11 @@ int build_enrichments(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,"    Your VE table should be pretty well dialed in before changing these otherwise tuning becomes harder. See the MS FAQ for more information.  The Acceleration enrichments determine when and how much extra fuel is added when the throttle is moved, or mashed to the floor...  The decel fuel cut means \"What percentage of fuel do you want the engine to get on deceleration\". Thus 100% means to not cut anything off, and 1% means to cut out 99% of the fuel during decel.  The Accel enrichment bins determine how much of an accel \"Pump Shot\" is give based on how fast the throttle position is changing. Of course the MS interpolates between points.",NULL);
 	frame = gtk_frame_new("Acceleration Enrichments");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 	
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
@@ -403,13 +412,16 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 
+			
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,"    First off select the type of O2 sensors you are using, most vehicles have a std NArrow Band (1,2,3 or 4 wire sensor). WideBand sensors are available but require dedicated controller hardware to ouotput the proper signals that refer to the O<sub>2</sub> content in the exhaust.  The Coolant Temp Activation is the minimum temp that the engine must reach before O2 correction is enabled.  The EGO Active RPM is the minimum RPM that must be exceeded before O2 correction is enabled. Both this and the minimum temp must be reached before this feature is enabled. The EGO switching voltage is typically set to your target AFR voltage.  for NB sensors that is about .47 Volts (for stoich), and about 2.5 Volts for Wideband (but your controller may output a different voltage consult your WB controller documentation). The EGO step  is the amount of percentage change to adjust the fuel to correct a lean/rich condition. The higher the number the faster the MS will adjust, but this may cause oscillation if set too high.  See the FAQ for tips on tuning.  The # of ign events between steps determines how fast the ECU reacts to mixture changes. The EGO+- limit is the maximum deviation the MS will allow. (the better your VE table is set the lower this can be set).",NULL);
+	frame = gtk_frame_new(NULL);
 	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label),
 			"Exhaust O<sub>2</sub> Feedback Settings");
-			
-	frame = gtk_frame_new(NULL);
 	gtk_frame_set_label_widget(GTK_FRAME(frame),GTK_WIDGET(label));
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
         vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox3);
@@ -612,6 +624,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	button = gtk_button_new_with_label("Get Data from ECU");
+	gtk_tooltips_set_tip(tip,button,
+        "Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
+
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -630,6 +645,5 @@ int build_enrichments(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(WRITE_TO_MS));
 	
-	/* Not written yet */
 	return TRUE;
 }
