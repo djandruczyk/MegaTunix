@@ -156,7 +156,7 @@ dl_type=_IMMEDIATE_
 ign_parm=TRUE
 handler=_GENERIC_
 
-#----- TextViews -------------------------------------------------------------
+#----- TreeViews -------------------------------------------------------------
 
 [output1_swin]
 keys=page,offset,src_offset,lim_offset,ign_parm,post_function_with_arg,output_num

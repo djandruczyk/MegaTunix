@@ -155,3 +155,27 @@ ul_conv_expr=x*100
 dl_type=_IMMEDIATE_
 ign_parm=TRUE
 handler=_GENERIC_
+
+#----- TreeViews -------------------------------------------------------------
+
+[output1_swin]
+keys=page,offset,src_offset,lim_offset,ign_parm,post_function_with_arg,output_num
+key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_INT_
+page=1
+offset=91
+src_offset=91
+lim_offset=92
+ign_parm=TRUE
+post_function_with_arg=build_model_and_view
+output_num=1
+
+[output2_swin]
+keys=page,offset,src_offset,lim_offset,ign_parm,post_function_with_arg,output_num
+key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_INT_
+page=1
+offset=93
+src_offset=93
+lim_offset=94
+ign_parm=TRUE
+post_function_with_arg=build_model_and_view
+output_num=2
