@@ -192,7 +192,6 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 				{
 					if (mt_classic[i] == 1)
 					{
-						printf("pressing button %i\n",i);
 						gtk_toggle_button_set_active(
 							GTK_TOGGLE_BUTTON
 							(logables.widgets[i]),
