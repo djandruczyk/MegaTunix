@@ -20,7 +20,7 @@
 #define MS_PAGE_SIZE 256
 #define MAX_SUPPORTED_PAGES 8
 
-/* Windows speciifc for exporting symbols forglade... */
+/* Windows specific for exporting symbols for glade... */
 #ifdef __WIN32__
 #define EXPORT __declspec (dllexport)
 #else
