@@ -76,6 +76,14 @@ key_types=_INT_,_STRING_
 page=7
 set_label=Boost Table 3 (KPA Target)
 
+#----- widgets ---------------------------------------------------------------
+
+[basetable]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=7
+bind_to_list=boost_table3,boost_controls
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
