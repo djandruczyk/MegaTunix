@@ -346,11 +346,12 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = -1;
 	static gboolean queue_referenced =  FALSE;
 	extern GAsyncQueue *io_queue;
-	if (GTK_IS_OBJECT(widget))
-	{
-		obj_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
-		handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
-	}
+	if (!GTK_IS_OBJECT(widget))
+		return;
+
+	obj_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
+	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
+
 	if (queue_referenced == FALSE)
 		g_async_queue_ref(io_queue);
 	if (handler == 0)

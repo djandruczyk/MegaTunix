@@ -42,6 +42,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	if (conv_expr == NULL)
 	{
 		dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): NO CONVERSION defined for page: %i, offset: %i\n",page, offset),DL_CONV);
+		ms_data[page][offset] = (gint)value; 
 		return ((gint)value);		
 	}
 	if (!evaluator) 	/* if no evaluator create one */
@@ -52,7 +53,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	return_value = evaluator_evaluate_x(evaluator,value)+0.001;
 
-	dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): offset %i, raw %.2f, sent %i, page %i,\n",offset,value,return_value,page),DL_CONV);
+	dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): page %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value),DL_CONV);
 
 	ms_data[page][offset] = return_value; 
 	return (return_value);
