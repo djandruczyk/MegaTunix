@@ -17,7 +17,6 @@
 /* Definitions */
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
-#define MS_PAGE_SIZE 256
 
 /* Windows specific for exporting symbols for glade... */
 #ifdef __WIN32__

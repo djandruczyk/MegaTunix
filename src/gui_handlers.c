@@ -926,7 +926,7 @@ void update_ve_const()
 	/* Update all on screen controls (except bitfields (done above)*/
 	for (page=0;page<firmware->total_pages;page++)
 	{
-		for (offset=0;offset<MS_PAGE_SIZE;offset++)
+		for (offset=0;offset<firmware->page_params[page]->size;offset++)
 		{
 			if (ve_widgets[page][offset] != NULL)
 			{
@@ -1037,8 +1037,7 @@ EXPORT gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer 
 
 EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
-	static gboolean marked[MS_PAGE_SIZE];
-	gint index = 0;
+	gboolean marked = FALSE;
 	extern GdkColor red;
 	static GdkColor old_bg;
 	static GdkColor text_color;
@@ -1049,19 +1048,17 @@ EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpoin
 	if (!grab_allowed)
 		return FALSE;
 
-	index = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-	if (index >= MS_PAGE_SIZE)
-		index -= (MS_PAGE_SIZE/2);
+	marked = (gboolean)g_object_get_data(G_OBJECT(widget),"marked");
 
-	if (marked[index])
+	if (marked)
 	{
-		marked[index] = FALSE;
+		g_object_set_data(G_OBJECT(widget),"marked",GINT_TO_POINTER(FALSE));
 		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&old_bg);
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&text_color);
 	}
 	else
 	{
-		marked[index] = TRUE;
+		g_object_set_data(G_OBJECT(widget),"marked",GINT_TO_POINTER(TRUE));
 		style = gtk_widget_get_style(widget);
 		old_bg = style->bg[GTK_STATE_NORMAL];
 		text_color = style->text[GTK_STATE_NORMAL];

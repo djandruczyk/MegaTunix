@@ -947,8 +947,8 @@
 			  <property name="n_rows">2</property>
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
-			  <property name="row_spacing">2</property>
-			  <property name="column_spacing">1</property>
+			  <property name="row_spacing">1</property>
+			  <property name="column_spacing">5</property>
 			</widget>
 		      </child>
 

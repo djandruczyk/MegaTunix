@@ -38,8 +38,6 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 	gint i = 0;
 
 
-	if (page == 2)
-		offset = MS_PAGE_SIZE;
 
 	get_indexes(KPA,map, &kpa_index[page],page);
 	get_indexes(RPM,rpm/100, &rpm_index[page],page);
@@ -101,8 +99,6 @@ void get_indexes(TableType type, gint value, void *ptr,gint page)
 		index->high = -1;
 		return;
 	}
-	if (page == 2)
-		start += MS_PAGE_SIZE;
 	
 	for (i=0;i<span-1;i++)
 	{

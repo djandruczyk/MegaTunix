@@ -613,7 +613,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -641,7 +641,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -669,7 +669,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -697,7 +697,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -725,7 +725,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -753,7 +753,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -781,7 +781,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -809,7 +809,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -837,7 +837,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -865,7 +865,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -893,7 +893,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -921,7 +921,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -949,7 +949,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -977,7 +977,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1005,7 +1005,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1033,7 +1033,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1061,7 +1061,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1089,7 +1089,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1117,7 +1117,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1145,7 +1145,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1173,7 +1173,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1201,7 +1201,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1229,7 +1229,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1257,7 +1257,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1285,7 +1285,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1313,7 +1313,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1341,7 +1341,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1369,7 +1369,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1397,7 +1397,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1425,7 +1425,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1453,7 +1453,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1481,7 +1481,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1509,7 +1509,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1537,7 +1537,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1565,7 +1565,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1593,7 +1593,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1621,7 +1621,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1649,7 +1649,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1677,7 +1677,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1705,7 +1705,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1733,7 +1733,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1761,7 +1761,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1789,7 +1789,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1817,7 +1817,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1845,7 +1845,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1873,7 +1873,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1901,7 +1901,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1929,7 +1929,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1957,7 +1957,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -1985,7 +1985,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2013,7 +2013,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2041,7 +2041,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2069,7 +2069,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2097,7 +2097,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2125,7 +2125,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2153,7 +2153,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2181,7 +2181,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2209,7 +2209,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2237,7 +2237,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2265,7 +2265,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2293,7 +2293,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2321,7 +2321,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2349,7 +2349,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2377,7 +2377,7 @@
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
 				  <property name="digits">2</property>
-				  <property name="numeric">False</property>
+				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
@@ -2516,7 +2516,7 @@
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
 			      <property name="digits">2</property>
-			      <property name="numeric">False</property>
+			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
@@ -2564,7 +2564,7 @@
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
 			      <property name="digits">2</property>
-			      <property name="numeric">False</property>
+			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>

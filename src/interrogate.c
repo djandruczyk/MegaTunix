@@ -56,7 +56,7 @@ void interrogate_ecu()
 	 */
 	struct Command *cmd = NULL;
 	struct Canidate *canidate = NULL;
-	gint size = 1024;
+	gint size = 4096;
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
@@ -124,7 +124,7 @@ void interrogate_ecu()
 		g_free(string);
 
 		total_read = 0;
-		total_wanted = 1024;
+		total_wanted = size;
 		zerocount = 0;
 		while (total_read < total_wanted )
 		{
@@ -310,7 +310,6 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	firmware->multi_page = potential->multi_page;
 	firmware->total_pages = potential->total_pages;
 	/* Allocate ram for the necessary structures... */
-	mem_alloc();
 
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
@@ -328,6 +327,8 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 			firmware->page_params[i]->size = (gint)g_hash_table_lookup(potential->bytecounts,cmd->key);
 		}
 	}
+
+	mem_alloc();
 
 	/* use commands defined in the interogation profile to map the proper
 	 * command to the I/O routines...  Looks ugly but should (hopefully)

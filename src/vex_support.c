@@ -627,9 +627,9 @@ void feed_import_data_to_ms(void *ptr)
 	}
 
 	/* Backup the ms data first... */
-	memset((void *)ms_data_backup[page], 0, MS_PAGE_SIZE);
-	memcpy(ms_data_backup[page], 
-			ms_data[page],MS_PAGE_SIZE);
+	memset((void *)ms_data_backup[page], 0, sizeof(gint)*firmware->page_params[page]->size);
+	memcpy(ms_data_backup[page], ms_data[page],sizeof(gint)*firmware->page_params[page]->size);
+			
 
 	for (i=0;i<vex_import->total_rpm_bins;i++)
 		ms_data[page][firmware->page_params[page]->rpm_base + i] =
@@ -661,7 +661,7 @@ void revert_to_previous_data()
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		memcpy(ms_data[i], ms_data_backup[i], MS_PAGE_SIZE*sizeof(gint));
+		memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->size);
 	}
 	update_ve_const();
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),FALSE);

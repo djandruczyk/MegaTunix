@@ -157,7 +157,7 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 		return;
 	}
 	g_free(name);
-	hbox  = gtk_hbox_new(FALSE,10);
+	hbox = gtk_hbox_new(FALSE,5);
 
 	label = gtk_label_new(NULL);
 	slider->label = label;
