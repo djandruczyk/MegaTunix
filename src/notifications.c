@@ -23,6 +23,9 @@ extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
+extern GtkWidget *tools_view;
+extern GtkWidget *dlog_view;
+
 
 
 void set_store_buttons_state(GuiState state)
@@ -243,10 +246,90 @@ void interdep_state(GuiState state, gint page)
 	}
 }
 
-void warn_file_not_empty(void)
+void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
 {
-	gchar *buff;
-	buff = g_strdup("The Log/VEX file you selected is NOT empty.  If you wish to overwrite this file, just hit \"Close\" to dismiss this warning, and select \"Clear Log/VEX File\" button.  If you do NOT clear out the logfile, the information already present in it will most likely confuse whatever program you use to process it.  If you do NOT wish to use this logfile, Close this warning and click on \"Select Logfile\" and either select a new empty file, or type in the name of your choice.");
-	warn_user(buff);
+	gchar *buff = NULL;
+	gchar *function = NULL;
+	gchar *choice = NULL;
+	gchar *lbar_msg = NULL;
+	switch (iotype)
+        {
+                case VE_IMPORT:
+                        function = g_strdup("VE Table Load");
+                        choice = g_strdup("\"Import VE Table (s)\"");
+			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nImporting a VE Table requires a valid VEX file\n",filename);
+			update_logbar(tools_view,"warning",lbar_msg,TRUE);
+                        break;
+                case DATALOG_IMPORT:
+                        function = g_strdup("DataLog Load");
+                        choice = g_strdup("\"Select Log File\"");
+			lbar_msg = g_strdup_printf("The selected file %s does NOPT exist\nImporting a DataLog for viewing requires a valid datalog file\n",filename);
+			update_logbar(dlog_view,"warning",lbar_msg,TRUE);
+                        break;
+                case FULL_RESTORE:
+                        function = g_strdup("MegaSquirt Restore");
+                        choice = g_strdup("\"Restore All MS Parameters\"");
+			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nA Full restore of MegaSquirt parameters requires a valid backup file\n",filename);
+			update_logbar(tools_view,"warning",lbar_msg,TRUE);
+                        break;
+                default:
+                        break;
+        }
+
+        buff = g_strdup_printf("The file you selected does NOT exist. The %s function requires a valid input file to work, please close this dialog by clicking on \"Close\" to dismiss this warning, and select the %s button and select a valid file.",function,choice);
+        warn_user(buff);
 	g_free(buff);
+	if (lbar_msg)
+		g_free(lbar_msg);
+	if (function)
+		g_free(function);
+	if (choice)
+		g_free(choice);
+	return;
+}
+void warn_file_not_empty(FileIoType iotype,gchar * filename)
+{
+	gchar *buff = NULL;
+	gchar *filetype = NULL;
+	gchar *button = NULL;
+	gchar *choice = NULL;
+	gchar *lbar_msg = NULL;
+	switch (iotype)
+	{
+		case DATALOG_EXPORT:
+			filetype = g_strdup("DataLog");
+			button = g_strdup("\"Truncate Log File\"");
+			choice = g_strdup("\"Select Log File\"");
+			lbar_msg = g_strdup_printf("The selected file %s is NOY empty\nsuggest an alternate name or press \"Truncate Log File\" and retry\n",filename);
+			update_logbar(dlog_view,"warning",lbar_msg,TRUE);
+			break;
+		case FULL_BACKUP:
+			filetype = g_strdup("MegaSquirt Backup");
+			button = g_strdup("\"Truncate File\"");
+			choice = g_strdup("\"Backup All MS Parameters\"");
+			lbar_msg =  g_strdup_printf("The selected file %s is NOT empty,\n suggest alternate name or press \"Truncate File\" and retry\n",filename);
+			update_logbar(tools_view,"warning",lbar_msg,TRUE);
+			break;
+		case VE_EXPORT:
+			filetype = g_strdup("VE Table Export");
+			button = g_strdup("\"Truncate File\"");
+			choice = g_strdup("\"Export VE Table(s)\"");
+			lbar_msg =  g_strdup_printf("The selected file %s is NOT empty,\n suggest alternate name or press \"Truncate File\" and retry\n",filename);
+			update_logbar(tools_view,"warning",lbar_msg,TRUE);
+			break;
+		default:
+			break;
+	}
+		
+	buff = g_strdup_printf("The %s file you selected already exists and contains data.  If you wish to overwrite this file, just hit \"Close\" to dismiss this warning, and select the %s button and then select the %s button.",filetype,button,choice);
+	warn_user(buff);
+	if (lbar_msg)
+		g_free(lbar_msg);
+	if (filetype)
+		g_free(filetype);
+	if (button)
+		g_free(button);
+	if (choice)
+		g_free(choice);
+	return;
 }

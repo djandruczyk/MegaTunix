@@ -225,7 +225,7 @@ gboolean vetable_import()
 	{
 		//printf("Successful VEX import. Updating VE table.\n");
 		feed_import_data_to_ms();
-		gtk_widget_set_sensitive(buttons.ve_revert_but,TRUE);
+		gtk_widget_set_sensitive(buttons.tools_revert_but,TRUE);
 		return TRUE;
 	} 
 #ifdef DEBUG
@@ -646,12 +646,16 @@ void feed_import_data_to_ms()
 
 void revert_to_previous_data()
 {
+	gchar * tmpbuf;
 	/* Called to back out a load of a VEtable from VEX import */
 	extern struct Ve_Const_Std *backup_ve_const_p0;
 	extern struct Ve_Const_Std *backup_ve_const_p1;
 	memcpy(ve_const_p0, backup_ve_const_p0, MS_PAGE_SIZE);
 	memcpy(ve_const_p1, backup_ve_const_p1, MS_PAGE_SIZE);
 	update_ve_const();
-	gtk_widget_set_sensitive(buttons.ve_revert_but,FALSE);
+	gtk_widget_set_sensitive(buttons.tools_revert_but,FALSE);
+	tmpbuf = g_strdup("Reverting to previous settings....\n");
+	update_logbar(tools_view,"warning",tmpbuf,TRUE);
+	g_free(tmpbuf);
 }
 

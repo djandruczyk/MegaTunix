@@ -180,10 +180,8 @@ struct DynamicButtons
 	GtkWidget *baro_disa_but;		/* Toggle button */
 	GtkWidget *nbo2_but;			/* Toggle button */
 	GtkWidget *wbo2_but;			/* Toggle button */
-	GtkWidget *ve_import_but;
-	GtkWidget *ve_export_but;
-	GtkWidget *ve_clear_vex_but;
-	GtkWidget *ve_revert_but;		/* revert to old data */
+	GtkWidget *tools_clear_but;		/* Clear file (truncate)*/
+	GtkWidget *tools_revert_but;		/* revert to old data */
 	GtkWidget *stop_dlog_but;		/* Stop DataLogging */
 	GtkWidget *start_dlog_but;		/* Start DataLogging */
 };

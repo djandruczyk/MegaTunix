@@ -400,16 +400,11 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case STOP_DATALOGGING:
 			stop_datalogging();
 			break;
-		case SELECT_VEXFILE:
+		case EXPORT_VETABLE:
 			present_filesavebox(VE_EXPORT);
 			break;
-		case EXPORT_VETABLE:
-			vetable_export();
-			close_file(VE_EXPORT);
-			break;
 		case IMPORT_VETABLE:
-			vetable_import();
-			close_file(VE_IMPORT);
+			present_filesavebox(VE_IMPORT);
 			break;
 		case REVERT_TO_BACKUP:
 			revert_to_previous_data();
@@ -419,6 +414,12 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case RESET_3D_VIEW:
 			reset_3d_view();
+			break;
+		case BACKUP_ALL:
+			present_filesavebox(FULL_BACKUP);
+			break;
+		case RESTORE_ALL:
+			present_filesavebox(FULL_RESTORE);
 			break;
 	}
 	return TRUE;

@@ -58,12 +58,13 @@ typedef enum
 	CLOSE_LOGFILE,
 	START_DATALOGGING,
 	STOP_DATALOGGING,
-	SELECT_VEXFILE,
 	EXPORT_VETABLE,
 	REVERT_TO_BACKUP,
 	IMPORT_VETABLE,
 	TRUNCATE_VEXFILE,
-	RESET_3D_VIEW
+	RESET_3D_VIEW,
+	BACKUP_ALL,
+	RESTORE_ALL
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -131,7 +132,9 @@ typedef enum
 	VE_IMPORT,
 	DATALOG_EXPORT,
 	DATALOG_IMPORT,
-	ANY
+	FULL_BACKUP,
+	FULL_RESTORE,
+	ANY	/*  Used for closing files on exit,  closes any open files*/
 }FileIoType;
 
 

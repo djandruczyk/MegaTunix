@@ -142,7 +142,7 @@ int build_datalogging(GtkWidget *parent_frame)
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(CLOSE_LOGFILE));
 
-	button = gtk_button_new_with_label("Clear Log File");
+	button = gtk_button_new_with_label("Truncate Log File");
 	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \

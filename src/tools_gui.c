@@ -61,7 +61,7 @@ int build_tools(GtkWidget *parent_frame)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
-	gtk_widget_set_size_request(sw,0,55);
+	gtk_widget_set_size_request(sw,0,65);
 	gtk_container_add(GTK_CONTAINER(ebox),sw);
 
 	view = gtk_text_view_new();
@@ -83,38 +83,28 @@ int build_tools(GtkWidget *parent_frame)
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
 
-	button = gtk_button_new_with_label("Select VEX File");
-	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,0);
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(SELECT_VEXFILE));
-
-	button = gtk_button_new_with_label("Clear VEX File");
-	buttons.ve_clear_vex_but = button;
-	gtk_widget_set_sensitive(button,FALSE);
-	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(TRUNCATE_VEXFILE));
-
 	button = gtk_button_new_with_label("Import VE Table(s)");
-	buttons.ve_import_but = button;
-	gtk_widget_set_sensitive(button,FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(IMPORT_VETABLE));
 
 	button = gtk_button_new_with_label("Export VE Table(s)");
-	buttons.ve_export_but = button;
-	gtk_widget_set_sensitive(button,FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(EXPORT_VETABLE));
 
+	button = gtk_button_new_with_label("Truncate File");
+	buttons.tools_clear_but = button;
+	gtk_widget_set_sensitive(button,FALSE);
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(TRUNCATE_VEXFILE));
+
 	button = gtk_button_new_with_label("Revert to Last");
-	buttons.ve_revert_but = button;
+	buttons.tools_revert_but = button;
 	gtk_widget_set_sensitive(button,FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
@@ -144,6 +134,27 @@ int build_tools(GtkWidget *parent_frame)
 			G_CALLBACK (vex_comment_parse),
 			GINT_TO_POINTER(0));
 	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,10);
+
+	frame = gtk_frame_new("Backup/Restore All Settings");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+	hbox = gtk_hbox_new(TRUE,0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
+
+	button = gtk_button_new_with_label("Backup All MS Parameters");
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,0);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(BACKUP_ALL));
+
+	button = gtk_button_new_with_label("Restore All MS Parameters");
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,0);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(RESTORE_ALL));
 
 
 	return TRUE;
