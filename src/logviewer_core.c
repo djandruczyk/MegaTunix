@@ -43,11 +43,18 @@ void load_logviewer_file(void *ptr)
 	initialize_log_info(log_info);
 	read_log_header(iofile->iochannel, log_info);
 	allocate_buffers(log_info);
+	populate_limits(log_info);
 	read_log_data(iofile->iochannel, log_info);
 	close_file(iofile);
 	return;
 }
 
+void populate_limits(void *ptr)
+{
+	struct Log_Info *log_info;
+	log_info = ptr;
+
+}
 /* Initializer routine for the log_info datastructure */
 void initialize_log_info(void *ptr)
 {

@@ -11,18 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __LOGVIEWER_CORE_H__
-#define __LOGVIEWER_CORE_H__
+#ifndef __DEFAULT_LIMITS_H__
+#define __DEFAULT_LIMITS_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
+#include <structures.h>
 
-/* Prototypes */
-void load_logviewer_file(void * );
-void read_log_header(GIOChannel *, void * );
-void read_log_data(GIOChannel *, void * );
-void initialize_log_info(void *);
-void allocate_buffers(void *);
-void populate_limits(void *);
-/* Prototypes */
-
-#endif
+/* Structure defined in structures.h */
+static struct Default_Limits def_limits[] = {
+/* Default visible Controls */
+{"Clock",0,0,"Seconds",1,54,UCHAR,TRUE,0},
+};

@@ -19,7 +19,7 @@
 #include <structures.h>
 
 /* Structure defined in structures.h */
-static struct Def_Control all_controls[] = {
+static struct Default_Control all_controls[] = {
 /* Default visible Controls */
 {"Clock",0,0,"Seconds",1,54,UCHAR,TRUE,0},
 {"O2_Volts",0,1,"O<sub>2</sub> (Volts)",20,12,FLOAT,TRUE,O2_DEP}, /*scale varies */

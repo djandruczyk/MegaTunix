@@ -277,7 +277,7 @@ struct Rt_Control
 /* The Def_Control struct contains info on the default controls that are 
  * written to the config file on startup.
  */
-struct Def_Control
+struct Default_Control
 {
 	gchar *ctrl_name;
 	gint tbl;
@@ -288,6 +288,18 @@ struct Def_Control
 	gint size;
 	gboolean enabled;
 	Capabilities flags;
+};
+
+/* the Default_Limits struct maps field names to limits. used for importing
+ * datalogs from megatune mainly as that friggin peice of work uses different
+ * friggin field names per log type/version.
+ */
+
+struct Default_Limits
+{
+	gchar * field_name;
+	gfloat lower;
+	gfloat upper;
 };
 
 /* The Log_Info datastructure is populated when a datalog file is opened
