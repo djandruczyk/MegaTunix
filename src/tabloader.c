@@ -45,7 +45,6 @@ gboolean load_gui_tabs()
 	
 	while (firmware->tab_list[i])
 	{
-		//printf("should load %s\n",firmware->tab_list[i]);
 		glade_file = g_strconcat(DATA_DIR,"/",GUI_DIR,"/",
 				firmware->tab_list[i],".glade",NULL);
 		map_file = g_strconcat(DATA_DIR,"/",GUI_DIR,"/",
@@ -61,7 +60,7 @@ gboolean load_gui_tabs()
 				label = gtk_label_new_with_mnemonic(g_strdup(tmpbuf));
 				g_free(tmpbuf);
 				g_hash_table_foreach(xml->priv->name_hash,bind_data,(gpointer)cfgfile);
-				g_hash_table_foreach(xml->priv->name_hash,populate_master,NULL);
+				g_hash_table_foreach(xml->priv->name_hash,populate_master,(gpointer)map_file);
 				cfg_free(cfgfile);
 			}
 			else
@@ -71,7 +70,7 @@ gboolean load_gui_tabs()
 			g_free(glade_file);
 			frame = glade_xml_get_widget(xml,"topframe");
 			if (frame == NULL)
-				printf("frame not found in xml\n");
+				dbg_func(__FILE__": load_gui_tabs() \"topframe\" not found in xml\n",CRITICAL);
 			
 			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
 			gtk_widget_show_all(frame);
@@ -79,7 +78,7 @@ gboolean load_gui_tabs()
 			
 		}
 		else
-			printf("file NOT found \n");
+			dbg_func(__FILE__": load_gui_tabs() .glade/.datamap file NOT FOUND!! \n",CRITICAL);
 		i++;
 		
 	}
@@ -90,9 +89,21 @@ gboolean load_gui_tabs()
 
 void populate_master(gpointer name, gpointer value,gpointer user_data)
 {
+	/* Populates a big master hashtable of all dynamic widgets so that 
+	 * various functions can do a lookup for hte widgets name and get it's
+	 * GtkWidget * for manipulation.  We do NOT insert the topframe
+	 * widgets fro mthe XML tree as if more htan 1 tab loads there will 
+	 * be a clash, and there's no need to store the top frame widget 
+	 * anyways...
+	 */
+	if (g_strrstr((gchar *)name,"topframe"))
+		return;
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
-	g_hash_table_insert(dynamic_widgets,g_strdup(name),value);
+	if (!g_hash_table_lookup(dynamic_widgets,(gchar *)name))
+		g_hash_table_insert(dynamic_widgets,g_strdup(name),value);
+	else
+		dbg_func(g_strdup_printf(__FILE__": populate_master(), key %s already exists in master table\n",(gchar *)name),CRITICAL);
 }
 
 void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
