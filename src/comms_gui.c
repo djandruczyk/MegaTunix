@@ -289,7 +289,7 @@ void build_comms(GtkWidget *parent_frame)
 	return;
 }
 
-gboolean reset_errcounts(GtkWidget *widget)
+EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
 	ms_ve_goodread_count = 0;
 	ms_goodread_count = 0;

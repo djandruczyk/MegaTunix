@@ -36,13 +36,10 @@ enum
 	NUM_COLS
 } ;
 
-void populate_user_output_choices(void)
+void build_model_for_view(GtkWidget * widget)
 {
 	extern gboolean rtvars_loaded;
 	extern GHashTable *dynamic_widgets;
-	GtkWidget *table = NULL;
-	GtkWidget *parent = NULL;
-	GtkWidget *sw = NULL;
 	GtkWidget *view = NULL;
 	GtkTreeModel *model = NULL;
 
@@ -51,43 +48,19 @@ void populate_user_output_choices(void)
 		dbg_func(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
 		return;
 	}
-	parent = (GtkWidget *) g_hash_table_lookup(dynamic_widgets,"user_outputs_frame");
-	if (!parent)
-	{
-		dbg_func(__FILE__": populate_user_output_choices()\n\t\"user_outputs_frame\" could NOT be located, critical error\n\n",CRITICAL);
-		return;
-	}
-
-	table = gtk_table_new(2,2,FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table),15);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_container_add(GTK_CONTAINER(parent),table);
-
-	sw = gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-			GTK_POLICY_AUTOMATIC,
-			GTK_POLICY_AUTOMATIC);
 
 	model = create_model ();
-	g_object_set_data(G_OBJECT(model),"lim_offset",GINT_TO_POINTER(91));
-	g_object_set_data(G_OBJECT(model),"src_offset",GINT_TO_POINTER(92));
-	g_object_set_data(G_OBJECT(model),"page",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(model),"ign_parm",GINT_TO_POINTER(TRUE));
+
+	g_object_set_data(G_OBJECT(model),"lim_offset",g_object_get_data(G_OBJECT(widget),"lim_offset"));
+	g_object_set_data(G_OBJECT(model),"src_offset",g_object_get_data(G_OBJECT(widget),"src_offset"));
+	g_object_set_data(G_OBJECT(model),"page",g_object_get_data(G_OBJECT(widget),"page"));
+	g_object_set_data(G_OBJECT(model),"ign_parm",g_object_get_data(G_OBJECT(widget),"ign_parm"));
+//	view = g_hash_table_lookup(dynamic_widgets,"
 	view = gtk_tree_view_new_with_model (model);
 	g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
 	add_columns(GTK_TREE_VIEW(view), 1);
-			      				       
-	gtk_container_add(GTK_CONTAINER(sw),view);
-	gtk_table_attach(GTK_TABLE(table),sw,
-			0,1,0,1,
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-			0,0);
-
-	gtk_widget_show_all(parent);
-
 
 }
 

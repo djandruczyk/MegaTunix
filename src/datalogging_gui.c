@@ -326,7 +326,7 @@ void run_datalog(void)
 
 }
 
-gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
+EXPORT gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 {
 	gint handler = 0;
 

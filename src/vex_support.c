@@ -566,7 +566,7 @@ breakout:
 	return status;
 }
 
-gint vex_comment_parse(GtkWidget *widget, gpointer data)
+EXPORT gint vex_comment_parse(GtkWidget *widget, gpointer data)
 {
 	gchar *tmpbuf = NULL;;
 	/* Gets data from VEX comment field in tools gui and stores it 

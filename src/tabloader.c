@@ -40,15 +40,13 @@ gboolean load_gui_tabs()
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
 	gchar * glade_file = NULL;
+	gchar * tmpbuf = NULL;
 	GladeXML *xml = NULL;
 	GtkWidget *frame = NULL;
 	gchar * tab_name = NULL;
 	GtkWidget * label = NULL;
 	GtkWidget *topframe = NULL;
 	extern GtkWidget * notebook;
-	gchar *post_function = NULL;
-	void (*function)(void);
-	GModule *module = NULL;
 
 	if (!firmware)
 		return FALSE;
@@ -74,23 +72,10 @@ gboolean load_gui_tabs()
 				 */
 				bind_data(topframe,(gpointer)cfgfile);
 				populate_master(topframe,(gpointer)cfgfile);
-				if (cfg_read_string(cfgfile,"global","post_function",&post_function))
+				if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
 				{
-					module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-					if (!module)
-						dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
-					if (!g_module_symbol(module,post_function,(void *)&function))
-					{
-						dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tError finding symbol \"%s\", error:\n\t%s\n\tCheck the \"%s.datamap\"\n\tfile in the Gui dir for a syntax error\n",post_function,g_module_error(),firmware->tab_list[i]),CRITICAL);
-						if (!g_module_close(module))
-							dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
-					}
-					else
-					{
-						function();
-						if (!g_module_close(module))
-							dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
-					}
+					run_post_function(tmpbuf);
+					g_free(tmpbuf);
 				}
 				
 				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
@@ -181,7 +166,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
 
 	/* Bind widgets to lists if thy have the bind_to_list flag set...
-	 */
+	*/
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
 	{
 		bind_keys = parse_keys(tmpbuf,&bind_num_keys,",");
@@ -280,8 +265,62 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 		}
 	}
+	if (cfg_read_string(cfgfile,section,"post_function_with_arg",&tmpbuf))
+	{
+		printf("post_function_with_arg\n");
+		run_post_function_with_arg(tmpbuf,widget);
+		g_free(tmpbuf);
+	}
 	g_free(keytypes);
 	g_strfreev(keys);
 	dbg_func(__FILE__": bind_data()\n\t All is well, leaving...\n\n",TABLOADER);
 }
+
+void run_post_function(gchar * function_name)
+{
+	void (*function)(void);
+	GModule *module = NULL;
+
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (!module)
+		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
+	if (!g_module_symbol(module,function_name,(void *)&function))
+	{
+		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()),CRITICAL);
+		if (!g_module_close(module))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+	}
+	else
+	{
+		function();
+		if (!g_module_close(module))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+	}
+}
+
+
+
+void run_post_function_with_arg(gchar * function_name, GtkWidget *widget)
+{
+	void (*function)(GtkWidget *);
+	GModule *module = NULL;
+
+	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (!module)
+		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
+	if (!g_module_symbol(module,function_name,(void *)&function))
+	{
+		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()),CRITICAL);
+		if (!g_module_close(module))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+	}
+	else
+	{
+		function(widget);
+		if (!g_module_close(module))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+	}
+}
+
+
 

@@ -19,6 +19,8 @@
 /* Prototypes */
 gboolean load_gui_tabs(void);
 void bind_data(GtkWidget *, gpointer );
+void run_post_function_with_arg(gchar *, GtkWidget *);
+void run_post_function(gchar * );
 /* Prototypes */
 
 #endif
