@@ -20,7 +20,7 @@
 /* Prototypes */
 gboolean vetable_export(void);
 gboolean vetable_import(void);
-void present_filesavebox(FileIoType);
+void clear_vexfile(void);
 /* Prototypes */
 
 #endif

@@ -17,6 +17,7 @@
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <enums.h>
+#include <fileio.h>
 #include <globals.h>
 #include <gui_handlers.h>
 #include <init.h>
@@ -378,6 +379,9 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case STOP_DATALOGGING:
 			stop_datalogging();
+			break;
+		case CLEAR_VEXFILE:
+			clear_vexfile();
 			break;
 		case EXPORT_VETABLE:
 			present_filesavebox(VE_EXPORT);

@@ -35,3 +35,8 @@ gboolean vetable_import()
 	printf("import VEtable\n");
 	return TRUE; /* return TRUE on success, FALSE on failure */
 }
+
+void clear_vexfile()
+{
+	return;
+}
