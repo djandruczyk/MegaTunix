@@ -642,10 +642,13 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 		case NUM_SQUIRTS_2:
 			/* This actuall effects another variable */
 			num_squirts_2 = tmpi;
+			printf("divider for table 2 before %i\n",ve_const_dt2->divider);
 			ve_const_dt2->divider = 
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
 			dload_val = ve_const_dt2->divider;
+			printf("divider for table 2 after %i\n",ve_const_dt2->divider);
+			printf("offset %i\n",offset);
 			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
 			{
 				offsets_2 = g_list_append(offsets_2,
@@ -676,13 +679,16 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			/* Updates a shared bitfield */
 			num_cylinders_2 = tmpi;
 			tmp = ve_const_dt2->config11.value;
+			printf("table2 config 11 value before %i\n",ve_const_dt2->config11.value);
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_const_dt2->config11.value = tmp;
+			printf("table2 config 11 value after %i\n",ve_const_dt2->config11.value);
 			ve_const_dt2->divider = 
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
 			dload_val = tmp;
+			printf("offset %i\n",offset);
 			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
 			{
 				offsets_2 = g_list_append(offsets_2,
@@ -805,6 +811,12 @@ void update_ve_const()
 	 */
 	if (dualtable)
 	{
+		printf("table1 cfg11 value %i, cfg12 %i\n",
+				ve_const_dt1->config11.value,
+				ve_const_dt1->config12.value);
+		printf("table2 cfg11 value %i, cfg12 %i\n",
+				ve_const_dt2->config11.value,
+				ve_const_dt2->config12.value);
 		/*printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
 				ve_const_dt1->req_fuel,
 				ve_const_dt1->config12.bit.injectors+1,
@@ -895,13 +907,13 @@ void update_ve_const()
 	{
 		/*  B&G, MSnS, MSnEDIS req Fuel calc *
 		 * req-fuel 
-		 *                                        /     num_injectors_1   \
+		 *                                        /     num_injectors     \
 		 *         	   req_fuel_per_squirt * (-------------------------)
 		 *                                        \ divider*(alternate+1) /
 		 * req_fuel_total = --------------------------------------------------
 		 *				10
 		 *
-		 * where divider = num_cylinders_1/num_squirts_1;
+		 * where divider = num_cylinders/num_squirts;
 		 *
 		 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
 		 * the req_fuel variable.  Take note when doing conversions.  On screen
@@ -953,7 +965,8 @@ void update_ve_const()
 				ve_const->config12.bit.injectors+1);
 		num_injectors_1 = ve_const->config12.bit.injectors+1;
 
-	}
+	}	// End of B&G specific code...
+
 	/* Speed Density or Alpha-N */
 	if (ve_const->config13.bit.inj_strat)
 		gtk_toggle_button_set_active(

@@ -34,9 +34,15 @@ void post_process(void *input, void *output)
 	struct Raw_Runtime_Dualtable *in_dt = input;
 	struct Runtime_Common *out = output;
 	extern unsigned char *ms_data;
-	struct Ve_Const_Std *ve_const_p0 = (struct Ve_Const_Std *) ms_data;
-	struct Ve_Const_DT_1 *ve_const_p1 = (struct Ve_Const_DT_1 *) ms_data+MS_PAGE_SIZE;
-
+	struct Ve_Const_Std *ve_const = NULL;
+	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
+	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
+	ve_const = (struct Ve_Const_Std *) ms_data;
+	if (dualtable)
+	{
+		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+	}
 	gint divider = 0;
 	gint nsquirts = 0;
 	gfloat cycletime = 0.0;
@@ -85,17 +91,17 @@ void post_process(void *input, void *output)
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
-	nsquirts = (ve_const_p0->config11.bit.cylinders+1)/ve_const_p0->divider;
+	nsquirts = (ve_const->config11.bit.cylinders+1)/ve_const->divider;
 
 	if (!dualtable)
 	{	/* Std B&G Code */
 		out->pw1 = (float)in->pw1 / 10.0;
 		out->vecurr1 = in->vecurr1;
-		if (ve_const_p0->alternate)
+		if (ve_const->alternate)
 			divider = 2;
 		else
 			divider = 1;
-		if (ve_const_p0->config11.bit.eng_type == 1)
+		if (ve_const->config11.bit.eng_type == 1)
 			cycletime = 600.0 /(float) in->rpm;
 		else
 			cycletime = 1200.0 /(float) in->rpm;
@@ -113,25 +119,27 @@ void post_process(void *input, void *output)
 		out->pw2 = (float)in_dt->pw2 / 10.0;
 		out->vecurr1 = in_dt->vecurr1;
 		out->vecurr2 = in_dt->vecurr2;
+		out->idleDC = in_dt->idleDC;
 
-		nsquirts = (int) 0.00001 
-				+ (float)(ve_const_p0->config11.bit.cylinders+1)
-				/ (float)ve_const_p0->divider;
-		if (ve_const_p0->config11.bit.eng_type == 1)
+		if (ve_const_dt1->config11.bit.eng_type == 1)
 			cycletime = 600.0 /(float) in->rpm;
 		else
 			cycletime = 1200.0 /(float) in->rpm;
 
+		/* Table 1 */
+		nsquirts = (int) 0.00001 
+				+ (float)(ve_const_dt1->config11.bit.cylinders+1)
+				/ (float)ve_const_dt1->divider;
+
 		possible_inj_time = (float)cycletime/(float)nsquirts;
 		out->dcycle1 =  (float) out->pw1 / possible_inj_time;
 
-		// Page 1
+		/* Table 2 */
 		nsquirts = (int) 0.00001 
-				+ (float)(ve_const_p1->config11.bit.cylinders+1)
-				/ (float)ve_const_p1->divider;
+				+ (float)(ve_const_dt2->config11.bit.cylinders+1)
+				/ (float)ve_const_dt2->divider;
 		possible_inj_time = (float)cycletime/(float)nsquirts;
 		out->dcycle2 =  (float) out->pw2 / possible_inj_time;
 
-		out->idleDC = in_dt->idleDC;
 	}
 }
