@@ -21,9 +21,11 @@ void interrogate_ecu(void);
 void determine_ecu(void *, GArray *,GHashTable *);
 GArray * validate_and_load_tests(GHashTable *);
 void free_test_commands(GArray *);
-void parse_bytecounts(GArray *, GHashTable *, void *);
+void load_bytecounts(GArray *, GHashTable *, void *);
 void close_profile(void * );
-void * load_profile(GArray * , gchar * );
+void * load_potential_match(GArray * , gchar * );
+gboolean check_for_match(GArray *, void *, void *);
+void load_profile_details(void * );
 gint translate_capabilities(gchar *);
 /* Prototypes */
 

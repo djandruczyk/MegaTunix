@@ -167,8 +167,8 @@ typedef enum
 
 typedef enum
 {
-	KPA=0xf0,
-	RPM
+	MAT=0xf0,
+	CLT
 }TableType;
 
 typedef enum

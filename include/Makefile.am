@@ -21,6 +21,7 @@ headers = \
         gui_handlers.h \
         init.h \
         interrogate.h \
+	kpatables.h \
         logo.h \
         logviewer_core.h \
         logviewer_gui.h \

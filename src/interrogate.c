@@ -20,6 +20,7 @@
 #include <enums.h>
 #include <errno.h>
 #include <interrogate.h>
+#include <lookuptables.h>
 #include <mode_select.h>
 #include <notifications.h>
 #include <serialio.h>
@@ -188,82 +189,53 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	struct Canidate *potential = NULL;
 	struct Command *cmd = NULL;
 	gint i = 0;
-	gint j = 0;
-	gint cbytes = 0;
-	gint pbytes = 0;
 	gint num_tests = cmd_array->len;
-	gint passcount = 0;
-	gint match = -1;
+	gboolean match = FALSE;
 	gchar * tmpbuf = NULL;
-	GDir *dir;
-	GError *error;
-	gchar * path;
+	GDir *dir = NULL;
+	GError *error = NULL;
+	gchar * path = NULL;
 	gchar * filename = NULL;
+	gchar * full_pathname = NULL;
 	extern struct IoCmds *cmds;
 
-	path = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/Profiles/",NULL);
+	
+	/* Search homedire for potential interrogation profiles FIRST... */
+	path = g_strconcat(g_get_home_dir(),"/.MegaTunix/",INTERROGATOR_DIR,"/Profiles/",NULL);
 	dir = g_dir_open(path,0,&error);	
 	filename = (gchar *)g_dir_read_name(dir);
 	while (filename != NULL)
 	{
-		potential = load_profile(cmd_array,filename);
-
-		passcount = 0;
-		for (j=0;j<num_tests;j++)
+		full_pathname= g_strconcat(path,filename,NULL);
+		potential = load_potential_match(cmd_array,full_pathname);
+		if (check_for_match(cmd_array,potential,canidate))
 		{
-			cmd = g_array_index(cmd_array,struct Command *, j);
-			cbytes = (gint)g_hash_table_lookup(
-					canidate->bytecounts,
-					g_strdup_printf("CMD_%s_%i",
-						cmd->string,cmd->page));
-			pbytes = (gint)g_hash_table_lookup(
-					potential->bytecounts,
-					g_strdup_printf("CMD_%s_%i",
-						cmd->string,cmd->page));
-			dbg_func(g_strdup_printf(__FILE__": determine_ecu() Test %s, canidate bytes %i, potential %i\n",cmd->string,cbytes,pbytes),INTERROGATOR);
-			if (cbytes != pbytes)
-			{
-				// Mismatch, abort test and move on to the 
-				// next one...
-				dbg_func(g_strdup_printf(__FILE__": determine_ecu(), counts don't match, loading next profile\n"),INTERROGATOR);
-				close_profile(potential);
-				goto end_of_loop; 
-			}
-		}
-		dbg_func(g_strdup_printf(__FILE__": determine_ecu() all bytecount tests passed for firmware %s\n",potential->firmware_name),INTERROGATOR);
-		/* If all test pass, now check the Extended version
-		 * If it matches,  jump out...
-		 */
-		if ((potential->quest_str != NULL) && (canidate->quest_str != NULL))
-		{
-			dbg_func(g_strdup_printf(__FILE__": determine_ecu() testing ext version, canidate %s, potential %s\n",canidate->quest_str,potential->quest_str),INTERROGATOR);
-			if (strstr(canidate->quest_str,potential->quest_str) != NULL)
-			{
-				dbg_func(__FILE__": determine_ecu() found match on ext version\n",INTERROGATOR);
-				match = i;
-				break;
-			}
-		}
-		else if ((potential->sig_str != NULL) && (canidate->sig_str != NULL))
-		{
-			dbg_func(g_strdup_printf(__FILE__": determine_ecu() testing signature, canidate %s, potential %s\n",canidate->sig_str,potential->sig_str),INTERROGATOR);
-			if (strstr(canidate->sig_str,potential->sig_str) != NULL)
-			{
-				dbg_func(__FILE__": determine_ecu() found match on signature\n",INTERROGATOR);
-				match = i;
-				break;
-			}
-		}
-		else
-		{
-			dbg_func(g_strdup_printf(__FILE__": determine_ecu() found match on bytecounts alone...\n"),INTERROGATOR);
-			match = i;
+			match = TRUE;
 			break;
 		}
-end_of_loop:
-		i++;
-		filename =(gchar *) g_dir_read_name(dir);
+
+		filename = (gchar *) g_dir_read_name(dir);
 	}
+	/* IF search in homedir failes search system wide ones */
+	if (match == FALSE)
+	{
+		path = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/Profiles/",NULL);
+		dir = g_dir_open(path,0,&error);	
+		filename = (gchar *)g_dir_read_name(dir);
+		while (filename != NULL)
+		{
+			full_pathname= g_strconcat(path,filename,NULL);
+			potential = load_potential_match(cmd_array,full_pathname);
+			if (check_for_match(cmd_array,potential,canidate))
+			{
+				match = TRUE;
+				break;
+			}
+			filename = (gchar *) g_dir_read_name(dir);
+		}
+	}
+	if (dir)
+		g_dir_close(dir);
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
 	{
@@ -320,7 +292,7 @@ end_of_loop:
 		}
 
 	}
-	if (match == -1) // (we DID NOT find one)
+	if (match == FALSE) // (we DID NOT find one)
 	{
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, Expect MegaTunix to NOT behave properly \nContact the author with the contents of this window\n");
 		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu() Firmware NOT DETECTED, send contents of the\ninterrogation window and the firmware details to the MegaTunix author\n"),CRITICAL);
@@ -331,6 +303,9 @@ end_of_loop:
 		goto cleanup;
 	}
 
+	load_profile_details(potential);
+
+	load_lookuptables(potential);
 	/* Set flags */
 	ecu_caps = potential->capabilities;
 	/* Enable/Disable Controls */
@@ -339,10 +314,6 @@ end_of_loop:
 	/* Set expected sizes for commands */
 	if (!firmware)
 		firmware = g_new0(struct Firmware_Details,1);
-	firmware->rtvars_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"CMD_A_0");
-	firmware->memblock_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"CMD_F_0");
 	firmware->firmware_name = g_strdup(potential->firmware_name);
 	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
 	firmware->multi_page = potential->multi_page;
@@ -382,12 +353,15 @@ end_of_loop:
 		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->rt_cmd_key);
 		cmds->realtime_cmd = g_strdup(cmd->string);
 		cmds->rt_cmd_len = cmd->len;
+		firmware->rtvars_size = (gint)g_hash_table_lookup(
+				potential->bytecounts,g_strdup_printf("CMD_%s_0",cmds->realtime_cmd));
 	}
 	else
 	{
 		dbg_func("Realtime Read cmd is NOT defined in interrogation profile, using hardcoded default\n",CRITICAL);
 		cmds->realtime_cmd = g_strdup("A");
 		cmds->rt_cmd_len = 1;
+		firmware->rtvars_size = 22;
 	}
 	/* VE/Constants */
 	if (potential->ve_cmd_key != NULL)
@@ -422,12 +396,15 @@ end_of_loop:
 		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->raw_mem_cmd_key);
 		cmds->raw_mem_cmd = g_strdup(cmd->string);
 		cmds->raw_mem_cmd_len = cmd->len;
+		firmware->memblock_size = (gint)g_hash_table_lookup(
+				potential->bytecounts,g_strdup_printf("CMD_%s_0",cmds->raw_mem_cmd));
 	}
 	else
 	{
 		dbg_func("Raw Memory Read cmd is NOT defined in interrogation profile, using hardcoded default\n",CRITICAL);
 		cmds->raw_mem_cmd = g_strdup("F");
 		cmds->raw_mem_cmd_len = 1;
+		firmware->memblock_size = 256;
 	}
 
 
@@ -556,7 +533,8 @@ void close_profile(void *ptr)
 	
 	dbg_func(__FILE__": close_profile(),\n\tdeallocating memory for potential canidate match\n",INTERROGATOR);
 	for (i=0;i<(canidate->total_pages);i++)
-		g_free(canidate->page_params[i]);
+		if (canidate->page_params[i])
+			g_free(canidate->page_params[i]);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
@@ -571,28 +549,54 @@ void close_profile(void *ptr)
 }
 
 		
-void * load_profile(GArray * cmd_array, gchar * file)
+void * load_potential_match(GArray * cmd_array, gchar * filename)
+{
+	ConfigFile *cfgfile;
+	struct Canidate *canidate = NULL;
+
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
+	{	
+		canidate = g_malloc0(sizeof(struct Canidate));
+		canidate->filename = g_strdup(filename);
+		dbg_func(g_strdup_printf(__FILE__": load_potential_match() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
+		canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->firmware_name);
+		load_bytecounts(cmd_array, canidate->bytecounts, (void *)cfgfile);
+		cfg_read_string(cfgfile,"parameters","SignatureQueryString",
+				&canidate->sig_str);
+		cfg_read_string(cfgfile,"parameters","ExtVerQueryString",
+				&canidate->quest_str);
+		cfg_read_int(cfgfile,"parameters","VerNumber",
+				&canidate->ver_num);
+
+		cfg_free(cfgfile);
+		g_free(filename);
+
+	}
+	else
+	{
+		dbg_func(g_strdup_printf(__FILE__": load_mini_profile() failure opening file:\n\t%s\n",filename),CRITICAL);
+		g_free(filename);
+	}
+	return canidate;
+}
+
+		
+void load_profile_details(void *ptr)
 {
 	ConfigFile *cfgfile;
 	gchar * tmpbuf;
 	gchar * filename;
 	gchar * section;
 	gint i = 0;
-	struct Canidate *canidate = NULL;
+	struct Canidate *canidate = ptr;
 
-	filename = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/Profiles/",file,NULL);
+	filename = g_strdup(canidate->filename);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{	
-		canidate = g_malloc0(sizeof(struct Canidate));
-		dbg_func(g_strdup_printf(__FILE__": load_profile() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
-		canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->firmware_name);
-		parse_bytecounts(cmd_array, canidate->bytecounts, (void *)cfgfile);
-		cfg_read_string(cfgfile,"parameters","SignatureQueryString",
-				&canidate->sig_str);
-		cfg_read_string(cfgfile,"parameters","ExtVerQueryString",
-				&canidate->quest_str);
+		dbg_func(g_strdup_printf(__FILE__": load_profile_details() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
 		cfg_read_string(cfgfile,"parameters","Rt_Cmd_Key",
 				&canidate->rt_cmd_key);
 		cfg_read_string(cfgfile,"parameters","VE_Cmd_Key",
@@ -605,14 +609,18 @@ void * load_profile(GArray * cmd_array, gchar * file)
 				&canidate->multi_page);
 		cfg_read_int(cfgfile,"parameters","TotalPages",
 				&canidate->total_pages);
-		cfg_read_int(cfgfile,"parameters","VerNumber",
-				&canidate->ver_num);
 		cfg_read_string(cfgfile,"parameters","Capabilities",
 				&tmpbuf);
 		canidate->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
 		cfg_read_string(cfgfile,"gui","LoadTabs",
 				&canidate->load_tabs);
+		if (!cfg_read_string(cfgfile,"lookuptables","mat",
+				&canidate->mat_tbl_name))
+			printf("lookup table for mat not found\n");
+		if(!cfg_read_string(cfgfile,"lookuptables","clt",
+				&canidate->clt_tbl_name))
+			printf("lookup table for clt not found\n");
 
 
 		/* Allocate space Table Offsets structures.... */
@@ -621,33 +629,32 @@ void * load_profile(GArray * cmd_array, gchar * file)
 			canidate->page_params[i] = g_new0(struct Page_Params,1);
 			section = g_strdup_printf("page_%i",i);
 			cfg_read_int(cfgfile,section,"ve_base_offset",
-				&canidate->page_params[i]->ve_base);
+					&canidate->page_params[i]->ve_base);
 			cfg_read_int(cfgfile,section,"rpm_base_offset",
-				&canidate->page_params[i]->rpm_base);
+					&canidate->page_params[i]->rpm_base);
 			cfg_read_int(cfgfile,section,"load_base_offset",
-				&canidate->page_params[i]->load_base);
+					&canidate->page_params[i]->load_base);
 			cfg_read_int(cfgfile,section,"rpm_bincount",
-				&canidate->page_params[i]->rpm_bincount);
+					&canidate->page_params[i]->rpm_bincount);
 			cfg_read_int(cfgfile,section,"load_bincount",
-				&canidate->page_params[i]->load_bincount);
+					&canidate->page_params[i]->load_bincount);
 			cfg_read_boolean(cfgfile,section,"is_spark",
-				&canidate->page_params[i]->is_spark);
+					&canidate->page_params[i]->is_spark);
 			g_free(section);
 		}
 
 		cfg_free(cfgfile);
 		g_free(filename);
-		
+
 	}
 	else
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_profile() failure opening file:\n\t%s\n",filename),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_profile_details() failure opening file:\n\t%s\n",filename),CRITICAL);
 		g_free(filename);
 	}
-	return canidate;
 }
 
-void parse_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
+void load_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 {
 	struct Command *cmd = NULL;
 	gint i = 0;
@@ -664,7 +671,7 @@ void parse_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 				&bytecount);
 		
 		g_hash_table_insert(hash, g_strdup(tmpbuf),GINT_TO_POINTER(bytecount));
-		dbg_func(g_strdup_printf(__FILE__": parse_bytecounts() inserting key %s, val %i\n",tmpbuf,bytecount),INTERROGATOR);
+		dbg_func(g_strdup_printf(__FILE__": load_bytecounts() inserting key %s, val %i\n",tmpbuf,bytecount),INTERROGATOR);
 		g_free(tmpbuf);
 	}	
 
@@ -689,4 +696,66 @@ gint translate_capabilities(gchar *string)
 
 	g_strfreev(vector);
 	return value;	
+}
+
+gboolean check_for_match(GArray *cmd_array, void *pot_ptr, void *can_ptr)
+{
+	struct Canidate *potential = (struct Canidate *)pot_ptr;
+	struct Canidate *canidate = (struct Canidate *)can_ptr;
+	gint num_tests = cmd_array->len;
+	gint cbytes = 0;
+	gint pbytes = 0;
+	struct Command *cmd = NULL;
+	
+	gint j = 0;
+
+	for (j=0;j<num_tests;j++)
+	{
+		cmd = g_array_index(cmd_array,struct Command *, j);
+		cbytes = (gint)g_hash_table_lookup(
+				canidate->bytecounts,
+				g_strdup_printf("CMD_%s_%i",
+					cmd->string,cmd->page));
+		pbytes = (gint)g_hash_table_lookup(
+				potential->bytecounts,
+				g_strdup_printf("CMD_%s_%i",
+					cmd->string,cmd->page));
+		dbg_func(g_strdup_printf(__FILE__": determine_ecu() Test %s, canidate bytes %i, potential %i\n",cmd->string,cbytes,pbytes),INTERROGATOR);
+		if (cbytes != pbytes)
+		{
+			// Mismatch, abort test and move on to the 
+			// next one...
+			dbg_func(g_strdup_printf(__FILE__": determine_ecu(), counts don't match, loading next profile\n"),INTERROGATOR);
+			close_profile(potential);
+			return FALSE;
+		}
+	}
+	dbg_func(g_strdup_printf(__FILE__": determine_ecu() all bytecount tests passed for firmware %s\n",potential->firmware_name),INTERROGATOR);
+	/* If all test pass, now check the Extended version
+	 * If it matches,  jump out...
+	 */
+	if ((potential->quest_str != NULL) && (canidate->quest_str != NULL))
+	{
+		dbg_func(g_strdup_printf(__FILE__": determine_ecu() testing ext version, canidate %s, potential %s\n",canidate->quest_str,potential->quest_str),INTERROGATOR);
+		if (strstr(canidate->quest_str,potential->quest_str) != NULL)
+		{
+			dbg_func(__FILE__": determine_ecu() found match on ext version\n",INTERROGATOR);
+			return TRUE;
+		}
+	}
+	else if ((potential->sig_str != NULL) && (canidate->sig_str != NULL))
+	{
+		dbg_func(g_strdup_printf(__FILE__": determine_ecu() testing signature, canidate %s, potential %s\n",canidate->sig_str,potential->sig_str),INTERROGATOR);
+		if (strstr(canidate->sig_str,potential->sig_str) != NULL)
+		{
+			dbg_func(__FILE__": determine_ecu() found match on signature\n",INTERROGATOR);
+			return TRUE;
+		}
+	}
+	else
+	{
+		dbg_func(g_strdup_printf(__FILE__": determine_ecu() found match on bytecounts alone...\n"),INTERROGATOR);
+		return TRUE;
+	}
+	return TRUE;
 }

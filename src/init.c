@@ -17,6 +17,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <init.h>
+#include <kpatables.h>
 #include <ms_structures.h>
 #include <structures.h>
 #include <string.h>
@@ -191,7 +192,16 @@ void make_megasquirt_dirs(void)
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix", NULL);
 	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/VE_Tables", NULL);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator", NULL);
+	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	g_free(filename);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator/Profiles", NULL);
+	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	g_free(filename);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Gui", NULL);
+	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	g_free(filename);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/LookupTables", NULL);
 	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	g_free(filename);
 

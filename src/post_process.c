@@ -24,7 +24,11 @@
 extern unsigned char *kpa_conversion;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
+gint matfactor[256];
+gint cltfactor[256];
 static GArray * raw_memory_data;
+
+
 void post_process_realtime_vars(void *input, void *output)
 {
 	/* We can use the dualtable struct ptr only because
@@ -72,16 +76,16 @@ void post_process_realtime_vars(void *input, void *output)
 	out->clt_volts = (float)in->clt * (5.0/255.0);
 	out->clt_raw = in->clt;
 	if (temp_units == FAHRENHEIT)
-		out->clt = thermfactor[in->clt]-40;
+		out->clt = cltfactor[in->clt]-40;
 	else
-		out->clt = (short)((thermfactor[in->clt]-40-32)*(5.0/9.0));
+		out->clt = (short)((cltfactor[in->clt]-40-32)*(5.0/9.0));
 
 	out->mat_volts = (float)in->mat * (5.0/255.0);
 	out->mat_raw = in->mat;
 	if (temp_units == FAHRENHEIT)
-		out->mat = thermfactor[in->mat]-40;
+		out->mat = matfactor[in->mat]-40;
 	else
-		out->mat = (short)((thermfactor[in->mat]-40-32)*(5.0/9.0));
+		out->mat = (short)((matfactor[in->mat]-40-32)*(5.0/9.0));
 
 	out->tps_volts = (float)in->tps * (5.0/255.0);
 	out->tps_raw = in->tps;

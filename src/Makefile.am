@@ -25,6 +25,7 @@ megatunix_SOURCES = \
 	interrogate.c \
 	logviewer_core.c \
 	logviewer_gui.c \
+	lookuptables.c \
 	main.c \
 	memory_gui.c \
 	mode_select.c \
