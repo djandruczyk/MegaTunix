@@ -94,7 +94,6 @@ gboolean dispatcher(gpointer data)
 		return TRUE;
 	/* Endless Loop, wiat for message, processs and repeat... */
 trypop:
-
 	message = g_async_queue_try_pop(dispatch_queue);
 	if (!message)
 		return TRUE;

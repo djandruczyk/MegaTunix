@@ -83,7 +83,6 @@ gboolean update_runtime_vars()
 				goto breakout;
 redraw:
 				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
-				printf("gl change updating\n");
 			}
 breakout:
 			g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
