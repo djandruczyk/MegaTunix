@@ -423,7 +423,6 @@ GIOStatus process_table(struct Vex_Import *vex)
 	gchar **string = NULL;
 	extern struct Firmware_Details *firmware;
 
-	printf("process_table\n");
 	if (firmware->total_tables == firmware->total_pages)
 		vex->table = vex->page;
 	else
@@ -780,7 +779,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 		memset((void *)ms_data_backup[i], 0, sizeof(gint)*firmware->page_params[i]->length);
 		memcpy(ms_data_backup[i], ms_data[i],sizeof(gint)*firmware->page_params[i]->length);
 	}
-			
+
 
 	for (i=0;i<vex->total_rpm_bins;i++)
 		ms_data[page][firmware->table_params[table]->x_base + i] =

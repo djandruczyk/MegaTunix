@@ -284,6 +284,7 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 	extern struct Firmware_Details *firmware;
+	extern gboolean offline;
 
 	if ((g_list_length(ve_widgets[page][offset]) > 1) &&
 	   (offset != firmware->page_params[page]->reqfuel_offset))
@@ -292,7 +293,8 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 		g_list_foreach(ve_widgets[page][offset],update_widget,widget);
 		paused_handlers = FALSE;
 	}
-
+	if (offline)
+		return;
 
 	dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm),SERIAL_WR);
 	output = g_new0(struct OutputData,1);
