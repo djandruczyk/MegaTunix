@@ -104,20 +104,20 @@ void check_config13(unsigned char tmp)
 	 */
 	if (((tmp >> 2)&0x1) == 1)
 	{
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_lab");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_frame_title");
 		if (label)
 			gtk_label_set_text(GTK_LABEL(label),"TPS Bins");
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_units");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_table_units");
 		if (label)
 			gtk_label_set_text(GTK_LABEL(label),"TPS %");
 				
 	}
 	else
 	{
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_lab");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_frame_title");
 		if (label)
 			gtk_label_set_text(GTK_LABEL(label),"MAP Bins");
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_units");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_table_units");
 		if (label)
 			gtk_label_set_text(GTK_LABEL(label),"Kpa");
 	}

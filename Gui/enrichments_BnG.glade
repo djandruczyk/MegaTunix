@@ -1988,7 +1988,7 @@ Between Steps</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="enich_get_data_button">
+		    <widget class="GtkButton" id="enrich_get_data_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Get Data from ECU</property>

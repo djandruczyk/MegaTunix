@@ -21,13 +21,13 @@
       <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
       <child>
-	<widget class="GtkVBox" id="vbox1">
+	<widget class="GtkVBox" id="VE2_top_vbox">
 	  <property name="border_width">5</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox2">
+	    <widget class="GtkVBox" id="VE2_second_vbox">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -54,7 +54,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox1">
+		<widget class="GtkHBox" id="VE2_hbox">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
@@ -86,7 +86,7 @@
 			      <property name="column_spacing">2</property>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_8">
+				<widget class="GtkSpinButton" id="VE2_load_spin_1">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -110,7 +110,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_7">
+				<widget class="GtkSpinButton" id="VE2_load_spin_2">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -134,7 +134,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_6">
+				<widget class="GtkSpinButton" id="VE2_load_spin_3">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -158,7 +158,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_5">
+				<widget class="GtkSpinButton" id="VE2_load_spin_4">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -182,7 +182,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_4">
+				<widget class="GtkSpinButton" id="VE2_load_spin_5">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -206,7 +206,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_3">
+				<widget class="GtkSpinButton" id="VE2_load_spin_6">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -230,7 +230,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_2">
+				<widget class="GtkSpinButton" id="VE2_load_spin_7">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -254,7 +254,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="VE2_load_spin_1">
+				<widget class="GtkSpinButton" id="VE2_load_spin_8">
 				  <property name="width_request">45</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -278,7 +278,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="VE2_load_tbl_units">
+				<widget class="GtkLabel" id="VE2_load_table_units">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Kpa</property>
 				  <property name="use_underline">False</property>
@@ -304,7 +304,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="VE2_load_tbl_lab">
+			    <widget class="GtkLabel" id="VE2_load_frame_title">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">MAP Bins</property>
 			      <property name="use_underline">False</property>
@@ -537,7 +537,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="VE2_rpm_label">
+			    <widget class="GtkLabel" id="VE2_rpm_frame_title">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">RPM Bins</property>
 			      <property name="use_underline">False</property>
@@ -573,7 +573,7 @@
 			  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			  <child>
-			    <widget class="GtkTable" id="table6">
+			    <widget class="GtkTable" id="VE2_main_vetable">
 			      <property name="border_width">5</property>
 			      <property name="visible">True</property>
 			      <property name="n_rows">9</property>
@@ -2337,7 +2337,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="VE2_vetable_label">
+			    <widget class="GtkLabel" id="VE2_vetable_frame_title">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Volumetric Efficiency (%)</property>
 			      <property name="use_underline">False</property>
@@ -2414,7 +2414,7 @@
 	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 	      <child>
-		<widget class="GtkTable" id="table4">
+		<widget class="GtkTable" id="VE2_cmd_frame">
 		  <property name="border_width">5</property>
 		  <property name="visible">True</property>
 		  <property name="n_rows">1</property>
@@ -2464,7 +2464,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="VE2_commands_label">
+		<widget class="GtkLabel" id="VE2_cmd_frame_title">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Commands</property>
 		  <property name="use_underline">False</property>
@@ -2493,7 +2493,7 @@
       </child>
 
       <child>
-	<widget class="GtkLabel" id="label1">
+	<widget class="GtkLabel" id="topframe_title">
 	  <property name="visible">True</property>
 	  <property name="label" translatable="yes">MegaSquirt VE-Table (1)</property>
 	  <property name="use_underline">False</property>
