@@ -36,6 +36,11 @@ extern GdkColor red;
 gboolean forced_update = TRUE;
 gboolean no_update = FALSE;
 
+
+/*!
+ \brief update_runtime_vars() updates all of the runtime sliders on all
+ visible portions of the gui
+ */
 gboolean update_runtime_vars()
 {
 	gint i = 0;
@@ -95,6 +100,11 @@ gboolean update_runtime_vars()
 	return TRUE;
 }
 
+
+/*!
+ \brief reset_runtime_statue() sets all of the status indicators to OFF
+ to reset the display
+ */
 void reset_runtime_status()
 {
 	// Runtime screen
@@ -104,6 +114,13 @@ void reset_runtime_status()
 
 }
 
+
+/*!
+ \brief rt_update_status() updates the bitfield based status lights on the 
+ runtime/warmupwizard displays
+ \param key (gpointer) pointer to a widget
+ \param data (gpointer) unused
+ */
 void rt_update_status(gpointer key, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *) key;
@@ -146,6 +163,13 @@ void rt_update_status(gpointer key, gpointer data)
 }
 
 
+/*!
+ \brief rt_update_values() is called for each runtime slider to update
+ it's position and label (label is periodic and not every time due to pango
+ speed problems)
+ \param key (gpointer) pointer to widget
+ \param data (gpointer) unused
+ */
 void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
 	struct Rt_Slider *slider = (struct Rt_Slider *)value;

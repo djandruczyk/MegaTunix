@@ -507,7 +507,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 
 
 /*!
- \brief free_test_commands() deallocatss the data in the cmd_array array
+ \brief free_test_commands() deallocates the data in the cmd_array array
  */
 void free_test_commands(GArray * cmd_array)
 {
