@@ -8,7 +8,8 @@ lookuptables =	cltfactor.inc \
 		TEWBLin.inc \
 		DIYWB.inc \
 		AEMWB.inc \
-		CustomWB.inc
+		CustomWB.inc \
+		NBafr100.inc
 
 lookuptables_DATA = $(lookuptables)
 

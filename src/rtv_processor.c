@@ -65,7 +65,7 @@ void process_rt_vars(void *incoming)
 			}
 
 			if (g_object_get_data(object,"lookuptable"))
-				x = lookup_data(object,offset);
+				x = lookup_data(object,raw_realtime[offset]);
 			else
 				x = raw_realtime[offset];
 
@@ -76,6 +76,7 @@ void process_rt_vars(void *incoming)
 				result = (tmpf-32)*(5.0/9.0);
 			else
 				result = tmpf;
+			printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 
 		}
 	}

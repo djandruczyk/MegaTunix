@@ -1,7 +1,7 @@
 [realtime_map]
 firmware_name=Dualtable v1.02
 raw_total=22
-derived_total=36
+derived_total=37
 
 [derived_0]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
@@ -215,9 +215,19 @@ dlog_gui_name=AFR
 dlog_field_name=AFR
 offset=9
 lookuptable=afr_table
-conv_expr=x*1
+conv_expr=x/100
 
 [derived_23]
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+internal_name=lambda
+dlog_gui_name=Lambda
+dlog_field_name=LAMBDA
+offset=9
+lookuptable=afr_table
+conv_expr=x/1470
+
+[derived_24]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=battvolt
@@ -226,7 +236,7 @@ dlog_field_name=BATTVOLT
 offset=8
 conv_expr=x*(5.0/255.0)*6.0;
 
-[derived_24]
+[derived_25]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=battcount
@@ -235,7 +245,7 @@ dlog_field_name=BATTCOUNT
 offset=8
 conv_expr=x*1
 
-[derived_25]
+[derived_26]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=aircorr
@@ -244,7 +254,7 @@ dlog_field_name=AIRCORR
 offset=11
 conv_expr=x*1
 
-[derived_26]
+[derived_27]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=barocorr
@@ -253,7 +263,7 @@ dlog_field_name=BAROCORR
 offset=16
 conv_expr=x*1
 
-[derived_27]
+[derived_28]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=egocorr
@@ -262,7 +272,7 @@ dlog_field_name=EGOCORR
 offset=10
 conv_expr=x*1
 
-[derived_28]
+[derived_29]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=warmcorr
@@ -271,7 +281,7 @@ dlog_field_name=WARMCORR
 offset=12
 conv_expr=x*1
 
-[derived_29]
+[derived_30]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=tpsaccel
@@ -280,7 +290,7 @@ dlog_field_name=TPSACCEL
 offset=15
 conv_expr=x*1
 
-[derived_30]
+[derived_31]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=vecurr1
@@ -289,7 +299,7 @@ dlog_field_name=VE1
 offset=18
 conv_expr=x*1
 
-[derived_31]
+[derived_32]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=pw1
@@ -298,7 +308,7 @@ dlog_field_name=PW1
 offset=14
 conv_expr=x/10.0
 
-[derived_32]
+[derived_33]
 keys=internal_name,dlog_gui_name,offset,complex_expr,conv_expr
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 internal_name=dcycle1
@@ -324,7 +334,7 @@ eng_type_bitmask=4
 eng_type_bitshift=2
 raw_rpm_offset=13
 
-[derived_33]
+[derived_34]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=bspot1
@@ -333,7 +343,7 @@ dlog_field_name=BSPOT1
 offset=19
 conv_expr=x*1
 
-[derived_34]
+[derived_35]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=bspot2
@@ -342,7 +352,7 @@ dlog_field_name=BSPOT2
 offset=20
 conv_expr=x*1
 
-[derived_35]
+[derived_36]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
 internal_name=bspot3

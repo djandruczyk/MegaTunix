@@ -48,5 +48,5 @@ RealtimeMapFile=Dualtable-1.01
 tables=mat_table,clt_table,afr_table,kpa_table
 mat_table=matfactor.inc
 clt_table=cltfactor.inc
-afr_table=afrtable.inc
+afr_table=NBafr100.inc
 kpa_table=kpafactor.inc
