@@ -42,6 +42,7 @@ int build_vetable(GtkWidget *parent_frame)
         GtkWidget *frame;
         GtkAdjustment *adj;
 	gint x,y;
+	gint index;
 
         vbox = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -75,7 +76,7 @@ int build_vetable(GtkWidget *parent_frame)
 		constants.kpa_bins_spin[y] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(kpa_offset+y));
-		gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 8-y, 9-y,
+		gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, y+1, y+2,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 
@@ -100,9 +101,10 @@ int build_vetable(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	for (x=0;x<8;x++)
+	index = 0;
+	for (y=0;y<8;y++)
 	{
-		for (y=0;y<8;y++)
+		for (x=0;x<8;x++)
 		{
 			adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
@@ -110,12 +112,13 @@ int build_vetable(GtkWidget *parent_frame)
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
 					G_CALLBACK (ve_spinner_changed),
 					GINT_TO_POINTER(x+y));
-			constants.ve_bins_spin[x+y] = spinner;
+			constants.ve_bins_spin[index] = spinner;
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-			gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 8-y, 9-y,
+			gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, y+1, y+2,
 					(GtkAttachOptions) (GTK_EXPAND),
 					(GtkAttachOptions) (0), 0, 0);
 
+			index++;
 		}
 	}
 

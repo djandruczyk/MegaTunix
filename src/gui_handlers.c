@@ -303,7 +303,7 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 }
 
 int ve_spinner_changed(GtkWidget *widget, gpointer *data)
-{}
+{ return TRUE;}
 
 int spinner_changed(GtkWidget *widget, gpointer *data)
 {
@@ -481,6 +481,29 @@ void update_const_ve()
 	gtk_entry_set_text(GTK_ENTRY(constants.ego_limit_ent),
 			buff);
 
+		/* VE table entries */
+	for (i=0;i<64;i++)
+	{
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(constants.ve_bins_spin[i]),
+				ve_constants->ve_bins[i]);
+	}
+
+		/* KPA axis VE table entries */
+	for (i=0;i<8;i++)
+	{
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(constants.kpa_bins_spin[i]),
+				ve_constants->kpa_bins[i]);
+	}
+
+		/* RPM axis VE table entries */
+	for (i=0;i<8;i++)
+	{
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(constants.rpm_bins_spin[i]),
+				ve_constants->rpm_bins[i]*100);
+	}
 
 	// Stub function, does nothing yet... 
 }

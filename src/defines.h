@@ -212,7 +212,7 @@ union config13
 struct ms_ve_constants
 {
 	/* TYPE          Variable              Offset,  Comment */
-	unsigned char	vetable[64];		/* 0, VE table, 64 bytes */
+	unsigned char	ve_bins[64];		/* 0, VE table, 64 bytes */
 	unsigned char	cr_pulse_neg40;		/* 65, crank pulse at -40 deg F */
 	unsigned char	cr_pulse_pos170;	/* 66, crank pulse at 170 deg F */
 	unsigned char	as_enrich;		/* 67, Enrich over base (%) */
@@ -238,8 +238,8 @@ struct ms_ve_constants
 	unsigned char	pwm_time_max;		/* 97, Peak hold time */
 	unsigned char	batt_corr;		/* 98, Battry Voltage Correction */
 	unsigned short	rpmk;			/* 99, Constant for RPM 12K/ncyl */
-	unsigned char	ve_rpm_range[8];	/* 101, VEtable RPM bins (8 bytes) */
-	unsigned char	ve_kpa_range[8];	/* 109, VEtable KPA bins (8 bytes) */
+	unsigned char	rpm_bins[8];		/* 101, VEtable RPM bins (8 bytes) */
+	unsigned char	kpa_bins[8];		/* 109, VEtable KPA bins (8 bytes) */
 	union	config11 config11;		/* 117, Config for PC Config */
 	union	config12 config12;		/* 118, Config for PC Config */
 	union	config13 config13;		/* 119, Config for PC Config */
