@@ -19,6 +19,7 @@
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
 #define MS_PAGE_SIZE 128
+#define MAX_SUPPORTED_PAGES 8
 
 /* Memory offsets */
 #define VE1_TABLE_OFFSET	0	/* From page 0 boundary */

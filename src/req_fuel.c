@@ -338,16 +338,16 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	struct Reqd_Fuel * reqd_fuel = NULL;
 	struct Ve_Const_Std *ve_const;
 	gint dload_val;
-	extern unsigned char * ms_data;
+        extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	ConfigFile *cfgfile;
 	gchar *filename;
 	gchar *tmpbuf;
 
 	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	if (reqd_fuel->table == 1)
-		ve_const = (struct Ve_Const_Std *)ms_data;
+		ve_const = (struct Ve_Const_Std *)ms_data[0];
 	else if (reqd_fuel->table == 2)
-		ve_const = (struct Ve_Const_Std *) (ms_data + MS_PAGE_SIZE);
+		ve_const = (struct Ve_Const_Std *) ms_data[1];
 	else
 	{
 		dbg_func(g_strdup_printf(__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table),REQD_FUEL);
@@ -366,9 +366,9 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	check_req_fuel_limits();
 	dload_val = ve_const->rpmk;
 	if (reqd_fuel->table == 1)
-		write_ve_const(dload_val, rpmk_offset, FALSE);
+		write_ve_const(0, rpmk_offset, dload_val, FALSE);
 	else
-		write_ve_const(dload_val, rpmk_offset+MS_PAGE_SIZE, FALSE);
+		write_ve_const(1, rpmk_offset, dload_val, FALSE);
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Table_%i",reqd_fuel->table);
@@ -415,11 +415,12 @@ void check_req_fuel_limits()
 	gint lim_flag = 0;
 	gint dload_val = 0;
 	gint offset = 0;
+	gint page = -1;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
 	extern GHashTable * interdep_vars_1;
 	extern GHashTable * interdep_vars_2;
-	extern unsigned char *ms_data;
+        extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
@@ -427,8 +428,8 @@ void check_req_fuel_limits()
 
 	if (ecu_caps & DUALTABLE)
 	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *)ms_data;
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		ve_const_dt1 = (struct Ve_Const_DT_1 *)ms_data[0];
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) ms_data[1];
 		/* F&H Dualtable required Fuel calc
 		 *
 		 *                                        / num_injectors \
@@ -449,6 +450,7 @@ void check_req_fuel_limits()
 		 */
 
 		/* TABLE 1 */
+		page = 0;
 		tmp = (float)(num_injectors_1)/(float)(ve_const_dt1->divider);
 		req_fuel_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
 
@@ -476,16 +478,17 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90;
-			dload_val = convert_before_download(offset,
-					req_fuel_per_squirt,FALSE);
-			write_ve_const(dload_val, offset, FALSE);
+			dload_val = convert_before_download(page, offset,
+					req_fuel_per_squirt);
+			write_ve_const(page, offset, dload_val, FALSE);
 			/* Call handler to empty interdependant hash table */
-			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));
 					
 		}
 
 		lim_flag = 0;
 		/* TABLE 2 */
+		page=1;
 		tmp = (float)(num_injectors_2)/(float)(ve_const_dt2->divider);
 		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
 
@@ -522,26 +525,26 @@ void check_req_fuel_limits()
 				ve_const_dt1->rpmk = (int)(12000.0/((double)num_cylinders_1));
 
 			dload_val = ve_const_dt1->rpmk;
-			write_ve_const(dload_val, rpmk_offset, FALSE);
+			write_ve_const(0, rpmk_offset, dload_val, FALSE);
 			if (ve_const_dt2->config11.bit.eng_type)
 				ve_const_dt2->rpmk = (int)(6000.0/((double)num_cylinders_2));
 			else
 				ve_const_dt2->rpmk = (int)(12000.0/((double)num_cylinders_2));
 
 			dload_val = ve_const_dt1->rpmk;
-			write_ve_const(dload_val, rpmk_offset+MS_PAGE_SIZE, FALSE);
+			write_ve_const(1, rpmk_offset, dload_val, FALSE);
 
 			offset = 90 + MS_PAGE_SIZE;
-			dload_val = convert_before_download(offset,
-					req_fuel_per_squirt,FALSE);
-			write_ve_const(dload_val, offset, FALSE);
-			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,NULL);
+			dload_val = convert_before_download(page, offset,
+					req_fuel_per_squirt);
+			write_ve_const(page, offset, dload_val, FALSE);
+			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(1));
 					
 		}
 	}// END Dualtable Req fuel checks... */
 	else
 	{
-		ve_const = (struct Ve_Const_Std *)ms_data;
+		ve_const = (struct Ve_Const_Std *)ms_data[0];
 
 		/* B&G, MSnS, MSnEDIS Required Fuel Calc
 		 *
@@ -564,6 +567,7 @@ void check_req_fuel_limits()
 		 * 
 		 */
 
+		page = 0;
 		tmp =	((float)(num_injectors_1))/((float)ve_const->divider*(float)(ve_const->alternate+1));
 
 		/* This is 1 tenth the value as the one screen stuff is 1/10th 
@@ -613,14 +617,14 @@ void check_req_fuel_limits()
 				ve_const->rpmk = (int)(12000.0/((double)num_cylinders_1));
 
 			dload_val = ve_const->rpmk;
-			write_ve_const(dload_val, rpmk_offset, FALSE);
+			write_ve_const(page, rpmk_offset, dload_val, FALSE);
 
 			/* Send reqd_fuel_per_squirt */
 			offset = 90;
-			dload_val = convert_before_download(offset,
-					req_fuel_per_squirt,FALSE);
-			write_ve_const(dload_val, offset, FALSE);
-			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
+			dload_val = convert_before_download(page, offset,
+					req_fuel_per_squirt);
+			write_ve_const(page, offset, dload_val, FALSE);
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));
 		}
 	} // End B&G style Req Fuel check 
 	return ;

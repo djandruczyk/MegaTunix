@@ -24,7 +24,7 @@ void *serial_io_handler(gpointer);	/* thread that processes messages */
 void comms_test(void);			/* new check_ecu_comms function */
 void readfrom_ecu(void *);		/* Function to get data FROM ecu */
 void writeto_ecu(void *);		/* Func to send data to the ECU */
-void write_ve_const(gint, gint, gboolean);
+void write_ve_const(gint, gint, gint, gboolean);
 void burn_ms_flash(void);		/* run after burn completion */
 /* Prototypes */
 

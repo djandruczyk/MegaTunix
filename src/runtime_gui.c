@@ -28,7 +28,7 @@
 
 extern struct DynamicEntries entries;
 extern struct DynamicLabels labels;
-extern struct DynamicMisc misc;
+struct DynamicMisc misc;
 extern gboolean connected;
 extern gint active_page;
 extern GdkColor white;
@@ -248,29 +248,30 @@ void build_runtime(GtkWidget *parent_frame)
 
 gboolean update_runtime_vars()
 {
+	gint i = 0;
 	extern struct Runtime_Common *runtime;
 	extern gint ecu_caps;
-	struct Ve_View_3D * ve_view0 = NULL;
-	struct Ve_View_3D * ve_view1 = NULL;
-	struct Ve_View_3D * ve_view2 = NULL;
-	extern GtkWidget *ve_widgets[];
-	extern GtkWidget *ign_widgets[];
+	struct Ve_View_3D * ve_view = NULL;
+	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern GHashTable *rt_controls;
 	gchar * tmpbuf = NULL;
 	gfloat tmpf = 0.0;
 	static struct Runtime_Common *rt_last = NULL;	
+	extern struct Firmware_Details *firmware;
 
 	if (rt_last == NULL)
 		rt_last = g_malloc0(sizeof(struct Runtime_Common));
 	
+	gdk_threads_enter();
 
-	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(ve_widgets[0]),"data");
-	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(ve_widgets[0+MS_PAGE_SIZE]),"data");
-	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-		ve_view2 = (struct Ve_View_3D *)g_object_get_data(
-					G_OBJECT(ign_widgets[0]),"data");
+
+	for (i=0;i<firmware->total_pages;i++)
+	{
+		ve_view = (struct Ve_View_3D *)g_object_get_data(
+				G_OBJECT(ve_widgets[i][0]),"ve_view");
+		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
+		        gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+	}
 	/* Count is used  to force an update after 5 runs EVEN IF the 
 	 * value hasn't changed.  seems to fix a "stuck bar" I've seen
 	 */
@@ -280,24 +281,6 @@ gboolean update_runtime_vars()
 	 * It's a small window, but I hit it several times.
 	 */
 
-	gdk_threads_enter();
-	if ((ve_view0 != NULL) && (ve_view0->drawing_area->window != NULL)) 
-	        gdk_window_invalidate_rect (ve_view0->drawing_area->window, 
-					&ve_view0->drawing_area->allocation, 
-					FALSE);
-
-	if ((ve_view1 != NULL) && (ve_view1->drawing_area->window != NULL)) 
-	        gdk_window_invalidate_rect (ve_view1->drawing_area->window, 
-					&ve_view1->drawing_area->allocation, 
-					FALSE);
-	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-	{
-		if ((ve_view2 != NULL) && (ve_view2->drawing_area->window != NULL)) 
-			gdk_window_invalidate_rect (ve_view2->drawing_area->window, 
-					&ve_view2->drawing_area->allocation, 
-					FALSE);
-	}
-	
 
 	/* Update all the dynamic RT controls */
 	if (active_page == RUNTIME_DISP)	/* Runtime display is visible */

@@ -60,8 +60,7 @@ extern GtkWidget *custom_logables;
 extern unsigned char *kpa_conversion;
 extern unsigned char na_map[];
 extern unsigned char turbo_map[];
-extern GtkWidget *ve_widgets[];
-extern GtkWidget *ign_widgets[];
+extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
@@ -243,6 +242,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint bit_val = -1;
 	gint bitmask = -1;
 	gint dload_val = -1;
+	gint page = -1;
 	unsigned char tmp = 0;
 	guint32 tmp32 = 0;
 	gint offset = -1;
@@ -250,21 +250,21 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint dl_type = -1;
 	gboolean single = FALSE;
 	extern gint dbg_lvl;
-	extern unsigned char *ms_data;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 	struct Ignition_Table *ign_table = NULL;
-	ve_const = (struct Ve_Const_Std *) ms_data;
+	ve_const = (struct Ve_Const_Std *) ms_data[0];
 
 	if (ecu_caps & DUALTABLE)
 	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data[0];
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 	}
 	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-		ign_table = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
+		ign_table = (struct Ignition_Table *) (ms_data[1]);
 
 	if (paused_handlers)
 		return TRUE;
@@ -276,15 +276,16 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	single = (gboolean)g_object_get_data(G_OBJECT(widget),"single");
-	
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+
 	/* to handle check buttons */
 	if (single)	// If it's true....
 		bit_val = gtk_toggle_button_get_active( 
 				GTK_TOGGLE_BUTTON (widget));
 
 	/* Note to self,  WTF is this next line for anyways???
-	*/
-//	if ((offset == 92) || (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
+	 */
+	//	if ((offset == 92) || (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
 	{
 		switch (offset)
 		{
@@ -294,12 +295,12 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 					dbg_func(__FILE__": bitmask_button_handler() Setting spark_config1 but NOT using spark capable firmware...\n",CRITICAL);	
 					break;
 				}
-					tmp = ign_table->spark_config1.value;
-					tmp = tmp & ~bitmask;	/*clears bits */
-					tmp = tmp | (bit_val << bit_pos);
-					ign_table->spark_config1.value = tmp;
-					dload_val = tmp;
-				
+				tmp = ign_table->spark_config1.value;
+				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp | (bit_val << bit_pos);
+				ign_table->spark_config1.value = tmp;
+				dload_val = tmp;
+
 				break;	
 			case 92: /* alternate OR tblcnf (firmware dependant) */
 				if (ecu_caps & DUALTABLE)
@@ -324,8 +325,8 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 						dload_val = 0;
 					}
 					g_hash_table_insert(interdep_vars_1,
-						GINT_TO_POINTER(offset),
-						GINT_TO_POINTER(dload_val));
+							GINT_TO_POINTER(offset),
+							GINT_TO_POINTER(dload_val));
 					if (!err_flag)
 						check_req_fuel_limits();
 				}
@@ -372,7 +373,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 		}
 		if (dl_type == IMMEDIATE)
-			write_ve_const(dload_val, offset, ign_parm);
+			write_ve_const(page, offset, dload_val, ign_parm);
 	}
 	return TRUE;
 }
@@ -400,7 +401,6 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((StdButton)handler)
 	{
 		case INTERROGATE_ECU:
-			printf("interrogate_ecu button pushed\n");
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
 			
@@ -502,6 +502,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint dl_type = -1;
 	gint offset = -1;
 	gint dload_val = -1;
+	gint page = -1;
 	gboolean ign_parm = FALSE;
 	gboolean temp_dep = FALSE;
 	gint tmpi = 0;
@@ -509,10 +510,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = -1;
 	gfloat value = 0.0;
 	GtkWidget * info = NULL;
-	extern unsigned char * ms_data;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern gint lv_scroll;
-	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
+	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data[0];
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Ignition_Table * ign_parms = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
@@ -527,16 +528,17 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		return TRUE;
 
 	if (ecu_caps & DUALTABLE)
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 
 	if (ecu_caps & (S_N_EDIS|S_N_SPARK))
-		ign_parms = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
+		ign_parms = (struct Ignition_Table *) (ms_data[1]);
 
 	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
 	info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
+	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	tmpi = (int)(value+.001);
@@ -731,9 +733,9 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 1);	/* Set xlong_trig */
 				ign_parms->spark_config1.value = tmp;
-				write_ve_const(tmp, SPARK_CONFIG1, ign_parm);
+				write_ve_const(page, SPARK_CONFIG1, tmp, ign_parm);
 				value -= 45.0;
-				dload_val = convert_before_download(offset,value,ign_parm);
+				dload_val = convert_before_download(page,offset,value);
 			}
 			else if (value > 89.65) /* Long trigger needed */
 			{
@@ -741,17 +743,17 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 0);	/* Set long_trig */
 				ign_parms->spark_config1.value = tmp;
-				write_ve_const(tmp, SPARK_CONFIG1, ign_parm);
+				write_ve_const(page, SPARK_CONFIG1, tmp, ign_parm);
 				value -= 22.5;
-				dload_val = convert_before_download(offset,value,ign_parm);
+				dload_val = convert_before_download(page,offset,value);
 			}
 			else	// value <= 89.65 degrees, no long trigger
 			{
 				tmp = ign_parms->spark_config1.value;
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				ign_parms->spark_config1.value = tmp;
-				write_ve_const(tmp, SPARK_CONFIG1, ign_parm);
-				dload_val = convert_before_download(offset,value,ign_parm);
+				write_ve_const(page, SPARK_CONFIG1, tmp, ign_parm);
+				dload_val = convert_before_download(page,offset,value);
 			}
 			
 			break;
@@ -759,11 +761,11 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case GENERIC:	/* Handles almost ALL other variables */
 			if (ign_parm)
 				temp_dep = (gboolean)g_object_get_data(
-						G_OBJECT(ign_widgets[offset]),
+						G_OBJECT(ve_widgets[page][offset]),
 						"temp_dep");
 			else
 				temp_dep = (gboolean)g_object_get_data(
-						G_OBJECT(ve_widgets[offset]),
+						G_OBJECT(ve_widgets[page][offset]),
 						"temp_dep");
 
 			if (temp_dep)
@@ -771,7 +773,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				if (temp_units == FAHRENHEIT)
 					value = (value*(9.0/5.0))+32;
 			}
-			dload_val = convert_before_download(offset,value,ign_parm);
+			dload_val = convert_before_download(page,offset,value);
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
@@ -780,7 +782,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 	}
 	if (dl_type == IMMEDIATE) 
-		write_ve_const(dload_val, offset, ign_parm);
+		write_ve_const(page, offset, dload_val, ign_parm);
 	return TRUE;
 
 }
@@ -788,11 +790,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 void update_ve_const()
 {
 	gint i = 0;
+	gint x = 0;
 	gint dl_type = 0;
 	gfloat tmp = 0.0;
 	gfloat value = 0.0;
 	gboolean temp_dep = FALSE;
-	extern unsigned char *ms_data;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
@@ -800,12 +803,12 @@ void update_ve_const()
 	struct Ignition_Table *ign_table = NULL;
 
 	/* Point to Table0 (stock MS ) data... */
-	ve_const = (struct Ve_Const_Std *) ms_data;
+	ve_const = (struct Ve_Const_Std *) ms_data[0];
 
 	check_config11(ve_const->config11.value);
 	check_config13(ve_const->config13.value);
 	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-		ign_table = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
+		ign_table = (struct Ignition_Table *) (ms_data[1]);
 	
 
 	/* DualTable Fuel Calculations
@@ -825,8 +828,8 @@ void update_ve_const()
 	 */
 	if (ecu_caps & DUALTABLE)
 	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data[0];
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 
 //		g_printf("updating screen, ptr addy for table 1 %p, table2 %p\n",ve_const_dt1,ve_const_dt2);
 		/*g_printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
@@ -1143,47 +1146,22 @@ void update_ve_const()
 	}
 
 	/* Update all on screen controls (except bitfields (done above)*/
-	for (i=0;i<2*MS_PAGE_SIZE;i++)
+	for (x=0;x<MAX_SUPPORTED_PAGES;x++)
 	{
-		temp_dep = FALSE;
-		dl_type = -1;
-		if (GTK_IS_OBJECT(ve_widgets[i]))
-		{
-			dl_type = (gint)g_object_get_data(
-					G_OBJECT(ve_widgets[i]),
-					"dl_type");
-			temp_dep = (gboolean)g_object_get_data(
-					G_OBJECT(ve_widgets[i]),
-					"temp_dep");
-			if (dl_type == IMMEDIATE)
-				value = convert_after_upload(i,FALSE);  
-			if (temp_dep)
-			{
-				if (temp_units == CELSIUS)
-					value = (value-32)*(5.0/9.0);
-			}
-
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						ve_widgets[i]),value);
-		}
-	}
-	/* Update Spark Control spinbuttons if using Spark firmware */
-	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-	{
-		for (i=0;i<MS_PAGE_SIZE;i++)
+		for (i=0;i<2*MS_PAGE_SIZE;i++)
 		{
 			temp_dep = FALSE;
 			dl_type = -1;
-			if (GTK_IS_OBJECT(ign_widgets[i]))
+			if (GTK_IS_OBJECT(ve_widgets[x][i]))
 			{
 				dl_type = (gint)g_object_get_data(
-						G_OBJECT(ign_widgets[i]),
+						G_OBJECT(ve_widgets[x][i]),
 						"dl_type");
 				temp_dep = (gboolean)g_object_get_data(
-						G_OBJECT(ign_widgets[i]),
+						G_OBJECT(ve_widgets[x][i]),
 						"temp_dep");
 				if (dl_type == IMMEDIATE)
-					value = convert_after_upload(i,TRUE);  
+					value = convert_after_upload(x,i);  
 				if (temp_dep)
 				{
 					if (temp_units == CELSIUS)
@@ -1191,7 +1169,7 @@ void update_ve_const()
 				}
 
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							ign_widgets[i]),value);
+							ve_widgets[x][i]),value);
 			}
 		}
 	}

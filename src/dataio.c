@@ -42,8 +42,8 @@ void handle_ms_data(InputHandler handler, gint offset)
 	unsigned char buf[2048];
 	unsigned char *ptr = buf;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
-	extern unsigned char *ms_data;
-	extern unsigned char *ms_data_last;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 	extern struct Runtime_Common *runtime;
@@ -156,7 +156,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 
 			break;
 
-		case VE_AND_CONSTANTS_1:
+		case VE_AND_CONSTANTS_0:
 			total_read = 0;
 			total_wanted = firmware->table0_size;
 			zerocount = 0;
@@ -192,15 +192,12 @@ void handle_ms_data(InputHandler handler, gint offset)
 			 * comparison against to know if we have 
 			 * to burn stuff to flash.
 			 */
-			memcpy(ms_data,buf,
-					sizeof(struct Ve_Const_Std));
-			memcpy(ms_data_last,buf,
-					sizeof(struct Ve_Const_Std));
-
+			memcpy(ms_data[0],buf,total_wanted);
+			memcpy(ms_data_last[0],buf,total_wanted);
 			ms_ve_goodread_count++;
 			break;
 
-		case VE_AND_CONSTANTS_2:
+		case VE_AND_CONSTANTS_1:
 			total_read = 0;
 			total_wanted = firmware->table1_size;
 			zerocount = 0;
@@ -236,10 +233,8 @@ void handle_ms_data(InputHandler handler, gint offset)
 			 * comparison against to know if we have 
 			 * to burn stuff to flash.
 			 */
-			memcpy(ms_data+MS_PAGE_SIZE,buf,
-					sizeof(struct Ve_Const_DT_2));
-			memcpy(ms_data_last+MS_PAGE_SIZE,buf,
-					sizeof(struct Ve_Const_DT_2));
+			memcpy(ms_data[1],buf,total_wanted);
+			memcpy(ms_data_last[1],buf,total_wanted);
 
 			ms_ve_goodread_count++;
 			break;
@@ -280,13 +275,11 @@ void handle_ms_data(InputHandler handler, gint offset)
 			 * to burn stuff to flash.
 			 */
 			/* clear memory area */
-			memset(ms_data+MS_PAGE_SIZE,0,MS_PAGE_SIZE);
-			memset(ms_data_last+MS_PAGE_SIZE,0,MS_PAGE_SIZE);
+			memset(ms_data[1],0,2*MS_PAGE_SIZE);
+			memset(ms_data_last[1],0,2*MS_PAGE_SIZE);
 			/* Copy new data into memory and backup blocks */
-			memcpy(ms_data+MS_PAGE_SIZE,buf,
-					sizeof(struct Ignition_Table));
-			memcpy(ms_data_last+MS_PAGE_SIZE,buf,
-					sizeof(struct Ignition_Table));
+			memcpy(ms_data[1],buf,total_wanted);
+			memcpy(ms_data_last[1],buf,total_wanted);
 
 			ms_ve_goodread_count++;
 			break;

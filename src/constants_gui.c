@@ -22,7 +22,7 @@
 
 extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
-extern GtkWidget *ve_widgets[];
+extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern GdkColor black;
 extern GdkColor white;
 GList *inv_dt_controls = NULL;
@@ -336,9 +336,11 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Injector Open Time 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets[93] = spinner;
+	ve_widgets[0][93] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(93));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -365,9 +367,11 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Battery Correction Factor 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets[97] = spinner;
+	ve_widgets[0][97] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(97));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -405,9 +409,11 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Current Limit % 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[95] = spinner;
+	ve_widgets[0][95] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(95));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -433,9 +439,11 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Time threshold 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets[96] = spinner;
+	ve_widgets[0][96] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(96));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -717,11 +725,13 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Injector Open Time 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets[93+MS_PAGE_SIZE] = spinner;
+//	ve_widgets[1][93] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(spinner),"offset",
-			GINT_TO_POINTER(93+MS_PAGE_SIZE));
+			GINT_TO_POINTER(93));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
 	g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -746,11 +756,13 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Battery Correction Factor 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets[97+MS_PAGE_SIZE] = spinner;
+//	ve_widgets[1][97] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(spinner),"offset",
-			GINT_TO_POINTER(97+MS_PAGE_SIZE));
+			GINT_TO_POINTER(97));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(60*100));
 	g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -786,11 +798,13 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Current Limit % 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[95+MS_PAGE_SIZE] = spinner;
+//	ve_widgets[1][95] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(spinner),"offset",
-			GINT_TO_POINTER(95+MS_PAGE_SIZE));
+			GINT_TO_POINTER(95));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
 	g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -814,11 +828,13 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Time threshold 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets[96+MS_PAGE_SIZE] = spinner;
+//	ve_widgets[1][96] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(spinner),"offset",
-			GINT_TO_POINTER(96+MS_PAGE_SIZE));
+			GINT_TO_POINTER(96));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
 	g_object_set_data(G_OBJECT(spinner),"conv_type",

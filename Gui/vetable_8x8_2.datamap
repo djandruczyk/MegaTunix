@@ -32,19 +32,27 @@ tab_name=_VE Table(1)
 
 #----- Buttons ---------------------------------------------------------------
 [VE2_get_data_button]
-keys=handler
-key_types=_STRING_
+keys=handler,page
+key_types=_STRING_,_INT_
 handler=_READ_VE_CONST_
+page=1
 
 [VE2_burn_data]
-keys=handler
-key_types=_STRING_
+keys=handler,page
+key_types=_STRING_,_INT_
 handler=_BURN_MS_FLASH_
+page=1
 
 [VE2_3d_view_button]
-keys=table
-key_types=_INT_
-table=2
+keys=page,ve_base_offset,load_base_offset,rpm_base_offset,load_bincount,rpm_bincount,is_spark
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_
+page=1
+ve_base_offset=0
+load_base_offset=108
+rpm_base_offset=100
+load_bincount=8
+rpm_bincount=8
+is_spark=FALSE
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 

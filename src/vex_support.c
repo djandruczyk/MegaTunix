@@ -99,7 +99,7 @@ gboolean vetable_export(void *ptr)
 	gint j = 0;
 	gsize count = 0;
 	gint index = 0;
-	extern unsigned char * ms_data;
+	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
 	unsigned char * ve_const_arr = NULL;
 	extern gint ecu_caps;
 	gchar * tmpbuf;
@@ -122,7 +122,7 @@ gboolean vetable_export(void *ptr)
 	output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
 	output = g_string_append(output, "Page 0\n");
 	output = g_string_append(output, "VE Table RPM Range              [ 8]\n");
-	ve_const_arr = (unsigned char *)ms_data;
+	ve_const_arr = (unsigned char *)ms_data[0];
 	for (i=0;i<8;i++)
 		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE1_RPM_BINS_OFFSET]));
 				
@@ -626,15 +626,15 @@ void reset_tmp_bins()
 void feed_import_data_to_ms()
 {
 	gint i = 0;
-	extern unsigned char *ms_data;
-	extern unsigned char *ms_data_backup;
+	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
+	extern unsigned char * ms_data_backup[MAX_SUPPORTED_PAGES];
 	unsigned char * ptr;
 	gchar * tmpbuf;
 
 	/* Backup the ms data first... */
-	memset((void *)ms_data_backup, 0, 2*MS_PAGE_SIZE);
-	memcpy(ms_data_backup, ms_data,2*MS_PAGE_SIZE);
-	ptr = (unsigned char *) ms_data;
+	memset((void *)ms_data_backup[0], 0, 2*MS_PAGE_SIZE);
+	memcpy(ms_data_backup[0], ms_data,2*MS_PAGE_SIZE);
+	ptr = (unsigned char *) ms_data[0];
 
 	/* check to make sure we update the right page */
 	if (import_page == 0)
@@ -673,9 +673,9 @@ void revert_to_previous_data()
 {
 	gchar * tmpbuf;
 	/* Called to back out a load of a VEtable from VEX import */
-	extern unsigned char * ms_data;
-	extern unsigned char * ms_data_backup;
-	memcpy(ms_data, ms_data_backup, 2*MS_PAGE_SIZE);
+	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
+	extern unsigned char * ms_data_backup[MAX_SUPPORTED_PAGES];
+	memcpy(ms_data[0], ms_data_backup[0], 2*MS_PAGE_SIZE);
 	update_ve_const();
 	gtk_widget_set_sensitive(buttons.tools_revert_but,FALSE);
 	tmpbuf = g_strdup("Reverting to previous settings....\n");

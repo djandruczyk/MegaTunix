@@ -47,6 +47,8 @@ struct Firmware_Details
         gint rtvars_size;       /* Size of Realtime vars datablock */
         gint ignvars_size;      /* Size of Realtime vars datablock */
         gint memblock_size;     /* Size of Raw_Memory datablock */
+	gboolean multi_page;	/* Multi-page firmware? */
+	gint total_pages;	/* How many pages do we handle? */
 };
 
 /* Progress bars that are updated from various functions... */
@@ -61,8 +63,6 @@ struct DynamicProgress
 /* Misc widgets that need to be modified/updated during runtime */
 struct DynamicMisc
 {
-	GtkWidget *p0_map_tps_frame;
-	GtkWidget *p1_map_tps_frame;
 	GtkWidget *warmwizard_table;
         GtkWidget *status[7];           /* Status boxes */
         GtkWidget *ww_status[7];           /* Status boxes */
@@ -330,6 +330,8 @@ struct Canidate
 	gchar * ve_cmd_key;	/* string key to hashtable for VE command */
 	gchar * ign_cmd_key;	/* string key to hashtable for Ign command */
 	gchar * raw_mem_cmd_key;/* string key to hashtable for RAW command */
+	gboolean multi_page;	/* Multi-page firmware ??? */
+	gint total_pages;	/* how many pages do we handle? */
 };
 
 struct Command
@@ -370,8 +372,9 @@ struct IoCmds
 
 struct OutputData
 {
-	gint value;		/* Value to send */
+	gint page;		/* Page in ECU */
 	gint offset;		/* Offset in block */
-	gboolean ign_parm;	/* Ignition parameter, yes or no? */
+	gint value;		/* Value to send */
+	gboolean ign_parm;	/* Ignition parameter, True or False */
 };
 #endif

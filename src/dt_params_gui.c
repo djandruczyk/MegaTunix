@@ -35,7 +35,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	GtkAdjustment *adj;
 	GSList *group = NULL;
 
-	extern GtkWidget *ve_widgets[];
+	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern GList *store_controls;
 	extern struct DynamicButtons buttons;
 	extern GtkTooltips *tip;
@@ -307,11 +307,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			300.0,100.0,1500,100,100,10.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[255] = spinner;
+	ve_widgets[1][127] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(255));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(127));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(100*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -330,11 +333,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			8500.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[251] = spinner;
+	ve_widgets[1][123] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(251));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(123));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(100*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -373,11 +379,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			5000.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[252] = spinner;
+	ve_widgets[1][124] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(252));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(124));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(100*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -402,11 +411,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			6000.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[253] = spinner;
+	ve_widgets[1][125] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(253));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(125));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(100*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -431,11 +443,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			6500.0,100.0,25500,100,1000,100.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[254] = spinner;
+	ve_widgets[1][126] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(254));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(126));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(100*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -559,11 +574,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			50.0,1.0,255,10,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[248] = spinner;
+	ve_widgets[1][120] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(248));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(120));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(1*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -590,11 +608,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			50.0,1.0,255,10,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[249] = spinner;
+	ve_widgets[1][121] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(249));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(121));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(1*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -620,11 +641,14 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			50.0,1.0,255,10,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets[250] = spinner;
+	ve_widgets[1][122] = spinner;
         dt_controls = g_list_append(dt_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(250));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(122));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(1*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",

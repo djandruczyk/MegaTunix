@@ -50,16 +50,14 @@ extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
-struct Serial_Params *serial_params;
-unsigned char *ms_data;
-unsigned char *ms_data_last;
-unsigned char *ms_data_backup;
-struct Conversion_Chart *std_conversions;
-struct Conversion_Chart *ign_conversions;
+struct Serial_Params *serial_params;	
+/* Support up to "x" page firmware.... */
+unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
+unsigned char *ms_data_backup[MAX_SUPPORTED_PAGES];
+struct Conversion_Chart *std_conversions[MAX_SUPPORTED_PAGES];
 struct Runtime_Common *runtime;
-GtkWidget *ve_widgets[2*MS_PAGE_SIZE];
-GtkWidget *ign_widgets[MS_PAGE_SIZE];
-
+GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
 struct IoCmds *cmds;
@@ -203,6 +201,7 @@ void make_megasquirt_dirs(void)
 
 void mem_alloc()
 {
+	gint i=0;
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
 	 */
@@ -211,14 +210,17 @@ void mem_alloc()
 
 	/* Allocate memory blocks */
 	serial_params = g_malloc0(sizeof(struct Serial_Params));
-	ms_data = g_malloc0(2*MS_PAGE_SIZE);
-	ms_data_last = g_malloc0(2*MS_PAGE_SIZE);
-	ms_data_backup = g_malloc0(2*MS_PAGE_SIZE);
+
+	for (i=0;i<MAX_SUPPORTED_PAGES;i++)
+	{
+		ms_data[i] = g_malloc0(2*MS_PAGE_SIZE);
+		ms_data_last[i] = g_malloc0(2*MS_PAGE_SIZE);
+		ms_data_backup[i] = g_malloc0(2*MS_PAGE_SIZE);
+		std_conversions[i] = g_malloc0(sizeof(struct Conversion_Chart));
+	}
 
 	runtime = g_malloc0(sizeof(struct Runtime_Common));
 
-	std_conversions =  g_malloc0(sizeof(struct Conversion_Chart));
-	ign_conversions =  g_malloc0(sizeof(struct Conversion_Chart));
 
 	cmds = g_malloc0(sizeof(struct IoCmds));
 
@@ -226,15 +228,19 @@ void mem_alloc()
 
 void mem_dealloc()
 {
+	gint i = 0;
 	/* Allocate memory blocks */
 	
 	g_free(serial_params);
-	g_free(ms_data);
-	g_free(ms_data_last);
-	g_free(ms_data_backup);
+	for (i=0;i<MAX_SUPPORTED_PAGES;i++)
+	{
+		g_free(ms_data[i]);
+		g_free(ms_data_last[i]);
+		g_free(ms_data_backup[i]);
+		g_free(std_conversions[i]);
+	}
 	g_free(runtime);
 	g_free(std_conversions);
-	g_free(ign_conversions);
 	g_hash_table_destroy(interdep_vars_1);
 	g_hash_table_destroy(interdep_vars_2);
 }

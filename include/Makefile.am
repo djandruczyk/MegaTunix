@@ -39,7 +39,6 @@ headers = \
         runtime_controls.h \
         runtime_gui.h \
         serialio.h \
-        sparktable_gui.h \
 	stringmatch.h \
         structures.h \
         tabloader.h \

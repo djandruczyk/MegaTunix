@@ -86,8 +86,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 				tmp = UPD_LOAD_GUI_TABS;
 				g_array_append_val(message->funcs,tmp);
 			}
-			tmp = UPD_READ_VE_CONST;
-			g_array_append_val(message->funcs,tmp);
+//			tmp = UPD_READ_VE_CONST;
+//			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_COMMS_TEST:
@@ -105,7 +105,7 @@ void io_cmd(IoCommands cmd, gpointer data)
 			message->page = 0;
 			message->out_str = g_strdup(cmds->veconst_cmd);
 			message->out_len = cmds->ve_cmd_len;
-			message->handler = VE_AND_CONSTANTS_1;
+			message->handler = VE_AND_CONSTANTS_0;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
 			tmp = UPD_STORE_CONVERSIONS;
 			g_array_append_val(message->funcs,tmp);
@@ -121,7 +121,7 @@ void io_cmd(IoCommands cmd, gpointer data)
 				message->page = 1;
 				message->out_str = g_strdup(cmds->veconst_cmd);
 				message->out_len = cmds->ve_cmd_len;
-				message->handler = VE_AND_CONSTANTS_2;
+				message->handler = VE_AND_CONSTANTS_1;
 				message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 				tmp = UPD_VE_CONST;
 				g_array_append_val(message->funcs,tmp);
@@ -399,12 +399,13 @@ void comms_test()
 	return;
 }
 
-void write_ve_const(gint value, gint offset, gboolean ign_parm)
+void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 {
         struct OutputData *output = NULL;
         output = g_new0(struct OutputData,1);
-        output->value = value;
+        output->page = page;
         output->offset = offset;
+        output->value = value;
         output->ign_parm = ign_parm;
         io_cmd(IO_WRITE_DATA,output);
 	return;
@@ -415,8 +416,9 @@ void writeto_ecu(void *ptr)
 	struct Io_Message *message = (struct Io_Message *)ptr;
 	struct OutputData *data = message->payload;
 
-	gint value = data->value;
+	gint page = data->page;
 	gint offset = data->offset;
+	gint value = data->value;
 	gboolean ign_parm = data->ign_parm;
 	gint highbyte = 0;
 	gint lowbyte = 0;
@@ -424,10 +426,10 @@ void writeto_ecu(void *ptr)
 	gint res = 0;
 	gint count = 0;
 	char lbuff[3] = {0, 0, 0};
-	extern unsigned char *ms_data;
-	extern unsigned char *ms_data_last;
-	extern gint ecu_caps;
-	gchar * write_cmd = NULL;;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
+	gchar * write_cmd = NULL;
+	extern struct Firmware_Details *firmware;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -457,18 +459,9 @@ void writeto_ecu(void *ptr)
 	}
 
 	/* Handles variants and dualtable... */
-	if (offset > MS_PAGE_SIZE)
-	{
-		offset -= MS_PAGE_SIZE;
-		if (ecu_caps & DUALTABLE)
-			set_ms_page(1);
-		else
-			dbg_func(g_strdup_printf(__FILE__": High offset (%i), but no DT flag\n",offset+MS_PAGE_SIZE),CRITICAL);
-
-	}
-	/* NOT high offset, but if using DT switch page back to 0 */
-	else if (ecu_caps & DUALTABLE)
-		set_ms_page(0);
+	if (firmware->multi_page)
+		if ((ign_parm == FALSE) && (page > 0))
+			set_ms_page(page);
 
 	if (ign_parm)
 		write_cmd = g_strdup("J");
@@ -497,7 +490,7 @@ void writeto_ecu(void *ptr)
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 	if (res != count )
 		dbg_func("Sending offset+data FAILED!!!\n",CRITICAL);
-	if (ecu_caps & DUALTABLE)
+	if (page > 0)
 		set_ms_page(0);
 	g_free(write_cmd);
 
@@ -505,7 +498,7 @@ void writeto_ecu(void *ptr)
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
-	res = memcmp(ms_data_last,ms_data,2*MS_PAGE_SIZE);
+	res = memcmp(ms_data_last[page],ms_data[page],2*MS_PAGE_SIZE);
 	gdk_threads_enter();
 	if (res == 0)
 		set_store_buttons_state(BLACK);
@@ -519,8 +512,8 @@ void writeto_ecu(void *ptr)
 
 void burn_ms_flash()
 {
-        extern unsigned char *ms_data;
-        extern unsigned char *ms_data_last;
+        extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+        extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
         gint res = 0;
         extern gint ecu_caps;
         static GStaticMutex mutex = G_STATIC_MUTEX_INIT;

@@ -32,7 +32,7 @@ void post_process_realtime_vars(void *input, void *output)
 	 * choose below which ones to take based on whether
 	 * dualtable is set or not..
 	 */
-	extern unsigned char *ms_data;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern gint temp_units;
 	gfloat ign_int = 0.0;
@@ -46,11 +46,11 @@ void post_process_realtime_vars(void *input, void *output)
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
-	ve_const = (struct Ve_Const_Std *) ms_data;
+	ve_const = (struct Ve_Const_Std *) ms_data[0];
 	if (ecu_caps & DUALTABLE)
 	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data[0];
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 	}
 	gint divider = 0;
 	gint nsquirts = 0;

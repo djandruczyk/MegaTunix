@@ -9,8 +9,9 @@ Capabilities=_S_N_SPARK_,_ENHANCED_
 Rt_Cmd_Key=CMD_A_0
 VE_Cmd_Key=CMD_V_0
 Ign_Cmd_Key=CMD_I_0
-Raw_Mem_Cmd_Key=CMD_F_0
-MultiPage=FALSE
+#Raw_Mem_Cmd_Key=CMD_F_0
+MultiPage=TRUE
+TotalPages=2
 
 [bytecounts]
 CMD_A_0=27

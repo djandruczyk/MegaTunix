@@ -28,7 +28,6 @@
 #include <logviewer_gui.h>
 #include <memory_gui.h>
 #include <runtime_gui.h>
-#include <sparktable_gui.h>
 #include <tuning_gui.h>
 #include <tools_gui.h>
 #include <vetable_gui.h>

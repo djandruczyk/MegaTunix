@@ -32,8 +32,7 @@
  * 
  */
 
-extern struct Conversion_Chart *std_conversions;
-extern struct Conversion_Chart *ign_conversions;
+extern struct Conversion_Chart *std_conversions[];
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
@@ -46,102 +45,57 @@ static gchar * conv_text[] =
 	"Divide",
 	"No Conversion"
 };
-	
-
 
 void store_conversions(void)
 {
 	gint i = 0;
+	gint x = 0;
 	gint dl_type;
 	struct Conversion_Chart *conv_chart=NULL;
-	extern gint ecu_caps;
-	extern GtkWidget *ve_widgets[];
-	extern GtkWidget *ign_widgets[];
-	gchar * tmpbuf = NULL;
+	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
-	conv_chart = std_conversions;
 
-	for (i=0;i<2*MS_PAGE_SIZE;i++)
+	for (x=0;x<MAX_SUPPORTED_PAGES;x++)
 	{
-		if (GTK_IS_OBJECT(ve_widgets[i]))
+		conv_chart = std_conversions[x];
+		for (i=0;i<2*MS_PAGE_SIZE;i++)
 		{
-			dl_type = (gint)g_object_get_data(
-					G_OBJECT(ve_widgets[i]),
-					"dl_type");
-			if (dl_type == IMMEDIATE)
-			{
-				conv_chart->conv_type[i] = (gint)
-					g_object_get_data(G_OBJECT
-							(ve_widgets[i]),
-							"conv_type");
-				conv_chart->conv_factor[i] = (gfloat)((gint)
-						g_object_get_data(G_OBJECT
-							(ve_widgets[i]),
-							"conv_factor_x100"))
-					/100.0;
-			}
-
-		}
-		if (i == 90)	/* Required fuel special case */
-		{
-			conv_chart->conv_type[i] = CONV_NOTHING;
-			conv_chart->conv_factor[i] = 1.0;
-		}
-
-		tmpbuf = g_strdup_printf(__FILE__": load_conversions() BASE Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
-		dbg_func(tmpbuf,DL_CONV);
-		g_free(tmpbuf);
-	}
-
-	/* Ignition variant specific */
-	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-	{
-		conv_chart = ign_conversions;
-
-		for (i=0;i<MS_PAGE_SIZE;i++)
-		{
-			if (GTK_IS_OBJECT(ign_widgets[i]))
+			if (GTK_IS_OBJECT(ve_widgets[x][i]))
 			{
 				dl_type = (gint)g_object_get_data(
-						G_OBJECT(ign_widgets[i]),
+						G_OBJECT(ve_widgets[x][i]),
 						"dl_type");
 				if (dl_type == IMMEDIATE)
 				{
-					conv_chart->conv_type[i] = (gint)
-						g_object_get_data(G_OBJECT
-								(ign_widgets[i]),
-								"conv_type");
-					conv_chart->conv_factor[i] = (gfloat)((gint)
-							g_object_get_data(G_OBJECT
-								(ign_widgets[i]),
-								"conv_factor_x100"))
-						/100.0;
+					conv_chart->conv_type[i] = (gint)g_object_get_data(G_OBJECT(ve_widgets[x][i]),"conv_type");
+					conv_chart->conv_factor[i] = (gfloat)((gint)g_object_get_data(G_OBJECT(ve_widgets[x][i]),"conv_factor_x100"))/100.0;
 				}
 
 			}
-			tmpbuf = g_strdup_printf(__FILE__": load_conversions() Ignition Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
-			dbg_func(tmpbuf,DL_CONV);
-			g_free(tmpbuf);
+			if ((i == 90) && ((x == 0)||(x==1)))	/* Required fuel special case */
+			{
+				conv_chart->conv_type[i] = CONV_NOTHING;
+				conv_chart->conv_factor[i] = 1.0;
+			}
+
+			dbg_func(g_strdup_printf(__FILE__": load_conversions() PAGE: %i,BASE Offset, %i, conv_type %s, conv_factor %f\n",x,i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]),DL_CONV);
 		}
 	}
+
 	return;
 }
 
-gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
+gint convert_before_download(gint page, gint offset, gfloat value)
 {
 	gint return_value = 0;
 	gint tmp_val = (gint)(value+0.001);
 	gfloat factor;
 	unsigned char *ve_const_arr; 
 	struct Conversion_Chart *conv_chart;
-	extern unsigned char *ms_data;
-	gchar * tmpbuf = NULL;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 
-	if (ign_var)
-		conv_chart = ign_conversions;
-	else
-		conv_chart = std_conversions;
-	ve_const_arr = (unsigned char *)ms_data;
+	conv_chart = std_conversions[page];
+	ve_const_arr = (unsigned char *)ms_data[page];
 
 	factor = conv_chart->conv_factor[offset];
 
@@ -163,14 +117,10 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 			return_value = tmp_val;
 			break;
 		default:
-			tmpbuf = g_strdup_printf(__FILE__": convert_before_dl(): NO CONVERSION defined, BUG!!! offset: %i\n",offset);
-			dbg_func(tmpbuf,DL_CONV);
-			g_free(tmpbuf);
+			dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): NO CONVERSION defined, BUG!!! offset: %i\n",offset),DL_CONV);
 			break;
 	}
-	tmpbuf = g_strdup_printf(__FILE__": convert_before_dl(): offset %i, raw %.2f, sent %i, ign_parm %i\n",offset,value,return_value,(gint)ign_var);
-	dbg_func(tmpbuf,DL_CONV);
-	g_free(tmpbuf);
+	dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): offset %i, raw %.2f, sent %i, page %i,\n",offset,value,return_value,page),DL_CONV);
 
 	/* Store value in veconst_arr pointer (to structure) 
 	 * (accessing it via array syntax as it's friggin easier).... 
@@ -179,34 +129,20 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 	 * by an offset from the beginning of their page.
 	 */
 
-	if (ign_var)
-		offset += MS_PAGE_SIZE;
 	ve_const_arr[offset] = return_value; 
 	return (return_value);
 }
 
-gfloat convert_after_upload(gint offset, gboolean ign_var)
+gfloat convert_after_upload(gint page, gint offset)
 {
 	gfloat return_value = 0.0;
 	gfloat factor = 0.0;
 	unsigned char *ve_const_arr;
 	struct Conversion_Chart *conv_chart;
-	extern unsigned char *ms_data;
-	gint index;
-	gchar * tmpbuf = NULL;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 
-	if (ign_var)
-	{
-		conv_chart = ign_conversions;
-		/* Ignition vars are stored in second page */
-		index = offset+MS_PAGE_SIZE;
-	}
-	else
-	{
-		conv_chart = std_conversions;
-		index = offset;
-	}
-	ve_const_arr = (unsigned char *)ms_data;
+	conv_chart = std_conversions[page];
+	ve_const_arr = (unsigned char *)ms_data[page];
 
 	factor = conv_chart->conv_factor[offset];
 
@@ -218,30 +154,26 @@ gfloat convert_after_upload(gint offset, gboolean ign_var)
 	switch ((Conversions)conv_chart->conv_type[offset])
 	{
 		case (CONV_ADD):
-			return_value = ve_const_arr[index] - factor;
+			return_value = ve_const_arr[offset] - factor;
 			break;
 		case (CONV_SUB):
-			return_value = ve_const_arr[index] + factor;
+			return_value = ve_const_arr[offset] + factor;
 			break;
 		case (CONV_MULT):
-			return_value = (gfloat)ve_const_arr[index] / factor;
+			return_value = (gfloat)ve_const_arr[offset] / factor;
 			break;
 		case (CONV_DIV):
-			return_value = (gfloat)ve_const_arr[index] * factor;
+			return_value = (gfloat)ve_const_arr[offset] * factor;
 			break;
 		case (CONV_NOTHING):
-			return_value = ve_const_arr[index];
+			return_value = ve_const_arr[offset];
 			break;
 		default:
-			tmpbuf = g_strdup_printf(__FILE__": convert_after_ul() NO CONVERSION defined, index %i BUG!!!\n",index);
-			dbg_func(tmpbuf,UL_CONV);
-			g_free(tmpbuf);
+			dbg_func(g_strdup_printf(__FILE__": convert_after_ul() NO CONVERSION defined, index %i BUG!!!\n",offset),UL_CONV);
 			break;
 
 	}
-	tmpbuf = g_strdup_printf(__FILE__": convert_after_ul(),offset %i, raw %i, val %f, ign_parm %i\n",offset,ve_const_arr[index],return_value,(gint)ign_var);
-	dbg_func(tmpbuf,UL_CONV);
-	g_free(tmpbuf);
+	dbg_func(g_strdup_printf(__FILE__": convert_after_ul(),offset %i, raw %i, val %f, page %i\n",offset,ve_const_arr[offset],return_value,page),UL_CONV);
 	return (return_value);
 }
 void convert_temps(gpointer widget, gpointer units)

@@ -79,7 +79,13 @@ struct Ve_View_3D
 	GtkWidget *drawing_area;
 	GtkWidget *window;
 	GtkWidget *burn_but;
-	gint table;
+	gint page;
+	gint load_bincount;
+	gint rpm_bincount;
+	gint ve_base_offset;
+	gint load_base_offset;
+	gint rpm_base_offset;
+	gboolean is_spark;
 };
 
 #endif

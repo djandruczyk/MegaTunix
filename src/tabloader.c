@@ -25,6 +25,7 @@
 gboolean tabs_loaded = FALSE;
 GHashTable *dynamic_widgets = NULL;
 
+void check_ve_widgets();
 void load_gui_tabs()
 {
 	extern struct Firmware_Details * firmware;
@@ -91,8 +92,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	ConfigFile *cfgfile = (ConfigFile *)user_data;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = (GtkWidget *) value;
-	extern GtkWidget *ve_widgets[];
-	extern GtkWidget *ign_widgets[];
+	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	gchar * section = g_strdup((gchar *)widget_name);
 	gchar ** keys = NULL;
 	gint keytypes[50];	/* bad idea to be fixed size!! */
@@ -100,7 +100,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint num_keytypes = 0;
 	gint i = 0;
 	gint tmpi = 0;
-	gboolean ign_param = FALSE;
+	gint offset = 0;
 	gint page = 0;
 
 	//	printf("bind_data to key %s\n",(gchar *)key);	
@@ -121,16 +121,17 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 		g_strfreev(keys);
 		return;
 	}
-	tmpi = -1;
-	cfg_read_int(cfgfile,section,"offset",&tmpi);
-	cfg_read_int(cfgfile,section,"page",&page);
-	cfg_read_boolean(cfgfile,section,"ign_param",&ign_param);
-	if (tmpi >= 0)
+	offset = -1;
+	page = -1;
+	cfg_read_int(cfgfile,section,"offset",&offset);
+	if (!cfg_read_int(cfgfile,section,"page",&page))
+		dbg_func(g_strdup_printf(__FILE__": bind_data(), Object %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
+	if (offset >= 0)
 	{
-		if (ign_param)
-			ign_widgets[tmpi] = widget;
+		if (GTK_IS_OBJECT(ve_widgets[page][offset]))
+			dbg_func(g_strdup_printf(__FILE__": bind_data() CRITICAL ERROR, Attempted overwrite of widget pointer at page %i, offset %i with info from widget defiend as %s\n",page,offset,section),CRITICAL);
 		else
-			ve_widgets[(page*MS_PAGE_SIZE)+tmpi] = widget;
+			ve_widgets[page][offset] = widget;
 	}
 	for (i=0;i<num_keys;i++)
 	{
@@ -190,4 +191,21 @@ void parse_keytypes(gchar * string, gint keytypes[], gint * count)
 	g_strfreev(vector);
 	*count = i;	
 		
+}
+void check_ve_widgets()
+{
+	extern GtkWidget * ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	gint x = 0;
+	gint y = 0;
+
+	for (x=0;x<2;x++)
+	{
+		for(y=0;y<MS_PAGE_SIZE;y++)
+		{
+			if (GTK_IS_OBJECT(ve_widgets[x][y]))
+				printf("widget at %i,%i\n",x,y);
+			else
+				printf("NO widget at %i,%i\n",x,y);
+		}
+	}
 }

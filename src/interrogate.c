@@ -352,6 +352,8 @@ end_of_loop:
 			potential->bytecounts,"CMD_F_0");
 	firmware->firmware_name = g_strdup(potential->firmware_name);
 	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
+	firmware->multi_page = potential->multi_page;
+	firmware->total_pages = potential->total_pages;
 
 	/* use commands defined in hte interogation profile to map the proper
 	 * command to the I/O routines...  Looks ugly but should (hopefully)
@@ -571,6 +573,10 @@ void * load_profile(GArray * cmd_array, gchar * file)
 				&canidate->ign_cmd_key);
 		cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
 				&canidate->raw_mem_cmd_key);
+		cfg_read_boolean(cfgfile,"parameters","MultiPage",
+				&canidate->multi_page);
+		cfg_read_int(cfgfile,"parameters","TotalPages",
+				&canidate->total_pages);
 		cfg_read_int(cfgfile,"parameters","VerNumber",
 				&canidate->ver_num);
 		cfg_read_string(cfgfile,"parameters","Capabilities",

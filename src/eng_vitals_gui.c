@@ -21,7 +21,7 @@
 
 struct DynamicLabels labels;
 struct DynamicButtons buttons;
-extern GtkWidget *ve_widgets[];
+extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern GdkColor black;
 GList *enh_idle_controls = NULL;
 GList *iac_idle_controls = NULL;
@@ -93,7 +93,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(NULL,"Speed Density");
 	buttons.speed_den_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -108,7 +111,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"Alpha-N");
 	buttons.alpha_n_but = button;
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -141,7 +147,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(NULL,"Multi-Port");
 	buttons.multi_port_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(116));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -156,7 +165,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
 	buttons.tbi_but = button;
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(116));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -189,7 +201,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(NULL,"Four-Stroke");
 	buttons.four_stroke_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(116));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -204,7 +219,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
 	buttons.two_stroke_but = button;
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(116));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -237,7 +255,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(NULL,"Even Fire");
 	buttons.even_fire_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
@@ -252,7 +273,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"Odd Fire");
 	buttons.odd_fire_but = button;
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
@@ -293,7 +317,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(NULL,"115 kPa");
 	buttons.map_115_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(116));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
@@ -308,7 +335,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"250 kPa");
 	buttons.map_250_but = button;
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(116));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
@@ -342,7 +372,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
         button = gtk_radio_button_new_with_label(NULL,"Narrow-Band");
         buttons.nbo2_but = button;
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
@@ -357,7 +390,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
         button = gtk_radio_button_new_with_label(group,"Wide-Band");
         buttons.wbo2_but = button;
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
@@ -391,7 +427,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(NULL,"Enabled");
 	buttons.baro_ena_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -406,7 +445,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"Disabled");
 	buttons.baro_disa_but = button;
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -446,7 +488,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(NULL,"B&G On-Off");
 	buttons.onoff_idle_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(16));
@@ -463,7 +508,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"PWM Controlled");
 	buttons.pwm_idle_but = button;
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)button);
-	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
+	g_object_set_data(G_OBJECT(button),"offset",
+			GINT_TO_POINTER(118));
+        g_object_set_data(G_OBJECT(button),"page",
+			GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(16));
@@ -500,11 +548,15 @@ void build_eng_vitals(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
 	temp_dep = g_list_append(temp_dep,(gpointer)spinner);
-        ve_widgets[121] = spinner;
+        ve_widgets[0][121] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
+        g_object_set_data(G_OBJECT(spinner),"temp_dep",
+			GINT_TO_POINTER(TRUE));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(121));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(40*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -562,7 +614,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	 * IF this does NOT make sense to you feel free to email the 
 	 * author and I'll explain to you...  :) */
         /* Fast Idle Temp (tied to "Cooling Fan Temp" (MSnEDIS/spark ) */
-	tmpspin = ve_widgets[121];
+	tmpspin = ve_widgets[0][121];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
         spinner = gtk_spin_button_new(adj,0,0);
 	temp_dep = g_list_append(temp_dep,(gpointer)spinner);
@@ -584,13 +636,16 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Fast Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(1800.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-        ve_widgets[125] = spinner;
+        ve_widgets[0][125] = spinner;
 	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
 	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(125));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(125));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(10*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -622,11 +677,14 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
 	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
-        ve_widgets[124] = spinner;
+        ve_widgets[0][124] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(124));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(124));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(40*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -657,10 +715,13 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
 	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
-        ve_widgets[126] = spinner;
+        ve_widgets[0][126] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(126));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(126));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(10*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
@@ -692,10 +753,13 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
 	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
-        ve_widgets[127] = spinner;
+        ve_widgets[0][127] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(127));
+        g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(127));
+        g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
                         GINT_TO_POINTER(1*100));
         g_object_set_data(G_OBJECT(spinner),"conv_type",
