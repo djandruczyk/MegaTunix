@@ -169,7 +169,6 @@ void interrogate_ecu()
 			dbg_func("\n\n",SERIAL_RD);
 		}
 
-
 		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);
 		ptr = buf;
 
@@ -279,9 +278,9 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 						((float)canidate->ver_num/10.0));
 			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_revision_entry")))
 			{
-				gdk_threads_enter();
-				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				gdk_threads_leave();
+//				gdk_threads_enter();
+//				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+//				gdk_threads_leave();
 			}
 			g_free(tmpbuf);
 		}
@@ -295,9 +294,9 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key));
 			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_signature_entry")))
 			{
-				gdk_threads_enter();
-				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				gdk_threads_leave();
+//				gdk_threads_enter();
+//				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+//				gdk_threads_leave();
 			}
 			g_free(tmpbuf);
 		}
@@ -311,9 +310,9 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key));
 			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ext_revision_entry")))
 			{
-				gdk_threads_enter();
-				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				gdk_threads_leave();
+//				gdk_threads_enter();
+//				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+//				gdk_threads_leave();
 			}
 			g_free(tmpbuf);
 		}

@@ -1241,7 +1241,7 @@ void update_widget(gpointer object, gpointer user_data)
 	{
 		/* This will looks really weird, but is used in the 
 		 * special case of a treeview widget which is always
-		 * packed into ascrolled window. Since the treeview
+		 * packed into a scrolled window. Since the treeview
 		 * depends on ECU variables, we call a handler here
 		 * passing in a pointer to the treeview(the scrolled
 		 * window's child widget)

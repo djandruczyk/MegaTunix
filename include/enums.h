@@ -237,6 +237,7 @@ typedef enum
 typedef enum
 {
 	UPD_REALTIME = 0x140,
+	UPD_LOGBAR,
 	UPD_LOGVIEWER,
 	UPD_DATALOGGER,
 	UPD_VE_CONST,

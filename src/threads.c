@@ -325,18 +325,27 @@ void  thread_update_logbar(
 		gboolean count,
 		gboolean clear)
 {
-	struct Text_Message *message = NULL;
-	extern GAsyncQueue *textmessage_queue;
+	struct Io_Message *message = NULL;
+	struct Text_Message *t_message = NULL;
+	extern GAsyncQueue *dispatch_queue;
+	gint tmp = 0;
 
-	message = g_new0(struct Text_Message, 1);
-	message->view_name = g_strdup(view_name);
-	message->tagname = g_strdup(tagname);
-	message->msg = g_strdup(msg);
-	message->count = count;
-	message->clear = clear;
+	message = g_new0(struct Io_Message,1);
 
-	g_async_queue_ref(textmessage_queue);
-	g_async_queue_push(textmessage_queue,(gpointer)message);
-	g_async_queue_unref(textmessage_queue);
+	t_message = g_new0(struct Text_Message, 1);
+	t_message->view_name = g_strdup(view_name);
+	t_message->tagname = g_strdup(tagname);
+	t_message->msg = g_strdup(msg);
+	t_message->count = count;
+	t_message->clear = clear;
+
+	message->payload = t_message;
+	message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_LOGBAR;
+	g_array_append_val(message->funcs,tmp);
+
+	g_async_queue_ref(dispatch_queue);
+	g_async_queue_push(dispatch_queue,(gpointer)message);
+	g_async_queue_unref(dispatch_queue);
 	return;
 }

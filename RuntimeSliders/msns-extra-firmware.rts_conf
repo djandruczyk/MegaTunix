@@ -1,7 +1,7 @@
 [global]
 description=Runtime Slider definitions for MSnS-Extra firmwares 
 rt_total_sliders=21
-ww_total_sliders=4
+ww_total_sliders=0
 ve3d_total_sliders=4
 
 [rt_slider_0]

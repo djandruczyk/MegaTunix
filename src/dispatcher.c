@@ -44,32 +44,6 @@ extern gboolean interrogated;			/* valid connection with MS */
 
 
 /*!
- \brief testmessage_dispatcher()  is a GTK+ timeout that runs 5-10 times per 
- second checkign for messages from threeads to update textviews 
- from a thread context. A thread will push the message across the queue to
- here to do the update as it's unsafe in the thread context. (win32)
- \param data (gpointer) unused
- \returns TRUE
- */
-gboolean textmessage_dispatcher(gpointer data)
-{
-	extern GAsyncQueue *textmessage_queue;
-	struct Text_Message *message = NULL;
-
-	if (!textmessage_queue) /*queue not built yet... */
-		return TRUE;
-
-	message = g_async_queue_try_pop(textmessage_queue);
-	if (!message)
-		return TRUE;
-
-	update_logbar(message->view_name,message->tagname,message->msg,message->count,message->clear);
-	dealloc_textmessage(message);
-	return TRUE;
-}
-
-
-/*!
  \brief dispatcher() is a GTK+ timeout that runs 30 tiems per second checking
  for message on the dispatch queue which handles gui operations after a thread
  function runs, This will attempt to handle multiple messages at a time if the
@@ -85,6 +59,7 @@ gboolean dispatcher(gpointer data)
 	gint val=-1;
 	gint count = 0;
 	struct Io_Message *message = NULL;
+	struct Text_Message *t_message = NULL;
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gint mem_view_style[];
@@ -96,13 +71,19 @@ gboolean dispatcher(gpointer data)
 trypop:
 	message = g_async_queue_try_pop(dispatch_queue);
 	if (!message)
+	{
+		//printf("no messages waiting, returning\n");
 		return TRUE;
+	}
 
 	/* NOTE if !connected we ABORT All dispatchers as they all
 	 * depend on a "connected" status.
 	 */
 	if ((!connected) && (!offline)) // Raise error window.... 
+	{
+		//printf("NOT connected, not offline\n");
 		no_ms_connection();
+	}
 
 	if (message->funcs != NULL)
 	{
@@ -113,6 +94,12 @@ trypop:
 
 			switch ((UpdateFunction)val)
 			{
+				case UPD_LOGBAR:
+					t_message = (struct Text_Message *)message->payload;
+					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
+					dealloc_textmessage(t_message);
+					message->payload = NULL;
+					break;
 				case UPD_POPULATE_DLOGGER:
 					if (connected)
 						populate_dlog_choices();
@@ -180,16 +167,25 @@ trypop:
 					break;
 
 			}
+			gdk_threads_enter();
+			while (gtk_events_pending())
+				gtk_main_iteration();
+			gdk_threads_leave();
 		}
 	}
 	dealloc_message(message);
+	//printf ("deallocation of dispatch message complete\n");
 	count++;
 	/* try to handle up to 4 messages at a time.  If this is 
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
 	if(count < 3)
+	{
+		//printf("trying to handle another message\n");
 		goto trypop;
+	}
+	//printf("returning\n");
 	return TRUE;
 }
 
@@ -208,6 +204,7 @@ void dealloc_textmessage(struct Text_Message * message)
         if (message->msg)
                 g_free(message->msg);
 	g_free(message);
+	message = NULL;
 
 }
 

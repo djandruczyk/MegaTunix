@@ -76,17 +76,20 @@ gboolean load_gui_tabs()
 			update_logbar("interr_view","warning",g_strdup_printf("Glade File: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
+			i++;
+			continue;
 		}
-		else if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
+		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
 			update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
+			i++;
+			continue;
 		}
-		//if ((g_file_test(glade_file,G_FILE_TEST_EXISTS)) &&
-		//		(g_file_test(map_file,G_FILE_TEST_EXISTS)))
-		else
+//		if ((g_file_test(glade_file,G_FILE_TEST_EXISTS)) &&
+//				(g_file_test(map_file,G_FILE_TEST_EXISTS)))
 		{
 			update_logbar("interr_view",NULL,g_strdup_printf("Load of tab: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
@@ -142,9 +145,12 @@ gboolean load_gui_tabs()
 
 		}
 		i++;
+			gdk_threads_enter();
 		while (gtk_events_pending())
+		{
 			gtk_main_iteration();
-
+		}
+			gdk_threads_leave();
 		update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 
 	}
@@ -152,7 +158,6 @@ gboolean load_gui_tabs()
 	dbg_func(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n",TABLOADER);
 	g_free(bindgroup);
 	return TRUE;
-
 }
 
 

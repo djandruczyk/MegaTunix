@@ -189,7 +189,6 @@ void  update_logbar(
 	{
 		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
 		adj->value = adj->upper;
-		gtk_adjustment_value_changed(GTK_ADJUSTMENT(adj));
 	}
 
 	if (tmpbuf)
