@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
+#include <enums.h>
 
 /* Default window size and MINIMUM size as well... */
 static int def_width=690;
@@ -33,7 +34,7 @@ GtkTooltips *tip;
 static struct 
 {
 	gchar *frame_name;	/* Textual name at the top of the frame */
-	gint identifier;	/* identifier used when building each frame */
+	GuiFramePage page;	/* identifier used when building each frame */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
 	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
 } notebook_tabs[] = { 
@@ -91,7 +92,7 @@ int setup_gui()
 		frame = gtk_frame_new (notebook_tabs[i].frame_name);
 	        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 
-		framebuild_dispatch(frame,notebook_tabs[i].identifier, notebook_tabs[i].enabled);
+		framebuild_dispatch(frame,notebook_tabs[i].page, notebook_tabs[i].enabled);
 
 	        label = gtk_label_new (notebook_tabs[i].tab_name);
 		if (notebook_tabs[i].enabled == FALSE)
@@ -115,7 +116,7 @@ int setup_gui()
 	return TRUE;
 }
 
-int framebuild_dispatch(GtkWidget *frame, gint data, gboolean frame_enabled)
+int framebuild_dispatch(GtkWidget *frame, GuiFramePage data, gboolean frame_enabled)
 {
 	switch (data)
 	{
@@ -151,6 +152,9 @@ int framebuild_dispatch(GtkWidget *frame, gint data, gboolean frame_enabled)
 			break;
 		case DATALOGGING_PAGE:
 			build_datalogging(frame);
+			break;
+		case IGNITION_PAGE:
+			build_ignition(frame);
 			break;
 	}
 	if (frame_enabled == FALSE)

@@ -25,6 +25,7 @@
 #include <protos.h>
 #include <globals.h>
 #include <datalogging.h>
+#include <enums.h>
 
 #define TABLE_COLS 6
 #define MAX_LOGABLES 32
@@ -43,15 +44,15 @@ struct timeval now;
 struct timeval last;
 static gint dlog_context_id;
 static gint total_logables = 0;
-static gint mode = CUSTOM_LOG;
+gint logging_mode = CUSTOM_LOG;
 static gint delimiter = SPACE;
 static gboolean logging = FALSE;
 static gboolean header_needed = FALSE;
-static GtkWidget *logables_table;
+GtkWidget *logables_table;
+GtkWidget *delim_table;
+GtkWidget *tab_delim_button;
 static GtkWidget *file_selection;
-static GtkWidget *delim_table;
 static GtkWidget *format_table;
-static GtkWidget *tab_delim_button;
 static GtkWidget *comma_delim_button;
 static GtkWidget *space_delim_button;
 static GtkWidget *dlog_statbar;
@@ -78,15 +79,6 @@ const gchar *logable_names[] =
  */
 const gint logging_offset_map[] = 
 { 99,0,13,7,8,4,3,9,5,6,18,16,10,11,12,14,2,17,19,20,21 }; 
-
-/* classic[] is an array of the bit POSITIONS that correspond with the names
- * in the above list. When applying the "classic" array to the bitfield of
- * logable variables, we end up selecting all the stuff that MegaTune uses
- * for its "Classic" style datalog...  The is NOT the way I wanted to do 
- * this, but it works as it is.  Someday I'll do this "The Right Way"...
- */
-const gint classic[] =
-{ 1,2,5,7,9,10,11,12,13,14,16,17 };
 
 int build_datalogging(GtkWidget *parent_frame)
 {
@@ -217,9 +209,9 @@ int build_datalogging(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(set_logging_mode),
+                        G_CALLBACK(toggle_button_handler),
                         GINT_TO_POINTER(CLASSIC_LOG));
-	if (mode == CLASSIC_LOG)
+	if (logging_mode == CLASSIC_LOG)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	button = gtk_radio_button_new_with_label(group,"Custom Format");
@@ -228,9 +220,9 @@ int build_datalogging(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(set_logging_mode),
+                        G_CALLBACK(toggle_button_handler),
                         GINT_TO_POINTER(CUSTOM_LOG));
-	if (mode == CUSTOM_LOG)
+	if (logging_mode == CUSTOM_LOG)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	frame = gtk_frame_new("Logging Delimiters ");
@@ -254,7 +246,7 @@ int build_datalogging(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(set_logging_delimiter),
+                        G_CALLBACK(toggle_button_handler),
                         GINT_TO_POINTER(COMMA));
 	if (delimiter == COMMA)
 	{
@@ -272,7 +264,7 @@ int build_datalogging(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(set_logging_delimiter),
+                        G_CALLBACK(toggle_button_handler),
                         GINT_TO_POINTER(TAB));
 	if (delimiter == TAB)
 	{
@@ -290,7 +282,7 @@ int build_datalogging(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(set_logging_delimiter),
+                        G_CALLBACK(toggle_button_handler),
                         GINT_TO_POINTER(SPACE));
 	if (delimiter == SPACE)
 	{
@@ -498,7 +490,7 @@ void start_datalogging()
 void stop_datalogging()
 {
 	logging = FALSE;
-	if (mode == CUSTOM_LOG)
+	if (logging_mode == CUSTOM_LOG)
 	{
 		gtk_widget_set_sensitive(logables_table,TRUE);
 		gtk_widget_set_sensitive(delim_table,TRUE);
@@ -510,49 +502,6 @@ void stop_datalogging()
 	return;
 }
 
-gint set_logging_mode(GtkWidget *widget, gpointer data)
-{
-	gint i = 0;
-	gint max = sizeof(classic)/sizeof(gint);
-	if (!ready)
-		return FALSE;
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-	{
-		switch ((gint)data)
-		{
-			case CLASSIC_LOG:
-				mode = CLASSIC_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,FALSE);
-				gtk_toggle_button_set_active(
-						GTK_TOGGLE_BUTTON
-						(tab_delim_button),
-						TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,FALSE);
-				
-				for (i=0;i<max;i++)
-				{
-					gtk_toggle_button_set_active(
-							GTK_TOGGLE_BUTTON
-							(logables.widgets[classic[i]]),
-							TRUE);
-				}
-				break;
-			case CUSTOM_LOG:
-				mode = CUSTOM_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,TRUE);
-				break;
-		}
-	}
-
-	return TRUE;
-}
 
 void clear_logables(void)
 {
@@ -564,29 +513,6 @@ void clear_logables(void)
 				FALSE);
 }
 
-gint set_logging_delimiter(GtkWidget *widget, gpointer data)
-{
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-	{
-
-		switch ((gint)data)
-		{
-			case COMMA:
-				delim = g_strdup(",");
-				break;
-			case TAB:
-				delim = g_strdup("\t");
-				break;
-			case SPACE:
-				delim = g_strdup(" ");
-				break;
-			default:
-				printf("delimiter not handled properly\n");
-				break;
-		}
-	}
-	return TRUE;
-}
 gint log_value_set(GtkWidget * widget, gpointer data)
 {
 	gint bit_pos = 0;

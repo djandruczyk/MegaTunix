@@ -21,6 +21,7 @@
 #include <globals.h>
 #include <structures.h>
 #include <datalogging.h>
+#include <enums.h>
 
 
 extern gint req_fuel_popup;
@@ -28,11 +29,12 @@ extern unsigned char *kpa_conversion;
 extern unsigned char na_map[];
 extern unsigned char turbo_map[];
 extern GtkTooltips *tip;
-gboolean tips_in_use;
-gboolean forced_update;
-gboolean fahrenheit;
-static gboolean paused_handlers = FALSE;
-static gboolean constants_loaded = FALSE;
+extern GtkWidget *logables_table;
+extern GtkWidget *tab_delim_button;
+extern GtkWidget *delim_button;
+extern GtkWidget *delim_table;
+extern gint logging_mode;
+extern gchar *delim;
 extern gboolean raw_reader_running;
 extern gboolean raw_reader_stopped;
 extern gint read_wait_time;
@@ -48,18 +50,36 @@ extern gfloat map_pbar_divisor;
 extern GtkWidget *map_tps_frame;
 extern GtkWidget *map_tps_label;
 extern GtkWidget *custom_logables;
+extern gint ready;
 static gint num_squirts = 1;
+gboolean tips_in_use;
+gboolean forced_update;
+gboolean fahrenheit;
 gint num_cylinders = 1;
+GdkColor red = { 0, 65535, 0, 0};
+GdkColor black = { 0, 0, 0, 0};
+GtkWidget *veconst_widgets_1[VEBLOCK_SIZE];
+GtkWidget *veconst_widgets_2[VEBLOCK_SIZE];
+
+/* classic[] is an array of the bit POSITIONS that correspond with the names
+ * in the logable_names[] list. When applying the "classic" array to the 
+ * bitfield of logable variables, we end up selecting all the stuff that 
+ * MegaTune uses for its "Classic" style datalog...  The is NOT the way 
+ * I wanted to do this, but it works as it is.  Someday I'll do this 
+ * "The Right Way"...
+ */
+
+const gint classic[] = 
+{ 1,2,5,7,9,10,11,12,13,14,16,17 }; /* from datalogging_gui.c */
+
+static gboolean paused_handlers = FALSE;
+static gboolean constants_loaded = FALSE;
 static gint num_injectors = 1;
 static gfloat req_fuel_total = 0.0;
 static gboolean err_flag = FALSE;
-GdkColor red = { 0, 65535, 0, 0};
-GdkColor black = { 0, 0, 0, 0};
 static GList *offsets = NULL;
 static gint offset_data[5]; /* Only 4 interdependant vars... */
 static gint page_data[5]; /* Only 4 interdependant vars... */
-GtkWidget *veconst_widgets_1[VEBLOCK_SIZE];
-GtkWidget *veconst_widgets_2[VEBLOCK_SIZE];
 
 void leave(GtkWidget *widget, gpointer data)
 {
@@ -76,9 +96,11 @@ void leave(GtkWidget *widget, gpointer data)
 
 int toggle_button_handler(GtkWidget *widget, gpointer data)
 {
+	gint max = sizeof(classic)/sizeof(gint);
+	gint i = 0;
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
-		switch ((gint)data)
+		switch ((ToggleButton)data)
 		{
 			case TOOLTIPS_STATE:
 				gtk_tooltips_enable(tip);
@@ -94,6 +116,49 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				reset_temps(GINT_TO_POINTER(CELSIUS));
 				forced_update = TRUE;
 				break;
+			case CLASSIC_LOG:
+				if (!ready)
+					return FALSE;
+				logging_mode = CLASSIC_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,FALSE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+						(tab_delim_button),
+						TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,FALSE);
+
+				for (i=0;i<max;i++)
+				{
+					gtk_toggle_button_set_active(
+							GTK_TOGGLE_BUTTON
+							(logables.widgets[classic[i]]),
+							TRUE);
+				}
+				break;
+			case CUSTOM_LOG:
+				if (!ready)
+					return FALSE;
+				logging_mode = CUSTOM_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,TRUE);
+				break;
+			case COMMA:
+                                delim = g_strdup(",");
+                                break;
+                        case TAB:
+                                delim = g_strdup("\t");
+                                break;
+                        case SPACE:
+                                delim = g_strdup(" ");
+                                break;
+
+
 		}
 	}
 	else
@@ -215,7 +280,7 @@ int bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 int std_button_handler(GtkWidget *widget, gpointer data)
 {
-	switch ((gint)data)
+	switch ((StdButton)data)
 	{
 		case START_REALTIME:
 			if (!connected)
@@ -235,6 +300,7 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			stop_serial_thread();
 			reset_runtime_status();
 			force_status_update = TRUE;
+			stop_datalogging();
 			break;
 		case REQD_FUEL_POPUP:
 			if (!req_fuel_popup)
@@ -303,7 +369,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 	if (page == -1)
 		printf("ERROR, page not defined for variable at offset %i\n",offset);
 
-	switch ((gint)data)
+	switch ((SpinButton)data)
 	{
 		case SET_SER_PORT:
 			if(serial_params.open)
@@ -637,7 +703,6 @@ void update_ve_const()
 						veconst_widgets_1[i]),value);
 					
 		}
-
 	}
 }
 void check_req_fuel_limits()

@@ -20,6 +20,7 @@
 #include <globals.h>
 #include <structures.h>
 #include <conversions.h>
+#include <enums.h>
 
 /* Conversions.c
  * 
@@ -89,7 +90,7 @@ gint convert_before_download(gint offset, gfloat value)
 	gint tmp_val = (gint)(value+0.001);
 	gfloat factor = std_conversions.conv_factor[offset];
 
-	switch (std_conversions.conv_type[offset])
+	switch ((Conversions)std_conversions.conv_type[offset])
 	{
 		case (ADD):
 			return_value = tmp_val + factor;
@@ -124,7 +125,7 @@ gfloat convert_after_upload(gint offset)
 	 * On upload we need to "un-convert" from MS values to Gui friendly
 	 * versions....
 	 */
-	switch (std_conversions.conv_type[offset])
+	switch ((Conversions)std_conversions.conv_type[offset])
 	{
 		case (ADD):
 			return_value = ve_const_arr[offset] - factor;

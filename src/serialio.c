@@ -174,10 +174,8 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         gint tmp;
         gint res;
         struct pollfd ufds;
-	gint size = 44;
-	char buf[size];
+	char buf[1024];
         gint restart_reader = FALSE;
-	gint count;
 	static gboolean locked;
 
 	if (locked)
@@ -211,9 +209,8 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			/* Command succeeded,  but we still need to drain the
 			 * buffer...
 			 */
-			count = size;	/* Arbritrary number */
 			while (poll(&ufds,1,serial_params.poll_timeout))
-				res = read(serial_params.fd,&buf,count);
+				res = read(serial_params.fd,&buf,64);
 
 			g_snprintf(buff,60,"ECU Comms Test Successfull");
 			/* COMMS test succeeded */

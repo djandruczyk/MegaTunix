@@ -28,6 +28,12 @@
 
 extern GtkWidget *ms_ecu_revision_entry;
 gfloat ecu_version;
+const gchar *cmd_chars[] = {"A","C","Q","V","S","I"};
+struct Cmd_Results
+{
+	gchar *cmd_string;
+	gint count;
+};
 
 
 void interrogate_ecu()
@@ -44,19 +50,17 @@ void interrogate_ecu()
 	struct pollfd ufds;
 	gint size = 1024;
 	char buf[size];
-	const gchar *cmd_chars[] = {"A","C","Q","V","S","I"};
-	gint tests_to_run = 0;
+	gint tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
+	struct Cmd_Results cmd_results[tests_to_run]; 
 	gint res = 0;
 	gint count = 0;
 	gint tmp = 0;
 	gint i = 0;
 
-	printf("entered interrogate_ecu()\n");
 	/*                 Readback initiator commands	
 	 *                "A" "C" "Q" "S" "V" "I"
 	 * B&G 2.x         22   1   1   0 125   0
 	 * DualTable 090   22   1   1   0 128   0
-	 * DualTable 099b  22   1   1   0 128   0
 	 * DualTable 099b  22   1   1   0 128   0
 	 * DualTable 100   22   1   1   0 128   0
 	 * DualTable 101   22   1   1  18 128   0
@@ -73,23 +77,27 @@ void interrogate_ecu()
 	tcflush(serial_params.fd, TCIFLUSH);
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
-
-	tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
-
 	for (i=0;i<tests_to_run;i++)
 	{
 		count = 0;
+		cmd_results[i].cmd_string = g_strdup(cmd_chars[i]);
 		res = write(serial_params.fd,cmd_chars[i],1);
 		res = poll (&ufds,1,serial_params.poll_timeout);
 		if (res)
 		{	
 			while (poll(&ufds,1,serial_params.poll_timeout))
-				count += read(serial_params.fd,&buf,1);
+				count += read(serial_params.fd,&buf,64);
 		}
-		else
-			printf("Failed to respond to \"%s\" command\n",cmd_chars[i]);
+		cmd_results[i].count = count;
+	}
 
-		printf("\"%s\" command returned %i bytes\n",cmd_chars[i],count);
+	printf("\n");
+	for (i=0;i<tests_to_run;i++)
+	{
+		if (cmd_results[i].count > 0)
+			printf("Command %s, returned %i bytes\n",cmd_results[i].cmd_string, cmd_results[i].count);
+		else
+			printf("Command %s is not supported by this ECU\n",cmd_results[i].cmd_string);
 	}
 
 	/* flush serial port... */
@@ -98,7 +106,16 @@ void interrogate_ecu()
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
 
+	update_gui_with_type();
+
 	return;
 }
 
+
+void update_gui_with_type()
+{
+	
+
+	return;
+}
 

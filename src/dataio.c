@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
+#include <enums.h>
 
 
 static gint lastcount=0;
@@ -35,7 +36,7 @@ extern struct ve_const_std *ve_const_tmp;
 extern unsigned char * ve_const_arr;
 //char * test_ptr;
        
-int handle_ms_data(int which_data)
+int handle_ms_data(InputData which_data)
 {
 	int res = 0;
 	unsigned char buf[255];
@@ -154,6 +155,16 @@ int handle_ms_data(int which_data)
 			//test_ptr = (char *)ve_constants;
 			//printf("cr_pulse via array manip at -40 = %i\n",test_ptr[64]);
                         ms_ve_goodread_count++;
+			break;
+
+		case IGNITION_VARS:
+			printf("handling of read ignition data isn't handled yet\n");
+			break;
+		case RAW_MEMORY:
+			printf("Not designed yet...\n");
+			break;
+		default:
+			printf("handle_ms_data, improper case, contact author\n");
 			break;
 	}
 

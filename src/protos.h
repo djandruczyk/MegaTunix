@@ -16,9 +16,10 @@
 #define __PROTOS_H__
 
 #include <config.h>
-#include "globals.h"
-#include "defines.h"
-#include "configfile.h"
+#include <globals.h>
+#include <defines.h>
+#include <configfile.h>
+#include <enums.h>
 #include <gtk/gtk.h>
 
 /* Function Prototypes for all objects/source files */
@@ -81,7 +82,7 @@ gfloat convert_after_upload(gint);
 
 /* core_gui.c */
 int setup_gui(void);
-int framebuild_dispatch(GtkWidget *, int, gboolean);
+int framebuild_dispatch(GtkWidget *, GuiFramePage, gboolean);
 /* core_gui.c */
 
 /* datalogging_gui.c */
@@ -93,8 +94,6 @@ void start_datalogging(void);
 void stop_datalogging(void);
 void close_logfile(void);
 void clear_logables(void);
-int set_logging_mode(GtkWidget *, gpointer);
-int set_logging_delimiter(GtkWidget *, gpointer);
 int log_value_set(GtkWidget *, gpointer);
 void write_log_header(void);
 void run_datalog(void);
@@ -120,6 +119,10 @@ void check_config11(gint);
 void check_config13(gint);
 /* gui_handlers.c */
 
+/* ignition.c */
+int build_ignition(GtkWidget *);
+/* ignition.c */
+
 /* init.c */
 void init(void);
 int read_config(void);
@@ -131,8 +134,8 @@ void mem_dealloc(void);
 
 /* interrogate.c */
 void interrogate_ecu(void);
+void update_gui_with_type(void);
 /* interrogate.c */
-
 
 /* lowlevel_gui.c */
 int build_lowlevel(GtkWidget *);
@@ -174,7 +177,7 @@ void reset_runtime_status(void);
 void open_serial(int); 
 int setup_serial_params(void); 
 void close_serial(void); 
-int handle_ms_data(int); 
+int handle_ms_data(InputData); 
 int check_ecu_comms(GtkWidget *, gpointer);
 void read_ve_const(void);
 void update_ve_const(void);

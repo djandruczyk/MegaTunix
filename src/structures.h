@@ -24,7 +24,6 @@
  * can update them easily with a generic function instead of
  * one function per control.... 
  */
-
 struct v1_2_Constants
 {
 	GtkWidget *inj_open_time_spin;		/* Spinner */
@@ -80,6 +79,7 @@ struct v1_2_Constants
 	GtkWidget *baro_disa_but;		/* Toggle button */
 };
 
+/* Controls for the Required Fuel Calculator... */
 struct Reqd_Fuel
 {
         GtkWidget *disp_spin;		/* Spinbutton */
@@ -93,7 +93,7 @@ struct Reqd_Fuel
 };
 
 /* These are defined as they are semi-dynamic and are modified
- * during run of MEgaTunix for status or units related reasons
+ * during run of MegaTunix for status or units related reasons
  */
 struct Labels
 {
@@ -112,7 +112,7 @@ struct Labels
 };
 
 /* These are defined as they are semi-dynamic and are modified
- * during run of MEgaTunix for status or units related reasons
+ * during run of MegaTunix for status or units related reasons
  */
 struct Adjustments
 {
@@ -120,6 +120,9 @@ struct Adjustments
 	GtkAdjustment *ego_temp_adj;
 };
 
+/* These are defined here instead of the individual .c files as
+ * we manipulate their attributes to give feedback to the user
+ */
 struct Buttons
 {
 	GtkWidget *const_store_but;
@@ -127,6 +130,9 @@ struct Buttons
 	GtkWidget *vetable_store_but;
 };
 
+/* These are defined here instead of the individual .c files as
+ * we manipulate their attributes to give feedback to the user
+ */
 struct Counts
 {
 	GtkWidget *comms_reset_entry;
@@ -137,6 +143,20 @@ struct Counts
 	GtkWidget *runtime_readcount_entry;
 	GtkWidget *comms_ve_readcount_entry;
 	GtkWidget *runtime_ve_readcount_entry;
+};
+
+/* Datastructure the holds the expected responses for the data
+ * returning commands issued to the MegaSquirt.
+ */
+
+struct Command_Limits
+{
+	gint	A_count;
+	gint	C_count;
+	gint	Q_count;
+	gint	V_count;
+	gint	S_count;
+	gint	I_count;
 };
 
 	

@@ -7,9 +7,11 @@ megatunix_SOURCES = \
 	Makefile \
 	c_gauge.h \
 	configfile.h \
+	conversions.h \
 	structures.h \
 	datalogging.h \
 	defines.h \
+	enums.h \
 	globals.h \
 	lookuptables.h \
 	protos.h \
