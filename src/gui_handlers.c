@@ -93,6 +93,7 @@ gboolean leaving = FALSE;
 void leave(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dynamic_widgets;
+	extern gint playback_id;
 	extern gint realtime_id;
 	extern gint dispatcher_id;
 	extern gint statuscounts_id;
@@ -112,6 +113,10 @@ void leave(GtkWidget *widget, gpointer data)
 	if(realtime_id)
 		stop_realtime_tickler();
 	realtime_id = 0;
+
+	if(playback_id)
+		stop_logviewer_playback();
+	playback_id = 0;
 
 	if (dynamic_widgets)
 	{
@@ -380,6 +385,12 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case INTERROGATE_ECU:
 			io_cmd(IO_INTERROGATE_ECU, NULL);
+			break;
+		case START_PLAYBACK:
+			start_logviewer_playback();
+			break;
+		case STOP_PLAYBACK:
+			stop_logviewer_playback();
 			break;
 
 		case START_REALTIME:

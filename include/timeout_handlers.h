@@ -19,6 +19,8 @@
 /* Prototypes */
 void start_realtime_tickler(void);
 void stop_realtime_tickler(void);
+void start_logviewer_playback(void);
+void stop_logviewer_playback(void);
 gboolean signal_read_rtvars(void);
 gboolean early_interrogation(void);
 void force_an_update(void);

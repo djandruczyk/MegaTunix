@@ -23,6 +23,7 @@
 #include <threads.h>
 
 gint realtime_id = 0;
+gint playback_id = 0;
 
 
 void start_realtime_tickler()
@@ -40,6 +41,26 @@ void start_realtime_tickler()
 		dbg_func(__FILE__": start_realtime_tickler()\n\tTickler already running\n",CRITICAL);
 		update_logbar("comms_view","warning","Realtime Reader ALREADY started\n",TRUE,FALSE);
 	}
+}
+
+void start_logviewer_playback()
+{
+
+	if (playback_id == 0)
+		playback_id = g_timeout_add(33,(GtkFunction)update_logview_traces,GINT_TO_POINTER(FALSE));
+	else
+		dbg_func(__FILE__": start_logviewer_playback()\n\tPlayback already running \n",CRITICAL);
+}
+
+void stop_logviewer_playback()
+{
+	if (playback_id)
+	{
+		g_source_remove(playback_id);
+		playback_id = 0;
+	}
+	else
+		dbg_func(__FILE__": stop_logviewer_playback()\n\tPlayback already stopped...\n",CRITICAL);
 }
 
 void stop_realtime_tickler()
