@@ -1242,9 +1242,14 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
 			return TRUE;
 			break;
+		case GDK_Escape:
+			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			break;
 		default:	
 			return FALSE;
 	}
+	return FALSE;
 }
 
 EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
