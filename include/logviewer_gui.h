@@ -19,6 +19,9 @@
 /* Prototypes */
 void build_logviewer(GtkWidget *);
 void present_viewer_choices(void *);
+void scroll_logviewer_traces(void);
+gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
+gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean view_value_set(GtkWidget *, gpointer );
 gboolean populate_viewer(GtkWidget * );
 struct Viewable_Value * build_v_value(GtkWidget *, gint );

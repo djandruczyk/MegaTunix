@@ -217,23 +217,22 @@ struct Io_File
  */
 struct Viewable_Value
 {
-	GtkWidget *parent; 		/* Parent Widget */
-	GtkWidget *d_area;		/* Drawing area widget */
-	GdkPixmap *trace_pmap;		/* area used for the trace */
 	GdkGC *font_gc;			/* GC used for the fonts */
 	GdkGC *trace_gc;		/* GC used for the trace */
 	GdkGC *grat_gc;			/* GC used for the graticule */
-	gint info_width;		/* width in pixels of the info_pmap */
+	GtkWidget *d_area;		/* Drawing Area */
 	gchar *vname;			/* Name of widget being logged */
 	gint runtime_offset;		/* Offset into runtime struct */
 	gint size;			/* 1=byte, 2=short, 4=float */
 	gint last_y;			/* Last point on screen of trace */
-	gfloat min;			/* for auto-scaling */
-	gfloat max;			/* for auto-scaling */
 	gint last_grat;			/* last grat line position */
 	gint grat_interval;		/* graticule interval in pixels */
-	gfloat lower;			/* limits to use for scaling */
-	gfloat upper;			/* limits to use for scaling */
+	gfloat min;			/* for auto-scaling */
+	gfloat max;			/* for auto-scaling */
+	gfloat lower;			/* hard limits to use for scaling */
+	gfloat upper;			/* hard limits to use for scaling */
+	gfloat cur_low;			/* User limits to use for scaling */
+	gfloat cur_high;		/* User limits to use for scaling */
 	GArray *data_array;		/* History of all values recorded */
 };
 	

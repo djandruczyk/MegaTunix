@@ -166,7 +166,6 @@ void add_control(gchar *control_name, gchar *parameters)
 	gchar **parm_array = NULL;
 	struct Rt_Control *control = NULL;
 	control = g_malloc0(sizeof(struct Rt_Control));
-	GtkWidget *table;
 	GtkWidget *label;
 	GtkWidget *pbar;
 	extern GList *dt_widgets;
