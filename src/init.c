@@ -28,6 +28,7 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
+extern guint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
 guchar *kpa_conversion; 
 extern gint mem_view_style[];
@@ -107,6 +108,7 @@ gboolean read_config(void)
 		//cfg_read_int(cfgfile, "Global", "micro_ver", &micro_ver);
 		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
 		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
+		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		cfg_read_int(cfgfile, "Window", "width", &width);
 		cfg_read_int(cfgfile, "Window", "height", &height);
 		cfg_read_int(cfgfile, "Window", "main_x_origin", 
@@ -156,6 +158,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
 	cfg_write_boolean(cfgfile, "Global", "Tooltips", tips_in_use);
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", temp_units);
+	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
 
 	if (ready)
 	{

@@ -60,7 +60,7 @@ void open_serial(gchar * port_name)
 		serial_params->fd = fd;
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
-		dbg_func(g_strdup_printf(__FILE__" open_serial(), %s Opened Successfully\n",device),SERIAL_GEN);
+		dbg_func(g_strdup_printf(__FILE__" open_serial(), %s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
 		update_logbar(comms_view,NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 	}
 	else
@@ -154,7 +154,7 @@ void close_serial()
 	//			connected);
 
 	/* An Closing the comm port */
-	dbg_func(__FILE__": close_serial(), COM Port Closed\n",SERIAL_GEN);
+	dbg_func(__FILE__": close_serial(), COM Port Closed\n",SERIAL_RD|SERIAL_WR);
 	update_logbar(comms_view,NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
 }
 

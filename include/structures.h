@@ -331,4 +331,13 @@ struct RtvMap
 				 * it's internal name */
 };
 
+struct DebugLevel
+{
+	gchar * name;		/* Debugging name */
+	gint	handler;	/* Signal handler name */
+	Dbg_Class dclass;	/* Bit mask for this level (0-31) */
+	Dbg_Shift dshift;	/* Bit shift amount */
+	gboolean enabled;	/* Enabled or not? */
+};
+
 #endif

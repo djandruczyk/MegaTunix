@@ -76,7 +76,7 @@ gboolean signal_read_rtvars()
 		return TRUE;
 
 	io_cmd(IO_REALTIME_READ,NULL);			
-	dbg_func(__FILE__": signal_read_rtvars(), sending message to thread to read RT vars\n",SERIAL_GEN);
+	dbg_func(__FILE__": signal_read_rtvars(), sending message to thread to read RT vars\n",SERIAL_RD|SERIAL_WR);
 
 	return TRUE;	/* Keep going.... */
 }

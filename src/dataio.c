@@ -49,7 +49,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 	extern struct Firmware_Details *firmware;
 	extern struct Runtime_Common *runtime;
 
-	dbg_func(__FILE__": handle_ms_data()\n",IO_PROCESS);
+	dbg_func("\n"__FILE__": handle_ms_data()\tENTERED...\n\n",IO_PROCESS);
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
@@ -68,7 +68,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf(__FILE__": C_TEST requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf("\tC_TEST requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -87,7 +87,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 			}
 			if (bad_read)
 			{
-				dbg_func(__FILE__":  Error reading MS Clock (C_TEST)\n",CRITICAL);
+				dbg_func("\tC_TEST,Error reading MS Clock (C_TEST)\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -105,7 +105,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf(__FILE__": RT_VARS requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf("\tRT_VARS requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -124,7 +124,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 			}
 			if (bad_read)
 			{
-				dbg_func(__FILE__":  Error reading Real-Time Variables \n",CRITICAL);
+				dbg_func("\tError reading Real-Time Variables \n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -165,7 +165,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf(__FILE__": VE_BLOCK, page %i, requesting %i bytes, ",message->page,total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf("\tVE_BLOCK, page %i, requesting %i bytes\n",message->page,total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -175,7 +175,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 				if (res == 0)
 					zerocount++;
 
-				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf("\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -185,7 +185,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup_printf(__FILE__":  Error reading VE-BlockConstants for page %i\n",message->page),CRITICAL);
+				dbg_func(g_strdup_printf("\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -206,7 +206,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf(__FILE__": RAW_MEMORY_DUMP requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf("\tRAW_MEMORY_DUMP requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
@@ -215,7 +215,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 				if (res == 0)
 					zerocount++;
 
-				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf("\tread %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -225,7 +225,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(__FILE__": Error reading Raw Memory Block\n",CRITICAL);
+				dbg_func("\tError reading Raw Memory Block\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -233,10 +233,11 @@ void handle_ms_data(InputHandler handler, void * msg)
 			post_process_raw_memory((void *)buf, message->offset);
 			break;
 		default:
-			dbg_func("handle_ms_data, improper case, contact author\n",CRITICAL);
+			dbg_func(__FILE__": handle_ms_data()\n\timproper case, contact author!\n",CRITICAL);
 			break;
 	}
 jumpout:
 
+	dbg_func("\n"__FILE__": handle_ms_data\tLEAVING...\n\n",IO_PROCESS);
 	return;
 }

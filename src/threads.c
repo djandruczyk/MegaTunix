@@ -184,24 +184,24 @@ void *serial_io_handler(gpointer data)
 		switch ((CmdType)message->command)
 		{
 			case INTERROGATION:
-				dbg_func(__FILE__": serial_io_handler() Interrogate_ecu requested\n",SERIAL_GEN);
+				dbg_func(__FILE__": serial_io_handler() Interrogate_ecu requested\n",SERIAL_RD|SERIAL_WR);
 				if (connected)
 					interrogate_ecu();
 				break;
 			case COMMS_TEST:
-				dbg_func(__FILE__": serial_io_handler() comms_test requested \n",SERIAL_GEN);
+				dbg_func(__FILE__": serial_io_handler() comms_test requested \n",SERIAL_RD|SERIAL_WR);
 				comms_test();
 				break;
 			case READ_CMD:
-				dbg_func(g_strdup_printf(__FILE__": serial_io_handler() read_command requested (%s)\n",handler_types[message->handler]),SERIAL_GEN);
+				dbg_func(g_strdup_printf(__FILE__": serial_io_handler() read_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD);
 				readfrom_ecu(message);
 				break;
 			case WRITE_CMD:
-				dbg_func(__FILE__": serial_io_handler() write_command requested\n",SERIAL_GEN);
+				dbg_func(__FILE__": serial_io_handler() write_command requested\n",SERIAL_WR);
 				writeto_ecu(message);
 				break;
 			case BURN_CMD:
-				dbg_func(__FILE__": serial_io_handler() burn_command requested\n",SERIAL_GEN);
+				dbg_func(__FILE__": serial_io_handler() burn_command requested\n",SERIAL_WR);
 				burn_ms_flash();
 				break;
 

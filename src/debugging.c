@@ -18,8 +18,7 @@
 #include <glib/gprintf.h>
 
 
-gint dbg_lvl = 0;
-//gint dbg_lvl = 0xff;
+guint dbg_lvl = 0;
 
 void dbg_func(gchar *str, Dbg_Class class)
 {
