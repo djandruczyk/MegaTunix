@@ -32,10 +32,10 @@ GtkWidget *main_window;
 GtkTooltips *tip;
 static struct 
 {
-	gchar *frame_name;
-	gint identifier;
-	gchar *tab_name;
-	gboolean enabled;
+	gchar *frame_name;	/* Textual name at the top of the frame */
+	gint identifier;	/* identifier used when building each frame */
+	gchar *tab_name;	/* The Tab textual name for the main gui */
+	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
 } notebook_tabs[] = { 
 { "About MegaTunix", ABOUT_PAGE, "About",TRUE},
 { "General MegaTunix Settings", GENERAL_PAGE, "General",TRUE},
@@ -115,7 +115,7 @@ int setup_gui()
 	return TRUE;
 }
 
-int framebuild_dispatch(GtkWidget *frame, gint data, gboolean enabled)
+int framebuild_dispatch(GtkWidget *frame, gint data, gboolean frame_enabled)
 {
 	switch (data)
 	{
@@ -153,7 +153,7 @@ int framebuild_dispatch(GtkWidget *frame, gint data, gboolean enabled)
 			build_datalogging(frame);
 			break;
 	}
-	if (status == FALSE)
+	if (frame_enabled == FALSE)
 		gtk_widget_set_sensitive(frame,FALSE);
 	return TRUE;
 }

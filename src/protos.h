@@ -32,11 +32,11 @@
  */
 
 /* about_gui.c */
-int build_about(GtkWidget *, gboolean);
+int build_about(GtkWidget *);
 /* abou_guit.c */
 
 /* comms_gui.c */
-int build_comms(GtkWidget *, gboolean);
+int build_comms(GtkWidget *);
 void update_errcounts(void);
 /* comms_gui.c */
 
@@ -80,11 +80,11 @@ gfloat convert_after_upload(gint);
 
 /* core_gui.c */
 int setup_gui(void);
-int framebuild_dispatch(GtkWidget *, int);
+int framebuild_dispatch(GtkWidget *, int, gboolean);
 /* core_gui.c */
 
 /* datalogging_gui.c */
-int build_datalogging(GtkWidget *, gboolean);
+int build_datalogging(GtkWidget *);
 void create_dlog_filesel(void);
 void check_filename(GtkWidget *, GtkFileSelection *);
 void truncate_log(void);
@@ -100,11 +100,11 @@ void run_datalog(void);
 /* datalogging_gui.c */
 
 /* enrichments_gui.c */
-int build_enrichments(GtkWidget *, gboolean);
+int build_enrichments(GtkWidget *);
 /* enrichments_gui.c */
 
 /* general_gui.c */
-int build_general(GtkWidget *, gboolean);
+int build_general(GtkWidget *);
 /* general_gui.c */
 
 /* gui_handlers.c */
@@ -129,7 +129,7 @@ void mem_dealloc(void);
 /* init.c */
 
 /* lowlevel_gui.c */
-int build_lowlevel(GtkWidget *, gboolean);
+int build_lowlevel(GtkWidget *);
 /* lowlevel_gui.c */
 
 /* main.c */
@@ -159,7 +159,7 @@ int close_popup(GtkWidget *, gpointer);
 /* req_fuel.c */
 
 /* runtime_gui.c */
-int build_runtime(GtkWidget *, gboolean);
+int build_runtime(GtkWidget *);
 void update_runtime_vars(void);
 void reset_runtime_status(void);
 /* runtime_gui.c */
@@ -185,15 +185,15 @@ void start_serial_thread(void);	/*bootstrp function fopr above */
 /* threads.c */
 
 /* tools_gui.c */
-int build_tools(GtkWidget *, gboolean);
+int build_tools(GtkWidget *);
 /* tools_gui.c */
 
 /* tuning_gui.c */
-int build_tuning(GtkWidget *, gboolean);
+int build_tuning(GtkWidget *);
 /* tuning_gui.c */
 
 /* vetable_gui.c */
-int build_vetable(GtkWidget *, gboolean);
+int build_vetable(GtkWidget *);
 /* vetable_gui.c */
 
 #endif
