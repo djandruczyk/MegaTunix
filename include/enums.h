@@ -200,7 +200,8 @@ typedef enum
 	THREADS		= 1<<8,
 	REQ_FUEL	= 1<<9,
 	TABLOADER	= 1<<10,
-	CRITICAL	= 1<<11
+	RTMLOADER	= 1<<11,
+	CRITICAL	= 1<<31
 }Dbg_Class;
 
 typedef enum
@@ -240,6 +241,7 @@ typedef enum
 	UPD_RAW_MEMORY,
 	UPD_STORE_BLACK,
 	UPD_LOAD_GUI_TABS,
+	UPD_LOAD_REALTIME_MAP,
 }UpdateFunctions;
 
 typedef enum
@@ -267,5 +269,13 @@ typedef enum
 	DATALOGGING_PAGE,
 	LOGVIEWER_PAGE,
 }PageIdent;
+
+typedef enum
+{
+	VE_EMB_BIT=0x170,
+	VE_VAR,
+	RAW_VAR,
+}ComplexExprTypes;
+
 
 #endif

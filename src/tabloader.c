@@ -112,16 +112,16 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = (GtkWidget *) value;
 	gchar * section = g_strdup((gchar *)widget_name);
-	gint keytypes[50];	/* bad idea to be fixed size!! */
 	gchar ** bind_keys = NULL;
 	gint bind_num_keys = 0;
 	gchar ** keys = NULL;
+	gint * keytypes = NULL;
 	gint num_keys = 0;
 	gint num_keytypes = 0;
 	gint i = 0;
-	gint tmpi = 0;
 	gint offset = 0;
 	gint page = 0;
+	gint tmpi = 0;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
@@ -135,7 +135,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 
 	if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 	{
-		parse_keytypes(tmpbuf,keytypes, &num_keytypes);
+		keytypes = parse_keytypes(tmpbuf, &num_keytypes);
 		g_free(tmpbuf);
 	}
 
@@ -143,6 +143,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	{
 		dbg_func(g_strdup_printf(__FILE__": Number of keys (%i) and keytypes(%i) does NOT match for widget %s, CRITICAL!!!\n",num_keys,num_keytypes,section),CRITICAL);
 		g_strfreev(keys);
+		g_free(keytypes);
 		return;
 	}
 	page = -1;
@@ -180,6 +181,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 				ve_widgets[page][offset],
 				(gpointer)widget);
 	}
+
 	for (i=0;i<num_keys;i++)
 	{
 		switch((DataTypes)keytypes[i])
@@ -234,8 +236,8 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 
 		}
 	}
+	g_free(keytypes);
 	g_strfreev(keys);
-
 }
 
 GList * get_list(gchar * key)
@@ -262,11 +264,17 @@ gchar ** parse_keys(gchar * string, gint * count)
 	return result;
 }
 
-void parse_keytypes(gchar * string, gint keytypes[], gint * count)
+gint * parse_keytypes(gchar * string, gint * count)
 {
-	gchar **vector;	
+	gchar **vector = NULL;	
+	gint *keytypes = NULL;
 	gint i = 0;
+	gint ct = 0;
 	vector = g_strsplit(string,",",0);
+	while (vector[ct])
+		ct++;
+	
+	keytypes = (gint *)g_malloc0(ct*sizeof(gint));	
 	while (vector[i])
 	{
 		dbg_func(g_strdup_printf(__FILE__": parse_keytypes() trying to translate %s\n",vector[i]),TABLOADER);
@@ -276,5 +284,6 @@ void parse_keytypes(gchar * string, gint keytypes[], gint * count)
 	}
 	g_strfreev(vector);
 	*count = i;	
+	return keytypes;
 		
 }

@@ -71,6 +71,15 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(IMMEDIATE));
 	g_hash_table_insert(str_2_enum,"_DEFERRED_",
 			GINT_TO_POINTER(DEFERRED));
+	/* Complex Expressions (RT Vars)*/
+	g_hash_table_insert(str_2_enum,"_VE_EMB_BIT_",
+			GINT_TO_POINTER(VE_EMB_BIT));
+	g_hash_table_insert(str_2_enum,"_VE_VAR_",
+			GINT_TO_POINTER(VE_VAR));
+	g_hash_table_insert(str_2_enum,"_RAW_VAR_",
+			GINT_TO_POINTER(RAW_VAR));
+	
+
 	/* Signal handler mapping */
 	g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
 			GINT_TO_POINTER(ALT_SIMUL));

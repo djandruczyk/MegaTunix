@@ -25,6 +25,7 @@
 #include <notifications.h>
 #include <post_process.h>
 #include <runtime_gui.h>
+#include <rtv_map_loader.h>
 #include <serialio.h>
 #include <string.h>
 #include <structures.h>
@@ -85,6 +86,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 			if (!tabs_loaded)
 			{
 				tmp = UPD_LOAD_GUI_TABS;
+				g_array_append_val(message->funcs,tmp);
+				tmp = UPD_LOAD_REALTIME_MAP;
 				g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;
@@ -212,6 +215,19 @@ void *serial_io_handler(gpointer data)
 						UpdateFunctions, i);
 				switch ((UpdateFunctions)val)
 				{
+					case UPD_LOAD_REALTIME_MAP:
+						if (connected)
+						{
+							gdk_threads_enter();
+							result = load_realtime_map();
+							if (result == FALSE)
+							{
+								gdk_threads_leave();
+								goto breakout;
+							}
+							gdk_threads_leave();
+						}
+						break;
 					case UPD_LOAD_GUI_TABS:
 						if (connected)
 						{

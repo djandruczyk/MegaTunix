@@ -21,15 +21,16 @@
 #include <enums.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_map_loader.h>
+#include <stringmatch.h>
 #include <structures.h>
 #include <tabloader.h>
 
 GArray *raw_array;
 
-void realtime_map_load(void *ptr, gchar *basename)
+gboolean load_realtime_map(void )
 {
 	ConfigFile *cfgfile;
-	struct Firmware_Details *firmware = ptr;
+	extern struct Firmware_Details *firmware;
 	gchar * filename = NULL;
 	gchar *tmpbuf = NULL;
 	gint raw_total = 0;
@@ -37,12 +38,18 @@ void realtime_map_load(void *ptr, gchar *basename)
 	gint num_keys = 0;
 	gint num_keytypes = 0;
 	gchar ** keys = NULL;
+	gint *keytypes = NULL;
 	gint i = 0;
+	gint j = 0;
+	gint tmpi = 0;
+	gint offset = 0;
 	gchar * section = NULL;
-	gint keytypes[50]; /* bad idea... */
+	GObject * object = NULL;
+	GList * list = NULL;
 	
+	printf("load_realtime_map()\n");
 
-	filename = g_strconcat(DATA_DIR,"/",REALTIME_MAP_DIR,"/",basename,NULL);
+	filename = g_strconcat(DATA_DIR,"/",REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -54,8 +61,8 @@ void realtime_map_load(void *ptr, gchar *basename)
 			cfg_free(cfgfile);
 			g_free(cfgfile);
 			g_free(filename);
-			return;
-			
+			return FALSE;
+
 		}
 		/* OK, basic checks passed,  start loading data into
 		 * the main mapping structures...
@@ -66,15 +73,19 @@ void realtime_map_load(void *ptr, gchar *basename)
 			dbg_func(__FILE__": realtime_map_load(), can't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
 		raw_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
-//		for (i=0;i<raw_total;i++)
-//			g_array_insert_val(raw_array,i,NULL);
-			
+		list = NULL;
+		for (i=0;i<raw_total;i++)
+			g_array_insert_val(raw_array,i,list);
+
 		for (i=0;i<derived_total;i++)
 		{
 			section = g_strdup_printf("derived_%i",i);
 			/* Get key list and parse */
 			if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
+			{
 				dbg_func(g_strdup_printf(__FILE__": realtime_map_load(), can't find \"keys\" in the \"[derived_%i]\" section\n",i),CRITICAL);
+				return FALSE;
+			}
 			else
 			{
 				keys = parse_keys(tmpbuf,&num_keys);
@@ -82,16 +93,125 @@ void realtime_map_load(void *ptr, gchar *basename)
 			}
 			/* Get key TYPE list and parse */
 			if(!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
+			{
 				dbg_func(g_strdup_printf(__FILE__": realtime_map_load(), can't find \"key_types\" in the \"[derived_%i]\" section\n",i),CRITICAL);
+				return FALSE;
+			}
 			else
 			{
-				parse_keytypes(tmpbuf,keytypes, &num_keytypes);
+				keytypes = parse_keytypes(tmpbuf, &num_keytypes);
 				g_free(tmpbuf);
 			}
+			if (num_keytypes != num_keys)
+			{
+				dbg_func(g_strdup_printf(__FILE__": Number of keys (%i) and keytypes(%i) does NOT match for: \"%s\", CRITICAL!!!\n",num_keys,num_keytypes,section),CRITICAL);
+				g_free(keytypes);
+				g_strfreev(keys);
+				return FALSE;
+			}
+			if (!cfg_read_int(cfgfile,section,"offset",&offset))
+				dbg_func(g_strdup_printf(__FILE__": Offset not defined for: \"%s\", CRITICAL!!!\n",section),CRITICAL);
+	
+				
+			object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+			for (j=0;j<num_keys;j++)
+			{
+				switch((DataTypes)keytypes[j])
+				{
+					case MTX_INT:
+						if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
+						{
+							dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+							g_object_set_data(object,
+									g_strdup(keys[j]),
+									GINT_TO_POINTER(tmpi));
+						}
+						else
+							dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						break;
+					case MTX_ENUM:
+						if (cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
+						{
+							tmpi = translate_string(tmpbuf);
+							dbg_func(g_strdup_printf(__FILE__": bind_data() binding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+							g_object_set_data(object,
+									g_strdup(keys[j]),
+									GINT_TO_POINTER(tmpi));
+							g_free(tmpbuf);
+						}
+						else
+							dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						break;
+					case MTX_BOOL:
+						if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
+						{
+							dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+							g_object_set_data(object,
+									g_strdup(keys[j]),
+									GINT_TO_POINTER(tmpi));
+							if (strstr(keys[j],"complex_expr") != NULL)
+								load_complex_params(object,cfgfile,section);
+						}
+						else
+							dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						break;
+					case MTX_STRING:
+						if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
+						{
+							dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section),TABLOADER);
+							g_object_set_data(object,
+									g_strdup(keys[j]),
+									g_strdup(tmpbuf));
+							g_free(tmpbuf);
+						}
+						else
+							dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						break;
 
-			
+				}
+			}
+			list = g_array_index(raw_array,GList *,offset);
+			list = g_list_append(list,(gpointer)object);
+			raw_array = g_array_insert_val(raw_array,offset,list);
+
 			g_free(section);
+			g_free(keytypes);
+			g_strfreev(keys);
 		}
-		
+
 	}
+	return TRUE;
+}
+
+void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
+{
+	gchar *tmpbuf = NULL;
+	gchar **expr_symbols = NULL;
+	gint *expr_types = NULL;
+	gint total_symbols = 0;
+	gint total_symtypes = 0;
+
+	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
+	{
+		dbg_func(g_strdup_printf(__FILE__": load_complex_params(), read of \"expr_symbols\" from section \"%s\" failed\n",section),CRITICAL);
+		g_free(tmpbuf);
+		return;
+	}
+	else
+	{
+		expr_symbols = parse_keys(tmpbuf, &total_symbols);	
+		g_free(tmpbuf);
+	}
+	if (!cfg_read_string(cfgfile,section,"expr_types",&tmpbuf))
+	{
+		dbg_func(g_strdup_printf(__FILE__": load_complex_params(), read of \"expr_types\" from section \"%s\" failed\n",section),CRITICAL);
+		g_free(tmpbuf);
+		return;
+	}
+	else
+	{
+		expr_types = parse_keytypes(tmpbuf, &total_symtypes);	
+		g_free(tmpbuf);
+	}
+	printf("load_complex_params\n");
 }

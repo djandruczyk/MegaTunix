@@ -34,6 +34,7 @@ CMD_F_0=0
 
 [gui]
 LoadTabs=B_n_G_constants,enrichments_BnG,vetable_8x8_1
+RealtimeMapFile=B_and_G_2.0-3.01
 
 [lookuptables]
 mat=matfactor.inc

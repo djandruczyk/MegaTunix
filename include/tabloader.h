@@ -21,7 +21,8 @@ gboolean load_gui_tabs(void);
 void bind_data(gpointer,gpointer,gpointer);
 void populate_master(gpointer,gpointer,gpointer);
 gchar ** parse_keys(gchar * , gint * );
-void parse_keytypes(gchar * , gint *, gint * );
+gint * parse_keytypes(gchar * , gint * );
+//void parse_keytypes(gchar * , gint *, gint * );
 GList * get_list(gchar * );
 void store_list(gchar * , GList * );
 

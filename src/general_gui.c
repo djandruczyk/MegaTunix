@@ -249,8 +249,8 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Critical Errors");
         g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(11));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<11));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(31));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<31));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),

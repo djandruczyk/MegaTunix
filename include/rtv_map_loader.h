@@ -15,10 +15,11 @@
 #define __RTV_MAP_LOADER_H__
 
 #include <gtk/gtk.h>
+#include <configfile.h>
 
 /* Prototypes */
-void test_math(void);
-void realtime_map_load(void *, gchar *);
+gboolean load_realtime_map(void );
+void load_complex_params(GObject *, ConfigFile *, gchar * );
 /* Prototypes */
 
 #endif
