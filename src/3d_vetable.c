@@ -175,6 +175,15 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 
+        button = gtk_button_new_with_label("Close Window");
+        gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+	g_signal_connect_swapped(G_OBJECT(button), "clicked",
+			G_CALLBACK(reset_3d_winstat),
+			(gpointer) window);
+        g_signal_connect_swapped(G_OBJECT(button), "clicked",
+                        G_CALLBACK(gtk_widget_destroy),
+			(gpointer) window);
+
 	gtk_widget_show_all(window);
 
 	return TRUE;
