@@ -6,6 +6,7 @@ tab_name=_Logviewer
 post_function=finish_logviewer
 
 #----- Buttons ---------------------------------------------------------------
+
 [logviewer_start_button]
 keys=handler,page
 key_types=_ENUM_,_INT_

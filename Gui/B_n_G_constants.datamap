@@ -5,6 +5,7 @@ description=Object data map for B&G Constants (most firmwares except DT... )
 tab_name=_Engine Vitals
 
 #----- Buttons ---------------------------------------------------------------
+
 [bng_get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
@@ -26,6 +27,7 @@ page=0
 handler=_REQ_FUEL_POPUP_
 
 #----- Labels ----------------------------------------------------------------
+
 [fast_idle_thresh_temp_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
@@ -54,6 +56,7 @@ page=0
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 
 #----- Radio/Checkbuttons ----------------------------------------------------
+
 [speed_density_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
@@ -229,7 +232,6 @@ bitval=1
 bitmask=1
 dl_type=_DEFERRED_
 handler=_ALT_SIMUL_
-
 
 #----- SpinButtons -----------------------------------------------------------
 

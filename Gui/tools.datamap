@@ -5,6 +5,7 @@ description=Object data map for MegaSquirt Tools (backup/restore, etc...)
 tab_name=_Tools
 
 #----- Buttons ---------------------------------------------------------------
+
 [tools_import_vex_button]
 keys=handler,page
 key_types=_ENUM_,_INT_

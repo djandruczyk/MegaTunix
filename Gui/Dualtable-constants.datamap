@@ -5,6 +5,7 @@ description=Object data map for Dualtable (0.9-1.02)
 tab_name=_Dualtable Constants
 
 #----- Buttons ---------------------------------------------------------------
+
 [dt_get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
@@ -32,6 +33,7 @@ page=1
 handler=_REQ_FUEL_POPUP_
 
 #----- Labels ----------------------------------------------------------------
+
 [num_injectors_1_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -69,6 +71,7 @@ page=0
 bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
 
 #----- Radio/Checkbuttons ----------------------------------------------------
+
 [speed_density_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_

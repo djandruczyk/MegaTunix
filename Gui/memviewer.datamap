@@ -6,6 +6,7 @@ tab_name=_Memory Viewer
 post_function=finish_memviewer
 
 #----- Buttons ---------------------------------------------------------------
+
 [memviewer_tab0_read_button]
 keys=handler,page,data
 key_types=_ENUM_,_INT_,_INT_

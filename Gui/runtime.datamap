@@ -5,6 +5,7 @@ description=Object data map for MegaSquirt Runtime Display
 tab_name=_Runtime Display
 
 #----- Buttons ---------------------------------------------------------------
+
 [runtime_start_realtime_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
@@ -18,6 +19,7 @@ handler=_STOP_REALTIME_
 page=0
 
 #------ Gui objects ---------------------------------------------------------
+
 [topframe]
 keys=page,page_ident
 key_types=_INT_,_ENUM_

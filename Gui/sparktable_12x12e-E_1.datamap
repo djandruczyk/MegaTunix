@@ -9,6 +9,7 @@ id_prefix=SP1_
 groups=load,rpm,sparkentry
 
 #----- Group config ----------------------------------------------------------
+
 [load]
 keys=page,dl_type,handler,base,type,raw_lower,raw_upper
 key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_
@@ -48,8 +49,8 @@ raw_upper=255
 is_float=TRUE
 precision=1
 
-
 #----- Labels ----------------------------------------------------------------
+
 [topframe_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
@@ -62,8 +63,8 @@ key_types=_INT_,_STRING_
 page=3
 set_label=Spark Advance Table (MSnS-Extra)
 
-
 #----- Buttons ---------------------------------------------------------------
+
 [get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
@@ -94,7 +95,7 @@ page=3
 handler=_RESCALE_TABLE_
 data=SP1_rescale_spinner
 
-#----- Rescale Spinners ------------------------------------------------------
+#----- Rescale Spinner ------------------------------------------------------
 
 [rescale_spinner]
 keys=page,table_num
@@ -110,8 +111,8 @@ key_types=_INT_,_STRING_
 page=3
 rescaler_frame=SP1_rescale_frame
 
-
 #----- Temp Timing Controls --------------------------------------------------
+
 [trimangle_entry]
 keys=offset
 key_types=_INT_
@@ -124,7 +125,7 @@ key_types=_INT_
 offset=81
 group=sparkentry
 
-#----- Load Spinners (MAP/TPS) -----------------------------------------------
+#----- Load Entries (MAP/TPS) -----------------------------------------------
 
 [load_entry_0]
 keys=offset
@@ -198,7 +199,7 @@ key_types=_INT_
 offset=167
 group=load
 
-#----- RPM Spinners ---------------------------------------------------------
+#----- RPM Entries ---------------------------------------------------------
 
 [rpm_entry_0]
 keys=offset
@@ -272,7 +273,7 @@ key_types=_INT_
 offset=155
 group=rpm
 
-#----- VE-Table Spinners -----------------------------------------------------
+#----- VE-Table Entries -----------------------------------------------------
 
 [sparkentry_(0,0)]
 keys=offset

@@ -6,8 +6,8 @@ tab_name=_Raw Memory Editor
 post_function=finish_raweditor
 id_prefix=raweditor_
 
-
 #----- Buttons ---------------------------------------------------------------
+
 [get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_

@@ -12,6 +12,7 @@ page=0
 page_ident=_WARMUP_WIZ_PAGE_
 
 #----- Buttons ---------------------------------------------------------------
+
 [ww_get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
@@ -149,6 +150,7 @@ temp_dep=TRUE
 bind_to_list=temperature
 
 #----- Spin Buttons ----------------------------------------------------------
+
 [ww_cpulse_neg40_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_

@@ -9,6 +9,7 @@ id_prefix=SP1_
 groups=load,rpm,sparkspin
 
 #----- Group config ----------------------------------------------------------
+
 [load]
 keys=page,dl_type,handler,base,type,raw_lower,raw_upper
 key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_
@@ -48,8 +49,8 @@ raw_upper=255
 is_float=TRUE
 precision=1
 
-
 #----- Labels ----------------------------------------------------------------
+
 [topframe_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
@@ -62,8 +63,8 @@ key_types=_INT_,_STRING_
 page=3
 set_label=Spark Advance Table (MSnS-Extra)
 
-
 #----- Buttons ---------------------------------------------------------------
+
 [get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
@@ -92,11 +93,11 @@ keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
 page=3
 handler=_RESCALE_TABLE_
-data=SP1_rescale_entry
+data=SP1_rescale_spin
 
 #----- Rescale Spinner -------------------------------------------------------
 
-[rescale_entry]
+[rescale_spin]
 keys=page,table_num
 key_types=_INT_,_INT_
 page=3
@@ -110,169 +111,169 @@ key_types=_INT_,_STRING_
 page=3
 rescaler_frame=SP1_rescale_frame
 
-
 #----- Temp Timing Controls --------------------------------------------------
-[trimangle_entry]
+
+[trimangle_spin]
 keys=offset
 key_types=_INT_
 offset=82
 group=sparkspin
 
-[fixedangle_entry]
+[fixedangle_spin]
 keys=offset
 key_types=_INT_
 offset=81
 group=sparkspin
 
-#----- Load Entries (MAP/TPS) -----------------------------------------------
+#----- Load Spinners (MAP/TPS) -----------------------------------------------
 
-[load_entry_0]
+[load_spin_0]
 keys=offset
 key_types=_INT_
 offset=156
 group=load
 
-[load_entry_1]
+[load_spin_1]
 keys=offset
 key_types=_INT_
 offset=157
 group=load
 
-[load_entry_2]
+[load_spin_2]
 keys=offset
 key_types=_INT_
 offset=158
 group=load
 
-[load_entry_3]
+[load_spin_3]
 keys=offset
 key_types=_INT_
 offset=159
 group=load
 
-[load_entry_4]
+[load_spin_4]
 keys=offset
 key_types=_INT_
 offset=160
 group=load
 
-[load_entry_5]
+[load_spin_5]
 keys=offset
 key_types=_INT_
 offset=161
 group=load
 
-[load_entry_6]
+[load_spin_6]
 keys=offset
 key_types=_INT_
 offset=162
 group=load
 
-[load_entry_7]
+[load_spin_7]
 keys=offset
 key_types=_INT_
 offset=163
 group=load
 
-[load_entry_8]
+[load_spin_8]
 keys=offset
 key_types=_INT_
 offset=164
 group=load
 
-[load_entry_9]
+[load_spin_9]
 keys=offset
 key_types=_INT_
 offset=165
 group=load
 
-[load_entry_10]
+[load_spin_10]
 keys=offset
 key_types=_INT_
 offset=166
 group=load
 
-[load_entry_11]
+[load_spin_11]
 keys=offset
 key_types=_INT_
 offset=167
 group=load
 
-#----- RPM Entries ----------------------------------------------------------
+#----- RPM Spinners ----------------------------------------------------------
 
-[rpm_entry_0]
+[rpm_spin_0]
 keys=offset
 key_types=_INT_
 offset=144
 group=rpm
 
-[rpm_entry_1]
+[rpm_spin_1]
 keys=offset
 key_types=_INT_
 offset=145
 group=rpm
 
-[rpm_entry_2]
+[rpm_spin_2]
 keys=offset
 key_types=_INT_
 offset=146
 group=rpm
 
-[rpm_entry_3]
+[rpm_spin_3]
 keys=offset
 key_types=_INT_
 offset=147
 group=rpm
 
-[rpm_entry_4]
+[rpm_spin_4]
 keys=offset
 key_types=_INT_
 offset=148
 group=rpm
 
-[rpm_entry_5]
+[rpm_spin_5]
 keys=offset
 key_types=_INT_
 offset=149
 group=rpm
 
-[rpm_entry_6]
+[rpm_spin_6]
 keys=offset
 key_types=_INT_
 offset=150
 group=rpm
 
-[rpm_entry_7]
+[rpm_spin_7]
 keys=offset
 key_types=_INT_
 offset=151
 group=rpm
 
-[rpm_entry_8]
+[rpm_spin_8]
 keys=offset
 key_types=_INT_
 offset=152
 group=rpm
 
-[rpm_entry_9]
+[rpm_spin_9]
 keys=offset
 key_types=_INT_
 offset=153
 group=rpm
 
-[rpm_entry_10]
+[rpm_spin_10]
 keys=offset
 key_types=_INT_
 offset=154
 group=rpm
 
-[rpm_entry_11]
+[rpm_spin_11]
 keys=offset
 key_types=_INT_
 offset=155
 group=rpm
 
-#----- VE-Table Entries ------------------------------------------------------
+#----- VE-Table Spinners ------------------------------------------------------
 
 [sparkspin_(0,0)]
 keys=offset
@@ -1137,4 +1138,3 @@ keys=offset
 key_types=_INT_
 offset=143
 group=sparkspin
-

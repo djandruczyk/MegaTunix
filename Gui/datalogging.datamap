@@ -66,8 +66,3 @@ key_types=_ENUM_,_INT_
 handler=_STOP_DATALOGGING_
 page=0
 
-
-#----- Textview -------------------------------------------------------------
-#[dlog_status_textview]
-#keys=
-#key_types=

@@ -4,8 +4,8 @@
 description=Object data map for MSnS-3.0x ignition params
 tab_name=_Ignition Params
 
-
 #----- Buttons ---------------------------------------------------------------
+
 [ign_get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_

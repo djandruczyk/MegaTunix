@@ -65,7 +65,6 @@ key_types=_INT_,_STRING_
 page=1
 set_label=Spark Advance Table (EDIS)
 
-
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
@@ -98,7 +97,7 @@ page=1
 handler=_RESCALE_TABLE_
 data=SP1_rescale_spinner
 
-#----- Rescale Spinners ------------------------------------------------------
+#----- Rescale Spinner ------------------------------------------------------
 
 [rescale_spinner]
 keys=page,table_num
@@ -128,7 +127,7 @@ key_types=_INT_
 group=sparktable
 offset=81
 
-#----- Load Spinners (MAP/TPS) -----------------------------------------------
+#----- Load Entries (MAP/TPS) -----------------------------------------------
 
 [load_entry_0]
 keys=offset
@@ -178,7 +177,7 @@ key_types=_INT_
 offset=79
 group=load
 
-#----- RPM Spinners ---------------------------------------------------------
+#----- RPM Entries ---------------------------------------------------------
 
 [rpm_entry_0]
 keys=offset
@@ -228,7 +227,7 @@ key_types=_INT_
 group=rpm
 offset=71
 
-#----- VE-Table Spinners -----------------------------------------------------
+#----- VE-Table Entries -----------------------------------------------------
 
 [sparkentry_(0,0)]
 keys=offset

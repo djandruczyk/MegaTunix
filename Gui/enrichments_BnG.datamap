@@ -4,8 +4,8 @@
 description=Object data map for Std B&G Enrichments
 tab_name=_Enrichments
 
-
 #----- Buttons ---------------------------------------------------------------
+
 [enrich_get_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
@@ -149,6 +149,7 @@ temp_dep=TRUE
 bind_to_list=temperature
 
 #----- Spin Buttons ----------------------------------------------------------
+
 [cpulse_neg40_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
