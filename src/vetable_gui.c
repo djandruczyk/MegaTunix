@@ -142,7 +142,7 @@ void build_vetable(GtkWidget *parent_frame)
 		for (x=0;x<8;x++)
 		{
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
-					1.0,1.0,255,1,10,0);
+					0.0,0.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
 			ve_widgets->widget[VE1_TABLE_OFFSET+index] = spinner;
 			g_object_set_data(G_OBJECT(spinner),"offset", 
@@ -306,7 +306,7 @@ void build_vetable(GtkWidget *parent_frame)
 		for (x=0;x<8;x++)
 		{
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
-					1.0,1.0,255,1,10,0);
+					0.0,0.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
 			ve_widgets->widget[VE2_TABLE_OFFSET+index] = spinner;
 			g_object_set_data(G_OBJECT(spinner),"offset", 
