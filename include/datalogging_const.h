@@ -122,9 +122,9 @@ static const gint mt_full_order[] =
 	 4, 3,-1, 6, 7,
 	 5,-1,13,-1,-1,
 	10,12, 9,11,14,
-	15,17,16,18,-1.
-	-1,-1,-1,-1,-1,
-	-1,-1
+	15,17,16,18,19,
+	20,-1,-1,-1,21,
+	22,23
 };
 
 /* Size of each logable variable in BYTES, so 4 = a 32 bit var 

@@ -25,6 +25,13 @@ extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern GtkWidget *ve_widgets[];
 
+gboolean spinbutton_highlighter(GtkWidget *, gpointer);
+
+gboolean spinbutton_highlighter(GtkWidget *widget, gpointer data)
+{
+	printf("spinbutton clicked on...\n");
+	return FALSE;
+}
 void build_vetable_1(GtkWidget *parent_frame)
 {
 	gint x,y;
@@ -38,7 +45,7 @@ void build_vetable_1(GtkWidget *parent_frame)
 	GtkWidget *spinner;
 	GtkWidget *frame;
 	GtkWidget *button;
-	GtkAdjustment *adj;
+	GtkAdjustment *adj = NULL;
 	extern GList *store_controls;
 	extern GtkTooltips *tip;
 
@@ -87,8 +94,9 @@ void build_vetable_1(GtkWidget *parent_frame)
 	index = 0;
 	for (y=0;y<8;y++)
 	{
-		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		spinner = gtk_spin_button_new(adj,1,0);
+		gtk_widget_add_events(spinner,
+				GDK_BUTTON_PRESS_MASK);
 		ve_widgets[VE1_KPA_BINS_OFFSET+index] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		g_object_set_data(G_OBJECT(spinner),"offset", 
@@ -99,8 +107,12 @@ void build_vetable_1(GtkWidget *parent_frame)
 				GINT_TO_POINTER(NOTHING));
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
+		g_signal_connect (G_OBJECT(spinner), "button_press_event",
+				G_CALLBACK (spinbutton_highlighter),
+				NULL);
+		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (spinbutton_handler),
+				G_CALLBACK (spin_button_handler),
 				GINT_TO_POINTER(GENERIC));
 		/* Bind data to object for handlers */
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -147,7 +159,7 @@ void build_vetable_1(GtkWidget *parent_frame)
 			g_object_set_data(G_OBJECT(spinner),"dl_type",
 					GINT_TO_POINTER(IMMEDIATE));
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
-					G_CALLBACK (spinbutton_handler),
+					G_CALLBACK (spin_button_handler),
 					GINT_TO_POINTER(GENERIC));
 			/* Bind data to object for handlers */
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), 
@@ -188,7 +200,7 @@ void build_vetable_1(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (spinbutton_handler),
+				G_CALLBACK (spin_button_handler),
 				GINT_TO_POINTER(GENERIC));
 		/* Bind data to object for handlers */
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -312,7 +324,7 @@ void build_vetable_2(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (spinbutton_handler),
+				G_CALLBACK (spin_button_handler),
 				GINT_TO_POINTER(GENERIC));
 		/* Bind data to object for handlers */
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -359,7 +371,7 @@ void build_vetable_2(GtkWidget *parent_frame)
 			g_object_set_data(G_OBJECT(spinner),"dl_type",
 					GINT_TO_POINTER(IMMEDIATE));
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
-					G_CALLBACK (spinbutton_handler),
+					G_CALLBACK (spin_button_handler),
 					GINT_TO_POINTER(GENERIC));
 			/* Bind data to object for handlers */
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), 
@@ -400,7 +412,7 @@ void build_vetable_2(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (spinbutton_handler),
+				G_CALLBACK (spin_button_handler),
 				GINT_TO_POINTER(GENERIC));
 		/* Bind data to object for handlers */
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);

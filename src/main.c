@@ -23,6 +23,7 @@
 #include <runtime_controls.h>
 #include <serialio.h>
 #include <structures.h>
+#include <timeout_handlers.h>
 
 
 extern gboolean temp_units;

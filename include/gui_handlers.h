@@ -18,19 +18,15 @@
 
 /* Prototypes */
 void leave(GtkWidget *, gpointer);
-gint comm_port_change(GtkEditable *);
+gboolean comm_port_change(GtkEditable *);
 gboolean std_button_handler(GtkWidget *, gpointer);
 gboolean toggle_button_handler(GtkWidget *, gpointer);
 gboolean bitmask_button_handler(GtkWidget *, gpointer);
-gboolean spinbutton_handler(GtkWidget *, gpointer);
-gint set_logging_mode(GtkWidget * widget, gpointer *data);
+gboolean spin_button_handler(GtkWidget *, gpointer);
 void check_config11(unsigned char);
 void check_config13(unsigned char);
 void check_tblcnf(unsigned char, gboolean);
 void check_bcfreq(unsigned char, gboolean);
-void start_runtime_display(void);
-void stop_runtime_display(void);
-gboolean populate_gui(void);
 /* Prototypes */
 
 #endif

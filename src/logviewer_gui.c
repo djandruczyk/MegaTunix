@@ -190,7 +190,7 @@ void build_logviewer(GtkWidget *parent_frame)
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"info",(gpointer)d_area);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinbutton_handler),
+                        G_CALLBACK (spin_button_handler),
                         GINT_TO_POINTER(LOGVIEW_SCROLL));
 	gtk_box_pack_start(GTK_BOX(vbox3),spinner,TRUE,FALSE,0);
 

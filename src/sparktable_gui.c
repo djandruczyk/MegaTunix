@@ -94,7 +94,7 @@ void build_sparktable(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (spinbutton_handler),
+				G_CALLBACK (spin_button_handler),
 				GINT_TO_POINTER(GENERIC));
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner,
@@ -142,7 +142,7 @@ void build_sparktable(GtkWidget *parent_frame)
 			g_object_set_data(G_OBJECT(spinner),"dl_type",
 					GINT_TO_POINTER(IMMEDIATE));
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
-					G_CALLBACK (spinbutton_handler),
+					G_CALLBACK (spin_button_handler),
 					GINT_TO_POINTER(GENERIC));
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner),
 					FALSE);
@@ -185,7 +185,7 @@ void build_sparktable(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (spinbutton_handler),
+				G_CALLBACK (spin_button_handler),
 				GINT_TO_POINTER(GENERIC));
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,
@@ -233,7 +233,7 @@ void build_sparktable(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinbutton_handler),
+                        G_CALLBACK (spin_button_handler),
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -259,7 +259,7 @@ void build_sparktable(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinbutton_handler),
+                        G_CALLBACK (spin_button_handler),
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),

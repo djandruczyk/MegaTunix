@@ -40,6 +40,7 @@ headers = \
         sparktable_gui.h \
         structures.h \
         threads.h \
+        timeout_handlers.h \
         tools_gui.h \
         tuning_gui.h \
         unions.h \

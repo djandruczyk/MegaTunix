@@ -42,6 +42,7 @@ megatunix_SOURCES = \
 	runtime_gui.c \
 	serialio.c \
 	sparktable_gui.c \
+	timeout_handlers.c \
 	threads.c \
 	tools_gui.c \
 	tuning_gui.c \

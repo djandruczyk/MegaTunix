@@ -24,8 +24,6 @@
 #include <GL/glu.h>
 #include <pango/pangoft2.h>
 #include <gdk/gdkkeysyms.h>
-#include <gdk/gdkkeysyms.h>
-#include <gdk/gdkkeysyms.h>
 
 /* Prototypes */
 gint create_3d_view(GtkWidget *, gpointer );

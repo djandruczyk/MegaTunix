@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <structures.h>
 #include <threads.h>
+#include <timeout_handlers.h>
 #include <vetable_gui.h>
 #include <vex_support.h>
 
@@ -67,9 +68,6 @@ extern struct Serial_Params *serial_params;
 extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;
 
-static gfloat update_rate = 24;
-static gint runtime_id = 0;
-static gint logviewer_id = 0;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean temp_units;
@@ -228,74 +226,6 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case TOOLTIPS_STATE:
 				gtk_tooltips_disable(tip);
 				tips_in_use = FALSE;
-				break;
-		}
-	}
-	return TRUE;
-}
-
-gint set_logging_mode(GtkWidget * widget, gpointer *data)
-{
-	gint i = 0;
-	if (!ready)
-		return FALSE;
-	if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
-	{
-		switch((LoggingMode)data)
-		{
-			case MT_CLASSIC_LOG:
-				logging_mode = MT_CLASSIC_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,FALSE);
-				gtk_toggle_button_set_active(
-						GTK_TOGGLE_BUTTON
-						(tab_delimiter_button),
-						TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,FALSE);
-
-				for (i=0;i<max_logables;i++)
-				{
-					if (mt_classic[i] == 1)
-					{
-						gtk_toggle_button_set_active(
-							GTK_TOGGLE_BUTTON
-							(logables.widgets[i]),
-							TRUE);
-					}
-				}
-				break;
-			case MT_FULL_LOG:
-				logging_mode = MT_FULL_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,FALSE);
-				gtk_toggle_button_set_active(
-						GTK_TOGGLE_BUTTON
-						(tab_delimiter_button),
-						TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,FALSE);
-
-				for (i=0;i<max_logables;i++)
-				{
-					if (mt_full[i] == 1)
-					{
-					gtk_toggle_button_set_active(
-							GTK_TOGGLE_BUTTON
-							(logables.widgets[i]),
-							TRUE);
-					}
-				}
-				break;
-			case CUSTOM_LOG:
-				logging_mode = CUSTOM_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,TRUE);
 				break;
 		}
 	}
@@ -533,7 +463,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gboolean spinbutton_handler(GtkWidget *widget, gpointer data)
+gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 
@@ -1433,42 +1363,4 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 				(buttons.inj2_gammae),
 				val);
 	return;	
-}
-
-void start_runtime_display()
-{
-	if (runtime_id == 0)
-		runtime_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
-				(GtkFunction)update_runtime_vars,NULL);
-	if (logviewer_id == 0)
-		logviewer_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
-				(GtkFunction)update_logview_traces,NULL);
-}
-
-void stop_runtime_display()
-{
-	if (runtime_id)
-		gtk_timeout_remove(runtime_id);
-	runtime_id = 0;
-	if (logviewer_id)
-		gtk_timeout_remove(logviewer_id);
-	logviewer_id = 0;
-}
-
-gboolean populate_gui()
-{
-	/* A trick used in main() to startup MegaTunix faster..
-	 * the problem is that calling the READ_VE_CONST stuff before 
-	 * gtk_main is that it makes the gui have to go through interrogation
-	 * of the ecu before the gui appears, giving the appearance that
-	 * MegaTunix is slow.  By creating this simple wrapper and kicking
-	 * it off as a timeout, it'll run just after the gui is ready, and
-	 * since it returns FALSE, the timeout will be canceled and deleted
-	 * i.e. it acts like a one-shot behind a time delay. (the delay lets
-	 * the gui get "ready" and then this kicks off the interrogator and
-	 * populates the gui controls if the ECU is detected... 
-	 */
-
-	std_button_handler(NULL,GINT_TO_POINTER(READ_VE_CONST));
-	return FALSE;
 }

@@ -53,7 +53,7 @@ static gint total_logables = 0;
 static gint delim_char = SPACE;
 static gint offset_list[MAX_LOGABLES];
 static gint size_list[MAX_LOGABLES];
-static gboolean logging = FALSE;
+static gboolean logging_active = FALSE;
 static gboolean header_needed = FALSE;
 static GtkWidget *file_selection;
 static GtkWidget *format_table;
@@ -65,6 +65,36 @@ static GHashTable *full_ord_hash;
 static struct timeval now;
 static struct timeval last;
 
+
+/* mt_classic[] and mt_full[] are arrays laid out like the datalogging
+ * screen, insert a "1" where you want the button selected for that mode
+ * otherwise use a zero...
+ */
+static const gboolean mt_classic[] =
+{
+	FALSE,	TRUE,	TRUE,	TRUE,	FALSE,	
+	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
+	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
+	FALSE,	TRUE,	FALSE,	FALSE,	FALSE,	
+	TRUE,	FALSE,	TRUE,	FALSE,	FALSE,	
+	TRUE,	TRUE,	TRUE,	TRUE,	FALSE,	
+	TRUE,	FALSE,	FALSE,	FALSE,	FALSE,	
+	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
+	FALSE,	FALSE 
+};
+
+static const gboolean mt_full[] = 
+{
+	TRUE,	TRUE,	TRUE,	TRUE,	FALSE,	
+	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
+	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
+	TRUE,	TRUE,	FALSE,	TRUE,	TRUE,	
+	TRUE,	FALSE,	TRUE,	FALSE,	FALSE,	
+	TRUE,	TRUE,	TRUE,	TRUE,	TRUE,	
+	TRUE,	TRUE,	TRUE,	TRUE,	TRUE,	
+	TRUE,	FALSE,	FALSE,	FALSE,	TRUE,	
+	TRUE,	TRUE 
+}; 
 void build_datalogging(GtkWidget *parent_frame)
 {
 	gint i,j,k;
@@ -352,7 +382,7 @@ void build_datalogging(GtkWidget *parent_frame)
 void start_datalogging(void)
 {
 	gchar * tmpbuf;
-	if (logging)
+	if (logging_active)
 		return;   /* Logging already running ... */
 
 	gtk_widget_set_sensitive(logables_table,FALSE);
@@ -360,7 +390,7 @@ void start_datalogging(void)
 	gtk_widget_set_sensitive(format_table,FALSE);
 	gtk_widget_set_sensitive(file_selection,FALSE);
 	header_needed = TRUE;
-	logging = TRUE;
+	logging_active = TRUE;
 	tmpbuf = g_strdup_printf("DataLogging Started...\n");
 	update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
@@ -371,7 +401,7 @@ void start_datalogging(void)
 void stop_datalogging()
 {
 	gchar *tmpbuf;
-	logging = FALSE;
+	logging_active = FALSE;
 	if (logging_mode == CUSTOM_LOG)
 	{
 		gtk_widget_set_sensitive(logables_table,TRUE);
@@ -396,7 +426,7 @@ void clear_logables(void)
 				FALSE);
 }
 
-gint log_value_set(GtkWidget * widget, gpointer data)
+gboolean log_value_set(GtkWidget * widget, gpointer data)
 {
 	gint index = 0;
 	gint size = 0;
@@ -534,7 +564,7 @@ void run_datalog(void)
 	short * short_ptr = (short *)runtime;
 	float * float_ptr = (float *)runtime;
 
-	if (!logging) /* Logging isn't enabled.... */
+	if (!logging_active) /* Logging isn't enabled.... */
 		return;
 
 	data =  g_object_get_data(G_OBJECT(buttons.close_dlog_but),"data");
@@ -613,3 +643,72 @@ void run_datalog(void)
 	g_string_free(output,TRUE);
 
 }
+
+gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
+{
+	gint i = 0;
+	if (!ready)
+		return FALSE;
+	if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
+	{
+		switch((LoggingMode)data)
+		{
+			case MT_CLASSIC_LOG:
+				logging_mode = MT_CLASSIC_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,FALSE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+						(tab_delimiter_button),
+						TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,FALSE);
+
+				for (i=0;i<max_logables;i++)
+				{
+					if (mt_classic[i] == 1)
+					{
+						gtk_toggle_button_set_active(
+							GTK_TOGGLE_BUTTON
+							(logables.widgets[i]),
+							TRUE);
+					}
+				}
+				break;
+			case MT_FULL_LOG:
+				logging_mode = MT_FULL_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,FALSE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+						(tab_delimiter_button),
+						TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,FALSE);
+
+				for (i=0;i<max_logables;i++)
+				{
+					if (mt_full[i] == 1)
+					{
+					gtk_toggle_button_set_active(
+							GTK_TOGGLE_BUTTON
+							(logables.widgets[i]),
+							TRUE);
+					}
+				}
+				break;
+			case CUSTOM_LOG:
+				logging_mode = CUSTOM_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,TRUE);
+				break;
+		}
+	}
+	return TRUE;
+}
+

@@ -190,7 +190,7 @@ gboolean reqd_fuel_popup(void * data)
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinbutton_handler),
+			G_CALLBACK (spin_button_handler),
 			GINT_TO_POINTER(REQ_FUEL_DISP));
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
@@ -205,7 +205,7 @@ gboolean reqd_fuel_popup(void * data)
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinbutton_handler),
+			G_CALLBACK (spin_button_handler),
 			GINT_TO_POINTER(REQ_FUEL_CYLS));
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
@@ -220,7 +220,7 @@ gboolean reqd_fuel_popup(void * data)
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinbutton_handler),
+			G_CALLBACK (spin_button_handler),
 			GINT_TO_POINTER(REQ_FUEL_AFR));
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
@@ -235,7 +235,7 @@ gboolean reqd_fuel_popup(void * data)
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinbutton_handler),
+			G_CALLBACK (spin_button_handler),
 			GINT_TO_POINTER(REQ_FUEL_RATED_INJ_FLOW));
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 0, 1,
@@ -249,7 +249,7 @@ gboolean reqd_fuel_popup(void * data)
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinbutton_handler),
+			G_CALLBACK (spin_button_handler),
 			GINT_TO_POINTER(REQ_FUEL_RATED_PRESSURE));
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 1, 2,
@@ -264,7 +264,7 @@ gboolean reqd_fuel_popup(void * data)
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinbutton_handler),
+			G_CALLBACK (spin_button_handler),
 			GINT_TO_POINTER(REQ_FUEL_ACTUAL_PRESSURE));
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 2, 3,
