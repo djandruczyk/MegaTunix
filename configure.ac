@@ -16,15 +16,15 @@ AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
 dnl Checks for programs.
-AC_PROG_AWK
-AC_PROG_INSTALL
-AC_PROG_LN_S
 AC_PROG_CC
-AM_PROG_LEX
 AC_PROG_LN_S
-AC_PROG_LIBTOOL
+AC_PROG_RANLIB
+AC_PROG_AWK
 AC_PROG_YACC
+AM_PROG_LEX
+AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
+AC_PROG_INSTALL
 
 dnl check paths for necessary files
 dnl pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
