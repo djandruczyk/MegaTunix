@@ -284,7 +284,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
 
 	/* TPS trigger threashold */
@@ -394,7 +394,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),sep,TRUE,TRUE,0);
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox2,FALSE,TRUE,0);
@@ -447,7 +447,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 3);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,10);
 
 	/* Decel Cut % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
@@ -495,7 +495,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),0);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,10);
 	gtk_widget_set_size_request(table,-1,30);
 
 
@@ -537,7 +537,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			NULL);
 
 	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,TRUE,TRUE,0);
 
 
 	table = gtk_table_new(6,2,FALSE);

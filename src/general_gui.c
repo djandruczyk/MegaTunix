@@ -23,8 +23,8 @@ extern gboolean tips_in_use;
 extern gboolean fahrenheit;
 extern GdkColor black;
 GtkWidget *ms_ecu_revision_entry;
-GtkWidget *view;
-GtkWidget *sw;
+GtkWidget *interr_view;
+
 GtkTextBuffer *textbuffer;
 
 int build_general(GtkWidget *parent_frame)
@@ -33,6 +33,7 @@ int build_general(GtkWidget *parent_frame)
 	GtkWidget *vbox;
 	//       GtkWidget *vbox2;
 	GtkWidget *sw;
+	GtkWidget *view;
 	GtkWidget *frame;
 	GtkWidget *hbox;
 	GtkWidget *hbox2;
@@ -95,7 +96,7 @@ int build_general(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-			"This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you seem feedback about how the MS responds to various commands and suggestes what it thinks is the closest match.",NULL);
+			"This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match.",NULL);
 
 	frame = gtk_frame_new("MegaSquirt ECU Information");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -149,10 +150,11 @@ int build_general(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),sw);
 
 	view = gtk_text_view_new ();
+	interr_view = view;
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	gtk_text_buffer_create_tag(textbuffer,
-			"red_foreground",
+			"warning",
 			"foreground",
 			"red", NULL);
 	gtk_container_add(GTK_CONTAINER(sw),view);

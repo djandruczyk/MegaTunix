@@ -73,7 +73,8 @@ void set_store_buttons_state(GuiState state)
 	}
 }
 
-void update_logbar(GtkWidget *view, gchar * tagname, gchar * message)
+void 
+ update_logbar(GtkWidget *view, gchar * tagname, gchar * message,gboolean count)
 {
 	GtkTextIter iter;
 	GtkTextBuffer * textbuffer;
@@ -96,7 +97,8 @@ void update_logbar(GtkWidget *view, gchar * tagname, gchar * message)
 	tmpbuf = g_strdup_printf("%i. ",counter);
 	g_object_set_data(G_OBJECT(view),"counter",GINT_TO_POINTER(counter));	
 
-	gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
+	if (count) /* if TRUE, display counter, else don't */
+		gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 	if (tagname == NULL)
 		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
 	else

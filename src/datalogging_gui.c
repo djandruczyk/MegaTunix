@@ -345,7 +345,7 @@ void start_datalogging()
 		header_needed = TRUE;
 		logging = TRUE;
 		tmpbuf = g_strdup_printf("DataLogging Started...\n");
-		update_logbar(dlog_view,NULL,tmpbuf);
+		update_logbar(dlog_view,NULL,tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 	return;
@@ -363,7 +363,7 @@ void stop_datalogging()
 	gtk_widget_set_sensitive(format_table,TRUE);
 	gtk_widget_set_sensitive(file_selection,TRUE);
 	tmpbuf = g_strdup_printf("DataLogging Stopped...\n");
-	update_logbar(dlog_view,NULL,tmpbuf);
+	update_logbar(dlog_view,NULL,tmpbuf,TRUE);
 	g_free(tmpbuf);
 	return;
 }

@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <globals.h>
 #include <interrogate.h>
+#include <notifications.h>
 #include <string.h>
 #include <structures.h>
 #include <sys/stat.h>
@@ -26,6 +27,8 @@
 
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
+extern GtkWidget *interr_view;
+
 extern struct Serial_Params *serial_params;
 gfloat ecu_version;
 const gchar *cmd_chars[] = {"A","C","Q","V","S","I","?"};
@@ -35,7 +38,6 @@ struct Cmd_Results
 	gchar *cmd_string;
 	gint count;
 } ;
-static gint interrogate_count = 0;
 
 /* The Various MegaSquirt variants that MegaTunix attempts to support
  * have one major problem.  Inconsistent version numbering.  Several
@@ -91,12 +93,8 @@ void interrogate_ecu()
 	gint i_bytes = 0;
 	gint quest_bytes = 0;
 	gchar *tmpbuf;
-	GtkTextIter iter;
-	GtkTextIter end_iter;
-	GtkTextIter begin_iter;
 	gint tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
 	struct Cmd_Results cmd_results[tests_to_run]; 
-	interrogate_count++;
 
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
@@ -120,15 +118,6 @@ void interrogate_ecu()
 		}
 		cmd_results[i].count = count;
 	}
-
-	if (interrogate_count > 1)
-	{
-		gtk_text_buffer_get_iter_at_offset (textbuffer, &begin_iter, 0);
-		gtk_text_buffer_get_end_iter (textbuffer, &end_iter);
-		gtk_text_buffer_delete (textbuffer,&begin_iter,&end_iter);
-		interrogate_count = 1;
-	}
-	gtk_text_buffer_get_iter_at_offset (textbuffer, &iter, 0);
 	for (i=0;i<tests_to_run;i++)
 	{
 		if (cmd_results[i].count > 0)
@@ -137,7 +126,7 @@ void interrogate_ecu()
 					"Command %s, returned %i bytes\n",
 					cmd_results[i].cmd_string, 
 					cmd_results[i].count);
-			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
+			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
 		else
@@ -145,7 +134,7 @@ void interrogate_ecu()
 			tmpbuf = g_strdup_printf(
 					"Command %s isn't supported...\n",
 					cmd_results[i].cmd_string);
-			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
+			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
 	}
@@ -154,7 +143,6 @@ void interrogate_ecu()
 	serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
 	tcflush(serial_params->fd, TCIFLUSH);
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
-
 
 	for(i=0;i<tests_to_run;i++)
 	{
@@ -169,52 +157,35 @@ void interrogate_ecu()
 	}
 	if (v_bytes > 125)
 	{
-		gtk_text_buffer_insert_with_tags_by_name(
-				textbuffer,&iter,
-				"Code is DualTable version: ",
-				-1,"red_foreground",NULL);
+		update_logbar(interr_view,"warning","Code is DualTable version: ",FALSE);
 		if (s_bytes == 0)
-		{
-			gtk_text_buffer_insert_with_tags_by_name(
-					textbuffer,&iter,
-					"0.90, 0.99b, or 1.00\n",
-					-1,"red_foreground",NULL);
-		}
+			update_logbar(interr_view,"warning","0.90, 0.99b, or 1.00\n",FALSE);
 		if (s_bytes == 18)
-		{
-			gtk_text_buffer_insert_with_tags_by_name(
-					textbuffer,&iter,
-					"1.01\n",-1,"red_foreground",NULL);
-		}
+			update_logbar(interr_view,"warning","1.01\n",FALSE);
 		if (s_bytes == 19)
-		{
-			gtk_text_buffer_insert_with_tags_by_name(
-					textbuffer,&iter,
-					"1.02\n",-1,"red_foreground",NULL);
-		}
+			update_logbar(interr_view,"warning","1.02\n",FALSE);
 	}
 	else
 	{
 		if (quest_bytes > 0)
-			gtk_text_buffer_insert_with_tags_by_name(
-					textbuffer,&iter,
-					"Code is MegaSquirtnEDIS v3.05 code\n",
-					-1,"red_foreground",NULL);
+			update_logbar(interr_view,"warning","Code is MegaSquirtnEDIS v3.05 code\n",FALSE);
+
+					
 		else
 		{
 			switch (i_bytes)
 			{
 				case 0:
-					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is Standard B&G 2.x code\n", -1,"red_foreground",NULL);
+					update_logbar(interr_view,"warning","Code is Standard B&G 2.x code\n",FALSE);
 					break;
 				case 83:
-					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n", -1,"red_foreground",NULL);
+					update_logbar(interr_view,"warning","Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n",FALSE);
 					break;
 				case 95:
-					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 3.0\n", -1,"red_foreground",NULL);
+					update_logbar(interr_view,"warning","Code is SquirtnSpark 3.0\n",FALSE);
 					break;
 				default:
-					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is not recognized\n Contact author!!!\n", -1,"red_foreground",NULL);
+					update_logbar(interr_view,"warning","Code is not recognized\n Contact author!!!\n",FALSE);
 					break;
 			}
 		}

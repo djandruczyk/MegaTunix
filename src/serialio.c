@@ -66,7 +66,7 @@ void open_serial(int port_num)
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
 		tmpbuf = g_strdup_printf("COM%i Opened Successfully\n",port_num);
-		update_logbar(comms_view,NULL,tmpbuf);
+		update_logbar(comms_view,NULL,tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 	else
@@ -76,7 +76,7 @@ void open_serial(int port_num)
 		serial_params->open = FALSE;
 		tmpbuf = g_strdup_printf("Error Opening COM%i Error Code: %s\n",
 				port_num,strerror(errno));
-		update_logbar(comms_view,"warning",tmpbuf);
+		update_logbar(comms_view,"warning",tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 
@@ -174,7 +174,7 @@ void close_serial()
 
 	tmpbuf = g_strdup_printf("COM Port Closed\n");
 	/* An Closing the comm port */
-	update_logbar(comms_view,NULL,tmpbuf);
+	update_logbar(comms_view,NULL,tmpbuf,TRUE);
 	g_free(tmpbuf);
 }
 
@@ -224,7 +224,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 
 			tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 			/* COMMS test succeeded */
-			update_logbar(comms_view,NULL,tmpbuf);
+			update_logbar(comms_view,NULL,tmpbuf,TRUE);
 			g_free(tmpbuf);
 			connected = TRUE;
 			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
@@ -234,7 +234,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		{
 			tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 			/* An I/O Error occurred with the MegaSquirt ECU */
-			update_logbar(comms_view,"warning",tmpbuf);
+			update_logbar(comms_view,"warning",tmpbuf,TRUE);
 			g_free(tmpbuf);
 			connected = FALSE;
 			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
@@ -253,7 +253,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	{
 		tmpbuf = g_strdup_printf("Serial Port NOT Opened, Can NOT Test ECU Communications\n");
 		/* Serial port not opened, can't test */
-		update_logbar(comms_view,"warning",tmpbuf);
+		update_logbar(comms_view,"warning",tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 	locked = FALSE;

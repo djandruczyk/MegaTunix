@@ -135,7 +135,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 							labels.dlog_file_lab),
 						selected_filename);
 				tmpbuf = g_strdup_printf("DataLog File Opened\n");
-				update_logbar(dlog_view,NULL,tmpbuf);
+				update_logbar(dlog_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
 				log_opened = TRUE;
 			}
@@ -148,7 +148,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				gtk_widget_set_sensitive(
 						buttons.start_dlog_but,FALSE);
 				tmpbuf = g_strdup_printf("Failure opening DataLog File, Error Code: %s\n",strerror(errno));
-				update_logbar(dlog_view,"warning",tmpbuf);
+				update_logbar(dlog_view,"warning",tmpbuf,TRUE);
 				g_free(tmpbuf);
 			}
 			break;
@@ -172,14 +172,14 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				else
 					tmpbuf = g_strdup_printf("VEX File Opened, VEX Comment already stored\n");
 
-				update_logbar(tools_view,NULL,tmpbuf);
+				update_logbar(tools_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
 			}
 			else
 			{
 				vex_opened = FALSE;
 				tmpbuf = g_strdup_printf("File Couldn't be opened to export to!!!\n");
-				update_logbar(tools_view,"warning",tmpbuf);
+				update_logbar(tools_view,"warning",tmpbuf,TRUE);
 				g_free(tmpbuf);
 			}
 			break;
@@ -197,14 +197,14 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				gtk_widget_set_sensitive(
 						buttons.ve_clear_vex_but,TRUE);
 				tmpbuf = g_strdup_printf("VEX File Opened.\n");
-				update_logbar(tools_view,NULL,tmpbuf);
+				update_logbar(tools_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
 			}
 			else
 			{
 				vex_opened = FALSE;
 				tmpbuf = g_strdup_printf("File Couldn't be opened to import from!!!\n");
-				update_logbar(tools_view,"warning",tmpbuf);
+				update_logbar(tools_view,"warning",tmpbuf,TRUE);
 				g_free(tmpbuf);
 			}
 			break;
@@ -230,7 +230,7 @@ void close_file(FileIoType filetype)
 							labels.dlog_file_lab),
 						"No Log Selected Yet");
 				tmpbuf = g_strdup_printf("Logfile Closed\n");
-				update_logbar(dlog_view,NULL,tmpbuf);
+				update_logbar(dlog_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
 				gtk_widget_set_sensitive(									buttons.stop_dlog_but,FALSE);
 				gtk_widget_set_sensitive(
@@ -247,7 +247,7 @@ void close_file(FileIoType filetype)
 							labels.vex_file_lab),
 						"No VEX File Selected Yet");
 				tmpbuf = g_strdup_printf("VEX File Closed\n");
-				update_logbar(tools_view,NULL,tmpbuf);
+				update_logbar(tools_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
 				gtk_entry_set_text(GTK_ENTRY(
 							entries.vex_comment_entry),
@@ -278,7 +278,7 @@ void truncate_file(FileIoType filetype)
 					tmpbuf = g_strdup_printf("DataLog Truncation Error: %s\n",strerror(errno));
 				else
 					tmpbuf = g_strdup_printf("DataLog Truncation successful\n");
-				update_logbar(dlog_view,NULL,tmpbuf);
+				update_logbar(dlog_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
 			}
 			break;
@@ -287,7 +287,7 @@ void truncate_file(FileIoType filetype)
 			{
 				truncate(io_file_name,0);
 				tmpbuf = g_strdup_printf("VEX File Truncated\n");
-				update_logbar(tools_view,NULL,tmpbuf);
+				update_logbar(tools_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
 				g_free(tmpbuf);
 

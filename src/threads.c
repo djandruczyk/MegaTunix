@@ -51,7 +51,7 @@ void start_serial_thread()
 	{
 		tmpbuf = g_strdup_printf("Serial Port Not Open, Can NOT Start Thread in This State\n");
 		/* Serial not opened, can't start thread in this state */
-		update_logbar(comms_view,"warning",tmpbuf);
+		update_logbar(comms_view,"warning",tmpbuf,TRUE);
 		g_free(tmpbuf);
 		return;	
 	}
@@ -59,7 +59,7 @@ void start_serial_thread()
 	{
 		tmpbuf = g_strdup_printf("Serial Reader Thread ALREADY Running\n");
 		/* Thread already running, can't run more than 1 */
-		update_logbar(comms_view,"warning",tmpbuf);
+		update_logbar(comms_view,"warning",tmpbuf,TRUE);
 		g_free(tmpbuf);
 		return;
 	}
@@ -75,7 +75,7 @@ void start_serial_thread()
 		/* SUCCESS */
 		tmpbuf = g_strdup_printf("Successfull Start of Realtime Reader Thread\n");
 		/* Thread started successfully */
-		update_logbar(comms_view,NULL,tmpbuf);
+		update_logbar(comms_view,NULL,tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 	else
@@ -83,7 +83,7 @@ void start_serial_thread()
 		/* FAILURE */
 		tmpbuf = g_strdup_printf("FAILURE Attempting To Start Realtime Reader Thread\n");
 		/* Thread failed to start */
-		update_logbar(comms_view,"warning",tmpbuf);
+		update_logbar(comms_view,"warning",tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 	return;
@@ -104,7 +104,7 @@ int stop_serial_thread()
 	{
 		tmpbuf = g_strdup_printf("Realtime Reader Thread ALREADY Stopped\n");
 		/* Thread not running, can't stop what hasn't started yet*/
-		update_logbar(comms_view,"warning",tmpbuf);
+		update_logbar(comms_view,"warning",tmpbuf,TRUE);
 		g_free(tmpbuf);
 		raw_reader_running = FALSE;
 		raw_reader_stopped = TRUE;
@@ -118,7 +118,7 @@ int stop_serial_thread()
 			usleep(100);
 		tmpbuf = g_strdup_printf("Realtime Reader Thread Stopped Normally\n");
 		/* Thread stopped normally */
-		update_logbar(comms_view,NULL,tmpbuf);
+		update_logbar(comms_view,NULL,tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 	locked = FALSE;
