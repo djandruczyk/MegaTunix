@@ -23,5 +23,6 @@
 void load_lookuptables(void *);
 gboolean load_table(gchar *, gchar *);
 void get_table(gpointer, gpointer, gpointer );
+gint reverse_lookup(gint , gint *);
 
 #endif

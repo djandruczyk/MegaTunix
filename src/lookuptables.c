@@ -91,3 +91,23 @@ gboolean load_table(gchar *table_name, gchar *filename)
 
 	return TRUE;
 }
+
+
+gint reverse_lookup(gint value, gint *table)
+{
+	gint i = 0;
+	gint closest_index = 0;
+	gint minimum = 65535;
+
+	while (table[i])
+	{
+		if (abs(table[i]-value) < minimum)
+		{
+			minimum = abs(table[i]-value);
+			closest_index = i;
+		}
+		i++;
+	}
+
+	return closest_index;
+}

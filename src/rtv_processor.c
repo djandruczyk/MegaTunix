@@ -94,7 +94,7 @@ void process_rt_vars(void *incoming)
 				tmpf = handle_special(object,special);
 				goto store_it;
 			}
-			evaluator = (void *)g_object_get_data(object,"evaluator");
+			evaluator = (void *)g_object_get_data(object,"ul_evaluator");
 			if (!evaluator)
 			{
 				expr = g_object_get_data(object,"ul_conv_expr");
@@ -103,11 +103,11 @@ void process_rt_vars(void *incoming)
 					dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")),CRITICAL);
 					exit (-3);
 				}
-				evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
+				evaluator = evaluator_create(expr);
 				if (!evaluator)
-					dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",(gchar *)g_object_get_data(object,"ul_conv_expr")),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr),CRITICAL);
 				assert(evaluator);
-				g_object_set_data(object,"evaluator",evaluator);
+				g_object_set_data(object,"ul_evaluator",evaluator);
 			}
 			else
 				assert(evaluator);
@@ -259,25 +259,29 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 		}
 
 	}
-	evaluator = g_object_get_data(object,"evaluator");
-	if (!evaluator)
+	if (type == UPLOAD)
 	{
-		if (type == UPLOAD)
-			evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
-		else if (type == DOWNLOAD)
-			evaluator = evaluator_create(g_object_get_data(object,"dl_conv_expr"));
-		else
-			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
+		evaluator = (void *)g_object_get_data(object,"ul_evaluator");
 		if (!evaluator)
-		{
-			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
-			exit (-1);
-		}
-		else
-			g_object_set_data(object,"evaluator",evaluator);
+			evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
+		g_object_set_data(object,"ul_evaluator",evaluator);
+	}
+	else if (type == DOWNLOAD)
+	{
+		evaluator = (void *)g_object_get_data(object,"dl_evaluator");
+		if (!evaluator)
+			evaluator = evaluator_create(g_object_get_data(object,"dl_conv_expr"));
+		g_object_set_data(object,"dl_evaluator",evaluator);
 	}
 	else
-		assert(evaluator);
+		dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
+	if (!evaluator)
+	{
+		dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
+		exit (-1);
+	}
+
+	assert(evaluator);
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
 	for (i=0;i<total_symbols;i++)
 	{
