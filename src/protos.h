@@ -18,6 +18,7 @@
 #include <config.h>
 #include "globals.h"
 #include "defines.h"
+#include "configfile.h"
 #include <gtk/gtk.h>
 
 /* Function Prototypes for all objects/source files */

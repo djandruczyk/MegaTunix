@@ -14,9 +14,6 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-#include <glib.h>
-
-
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
 
@@ -78,37 +75,11 @@
 #define MS_SER_ERRCOUNT		0x7b
 
 /* Group classes */
+/* Classes are used for widget groups, i.e. the VEtable, RPM bins, etc... */
 #define	ACCEL			0x80
 #define RPM			0x81
 #define KPA			0x82
 #define VE			0x83
 #define WARMUP			0x84
-
-/* Configfile structs. (derived from an older version of XMMS) */
-
-#ifndef MEGASQUIRT_LIN_CONFIGFILE_H
-#define MEGASQUIRT_LIN_CONFIGFILE_H
-
-#include <glib.h>
-
-typedef struct
-{
-        gchar *key;
-        gchar *value;
-}
-ConfigLine;
-
-typedef struct
-{
-        gchar *name;
-        GList *lines;
-}
-ConfigSection;
-typedef struct
-{
-        GList *sections;
-}
-ConfigFile;
-#endif 
 
 #endif

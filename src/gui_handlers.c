@@ -31,7 +31,7 @@ extern int raw_reader_stopped;
 extern int read_wait_time;
 extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
-struct 
+struct Reqd_Fuel
 {
 	GtkWidget *disp_spin;		/* Engine size  1-1000 Cu-in */
 	GtkWidget *cyls_spin;		/* # of Cylinders  1-12 */
@@ -41,7 +41,8 @@ struct
 	gint cyls;
 	gint inj_rate;
 	gfloat afr;
-}reqd_fuel ;
+}reqd_fuel = { NULL,NULL,NULL,NULL,350,8,19,14.7};
+
 
 
 void leave(GtkWidget *widget, gpointer *data)
@@ -171,10 +172,6 @@ int reqd_fuel_popup()
 	GtkAdjustment *adj;
 
 	req_fuel_popup=TRUE;
-	//	reqd_fuel.disp = 350;
-	reqd_fuel.cyls = 4;
-	//	reqd_fuel.inj_rate = 19;
-	reqd_fuel.afr = 14.7;
 	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(popup),"Required Fuel Calc");
 	gtk_container_set_border_width(GTK_CONTAINER(popup),10);

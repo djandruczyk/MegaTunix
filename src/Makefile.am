@@ -5,6 +5,7 @@ bin_PROGRAMS = megatunix
 
 megatunix_SOURCES = \
 	Makefile \
+	configfile.h \
 	globals.h \
 	defines.h \
 	protos.h \
