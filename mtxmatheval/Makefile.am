@@ -28,15 +28,16 @@ EXTRA_DIST = parser.h
 
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)
 
-lib_LTLIBRARIES = libmtxmatheval.la
+noinst_LTLIBRARIES = libmtxmatheval.la
 
 libmtxmatheval_la_SOURCES = parser.y scanner.l error.c matheval.c	\
 node.c symbol_table.c xmalloc.c xmath.c
 
-libmtxmatheval_la_LDFLAGS = -version-info 1:0:0
-libmtxmatheval_la_LIBADD = -lfl -lm
+libmtxmatheval_la_LDFLAGS = 
+libmtxmatheval_la_LIBADD = -lfl -lm 
+#libmtxmatheval_la_LIBADD = -lfl -lm 
 
-include_HEADERS = mtxmatheval.h
-noinst_HEADERS = common.h error.h node.h symbol_table.h xmalloc.h	\
+# include_HEADERS = mtxmatheval.h
+noinst_HEADERS = mtxmatheval.h common.h error.h node.h symbol_table.h xmalloc.h	\
 xmath.h
 

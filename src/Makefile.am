@@ -46,7 +46,7 @@ megatunix_SOURCES = \
 	vex_support.c \
 	warmwizard_gui.c
 
-megatunix_LDADD = @PACKAGE_LIBS@  
+megatunix_LDADD = @PACKAGE_LIBS@  -L../mtxmatheval -lmtxmatheval -lfl
 
 megatunix_LDFLAGS =
 

@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+void test_math(void);
 void realtime_map_load(void *, gchar *);
 /* Prototypes */
 

@@ -4,174 +4,193 @@ raw_total=22
 derived_total=36
 
 [derived_0]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=raw_secl
 dlog_gui_name=MS Clock
+dlog_field_name=SECL
 source=_RAW_
 offset=0
 conv_expr=x*1
 
 [derived_1]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=raw_rpm
 dlog_gui_name=RAW_RPM
+dlog_field_name=RPM
 source=_RAW_
 offset=13
 conv_expr=x*1
 
 [derived_2]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=rpmx100
 dlog_gui_name=RPMx100
+dlog_field_name=RPMX100
 source=_RAW_
 offset=13
 conv_expr=x*100
 
 [derived_3]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=enginebit
 dlog_gui_name=EngineBits
+dlog_field_name=ENGINEBIT
 source=_RAW_
 offset=2
 conv_expr=x*1
 
 [derived_4]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=gammae
 dlog_gui_name=GammaE
+dlog_field_name=GAMMAE
 source=_RAW_
 offset=17
 conv_expr=x*1
 
 [derived_5]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=tpsvolt
 dlog_gui_name=TPS Volts
+dlog_field_name=TPSVOLT
 source=_RAW_
 offset=7
 conv_expr=x*(5.0/255.0)
 
 [derived_6]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=mapvolt
 dlog_gui_name=MAP Volts
+dlog_field_name=MAPVOLT
 source=_RAW_
 offset=4
 conv_expr=x*(5.0/255.0)
 
 [derived_7]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=barovolt
 dlog_gui_name=BARO Volts
+dlog_field_name=BAROVOLT
 source=_RAW_
 offset=3
 conv_expr=x*(5.0/255.0)
 
 [derived_8]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=matvolt
 dlog_gui_name=MAT Volts
+dlog_field_name=MATVOLT
 source=_RAW_
 offset=5
 conv_expr=x*(5.0/255.0)
 
 [derived_9]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=cltvolt
 dlog_gui_name=CLT Volts
+dlog_field_name=CLTVOLT
 source=_RAW_
 offset=6
 conv_expr=x*(5.0/255.0)
 
 [derived_10]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=tpscount
 dlog_gui_name=TPS Counts
+dlog_field_name=TPSCOUNT
 source=_RAW_
 offset=7
 conv_expr=x*1
 
 [derived_11]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=mapcount
 dlog_gui_name=MAP Counts
+dlog_field_name=MAPCOUNT
 source=_RAW_
 offset=4
 conv_expr=x*1
 
 [derived_12]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=barocount
 dlog_gui_name=BARO Counts
+dlog_field_name=BAROCOUNT
 source=_RAW_
 offset=3
 conv_expr=x*1
 
 [derived_13]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=matcount
 dlog_gui_name=MAT Counts
+dlog_field_name=MATCOUNT
 source=_RAW_
 offset=5
 conv_expr=x*1
 
 [derived_14]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=cltcount
 dlog_gui_name=CLT Counts
+dlog_field_name=CLTCOUNT
 source=_RAW_
 offset=6
 conv_expr=x*1
 
 [derived_15]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=tpspercent
 dlog_gui_name=TPS %
+dlog_field_name=TPSPERCENT
 source=_RAW_
 offset=7
 conv_expr=(x/255.0)*100
 
 [derived_16]
-keys=internal_name,dlog_gui_name,source,offset,lookuptable,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,lookuptable,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_
 internal_name=mapkpa
 dlog_gui_name=MAP KpA
+dlog_field_name=MAPKPA
 source=_RAW_
 offset=4
 lookuptable=kpa_coversion
 conv_expr=x*1
 
 [derived_17]
-keys=internal_name,dlog_gui_name,source,offset,lookuptable,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,lookuptable,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_
 internal_name=barokpa
 dlog_gui_name=BARO KpA
+dlog_field_name=BAROKPA
 source=_RAW_
 offset=3
 lookuptable=kpa_coversion
 conv_expr=x*1
 
 [derived_18]
-keys=internal_name,dlog_gui_name,source,offset,lookuptable,conv_expr,temp_dep
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_,_BOOL_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,lookuptable,conv_expr,temp_dep
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_,_BOOL_
 internal_name=matdeg
 dlog_gui_name=MAT (\302\260)
+dlog_field_name=MATDEG
 source=_RAW_
 offset=5
 lookuptable=matfactor
@@ -179,120 +198,133 @@ conv_expr=x-40
 temp_dep=TRUE
 
 [derived_19]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=cltdeg
 dlog_gui_name=CLT (\302\260)
+dlog_field_name=CLTDEG
 source=_RAW_
 offset=6
 lookuptable=cltfactor
 conv_expr=x-40
 
 [derived_20]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=o2volt
 dlog_gui_name=O<sub>2</sub> Volts
+dlog_field_name=O2VOLT
 source=_RAW_
 offset=9
 conv_expr=x*(5.0/255.0)
 
 [derived_21]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=o2count
 dlog_gui_name=O<sub>2</sub> Counts
+dlog_field_name=O2COUNT
 source=_RAW_
 offset=9
 conv_expr=x*1
 
 [derived_22]
-keys=internal_name,dlog_gui_name,source,offset,lookuptable,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,lookuptable,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_,_STRING_
 internal_name=afr
 dlog_gui_name=AFR
+dlog_field_name=AFR
 source=_RAW_
 offset=9
 lookuptable=afrtable
 conv_expr=x*1
 
 [derived_23]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=battvolt
 dlog_gui_name=BATT Volts
+dlog_field_name=BATTVOLT
 source=_RAW_
 offset=8
 conv_expr=x*(5.0/255.0)*6.0;
 
 [derived_24]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=battcount
 dlog_gui_name=BATT Counts
+dlog_field_name=BATTCOUNT
 source=_RAW_
 offset=8
 conv_expr=x*1
 
 [derived_25]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=aircorr
 dlog_gui_name=AIRCorr
+dlog_field_name=AIRCORR
 source=_RAW_
 offset=11
 conv_expr=x*1
 
 [derived_26]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=barocorr
 dlog_gui_name=BAROCorr
+dlog_field_name=BAROCORR
 source=_RAW_
 offset=16
 conv_expr=x*1
 
 [derived_27]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=egocorr
 dlog_gui_name=EGOCorr
+dlog_field_name=EGOCORR
 source=_RAW_
 offset=10
 conv_expr=x*1
 
 [derived_28]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=warmcorr
 dlog_gui_name=WARMCorr
+dlog_field_name=WARMCORR
 source=_RAW_
 offset=12
 conv_expr=x*1
 
 [derived_29]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=tpsaccel
 dlog_gui_name=TPSAccel
+dlog_field_name=TPSACCEL
 source=_RAW_
 offset=15
 conv_expr=x*1
 
 [derived_30]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=vecurr1
 dlog_gui_name=VE 1
+dlog_field_name=VE1
 source=_RAW_
 offset=18
 conv_expr=x*1
 
 [derived_31]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=pw1
 dlog_gui_name=PW 1
+dlog_field_name=PW1
 source=_RAW_
 offset=14
 conv_expr=x/10.0
@@ -302,6 +334,7 @@ keys=internal_name,dlog_gui_name,complex_expr,conv_expr
 key_types=_STRING_,_STRING_,_BOOL_,_STRING_
 internal_name=dcycle1
 dlog_gui_name=Dutycycle 1
+dlog_field_name=DCYCLE1
 source=_RAW_
 complex_expr=TRUE
 conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw1/10)/((1200/eng_type+1)/raw_rpm))
@@ -323,28 +356,31 @@ eng_type_bitshift=2
 raw_rpm_offset=13
 
 [derived_33]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=bspot1
 dlog_gui_name=BSpot 1
+dlog_field_name=BSPOT1
 source=_RAW_
 offset=19
 conv_expr=x*1
 
 [derived_34]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=bspot2
 dlog_gui_name=BSpot 2
+dlog_field_name=BSPOT2
 source=_RAW_
 offset=20
 conv_expr=x*1
 
 [derived_35]
-keys=internal_name,dlog_gui_name,source,offset,conv_expr
-key_types=_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,source,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_ENUM_,_INT_,_STRING_
 internal_name=bspot3
 dlog_gui_name=BSpot 3
+dlog_field_name=BSPOT3
 source=_RAW_
 offset=21
 conv_expr=x*1
