@@ -38,8 +38,9 @@ struct Serial_Params
 
 struct Firmware_Details
 {
-	gchar *firmware_name;	/* textual name*/
+	gchar *name;		/* textual name */
 	gchar **tab_list;	/* vector string of tabs to load */
+	gchar *rtv_map_file;	/* realtime vars map filename */
         gint rtvars_size;       /* Size of Realtime vars datablock */
         gint ignvars_size;      /* Size of Realtime vars datablock */
         gint memblock_size;     /* Size of Raw_Memory datablock */
@@ -291,13 +292,14 @@ struct Page_Params
 	/* Interrogator structures.... */
 struct Canidate
 {
+	gchar *name;		/* Name of this firmware */
 	gchar *filename;	/* absolute path to this canidate profile */
 	GHashTable *bytecounts;	/* byte count for each of the 10 test cmds */
 	gchar *sig_str;		/* Signature string to search for */
 	gchar *quest_str;	/* Ext Version string to search for */
 	gint ver_num;		/* Version number to search for */
-	gchar *firmware_name;	/* Name of this firmware */
 	gchar *load_tabs;	/* list of tabs to load into the gui */
+	gchar *rtv_map_file;	/* name of realtime vars map file */
 	Capabilities capabilities;	/* Bitmask of capabilities.... */
 	gchar * rt_cmd_key;	/* string key to hashtable for RT command */
 	gchar * ve_cmd_key;	/* string key to hashtable for VE command */

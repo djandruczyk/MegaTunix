@@ -314,7 +314,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	/* Set expected sizes for commands */
 	if (!firmware)
 		firmware = g_new0(struct Firmware_Details,1);
-	firmware->firmware_name = g_strdup(potential->firmware_name);
+	firmware->name = g_strdup(potential->name);
 	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
 	firmware->multi_page = potential->multi_page;
 	firmware->total_pages = potential->total_pages;
@@ -409,9 +409,9 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 
 
 	/* Display firmware version in the window... */
-	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",potential->firmware_name);
+	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",potential->name);
 
-	dbg_func(g_strdup_printf(__FILE__": determine_ecu() Detected Firmware: %s\n",potential->firmware_name),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": determine_ecu() Detected Firmware: %s\n",potential->name),INTERROGATOR);
 	gdk_threads_enter();
 	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 	gdk_threads_leave();
@@ -539,8 +539,8 @@ void close_profile(void *ptr)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
 		g_free(canidate->quest_str);
-	if (canidate->firmware_name)
-		g_free(canidate->firmware_name);
+	if (canidate->name)
+		g_free(canidate->name);
 	if (canidate->bytecounts)
 		g_hash_table_destroy(canidate->bytecounts);
 	g_free(canidate);
@@ -561,7 +561,7 @@ void * load_potential_match(GArray * cmd_array, gchar * filename)
 		canidate->filename = g_strdup(filename);
 		dbg_func(g_strdup_printf(__FILE__": load_potential_match() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
 		canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->firmware_name);
+		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->name);
 		load_bytecounts(cmd_array, canidate->bytecounts, (void *)cfgfile);
 		cfg_read_string(cfgfile,"parameters","SignatureQueryString",
 				&canidate->sig_str);
@@ -597,30 +597,45 @@ void load_profile_details(void *ptr)
 	if (cfgfile)
 	{	
 		dbg_func(g_strdup_printf(__FILE__": load_profile_details() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
-		cfg_read_string(cfgfile,"parameters","Rt_Cmd_Key",
-				&canidate->rt_cmd_key);
-		cfg_read_string(cfgfile,"parameters","VE_Cmd_Key",
-				&canidate->ve_cmd_key);
-		cfg_read_string(cfgfile,"parameters","Ign_Cmd_Key",
-				&canidate->ign_cmd_key);
-		cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
-				&canidate->raw_mem_cmd_key);
-		cfg_read_boolean(cfgfile,"parameters","MultiPage",
-				&canidate->multi_page);
-		cfg_read_int(cfgfile,"parameters","TotalPages",
-				&canidate->total_pages);
-		cfg_read_string(cfgfile,"parameters","Capabilities",
-				&tmpbuf);
-		canidate->capabilities = translate_capabilities(tmpbuf);
-		g_free(tmpbuf);
-		cfg_read_string(cfgfile,"gui","LoadTabs",
-				&canidate->load_tabs);
+		if(!cfg_read_string(cfgfile,"parameters","Rt_Cmd_Key",
+				&canidate->rt_cmd_key))
+			dbg_func(__FILE__": load_profile_details(), \"Rt_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"parameters","VE_Cmd_Key",
+				&canidate->ve_cmd_key))
+			dbg_func(__FILE__": load_profile_details(), \"VE_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"parameters","Ign_Cmd_Key",
+				&canidate->ign_cmd_key))
+			dbg_func(__FILE__": load_profile_details(), \"Ign_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
+				&canidate->raw_mem_cmd_key))
+			dbg_func(__FILE__": load_profile_details(), \"Raw_Mem_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+
+		if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
+				&canidate->multi_page))
+			dbg_func(__FILE__": load_profile_details(), \"MultiPage\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_int(cfgfile,"parameters","TotalPages",
+				&canidate->total_pages))
+			dbg_func(__FILE__": load_profile_details(), \"TotalPages\" value not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"parameters","Capabilities",
+				&tmpbuf))
+			dbg_func(__FILE__": load_profile_details(), \"Capabilities\" enumeration list not found in interrogation profile, ERROR\n",CRITICAL);
+		else
+		{
+			canidate->capabilities = translate_capabilities(tmpbuf);
+			g_free(tmpbuf);
+		}
+		if(!cfg_read_string(cfgfile,"gui","LoadTabs",
+				&canidate->load_tabs))
+			dbg_func(__FILE__": load_profile_details(), \"LoadTabs\" list not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
+				&canidate->rtv_map_file))
+			dbg_func(__FILE__": load_profile_details(), \"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if (!cfg_read_string(cfgfile,"lookuptables","mat",
 				&canidate->mat_tbl_name))
-			printf("lookup table for mat not found\n");
+			dbg_func(__FILE__": load_profile_details(), \"MAT\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"lookuptables","clt",
 				&canidate->clt_tbl_name))
-			printf("lookup table for clt not found\n");
+			dbg_func(__FILE__": load_profile_details(), \"CLT\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);
 
 
 		/* Allocate space Table Offsets structures.... */
@@ -628,18 +643,24 @@ void load_profile_details(void *ptr)
 		{
 			canidate->page_params[i] = g_new0(struct Page_Params,1);
 			section = g_strdup_printf("page_%i",i);
-			cfg_read_int(cfgfile,section,"ve_base_offset",
-					&canidate->page_params[i]->ve_base);
-			cfg_read_int(cfgfile,section,"rpm_base_offset",
-					&canidate->page_params[i]->rpm_base);
-			cfg_read_int(cfgfile,section,"load_base_offset",
-					&canidate->page_params[i]->load_base);
-			cfg_read_int(cfgfile,section,"rpm_bincount",
-					&canidate->page_params[i]->rpm_bincount);
-			cfg_read_int(cfgfile,section,"load_bincount",
-					&canidate->page_params[i]->load_bincount);
-			cfg_read_boolean(cfgfile,section,"is_spark",
-					&canidate->page_params[i]->is_spark);
+			if(!cfg_read_int(cfgfile,section,"ve_base_offset",
+					&canidate->page_params[i]->ve_base))
+				dbg_func(__FILE__": load_profile_details(), \"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"rpm_base_offset",
+					&canidate->page_params[i]->rpm_base))
+				dbg_func(__FILE__": load_profile_details(), \"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"load_base_offset",
+					&canidate->page_params[i]->load_base))
+				dbg_func(__FILE__": load_profile_details(), \"load_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"rpm_bincount",
+					&canidate->page_params[i]->rpm_bincount))
+				dbg_func(__FILE__": load_profile_details(), \"rpm_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"load_bincount",
+					&canidate->page_params[i]->load_bincount))
+				dbg_func(__FILE__": load_profile_details(), \"load_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_boolean(cfgfile,section,"is_spark",
+					&canidate->page_params[i]->is_spark))
+				dbg_func(__FILE__": load_profile_details(), \"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			g_free(section);
 		}
 
@@ -667,12 +688,15 @@ void load_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 		bytecount = -1;
 		cmd = g_array_index(cmd_array,struct Command *, i);
 		tmpbuf = g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page);
-		cfg_read_int(cfgfile,"bytecounts",tmpbuf,
-				&bytecount);
-		
-		g_hash_table_insert(hash, g_strdup(tmpbuf),GINT_TO_POINTER(bytecount));
-		dbg_func(g_strdup_printf(__FILE__": load_bytecounts() inserting key %s, val %i\n",tmpbuf,bytecount),INTERROGATOR);
-		g_free(tmpbuf);
+		if(!cfg_read_int(cfgfile,"bytecounts",tmpbuf,
+				&bytecount))
+			dbg_func(g_strdup_printf(__FILE__": load_bytecounts(), \"%s\" key not found in interrogation profile, ERROR\n",tmpbuf),CRITICAL);
+		else
+		{
+			g_hash_table_insert(hash, g_strdup(tmpbuf),GINT_TO_POINTER(bytecount));
+			dbg_func(g_strdup_printf(__FILE__": load_bytecounts() inserting key %s, val %i\n",tmpbuf,bytecount),INTERROGATOR);
+			g_free(tmpbuf);
+		}
 	}	
 
 }
@@ -730,7 +754,7 @@ gboolean check_for_match(GArray *cmd_array, void *pot_ptr, void *can_ptr)
 			return FALSE;
 		}
 	}
-	dbg_func(g_strdup_printf(__FILE__": determine_ecu() all bytecount tests passed for firmware %s\n",potential->firmware_name),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": determine_ecu() all bytecount tests passed for firmware %s\n",potential->name),INTERROGATOR);
 	/* If all test pass, now check the Extended version
 	 * If it matches,  jump out...
 	 */
