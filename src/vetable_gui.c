@@ -22,6 +22,8 @@
 extern struct v1_2_Constants constants;
 extern struct ms_ve_constants ve_constants;
 extern struct Buttons buttons;
+GtkWidget *map_tps_frame;
+GtkWidget *map_tps_label;
 
 int build_vetable(GtkWidget *parent_frame)
 {
@@ -48,8 +50,12 @@ int build_vetable(GtkWidget *parent_frame)
         vbox2 = gtk_vbox_new(FALSE,0);
         gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
 
-	frame = gtk_frame_new("MAP Bins");
+	frame = gtk_frame_new(NULL);
+	label = gtk_label_new("MAP Bins");
+	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+	map_tps_frame = frame;
 
 	table = gtk_table_new(9,1,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -58,8 +64,8 @@ int build_vetable(GtkWidget *parent_frame)
         gtk_container_add(GTK_CONTAINER(frame),table);
 
 	/* KPA spinbuttons */
-	label = gtk_label_new("Kpa");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+	map_tps_label = gtk_label_new("Kpa");
+	gtk_table_attach (GTK_TABLE (table), map_tps_label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	for (y=0;y<8;y++)

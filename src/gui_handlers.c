@@ -35,6 +35,8 @@ extern struct Labels labels;
 extern gint connected;
 extern gint force_status_update;
 extern gfloat ego_pbar_divisor;
+extern GtkWidget *map_tps_frame;
+extern GtkWidget *map_tps_label;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
@@ -88,6 +90,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				ve_constants->config11.value = tmp;
 				dload_val = tmp;
 				offset = 116;
+				check_config11(dload_val);
 				break;
 			case 12:
 				tmp = ve_constants->config12.value;
@@ -104,12 +107,8 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				ve_constants->config13.value = tmp;
 				dload_val = tmp;
 				offset = 118;
-				/* check O2 sensor bit and adjust factor
-				   so runtime display has a sane scale... */
-				if (((tmp >> 1)&0x1) == 1)
-					ego_pbar_divisor=5.0;
-				else
-					ego_pbar_divisor=1.2;
+				check_config13(dload_val);
+
 				break;
 			case 14:
 				/*SPECIAL*/
@@ -502,6 +501,9 @@ void update_ve_const()
 	gint i;
 	gfloat tmp;
 
+	check_config11(ve_constants->config11.value);
+	check_config13(ve_constants->config13.value);
+
 	/* req-fuel  */
 	/*				/     num_injectors     \
 	 *          req_fuel_from_MS * |-------------------------|
@@ -864,4 +866,56 @@ void check_req_fuel_limits()
 	}
 	return ;
 	
+}
+
+void check_config11(int tmp)
+{
+	/* checks some of the bits in the config11 variable and 
+	 * adjusts some important things as necessary....
+	 */
+//	if ((tmp &0x3) == 0)	
+//		printf("using 115KPA map sensor\n");
+//	if ((tmp &0x3) == 1)	
+//		printf("using 250KPA map sensor\n");
+}
+void check_config13(int tmp)
+{
+	GtkWidget *label;
+	/* checks bits of the confgi13 bitfield and forces
+	 * gui to update/adapt as necessary...
+	 */
+
+
+	/* check O2 sensor bit and adjust factor
+	   so runtime display has a sane scale... */
+	if (((tmp >> 1)&0x1) == 1)
+		ego_pbar_divisor=5.0;
+	else
+		ego_pbar_divisor=1.2;
+
+	/* Check SD/Alpha-N button and adjust VEtable labels
+	 * to suit
+	 */
+	if (((tmp >> 2)&0x1) == 1)
+	{
+		label = gtk_frame_get_label_widget(
+				GTK_FRAME
+				(map_tps_frame));
+		gtk_label_set_text(GTK_LABEL
+				(label),"TPS Bins");
+		gtk_label_set_text(GTK_LABEL
+				(map_tps_label),
+				"TPS %");
+	}
+	else
+	{
+		label = gtk_frame_get_label_widget(
+				GTK_FRAME
+				(map_tps_frame));
+		gtk_label_set_text(GTK_LABEL
+				(label),"MAP Bins");
+		gtk_label_set_text(GTK_LABEL
+				(map_tps_label),
+				"Kpa");
+	}
 }

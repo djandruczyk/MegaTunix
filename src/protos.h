@@ -97,6 +97,8 @@ int toggle_button_handler(GtkWidget *, gpointer);
 int spinner_changed(GtkWidget *, gpointer);
 int classed_spinner_changed(GtkWidget *, gpointer);
 void check_req_fuel_limits(void);
+void check_config11(gint);
+void check_config13(gint);
 /* gui_handlers.c */
 
 /* req_fuel.c */
