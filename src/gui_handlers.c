@@ -20,7 +20,6 @@
 #include <defines.h>
 #include <globals.h>
 #include <constants.h>
-#include <datalogging.h>
 
 
 extern gint req_fuel_popup;
@@ -91,7 +90,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 			case 11:
 				tmp = ve_constants->config11.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << (bit_pos-1));
+				tmp = tmp | (bit_val << bit_pos);
 				ve_constants->config11.value = tmp;
 				dload_val = tmp;
 				offset = 116;
@@ -100,7 +99,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 			case 12:
 				tmp = ve_constants->config12.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << (bit_pos-1));
+				tmp = tmp | (bit_val << bit_pos);
 				ve_constants->config12.value = tmp;
 				dload_val = tmp;
 				offset = 117;
@@ -108,7 +107,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 			case 13:
 				tmp = ve_constants->config13.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << (bit_pos-1));
+				tmp = tmp | (bit_val << bit_pos);
 				ve_constants->config13.value = tmp;
 				dload_val = tmp;
 				offset = 118;

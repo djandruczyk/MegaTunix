@@ -56,6 +56,9 @@
 #define STOP_DATALOGGING	0x39
 #define CLASSIC_LOG		0x3a
 #define CUSTOM_LOG		0x3b
+#define COMMA			0x3c
+#define TAB			0x3d
+#define SPACE			0x3e
 
 /* Spinbuttons */
 #define REQ_FUEL_DISP		0x40

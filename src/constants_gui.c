@@ -268,7 +268,7 @@ int build_constants(GtkWidget *parent_frame)
 	constants.speed_den_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -283,7 +283,7 @@ int build_constants(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Alpha-N");
 	constants.alpha_n_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -314,7 +314,7 @@ int build_constants(GtkWidget *parent_frame)
 	constants.multi_port_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -329,7 +329,7 @@ int build_constants(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
 	constants.tbi_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -360,7 +360,7 @@ int build_constants(GtkWidget *parent_frame)
 	constants.four_stroke_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -375,7 +375,7 @@ int build_constants(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
 	constants.two_stroke_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -406,7 +406,7 @@ int build_constants(GtkWidget *parent_frame)
 	constants.even_fire_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -421,7 +421,7 @@ int build_constants(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Odd Fire");
 	constants.odd_fire_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -452,7 +452,7 @@ int build_constants(GtkWidget *parent_frame)
 	constants.map_115_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -467,7 +467,7 @@ int build_constants(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"250 kPa");
 	constants.map_250_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -498,7 +498,7 @@ int build_constants(GtkWidget *parent_frame)
 	constants.baro_ena_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -513,7 +513,7 @@ int build_constants(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Disabled");
 	constants.baro_disa_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
 	g_object_set_data(G_OBJECT(button),"dl_type",

@@ -431,7 +431,7 @@ int build_enrichments(GtkWidget *parent_frame)
         constants.nbo2_but = button;
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
         g_object_set_data(G_OBJECT(button),"dl_type",
@@ -446,7 +446,7 @@ int build_enrichments(GtkWidget *parent_frame)
         button = gtk_radio_button_new_with_label(group,"Wide-Band");
         constants.wbo2_but = button;
         g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
         g_object_set_data(G_OBJECT(button),"dl_type",

@@ -25,6 +25,7 @@
 
 
 gint def_comm_port;
+gint ready = FALSE;
 
 int main(int argc, char ** argv)
 {
@@ -54,6 +55,7 @@ int main(int argc, char ** argv)
 
 	setup_serial_params();	/* Setup the serial port for I/O */
 
+	ready = TRUE;
 	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();
