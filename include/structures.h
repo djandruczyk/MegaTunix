@@ -70,6 +70,7 @@ struct DynamicMisc
 	GtkWidget *warmwizard_table;
         GtkWidget *status[7];           /* Status boxes */
         GtkWidget *ww_status[7];           /* Status boxes */
+	GtkWidget *vetable2;
 };
 
 /* this is required so we keep track of the gui controls so we

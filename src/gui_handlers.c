@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <3d_vetable.h>
 #include <config.h>
 #include <conversions.h>
 #include <datalogging_gui.h>
@@ -27,7 +28,6 @@
 #include <serialio.h>
 #include <stdio.h>
 #include <structures.h>
-#include <tuning_gui.h>
 #include <threads.h>
 #include <vex_support.h>
 
@@ -1011,11 +1011,13 @@ void set_dualtable_mode(gboolean state)
 	if (state)
 	{
 		dualtable = TRUE;
+		gtk_widget_set_sensitive(misc.vetable2,TRUE);
 		printf("enabling dualtable mode controls\n");
 	}
 	else
 	{
 		dualtable = FALSE;
+		gtk_widget_set_sensitive(misc.vetable2,FALSE);
 		printf("disabling dualtable mode controls\n");
 	}
 }

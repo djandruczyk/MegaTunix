@@ -28,6 +28,8 @@
 #include <gdk/gdkkeysyms.h>
 
 /* Prototypes */
+gint create_3d_view(GtkWidget *, gpointer );
+gint reset_3d_status(GtkWidget *);
 GdkGLConfig* get_gl_config(void);
 void ve_realize (GtkWidget *, gpointer );
 gboolean ve_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);

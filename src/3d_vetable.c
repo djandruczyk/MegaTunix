@@ -50,6 +50,148 @@ static gchar label[6];
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
 
+
+#define DEFAULT_WIDTH  400
+#define DEFAULT_HEIGHT 320                                                                                  
+static gboolean winstat[2] = {FALSE,FALSE};
+extern struct DynamicButtons buttons;
+
+gint create_3d_view(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *window;
+	GtkWidget *frame;
+	GtkWidget *vbox;
+	GtkWidget *button;
+	GtkWidget *vbox2;
+	GtkWidget *hbox;
+	GtkWidget *drawing_area;
+	GtkWidget *table;
+        GdkGLConfig *gl_config;
+	extern GtkTooltips *tip;
+	gchar *tmpbuf;
+	gint tbl = (gint)data;
+
+	if (winstat[tbl] == TRUE)
+		return TRUE;
+	else
+		winstat[tbl] = TRUE;
+	
+	tmpbuf = g_strdup_printf("3D VE-Table for table %i\n",(gint)data);
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title(GTK_WINDOW(window), tmpbuf);
+	g_free(tmpbuf);
+	gtk_widget_set_size_request(window,DEFAULT_WIDTH,DEFAULT_HEIGHT);
+	gtk_container_set_border_width(GTK_CONTAINER(window),0);
+	g_object_set_data(G_OBJECT(window),"table",GINT_TO_POINTER(tbl));
+	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+			G_CALLBACK(reset_3d_status),
+			(gpointer) window);
+	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+			G_CALLBACK(gtk_widget_destroy),
+			(gpointer) window);
+
+	vbox = gtk_vbox_new(FALSE,0);
+        gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+        gtk_container_add(GTK_CONTAINER(window),vbox);
+
+        hbox = gtk_hbox_new(FALSE,5);
+        gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
+
+        frame = gtk_frame_new("VE Table 3D display");
+        gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+        gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
+
+        drawing_area = gtk_drawing_area_new();
+        gtk_container_add(GTK_CONTAINER(frame),drawing_area);
+
+        gl_config = get_gl_config();
+        gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
+                        TRUE, GDK_GL_RGBA_TYPE);
+
+        GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
+
+        gtk_widget_add_events (drawing_area,
+                        GDK_BUTTON1_MOTION_MASK |
+                        GDK_BUTTON2_MOTION_MASK |
+                        GDK_BUTTON_PRESS_MASK   |
+                        GDK_KEY_PRESS_MASK              |
+                        GDK_KEY_RELEASE_MASK    |
+                        GDK_FOCUS_CHANGE_MASK   |
+                        GDK_VISIBILITY_NOTIFY_MASK);
+
+        /* Connect signal handlers to the drawing area */
+        g_signal_connect_after(G_OBJECT (drawing_area), "realize",
+                        G_CALLBACK (ve_realize), NULL);
+        g_signal_connect(G_OBJECT (drawing_area), "configure_event",
+                        G_CALLBACK (ve_configure_event), NULL);
+        g_signal_connect(G_OBJECT (drawing_area), "expose_event",
+                        G_CALLBACK (ve_expose_event), NULL);
+        g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
+                        G_CALLBACK (ve_motion_notify_event), NULL);
+        g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
+                        G_CALLBACK (ve_button_press_event), NULL);
+        g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
+                        G_CALLBACK (ve_key_press_event), NULL);
+        g_signal_connect(G_OBJECT (drawing_area), "focus_in_event",
+                        G_CALLBACK (ve_focus_in_event), NULL);
+
+        /* End of GL window, Now controls for it.... */
+        frame = gtk_frame_new("3D Display Controls");
+        gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
+
+        vbox2 = gtk_vbox_new(FALSE,0);
+        gtk_container_add(GTK_CONTAINER(frame),vbox2);
+        button = gtk_button_new_with_label("Reset Display");
+        gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(RESET_3D_VIEW));
+
+        frame = gtk_frame_new("Commands");
+        gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
+
+        table = gtk_table_new(1,2,FALSE);
+        gtk_table_set_col_spacings(GTK_TABLE(table),5);
+        gtk_table_set_row_spacings(GTK_TABLE(table),5);
+        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+        gtk_container_add(GTK_CONTAINER(frame),table);
+
+        button = gtk_button_new_with_label("Get Data from ECU");
+        gtk_tooltips_set_tip(tip,button,
+                        "Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
+
+        gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+        g_signal_connect(G_OBJECT(button), "clicked",
+                       G_CALLBACK(std_button_handler),
+                        GINT_TO_POINTER(READ_VE_CONST));
+
+        button = gtk_button_new_with_label("Permanently Store Data in ECU");
+        //buttons.tuning_store_but = button;
+        gtk_tooltips_set_tip(tip,button,
+                        "Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
+        gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+        g_signal_connect(G_OBJECT(button), "clicked",
+                        G_CALLBACK(std_button_handler),
+                        GINT_TO_POINTER(BURN_MS_FLASH));
+
+
+	gtk_widget_show_all(window);
+
+	return TRUE;
+}
+gint reset_3d_status(GtkWidget * widget)
+{
+	gint tbl = (gint)g_object_get_data(G_OBJECT(widget),"table");
+	winstat[(gint)tbl] = FALSE;
+	return FALSE;  /* MUST return false otherwise 
+			* other handlers WILL NOT run.
+			*/
+}
+	
 void reset_3d_view()
 {
 	grid = 8;

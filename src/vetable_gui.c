@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <3d_vetable.h>
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
@@ -30,9 +31,9 @@ int build_vetable(GtkWidget *parent_frame)
 	GtkWidget *sep;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
-	GtkWidget *vbox3;
 	GtkWidget *hbox;
 	GtkWidget *label;
+	GtkWidget *basetable;
 	GtkWidget *table;
 	GtkWidget *spinner;
 	GtkWidget *frame;
@@ -61,11 +62,13 @@ int build_vetable(GtkWidget *parent_frame)
 	label = gtk_label_new("VE Table 1 (All MS Variants)");
 	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
 
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,TRUE,0);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
 
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	basetable = gtk_table_new(2,2,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(basetable),5);
+	gtk_table_set_row_spacings(GTK_TABLE(basetable),0);
+	gtk_box_pack_start(GTK_BOX(hbox),basetable,FALSE,FALSE,0);
 
 
 	frame = gtk_frame_new(NULL);
@@ -73,7 +76,9 @@ int build_vetable(GtkWidget *parent_frame)
 	label = gtk_label_new("MAP Bins");
 	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (basetable), frame, 0, 1, 0, 1,
+			(GtkAttachOptions) (0),
+			(GtkAttachOptions) (0), 0, 0);
 
 	table = gtk_table_new(9,1,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -115,12 +120,10 @@ int build_vetable(GtkWidget *parent_frame)
 
 	}
 
-
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
-
 	frame = gtk_frame_new("Volumetric Efficiency (%)");
-	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (basetable), frame, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	table = gtk_table_new(9,8,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -167,9 +170,12 @@ int build_vetable(GtkWidget *parent_frame)
 		}
 	}
 
+
 	/* RPM Table */
 	frame = gtk_frame_new("RPM Bins");
-	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (basetable), frame, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	table = gtk_table_new(1,8,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),1);
@@ -203,6 +209,14 @@ int build_vetable(GtkWidget *parent_frame)
 
 	}
 
+	button = gtk_button_new_with_label("3D View");
+	g_signal_connect (G_OBJECT(button), "clicked",
+			G_CALLBACK (create_3d_view),
+			GINT_TO_POINTER(1));
+	gtk_table_attach (GTK_TABLE (basetable), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
 	/* VEtable 2 *DUAL TABLE ONLY* */
 	label = gtk_label_new("\n");
 	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
@@ -214,19 +228,24 @@ int build_vetable(GtkWidget *parent_frame)
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
 
-	hbox = gtk_hbox_new(FALSE,5);
+	hbox = gtk_hbox_new(FALSE,0);
+	misc.vetable2 = hbox;
 	gtk_widget_set_sensitive(hbox,FALSE);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
 
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	basetable = gtk_table_new(2,2,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(basetable),5);
+	gtk_table_set_row_spacings(GTK_TABLE(basetable),0);
+	gtk_box_pack_start(GTK_BOX(hbox),basetable,FALSE,FALSE,0);
 
 	frame = gtk_frame_new(NULL);
 	misc.p1_map_tps_frame = frame;
 	label = gtk_label_new("MAP Bins");
 	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (basetable), frame, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	table = gtk_table_new(9,1,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -269,12 +288,10 @@ int build_vetable(GtkWidget *parent_frame)
 
 	}
 
-
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
-
 	frame = gtk_frame_new("Volumetric Efficiency (%)");
-	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (basetable), frame, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	table = gtk_table_new(9,8,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -324,7 +341,9 @@ int build_vetable(GtkWidget *parent_frame)
 
 	/* RPM Table */
 	frame = gtk_frame_new("RPM Bins");
-	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (basetable), frame, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	table = gtk_table_new(1,8,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),1);
@@ -357,6 +376,14 @@ int build_vetable(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 	}
+
+	button = gtk_button_new_with_label("3D View");
+	g_signal_connect (G_OBJECT(button), "clicked",
+			G_CALLBACK (create_3d_view),
+			GINT_TO_POINTER(2));
+	gtk_table_attach (GTK_TABLE (basetable), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,TRUE,0);
