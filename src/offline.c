@@ -167,6 +167,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 		
 		i++;
 	}
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 	g_strfreev(filenames);
 	
 	gtk_widget_show_all(dialog);
