@@ -76,7 +76,7 @@ void build_ignition(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Ignition Trigger and Cranking Settings");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 	
-	table = gtk_table_new(5,4,FALSE);
+	table = gtk_table_new(5,3,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_table_set_row_spacings(GTK_TABLE(table),10);
         gtk_table_set_row_spacing(GTK_TABLE(table),1,5);
@@ -184,7 +184,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(72.0,0.0,134.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
         ign_widgets[80] = spinner;
-        gtk_widget_set_size_request(spinner,45,-1);
+        gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(80));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -197,7 +197,7 @@ void build_ignition(GtkWidget *parent_frame)
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(TRIGGER_ANGLE));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (GTK_SHRINK|GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Crank Angle:");
@@ -210,7 +210,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
         ign_widgets[83] = spinner;
-        gtk_widget_set_size_request(spinner,45,-1);
+        gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(83));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -236,7 +236,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,10,1.0,1.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
         ign_widgets[84] = spinner;
-        gtk_widget_set_size_request(spinner,45,-1);
+        gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(84));
         g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -252,11 +252,72 @@ void build_ignition(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("cyles at startup");
+	label = gtk_label_new("cycles at startup");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE(table),label,2,3,4,5,
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+
+	frame = gtk_frame_new("Timing Offset Settings");
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
+	
+	table = gtk_table_new(4,2,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),15);
+	gtk_table_set_row_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	label = gtk_label_new("Trim Angle:");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE(table),label,0,1,0,1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
+
+	/* Trim Angle */
+        adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
+        spinner = gtk_spin_button_new(adj,1,1);
+        ign_widgets[82] = spinner;
+        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(82));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER((gint)(2.84*100)));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
+        g_object_set_data(G_OBJECT(spinner),"ign_parm",GINT_TO_POINTER(TRUE));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Fixed Angle:");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE(table),label,0,1,1,2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	/* Fixed Angle */
+        adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
+        spinner = gtk_spin_button_new(adj,1,1);
+        ign_widgets[81] = spinner;
+        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(81));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER((gint)(2.84*100)));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
+        g_object_set_data(G_OBJECT(spinner),"ign_parm",GINT_TO_POINTER(TRUE));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	/* Not written yet */
 	return;

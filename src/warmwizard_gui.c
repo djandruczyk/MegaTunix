@@ -59,7 +59,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	/*  Box to contain the warmup entries */
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,TRUE,0);
 
 	frame = gtk_frame_new("Warmup Enrichment (%)");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
@@ -143,8 +143,8 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	/* Cranking Pulsewidth at -40 deg F */
 	tmpspin = ve_widgets[64];
@@ -153,8 +153,8 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	/* Cranking Pulsewidth at 170 deg F */
 	tmpspin = ve_widgets[65];
@@ -163,8 +163,8 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 2, 3,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	/* Afterstart Enrichment frame */
 	frame = gtk_frame_new("Afterstart Enrichment");
@@ -185,7 +185,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
-	label = gtk_label_new("# of Ignition Cycles  ");
+	label = gtk_label_new("# of Ignition Cycles   ");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -198,8 +198,8 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	/* Number of cycles  */
 	tmpspin = ve_widgets[67];
@@ -208,14 +208,14 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
 	table = gtk_table_new(5,4,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),7);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacing(GTK_TABLE(table),0,0);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);

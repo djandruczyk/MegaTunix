@@ -45,13 +45,13 @@ void build_dt_params(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+	hbox = gtk_hbox_new(TRUE,5);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
 	frame = gtk_frame_new("Injector to Table Mapping");
 	dt_controls = g_list_append(dt_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
 	table = gtk_table_new(4,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -274,7 +274,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Cranking and Revlimiter");
 	dt_controls = g_list_append(dt_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 	
 	table = gtk_table_new(3,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),20);
@@ -347,13 +347,13 @@ void build_dt_params(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+	hbox = gtk_hbox_new(TRUE,5);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
 	frame = gtk_frame_new("Launch Control/Shift Light");
 	dt_controls = g_list_append(dt_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
 	table = gtk_table_new(3,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),10);
@@ -448,7 +448,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Boost Actuator Control");
 	dt_controls = g_list_append(dt_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
 	table = gtk_table_new(4,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
