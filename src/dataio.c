@@ -88,7 +88,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			}
 			if (bad_read)
 			{
-				dbg_func(__FILE__": handle_ms_data()\n\tError reading MS Clock (C_TEST)\n",CRITICAL);
+				dbg_func(__FILE__": handle_ms_data()\n\tError reading ECU Clock (C_TEST)\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
