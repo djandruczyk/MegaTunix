@@ -166,7 +166,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			{
 				if (iotype == DATALOG_EXPORT)
 				{
-					tmpbuf = g_strdup("File chosen for datalog already contained data, user has chosen not to over-write it...\n");
+					tmpbuf = g_strdup("File chosen for datalogging already contained data, user has chosen not to over-write it...\n");
 					update_logbar(dlog_view,"warning",tmpbuf,TRUE,FALSE);
 				}
 				else
@@ -244,8 +244,9 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				return;
 			}
 			backup_open = TRUE;
-			backup_all_ms_settings(iofile);
 			close_file(iofile);
+			backup_all_ms_settings(selected_filename);
+			backup_open = FALSE;
 			break;
 		case FULL_RESTORE:
 			if (restore_open)
@@ -255,8 +256,9 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				return;
 			}
 			restore_open = TRUE;
-			restore_all_ms_settings(iofile);
 			close_file(iofile);
+			restore_all_ms_settings(selected_filename);
+			restore_open = FALSE;
 			break;
 
 		case VE_EXPORT:
@@ -376,40 +378,43 @@ void close_file(void *ptr)
 
 void truncate_file(FileIoType filetype, gchar *filename)
 {
-	gchar *tmpbuf;
+	gchar *tmpbuf = NULL;
+	gchar *base=NULL;
 
 	switch (filetype)
 	{
 		case DATALOG_EXPORT:
-			if (truncate(filename,0) == 0)
-				tmpbuf = g_strdup_printf("DataLog Truncation successful\n");
-			else
-				tmpbuf = g_strdup_printf("DataLog Truncation FAILED\n");
-			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
-			g_free(tmpbuf);
+			base = g_strdup("DataLog ");
 			break;
 		case VE_EXPORT:
-			if (truncate(filename,0) == 0)
-				tmpbuf = g_strdup_printf("VE Export file Truncated successfully\n");
-			else
-				tmpbuf = g_strdup_printf("File Truncation FAILED\n");
-			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
-			g_free(tmpbuf);
+			base = g_strdup("VE Export ");
+			break;
+		case FULL_BACKUP:
+			base = g_strdup("MS Data Backup ");
 			break;
 		default:
-			dbg_func(g_strdup_printf(__FILE__": truncate_file(), truncating nothing, iotype was %i\n",filetype),CRITICAL);
+			base = g_strdup("Unknown Type ");
 			break;
-
 	}
+	if (truncate(filename,0) == 0)
+		tmpbuf = g_strdup_printf("%sFile Truncation successful\n",base);
+	else
+		tmpbuf = g_strdup_printf("%sFile Truncation FAILED\n",base);
+	update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
+	g_free(tmpbuf);
+	g_free(base);
 }
 
-void backup_all_ms_settings(void *ptr)
+void backup_all_ms_settings(gchar *filename)
 {
+	extern struct Firmware_Details *firmware;
+	printf("backup settings to %s\n",filename);
+	
 	dbg_func(__FILE__": backup all MS settings to file isn't written yet...\n",CRITICAL);
 
 }
 
-void restore_all_ms_settings(void *ptr)
+void restore_all_ms_settings(gchar *filename)
 {
 	dbg_func(__FILE__": restore all MS settings to file isn't written yet...\n",CRITICAL);
 	

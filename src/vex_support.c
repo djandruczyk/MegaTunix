@@ -636,11 +636,11 @@ void revert_to_previous_data()
 	extern unsigned char * ms_data_backup[MAX_SUPPORTED_PAGES];
 	extern struct Firmware_Details *firmware;
 
-	for (i=0;i<firmware->total_pages;i++);
+	for (i=0;i<firmware->total_pages;i++)
 	{
 		memcpy(ms_data[i], ms_data_backup[i], 2*MS_PAGE_SIZE);
-		update_ve_const();
 	}
+	update_ve_const();
 	gtk_widget_set_sensitive(buttons.tools_revert_but,FALSE);
 	update_logbar(tools_view,"warning","Reverting to previous settings....\n",TRUE,FALSE);
 }
