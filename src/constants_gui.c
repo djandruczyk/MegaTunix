@@ -74,23 +74,25 @@ int build_constants(GtkWidget *parent_frame)
 	/* Required Fuel */
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
+        constants.req_fuel_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(REQ_FUEL_1));
-        constants.req_fuel_spin = spinner;
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+			GINT_TO_POINTER(REQ_FUEL));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
+        constants.req_fuel_base_spin = spinner;
+	gtk_widget_set_sensitive(spinner,FALSE);
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_widget_set_sensitive(spinner,FALSE);
-        constants.req_fuel_base_spin = spinner;
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -107,36 +109,41 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 	
+	/* Injector Open Time */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
+        constants.inj_open_time_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(INJ_OPEN_TIME));
-        constants.inj_open_time_spin = spinner;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,60,-1);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(BATT_CORR));
-        constants.batt_corr_spin = spinner;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Inj. Open Time\n(ms)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	/* Battery Voltage Correction Factor */
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1,0);
+        spinner = gtk_spin_button_new(adj,0,1);
+        constants.batt_corr_spin = spinner;
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(BATT_CORR));
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -158,35 +165,41 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 
+	/* PWM Current Limit % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
+        constants.pwm_curr_lim_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(PWM_CUR_LIM));
-        constants.pwm_curr_lim_spin = spinner;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,60,-1);
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(PWM_TIME_THRES));
-        constants.pwm_time_max_spin = spinner;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("PWM Current\n Limit (%)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	/* PWM Time threshold */
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
+        spinner = gtk_spin_button_new(adj,0,1);
+        constants.pwm_time_max_spin = spinner;
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(PWM_TIME_THRES));
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -205,15 +218,18 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
+	/* Fast Idle Temp Threshold */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(140.0,0.0,250.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
+        constants.fast_idle_thresh_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(122));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(FAST_IDLE_THRES));
-        constants.fast_idle_thresh_spin = spinner;
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(122));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -223,8 +239,6 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-
-
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
@@ -249,29 +263,35 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Speed Density");
+	constants.speed_den_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.speed_den_but = button;
 
 	button = gtk_radio_button_new_with_label(group,"Alpha-N");
+	constants.alpha_n_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.alpha_n_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -289,29 +309,35 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Multi-Port");
+	constants.multi_port_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.multi_port_but = button;
 
 	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
+	constants.tbi_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.tbi_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -329,28 +355,35 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Four-Stroke");
+	constants.four_stroke_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.four_stroke_but = button;
+
 	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
+	constants.two_stroke_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.two_stroke_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -368,28 +401,35 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Even Fire");
+	constants.even_fire_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.even_fire_but = button;
+
 	button = gtk_radio_button_new_with_label(group,"Odd Fire");
+	constants.odd_fire_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.odd_fire_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -407,28 +447,35 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"115 kPa");
+	constants.map_115_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.map_115_but = button;
+
 	button = gtk_radio_button_new_with_label(group,"250 kPa");
+	constants.map_250_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.map_250_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -446,28 +493,35 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Narrow-Band");
+	constants.nbo2_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.nbo2_but = button;
+
 	button = gtk_radio_button_new_with_label(group,"Wide-Band");
+	constants.wbo2_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.wbo2_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -485,28 +539,35 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Enabled");
+	constants.baro_ena_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.baro_ena_but = button;
+
 	button = gtk_radio_button_new_with_label(group,"Disabled");
+	constants.baro_disa_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.baro_disa_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -524,22 +585,31 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Simultaneous");
+	constants.simul_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(DEFERRED));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.simul_but = button;
+
 	button = gtk_radio_button_new_with_label(group,"Alternate");
+	constants.alternate_but = button;
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(DEFERRED));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
-	constants.alternate_but = button;
 
 	/* Injection Control cyls/injectors, etc.. */
 	frame = gtk_frame_new("Cylinder/Injection Configuration");
@@ -552,17 +622,18 @@ int build_constants(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
+        constants.inj_per_cycle_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			NULL);
-//			GINT_TO_POINTER(INJ_PER_CYCLE));
-        constants.inj_per_cycle_spin = spinner;
-//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("# of Injections per Cycle");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -570,14 +641,15 @@ int build_constants(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
+        constants.injectors_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			NULL);
 //			GINT_TO_POINTER(NUM_INJECTORS));
-        constants.injectors_spin = spinner;
-//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -588,14 +660,15 @@ int build_constants(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
+        constants.cylinders_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			NULL);
 //			GINT_TO_POINTER(NUM_CYLINDERS));
-        constants.cylinders_spin = spinner;
-//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);

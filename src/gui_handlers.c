@@ -44,27 +44,79 @@ void leave(GtkWidget *widget, gpointer *data)
 
 int toggle_button_handler(GtkWidget *widget, gpointer *data)
 {
-	gint config_num;
-	gint bit_pos;
-	gint bit_val;
+	gint config_num = 0;
+	gint bit_pos = 0;
+	gint bit_val = 0;
+	gint bitmask = 0;
+	gint dload_val = 0;
+	unsigned char tmp = 0;
+	gint offset = 0;
+	gint dl_type = 0;
 
         if (paused_handlers)
                 return TRUE;
 
 	config_num = (gint)g_object_get_data(G_OBJECT(widget),"config_num");
+	dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
+	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{
 		/* If control reaches here, the toggle button is down */
-		printf("config_num %i, bit_pos %i, bit_val %i\n",config_num,bit_pos,bit_val);		
+		printf("config_num %i, bit_pos %i, bit_val %i,bitmask %i\n",config_num,bit_pos,bit_val,bitmask);		
+		switch (config_num)
+		{
+			case 11:
+				tmp = ve_constants->config11.value;
+				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp | (bit_val << (bit_pos-1));
+				ve_constants->config11.value = tmp;
+				dload_val = tmp;
+				offset = 117;
+				break;
+			case 12:
+				tmp = ve_constants->config12.value;
+				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp | (bit_val << (bit_pos-1));
+				dload_val = tmp;
+				offset = 118;
+				break;
+			case 13:
+				tmp = ve_constants->config13.value;
+				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp | (bit_val << (bit_pos-1));
+				dload_val = tmp;
+				offset = 119;
+				break;
+			case 14:
+				/*SPECIAL*/
+				offset = 93;
+				if (bit_val)
+				{
+					ve_constants->alternate=1;
+					dload_val = 1;
+				}
+				else
+				{
+					ve_constants->alternate=0;
+					dload_val = 0;
+				}
+				break;
 
-	} 
-	else 
-	{
-
-		/* If control reaches here, the toggle button is up */
+		}
+		if (dl_type == IMMEDIATE)
+		{
+			printf("Immediate download\n");
+			write_ve_const(dload_val, offset);
+		}
+		else if (dl_type == DEFERRED)
+		{
+			printf("Test if in gList, if not add it\n");
+			printf("Deferred download (inter-related variable)\n");
+			printf("tests should be performed and downlaod button\nchanged to RED to inform user to force a download\n");
+		}
 	}
 	return TRUE;
 }
@@ -148,8 +200,8 @@ int classed_spinner_changed(GtkWidget *widget, gpointer *data)
 			break;
 		case ACCEL:
 			ve_constants->accel_bins[offset-ACCEL_BINS_OFFSET] 
-				= (gint)((value*10.0)+.01);
-			write_ve_const((gint)((value*10.0)+.01), offset);
+				= (gint)((value*10.0)+.001);
+			write_ve_const((gint)((value*10.0)+.001), offset);
 			break;
 	}
 
@@ -167,11 +219,14 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	gint offset;
 	gint tmpi_x10 = 0; /* value*10 converted to an INT */
 	gint tmpi = 0;
+	gint dload_val = 0;
+	gint dl_type = 0;
 	if (paused_handlers)
 		return TRUE;
 	printf("spinner changed handler \n");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
+	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
 	tmpi_x10 = (int)((value*10.0)+.001);
 	tmpi = (int)(value+.001);
 
@@ -206,9 +261,8 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 		case REQ_FUEL_AFR:
 			reqd_fuel.afr = value;
 			break;
-		case REQ_FUEL_1:
+		case REQ_FUEL:
 //			ve_constants->req_fuel = tmpi_x10;
-//			write_ve_const(tmpi_x10, offset);
 			break;
 		case INJ_OPEN_TIME:
 			/* This funny conversion is needed cause of 
@@ -217,92 +271,106 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			 * one in SOME cases only..
 			 */
 			ve_constants->inj_open_time = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case BATT_CORR:
 			ve_constants->batt_corr = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case PWM_CUR_LIM:
 			ve_constants->pwm_curr_lim = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case PWM_TIME_THRES:
 			ve_constants->pwm_time_max = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case FAST_IDLE_THRES:
 			ve_constants->fast_idle_thresh = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case CRANK_PULSE_NEG_40:
 			ve_constants->cr_pulse_neg40 = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case CRANK_PULSE_170:
 			ve_constants->cr_pulse_pos170 = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case CRANK_PRIMING_PULSE:
 			ve_constants->cr_priming_pulse = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case AFTERSTART_ENRICH:
 			ve_constants->as_enrich = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case AFTERSTART_NUM_CYCLES:
 			ve_constants->as_num_cycles = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case TPS_TRIG_THRESH:
 			tmpi = (int)((value*5.0)+.001);
 			ve_constants->tps_trig_thresh = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case ACCEL_ENRICH_DUR:
 			ve_constants->accel_duration = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case COLD_ACCEL_ENRICH:
 			ve_constants->cold_accel_addon = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+			dload_val = tmpi_x10;
 			break;
 		case COLD_ACCEL_MULT:
 			ve_constants->cold_accel_mult = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case DECEL_CUT:
 			ve_constants->decel_cut = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case EGO_TEMP_ACTIVE:
 			ve_constants->ego_temp_active = tmpi+40;
-			write_ve_const(tmpi+40, offset);
+			dload_val = tmpi+40;
 			break;
 		case EGO_RPM_ACTIVE:
 			ve_constants->ego_rpm_active = tmpi/100;
-			write_ve_const(tmpi/100, offset);
+			dload_val = tmpi/100;
 			break;
 		case EGO_SW_VOLTAGE:	
 			tmpi = (int)((value*51.0)+.001);
 			ve_constants->ego_sw_voltage = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case EGO_STEP:	
 			ve_constants->ego_step = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case EGO_EVENTS:	
 			ve_constants->ego_events = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		case EGO_LIMIT:	
 			ve_constants->ego_limit = tmpi;
-			write_ve_const(tmpi, offset);
+			dload_val = tmpi;
 			break;
 		default:
+			/* Prevents MS corruption for a SW bug */
+			printf("ERROR spinbutton not handled\b\n");
+			dl_type = 0;  
 			break;
+	}
+	if (dl_type == IMMEDIATE)
+	{
+		printf("Immediate download\n");
+		write_ve_const(dload_val, offset);
+	}
+	else if (dl_type == DEFERRED)
+	{
+		printf("Test if in gList, if not add it\n");
+		printf("Deferred download (inter-related variable)\n");
+		printf("tests should be performed and downlaod button\nchanegd to RED to inform user to force a download\n");
 	}
 	return TRUE;
 
@@ -313,6 +381,7 @@ void update_const_ve()
 	gint i;
 	gfloat tmp;
 
+	printf("config11: %i, config12: %i. config13: %i\n",ve_constants->config11.value,ve_constants->config12.value,ve_constants->config13.value);
 	/* req-fuel  */
 	/*				/     num_injectors     \
 	 *          req_fuel_from_MS * |-------------------------|

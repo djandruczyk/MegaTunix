@@ -54,8 +54,8 @@
 #define REQ_FUEL_CYLS		0x41
 #define REQ_FUEL_INJ_RATE	0x42
 #define REQ_FUEL_AFR		0x43
-#define REQ_FUEL_1		0x44
-#define REQ_FUEL_2		0x45
+#define REQ_FUEL		0x44
+//#define REQ_FUEL_2		0x45
 #define	INJ_OPEN_TIME		0x46
 #define	BATT_CORR		0x47
 #define	PWM_CUR_LIM		0x48
@@ -92,5 +92,10 @@
 #define KPA			0x82
 #define VE			0x83
 #define WARMUP			0x84
+
+/* Download modes */
+#define IMMEDIATE		0x90
+#define DEFERRED		0x91
+
 
 #endif

@@ -248,6 +248,8 @@ void read_ve_const()
 
 void write_ve_const(gint value, gint offset)
 {
+	if (value > 255)
+		printf("large value, %i, offset %i\n",value,offset);
 	printf("Should write %i to location %i\n",value,offset);
 	
 	// Stub function, does nothing yet... 
