@@ -89,7 +89,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-		label = gtk_label_new("-40 Deg. F");
+	label = gtk_label_new("-40 Deg. F");
 	labels.cr_pulse_lowtemp_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -568,7 +568,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-		label = gtk_label_new("Coolant Temp\nActivation(Deg F.)");
+	label = gtk_label_new("Coolant Temp\nActivation(Deg F.)");
 	labels.ego_temp_lab = label;
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
@@ -728,7 +728,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(READ_FROM_MS));
+			GINT_TO_POINTER(READ_VE_CONST));
 
 	button = gtk_button_new_with_label("Permanently Store Data in ECU");
 	buttons.enrich_store_but = button;
@@ -739,7 +739,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(WRITE_TO_MS));
+			GINT_TO_POINTER(BURN_MS_FLASH));
 
 	return TRUE;
 }

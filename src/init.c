@@ -134,6 +134,7 @@ int read_config(void)
 		return (-1);	/* No file found */
 	}
 }
+
 void save_config(void)
 {
 	gchar *filename;
@@ -170,6 +171,7 @@ void save_config(void)
 	g_free(filename);
 
 }
+
 void make_megasquirt_dirs(void)
 {
 	gchar *filename;
@@ -183,7 +185,6 @@ void make_megasquirt_dirs(void)
 
 
 }
-
 
 void mem_alloc()
 {
@@ -200,7 +201,7 @@ void mem_alloc()
 	page1_conversions =  g_malloc(sizeof(struct Conversion_Chart));
 	page0_widgets = g_malloc(sizeof(struct Ve_Widgets));
 	page1_widgets = g_malloc(sizeof(struct Ve_Widgets));
-	
+
 	/* Set memory blocks to known states... */
 	memset((void *)serial_params, 0, sizeof(struct Serial_Params));
 	memset((void *)ve_const_p0, 0, MS_PAGE_SIZE);

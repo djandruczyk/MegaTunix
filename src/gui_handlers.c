@@ -127,14 +127,14 @@ gint toggle_button_handler(GtkWidget *widget, gpointer data)
 				forced_update = TRUE;
 				break;
 			case COMMA:
-                                delim = g_strdup(",");
-                                break;
-                        case TAB:
-                                delim = g_strdup("\t");
-                                break;
-                        case SPACE:
-                                delim = g_strdup(" ");
-                                break;
+				delim = g_strdup(",");
+				break;
+			case TAB:
+				delim = g_strdup("\t");
+				break;
+			case SPACE:
+				delim = g_strdup(" ");
+				break;
 
 
 		}
@@ -159,10 +159,10 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 	gint i = 0;
 	if (!ready)
 		return FALSE;
-        if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
-        {
-                switch((LoggingMode)data)
-                {
+	if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
+	{
+		switch((LoggingMode)data)
+		{
 			case MT_CLASSIC_LOG:
 				logging_mode = MT_CLASSIC_LOG;
 				clear_logables();
@@ -215,6 +215,7 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 	}
 	return TRUE;
 }
+
 gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint config_num = 0;
@@ -227,8 +228,8 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint offset = 0;
 	gint dl_type = 0;
 
-        if (paused_handlers)
-                return TRUE;
+	if (paused_handlers)
+		return TRUE;
 
 	config_num = (gint)g_object_get_data(G_OBJECT(widget),"config_num");
 	dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
@@ -285,24 +286,24 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 					dload_val = 0;
 				}
 				if (g_list_find(offsets,
-						GINT_TO_POINTER(offset))==NULL)
+							GINT_TO_POINTER(offset))==NULL)
 				{
 					offsets = g_list_append(offsets,
-						GINT_TO_POINTER(offset));
+							GINT_TO_POINTER(offset));
 					offset_data[g_list_index(offsets,
-						GINT_TO_POINTER(offset))] 
+							GINT_TO_POINTER(offset))] 
 						= dload_val;	
 					page_data[g_list_index(offsets,
-						GINT_TO_POINTER(offset))] 
+							GINT_TO_POINTER(offset))] 
 						= page;	
 				}
 				else
 				{
 					offset_data[g_list_index(offsets,
-						GINT_TO_POINTER(offset))] 
+							GINT_TO_POINTER(offset))] 
 						= dload_val;	
 					page_data[g_list_index(offsets,
-						GINT_TO_POINTER(offset))] 
+							GINT_TO_POINTER(offset))] 
 						= page;	
 				}
 				if (!err_flag)
@@ -348,7 +349,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			if (!req_fuel_popup)
 				reqd_fuel_popup();
 			break;
-		case READ_FROM_MS:
+		case READ_VE_CONST:
 			if (!raw_reader_running)
 				check_ecu_comms(NULL,NULL);
 			if (!connected)
@@ -363,7 +364,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 				constants_loaded = TRUE;
 			}
 			break;
-		case WRITE_TO_MS:
+		case BURN_MS_FLASH:
 			burn_flash();
 			break;
 		case SELECT_LOGFILE:
@@ -478,19 +479,19 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= dload_val;	
+					= dload_val;	
 				page_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= page;	
+					= page;	
 			}
 			else
 			{
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= dload_val;	
+					= dload_val;	
 				page_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= page;	
+					= page;	
 			}
 			if (num_cylinders % num_squirts)
 			{
@@ -521,19 +522,19 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= dload_val;	
+					= dload_val;	
 				page_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= page;	
+					= page;	
 			}
 			else
 			{
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= dload_val;	
+					= dload_val;	
 				page_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= page;	
+					= page;	
 			}
 			if (num_cylinders % num_squirts)
 			{
@@ -561,31 +562,31 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= dload_val;	
+					= dload_val;	
 				page_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= page;	
+					= page;	
 			}
 			else
 			{
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= dload_val;	
+					= dload_val;	
 				page_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
-						= page;	
+					= page;	
 			}
 			check_req_fuel_limits();
 			break;
 		case GENERIC:	/* Handles almost ALL other variables */
 			if (page == 0)
 				temp_dep = (gboolean)g_object_get_data(
-					G_OBJECT(page0_widgets->widget[offset]),
-					"temp_dep");
+						G_OBJECT(page0_widgets->widget[offset]),
+						"temp_dep");
 			else 
 				temp_dep = (gboolean)g_object_get_data(
-					G_OBJECT(page1_widgets->widget[offset]),
-					"temp_dep");
+						G_OBJECT(page1_widgets->widget[offset]),
+						"temp_dep");
 
 			if (temp_dep)
 			{
@@ -777,27 +778,28 @@ void update_ve_const()
 		temp_dep = FALSE;
 		dl_type = -1;
 		if (GTK_IS_OBJECT(page1_widgets->widget[i]))
-                {
-                        dl_type = (gint)g_object_get_data(
-                                        G_OBJECT(page1_widgets->widget[i]),
-                                        "dl_type");
-                        temp_dep = (gboolean)g_object_get_data(
-                                        G_OBJECT(page1_widgets->widget[i]),
-                                        "temp_dep");
-                        if (dl_type == IMMEDIATE)
-                                value = convert_after_upload(i,1);
-                        if (temp_dep)
-                        {
-                                if (!fahrenheit)
-                                        value = (value-32)*(5.0/9.0);
-                        }
+		{
+			dl_type = (gint)g_object_get_data(
+					G_OBJECT(page1_widgets->widget[i]),
+					"dl_type");
+			temp_dep = (gboolean)g_object_get_data(
+					G_OBJECT(page1_widgets->widget[i]),
+					"temp_dep");
+			if (dl_type == IMMEDIATE)
+				value = convert_after_upload(i,1);
+			if (temp_dep)
+			{
+				if (!fahrenheit)
+					value = (value-32)*(5.0/9.0);
+			}
 
-                        gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-                                                page1_widgets->widget[i]),value);
-                }
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+						page1_widgets->widget[i]),value);
+		}
 
 	}
 }
+
 void check_req_fuel_limits()
 {
 	gfloat tmp = 0.0;
@@ -845,7 +847,7 @@ void check_req_fuel_limits()
 	}
 	/* req-fuel info box  */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-			spinners.req_fuel_per_squirt_spin),
+				spinners.req_fuel_per_squirt_spin),
 			req_fuel_per_squirt);
 	page = 0;
 	if (tuning_zone_flag)
@@ -853,8 +855,8 @@ void check_req_fuel_limits()
 	   * This means each injector squirt is within sane limits, and
 	   * should be tunable and operate over a full rev-range
 	   */
-//		gtk_widget_modify_text(GTK_WIDGET(								spinners.req_fuel_per_squirt_spin),
-//				GTK_STATE_INSENSITIVE,&green);
+		//		gtk_widget_modify_text(GTK_WIDGET(								spinners.req_fuel_per_squirt_spin),
+		//				GTK_STATE_INSENSITIVE,&green);
 	}
 	if (lim_flag)
 	{	/*
@@ -916,15 +918,16 @@ void check_config11(int tmp)
 	{
 		kpa_conversion = na_map;
 		map_pbar_divisor = 115.0;
-	//	printf("using 115KPA map sensor\n");
+		//	printf("using 115KPA map sensor\n");
 	}
 	if ((tmp &0x3) == 1)	
 	{
 		kpa_conversion = turbo_map;
 		map_pbar_divisor = 255.0;
-	//	printf("using 250KPA map sensor\n");
+		//	printf("using 250KPA map sensor\n");
 	}
 }
+
 void check_config13(int tmp)
 {
 	GtkWidget *label;
@@ -966,4 +969,3 @@ void check_config13(int tmp)
 				"Kpa");
 	}
 }
-

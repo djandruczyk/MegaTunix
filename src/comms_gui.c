@@ -65,7 +65,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
 
 	frame = gtk_frame_new("Serial Status Messages");
-        gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
+	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
@@ -75,21 +75,21 @@ int build_comms(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 
-        sw = gtk_scrolled_window_new(NULL,NULL);
+	sw = gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
-        gtk_widget_set_size_request(sw,0,55);
-        gtk_container_add(GTK_CONTAINER(ebox),sw);
+	gtk_widget_set_size_request(sw,0,55);
+	gtk_container_add(GTK_CONTAINER(ebox),sw);
 
 	view = gtk_text_view_new();
 	comms_view = view;
-        gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-        gtk_text_buffer_create_tag(textbuffer,
-                                "warning",
-                                "foreground",
-                                "red", NULL);
+	gtk_text_buffer_create_tag(textbuffer,
+			"warning",
+			"foreground",
+			"red", NULL);
 
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
@@ -99,7 +99,7 @@ int build_comms(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-	"Sets the comm port to use.  MegaTunix use DOS/Win32 style port numbers like 1 for COM1, 2 for COM2 and so on.",NULL);
+			"Sets the comm port to use.  MegaTunix use DOS/Win32 style port numbers like 1 for COM1, 2 for COM2 and so on.",NULL);
 
 	frame = gtk_frame_new("Select Communications Port");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -115,8 +115,8 @@ int build_comms(GtkWidget *parent_frame)
 
 	label = gtk_label_new("Communications Port");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
 	spinner = gtk_spin_button_new(adj,0,0);
@@ -127,13 +127,13 @@ int build_comms(GtkWidget *parent_frame)
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SET_SER_PORT));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-	"Attempts to communicate with the MegaSquirt Controller.  Check the status log at the bottom of the window for the results of this test.",NULL);
+			"Attempts to communicate with the MegaSquirt Controller.  Check the status log at the bottom of the window for the results of this test.",NULL);
 
 	frame = gtk_frame_new("Verify ECU Communication");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -165,40 +165,40 @@ int build_comms(GtkWidget *parent_frame)
 	label = gtk_label_new("Polling Timeout (ms)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			100,poll_min,poll_max,poll_step,poll_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_tooltips_set_tip(tip,spinner,
-	"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds.  This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
+			"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds.  This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
 
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_POLL_TIMEO));
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->poll_timeout);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	gtk_tooltips_set_tip(tip,button,
-	"Starts reading the RealTime variables from the MS.  This will cause the Runtime Disp. page to begin updating continuously.",NULL);
+			"Starts reading the RealTime variables from the MS.  This will cause the Runtime Disp. page to begin updating continuously.",NULL);
 
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(START_REALTIME));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Serial Interval Delay\nBetween Reads(ms)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			100,interval_min,interval_max,
@@ -206,29 +206,29 @@ int build_comms(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_tooltips_set_tip(tip,spinner,
-	"Sets the time delay between read attempts for getting the RealTime variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS.  This will control the rate at which the Runtime Display page updates.",NULL);
+			"Sets the time delay between read attempts for getting the RealTime variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS.  This will control the rate at which the Runtime Display page updates.",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_INTERVAL_DELAY));
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->read_wait);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
 	gtk_tooltips_set_tip(tip,button,
-	"Stops reading the RT variables from the MS.  NOTE: you don't have to stop reading the RT vars to read the VEtable and Constants.  It is handled automatically for you.",NULL);
+			"Stops reading the RT variables from the MS.  NOTE: you don't have to stop reading the RT vars to read the VEtable and Constants.  It is handled automatically for you.",NULL);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(STOP_REALTIME));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-	"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
+			"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
 
 	frame = gtk_frame_new("MegaSquirt I/O Status");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -245,8 +245,8 @@ int build_comms(GtkWidget *parent_frame)
 	label = gtk_label_new("Good VE/Constants Reads");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
 	entries.comms_ve_readcount_entry = entry;
@@ -254,30 +254,30 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
-     
+
 	label = gtk_label_new("Good RealTime Reads");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
-     
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
+
 	entry = gtk_entry_new();
 	entries.comms_readcount_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
 	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Hard Reset Count");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	entry = gtk_entry_new();
 	entries.comms_reset_entry = entry;
@@ -285,14 +285,14 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Serial I/O Error Count");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	entry = gtk_entry_new();
 	entries.comms_sioerr_entry = entry;
@@ -300,16 +300,16 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
 	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Reset Status Counters...");
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (update_errcounts), \
 			GINT_TO_POINTER(TRUE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	gtk_widget_show_all(vbox);
 	return(0);

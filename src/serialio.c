@@ -80,7 +80,7 @@ void open_serial(int port_num)
 		update_logbar(comms_view,"warning",tmpbuf);
 		g_free(tmpbuf);
 	}
-	
+
 	g_free(devicename);
 	return;
 }
@@ -134,7 +134,7 @@ int setup_serial_params()
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
 	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arriv
-					  es */
+							 es */
 	serial_params->newtio.c_cc[VSWTC]    = 0;     /* '\0' */
 	serial_params->newtio.c_cc[VSTART]   = 0;     /* Ctrl-q */
 	serial_params->newtio.c_cc[VSTOP]    = 0;     /* Ctrl-s */
@@ -170,8 +170,8 @@ void close_serial()
 	close(serial_params->fd);
 	serial_params->open = FALSE;
 	connected = FALSE;
-        gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
-                        connected);
+	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+			connected);
 
 	tmpbuf = g_strdup_printf("COM Port Closed\n");
 	/* An Closing the comm port */
@@ -181,11 +181,11 @@ void close_serial()
 
 int check_ecu_comms(GtkWidget *widget, gpointer data)
 {
-        gint tmp;
-        gint res;
-        struct pollfd ufds;
+	gint tmp;
+	gint res;
+	struct pollfd ufds;
 	char buf[1024];
-        gint restart_reader = FALSE;
+	gint restart_reader = FALSE;
 	static gboolean locked;
 	gchar *tmpbuf;
 
@@ -194,7 +194,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	else
 		locked = TRUE;
 	/* If port isn't opened no sense trying here... */
-        if(serial_params->open)
+	if(serial_params->open)
 	{
 		/* If realtime reader thread is running shut it down... */
 		if (raw_reader_running)
@@ -212,7 +212,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		tcflush(serial_params->fd, TCIFLUSH);
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
-		/* request oen batch of relatime vars */
+		/* request one batch of realtime vars */
 		res = write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
@@ -229,7 +229,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			g_free(tmpbuf);
 			connected = TRUE;
 			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
-						connected);
+					connected);
 		}
 		else
 		{
@@ -240,7 +240,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			connected = FALSE;
 			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 					connected);
-		
+
 		}
 
 		serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
@@ -250,15 +250,15 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		if (restart_reader)
 			start_serial_thread();
 	}
-        else
-        {
-                tmpbuf = g_strdup_printf("Serial Port NOT Opened, Can NOT Test ECU Communications\n");
-                /* Serial port not opened, can't test */
+	else
+	{
+		tmpbuf = g_strdup_printf("Serial Port NOT Opened, Can NOT Test ECU Communications\n");
+		/* Serial port not opened, can't test */
 		update_logbar(comms_view,"warning",tmpbuf);
 		g_free(tmpbuf);
-        }
+	}
 	locked = FALSE;
-        return (0);
+	return (0);
 
 }
 
@@ -300,26 +300,26 @@ void read_ve_const()
 	{
 		connected = TRUE;
 		res = handle_ms_data(VE_AND_CONSTANTS_1);
-		
+
 	}
 	/*	 Dualtable not ready yet... 
-	if (dualtable)
-	{
-		res = write(serial_params->fd,"P1V",1);
-		res = poll (&ufds,1,serial_params->poll_timeout*20);
-		if (res == 0)	// Error 
-		{
-			serial_params->errcount++;
-			connected = FALSE;
-		}
-		else		// Data arrived 
-		{
-			connected = TRUE;
-			res = handle_ms_data(VE_AND_CONSTANTS_2);
+		 if (dualtable)
+		 {
+		 res = write(serial_params->fd,"P1V",1);
+		 res = poll (&ufds,1,serial_params->poll_timeout*20);
+		 if (res == 0)	// Error 
+		 {
+		 serial_params->errcount++;
+		 connected = FALSE;
+		 }
+		 else		// Data arrived 
+		 {
+		 connected = TRUE;
+		 res = handle_ms_data(VE_AND_CONSTANTS_2);
 
-		}
-	}
-	*/
+		 }
+		 }
+	 */
 	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 			connected);
 
@@ -337,7 +337,6 @@ void read_ve_const()
 
 	return;
 }
-
 
 void write_ve_const(gint value, gint offset, gint page)
 {
@@ -358,7 +357,7 @@ void write_ve_const(gint value, gint offset, gint page)
 #endif
 	if (value > 255)
 	{
-	//	printf("large value, %i, offset %i\n",value,offset);
+		//	printf("large value, %i, offset %i\n",value,offset);
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
 		twopart = TRUE;
@@ -392,7 +391,7 @@ void write_ve_const(gint value, gint offset, gint page)
 		res = write (serial_params->fd,"P1",2);	/* Send write command */
 		res = write (serial_params->fd,"W",1);	/* Send write command */
 		res = write (serial_params->fd,lbuff,count);	/* Send write command */
-	
+
 	}
 
 	/* We check to see if the last burn copy of the MS VE/constants matches 
@@ -400,7 +399,7 @@ void write_ve_const(gint value, gint offset, gint page)
 	 * avoid unnecessary burns to the FLASH 
 	 */
 	res = memcmp(ve_const_p0_tmp,ve_const_p0,sizeof(struct Ve_Const_Std)) +
-	memcmp(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
+		memcmp(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
 	if (res == 0)
 	{
 		set_store_buttons_state(BLACK);
@@ -411,7 +410,7 @@ void write_ve_const(gint value, gint offset, gint page)
 		set_store_buttons_state(RED);
 		burn_needed = TRUE;
 	}
-	
+
 }
 
 void burn_flash()
@@ -430,4 +429,3 @@ void burn_flash()
 	set_store_buttons_state(BLACK);
 	burn_needed = FALSE;
 }
-

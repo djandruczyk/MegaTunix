@@ -57,5 +57,4 @@ void post_process(void *input, void *output)
 	out->bspot1 = in->bspot1;
 	out->bspot2 = in->bspot2;
 	out->bspot3 = in->bspot3;
-};
-
+}

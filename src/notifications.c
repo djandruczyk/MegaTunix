@@ -32,47 +32,46 @@ void set_store_buttons_state(GuiState state)
 		case RED:
 			/* Let user know to burn vars byt turnign button text red */
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.const_store_but)->child,
+						buttons.const_store_but)->child,
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.const_store_but)->child,
+						buttons.const_store_but)->child,
 					GTK_STATE_PRELIGHT,&red);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.enrich_store_but)->child,
+						buttons.enrich_store_but)->child,
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.enrich_store_but)->child,
+						buttons.enrich_store_but)->child,
 					GTK_STATE_PRELIGHT,&red);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.vetable_store_but)->child,
+						buttons.vetable_store_but)->child,
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.vetable_store_but)->child,
+						buttons.vetable_store_but)->child,
 					GTK_STATE_PRELIGHT,&red);
 			break;
 		case BLACK:
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.const_store_but)->child,
+						buttons.const_store_but)->child,
 					GTK_STATE_NORMAL,&black);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.const_store_but)->child,
+						buttons.const_store_but)->child,
 					GTK_STATE_PRELIGHT,&black);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.enrich_store_but)->child,
+						buttons.enrich_store_but)->child,
 					GTK_STATE_NORMAL,&black);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.enrich_store_but)->child,
+						buttons.enrich_store_but)->child,
 					GTK_STATE_PRELIGHT,&black);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.vetable_store_but)->child,
+						buttons.vetable_store_but)->child,
 					GTK_STATE_NORMAL,&black);
 			gtk_widget_modify_fg(GTK_BIN(
-					buttons.vetable_store_but)->child,
+						buttons.vetable_store_but)->child,
 					GTK_STATE_PRELIGHT,&black);
 			break;
 	}
 }
-
 
 void update_logbar(GtkWidget *view, gchar * tagname, gchar * message)
 {
@@ -92,11 +91,11 @@ void update_logbar(GtkWidget *view, gchar * tagname, gchar * message)
 		counter = 0;
 	else
 		counter = (gint)result;
-	
+
 	counter++;
 	tmpbuf = g_strdup_printf("%i. ",counter);
 	g_object_set_data(G_OBJECT(view),"counter",GINT_TO_POINTER(counter));	
-			
+
 	gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 	if (tagname == NULL)
 		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
@@ -117,6 +116,7 @@ void update_logbar(GtkWidget *view, gchar * tagname, gchar * message)
 
 	return;	
 }
+
 void no_ms_connection(void)
 {
 	gchar *buff;
@@ -125,7 +125,6 @@ void no_ms_connection(void)
 		warn_user(buff);
 	g_free(buff);
 }
-
 
 void warn_user(gchar *message)
 {
@@ -183,6 +182,7 @@ void squirt_cyl_inj_set_state(GuiState state)
 			break;
 	}
 }
+
 void interdep_state(GuiState state, gint page)
 {
 	switch (state)

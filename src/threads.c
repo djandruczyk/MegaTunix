@@ -191,4 +191,3 @@ void *raw_reader_thread(void *params)
 	pthread_cleanup_pop(0);
 	return 0;
 }
-

@@ -233,7 +233,7 @@ int build_vetable(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
-	
+
 	/* KPA/TPS spinbuttons */
 	label = gtk_label_new("Kpa");
 	labels.p1_map_tps_lab = label;
@@ -281,7 +281,7 @@ int build_vetable(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
-	
+
 	/* VeTable spinbuttons */
 	label = gtk_label_new(" ");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 8, 0, 1,
@@ -310,7 +310,7 @@ int build_vetable(GtkWidget *parent_frame)
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
 					G_CALLBACK (spinner_changed),
 					GINT_TO_POINTER(GENERIC));
-			
+
 			/* Bind data to object for handlers */
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), 
 					FALSE);
@@ -321,7 +321,7 @@ int build_vetable(GtkWidget *parent_frame)
 			index++;
 		}
 	}
-	
+
 	/* RPM Table */
 	frame = gtk_frame_new("RPM Bins");
 	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
@@ -350,7 +350,7 @@ int build_vetable(GtkWidget *parent_frame)
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (spinner_changed),
 				GINT_TO_POINTER(GENERIC));
-		
+
 		/* Bind data to object for handlers */
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,
@@ -373,7 +373,7 @@ int build_vetable(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(READ_FROM_MS));
+			GINT_TO_POINTER(READ_VE_CONST));
 
 	button = gtk_button_new_with_label("Permanently Store Data in ECU");
 	buttons.vetable_store_but = button;
@@ -384,7 +384,7 @@ int build_vetable(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(WRITE_TO_MS));
+			GINT_TO_POINTER(BURN_MS_FLASH));
 
 
 

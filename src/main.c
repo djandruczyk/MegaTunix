@@ -55,9 +55,9 @@ int main(int argc, char ** argv)
 	setup_serial_params();	/* Setup the serial port for I/O */
 
 	read_conversions();
-	
+
 	/* Force a read of constants to populate the gui */
-	std_button_handler(NULL,GINT_TO_POINTER(READ_FROM_MS));
+	std_button_handler(NULL,GINT_TO_POINTER(READ_VE_CONST));
 
 	/* Convert the gui based on temp preference.  This MUST BE DONE
 	 * AFTER data has been read once to make sure it's displayed correctly

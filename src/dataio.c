@@ -115,7 +115,7 @@ int handle_ms_data(InputData which_data)
 			}
 			else
 			{
-                        	ms_goodread_count++;
+				ms_goodread_count++;
 			}
 			lastcount = raw_runtime->secl;
 
@@ -153,7 +153,7 @@ int handle_ms_data(InputData which_data)
 			memcpy(ve_const_p0,buf,sizeof(struct Ve_Const_Std));
 			memcpy(ve_const_p0_tmp,buf,sizeof(struct Ve_Const_Std));
 
-                        ms_ve_goodread_count++;
+			ms_ve_goodread_count++;
 			break;
 
 		case VE_AND_CONSTANTS_2:

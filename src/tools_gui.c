@@ -58,20 +58,20 @@ int build_tools(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 
 	sw = gtk_scrolled_window_new(NULL,NULL);
-        gtk_container_add(GTK_CONTAINER(ebox),sw);
-        gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-                        GTK_POLICY_AUTOMATIC,
-                        GTK_POLICY_AUTOMATIC);
-        gtk_widget_set_size_request(sw,0,55);
+	gtk_container_add(GTK_CONTAINER(ebox),sw);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+			GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC);
+	gtk_widget_set_size_request(sw,0,55);
 
-        view = gtk_text_view_new();
-        tools_view = view;
-        gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
-        textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-        gtk_text_buffer_create_tag(textbuffer,
-                                "warning",
-                                "foreground",
-                                "red", NULL);
+	view = gtk_text_view_new();
+	tools_view = view;
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+	gtk_text_buffer_create_tag(textbuffer,
+			"warning",
+			"foreground",
+			"red", NULL);
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
 	frame = gtk_frame_new("VE Table Import/Export (VEX Files)");

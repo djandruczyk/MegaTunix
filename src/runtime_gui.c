@@ -51,7 +51,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gint i=0;
 
 	vbox = gtk_vbox_new(FALSE,0);
-        gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
 	frame = gtk_frame_new("Real-Time Variables");
@@ -62,24 +62,24 @@ int build_runtime(GtkWidget *parent_frame)
 
 	table = gtk_table_new(6,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
 	/* Seconds Counter Label */
 	label = gtk_label_new("Seconds");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	/* Seconds Counter from MS */
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.secl_lab = label;
 
 	/* O2 Voltage Label*/
@@ -87,24 +87,24 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> (Volts)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	/* O2 Voltage value*/
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.ego_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.ego_pbar = pbar;
 
 	/* Coolant */
@@ -112,228 +112,228 @@ int build_runtime(GtkWidget *parent_frame)
 	labels.runtime_clt_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.clt_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.clt_pbar = pbar;
-	
-	
+
+
 	/* Battery Voltage */
 	label = gtk_label_new("Batt (Volts)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.batt_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
 
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.batt_pbar = pbar;
-	
+
 
 	/* TPS */
 	label = gtk_label_new("TPS (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.tps_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.tps_pbar = pbar;
-	
-	
+
+
 	/* GammaE (sum of enrichments) */
 	label = gtk_label_new("GammaE (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.gammae_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.gammae_pbar = pbar;
-	
+
 	table = gtk_table_new(6,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
 	/* NULL label to make spacing line up... */
 	label = gtk_label_new(NULL);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
-	
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
 	/* MAP Sensor */	
 	label = gtk_label_new("MAP (kPa)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.map_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.map_pbar = pbar;
-	
+
 	/* Manifold Air Temp */
 	label = gtk_label_new("MAT (F)");
 	labels.runtime_mat_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.mat_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.mat_pbar = pbar;
-	
+
 	/* RPM */
 	label = gtk_label_new("RPM");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.rpm_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.rpm_pbar = pbar;
 
 	/* PW */
 	label = gtk_label_new("PW (ms)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.pw_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.pw_pbar = pbar;
 
 	/* Duty Cycle */
 	label = gtk_label_new("Duty Cycle (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.dcycle_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.dcycle_pbar = pbar;
-	
+
 	/* Corrections/Enrichments frame */
 
 	frame = gtk_frame_new("Corrections/Enrichments (Percent)");
@@ -345,273 +345,273 @@ int build_runtime(GtkWidget *parent_frame)
 
 	table = gtk_table_new(3,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
 	/* EGOcorr  */
 	label = gtk_label_new("EGO (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.egocorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.egocorr_pbar = pbar;
-	
-	
+
+
 	/* Baro Correction  */
 	label = gtk_label_new("Baro (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.barocorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.barocorr_pbar = pbar;
-	
-	
+
+
 	/* Warmup Correction  */
 	label = gtk_label_new("Warmup (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.warmcorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.warmcorr_pbar = pbar;
-	
+
 	table = gtk_table_new(3,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
 	/* Air Den Cycle */
 	label = gtk_label_new("Air Density (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.aircorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.aircorr_pbar = pbar;
-	
+
 	/* Ve  */
 	label = gtk_label_new("VE (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.vecurr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.vecurr_pbar = pbar;
-	
+
 	/* Accel Boost  */
 	label = gtk_label_new("Accel (ms)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-                        (GtkAttachOptions) (GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.tpsaccel_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-        gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
 	runtime_data.tpsaccel_pbar = pbar;
 
 	ebox = gtk_event_box_new();
-        gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-        gtk_tooltips_set_tip(tip,ebox,
-        "This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,
+			"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
 
 	frame = gtk_frame_new("MegaSquirt I/O Status");
-        gtk_container_add(GTK_CONTAINER(ebox),frame);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
-        hbox = gtk_hbox_new(TRUE,0);
-        gtk_container_add(GTK_CONTAINER(frame),hbox);
+	hbox = gtk_hbox_new(TRUE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-        table = gtk_table_new(3,4,FALSE);
-        gtk_table_set_row_spacings(GTK_TABLE(table),7);
-        gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width(GTK_CONTAINER(table),5);
-        gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
+	table = gtk_table_new(3,4,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),7);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
 
-        label = gtk_label_new("Good VE/Constants Reads");
-        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+	label = gtk_label_new("Good VE/Constants Reads");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
-        entry = gtk_entry_new();
-        entries.runtime_ve_readcount_entry = entry;
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-        gtk_widget_set_sensitive(entry,FALSE);
-        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
-        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+	entry = gtk_entry_new();
+	entries.runtime_ve_readcount_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 
-        label = gtk_label_new("Good RealTime Reads");
-        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-        gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+	label = gtk_label_new("Good RealTime Reads");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
-        entry = gtk_entry_new();
-        entries.runtime_readcount_entry = entry;
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-        gtk_widget_set_sensitive(entry,FALSE);
-        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
-        gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+	entry = gtk_entry_new();
+	entries.runtime_readcount_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
-        label = gtk_label_new("Hard Reset Count");
-        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+	label = gtk_label_new("Hard Reset Count");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
-        entry = gtk_entry_new();
-        entries.runtime_reset_entry = entry;
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-        gtk_widget_set_sensitive(entry,FALSE);
-        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
-        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+	entry = gtk_entry_new();
+	entries.runtime_reset_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
-        label = gtk_label_new("Serial I/O Error Count");
-        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-        gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+	label = gtk_label_new("Serial I/O Error Count");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
-        entry = gtk_entry_new();
-        entries.runtime_sioerr_entry = entry;
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-        gtk_widget_set_sensitive(entry,FALSE);
-        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
-        gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+	entry = gtk_entry_new();
+	entries.runtime_sioerr_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Reset Status Counters...");
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (update_errcounts), \
 			GINT_TO_POINTER(TRUE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
-        g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler), \
-                        GINT_TO_POINTER(START_REALTIME));
-        gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(START_REALTIME));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
-        g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler), \
-                        GINT_TO_POINTER(STOP_REALTIME));
-        gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(STOP_REALTIME));
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Runtime Status");
-        gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
-        vbox2 = gtk_vbox_new(FALSE,0);
-        gtk_container_add(GTK_CONTAINER(frame),vbox2);
-        gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 	hbox = gtk_hbox_new(TRUE,3);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
 	for (i=0;i<7;i++)
@@ -623,7 +623,7 @@ int build_runtime(GtkWidget *parent_frame)
 		gtk_container_add(GTK_CONTAINER(frame),runtime_data.status[i]);
 		gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 	}
-	
+
 	return TRUE;
 }
 
@@ -653,7 +653,7 @@ void update_runtime_vars()
 		tmpbuf = g_strdup_printf("%.2f",runtime->ego);
 		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),tmpbuf);
 		tmpf = runtime->ego/ego_pbar_divisor <= 1.0 
-				? runtime->ego/ego_pbar_divisor: 1.0;
+			? runtime->ego/ego_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.ego_pbar),
 				tmpf);
@@ -664,7 +664,7 @@ void update_runtime_vars()
 		tmpbuf = g_strdup_printf("%i",runtime->map);
 		gtk_label_set_text(GTK_LABEL(runtime_data.map_lab),tmpbuf);
 		tmpf = runtime->map/map_pbar_divisor <= 1.0 
-				? runtime->map/map_pbar_divisor: 1.0;
+			? runtime->map/map_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.map_pbar),
 				tmpf);
@@ -676,7 +676,7 @@ void update_runtime_vars()
 			tmpi = runtime->clt-40;
 		else	/* subtract 40 and then to F->C conversion */
 			tmpi = (runtime->clt-40-32)*(5.0/9.0);
-	
+
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),tmpbuf);
 		tmpf = runtime->clt/255.0 <= 1.0 ? runtime->clt/255.0 : 1.0;
@@ -711,7 +711,7 @@ void update_runtime_vars()
 			tmpi = runtime->mat-40;
 		else	/* subtract 40 and then to F->C conversion */
 			tmpi = (runtime->mat-40-32)*(5.0/9.0);
-			
+
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),tmpbuf);
 		tmpf = runtime->mat/255.0 <= 1.0 ? runtime->mat/255.0 : 1.0;
@@ -805,7 +805,7 @@ void update_runtime_vars()
 		tmpbuf = g_strdup_printf("%.1f",runtime->tpsaccel/10.0);
 		gtk_label_set_text(GTK_LABEL(runtime_data.tpsaccel_lab),tmpbuf);
 		tmpf = (runtime->tpsaccel/10.0)/25.5 <= 1.0 
-				? (runtime->tpsaccel/10.0)/25.5: 1.0;
+			? (runtime->tpsaccel/10.0)/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.tpsaccel_pbar),
 				tmpf);
@@ -825,7 +825,7 @@ void update_runtime_vars()
 	/* Connected */
 	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 			connected);
-		
+
 	if ((force_status_update) || (runtime->engine.value != runtime_last->engine.value))
 	{
 		force_status_update = FALSE;
@@ -847,7 +847,7 @@ void update_runtime_vars()
 		/* Decel Enleanment */
 		gtk_widget_set_sensitive(runtime_data.status[DECEL],
 				runtime->engine.bit.tpsden);
-		
+
 	}
 	if (forced_update)
 		forced_update = FALSE;
@@ -863,4 +863,3 @@ void reset_runtime_status()
 				FALSE);
 	}
 }
-	

@@ -76,17 +76,17 @@ void read_conversions(void)
 				if (dl_type == IMMEDIATE)
 				{
 					conv_chart->conv_type[i] = 
-							(gint)g_object_get_data(
-							G_OBJECT(
-							widget_list->widget[i]),
-							"conv_type");
+						(gint)g_object_get_data(
+									G_OBJECT(
+										widget_list->widget[i]),
+									"conv_type");
 					conv_chart->conv_factor[i] = 
-							(gfloat)((gint)
-							g_object_get_data(
-							G_OBJECT(
-							widget_list->widget[i]),
-							"conv_factor_x100"))
-							/100.0;
+						(gfloat)((gint)
+							 g_object_get_data(
+								 G_OBJECT(
+									 widget_list->widget[i]),
+								 "conv_factor_x100"))
+						/100.0;
 				}
 
 			}
@@ -235,8 +235,8 @@ void reset_temps(gpointer type)
 					"MAT (F)");
 			for (i=0;i<10;i++)
 				gtk_label_set_text(
-					GTK_LABEL(labels.warmup_bins_lab[i]),
-					F_warmup_labels[i]);
+						GTK_LABEL(labels.warmup_bins_lab[i]),
+						F_warmup_labels[i]);
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper < 215) /* if so it was celsius, if not skip*/
 			{	
@@ -247,7 +247,7 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.fast_idle_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						spinners.fast_idle_thresh_spin),
+							spinners.fast_idle_thresh_spin),
 						(value*(9.0/5.0))+32);
 			}
 			upper = adjustments.ego_temp_adj->upper;
@@ -260,7 +260,7 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.ego_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						spinners.ego_temp_active_spin),
+							spinners.ego_temp_active_spin),
 						(value*(9.0/5.0))+32);
 			}
 			break;
@@ -289,8 +289,8 @@ void reset_temps(gpointer type)
 					"MAT (C)");
 			for (i=0;i<10;i++)
 				gtk_label_set_text(
-					GTK_LABEL(labels.warmup_bins_lab[i]),
-					C_warmup_labels[i]);
+						GTK_LABEL(labels.warmup_bins_lab[i]),
+						C_warmup_labels[i]);
 
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper > 102) /* if so it was fahren, if not skip*/
@@ -298,11 +298,11 @@ void reset_temps(gpointer type)
 				value = adjustments.fast_idle_temp_adj->value;
 				adjustments.fast_idle_temp_adj->upper=101.6;
 				adjustments.fast_idle_temp_adj->value=
-						(value-32)*(5.0/9.0);
+					(value-32)*(5.0/9.0);
 				gtk_adjustment_changed(
 						adjustments.fast_idle_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						spinners.fast_idle_thresh_spin),
+							spinners.fast_idle_thresh_spin),
 						(value-32)*(5.0/9.0));
 			}
 			upper = adjustments.ego_temp_adj->upper;
@@ -311,11 +311,11 @@ void reset_temps(gpointer type)
 				value = adjustments.ego_temp_adj->value;
 				adjustments.ego_temp_adj->upper=101.6;
 				adjustments.ego_temp_adj->value=
-						(value-32)*(5.0/9.0);
+					(value-32)*(5.0/9.0);
 				gtk_adjustment_changed(
 						adjustments.ego_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						spinners.ego_temp_active_spin),
+							spinners.ego_temp_active_spin),
 						(value-32)*(5.0/9.0));
 			}
 			break;

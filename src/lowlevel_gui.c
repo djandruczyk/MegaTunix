@@ -18,15 +18,15 @@
 
 int build_lowlevel(GtkWidget *parent_frame)
 {
-        GtkWidget *vbox;
-        GtkWidget *label;
+	GtkWidget *vbox;
+	GtkWidget *label;
 
-        vbox = gtk_vbox_new(FALSE,0);
-        gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-        label = gtk_label_new("Not Implemented yet");
-        gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
-        label = gtk_label_new("\n Designed for adding things to talk to the MegaSquirt or derivative unit via a\nvery low level means. (serial port twiddling mainly...)");
-        gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
+	vbox = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
+	label = gtk_label_new("Not Implemented yet");
+	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
+	label = gtk_label_new("\n Designed for adding things to talk to the MegaSquirt or derivative unit via a\nvery low level means. (serial port twiddling mainly...)");
+	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
 
 	/* Not written yet */
 	return TRUE;

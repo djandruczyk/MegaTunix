@@ -95,44 +95,44 @@ gboolean vetable_export()
 		fprintf(io_file,"\n");
 	}
 	/* DUALTABLE,  print out page 2 
-	if (dualtable == TRUE)
-	fprintf(io_file, "Page 1\n");
-        fprintf(io_file, "VE Table RPM Range              [ 8]\n");
-        for (i=0;i<8;i++)
-        {
-                fprintf(io_file,"   [%3d] = %3d\n",
-                                i,ve_const_page1[i+VE2_RPM_BINS_OFFSET]);
-        }
-        fprintf(io_file, "VE Table Load Range (MAP)       [ 8]\n");
-        for (i=0;i<8;i++)
-        {
-                fprintf(io_file,"   [%3d] = %3d\n",
-                                i,ve_const_page1[i+VE2_KPA_BINS_OFFSET]);
-        }
-        fprintf(io_file, "VE Table                        [  8][  8]\n");
-        fprintf(io_file, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
-        for (i=1;i<=8;i++)
-        {
-                fprintf(io_file,"   [%3d] =",i-1);
-                for (j=1;j<=8;j++)
-                {
-                        if (j == 1)
-                        {
-                                fprintf (io_file, "  %3d",
-                                                ve_const_page1[((i*j)-1)
-                                                +VE2_TABLE_OFFSET]);
-                        }
-                        else
-                        {
-                                fprintf (io_file, "   %3d",
-                                                ve_const_page1[((i*j)-1)
-                                                +VE2_TABLE_OFFSET]);
-                        }
-                }
-                fprintf(io_file,"\n");
-        }
-	*/
-	
+	   if (dualtable == TRUE)
+	   fprintf(io_file, "Page 1\n");
+	   fprintf(io_file, "VE Table RPM Range              [ 8]\n");
+	   for (i=0;i<8;i++)
+	   {
+	   fprintf(io_file,"   [%3d] = %3d\n",
+	   i,ve_const_page1[i+VE2_RPM_BINS_OFFSET]);
+	   }
+	   fprintf(io_file, "VE Table Load Range (MAP)       [ 8]\n");
+	   for (i=0;i<8;i++)
+	   {
+	   fprintf(io_file,"   [%3d] = %3d\n",
+	   i,ve_const_page1[i+VE2_KPA_BINS_OFFSET]);
+	   }
+	   fprintf(io_file, "VE Table                        [  8][  8]\n");
+	   fprintf(io_file, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
+	   for (i=1;i<=8;i++)
+	   {
+	   fprintf(io_file,"   [%3d] =",i-1);
+	   for (j=1;j<=8;j++)
+	   {
+	   if (j == 1)
+	   {
+	   fprintf (io_file, "  %3d",
+	   ve_const_page1[((i*j)-1)
+	   +VE2_TABLE_OFFSET]);
+	   }
+	   else
+	   {
+	   fprintf (io_file, "   %3d",
+	   ve_const_page1[((i*j)-1)
+	   +VE2_TABLE_OFFSET]);
+	   }
+	   }
+	   fprintf(io_file,"\n");
+	   }
+	 */
+
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
 	update_logbar(tools_view,NULL,tmpbuf);
 
@@ -176,7 +176,6 @@ gint process_vex_map_range()
 	return TRUE;
 }
 
-
 gint process_vex_table()
 {
 	gint i, j;
@@ -210,11 +209,11 @@ gint process_vex_line()
 		process_vex_map_range();
 	} else if (g_strrstr(a_line->str,"VE Table\0") != NULL) {	
 		process_vex_table();
-	/*
-	} else {
-		printf("Unrecognized or otherwise useless line:\n %s \n", \
-			a_line->str);
-	*/
+		/*
+		   } else {
+		   printf("Unrecognized or otherwise useless line:\n %s \n", \
+		   a_line->str);
+		 */
 	} 
 	g_string_free(a_line, TRUE);
 	return result;

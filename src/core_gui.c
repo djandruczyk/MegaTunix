@@ -77,17 +77,17 @@ int setup_gui()
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	/* set name so MegaTunixrc can alter the settings */
 	gtk_widget_set_name(main_window, "main window");
-        gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
-        gtk_widget_set_size_request(main_window,def_width,def_height);
-        gtk_window_set_default_size(GTK_WINDOW(main_window),width,height);
-        gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix " VERSION);
-        gtk_container_set_border_width(GTK_CONTAINER(main_window),0);
-        g_signal_connect(G_OBJECT(main_window),"destroy_event",
-                        G_CALLBACK(leave),NULL);
-        g_signal_connect(G_OBJECT(main_window),"delete_event",
-                        G_CALLBACK(leave),NULL);
+	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
+	gtk_widget_set_size_request(main_window,def_width,def_height);
+	gtk_window_set_default_size(GTK_WINDOW(main_window),width,height);
+	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix " VERSION);
+	gtk_container_set_border_width(GTK_CONTAINER(main_window),0);
+	g_signal_connect(G_OBJECT(main_window),"destroy_event",
+			G_CALLBACK(leave),NULL);
+	g_signal_connect(G_OBJECT(main_window),"delete_event",
+			G_CALLBACK(leave),NULL);
 
-        gtk_widget_realize(main_window);
+	gtk_widget_realize(main_window);
 
 	tip = gtk_tooltips_new();
 
@@ -101,21 +101,21 @@ int setup_gui()
 	for (i=0;i<num_tabs;i++)
 	{
 		frame = gtk_frame_new (notebook_tabs[i].frame_name);
-	        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
+		gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 
 		framebuild_dispatch(frame,notebook_tabs[i].page, notebook_tabs[i].enabled);
 
-	        label = gtk_label_new (notebook_tabs[i].tab_name);
+		label = gtk_label_new (notebook_tabs[i].tab_name);
 		if (notebook_tabs[i].enabled == FALSE)
 			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
-	        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
+		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 
 	}
 
 	button = gtk_button_new_with_label("Exit");
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,FALSE,0);
-        g_signal_connect(G_OBJECT(button),"pressed",
-                        G_CALLBACK(leave),NULL);
+	g_signal_connect(G_OBJECT(button),"pressed",
+			G_CALLBACK(leave),NULL);
 
 	if(tips_in_use)
 		gtk_tooltips_enable(tip);
