@@ -328,6 +328,7 @@ end_of_loop:
 		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();
 		g_free(tmpbuf);
+		sleep(5);
 		goto cleanup;
 	}
 

@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void read_conversions(void);
+void store_conversions(void);
 void reset_temps(gpointer);
 void convert_temps(gpointer,gpointer);
 gint convert_before_download(gint, gfloat, gboolean);

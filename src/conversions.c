@@ -49,7 +49,7 @@ static gchar * conv_text[] =
 	
 
 
-void read_conversions(void)
+void store_conversions(void)
 {
 	gint i = 0;
 	gint dl_type;

@@ -107,7 +107,7 @@ void io_cmd(IoCommands cmd, gpointer data)
 			message->out_len = cmds->ve_cmd_len;
 			message->handler = VE_AND_CONSTANTS_1;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-			tmp = UPD_READ_CONVERSIONS;
+			tmp = UPD_STORE_CONVERSIONS;
 			g_array_append_val(message->funcs,tmp);
 			tmp = UPD_VE_CONST;
 			g_array_append_val(message->funcs,tmp);
@@ -123,8 +123,6 @@ void io_cmd(IoCommands cmd, gpointer data)
 				message->out_len = cmds->ve_cmd_len;
 				message->handler = VE_AND_CONSTANTS_2;
 				message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
-				tmp = UPD_READ_CONVERSIONS;
-				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_VE_CONST;
 				g_array_append_val(message->funcs,tmp);
 				g_async_queue_push(io_queue,(gpointer)message);
@@ -138,8 +136,6 @@ void io_cmd(IoCommands cmd, gpointer data)
 				message->out_len = cmds->ign_cmd_len;
 				message->handler = IGNITION_VARS;
 				message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
-				tmp = UPD_READ_CONVERSIONS;
-				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_VE_CONST;
 				g_array_append_val(message->funcs,tmp);
 				g_async_queue_push(io_queue,(gpointer)message);
@@ -236,8 +232,8 @@ void *serial_io_handler(gpointer data)
 					case UPD_READ_VE_CONST:
 						io_cmd(IO_READ_VE_CONST,NULL);
 						break;
-					case UPD_READ_CONVERSIONS:
-						read_conversions();
+					case UPD_STORE_CONVERSIONS:
+						store_conversions();
 						break;
 					case UPD_REALTIME:
 						update_runtime_vars();
