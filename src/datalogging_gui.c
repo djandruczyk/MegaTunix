@@ -123,7 +123,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(SELECT_LOGFILE));
+			GINT_TO_POINTER(SELECT_DLOG_EXP));
 
 	label = gtk_label_new("No Log Selected Yet");
 	labels.dlog_file_lab = label;

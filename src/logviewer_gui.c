@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#define  PANGO_ENABLE_BACKEND
 #include <config.h>
 #include <datalogging_const.h>
 #include <defines.h>
@@ -28,8 +27,9 @@ static GHashTable *active_traces = NULL;
 static guint16 red = 0;
 static guint16 green = 32768;
 static guint16 blue = 65535;
-/* This table is the same dimensions as the table used  for datalogging.
- * FALSE means it's greyed out asa choice for the logviewer, TRUE means
+
+/* This table is the same dimensions as the table used for datalogging.
+ * FALSE means it's greyed out as a choice for the logviewer, TRUE means
  * it's visible.  Some logable variables (like the clock) don't make a lot
  * of sense on a stripchart view...
  */
@@ -54,6 +54,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	GtkWidget *hbox;
 	GtkWidget *button;
 	GtkWidget *frame;
+	extern struct DynamicButtons buttons;
 	GSList *group;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -70,7 +71,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
 	/* Settings/Parameters frame... */
-	frame = gtk_frame_new("Viewer Parameters");
+	frame = gtk_frame_new("Playback/Viewer Parameters");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	hbox = gtk_hbox_new(FALSE,15);
@@ -82,31 +83,47 @@ void build_logviewer(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(NULL,"Realtime Mode");
 	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
+	g_signal_connect(G_OBJECT(button), "toggled",
+			G_CALLBACK(toggle_button_handler),
+			GINT_TO_POINTER(REALTIME_VIEW));
 
 	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	button = gtk_radio_button_new_with_label(group,"Playback Mode");
-	gtk_widget_set_sensitive(button,FALSE);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
+	g_signal_connect(G_OBJECT(button), "toggled",
+			G_CALLBACK(toggle_button_handler),
+			GINT_TO_POINTER(PLAYBACK_VIEW));
 
 	/* Holds the Select Button */
 	vbox4 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,0);
 
+	button = gtk_button_new_with_label("Select Logfile to Playback");
+	buttons.logplay_sel_log_but = button;
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(std_button_handler),
+			GINT_TO_POINTER(SELECT_DLOG_IMP));
+	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+	gtk_widget_set_sensitive(button,FALSE);
+	
 	button = gtk_button_new_with_label("Select Parameters to view");
+	buttons.logplay_sel_parm_but = button;
 	g_object_set_data(G_OBJECT(button),"data",(gpointer)vbox2);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(SEL_PARAMS));
+			GINT_TO_POINTER(SELECT_PARAMS));
 	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
 	
 	vbox4 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,0);
 	button = gtk_button_new_with_label("Start Reading RT Vars");
+	buttons.logplay_start_rt_but = button;
         g_signal_connect(G_OBJECT (button), "clicked",
                         G_CALLBACK (std_button_handler), \
                         GINT_TO_POINTER(START_REALTIME));
 	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
 	button = gtk_button_new_with_label("Stop Reading RT vars");
+	buttons.logplay_stop_rt_but = button;
         g_signal_connect(G_OBJECT (button), "clicked",
                         G_CALLBACK (std_button_handler), \
                         GINT_TO_POINTER(STOP_REALTIME));

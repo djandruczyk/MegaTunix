@@ -165,6 +165,18 @@ gint toggle_button_handler(GtkWidget *widget, gpointer data)
 			case SPACE:
 				delim = g_strdup(" ");
 				break;
+			case REALTIME_VIEW:
+				gtk_widget_set_sensitive(buttons.logplay_sel_log_but, FALSE);
+				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, TRUE);
+				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, TRUE);
+				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, TRUE);
+				break;
+			case PLAYBACK_VIEW:
+				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, FALSE);
+				gtk_widget_set_sensitive(buttons.logplay_sel_log_but, TRUE);
+				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, FALSE);
+				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, FALSE);
+				break;
 		}
 	}
 	else
@@ -399,8 +411,11 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case BURN_MS_FLASH:
 			burn_flash();
 			break;
-		case SELECT_LOGFILE:
+		case SELECT_DLOG_EXP:
 			present_filesavebox(DATALOG_EXPORT);
+			break;
+		case SELECT_DLOG_IMP:
+			present_filesavebox(DATALOG_IMPORT);
 			break;
 		case CLOSE_LOGFILE:
 			stop_datalogging();
@@ -427,7 +442,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case RESTORE_ALL:
 			present_filesavebox(FULL_RESTORE);
 			break;
-		case SEL_PARAMS:
+		case SELECT_PARAMS:
 			present_viewer_choices(w_data);
 			break;
 	}

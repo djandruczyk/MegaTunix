@@ -193,6 +193,10 @@ struct DynamicButtons
 	GtkWidget *stop_dlog_but;		/* Stop DataLogging */
 	GtkWidget *start_dlog_but;		/* Start DataLogging */
 	GtkWidget *close_dlog_but;		/* Close DataLog file */
+	GtkWidget *logplay_sel_log_but;		/* Select playback log */
+	GtkWidget *logplay_sel_parm_but;	/* Select rt parms for play */
+	GtkWidget *logplay_start_rt_but;
+	GtkWidget *logplay_stop_rt_but;
 };
 
 /* Simple struct to store the pointers to the entry and button
