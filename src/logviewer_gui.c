@@ -15,6 +15,7 @@
 #include <datalogging_const.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <logviewer_gui.h>
 #include <ms_structures.h>
@@ -155,7 +156,7 @@ void present_viewer_choices( void *ptr)
 	if (ptr != NULL)
 		special = (GtkWidget *)ptr;
 	else
-		printf("pointer fed was NULL (present_viewer_choices)\n");
+		g_printf("pointer fed was NULL (present_viewer_choices)\n");
 
 	/* basty hack to prevent a compiler warning... */
 	max_viewables = sizeof(mt_classic_names)/sizeof(gchar *);
@@ -252,7 +253,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
                         total_viewables++;
         }
 
-	//printf("total viewables is %i\n",total_viewables);
+	//g_printf("total viewables is %i\n",total_viewables);
 
 	return TRUE;
 }
@@ -283,11 +284,11 @@ gboolean populate_viewer(GtkWidget * widget)
 		{
 			if (viewables.index[i])	/* Marked viewable widget */
 			{
-				//printf("allocating struct and putting into table\n");
+				//g_printf("allocating struct and putting into table\n");
 				/* Call the build routine, feed it it's parent*/
 				v_value = build_v_value(widget,i);
 					
-//				printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
+//				g_printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
 				g_hash_table_insert(active_traces,
 						GINT_TO_POINTER(i),
 						(gpointer)v_value);
@@ -360,7 +361,7 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	draw_old_data(v_value);
 
 	gdk_window_clear(widget->window);
-//	printf("configure event....\n");
+//	g_printf("configure event....\n");
 	return TRUE;
 }
 
@@ -380,7 +381,7 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
                         event->area.x, event->area.y,
                         event->area.width, event->area.height);
 
-//	printf("expose event....\n");
+//	g_printf("expose event....\n");
 	return TRUE;
 }
 

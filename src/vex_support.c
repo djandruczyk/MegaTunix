@@ -194,10 +194,10 @@ gboolean vetable_export(void *ptr)
 	status = g_io_channel_write_chars(
 				iofile->iochannel,buffer,pos,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		fprintf(stderr,__FILE__": Error exporting VEX file\n");
+		g_fprintf(stderr,__FILE__": Error exporting VEX file\n");
 
 #ifdef DEBUG
-	fprintf(stderr,__FILE__": count of bytes written: %i\n",(gint)count);
+	g_fprintf(stderr,__FILE__": count of bytes written: %i\n",(gint)count);
 #endif
 
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
@@ -225,13 +225,13 @@ gboolean vetable_import(void *ptr)
 		iofile = (struct Io_File *)ptr;
 	else
 	{
-		fprintf(stderr,__FILE__": vetable_import, iofile undefined\n");
+		g_fprintf(stderr,__FILE__": vetable_import, iofile undefined\n");
 		exit(-1);
 	}
 	reset_import_flags();
 	status = g_io_channel_seek_position(iofile->iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		fprintf(stderr,__FILE__": Eror seeking to beginning of the file\n");
+		g_fprintf(stderr,__FILE__": Eror seeking to beginning of the file\n");
 	/* process lines while we can */
 	while (go)
 	{
@@ -256,7 +256,7 @@ gboolean vetable_import(void *ptr)
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		fprintf(stderr,__FILE__": Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve);
+		g_fprintf(stderr,__FILE__": Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve);
 		return FALSE;
 	}
 	return TRUE;
@@ -277,7 +277,7 @@ GIOStatus process_vex_line(GIOChannel *iochannel)
 			{
 				status = handler_dispatch(import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
-					fprintf(stderr,__FILE__": VEX_line parsing ERROR\n");
+					g_fprintf(stderr,__FILE__": VEX_line parsing ERROR\n");
 				goto breakout;
 			}
 		}
@@ -546,7 +546,7 @@ GIOStatus process_vex_table(gchar * string, GIOChannel *iochannel)
 		{
 			value = (int)strtol(numbers,&numbers,10);
 #ifdef DEBUG
-			printf("(%i,%i) %i ",i,j,value);
+			g_printf("(%i,%i) %i ",i,j,value);
 #endif
 			if ((value < 0) || (value > 255))
 			{
@@ -562,7 +562,7 @@ GIOStatus process_vex_table(gchar * string, GIOChannel *iochannel)
 			}
 		}		
 #ifdef DEBUG
-		printf("\n");
+		g_printf("\n");
 #endif
 		g_string_free(a_line, TRUE);
 	}

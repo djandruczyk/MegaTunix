@@ -15,11 +15,11 @@
 #include <dataio.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <ms_structures.h>
 #include <post_process.h>
 #include <pthread.h>
 #include <serialio.h>
-#include <stdio.h>
 #include <string.h>
 #include <structures.h>
 #include <sys/poll.h>
@@ -50,7 +50,7 @@ int handle_ms_data(InputData which_data)
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
 
-	//printf("handle_ms_data\n");
+	//g_printf("handle_ms_data\n");
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
@@ -70,7 +70,7 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
-				//printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+				//g_printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -80,7 +80,7 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
-				//printf("read %i bytes, count %i\n",res,count);
+				//g_printf("read %i bytes, count %i\n",res,count);
 				if (zerocount == 3)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -89,8 +89,7 @@ int handle_ms_data(InputData which_data)
 			}
 			if (bad_read)
 			{
-				fprintf(stderr,__FILE__":  Error reading Real-Time Variables \n");
-				printf("error, bad realtime read\n");
+				g_fprintf(stderr,__FILE__":  Error reading Real-Time Variables \n");
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -134,7 +133,7 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
-				//printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+				//g_printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -144,7 +143,7 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
-				//printf("read %i bytes, count %i\n",res,count);
+				//g_printf("read %i bytes, count %i\n",res,count);
 				if (zerocount == 3)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -154,8 +153,7 @@ int handle_ms_data(InputData which_data)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				fprintf(stderr,__FILE__":  Error reading VE/Constants for page 0\n");
-				printf("error, bad veconst read\n");
+				g_fprintf(stderr,__FILE__":  Error reading VE/Constants for page 0\n");
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -179,7 +177,7 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
-				//printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+				//g_printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -189,7 +187,7 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
-				//printf("read %i bytes, count %i\n",res,count);
+				//g_printf("read %i bytes, count %i\n",res,count);
 				if (zerocount == 3)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -199,8 +197,7 @@ int handle_ms_data(InputData which_data)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
-				printf("error, bad veconst read\n");
+				g_fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -218,17 +215,17 @@ int handle_ms_data(InputData which_data)
 			break;
 
 		case IGNITION_VARS:
-			printf("handling of read ignition data isn't handled yet\n");
+			g_printf("handling of read ignition data isn't handled yet\n");
 			break;
 		case RAW_MEMORY:
-			printf("Not designed yet...\n");
+			g_printf("Not designed yet...\n");
 			break;
 		default:
-			printf("handle_ms_data, improper case, contact author\n");
+			g_printf("handle_ms_data, improper case, contact author\n");
 			break;
 	}
 	jumpout:
 
-	//printf("leaving\n");
+	//g_printf("leaving\n");
 	return TRUE;
 }

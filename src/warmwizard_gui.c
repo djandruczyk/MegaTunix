@@ -46,6 +46,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	GtkAdjustment *adj;
 	extern GtkTooltips *tip;
 	extern GList *store_widgets;
+	extern GList *temp_dep;
 
 	/* MAin box inside parent frame */
 	vbox = gtk_vbox_new(FALSE,0);
@@ -224,7 +225,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 10, 0);
 
 	label = gtk_label_new("Coolant (F)");
-	labels.warmwiz_clt_lab = label;
+	temp_dep = g_list_append(temp_dep, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),

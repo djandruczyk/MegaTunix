@@ -48,6 +48,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	extern GList *store_widgets;
 	extern GtkTooltips *tip;
 	extern GList *dt_widgets;
+	extern GList *temp_dep;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -587,7 +588,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	// Slow Idle Temp
 	label = gtk_label_new("Slow Idle Temp (\302\260 F.)");
-        labels.slow_idle_temp_lab = label;
+	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);

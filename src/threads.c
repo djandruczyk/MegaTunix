@@ -17,11 +17,10 @@
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <notifications.h>
 #include <runtime_gui.h>
 #include <serialio.h>
-#include <stdio.h>
-#include <string.h>
 #include <structures.h>
 #include <sys/poll.h>
 #include <threads.h>
@@ -117,10 +116,10 @@ int stop_serial_thread()
 		 * Call g_thread_join to wait until it COMPLETELY EXITS
 		 * g_thread_join will release when the thread evaporates
 		 */
-		//printf("attempting to stop thread\n");
+		//g_printf("attempting to stop thread\n");
 		raw_reader_running = FALSE; /* should cause thread to die */
 		g_thread_join(raw_input_thread); /*wait for it to evaporate */
-		//printf("thread stopped\n");
+		//g_printf("thread stopped\n");
 
 		tmpbuf = g_strdup_printf("Realtime Reader Thread Stopped Normally\n");
 		/* Thread stopped normally */
@@ -147,7 +146,7 @@ void *raw_reader_thread(void *params)
 	 * After the first successful read it gets reset to zero... :)
 	 */
 
-	//printf("thread staring\n");
+	//g_printf("thread staring\n");
 	raw_reader_running = TRUE; /* make sure it starts */
 	while(raw_reader_running == TRUE) 
 	{
@@ -157,7 +156,7 @@ void *raw_reader_thread(void *params)
 		res = poll (&ufds,1,startup+serial_params->poll_timeout);
 		if (res == 0)
 		{
-			fprintf(stderr,__FILE__": Error polling for RealTime vars\n");
+			g_fprintf(stderr,__FILE__": Error polling for RealTime vars\n");
 			serial_params->errcount++;
 			connected = FALSE;
 		}
@@ -171,7 +170,7 @@ void *raw_reader_thread(void *params)
 				run_datalog();
 			}
 			else
-				printf("handle_ms_data reported a fault\n");
+				g_printf("handle_ms_data reported a fault\n");
 		}
 
 		gtk_widget_set_sensitive(misc.status[0],

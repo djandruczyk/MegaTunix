@@ -22,6 +22,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <ms_structures.h>
 #include <serialio.h>
@@ -272,7 +273,7 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	GLfloat h = widget->allocation.height;
 
 	#ifdef GLDEBUG
-	//printf("%i Got Configure\n", clock());
+	//g_printf("%i Got Configure\n", clock());
 	#endif
 	
 	/*** OpenGL BEGIN ***/
@@ -354,7 +355,7 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	{
 		ve_view->h_strafe -= (float)(event->x -ve_view->beginX) / 40.0;
 		ve_view->v_strafe += (float)(event->y -ve_view->beginY) / 40.0;
-//		printf("h_strafe %f, v_strafe %f\n",ve_view->h_strafe,ve_view->v_strafe);
+//		g_printf("h_strafe %f, v_strafe %f\n",ve_view->h_strafe,ve_view->v_strafe);
 		redraw = TRUE;
 	}
 	// Right Button
@@ -438,7 +439,7 @@ void ve_calculate_scaling(void *ptr)
 	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
-		fprintf(stderr,__FILE__": Problem, ve_calculate_scaling(), table out of range..\n");
+		g_fprintf(stderr,__FILE__": Problem, ve_calculate_scaling(), table out of range..\n");
 	
 	ve_view->rpm_max = 0;
 	ve_view->load_max = 0;
@@ -479,7 +480,7 @@ void ve_draw_ve_grid(void *ptr)
 	else if (ve_view->table == 2)	/* DT code */
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
-		fprintf(stderr,__FILE__": Problem, ve_draw_ve_grid(), table out of range..\n");
+		g_fprintf(stderr,__FILE__": Problem, ve_draw_ve_grid(), table out of range..\n");
 	
 
 	glColor3f(1.0, 1.0, 1.0);
@@ -532,7 +533,7 @@ void ve_draw_active_indicator(void *ptr)
 	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
-		fprintf(stderr,__FILE__": Problem, ve_draw_active_indicator(), table out of range..\n");
+		g_fprintf(stderr,__FILE__": Problem, ve_draw_active_indicator(), table out of range..\n");
 	/* Render a red dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
@@ -555,7 +556,7 @@ void ve_draw_runtime_indicator(void *ptr)
 	else if (ve_view->table == 2)
 		actual_ve = runtime->vecurr2;
 	else
-		fprintf(stderr,__FILE__": Problem, ve_draw_runtim_indicator(), table out of range..\n");
+		g_fprintf(stderr,__FILE__": Problem, ve_draw_runtim_indicator(), table out of range..\n");
 
 	/* Render a green dot at the active VE map position */
 	glPointSize(8.0);
@@ -584,7 +585,7 @@ void ve_draw_axis(void *ptr)
 	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
-		fprintf(stderr,__FILE__": Problem, ve_draw_axis(), table out of range..\n");
+		g_fprintf(stderr,__FILE__": Problem, ve_draw_axis(), table out of range..\n");
 	
 	top = ((float)(ve_view->ve_max+20))/ve_view->ve_div;
 	/* Set line thickness and color */
@@ -754,16 +755,16 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
-		fprintf(stderr,__FILE__": Problem, ve_key_press_event(), table out of range..\n");
+		g_fprintf(stderr,__FILE__": Problem, ve_key_press_event(), table out of range..\n");
 
 #ifdef GLDEBUG	
-	printf("Key press event\n");
+	g_printf("Key press event\n");
 #endif
 	switch (event->keyval)
 	{
 		case GDK_Up:
 #ifdef GLDEBUG
-			printf("UP\n");
+			g_printf("UP\n");
 #endif
 			if (ve_view->active_load < 7)
 				ve_view->active_load += 1;
@@ -771,7 +772,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 		case GDK_Down:
 #ifdef GLDEBUG
-			printf("DOWN\n");
+			g_printf("DOWN\n");
 #endif
 			if (ve_view->active_load > 0)
 				ve_view->active_load -= 1;
@@ -779,7 +780,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 		case GDK_Left:
 #ifdef GLDEBUG
-			printf("LEFT\n");
+			g_printf("LEFT\n");
 #endif
 			if (ve_view->active_rpm > 0)
 				ve_view->active_rpm -= 1;
@@ -787,7 +788,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 		case GDK_Right:
 #ifdef GLDEBUG
-			printf("RIGHT\n");
+			g_printf("RIGHT\n");
 #endif
 			if (ve_view->active_rpm < 7)
 				ve_view->active_rpm += 1;
@@ -796,7 +797,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 		case GDK_plus:
 		case GDK_KP_Add:
 #ifdef GLDEBUG
-			printf("PLUS\n");
+			g_printf("PLUS\n");
 #endif
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] < 255)
 			{
@@ -816,7 +817,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 		case GDK_minus:
 		case GDK_KP_Subtract:
 #ifdef GLDEBUG
-			printf("MINUS\n");
+			g_printf("MINUS\n");
 #endif
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] > 0)
 			{

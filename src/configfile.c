@@ -20,6 +20,7 @@
  */
 
 #include <configfile.h>
+#include <glib/gprintf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -112,15 +113,15 @@ gboolean cfg_write_file(ConfigFile * cfg, gchar * filename)
 		section = (ConfigSection *) section_list->data;
 		if (section->lines)
 		{
-			fprintf(file, "[%s]\n", section->name);
+			g_fprintf(file, "[%s]\n", section->name);
 			line_list = section->lines;
 			while (line_list)
 			{
 				line = (ConfigLine *) line_list->data;
-				fprintf(file, "%s=%s\n", line->key, line->value);
+				g_fprintf(file, "%s=%s\n", line->key, line->value);
 				line_list = g_list_next(line_list);
 			}
-			fprintf(file, "\n");
+			g_fprintf(file, "\n");
 		}
 		section_list = g_list_next(section_list);
 	}

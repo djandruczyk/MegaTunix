@@ -16,10 +16,10 @@
 #include <defines.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <glib/gprintf.h>
 #include <notifications.h>
 #include <runtime_gui.h>
 #include <serialio.h>
-#include <stdio.h>
 #include <string.h>
 #include <structures.h>
 #include <sys/poll.h>
@@ -70,7 +70,7 @@ void open_serial(gchar * port_name)
 		/* An Error occurred opening the port */
 		serial_params->open = FALSE;
 		tmpbuf = g_strdup_printf("Error Opening %s Error Code: %s\n",
-				device,strerror(errno));
+				device,g_strerror(errno));
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
@@ -87,7 +87,7 @@ int setup_serial_params()
 	 */ 
 
 	/*clear struct for new settings*/
-	bzero(&serial_params->newtio, sizeof(serial_params->newtio)); 
+	memset(&serial_params->newtio, 0, sizeof(serial_params->newtio)); 
 	/* 
 	 * BAUDRATE: Set bps rate. You could also use cfsetispeed and 
 	 * cfsetospeed
@@ -191,7 +191,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		while (write(serial_params->fd,"A",1) != 1)
 		{
 			usleep(1000);
-			fprintf(stderr,__FILE__": Error writing \"A\" to the ecu in check_ecu_comms()\n");
+			g_fprintf(stderr,__FILE__": Error writing \"A\" to the ecu in check_ecu_comms()\n");
 		}
 			
 		res = poll (&ufds,1,serial_params->poll_timeout);
@@ -265,10 +265,10 @@ void read_ve_const()
 	}
 	if (raw_reader_running)
 	{
-		//printf("stopping thread\n");
+		//g_printf("stopping thread\n");
 		restart_reader = TRUE;
 		stop_serial_thread(); /* stops realtime read */
-		//printf(" thread stopped\n");
+		//g_printf(" thread stopped\n");
 	}
 
 	ufds.fd = serial_params->fd;
@@ -283,7 +283,7 @@ void read_ve_const()
 	res = poll (&ufds,1,serial_params->poll_timeout);
 	if (res == 0)	/* Error */
 	{
-		fprintf(stderr,__FILE__": failure reading VE-Table\n");
+		g_fprintf(stderr,__FILE__": failure reading VE-Table\n");
 		serial_params->errcount++;
 		connected = FALSE;
 	}
@@ -300,7 +300,7 @@ void read_ve_const()
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)	// Error 
 		{
-			fprintf(stderr,__FILE__": failure reading VE-Table (DT page 1)\n");
+			g_fprintf(stderr,__FILE__": failure reading VE-Table (DT page 1)\n");
 			serial_params->errcount++;
 			connected = FALSE;
 		}
@@ -332,18 +332,18 @@ void set_ms_page(gint ms_page)
 	gchar buf;
 
 #ifdef DEBUG
-	fprintf(stderr,__FILE__": Changing page on MS to %i\n",ms_page);
+	g_fprintf(stderr,__FILE__": Changing page on MS to %i\n",ms_page);
 #endif
 	if ((ms_page > 1) || (ms_page < 0))
-		fprintf(stderr,__FILE__": page choice %i is out of range(0,1)\n",ms_page);
+		g_fprintf(stderr,__FILE__": page choice %i is out of range(0,1)\n",ms_page);
 	
 	buf = ms_page & 0x01;
 	res = write(serial_params->fd,"P",1);
 	if (res != 1)
-		fprintf(stderr,__FILE__": FAILURE sending \"P\" command to ECU \n");
+		g_fprintf(stderr,__FILE__": FAILURE sending \"P\" command to ECU \n");
 	res = write(serial_params->fd,&buf,1);
 	if (res != 1)
-		fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);
+		g_fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);
 }
 
 void write_ve_const(gint value, gint offset)
@@ -366,7 +366,7 @@ void write_ve_const(gint value, gint offset)
 		return;		/* can't write anything if disconnected */
 	}
 #ifdef DEBUG
-	printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
+	g_printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
 #endif
 	/* If realtime reader thread is running shut it down... */
 	if (raw_reader_running)
@@ -376,14 +376,14 @@ void write_ve_const(gint value, gint offset)
 	}
 	if (value > 255)
 	{
-		//	printf("large value, %i, offset %i\n",value,offset);
+		//	g_printf("large value, %i, offset %i\n",value,offset);
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
 		twopart = TRUE;
 	}
 	if (value < 0)
 	{
-		printf("WARNING!!, value sent is below 0\n");
+		g_printf("WARNING!!, value sent is below 0\n");
 		return;
 	}
 
@@ -394,7 +394,7 @@ void write_ve_const(gint value, gint offset)
 		if (ecu_caps & DUALTABLE)
 			set_ms_page(1);
 		else
-			fprintf(stderr,__FILE__": High offset (%i), but no DT flag\n",offset+MS_PAGE_SIZE);
+			g_fprintf(stderr,__FILE__": High offset (%i), but no DT flag\n",offset+MS_PAGE_SIZE);
 	
 	}
 	/* NOT high offset, but if using DT switch page back to 0 */
@@ -472,10 +472,10 @@ void burn_flash()
 	/* doing this may NOT be necessary,  but who knows... */
 	res = write (serial_params->fd,"B",1);	/* Send Burn command */
 	if (res != 1)
-		fprintf(stderr,__FILE__": Burn Failure, write command failed %i\n",res);
+		g_fprintf(stderr,__FILE__": Burn Failure, write command failed %i\n",res);
 
 #ifdef DEBUG
-	fprintf(stderr,__FILE__": Burn to Flash\n");
+	g_fprintf(stderr,__FILE__": Burn to Flash\n");
 #endif
 
 	/* sync temp buffer with current burned settings */

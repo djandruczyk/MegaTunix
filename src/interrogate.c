@@ -16,15 +16,13 @@
 #include <config.h>
 #include <defines.h>
 #include <errno.h>
+#include <glib/gprintf.h>
 #include <interrogate.h>
 #include <mode_select.h>
 #include <notifications.h>
 #include <serialio.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <strings.h>
 #include <structures.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/poll.h>
 #include <threads.h>
@@ -185,14 +183,14 @@ void interrogate_ecu()
 		res = write(serial_params->fd,string,len);
 		g_free(string);
 		if (res != len)
-			fprintf(stderr,__FILE__": Error writing data to the ECU\n");
+			g_fprintf(stderr,__FILE__": Error writing data to the ECU\n");
 		res = poll (&ufds,1,25);
 		if (res)
 		{	
 			while (poll(&ufds,1,25))
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
-				//printf("count %i, total %i\n",count,total);
+				//g_printf("count %i, total %i\n",count,total);
 			}
 
 			ptr = buf;

@@ -122,12 +122,10 @@ void load_controls()
 	{
 		cfg_read_string(cfgfile,heading,"Defaults",&defaults);
 		cfg_read_string(cfgfile,heading,"Control_List",&ctrl_list);
-//		printf("Default list:\n%s\n",defaults);
-//		printf("Control list:\n%s\n",ctrl_list);
 	}
 	if ((ctrl_list == NULL) && (defaults))
 	{
-//		printf("Using defaults\n");
+//		g_printf("Using defaults\n");
 		control_names = g_strsplit(defaults, ",", 0);
 		i = 0;
 		while (control_names[i] != NULL)
@@ -144,7 +142,7 @@ void load_controls()
 	}
 	else
 	{
-//		printf("using user specified controls\n");
+//		g_printf("using user specified controls\n");
 		control_names = g_strsplit(ctrl_list, ",", 0);
 		i = 0;
 		while (control_names[i] != NULL)
@@ -173,6 +171,7 @@ void add_control(gchar *control_name, gchar *parameters)
 	GtkWidget *pbar;
 	extern GList *dt_widgets;
 	extern GList *ign_widgets;
+	extern GList *temp_dep;
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
@@ -235,6 +234,10 @@ void add_control(gchar *control_name, gchar *parameters)
 		ign_widgets = g_list_append(ign_widgets,(gpointer)control->label);
 		ign_widgets = g_list_append(ign_widgets,(gpointer)control->data);
 		ign_widgets = g_list_append(ign_widgets,(gpointer)control->pbar);
+	}
+	if (control->flags & TEMP_DEP)	/* name has temp unit in it */
+	{
+		temp_dep = g_list_append(temp_dep,(gpointer)control->label);
 	}
 
 	if (g_hash_table_lookup(rt_controls,g_strdup(control_name))==NULL)

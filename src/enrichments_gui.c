@@ -47,6 +47,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	GtkWidget *spinner;
 	extern GtkTooltips *tip;
 	extern GList *store_widgets;
+	extern GList *temp_dep;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -514,7 +515,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("EGO Active Temp(\302\260 F.)");
-	labels.ego_temp_lab = label;
+	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),

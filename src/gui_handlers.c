@@ -18,6 +18,7 @@
 #include <defines.h>
 #include <enums.h>
 #include <fileio.h>
+#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <init.h>
 #include <interrogate.h>
@@ -162,7 +163,7 @@ gint comm_port_change(GtkEditable *editable)
 	}
 /*	else
 	{
-		printf("file not found...\n");	
+		g_printf("file not found...\n");	
 	}
 */
 
@@ -378,15 +379,6 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				dload_val = tmp;
 				check_config11(dload_val);
 				break;
-			/*
-			case 117: // config12 
-				tmp = ve_const->config12.value;
-				tmp = tmp & ~bitmask;	// clears bits 
-				tmp = tmp | (bit_val << bit_pos);
-				ve_const->config12.value = tmp;
-				dload_val = tmp;
-				break;
-			*/
 			case 118: // config13
 				tmp = ve_const->config13.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
@@ -397,7 +389,10 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case 247: // Boost Controller (DT only)
 				if (!(ecu_caps & DUALTABLE))
+				{
+					g_fprintf(stderr,__FILE__": Attempted modification of boost controller variable,  but not running Dualtable firmware, contact Author with contents of the ECU interrogation window in the general tab\n");
 					break;
+				}
 				tmp = ve_const_dt2->bcfreq.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
 				tmp = tmp | (bit_val << bit_pos);
@@ -406,7 +401,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				check_bcfreq(dload_val,FALSE);
 				break;
 			default:
-				printf(" Toggle button NOT handled ERROR!!, contact author\n");
+				g_printf(" Toggle button NOT handled ERROR!!, contact author\n");
 				return FALSE;
 				break;
 
@@ -745,7 +740,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
-			printf("ERROR spinbutton not handled\b\n");
+			g_printf("ERROR spinbutton not handled\b\n");
 			dl_type = 0;  
 			break;
 	}
@@ -795,8 +790,8 @@ void update_ve_const()
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 
-//		printf("updating screen, ptr addy for table 1 %p, table2 %p\n",ve_const_dt1,ve_const_dt2);
-		/*printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
+//		g_printf("updating screen, ptr addy for table 1 %p, table2 %p\n",ve_const_dt1,ve_const_dt2);
+		/*g_printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
 				ve_const_dt1->req_fuel,
 				ve_const_dt1->config12.bit.injectors+1,
 				ve_const_dt1->config11.bit.cylinders+1,
@@ -825,7 +820,7 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.cylinders_1_spin),
 				ve_const_dt1->config11.bit.cylinders+1);
 		num_cylinders_1 = ve_const_dt1->config11.bit.cylinders+1;
-//		printf("cyls DT1 set to %i\n",num_cylinders_1);
+//		g_printf("cyls DT1 set to %i\n",num_cylinders_1);
 
 		/* Config12 bits */
 		/* Number of injectors */
@@ -833,7 +828,7 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.injectors_1_spin),
 				ve_const_dt1->config12.bit.injectors+1);
 		num_injectors_1 = ve_const_dt1->config12.bit.injectors+1;
-//		printf("injs DT1 set to %i\n",num_injectors_1);
+//		g_printf("injs DT1 set to %i\n",num_injectors_1);
 
 		/* Config11 bits */
 		/* Injections per cycle */
@@ -845,7 +840,7 @@ void update_ve_const()
 		gtk_spin_button_set_value(
 				GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
 				num_squirts_1);
-//		printf("sqrts DT1 set to %i\n",num_squirts_1);
+//		g_printf("sqrts DT1 set to %i\n",num_squirts_1);
 
 
 		/* Table 2 */
@@ -921,7 +916,7 @@ void update_ve_const()
 		tmp /= 10.0;
 		req_fuel_total_1 = tmp;
 
-		/* printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i, alt %i\n",
+		/* g_printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i, alt %i\n",
 				ve_const->req_fuel,
 				ve_const->config12.bit.injectors+1,
 				ve_const->config11.bit.cylinders+1,
@@ -1130,13 +1125,13 @@ void check_config11(unsigned char tmp)
 	{
 		kpa_conversion = na_map;
 		map_pbar_divisor = 115.0;
-		//	printf("using 115KPA map sensor\n");
+		//	g_printf("using 115KPA map sensor\n");
 	}
 	if ((tmp &0x3) == 1)	
 	{
 		kpa_conversion = turbo_map;
 		map_pbar_divisor = 255.0;
-		//	printf("using 250KPA map sensor\n");
+		//	g_printf("using 250KPA map sensor\n");
 	}
 }
 
@@ -1256,7 +1251,7 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 					TRUE);
 			break;
 		default:
-			fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
+			g_fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
 	}
 	val = (tmp >> 3)&0x3;  //(interested in bits 3-4) 
 	switch (val)
@@ -1277,7 +1272,7 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 					TRUE);
 			break;
 		default:
-			fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
+			g_fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
 	}
 	/* Gammae for injection channel 1 */
 	val = (tmp >> 5)&0x1;

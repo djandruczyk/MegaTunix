@@ -17,6 +17,7 @@
 #include <datalogging_const.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <ms_structures.h>
 #include <runtime_gui.h>
@@ -83,11 +84,13 @@ void build_runtime(GtkWidget *parent_frame)
 
 
 	/* Second column */
+
 	rt_table[1] = gtk_table_new(7,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(rt_table[1]),1);
 	gtk_table_set_col_spacings(GTK_TABLE(rt_table[1]),5);
 	gtk_container_set_border_width (GTK_CONTAINER (rt_table[1]), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),rt_table[1],TRUE,TRUE,0);
+
 
 	/* Corrections/Enrichments frame */
 
@@ -280,15 +283,11 @@ gboolean update_runtime_vars()
 	
 	/* Color the boxes on the VEtable closest to the operating point */
 
-	/* test to see if data changed 
-	 * Why bother wasting CPU to update the GUI when 
-	 * you'd just print the same damn thing?
-	 * Makes the code a little uglier, but the gui won't
-	 * flicker the text widgets at high update rates
-	 */
-	
+
+	/* Update allthe dynamic RT controls */
 	g_hash_table_foreach(rt_controls,rt_update_values,NULL);
 
+	/* Update all the controls on the warmup wizrd page... */
 	if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
@@ -326,7 +325,7 @@ gboolean update_runtime_vars()
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->warmcorr);
 		gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
-		tmpf = runtime->warmcorr/200.0 <= 1.0 ? runtime->warmcorr/200.0: 1.0;
+		tmpf = runtime->warmcorr/255.0 <= 1.0 ? runtime->warmcorr/255.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(progress.ww_warmcorr_pbar),
 				tmpf);
@@ -470,7 +469,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		}
 	}
 	else
-		fprintf(stderr,__FILE__": MAJOR error, rt_update_values(), size invalid: %i\n",control->size);
+		g_fprintf(stderr,__FILE__": MAJOR error, rt_update_values(), size invalid: %i\n",control->size);
 
 	return;
 }

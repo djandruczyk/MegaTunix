@@ -15,6 +15,7 @@
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <structures.h>
 #include <vetable_gui.h>
@@ -487,7 +488,7 @@ void hilite_ve_entries(gint rpm, gint map, gint table)
 		}
 	}
 #ifdef DEBUG
-	printf("rpm %i,%i, kpa %i,%i\n",rpm_index[table].low,rpm_index[table].high,kpa_index[table].low,kpa_index[table].high);
+	g_printf("rpm %i,%i, kpa %i,%i\n",rpm_index[table].low,rpm_index[table].high,kpa_index[table].low,kpa_index[table].high);
 #endif
 
 	index[table][0] = (kpa_index[table].low * 8) + rpm_index[table].low;
@@ -525,7 +526,7 @@ void get_indexes(TableType type, gint value, void *ptr,gint table)
 		start = VE1_RPM_BINS_OFFSET;
 	else
 	{
-		fprintf(stderr,__FILE__": Invalid TableType passed to get_indexes()\n");
+		g_fprintf(stderr,__FILE__": Invalid TableType passed to get_indexes()\n");
 		index->low = -1;
 		index->high = -1;
 		return;

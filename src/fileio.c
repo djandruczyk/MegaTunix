@@ -16,10 +16,9 @@
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <notifications.h>
-#include <stdio.h>
-#include <string.h>
 #include <structures.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -203,7 +202,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case DATALOG_EXPORT:
 			if (dlog_open)
 			{
-				fprintf(stderr,__FILE__": Datalog already open,  should not open it twice...BUG!!!\n");
+				g_fprintf(stderr,__FILE__": Datalog already open,  should not open it twice...BUG!!!\n");
 				g_free(iofile);
 				return;
 			}
@@ -223,7 +222,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case FULL_BACKUP:
 			if (backup_open)
 			{
-				fprintf(stderr,__FILE__": Settings Backup file already open,  should not open it twice...BUG!!!\n");
+				g_fprintf(stderr,__FILE__": Settings Backup file already open,  should not open it twice...BUG!!!\n");
 				g_free(iofile);
 				return;
 			}
@@ -234,7 +233,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case FULL_RESTORE:
 			if (restore_open)
 			{
-				fprintf(stderr,__FILE__": Settings Restore file already open,  should not open it twice...BUG!!!\n");
+				g_fprintf(stderr,__FILE__": Settings Restore file already open,  should not open it twice...BUG!!!\n");
 				g_free(iofile);
 				return;
 			}
@@ -246,7 +245,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_EXPORT:
 			if (vex_open)
 			{
-				fprintf(stderr,__FILE__": VEX File already open,  should not open it twice...BUG!!!\n");
+				g_fprintf(stderr,__FILE__": VEX File already open,  should not open it twice...BUG!!!\n");
 				g_free(iofile);
 				return;
 			}
@@ -265,7 +264,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_IMPORT:
 			if (vex_open)
 			{
-				fprintf(stderr,__FILE__": VEX File already open,  should not open it twice...BUG!!!\n");
+				g_fprintf(stderr,__FILE__": VEX File already open,  should not open it twice...BUG!!!\n");
 				g_free(iofile);
 				return;
 			}
@@ -278,7 +277,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			close_file (iofile);
 			break;
 		default:
-			printf("ERROR in check_filename()\n");
+			g_fprintf(stderr,__FILE__": ERROR in check_filename()\n");
 			break;
 	}
 }
@@ -293,7 +292,7 @@ void close_file(void *ptr)
 		iofile = (struct Io_File *)ptr;
 	else
 	{
-		fprintf(stderr,__FILE__": close_file() pointer null\n");
+		g_fprintf(stderr,__FILE__": close_file() pointer null\n");
 		return;
 	}
 
@@ -301,7 +300,7 @@ void close_file(void *ptr)
 	{
 		status = g_io_channel_shutdown(iofile->iochannel,TRUE,NULL);
 		if (status != G_IO_STATUS_NORMAL)
-			fprintf(stderr,__FILE__": Error closing iochannel\n");
+			g_fprintf(stderr,__FILE__": Error closing iochannel\n");
 	}
 	
 	switch (iofile->iotype)
@@ -377,7 +376,7 @@ void truncate_file(FileIoType filetype, gchar *filename)
 			g_free(tmpbuf);
 			break;
 		default:
-			printf("truncating nothing, iotype was %i\n",filetype);
+			g_printf("truncating nothing, iotype was %i\n",filetype);
 			break;
 
 	}
@@ -385,7 +384,7 @@ void truncate_file(FileIoType filetype, gchar *filename)
 
 void backup_all_ms_settings(void *ptr)
 {
-	fprintf(stderr,__FILE__": backup all MS settings to file isn't written yet...\n");
+	g_fprintf(stderr,__FILE__": backup all MS settings to file isn't written yet...\n");
 
 }
 
@@ -398,8 +397,8 @@ void restore_all_ms_settings(void *ptr)
 	local_buffer = g_malloc(MS_PAGE_SIZE);
 	// Backup currently active parameters into backup structure 
 	
-	fprintf(stderr,__FILE__": restore all MS settings from file isn't written yet\n");
-	fprintf(stderr,__FILE__": should restore from %s\n",filename);
+	g_fprintf(stderr,__FILE__": restore all MS settings from file isn't written yet\n");
+	g_fprintf(stderr,__FILE__": should restore from %s\n",filename);
 	iochannel = g_io_channel_new_file(filename, "w", NULL);
 
 	g_io_channel_close(iochannel);

@@ -18,6 +18,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
 #include <math.h>
@@ -51,7 +52,7 @@ void req_fuel_change(void *ptr)
 		reqd_fuel = (struct Reqd_Fuel *) ptr;
 	else
 	{
-		fprintf(stderr,__FILE__": req_fuel_change(), invalid pointer passed\n");
+		g_fprintf(stderr,__FILE__": req_fuel_change(), invalid pointer passed\n");
 		return;
 	}
 
@@ -59,11 +60,11 @@ void req_fuel_change(void *ptr)
 			sqrt((double)reqd_fuel->actual_pressure / (double)reqd_fuel->rated_pressure));
 
 #ifdef DEBUG
-	printf("Rated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow);
-	printf("Rated fuel pressure is %f bar\n",reqd_fuel->rated_pressure);
-	printf("Actual fuel pressure is %f bar\n",reqd_fuel->actual_pressure);
-	printf("Calculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow);
-	printf("Target AFR is %f lbs/hr\n",reqd_fuel->target_afr);
+	g_printf("Rated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow);
+	g_printf("Rated fuel pressure is %f bar\n",reqd_fuel->rated_pressure);
+	g_printf("Actual fuel pressure is %f bar\n",reqd_fuel->actual_pressure);
+	g_printf("Calculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow);
+	g_printf("Target AFR is %f lbs/hr\n",reqd_fuel->target_afr);
 #endif
 
 	tmp1 = 36.0*((double)reqd_fuel->disp)*4.27793;
@@ -106,7 +107,7 @@ gboolean reqd_fuel_popup(void * data)
 		reqd_fuel = (struct Reqd_Fuel *) data;
 	else
 	{
-		fprintf(stderr,__FILE__": reqd_fuel_popup(), pointer passed is invalid, contact author\n");
+		g_fprintf(stderr,__FILE__": reqd_fuel_popup(), pointer passed is invalid, contact author\n");
 		return FALSE;
 	}
 
@@ -341,7 +342,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 		ve_const = (struct Ve_Const_Std *) (ms_data + MS_PAGE_SIZE);
 	else
 	{
-		fprintf(stderr,__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table);
+		g_fprintf(stderr,__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table);
 		return FALSE;
 	}	
 

@@ -15,10 +15,9 @@
 #include <configfile.h>
 #include <conversions.h>
 #include <defines.h>
+#include <glib/gprintf.h>
 #include <init.h>
 #include <ms_structures.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <structures.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -125,8 +124,9 @@ int read_config(void)
 	else
 	{
 		serial_params->port_name = g_strdup("/dev/tt???");
-		fprintf(stderr,__FILE__": Config file not found, using defaults\n");
+		g_fprintf(stderr,__FILE__": Config file not found, using defaults\n");
 		g_free(filename);
+		save_config();
 		return (-1);	/* No file found */
 	}
 }
@@ -136,6 +136,7 @@ void save_config(void)
 	gchar *filename;
 	int x,y,tmp_width,tmp_height;
 	ConfigFile *cfgfile;
+	extern gboolean ready;
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
@@ -148,12 +149,15 @@ void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "Tooltips", tips_in_use);
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", temp_units);
 
-	gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
-	cfg_write_int(cfgfile, "Window", "width", tmp_width);
-	cfg_write_int(cfgfile, "Window", "height", tmp_height);
-	gdk_window_get_position(main_window->window,&x,&y);
-	cfg_write_int(cfgfile, "Window", "main_x_origin", x);
-	cfg_write_int(cfgfile, "Window", "main_y_origin", y);
+	if (ready)
+	{
+		gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
+		cfg_write_int(cfgfile, "Window", "width", tmp_width);
+		cfg_write_int(cfgfile, "Window", "height", tmp_height);
+		gdk_window_get_position(main_window->window,&x,&y);
+		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
+		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
+	}
 	cfg_write_string(cfgfile, "Serial", "port_name", 
 			serial_params->port_name);
 	cfg_write_int(cfgfile, "Serial", "polling_timeout", 

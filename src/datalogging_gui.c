@@ -19,12 +19,11 @@
 #include <errno.h>
 #include <fileio.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <ms_structures.h>
 #include <notifications.h>
-#include <stdio.h>
-#include <string.h>
 #include <structures.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -451,7 +450,7 @@ void run_datalog(void)
 	if (data != NULL)
 		iofile = (struct Io_File *)data;
 	else
-		fprintf(stderr,__FILE__": run_datalog, iofile undefined\n");
+		g_fprintf(stderr,__FILE__": run_datalog, iofile undefined\n");
 
 
 	output = g_string_sized_new(64); /*64 char initial size */
@@ -506,7 +505,7 @@ void run_datalog(void)
 							output,"%i",short_ptr[offset/SHORT]);
 						break;
 					default:
-						printf("SIZE not defined (%i)\n",i);
+						g_fprintf(stderr,__FILE__": SIZE not defined (%i)\n",i);
 						break;
 				}
 
@@ -536,7 +535,7 @@ void write_log_header(void *ptr)
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
 	else
-		fprintf(stderr,__FILE__": iofile pointer was undefined...\n");
+		g_fprintf(stderr,__FILE__": iofile pointer was undefined...\n");
 		
 	output = g_string_sized_new(64); /*pre-allccate for 4 chars */
 
@@ -581,7 +580,7 @@ void write_log_header(void *ptr)
 			if (index == 0)
 				continue;
 			index -= 1;
-			printf("i %i, index %i\n",i,index);
+			//g_printf("i %i, index %i\n",i,index);
 			output = g_string_append(output, 
 					logable_names[index]);
 			offset_list[j] = logging_offset_map[index];

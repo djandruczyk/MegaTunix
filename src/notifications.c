@@ -13,9 +13,9 @@
 
 #include <defines.h>
 #include <fileio.h>
+#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <notifications.h>
-#include <stdio.h>
 #include <structures.h>
 
 extern GdkColor red;
@@ -45,7 +45,7 @@ void set_interdep_state(GuiState state, gint table)
 	else if (table == 2)
 		g_list_foreach(interdep_2_widgets, set_widget_color,(gpointer)state);
 	else
-		fprintf(stderr,__FILE__": set_interdep_state(), invalid table number %i\n",table);
+		g_fprintf(stderr,__FILE__": set_interdep_state(), invalid table number %i\n",table);
 }
 
 void set_reqfuel_state(GuiState state, gint table)
@@ -55,7 +55,7 @@ void set_reqfuel_state(GuiState state, gint table)
 	else if (table == 2)
 		g_list_foreach(reqfuel_2_widgets, set_widget_color,(gpointer)state);
 	else
-		fprintf(stderr,__FILE__": set_reqfuel_state(), invalid table number %i\n",table);
+		g_fprintf(stderr,__FILE__": set_reqfuel_state(), invalid table number %i\n",table);
 }
 
 void set_widget_color(gpointer widget, gpointer state)

@@ -15,6 +15,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <enums.h>
+#include <glib/gprintf.h>
 #include <stdio.h>
 #include <structures.h>
 
@@ -38,6 +39,7 @@ extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
 extern GtkWidget *ve_widgets[];
+GList *temp_dep = NULL;
 
 
 void read_conversions(void)
@@ -75,7 +77,7 @@ void read_conversions(void)
 			conv_chart->conv_factor[i] = 1.0;
 		}
 #ifdef DEBUG
-		printf("BASE Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
+		g_printf("BASE Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
 #endif
 	}
 	return;
@@ -113,7 +115,7 @@ gint convert_before_download(gint offset, gfloat value)
 			return_value = tmp_val;
 			break;
 		default:
-			printf("Convert_before_download() NO CONVERSION defined, BUG!!!\b\b\n");
+			g_printf("Convert_before_download() NO CONVERSION defined, BUG!!!\b\b\n");
 			break;
 	}
 	/* Store value in veconst_arr pointer (to structure) 
@@ -159,11 +161,36 @@ gfloat convert_after_upload(gint offset)
 			return_value = ve_const_arr[offset];
 			break;
 		default:
-			printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
+			g_printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
 			break;
 
 	}
 	return (return_value);
+}
+void convert_temps(gpointer widget, gpointer units)
+{
+	gchar *text = NULL;
+	gchar * newtext = NULL;
+	gchar **array = NULL;
+	text = g_strdup(gtk_label_get_text(GTK_LABEL(widget)));
+	if ((int)units == FAHRENHEIT)
+	{
+		array = g_strsplit(text,"C.",0);
+		if (array[1] == NULL)// IF null, means not needed to change it
+			return;
+		newtext = g_strdup_printf("%sF.%s",array[0],array[1]);	
+	}
+	else
+	{
+		array = g_strsplit(text,"F.",0);
+		if (array[1] == NULL)// IF null, means not needed to change it
+			return;
+		newtext = g_strdup_printf("%sC.%s",array[0],array[1]);	
+	}
+	gtk_label_set_text(GTK_LABEL(widget),newtext);
+	g_free(text);
+	g_free(newtext);
+	g_strfreev(array);
 }
 
 void reset_temps(gpointer type)
@@ -175,6 +202,10 @@ void reset_temps(gpointer type)
 	extern unsigned int ecu_caps;
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
+
+	/* Better way.. :) */
+	g_list_foreach(temp_dep,convert_temps,type);
+
 	switch ((gint)type)
 	{
 		case FAHRENHEIT:
@@ -187,9 +218,6 @@ void reset_temps(gpointer type)
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmup_lab),
 					"Engine Temp in Degrees Fahrenheit");
-			gtk_label_set_text(
-					GTK_LABEL(labels.ego_temp_lab),
-					"EGO Active Temp(\302\260 F.)");
 			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
@@ -204,19 +232,6 @@ void reset_temps(gpointer type)
 						GTK_LABEL(labels.cooling_fan_temp_lab),
 						"Cooling Fan Turn-On Temp (\302\260 F.)");
 			}
-			gtk_label_set_text(
-					GTK_LABEL(labels.slow_idle_temp_lab),
-					"Slow Idle Temp (\302\260 F.)");
-			gtk_label_set_text(
-					GTK_LABEL(labels.warmwiz_clt_lab),
-					"Coolant (\302\260 F.)");
-/*			gtk_label_set_text(
-					GTK_LABEL(labels.runtime_clt_lab),
-					"Coolant (\302\260 F.)");
-			gtk_label_set_text(
-					GTK_LABEL(labels.runtime_mat_lab),
-					"MAT (\302\260 F.)");
-*/
 			for (i=0;i<10;i++)
 			{
 				string = g_strdup_printf("%s\302\260",
@@ -287,9 +302,6 @@ void reset_temps(gpointer type)
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmup_lab),
 					"Engine Temp in Degrees Celsius");
-			gtk_label_set_text(
-					GTK_LABEL(labels.ego_temp_lab),
-					"EGO Active Temp(\302\260 C.)");
 			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
@@ -304,19 +316,6 @@ void reset_temps(gpointer type)
 						GTK_LABEL(labels.cooling_fan_temp_lab),
 						"Cooling Fan Turn-On Temp (\302\260 C.)");
 			}
-			gtk_label_set_text(
-					GTK_LABEL(labels.slow_idle_temp_lab),
-					"Slow Idle Temp (\302\260 C.)");
-			gtk_label_set_text(
-					GTK_LABEL(labels.warmwiz_clt_lab),
-					"Coolant (\302\260 C.)");
-/*			gtk_label_set_text(
-					GTK_LABEL(labels.runtime_clt_lab),
-					"Coolant (\302\260 C.)");
-			gtk_label_set_text(
-					GTK_LABEL(labels.runtime_mat_lab),
-					"MAT (\302\260 C.)");
-*/
 			for (i=0;i<10;i++)
 			{
 				string = g_strdup_printf("%s\302\260",
