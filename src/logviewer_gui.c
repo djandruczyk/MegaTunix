@@ -362,6 +362,8 @@ void populate_viewer()
 				g_object_unref(v_value->font_gc);
 				g_free(v_value->vname);
 				g_free(v_value);
+				g_free(v_value->ink_rect);
+				g_free(v_value->log_rect);
 				v_value = NULL;
 			}
 		}
@@ -474,6 +476,12 @@ struct Viewable_Value * build_v_value(GObject *object)
 	/* Allocate the colors (GC's) for the font and trace */
 	v_value->font_gc = initialize_gc(pixmap, FONT);
 	v_value->trace_gc = initialize_gc(pixmap, TRACE);
+
+	/* Allocate the structs to hold the text screen dimensions */
+	v_value->ink_rect = g_new0(PangoRectangle, 1);
+	v_value->log_rect = g_new0(PangoRectangle, 1);
+
+	v_value->force_update = TRUE;
 
 	return v_value;
 }
@@ -641,12 +649,15 @@ void draw_infotext()
 {
 	// Draws the textual (static) info on the left side of the window..
 
-	gint spread = 0.0;
 	gint name_x = 0;
 	gint name_y = 0;
+	gint text_border = 10;
 	gint info_ctr = 0;
 	gint h = 0;
 	gint i = 0;
+	gint width = 0;
+	gint height = 0;
+	gint max = 0;
 	struct Viewable_Value *v_value = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = lv_data->pixmap;
@@ -663,25 +674,33 @@ void draw_infotext()
 	if (!lv_data->highlight_gc)
 		lv_data->highlight_gc = initialize_gc(lv_data->pixmap,HIGHLIGHT);
 	
-	spread = (gint)((float)h/(float)lv_data->active_traces);
-	name_x = 10;
+	lv_data->spread = (gint)((float)h/(float)lv_data->active_traces);
+	name_x = text_border;
 	for (i=0;i<lv_data->active_traces;i++)
 	{
 		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-		info_ctr = (spread * (i+1))- (spread/2);
-		name_y = info_ctr - 15;
+		info_ctr = (lv_data->spread * (i+1))- (lv_data->spread/2);
 
 		layout = gtk_widget_create_pango_layout(lv_data->darea,NULL);
 		pango_layout_set_markup(layout,v_value->vname,-1);
 		pango_layout_set_font_description(layout,lv_data->font_desc);
-		gdk_draw_layout(pixmap,v_value->trace_gc,name_x,name_y,layout);
+		pango_layout_get_pixel_size(layout,&width,&height);
+		name_y = info_ctr - height - 2;
 
+		if (width > max)
+			max = width;
+		
+		gdk_draw_layout(pixmap,v_value->trace_gc,name_x,name_y,layout);
+	}
+	info_width = max + (text_border * 2);
+
+	for (i=0;i<lv_data->active_traces;i++)
+	{
 		gdk_draw_rectangle(pixmap,
 				lv_data->darea->style->white_gc,
-				FALSE, 0,info_ctr-(spread/2),
-				info_width-1,spread);
+				FALSE, 0,i*lv_data->spread,
+				info_width-1,lv_data->spread);
 	}
-	lv_data->spread = spread;
 
 }
 
@@ -699,7 +718,6 @@ void draw_valtext(gboolean force_draw)
 	gint last_index = 0;
 	gfloat val = 0.0;
 	gfloat last_val = 0.0;
-	gfloat spread = 0.0;
 	gint val_x = 0;
 	gint val_y = 0;
 	gint info_ctr = 0;
@@ -712,14 +730,13 @@ void draw_valtext(gboolean force_draw)
 	h = lv_data->darea->allocation.height;
 
 	if (!lv_data->font_desc)
-		lv_data->font_desc = pango_font_description_from_string("courier 11");
+		lv_data->font_desc = pango_font_description_from_string("courier 10");
 	
-	spread = (gint)((float)h/(float)lv_data->active_traces);
-	val_x = 25;
+	val_x = 15;
 	for (i=0;i<lv_data->active_traces;i++)
 	{
 		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-		info_ctr = (spread * (i+1))- (spread/2);
+		info_ctr = (lv_data->spread * (i+1))- (lv_data->spread/2);
 		val_y = info_ctr + 1;
 
 		last_index = v_value->last_index;
@@ -728,14 +745,17 @@ void draw_valtext(gboolean force_draw)
 			last_val = g_array_index(v_value->data_array,gfloat,last_index-1);
 		/* IF this value matches the last one,  don't bother
 		 * updating the text as there's no point... */
-		if ((val == last_val) && (!force_draw))
+		if ((val == last_val) && (!force_draw) && (!v_value->force_update))
 			continue;
 		
+		v_value->force_update = FALSE;
 		gdk_draw_rectangle(pixmap,
 				lv_data->darea->style->black_gc,
 				TRUE,
-				val_x,val_y,
-				info_width-(val_x)-1,12);
+				v_value->ink_rect->x+val_x,
+				v_value->ink_rect->y+val_y,
+				info_width-1-v_value->ink_rect->x-val_x,
+				v_value->ink_rect->height);
 
 		if (v_value->is_float)
 			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%.2f",val));
@@ -743,6 +763,7 @@ void draw_valtext(gboolean force_draw)
 			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%i",(gint)val));
 
 		pango_layout_set_font_description(layout,lv_data->font_desc);
+		pango_layout_get_pixel_extents(layout,v_value->ink_rect,v_value->log_rect);
 		gdk_draw_layout(pixmap,v_value->font_gc,val_x,val_y,layout);
 	}
 
@@ -878,7 +899,7 @@ void trace_update(gboolean redraw_all)
 					total);
 
 			v_value->last_y = pts[0].y;
-			v_value->last_index = len;
+			v_value->last_index = len-1;
 
 			//printf ("last index displayed was %i from %i,%i to %i,%i\n",v_value->last_index,pts[1].x,pts[1].y, pts[0].x,pts[0].y );
 		}
@@ -982,12 +1003,9 @@ void trace_update(gboolean redraw_all)
 		}
 		/* Draw the data.... */
 		v_value->last_y = (gint)((percent*(h-2))+1);
-
-
 	}
 	/* Update textual data */
 	draw_valtext(FALSE);
-
 }
 
 

@@ -119,9 +119,12 @@ struct Viewable_Value
 {
 	GdkGC *font_gc;			/*! GC used for the fonts */
 	GdkGC *trace_gc;		/*! GC used for the trace */
+	PangoRectangle *log_rect;	/*! Logcial rectangle around text */
+	PangoRectangle *ink_rect;	/*! Ink rectangle around text */
 	GObject *object;		/*! object */
 	gchar *vname;			/*! Name of widget being logged */
 	gboolean is_float;		/*! TRUE or FALSE */
+	gboolean force_update;		/*! flag to force update on addition */
 	gint last_y;			/*! Last point on screen of trace */
 	gint last_index;		/*! latest entryu into data array */
 	gfloat min;			/*! for auto-scaling */
