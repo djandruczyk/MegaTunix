@@ -387,10 +387,10 @@ struct ve_const_dualtable
         union   config13 config13;              /* 118, Config for PC Config */
         unsigned char   cr_priming_pulse;       /* 119, priming pulse b4 start*/
         unsigned char   ego_rpm_active;         /* 120, EGO RPM trigger volt  */
-        unsigned char   fast_idle_thresh;       /* 121, fast idle temp thresh */
+        unsigned char   fastidle_temp;		/* 121, fast idle temp */
         unsigned char   ego_sw_voltage;         /* 122, EGO flip pt voltage */
         unsigned char   cold_accel_mult;        /* 123, Cold Accel * factor */
-        unsigned char   slowidle;               /* 124, Dualtable */
+        unsigned char   slowidle_temp;               /* 124, Dualtable */
         unsigned char   fastidlespd;            /* 125, Fast idle speed RPM/10 */
         unsigned char   slowidlespd;            /* 126, Slow idle speed RPM/10 */
         unsigned char   idlethresh;             /* 127, TPS A/D count threshold BELOW which idle PWM is used */
