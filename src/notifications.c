@@ -100,15 +100,7 @@ void set_widget_color(gpointer widget, gpointer state)
 	}
 }
 
-void 
- /*update_logbar(
-		GtkWidget *view, 
-		gchar * tagname, 
-		gchar * message,
-		gboolean count,
-		gboolean clear)
-*/
- update_logbar(
+void  update_logbar(
 		gchar * view_name, 
 		gchar * tagname, 
 		gchar * message,
@@ -136,6 +128,8 @@ void
 
 	/* Add the message to the end of the textview */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+	if (!textbuffer)
+		return;
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
 	result = g_object_get_data(G_OBJECT(widget),"counter");	
 	if (result == NULL)

@@ -113,7 +113,6 @@ struct Viewable_Value
 	GtkWidget *d_area;		/*! Drawing Area */
 	GObject *object;		/*! object */
 	gchar *vname;			/*! Name of widget being logged */
-	gint runtime_offset;		/*! Offset into runtime struct */
 	gboolean is_float;		/*! TRUE or FALSE */
 	gint last_y;			/*! Last point on screen of trace */
 	gfloat min;			/*! for auto-scaling */
@@ -175,6 +174,7 @@ struct Log_Info
 	gchar *delimiter;	/*! delimiter between fields for this logfile */
 	GArray *log_list;	/*! List of objects */
 	gint active_viewables;	/*! Number of active traces.. */
+	gfloat global_position;	/*! Where we are in the logviewer (playback) */
 };
 
 /*! 

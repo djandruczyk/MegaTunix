@@ -23,7 +23,6 @@ void read_log_data(GIOChannel *, void * );
 void initialize_log_info(void *);
 void allocate_buffers(void *);
 void populate_limits(void *);
-void get_limits(gchar *, GObject *, gint );
 void free_log_info(void);
 
 /* Prototypes */

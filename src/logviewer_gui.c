@@ -565,8 +565,8 @@ gboolean update_logview_traces()
 
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 	{
-		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(FALSE));
 		scroll_logviewer_traces();
+		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(FALSE));
 	}
 
 	return TRUE;
@@ -621,8 +621,12 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		{
 			val = g_array_index(v_value->data_array,gfloat,len-1-i);
 			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
-			pts[i].x = w-(i*lv_scroll)-lv_scroll-1;
+			pts[i].x = w-(i*lv_scroll);
 			pts[i].y = (gint) (percent*(h-2))+1;
+	//		val = g_array_index(v_value->data_array,gfloat,len-total+i);
+	//		percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+	//		pts[i].x = info_width+(i*lv_scroll);
+	//		pts[i].y = (gint) (percent*(h-2))+1;
 		}
 		/* Debugging code
 		   i = total - 1;
@@ -640,7 +644,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 				total);
 		return;
 	}
-	/* we don't get data from the new infrastructure in payback mode... */
+	/* we don't get data from the new infrastructure in playback mode... */
 	if (playback_mode)
 		return;
 
@@ -662,8 +666,9 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 
 	gdk_draw_line(pixmap,
 			v_value->trace_gc,
-			w-lv_scroll-1,v_value->last_y,
-			w-1,(gint)(percent*(h-2))+1);
+			w-lv_scroll,v_value->last_y,
+			w,(gint)(percent*(h-2))+1);
+	printf("width = %i, line from x1 %i to x2 %i\n",w,w-lv_scroll-1,w-1);
 
 	//	printf("drawing line from (%i,%i) to (%i,%i)\n",w-lv_scroll,v_value->last_y,w,(gint)(percent*(h-2))+1);
 
@@ -773,6 +778,21 @@ gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
 
 	g_list_foreach(get_list("viewables"),set_widget_active,(gpointer)state);
 
+	return TRUE;
+}
+
+
+gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
+{
+	gfloat val = 0.0;
+	/* If we pass "TRUE" as the widget data we just ignore this signal as 
+	 * the redraw routine wil have to adjsut the slider as it scrolls 
+	 * through the data...
+	 */
+	if ((gboolean)data)
+		return TRUE;
+	val = gtk_range_get_value(GTK_RANGE(widget));
+	g_object_set_data(G_OBJECT(lv_darea),"log_pos",g_strdup_printf("%.3f",val));
 	return TRUE;
 }
 

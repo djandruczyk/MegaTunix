@@ -101,7 +101,7 @@ gboolean read_config(void)
 {
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
-	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -133,7 +133,7 @@ gboolean read_config(void)
 	}
 	else
 	{
-		serial_params->port_name = g_strdup("/dev/tt???");
+		serial_params->port_name = g_strdup(DEFAULT_PORT);
 		dbg_func(__FILE__": read_config()\n\tConfig file not found, using defaults\n",CRITICAL);
 		g_free(filename);
 		save_config();

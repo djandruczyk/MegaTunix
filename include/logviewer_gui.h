@@ -34,6 +34,7 @@ void draw_infotext(void * );
 void draw_old_data(void * );
 gboolean update_logview_traces(void);
 void trace_update(gpointer, gpointer, gpointer );
+gboolean logviewer_log_position_change(GtkWidget *, gpointer);
 
 /* Prototypes */
 

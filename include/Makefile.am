@@ -12,7 +12,6 @@ headers = \
         datalogging_gui.h \
         debugging.h \
         defines.h \
-        default_limits.h \
 	dep_loader.h \
 	dep_processor.h \
 	dispatcher.h \

@@ -13,7 +13,6 @@
 
 #include <config.h>
 #include <defines.h>
-#include <default_limits.h>
 #include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
@@ -42,8 +41,8 @@ void load_logviewer_file(void *ptr)
 	log_info = g_malloc0(sizeof(struct Log_Info));
 	initialize_log_info(log_info);
 	read_log_header(iofile->iochannel, log_info);
-	populate_limits(log_info);
 	read_log_data(iofile->iochannel, log_info);
+	populate_limits(log_info);
 	close_file(iofile);
 	return;
 }
@@ -125,51 +124,42 @@ void populate_limits(void *ptr)
 {
 	struct Log_Info *log_info = NULL;
 	gint i = 0;
+	gint j = 0;
 	log_info = ptr;
-	gchar * name = NULL;
 	GObject * object = NULL;
+	GArray *array = NULL;
+	gfloat val = 0.0;
+	gfloat lower = 0.0;
+	gfloat upper = 0.0;
+	gint tmpi = 0;
+	gint len = 0;
 
 	for (i=0;i<log_info->field_count;i++)
 	{
+		object = NULL;
+		array = NULL;
+		lower = 0.0;
+		upper = 0.0;
+		tmpi = 0;
+		len = 0;
 		object = g_array_index(log_info->log_list,GObject *, i);
-		name = g_strdup(g_object_get_data(object,"lview_name"));
-		get_limits(name,object, i);
-		g_free(name);
-	}
-}
-
-
-void get_limits(gchar *target_field, GObject *object, gint position)
-{
-	gint i = 0;
-	gint lower = 0;
-	gint upper = 255;
-	gint index = -1;
-	gint max_chances = sizeof(def_limits)/sizeof(def_limits[0]);
-	while (i <max_chances)
-	{
-		index = -1;
-		if (strcmp(def_limits[i].field,target_field) == 0) 
+		array = (GArray *)g_object_get_data(object,"data_array");
+		len = array->len;
+		for (j=0;j<len;j++)
 		{
-			//	printf("found value %s at index %i, for field # %i\n",target_field,i,position);
-			index = i;
-			break;
+			val = g_array_index(array,gfloat, j);
+			if (val < lower)
+				lower = val;
+			if (val >upper )
+				upper = val;
+
 		}
-		i++;
+		tmpi = floor(lower) -1.0;
+		g_object_set_data(object,"lower_limit", GINT_TO_POINTER(tmpi));
+		tmpi = ceil(upper) + 1.0;
+		g_object_set_data(object,"upper_limit", GINT_TO_POINTER(tmpi));
+
 	}
-	if (index != -1)
-	{
-		lower = def_limits[index].lower;
-		upper = def_limits[index].upper;
-	}
-	else
-	{
-		lower = 0;
-		upper = 255;
-		dbg_func(g_strdup_printf(__FILE__": get_limits()\n\tField \"%s\" NOT found in internal list,\n\tassuming limits bound of 0.0<-%s->255.0,\n\tsend the datalog you're trying to open\n\tto the Author for analysis\n",target_field,target_field),CRITICAL);
-	}
-	g_object_set_data(object,"lower_limit", GINT_TO_POINTER(lower));
-	g_object_set_data(object,"upper_limit", GINT_TO_POINTER(upper));
 }
 
 
