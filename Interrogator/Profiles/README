@@ -114,8 +114,14 @@ is_spark
   - Boolean,  if this table is a spark table and uses the unusualy 2.84 
   conversion factor then this flag is set to TRUE, otherwise FALSE.
 
-page
-  - Integer, lists the page number that this table resides within
+rpm_page
+  - Integer, lists the page number that the rpm array lives in
+
+load_page
+  - Integer, lists the page number that the load array lives in
+
+tbl_page
+  - Integer, lists the page number that the tbl array lives in
 
 tbl_base_offset
   - Integer, The offset from the base of page (above) that this table starts
