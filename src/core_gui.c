@@ -24,7 +24,7 @@
 
 
 /* Default window size and MINIMUM size as well... */
-static gint def_width=640;
+static gint def_width=620;
 static gint def_height=525;
 gint width = 0;
 gint height = 0;

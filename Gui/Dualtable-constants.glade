@@ -900,7 +900,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="req_fuel_per_cycle_1_label">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Required Fuel (per cyl/cycle)</property>
+			      <property name="label" translatable="yes">Reqd Fuel (per cyl/cycle)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -924,7 +924,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="req_fuel_per_squirt_1_label">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Required Fuel (ms. per squirt)</property>
+			      <property name="label" translatable="yes">Reqd Fuel (ms. per squirt)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1436,7 +1436,7 @@ Threshold (ms.)</property>
 			  <child>
 			    <widget class="GtkLabel" id="req_fuel_per_cycle_2_label">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Required Fuel (per cyl/cycle)</property>
+			      <property name="label" translatable="yes">Reqd Fuel (per cyl/cycle)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1460,7 +1460,7 @@ Threshold (ms.)</property>
 			  <child>
 			    <widget class="GtkLabel" id="req_fuel_per_squirt_2_label">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Required Fuel (ms. per squirt)</property>
+			      <property name="label" translatable="yes">Reqd Fuel (ms. per squirt)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
