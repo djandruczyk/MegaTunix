@@ -244,48 +244,48 @@ struct ms_ve_constants
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char   ve_bins[64];            /* 0, VE table, 64 bytes */
-        unsigned char   cr_pulse_neg40;         /* 65, cr pulse at -40 deg F */
-        unsigned char   cr_pulse_pos170;        /* 66, cr pulse at 170 deg F */
-        unsigned char   as_enrich;              /* 67, Enrich over base (%) */
-        unsigned char   as_num_cycles;          /* 68, enrich for X cycles */
-        unsigned char   warmup_bins[10];        /* 69, Warmup bins  */
-        unsigned char   accel_bins[4];          /* 79, TPS Accel bins */
-        unsigned char   cold_accel_addon;       /* 83, Accel addon at -40deg */
-        unsigned char   tps_trig_thresh;        /* 84, TPS trig thr in V/sec */
-        unsigned char   accel_duration;         /* 85, Accel duration(secs) */
-        unsigned char   decel_cut;              /* 86, decel fuel cut % */
-        unsigned char   ego_temp_active;        /* 87, EGO activation pt */
-        unsigned char   ego_events;             /* 88, ign events betw steps */
-        unsigned char   ego_step;               /* 89, correction % */
-        unsigned char   ego_limit;              /* 90, +/- limit */
-        unsigned char   req_fuel;		/* 91, require fuel */
-        unsigned char   divider;                /* 92, IRQ / factor for pulse*/
-        unsigned char   alternate;              /* 93, alternate inj drivers */
-        unsigned char   inj_open_time;          /* 94, inj open time */
-        unsigned char   inj_ocfuel;             /* 95, PW-correlated amount of 
+        unsigned char   cr_pulse_neg40;         /* 64, cr pulse at -40 deg F */
+        unsigned char   cr_pulse_pos170;        /* 65, cr pulse at 170 deg F */
+        unsigned char   as_enrich;              /* 66, Enrich over base (%) */
+        unsigned char   as_num_cycles;          /* 67, enrich for X cycles */
+        unsigned char   warmup_bins[10];        /* 68, Warmup bins  */
+        unsigned char   accel_bins[4];          /* 78, TPS Accel bins */
+        unsigned char   cold_accel_addon;       /* 82, Accel addon at -40deg */
+        unsigned char   tps_trig_thresh;        /* 83, TPS trig thr in V/sec */
+        unsigned char   accel_duration;         /* 84, Accel duration(secs) */
+        unsigned char   decel_cut;              /* 85, decel fuel cut % */
+        unsigned char   ego_temp_active;        /* 86, EGO activation pt */
+        unsigned char   ego_events;             /* 87, ign events betw steps */
+        unsigned char   ego_step;               /* 88, correction % */
+        unsigned char   ego_limit;              /* 89, +/- limit */
+        unsigned char   req_fuel;		/* 90, require fuel */
+        unsigned char   divider;                /* 91, IRQ / factor for pulse*/
+        unsigned char   alternate;              /* 92, alternate inj drivers */
+        unsigned char   inj_open_time;          /* 93, inj open time */
+        unsigned char   inj_ocfuel;             /* 94, PW-correlated amount of 
 						 * fuel injected during open 
                                                  */
-        unsigned char   pwm_curr_lim;           /* 96, curr limit PWM duty 
+        unsigned char   pwm_curr_lim;           /* 95, curr limit PWM duty 
 						 * cycle
  						 */
-        unsigned char   pwm_time_max;           /* 97, Peak hold time */
-        unsigned char   batt_corr;              /* 98, Batt Voltage Corr */
-        unsigned short  rpmk;                   /* 99, 12K/ncyl */
-        unsigned char   rpm_bins[8];            /* 101, VEtable RPM bins */
-        unsigned char   kpa_bins[8];            /* 109, VEtable KPA bins */
+        unsigned char   pwm_time_max;           /* 96, Peak hold time */
+        unsigned char   batt_corr;              /* 97, Batt Voltage Corr */
+        unsigned short  rpmk;                   /* 98, 12K/ncyl */
+        unsigned char   rpm_bins[8];            /* 100, VEtable RPM bins */
+        unsigned char   kpa_bins[8];            /* 108, VEtable KPA bins */
 
-        union   config11 config11;              /* 117, Config for PC Config */
-        union   config12 config12;              /* 118, Config for PC Config */
-        union   config13 config13;              /* 119, Config for PC Config */
-        unsigned char   cr_priming_pulse;       /* 120, priming pulse b4 start*/
-        unsigned char   ego_rpm_active;         /* 121, EGO RPM trigger volt  */
-        unsigned char   fast_idle_thresh;       /* 122, fast idle temp thresh */
-        unsigned char   ego_sw_voltage;         /* 123, EGO flip pt voltage */
-        unsigned char   cold_accel_mult;        /* 124, Cold Accel * factor */
-        unsigned char   pad1;                   /* 125, Padding to 128 bytes */
-        unsigned char   pad2;                   /* 126, Padding to 128 bytes */
-        unsigned char   pad3;                   /* 127, Padding to 128 bytes */
-        unsigned char   pad4;                   /* 128, Padding to 128 bytes */
+        union   config11 config11;              /* 116, Config for PC Config */
+        union   config12 config12;              /* 117, Config for PC Config */
+        union   config13 config13;              /* 118, Config for PC Config */
+        unsigned char   cr_priming_pulse;       /* 119, priming pulse b4 start*/
+        unsigned char   ego_rpm_active;         /* 120, EGO RPM trigger volt  */
+        unsigned char   fast_idle_thresh;       /* 121, fast idle temp thresh */
+        unsigned char   ego_sw_voltage;         /* 122, EGO flip pt voltage */
+        unsigned char   cold_accel_mult;        /* 123, Cold Accel * factor */
+        unsigned char   pad1;                   /* 124, Padding to 128 bytes */
+        unsigned char   pad2;                   /* 125, Padding to 128 bytes */
+        unsigned char   pad3;                   /* 126, Padding to 128 bytes */
+        unsigned char   pad4;                   /* 127, Padding to 128 bytes */
 }; 
 
 #endif

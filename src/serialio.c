@@ -248,9 +248,44 @@ void read_ve_const()
 
 void write_ve_const(gint value, gint offset)
 {
+	gint highbyte = 0;
+	gint lowbyte = 0;
+	gint twopart = 0;
+	gint res = 0;
+	gint count = 0;
+	char buff[3] = {0, 0, 0};
+
 	if (value > 255)
+	{
 		printf("large value, %i, offset %i\n",value,offset);
-	printf("Should write %i to location %i\n",value,offset);
-	
-	// Stub function, does nothing yet... 
+		highbyte = (value & 0xff00) >> 8;
+		lowbyte = value & 0x00ff;
+		twopart = 1;
+	}
+	if (value < 0)
+	{
+		printf("WARNING!!, value sent is below 0\n");
+		return;
+	}
+
+	buff[0]=offset;
+	if(twopart)
+	{
+		buff[1]=highbyte;
+		buff[2]=lowbyte;
+		count = 3;
+	}
+	else
+	{
+		buff[1]=value;
+		count = 2;
+	}
+	res = write (serial_params.fd,"W",1);	/* Send write command */
+	res = write (serial_params.fd,buff,count);	/* Send write command */
 }
+
+void burn_flash()
+{
+	write (serial_params.fd,"B",1);	/* Send Burn command */
+}
+

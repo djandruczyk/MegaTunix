@@ -20,7 +20,7 @@
 #include <constants.h>
 
 gint req_fuel_popup = FALSE;
-static gint rpmk_offset = 99;
+static gint rpmk_offset = 98;
 static GtkWidget *popup;
 struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,0,19,14.7};
 extern struct ms_ve_constants *ve_constants;
@@ -179,6 +179,7 @@ int close_popup(GtkWidget *widget, gpointer data)
 int update_reqd_fuel(GtkWidget *widget, gpointer data)
 {
         gfloat tmp1,tmp2;
+	gint dload_val;
 
         tmp1 = 36.0*((double)reqd_fuel.disp)*4.27793;
         tmp2 = ((double) reqd_fuel.cyls) \
@@ -202,7 +203,8 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
         	ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
 
 	check_req_fuel_limits();
-        write_ve_const(ve_constants->rpmk, rpmk_offset);
+	dload_val = ve_constants->rpmk;
+        write_ve_const(dload_val, rpmk_offset);
 
         return TRUE;
 }

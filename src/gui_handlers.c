@@ -39,7 +39,7 @@ static gint err_flag = 0;
 static GdkColor red = { 0, 65535, 0, 0};
 static GdkColor black = { 0, 0, 0, 0};
 static GList *offsets = NULL;
-static gint offset_data[4]; /* Only 4 interdependant vars... */
+static gint offset_data[5]; /* Only 4 interdependant vars... */
 
 void leave(GtkWidget *widget, gpointer data)
 {
@@ -101,7 +101,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case 14:
 				/*SPECIAL*/
-				offset = 93;
+				offset = 92;
 				if (bit_val)
 				{
 					ve_constants->alternate=1;
@@ -160,7 +160,8 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			paused_handlers = FALSE;
 			break;
 		case WRITE_TO_MS:
-			//write_ve_const();
+			printf("burning flash\n");
+			burn_flash();
 			break;
 	}
 	return TRUE;
@@ -381,9 +382,9 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 				(gint)(((float)num_cylinders/
 					(float)num_squirts)+0.001);
 			dload_val = ve_constants->divider;
-			offset = 92;
 			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
 			{
+				printf("SQUIRT Adding to list\n");
 				offsets = g_list_append(offsets,
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
@@ -392,6 +393,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
+				printf("SQUIRT updating data in list\n");
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
@@ -432,10 +434,10 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			ve_constants->divider = 
 				(gint)(((float)num_cylinders/
 					(float)num_squirts)+0.001);
-			offset = 117;
 			dload_val = tmp;
 			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
 			{
+				printf("CYL Adding to list\n");
 				offsets = g_list_append(offsets,
 						GINT_TO_POINTER(offset));
 				offset_data[g_list_index(offsets,
@@ -444,6 +446,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
+				printf("CYL updating data in list\n");
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
@@ -482,6 +485,22 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_constants->config12.value = tmp;
 			dload_val = tmp;
+			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
+			{
+				printf("INJ Adding to list\n");
+				offsets = g_list_append(offsets,
+						GINT_TO_POINTER(offset));
+				offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+			}
+			else
+			{
+				printf("INJ Updating entry in list\n");
+				offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+			}
 			check_req_fuel_limits();
 			break;
 		default:
@@ -761,6 +780,8 @@ void check_req_fuel_limits()
 	gfloat req_fuel_dl = 0.0;
 	gint lim_flag = 0;
 	gint index = 0;
+	gint dload_val = 0;
+	gint offset = 0;
 
 	tmp =	(float)(ve_constants->divider*(float)(ve_constants->alternate+1))/(float)(num_injectors);
 
@@ -806,6 +827,7 @@ void check_req_fuel_limits()
 		 * Everything is OK with all inter-dependant variables.
 		 * settings all previous gui enties to normal state...
 		 */
+
 		gtk_widget_modify_fg(labels.squirts_lab,
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_fg(labels.injectors_lab,
@@ -823,6 +845,16 @@ void check_req_fuel_limits()
 		gtk_widget_modify_text(constants.req_fuel_base_spin,
 				GTK_STATE_INSENSITIVE,&black);
 
+		/* All Tested succeeded, download Required fuel, 
+		 * then iterate through the list of offsets of changed
+		 * inter-dependant variables, extract the data out of 
+		 * the companion array, and send to ECU.  Then free
+		 * the offset GList, and clear the array...
+		 */
+		dload_val = (gint)(req_fuel_dl);
+		offset = 90;
+		printf("writing req_fuel entry %i\n",dload_val);
+		write_ve_const(dload_val, offset);
 		for (index=0;index<g_list_length(offsets);index++)
 		{
 			gint offset;
@@ -830,11 +862,12 @@ void check_req_fuel_limits()
 			offset = GPOINTER_TO_INT(g_list_nth_data(offsets,index));
 			data = offset_data[g_list_index(offsets,
 					g_list_nth_data(offsets,index))];
+			printf("writing offset %i, data %i\n",offset,data);
 			write_ve_const(data, offset);
 		}
 		g_list_free(offsets);
 		offsets = NULL;
-		for (index=0;index<4;index++)
+		for (index=0;index<5;index++)
 			offset_data[index]=0;
 	}
 	return ;

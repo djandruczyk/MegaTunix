@@ -37,6 +37,7 @@ int build_constants(GtkWidget *parent_frame)
 	GtkWidget *spinner;
 	GtkAdjustment *adj;
 	GSList	*group;
+	extern GtkTooltips *tip;
 	
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -78,7 +79,7 @@ int build_constants(GtkWidget *parent_frame)
         constants.req_fuel_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(90));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -116,7 +117,7 @@ int build_constants(GtkWidget *parent_frame)
         constants.inj_open_time_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(93));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -138,7 +139,7 @@ int build_constants(GtkWidget *parent_frame)
         constants.batt_corr_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -172,7 +173,7 @@ int build_constants(GtkWidget *parent_frame)
         constants.pwm_curr_lim_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(95));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -194,7 +195,7 @@ int build_constants(GtkWidget *parent_frame)
         constants.pwm_time_max_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -225,7 +226,7 @@ int build_constants(GtkWidget *parent_frame)
         constants.fast_idle_thresh_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(122));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -622,13 +623,14 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
+	/* Indirectly generates the "divider" variable */
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
         constants.inj_per_cycle_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
-			GINT_TO_POINTER(92));
+			GINT_TO_POINTER(91));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -644,13 +646,14 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
+	/* Number of injectors, part of config12 */
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
         constants.injectors_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
-			GINT_TO_POINTER(118));
+			GINT_TO_POINTER(117));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -666,6 +669,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
+	/* Number of Cylinders part of config11 */
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
         constants.cylinders_spin = spinner;
@@ -673,7 +677,7 @@ int build_constants(GtkWidget *parent_frame)
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
-			GINT_TO_POINTER(117));
+			GINT_TO_POINTER(116));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -706,7 +710,9 @@ int build_constants(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(READ_FROM_MS));
 	
-	button = gtk_button_new_with_label("Send Data to ECU");
+	button = gtk_button_new_with_label("Permanently Store Data in ECU");
+	gtk_tooltips_set_tip(tip,button,
+        "Even though MegaTunix writes data to the MS as soon as its changed it has only written it to the MegaSquirt units RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);

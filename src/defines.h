@@ -22,10 +22,10 @@
 
 /* Memroy offsets */
 #define VE_TABLE_OFFSET		0
-#define WARMUP_BINS_OFFSET	69
-#define ACCEL_BINS_OFFSET	79
-#define RPM_BINS_OFFSET		101
-#define KPA_BINS_OFFSET		109
+#define WARMUP_BINS_OFFSET	68
+#define ACCEL_BINS_OFFSET	78
+#define RPM_BINS_OFFSET		100
+#define KPA_BINS_OFFSET		108
 
 /* Gui frames */
 #define ABOUT_PAGE		0x01
