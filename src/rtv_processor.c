@@ -46,6 +46,9 @@ void process_rt_vars(void *incoming)
 	void *evaluator = NULL;
 	GTimeVal timeval;
 	gint ts_position;
+	gint hist_position;
+	gint hist_max;
+	gfloat *history = NULL;;
 
 	len = firmware->rtvars_size;
 	if (len != rtv_map->raw_total)
@@ -60,7 +63,7 @@ void process_rt_vars(void *incoming)
 	rtv_map->ts_array[ts_position] = timeval;
 	ts_position++;
 	/* wrap around.. */
-	if (ts_position > rtv_map->ts_max)
+	if (ts_position >= rtv_map->ts_max)
 		ts_position = 0;
 	rtv_map->ts_position = ts_position;
 	
@@ -74,6 +77,7 @@ void process_rt_vars(void *incoming)
 		list = g_list_first(list);
 		for (j=0;j<g_list_length(list);j++)
 		{
+			history = NULL;
 			object=(GObject *)g_list_nth_data(list,j);
 			evaluator = (void *)g_object_get_data(object,"evaluator");
 			if (!evaluator)
@@ -95,7 +99,7 @@ void process_rt_vars(void *incoming)
 			{
 				result = handle_complex_expr(object,incoming,RTV);
 				//printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
-				continue;
+				goto store_it;
 			}
 
 			if (g_object_get_data(object,"lookuptable"))
@@ -116,6 +120,20 @@ void process_rt_vars(void *incoming)
 				result = (tmpf-32)*(5.0/9.0);
 			else
 				result = tmpf;
+store_it:
+			history = (gfloat *)g_object_get_data(object,"history");
+			hist_position = (gint)g_object_get_data(object,"hist_position");
+			hist_max = (gint)g_object_get_data(object,"hist_max");
+			/* Store data in ringbuffer */
+			history[hist_position] = result;
+			g_object_set_data(object,"last_entry",GINT_TO_POINTER(hist_position));
+			hist_position++;
+			/* wrap around.. */
+			if (hist_position >= hist_max)
+				hist_position = 0;
+			g_object_set_data(object,"hist_position",GINT_TO_POINTER(hist_position));
+
+
 			//printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 
 		}

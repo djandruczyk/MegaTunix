@@ -285,7 +285,7 @@ void run_datalog(void)
 	GObject *object = NULL;
 	gfloat value = 0.0;
 	gfloat *history = NULL;
-	gint hist_position = 0;
+	gint last_entry = 0;
 	extern GHashTable *dynamic_widgets;
 
 	if (!logging_active) /* Logging isn't enabled.... */
@@ -323,8 +323,8 @@ void run_datalog(void)
 			continue;
 
 		history = (gfloat *)g_object_get_data(object,"history");
-		hist_position = (gint)g_object_get_data(object,"hist_position");
-		value = history[hist_position];
+		last_entry = (gint)g_object_get_data(object,"last_entry");
+		value = history[last_entry];
 		if ((gboolean)g_object_get_data(object,"is_float"))
 			g_string_append_printf(output,"%.3f",value);
 		else
