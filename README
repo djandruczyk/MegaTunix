@@ -1,11 +1,11 @@
 
 MegaTunix x.y.z. designed and written by Dave J. Andruczyk
 
-Insiration for this code came from Bruce Bowling and Al Grippo, 
-designers of the MegaSquirt DIY Fuel injection ECU. This code is 
+Inspiration for this code came from Bruce Bowling and Al Grippo, 
+designers of the MegaSquirt DIY Fuel Injection ECU.  This code is 
 modelled slightly after Bruce and Al's MegaSquirt PCC tuning software 
-for MS-Windows.  Inspiration also came from Eric Fahlgrens' MegaTune,
-also for windows.
+for Windows.  Inspiration also came from Eric Fahlgrens' MegaTune,
+also for Windows.
 
 NOTE about fonts:
 	Some people have complained that MegaTunix comes up with abnormally
@@ -14,8 +14,9 @@ for Gnome being set to large.  This problem is mostly seen by people NOT
 using the Gnome desktop.   MegaTunix uses the GTK+2 libraries which are the 
 foundation libraries by which Gnome's gui is based upon.  The fix is to run 
 "gnome-font-properties" and set the "Application Font" size to a smaller 
-point size.  On the Author's system a Application Font of "Sans" at 8pt, 
-looks the best.
+point size.  On the authors' system a Application Font of "Sans" at 8pt, 
+looks the best.  The author runs at 1600x1200 on an ancient 21 inch monitor 
+so your ideal font size may vary.
 
 	Currently all Serial I/O is working. Reading of Realtime vars works.  
 Reading of VEtable/Constants works fine.  Changing any var checks for limits
@@ -23,4 +24,6 @@ and sends directly to the MS (new as of 5/25/2003). Flash burn works..
 
 The only things not done yet are the Tuning gui (guages, VEtable graphical
 editor..) and the datalogging/tools pages.
+
+Suggestions are welcomed for improving the functionality of MegaTunix...
 
