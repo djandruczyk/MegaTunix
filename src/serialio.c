@@ -241,7 +241,7 @@ void set_ms_page(gint ms_page)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i\n",ms_page),CRITICAL);
 
 	last_page = ms_page;
-	usleep(5000);
+	g_usleep(5000);
 
 
 	return;

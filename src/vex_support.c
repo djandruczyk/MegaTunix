@@ -782,19 +782,45 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 
 
 	for (i=0;i<vex->total_rpm_bins;i++)
-		ms_data[page][firmware->table_params[table]->x_base + i] =
-			vex->rpm_bins[i];
+		ms_data[firmware->table_params[table]->x_page][firmware->table_params[table]->x_base + i] = vex->rpm_bins[i];
 	for (i=0;i<vex->total_load_bins;i++)
-		ms_data[page][firmware->table_params[table]->y_base + i] =
-			vex->load_bins[i];
-
+		ms_data[firmware->table_params[table]->y_page][firmware->table_params[table]->y_base + i] = vex->load_bins[i];
 	for (i=0;i<((vex->total_load_bins)*(vex->total_rpm_bins));i++)
-		ms_data[page][firmware->table_params[table]->z_base + i] =
-			vex->ve_bins[i];
+		ms_data[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + i] = vex->ve_bins[i];
 
-	for (i=0;i<firmware->page_params[page]->length;i++)
+	/* Set page to the page defined for the X axis group variable */
+	page = firmware->table_params[table]->x_page;
+	for (i=0;i<firmware->page_params[firmware->table_params[table]->x_page]->length;i++)
+	{
 		if (ms_data[page][i] != ms_data_last[page][i])
 			write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+	}
+
+	/* If Y page is different then the page we just updated, iterate
+	 * through the data chek for changes and send differences
+	 */
+	if (page != firmware->table_params[table]->y_page)
+	{
+		page = firmware->table_params[table]->y_page;
+		for (i=0;i<firmware->page_params[firmware->table_params[table]->y_page]->length;i++)
+		{
+			if (ms_data[page][i] != ms_data_last[page][i])
+				write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+		}
+	}
+
+	/* If Z page is different then the page we just updated, iterate
+	 * through the data chek for changes and send differences
+	 */
+	if (page != firmware->table_params[table]->z_page)
+	{
+		page = firmware->table_params[table]->z_page;
+		for (i=0;i<firmware->page_params[firmware->table_params[table]->z_page]->length;i++)
+		{
+			if (ms_data[page][i] != ms_data_last[page][i])
+				write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+		}
+	}
 
 	//update_ve_const();	
 	tmpbuf = g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex->page);
