@@ -32,6 +32,12 @@ extern GtkWidget *tools_view;
 
 
 	/* Datastructure for VE table import fields.  */
+/*!
+ \brief The Vex_Import structure holds all fields (lots) needed to load and
+ process a VEX (Vetace EXport file) and load it into megatunix.
+ \see vetable_import
+ \see vetable_export
+ */
 struct Vex_Import
 {	
 	gchar *version;		/* String */
