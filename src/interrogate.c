@@ -688,10 +688,10 @@ void load_profile_details(void *ptr)
 						dbg_func(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 				}
 			}
-			if(!cfg_read_int(cfgfile,section,"ve_base_offset",&canidate->page_params[i]->ve_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"tbl_base_offset",&canidate->page_params[i]->tbl_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"tbl_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"rpm_base_offset",&canidate->page_params[i]->rpm_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"load_base_offset",&canidate->page_params[i]->load_base))
 				dbg_func(__FILE__": load_profile_details()\n\t\"load_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"rpm_bincount",&canidate->page_params[i]->rpm_bincount))

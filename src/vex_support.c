@@ -89,7 +89,7 @@ gboolean vetable_export(void *ptr)
 	gsize count = 0;
 	gint index = 0;
 	gint load_base = 0;
-	gint ve_base = 0;
+	gint tbl_base = 0;
 	gint rpm_base = 0;
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
@@ -106,7 +106,7 @@ gboolean vetable_export(void *ptr)
 	for (z=0;z<firmware->total_pages;z++)
 	{
 		page = z;
-		ve_base = firmware->page_params[page]->ve_base;
+		tbl_base = firmware->page_params[page]->tbl_base;
 		load_base = firmware->page_params[page]->load_base;
 		rpm_base = firmware->page_params[page]->rpm_base;
 		load_bincount = firmware->page_params[page]->load_bincount;
@@ -151,9 +151,9 @@ gboolean vetable_export(void *ptr)
 			for (j=0;j<load_bincount;j++)
 			{
 				if (j == 0)
-					output = g_string_append (output,g_strdup_printf("  %3d",ms_data[page][index+ve_base]));
+					output = g_string_append (output,g_strdup_printf("  %3d",ms_data[page][index+tbl_base]));
 				else
-					output = g_string_append (output,g_strdup_printf("   %3d",ms_data[page][index+ve_base]));
+					output = g_string_append (output,g_strdup_printf("   %3d",ms_data[page][index+tbl_base]));
 				index++;
 			}
 			output = g_string_append(output,"\n");
@@ -639,7 +639,7 @@ void feed_import_data_to_ms(void *ptr)
 			vex_import->load_bins[i];
 
 	for (i=0;i<((vex_import->total_load_bins)*(vex_import->total_rpm_bins));i++)
-		ms_data[page][firmware->page_params[page]->ve_base + i] =
+		ms_data[page][firmware->page_params[page]->tbl_base + i] =
 			vex_import->ve_bins[i];
 
 	update_ve_const();	

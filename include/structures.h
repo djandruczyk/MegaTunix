@@ -185,7 +185,7 @@ struct Log_Info
 struct Page_Params
 {
 	gint size;		/*! total size of this page as returned... */
-	gint ve_base;		/*! where the vetable starts */
+	gint tbl_base;		/*! where the vetable starts */
 	gint rpm_base;		/*! where rpm table starts */
 	gint load_base;		/*! where load table starts */
 	gint rpm_bincount;	/*! how many RPM bins */

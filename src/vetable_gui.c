@@ -29,7 +29,7 @@ void rescale_table(void * data)
 	extern GHashTable *dynamic_widgets;
 	gchar *widget_name = (gchar *)data;
 	gint page = -1;
-	gint ve_base = 0;
+	gint tbl_base = 0;
 	gint rpm_bins = 0;
 	gint load_bins = 0;
 	gboolean is_spark = FALSE;
@@ -44,7 +44,7 @@ void rescale_table(void * data)
 	widget = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-	ve_base = firmware->page_params[page]->ve_base;
+	tbl_base = firmware->page_params[page]->tbl_base;
 	rpm_bins = firmware->page_params[page]->rpm_bincount;
 	load_bins = firmware->page_params[page]->load_bincount;
 	is_spark = firmware->page_params[page]->is_spark;

@@ -75,7 +75,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->page = page;
 	ve_view->rpm_bincount = firmware->page_params[page]->rpm_bincount;
 	ve_view->load_bincount = firmware->page_params[page]->load_bincount; 
-	ve_view->ve_base = firmware->page_params[page]->ve_base;
+	ve_view->tbl_base = firmware->page_params[page]->tbl_base;
 	ve_view->load_base = firmware->page_params[page]->load_base;
 	ve_view->rpm_base = firmware->page_params[page]->rpm_base;
 	ve_view->is_spark = firmware->page_params[page]->is_spark;
@@ -500,7 +500,7 @@ void ve3d_calculate_scaling(void *ptr)
 	gint * ve_ptr = NULL;
 	gint rpm_base = 0;
 	gint load_base = 0;
-	gint ve_base = 0;
+	gint tbl_base = 0;
 	gfloat divider = 0.0;
 
 	dbg_func(__FILE__": ve3d_calculate_scaling()\n",OPENGL);
@@ -510,7 +510,7 @@ void ve3d_calculate_scaling(void *ptr)
 	ve_ptr = (gint *)ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
-	ve_base = ve_view->ve_base;
+	tbl_base = ve_view->tbl_base;
 
 	ve_view->rpm_max = 0;
 	ve_view->load_max = 0;
@@ -534,8 +534,8 @@ void ve3d_calculate_scaling(void *ptr)
 	}
 	for (i=0;i<(ve_view->rpm_bincount*ve_view->load_bincount);i++) 
 	{
-		if (ve_ptr[ve_base+i]/divider > ve_view->ve_max) 
-			ve_view->ve_max = ve_ptr[ve_base+i]/divider;
+		if (ve_ptr[tbl_base+i]/divider > ve_view->ve_max) 
+			ve_view->ve_max = ve_ptr[tbl_base+i]/divider;
 	}
 
 	ve_view->rpm_div = ((gfloat)ve_view->rpm_max/(gfloat)ve_view->rpm_bincount);
@@ -556,7 +556,7 @@ void ve3d_draw_ve_grid(void *ptr)
 	struct Ve_View_3D *ve_view = NULL;
 	gint rpm_base = 0;
 	gint load_base = 0;
-	gint ve_base = 0;
+	gint tbl_base = 0;
 	gfloat divider = 0.0;
 
 	ve_view = (struct Ve_View_3D *)ptr;
@@ -566,7 +566,7 @@ void ve3d_draw_ve_grid(void *ptr)
 	ve_ptr = (gint *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
-	ve_base = ve_view->ve_base;
+	tbl_base = ve_view->tbl_base;
 
 	glColor3f(1.0, 1.0, 1.0);
 	glLineWidth(1.5);
@@ -588,7 +588,7 @@ void ve3d_draw_ve_grid(void *ptr)
 					/ve_view->rpm_div,
 					(gfloat)(ve_ptr[load_base+load])
 					/ve_view->load_div, 	 	
-					(gfloat)(ve_ptr[ve_base+(load*ve_view->load_bincount)+rpm])/divider
+					(gfloat)(ve_ptr[tbl_base+(load*ve_view->load_bincount)+rpm])/divider
 					/ve_view->ve_div);
 		}
 		glEnd();
@@ -605,7 +605,7 @@ void ve3d_draw_ve_grid(void *ptr)
 					/ve_view->rpm_div,
 					(gfloat)(ve_ptr[load_base+load])
 					/ve_view->load_div,
-					(gfloat)(ve_ptr[ve_base+(load*ve_view->load_bincount)+rpm])/divider
+					(gfloat)(ve_ptr[tbl_base+(load*ve_view->load_bincount)+rpm])/divider
 					/ve_view->ve_div);	
 		}
 		glEnd();
@@ -625,7 +625,7 @@ void ve3d_draw_active_indicator(void *ptr)
 	extern gint **ms_data;
 	gint rpm_base = 0;
 	gint load_base = 0;
-	gint ve_base = 0;
+	gint tbl_base = 0;
 	gfloat divider = 0.0;
 
 	dbg_func(__FILE__": ve3d_draw_active_indicator()\n",OPENGL);
@@ -633,7 +633,7 @@ void ve3d_draw_active_indicator(void *ptr)
 	ve_ptr = (gint *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
-	ve_base = ve_view->ve_base;
+	tbl_base = ve_view->tbl_base;
 
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
 	if (ve_view->is_spark)
@@ -648,7 +648,7 @@ void ve3d_draw_active_indicator(void *ptr)
 	glVertex3f(	
 			(gfloat)(ve_ptr[rpm_base+ve_view->active_rpm])/ve_view->rpm_div,
 			(gfloat)(ve_ptr[load_base+ve_view->active_load])/ve_view->load_div,	
-			((gfloat)ve_ptr[ve_base+(ve_view->active_load*ve_view->load_bincount)+ve_view->active_rpm]/divider)/ve_view->ve_div);
+			((gfloat)ve_ptr[tbl_base+(ve_view->active_load*ve_view->load_bincount)+ve_view->active_rpm]/divider)/ve_view->ve_div);
 	glEnd();	
 }
 
@@ -710,14 +710,14 @@ void ve3d_draw_axis(void *ptr)
 	gint load_base = 0;
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
-	gint ve_base = 0;
+	gint tbl_base = 0;
 
 	dbg_func(__FILE__": ve3d_draw_axis()\n",OPENGL);
 
 	ve_ptr = (gint *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
-	ve_base = ve_view->ve_base;
+	tbl_base = ve_view->tbl_base;
 	rpm_bincount = ve_view->rpm_bincount;
 	load_bincount = ve_view->load_bincount;
 
@@ -906,7 +906,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	gint load_bincount = 0;
 	gint load_base = 0;
 	gint rpm_base = 0;
-	gint ve_base = 0;
+	gint tbl_base = 0;
 	gfloat divider = 0.0;
 	extern GList ***ve_widgets;
 	struct Ve_View_3D *ve_view = NULL;
@@ -923,7 +923,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	rpm_bincount = ve_view->rpm_bincount;
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
-	ve_base = ve_view->ve_base;
+	tbl_base = ve_view->tbl_base;
 
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
 	if (ve_view->is_spark)
@@ -964,9 +964,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_Page_Up:
 			dbg_func("\t\"Page Up\"\n",OPENGL);
 
-			if (ve_ptr[ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] <= 245)
+			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] <= 245)
 			{
-				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 10;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
@@ -976,9 +976,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_KP_Add:
 			dbg_func("\t\"PLUS\"\n",OPENGL);
 
-			if (ve_ptr[ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] < 255)
+			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] < 255)
 			{
-				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 1;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
@@ -988,9 +988,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_Page_Down:
 			dbg_func("\t\"Page Down\"\n",OPENGL);
 
-			if (ve_ptr[ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] >= 10)
+			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] >= 10)
 			{
-				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 10;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
@@ -1002,9 +1002,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_KP_Subtract:
 			dbg_func("\t\"MINUS\"\n",OPENGL);
 
-			if (ve_ptr[ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] > 0)
+			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] > 0)
 			{
-				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 1;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
@@ -1051,7 +1051,7 @@ void initialize_ve3d_view(void *ptr)
 	ve_view->is_spark = FALSE;
 	ve_view->rpm_base = 0;
 	ve_view->load_base = 0;
-	ve_view->ve_base = 0;
+	ve_view->tbl_base = 0;
 	ve_view->rpm_bincount = 0;
 	ve_view->load_bincount = 0;
 	return;

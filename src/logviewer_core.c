@@ -176,6 +176,8 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) == G_IO_STATUS_NORMAL) 
 	{
+		if (g_strrstr(a_line->str,"MARK"))
+			continue;
 		data = g_strsplit(a_line->str,log_info->delimiter,0);
 		for (i=0;i<(log_info->field_count);i++)
 		{
