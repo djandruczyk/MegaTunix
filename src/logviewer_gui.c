@@ -46,7 +46,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	/* Holds all the log traces... */
-	vbox2 = gtk_vbox_new(TRUE,0);
+	vbox2 = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
@@ -233,11 +233,36 @@ gboolean populate_viewer(GtkWidget * widget)
 				/* Allocate data struct and insert ptr to it*/
 				v_value = g_malloc(sizeof(struct Viewable_Value));		
 				v_value->parent = widget;
-				//v_value->drawing_area = gtk_drawing_area_new();
-				v_value->drawing_area = gtk_label_new("Viewable");
+				v_value->d_area = gtk_drawing_area_new();
+
+				v_value->pmap = gdk_pixmap_new(
+						v_value->d_area->window, 
+						10,10, 
+						gtk_widget_get_visual(
+							v_value->d_area)->depth);
 				gtk_box_pack_start(GTK_BOX(widget),
-						v_value->drawing_area,
+						v_value->d_area,
 						TRUE,TRUE,0);
+				gtk_widget_add_events(v_value->d_area,
+						GDK_BUTTON_PRESS_MASK |
+						GDK_BUTTON_RELEASE_MASK |
+						GDK_FOCUS_CHANGE_MASK);
+						
+				g_signal_connect(G_OBJECT
+						(v_value->d_area),
+						"configure_event",
+						G_CALLBACK(lv_configure_event),
+						NULL);
+						
+				g_signal_connect(G_OBJECT
+						(v_value->d_area),
+						"expose_event",
+						G_CALLBACK(lv_expose_event),
+						NULL);
+						
+				g_object_set_data(G_OBJECT(v_value->d_area),
+						"data",(gpointer)v_value);
+		
 				v_value->runtime_offset = logging_offset_map[i];
 				v_value->size = logging_datasizes_map[i];
 				
@@ -257,11 +282,11 @@ gboolean populate_viewer(GtkWidget * widget)
 							active_traces,
 							GINT_TO_POINTER(i));
 				/* Need to remove the widgets as well */
-				gtk_widget_destroy(v_value->drawing_area);
+				gtk_widget_destroy(v_value->d_area);
 				g_hash_table_remove(active_traces,
 						GINT_TO_POINTER(i));
 				v_value->parent = NULL;
-				v_value->drawing_area = NULL;
+				v_value->d_area = NULL;
 				v_value->runtime_offset = -1;
 				v_value->size = 0;
 				g_free(v_value);
@@ -271,4 +296,65 @@ gboolean populate_viewer(GtkWidget * widget)
 	}
 		
 	return FALSE; /* want other handlers to run... */
+}
+
+gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+{
+	GdkPixmap *pixmap = NULL;
+	gint w = 0;
+	gint h = 0;
+	struct Viewable_Value *v_value = NULL;
+
+	/* Get rest of important data... */
+	v_value = (struct Viewable_Value *)g_object_get_data(G_OBJECT(widget),
+			"data");
+	//	w= v_value->
+	//	h= v_value->
+	w=300;  /* HACK FIXME!!!! */
+	h=50;
+	pixmap = v_value->pmap;
+
+	if ((w!=event->width)||(h!=event->height))
+	{
+		if (pixmap)
+			g_object_unref(pixmap);
+
+		w=event->width;
+		h=event->height;
+		pixmap=gdk_pixmap_new(widget->window,
+				w,h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_rectangle(pixmap,
+				widget->style->black_gc,
+				TRUE, 0,0,
+				w,h);
+		gdk_window_set_back_pixmap(widget->window,pixmap,0);
+	}
+	v_value->pmap = pixmap;
+	gdk_window_clear(widget->window);
+
+
+
+	printf("configure event....\n");
+	return TRUE;
+}
+
+gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{
+	GdkPixmap *pixmap = NULL;
+	struct Viewable_Value *v_value = NULL;
+	v_value = (struct Viewable_Value *)g_object_get_data(G_OBJECT(widget),
+				"data");
+
+	/* Expose event handler... */
+	pixmap = v_value->pmap;
+	gdk_draw_drawable(widget->window,
+                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                        pixmap,
+                        event->area.x, event->area.y,
+                        event->area.x, event->area.y,
+                        event->area.width, event->area.height);
+
+	printf("expose event....\n");
+	return TRUE;
 }

@@ -246,7 +246,8 @@ struct Io_File
 struct Viewable_Value
 {
 	GtkWidget *parent; 		/* Parent Widget */
-	GtkWidget *drawing_area;	/* Drawing area widget */
+	GtkWidget *d_area;		/* Drawing area widget */
+	GdkPixmap *pmap;		/* Drawing area backing pixmap */
 	gchar *vname;			/* Name of widget being logged */
 	gint runtime_offset;		/* Offset into runtime struct */
 	gint size;			/* 1=byte, 2=float, 4=float */
