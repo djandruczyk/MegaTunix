@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-int handle_ms_data(InputData, gint );
+void handle_ms_data(InputHandler, gint );
 /* Prototypes */
 
 #endif

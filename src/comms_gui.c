@@ -143,8 +143,8 @@ void build_comms(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("   Test ECU Communication...   ");
 	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (check_ecu_comms), \
-			NULL);
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(CHECK_ECU_COMMS));
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);

@@ -195,7 +195,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(72.0,0.0,134.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
         ign_widgets[80] = spinner;
-        gtk_widget_set_size_request(spinner,40,-1);
+        gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(80));
@@ -224,7 +224,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
         ign_widgets[83] = spinner;
-        gtk_widget_set_size_request(spinner,40,-1);
+        gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(83));
@@ -253,7 +253,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,10,1.0,1.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
         ign_widgets[84] = spinner;
-        gtk_widget_set_size_request(spinner,40,-1);
+        gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(84));

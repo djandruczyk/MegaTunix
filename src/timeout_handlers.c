@@ -12,79 +12,75 @@
  */
 
 #include <config.h>
+#include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
 #include <runtime_gui.h>
 #include <logviewer_gui.h>
+#include <structures.h>
 #include <timeout_handlers.h>
+#include <threads.h>
 
-static gint runtime_id = 0;
-static gint logviewer_id = 0;
+GAsyncQueue *dispatcher = NULL;
+static gint realtime_id = 0;
 static gint forced_id = 0;
-static gfloat update_rate = 24;
+static gint update_rate = 24;
 
-void start_runtime_display()
+
+void start_realtime_tickler()
 {
-	if (runtime_id == 0)
-		runtime_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
-				(GtkFunction)update_runtime_vars,NULL);
-	if (logviewer_id == 0)
-		logviewer_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
-				(GtkFunction)update_logview_traces,NULL);
+	extern struct Serial_Params *serial_params;
+	if (realtime_id == 0)
+		realtime_id = g_timeout_add(serial_params->read_wait,
+				(GtkFunction)signal_read_rtvars,NULL);
 }
 
-void stop_runtime_display()
+gboolean signal_read_rtvars()
 {
-	if (runtime_id)
-		gtk_timeout_remove(runtime_id);
-	runtime_id = 0;
-	if (logviewer_id)
-		gtk_timeout_remove(logviewer_id);
-	logviewer_id = 0;
-}
+	gint length = 0;
+	extern GAsyncQueue *io_queue;
 
-	/* Funky hack to make sure the runtime screens update properly.
-	 * the problem is that the display updates run as gtk_timeouts so
-	 * their runtime is async to the serial I/O so that if they run b4
-	 * the serial does they will cancel the forced update flag before
-	 * data gets here,  thus we setup a timeout that waits at least 
-	 * 3 cycles of the runtime update so things have had time to stabilize
-	 * then we call the canel handler that resets the flag, returns FALSE
-	 * and expires the timeout. (cancels it run running again...)
+	length = g_async_queue_length(io_queue);
+	/* IF queue depth is too great we should not make the problem worse
+	 * so we skip a call as we're probably trying to go faster than the 
+	 * MS and/or serai lport can go....
 	 */
+	if (length > 2)
+		return TRUE;
+
+	io_cmd(IO_REALTIME_READ,NULL);			
+	dbg_func(__FILE__": signal_read_rtvars(), sending message to thread to read RT vars\n",SERIAL_GEN);
+
+	return TRUE;	/* Keep going.... */
+}
+void stop_realtime_tickler()
+{
+	if (realtime_id)
+		g_source_remove(realtime_id);
+	realtime_id = 0;
+}
 void force_an_update()
 {
-	extern gboolean forced_update;
-	if (forced_id == 0)
-	{
-		forced_update = TRUE;
-		gtk_timeout_add((int)((3.0/update_rate)*1000.0),
+      extern gboolean forced_update;
+      if (forced_id == 0)
+      {
+              forced_update = TRUE;
+              gtk_timeout_add((int)((3.0/update_rate)*1000.0),
                                 (GtkFunction)cancel_forced_update,NULL);
-	}
-	
+      }
+
 }
 
 gboolean cancel_forced_update()
 {
-	extern gboolean forced_update;
-	forced_update = FALSE;
-	return FALSE;
+        extern gboolean forced_update;
+        forced_update = FALSE;
+        return FALSE;
 }
 
-gboolean populate_gui()
+gboolean early_interrogation()
 {
-	/* A trick used in main() to startup MegaTunix faster..
-	 * the problem is that calling the READ_VE_CONST stuff before 
-	 * gtk_main is that it makes the gui have to go through interrogation
-	 * of the ecu before the gui appears, giving the appearance that
-	 * MegaTunix is slow.  By creating this simple wrapper and kicking
-	 * it off as a timeout, it'll run just after the gui is ready, and
-	 * since it returns FALSE, the timeout will be canceled and deleted
-	 * i.e. it acts like a one-shot behind a time delay. (the delay lets
-	 * the gui get "ready" and then this kicks off the interrogator and
-	 * populates the gui controls if the ECU is detected... 
-	 */
-
-	std_button_handler(NULL,GINT_TO_POINTER(READ_VE_CONST));
+	io_cmd(IO_INTERROGATE_ECU,NULL);
 	return FALSE;
 }
+

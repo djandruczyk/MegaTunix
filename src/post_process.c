@@ -218,7 +218,6 @@ void post_process_raw_memory(void *input, gint offset)
 {
 	gint i = 0;
 	unsigned char *ptr = input;
-	extern gint mem_view_style[];
 	gint init_val = 0;
 	extern gint num_mem_pages;
 
@@ -233,7 +232,6 @@ void post_process_raw_memory(void *input, gint offset)
 	for (i=0;i<256;i++)
 		raw_memory_data = g_array_insert_val(raw_memory_data,i+(256*offset),ptr[i]);
 				
-	update_raw_memory_view(mem_view_style[offset],offset);
 }
 
 void update_raw_memory_view(ToggleButton type, gint page_offset)

@@ -63,40 +63,24 @@ void interrogate_ecu()
 	gint total = 0;
 	gint last_page = 0;
 	gint tests_to_run = 0;
-	gboolean restart_reader = FALSE;
-	gboolean con_status = FALSE;
 	gchar *string = NULL;
 	GArray *cmd_array = NULL;
 	unsigned char buf[size];
 	unsigned char *ptr = buf;
-	extern gboolean raw_reader_running;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);
-	
 
 	if (!connected)
 	{
-		con_status = check_ecu_comms(NULL,NULL);
-		if (con_status == FALSE)
-		{
-			interrogated = FALSE;
-			no_ms_connection();
-			/* Set caps to std, no flags, disable all extra
-			 * controls 
-			 */
-			parse_ecu_capabilities(0);
-			g_static_mutex_unlock(&mutex);
-			return;
-		}
+		gdk_threads_enter();
+		no_ms_connection();
+		gdk_threads_leave();
+		g_static_mutex_unlock(&mutex);
+		return;
 	}
-	if (raw_reader_running)
-	{
-		restart_reader = TRUE;
-		stop_serial_thread();
-	}
-
+	
 	/* Allocate memory to store interrogation results */
 	canidate = g_malloc0(sizeof(struct Canidate));
 	canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
@@ -178,9 +162,6 @@ void interrogate_ecu()
 		g_free(canidate);
 
 	free_test_commands(cmd_array);
-
-	if (restart_reader)
-		start_serial_thread();
 
 	g_static_mutex_unlock(&mutex);
 
@@ -274,11 +255,13 @@ end_of_loop:
 				cmd->string, 
 				cmd->desc, 
 				(gint) g_hash_table_lookup(
-						canidate->bytecounts, 
-						cmd->handle));
+							   canidate->bytecounts, 
+							   cmd->handle));
 		// Store counts for VE/realtime readback... 
 		dbg_func(tmpbuf,INTERROGATOR);
+		gdk_threads_enter();
 		update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
+		gdk_threads_leave();
 		g_free(tmpbuf);
 		if (cmd->store_type == VNUM)
 		{
@@ -287,8 +270,10 @@ end_of_loop:
 			else
 				tmpbuf = g_strdup_printf("%.1f",
 						((float)canidate->ver_num/10.0));
+			gdk_threads_enter();
 			gtk_entry_set_text(GTK_ENTRY(entries.ecu_revision_entry)
 					,tmpbuf);
+			gdk_threads_leave();
 			g_free(tmpbuf);
 		}
 		if (cmd->store_type == SIG)
@@ -299,7 +284,9 @@ end_of_loop:
 				tmpbuf = g_strndup(
 						canidate->sig_str,
 						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->handle));
+			gdk_threads_enter();
 			gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
+			gdk_threads_leave();
 			g_free(tmpbuf);
 		}
 		if (cmd->store_type == EXTVER)
@@ -310,7 +297,9 @@ end_of_loop:
 				tmpbuf = g_strndup(
 						canidate->quest_str,
 						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->handle));
+			gdk_threads_enter();
 			gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
+			gdk_threads_leave();
 			g_free(tmpbuf);
 		}
 
@@ -319,7 +308,9 @@ end_of_loop:
 	{
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, Expect MegaTunix to NOT behave properly \nContact the author with the contents of this window\n");
 		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu() Firmware NOT DETECTED, send contents of the\ninterrogation window and the firmware details to the MegaTunix author\n"),CRITICAL);
+		gdk_threads_enter();
 		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
+		gdk_threads_leave();
 		g_free(tmpbuf);
 		goto cleanup;
 	}
@@ -345,7 +336,9 @@ end_of_loop:
 	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",potential->firmware_name);
 
 	dbg_func(g_strdup_printf(__FILE__": determine_ecu() Detected Firmware: %s\n",potential->firmware_name),INTERROGATOR);
+	gdk_threads_enter();
 	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
+	gdk_threads_leave();
 	g_free(tmpbuf);
 	goto freeup;
 

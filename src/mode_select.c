@@ -18,6 +18,7 @@
 #include <mode_select.h>
 #include <serialio.h>
 #include <structures.h>
+#include <threads.h>
 
 gchar *states[] = {"FALSE","TRUE"};
 

@@ -28,6 +28,7 @@
 #include <req_fuel.h>
 #include <serialio.h>
 #include <structures.h>
+#include <threads.h>
 
 static gint rpmk_offset = 98;
 extern struct DynamicSpinners spinners;

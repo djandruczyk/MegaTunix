@@ -17,10 +17,11 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void start_runtime_display(void);
-void stop_runtime_display(void);
+void start_realtime_tickler(void);
+void stop_realtime_tickler(void);
+gboolean signal_read_rtvars(void);
+gboolean early_interrogation(void);
 void force_an_update(void);
-gboolean populate_gui(void);
 gboolean cancel_forced_update(void);
 /* Prototypes */
 

@@ -270,8 +270,8 @@ void build_general(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("Interrogate ECU capabilities");
 	gtk_container_add(GTK_CONTAINER(ebox),button);
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (interrogate_ecu), \
-			NULL);
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(INTERROGATE_ECU));
 
 	hbox = gtk_hbox_new(FALSE,18);
 	gtk_table_attach (GTK_TABLE (table), hbox, 3, 5, 0, 1,

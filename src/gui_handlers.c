@@ -17,6 +17,7 @@
 #include <conversions.h>
 #include <datalogging_gui.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
 #include <glib/gprintf.h>
@@ -132,7 +133,6 @@ void leave(GtkWidget *widget, gpointer data)
 
 	stop_datalogging();
 	save_config();
-	stop_serial_thread();
 	close_serial();
 	if (iofile)	
 		close_file(iofile);
@@ -146,12 +146,11 @@ gint comm_port_change(GtkEditable *editable)
 {
 	gchar *port;
 	gboolean result;
+	extern GtkWidget *comms_view;
 
 	port = gtk_editable_get_chars(editable,0,-1);
 	if(serial_params->open)
 	{
-		if (raw_reader_running)
-			stop_serial_thread();
 		close_serial();
 	}
 	result = g_file_test(port,G_FILE_TEST_EXISTS);
@@ -163,11 +162,12 @@ gint comm_port_change(GtkEditable *editable)
 		serial_params->port_name = g_strdup(port);
 		setup_serial_params();
 	}
-/*	else
+	else
 	{
-		g_printf("file not found...\n");	
+		dbg_func(__FILE__": comm_port_change(), File not found\n",CRITICAL);
+		update_logbar(comms_view,"warning",g_strdup_printf("\"%s\" File not found\n",port),TRUE,FALSE);
 	}
-*/
+
 
 	g_free(port);
 	return TRUE;
@@ -384,76 +384,68 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	/* get any datastructures attached to the widget */
 	void *object_data = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
+	static gboolean queue_referenced =  FALSE;
+	extern GAsyncQueue *io_queue;
 	if (GTK_IS_OBJECT(widget))
 	{
 		object_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 		reqd_fuel = (struct Reqd_Fuel *) 
 			g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	}
+	if (queue_referenced == FALSE)
+		g_async_queue_ref(io_queue);
+
 	switch ((StdButton)data)
 	{
+		case INTERROGATE_ECU:
+			io_cmd(IO_INTERROGATE_ECU, NULL);
+			break;
+			
 		case START_REALTIME:
 			if (!connected)
-				check_ecu_comms(NULL,NULL);
+				io_cmd(IO_COMMS_TEST, NULL);
 			if (!interrogated)
-				interrogate_ecu();
+				io_cmd(IO_INTERROGATE_ECU, NULL);
 			if (!constants_loaded)
-			{	/*Read constants first at least once */
-				paused_handlers = TRUE;
-				read_ve_const();
-				update_ve_const();
-				set_store_buttons_state(BLACK);
-				paused_handlers = FALSE;
-				constants_loaded = TRUE;
-			}
-			start_serial_thread();
-			start_runtime_display();
-			force_an_update();
+				io_cmd(IO_READ_VE_CONST, NULL);
+			start_realtime_tickler();
 			break;
 		case STOP_REALTIME:
-			stop_serial_thread();
+			stop_realtime_tickler();
+			//stop_datalogging();
 			reset_runtime_status();
-			force_an_update();
-			stop_runtime_display();
-			stop_datalogging();
 			break;
 		case READ_VE_CONST:
-			if (!interrogated)
-				interrogate_ecu();
 			if (!connected)
-				check_ecu_comms(NULL,NULL);
+				io_cmd(IO_COMMS_TEST, NULL);
 			if (!connected)
-				no_ms_connection();
-			else
 			{
-				paused_handlers = TRUE;
-				read_conversions();
-				read_ve_const();
-				update_ve_const();
-				set_store_buttons_state(BLACK);
-				paused_handlers = FALSE;
-				constants_loaded = TRUE;
+				no_ms_connection();
+				break;
 			}
+			if (!interrogated)
+				io_cmd(IO_INTERROGATE_ECU, NULL);
+
+			io_cmd(IO_READ_VE_CONST, NULL);
 			break;
 		case READ_RAW_MEMORY:
 			if (!interrogated)
-				interrogate_ecu();
+				io_cmd(IO_INTERROGATE_ECU, NULL);
 			if (!connected)
-				check_ecu_comms(NULL,NULL);
+				io_cmd(IO_COMMS_TEST, NULL);
 			if (!connected)
-				no_ms_connection();
-			else
 			{
-				paused_handlers = TRUE;
-				read_raw_memory((gint)object_data);
-				//update_raw_memory();
-				paused_handlers = FALSE;
+				no_ms_connection();
+				break;
 			}
+			else
+				io_cmd(IO_READ_RAW_MEMORY,(gpointer)object_data);
+			break;
+		case CHECK_ECU_COMMS:
+			io_cmd(IO_COMMS_TEST,NULL);
 			break;
 		case BURN_MS_FLASH:
-			paused_handlers = TRUE;
-			burn_flash();
-			paused_handlers = FALSE;
+			io_cmd(IO_BURN_MS_FLASH,NULL);
 			break;
 		case SELECT_DLOG_EXP:
 			present_filesavebox(DATALOG_EXPORT);
@@ -551,6 +543,8 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
+			stop_realtime_tickler();
+			start_realtime_tickler();
 			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;

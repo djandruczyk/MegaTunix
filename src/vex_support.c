@@ -18,6 +18,7 @@
 #include <enums.h>
 #include <fileio.h>
 #include <glib/gprintf.h>
+#include <gui_handlers.h>
 #include <notifications.h>
 #include <stdio.h>
 #include <structures.h>

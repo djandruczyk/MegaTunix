@@ -331,4 +331,22 @@ struct Command
 	StoreType store_type;	/* Store data where */
 };
 
+struct Io_Message
+{
+	CmdType command;	/* Command type */
+	gint page;		/* dualtable specific */
+	gchar *out_str;		/* Data sent to the ECU  for READ_CMD's */
+	gint out_len;		/* number of bytes in out_str */
+	gint offset;		/* used for RAW_MEMORY and more */
+	GArray *funcs;		/* List of functiosn to be dispatched... */
+	InputHandler handler;	/* Command handler for inbound data */
+	void *payload;		/* data passed along, arbritrary size.. */
+};
+
+struct OutputData
+{
+	gint value;		/* Value to send */
+	gint offset;		/* Offset in block */
+	gboolean ign_parm;	/* Ignition parameter, yes or no? */
+};
 #endif

@@ -33,7 +33,7 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
        
-int handle_ms_data(InputData which_data, gint offset)
+void handle_ms_data(InputHandler handler, gint offset)
 {
 	gint res = 0;
 	gint total_read = 0;
@@ -53,8 +53,46 @@ int handle_ms_data(InputData which_data, gint offset)
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
 	 */
-	switch (which_data)
+	switch (handler)
 	{
+		case C_TEST:
+			/* Check_ecu_comms equivalent....
+			 * REALLY REALLY overkill just to read 1 byte, but 
+			 * done this way for consistency sake with all the 
+			 * other handlers....
+			 */
+			total_read = 0;
+			total_wanted = 1;
+			zerocount = 0;
+
+			while (total_read < total_wanted )
+			{
+				dbg_func(g_strdup_printf(__FILE__": C_TEST requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
+
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				// Increment bad read counter....
+				if (res == 0)
+					zerocount++;
+
+				dbg_func(g_strdup_printf("\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (zerocount >= 5)  // 3 bad reads, abort
+				{
+					bad_read = TRUE;
+					break;
+				}
+			}
+			if (bad_read)
+			{
+				dbg_func(__FILE__":  Error reading MS Clock (C_TEST)\n",CRITICAL);
+				tcflush(serial_params->fd, TCIOFLUSH);
+				serial_params->errcount++;
+				goto jumpout;
+			}
+			break;
+			
 		case REALTIME_VARS:
 			/* Data arrived,  drain buffer until we receive
 			 * serial->params->rtvars_size, or readcount
@@ -291,5 +329,5 @@ int handle_ms_data(InputData which_data, gint offset)
 	}
 	jumpout:
 
-	return TRUE;
+	return;
 }

@@ -29,6 +29,7 @@
 #include <notifications.h>
 #include <serialio.h>
 #include <structures.h>
+#include <threads.h>
 #include <time.h>
 
 static int grid = 8;

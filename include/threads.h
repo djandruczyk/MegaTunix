@@ -15,11 +15,16 @@
 #define __THREADS_H__
 
 #include <gtk/gtk.h>
+#include <enums.h>
 
 /* Prototypes */
-void * raw_reader_thread(void *); /* Serial raw reader thread */
-int stop_serial_thread();       /* cancels reader thread */
-void start_serial_thread(void); /*bootstrp function fopr above */
+void io_cmd(IoCommands, gpointer);	/* Send message down the queue */
+void *serial_io_handler(gpointer);	/* thread that processes messages */
+void comms_test(void);			/* new check_ecu_comms function */
+void readfrom_ecu(void *);		/* Function to get data FROM ecu */
+void writeto_ecu(void *);		/* Func to send data to the ECU */
+void write_ve_const(gint, gint, gboolean);
+void burn_ms_flash(void);		/* run after burn completion */
 /* Prototypes */
 
 #endif
