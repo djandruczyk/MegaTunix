@@ -715,15 +715,15 @@ gboolean update_runtime_vars()
 	extern struct Runtime_Common *runtime_last;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
-	extern struct Ve_Widgets *ve_widgets;
+	extern GtkWidget *ve_widgets[];
 	extern gboolean dualtable;
 
 	gdk_threads_enter();
 
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(ve_widgets->widget[0]),"data");
+				G_OBJECT(ve_widgets[0]),"data");
 	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(ve_widgets->widget[0+MS_PAGE_SIZE]),"data");
+				G_OBJECT(ve_widgets[0+MS_PAGE_SIZE]),"data");
 	/* Count is used  to force an update after 5 runs EVEN IF the 
 	 * value hasn't changed.  seems to fix a "stuck bar" I've seen
 	 */

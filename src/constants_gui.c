@@ -22,7 +22,7 @@
 
 extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
-extern struct Ve_Widgets *ve_widgets;
+extern GtkWidget *ve_widgets[];
 extern GdkColor black;
 GList *inv_dt_widgets = NULL;
 GList *dt_widgets = NULL;
@@ -328,7 +328,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Injector Open Time 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets->widget[93] = spinner;
+	ve_widgets[93] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -354,7 +354,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Battery Correction Factor 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets->widget[97] = spinner;
+	ve_widgets[97] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
@@ -391,7 +391,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Current Limit % 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[95] = spinner;
+	ve_widgets[95] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(95));
@@ -417,7 +417,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Time threshold 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets->widget[96] = spinner;
+	ve_widgets[96] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
@@ -692,7 +692,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Injector Open Time 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets->widget[93+MS_PAGE_SIZE] = spinner;
+	ve_widgets[93+MS_PAGE_SIZE] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -718,7 +718,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Battery Correction Factor 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets->widget[97+MS_PAGE_SIZE] = spinner;
+	ve_widgets[97+MS_PAGE_SIZE] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97+MS_PAGE_SIZE));
@@ -755,7 +755,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Current Limit % 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[95+MS_PAGE_SIZE] = spinner;
+	ve_widgets[95+MS_PAGE_SIZE] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(95+MS_PAGE_SIZE));
@@ -781,7 +781,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// PWM Time threshold 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	ve_widgets->widget[96+MS_PAGE_SIZE] = spinner;
+	ve_widgets[96+MS_PAGE_SIZE] = spinner;
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96+MS_PAGE_SIZE));
@@ -851,8 +851,8 @@ void initialize_reqd_fuel(void * ptr, gint table)
 	reqd_fuel->disp = 350;
 	reqd_fuel->cyls = 8;
 	reqd_fuel->rated_inj_flow = 19.0;
-	reqd_fuel->rated_pressure = 3.0;
 	reqd_fuel->actual_inj_flow = 0.0;
+	reqd_fuel->rated_pressure = 3.0;
 	reqd_fuel->actual_pressure = 3.0;
 	reqd_fuel->target_afr = 14.7;
 
@@ -862,9 +862,11 @@ void initialize_reqd_fuel(void * ptr, gint table)
 		cfg_read_int(cfgfile,tmpbuf,"Cylinders",&reqd_fuel->cyls);
 		cfg_read_float(cfgfile,tmpbuf,"Rated_Inj_Flow",
 				&reqd_fuel->rated_inj_flow);
+		cfg_read_float(cfgfile,tmpbuf,"Actual_Pressure",
+				&reqd_fuel->actual_pressure);
 		cfg_read_float(cfgfile,tmpbuf,"Rated_Pressure",
 				&reqd_fuel->rated_pressure);
-		cfg_read_float(cfgfile,tmpbuf,"Actual_Pressure",
+		cfg_read_float(cfgfile,tmpbuf,"Actual_Inj_Flow",
 				&reqd_fuel->actual_inj_flow);
 		cfg_read_float(cfgfile,tmpbuf,"Target_AFR",
 				&reqd_fuel->target_afr);

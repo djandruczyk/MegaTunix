@@ -55,7 +55,7 @@ extern GtkWidget *custom_logables;
 extern unsigned char *kpa_conversion;
 extern unsigned char na_map[];
 extern unsigned char turbo_map[];
-extern struct Ve_Widgets *ve_widgets;
+extern GtkWidget *ve_widgets[];
 extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
@@ -712,7 +712,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			break;
 		case GENERIC:	/* Handles almost ALL other variables */
 			temp_dep = (gboolean)g_object_get_data(
-					G_OBJECT(ve_widgets->widget[offset]),
+					G_OBJECT(ve_widgets[offset]),
 						"temp_dep");
 
 			if (temp_dep)
@@ -1049,13 +1049,13 @@ void update_ve_const()
 	{
 		temp_dep = FALSE;
 		dl_type = -1;
-		if (GTK_IS_OBJECT(ve_widgets->widget[i]))
+		if (GTK_IS_OBJECT(ve_widgets[i]))
 		{
 			dl_type = (gint)g_object_get_data(
-					G_OBJECT(ve_widgets->widget[i]),
+					G_OBJECT(ve_widgets[i]),
 					"dl_type");
 			temp_dep = (gboolean)g_object_get_data(
-					G_OBJECT(ve_widgets->widget[i]),
+					G_OBJECT(ve_widgets[i]),
 					"temp_dep");
 			if (dl_type == IMMEDIATE)
 				value = convert_after_upload(i);  
@@ -1066,7 +1066,7 @@ void update_ve_const()
 			}
 
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						ve_widgets->widget[i]),value);
+						ve_widgets[i]),value);
 		}
 	}
 }

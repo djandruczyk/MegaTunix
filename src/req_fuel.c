@@ -372,8 +372,10 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
                                 reqd_fuel->rated_inj_flow);
                 cfg_write_float(cfgfile,tmpbuf,"Rated_Pressure",
                                 reqd_fuel->rated_pressure);
-                cfg_write_float(cfgfile,tmpbuf,"Actual_Pressure",
+                cfg_write_float(cfgfile,tmpbuf,"Actual_Inj_Flow",
                                 reqd_fuel->actual_inj_flow);
+                cfg_write_float(cfgfile,tmpbuf,"Actual_Pressure",
+                                reqd_fuel->actual_pressure);
                 cfg_write_float(cfgfile,tmpbuf,"Target_AFR",
                                 reqd_fuel->target_afr);
 

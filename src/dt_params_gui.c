@@ -35,7 +35,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	GtkAdjustment *adj;
 	GSList *group = NULL;
 
-	extern struct Ve_Widgets *ve_widgets;
+	extern GtkWidget *ve_widgets[];
 	extern GList *store_widgets;
 	extern struct DynamicButtons buttons;
 	extern GtkTooltips *tip;
@@ -307,7 +307,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			300.0,100.0,1500,100,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[255] = spinner;
+	ve_widgets[255] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -329,7 +329,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			8500.0,100.0,25500,100,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[251] = spinner;
+	ve_widgets[251] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -371,7 +371,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			5000.0,100.0,25500,100,1000,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[252] = spinner;
+	ve_widgets[252] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -399,7 +399,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			6000.0,100.0,25500,100,1000,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[253] = spinner;
+	ve_widgets[253] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -427,7 +427,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			6500.0,100.0,25500,100,1000,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[254] = spinner;
+	ve_widgets[254] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -554,7 +554,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			50.0,1.0,255,10,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[248] = spinner;
+	ve_widgets[248] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -584,7 +584,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			50.0,1.0,255,10,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[249] = spinner;
+	ve_widgets[249] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -613,7 +613,7 @@ void build_dt_params(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(
 			50.0,1.0,255,10,100,1.0);
         spinner = gtk_spin_button_new(adj,1,0);
-	ve_widgets->widget[250] = spinner;
+	ve_widgets[250] = spinner;
         dt_widgets = g_list_append(dt_widgets,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);

@@ -23,7 +23,7 @@ extern struct DynamicSpinners spinners;
 struct DynamicAdjustments adjustments;
 struct DynamicLabels labels;
 struct DynamicButtons buttons;
-extern struct Ve_Widgets *ve_widgets;
+extern GtkWidget *ve_widgets[];
 extern GdkColor black;
 GList *enh_idle_widgets = NULL;
 GList *inv_ign_widgets = NULL;
@@ -481,7 +481,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Cooling Fan Turn-On Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-        ve_widgets->widget[121] = spinner;
+        ve_widgets[121] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
@@ -536,7 +536,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	 * IF this does NOT make sense to you feel free to email the 
 	 * author and I'll explain to you...  :) */
         /* Fast Idle Temp (tied to "Cooling Fan Temp" (MSnEDIS/spark ) */
-	tmpspin = ve_widgets->widget[121];
+	tmpspin = ve_widgets[121];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
         adjustments.fast_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
@@ -558,7 +558,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Fast Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(1800.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-        ve_widgets->widget[125] = spinner;
+        ve_widgets[125] = spinner;
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
@@ -592,7 +592,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         spinners.slow_idle_temp_spin = spinner;
-        ve_widgets->widget[124] = spinner;
+        ve_widgets[124] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
@@ -623,7 +623,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
-        ve_widgets->widget[126] = spinner;
+        ve_widgets[126] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(126));
@@ -654,7 +654,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
-        ve_widgets->widget[127] = spinner;
+        ve_widgets[127] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(127));

@@ -37,7 +37,7 @@ extern struct Conversion_Chart *conversions;
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
-extern struct Ve_Widgets *ve_widgets;
+extern GtkWidget *ve_widgets[];
 
 
 void read_conversions(void)
@@ -50,20 +50,20 @@ void read_conversions(void)
 
 	for (i=0;i<2*MS_PAGE_SIZE;i++)
 	{
-		if (GTK_IS_OBJECT(ve_widgets->widget[i]))
+		if (GTK_IS_OBJECT(ve_widgets[i]))
 		{
 			dl_type = (gint)g_object_get_data(
-					G_OBJECT(ve_widgets->widget[i]),
+					G_OBJECT(ve_widgets[i]),
 					"dl_type");
 			if (dl_type == IMMEDIATE)
 			{
 				conv_chart->conv_type[i] = (gint)
 					g_object_get_data(G_OBJECT
-							(ve_widgets->widget[i]),
+							(ve_widgets[i]),
 							"conv_type");
 				conv_chart->conv_factor[i] = (gfloat)((gint)
 						g_object_get_data(G_OBJECT
-							(ve_widgets->widget[i]),
+							(ve_widgets[i]),
 							"conv_factor_x100"))
 					/100.0;
 			}

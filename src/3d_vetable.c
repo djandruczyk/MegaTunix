@@ -50,7 +50,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
         GdkGLConfig *gl_config;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
-	extern struct Ve_Widgets *ve_widgets;
+	extern GtkWidget *ve_widgets[];
 	extern GList *store_widgets;
 	gchar *tmpbuf;
 	gint tbl = (gint)data;
@@ -73,11 +73,11 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	ve_view->window = window;
 	g_object_set_data(G_OBJECT(window),"data",(gpointer)ve_view);
 	/* Bind pointer to veview to an object for retrieval elsewhere */
-	if (tbl == 0)
-		g_object_set_data(G_OBJECT(ve_widgets->widget[0]),
+	if (tbl == 1)
+		g_object_set_data(G_OBJECT(ve_widgets[0]),
 				"data",(gpointer)ve_view);
 	else
-		g_object_set_data(G_OBJECT(ve_widgets->widget[0+MS_PAGE_SIZE]),
+		g_object_set_data(G_OBJECT(ve_widgets[0+MS_PAGE_SIZE]),
 				"data",(gpointer)ve_view);
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
@@ -196,7 +196,7 @@ gint reset_3d_winstat(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
 	gint tbl = -1;
-	extern struct Ve_Widgets *ve_widgets;
+	extern GtkWidget *ve_widgets[];
 	extern GList *store_widgets;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 	store_widgets = g_list_remove(store_widgets,(gpointer)ve_view->burn_but);	
@@ -204,11 +204,11 @@ gint reset_3d_winstat(GtkWidget *widget)
 	winstat[ve_view->table] = FALSE;
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
-	if (tbl == 0)
-		g_object_set_data(G_OBJECT(ve_widgets->widget[0]),
+	if (tbl == 1)
+		g_object_set_data(G_OBJECT(ve_widgets[0]),
 				"data",NULL);
 	else
-		g_object_set_data(G_OBJECT(ve_widgets->widget[0+MS_PAGE_SIZE]),
+		g_object_set_data(G_OBJECT(ve_widgets[0+MS_PAGE_SIZE]),
 				"data",NULL);
 	return FALSE;  /* MUST return false otherwise 
 			* other handlers WILL NOT run. */
@@ -428,9 +428,9 @@ void ve_calculate_scaling(void *ptr)
 	struct Ve_View_3D *ve_view = NULL;
 
 	ve_view = (struct Ve_View_3D *)ptr;
-	if (ve_view->table == 0) /* all std code derivatives..*/
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
-	else if (ve_view->table == 1)
+	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_calculate_scaling(), table out of range..\n");
@@ -469,9 +469,9 @@ void ve_draw_ve_grid(void *ptr)
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	if (ve_view->table == 0) /* all std code derivatives..*/
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
-	else if (ve_view->table == 1)	/* DT code */
+	else if (ve_view->table == 2)	/* DT code */
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_ve_grid(), table out of range..\n");
@@ -522,9 +522,9 @@ void ve_draw_active_indicator(void *ptr)
 	ve_view = (struct Ve_View_3D *)ptr;
 	extern unsigned char * ms_data;
 
-	if (ve_view->table == 0) /* all std code derivatives..*/
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
-	else if (ve_view->table == 1)
+	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_active_indicator(), table out of range..\n");
@@ -545,9 +545,9 @@ void ve_draw_runtime_indicator(void *ptr)
 	ve_view = (struct Ve_View_3D *)ptr;
 	unsigned char actual_ve = 0;
 
-	if (ve_view->table == 0) /* all std code derivatives..*/
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		actual_ve = runtime->vecurr1;
-	else if (ve_view->table == 1)
+	else if (ve_view->table == 2)
 		actual_ve = runtime->vecurr2;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_runtim_indicator(), table out of range..\n");
@@ -574,9 +574,9 @@ void ve_draw_axis(void *ptr)
 	ve_view = (struct Ve_View_3D *)ptr;
 	extern unsigned char *ms_data;
 
-	if (ve_view->table == 0) /* all std code derivatives..*/
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
-	else if (ve_view->table == 1)
+	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_axis(), table out of range..\n");
@@ -737,18 +737,16 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	gint value = 0;
 	gint offset = 0;
 	gint dload_val = 0;
-	extern struct Ve_Widgets *ve_widgets;
+	extern GtkWidget *ve_widgets[];
 	struct Ve_Const_Std *ve_ptr = NULL;
-	struct Ve_Widgets *widget_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	extern unsigned char *ms_data;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"data");
 
-	widget_ptr = ve_widgets;
-	if (ve_view->table == 0) /* all std code derivatives..*/
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
-	else if (ve_view->table == 1)
+	else if (ve_view->table == 2)
 		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_key_press_event(), table out of range..\n");
@@ -799,12 +797,12 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			{
 				offset = (ve_view->active_load*8)+ve_view->active_rpm;
 				value = ve_ptr->ve_bins[offset] + 1;
-				if (ve_view->table == 1)
+				if (ve_view->table == 2)
 					offset+=MS_PAGE_SIZE;
 				dload_val = convert_before_download(offset,value);
 				write_ve_const(dload_val,offset);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							widget_ptr->widget[offset]),
+							ve_widgets[offset]),
 						value);
 
 			}
@@ -819,12 +817,12 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			{
 				offset = (ve_view->active_load*8)+ve_view->active_rpm;
 				value = ve_ptr->ve_bins[offset] - 1;
-				if (ve_view->table == 1)
+				if (ve_view->table == 2)
 					offset+=MS_PAGE_SIZE;
 				dload_val = convert_before_download(offset,value);
 				write_ve_const(dload_val,offset);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							widget_ptr->widget[offset]),
+							ve_widgets[offset]),
 						value);
 			}
 			break;							

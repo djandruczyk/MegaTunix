@@ -257,14 +257,6 @@ struct DynamicEntries
 	GtkWidget *ecu_signature_entry;
 };
 
-/* Pointers to the widgets, sorted by OFFSET 
- * into the ms datablock (ve/constants)
- */
-struct Ve_Widgets
-{
-	GtkWidget *widget[2*MS_PAGE_SIZE];
-};
-
 /* Logable data sorted by offset into runtime_data memory block */
 struct Logables
 {

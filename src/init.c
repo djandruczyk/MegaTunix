@@ -58,7 +58,9 @@ unsigned char *ms_data_backup;
 struct Conversion_Chart *conversions;
 struct Runtime_Common *runtime;
 struct Runtime_Common *runtime_last;
-struct Ve_Widgets *ve_widgets;
+GtkWidget *ve_widgets[2*MS_PAGE_SIZE];
+GtkWidget *spark_widgets[MS_PAGE_SIZE];
+
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
 
@@ -202,7 +204,6 @@ void mem_alloc()
 	runtime_last = g_malloc(sizeof(struct Runtime_Common));
 
 	conversions =  g_malloc(sizeof(struct Conversion_Chart));
-	ve_widgets = g_malloc(sizeof(struct Ve_Widgets));
 
 	/* Set memory blocks to known states... */
 	memset((void *)serial_params, 0, sizeof(struct Serial_Params));
@@ -213,7 +214,6 @@ void mem_alloc()
 	memset((void *)runtime, 0, sizeof(struct Runtime_Common));
 	memset((void *)runtime_last, 0, sizeof(struct Runtime_Common));
 	memset((void *)conversions, 0, sizeof(struct Conversion_Chart));
-	memset((void *)ve_widgets, 0, sizeof(struct Ve_Widgets));
 }
 
 void mem_dealloc()
@@ -227,7 +227,6 @@ void mem_dealloc()
 	g_free(runtime);
 	g_free(runtime_last);
 	g_free(conversions);
-	g_free(ve_widgets);
 	g_hash_table_destroy(interdep_vars_1);
 	g_hash_table_destroy(interdep_vars_2);
 }
