@@ -23,6 +23,9 @@
 #include <constants.h>
 #include <globals.h>
 #include <runtime_gui.h>
+#ifdef HAVE_ERRNO_H
+#include <errno.h>
+#endif
 
 
 extern gint raw_reader_running;
@@ -41,7 +44,9 @@ int open_serial(int port_num)
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
+#ifdef HAVE_ERRNO_H
 	extern int errno;
+#endif
 	char devicename[11]; /* temporary unix name of the serial port */
 	serial_params.comm_port = port_num;
 	g_snprintf(devicename,11,"/dev/ttyS%i",port_num-1);
@@ -51,7 +56,11 @@ int open_serial(int port_num)
 		/* FAILURE */
 		/* An Error occurred opening the port */
 		serial_params.open = 0;
+#ifdef HAVE_ERRNO_H
 		g_snprintf(buff,60,"Error Opening COM%i Error Code: %s",port_num,strerror(errno));
+#else
+		g_snprintf(buff,60,"Error Opening COM%i ",port_num);
+#endif
 		update_statusbar(ser_statbar,ser_context_id,buff);
 	}
 	else

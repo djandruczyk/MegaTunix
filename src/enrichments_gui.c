@@ -39,7 +39,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	GtkWidget *frame;
 	GtkWidget *label;
 	GtkWidget *table;
-	GtkWidget *otable;
 	GSList *group;
 	GtkAdjustment *adj;
 	GtkWidget *spinner;

@@ -3,7 +3,7 @@ AC_INIT(configure.in)
 
 MEGATUNIX_LIN_MAJOR_VERSION=0
 MEGATUNIX_LIN_MINOR_VERSION=1
-MEGATUNIX_LIN_MICRO_VERSION=51
+MEGATUNIX_LIN_MICRO_VERSION=53
 
 MEGATUNIX_LIN_VERSION=$MEGATUNIX_LIN_MAJOR_VERSION.$MEGATUNIX_LIN_MINOR_VERSION.$MEGATUNIX_LIN_MICRO_VERSION
 
@@ -28,9 +28,6 @@ PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
-#AM_PATH_GTK(1.2.0, , AC_MSG_ERROR([** GTK 1.2.0 not installed or broken **]),gthread)
-#AM_PATH_GLIB(1.2.0, , AC_MSG_ERROR([** GLIB 1.2.0 not installed or broken **]),gthread)
-
 
 dnl Checks for libraries.
 
@@ -40,7 +37,7 @@ AC_CHECK_LIB(pthread, main)
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(fcntl.h sys/ioctl.h sys/time.h unistd.h pthread.h)
+AC_CHECK_HEADERS(string.h errno.h sys/poll.h sys/stat.h sys/types.h termios.h fcntl.h sys/ioctl.h sys/time.h unistd.h pthread.h)
 
 
 
