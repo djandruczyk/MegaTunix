@@ -37,9 +37,12 @@ void get_table(gpointer table, gpointer fname, gpointer user_data)
 	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,"/",(gchar *)fname,NULL));
 	if (filename)
 		status = load_table(table,filename);
-	if (!status)
-		dbg_func(g_strdup_printf(__FILE__": load_lookuptables(), FAILURE loading \"%s\" lookuptable\n",(gchar *)table),CRITICAL);
 	g_free(filename);
+	if (!status)
+	{
+		dbg_func(g_strdup_printf(__FILE__": load_lookuptables(), FAILURE loading \"%s\" lookuptable\n",(gchar *)table),CRITICAL);
+		exit (-1);
+	}
 
 }
 

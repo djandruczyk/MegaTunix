@@ -46,8 +46,7 @@ megatunix_SOURCES = \
 	tuning_gui.c \
 	vetable_gui.c \
 	vex_support.c \
-	warmwizard_gui.c \
-	../mtxmatheval/matheval.c 
+	warmwizard_gui.c 
 
 megatunix_LDADD = @PACKAGE_LIBS@  -L../mtxmatheval -lmtxmatheval -lfl
 
