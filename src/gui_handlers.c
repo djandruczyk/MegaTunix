@@ -1151,6 +1151,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
 	gboolean is_float = FALSE;
+	gboolean use_color = FALSE;
 	gint tmpi = -1;
 	gint page = -1;
 	gint offset = -1;
@@ -1164,6 +1165,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_label = NULL;
+	GdkColor color;
+	extern gint ** ms_data;
 
 	if (!GTK_IS_OBJECT(widget))
 		return;
@@ -1196,6 +1199,8 @@ void update_widget(gpointer object, gpointer user_data)
 			"toggle_group");
 	invert_state = (gboolean)g_object_get_data(G_OBJECT(widget),
 			"invert_state");
+	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),
+			"use_color");
 	swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
 			"swap_label");
 
@@ -1222,10 +1227,21 @@ void update_widget(gpointer object, gpointer user_data)
 		else
 			dbg_func(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n",CRITICAL);
 
-		
+	 	if (use_color)
+		{
+			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0);
+			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+		}
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
+	{
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+		if (use_color)
+		{
+			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0);
+			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+		}
+	}
 	else if (GTK_IS_CHECK_BUTTON(widget))
 	{
 		/* If value masked by bitmask, shifted right by bitshift = bitval

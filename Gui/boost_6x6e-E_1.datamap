@@ -35,8 +35,8 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [table]
-keys=page,base,raw_lower,raw_upper,is_float,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_
+keys=page,base,raw_lower,raw_upper,is_float,dl_type,handler,use_color
+key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_
 page=7
 base=10
 raw_lower=0
@@ -44,6 +44,7 @@ raw_upper=255
 is_float=FALSE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+use_color=TRUE
 
 #----- Labels ----------------------------------------------------------------
 

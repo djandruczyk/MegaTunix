@@ -36,8 +36,8 @@ raw_upper=255
 ign_parm=TRUE
 
 [sparktable]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,is_float,precision,ign_parm
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,is_float,precision,ign_parm,use_color
+key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_,_BOOL_
 page=1
 dl_conv_expr=(x+10)/0.352
 ul_conv_expr=(x*0.352)-10
@@ -50,6 +50,7 @@ raw_upper=255
 is_float=TRUE
 precision=1
 ign_parm=TRUE
+use_color=TRUE
 
 #----- Labels ----------------------------------------------------------------
 
@@ -116,16 +117,18 @@ rescaler_frame=SP1_rescale_frame
 #----- Temp Timing Controls --------------------------------------------------
 
 [trimangle_spin]
-keys=offset
-key_types=_INT_
+keys=offset,use_color
+key_types=_INT_,_BOOL_
 group=sparktable
 offset=82
+use_color=FALSE
 
 [fixedangle_spin]
-keys=offset
-key_types=_INT_
+keys=offset,use_color
+key_types=_INT_,_BOOL_
 group=sparktable
 offset=81
+use_color=FALSE
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 

@@ -35,8 +35,8 @@ raw_lower=0
 raw_upper=255
 
 [sparktable]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,is_float,precision
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,is_float,precision,use_color
+key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_
 page=3
 dl_conv_expr=(x+10)/0.352
 ul_conv_expr=(x*0.352)-10
@@ -48,6 +48,7 @@ raw_lower=0
 raw_upper=255
 is_float=TRUE
 precision=1
+use_color=black
 
 #----- Labels ----------------------------------------------------------------
 
@@ -114,18 +115,21 @@ rescaler_frame=SP1_rescale_frame
 #----- Temp Timing Controls --------------------------------------------------
 
 [trimangle_entry]
-keys=offset,dl_conv_expr,ul_conv_expr
-key_types=_INT_,_STRING_,_STRING_
+keys=offset,dl_conv_expr,ul_conv_expr,use_color
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
 offset=170
 group=sparktable
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+use_color=FALSE
 
 [fixedangle_entry]
-keys=offset
-key_types=_INT_
+keys=offset,use_color
+key_types=_INT_,_BOOL_
 offset=169
 group=sparktable
+use_color=FALSE
+
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 
