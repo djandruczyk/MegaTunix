@@ -112,7 +112,7 @@ void update_write_status(void)
 	for (i=0;i<firmware->total_pages;i++)
 	{
 	
-		if(memcmp(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->size) != 0)
+		if(memcmp(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->length) != 0)
 		{
 			set_store_buttons_state(RED);
 			return;
@@ -268,7 +268,7 @@ void burn_ms_flash()
 copyover:
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
-		memcpy(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->size);
+		memcpy(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->length);
 
 	g_static_mutex_unlock(&mutex);
 	return;

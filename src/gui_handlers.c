@@ -965,7 +965,7 @@ void update_ve_const()
 	/* Update all on screen controls (except bitfields (done above)*/
 	for (page=0;page<firmware->total_pages;page++)
 	{
-		for (offset=0;offset<firmware->page_params[page]->size;offset++)
+		for (offset=0;offset<firmware->page_params[page]->length;offset++)
 		{
 			if (ve_widgets[page][offset] != NULL)
 			{

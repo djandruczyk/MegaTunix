@@ -264,15 +264,15 @@ void mem_alloc()
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		if (!ms_data[i])
-			ms_data[i] = g_new0(gint, firmware->page_params[i]->size);
+			ms_data[i] = g_new0(gint, firmware->page_params[i]->length);
 		if (!ms_data_last[i])
-			ms_data_last[i] = g_new0(gint, firmware->page_params[i]->size);
+			ms_data_last[i] = g_new0(gint, firmware->page_params[i]->length);
 		if (!ms_data_backup[i])
-			ms_data_backup[i] = g_new0(gint, firmware->page_params[i]->size);
+			ms_data_backup[i] = g_new0(gint, firmware->page_params[i]->length);
 		if (!ve_widgets[i])
 		{
-			ve_widgets[i] = g_new0(GList *, firmware->page_params[i]->size);
-			for (j=0;j<firmware->page_params[i]->size;j++)
+			ve_widgets[i] = g_new0(GList *, firmware->page_params[i]->length);
+			for (j=0;j<firmware->page_params[i]->length;j++)
 			{
 				ve_widgets[i][j] = NULL;
 			}

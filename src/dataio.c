@@ -163,7 +163,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 
 		case VE_BLOCK:
 			total_read = 0;
-			total_wanted = firmware->page_params[message->page]->size;
+			total_wanted = firmware->page_params[message->page]->length;
 			zerocount = 0;
 
 			while (total_read < total_wanted )

@@ -39,7 +39,6 @@ void set_offline_mode(void)
 	GArray *cmd_array = NULL;
 	GHashTable *cmd_details = NULL;
 	struct Canidate *canidate = NULL;
-	struct Command *cmd = NULL;
 	extern struct Firmware_Details *firmware;
 	extern gint ecu_caps;
 	extern gint temp_units;
@@ -75,16 +74,6 @@ void set_offline_mode(void)
 	{
 		firmware->page_params[i] = g_new0(struct Page_Params, 1);
 		g_memmove(firmware->page_params[i],canidate->page_params[i],sizeof(struct Page_Params));
-		if (canidate->page_params[i]->is_spark)
-		{
-			cmd = (struct Command *)g_hash_table_lookup(cmd_details,canidate->ign_cmd_key);
-			firmware->page_params[i]->size = (gint)g_hash_table_lookup(canidate->bytecounts,cmd->key);
-		}
-		else
-		{
-			cmd = (struct Command *)g_hash_table_lookup(cmd_details,canidate->ve_cmd_key);
-			firmware->page_params[i]->size = (gint)g_hash_table_lookup(canidate->bytecounts,cmd->key);
-		}
 	}
 
 	mem_alloc();

@@ -28,6 +28,7 @@ load_bincount=8
 rpm_bincount=8
 
 [page_0]
+length=128
 is_spark=FALSE
 reqfuel_offset=90
 divider_offset=91
@@ -46,6 +47,7 @@ rpm_bincount=8
 load_bincount=8
 
 [page_1]
+length=128
 is_spark=FALSE
 reqfuel_offset=90
 divider_offset=91

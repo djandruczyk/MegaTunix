@@ -438,11 +438,11 @@ void backup_all_ms_settings(gchar *filename)
 	{
 		string = g_string_sized_new(64);
 		section = g_strdup_printf("page_%i",i);
-		cfg_write_int(cfgfile,section,"num_variables",firmware->page_params[i]->size);
-		for(x=0;x<firmware->page_params[i]->size;x++)
+		cfg_write_int(cfgfile,section,"num_variables",firmware->page_params[i]->length);
+		for(x=0;x<firmware->page_params[i]->length;x++)
 		{
 			string = g_string_append(string,g_strdup_printf("%i",ms_data[i][x]));
-			if (x < (firmware->page_params[i]->size-1))
+			if (x < (firmware->page_params[i]->length-1))
 				string = g_string_append(string,",");
 		}
 		cfg_write_string(cfgfile,section,"data",string->str);
@@ -484,13 +484,13 @@ void restore_all_ms_settings(gchar *filename)
 		{
 			section = g_strdup_printf("page_%i",i);
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
-				if (tmpi != firmware->page_params[i]->size)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[i]->size),CRITICAL);
+				if (tmpi != firmware->page_params[i]->length)
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[i]->length),CRITICAL);
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
 				keys = parse_keys(tmpbuf,&num_keys,",");
-				if (num_keys != firmware->page_params[i]->size)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the size of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->size),CRITICAL);
+				if (num_keys != firmware->page_params[i]->length)
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->length),CRITICAL);
 				for (x=0;x<num_keys;x++)
 					ms_data[i][x]=atoi(keys[x]);
 				g_strfreev(keys);

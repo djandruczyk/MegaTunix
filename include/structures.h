@@ -189,8 +189,8 @@ struct Log_Info
  */
 struct Page_Params
 {
+	gint length;		/*! How big this page is... */
 	gint is_spark;		/*! What page this is */
-	gint size;		/*! total size of this page as returned... */
 	gint cfg11_offset;	/*! Where config11 value is located */
 	gint cfg12_offset;	/*! Where config12 value is located */
 	gint cfg13_offset;	/*! Where config13 value is located */

@@ -361,16 +361,6 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	{
 		firmware->page_params[i] = g_new0(struct Page_Params, 1);
 		memcpy(firmware->page_params[i],potential->page_params[i],sizeof(struct Page_Params));
-		if (potential->page_params[i]->is_spark)
-		{
-			cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
-			firmware->page_params[i]->size = (gint)g_hash_table_lookup(potential->bytecounts,cmd->key);
-		}
-		else
-		{
-			cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
-			firmware->page_params[i]->size = (gint)g_hash_table_lookup(potential->bytecounts,cmd->key);
-		}
 	}
 
 	mem_alloc();
@@ -737,6 +727,8 @@ void load_profile_details(void *ptr)
 		{
 			canidate->page_params[i] = g_new0(struct Page_Params,1);
 			section = g_strdup_printf("page_%i",i);
+			if(!cfg_read_int(cfgfile,section,"length",&canidate->page_params[i]->length))
+				dbg_func(__FILE__": load_profile_details()\n\t\"length\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->page_params[i]->is_spark))
 				dbg_func(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if (!(canidate->page_params[i]->is_spark))
