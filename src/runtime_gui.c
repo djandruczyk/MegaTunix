@@ -77,7 +77,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	rt_table[0] = gtk_table_new(10,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(rt_table[0]),1);
+	gtk_table_set_row_spacings(GTK_TABLE(rt_table[0]),0);
 	gtk_table_set_col_spacings(GTK_TABLE(rt_table[0]),5);
 	gtk_container_set_border_width (GTK_CONTAINER (rt_table[0]), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),rt_table[0],TRUE,TRUE,0);

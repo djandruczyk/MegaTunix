@@ -13,6 +13,7 @@
 
 
 #include <configfile.h>
+#include <default_controls.h>
 #include <runtime_controls.h>
 #include <stdio.h>
 #include <stdlib.h>

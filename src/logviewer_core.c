@@ -27,8 +27,8 @@
 void load_logviewer_file(void *ptr)
 {
 	struct Io_File *iofile = NULL;
-	gchar *tmpbuf = NULL;
-	GIOStatus status = 0;
+	//gchar *tmpbuf = NULL;
+	//GIOStatus status = 0;
 	struct Log_Info *log_info = NULL;
 	
 
@@ -72,7 +72,6 @@ void read_logviewer_header(GIOChannel *iochannel, void *ptr)
 	GIOStatus  status = G_IO_STATUS_ERROR;
 	gchar *delim = NULL;
 	struct Log_Info *log_info = ptr;
-	gint i = 0;
 
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
 
@@ -85,19 +84,19 @@ void read_logviewer_header(GIOChannel *iochannel, void *ptr)
 		else	
 			delim = g_strdup(" ");
 
-		printf("Delimiter: \"%s\"\n", delim);
+		/* Store delimiter in structure */
 		log_info->delim = g_strdup(delim);
-			log_info->fields = g_strsplit(a_line->str,delim,0);
-			i = 0;
-			while (log_info->fields[i] != NULL)
-			{
-				log_info->field_count++;
-				printf("Field  %s\n",log_info->fields[i]);
-				i++;
-			}
-			printf("total elements in list %i\n",log_info->field_count);
+		/* Store field names as well... 
+		 * log_info->fields is a string vector (char **)
+		 * that is NULL terminated thanks to g_strsplit()
+		 */
+		log_info->fields = g_strsplit(a_line->str,delim,0);
+
+		log_info->field_count = 0;
+		/* Get total count of fields in there too... */
+		while (log_info->fields[log_info->field_count] != NULL)
+			log_info->field_count++;
 		
-	
 	}
 	g_free(delim);
 	

@@ -359,7 +359,6 @@ gboolean populate_viewer(GtkWidget * widget)
 				g_array_free(v_value->data_array,TRUE);
 				g_object_unref(v_value->trace_gc);
 				g_object_unref(v_value->font_gc);
-				g_object_unref(v_value->grat_gc);
 				g_free(v_value->vname);
 				g_free(v_value);
 				v_value = NULL;
@@ -462,10 +461,9 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 	v_value->cur_low = v_value->lower;
 	v_value->cur_high = v_value->upper;
 
-	/* Allocate the colors (GC's) for the font, trace and graticule */
+	/* Allocate the colors (GC's) for the font and trace */
 	v_value->font_gc = initialize_gc(pixmap, FONT);
 	v_value->trace_gc = initialize_gc(pixmap, TRACE);
-	v_value->grat_gc = initialize_gc(pixmap, GRATICULE);
 
 	return v_value;
 }
@@ -632,37 +630,6 @@ void draw_infotext(void *data)
 }
 
 
-/*
-void draw_graticule(void * data)
-{
-	// Draws graticule for the v_value passed to it.. 
-	gint lo_width = 0;
-	gint lo_height = 0;
-	gint i = 0;
-	gint count = 0;
-	gint grat_interval = 40;
-	GdkSegment segs[200];	// bad idea to do statically
-	struct Viewable_Value *v_value = (struct Viewable_Value *)data;
-
-	lo_width = v_value->d_area->allocation.width-v_value->info_width;
-	lo_height = v_value->d_area->allocation.height;
-	v_value->grat_interval = 40;
-		
-	for (i=0;i<lo_width;i+=grat_interval)
-	{
-
-		segs[count].x1 = v_value->info_width+i;
-		segs[count].x2 = v_value->info_width+i;
-		segs[count].y1 = 0;
-		segs[count].y2 = lo_height;
-		count++;
-	}
-	gdk_draw_segments(v_value->trace_pmap,v_value->grat_gc,segs,count);
-	v_value->last_grat = segs[count-1].x1;
-		
-}
-*/
-
 gboolean update_logview_traces()
 {
 	/* Called from one of two possible places:
@@ -689,8 +656,6 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	gfloat val = 0.0;
 	gfloat percent = 0.0;
 	gint size = 0;
-	gint last_grat = 0;
-	gint grat_interval = 0;
 	gint len = 0;
 	gint lo_width;
 	gint total = 0;
@@ -779,9 +744,6 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 
 	g_array_append_val(v_value->data_array,val);
 
-	last_grat = v_value->last_grat;
-	grat_interval = v_value->grat_interval;
-
 	/* Draw the data.... */
 	percent = 1.0-(val/(v_value->upper-v_value->lower));
 	if (v_value->last_y == -1)
@@ -834,19 +796,6 @@ void scroll_logviewer_traces()
 			TRUE,
 			w-lv_scroll,0,
 			lv_scroll,h);
-
-	// Update the graticule... 
-/*	v_value->last_grat -= lv_scroll;
-	if ((last_grat + grat_interval) < w)
-	{
-		gdk_draw_line(v_value->trace_pmap,
-				v_value->grat_gc,
-				w-1, 0,
-				w-1, h);
-
-		v_value->last_grat = w-1;
-	}
-*/
 
 	tcount = 0;
 	gdk_window_clear(lv_darea->window);

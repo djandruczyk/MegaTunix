@@ -227,14 +227,11 @@ struct Viewable_Value
 {
 	GdkGC *font_gc;			/* GC used for the fonts */
 	GdkGC *trace_gc;		/* GC used for the trace */
-	GdkGC *grat_gc;			/* GC used for the graticule */
 	GtkWidget *d_area;		/* Drawing Area */
 	gchar *vname;			/* Name of widget being logged */
 	gint runtime_offset;		/* Offset into runtime struct */
 	gint size;			/* 1=byte, 2=short, 4=float */
 	gint last_y;			/* Last point on screen of trace */
-	gint last_grat;			/* last grat line position */
-	gint grat_interval;		/* graticule interval in pixels */
 	gfloat min;			/* for auto-scaling */
 	gfloat max;			/* for auto-scaling */
 	gfloat lower;			/* hard limits to use for scaling */
