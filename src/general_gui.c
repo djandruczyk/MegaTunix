@@ -113,12 +113,21 @@ int build_general(GtkWidget *parent_frame)
 
         entry = gtk_entry_new();
 	ms_ecu_revision_entry = entry;
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+        gtk_entry_set_width_chars (GTK_ENTRY (entry), 12);
         gtk_widget_set_sensitive(entry,FALSE);
         gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_button_new_with_label("Get ECU Revision #...");
+	g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (check_ecu_comms), \
+                        NULL);
+        gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
 
 	
 
