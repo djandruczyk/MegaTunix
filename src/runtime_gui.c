@@ -40,7 +40,6 @@ gboolean update_runtime_vars()
 {
 	gint i = 0;
 	struct Ve_View_3D * ve_view = NULL;
-	extern GList ***ve_widgets;
 	extern GHashTable *rt_sliders;
 	extern GHashTable *ww_sliders;
 	GtkWidget * tmpwidget=NULL;
@@ -52,13 +51,16 @@ gboolean update_runtime_vars()
 	if(no_update)
 		return FALSE;
 	/* If OpenGL window is open, redraw it... */
-	for (i=0;i<firmware->total_pages;i++)
+	for (i=0;i<firmware->total_tables;i++)
 	{
-		tmpwidget = g_list_nth_data(ve_widgets[i][0],0);
-		ve_view = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(tmpwidget),"ve_view");
-		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
-			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+		tmpwidget = g_hash_table_lookup(dynamic_widgets,g_strdup_printf("ve_view_%i",i));
+		if (GTK_IS_WIDGET(tmpwidget))
+		{
+			ve_view = (struct Ve_View_3D *)g_object_get_data(
+					G_OBJECT(tmpwidget),"ve_view");
+			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
+				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+		}
 	}
 
 	/* Update all the dynamic RT Sliders */

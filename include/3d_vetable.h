@@ -79,6 +79,7 @@ struct Ve_View_3D
 	GtkWidget *window;
 	GtkWidget *burn_but;
 	gint page;
+	gint table_num;
 	gint load_bincount;
 	gint rpm_bincount;
 	gint tbl_base;

@@ -28,6 +28,7 @@ void rescale_table(void * data)
 	extern GList ***ve_widgets;
 	extern GHashTable *dynamic_widgets;
 	gchar *widget_name = (gchar *)data;
+	gint table_num = -1;
 	gint page = -1;
 	gint tbl_base = 0;
 	gint rpm_bins = 0;
@@ -43,11 +44,12 @@ void rescale_table(void * data)
 
 	widget = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(widget));
+	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-	tbl_base = firmware->page_params[page]->tbl_base;
-	rpm_bins = firmware->page_params[page]->rpm_bincount;
-	load_bins = firmware->page_params[page]->load_bincount;
-	is_spark = firmware->page_params[page]->is_spark;
+	tbl_base = firmware->table_params[table_num]->tbl_base;
+	rpm_bins = firmware->table_params[table_num]->rpm_bincount;
+	load_bins = firmware->table_params[table_num]->load_bincount;
+	is_spark = firmware->table_params[table_num]->is_spark;
 
 	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 	for (i=0;i<(rpm_bins*load_bins);i++)
@@ -79,7 +81,7 @@ void rescale_table(void * data)
 
 /* Currently unused due to being horribly slow... 
  * highlights the four boxes currounding the current VE point...
-void hilite_ve_entries(gint rpm, gint map, gint page)
+void hilite_ve_entries(gint rpm, gint map, gint table_num)
 {
 	// Highlights the VEtable entries around the current engine
 	// Operating point to assist with tuning the table.
@@ -96,13 +98,13 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 
 
 
-	get_indexes(KPA,map, &kpa_index[page],page);
-	get_indexes(RPM,rpm/100, &rpm_index[page],page);
+	get_indexes(KPA,map, &kpa_index[table_num],table_num);
+	get_indexes(RPM,rpm/100, &rpm_index[table_num],table_num);
 
 	// If nothing has changed, exit now saving CPU time 
-	if ((l_kpa_index[page].low == kpa_index[page].low) &&
-			(l_kpa_index[page].high == kpa_index[page].high) &&
-			(l_rpm_index[page].low == rpm_index[page].low) &&
+	if ((l_kpa_index[table_num].low == kpa_index[table_num].low) &&
+			(l_kpa_index[table_num].high == kpa_index[table_num].high) &&
+			(l_rpm_index[table_num].low == rpm_index[page].low) &&
 			(l_rpm_index[page].high == rpm_index[page].high))
 		return;
 

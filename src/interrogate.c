@@ -320,10 +320,18 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	firmware->rtv_map_file = g_strdup(potential->rtv_map_file);
 	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
 	firmware->multi_page = potential->multi_page;
+	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
 	firmware->write_cmd = g_strdup(potential->write_cmd);
 	firmware->burn_cmd = g_strdup(potential->burn_cmd);
 	/* Allocate ram for the necessary structures... */
+
+	firmware->table_params = g_new0(struct Table_Params *,firmware->total_tables);
+	for (i=0;i<firmware->total_tables;i++)
+	{
+		firmware->table_params[i] = g_new0(struct Table_Params, 1);
+		memcpy(firmware->table_params[i],potential->table_params[i],sizeof(struct Table_Params));
+	}
 
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
@@ -507,6 +515,9 @@ void close_profile(void *ptr)
 	for (i=0;i<(canidate->total_pages);i++)
 		if (canidate->page_params[i])
 			g_free(canidate->page_params[i]);
+	for (i=0;i<(canidate->total_tables);i++)
+		if (canidate->table_params[i])
+			g_free(canidate->table_params[i]);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
@@ -541,8 +552,10 @@ struct Canidate * initialize_canidate(void)
 	canidate->burn_cmd = NULL;
 	canidate->lookuptables = NULL;
 	canidate->total_pages = -1;
+	canidate->total_tables = -1;
 	canidate->capabilities = 0;
 	canidate->page_params = NULL;
+	canidate->table_params = NULL;
 	return canidate;
 }
 		
@@ -616,6 +629,9 @@ void load_profile_details(void *ptr)
 		if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 					&canidate->total_pages))
 			dbg_func(__FILE__": load_profile_details()\n\t\"TotalPages\" value not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_int(cfgfile,"parameters","TotalTables",
+					&canidate->total_tables))
+			dbg_func(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"parameters","Capabilities",
 					&tmpbuf))
 			dbg_func(__FILE__": load_profile_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n",CRITICAL);
@@ -661,6 +677,28 @@ void load_profile_details(void *ptr)
 		}
 
 		/* Allocate space for Table Offsets structures.... */
+		canidate->table_params = g_new0(struct Table_Params *,canidate->total_tables);
+		for (i=0;i<canidate->total_tables;i++)
+		{
+			canidate->table_params[i] = g_new0(struct Table_Params,1);
+			section = g_strdup_printf("table_%i",i);
+			if(!cfg_read_int(cfgfile,section,"page",&canidate->table_params[i]->page))
+				dbg_func(__FILE__": load_profile_details()\n\t\"page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->table_params[i]->is_spark))
+				dbg_func(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"tbl_base_offset",&canidate->table_params[i]->tbl_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"tbl_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"rpm_base_offset",&canidate->table_params[i]->rpm_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"load_base_offset",&canidate->table_params[i]->load_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"load_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"rpm_bincount",&canidate->table_params[i]->rpm_bincount))
+				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"load_bincount",&canidate->table_params[i]->load_bincount))
+				dbg_func(__FILE__": load_profile_details()\n\t\"load_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			g_free(section);
+		}
+
 		canidate->page_params = g_new0(struct Page_Params *,canidate->total_pages);
 		for (i=0;i<canidate->total_pages;i++)
 		{
@@ -688,17 +726,6 @@ void load_profile_details(void *ptr)
 						dbg_func(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 				}
 			}
-			if(!cfg_read_int(cfgfile,section,"tbl_base_offset",&canidate->page_params[i]->tbl_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"tbl_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"rpm_base_offset",&canidate->page_params[i]->rpm_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"load_base_offset",&canidate->page_params[i]->load_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"load_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"rpm_bincount",&canidate->page_params[i]->rpm_bincount))
-				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"load_bincount",&canidate->page_params[i]->load_bincount))
-				dbg_func(__FILE__": load_profile_details()\n\t\"load_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			g_free(section);
 		}
 
 		cfg_free(cfgfile);

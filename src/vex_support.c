@@ -85,6 +85,7 @@ gboolean vetable_export(void *ptr)
 	gint i = 0;
 	gint j = 0;
 	gint z = 0;
+	gint table = -1;
 	gint page = -1;
 	gsize count = 0;
 	gint index = 0;
@@ -103,14 +104,17 @@ gboolean vetable_export(void *ptr)
 
 	/* For Page 0.... */
 	output = g_string_sized_new(64); /*pre-allocate 64 chars */
-	for (z=0;z<firmware->total_pages;z++)
+	printf("total tables %i\n",firmware->total_tables);
+	for (z=0;z<firmware->total_tables;z++)
 	{
-		page = z;
-		tbl_base = firmware->page_params[page]->tbl_base;
-		load_base = firmware->page_params[page]->load_base;
-		rpm_base = firmware->page_params[page]->rpm_base;
-		load_bincount = firmware->page_params[page]->load_bincount;
-		rpm_bincount = firmware->page_params[page]->rpm_bincount;
+		table = z;
+		page = firmware->table_params[table]->page;
+		tbl_base = firmware->table_params[table]->tbl_base;
+		load_base = firmware->table_params[table]->load_base;
+		rpm_base = firmware->table_params[table]->rpm_base;
+		load_bincount = firmware->table_params[table]->load_bincount;
+		rpm_bincount = firmware->table_params[table]->rpm_bincount;
+		printf("table %i, page %i, base %i, load %i, rpm %i\n",table,page,tbl_base,load_base,rpm_base);
 
 		t = g_malloc(sizeof(time_t));
 		time(t);
@@ -615,14 +619,14 @@ void feed_import_data_to_ms(void *ptr)
 
 	page = vex_import->page;
 	/* If dimensions do NOT match, ABORT!!! */
-	if (firmware->page_params[page]->rpm_bincount != vex_import->total_rpm_bins)
+	if (firmware->table_params[page]->rpm_bincount != vex_import->total_rpm_bins)
 	{
-		tmpbuf = g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->page_params[page]->rpm_bincount,vex_import->total_rpm_bins);
+		tmpbuf = g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->rpm_bincount,vex_import->total_rpm_bins);
 		return;
 	}
-	if (firmware->page_params[page]->load_bincount != vex_import->total_load_bins)
+	if (firmware->table_params[page]->load_bincount != vex_import->total_load_bins)
 	{
-		tmpbuf = g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->page_params[page]->load_bincount,vex_import->total_load_bins);
+		tmpbuf = g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->load_bincount,vex_import->total_load_bins);
 		return;
 	}
 
@@ -632,14 +636,14 @@ void feed_import_data_to_ms(void *ptr)
 			
 
 	for (i=0;i<vex_import->total_rpm_bins;i++)
-		ms_data[page][firmware->page_params[page]->rpm_base + i] =
+		ms_data[page][firmware->table_params[page]->rpm_base + i] =
 			vex_import->rpm_bins[i];
 	for (i=0;i<vex_import->total_load_bins;i++)
-		ms_data[page][firmware->page_params[page]->load_base + i] =
+		ms_data[page][firmware->table_params[page]->load_base + i] =
 			vex_import->load_bins[i];
 
 	for (i=0;i<((vex_import->total_load_bins)*(vex_import->total_rpm_bins));i++)
-		ms_data[page][firmware->page_params[page]->tbl_base + i] =
+		ms_data[page][firmware->table_params[page]->tbl_base + i] =
 			vex_import->ve_bins[i];
 
 	update_ve_const();	

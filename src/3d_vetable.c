@@ -34,6 +34,7 @@
 #include <tabloader.h>
 #include <threads.h>
 #include <time.h>
+#include <widgetmgmt.h>
 
 static GLuint font_list_base;
 
@@ -56,33 +57,32 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *vbox2;
 	GtkWidget *hbox;
 	GtkWidget *drawing_area;
-	GtkWidget *tmpwidget = NULL;
+	GtkObject * object = NULL;
 	GdkGLConfig *gl_config;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
-	extern GList ***ve_widgets;
 	extern struct Firmware_Details *firmware;
 	gchar *tmpbuf = NULL;
-	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	gint table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 
-	if (winstat[page] == TRUE)
+	if (winstat[table_num] == TRUE)
 		return TRUE;
 	else
-		winstat[page] = TRUE;
+		winstat[table_num] = TRUE;
 
 	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
 	initialize_ve3d_view((void *)ve_view);
-	ve_view->page = page;
-	ve_view->rpm_bincount = firmware->page_params[page]->rpm_bincount;
-	ve_view->load_bincount = firmware->page_params[page]->load_bincount; 
-	ve_view->tbl_base = firmware->page_params[page]->tbl_base;
-	ve_view->load_base = firmware->page_params[page]->load_base;
-	ve_view->rpm_base = firmware->page_params[page]->rpm_base;
-	ve_view->is_spark = firmware->page_params[page]->is_spark;
+	ve_view->table_num = table_num;
+	ve_view->rpm_bincount = firmware->table_params[table_num]->rpm_bincount;
+	ve_view->load_bincount = firmware->table_params[table_num]->load_bincount; 
+	ve_view->tbl_base = firmware->table_params[table_num]->tbl_base;
+	ve_view->load_base = firmware->table_params[table_num]->load_base;
+	ve_view->rpm_base = firmware->table_params[table_num]->rpm_base;
+	ve_view->is_spark = firmware->table_params[table_num]->is_spark;
 	if(ve_view->is_spark)
 		tmpbuf = g_strdup("3D Spark Advance Table");
 	else
-		tmpbuf = g_strdup_printf("3D VE-Table for table %i",page+1);
+		tmpbuf = g_strdup_printf("3D VE-Table for table %i",table_num+1);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), tmpbuf);
@@ -93,9 +93,11 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_object_set_data(G_OBJECT(window),"ve_view",(gpointer)ve_view);
 
 	/* Bind pointer to veview to an object for retrieval elsewhere */
-	tmpwidget = g_list_nth_data(ve_widgets[page][0],0);
-	g_object_set_data(G_OBJECT(tmpwidget),
-			"ve_view",(gpointer)ve_view);
+	object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	g_object_set_data(G_OBJECT(object),"ve_view",(gpointer)ve_view);
+			
+	register_widget(g_strdup_printf("ve_view_%i",table_num),
+			(gpointer)object);
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(free_ve3d_view),
@@ -222,15 +224,15 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 gint free_ve3d_view(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
-	GtkWidget *tmpwidget = NULL;
-	extern GList ***ve_widgets;
+	extern GHashTable *dynamic_widgets;
+
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	store_list("burners",g_list_remove(
 			get_list("burners"),(gpointer)ve_view->burn_but));
-	winstat[ve_view->page] = FALSE;
-	tmpwidget = g_list_nth_data(ve_widgets[ve_view->page][0],0);
-	g_object_set_data(G_OBJECT(tmpwidget),
-			"ve_view",NULL);
+	winstat[ve_view->table_num] = FALSE;
+	g_object_set_data(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("ve_view_%i",ve_view->table_num)),"ve_view",NULL);
+	deregister_widget(g_strdup_printf("ve_view_%i",ve_view->table_num));
+
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 
@@ -507,7 +509,7 @@ void ve3d_calculate_scaling(void *ptr)
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	ve_ptr = (gint *)ms_data[ve_view->page];
+	ve_ptr = (gint *)ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
@@ -563,7 +565,7 @@ void ve3d_draw_ve_grid(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_ve_grid() \n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->page];
+	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
@@ -630,7 +632,7 @@ void ve3d_draw_active_indicator(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_active_indicator()\n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->page];
+	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
@@ -666,14 +668,14 @@ void ve3d_draw_runtime_indicator(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n",OPENGL);
 
-	if (ve_view->page == 0) /* all std code derivatives..*/
+	if (ve_view->table_num == 0) /* all std code derivatives..*/
 		lookup_current_value("vecurr",&actual_ve);
-	else if ((ve_view->page == 1) && (!(ve_view->is_spark)))
+	else if ((ve_view->table_num == 1) && (!(ve_view->is_spark)))
 		lookup_current_value("vecurr2",&actual_ve);
 	else if (ve_view->is_spark)
 		lookup_current_value("sparkangle",&actual_ve);
 	else
-		dbg_func(__FILE__"\tve3d_draw_runtime_indicator()\n\tProblem, page out of range..\n",CRITICAL);
+		dbg_func(__FILE__"\tve3d_draw_runtime_indicator()\n\tProblem, table_num out of range..\n",CRITICAL);
 
 	if (!lookup_current_value("raw_rpm",&rpm))
 		dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n\t Failed finding \"raw_rpm\" datasource...\n",CRITICAL);
@@ -714,7 +716,7 @@ void ve3d_draw_axis(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_axis()\n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->page];
+	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
@@ -918,7 +920,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 
 	dbg_func(__FILE__": ve3d_key_press_event()\n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->page];
+	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	load_bincount = ve_view->load_bincount;
 	rpm_bincount = ve_view->rpm_bincount;
 	rpm_base = ve_view->rpm_base;
@@ -968,7 +970,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 10;
-				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;				
@@ -980,7 +982,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 1;
-				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 
 			}
@@ -992,7 +994,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 10;
-				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;							
@@ -1006,7 +1008,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 1;
-				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;							

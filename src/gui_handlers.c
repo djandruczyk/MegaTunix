@@ -540,9 +540,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((SpinButton)handler)
 	{
-//		case RESCALE_TABLE:
-//			rescale_table(widget);
-//			break;
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
 			if (realtime_id > 0)

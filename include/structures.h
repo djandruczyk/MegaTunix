@@ -60,9 +60,11 @@ struct Firmware_Details
         gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gboolean multi_page;	/*! Multi-page firmware? */
 	gint total_pages;	/*! How many pages do we handle? */
+	gint total_tables;	/*! How many tables do we handle? */
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
-	struct Page_Params **page_params;	/*! details on data per page.. */
+	struct Page_Params **page_params;/*! special vars per page */
+	struct Table_Params **table_params;/*! details each table */
 };
 
 /*! 
@@ -184,12 +186,8 @@ struct Log_Info
  */
 struct Page_Params
 {
+	gint is_spark;		/*! What page this is */
 	gint size;		/*! total size of this page as returned... */
-	gint tbl_base;		/*! where the vetable starts */
-	gint rpm_base;		/*! where rpm table starts */
-	gint load_base;		/*! where load table starts */
-	gint rpm_bincount;	/*! how many RPM bins */
-	gint load_bincount;	/*! how many load bins... */
 	gint cfg11_offset;	/*! Where config11 value is located */
 	gint cfg12_offset;	/*! Where config12 value is located */
 	gint cfg13_offset;	/*! Where config13 value is located */
@@ -197,6 +195,21 @@ struct Page_Params
 	gint divider_offset;	/*! Where divider value is located */
 	gint rpmk_offset;	/*! Where rpmk value is located */
 	gint reqfuel_offset;	/*! Where reqfuel value is located */
+};
+
+
+/*! 
+ \brief The Table_Params structure contains fields defining table parameters
+ One struct is allocated per table, and multiple tables per page are allowed
+ */
+struct Table_Params
+{
+	gint page;		/*! What page this table lies in */
+	gint tbl_base;		/*! where the vetable starts */
+	gint rpm_base;		/*! where rpm table starts */
+	gint load_base;		/*! where load table starts */
+	gint rpm_bincount;	/*! how many RPM bins */
+	gint load_bincount;	/*! how many load bins... */
 	gboolean is_spark;	/*! is this a spark table?? */
 };
 
@@ -229,8 +242,10 @@ struct Canidate
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gboolean multi_page;	/*! Multi-page firmware ??? */
 	gint total_pages;	/*! how many pages do we handle? */
+	gint total_tables;	/*! how many tables do we handle? */
 	GHashTable *lookuptables;/*! Lookuptables hashtable... */
-	struct Page_Params **page_params;/*! details on ve/rpm/load tables*/
+	struct Page_Params **page_params;/*! special vars per page */
+	struct Table_Params **table_params;/*! details on ve/rpm/load tables*/
 };
 
 /*!

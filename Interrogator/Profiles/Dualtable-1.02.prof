@@ -12,15 +12,19 @@ Raw_Mem_Cmd_Key=CMD_UPPER_F
 Write_Cmd=W
 Burn_Cmd=B
 MultiPage=TRUE
-MultiTablePerPage=FALSE
+TotalTables=2
 TotalPages=2
 
-[page_0]
+[table_0]
+is_spark=FALSE
+page=0
 tbl_base_offset=0
 rpm_base_offset=100
 load_base_offset=108
 load_bincount=8
 rpm_bincount=8
+
+[page_0]
 is_spark=FALSE
 reqfuel_offset=90
 divider_offset=91
@@ -29,12 +33,16 @@ cfg11_offset=116
 cfg12_offset=117
 cfg13_offset=118
 
-[page_1]
+[table_1]
+is_spark=FALSE
+page=1
 tbl_base_offset=0
 rpm_base_offset=100
 load_base_offset=108
 rpm_bincount=8
 load_bincount=8
+
+[page_1]
 is_spark=FALSE
 reqfuel_offset=90
 divider_offset=91
