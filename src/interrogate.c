@@ -14,6 +14,7 @@
  */
 
 #include <config.h>
+#include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -25,6 +26,7 @@
 #include <serialio.h>
 #include <structures.h>
 #include <string.h>
+#include <stringmatch.h>
 #include <sys/stat.h>
 #include <sys/poll.h>
 #include <threads.h>
@@ -81,24 +83,27 @@ static struct Canidate
 			S_N_SPARK|ENHANCED}
 };
 
-static struct 
+static struct Command
 {
 	gint page;		/* ms page in memory where it resides */
 	gchar *cmd_string;	/* command to get the data */
 	gchar *cmd_desc;	/* command description */
 	gint cmd_len;		/* Command length in chars to send */
 	gboolean combine;	/* combine page with cmd as cmd_name */
+	gboolean store_data;	/* Store returned data */
+	StoreType store_type;	/* Store data where */
+	gint cmd_index;		/* might not bee needed... */
 } cmds[] = {
-	{ 0,"A", "Runtime Vars", 1, FALSE },
-	{ 0,"C", "MS Clock", 1, FALSE },
-	{ 0,"Q", "MS Revision", 1, FALSE },
-	{ 0,"V", "VE/Constants page0", 1, TRUE },
-	{ 1,"V", "VE/Constants page1", 1, TRUE },
-	{ 0,"S", "Signature Echo", 1, FALSE },
-	{ 0,"?", "Extended Version", 1, FALSE },
-	{ 0,"I", "Ignition Vars", 1, FALSE },
-	{ 0,"F0", "Memory readback 1st 256 bytes", 2, FALSE },
-	{ 0,"F1", "Memory readback 2nd 256 bytes", 2, FALSE }
+	{ 0,"A", "Runtime Vars", 1, FALSE, FALSE, 0, 0 },
+	{ 0,"C", "MS Clock", 1, FALSE, FALSE, 0, 1 },
+	{ 0,"Q", "MS Revision", 1, FALSE, FALSE, 0, 2 },
+	{ 0,"V", "VE/Constants page0", 1, TRUE, FALSE, 0, 3 },
+	{ 1,"V", "VE/Constants page1", 1, TRUE, FALSE, 0, 4 },
+	{ 0,"S", "Signature Echo", 1, FALSE, FALSE, 0, 5 },
+	{ 0,"?", "Extended Version", 1, FALSE, FALSE, 0, 6 },
+	{ 0,"I", "Ignition Vars", 1, FALSE, FALSE, 0, 7 },
+	{ 0,"F0", "Memory readback 1st 256 bytes", 2, FALSE, FALSE, 0, 8 },
+	{ 0,"F1", "Memory readback 2nd 256 bytes", 2, FALSE, FALSE, 0, 9 }
 };
 
 typedef enum
@@ -140,6 +145,7 @@ void interrogate_ecu()
 	gboolean restart_reader = FALSE;
 	gchar *string;
 	gchar *tmpbuf;
+	GArray *cmd_array;
 	gboolean con_status = FALSE;
 	gint tests_to_run = sizeof(cmds)/sizeof(cmds[0]);
 	struct Canidate *canidate;
@@ -170,7 +176,9 @@ void interrogate_ecu()
 
 	/* Allocate hash table to store the results for each test... */
 	canidate = g_malloc0(sizeof(struct Canidate));
-	
+
+	build_string_2_enum_table();
+	cmd_array = validate_and_load_tests();
 
 	/* Configure port for polled IO and flush I/O buffer */
 	ufds.fd = serial_params->fd;
@@ -386,4 +394,67 @@ freeup:
 		g_free(canidate->quest_str);
 	return;
 
+}
+
+GArray * validate_and_load_tests()
+{
+	ConfigFile *cfgfile;
+	GArray * cmd_array = NULL;
+	gchar * filename;
+	gchar *section = NULL;
+	gchar * tmpbuf;
+	gint total_tests = 0;
+	gint i = 0;
+	struct Command *cmd = NULL;
+
+	filename = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/","tests",NULL);
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
+	{	
+		cmd_array = g_array_new(FALSE,FALSE,sizeof(struct Command));
+		cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
+		for (i=0;i<total_tests;i++)
+		{
+			cmd = (struct Command *)new_cmd_struct();
+			section = g_strdup_printf("test_%.2i",i);
+			cfg_read_string(cfgfile,section,"raw_cmd",
+					&cmd->cmd_string);
+			cfg_read_int(cfgfile,section,"cmd_length",
+					&cmd->cmd_len);
+//			cfg_read_string(cfgfile,section,"cmd_handle",
+//					&cmd->handle);
+			cfg_read_string(cfgfile,section,"cmd_desc",
+					&cmd->cmd_desc);
+			cfg_read_boolean(cfgfile,section,"page_required",
+					&cmd->combine);
+			cfg_read_int(cfgfile,section,"page",
+					&cmd->page);
+			cfg_read_boolean(cfgfile,section,"store_data",
+					&cmd->store_data);
+			if (cmd->store_data)
+			{
+				cfg_read_string(cfgfile,section,"store_type",
+						&tmpbuf);
+				cmd->store_type = translate_string(tmpbuf);
+
+				g_free(tmpbuf);
+			}
+			cmd->cmd_index = i;
+
+			g_free(section);
+			g_array_insert_val(cmd_array,i,cmd);
+		}
+		
+		
+	}
+	else
+		printf("failure opening\n");
+	return cmd_array;
+}
+
+void * new_cmd_struct()
+{
+	struct Command *cmd = NULL;
+	cmd = g_malloc0(sizeof(struct Command));
+	return cmd;
 }

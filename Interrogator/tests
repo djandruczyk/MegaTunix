@@ -36,93 +36,93 @@
 #	
 
 [interrogation_tests]
-testcount=10
+total_tests=10
 
 [test_00]
-raw_cmd="A"
+raw_cmd=A
 cmd_length=1
-cmd_handle="_REALTIME_READ_"
-cmd_description="Runtime Vars"
+cmd_handle=_REALTIME_READ_
+cmd_description=Runtime Vars
 page_required=FALSE
 page=0
 store_data=FALSE
 
 [test_01]
-raw_cmd="C"
+raw_cmd=C
 cmd_length=1
-cmd_description="MS Clock"
+cmd_description=MS Clock
 page_required=FALSE
 page=0
 store_data=FALSE
 
 [test_02]
-raw_cmd="Q"
+raw_cmd=Q
 cmd_length=1
-cmd_description="MS Revision"
+cmd_description=MS Revision
 page_required=FALSE
 page=0
 store_data=TRUE
-store_type="_VNUM_"
+store_type=_VNUM_
 
 [test_03]
-raw_cmd="V"
+raw_cmd=V
 cmd_length=1
-cmd_handle="_VE_PAGE0_READ_"
-cmd_description="VE/Constants page0"
+cmd_handle=_VE_PAGE0_READ_
+cmd_description=VE/Constants page0
 page_required=TRUE
 page=0
 store_data=FALSE
 
 [test_04]
-raw_cmd="V"
+raw_cmd=V
 cmd_length=1
-cmd_handle="_VE_PAGE1_READ_"
-cmd_description="VE/Constants page1"
+cmd_handle=_VE_PAGE1_READ_
+cmd_description=VE/Constants page1
 page_required=TRUE
 page=1
 store_data=FALSE
 
 [test_05]
-raw_cmd="S"
+raw_cmd=S
 cmd_length=1
-cmd_description="Signature Echo"
+cmd_description=Signature Echo
 page_required=FALSE
 page=0
 store_data=TRUE
-store_type="_SIG_"
+store_type=_SIG_
 
 [test_06]
-raw_cmd="?"
+raw_cmd=?
 cmd_length=1
-cmd_description="Extended Revision"
+cmd_description=Extended Revision
 page_required=FALSE
 page=0
 store_data=TRUE
-store_type="_EXTVER_"
+store_type=_EXTVER_
 
 [test_07]
-raw_cmd="I"
+raw_cmd=I
 cmd_length=1
-cmd_handle="_IGNITION_READ_"
-cmd_description="Ignition Variables"
+cmd_handle=_IGNITION_READ_
+cmd_description=Ignition Variables
 page_required=FALSE
 page=0
 store_data=FALSE
 
 [test_08]
-raw_cmd="F0"
+raw_cmd=F0
 cmd_length=2
-cmd_handle="_RAW_MEMORY_READ_0_"
-cmd_description="Memory Readback 1st 256 bytes"
+cmd_handle=_RAW_MEMORY_READ_0_
+cmd_description=Memory Readback 1st 256 bytes
 page_required=FALSE
 page=0
 store_data=FALSE
 
 [test_09]
-raw_cmd="F1"
+raw_cmd=F1
 cmd_length=2
-cmd_handle="_RAW_MEMORY_READ_1_"
-cmd_description="Memory Readback 2nd 256 bytes"
+cmd_handle=_RAW_MEMORY_READ_1_
+cmd_description=Memory Readback 2nd 256 bytes
 page_required=FALSE
 page=0
 store_data=FALSE

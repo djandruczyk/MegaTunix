@@ -18,7 +18,8 @@
 #include <enums.h>
 
 /* Prototypes */
-void build_str_2_enum_table(void);
+void build_string_2_enum_table(void);
+gint translate_string(gchar *);
 /* Prototypes */
 
 #endif

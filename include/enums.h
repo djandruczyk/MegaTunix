@@ -233,4 +233,13 @@ typedef enum
 	CRITICAL	= 1<<10
 }Dbg_Class;
 
+typedef enum
+{
+        VNUM = 1,
+        EXTVER = 2,
+        SIG = 3
+}StoreType;
+
+
+
 #endif
