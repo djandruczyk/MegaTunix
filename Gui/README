@@ -61,11 +61,15 @@ keys themselves are not, as the string compare functions are case insensitive.
 	handler		(enum)	  A string representation of a signal handler
 			choice, uses translate_string() to convert to an integer
 	
-	conv_factor	(enum)	  A string representation of a mathematical
-			conversion, valid values are "_ADD_","_SUBTRACT_",
-			"_MULTIPLY_","_DIVIDE_", and "_NOTHING_"
-	conv_factor_x100 (int)    Conversion factor multipled by 100, as you
-			cannot bind a floating point number to a widget in GTK+
+	dl_conv_expr	(string)  A string representation of a mathematical
+			expression. (something like x*60)  Used when a control
+			is modified and the value needs conversion BEFORE
+			sending to the ECU.
+	ul_conv_expr	(string)  A string representation of a mathematical
+			expression. (something like x*60)  Used when reading a
+			variable FROM the ecu and convertign it to a value for
+			the on-screen control. USUALLY a converse function to
+			"dl_conv_expr" above.
 	spconfig	(integer) Location of the sparkconfig variable.
 			Special case that applies to only 1 widget... :(
 

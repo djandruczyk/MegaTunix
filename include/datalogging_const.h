@@ -58,7 +58,7 @@ static const gchar *mt_full_names[] =
 "DutyCycle2",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"UserData1",	"UserData2",	"UserData3"
 };
 
-static const Capabilities dlog_caps[] = 
+static const Capability dlog_caps[] = 
 {
 STANDARD,	STANDARD,	STANDARD,	STANDARD,	DUALTABLE|IAC_PWM,
 STANDARD,	STANDARD,	STANDARD,	STANDARD,	STANDARD,

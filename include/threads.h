@@ -19,7 +19,7 @@
 
 /* Prototypes */
 void dealloc_message(void * );		/* Deallocate memory for message struct */
-void io_cmd(IoCommands, gpointer);	/* Send message down the queue */
+void io_cmd(IoCommand, gpointer);	/* Send message down the queue */
 void *serial_io_handler(gpointer);	/* thread that processes messages */
 void comms_test(void);			/* new check_ecu_comms function */
 void readfrom_ecu(void *);		/* Function to get data FROM ecu */

@@ -45,7 +45,7 @@ extern struct Serial_Params *serial_params;
 static gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test"};
 
 
-void io_cmd(IoCommands cmd, gpointer data)
+void io_cmd(IoCommand cmd, gpointer data)
 {
 	struct Io_Message *message = NULL;
 	extern struct IoCmds *cmds;
@@ -212,8 +212,8 @@ void *serial_io_handler(gpointer data)
 			for (i=0;i<len;i++)
 			{
 				val = g_array_index(message->funcs,
-						UpdateFunctions, i);
-				switch ((UpdateFunctions)val)
+						UpdateFunction, i);
+				switch ((UpdateFunction)val)
 				{
 					case UPD_LOAD_REALTIME_MAP:
 						if (connected)

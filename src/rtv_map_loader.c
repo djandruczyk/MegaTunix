@@ -21,6 +21,7 @@
 #include <enums.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_map_loader.h>
+#include <string.h>
 #include <stringmatch.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -47,8 +48,6 @@ gboolean load_realtime_map(void )
 	GObject * object = NULL;
 	GList * list = NULL;
 	
-	printf("load_realtime_map()\n");
-
 	filename = g_strconcat(DATA_DIR,"/",REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -116,7 +115,7 @@ gboolean load_realtime_map(void )
 			object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 			for (j=0;j<num_keys;j++)
 			{
-				switch((DataTypes)keytypes[j])
+				switch((DataType)keytypes[j])
 				{
 					case MTX_INT:
 						if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
@@ -190,6 +189,9 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gint *expr_types = NULL;
 	gint total_symbols = 0;
 	gint total_symtypes = 0;
+	gchar * name = NULL;
+	gint tmpi;
+	gint i = 0;
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
@@ -213,5 +215,69 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 		expr_types = parse_keytypes(tmpbuf, &total_symtypes);	
 		g_free(tmpbuf);
 	}
-	printf("load_complex_params\n");
+	if (total_symbols!=total_symtypes)
+	{
+		dbg_func(g_strdup_printf(__FILE__": load_complex_params(), Number of symbols(%i) and symbol types(%i) are different, ABORTING\n",total_symbols,total_symtypes),CRITICAL);
+		g_free(expr_types);
+		g_free(expr_symbols);
+		return;
+	}
+	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
+	g_object_set_data(object,"expr_types",(gpointer)expr_types);
+	g_object_set_data(object,"expr_symbols",(gpointer)expr_symbols);
+	for (i=0;i<total_symbols;i++)
+	{
+		switch ((ComplexExprType)expr_types[i])
+		{
+			case VE_EMB_BIT:
+				/* VE Table embedded bitfield 4 params */
+				name=NULL;
+				name=g_strdup_printf("%s_page",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				name=NULL;
+				name=g_strdup_printf("%s_offset",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				name=NULL;
+				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				name=NULL;
+				name=g_strdup_printf("%s_bitshift",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				name=NULL;
+				break;
+			case VE_VAR:
+				/* VE table std variable,  page/offset only */
+				name=NULL;
+				name=g_strdup_printf("%s_page",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				name=NULL;
+				name=g_strdup_printf("%s_offset",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				name=NULL;
+				break;
+			case RAW_VAR:
+				/* RAW variable */
+				name=NULL;
+				name=g_strdup_printf("%s_offset",expr_symbols[i]);
+				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				name=NULL;
+				break;
+
+		}
+	}
+	
 }

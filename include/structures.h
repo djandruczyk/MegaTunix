@@ -234,7 +234,7 @@ struct Rt_Control
 	gint size;	  /* UCHAR,SHORT or FLOAT (1,2, or 4) */
 	gboolean enabled; /* Pretty obvious */
 	gint count;	  /* used to making sure things update */
-	Capabilities flags;/* DT, Temp_dep, IGN or whatever ... */
+	Capability flags;/* DT, Temp_dep, IGN or whatever ... */
 };
 
 /* The Def_Control struct contains info on the default controls that are 
@@ -250,7 +250,7 @@ struct Default_Control
 	gint runtime_offset;
 	gint size;
 	gboolean enabled;
-	Capabilities flags;
+	Capability flags;
 };
 
 /* the Default_Limits struct maps field names to limits. used for importing
@@ -300,7 +300,7 @@ struct Canidate
 	gint ver_num;		/* Version number to search for */
 	gchar *load_tabs;	/* list of tabs to load into the gui */
 	gchar *rtv_map_file;	/* name of realtime vars map file */
-	Capabilities capabilities;	/* Bitmask of capabilities.... */
+	Capability capabilities;/* Bitmask of capabilities.... */
 	gchar * rt_cmd_key;	/* string key to hashtable for RT command */
 	gchar * ve_cmd_key;	/* string key to hashtable for VE command */
 	gchar * ign_cmd_key;	/* string key to hashtable for Ign command */

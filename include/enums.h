@@ -176,7 +176,7 @@ typedef enum
 	OVERBOOST_SFTY	= 1<<9,
 	LAUNCH_CTRL	= 1<<10,
 	TEMP_DEP	= 1<<11,
-}Capabilities;
+}Capability;
 
 typedef enum
 {
@@ -229,7 +229,7 @@ typedef enum
 	IO_READ_RAW_MEMORY,
 	IO_BURN_MS_FLASH,
 	IO_WRITE_DATA,
-}IoCommands;
+}IoCommand;
 
 typedef enum
 {
@@ -242,7 +242,7 @@ typedef enum
 	UPD_STORE_BLACK,
 	UPD_LOAD_GUI_TABS,
 	UPD_LOAD_REALTIME_MAP,
-}UpdateFunctions;
+}UpdateFunction;
 
 typedef enum
 {
@@ -250,7 +250,7 @@ typedef enum
 	MTX_ENUM,
 	MTX_BOOL,
 	MTX_STRING,
-}DataTypes;
+}DataType;
 
 typedef enum
 {
@@ -275,7 +275,7 @@ typedef enum
 	VE_EMB_BIT=0x170,
 	VE_VAR,
 	RAW_VAR,
-}ComplexExprTypes;
+}ComplexExprType;
 
 
 #endif

@@ -46,7 +46,7 @@ static struct
 	gchar *frame_name;	/* Textual name at the top of the frame */
 	void (*Function) (GtkWidget *);	/* builder function */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
-	Capabilities capabilities;	/* What does it do */
+	Capability capabilities;	/* What does it do */
 	PageIdent page_ident;	/* Page Identifier... */
 } notebook_tabs[] = { 
 { "About MegaTunix", build_about, "_About",STANDARD,ABOUT_PAGE},

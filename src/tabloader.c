@@ -109,9 +109,9 @@ void populate_master(gpointer name, gpointer value,gpointer user_data)
 void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 {
 	ConfigFile *cfgfile = (ConfigFile *)user_data;
+	GtkWidget * widget = value;
 	gchar * tmpbuf = NULL;
-	GtkWidget *widget = (GtkWidget *) value;
-	gchar * section = g_strdup((gchar *)widget_name);
+	gchar * section = NULL;
 	gchar ** bind_keys = NULL;
 	gint bind_num_keys = 0;
 	gchar ** keys = NULL;
@@ -124,6 +124,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint tmpi = 0;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
+	section = widget_name;
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys);
@@ -184,7 +185,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 
 	for (i=0;i<num_keys;i++)
 	{
-		switch((DataTypes)keytypes[i])
+		switch((DataType)keytypes[i])
 		{
 			case MTX_INT:
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
