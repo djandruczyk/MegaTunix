@@ -1,12 +1,9 @@
-
-
-Tools  (memory editor, firmware loader)
-
-Improve the 3D Vetable editor. (runtime display, highlighting etc..)
-
 GaugeEngine: XML based file format storing a description (theme) to build
-the gauges.  The gaugesEngine is intended to give photo-realisitic gauges
+the gauges.  The GaugeEngine is intended to give photo-realisitic gauges
 comparable to what you could buy off the shelf..  Will be based on the 
 gnome canvas...
 
-Log playback tool. (stripchart like)
+support for MS-II (difficult, requires parser to be designed and written to
+handler it's I/O stream (different size variabels not layed out on clean
+coundaries, makes it a bitch to deal with..)
+
