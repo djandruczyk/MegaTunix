@@ -91,6 +91,8 @@ EXPORT void finish_raweditor(void)
 			ve_widgets[i][j] = g_list_append(ve_widgets[i][j],(gpointer)entry);
 			g_object_set_data(G_OBJECT(entry),"handler",
 					GINT_TO_POINTER(GENERIC));
+			g_signal_connect (G_OBJECT(entry), "changed",
+					G_CALLBACK(entry_changed_handler),NULL);
 			g_signal_connect (G_OBJECT(entry), "activate",
 					G_CALLBACK(std_entry_handler),NULL);
 
@@ -101,9 +103,9 @@ EXPORT void finish_raweditor(void)
 					(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL), 0, 0);
 
 			if (row%2)
-				gtk_widget_modify_bg(entry,GTK_STATE_NORMAL,&purple);
+				gtk_widget_modify_base(entry,GTK_STATE_NORMAL,&purple);
 			else
-				gtk_widget_modify_bg(entry,GTK_STATE_NORMAL,&white);
+				gtk_widget_modify_base(entry,GTK_STATE_NORMAL,&white);
 			if (col == 0)
 			{
 				label = gtk_label_new(g_strdup_printf("0x%.4X",(row*cols)));

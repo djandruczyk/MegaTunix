@@ -337,6 +337,8 @@ void reset_logviewer_state()
 	}
 	else
 	{
+		if (!rtv_map)
+			return;
 		for (i=0;i<rtv_map->derived_total;i++)
 		{
 			object = g_array_index(rtv_map->rtv_list,GObject *,i);

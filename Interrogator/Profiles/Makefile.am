@@ -10,7 +10,8 @@ profiles = B_and_G_1.x.prof \
 	SquirtnEDIS-3.005.prof \
 	SquirtnEDIS-3.007.prof \
 	SquirtnEDIS-3.008.prof \
-	SquirtnSpark-3.0.prof 
+	SquirtnSpark-3.0.prof \
+	SquirtnSpark-Extra-021x.prof
 
 profiles_DATA = $(profiles)
 

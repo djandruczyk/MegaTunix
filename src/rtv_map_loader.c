@@ -59,6 +59,11 @@ gboolean load_realtime_map(void )
 		return FALSE;
 
 	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL));
+	if (!filename)
+	{
+		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\t File not found!!, exiting function\n"),CRITICAL);
+		return FALSE;
+	}
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 	{

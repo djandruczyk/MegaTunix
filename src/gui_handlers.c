@@ -353,6 +353,16 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
+{
+	if ((paused_handlers) || (!ready))
+		return TRUE;
+
+
+	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+	return TRUE;
+}
+
 EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
@@ -367,7 +377,11 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	if ((paused_handlers) || (!ready))
+	{
+		printf("resetting to black\n");
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
+	}
 
 	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
@@ -380,6 +394,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	dload_val = convert_before_download(widget,value);
 
 	write_ve_const(page, offset, dload_val, ign_parm);
+	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 
 	return TRUE;
 }
