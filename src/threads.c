@@ -35,7 +35,7 @@ gboolean raw_reader_stopped;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern gint ser_context_id;			/* Statusbar related */
 extern struct Runtime_Widgets runtime_data;
-extern struct Serial_Params serial_params;
+extern struct Serial_Params *serial_params;
 extern GtkWidget *ser_statbar;			/* Statusbar */
 char buff[60];
 
@@ -48,7 +48,7 @@ void start_serial_thread()
 		return;
 	}
 
-	if (!serial_params.open)
+	if (!serial_params->open)
 	{
 		g_snprintf(buff,60,"Serial Port Not Open, Can NOT Start Thread in This State");
 		/* Serial not opened, can't start thread in this state */
@@ -142,13 +142,13 @@ void *raw_reader_thread(void *params)
 	while(raw_reader_running == TRUE) 
 	{
 		pthread_testcancel();
-		ufds.fd = serial_params.fd;
+		ufds.fd = serial_params->fd;
 		ufds.events = POLLIN;
-		res = write(serial_params.fd,"A",1);
-		res = poll (&ufds,1,serial_params.poll_timeout);
+		res = write(serial_params->fd,"A",1);
+		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)
 		{
-			serial_params.errcount++;
+			serial_params->errcount++;
 			connected = FALSE;
 			gtk_widget_set_sensitive(runtime_data.status[0],
 					connected);
@@ -171,7 +171,7 @@ void *raw_reader_thread(void *params)
 		gdk_threads_leave();
 
 		pthread_testcancel();
-		usleep(serial_params.read_wait * 1000); /* Sleep */
+		usleep(serial_params->read_wait * 1000); /* Sleep */
 
 	}
 	/* if we get here, the thread got killed, mark it as "stopped" */

@@ -32,7 +32,7 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
 extern gboolean raw_reader_running;
-extern struct Serial_Params serial_params;
+extern struct Serial_Params *serial_params;
 extern struct Raw_Runtime_Std *raw_runtime;
 extern struct Runtime_Std *runtime;
 extern struct Runtime_Std *runtime_last;
@@ -53,9 +53,9 @@ int handle_ms_data(InputData which_data)
 	switch (which_data)
 	{
 		case REALTIME_VARS:
-			res = read(serial_params.fd,ptr,serial_params.raw_bytes*2); 
+			res = read(serial_params->fd,ptr,serial_params->raw_bytes*2); 
 			/* the number of bytes expected for raw data read */
-			if (res > serial_params.raw_bytes) 
+			if (res > serial_params->raw_bytes) 
 			{
 				/* Serial I/O problem, resetting port 
 				 * This problem can occur if the MS is 
@@ -63,7 +63,7 @@ int handle_ms_data(InputData which_data)
 				 * problems with the serial interface, 
 				 * perhaps even a very slow machine
 				 * The problem is part of the data is lost, 
-				 * and since we read in serial_params.raw_bytes
+				 * and since we read in serial_params->raw_bytes
 				 * blocks, the data is now offset, the damn 
 				 * problem is that there is no formatting so 
 				 * the datastream which is now out of sync by
@@ -76,7 +76,7 @@ int handle_ms_data(InputData which_data)
 				 */
 				//printf("warning serial data read error (%i bytes)\n",res);
 				close_serial();
-				open_serial(serial_params.comm_port);
+				open_serial(serial_params->comm_port);
 
 				/* The raw_reader_running flag  MUST be reset 
 				 * to prevent a deadlock in check_ecu_comms 
@@ -128,9 +128,9 @@ int handle_ms_data(InputData which_data)
 			break;
 
 		case VE_AND_CONSTANTS_1:
-			res = read(serial_params.fd,ptr,serial_params.veconst_size); 
+			res = read(serial_params->fd,ptr,serial_params->veconst_size); 
 			/* the number of bytes expected for raw data read */
-			if (res != serial_params.veconst_size) 
+			if (res != serial_params->veconst_size) 
 			{
 				/* Serial I/O problem, resetting port 
 				 * This problem can occur if the MS is 
@@ -138,7 +138,7 @@ int handle_ms_data(InputData which_data)
 				 * problems with the serial interface, 
 				 * perhaps even a very slow machine
 				 * The problem is part of the data is lost, 
-				 * and since we read in serial_params.raw_bytes
+				 * and since we read in serial_params->raw_bytes
 				 * blocks, the data is now offset can hoses 
 				 * things all to hell.  The solution is to 
 				 * close the port, re-open it and reinitialize 

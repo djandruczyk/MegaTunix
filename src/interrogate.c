@@ -27,14 +27,15 @@
 
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
-extern struct Serial_Params serial_params;
+extern struct Serial_Params *serial_params;
 gfloat ecu_version;
-const gchar *cmd_chars[] = {"A","C","Q","V","S","I"};
+const gchar *cmd_chars[] = {"A","C","Q","V","S","I","?"};
 struct Cmd_Results
 {
 	gchar *cmd_string;
 	gint count;
 } ;
+static gint interrogate_count = 0;
 
 /* The Various MegaSquirt variants that MegaTunix attempts to support
  * have one major problem.  Inconsistent version numbering.  Several
@@ -43,25 +44,27 @@ struct Cmd_Results
  * we can make an educated guess and help guide the user to make the final
  * selection on the General Tab.
  * Actual results of querying the variosu MS codes are below.  The list will
- * be updated as the versions out there preogress.
+ * be updated as the versions out there progress.
  *
  * "A" = Relatime Variables return command
  * "C" = Echo back Secl (MS 1sec resolution clock)
  * "Q" = Echo back embedded version number
  * "V" = Return VEtable and Constants
  * "I" = Return Ignition table (Spark variants only)
+ * "?" = Return textual identification (new as of MSnEDIS 3.0.5)
  *
  *                 Readback initiator commands	
- *                "A" "C" "Q" "S" "V" "I"
- * B&G 2.x         22   1   1   0 125   0
- * DualTable 090   22   1   1   0 128   0
- * DualTable 099b  22   1   1   0 128   0
- * DualTable 100   22   1   1   0 128   0
- * DualTable 101   22   1   1  18 128   0
- * DualTable 102   22   1   1  19 128   0
- * Sqrtnspark 2.02 22   1   1   0 125  83
- * SqrtnSpark 3.0  22   1   1   0 125  95
- * SqrtnEDIS 0.108 22   1   1   0 125  83
+ *                "A" "C" "Q" "S" "V" "I" "?"
+ * B&G 2.x         22   1   1   0 125   0   0
+ * DualTable 090   22   1   1   0 128   0   0
+ * DualTable 099b  22   1   1   0 128   0   0
+ * DualTable 100   22   1   1   0 128   0   0
+ * DualTable 101   22   1   1  18 128   0   0
+ * DualTable 102   22   1   1  19 128   0   0
+ * Sqrtnspark 2.02 22   1   1   0 125  83   0
+ * SqrtnSpark 3.0  22   1   1   0 125  95   0
+ * SqrtnEDIS 0.108 22   1   1   0 125  83   0
+ * SqrtnEDIS 3.0.5 22   1   1   0 125  83  32
  */
 
 void interrogate_ecu()
@@ -86,60 +89,71 @@ void interrogate_ecu()
 	gint v_bytes = 0;
 	gint s_bytes = 0;
 	gint i_bytes = 0;
+	gint quest_bytes = 0;
 	gchar *tmpbuf;
 	GtkTextIter iter;
+	GtkTextIter end_iter;
+	GtkTextIter begin_iter;
 	gint tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
 	struct Cmd_Results cmd_results[tests_to_run]; 
+	interrogate_count++;
 
-	ufds.fd = serial_params.fd;
+	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
-	tmp = serial_params.newtio.c_cc[VMIN];
-	serial_params.newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
-	tcflush(serial_params.fd, TCIFLUSH);
-	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+	tmp = serial_params->newtio.c_cc[VMIN];
+	serial_params->newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
+	tcflush(serial_params->fd, TCIFLUSH);
+	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	for (i=0;i<tests_to_run;i++)
 	{
 		count = 0;
 		cmd_results[i].cmd_string = g_strdup(cmd_chars[i]);
 		len = strlen(cmd_results[i].cmd_string);
-		res = write(serial_params.fd,cmd_chars[i],len);
-		res = poll (&ufds,1,serial_params.poll_timeout);
+		res = write(serial_params->fd,cmd_chars[i],len);
+		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
 		{	
-			while (poll(&ufds,1,serial_params.poll_timeout))
-				count += read(serial_params.fd,&buf,64);
+			while (poll(&ufds,1,serial_params->poll_timeout))
+				count += read(serial_params->fd,&buf,64);
 		}
 		cmd_results[i].count = count;
 	}
 
-//	printf("\n");
+	if (interrogate_count > 1)
+	{
+		gtk_text_buffer_get_iter_at_offset (textbuffer, &begin_iter, 0);
+		gtk_text_buffer_get_end_iter (textbuffer, &end_iter);
+		gtk_text_buffer_delete (textbuffer,&begin_iter,&end_iter);
+		interrogate_count = 1;
+	}
 	gtk_text_buffer_get_iter_at_offset (textbuffer, &iter, 0);
-	gtk_text_buffer_create_tag(textbuffer,"red_foreground","foreground",
-				"red", NULL);
 	for (i=0;i<tests_to_run;i++)
 	{
 		if (cmd_results[i].count > 0)
 		{
-//			printf("Command %s, returned %i bytes\n",cmd_results[i].cmd_string, cmd_results[i].count);
-			tmpbuf = g_strdup_printf("Command %s, returned %i bytes\n",cmd_results[i].cmd_string, cmd_results[i].count);
+			tmpbuf = g_strdup_printf(
+					"Command %s, returned %i bytes\n",
+					cmd_results[i].cmd_string, 
+					cmd_results[i].count);
 			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 			g_free(tmpbuf);
 		}
 		else
 		{
-//			printf("Command %s is not supported by this ECU\n",cmd_results[i].cmd_string);
-			tmpbuf = g_strdup_printf("Command %s is not supported by this ECU\n",cmd_results[i].cmd_string);
+			tmpbuf = g_strdup_printf(
+					"Command %s isn't supported...\n",
+					cmd_results[i].cmd_string);
 			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 			g_free(tmpbuf);
 		}
 	}
 
 	/* flush serial port... */
-	serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
-	tcflush(serial_params.fd, TCIFLUSH);
-	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+	serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
+	tcflush(serial_params->fd, TCIFLUSH);
+	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 
 	for(i=0;i<tests_to_run;i++)
@@ -150,47 +164,59 @@ void interrogate_ecu()
 			s_bytes = cmd_results[i].count;
 		if (strcmp(cmd_results[i].cmd_string,"I")== 0)
 			i_bytes = cmd_results[i].count;
+		if (strcmp(cmd_results[i].cmd_string,"?")== 0)
+			quest_bytes = cmd_results[i].count;
 	}
 	if (v_bytes > 125)
 	{
-//		printf("Code is dualtable version ");
-		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is DualTable version: ",-1,"red_foreground",NULL);
+		gtk_text_buffer_insert_with_tags_by_name(
+				textbuffer,&iter,
+				"Code is DualTable version: ",
+				-1,"red_foreground",NULL);
 		if (s_bytes == 0)
 		{
-//			printf("0.90, 0.99b, or 1.00\n");
-			gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"0.90, 0.99b, or 1.00\n",-1,"red_foreground",NULL);
+			gtk_text_buffer_insert_with_tags_by_name(
+					textbuffer,&iter,
+					"0.90, 0.99b, or 1.00\n",
+					-1,"red_foreground",NULL);
 		}
 		if (s_bytes == 18)
 		{
-//			printf("1.01\n");
-			gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"1.01\n",-1,"red_foreground",NULL);
+			gtk_text_buffer_insert_with_tags_by_name(
+					textbuffer,&iter,
+					"1.01\n",-1,"red_foreground",NULL);
 		}
 		if (s_bytes == 19)
 		{
-//			printf("1.02\n");
-			gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"1.02\n",-1,"red_foreground",NULL);
+			gtk_text_buffer_insert_with_tags_by_name(
+					textbuffer,&iter,
+					"1.02\n",-1,"red_foreground",NULL);
 		}
 	}
 	else
 	{
-		switch (i_bytes)
+		if (quest_bytes > 0)
+			gtk_text_buffer_insert_with_tags_by_name(
+					textbuffer,&iter,
+					"Code is MegaSquirtnEDIS v3.05 code\n",
+					-1,"red_foreground",NULL);
+		else
 		{
-			case 0:
-				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is Standard B&G 2.x code\n", -1,"red_foreground",NULL);
-//				printf("Code is Standard B&G 2.x code\n");
-				break;
-			case 83:
-				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n", -1,"red_foreground",NULL);
-//				printf("Code is SquirtnSpark 2.02 OR SquirtnEDIS 0.108\n");
-				break;
-			case 95:
-				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 3.0\n", -1,"red_foreground",NULL);
-//				printf("Code is SquirtnSpark 3.0\n");
-				break;
-			default:
-				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is not recognized\n Contact author!!!\n", -1,"red_foreground",NULL);
-//				printf("i_bytes is something new, contact author\n");
-				break;
+			switch (i_bytes)
+			{
+				case 0:
+					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is Standard B&G 2.x code\n", -1,"red_foreground",NULL);
+					break;
+				case 83:
+					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n", -1,"red_foreground",NULL);
+					break;
+				case 95:
+					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 3.0\n", -1,"red_foreground",NULL);
+					break;
+				default:
+					gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is not recognized\n Contact author!!!\n", -1,"red_foreground",NULL);
+					break;
+			}
 		}
 	}
 	

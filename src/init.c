@@ -50,7 +50,7 @@ extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
-extern struct Serial_Params serial_params;
+extern struct Serial_Params *serial_params;
 struct Ve_Const_Std *ve_const_p0;
 struct Ve_Const_Std *ve_const_p1;
 struct Ve_Const_Std *ve_const_p0_tmp;
@@ -79,13 +79,13 @@ void init()
 
 	/* initialize all global variables to known states */
 	def_comm_port = 1; /* DOS/WIN32 style, COM1 default */
-	serial_params.fd = 0; /* serial port file-descriptor */
-	serial_params.errcount = 0; /* I/O error count */
-	serial_params.poll_timeout = 40; /* poll wait time in milliseconds */
+	serial_params->fd = 0; /* serial port file-descriptor */
+	serial_params->errcount = 0; /* I/O error count */
+	serial_params->poll_timeout = 40; /* poll wait time in milliseconds */
 	/* default for MS V 1.x and 2.x */
-	serial_params.raw_bytes = 22; /* number of bytes for realtime vars */
-	serial_params.veconst_size = 128; /* VE/Constants datablock size */
-	serial_params.read_wait = 100;	/* delay between reads in milliseconds */
+	serial_params->raw_bytes = 22; /* number of bytes for realtime vars */
+	serial_params->veconst_size = 128; /* VE/Constants datablock size */
+	serial_params->read_wait = 100;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
 	raw_reader_running = FALSE;  /* We're not reading raw data yet... */
@@ -118,11 +118,11 @@ int read_config(void)
 		cfg_read_int(cfgfile, "Window", "main_y_origin", 
 				&main_y_origin);
 		cfg_read_int(cfgfile, "Serial", "comm_port", 
-				&serial_params.comm_port);
+				&serial_params->comm_port);
 		cfg_read_int(cfgfile, "Serial", "polling_timeout", 
-				&serial_params.poll_timeout);
+				&serial_params->poll_timeout);
 		cfg_read_int(cfgfile, "Serial", "read_delay", 
-				&serial_params.read_wait);
+				&serial_params->read_wait);
 		cfg_free(cfgfile);
 		g_free(filename);
 		return(0);
@@ -158,11 +158,11 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 	cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 	cfg_write_int(cfgfile, "Serial", "comm_port", 
-			serial_params.comm_port);
+			serial_params->comm_port);
 	cfg_write_int(cfgfile, "Serial", "polling_timeout", 
-			serial_params.poll_timeout);
+			serial_params->poll_timeout);
 	cfg_write_int(cfgfile, "Serial", "read_delay", 
-			serial_params.read_wait);
+			serial_params->read_wait);
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
@@ -188,6 +188,7 @@ void make_megasquirt_dirs(void)
 void mem_alloc()
 {
 	/* Allocate memory blocks */
+	serial_params = g_malloc(sizeof(struct Serial_Params));
 	ve_const_p0 = g_malloc(MS_PAGE_SIZE);
 	ve_const_p1 = g_malloc(MS_PAGE_SIZE);
 	ve_const_p0_tmp = g_malloc(MS_PAGE_SIZE);
@@ -201,6 +202,7 @@ void mem_alloc()
 	page1_widgets = g_malloc(sizeof(struct Ve_Widgets));
 	
 	/* Set memory blocks to known states... */
+	memset((void *)serial_params, 0, sizeof(struct Serial_Params));
 	memset((void *)ve_const_p0, 0, MS_PAGE_SIZE);
 	memset((void *)ve_const_p1, 0, MS_PAGE_SIZE);
 	memset((void *)ve_const_p0_tmp, 0, MS_PAGE_SIZE);
@@ -217,6 +219,7 @@ void mem_alloc()
 void mem_dealloc()
 {
 
+	g_free(serial_params);
 	g_free(ve_const_p0);
 	g_free(ve_const_p1);
 	g_free(ve_const_p0_tmp);

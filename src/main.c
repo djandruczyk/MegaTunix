@@ -26,7 +26,7 @@
 
 gint def_comm_port;
 extern gboolean fahrenheit;
-extern struct Serial_Params serial_params;
+extern struct Serial_Params *serial_params;
 gboolean ready = FALSE;
 
 int main(int argc, char ** argv)
@@ -40,8 +40,8 @@ int main(int argc, char ** argv)
 
 	gtk_set_locale();
 
+	mem_alloc();		/* Allocate memory for DataStructures */
 	init();			/* initialize global vars */
-	mem_alloc();
 	make_megasquirt_dirs();	/*Create config file dirs if missing */
 
 	cfg_result = read_config();
@@ -50,7 +50,7 @@ int main(int argc, char ** argv)
 	if (cfg_result < 0)
 		open_serial(def_comm_port);
 	else	
-		open_serial(serial_params.comm_port);
+		open_serial(serial_params->comm_port);
 
 	setup_serial_params();	/* Setup the serial port for I/O */
 

@@ -37,7 +37,7 @@ extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p0_tmp;
 extern struct Ve_Const_Std *ve_const_p1;
 extern struct Ve_Const_Std *ve_const_p1_tmp;
-struct Serial_Params serial_params;
+struct Serial_Params *serial_params;
 gboolean connected;
 char buff[60];
 static gboolean burn_needed = FALSE;
@@ -50,7 +50,7 @@ void open_serial(int port_num)
 	 */
 	gint result = -1;
 	char devicename[11]; /* temporary unix name of the serial port */
-	serial_params.comm_port = port_num; /* DOS/Win32 semantics here */
+	serial_params->comm_port = port_num; /* DOS/Win32 semantics here */
 
 	/* Unix port names are always 1 lower than the DOS/Win32 semantics. 
 	 * Thus com1 = /dev/ttyS0 on unix 
@@ -62,10 +62,10 @@ void open_serial(int port_num)
 	{
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
-		serial_params.open = TRUE;
-		serial_params.fd = result;
+		serial_params->open = TRUE;
+		serial_params->fd = result;
 		/* Save serial port status */
-		tcgetattr(serial_params.fd,&serial_params.oldtio);
+		tcgetattr(serial_params->fd,&serial_params->oldtio);
 		g_snprintf(buff,60,"COM%i Opened Successfully,  \
 				Suggest Testing ECU Comms",port_num);
 		update_statusbar(ser_statbar,ser_context_id,buff);
@@ -74,7 +74,7 @@ void open_serial(int port_num)
 	{
 		/* FAILURE */
 		/* An Error occurred opening the port */
-		serial_params.open = FALSE;
+		serial_params->open = FALSE;
 		g_snprintf(buff,60,"Error Opening COM%i Error Code: %s",
 				port_num,strerror(errno));
 		update_statusbar(ser_statbar,ser_context_id,buff);
@@ -91,7 +91,7 @@ int setup_serial_params()
 	 */ 
 
 	/*clear struct for new settings*/
-	bzero(&serial_params.newtio, sizeof(serial_params.newtio)); 
+	bzero(&serial_params->newtio, sizeof(serial_params->newtio)); 
 	/* 
 	 * BAUDRATE: Set bps rate. You could also use cfsetispeed and 
 	 * cfsetospeed
@@ -102,7 +102,7 @@ int setup_serial_params()
 	 * CREAD   : enable receiving characters
 	 */
 
-	serial_params.newtio.c_cflag = BAUDRATE | CS8 | CLOCAL | CREAD;
+	serial_params->newtio.c_cflag = BAUDRATE | CS8 | CLOCAL | CREAD;
 	/*
 	 * IGNPAR  : ignore bytes with parity errors
 	 * ICRNL   : map CR to NL (otherwise a CR input on the other computer
@@ -110,46 +110,46 @@ int setup_serial_params()
 	 * otherwise make device raw (no other input processing)
 	 */
 
-	//      serial_params.newtio.c_iflag = IGNPAR |IGNBRK;
+	//      serial_params->newtio.c_iflag = IGNPAR |IGNBRK;
 	/* RAW Input */
-	serial_params.newtio.c_iflag = 0;
+	serial_params->newtio.c_iflag = 0;
 	/* RAW Ouput also */
-	serial_params.newtio.c_oflag = 0;
+	serial_params->newtio.c_oflag = 0;
 	/* set input mode (non-canonical, no echo,...) */
-	serial_params.newtio.c_lflag = 0;
+	serial_params->newtio.c_lflag = 0;
 
-	cfmakeraw(&serial_params.newtio);
+	cfmakeraw(&serial_params->newtio);
 
 	/* 
 	   initialize all control characters 
 	   default values can be found in /usr/include/termios.h, and are given
 	   in the comments, but we don't need them here
 	 */
-	serial_params.newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */
-	serial_params.newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
-	serial_params.newtio.c_cc[VERASE]   = 0;     /* del */
-	serial_params.newtio.c_cc[VKILL]    = 0;     /* @ */
-	serial_params.newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
-	serial_params.newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
-	serial_params.newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arriv
+	serial_params->newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */
+	serial_params->newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
+	serial_params->newtio.c_cc[VERASE]   = 0;     /* del */
+	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
+	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
+	serial_params->newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
+	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arriv
 					  es */
-	serial_params.newtio.c_cc[VSWTC]    = 0;     /* '\0' */
-	serial_params.newtio.c_cc[VSTART]   = 0;     /* Ctrl-q */
-	serial_params.newtio.c_cc[VSTOP]    = 0;     /* Ctrl-s */
-	serial_params.newtio.c_cc[VSUSP]    = 0;     /* Ctrl-z */
-	serial_params.newtio.c_cc[VEOL]     = 0;     /* '\0' */
-	serial_params.newtio.c_cc[VREPRINT] = 0;     /* Ctrl-r */
-	serial_params.newtio.c_cc[VDISCARD] = 0;     /* Ctrl-u */
-	serial_params.newtio.c_cc[VWERASE]  = 0;     /* Ctrl-w */
-	serial_params.newtio.c_cc[VLNEXT]   = 0;     /* Ctrl-v */
-	serial_params.newtio.c_cc[VEOL2]    = 0;     /* '\0' */
+	serial_params->newtio.c_cc[VSWTC]    = 0;     /* '\0' */
+	serial_params->newtio.c_cc[VSTART]   = 0;     /* Ctrl-q */
+	serial_params->newtio.c_cc[VSTOP]    = 0;     /* Ctrl-s */
+	serial_params->newtio.c_cc[VSUSP]    = 0;     /* Ctrl-z */
+	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
+	serial_params->newtio.c_cc[VREPRINT] = 0;     /* Ctrl-r */
+	serial_params->newtio.c_cc[VDISCARD] = 0;     /* Ctrl-u */
+	serial_params->newtio.c_cc[VWERASE]  = 0;     /* Ctrl-w */
+	serial_params->newtio.c_cc[VLNEXT]   = 0;     /* Ctrl-v */
+	serial_params->newtio.c_cc[VEOL2]    = 0;     /* '\0' */
 
-	serial_params.newtio.c_cc[VMIN]     = serial_params.raw_bytes; 
+	serial_params->newtio.c_cc[VMIN]     = serial_params->raw_bytes; 
 
 	/* blocking read until proper number of chars arrive */
 
-	tcflush(serial_params.fd, TCIFLUSH);
-	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+	tcflush(serial_params->fd, TCIFLUSH);
+	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	/* No hurt in checking to see if the MS is present, if it is
 	 * It'll update the serial statusbar, and set the "Connected" flag
@@ -163,9 +163,9 @@ int setup_serial_params()
 void close_serial()
 {
 
-	tcsetattr(serial_params.fd,TCSANOW,&serial_params.oldtio);
-	close(serial_params.fd);
-	serial_params.open = FALSE;
+	tcsetattr(serial_params->fd,TCSANOW,&serial_params->oldtio);
+	close(serial_params->fd);
+	serial_params->open = FALSE;
 	connected = FALSE;
         gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
                         connected);
@@ -189,7 +189,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	else
 		locked = TRUE;
 	/* If port isn't opened no sense trying here... */
-        if(serial_params.open)
+        if(serial_params->open)
 	{
 		/* If realtime reader thread is running shut it down... */
 		if (raw_reader_running)
@@ -199,24 +199,24 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			usleep(100000);
 		}
 
-		ufds.fd = serial_params.fd;
+		ufds.fd = serial_params->fd;
 		ufds.events = POLLIN;
 		/* save state */
-		tmp = serial_params.newtio.c_cc[VMIN];
-		serial_params.newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
-		tcflush(serial_params.fd, TCIFLUSH);
-		tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+		tmp = serial_params->newtio.c_cc[VMIN];
+		serial_params->newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
+		tcflush(serial_params->fd, TCIFLUSH);
+		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request oen batch of relatime vars */
-		res = write(serial_params.fd,"A",1);
-		res = poll (&ufds,1,serial_params.poll_timeout);
+		res = write(serial_params->fd,"A",1);
+		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
 		{
 			/* Command succeeded,  but we still need to drain the
 			 * buffer...
 			 */
-			while (poll(&ufds,1,serial_params.poll_timeout))
-				res = read(serial_params.fd,&buf,64);
+			while (poll(&ufds,1,serial_params->poll_timeout))
+				res = read(serial_params->fd,&buf,64);
 
 			g_snprintf(buff,60,"ECU Comms Test Successfull");
 			/* COMMS test succeeded */
@@ -236,9 +236,9 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		
 		}
 
-		serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
-		tcflush(serial_params.fd, TCIFLUSH);
-		tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+		serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
+		tcflush(serial_params->fd, TCIFLUSH);
+		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		if (restart_reader)
 			start_serial_thread();
@@ -272,20 +272,20 @@ void read_ve_const()
 		stop_serial_thread(); /* stops realtime read */
 	}
 
-	ufds.fd = serial_params.fd;
+	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
 	/* save state */
-	tmp = serial_params.newtio.c_cc[VMIN]; /* wait for VE table */
-	serial_params.newtio.c_cc[VMIN]     = 125;
-	tcflush(serial_params.fd, TCIFLUSH);
-	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+	tmp = serial_params->newtio.c_cc[VMIN]; /* wait for VE table */
+	serial_params->newtio.c_cc[VMIN]     = 125;
+	tcflush(serial_params->fd, TCIFLUSH);
+	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
-	res = write(serial_params.fd,"V",1);
-	res = poll (&ufds,1,serial_params.poll_timeout*20);
+	res = write(serial_params->fd,"V",1);
+	res = poll (&ufds,1,serial_params->poll_timeout*20);
 	if (res == 0)	/* Error */
 	{
-		serial_params.errcount++;
+		serial_params->errcount++;
 		connected = FALSE;
 	}
 	else		/* Data arrived */
@@ -297,11 +297,11 @@ void read_ve_const()
 	/*	 Dualtable not ready yet... 
 	if (dualtable)
 	{
-		res = write(serial_params.fd,"P1V",1);
-		res = poll (&ufds,1,serial_params.poll_timeout*20);
+		res = write(serial_params->fd,"P1V",1);
+		res = poll (&ufds,1,serial_params->poll_timeout*20);
 		if (res == 0)	// Error 
 		{
-			serial_params.errcount++;
+			serial_params->errcount++;
 			connected = FALSE;
 		}
 		else		// Data arrived 
@@ -318,9 +318,9 @@ void read_ve_const()
 	update_errcounts(NULL,FALSE);
 
 	/* restore previous serial port settings */
-	serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
-	tcflush(serial_params.fd, TCIFLUSH);
-	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+	serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
+	tcflush(serial_params->fd, TCIFLUSH);
+	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	if (restart_reader)
 	{
@@ -375,15 +375,15 @@ void write_ve_const(gint value, gint offset, gint page)
 	}
 	if (page == 0)
 	{
-		res = write (serial_params.fd,"W",1);	/* Send write command */
-		res = write (serial_params.fd,lbuff,count);	/* Send write command */
+		res = write (serial_params->fd,"W",1);	/* Send write command */
+		res = write (serial_params->fd,lbuff,count);	/* Send write command */
 	}
 	else if (page == 1)
 	{	/* DUAL Table code only thus far.... */
 		printf("DualTable write operation...\n");
-		res = write (serial_params.fd,"P1",2);	/* Send write command */
-		res = write (serial_params.fd,"W",1);	/* Send write command */
-		res = write (serial_params.fd,lbuff,count);	/* Send write command */
+		res = write (serial_params->fd,"P1",2);	/* Send write command */
+		res = write (serial_params->fd,"W",1);	/* Send write command */
+		res = write (serial_params->fd,lbuff,count);	/* Send write command */
 	
 	}
 
@@ -413,7 +413,7 @@ void burn_flash()
 		no_ms_connection();
 		return;		/* can't burn if disconnected */
 	}
-	write (serial_params.fd,"B",1);	/* Send Burn command */
+	write (serial_params->fd,"B",1);	/* Send Burn command */
 
 	/* sync temp buffer with current VE_constants */
 	memcpy(ve_const_p0_tmp,ve_const_p0,sizeof(struct Ve_Const_Std));

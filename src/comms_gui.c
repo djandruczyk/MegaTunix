@@ -33,7 +33,7 @@ extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
-extern struct Serial_Params serial_params;
+extern struct Serial_Params *serial_params;
 gint poll_min;
 gint poll_step;
 gint poll_max;
@@ -110,7 +110,7 @@ int build_comms(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.comm_port);
+	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->comm_port);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SET_SER_PORT));
@@ -166,7 +166,7 @@ int build_comms(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_POLL_TIMEO));
-	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.poll_timeout);
+	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->poll_timeout);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -198,7 +198,7 @@ int build_comms(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_INTERVAL_DELAY));
-	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.read_wait);
+	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->read_wait);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -312,7 +312,7 @@ void update_errcounts(GtkWidget *widget, gboolean reset)
 		ms_ve_goodread_count = 0;
 		ms_goodread_count = 0;
 		ms_reset_count = 0;
-		serial_params.errcount = 0;
+		serial_params->errcount = 0;
 	}
 	g_snprintf(buff,10,"%i",ms_ve_goodread_count);
 	gtk_entry_set_text(GTK_ENTRY(counts.comms_ve_readcount_entry),buff);
@@ -326,7 +326,7 @@ void update_errcounts(GtkWidget *widget, gboolean reset)
 	gtk_entry_set_text(GTK_ENTRY(counts.comms_reset_entry),buff);
 	gtk_entry_set_text(GTK_ENTRY(counts.runtime_reset_entry),buff);
 
-	g_snprintf(buff,10,"%i",serial_params.errcount);
+	g_snprintf(buff,10,"%i",serial_params->errcount);
 	gtk_entry_set_text(GTK_ENTRY(counts.comms_sioerr_entry),buff);
 	gtk_entry_set_text(GTK_ENTRY(counts.runtime_sioerr_entry),buff);
 

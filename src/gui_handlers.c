@@ -61,7 +61,7 @@ extern struct Reqd_Fuel reqd_fuel;
 extern struct DynamicLabels labels;
 extern struct DynamicMisc misc;
 extern struct Logables logables;
-extern struct Serial_Params serial_params;
+extern struct Serial_Params *serial_params;
 
 gboolean tips_in_use;
 gboolean forced_update;
@@ -422,7 +422,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	switch ((SpinButton)data)
 	{
 		case SET_SER_PORT:
-			if(serial_params.open)
+			if(serial_params->open)
 			{
 				if (raw_reader_running)
 					stop_serial_thread();
@@ -432,10 +432,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			setup_serial_params();
 			break;
 		case SER_POLL_TIMEO:
-			serial_params.poll_timeout = (gint)value;
+			serial_params->poll_timeout = (gint)value;
 			break;
 		case SER_INTERVAL_DELAY:
-			serial_params.read_wait = (gint)value;
+			serial_params->read_wait = (gint)value;
 			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel.disp = (gint)value;
