@@ -5,7 +5,8 @@ rtmap_files = 	README \
 		DT-std.rtv_map \
 		MSnEDIS-3.x.rtv_map \
 		MSnS-3.0.rtv_map \
-		MSnS-Extra.rtv_map
+		MSnS-Extra.rtv_map \
+		MSnS-Extra-024x.rtv_map
 
 rtmap_DATA = $(rtmap_files)
 
