@@ -27,12 +27,18 @@ pthread_t starter;				/* thread handle */
 gint raw_reader_running;			/* flag for thread */
 gint raw_reader_stopped;			/* flag for thread */
 extern gint ser_context_id;			/* Statusbar related */
+extern gint connected;				/* valid connection with MS */
 extern GtkWidget *ser_statbar;			/* Statusbar */
 char buff[60];
 
 
 void start_serial_thread()
 {
+	if (!connected)
+	{
+		no_ms_connection();
+		return;
+	}
 	pthread_create(&starter,
 			NULL,
 			serial_raw_thread_starter,

@@ -24,7 +24,7 @@
 struct v1_2_Runtime_Gui runtime_data;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AFTERSTART","ACCEL","DECEL"};
-extern gint raw_reader_running;
+extern gint connected;
 
 int build_runtime(GtkWidget *parent_frame)
 {
@@ -683,7 +683,7 @@ void update_runtime_vars()
 	}
 
 	gtk_widget_set_sensitive(runtime_data.status[0],
-			raw_reader_running);
+			connected);
 	if (runtime->engine.value != runtime_last->engine.value)
 	{
 		gtk_widget_set_sensitive(runtime_data.status[1],
@@ -701,5 +701,21 @@ void update_runtime_vars()
 		
 	}
 	gdk_threads_leave();
+}
+
+void reset_runtime_status()
+{
+		gtk_widget_set_sensitive(runtime_data.status[1],
+				FALSE);
+		gtk_widget_set_sensitive(runtime_data.status[2],
+				FALSE);
+		gtk_widget_set_sensitive(runtime_data.status[3],
+				FALSE);
+		gtk_widget_set_sensitive(runtime_data.status[4],
+				FALSE);
+		gtk_widget_set_sensitive(runtime_data.status[5],
+				FALSE);
+		gtk_widget_set_sensitive(runtime_data.status[6],
+				FALSE);
 }
 	

@@ -22,6 +22,7 @@
 #include <protos.h>
 #include <constants.h>
 #include <globals.h>
+#include <runtime_gui.h>
 
 
 extern gint raw_reader_running;
@@ -29,6 +30,8 @@ extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
 char buff[60];
 static gint burn_needed = 0;
+gint connected;
+extern struct v1_2_Runtime_Gui runtime_data;
        
 int open_serial(int port_num)
 {
@@ -125,6 +128,12 @@ int setup_serial_params()
 	tcflush(serial_params.fd, TCIFLUSH);
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
+	/* No hurt in checking to see if the MS is present, if it is
+	 * It'll update the serial statusbar, and set the "Connected" flag
+	 * which is visible in the Runtime screen 
+	 */
+	check_ecu_comms(NULL,NULL);
+
 	return 0;
 }
 
@@ -134,6 +143,9 @@ void close_serial()
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.oldtio);
 	close(serial_params.fd);
 	serial_params.open = 0;
+	connected = FALSE;
+        gtk_widget_set_sensitive(runtime_data.status[0],
+                        connected);
 
 	g_snprintf(buff,60,"COM Port Closed ");
 	/* An Closing the comm port */
@@ -149,44 +161,50 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         gint restart_reader = 0;
 
         if(serial_params.open)
-        {
-                if (raw_reader_running)
-                {
-                        restart_reader = 1;
+	{
+		if (raw_reader_running)
+		{
+			restart_reader = 1;
 			stop_serial_thread(); /* stops realtime read */
 			usleep(100000);	/* sleep 100 ms to be sure thread ends */
-                }
+		}
 
-                ufds.fd = serial_params.fd;
-                ufds.events = POLLIN;
-                /* save state */
-                tmp = serial_params.newtio.c_cc[VMIN];
-                serial_params.newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
-                tcflush(serial_params.fd, TCIFLUSH);
-                tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+		ufds.fd = serial_params.fd;
+		ufds.events = POLLIN;
+		/* save state */
+		tmp = serial_params.newtio.c_cc[VMIN];
+		serial_params.newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
+		tcflush(serial_params.fd, TCIFLUSH);
+		tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
-                res = write(serial_params.fd,"C",1);
-                res = poll (&ufds,1,serial_params.poll_timeout);
-                if (res == 0)
-                {
-                        g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
-                        /* An I/O Error occurred with the MegaSquirt ECU */
+		res = write(serial_params.fd,"C",1);
+		res = poll (&ufds,1,serial_params.poll_timeout);
+		if (res == 0)
+		{
+			g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
+			/* An I/O Error occurred with the MegaSquirt ECU */
 			update_statusbar(ser_statbar,ser_context_id,buff);
-                }
-                else
-                {
-                        g_snprintf(buff,60,"ECU Comms Test Successfull");
-                        /* COMMS test succeeded */
+			connected = FALSE;
+			gtk_widget_set_sensitive(runtime_data.status[0],
+					connected);
+		}
+		else
+		{
+			g_snprintf(buff,60,"ECU Comms Test Successfull");
+			/* COMMS test succeeded */
 			update_statusbar(ser_statbar,ser_context_id,buff);
-                }
+			connected = TRUE;
+			gtk_widget_set_sensitive(runtime_data.status[0],
+					connected);
+		}
 
-                serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
-                tcflush(serial_params.fd, TCIFLUSH);
-                tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+		serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
+		tcflush(serial_params.fd, TCIFLUSH);
+		tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
-                if (restart_reader)
-                        start_serial_thread();
-        }
+		if (restart_reader)
+			start_serial_thread();
+	}
         else
         {
                 g_snprintf(buff,60,"Serial Port NOT Opened, Can NOT Test ECU Communications");
@@ -204,6 +222,11 @@ void read_ve_const()
 	int res = 0;
 	int tmp = 0;
 
+	if (!connected)
+	{
+		no_ms_connection();
+		return;		/* can't do anything if not connected */
+	}
 	if (raw_reader_running)
 	{
 		restart_reader = 1;
@@ -257,6 +280,11 @@ void write_ve_const(gint value, gint offset)
 	gint count = 0;
 	char buff[3] = {0, 0, 0};
 
+	if (!connected)
+	{
+		no_ms_connection();
+		return;		/* can't write anything if disconnected */
+	}
 #ifdef DEBUG
 	printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
 #endif
@@ -296,6 +324,11 @@ void write_ve_const(gint value, gint offset)
 
 void burn_flash()
 {
+	if (!connected)
+	{
+		no_ms_connection();
+		return;		/* can't burn if disconnected */
+	}
 	write (serial_params.fd,"B",1);	/* Send Burn command */
 
 	/* Take away the red on the "Store" button */

@@ -94,7 +94,6 @@ int framebuild_dispatch(GtkWidget *, int);
 void leave(GtkWidget *, gpointer);
 int std_button_handler(GtkWidget *, gpointer);
 int toggle_button_handler(GtkWidget *, gpointer);
-void update_statusbar(GtkWidget *, int, gchar *);
 int spinner_changed(GtkWidget *, gpointer);
 int classed_spinner_changed(GtkWidget *, gpointer);
 void check_req_fuel_limits(void);
@@ -131,6 +130,7 @@ int build_constants(GtkWidget *);
 /* runtime_gui.c */
 int build_runtime(GtkWidget *);
 void update_runtime_vars(void);
+void reset_runtime_status(void);
 /* runtime_gui.c */
 
 /* enrichments_gui.c */
@@ -164,6 +164,9 @@ gboolean file_exists(const char *);
 /* notifications.c */
 void set_store_red(void);
 void set_store_black(void);
+void update_statusbar(GtkWidget *, int, gchar *);
+void no_ms_connection(void);
+void warn_user(gchar *);
 /* notifications.c */
 
 #endif

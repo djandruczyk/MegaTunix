@@ -31,6 +31,7 @@ extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
+extern gint connected;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
@@ -152,12 +153,18 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case STOP_REALTIME:
 			stop_serial_thread();
+			reset_runtime_status();
 			break;
 		case REQD_FUEL_POPUP:
 			if (!req_fuel_popup)
 				reqd_fuel_popup();
 			break;
 		case READ_FROM_MS:
+			if (!connected)
+			{
+				no_ms_connection();
+				break;
+			}
 			paused_handlers = TRUE;
 			read_ve_const();
 			update_const_ve();
@@ -171,23 +178,6 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
-{
-	/* takes 3 args, 
-	 * the GtkWidget pointer to the statusbar,
-	 * the context_id of the statusbar in arg[0],
-	 * and the string to be sent to that bar
-	 *
-	 * Fairly generic, works for multiple statusbars
-	 */
-
-	gtk_statusbar_pop(GTK_STATUSBAR(status_bar),
-			context_id);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar),
-			context_id,
-			message);
-}
-	
 int classed_spinner_changed(GtkWidget *widget, gpointer data)
 {
         gfloat value = 0.0;
