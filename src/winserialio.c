@@ -22,11 +22,17 @@
  #include <windows.h>
 
 extern struct Serial_Params *serial_params;
-
+/*
 void win32_open_comm_port()
 {
 
 }
+*/
+
+/*!
+ \brief, win32_setup_serial_params() sets up the serial port attributes for win32
+ by setting things basically for 8N1, no flow, no escapes, etc....
+ */
 void win32_setup_serial_params()
 {
 	DCB dcb;
@@ -84,6 +90,15 @@ void win32_setup_serial_params()
 	return;
 }
 
+
+/*!
+ \brief win32_fluch_serial(fd,mode) is used to flush the serial port.  It effectively
+ does the same thing as "tcflush(fd,mode)". and a wrapper function is used to call
+ this or tcflush depending what OS we are compiled for.
+ \param fd, (integer) filedescriptor to flush
+ \param mode, (integer enum) either TCIFLUSH (input flush) TCOFLUSH (output flush) 
+ or TCIOFLUSH (both input and output flush).
+ */
 void win32_flush_serial(int fd, int mode)
 {
 	switch (mode)

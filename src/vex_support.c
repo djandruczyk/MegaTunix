@@ -59,6 +59,10 @@ struct Vex_Import
 	
 };
 
+/*!
+ \brief import_handlers structure is used to hold the list of string tags to search
+ for and the function and function args to pass to the appropriate handlers.
+ */
 static struct
 {
 	gchar *import_tag;		/* string to find.. */
@@ -78,6 +82,15 @@ static struct
 	{ "VE Table\0", TABLE, VEX_NONE}
 };
 
+
+/*!
+ \brief vetable_export(void *) is the export function to dump all Tables to a "vex"
+ file.  It has been modified to handler multiple tables per page.  There is a major
+ problem with this in that the currect VEX 1.0 spec doesn't allow for multiple tables
+ per page, so import is likely to be a problem.
+ \param, (void *) a pointer to the output file (\see struct Io_File) to write the 
+ data to.
+ */
 gboolean vetable_export(void *ptr)
 {
 	struct tm *tm = NULL;
@@ -183,6 +196,13 @@ gboolean vetable_export(void *ptr)
 	return TRUE; /* return TRUE on success, FALSE on failure */
 }
 
+
+/*!
+ \brief vetable_import(void *) is called to import Tables from a file.  There currently
+ exists a big problem in that newer firmwares (msns-extra and MS-II) have multiple 
+ tables per page and the VEX 1.0 spec does NOT account for that.
+ \param (void *) pointer to the file (\see struct Io_File) to read the data from.
+ */
 gboolean vetable_import(void *ptr)
 {
 	struct Io_File *iofile = NULL;
@@ -239,6 +259,13 @@ gboolean vetable_import(void *ptr)
 	return TRUE;
 }
 
+
+/*!
+ \brief process_vex_line(void *, GIOChannel *) is called for to read the VEX file and
+ dispatch handler to process sectiosn of the file.
+ \param (void *) ptr, pointer to (\see struct Vex_Import) structure.
+ \param (GIOChannel *) iochannel, the bytestream represented by the VEXfile
+ */
 GIOStatus process_vex_line(void * ptr, GIOChannel *iochannel)
 {
 	GString *a_line = g_string_new("\0");
@@ -264,6 +291,19 @@ breakout:
 	return status;
 }
 
+
+/*!
+ \brief handler_dispatch calls handlers based on importparser function passed. It passes
+ off the pointer to the Vex_Import struct, the function arg, the string read, and the
+ pointer to the IOchannel representing the input bytestream.
+ \param (void *) ptr, pointer to the \see Vex_Import datastructure.
+ \param (ImportParserFunc) an enumeration used to determine a path of action.
+ \param (ImportParserArg) another enumeration passed to the functiosn being dispatched
+ from here
+ \param (gchar *) string The data passed to the dispatched function (single line's worth)
+ \param (GIOChannel *) iochannel, pointer to the input stream of the vexfile for reading
+ additional data (used by some dispatched functions
+ */
 GIOStatus handler_dispatch(void *ptr, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;

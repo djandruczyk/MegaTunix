@@ -20,6 +20,13 @@
 
 extern GdkColor red;
 
+
+/*!
+ \brief warmwizard_update_status(temp) will update the warmup wizard scale and 
+ highlight the appropriate values on screen when the temperature changes. This
+ is done ot aid hte user for tuning warmup enrichments for their ECU.
+ \param temp (float) the temp of the engine's coolant in deg Fahrenheit.
+ */
 void warmwizard_update_status(gfloat temp)
 {
 	extern gint temp_units;
@@ -48,11 +55,6 @@ void warmwizard_update_status(gfloat temp)
 			gtk_widget_modify_fg(g_hash_table_lookup(dynamic_widgets,name),GTK_STATE_NORMAL,&black);
 			g_free(name);
 					
-			/*			gtk_widget_modify_text(spinners.warmwizard[i],
-						GTK_STATE_NORMAL,&black);
-						gtk_widget_modify_fg(spinners.warmwizard[i],
-						GTK_STATE_NORMAL,&black);
-			 */
 		}
 		else
 			skipnext = FALSE;
@@ -67,15 +69,6 @@ void warmwizard_update_status(gfloat temp)
 			gtk_widget_modify_fg(g_hash_table_lookup(dynamic_widgets,name),GTK_STATE_NORMAL,&red);
 					
 			g_free(name);
-			/*			gtk_widget_modify_text(spinners.warmwizard[i],
-						GTK_STATE_NORMAL,&red);
-						gtk_widget_modify_fg(spinners.warmwizard[i],
-						GTK_STATE_NORMAL,&red);
-						gtk_widget_modify_text(spinners.warmwizard[i+1],
-						GTK_STATE_NORMAL,&red);
-						gtk_widget_modify_fg(spinners.warmwizard[i+1],
-						GTK_STATE_NORMAL,&red);
-			 */
 		}
 	}
 
