@@ -189,7 +189,10 @@ void interrogate_ecu()
 				break;
 			case VNUM:
 				if (total_read > 0)
-					memcpy(&(canidate->ver_num),buf,total_read);
+				{
+					canidate->ver_num = buf[0];
+				//	memcpy(&(canidate->ver_num),buf,total_read);
+				}
 				else 
 					canidate->ver_num = 0;
 				break;
