@@ -23,6 +23,9 @@ extern gboolean tips_in_use;
 extern gboolean fahrenheit;
 extern GdkColor black;
 GtkWidget *ms_ecu_revision_entry;
+GtkWidget *view;
+GtkWidget *sw;
+GtkTextBuffer *textbuffer;
 
 int build_general(GtkWidget *parent_frame)
 {
@@ -131,6 +134,20 @@ int build_general(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT (button), "clicked",
                         G_CALLBACK (interrogate_ecu), \
                         NULL);
+
+	view = gtk_text_view_new ();
+ 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+//	sw = gtk_scrolled_window_new (NULL, NULL);
+	frame = gtk_frame_new ("ECU Output");
+	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
+        gtk_table_attach (GTK_TABLE (table), frame, 0, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+//	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+//				      GTK_POLICY_AUTOMATIC,
+//				      GTK_POLICY_AUTOMATIC);
+	gtk_container_add(GTK_CONTAINER(frame),view);
 
 
 	

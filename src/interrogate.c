@@ -27,6 +27,7 @@
 #include <errno.h>
 
 extern GtkWidget *ms_ecu_revision_entry;
+extern GtkTextBuffer *textbuffer;
 gfloat ecu_version;
 const gchar *cmd_chars[] = {"A","C","Q","V","S","I"};
 struct Cmd_Results
@@ -85,6 +86,8 @@ void interrogate_ecu()
 	gint v_bytes = 0;
 	gint s_bytes = 0;
 	gint i_bytes = 0;
+	gchar *tmpbuf;
+	GtkTextIter iter;
 	gint tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
 	struct Cmd_Results cmd_results[tests_to_run]; 
 
@@ -111,13 +114,26 @@ void interrogate_ecu()
 		cmd_results[i].count = count;
 	}
 
-	printf("\n");
+//	printf("\n");
+	gtk_text_buffer_get_iter_at_offset (textbuffer, &iter, 0);
+	gtk_text_buffer_create_tag(textbuffer,"red_foreground","foreground",
+				"red", NULL);
 	for (i=0;i<tests_to_run;i++)
 	{
 		if (cmd_results[i].count > 0)
-			printf("Command %s, returned %i bytes\n",cmd_results[i].cmd_string, cmd_results[i].count);
+		{
+//			printf("Command %s, returned %i bytes\n",cmd_results[i].cmd_string, cmd_results[i].count);
+			tmpbuf = g_strdup_printf("Command %s, returned %i bytes\n",cmd_results[i].cmd_string, cmd_results[i].count);
+			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
+			g_free(tmpbuf);
+		}
 		else
-			printf("Command %s is not supported by this ECU\n",cmd_results[i].cmd_string);
+		{
+//			printf("Command %s is not supported by this ECU\n",cmd_results[i].cmd_string);
+			tmpbuf = g_strdup_printf("Command %s is not supported by this ECU\n",cmd_results[i].cmd_string);
+			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
+			g_free(tmpbuf);
+		}
 	}
 
 	/* flush serial port... */
@@ -137,34 +153,47 @@ void interrogate_ecu()
 	}
 	if (v_bytes > 125)
 	{
-		printf("Code is dualtable version ");
+//		printf("Code is dualtable version ");
+		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is DualTable version: ",-1,"red_foreground",NULL);
 		if (s_bytes == 0)
-			printf("0.90, 0.99b, or 1.00\n");
+		{
+//			printf("0.90, 0.99b, or 1.00\n");
+			gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"0.90, 0.99b, or 1.00\n",-1,"red_foreground",NULL);
+		}
 		if (s_bytes == 18)
-			printf("1.01\n");
+		{
+//			printf("1.01\n");
+			gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"1.01\n",-1,"red_foreground",NULL);
+		}
 		if (s_bytes == 19)
-			printf("1.02\n");
+		{
+//			printf("1.02\n");
+			gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"1.02\n",-1,"red_foreground",NULL);
+		}
 	}
 	else
 	{
 		switch (i_bytes)
 		{
 			case 0:
-				printf("Code is Standard B&G 2.x code\n");
+				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is Standard B&G 2.x code\n", -1,"red_foreground",NULL);
+//				printf("Code is Standard B&G 2.x code\n");
 				break;
 			case 83:
-				printf("Code is SquirtnSpark 2.02 OR SquirtnEDIS 0.108\n");
+				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n", -1,"red_foreground",NULL);
+//				printf("Code is SquirtnSpark 2.02 OR SquirtnEDIS 0.108\n");
 				break;
 			case 95:
-				printf("Code is SquirtnSpark 3.0\n");
+				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is SquirtnSpark 3.0\n", -1,"red_foreground",NULL);
+//				printf("Code is SquirtnSpark 3.0\n");
 				break;
 			default:
-				printf("i_bytes is something new, contact author\n");
+				gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,"Code is not recognized\n Contact author!!!\n", -1,"red_foreground",NULL);
+//				printf("i_bytes is something new, contact author\n");
 				break;
 		}
 	}
 	
-
 	return;
 }
 
