@@ -17,10 +17,10 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void populate_user_output_choices(void);
-gboolean show_user_output_choices(GtkWidget *, gpointer );
+void build_model_and_view(GtkWidget *);
 GtkTreeModel * create_model(void);
 void add_columns (GtkTreeView *, gint);
+void update_model_from_view(GtkWidget * );
 void cell_edited(GtkCellRendererText *, const gchar * ,const gchar * ,gpointer );
 
 

@@ -21,6 +21,7 @@
 #include <dep_processor.h>
 #include <enums.h>
 #include <glade/glade.h>
+#include <lookuptables.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_processor.h>
 #include <stdlib.h>
@@ -161,32 +162,6 @@ store_it:
 	}
 	return;
 }
-
-gfloat lookup_data(GObject *object, gint offset)
-{
-	extern GHashTable *lookuptables;
-	gint *lookuptable = NULL;
-	gchar *table = NULL;
-	gchar *alt_table = NULL;
-	gboolean state = FALSE;
-
-	table = (gchar *)g_object_get_data(object,"lookuptable");
-	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
-	if (g_object_get_data(object,"depend_on"))
-		state = check_dependancy(object);
-	if (state)
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
-	else
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
-	//assert(lookuptable);
-	if (!lookuptable)
-	{
-		dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")),CRITICAL);
-		return 0.0;
-	}
-	return lookuptable[offset];
-}
-
 gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 {
 	extern gint **ms_data;

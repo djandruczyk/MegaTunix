@@ -267,8 +267,12 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	if (cfg_read_string(cfgfile,section,"post_function_with_arg",&tmpbuf))
 	{
-		printf("post_function_with_arg\n");
 		run_post_function_with_arg(tmpbuf,widget);
+		g_free(tmpbuf);
+	}
+	if (cfg_read_string(cfgfile,section,"post_function",&tmpbuf))
+	{
+		run_post_function(tmpbuf);
 		g_free(tmpbuf);
 	}
 	g_free(keytypes);
@@ -307,18 +311,18 @@ void run_post_function_with_arg(gchar * function_name, GtkWidget *widget)
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module)
-		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
 	if (!g_module_symbol(module,function_name,(void *)&function))
 	{
-		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()),CRITICAL);
 		if (!g_module_close(module))
-			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
 	}
 	else
 	{
 		function(widget);
 		if (!g_module_close(module))
-			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
 	}
 }
 

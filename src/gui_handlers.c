@@ -37,6 +37,7 @@
 #include <tabloader.h>
 #include <threads.h>
 #include <timeout_handlers.h>
+#include <user_outputs.h>
 #include <vetable_gui.h>
 #include <vex_support.h>
 
@@ -987,6 +988,17 @@ void update_widget(gpointer object, gpointer user_data)
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
 			else
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);
+		}
+		else if (GTK_IS_SCROLLED_WINDOW(widget))
+		{
+			/* This will looks really weird, but is used in the 
+			 * special case of a treeview widget which is always
+			 * packed into ascrolled window. Since the treeview
+			 * depends on ECU variables, we call a handler here
+			 * passing in a pointer to the treeview(the scrolled
+			 * window's child widget)
+			 */
+			update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
 		}
 		if (toggle_group)
 		{

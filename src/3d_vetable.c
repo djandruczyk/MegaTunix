@@ -295,7 +295,7 @@ GdkGLConfig* get_gl_config(void)
  \brief ve3d_configure_event is called when the window needs to be drawn
  after a resize. 
  */
-EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
@@ -327,7 +327,7 @@ EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event
  even need to redraw at all..  :(
  /bug this code is slow, and needs to be optimized or redesigned
  */
-EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");

@@ -13,6 +13,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <assert.h>
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
@@ -36,10 +37,9 @@ enum
 	NUM_COLS
 } ;
 
-void build_model_for_view(GtkWidget * widget)
+void build_model_and_view(GtkWidget * widget)
 {
 	extern gboolean rtvars_loaded;
-	extern GHashTable *dynamic_widgets;
 	GtkWidget *view = NULL;
 	GtkTreeModel *model = NULL;
 
@@ -55,12 +55,14 @@ void build_model_for_view(GtkWidget * widget)
 	g_object_set_data(G_OBJECT(model),"src_offset",g_object_get_data(G_OBJECT(widget),"src_offset"));
 	g_object_set_data(G_OBJECT(model),"page",g_object_get_data(G_OBJECT(widget),"page"));
 	g_object_set_data(G_OBJECT(model),"ign_parm",g_object_get_data(G_OBJECT(widget),"ign_parm"));
-//	view = g_hash_table_lookup(dynamic_widgets,"
-	view = gtk_tree_view_new_with_model (model);
+
+	view = gtk_tree_view_new_with_model(model);
+	g_object_set_data(G_OBJECT(model),"view",(gpointer)view);
+	gtk_container_add(GTK_CONTAINER(widget),view);
 	g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
-	add_columns(GTK_TREE_VIEW(view), 1);
+	add_columns(GTK_TREE_VIEW(view), (gint)g_object_get_data(G_OBJECT(widget),"output_num"));
 
 }
 
@@ -160,6 +162,7 @@ void cell_edited(GtkCellRendererText *cell,
 		gpointer data)
 {
 	GtkTreeModel *model = (GtkTreeModel *)data;
+	GtkTreeView *view = (GtkTreeView *)g_object_get_data(G_OBJECT(model),"view");
 	GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
 	GtkTreeIter iter;
 	gboolean temp_dep;
@@ -258,5 +261,96 @@ void cell_edited(GtkCellRendererText *cell,
 	ms_data[page][lim_offset] = result;
 	write_ve_const(page,src_offset,rt_offset,ign_parm);
 	write_ve_const(page,lim_offset,result,ign_parm);
+	update_model_from_view((GtkWidget *)view);
 	
+}
+
+void update_model_from_view(GtkWidget * widget)
+{
+	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(widget));
+	GtkTreeIter    iter;
+	GObject *object = NULL;
+	gint src_offset = 0;
+	gint lim_offset = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint cur_val = 0;
+	gint x = 0;
+	gfloat tmpf = 0.0;
+	gfloat result = 0.0;
+	gchar * expr = NULL;
+	gboolean is_float = FALSE;
+	gboolean temp_dep = FALSE;
+	gboolean looptest = FALSE;
+	void * evaluator = NULL;
+	extern gint ** ms_data;
+	extern gint temp_units;
+
+
+	if (!gtk_tree_model_get_iter_first(model,&iter))
+		return;
+	src_offset = (gint)g_object_get_data(G_OBJECT(model),"src_offset");
+	lim_offset = (gint)g_object_get_data(G_OBJECT(model),"lim_offset");
+	page = (gint)g_object_get_data(G_OBJECT(model),"page");
+	offset = ms_data[page][src_offset];
+	cur_val = ms_data[page][lim_offset];
+	//printf("offset from secl we're looking for is %i\n",offset);
+
+	looptest = TRUE;
+	while (looptest)
+	{
+		gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
+		if (offset == (gint)g_object_get_data(object,"offset"))
+		{
+			is_float =(gboolean)g_object_get_data(object,"is_float");
+			temp_dep =(gboolean)g_object_get_data(object,"temp_dep");
+			evaluator =(void *)g_object_get_data(object,"ul_evaluator");
+			if (!evaluator) /* Not created yet */
+			{
+				expr = g_object_get_data(object,"ul_conv_expr");
+				if (expr == NULL)
+				{
+					dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")),CRITICAL);
+					exit (-3);
+				}
+				evaluator = evaluator_create(expr);
+				if (!evaluator)
+					dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr),CRITICAL);
+				assert(evaluator);
+				g_object_set_data(object,"ul_evaluator",evaluator);
+
+			}
+			else
+				assert(evaluator);
+
+			if (g_object_get_data(object,"lookuptable"))
+				x = lookup_data(object,cur_val);
+			else
+				x = cur_val;
+			tmpf = evaluator_evaluate_x(evaluator,x);
+			if (temp_dep)
+			{
+				if (temp_units == CELSIUS)
+					result = (tmpf-32)*(5.0/9.0);
+				else
+					result = tmpf;
+			}
+			else
+				result = tmpf;
+
+			if (is_float)
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%.2f",result), -1);
+			else
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%.i",(gint)result), -1);
+
+//			printf("offset matched for object %s\n",(gchar *)g_object_get_data(object,"dlog_gui_name"));
+
+		}
+		else
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup(""), -1);
+		looptest = gtk_tree_model_iter_next(model,&iter);
+	}
+
+
+
 }

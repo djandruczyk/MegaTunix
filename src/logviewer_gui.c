@@ -711,7 +711,7 @@ void scroll_logviewer_traces()
 	gdk_window_clear(lv_darea->window);
 }
 
-gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
 	gint w = 0;
@@ -751,7 +751,7 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 }
 
 
-gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
 	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
