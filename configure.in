@@ -50,6 +50,29 @@ AC_SUBST(CFLAGS)
 EXTRA_LIBS=""
 AC_SUBST(EXTRA_LIBS)
 
+
+dnl ===============
+dnl COMM port basename
+dnl ===============
+AC_MSG_CHECKING(for default serial port device)
+DFL_PORT="/dev/cuaa0"
+if test -c $DFL_PORT
+	then
+		AC_MSG_RESULT($DFL_PORT)
+		AC_DEFINE_UNQUOTED(PORT_BASE, "/dev/cuaa")
+	else
+		DFL_PORT=""
+fi
+DFL_PORT="/dev/ttyS0"
+if test -c $DFL_PORT
+	then
+		AC_MSG_RESULT($DFL_PORT)
+		AC_DEFINE_UNQUOTED(PORT_BASE, "/dev/ttyS")
+	else
+		DFL_PORT=""
+fi
+
+
 dnl ===============
 dnl Debugging stuff
 dnl ===============

@@ -56,7 +56,7 @@ void open_serial(int port_num)
 	/* Unix port names are always 1 lower than the DOS/Win32 semantics. 
 	 * Thus com1 = /dev/ttyS0 on unix 
 	 */
-	devicename = g_strdup_printf("/dev/ttyS%i",port_num-1);
+	devicename = g_strdup_printf("%s%i",PORT_BASE,port_num-1);
 	/* Open Read/Write and NOT as the controlling TTY */
 	result = open(devicename, O_RDWR | O_NOCTTY | O_NDELAY);
 	if (result >= 0)
