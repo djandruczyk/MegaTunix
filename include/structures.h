@@ -107,14 +107,19 @@ struct DynamicSpinners
 /* Controls for the Required Fuel Calculator... */
 struct Reqd_Fuel
 {
-        GtkWidget *disp_spin;		/* Spinbutton */
-        GtkWidget *cyls_spin;		/* Spinbutton */
-        GtkWidget *inj_rate_spin;	/* Spinbutton */
-        GtkWidget *afr_spin;		/* Spinbutton */
-        gint disp;			/* Engine size  1-1000 Cu-in */
-        gint cyls;			/* # of Cylinders  1-12 */
-        gint inj_rate;			/* injector flow rate (lbs/hr) */
-        gfloat afr;			/* Air fuel ratio 10-25.5 */
+        GtkWidget *disp_spin;     /* Spinbutton */
+        GtkWidget *cyls_spin;     /* Spinbutton */
+        GtkWidget *rated_inj_flow_spin;   /* Spinbutton */
+        GtkWidget *rated_pressure_spin;   /* Spinbutton */
+        GtkWidget *actual_pressure_spin;  /* Spinbutton */
+        GtkWidget *afr_spin;      /* Spinbutton */
+        gint disp;                /* Engine size  1-1000 Cu-in */
+        gint cyls;                /* # of Cylinders  1-12 */
+        gfloat rated_inj_flow;    /* Rated injector flow */
+        gfloat rated_pressure;    /* Rated fuel pressure */
+        gfloat actual_pressure;   /* Actual fuel pressure */
+        gfloat actual_inj_flow;   /* injector flow rate (lbs/hr) */
+        gfloat afr;               /* Air fuel ratio 10-25.5 */
 };
 
 /* These are defined as they are semi-dynamic and are modified

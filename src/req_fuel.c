@@ -26,7 +26,7 @@
 gboolean req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;
 static GtkWidget *popup;
-struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,0,19,14.7};
+struct Reqd_Fuel reqd_fuel = {NULL,NULL,NULL,NULL,NULL,NULL,300,8,19,2.7,3.5,0.0,14.7};
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct DynamicSpinners spinners;
 extern struct DynamicAdjustments adjustments;
@@ -63,7 +63,7 @@ int reqd_fuel_popup()
         frame = gtk_frame_new("Constants for your vehicle");
         gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
-        table =gtk_table_new(4,3,FALSE);
+        table = gtk_table_new(6,3,FALSE);
         gtk_table_set_col_spacings(GTK_TABLE(table),5);
         gtk_container_add(GTK_CONTAINER(frame),table);
         gtk_container_set_border_width(GTK_CONTAINER(table),5);
@@ -80,17 +80,30 @@ int reqd_fuel_popup()
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
-        label = gtk_label_new("Injector Flow (lbs/hr)");
+        label = gtk_label_new("Rated Injector Flow (lbs/hr)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
-        label = gtk_label_new("Air-Fuel Ratio");
+        label = gtk_label_new("Rated Fuel Pressure (bar)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
+
+        label = gtk_label_new("Actual Fuel Pressure (bar)");
+        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        label = gtk_label_new("Air-Fuel Ratio");
+        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 
         /* Engine Displacement */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.disp,1.0,1000,
@@ -107,7 +120,7 @@ int reqd_fuel_popup()
                         (GtkAttachOptions) (0), 0, 0);
 
         /* Number of Cylinders */
-	reqd_fuel.cyls = num_cylinders;
+        reqd_fuel.cyls = num_cylinders;
         spinner = gtk_spin_button_new(adjustments.cylinders_adj,0,0);
         gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -119,19 +132,48 @@ int reqd_fuel_popup()
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
-        /* Fuel injector flow rate in lbs/hr */
-        adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.inj_rate,1.0,100.0,
+        /* Rated fuel injector flow in lbs/hr */
+        adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.rated_inj_flow,1.0,100.0,
                         1.0,1.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
         gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
-                        GINT_TO_POINTER(REQ_FUEL_INJ_RATE));
-        reqd_fuel.inj_rate_spin = spinner;
+                        GINT_TO_POINTER(REQ_FUEL_RATED_INJ_FLOW));
+        reqd_fuel.rated_inj_flow_spin = spinner;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
+
+        /* Rated fuel pressure in bar */
+        adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.rated_pressure,1.0,10.0,
+                        0.1,0.1,0);
+        spinner = gtk_spin_button_new(adj,0,1);
+        gtk_widget_set_size_request(spinner,65,-1);
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(REQ_FUEL_RATED_PRESSURE));
+        reqd_fuel.rated_pressure_spin = spinner;
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 3, 4,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        /* Actual fuel pressure in bar */
+        adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.actual_pressure,1.0,10.0,
+                        0.1,0.1,0);
+        spinner = gtk_spin_button_new(adj,0,1);
+        gtk_widget_set_size_request(spinner,65,-1);
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(REQ_FUEL_ACTUAL_PRESSURE));
+        reqd_fuel.actual_pressure_spin = spinner;
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 4, 5,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
 
         /* Target Air Fuel Ratio */
         adj =  (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.afr,10.0,25.5,
@@ -143,7 +185,7 @@ int reqd_fuel_popup()
                         GINT_TO_POINTER(REQ_FUEL_AFR));
         reqd_fuel.afr_spin = spinner;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 3, 4,
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 5, 6,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
@@ -182,13 +224,23 @@ int close_popup(GtkWidget *widget, gpointer data)
 int update_reqd_fuel(GtkWidget *widget, gpointer data)
 {
         gfloat tmp1,tmp2;
-	gint dload_val;
-	gint page = -1;
+        gint dload_val;
+        gint page = -1;
 
+        reqd_fuel.actual_inj_flow = ((double)reqd_fuel.rated_inj_flow *
+          sqrt((double)reqd_fuel.actual_pressure / (double)reqd_fuel.rated_pressure));
+
+        #ifdef DEBUG
+          printf("Rated injector flow is %f lbs/hr\n",reqd_fuel.rated_inj_flow);
+          printf("Rated fuel pressure is %f bar\n",reqd_fuel.rated_pressure);
+          printf("Actual fuel pressure is %f bar\n",reqd_fuel.actual_pressure);
+          printf("Calculated injector flow rate is %f lbs/hr\n",reqd_fuel.actual_inj_flow);
+        #endif
+                        
         tmp1 = 36.0*((double)reqd_fuel.disp)*4.27793;
         tmp2 = ((double) reqd_fuel.cyls) \
                 * ((double)(reqd_fuel.afr)) \
-                * ((double)(reqd_fuel.inj_rate));
+                * ((double)(reqd_fuel.actual_inj_flow));
 
         ve_const_p0->req_fuel = 10.0*(tmp1/tmp2);
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_total_spin),
@@ -206,9 +258,9 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
 	else
         	ve_const_p0->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
 
-	check_req_fuel_limits();
-	dload_val = ve_const_p0->rpmk;
-	page = 0;
+  check_req_fuel_limits();
+  dload_val = ve_const_p0->rpmk;
+  page = 0;
         write_ve_const(dload_val, rpmk_offset, page);
 
         return TRUE;

@@ -20,6 +20,8 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <gtk/gtk.h>
+#include <math.h>
+#include <stdio.h>
 
 /* Megasquirt constants defined in C provided by Perry Harrington */
  

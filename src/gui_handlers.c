@@ -68,6 +68,7 @@ gboolean forced_update;
 gboolean fahrenheit;
 gint num_cylinders = 1;
 GdkColor red = { 0, 65535, 0, 0};
+GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
 
 /* mt_classic[] is an array of the bit POSITIONS that correspond with the names
@@ -448,8 +449,14 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 		case REQ_FUEL_CYLS:
 			reqd_fuel.cyls = (gint)value;
 			break;
-		case REQ_FUEL_INJ_RATE:
-			reqd_fuel.inj_rate = (gint)value;
+		case REQ_FUEL_RATED_INJ_FLOW:
+			reqd_fuel.rated_inj_flow = (gint)value;
+			break;
+		case REQ_FUEL_RATED_PRESSURE:
+			reqd_fuel.rated_pressure = (gfloat)value;
+			break;
+		case REQ_FUEL_ACTUAL_PRESSURE:
+			reqd_fuel.actual_pressure = (gfloat)value;
 			break;
 		case REQ_FUEL_AFR:
 			reqd_fuel.afr = value;
@@ -796,6 +803,7 @@ void check_req_fuel_limits()
 	gfloat req_fuel_per_squirt = 0.0;
 	gfloat req_fuel_per_squirt_dl = 0.0;
 	gint lim_flag = 0;
+	gint tuning_zone_flag = 0;  
 	gint index = 0;
 	gint dload_val = 0;
 	gint offset = 0;
@@ -817,7 +825,7 @@ void check_req_fuel_limits()
 	 */
 
 	tmp =	(float)(ve_const_p0->divider*(float)(ve_const_p0->alternate+1))/(float)(num_injectors);
-	
+
 	/* This is 1 tenth the value as the one screen stuff is 1/10th 
 	 * for the ms variable,  it gets converted farther down, just 
 	 * before download to the MS
@@ -831,12 +839,22 @@ void check_req_fuel_limits()
 			lim_flag = 1;
 		if (req_fuel_per_squirt_dl < 0)
 			lim_flag = 1;
+		if ((req_fuel_per_squirt_dl > 80) & (req_fuel_per_squirt_dl < 120))
+			tuning_zone_flag = 1;      
 	}
-		/* req-fuel info box  */
+	/* req-fuel info box  */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(
 			spinners.req_fuel_per_squirt_spin),
 			req_fuel_per_squirt);
-		page = 0;
+	page = 0;
+	if (tuning_zone_flag)
+	{ /*
+	   * This means each injector squirt is within sane limits, and
+	   * should be tunable and operate over a full rev-range
+	   */
+//		gtk_widget_modify_text(GTK_WIDGET(								spinners.req_fuel_per_squirt_spin),
+//				GTK_STATE_INSENSITIVE,&green);
+	}
 	if (lim_flag)
 	{	/*
 		 * ERROR, something is out of bounds 
@@ -859,9 +877,9 @@ void check_req_fuel_limits()
 		 * the offset GList, and clear the array...
 		 */
 
-		 /* Handlers get paused during a read of MS VE/Constants. We
-		  * don't need to write anything back during this window. 
-		  */
+		/* Handlers get paused during a read of MS VE/Constants. We
+		 * don't need to write anything back during this window. 
+		 */
 		if (paused_handlers)
 			return;
 		offset = 90;
@@ -885,7 +903,7 @@ void check_req_fuel_limits()
 			offset_data[index]=0;
 	}
 	return ;
-	
+
 }
 
 void check_config11(int tmp)
