@@ -290,6 +290,7 @@ typedef enum
 {
 	UPLOAD=0x180,
 	DOWNLOAD,
+	RTV,
 }ConvType;
 
 

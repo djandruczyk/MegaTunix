@@ -33,6 +33,7 @@ void process_rt_vars(void *incoming)
 	extern gint temp_units;
 	guchar *raw_realtime = incoming;
 	GObject * object = NULL;
+	gchar * expr = NULL;
 	gint len =  0;
 	GList * list= NULL;
 	gint i = 0;
@@ -62,6 +63,12 @@ void process_rt_vars(void *incoming)
 			evaluator = (void *)g_object_get_data(object,"evaluator");
 			if (!evaluator)
 			{
+				expr = g_object_get_data(object,"conv_expr");
+				if (expr == NULL)
+				{
+					dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\t \"conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")),CRITICAL);
+					exit (-3);
+				}
 				evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
 				assert(evaluator);
 				g_object_set_data(object,"evaluator",evaluator);
@@ -71,7 +78,7 @@ void process_rt_vars(void *incoming)
 			offset = (gint)g_object_get_data(object,"offset");
 			if (g_object_get_data(object,"complex_expr"))
 			{
-				result = handle_complex_expr(object,incoming,UPLOAD);
+				result = handle_complex_expr(object,incoming,RTV);
 				//printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 				continue;
 			}
@@ -187,6 +194,8 @@ gdouble handle_complex_expr(GObject *object, void * incoming,ConvType type)
 			evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
 		else if (type == DOWNLOAD)
 			evaluator = evaluator_create(g_object_get_data(object,"dl_conv_expr"));
+		else if (type == RTV)
+			evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
 		else
 			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
 		if (!evaluator)

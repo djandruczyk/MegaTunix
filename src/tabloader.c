@@ -232,7 +232,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 					g_free(tmpbuf);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t\MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))

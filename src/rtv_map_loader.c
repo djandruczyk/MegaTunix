@@ -146,7 +146,7 @@ gboolean load_realtime_map(void )
 				case MTX_INT:
 					if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
 					{
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),RTMLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								GINT_TO_POINTER(tmpi));
@@ -158,7 +158,7 @@ gboolean load_realtime_map(void )
 					if (cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
 						tmpi = translate_string(tmpbuf);
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),RTMLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								GINT_TO_POINTER(tmpi));
@@ -170,7 +170,7 @@ gboolean load_realtime_map(void )
 				case MTX_BOOL:
 					if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
 					{
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),RTMLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								GINT_TO_POINTER(tmpi));
@@ -183,7 +183,7 @@ gboolean load_realtime_map(void )
 				case MTX_STRING:
 					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section),RTMLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								g_strdup(tmpbuf));
