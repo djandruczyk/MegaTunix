@@ -378,7 +378,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 	
 	/* Decel Cut % */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	constants.decel_cut_spin = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
