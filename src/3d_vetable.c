@@ -29,24 +29,7 @@
 #include <time.h>
 
 static int grid = 8;
-/*
-static int beginX, beginY;
-static int active_load, active_rpm = 0;
-  
-static float dt = 0.008;
-static float sphi = 35.0; // 45.0
-static float stheta = 75.0; 
-static float sdepth = 7.533;
-static float zNear = 0.8;
-static float zFar = 23;
-static float aspect = 1.0;
-static float rpm_div=0.0, load_div=0.0,ve_div=0.0;
-static int rpm_max=0, load_max=0, ve_max=0;
-*/
-static gchar font_string[] = "sans 10";
 static GLuint font_list_base;
-static gint font_height;
-static gchar label[6];
 
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
@@ -93,17 +76,11 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	g_object_set_data(G_OBJECT(window),"data",(gpointer)ve_view);
 	/* Bind pointer to veview to an object for retrieval elsewhere */
 	if (tbl == 0)
-	{
-		printf("binding data to page0 widgets\n");
 		g_object_set_data(G_OBJECT(page0_widgets->widget[0]),
 				"data",(gpointer)ve_view);
-	}
 	else
-	{
-		printf("binding data to page1 widgets\n");
 		g_object_set_data(G_OBJECT(page1_widgets->widget[0]),
 				"data",(gpointer)ve_view);
-	}
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(reset_3d_winstat),
@@ -216,17 +193,11 @@ gint reset_3d_winstat(GtkWidget *widget)
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 	if (tbl == 0)
-	{
 		g_object_set_data(G_OBJECT(page0_widgets->widget[0]),
 				"data",NULL);
-		printf("setting page0 widgets data to NULL\n");
-	}
 	else
-	{
 		g_object_set_data(G_OBJECT(page1_widgets->widget[0]),
 				"data",NULL);
-		printf("setting page1 widgets data to NULL\n");
-	}
 	return FALSE;  /* MUST return false otherwise 
 			* other handlers WILL NOT run. */
 }
@@ -332,7 +303,7 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	ve_calculate_scaling(ve_view);
 	ve_draw_ve_grid(ve_view);
 	ve_draw_active_indicator(ve_view);
-	ve_draw_actual_indicator(ve_view);
+	ve_draw_runtime_indicator(ve_view);
 	ve_draw_axis(ve_view);
 
 	/* Swap buffers */
@@ -544,7 +515,7 @@ void ve_draw_active_indicator(void *ptr)
 	glEnd();	
 }
 
-void ve_draw_actual_indicator(void *ptr)
+void ve_draw_runtime_indicator(void *ptr)
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)ptr;
@@ -555,7 +526,7 @@ void ve_draw_actual_indicator(void *ptr)
 	else if (ve_view->table == 1)
 		actual_ve = runtime->vecurr2;
 	else
-		fprintf(stderr,__FILE__": Problem, ve_draw_actual_indicator(), table out of range..\n");
+		fprintf(stderr,__FILE__": Problem, ve_draw_runtim_indicator(), table out of range..\n");
 
 	/* Render a green dot at the active VE map position */
 	glPointSize(8.0);
@@ -573,6 +544,7 @@ void ve_draw_axis(void *ptr)
 	/* Set vars and an asthetically pleasing maximum value */
 	int i=0, rpm=0, load=0;
 	float top = 0.0;
+	gchar label[6];
 	struct Ve_Const_Std *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)ptr;
@@ -713,21 +685,23 @@ void ve_load_font_metrics(void)
 	PangoFontDescription *font_desc;
 	PangoFont *font;
 	PangoFontMetrics *font_metrics;
+	gchar font_string[] = "sans 10";
+	gint font_height;
 
 	font_list_base = glGenLists (128);
 	font_desc = pango_font_description_from_string (font_string);
-  	font = gdk_gl_font_use_pango_font (font_desc, 0, 128, font_list_base);
-  	if (font == NULL)
-    {
-      g_print ("*** Can't load font '%s'\n", font_string);
-      exit (1);
-    }
-  	font_metrics = pango_font_get_metrics (font, NULL);
-  	font_height = pango_font_metrics_get_ascent (font_metrics) +
-                  pango_font_metrics_get_descent (font_metrics);
-  	font_height = PANGO_PIXELS (font_height);
-  	pango_font_description_free (font_desc);
-  	pango_font_metrics_unref (font_metrics);
+	font = gdk_gl_font_use_pango_font (font_desc, 0, 128, font_list_base);
+	if (font == NULL)
+	{
+		g_print ("*** Can't load font '%s'\n", font_string);
+		exit (1);
+	}
+	font_metrics = pango_font_get_metrics (font, NULL);
+	font_height = pango_font_metrics_get_ascent (font_metrics) +
+		pango_font_metrics_get_descent (font_metrics);
+	font_height = PANGO_PIXELS (font_height);
+	pango_font_description_free (font_desc);
+	pango_font_metrics_unref (font_metrics);
 }
 
 gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -741,7 +715,8 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	struct Ve_Const_Std *ve_ptr = NULL;
 	struct Ve_Widgets *widget_ptr = NULL;
 	struct Ve_View_3D *ve_view;
-	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
+	ve_view = (struct Ve_View_3D *)g_object_get_data(
+			G_OBJECT(widget),"data");
 	if (ve_view->table == 0) /* all std code derivatives..*/
 	{
 		ve_ptr = ve_const_p0;
@@ -754,49 +729,49 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	}
 	else
 		fprintf(stderr,__FILE__": Problem, ve_key_press_event(), table out of range..\n");
-	
-	#ifdef GLDEBUG	
+
+#ifdef GLDEBUG	
 	printf("Key press event\n");
-	#endif
+#endif
 	switch (event->keyval)
 	{
 		case GDK_Up:
-			#ifdef GLDEBUG
+#ifdef GLDEBUG
 			printf("UP\n");
-			#endif
+#endif
 			if (ve_view->active_load < 7)
 				ve_view->active_load += 1;
 			break;
 
 		case GDK_Down:
-			#ifdef GLDEBUG
+#ifdef GLDEBUG
 			printf("DOWN\n");
-			#endif
+#endif
 			if (ve_view->active_load > 0)
 				ve_view->active_load -= 1;
 			break;				
 
 		case GDK_Left:
-			#ifdef GLDEBUG
+#ifdef GLDEBUG
 			printf("LEFT\n");
-			#endif
+#endif
 			if (ve_view->active_rpm > 0)
 				ve_view->active_rpm -= 1;
 			break;					
 
 		case GDK_Right:
-			#ifdef GLDEBUG
+#ifdef GLDEBUG
 			printf("RIGHT\n");
-			#endif
+#endif
 			if (ve_view->active_rpm < 7)
 				ve_view->active_rpm += 1;
 			break;				
 
 		case GDK_plus:
 		case GDK_KP_Add:
-			#ifdef GLDEBUG
+#ifdef GLDEBUG
 			printf("PLUS\n");
-			#endif
+#endif
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] < 255)
 			{
 				page = 0;  // < Change this when dualtable works
@@ -805,7 +780,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						widget_ptr->widget[offset]),
+							widget_ptr->widget[offset]),
 						value);
 
 			}
@@ -813,9 +788,9 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 		case GDK_minus:
 		case GDK_KP_Subtract:
-			#ifdef GLDEBUG
+#ifdef GLDEBUG
 			printf("MINUS\n");
-			#endif
+#endif
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] > 0)
 			{
 				page = 0;  // < Change this when dualtable works
@@ -824,7 +799,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						widget_ptr->widget[offset]),
+							widget_ptr->widget[offset]),
 						value);
 			}
 			break;							
@@ -867,42 +842,5 @@ void initialize_ve_view(void *ptr)
 	ve_view->load_max = 0;
 	ve_view->ve_max = 0;
 	return;
-}
-
-void ve_draw_runtime_indicator(void *ptr)
-{
-	extern struct Runtime_Common *runtime;
-        struct Ve_View_3D *ve_view = NULL;
-        float runtime_rpm = 0.0;
-        float runtime_load = 0.0;
-        float runtime_ve = 0.0;
-
-	ve_view = (struct Ve_View_3D *)ptr;
-	if (ve_view == NULL)
-	{
-		fprintf(stderr,__FILE__": runtime_indicator, struct undefined\n");
-		return;
-	} 
-
-        /* Get data from runtime */
-        runtime_rpm = runtime->rpm;
-        runtime_load = runtime->map;
-        if (ve_view->table == 0) { /* all std code derivatives..*/
-                runtime_ve = runtime->vecurr1;
-        } else if (ve_view->table == 1) {
-                runtime_ve = runtime->vecurr2;
-        } else
-                fprintf(stderr,__FILE__": Problem,ve_draw_runtime_indicator(), table out of range..\n");
-
-        /* Render a green dot at the active VE map position */
-        glPointSize(8.0);
-        glColor3f(0.0,1.0,0.0);
-                                                                                                                            
-        glBegin(GL_POINTS);
-        glVertex3f(
-                        (float)runtime_rpm/100/ve_view->rpm_div,
-                        (float)runtime_load/ve_view->load_div,
-                        (float)runtime_ve/ve_view->ve_div);
-        glEnd();
 }
 

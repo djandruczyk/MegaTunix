@@ -46,14 +46,13 @@ void ve_normalize(float );
 void ve_draw_grid_point(float , float , float , int );
 void ve_draw_labels(void);
 void ve_draw_active_indicator(void *);
-void ve_draw_actual_indicator(void *);
 void ve_calculate_scaling(void *);
 void ve_draw_axis(void *);
 void ve_drawtext(char* text, float x, float y, float z);
 void ve_load_font_metrics(void);
 void reset_3d_view(GtkWidget *);
 void initialize_ve_view(void *);
-void ve_draw_runtime_indicator(void *ptr);
+void ve_draw_runtime_indicator(void *);
 
 /* Prototypes */
 
