@@ -116,14 +116,13 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 26);
 	gtk_entry_set_text(GTK_ENTRY(entry),serial_params->port_name);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), TRUE);
 	g_signal_connect (G_OBJECT(entry), "changed",
 			G_CALLBACK (comm_port_change),
 			GINT_TO_POINTER(SET_SER_PORT));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK|GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	ebox = gtk_event_box_new();
