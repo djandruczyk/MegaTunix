@@ -23,12 +23,14 @@
 static GtkWidget *ms_reset_entry;	/* MS reset count */
 static GtkWidget *ms_sioerr_entry;	/* MS Serial I/O error count */
 static GtkWidget *ms_readcount_entry;	/* MS Good read counter */
+static GtkWidget *ms_ve_readcount_entry;	/* MS Good read counter */
 int ser_context_id;			/* for ser_statbar */
 GtkWidget *ser_statbar;			/* serial statusbar */ 
 extern int read_wait_time;
 extern int raw_reader_running;
 extern int ms_reset_count;
 extern int ms_goodread_count;
+extern int ms_ve_goodread_count;
 
 int build_comms(GtkWidget *parent_frame)
 {
@@ -155,6 +157,19 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
         gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,5);
 
+	label = gtk_label_new("Good VE/Constants Reads");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	ms_ve_readcount_entry = gtk_entry_new();
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_ve_readcount_entry), 7);
+	gtk_table_attach (GTK_TABLE (table), ms_ve_readcount_entry, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+     
 	label = gtk_label_new("Good RealTime Reads");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
@@ -199,7 +214,8 @@ void update_errcounts()
 {
 	char buff[10];
 
-	gdk_threads_enter();
+	g_snprintf(buff,10,"%i",ms_ve_goodread_count);
+	gtk_entry_set_text(GTK_ENTRY(ms_ve_readcount_entry),buff);
 
 	g_snprintf(buff,10,"%i",ms_goodread_count);
 	gtk_entry_set_text(GTK_ENTRY(ms_readcount_entry),buff);
@@ -210,7 +226,5 @@ void update_errcounts()
 	g_snprintf(buff,10,"%i",serial_params.errcount);
 	gtk_entry_set_text(GTK_ENTRY(ms_sioerr_entry),buff);
 
-
-	gdk_threads_leave();
 	return;
 }

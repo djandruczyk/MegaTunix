@@ -24,6 +24,7 @@
 static int lastcount=0;
 int ms_reset_count;
 int ms_goodread_count;
+int ms_ve_goodread_count;
 int just_starting;
        
 void handle_ms_data(int which_data)
@@ -84,6 +85,34 @@ void handle_ms_data(int which_data)
 
 		case VE_AND_CONSTANTS:
 			/* Not written yet */
+			res = read(serial_params.fd,ptr,255); 
+			/* the number of bytes expected for raw data read */
+			if (res != serial_params.veconst_size) 
+			{
+				/* Serial I/O problem, resetting port 
+				 * This problem can occur if the MS is 
+				 * resetting due to power spikes, or other 
+				 * problems with the serial interface, 
+				 * perhaps even a very slow machine
+				 * The problem is part of the data is lost, 
+				 * and since we read in serial_params.raw_bytes
+				 * blocks, the data is now offset can hoses 
+				 * things all to hell.  The solution is to 
+				 * close the port, re-open it and reinitialize 
+				 * it, then continue.  We CAN do this here 
+				 * because the serial I/O thread depends on 
+				 * this function and blocks until we return.
+				 */
+				printf("data read was not right size (%i)\n",res);
+				close_serial();
+				open_serial(serial_params.comm_port);
+				setup_serial_params();
+				return;
+			}
+			else
+			{
+                        	ms_ve_goodread_count++;
+			}
 			printf("VEtable/constants came in\n");
 			break;
 	}
@@ -138,4 +167,5 @@ void handle_ms_data(int which_data)
  *	printf("Error Count: %i\n",serial_params.errcount);
  *	printf("Reset Count: %i\n",ms_reset_count);
  */
+	printf("leaving handle_ms_data()\n");
 }

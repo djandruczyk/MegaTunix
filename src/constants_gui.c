@@ -77,8 +77,8 @@ int build_constants(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Calculate\nRequired Fuel...");
 	g_signal_connect(G_OBJECT(button), "clicked",
-			G_CALLBACK(reqd_fuel_popup),
-				NULL);
+			G_CALLBACK(std_button_handler),
+				GINT_TO_POINTER(REQD_FUEL_POPUP));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -490,7 +490,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Commands");
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	
 	table = gtk_table_new(1,2,FALSE);
@@ -501,11 +501,17 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+	g_signal_connect(G_OBJECT(button), "clicked",
+			G_CALLBACK(std_button_handler),
+			GINT_TO_POINTER(READ_FROM_MS));
 	
 	button = gtk_button_new_with_label("Send Data to ECU");
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+	g_signal_connect(G_OBJECT(button), "clicked",
+			G_CALLBACK(std_button_handler),
+			GINT_TO_POINTER(WRITE_TO_MS));
 	
 	/* Not written yet */
 	return TRUE;

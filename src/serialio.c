@@ -144,13 +144,13 @@ int check_ecu_comms(GtkWidget *widget, gpointer *data)
         gint res;
         struct pollfd ufds;
 	gchar buff[60];
-        gint restart_thread = 0;
+        gint restart_reader = 0;
 
         if(serial_params.open)
         {
                 if (raw_reader_running)
                 {
-                        restart_thread = 1;
+                        restart_reader = 1;
 			stop_serial_thread(); /* stops realtime read */
                 }
 
@@ -181,7 +181,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer *data)
                 tcflush(serial_params.fd, TCIFLUSH);
                 tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
-                if (restart_thread)
+                if (restart_reader)
                         start_serial_thread();
         }
         else
@@ -194,3 +194,65 @@ int check_ecu_comms(GtkWidget *widget, gpointer *data)
 
 }
 
+void read_ve_const()
+{
+	int restart_reader = 0;
+	struct pollfd ufds;
+	int res = 0;
+	int tmp = 0;
+
+	printf("entered read_ve_const()\n");
+	if (raw_reader_running)
+	{
+		printf("stopping reading thread\n");
+		restart_reader = 1;
+		stop_serial_thread(); /* stops realtime read */
+		usleep(100000);	/* sleep 100 ms to be sure thread ends */
+	}
+
+	ufds.fd = serial_params.fd;
+	ufds.events = POLLIN;
+
+	/* save state */
+	tmp = serial_params.newtio.c_cc[VMIN]; /* wait for VE table */
+	serial_params.newtio.c_cc[VMIN]     = 126;
+	tcflush(serial_params.fd, TCIFLUSH);
+	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+
+	res = write(serial_params.fd,"V",1);
+	res = poll (&ufds,1,serial_params.poll_timeout*20);
+	if (res == 0)	/* Error */
+	{
+		printf("poll error\n");
+		serial_params.errcount++;
+	}
+	else		/* Data arrived */
+	{
+		printf("poll success\n");
+		handle_ms_data(VE_AND_CONSTANTS);
+	}
+
+//	update_errcounts();
+
+	printf("About to reset serial to previous settins\n");
+	/* restore previous serial port settings */
+	serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
+	tcflush(serial_params.fd, TCIFLUSH);
+	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+
+	printf("Serial reset done \n");
+	if (restart_reader)
+	{
+		printf("Restarting serial reader \n");
+		start_serial_thread();
+	}
+
+	return;
+}
+
+
+void write_ve_const()
+{
+	printf("WriteVE table stub function\n");
+	// Stub function, does nothing yet... 
+}

@@ -71,6 +71,19 @@ int std_button_handler(GtkWidget *widget, gpointer *data)
 		case STOP_REALTIME:
 			stop_serial_thread();
 			break;
+		case REQD_FUEL_POPUP:
+			if (!req_fuel_popup)
+				reqd_fuel_popup();
+			break;
+		case READ_FROM_MS:
+			printf("Going to begin read VE/constants \n");
+			read_ve_const();
+			printf("read VE/constants complete\n");
+		//	update_const_ve();
+			break;
+		case WRITE_TO_MS:
+			write_ve_const();
+			break;
 	}
 	return TRUE;
 }
@@ -95,7 +108,7 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 }
 
 	
-int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
+int reqd_fuel_popup()
 {
 	GtkWidget *button;
 	GtkWidget *spinner;
@@ -106,8 +119,6 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	GtkWidget *table;
 	GtkAdjustment *adj;
 
-	if (req_fuel_popup)
-		return TRUE;
 	req_fuel_popup=TRUE;
 	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(popup),"Required Fuel Calc");
@@ -277,4 +288,9 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	}
 	return TRUE;
 
+}
+
+void update_const_ve()
+{
+	// Stub function, does nothing yet... 
 }

@@ -44,27 +44,27 @@ void init()
 	poll_max = 500;		/* 500 millisecond maximum poll delay */
 	interval_min = 50;	/* 50 millisecond minimum interval delay */
 	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
-
+	width = 640;		/* min window width */
+	height = 480;		/* min window height */
+	main_x_origin = 160;	/* offset from left edge of screen */
+	main_y_origin = 120;	/* offset from top edge of screen */
 
 	/* initialize all global variables to known states */
-	serial_params.fd = 0; /* serial port file-descriptor */
 	def_comm_port = 1; /* DOS/WIN32 style, COM1 default */
+	serial_params.fd = 0; /* serial port file-descriptor */
 	serial_params.errcount = 0; /* I/O error count */
 	serial_params.poll_timeout = 40; /* poll wait time in milliseconds */
 	/* default for MS V 1.1 and 2.2 */
 	serial_params.raw_bytes = 22; /* number of bytes for realtime vars */
+	serial_params.veconst_size = 128; /* VE/Constants datablock size */
+	serial_params.read_wait = 1000;	/* delay between reads in milliseconds */
+
+	/* Set flags to clean state */
 	raw_reader_running = 0;  /* We're not reading raw data yet... */
 	raw_reader_stopped = 1;  /* We're not reading raw data yet... */
-	serial_params.read_wait = 1000;	/* delay between reads in milliseconds */
 	just_starting = 1; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
-	width = 640;		/* default window width */
-	height = 480;		/* default window height */
-	main_x_origin = 160;	/* offset from left edge of screen */
-	main_y_origin = 120;	/* offset from top edge of screen */
-
-
 }
 
 int read_config(void)

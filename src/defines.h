@@ -273,6 +273,9 @@ struct ms_Ve_Constants
 /* Buttons */
 #define START_REALTIME		0x30
 #define STOP_REALTIME		0x31
+#define REQD_FUEL_POPUP		0x32
+#define READ_FROM_MS		0x33
+#define WRITE_TO_MS		0x34
 
 /* Spinbuttons */
 #define REQ_FUEL_DISP		0x40

@@ -146,7 +146,10 @@ void *raw_reader_thread(void *params)
 			update_runtime_vars();
 		}
 
+		gdk_threads_enter();
 		update_errcounts();
+		gdk_threads_leave();
+
                 usleep(serial_params.read_wait *1000);
 	}
 	/* if we get here, the thread got killed, mark it as "stopped" */

@@ -29,6 +29,7 @@ struct Serial_Params
 	int poll_timeout;	/* Pollng interval in MILLISECONDS */
 	int read_wait;		/* time delay between each read */
 	int raw_bytes;		/* number of bytes to read for realtime vars */
+	int veconst_size;	/* Size of VEtable/constants datablock */
 	struct termios oldtio;	/* serial port settings before we touch it */
 	struct termios newtio;	/* serial port settings we use when running */
 	int errcount;		/* Serial I/O errors read error count */
