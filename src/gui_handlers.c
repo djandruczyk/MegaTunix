@@ -31,9 +31,9 @@ extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
-static gint num_squirts;
-static gint num_cylinders;
-static gint num_injectors;
+static gint num_squirts = 1;
+gint num_cylinders = 1;
+static gint num_injectors = 1;
 static gint err_flag = 0;
 static GdkColor red = { 0, 65535, 0, 0};
 static GdkColor black = { 0, 0, 0, 0};
@@ -402,6 +402,10 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 						GTK_STATE_NORMAL,&red);
 				gtk_widget_modify_fg(labels.cylinders_lab,
 						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_text(constants.cylinders_spin,
+						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_text(constants.inj_per_cycle_spin,
+						GTK_STATE_NORMAL,&red);
 			}
 			else
 			{
@@ -409,6 +413,10 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 				gtk_widget_modify_fg(labels.squirts_lab,
 						GTK_STATE_NORMAL,&black);
 				gtk_widget_modify_fg(labels.cylinders_lab,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_text(constants.cylinders_spin,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_text(constants.inj_per_cycle_spin,
 						GTK_STATE_NORMAL,&black);
 				check_req_fuel_limits();
 			}
@@ -446,6 +454,10 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 						GTK_STATE_NORMAL,&red);
 				gtk_widget_modify_fg(labels.cylinders_lab,
 						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_text(constants.cylinders_spin,
+						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_text(constants.inj_per_cycle_spin,
+						GTK_STATE_NORMAL,&red);
 			}
 			else
 			{
@@ -453,6 +465,10 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 				gtk_widget_modify_fg(labels.squirts_lab,
 						GTK_STATE_NORMAL,&black);
 				gtk_widget_modify_fg(labels.cylinders_lab,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_text(constants.cylinders_spin,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_text(constants.inj_per_cycle_spin,
 						GTK_STATE_NORMAL,&black);
 			check_req_fuel_limits();
 			}
@@ -732,6 +748,8 @@ void update_const_ve()
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.simul_but),
                                 TRUE);
+
+	check_req_fuel_limits();
 	
 }
 void check_req_fuel_limits()
@@ -774,6 +792,12 @@ void check_req_fuel_limits()
 				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(constants.req_fuel_spin,
 				GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(constants.inj_per_cycle_spin,
+				GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(constants.cylinders_spin,
+				GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(constants.injectors_spin,
+				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(constants.req_fuel_base_spin,
 				GTK_STATE_INSENSITIVE,&red);
 
@@ -790,6 +814,12 @@ void check_req_fuel_limits()
 		gtk_widget_modify_fg(labels.cylinders_lab,
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(constants.req_fuel_spin,
+				GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(constants.inj_per_cycle_spin,
+				GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(constants.cylinders_spin,
+				GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(constants.injectors_spin,
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(constants.req_fuel_base_spin,
 				GTK_STATE_INSENSITIVE,&black);

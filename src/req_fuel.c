@@ -22,9 +22,10 @@
 gint req_fuel_popup = FALSE;
 static gint rpmk_offset = 99;
 static GtkWidget *popup;
-struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,8,19,14.7};
+struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,0,19,14.7};
 extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
+extern gint num_cylinders;
 
 
 
@@ -101,9 +102,10 @@ int reqd_fuel_popup()
                         (GtkAttachOptions) (0), 0, 0);
 
         /* Number of Cylinders */
-        adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.cyls,1.0,16,
-                        1.0,1.0,0);
-        spinner = gtk_spin_button_new(adj,0,0);
+	reqd_fuel.cyls = num_cylinders;
+//        adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.cyls,1.0,16,
+//                        1.0,1.0,0);
+        spinner = gtk_spin_button_new(constants.cylinders_adj,0,0);
         gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
@@ -178,6 +180,7 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 {
         gfloat tmp1,tmp2;
 
+	printf("disp %i, cyls %i, afr %f, inj_rate %i\n",reqd_fuel.disp,reqd_fuel.cyls,reqd_fuel.afr, reqd_fuel.inj_rate);
         tmp1 = 36.0*((double)reqd_fuel.disp)*4.27793;
         tmp2 = ((double) reqd_fuel.cyls) \
                 * ((double)(reqd_fuel.afr)) \

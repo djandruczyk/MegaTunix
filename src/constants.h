@@ -58,6 +58,7 @@ struct v1_2_Constants
 	GtkWidget *inj_per_cycle_spin;		/* Spinner */
 	GtkWidget *injectors_spin;		/* Spinner */
 	GtkWidget *cylinders_spin;		/* Spinner */
+	GtkAdjustment *cylinders_adj;		/* Adjustment */
 	GtkWidget *speed_den_but;		/* Toggle button */
 	GtkWidget *alpha_n_but;			/* Toggle button */
 	GtkWidget *two_stroke_but;		/* Toggle button */

@@ -669,6 +669,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
         constants.cylinders_spin = spinner;
+        constants.cylinders_adj = adj;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
