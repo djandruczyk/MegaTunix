@@ -623,7 +623,7 @@ void draw_infotext(struct Viewable_Value *v_value)
 	gint h = 0;
 	gint val_x_offset = 10;
 	gint val_y_offset = 14;
-	PangoFontDescription *font_desc;
+	static PangoFontDescription *font_desc = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),"pixmap");
 
@@ -635,13 +635,15 @@ void draw_infotext(struct Viewable_Value *v_value)
 				TRUE, 0,0,
 				info_width,h);
 	}
+	if (!font_desc)
+		font_desc = pango_font_description_from_string("courier 11");
 	
 	name_y = (gint) (((float)h/(float)(active_viewables+1))*(tcount+1));
 	name_y -= 15;
 	last_index = v_value->last_index;
 	val = g_array_index(v_value->data_array,gfloat,last_index);
 
-	font_desc = pango_font_description_from_string("courier 11");
+//	font_desc = pango_font_description_from_string("courier 11");
 	layout = gtk_widget_create_pango_layout(v_value->d_area,NULL);
 	pango_layout_set_markup(layout,v_value->vname,-1);
 	pango_layout_set_font_description(layout,font_desc);
@@ -687,6 +689,7 @@ gboolean update_logview_traces(gboolean force_redraw)
 		g_static_mutex_lock(&update_mutex);
 		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(force_redraw));
 		g_static_mutex_unlock(&update_mutex);
+		scroll_logviewer_traces();
 	}
 
 	return TRUE;

@@ -8,54 +8,63 @@ post_function=finish_logviewer
 #----- Buttons ---------------------------------------------------------------
 
 [logviewer_start_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_START_REALTIME_
 page=0
+tooltip=This starts reading the RT variables and updates the logviewer with the LIVE data from the ECU.  You can use the slider above to move back to see past data even while the log s running.
 
 [logviewer_stop_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_STOP_REALTIME_
 page=0
+tooltip=Stops the Realtime Variables and the log.
 
 [logviewer_start_playback]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_START_PLAYBACK_
 page=0
+tooltip=Starts datalog playback from the specified logfile. Playback will stop automatically at jsut after the end of the logfile..
 
 [logviewer_stop_playback]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_STOP_PLAYBACK_
 page=0
+tooltip=Stops datalog playback
 
 [logviewer_select_logfile_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_SELECT_DLOG_IMP_
 page=0
+tooltip=This will prompt you with a file chooser to select a datalog to open.
+
 
 [logviewer_select_params_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_SELECT_PARAMS_
 page=0
+tooltip=This will popup a window where you can select the fields you wish to view in either the Realtime view or Logfile for playback.  Traces can be selected/removed while the log is playing as well.
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [logviewer_realtime_radio_button]
-keys=page,handler
-key_types=_INT_,_ENUM_
+keys=page,handler,tooltip
+key_types=_INT_,_ENUM_,_STRING_
 page=0
 handler=_REALTIME_VIEW_
+tooltip=Enables Realtime mode for the logviewer.  The logviewer will act like a stripchart view allwing viewing of signals from the ECU live, with the added ability to scroll back in time (to the point where RT vars were started from)
 
 [logviewer_playback_radio_button]
 keys=page,handler
 key_types=_INT_,_ENUM_
 page=0
 handler=_PLAYBACK_VIEW_
+tooltip=Enabled Playback mode for the logviewer.  You need to select a logfile and then the parameters you wish to view.  Hittings Start Playback will initiate playback of the log and the playback will stop shortly after the end of the log is reached.  Scrolling to any point of the log is allowed even during runtime.
 
 #----- SpinButtons -----------------------------------------------------------
 

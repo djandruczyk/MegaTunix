@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="window1">
   <property name="visible">True</property>
@@ -537,7 +538,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="n20_which_bank_label">
+			    <widget class="GtkLabel" id="nos_which_bank_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Which bank to Add nitrous enrich  to?</property>
 			      <property name="use_underline">False</property>
@@ -561,7 +562,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="n2o_enrich_bank1_radio_button">
+			    <widget class="GtkRadioButton" id="nos_enrich_bank1_radio_button">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Bank 1</property>
@@ -583,7 +584,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="n2o_enrich_bank2_radio_button">
+			    <widget class="GtkRadioButton" id="nos_enrich_bank2_radio_button">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Bank 2</property>
@@ -592,7 +593,7 @@
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-			      <property name="group">n2o_enrich_bank1_radio_button</property>
+			      <property name="group">nos_enrich_bank1_radio_button</property>
 			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Feb 2005 19:35:00 GMT"/>
 			    </widget>
 			    <packing>
@@ -663,7 +664,7 @@
 			  <property name="column_spacing">0</property>
 
 			  <child>
-			    <widget class="GtkLabel" id="n2o_feature_label">
+			    <widget class="GtkLabel" id="nos_feature_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Nitrous System</property>
 			      <property name="use_underline">False</property>
@@ -774,7 +775,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="n2o_disabled_radio_button">
+			    <widget class="GtkRadioButton" id="nos_disabled_radio_button">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Disabled</property>
@@ -918,7 +919,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="n2o_enabled_radio_button">
+			    <widget class="GtkRadioButton" id="nos_enabled_radio_button">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Enabled</property>
@@ -927,7 +928,7 @@
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-			      <property name="group">n2o_disabled_radio_button</property>
+			      <property name="group">nos_disabled_radio_button</property>
 			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 28 Feb 2005 18:24:44 GMT"/>
 			    </widget>
 			    <packing>

@@ -279,7 +279,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gchar * group_states = NULL;
 	gchar * swap_labels = NULL;
 	gboolean state = FALSE;
-	gboolean invert_state = FALSE;
+	gboolean tmp_state = FALSE;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
@@ -371,8 +371,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		groups = parse_keys(toggle_groups,&num_groups,",");
 		for (i=0;i<num_groups;i++)
 		{
-			invert_state = get_state(group_states,i);
-			state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			tmp_state = get_state(group_states,i);
+			state = tmp_state == TRUE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 			g_list_foreach(get_list(groups[i]),set_widget_sensitive,(gpointer)state);
 		}
 		g_strfreev(groups);
@@ -1102,7 +1102,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar ** groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * group_states = NULL;
-	gboolean invert_state = FALSE;
+	gboolean tmp_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_labels = NULL;
 	gchar * tmpbuf = NULL;
@@ -1232,8 +1232,8 @@ void update_widget(gpointer object, gpointer user_data)
 
 		for (i=0;i<num_groups;i++)
 		{
-			invert_state = get_state(group_states,i);
-			state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			tmp_state = get_state(group_states,i);
+			state = tmp_state == TRUE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 			g_list_foreach(get_list(groups[i]),set_widget_sensitive,(gpointer)state);
 		}
 		g_strfreev(groups);

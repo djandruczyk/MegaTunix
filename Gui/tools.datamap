@@ -7,34 +7,39 @@ tab_name=_Tools
 #----- Buttons ---------------------------------------------------------------
 
 [tools_import_vex_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_IMPORT_VETABLE_
 page=0
+tooltip=VEX Import is used to load VEtables that were exported with the VEX export.  It can also accept MegaTune vex files and those from mstweek3K.  NOTE: On firmwares that use more that one table per page, like MSnS-Extra and MS-II, the stock VEX format can't handle that as there isn't a field to define the table number.  MegaTunix gets around this by embedding the Table number into the comment field.  The Table numbers come from the interrogation profile for the ECU so they are likely to be different than ones from something like megatune. In this case you may need to edit the file to ensure it is loaded to the write location.  After VEX import and validation, the data is swritten to the ECU, burnt to flash and the Gui updates all pages (which can take a few seconds, see the titlebar for updates..)
 
 [tools_export_vex_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_EXPORT_VETABLE_
 page=0
+tooltip=VEX Export is used to export VEtables to disk in a format acceptable by MegaTune and MStweek3K.  NOTE: On firmwares that use more that one table per page, like MSnS-Extra and MS-II, the stock VEX format can't handle that very well as there isn't a field to define the table number.  MegaTunix gets around this by embedding the Table number into the comment field.  The Table numbers come from the interrogation profile for the ECU so they are likely to be different than ones from something like megatune.  In this case you may need to edit the file to ensure it is loaded to the write location.
 
 [tools_undo_vex_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_REVERT_TO_BACKUP_
 page=0
+tooltip=The undo VEX load button does exactly as it says.  If you happened to load an incorrect or corrupt VEX file, this button will revert to the previous settings, send them to the ECU and burn the ECU flash.
 
 [tools_backup_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
 handler=_BACKUP_ALL_
 page=0
+tooltip=Backup All ECU settings prompts you for a filename and stores the values of ALL ECU settings in that file in a CLEAN ASCII format, which is human readable and easily parsed by 3rd party programs, unlike closed format binary files from other tuning softwares.
 
 [tools_restore_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_RESTORE_ALL_
 page=0
+tooltip=Restore All ECU settings prompts you for a filename and reads it, validates it for the currently running firmware and writes all settings to the ECU and burns flash when complete.  NOTE: This will ONLY accept MegaTunix ECU backup files,  MSQ files are NOT SUPPORTED, as they are binary, closed source, and there are not cross platform compatible.
 
 #----- Textview ----------------------------------------------------
 
