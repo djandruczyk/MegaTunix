@@ -75,7 +75,9 @@ struct Ve_View_3D
 	gfloat h_strafe;
 	gfloat v_strafe;
 	gint x_max;
+	gint x_min;
 	gint y_max;
+	gint y_min;
 	gint z_max;
 	gint z_min;
 	gchar *x_source;
@@ -95,6 +97,7 @@ struct Ve_View_3D
 	gboolean is_spark;
 	gchar *table_name;
 	gint table_num;
+	gfloat z_scale;
 };
 
 #endif

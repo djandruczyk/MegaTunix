@@ -585,6 +585,7 @@ void ve3d_calculate_scaling(void *ptr)
 	ve_view->x_max = 0;
 	ve_view->y_max = 0;
 	ve_view->z_max = 0;
+	ve_view->z_min = 255;
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
 	if (ve_view->is_spark)
 	{
@@ -618,7 +619,7 @@ void ve3d_calculate_scaling(void *ptr)
 
 	ve_view->x_div = ((gfloat)ve_view->x_max/(gfloat)ve_view->x_bincount);
 	ve_view->y_div = ((gfloat)ve_view->y_max/(gfloat)ve_view->y_bincount);
-	ve_view->z_div = ((gfloat)ve_view->z_max-(gfloat)ve_view->z_min)/4.0;	
+	ve_view->z_div = ((gfloat)ve_view->z_max-(gfloat)ve_view->z_min)/ve_view->z_scale;	
 }
 
 /*!
@@ -833,7 +834,7 @@ void ve3d_draw_axis(void *ptr)
 
 	/* Draw horizontal background grid lines  
 	   starting at 0 VE and working up to VE+20% */
-	for (i=ve_view->z_min;i<(ve_view->z_max+20);i = i + 10)
+	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+20);i = i + 10)
 	{
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(
@@ -937,7 +938,7 @@ void ve3d_draw_axis(void *ptr)
 	}
 
 	/* Draw VE labels */
-	for (i=0;i<(ve_view->z_max+20);i=i+10)
+	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+20);i=i+10)
 	{
 		label = g_strdup_printf("%i",i);
 		ve3d_draw_text(label,
@@ -1152,6 +1153,8 @@ void initialize_ve3d_view(void *ptr)
 	ve_view->zNear = 0.8;
 	ve_view->zFar = 23.0;
 	ve_view->aspect = 1.0;
+	ve_view->z_scale = 4.0;
+	ve_view->is_spark = FALSE;
 	ve_view->x_div = 0.0;
 	ve_view->x_max = 0;
 	ve_view->active_x = 0;
@@ -1159,9 +1162,8 @@ void initialize_ve3d_view(void *ptr)
 	ve_view->y_max = 0;
 	ve_view->active_y = 0;
 	ve_view->z_div = 0;
-	ve_view->z_min = 0;
+	ve_view->z_min = 255;
 	ve_view->z_max = 0;
-	ve_view->is_spark = FALSE;
 	ve_view->x_page = 0;
 	ve_view->y_page = 0;
 	ve_view->tbl_page = 0;

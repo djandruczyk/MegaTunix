@@ -4,6 +4,9 @@ gui_files = 	template.glade \
 		afrtable_8x8e.glade \
 		afrtable_8x8e_E_1.datamap \
 		afrtable_8x8e_E_2.datamap \
+		afrtable_8x8s.glade \
+		afrtable_8x8s_E_1.datamap \
+		afrtable_8x8s_E_2.datamap \
 		B_n_G_constants.glade \
 		B_n_G_constants.datamap \
 		datalogging.glade \
