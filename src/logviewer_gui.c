@@ -43,7 +43,8 @@ static const gboolean valid_logables[]=
 	TRUE,TRUE,TRUE,TRUE,TRUE,
 	TRUE,TRUE,TRUE,TRUE,TRUE,
 	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE,TRUE,TRUE
+	TRUE,TRUE,TRUE,TRUE,TRUE,
+	TRUE,TRUE
 };
 
 void build_logviewer(GtkWidget *parent_frame)
@@ -51,7 +52,6 @@ void build_logviewer(GtkWidget *parent_frame)
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
 	GtkWidget *vbox3;
-	GtkWidget *vbox4;
 	GtkWidget *hbox;
 	GtkWidget *button;
 	GtkWidget *frame;
@@ -67,7 +67,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	/* Holds all the log traces... */
-	vbox2 = gtk_vbox_new(TRUE,2);
+	vbox2 = gtk_vbox_new(TRUE,1);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
@@ -78,7 +78,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(FALSE,7);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-	/* Hold the realtime/[playback buttons */
+	/* Hold the realtime/playback toggle buttons */
 	vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 
@@ -96,15 +96,15 @@ void build_logviewer(GtkWidget *parent_frame)
 			GINT_TO_POINTER(PLAYBACK_VIEW));
 
 	/* Holds the Select Button */
-	vbox4 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,5);
+	vbox3 = gtk_vbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 
 	button = gtk_button_new_with_label("Select Logfile to Playback");
 	buttons.logplay_sel_log_but = button;
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(SELECT_DLOG_IMP));
-	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	gtk_widget_set_sensitive(button,FALSE);
 	
 	button = gtk_button_new_with_label("Select Parameters to view");
@@ -113,26 +113,24 @@ void build_logviewer(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(SELECT_PARAMS));
-	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	
-	vbox4 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,5);
+	vbox3 = gtk_vbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	buttons.logplay_start_rt_but = button;
         g_signal_connect(G_OBJECT (button), "clicked",
                         G_CALLBACK (std_button_handler), \
                         GINT_TO_POINTER(START_REALTIME));
-	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	button = gtk_button_new_with_label("Stop Reading RT vars");
 	buttons.logplay_stop_rt_but = button;
         g_signal_connect(G_OBJECT (button), "clicked",
                         G_CALLBACK (std_button_handler), \
                         GINT_TO_POINTER(STOP_REALTIME));
 
-	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 
-
-	
 	/* Not written yet */
 	return;
 }
@@ -165,7 +163,7 @@ void present_viewer_choices( void *ptr)
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window),575,300);
-	gtk_window_set_title(GTK_WINDOW(window),"Logviewer Realtime choices");
+	gtk_window_set_title(GTK_WINDOW(window),"Logviewer Choices");
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -174,7 +172,7 @@ void present_viewer_choices( void *ptr)
 			(gpointer)window);
 
 	gtk_container_set_border_width(GTK_CONTAINER(window),5);
-	frame = gtk_frame_new("Select Variables to view from the list below");
+	frame = gtk_frame_new("Select Variables to view/playback from the list below...");
 	gtk_container_add(GTK_CONTAINER(window),frame);
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -212,7 +210,7 @@ void present_viewer_choices( void *ptr)
 				(GtkAttachOptions) (0), 0, 0);
 		j++;
 
-		if (j == 5)
+		if (j == table_cols)
 		{
 			k++;
 			j = 0;
@@ -247,13 +245,12 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
                 viewables.index[index] = FALSE;
 
         total_viewables = 0;
+	/* Reget to total Viewables count */
         for (i=0;i<max_viewables;i++)
         {
                 if (viewables.index[i])
                         total_viewables++;
         }
-
-	//g_printf("total viewables is %i\n",total_viewables);
 
 	return TRUE;
 }
@@ -263,10 +260,10 @@ gboolean populate_viewer(GtkWidget * widget)
 	struct Viewable_Value *v_value = NULL;
 	gint i = 0;
 
-	/* Checks if list is created, if not,  makes one, allocates data
+	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
-	 * and adds the mto the list,  also checks if entires are removed and
-	 * pulles them fromthe list and de-allocates them...
+	 * and adds them to the list, also checks if entires are removed and
+	 * pulls them from the hashtable and de-allocates them...
 	 */
 	if (active_traces == NULL)
 	{
@@ -274,7 +271,7 @@ gboolean populate_viewer(GtkWidget * widget)
 	}
 	
 	/* check to see if it's already in the table, if so ignore, if not
-	 * malloca datastructure, populate it's values and insert a pointer
+	 * malloc datastructure, populate it's values and insert a pointer
 	 * into the table for it..
 	 */
 	for (i=0;i<max_viewables;i++)
@@ -400,7 +397,7 @@ struct Viewable_Value * build_v_value(GtkWidget * parent_widget, gint offset)
 	v_value->runtime_offset = logging_offset_map[offset];
 	/* How big the data is (needed when indexing into the datablock */
 	v_value->size = logging_datasizes_map[offset];
-	/* textual name of the variabel we're viewing.. */
+	/* textual name of the variable we're viewing.. */
 	v_value->vname = g_strdup(logable_names[offset]);
 
 	/* Array to keep history for resize/redraw and export to datalog
