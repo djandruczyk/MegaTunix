@@ -406,7 +406,7 @@ void check_req_fuel_limits()
 	gint lim_flag = 0;
 	gint dload_val = 0;
 	gint offset = 0;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	extern gboolean paused_handlers;
 	extern GHashTable * interdep_vars_1;
 	extern GHashTable * interdep_vars_2;

@@ -54,7 +54,7 @@ void read_conversions(void)
 	gint i = 0;
 	gint dl_type;
 	struct Conversion_Chart *conv_chart=NULL;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	extern GtkWidget *ve_widgets[];
 	extern GtkWidget *ign_widgets[];
 	gchar * tmpbuf = NULL;
@@ -333,7 +333,7 @@ void reset_temps(gpointer type)
 {
 	gint i;
 	gchar * string;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
 

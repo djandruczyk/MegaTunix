@@ -32,7 +32,7 @@
 #include <threads.h>
 #include <unistd.h>
 
-extern unsigned int ecu_caps;
+extern gint ecu_caps;
 extern gboolean connected;
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;

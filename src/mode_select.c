@@ -22,7 +22,7 @@
 
 gchar *states[] = {"FALSE","TRUE"};
 
-void parse_ecu_capabilities(unsigned int ecu_caps)
+void parse_ecu_capabilities(gint ecu_caps)
 {
 	extern struct DynamicButtons buttons;
 	set_dualtable_mode((ecu_caps & DUALTABLE) == 0 ? FALSE:TRUE);

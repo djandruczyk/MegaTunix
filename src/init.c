@@ -27,7 +27,7 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-unsigned int ecu_caps = 0;	/* Assume stock B&G code */
+gint ecu_caps = 0;	/* Assume stock B&G code */
 unsigned char *kpa_conversion; 
 extern gint mem_view_style[];
 extern unsigned char turbo_map[];

@@ -33,7 +33,7 @@ void post_process_realtime_vars(void *input, void *output)
 	 * dualtable is set or not..
 	 */
 	extern unsigned char *ms_data;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	extern gint temp_units;
 	gfloat ign_int = 0.0;
 	gint rpmconstant = 0;

@@ -247,7 +247,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gboolean single = FALSE;
 	extern gint dbg_lvl;
 	extern unsigned char *ms_data;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
@@ -500,7 +500,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GtkWidget * info = NULL;
 	extern unsigned char * ms_data;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	extern gint lv_scroll;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
@@ -782,7 +782,7 @@ void update_ve_const()
 	gfloat value = 0.0;
 	gboolean temp_dep = FALSE;
 	extern unsigned char *ms_data;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;

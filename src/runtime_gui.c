@@ -247,7 +247,7 @@ void build_runtime(GtkWidget *parent_frame)
 gboolean update_runtime_vars()
 {
 	extern struct Runtime_Common *runtime;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
 	struct Ve_View_3D * ve_view2 = NULL;

@@ -402,7 +402,7 @@ void writeto_ecu(void *ptr)
 	char lbuff[3] = {0, 0, 0};
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	gchar * write_cmd = NULL;;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -498,7 +498,7 @@ void burn_ms_flash()
         extern unsigned char *ms_data;
         extern unsigned char *ms_data_last;
         gint res = 0;
-        extern unsigned int ecu_caps;
+        extern gint ecu_caps;
         static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
         g_static_mutex_lock(&mutex);

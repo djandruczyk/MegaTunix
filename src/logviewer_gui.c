@@ -214,7 +214,7 @@ void present_viewer_choices(void *ptr)
 	gint table_cols = 5;
 	gchar * name = NULL;
 	GtkWidget *hand_me_down = NULL;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	struct Log_Info *log_info = NULL;
 
 	if (ptr != NULL)

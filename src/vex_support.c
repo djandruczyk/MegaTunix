@@ -101,7 +101,7 @@ gboolean vetable_export(void *ptr)
 	gint index = 0;
 	extern unsigned char * ms_data;
 	unsigned char * ve_const_arr = NULL;
-	extern unsigned int ecu_caps;
+	extern gint ecu_caps;
 	gchar * tmpbuf;
 	GIOStatus status;
 	GString *output;
