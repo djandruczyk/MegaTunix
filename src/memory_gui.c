@@ -19,26 +19,41 @@
 void build_memory(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
+	GtkWidget *hbox;
 	GtkWidget *label;
 	GtkWidget *table;
 	GtkWidget *ebox;
 	GtkWidget *frame;
 	extern GdkColor white;
 	GdkColor purple = { 0, 61000, 57000, 65535};
-	gint rows = 16;
-	gint cols = 16;
+	gint rows = 32;
+	gint cols = 8;
 	gint x = 0;
 	gint y = 0;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
-	table = gtk_table_new(rows,cols,TRUE);
-	gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
-	for (x=0;x<rows;x++)
+	table = gtk_table_new(rows,1,TRUE);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,10);
+
+	for (y=0;y<rows;y++)
 	{
-		for (y=0;y<cols;y++)
+		label = gtk_label_new(g_strdup_printf("%#.4x",y*cols));
+		gtk_table_attach(GTK_TABLE(table),label,0,1,y,y+1,
+				(GtkAttachOptions) (GTK_FILL),
+				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+	}
+
+	table = gtk_table_new(rows,cols,TRUE);
+	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+
+	for (x=0;x<cols;x++)
+	{
+		for (y=0;y<rows;y++)
 		{
 			frame = gtk_frame_new(NULL);
 			ebox = gtk_event_box_new();
