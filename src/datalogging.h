@@ -44,6 +44,8 @@ union Logbits
 		unsigned char dcycle		:1;
 		unsigned char engbits		:1;
 		unsigned char gammae		:1;
+		unsigned short filler		:12;
+		
 	} bit;
 };
 
