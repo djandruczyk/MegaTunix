@@ -25,4 +25,4 @@ CMD_I_0=0
 CMD_F_0=255
 
 [gui]
-LoadTabs=enrichments_BnG,vetable_8x8_1,vetable_8x8_2
+LoadTabs=dt-params,enrichments_BnG,vetable_8x8_1,vetable_8x8_2

@@ -394,7 +394,7 @@
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		  <child>
-		    <widget class="GtkVBox" id="vbox2">
+		    <widget class="GtkVBox" id="warmup_bins_vbox">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
@@ -968,7 +968,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		      <child>
-			<widget class="GtkVBox" id="vbox3">
+			<widget class="GtkVBox" id="accel_enrich_vbox">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
@@ -1952,14 +1952,14 @@ Between Steps</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkFrame" id="commands_frame">
+	    <widget class="GtkFrame" id="enrich_commands_frame">
 	      <property name="visible">True</property>
 	      <property name="label_xalign">0</property>
 	      <property name="label_yalign">0.5</property>
 	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 	      <child>
-		<widget class="GtkTable" id="commands_table">
+		<widget class="GtkTable" id="enrich_commands_table">
 		  <property name="border_width">5</property>
 		  <property name="visible">True</property>
 		  <property name="n_rows">1</property>

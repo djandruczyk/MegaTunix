@@ -40,7 +40,6 @@ GList *lists[10];	/* BAD idea to be static... */
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	gint return_value = 0;
-	unsigned char *ve_const_arr; 
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	gint tmp_val = (gint)(value+0.001);
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
@@ -48,7 +47,6 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	gfloat factor = (gfloat)((gint)g_object_get_data(G_OBJECT(widget),"conv_factor_x100"))/100.0;
 	Conversions conv_type = (Conversions)g_object_get_data(G_OBJECT(widget),"conv_type");
 
-	ve_const_arr = (unsigned char *)ms_data[page];
 
 	switch (conv_type)
 	{
@@ -80,7 +78,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	 * by an offset from the beginning of their page.
 	 */
 
-	ve_const_arr[offset] = return_value; 
+	ms_data[page][offset] = return_value; 
 	return (return_value);
 }
 

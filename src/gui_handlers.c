@@ -244,136 +244,145 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint dload_val = -1;
 	gint page = -1;
 	unsigned char tmp = 0;
-	guint32 tmp32 = 0;
+	gint tmp32 = 0;
 	gint offset = -1;
 	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
-	gboolean single = FALSE;
+	gint handler = 0;
 	extern gint dbg_lvl;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	extern gint ecu_caps;
-	struct Ve_Const_Std *ve_const = NULL;
-	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
-	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
-	struct Ignition_Table *ign_table = NULL;
-	ve_const = (struct Ve_Const_Std *) ms_data[0];
-
-	if (ecu_caps & DUALTABLE)
-	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data[0];
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
-	}
-	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-		ign_table = (struct Ignition_Table *) (ms_data[1]);
 
 	if (paused_handlers)
 		return TRUE;
 
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
-	single = (gboolean)g_object_get_data(G_OBJECT(widget),"single");
-	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 
-	/* to handle check buttons */
-	if (single)	// If it's true....
-		bit_val = gtk_toggle_button_get_active( 
-				GTK_TOGGLE_BUTTON (widget));
-
-	/* Note to self,  WTF is this next line for anyways???
-	 */
-	//	if ((offset == 92) || (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
+	// If it's a check button then it's state is dependant on the button's state
+	if (GTK_IS_RADIO_BUTTON(widget))
 	{
-		switch (offset)
+		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		{
-			case 85:
-				if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
-				{
-					dbg_func(__FILE__": bitmask_button_handler() Setting spark_config1 but NOT using spark capable firmware...\n",CRITICAL);	
-					break;
-				}
-				tmp = ign_table->spark_config1.value;
-				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << bit_pos);
-				ign_table->spark_config1.value = tmp;
-				dload_val = tmp;
+			// untoggle button's we don't care about for radio, as another will
+			// ALWAYS be true. thats the one we want....
+			return TRUE;
+		}
+	}
+	else if (GTK_IS_CHECK_BUTTON(widget))
+		bit_val = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-				break;	
-			case 92: /* alternate OR tblcnf (firmware dependant) */
-				if (ecu_caps & DUALTABLE)
-				{
-					tmp = ve_const_dt1->tblcnf.value;
-					tmp = tmp & ~bitmask;	/*clears bits */
-					tmp = tmp | (bit_val << bit_pos);
-					ve_const_dt1->tblcnf.value = tmp;
-					dload_val = tmp;
-					check_tblcnf(dload_val,FALSE);
-				}
-				else
-				{
-					if (bit_val)
-					{
-						ve_const->alternate = 1;
-						dload_val = 1;
-					}
-					else
-					{
-						ve_const->alternate = 0;
-						dload_val = 0;
-					}
-					g_hash_table_insert(interdep_vars_1,
-							GINT_TO_POINTER(offset),
-							GINT_TO_POINTER(dload_val));
-					if (!err_flag)
-						check_req_fuel_limits();
-				}
-				break;
-			case 116: // config11 
-				tmp = ve_const->config11.value;
-				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << bit_pos);
-				ve_const->config11.value = tmp;
-				dload_val = tmp;
-				check_config11(dload_val);
-				break;
-			case 118: // config13
-				tmp = ve_const->config13.value;
-				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << bit_pos);
-				ve_const->config13.value = tmp;
-				dload_val = tmp;
-				check_config13(dload_val);
-				break;
-			case 247: // Boost Controller (DT only)
-				if (!(ecu_caps & DUALTABLE))
-				{
-					dbg_func(__FILE__": Attempted modification of boost controller variable,  but not running Dualtable firmware!!!\n",CRITICAL);
-					break;
-				}
-				tmp = ve_const_dt2->bcfreq.value;
-				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << bit_pos);
-				ve_const_dt2->bcfreq.value = tmp;
-				dload_val = tmp;
-				break;
-			case 666:
-				/* Debugging selection buttons */
-				tmp32 = dbg_lvl;
-				tmp32 = tmp32 & ~bitmask;
-				tmp32 = tmp32 | (bit_val << bit_pos);
-				dbg_lvl = tmp32;
-				break;
-			default:
-				dbg_func(__FILE__": toggle_button_handler() Toggle button NOT handled ERROR!!, contact author\n",CRITICAL);
+//	printf("bit_val \"%i\", bit_pos \"%i\", bitmask \"%i\"\n",bit_val,bit_pos,bitmask);
+	switch ((SpinButton)handler)
+	{
+		case GENERIC:
+			tmp = ms_data[page][offset];
+			tmp = tmp & ~bitmask;	//clears bits 
+			tmp = tmp | (bit_val << bit_pos);
+			dload_val = tmp;
+			break;
+		case DEBUG_LEVEL:
+			// Debugging selection buttons 
+			tmp32 = dbg_lvl;
+			tmp32 = tmp32 & ~bitmask;
+			tmp32 = tmp32 | (bit_val << bit_pos);
+			dbg_lvl = tmp32;
+			break;
+
+			/*
+			   case 85:
+			   if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
+			   {
+			   dbg_func(__FILE__": bitmask_button_handler() Setting spark_config1 but NOT using spark capable firmware...\n",CRITICAL);	
+			   break;
+			   }
+			   tmp = ign_table->spark_config1.value;
+			   tmp = tmp & ~bitmask;	//clears bits 
+			   tmp = tmp | (bit_val << bit_pos);
+			   ign_table->spark_config1.value = tmp;
+			   dload_val = tmp;
+
+			   break;	
+			   case 92: // alternate OR tblcnf (firmware dependant)
+			   if (ecu_caps & DUALTABLE)
+			   {
+			   tmp = ve_const_dt1->tblcnf.value;
+			   tmp = tmp & ~bitmask;	// clears bits 
+			   tmp = tmp | (bit_val << bit_pos);
+			   ve_const_dt1->tblcnf.value = tmp;
+			   dload_val = tmp;
+			   check_tblcnf(dload_val,FALSE);
+			   }
+			   else
+			   {
+			   if (bit_val)
+			   {
+			   ve_const->alternate = 1;
+			   dload_val = 1;
+			   }
+			   else
+			   {
+			   ve_const->alternate = 0;
+			   dload_val = 0;
+			   }
+			   g_hash_table_insert(interdep_vars_1,
+			   GINT_TO_POINTER(offset),
+			   GINT_TO_POINTER(dload_val));
+			   if (!err_flag)
+			   check_req_fuel_limits();
+			   }
+			   break;
+			   case 116: // config11 
+			   tmp = ve_const->config11.value;
+			   tmp = tmp & ~bitmask;	// clears bits 
+			   tmp = tmp | (bit_val << bit_pos);
+			   ve_const->config11.value = tmp;
+			   dload_val = tmp;
+			   check_config11(dload_val);
+			   break;
+			   case 118: // config13
+			   tmp = ve_const->config13.value;
+			   tmp = tmp & ~bitmask;	// clears bits/
+			   tmp = tmp | (bit_val << bit_pos);
+			   ve_const->config13.value = tmp;
+			   dload_val = tmp;
+			   check_config13(dload_val);
+			   break;
+			   case 247: // Boost Controller (DT only)
+			   if (!(ecu_caps & DUALTABLE))
+			   {
+			   dbg_func(__FILE__": Attempted modification of boost controller variable,  but not running Dualtable firmware!!!\n",CRITICAL);
+			   break;
+			   }
+			   tmp = ve_const_dt2->bcfreq.value;
+			   tmp = tmp & ~bitmask;	// clears bits 
+			   tmp = tmp | (bit_val << bit_pos);
+			   ve_const_dt2->bcfreq.value = tmp;
+			   dload_val = tmp;
+			   break;
+			 case 666:
+			// Debugging selection buttons 
+			tmp32 = dbg_lvl;
+			tmp32 = tmp32 & ~bitmask;
+			tmp32 = tmp32 | (bit_val << bit_pos);
+			dbg_lvl = tmp32;
+			break;
+			*/
+		default:
+				dbg_func(__FILE__": bitmask_button_handler() bitmask button NOT handled ERROR!!, contact author\n",CRITICAL);
 				return FALSE;
 				break;
 
-		}
-		if (dl_type == IMMEDIATE)
-			write_ve_const(page, offset, dload_val, ign_parm);
+	}
+	if (dl_type == IMMEDIATE)
+	{
+		dload_val = convert_before_download(widget,dload_val);
+		write_ve_const(page, offset, dload_val, ign_parm);
 	}
 	return TRUE;
 }
@@ -920,8 +929,8 @@ void update_ve_const()
 		set_reqfuel_state(BLACK,2);
 		//		check_req_fuel_limits();
 
-		check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
-		check_bcfreq(ve_const_dt2->bcfreq.value,TRUE);
+		//check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
+		//check_bcfreq(ve_const_dt2->bcfreq.value,TRUE);
 	}
 	else
 	{
@@ -1153,15 +1162,22 @@ void update_widget(gpointer object, gpointer user_data)
 	GtkWidget * widget = object;
 	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
+	gint tmpi = -1;
 	gint page = -1;
 	gint offset = -1;
 	gfloat value = 0.0;
+	gint bit_val = -1;
+	gint bit_pos = -1;
+	gint bitmask = -1;
 
 	if (GTK_IS_OBJECT(widget))
 	{
 		dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
 		page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 		offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+		bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
+		bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
+		bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 				
 		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
 				"temp_dep");
@@ -1174,7 +1190,20 @@ void update_widget(gpointer object, gpointer user_data)
 				value = (value-32)*(5.0/9.0);
 		}
 
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+		// update widget whether spin,radio or checkbutton  (check encompases radio)
+		if (GTK_IS_SPIN_BUTTON(widget))
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+		else if (GTK_IS_CHECK_BUTTON(widget))
+		{
+			/* If value masked by bitmask, shifted right by bit_pos = bit_val
+			 * then set button state to on...
+			 */
+			tmpi = (gint)value;
+			if (((tmpi & bitmask) >> bit_pos) == bit_val)
+				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
+			else
+				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);
+		}
 	}
 }
 
