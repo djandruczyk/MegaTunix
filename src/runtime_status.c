@@ -59,7 +59,7 @@ void load_status(void)
 
 	if (!firmware->status_map_file)
 	{
-		dbg_func(g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED, exitins status creting routine!!!!\n"),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"),CRITICAL);
 		return;
 	}
 
@@ -111,7 +111,8 @@ void load_status(void)
 					(GtkAttachOptions)(GTK_FILL|GTK_EXPAND),
 					0,0);
 
-			label = gtk_label_new(tmpbuf);
+			label = gtk_label_new(NULL);
+			gtk_label_set_markup(GTK_LABEL(label),tmpbuf);
 			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
 			g_free(tmpbuf);
 			gtk_container_add(GTK_CONTAINER(frame),label);

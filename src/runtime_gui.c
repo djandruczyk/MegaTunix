@@ -104,10 +104,6 @@ breakout:
 			g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}
 	}
-	if ((count > 60) && (!forced_update))
-		forced_update = TRUE;
-	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
-	forced_update=FALSE;
 
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
@@ -124,6 +120,12 @@ breakout:
 		last_coolant = coolant;
 
 	}
+	if ((count > 60) && (!forced_update))
+		forced_update = TRUE;
+	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
+	g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
+	forced_update=FALSE;
+
 	if (count > 60 )
 		count = 0;
 

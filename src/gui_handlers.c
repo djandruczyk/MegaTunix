@@ -740,6 +740,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern struct Firmware_Details *firmware;
+	extern gboolean forced_update;
 	extern GHashTable **interdep_vars;
 
 	if ((paused_handlers) || (!ready))
@@ -777,6 +778,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			{
 				stop_realtime_tickler();
 				start_realtime_tickler();
+				forced_update=TRUE;
 			}
 			break;
 		case REQ_FUEL_DISP:
