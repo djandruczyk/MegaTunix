@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <comms.h>
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <debugging.h>
@@ -748,6 +749,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	gchar * tmpbuf = NULL;
 	gint page = -1;
 	gint table = -1;
+	gint writecount = 0;
 	extern struct Firmware_Details *firmware;
 
 	/* Since we assume the page is where the table is this can cause
@@ -790,12 +792,19 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 
 	/* Set page to the page defined for the X axis group variable */
 	page = firmware->table_params[table]->x_page;
+	writecount = 0;
 	for (i=0;i<firmware->page_params[firmware->table_params[table]->x_page]->length;i++)
 	{
 		if (ms_data[page][i] != ms_data_last[page][i])
+		{
 			write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+			writecount++;
+		}
 	}
+	if (writecount > 0)
+		io_cmd(IO_BURN_MS_FLASH,NULL);
 
+	writecount = 0;
 	/* If Y page is different then the page we just updated, iterate
 	 * through the data chek for changes and send differences
 	 */
@@ -805,9 +814,16 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 		for (i=0;i<firmware->page_params[firmware->table_params[table]->y_page]->length;i++)
 		{
 			if (ms_data[page][i] != ms_data_last[page][i])
+			{
 				write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+				writecount++;
+			}
 		}
+		if (writecount > 0)
+			io_cmd(IO_BURN_MS_FLASH,NULL);
 	}
+
+	writecount = 0;
 
 	/* If Z page is different then the page we just updated, iterate
 	 * through the data chek for changes and send differences
@@ -818,8 +834,13 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 		for (i=0;i<firmware->page_params[firmware->table_params[table]->z_page]->length;i++)
 		{
 			if (ms_data[page][i] != ms_data_last[page][i])
+			{
 				write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+				writecount++;
+			}
 		}
+		if (writecount > 0)
+			io_cmd(IO_BURN_MS_FLASH,NULL);
 	}
 
 	//update_ve_const();	
@@ -859,4 +880,5 @@ void revert_to_previous_data()
 	}
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),FALSE);
 	update_logbar("tools_view","warning","Reverting to previous settings....\n",TRUE,FALSE);
+	io_cmd(IO_BURN_MS_FLASH,NULL);
 }

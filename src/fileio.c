@@ -500,6 +500,7 @@ void restore_all_ecu_settings(gchar *filename)
 	gchar * section = NULL;
 	gint i = 0;
 	gint x = 0;
+	gint writecount = 0;
 	gint tmpi = 0;
 	gchar *tmpbuf = NULL;
 	gchar **keys = NULL;
@@ -521,6 +522,7 @@ void restore_all_ecu_settings(gchar *filename)
 		}
 		for (i=0;i<firmware->total_pages;i++)
 		{
+			writecount = 0;
 			section = g_strdup_printf("page_%i",i);
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
 				if (tmpi != firmware->page_params[i]->length)
@@ -535,6 +537,7 @@ void restore_all_ecu_settings(gchar *filename)
 					ms_data[i][x]=atoi(keys[x]);
 					if (ms_data[i][x] != ms_data_last[i][x])
 					{
+						writecount++;
 						write_ve_const(NULL,i,x,ms_data[i][x],firmware->page_params[i]->is_spark);
 					}
 				}
@@ -542,6 +545,8 @@ void restore_all_ecu_settings(gchar *filename)
 				g_strfreev(keys);
 				g_free(tmpbuf);
 			}
+			if (writecount > 0)
+				io_cmd(IO_BURN_MS_FLASH,NULL);
 
 		}
 	}
