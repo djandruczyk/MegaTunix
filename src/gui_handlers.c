@@ -21,6 +21,8 @@
 #include "globals.h"
 
 
+static int req_fuel_popup=FALSE;
+static GtkWidget *popup;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
 extern int ser_context_id;
@@ -92,9 +94,9 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 			message);
 }
 
+	
 int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 {
-	GtkWidget *window;
 	GtkWidget *button;
 	GtkWidget *spinner;
 	GtkWidget *frame;
@@ -104,18 +106,22 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	GtkWidget *table;
 	GtkAdjustment *adj;
 
-	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window),"Required Fuel Calc");
-	gtk_container_set_border_width(GTK_CONTAINER(window),10);
-	g_signal_connect(G_OBJECT(window),"delete_event",
-			(GtkSignalFunc) gtk_widget_destroy,
-			G_OBJECT(window));
-	g_signal_connect(G_OBJECT(window),"destroy_event",
-			(GtkSignalFunc) gtk_widget_destroy,
-			G_OBJECT(window));
+	if (req_fuel_popup)
+		return TRUE;
+	req_fuel_popup=TRUE;
+	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title(GTK_WINDOW(popup),"Required Fuel Calc");
+	gtk_container_set_border_width(GTK_CONTAINER(popup),10);
+	gtk_widget_realize(popup);
+	g_signal_connect(G_OBJECT(popup),"delete_event",
+			G_CALLBACK (close_popup),
+			NULL);
+	g_signal_connect(G_OBJECT(popup),"destroy_event",
+			G_CALLBACK (close_popup),
+			NULL);
 
 	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(window),vbox);
+	gtk_container_add(GTK_CONTAINER(popup),vbox);
 	frame = gtk_frame_new("Constants for your vehicle");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	
@@ -151,7 +157,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	/* Engine Displacement */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(350.0,1.0,1000,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_DISP));
@@ -164,7 +170,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	/* Number of Cylinders */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(8.0,1.0,16,1,1,0);
         spinner = gtk_spin_button_new(adj,0,0);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_CYLS));
@@ -177,7 +183,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	/* Fuel injector flow rate in lbs/hr */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(19.0,1.0,100.0,1.0,1.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_INJ_RATE));
@@ -190,7 +196,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	/* Target Air Fuel Ratio */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(14.7,10.0,25.5,0.1,0.1,0);
         spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_AFR));
@@ -200,35 +206,36 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 	
-	frame = gtk_frame_new("Exit");
+	frame = gtk_frame_new("Commands");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
 
-	button = gtk_button_new_with_label("OK");
+	button = gtk_button_new_with_label("Calculate\nand Close");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(update_reqd_fuel),
 			 NULL);
 	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK (close_window),
-			(gpointer)window);
+			G_CALLBACK (close_popup),
+			NULL);
 
 	button = gtk_button_new_with_label("Cancel");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
 	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK (close_window),
-			(gpointer)window);
+			G_CALLBACK (close_popup),
+			NULL);
 
-	gtk_widget_show_all(window);
+	gtk_widget_show_all(popup);
 	
 	return TRUE;
 }
 
-int close_window(GtkWidget *widget, gpointer *data)
+int close_popup(GtkWidget *widget, gpointer *data)
 {
-	gtk_widget_destroy(GTK_WIDGET(data));
+	gtk_widget_destroy(popup);
+	req_fuel_popup=FALSE;
 	return TRUE;
 }
 int update_reqd_fuel(GtkWidget *widget, gpointer *data)
