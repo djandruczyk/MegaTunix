@@ -166,6 +166,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         struct pollfd ufds;
 	char buf[2];
         gint restart_reader = FALSE;
+	gint count;
 
         if(serial_params.open)
 	{
@@ -188,23 +189,48 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		res = poll (&ufds,1,serial_params.poll_timeout);
 		if (res == 0)
 		{
-			g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
-			/* An I/O Error occurred with the MegaSquirt ECU */
-			update_statusbar(ser_statbar,ser_context_id,buff);
-			connected = FALSE;
-			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
-					connected);
+			printf("Failure to respond to \"C\" command\n");
+			printf("Attempting alternate test, (might be V1 ECU)\n");
+			res = write(serial_params.fd,"A",1);
+			res = poll (&ufds,1,serial_params.poll_timeout);
+			if (res)
+			{
+				count = 22;
+				while (count > 0)
+				{
+					printf("atempting to read %i bytes from MS\n",count);
+					count -= read(serial_params.fd,&buf,count);
+				}
+
+
+				printf("MS is V1 and responded to runtime cmd\n");
+				g_snprintf(buff,60,"ECU Comms Test Successfull");
+				/* COMMS test succeeded */
+				update_statusbar(ser_statbar,ser_context_id,buff);
+				connected = TRUE;
+				gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+						connected);
+			}
+			else
+			{
+				g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
+				/* An I/O Error occurred with the MegaSquirt ECU */
+				update_statusbar(ser_statbar,ser_context_id,buff);
+				connected = FALSE;
+				gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+						connected);
+			}
 		}
 		else
 		{
 			/* Reads out the secl # from the buffer.. */
 			res=read(serial_params.fd,&buf,1);
-
+			/* Request MS's version number... */
 			res = write(serial_params.fd,"Q",1);
 			res = poll(&ufds,1,serial_params.poll_timeout);
 			res = read(serial_params.fd,&buf,1);
 			ecu_version = (gfloat)buf[0]/10.0;
-			//printf("result of reading ecu version is %f\n",ecu_version);
+			printf("result of reading ecu version is %f\n",ecu_version);
 
 			g_snprintf(buff,60,"ECU Comms Test Successfull");
 			/* COMMS test succeeded */

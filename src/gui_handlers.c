@@ -424,7 +424,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			break;
 		case NUM_INJECTORS:
 			/* Updates a shared bitfield */
-			printf("number of injectors changed\n");
 			num_injectors = tmpi;
 			tmp = ve_constants->config12.value;
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
