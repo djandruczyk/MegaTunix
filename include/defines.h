@@ -29,6 +29,8 @@
 #define VE2_RPM_BINS_OFFSET	100+MS_PAGE_SIZE /* From Page 0 boundary */
 #define VE1_KPA_BINS_OFFSET	108	/* From page 0 boundary */
 #define VE2_KPA_BINS_OFFSET	108+MS_PAGE_SIZE /* From Page 0 boundary */
+#define DIV_OFFSET_1		91	/* Where "divider" is */
+#define DIV_OFFSET_2		91+MS_PAGE_SIZE	/* Where "divider" is */
 
 /* Download modes */
 #define IMMEDIATE		0x10

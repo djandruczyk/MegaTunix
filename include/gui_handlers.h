@@ -25,7 +25,6 @@ gint bitmask_button_handler(GtkWidget *, gpointer);
 gint spinner_changed(GtkWidget *, gpointer);
 gint classed_spinner_changed(GtkWidget *, gpointer);
 gint set_logging_mode(GtkWidget * widget, gpointer *data);
-void check_req_fuel_limits(void);
 void check_config11(unsigned char);
 void check_config13(unsigned char);
 void check_tblcnf(unsigned char, gboolean);

@@ -21,6 +21,7 @@ int reqd_fuel_popup();
 gboolean save_reqd_fuel(GtkWidget *, gpointer);
 gboolean close_popup(GtkWidget *);
 void req_fuel_change(void *);
+void check_req_fuel_limits(void);
 /* Prototypes */
 
 #endif

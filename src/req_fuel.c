@@ -15,12 +15,15 @@
 
 #include <config.h>
 #include <configfile.h>
+#include <conversions.h>
 #include <defines.h>
 #include <enums.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
 #include <math.h>
+#include <mode_select.h>
 #include <ms_structures.h>
+#include <notifications.h>
 #include <req_fuel.h>
 #include <serialio.h>
 #include <structures.h>
@@ -30,6 +33,15 @@ extern struct DynamicSpinners spinners;
 extern struct DynamicAdjustments adjustments;
 extern GdkColor red;
 extern GdkColor black;
+gint num_squirts_1 = 1;
+gint num_squirts_2 = 1;
+gint num_cylinders_1 = 1;
+gint num_cylinders_2 = 1;
+gint num_injectors_1 = 1;
+gint num_injectors_2 = 1;
+gfloat req_fuel_total_1 = 0.0;
+gfloat req_fuel_total_2 = 0.0;
+
 
 void req_fuel_change(void *ptr)
 {
@@ -384,3 +396,191 @@ gboolean close_popup(GtkWidget * widget)
 	reqd_fuel->visible = FALSE;
 	return TRUE;
 }
+
+void check_req_fuel_limits()
+{
+	gfloat tmp = 0.0;
+	gfloat req_fuel_per_squirt = 0.0;
+	gint lim_flag = 0;
+	gint dload_val = 0;
+	gint offset = 0;
+	extern gboolean dualtable;
+	extern gboolean paused_handlers;
+	extern GHashTable * interdep_vars_1;
+	extern GHashTable * interdep_vars_2;
+	extern unsigned char *ms_data;
+	struct Ve_Const_Std *ve_const = NULL;
+	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
+	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
+
+
+	if (dualtable)
+	{
+		ve_const_dt1 = (struct Ve_Const_DT_1 *)ms_data;
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		/* F&H Dualtable required Fuel calc
+		 *
+		 *                                        / num_injectors \
+		 *         	   req_fuel_per_squirt * (-----------------)
+		 *                                        \    divider    /
+		 * req_fuel_total = -------------------------------------------
+		 *				10
+		 *
+		 * where divider = num_cylinders/num_squirts;
+		 *
+		 * rearranging to solve for req_fuel_per_squirt...
+		 *
+		 *                        (req_fuel_total * 10)
+		 * req_fuel_per_squirt =  ---------------------
+		 *			    / num_injectors \
+		 *                         (-----------------)
+		 *                          \    divider    /
+		 */
+
+		/* TABLE 1 */
+		tmp = (float)(num_injectors_1)/(float)(ve_const_dt1->divider);
+		req_fuel_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
+
+		if (req_fuel_per_squirt != ve_const_dt1->req_fuel)
+		{
+			if (req_fuel_per_squirt > 255)
+				lim_flag = 1;
+			if (req_fuel_per_squirt < 0)
+				lim_flag = 1;
+			if (num_cylinders_1 % num_squirts_1)
+				lim_flag = 1;
+		}
+		/* Required Fuel per SQUIRT */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+					spinners.req_fuel_per_squirt_1_spin),
+				req_fuel_per_squirt/10.0);
+
+		/* Throw warning if an issue */
+		if (lim_flag)
+			set_interdep_state(RED,1);
+		else
+		{
+			set_interdep_state(BLACK,1);
+
+			if (paused_handlers)
+				return;
+			offset = 90;
+			dload_val = convert_before_download(offset,
+					req_fuel_per_squirt);
+			write_ve_const(dload_val, offset);
+			/* Call handler to empty interdependant hash table */
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
+					
+		}
+
+		lim_flag = 0;
+		/* TABLE 2 */
+		tmp = (float)(num_injectors_2)/(float)(ve_const_dt2->divider);
+		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
+
+		if (req_fuel_per_squirt != ve_const_dt2->req_fuel)
+		{
+			if (req_fuel_per_squirt > 255)
+				lim_flag = 1;
+			if (req_fuel_per_squirt < 0)
+				lim_flag = 1;
+			if (num_cylinders_2 % num_squirts_2)
+				lim_flag = 1;
+		}
+
+		/* Required Fuel per SQUIRT */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+					spinners.req_fuel_per_squirt_2_spin),
+				req_fuel_per_squirt/10);
+
+		/* Throw warning if an issue */
+		if (lim_flag)
+			set_interdep_state(RED,2);
+		else
+		{
+			set_interdep_state(BLACK,2);
+
+			if (paused_handlers)
+				return;
+			offset = 90 + MS_PAGE_SIZE;
+			dload_val = convert_before_download(offset,req_fuel_per_squirt);
+			write_ve_const(dload_val, offset);
+			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,NULL);
+					
+		}
+	}// END Dualtable Req fuel checks... */
+	else
+	{
+		ve_const = (struct Ve_Const_Std *)ms_data;
+
+		/* B&G, MSnS, MSnEDIS Required Fuel Calc
+		 *
+		 *                                        /     num_injectors_1     \
+		 *         	   req_fuel_per_squirt * (-------------------------)
+		 *                                        \ divider*(alternate+1) /
+		 * req_fuel_total = --------------------------------------------------
+		 *				10
+		 *
+		 * where divider = num_cylinders_1/num_squirts_1;
+		 *
+		 * rearranging to solve for req_fuel_per_squirt...
+		 *
+		 *                        (req_fuel_total * 10)
+		 * req_fuel_per_squirt =  ----------------------
+		 *			    /  num_injectors  \
+		 *                         (-------------------)
+		 *                          \ divider*(alt+1) /
+		 *
+		 * 
+		 */
+
+		tmp =	((float)(num_injectors_1))/((float)ve_const->divider*(float)(ve_const->alternate+1));
+
+		/* This is 1 tenth the value as the one screen stuff is 1/10th 
+		 * for the ms variable,  it gets converted farther down, just 
+		 * before download to the MS
+		 */
+		req_fuel_per_squirt = ((float)req_fuel_total_1*10.0)/tmp;
+
+		if (req_fuel_per_squirt != ve_const->req_fuel)
+		{
+			if (req_fuel_per_squirt > 255)
+				lim_flag = 1;
+			if (req_fuel_per_squirt < 0)
+				lim_flag = 1;
+			if (num_cylinders_1 % num_squirts_1)
+				lim_flag = 1;
+		}
+		/* req-fuel info box  */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+					spinners.req_fuel_per_squirt_1_spin),
+				req_fuel_per_squirt/10.0);
+
+		if (lim_flag)
+			set_interdep_state(RED,1);
+		else
+		{
+			set_interdep_state(BLACK,1);
+
+			/* All Tested succeeded, download Required fuel, 
+			 * then iterate through the list of offsets of changed
+			 * inter-dependant variables, extract the data out of 
+			 * the companion array, and send to ECU.  Then free
+			 * the offset GList, and clear the array...
+			 */
+
+			/* Handlers get paused during a read of MS VE/Constants. We
+			 * don't need to write anything back during this window. 
+			 */
+			if (paused_handlers)
+				return;
+			offset = 90;
+			dload_val = convert_before_download(offset,req_fuel_per_squirt);
+			write_ve_const(dload_val, offset);
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
+		}
+	} // End B&G style Req Fuel check 
+	return ;
+
+}
+
