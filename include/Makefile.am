@@ -2,7 +2,6 @@
 headers = \
 	3d_vetable.h \
 	about_gui.h \
-	bitfield_handlers.h \
 	comms.h \
         comms_gui.h \
         configfile.h \

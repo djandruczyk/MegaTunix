@@ -122,7 +122,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [b_n_g_idle_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,swap_label
+keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,swap_labels
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
@@ -131,7 +131,7 @@ bitval=0
 bitmask=16
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-swap_label=fast_idle_temp_label
+swap_labels=fast_idle_temp_label
 
 [pwm_idle_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,toggle_group,invert_state

@@ -12,7 +12,6 @@
  */
 
 #include <3d_vetable.h>
-#include <bitfield_handlers.h>
 #include <config.h>
 #include <conversions.h>
 #include <datalogging_gui.h>
@@ -24,6 +23,7 @@
 #include <gui_handlers.h>
 #include <glib.h>
 #include <init.h>
+#include <keyparser.h>
 #include <listmgmt.h>
 #include <logviewer_core.h>
 #include <logviewer_gui.h>
@@ -271,7 +271,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = 0;
 	gint table_num = -1;
 	gchar * toggle_group = NULL;
-	gchar * swap_label = NULL;
+	gchar * swap_labels = NULL;
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
 	extern gint dbg_lvl;
@@ -296,8 +296,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),"toggle_group");
 	invert_state = (gboolean )g_object_get_data(G_OBJECT(widget),"invert_state");
-	swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_label");
-
+	swap_labels = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_labels");
 
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
@@ -310,8 +309,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
 	}
 	/* Swaps the label of another control based on widget state... */
-	if (swap_label)
-		switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	if (swap_labels)
+		switch_labels(swap_labels,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
 	switch ((SpinButton)handler)
 	{
@@ -963,9 +962,6 @@ void update_ve_const()
 		/* All Tables */
 		for (i=0;i<firmware->total_tables;i++)
 		{
-			if (firmware->table_params[i]->cfg13_offset > 0)
-				check_config13(ms_data[firmware->table_params[i]->z_page][firmware->table_params[i]->cfg13_offset]);
-
 			page = firmware->table_params[i]->z_page;
 			if (firmware->table_params[i]->reqfuel_offset < 0)
 				continue;
@@ -1017,9 +1013,6 @@ void update_ve_const()
 		 */
 		for (i=0;i<firmware->total_tables;i++)
 		{
-			if (firmware->table_params[i]->cfg13_offset > 0)
-				check_config13(ms_data[firmware->table_params[i]->z_page][firmware->table_params[i]->cfg13_offset]);
-
 			page = firmware->table_params[i]->z_page;
 			if (firmware->table_params[i]->reqfuel_offset < 0)
 				continue;
@@ -1095,7 +1088,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar * toggle_group = NULL;
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
-	gchar * swap_label = NULL;
+	gchar * swap_labels = NULL;
 	gchar * tmpbuf = NULL;
 	GdkColor color;
 	extern gint ** ms_data;
@@ -1133,8 +1126,8 @@ void update_widget(gpointer object, gpointer user_data)
 			"invert_state");
 	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),
 			"use_color");
-	swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
-			"swap_label");
+	swap_labels = (gchar *)g_object_get_data(G_OBJECT(widget),
+			"swap_labels");
 
 	value = convert_after_upload(widget);  
 
@@ -1214,8 +1207,8 @@ void update_widget(gpointer object, gpointer user_data)
 		g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
 	}
 	/* Swaps the label of another control based on widget state... */
-	if (swap_label)
-		switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	if (swap_labels)
+		switch_labels(swap_labels,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
 
 }
@@ -1400,35 +1393,53 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 
 
 /*!
- \brief switch_labels() swaps labels on  temp dependant controls that are 
- dependant on the state of another control
- \param widget_name (gchar *) widget name we are checking state of
+ \brief switch_labels() swaps labels that depend on the state of another 
+ control. Handles temp dependant labels as well..
+ \param widgets (gchar *) comma seperated list of widget names to swap 
+ labels of
  \param state (gboolean) if TRUE we use the alternate label, if FALSE we use
  the default label
  */
-void switch_labels(gchar * widget_name,gboolean state)
+void switch_labels(gchar * widgets,gboolean state)
 {
 	extern GHashTable *dynamic_widgets;
 	extern gint temp_units;
-	GtkWidget *widget = g_hash_table_lookup(dynamic_widgets,widget_name);
-	if (widget)
+	gint i = 0;
+	gchar ** labels = NULL;
+	gint num_widgets;
+
+	labels = parse_keys(widgets,&num_widgets,",");
+
+	for (i=0;i<num_widgets;i++)
 	{
-		if ((gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep") == TRUE)
+		GtkWidget *widget = g_hash_table_lookup(dynamic_widgets,labels[i]);
+		if (widget)
 		{
-			if (state)
+			if ((gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep") == TRUE)
 			{
-				if (temp_units == FAHRENHEIT)
-					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"alt_f_label"));
+				if (state)
+				{
+					if (temp_units == FAHRENHEIT)
+						gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"alt_f_label"));
+					else
+						gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"alt_c_label"));
+				}
 				else
-					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"alt_c_label"));
+				{
+					if (temp_units == FAHRENHEIT)
+						gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"f_label"));
+					else
+						gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"c_label"));
+				}
 			}
 			else
 			{
-				if (temp_units == FAHRENHEIT)
-					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"f_label"));
+				if (state)
+					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"alt_label"));
 				else
-					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"c_label"));
+					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"label"));
 			}
 		}
 	}
+	g_strfreev(labels);
 }

@@ -161,11 +161,11 @@ void build_general(GtkWidget *parent_frame)
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
 				(GtkAttachOptions) (GTK_FILL),
 				(GtkAttachOptions) (0), 0, 0);
-		// if hardcoded on, turn on..
-		if (dbglevels[i].enabled)
-			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 		// If user set on turn on as well
 		if ((dbg_lvl & mask) >> shift)
+			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+		// if hardcoded on, turn on..
+		if (dbglevels[i].enabled)
 			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 		j++;
 		if (j == 4)

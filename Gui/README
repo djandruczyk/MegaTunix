@@ -75,6 +75,8 @@ keys themselves are not, as the string compare functions are case insensitive.
 	bitshift	(integer) the starting point in a bitfield for bitval
 	bitmask		(integer) the bitmask of bitval..
 	temp_dep	(boolean) Temperature dependant widget (flag)
+	label		(string)  normal label to use (See "swap_labels")
+	alt_label	(string)  alternate label to use (See "swap_labels")
 	c_label		(string)  Celsius label for temp dependant widgets
 	f_label		(string)  Fahrenheit label for temp dependant widgets
 	alt_c_label	(string)  Celsius label for temp dependant widget when
@@ -88,11 +90,20 @@ keys themselves are not, as the string compare functions are case insensitive.
 	*_bitmask	(integer) bitmask to mask value at page,offset
 	*_bitshift	(integer) how many bits to shift by before testing
 	*_bitval	(integer) value to match against for above 4 params
+	swap_labels	(comma seperated string list). List of widget names to
+			swap the labels based on the state of this widget. 
+			Currently applies to BITFIELD widgets ONLY. The target
+			widget IF IT IS NOT TEMP DEPENDANT should have "label"
+			and "alt_label" defined, otherwise it needs 4 keys
+			defined: f_label, c_label, alt_f_label and alt_c_label.
+			to handle all the possible states. The widget named
+			must have the "depend_on" flag set and all the required
+			keys for this to work as intended.. 
 	bind_to_list	(string)  A list of strings (keys) of lists that this
 			widget is bound to.  Used mainly to bind related 
 			controls together for combined operations on them with
 			some signal handler
-	handler		(enum)	  A string representation of a signal handler
+	handler		(enum) A string representation of a signal handler
 			choice, uses translate_string() to convert to an integer
 	toggle_group	(string) Name of group of widgets to enable/disable
 			based on the state of this control.

@@ -241,7 +241,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 
 		if (group->num_keytypes != group->num_keys)
 		{
-			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename),CRITICAL);
 			g_strfreev(group->keys);
 			g_free(group->keytypes);
 			return NULL;
@@ -258,49 +258,49 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 				case MTX_INT:
 					if (cfg_read_int(cfgfile,section,group->keys[i],&tmpi))
 					{
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
 						g_object_set_data(G_OBJECT(group->object),
 								g_strdup(group->keys[i]),
 								GINT_TO_POINTER(tmpi));	
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
 					break;
 				case MTX_ENUM:
 					if (cfg_read_string(cfgfile,section,group->keys[i],&tmpbuf))
 					{
 						tmpi = translate_string(tmpbuf);
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
 						g_object_set_data(G_OBJECT(group->object),
 								g_strdup(group->keys[i]),
 								GINT_TO_POINTER(tmpi));	
 						g_free(tmpbuf);
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
 					break;
 				case MTX_BOOL:
 					if (cfg_read_boolean(cfgfile,section,group->keys[i],&tmpi))
 					{
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
 						g_object_set_data(G_OBJECT(group->object),
 								g_strdup(group->keys[i]),
 								GINT_TO_POINTER(tmpi));	
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
 					break;
 				case MTX_STRING:
 					if(cfg_read_string(cfgfile,section,group->keys[i],&tmpbuf))
 					{
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",group->keys[i],tmpbuf,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",group->keys[i],tmpbuf,section),TABLOADER);
 						g_object_set_data(G_OBJECT(group->object),
 								g_strdup(group->keys[i]),
 								g_strdup(tmpbuf));
 						g_free(tmpbuf);
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
 					break;
 
 			}
@@ -398,7 +398,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys,",");
-		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber_keys for %s is %i\n",section,num_keys),TABLOADER);
+		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys for %s is %i\n",section,num_keys),TABLOADER);
 		g_free(tmpbuf);
 	}
 	else
@@ -407,8 +407,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 	{
 		keytypes = parse_keytypes(tmpbuf, &num_keytypes,",");
+		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumberk of keytypes for %s is %i\n",section,num_keys),TABLOADER);
 		g_free(tmpbuf);
 	}
+	else
+		return;
 
 	if (num_keytypes != num_keys)
 	{

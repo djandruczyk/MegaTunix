@@ -61,6 +61,34 @@ key_types=_INT_,_STRING_
 page=1
 set_label=VE Table 2 (DualTable
 
+[load_tbl_lab]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=1
+label=MAP Bins
+alt_label=TPS Bins
+depend_on=alpha_n_button
+alpha_n_button_type=_VE_EMB_BIT_
+alpha_n_button_page=0
+alpha_n_button_offset=118
+alpha_n_button_bitshift=2
+alpha_n_button_bitmask=4
+alpha_n_button_bitval=1
+
+[load_tbl_units]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=1
+label=Kpa
+alt_label=TPS %
+depend_on=alpha_n_button
+alpha_n_button_type=_VE_EMB_BIT_
+alpha_n_button_page=0
+alpha_n_button_offset=118
+alpha_n_button_bitshift=2
+alpha_n_button_bitmask=4
+alpha_n_button_bitval=1
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
