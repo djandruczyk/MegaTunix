@@ -224,7 +224,8 @@ typedef enum
 	SERIAL_GEN	= 1<<6,
 	IO_PROCESS	= 1<<7,
 	THREADS		= 1<<8,
-	CRITICAL	= 1<<9
+	REQD_FUEL	= 1<<9,
+	CRITICAL	= 1<<10
 }Dbg_Class;
 
 #endif

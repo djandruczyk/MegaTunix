@@ -21,7 +21,9 @@ void build_memory(GtkWidget *parent_frame)
 	GtkWidget *vbox;
 	GtkWidget *hbox;
 	GtkWidget *label;
+	GtkWidget *sep;
 	GtkWidget *table;
+	GtkWidget *table2;
 	GtkWidget *ebox;
 	GtkWidget *frame;
 	extern GdkColor white;
@@ -48,29 +50,49 @@ void build_memory(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	}
 
-	table = gtk_table_new(rows,cols,TRUE);
+	table = gtk_table_new(rows,1,TRUE);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
-	for (x=0;x<cols;x++)
+	for (y=0;y<rows;y++)
 	{
-		for (y=0;y<rows;y++)
-		{
-			frame = gtk_frame_new(NULL);
-			ebox = gtk_event_box_new();
-			gtk_container_add(GTK_CONTAINER(frame),ebox);
+		frame = gtk_frame_new(NULL);
+		ebox = gtk_event_box_new();
+		gtk_container_add(GTK_CONTAINER(frame),ebox);
 
-			label = gtk_label_new(g_strdup_printf("%i,%i",x,y));
-			gtk_container_add(GTK_CONTAINER(ebox),label);
-			if (y%2)
-				gtk_widget_modify_bg(ebox,GTK_STATE_NORMAL,&white);
+		gtk_table_attach(GTK_TABLE(table),frame,0,1,y,y+1,
+				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+
+		table2 = gtk_table_new(1,(cols*2)-1,FALSE);
+		gtk_container_add(GTK_CONTAINER(ebox),table2);
+
+		for (x=0;x<(cols*2)-1;x++)
+		{
+
+			if (x%2)
+			{
+				sep = gtk_vseparator_new();
+				gtk_table_attach(GTK_TABLE(table2),sep,x,x+1,0,1,
+						(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
+						(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
+			}
 			else
+			{
+				ebox = gtk_event_box_new();
+				gtk_table_attach(GTK_TABLE(table2),ebox,x,x+1,0,1,
+						(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+						(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+				label = gtk_label_new(g_strdup_printf("%i,%i",x/2,y));
+				gtk_container_add(GTK_CONTAINER(ebox),label);
+			}
+			if (y%2)
 				gtk_widget_modify_bg(ebox,GTK_STATE_NORMAL,&purple);
-			gtk_table_attach(GTK_TABLE(table),frame,x,x+1,y,y+1,
-					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+			else
+				gtk_widget_modify_bg(ebox,GTK_STATE_NORMAL,&white);
+
 		}
 	}
-			
+
 
 
 	/* Not written yet */

@@ -17,8 +17,8 @@
 #include <configfile.h>
 #include <conversions.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
-#include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
 #include <math.h>
@@ -52,20 +52,18 @@ void req_fuel_change(void *ptr)
 		reqd_fuel = (struct Reqd_Fuel *) ptr;
 	else
 	{
-		g_fprintf(stderr,__FILE__": req_fuel_change(), invalid pointer passed\n");
+		dbg_func(__FILE__": req_fuel_change(), invalid pointer passed\n",CRITICAL);
 		return;
 	}
 
 	reqd_fuel->actual_inj_flow = ((double)reqd_fuel->rated_inj_flow *
 			sqrt((double)reqd_fuel->actual_pressure / (double)reqd_fuel->rated_pressure));
 
-#ifdef DEBUG
-	g_printf("Rated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow);
-	g_printf("Rated fuel pressure is %f bar\n",reqd_fuel->rated_pressure);
-	g_printf("Actual fuel pressure is %f bar\n",reqd_fuel->actual_pressure);
-	g_printf("Calculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow);
-	g_printf("Target AFR is %f lbs/hr\n",reqd_fuel->target_afr);
-#endif
+	dbg_func(g_strdup_printf(__FILE__": Rated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow),REQD_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Rated fuel pressure is %f bar\n",reqd_fuel->rated_pressure),REQD_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Actual fuel pressure is %f bar\n",reqd_fuel->actual_pressure),REQD_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Calculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow),REQD_FUEL);
+	dbg_func(g_strdup_printf(__FILE__": Target AFR is %f lbs/hr\n",reqd_fuel->target_afr),REQD_FUEL);
 
 	tmp1 = 36.0*((double)reqd_fuel->disp)*4.27793;
 	tmp2 = ((double) reqd_fuel->cyls) \
@@ -107,7 +105,7 @@ gboolean reqd_fuel_popup(void * data)
 		reqd_fuel = (struct Reqd_Fuel *) data;
 	else
 	{
-		g_fprintf(stderr,__FILE__": reqd_fuel_popup(), pointer passed is invalid, contact author\n");
+		dbg_func(__FILE__": reqd_fuel_popup(), pointer passed is invalid, contact author\n",CRITICAL);
 		return FALSE;
 	}
 
@@ -342,7 +340,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 		ve_const = (struct Ve_Const_Std *) (ms_data + MS_PAGE_SIZE);
 	else
 	{
-		g_fprintf(stderr,__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table);
+		dbg_func(g_strdup_printf(__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table),REQD_FUEL);
 		return FALSE;
 	}	
 
