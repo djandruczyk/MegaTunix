@@ -22,22 +22,26 @@
 
 
 
-void rescale_table(GtkWidget * widget)
+void rescale_table(void * data)
 {
 	extern struct Firmware_Details *firmware;
 	extern GList ***ve_widgets;
+	extern GHashTable *dynamic_widgets;
+	gchar *widget_name = (gchar *)data;
 	gint page = -1;
 	gint ve_base = 0;
 	gint rpm_bins = 0;
 	gint load_bins = 0;
 	gboolean is_spark = FALSE;
 	GtkWidget * spinner = NULL;
+	GtkWidget *widget = NULL;
 	GList *list = NULL;
 	gfloat percentage = 0.0;
 	gint i = 0;
 	gint j = 0;
 	gfloat value = 0.0;
 
+	widget = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	ve_base = firmware->page_params[page]->ve_base;

@@ -1,8 +1,7 @@
 [realtime_map]
-firmware_name=MegaSquirtnEDIS v3.007
+applicable_firmwares=Dualtable v1.02,Dualtable v1.01,Dualtable v0.90-1.0
 raw_total=22
-derived_total=38
-raw_list=raw_secl,barocount,barovolt,barokpa,mapcount,mapvolt,mapkpa,matcount,matvolt,matdeg,cltcount,cltvolt,cltdeg,tpscount,tpsvolt,tpspercent,battcount,battvolt,o2count,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
+derived_total=39
 
 [derived_0]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,special,is_float,tooltip,lower_limit,upper_limit
@@ -46,31 +45,18 @@ is_float=FALSE
 tooltip="RAW RPM" Is the engine RPM, as sent from the ECU in units of rpmx100
 
 [derived_3]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,ul_conv_expr,complex_expr,is_float,tooltip,lower_limit,upper_limit
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_,_BOOL_,_STRING_,_INT_,_INT_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
 internal_name=rpmx100
 dlog_gui_name=RPMx100
 dlog_field_name=RPMX100
 offset=13
 lower_limit=0
 upper_limit=25500
+dl_conv_expr=x/100
+ul_conv_expr=x*100
 is_float=FALSE
-complex_expr=TRUE
-ul_conv_expr=((12000/(eng_type+1))/(cyls+1))/(((ctimeH*256)+ctimeL)/1.0/10000)
-expr_symbols=eng_type,cyls,ctimeH,ctimeL
-expr_types=_VE_EMB_BIT_,_VE_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
-eng_type_page=0
-eng_type_offset=116
-eng_type_bitmask=4
-eng_type_bitshift=2
-raw_rpm_offset=13
-cyls_page=0
-cyls_offset=116
-cyls_bitmask=240
-cyls_bitshift=4
-ctimeH_offset=19
-ctimeL_offset=20
-tooltip="RPMx100" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of about 1-5 RPM with the this firmware but NOT below 500 RPM. 
+tooltip="RPMx100" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of 100rpm with the this firmware. 
 
 [derived_4]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
@@ -249,7 +235,7 @@ dlog_field_name=TPSPERCENT
 offset=7
 lower_limit=0
 upper_limit=100
-dl_conv_expr=(x/100)*255.0
+dl_conv_expr=(x/100.0)*255
 ul_conv_expr=(x/255.0)*100
 is_float=TRUE
 tooltip="TPS %" is the Throttle Position in percentage of open (based on counts, a count of 255 is equal to 100% open).
@@ -415,7 +401,7 @@ dlog_field_name=BATTVOLT
 offset=8
 lower_limit=6
 upper_limit=18
-dl_conv_expr=(x/6.0)*(255,0/5,0)
+dl_conv_expr=(x/6.0)*(255.0/5.0)
 ul_conv_expr=x*(5.0/255.0)*6.0
 is_float=TRUE
 tooltip="BATT Volts" is the Battery voltage in DC volts.
@@ -507,103 +493,125 @@ tooltip="TPSaccel\" is the amount of Acceleration enrichment being dispensed. Un
 [derived_32]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=vecurr
-dlog_gui_name=VE
-dlog_field_name=VE
+internal_name=vecurr1
+dlog_gui_name=VE 1
+dlog_field_name=VE1
 offset=18
 lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="VE" is the instantaneous volumetric efficiency for table 1 that the MS is calculating fuel for.
+tooltip="VE 1" is the instantaneous volumetric efficiency for table 1 that the MS is calculating fuel for.
 
 [derived_33]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=pw
-dlog_gui_name=PW
-dlog_field_name=PW
+internal_name=pw1
+dlog_gui_name=PW 1
+dlog_field_name=PW1
 offset=14
 lower_limit=0
 upper_limit=26
 dl_conv_expr=x*10.0
 ul_conv_expr=x/10.0
 is_float=TRUE
-tooltip="PW" is the pulsewidth in milliseconds for the injectors tied to injector channel 1.
+tooltip="PW 1" is the pulsewidth in milliseconds for the injectors tied to injector channel 1.
 
 [derived_34]
 keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=dcycle
-dlog_gui_name=Dutycycle 
-dlog_field_name=DCYCLE
+internal_name=dcycle1
+dlog_gui_name=Dutycycle 1
+dlog_field_name=DCYCLE1
 offset=14
 lower_limit=0
 upper_limit=100
 complex_expr=TRUE
-ul_conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw1/10)/((1200/(eng_type+1))/raw_rpm))
-expr_symbols=cyls,divider,alternate,raw_pw1,eng_type,raw_rpm
-expr_types=_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_
-cyls_page=0
-cyls_offset=116
-cyls_bitmask=240
-cyls_bitshift=4
-divider_page=0
-divider_offset=91
-alternate_page=0
-alternate_offset=92
-alternate_bitmask=1
-alternate_bitshift=0
+ul_conv_expr=100*(raw_pw1/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
+expr_symbols=raw_pw1,eng_type,raw_rpm,cyls,divider
+expr_types=_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_VE_VAR_
 raw_pw1_offset=14
 eng_type_page=0
 eng_type_offset=116
 eng_type_bitmask=4
 eng_type_bitshift=2
 raw_rpm_offset=13
+cyls_page=0
+cyls_offset=116
+cyls_bitmask=240
+cyls_bitshift=4
+divider_page=0
+divider_offset=91
 is_float=TRUE
-tooltip=" Dcycle\" is the injector Duty cycle.
-
+tooltip="Dutycycle 1\" is the injector Duty cycle for injectors connected to injector channel 1.
 
 [derived_35]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=ctimeh
-dlog_gui_name=CTime H
-dlog_field_name=CTIMEH
+keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
+key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
+internal_name=dcycle2
+dlog_gui_name=Dutycycle 2
+dlog_field_name=DCYCLE2
 offset=19
 lower_limit=0
-upper_limit=255
-dl_conv_expr=x/1
-ul_conv_expr=x*1
-is_float=FALSE
-tooltip="Ctime H" is the upper byte of the High Res RPM Calculation specific to MSnEDIS/MSnSpark
+upper_limit=100
+complex_expr=TRUE
+ul_conv_expr=100*(raw_pw2/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
+expr_symbols=raw_pw2,eng_type,raw_rpm,cyls,divider
+expr_types=_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_VE_VAR_
+raw_pw2_offset=19
+eng_type_page=0
+eng_type_offset=116
+eng_type_bitmask=4
+eng_type_bitshift=2
+raw_rpm_offset=13
+cyls_page=1
+cyls_offset=116
+cyls_bitmask=240
+cyls_bitshift=4
+divider_page=1
+divider_offset=91
+is_float=TRUE
+tooltip="Dutycycle 2\" is the injector Duty cycle for injectors connected to injector channel 2.
 
 [derived_36]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=ctimel
-dlog_gui_name=CTime L 
-dlog_field_name=CTIMLE
+internal_name=pw2
+dlog_gui_name=PW 2
+dlog_field_name=PW2
+offset=19
+lower_limit=0
+upper_limit=26
+dl_conv_expr=x*10.0
+ul_conv_expr=x/10.0
+is_float=TRUE
+tooltip="PW 2" is the pulsewidth in milliseconds for the injectors tied to injector channel 2.
+
+[derived_37]
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
+internal_name=vecurr2
+dlog_gui_name=VE 2
+dlog_field_name=VE2
 offset=20
 lower_limit=0
 upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="Ctime H" is the lower byte of the High Res RPM Calculation specific to MSnEDIS/MSnSpark
+tooltip="VE 2" is the instantaneous volumetric efficiency for table 2 that the MS is calculating fuel for.
 
-[derived_37]
+[derived_38]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=sparkangle
-dlog_gui_name=Spark Advance
-dlog_field_name=SPKADVANCE
+internal_name=idledc
+dlog_gui_name=Idle DC
+dlog_field_name=IDLEDC
 offset=21
 lower_limit=0
-upper_limit=90
-dl_conv_expr=x*2.84
-ul_conv_expr=x/2.84
-is_float=TRUE
-tooltip="Spark Advance" is the Current spark advance being run.
-
+upper_limit=100
+dl_conv_expr=x/1
+ul_conv_expr=x*1
+is_float=FALSE
+tooltip="IdleDC" is the duty cycle for the PWM Idle control 

@@ -48,6 +48,7 @@ typedef enum
 	RESTORE_ALL,
 	SELECT_PARAMS,
 	REQ_FUEL_POPUP,
+	RESCALE_TABLE,
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -98,7 +99,6 @@ typedef enum
 	DEBUG_LEVEL,
 	GENERIC,
 	ALT_SIMUL,
-	RESCALE_TABLE,
 }SpinButton;
 
 /* Runtime Status flags */

@@ -36,7 +36,7 @@ CMD_UPPER_V=128
 CMD_UPPER_S=17
 
 [gui]
-RealtimeMapFile=Rover_IAC-3.0.4
+RealtimeMapFile=BnG-std
 SliderMapFile=std-firmware
 LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,tools,warmupwizard
 

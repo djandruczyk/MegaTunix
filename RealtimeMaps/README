@@ -29,6 +29,18 @@ keys themselves are not, as the string compare functions are case insensitive.
 3. There is no limit to the number of keys that you can bind to a widget.
 
 4. Most commonly used keys are:
+	applicable_firmwares (string) comma sepertated list of firmware names
+			(from interrogation profiles) that this realtime map 
+			is applicable to.  This is a new addition, after
+			version 0.6.3. This prevents having 3 different rtmaps
+			for a firmware family when the only thing changed is
+			the firmware name, not the API.
+	raw_list	(string) List of "internal_names" that are choices 
+			to be shown in the user controlled outputs on the
+			spark variants firmware. Only derived variables that
+			depend DIRECTLY on a SINGLE raw variable should be 
+			here,  things like high res RPM or sparkangle can
+			NOT be here as they depend on multiple inputs.
 	keys		(string) list of keys, comma seperated to be loaded
 			by the main loading routine. (NOTE not all keys in
 			the section are listed on this line.  keys specifc to

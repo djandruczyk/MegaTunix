@@ -57,25 +57,26 @@ gboolean load_realtime_map(void )
 
 	if (!interrogated)
 		return FALSE;
-	rtv_map = g_new0(struct Rtv_Map, 1);
 
 	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL));
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 	{
 		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find realtime vars map file %s\n\n",filename),CRITICAL);
-		g_free(rtv_map);
 		return FALSE;
 	}
-	/* If file found we continue... */
+
+	else
 		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tLoading realtime map from %s\n",filename),RTMLOADER);
 	g_free(filename);
 
-	if(!cfg_read_string(cfgfile,"realtime_map","firmware_name",&tmpbuf))
+	/* If file found we continue... */
+	rtv_map = g_new0(struct Rtv_Map, 1);
+	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
 		dbg_func(__FILE__": load_realtime_map()\n\tCan't find firmware name\n",CRITICAL);
-	if (g_strcasecmp(tmpbuf,firmware->name) != 0)	
+	if (strstr(tmpbuf,firmware->name) == NULL)	
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tFirmware name(%s) in this file(%s)\n\tdoes NOT match firmware name(%s) of loaded firmware, ABORT!\n\n",tmpbuf,filename,firmware->name),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tFirmware name \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->name,cfgfile->filename,tmpbuf),CRITICAL);
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 		g_free(tmpbuf);

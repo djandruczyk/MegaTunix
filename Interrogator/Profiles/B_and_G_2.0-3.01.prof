@@ -35,7 +35,7 @@ CMD_UPPER_Q=1
 CMD_UPPER_V=125
 
 [gui]
-RealtimeMapFile=B_and_G_2.0-3.01
+RealtimeMapFile=BnG-std
 SliderMapFile=std-firmware
 LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,tools,warmupwizard
 

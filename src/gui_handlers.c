@@ -389,6 +389,9 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((StdButton)handler)
 	{
+		case RESCALE_TABLE:
+			rescale_table(obj_data);
+			break;
 		case INTERROGATE_ECU:
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
@@ -549,9 +552,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((SpinButton)handler)
 	{
-		case RESCALE_TABLE:
-			rescale_table(widget);
-			break;
+//		case RESCALE_TABLE:
+//			rescale_table(widget);
+//			break;
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
 			if (realtime_id > 0)

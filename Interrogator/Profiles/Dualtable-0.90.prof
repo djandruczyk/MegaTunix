@@ -50,7 +50,7 @@ CMD_UPPER_V=128
 CMD_UPPER_F=255
 
 [gui]
-RealtimeMapFile=Dualtable-0.90
+RealtimeMapFile=DT-std
 SliderMapFile=dt-firmware
 LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8_1,vetable_8x8_2,tools,memviewer,warmupwizard
 
