@@ -56,6 +56,7 @@ void load_status(void)
 	GtkWidget * label;
 	GtkWidget * frame;
 	GtkWidget * table;
+	GdkColor color;
 
 	if (!firmware->status_map_file)
 	{
@@ -115,6 +116,19 @@ void load_status(void)
 			gtk_label_set_markup(GTK_LABEL(label),tmpbuf);
 			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
 			g_free(tmpbuf);
+			if (cfg_read_string(cfgfile,section,"active_fg",&tmpbuf))
+			{
+				gdk_color_parse(tmpbuf,&color);
+				gtk_widget_modify_fg(label,GTK_STATE_NORMAL,&color);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfgfile,section,"inactive_fg",&tmpbuf))
+			{
+				gdk_color_parse(tmpbuf,&color);
+				gtk_widget_modify_fg(label,GTK_STATE_INSENSITIVE,&color);
+				g_free(tmpbuf);
+			}
+
 			gtk_container_add(GTK_CONTAINER(frame),label);
 			if (!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);

@@ -77,10 +77,10 @@ row=5
 source=dcycle2
 
 [rt_slider_12]
-slider_name=vecurr1
+slider_name=gammae
 table=2
 row=0
-source=vecurr1
+source=gammae
 
 [rt_slider_13]
 slider_name=aircorr
@@ -107,16 +107,16 @@ row=4
 source=barocorr
 
 [rt_slider_17]
-slider_name=vecurr2
+slider_name=vecurr1
 table=3
 row=0
-source=vecurr2
+source=vecurr1
 
 [rt_slider_18]
-slider_name=gammae
+slider_name=vecurr2
 table=3
 row=1
-source=gammae
+source=vecurr2
 
 [rt_slider_19]
 slider_name=tpsaccel
