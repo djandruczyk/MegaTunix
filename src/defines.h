@@ -144,6 +144,114 @@ struct ms_data_v1_and_v2 {
 	unsigned char	bspot2;		/* Blank Spot 2 */
 	unsigned char	bspot3;		/* Blank Spot 3 */
 };
+
+union config11 
+{
+	unsigned char      value;
+	struct 
+	{
+		unsigned char map_type	:2;	/* 00 115KPA, 01-250kpa, 10,11
+						 * user-defined */
+		unsigned char eng_type	:1;	/* 0 = 4-stroke, 1 = 2-stroke */
+		unsigned char inj_type	:1;	/* 0 = multi-port, 1 = TBI */
+		unsigned char cylinders	:4;	/* 0000 = 1 cyl 
+						 * 0001 = 2 cyl
+						 * 0010 = 3 cyl
+						 * 0011 = 4 cyl
+						 * 0100 = 5 cyl
+						 * 0101 = 6 cyl
+						 * 0110 = 7 cyl
+						 * 0111 = 8 cyl
+						 * 1000 = 9 cyl
+						 * 1001 = 10 cyl
+						 * 1010 = 11 cyl
+						 * 1011 = 12 cyl
+						 */
+	} bit;
+};
+
+union config12
+{
+	unsigned char      value;
+	struct 
+	{
+		unsigned char clt_type	:2;	/* 00 = GM, 
+						 * 01,10,11 = user defined */
+		unsigned char mat_type	:2;	/* 00 = GM,
+						 * 01,10,11 = user defined */
+		unsigned char injectors	:4;	/* 0000 = 1 injector 
+						 * 0001 = 2 injectors
+						 * 0010 = 3 injectors
+						 * 0011 = 4 injectors
+						 * 0100 = 5 injectors
+						 * 0101 = 6 injectors
+						 * 0110 = 7 injectors
+						 * 0111 = 8 injectors
+						 * 1000 = 9 injectors
+						 * 1001 = 10 injectors
+						 * 1010 = 11 injectors
+						 * 1011 = 12 injectors
+						 */
+	} bit;
+};
+
+union config13
+{
+	unsigned char      value;
+	struct 
+	{
+		unsigned char firing	:1;	/* 0 = normal, 1=odd fire */
+		unsigned char ego_type	:1;	/* 0 = narrow, 1=wide */
+		unsigned char inj_strat	:1;	/* 0 = SD, 1 = Alpha-N */
+		unsigned char baro_corr	:1;	/* 0 = Enrichment off (100%)
+						 * 1 = Enrichment on 
+						 */
+	} bit;
+};
+
+struct ms_Ve_Constants
+{
+	unsigned char	vetable[64];		/* VE table, 64 bytes */
+	unsigned char	crank_pulse_neg40;	/* crank pulse at -40 deg F */
+	unsigned char	crank_pulse_pos170;	/* crank pulse at 170 deg F */
+	unsigned char	afterstart_enrich;	/* Enrich over base (%) */
+	unsigned char	afterstart_num_cycles;	/* enrich for X cycles */
+	unsigned char	warmupbins[10];		/* Warmup bins (10 bytes) */
+	unsigned char	tpsaccel[4];		/* TPS Accel bins, 4 bytes */
+	unsigned char	cold_accel_addon;	/* Accel addon at -40 deg F */
+	unsigned char	tps_trig_thresh;	/* TPS trig thresh in V/sec */
+	unsigned char	accel_duration;		/* Accel for how many seconds */
+	unsigned char	decel_cut;		/* decel fuel cut % */
+	unsigned char	ego_temp_active;	/* temp when EGO corr is on */
+	unsigned char	ego_events;		/* ign events between steps */
+	unsigned char	ego_step;		/* correction % */
+	unsigned char	ego_limit;		/* +/- limit */
+	unsigned char	req_fuel;		/* require fuel */
+	unsigned char	divider;		/* IRQ divide factor for pulse*/
+	unsigned char	alternate;		/* alternate inj drivers */
+	unsigned char	inj_open;		/* inj open time */
+	unsigned char	inj_ocfuel;		/* PW-correlated amount of fuel
+						 * injected during open 
+						 */
+	unsigned char	injpwm;			/* curr limit PWM duty cycle */
+	unsigned char	injpwmt;		/* Peak hold time */
+	unsigned char	battfactor;		/* Battry Voltage Correction */
+	unsigned short	rpmk;			/* Constant for RPM 12K/ncyl */
+	unsigned char	ve_rpm_range[8];	/* VEtable RPM bins (8 bytes) */
+	unsigned char	ve_kpa_range[8];	/* VEtable KPA bins (8 bytes) */
+	union	config11 config11;		/* Config for PC Config */
+	union	config12 config12;		/* Config for PC Config */
+	union	config13 config13;		/* Config for PC Config */
+	unsigned char	priming_pulse;		/* priming pulse b4 startup */
+	unsigned char	ego_rpm;		/* EGO RPM trigger voltage */
+	unsigned char	fastidle_temp;		/* fast idle temp thresh */
+	unsigned char	ego_voltage;		/* EGO flip point voltage */
+	unsigned char	accel_mult;		/* Cold Accel mult factor */
+	unsigned char	pad1;			/* Padding to 128 bytes */
+	unsigned char	pad2;			/* Padding to 128 bytes */
+	unsigned char	pad3;			/* Padding to 128 bytes */
+	unsigned char	pad4;			/* Padding to 128 bytes */
+}; 
 		
 /* Definitions */
 /* Gui frames */

@@ -34,8 +34,8 @@ struct v1_2_Constants
 	GtkAdjustment *fast_idle_thresh;	/* Adjustment */
 	GtkAdjustment *req_fuel_1;		/* Adjustment */
 	GtkAdjustment *req_fuel_2;		/* Adjustment */
-	GtkAdjustment *crank_pulse_40;		/* Adjustment */
-	GtkAdjustment *crank_pulse_170;		/* Adjustment */
+	GtkAdjustment *crank_pulse_neg40;	/* Adjustment */
+	GtkAdjustment *crank_pulse_pos170;	/* Adjustment */
 	GtkAdjustment *crank_priming_pulse;	/* Adjustment */
 	GtkAdjustment *afterstart_enrich;	/* Adjustment */
 	GtkAdjustment *afterstart_num_cycles;	/* Adjustment */
@@ -58,12 +58,12 @@ struct v1_2_Constants
 	GtkWidget *accel_8v_sec;		/* Text Entry */
 	GtkWidget *accel_15v_sec;		/* Text Entry */
 	GtkWidget *decel_cut;			/* Text Entry */
-	GtkWidget *o2_temp_active;		/* Text Entry */
-	GtkWidget *o2_rpm_active;		/* Text Entry */
-	GtkWidget *o2_sw_voltage;		/* Text Entry */
-	GtkWidget *o2_step;			/* Text Entry */
-	GtkWidget *o2_events;			/* Text Entry */
-	GtkWidget *o2_limit;			/* Text Entry */
+	GtkWidget *ego_temp_active;		/* Text Entry */
+	GtkWidget *ego_rpm_active;		/* Text Entry */
+	GtkWidget *ego_sw_voltage;		/* Text Entry */
+	GtkWidget *ego_step;			/* Text Entry */
+	GtkWidget *ego_events;			/* Text Entry */
+	GtkWidget *ego_limit;			/* Text Entry */
 };
 
 #endif
