@@ -86,35 +86,35 @@ int build_runtime(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.secl_val = entry;/*copy pointer to struct for update */
+	runtime_data.secl_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.map_val = entry;/*copy pointer to struct for update */
+	runtime_data.map_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.clt_val = entry;/*copy pointer to struct for update */
+	runtime_data.clt_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 3, 4,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.batt_val = entry;/*copy pointer to struct for update */
+	runtime_data.batt_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 4, 5,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.gammae_val = entry;/*copy pointer to struct for update */
+	runtime_data.gammae_ent = entry;/*copy pointer to struct for update */
 
 	sep = gtk_vseparator_new();
         gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 5,
@@ -161,35 +161,35 @@ int build_runtime(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.baro_val = entry;/*copy pointer to struct for update */
+	runtime_data.baro_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.mat_val = entry;/*copy pointer to struct for update */
+	runtime_data.mat_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.tps_val = entry;/*copy pointer to struct for update */
+	runtime_data.tps_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 3, 4,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.rpm_val = entry;/*copy pointer to struct for update */
+	runtime_data.rpm_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 4, 5,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.pw_val = entry;/*copy pointer to struct for update */
+	runtime_data.pw_ent = entry;/*copy pointer to struct for update */
 
 	/* Corrections/Enrichments frame */
 
@@ -229,21 +229,21 @@ int build_runtime(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.egocorr_val = entry;/*copy pointer to struct for update */
+	runtime_data.egocorr_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.barocorr_val = entry;/*copy pointer to struct for update */
+	runtime_data.barocorr_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_widget_set_size_request(entry,55,-1);
         gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.warmcorr_val = entry;/*copy pointer to struct for update */
+	runtime_data.warmcorr_ent = entry;/*copy pointer to struct for update */
 
 	sep = gtk_vseparator_new();
         gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 3,
@@ -276,7 +276,7 @@ int build_runtime(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.aircorr_val = entry;/*copy pointer to struct for update */
+	runtime_data.aircorr_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
@@ -285,7 +285,7 @@ int build_runtime(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.vecurr_val = entry;/*copy pointer to struct for update */
+	runtime_data.vecurr_ent = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
@@ -294,7 +294,7 @@ int build_runtime(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-	runtime_data.tpsaccel_val = entry;/*copy pointer to struct for update */
+	runtime_data.tpsaccel_ent = entry;/*copy pointer to struct for update */
 
 	return TRUE;
 }
@@ -314,82 +314,82 @@ void update_runtime_vars()
 	if (out.secl != out_last.secl)
 	{
 		g_snprintf(buff,10,"%i",out.secl);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.secl_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.secl_ent),buff);
 	}
 	if (out.map != out_last.map)
 	{
 		g_snprintf(buff,10,"%i",out.map);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.map_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.map_ent),buff);
 	}
 	if (out.clt != out_last.clt)
 	{
 		g_snprintf(buff,10,"%i",out.clt);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.clt_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.clt_ent),buff);
 	}
 	if (out.batt != out_last.batt)
 	{
 		g_snprintf(buff,10,"%.2f",out.batt);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.batt_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.batt_ent),buff);
 	}
 	if (out.gammae != out_last.gammae)
 	{
 		g_snprintf(buff,10,"%i",out.gammae);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.gammae_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.gammae_ent),buff);
 	}
 	if (out.baro != out_last.baro)
 	{
 		g_snprintf(buff,10,"%i",out.baro);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.baro_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.baro_ent),buff);
 	}
 	if (out.mat != out_last.mat)
 	{
 		g_snprintf(buff,10,"%i",out.mat);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.mat_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.mat_ent),buff);
 	}
 	if (out.tps != out_last.tps)
 	{
 		g_snprintf(buff,10,"%i",out.tps);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.tps_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.tps_ent),buff);
 	}
 	if (out.rpm != out_last.rpm)
 	{
 		g_snprintf(buff,10,"%i",out.rpm);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.rpm_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.rpm_ent),buff);
 	}
 	if (out.pw != out_last.pw)
 	{
 		g_snprintf(buff,10,"%.1f",out.pw);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.pw_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.pw_ent),buff);
 	}
 	if (out.egocorr != out_last.egocorr)
 	{
 		g_snprintf(buff,10,"%i",out.egocorr);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.egocorr_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.egocorr_ent),buff);
 	}
 	if (out.barocorr != out_last.barocorr)
 	{
 		g_snprintf(buff,10,"%i",out.barocorr);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.barocorr_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.barocorr_ent),buff);
 	}
 	if (out.warmcorr != out_last.warmcorr)
 	{
 		g_snprintf(buff,10,"%i",out.warmcorr);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.warmcorr_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.warmcorr_ent),buff);
 	}
 	if (out.aircorr != out_last.aircorr)
 	{
 		g_snprintf(buff,10,"%i",out.aircorr);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.aircorr_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.aircorr_ent),buff);
 	}
 	if (out.vecurr != out_last.vecurr)
 	{
 		g_snprintf(buff,10,"%i",out.vecurr);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.vecurr_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.vecurr_ent),buff);
 	}
 	if (out.tpsaccel != out_last.tpsaccel)
 	{
 		g_snprintf(buff,10,"%i",out.tpsaccel);
-		gtk_entry_set_text(GTK_ENTRY(runtime_data.tpsaccel_val),buff);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.tpsaccel_ent),buff);
 	}
 	gdk_threads_leave();
 }

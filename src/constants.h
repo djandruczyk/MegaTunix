@@ -27,31 +27,31 @@
 
 struct v1_2_Constants
 {
-	GtkAdjustment *inj_open_time;		/* Adjustment */
-	GtkAdjustment *batt_corr;		/* Adjustment */
-	GtkAdjustment *pwm_curr_lim;		/* Adjustment */
-	GtkAdjustment *pwm_time_thresh;		/* Adjustment */
-	GtkAdjustment *fast_idle_thresh;	/* Adjustment */
-	GtkAdjustment *req_fuel_1;		/* Adjustment */
-	GtkAdjustment *req_fuel_2;		/* Adjustment */
-	GtkAdjustment *crank_pulse_neg40;	/* Adjustment */
-	GtkAdjustment *crank_pulse_pos170;	/* Adjustment */
-	GtkAdjustment *crank_priming_pulse;	/* Adjustment */
-	GtkAdjustment *afterstart_enrich;	/* Adjustment */
-	GtkAdjustment *afterstart_num_cycles;	/* Adjustment */
+	GtkAdjustment *inj_open_time_adj;	/* Adjustment */
+	GtkAdjustment *batt_corr_adj;		/* Adjustment */
+	GtkAdjustment *pwm_curr_lim_adj;	/* Adjustment */
+	GtkAdjustment *pwm_time_max_adj;	/* Adjustment */
+	GtkAdjustment *fast_idle_thresh_adj;	/* Adjustment */
+	GtkAdjustment *req_fuel_1_adj;		/* Adjustment */
+	GtkAdjustment *req_fuel_2_adj;		/* Adjustment */
+	GtkAdjustment *cr_pulse_neg40_adj;	/* Adjustment */
+	GtkAdjustment *cr_pulse_pos170_adj;	/* Adjustment */
+	GtkAdjustment *cr_priming_pulse_adj;	/* Adjustment */
+	GtkAdjustment *as_enrich_adj;		/* Adjustment */
+	GtkAdjustment *as_num_cycles_adj;	/* Adjustment */
 	GtkWidget *warmup_entries[8];		/* Text Entries */
-	GtkWidget *tps_trig_thresh;		/* Text Entry */
-	GtkWidget *accel_duration;		/* Text Entry */
-	GtkWidget *cold_accel_addon;		/* Text Entry */
-	GtkWidget *cold_accel_mult;		/* Text Entry */
+	GtkWidget *tps_trig_thresh_ent;		/* Text Entry */
+	GtkWidget *accel_duration_ent;		/* Text Entry */
+	GtkWidget *cold_accel_addon_ent;	/* Text Entry */
+	GtkWidget *cold_accel_mult_ent;		/* Text Entry */
 	GtkWidget *accel_bins[4];		/* Text Entries */
-	GtkWidget *decel_cut;			/* Text Entry */
-	GtkWidget *ego_temp_active;		/* Text Entry */
-	GtkWidget *ego_rpm_active;		/* Text Entry */
-	GtkWidget *ego_sw_voltage;		/* Text Entry */
-	GtkWidget *ego_step;			/* Text Entry */
-	GtkWidget *ego_events;			/* Text Entry */
-	GtkWidget *ego_limit;			/* Text Entry */
+	GtkWidget *decel_cut_ent;		/* Text Entry */
+	GtkWidget *ego_temp_active_ent;		/* Text Entry */
+	GtkWidget *ego_rpm_active_ent;		/* Text Entry */
+	GtkWidget *ego_sw_voltage_ent;		/* Text Entry */
+	GtkWidget *ego_step_ent;		/* Text Entry */
+	GtkWidget *ego_events_ent;		/* Text Entry */
+	GtkWidget *ego_limit_ent;		/* Text Entry */
 };
 
 #endif

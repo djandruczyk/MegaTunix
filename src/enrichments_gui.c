@@ -65,7 +65,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_NEG_40));
-	constants.crank_pulse_neg40 = adj;
+	constants.cr_pulse_neg40_adj = adj;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
 	label = gtk_label_new("-40 Deg. F");
@@ -78,7 +78,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_170));
-	constants.crank_pulse_pos170 = adj;
+	constants.cr_pulse_pos170_adj = adj;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
 	label = gtk_label_new("170 Deg. F");
@@ -91,7 +91,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PRIMING_PULSE));
-	constants.crank_priming_pulse = adj;
+	constants.cr_priming_pulse_adj = adj;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,2,3,0,1);
 	label = gtk_label_new("Priming Pulse");
@@ -115,7 +115,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(AFTERSTART_ENRICH));
-	constants.afterstart_enrich = adj;
+	constants.as_enrich_adj = adj;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
@@ -129,7 +129,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_170));
-	constants.afterstart_num_cycles = adj;
+	constants.as_num_cycles_adj = adj;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
@@ -199,7 +199,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	constants.tps_trig_thresh = entry;
+	constants.tps_trig_thresh_ent = entry;
 
 	label = gtk_label_new("TPS Trigger Threshold\n(V/Sec)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -212,7 +212,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	constants.accel_duration = entry;
+	constants.accel_duration_ent = entry;
 
 	label = gtk_label_new("Accel Enrich\n Duration (Sec)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -225,7 +225,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	constants.cold_accel_addon = entry;
+	constants.cold_accel_addon_ent = entry;
 
 	label = gtk_label_new("Cold Accel Enrich\nAdd-On (ms)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -238,7 +238,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	constants.cold_accel_mult = entry;
+	constants.cold_accel_mult_ent = entry;
 
 	label = gtk_label_new("Cold Accel Enrich\nMultiplier (%)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -289,7 +289,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.decel_cut = entry;
+	constants.decel_cut_ent = entry;
 
 	label = gtk_label_new("Decel Fuel Cut\n(Percent)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -314,7 +314,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.ego_temp_active = entry;
+	constants.ego_temp_active_ent = entry;
 
 	label = gtk_label_new("Coolant Temp Activation\n(Deg F.)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -327,7 +327,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.ego_rpm_active = entry;
+	constants.ego_rpm_active_ent = entry;
 
 	label = gtk_label_new("EGO Active RPM");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -340,7 +340,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.ego_sw_voltage = entry;
+	constants.ego_sw_voltage_ent = entry;
 
 	label = gtk_label_new("EGO Switching Voltage");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -353,7 +353,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.ego_step = entry;
+	constants.ego_step_ent = entry;
 
 	label = gtk_label_new("EGO Step (Percent)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -366,7 +366,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.ego_events = entry;
+	constants.ego_events_ent = entry;
 
 	label = gtk_label_new("# of Ignition Events\nBetween Steps");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -379,7 +379,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	constants.ego_limit = entry;
+	constants.ego_limit_ent = entry;
 
 	label = gtk_label_new("EGO +/- Limit (Percent)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -388,7 +388,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Commands");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
 	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),50);
