@@ -588,7 +588,7 @@ int build_runtime(GtkWidget *parent_frame)
 	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
         gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");

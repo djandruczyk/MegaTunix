@@ -46,6 +46,7 @@ int build_vetable(GtkWidget *parent_frame)
 	extern GtkTooltips *tip;
 
 	vbox = gtk_vbox_new(FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
 	swin = gtk_scrolled_window_new(NULL,NULL);
