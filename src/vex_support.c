@@ -34,8 +34,6 @@ extern GtkWidget *tools_view;
 extern gboolean dualtable;
 static gint import_page = -1; 
 
-extern struct Ve_Const_Std *ve_const_p0;
-extern struct Ve_Const_Std *ve_const_p1;
 
 	/* Datastructure for VE table import fields.  */
 static struct
@@ -101,7 +99,9 @@ gboolean vetable_export(void *ptr)
 	gint i = 0;
 	gint j = 0;
 	gint count = 0;
-	unsigned char * ve_const_arr;
+	gint index = 0;
+	extern unsigned char * ms_data;
+	unsigned char * ve_const_arr = NULL;
 	gchar * tmpbuf;
 	gchar *buffer; 
 	gint pos = 0;
@@ -123,7 +123,7 @@ gboolean vetable_export(void *ptr)
 	pos += g_sprintf(buffer+pos, "Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min);
 	pos += g_sprintf(buffer+pos, "Page 0\n");
 	pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");
-	ve_const_arr = (unsigned char *)ve_const_p0;
+	ve_const_arr = (unsigned char *)ms_data;
 	for (i=0;i<8;i++)
 	{
 		pos += g_sprintf(buffer+pos,"   [%3d] = %3d\n",
@@ -137,29 +137,27 @@ gboolean vetable_export(void *ptr)
 	}
 	pos += g_sprintf(buffer+pos, "VE Table                        [  8][  8]\n");
 	pos += g_sprintf(buffer+pos, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
-	for (i=1;i<=8;i++)
+	index = 0;
+	for (i=0;i<8;i++)
 	{
-		pos += g_sprintf(buffer+pos,"   [%3d] =",i-1);
-		for (j=1;j<=8;j++)
+		pos += g_sprintf(buffer+pos,"   [%3d] =",i);
+		for (j=0;j<8;j++)
 		{
-			if (j == 1)
-			{
+			if (j == 0)
 				pos += g_sprintf (buffer+pos, "  %3d",
-						ve_const_arr[((i*j)-1)
+						ve_const_arr[index
 						+VE1_TABLE_OFFSET]);
-			}
+                                                
 			else
-			{
 				pos += g_sprintf (buffer+pos, "   %3d",
-						ve_const_arr[((i*j)-1)
+						ve_const_arr[index
 						+VE1_TABLE_OFFSET]);
-			}
+			index++;
 		}
 		pos += g_sprintf(buffer+pos,"\n");
 	}
 	if (dualtable == TRUE)
 	{
-		ve_const_arr = (unsigned char *)ve_const_p1;
 		pos += g_sprintf(buffer+pos, "Page 1\n");
 		pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");
 		for (i=0;i<8;i++)
@@ -175,23 +173,21 @@ gboolean vetable_export(void *ptr)
 		}
 		pos += g_sprintf(buffer+pos, "VE Table                        [  8][  8]\n");
 		pos += g_sprintf(buffer+pos, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
-		for (i=1;i<=8;i++)
+		index = 0;
+		for (i=0;i<8;i++)
 		{
-			pos += g_sprintf(buffer+pos,"   [%3d] =",i-1);
-			for (j=1;j<=8;j++)
+			pos += g_sprintf(buffer+pos,"   [%3d] =",i);
+			for (j=0;j<8;j++)
 			{
-				if (j == 1)
-				{
+				if (j == 0)
 					pos += g_sprintf (buffer+pos, "  %3d",
-							ve_const_arr[((i*j)-1)
+							ve_const_arr[index
 							+VE2_TABLE_OFFSET]);
-				}
 				else
-				{
 					pos += g_sprintf (buffer+pos, "   %3d",
-							ve_const_arr[((i*j)-1)
+							ve_const_arr[index
 							+VE2_TABLE_OFFSET]);
-				}
+				index++;
 			}
 			pos += g_sprintf(buffer+pos,"\n");
 		}
@@ -201,7 +197,9 @@ gboolean vetable_export(void *ptr)
 	if (status != G_IO_STATUS_NORMAL)
 		fprintf(stderr,__FILE__": Error exporting VEX file\n");
 
+#ifdef DEBUG
 	fprintf(stderr,__FILE__": count of bytes written: %i\n",count);
+#endif
 
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
 	update_logbar(tools_view,NULL,tmpbuf,TRUE);
@@ -645,18 +643,19 @@ void reset_tmp_bins()
 void feed_import_data_to_ms()
 {
 	gint i = 0;
-	extern struct Ve_Const_Std *backup_ve_const_p0;
-	extern struct Ve_Const_Std *backup_ve_const_p1;
+	extern unsigned char *ms_data;
+	extern unsigned char *ms_data_backup;
 	unsigned char * ptr;
 	gchar * tmpbuf;
+
+	/* Backup the ms data first... */
+	memset((void *)ms_data_backup, 0, 2*MS_PAGE_SIZE);
+	memcpy(ms_data_backup, ms_data,2*MS_PAGE_SIZE);
+	ptr = (unsigned char *) ms_data;
 
 	/* check to make sure we update the right page */
 	if (import_page == 0)
 	{
-		/* Backup the ms data first... */
-		memset((void *)backup_ve_const_p0, 0, MS_PAGE_SIZE);
-		memcpy(backup_ve_const_p0, ve_const_p0,MS_PAGE_SIZE);
-		ptr = (unsigned char *) ve_const_p0;
 		for (i=0;i<RPM_BINS_MAX;i++)
 		{
 			*(ptr+VE1_RPM_BINS_OFFSET+i) = vex_import.rpm_bins[i];
@@ -671,10 +670,6 @@ void feed_import_data_to_ms()
 	}
 	else	/* Page 1, dualtable and ignition variants... */
 	{
-		/* Backup the ms data first... */
-		memset((void *)backup_ve_const_p1, 0, MS_PAGE_SIZE);
-		memcpy(backup_ve_const_p1, ve_const_p1,MS_PAGE_SIZE);
-		ptr = (unsigned char *) ve_const_p1;
 		for (i=0;i<RPM_BINS_MAX;i++)
 		{
 			*(ptr+VE2_RPM_BINS_OFFSET+i) = vex_import.rpm_bins[i];
@@ -695,10 +690,9 @@ void revert_to_previous_data()
 {
 	gchar * tmpbuf;
 	/* Called to back out a load of a VEtable from VEX import */
-	extern struct Ve_Const_Std *backup_ve_const_p0;
-	extern struct Ve_Const_Std *backup_ve_const_p1;
-	memcpy(ve_const_p0, backup_ve_const_p0, MS_PAGE_SIZE);
-	memcpy(ve_const_p1, backup_ve_const_p1, MS_PAGE_SIZE);
+	extern unsigned char * ms_data;
+	extern unsigned char * ms_data_backup;
+	memcpy(ms_data, ms_data_backup, 2*MS_PAGE_SIZE);
 	update_ve_const();
 	gtk_widget_set_sensitive(buttons.tools_revert_but,FALSE);
 	tmpbuf = g_strdup("Reverting to previous settings....\n");

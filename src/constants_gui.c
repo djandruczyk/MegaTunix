@@ -24,7 +24,7 @@ extern struct DynamicSpinners spinners;
 struct DynamicAdjustments adjustments;
 struct DynamicLabels labels;
 struct DynamicButtons buttons;
-extern struct Ve_Widgets *page0_widgets;
+extern struct Ve_Widgets *ve_widgets;
 extern GdkColor black;
 
 void build_constants(GtkWidget *parent_frame)
@@ -133,7 +133,7 @@ void build_constants(GtkWidget *parent_frame)
 	/* Injector Open Time */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	page0_widgets->widget[93] = spinner;
+	ve_widgets->widget[93] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -159,7 +159,7 @@ void build_constants(GtkWidget *parent_frame)
 	/* Battery Voltage Correction Factor */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	page0_widgets->widget[97] = spinner;
+	ve_widgets->widget[97] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -200,7 +200,7 @@ void build_constants(GtkWidget *parent_frame)
 	/* PWM Current Limit % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	page0_widgets->widget[95] = spinner;
+	ve_widgets->widget[95] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -227,7 +227,7 @@ void build_constants(GtkWidget *parent_frame)
 	/* PWM Time threshold */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	page0_widgets->widget[96] = spinner;
+	ve_widgets->widget[96] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -266,7 +266,7 @@ void build_constants(GtkWidget *parent_frame)
 	adjustments.fast_idle_temp_adj = adj;
 	spinner = gtk_spin_button_new(adj,0,0);
 	spinners.fast_idle_thresh_spin = spinner;
-	page0_widgets->widget[121] = spinner;
+	ve_widgets->widget[121] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));

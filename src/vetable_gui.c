@@ -23,8 +23,7 @@
 struct DynamicMisc misc;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
-extern struct Ve_Widgets *page0_widgets;
-extern struct Ve_Widgets *page1_widgets;
+extern struct Ve_Widgets *ve_widgets;
 
 void build_vetable(GtkWidget *parent_frame)
 {
@@ -97,9 +96,8 @@ void build_vetable(GtkWidget *parent_frame)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		spinner = gtk_spin_button_new(adj,1,0);
-		page0_widgets->widget[VE1_KPA_BINS_OFFSET+index] = spinner;
+		ve_widgets->widget[VE1_KPA_BINS_OFFSET+index] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
-		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE1_KPA_BINS_OFFSET+index));
 		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -145,9 +143,7 @@ void build_vetable(GtkWidget *parent_frame)
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
 					1.0,1.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
-			page0_widgets->widget[VE1_TABLE_OFFSET+index] = spinner;
-			g_object_set_data(G_OBJECT(spinner),"page",
-					GINT_TO_POINTER(0));
+			ve_widgets->widget[VE1_TABLE_OFFSET+index] = spinner;
 			g_object_set_data(G_OBJECT(spinner),"offset", 
 					GINT_TO_POINTER(VE1_TABLE_OFFSET+index));
 			g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -187,9 +183,8 @@ void build_vetable(GtkWidget *parent_frame)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(100.0,100.0,25500,100,100,0);
 		spinner = gtk_spin_button_new(adj,1,0);
-		page0_widgets->widget[VE1_RPM_BINS_OFFSET+x] = spinner;
+		ve_widgets->widget[VE1_RPM_BINS_OFFSET+x] = spinner;
 		gtk_widget_set_size_request(spinner,54,-1);
-		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE1_RPM_BINS_OFFSET+x));
 		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -264,9 +259,8 @@ void build_vetable(GtkWidget *parent_frame)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		spinner = gtk_spin_button_new(adj,1,0);
-		page1_widgets->widget[VE2_KPA_BINS_OFFSET+index] = spinner;
+		ve_widgets->widget[VE2_KPA_BINS_OFFSET+index] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
-		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(1));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE2_KPA_BINS_OFFSET+index));
 		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -313,9 +307,7 @@ void build_vetable(GtkWidget *parent_frame)
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
 					1.0,1.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
-			page1_widgets->widget[VE2_TABLE_OFFSET+index] = spinner;
-			g_object_set_data(G_OBJECT(spinner),"page",
-					GINT_TO_POINTER(1));
+			ve_widgets->widget[VE2_TABLE_OFFSET+index] = spinner;
 			g_object_set_data(G_OBJECT(spinner),"offset", 
 					GINT_TO_POINTER(VE2_TABLE_OFFSET+index));
 			g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -355,9 +347,8 @@ void build_vetable(GtkWidget *parent_frame)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(100.0,100.0,25500,100,100,0);
 		spinner = gtk_spin_button_new(adj,1,0);
-		page1_widgets->widget[VE2_RPM_BINS_OFFSET+x] = spinner;
+		ve_widgets->widget[VE2_RPM_BINS_OFFSET+x] = spinner;
 		gtk_widget_set_size_request(spinner,54,-1);
-		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(1));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE2_RPM_BINS_OFFSET+x));
 		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",

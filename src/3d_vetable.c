@@ -31,8 +31,6 @@
 static int grid = 8;
 static GLuint font_list_base;
 
-extern struct Ve_Const_Std *ve_const_p0;
-extern struct Ve_Const_Std *ve_const_p1;
 extern struct Runtime_Common *runtime;
 
 #define DEFAULT_WIDTH  475
@@ -52,8 +50,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
         GdkGLConfig *gl_config;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
-	extern struct Ve_Widgets *page0_widgets;
-	extern struct Ve_Widgets *page1_widgets;
+	extern struct Ve_Widgets *ve_widgets;
 	gchar *tmpbuf;
 	gint tbl = (gint)data;
 
@@ -76,10 +73,10 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	g_object_set_data(G_OBJECT(window),"data",(gpointer)ve_view);
 	/* Bind pointer to veview to an object for retrieval elsewhere */
 	if (tbl == 0)
-		g_object_set_data(G_OBJECT(page0_widgets->widget[0]),
+		g_object_set_data(G_OBJECT(ve_widgets->widget[0]),
 				"data",(gpointer)ve_view);
 	else
-		g_object_set_data(G_OBJECT(page1_widgets->widget[0]),
+		g_object_set_data(G_OBJECT(ve_widgets->widget[0+MS_PAGE_SIZE]),
 				"data",(gpointer)ve_view);
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
@@ -197,18 +194,17 @@ gint reset_3d_winstat(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
 	gint tbl = -1;
-	extern struct Ve_Widgets *page0_widgets;
-	extern struct Ve_Widgets *page1_widgets;
+	extern struct Ve_Widgets *ve_widgets;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 	tbl = ve_view->table;
 	winstat[ve_view->table] = FALSE;
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 	if (tbl == 0)
-		g_object_set_data(G_OBJECT(page0_widgets->widget[0]),
+		g_object_set_data(G_OBJECT(ve_widgets->widget[0]),
 				"data",NULL);
 	else
-		g_object_set_data(G_OBJECT(page1_widgets->widget[0]),
+		g_object_set_data(G_OBJECT(ve_widgets->widget[0+MS_PAGE_SIZE]),
 				"data",NULL);
 	return FALSE;  /* MUST return false otherwise 
 			* other handlers WILL NOT run. */
@@ -422,14 +418,15 @@ void ve_realize (GtkWidget *widget, gpointer data)
 void ve_calculate_scaling(void *ptr)
 {
 	int i=0;
+	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_ptr = NULL;
-	struct Ve_View_3D *ve_view;
+	struct Ve_View_3D *ve_view = NULL;
 
 	ve_view = (struct Ve_View_3D *)ptr;
 	if (ve_view->table == 0) /* all std code derivatives..*/
-		ve_ptr = ve_const_p0;
+		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)
-		ve_ptr = ve_const_p1;
+		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_calculate_scaling(), table out of range..\n");
 	
@@ -462,14 +459,15 @@ void ve_draw_ve_grid(void *ptr)
 {
 	int rpm=0, load=0;
 	struct Ve_Const_Std *ve_ptr = NULL;
-	struct Ve_View_3D *ve_view;
+	struct Ve_View_3D *ve_view = NULL;
+	extern unsigned char *ms_data;
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
 	if (ve_view->table == 0) /* all std code derivatives..*/
-		ve_ptr = ve_const_p0;
+		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)	/* DT code */
-		ve_ptr = ve_const_p1;
+		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_ve_grid(), table out of range..\n");
 	
@@ -507,13 +505,14 @@ void ve_draw_ve_grid(void *ptr)
 void ve_draw_active_indicator(void *ptr)
 {
 	struct Ve_Const_Std *ve_ptr = NULL;
-	struct Ve_View_3D *ve_view;
+	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
+	extern unsigned char * ms_data;
 
 	if (ve_view->table == 0) /* all std code derivatives..*/
-		ve_ptr = ve_const_p0;
+		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)
-		ve_ptr = ve_const_p1;
+		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_active_indicator(), table out of range..\n");
 	/* Render a red dot at the active VE map position */
@@ -558,13 +557,14 @@ void ve_draw_axis(void *ptr)
 	float top = 0.0;
 	gchar label[6];
 	struct Ve_Const_Std *ve_ptr = NULL;
-	struct Ve_View_3D *ve_view;
+	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
+	extern unsigned char *ms_data;
 
 	if (ve_view->table == 0) /* all std code derivatives..*/
-		ve_ptr = ve_const_p0;
+		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)
-		ve_ptr = ve_const_p1;
+		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_axis(), table out of range..\n");
 	
@@ -718,26 +718,25 @@ void ve_load_font_metrics(void)
 
 gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	gint page = 0;
 	gint value = 0;
 	gint offset = 0;
 	gint dload_val = 0;
-	extern struct Ve_Widgets *page0_widgets;
-	extern struct Ve_Widgets *page1_widgets;
+	extern struct Ve_Widgets *ve_widgets;
 	struct Ve_Const_Std *ve_ptr = NULL;
 	struct Ve_Widgets *widget_ptr = NULL;
-	struct Ve_View_3D *ve_view;
+	struct Ve_View_3D *ve_view = NULL;
+	extern unsigned char *ms_data;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"data");
 	if (ve_view->table == 0) /* all std code derivatives..*/
 	{
-		ve_ptr = ve_const_p0;
-		widget_ptr = page0_widgets;
+		ve_ptr = (struct Ve_Const_Std *) ms_data;
+		widget_ptr = ve_widgets;
 	}
 	else if (ve_view->table == 1)
 	{
-		ve_ptr = ve_const_p1;
-		widget_ptr = page1_widgets;
+		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
+		widget_ptr = ve_widgets+MS_PAGE_SIZE;
 	}
 	else
 		fprintf(stderr,__FILE__": Problem, ve_key_press_event(), table out of range..\n");
@@ -786,11 +785,12 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 #endif
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] < 255)
 			{
-				page = 0;  // < Change this when dualtable works
 				offset = (ve_view->active_load*8)+ve_view->active_rpm;
+				if (ve_view->table == 1)
+					offset+=MS_PAGE_SIZE;
 				value = ve_ptr->ve_bins[offset] + 1;
-				dload_val = convert_before_download(offset,value,page);
-				write_ve_const(dload_val,offset,page);
+				dload_val = convert_before_download(offset,value);
+				write_ve_const(dload_val,offset);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
 							widget_ptr->widget[offset]),
 						value);
@@ -805,11 +805,12 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 #endif
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] > 0)
 			{
-				page = 0;  // < Change this when dualtable works
 				offset = (ve_view->active_load*8)+ve_view->active_rpm;
+				if (ve_view->table == 1)
+					offset+=MS_PAGE_SIZE;
 				value = ve_ptr->ve_bins[offset] - 1;
-				dload_val = convert_before_download(offset,value,page);
-				write_ve_const(dload_val,offset,page);
+				dload_val = convert_before_download(offset,value);
+				write_ve_const(dload_val,offset);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
 							widget_ptr->widget[offset]),
 						value);

@@ -34,93 +34,65 @@
  * put in the right place to be loaded...
  */
 
-extern struct Conversion_Chart * page0_conversions;
-extern struct Conversion_Chart * page1_conversions;
+extern struct Conversion_Chart *conversions;
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
-extern struct Ve_Const_Std *ve_const_p0;
-extern struct Ve_Const_Std *ve_const_p1;
-extern struct Ve_Widgets *page0_widgets;
-extern struct Ve_Widgets *page1_widgets;
+extern struct Ve_Widgets *ve_widgets;
 
 
 void read_conversions(void)
 {
 	gint i = 0;
-	gint j = 0;
 	gint dl_type;
 	struct Conversion_Chart *conv_chart=NULL;
-	struct Ve_Widgets *widget_list = NULL;
 
-	for (j=0;j<2;j++)
+	conv_chart = conversions;
+
+	for (i=0;i<2*MS_PAGE_SIZE;i++)
 	{
-		if (j == 0)
+		if (GTK_IS_OBJECT(ve_widgets->widget[i]))
 		{
-			conv_chart = page0_conversions;
-			widget_list = page0_widgets;
-		}
-		else
-		{
-			conv_chart = page1_conversions;
-			widget_list = page1_widgets;
-		}
-
-		for (i=0;i<MS_PAGE_SIZE;i++)
-		{
-			if (GTK_IS_OBJECT(widget_list->widget[i]))
+			dl_type = (gint)g_object_get_data(
+					G_OBJECT(ve_widgets->widget[i]),
+					"dl_type");
+			if (dl_type == IMMEDIATE)
 			{
-				dl_type = (gint)g_object_get_data(
-						G_OBJECT(widget_list->widget[i]),
-						"dl_type");
-				if (dl_type == IMMEDIATE)
-				{
-					conv_chart->conv_type[i] = 
-						(gint)g_object_get_data(
-									G_OBJECT(
-										widget_list->widget[i]),
-									"conv_type");
-					conv_chart->conv_factor[i] = 
-						(gfloat)((gint)
-							 g_object_get_data(
-								 G_OBJECT(
-									 widget_list->widget[i]),
-								 "conv_factor_x100"))
-						/100.0;
-				}
+				conv_chart->conv_type[i] = (gint)
+					g_object_get_data(G_OBJECT
+							(ve_widgets->widget[i]),
+							"conv_type");
+				conv_chart->conv_factor[i] = (gfloat)((gint)
+						g_object_get_data(G_OBJECT
+							(ve_widgets->widget[i]),
+							"conv_factor_x100"))
+					/100.0;
+			}
 
-			}
-			if (i == 90)	/* Required fuel special case */
-			{
-				conv_chart->conv_type[i] = MULT;
-				conv_chart->conv_factor[i] = 10.0;
-			}
+		}
+		if (i == 90)	/* Required fuel special case */
+		{
+			conv_chart->conv_type[i] = MULT;
+			conv_chart->conv_factor[i] = 10.0;
+		}
 #ifdef DEBUG
-			printf("Page %i Offset, %i, conv_type %i, conv_factor %f\n",j,i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
+		printf("BASE Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
 #endif
-		}
 	}
 	return;
 }
 
-gint convert_before_download(gint offset, gfloat value, gint page)
+gint convert_before_download(gint offset, gfloat value)
 {
 	gint return_value = 0;
 	gint tmp_val = (gint)(value+0.001);
 	gfloat factor;
 	unsigned char *ve_const_arr; 
 	struct Conversion_Chart *conv_chart;
+	extern unsigned char *ms_data;
 
-	if (page == 0)
-	{	/* Assign pointers to point at Page 0 conversions */
-		conv_chart = page0_conversions;
-		ve_const_arr = (unsigned char *)ve_const_p0;
-	}
-	else
-	{	/* Assign pointers to point at Page 1 conversions */
-		conv_chart = page1_conversions;
-		ve_const_arr = (unsigned char *)ve_const_p1;
-	}
+	conv_chart = conversions;
+	ve_const_arr = (unsigned char *)ms_data;
 
 	factor = conv_chart->conv_factor[offset];
 
@@ -152,23 +124,16 @@ gint convert_before_download(gint offset, gfloat value, gint page)
 	return (return_value);
 }
 
-gfloat convert_after_upload(gint offset, gint page)
+gfloat convert_after_upload(gint offset)
 {
 	gfloat return_value = 0.0;
 	gfloat factor = 0.0;
 	unsigned char *ve_const_arr;
 	struct Conversion_Chart *conv_chart;
+	extern unsigned char *ms_data;
 
-	if (page == 0)
-	{	/* Assign pointers to point at Page 0 conversions */
-		conv_chart = page0_conversions;
-		ve_const_arr = (unsigned char *)ve_const_p0;
-	}
-	else
-	{	/* Assign pointers to point at Page 1 conversions */
-		conv_chart = page1_conversions;
-		ve_const_arr = (unsigned char *)ve_const_p1;
-	}
+	conv_chart = conversions;
+	ve_const_arr = (unsigned char *)ms_data;
 
 	factor = conv_chart->conv_factor[offset];
 

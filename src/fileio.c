@@ -253,9 +253,6 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			}
 			vexfile = g_strdup(selected_filename);
 			vex_open = TRUE;
-			gtk_label_set_text(GTK_LABEL(
-						labels.vex_file_lab),
-					selected_filename);
 			if (vex_comment == NULL)
 				tmpbuf = g_strdup_printf("VEX File Opened. VEX Comment undefined, exporting without one.\n");
 			else
@@ -275,17 +272,11 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			}
 			vexfile = g_strdup(selected_filename);
 			vex_open = TRUE;
-			gtk_label_set_text(GTK_LABEL(
-						labels.vex_file_lab),
-					selected_filename);
 			tmpbuf = g_strdup_printf("VEX File Opened.\n");
 			update_logbar(tools_view,NULL,tmpbuf,TRUE);
 			g_free(tmpbuf);
-			printf("calling import routine\n");
 			vetable_import(iofile);
-			printf("returnd from import routine\n");
 			close_file (iofile);
-			printf("returing from closing file\n");
 			break;
 		default:
 			printf("ERROR in check_filename()\n");
@@ -371,7 +362,6 @@ void truncate_file(FileIoType filetype, gchar *filename)
 	switch (filetype)
 	{
 		case DATALOG_EXPORT:
-			printf("truncating the datalog\n");
 			if (truncate(filename,0) == 0)
 				tmpbuf = g_strdup_printf("DataLog Truncation successful\n");
 			else
@@ -380,7 +370,6 @@ void truncate_file(FileIoType filetype, gchar *filename)
 			g_free(tmpbuf);
 			break;
 		case VE_EXPORT:
-			printf("truncating the vexfile \n");
 			if (truncate(filename,0) == 0)
 				tmpbuf = g_strdup_printf("VE Export file Truncated successfully\n");
 			else
@@ -407,17 +396,9 @@ void restore_all_ms_settings(void *ptr)
 /*
 	GIOChannel *iochannel;
 	struct Ve_Const_Std *local_buffer;
-	extern struct Ve_Const_Std *ve_const_p0;
-	extern struct Ve_Const_Std *ve_const_p1;
-	extern struct Ve_Const_Std *ve_const_p0;
-	extern struct Ve_Const_Std *ve_const_p1;
-	extern struct Ve_Const_Std *backup_ve_const_p0;
-	extern struct Ve_Const_Std *backup_ve_const_p1;
 
 	local_buffer = g_malloc(MS_PAGE_SIZE);
 	// Backup currently active parameters into backup structure 
-        memcpy(backup_ve_const_p0, ve_const_p0, MS_PAGE_SIZE);
-        memcpy(backup_ve_const_p1, ve_const_p1, MS_PAGE_SIZE);
 	
 	fprintf(stderr,__FILE__": restore all MS settings from file isn't written yet\n");
 	fprintf(stderr,__FILE__": should restore from %s\n",filename);

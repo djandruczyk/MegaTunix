@@ -20,14 +20,14 @@
 /* Prototypes */
 void read_conversions(void);
 void reset_temps(gpointer);
-gint convert_before_download(gint, gfloat, gint);
-gfloat convert_after_upload(gint, gint);
+gint convert_before_download(gint, gfloat);
+gfloat convert_after_upload(gint);
 /* Prototypes */
 
 struct Conversion_Chart
 {
-	gint conv_type[MS_PAGE_SIZE];
-	gfloat conv_factor[MS_PAGE_SIZE];
+	gint conv_type[2*MS_PAGE_SIZE];
+	gfloat conv_factor[2*MS_PAGE_SIZE];
 };
 
 #endif

@@ -32,15 +32,6 @@ gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
-extern gboolean raw_reader_running;
-extern struct Serial_Params *serial_params;
-extern struct Raw_Runtime_Std *raw_runtime;
-extern struct Runtime_Common *runtime;
-extern struct Runtime_Common *runtime_last;
-extern struct Ve_Const_Std *ve_const_p0;
-extern struct Ve_Const_Std *ve_const_p1;
-extern struct Ve_Const_Std *ve_const_p0_tmp;
-extern struct Ve_Const_Std *ve_const_p1_tmp;
        
 int handle_ms_data(InputData which_data)
 {
@@ -49,6 +40,13 @@ int handle_ms_data(InputData which_data)
 	unsigned char buf[255];
 	unsigned char *ptr = buf;
 	struct pollfd ufds;
+	struct Raw_Runtime_Std *raw_runtime = NULL;
+	extern unsigned char *ms_data;
+	extern unsigned char *ms_data_last;
+	extern gboolean raw_reader_running;
+	extern struct Serial_Params *serial_params;
+	extern struct Runtime_Common *runtime;
+	extern struct Runtime_Common *runtime_last;
 
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
@@ -106,12 +104,8 @@ int handle_ms_data(InputData which_data)
 			}
 			else
 			{
-				/* copy data out of temp buffer into struct for 
-				 * use elsewhere (datalogging)
-				 */
-				memcpy(raw_runtime,buf,
-						sizeof(struct Raw_Runtime_Std));
 
+				raw_runtime = (struct Raw_Runtime_Std *)buf;
 				/* Test for MS reset */
 				if (just_starting)
 				{
@@ -138,7 +132,7 @@ int handle_ms_data(InputData which_data)
 				 * as a void * and pass it a pointer to the new
 				 * area for the parsed data...
 				 */
-				post_process((void *)raw_runtime,(void *)runtime);
+				post_process((void *)buf,(void *)runtime);
 			}
 
 			break;
@@ -163,9 +157,9 @@ int handle_ms_data(InputData which_data)
 				 * comparison against to know if we have 
 				 * to burn stuff to flash.
 				 */
-				memcpy(ve_const_p0,buf,
+				memcpy(ms_data,buf,
 						sizeof(struct Ve_Const_Std));
-				memcpy(ve_const_p0_tmp,buf,
+				memcpy(ms_data_last,buf,
 						sizeof(struct Ve_Const_Std));
 
 				ms_ve_goodread_count++;
@@ -190,9 +184,9 @@ int handle_ms_data(InputData which_data)
 				 * comparison against to know if we have 
 				 * to burn stuff to flash.
 				 */
-				memcpy(ve_const_p1,buf,
+				memcpy(ms_data+MS_PAGE_SIZE,buf,
 						sizeof(struct Ve_Const_Std));
-				memcpy(ve_const_p1_tmp,buf,
+				memcpy(ms_data_last+MS_PAGE_SIZE,buf,
 						sizeof(struct Ve_Const_Std));
 
 				ms_ve_goodread_count++;

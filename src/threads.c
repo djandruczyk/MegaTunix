@@ -140,8 +140,8 @@ void *raw_reader_thread(void *params)
 	while(raw_reader_running == TRUE) 
 	{
 //		printf("thread looping\n");
-		if (dualtable)
-			set_ms_page(0);
+//		if (dualtable)
+//			set_ms_page(0);
 		write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)

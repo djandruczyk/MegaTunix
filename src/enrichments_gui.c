@@ -23,7 +23,7 @@ struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicLabels labels;
-extern struct Ve_Widgets *page0_widgets;
+extern struct Ve_Widgets *ve_widgets;
 const gchar *F_warmup_labels[] = {"-40","-20",  "0", "20", "40",
 			         "60", "80","100","130","160"};
 const gchar *C_warmup_labels[] = {"-40","-28.8",  "-17.7", "-6.6", "4.4",
@@ -73,7 +73,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Cranking pulsewidth at -40deg F */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	page0_widgets->widget[64] = spinner;
+	ve_widgets->widget[64] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -99,7 +99,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Cranking pulsewidth at 170deg F */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	page0_widgets->widget[65] = spinner;
+	ve_widgets->widget[65] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -125,7 +125,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Priming pulse  */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
-	page0_widgets->widget[119] = spinner;
+	ve_widgets->widget[119] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -163,7 +163,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Afterstart Enrich % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(35.0,1.0,255.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,0,0);
-	page0_widgets->widget[66] = spinner;
+	ve_widgets->widget[66] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -189,7 +189,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Afterstart Enrich Number of engine cycles */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(250.0,1.0,255.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	page0_widgets->widget[67] = spinner;
+	ve_widgets->widget[67] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -234,7 +234,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		spinner = gtk_spin_button_new(adj,1,0);
-		page0_widgets->widget[WARMUP_BINS_OFFSET+i] = spinner;
+		ve_widgets->widget[WARMUP_BINS_OFFSET+i] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -293,7 +293,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* TPS trigger threashold */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,1,1);
-	page0_widgets->widget[83] = spinner;
+	ve_widgets->widget[83] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -320,7 +320,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Accel Enrich Duration (seconds) */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,1,1);
-	page0_widgets->widget[84] = spinner;
+	ve_widgets->widget[84] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -346,7 +346,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Cold Accel Addon at -40 deg */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,1,1);
-	page0_widgets->widget[82] = spinner;
+	ve_widgets->widget[82] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -372,7 +372,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Cold Accel Multiplier */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	page0_widgets->widget[123] = spinner;
+	ve_widgets->widget[123] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -419,7 +419,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
 		spinner = gtk_spin_button_new(adj,1,1);
-		page0_widgets->widget[ACCEL_BINS_OFFSET+i] = spinner;
+		ve_widgets->widget[ACCEL_BINS_OFFSET+i] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -455,7 +455,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* Decel Cut % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	page0_widgets->widget[85] = spinner;
+	ve_widgets->widget[85] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -556,7 +556,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	adjustments.ego_temp_adj = adj;
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.ego_temp_active_spin = spinner;
-	page0_widgets->widget[86] = spinner;
+	ve_widgets->widget[86] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -585,7 +585,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(
 			0.0,100.0,25500.0,100,1000.0,0);
 	spinner = gtk_spin_button_new(adj,0,0);
-	page0_widgets->widget[120] = spinner;
+	ve_widgets->widget[120] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -611,7 +611,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* EGO Switching Voltage */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,1,2);
-	page0_widgets->widget[122] = spinner;
+	ve_widgets->widget[122] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -637,7 +637,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* EGO Step in % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,100,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	page0_widgets->widget[88] = spinner;
+	ve_widgets->widget[88] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -664,7 +664,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* EGO # of ignition events between steps */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	page0_widgets->widget[87] = spinner;
+	ve_widgets->widget[87] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -691,7 +691,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* EGO Limit % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
-	page0_widgets->widget[89] = spinner;
+	ve_widgets->widget[89] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));

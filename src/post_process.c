@@ -33,8 +33,10 @@ void post_process(void *input, void *output)
 	struct Raw_Runtime_Dualtable *in = input;
 	struct Raw_Runtime_Std *in_std = input;
 	struct Runtime_Common *out = output;
-	extern struct Ve_Const_Std *ve_const_p0;
-	extern struct Ve_Const_Std *ve_const_p1;
+	extern unsigned char *ms_data;
+	struct Ve_Const_Std *ve_const_p0 = (struct Ve_Const_Std *) ms_data;
+//	struct Ve_Const_Std *ve_const_p1 = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
+
 	gint divider = 0;
 	gint nsquirts = 0;
 	gfloat cycletime = 0.0;
@@ -99,6 +101,7 @@ void post_process(void *input, void *output)
 	out->vecurr1 = in->vecurr1;
 	if (dualtable)
 	{
+/*
 		out->vecurr2 = in->vecurr2;
 		out->pw2 = (float)in->pw2 / 10.0;
 		nsquirts = (ve_const_p1->config11.bit.cylinders+1)/ve_const_p1->divider;
@@ -114,6 +117,7 @@ void post_process(void *input, void *output)
 		//out->dcycle2 = (float) out->pw2 / (1200.0 / (float) out->rpm);
 		out->dcycle2 = 100.0 *nsquirts/divider* (float) out->pw1 / cycletime;
 		out->idleDC = in->idleDC;
+*/
 	}
 	else
 	{

@@ -634,15 +634,14 @@ gboolean update_runtime_vars()
 	extern struct Runtime_Common *runtime_last;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
-	extern struct Ve_Widgets *page0_widgets;
-	extern struct Ve_Widgets *page1_widgets;
+	extern struct Ve_Widgets *ve_widgets;
 
 	gdk_threads_enter();
 
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(page0_widgets->widget[0]),"data");
+				G_OBJECT(ve_widgets->widget[0]),"data");
 	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(page1_widgets->widget[0]),"data");
+				G_OBJECT(ve_widgets->widget[0+MS_PAGE_SIZE]),"data");
 
 	/* The additional NULL test is to avoid a timing-based problem
 	 * where ve_view can exist, but the window doesn't yet.

@@ -145,7 +145,6 @@ struct DynamicLabels
 	GtkWidget *runtime_mat_lab;
 	GtkWidget *p0_map_tps_lab;
 	GtkWidget *p1_map_tps_lab;
-	GtkWidget *vex_file_lab;
 	GtkWidget *dlog_file_lab;
 	GtkWidget *warmwiz_clt_lab;
 	GtkWidget *ww_clt_lab;
@@ -227,7 +226,7 @@ struct DynamicEntries
 
 struct Ve_Widgets
 {
-	GtkWidget *widget[MS_PAGE_SIZE];
+	GtkWidget *widget[2*MS_PAGE_SIZE];
 };
 
 struct Logables

@@ -26,7 +26,7 @@ extern struct DynamicProgress progress;
 extern struct DynamicButtons buttons;
 extern struct DynamicSpinners spinners;
 extern struct DynamicMisc misc;
-extern struct Ve_Widgets *page0_widgets;
+extern struct Ve_Widgets *ve_widgets;
 extern GdkColor red;
 
 
@@ -72,7 +72,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	for (i=0;i<10;i++)
 	{
-		tmpspin = page0_widgets->widget[WARMUP_BINS_OFFSET+i];
+		tmpspin = ve_widgets->widget[WARMUP_BINS_OFFSET+i];
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 		spinner = gtk_spin_button_new(adj,1,0);
 		spinners.warmwizard[i] = spinner;
@@ -130,7 +130,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Priming pulse copy */
-	tmpspin = page0_widgets->widget[119];
+	tmpspin = ve_widgets->widget[119];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -140,7 +140,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Cranking Pulsewidth at -40 deg F */
-	tmpspin = page0_widgets->widget[64];
+	tmpspin = ve_widgets->widget[64];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -150,7 +150,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Cranking Pulsewidth at 170 deg F */
-	tmpspin = page0_widgets->widget[65];
+	tmpspin = ve_widgets->widget[65];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -182,7 +182,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Enrichment % */
-	tmpspin = page0_widgets->widget[66];
+	tmpspin = ve_widgets->widget[66];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,55,-1);
@@ -192,7 +192,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Number of cycles  */
-	tmpspin = page0_widgets->widget[67];
+	tmpspin = ve_widgets->widget[67];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,55,-1);

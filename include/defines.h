@@ -22,13 +22,13 @@
 
 /* Memory offsets */
 #define VE1_TABLE_OFFSET	0	/* From page 0 boundary */
-#define VE2_TABLE_OFFSET	0	/* From Page 1 boundary */
+#define VE2_TABLE_OFFSET	MS_PAGE_SIZE	/* From Page 0 boundary */
 #define WARMUP_BINS_OFFSET	68	/* From page 0 boundary */
 #define ACCEL_BINS_OFFSET	78	/* From page 0 boundary */
 #define VE1_RPM_BINS_OFFSET	100	/* From page 0 boundary */
-#define VE2_RPM_BINS_OFFSET	100	/* From Page 1 boundary */
+#define VE2_RPM_BINS_OFFSET	100+MS_PAGE_SIZE /* From Page 0 boundary */
 #define VE1_KPA_BINS_OFFSET	108	/* From page 0 boundary */
-#define VE2_KPA_BINS_OFFSET	108	/* From Page 1 boundary */
+#define VE2_KPA_BINS_OFFSET	108+MS_PAGE_SIZE /* From Page 0 boundary */
 
 /* Download modes */
 #define IMMEDIATE		0x10

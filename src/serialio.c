@@ -34,10 +34,6 @@ extern gboolean dualtable;
 extern gboolean raw_reader_running;
 extern GtkWidget *comms_view;
 extern struct DynamicMisc misc;
-extern struct Ve_Const_Std *ve_const_p0;
-extern struct Ve_Const_Std *ve_const_p0_tmp;
-extern struct Ve_Const_Std *ve_const_p1;
-extern struct Ve_Const_Std *ve_const_p1_tmp;
 struct Serial_Params *serial_params;
 gboolean connected;
 static gboolean burn_needed = FALSE;
@@ -211,8 +207,8 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request one batch of realtime vars */
-		if (dualtable)
-			set_ms_page(0);
+//		if (dualtable)
+//			set_ms_page(0);
 		res = write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
@@ -359,7 +355,7 @@ void set_ms_page(gint ms_page)
 		fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);
 }
 
-void write_ve_const(gint value, gint offset, gint page)
+void write_ve_const(gint value, gint offset)
 {
 	gint highbyte = 0;
 	gint lowbyte = 0;
@@ -368,6 +364,9 @@ void write_ve_const(gint value, gint offset, gint page)
 	gint res = 0;
 	gint count = 0;
 	char lbuff[3] = {0, 0, 0};
+	extern unsigned char *ms_data;
+	extern unsigned char *ms_data_last;
+	gchar * write_cmd = NULL;;
 
 	if (!connected)
 	{
@@ -396,6 +395,23 @@ void write_ve_const(gint value, gint offset, gint page)
 		return;
 	}
 
+	/* Handles variants and dualtable... */
+	if (offset > MS_PAGE_SIZE)
+	{
+		offset -= MS_PAGE_SIZE;
+		if (dualtable)
+			set_ms_page(1);
+//		if (igntion_variant)
+//			write_cmd = g_strdup("I");
+	
+	}
+	else
+	{
+		write_cmd = g_strdup("W");
+		if (dualtable)
+			set_ms_page(0);
+	}
+
 	lbuff[0]=offset;
 	if(twopart)
 	{
@@ -409,18 +425,16 @@ void write_ve_const(gint value, gint offset, gint page)
 		count = 2;
 	}
 
-	if (dualtable)
-		set_ms_page(page);
 
-	res = write (serial_params->fd,"W",1);	/* Send write command */
+	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	res = write (serial_params->fd,lbuff,count);	/* Send write command */
+	g_free(write_cmd);
 
 	/* We check to see if the last burn copy of the MS VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
-	res = memcmp(ve_const_p0_tmp,ve_const_p0,sizeof(struct Ve_Const_Std)) +
-		memcmp(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
+	res = memcmp(ms_data_last,ms_data,2*MS_PAGE_SIZE);
 	if (res == 0)
 	{
 		set_store_buttons_state(BLACK);
@@ -438,6 +452,8 @@ void write_ve_const(gint value, gint offset, gint page)
 
 void burn_flash()
 {
+	extern unsigned char *ms_data;
+	extern unsigned char *ms_data_last;
 	gboolean restart_reader = FALSE;
 
 	if (!connected)
@@ -453,9 +469,9 @@ void burn_flash()
 	/* doing this may NOT be necessary,  but who knows... */
 	write (serial_params->fd,"B",1);	/* Send Burn command */
 
-	/* sync temp buffer with current VE_constants */
-	memcpy(ve_const_p0_tmp,ve_const_p0,sizeof(struct Ve_Const_Std));
-	memcpy(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
+	/* sync temp buffer with current burned settings */
+	memcpy(ms_data_last,ms_data,2*MS_PAGE_SIZE);
+
 	/* Take away the red on the "Store" button */
 	set_store_buttons_state(BLACK);
 	burn_needed = FALSE;
