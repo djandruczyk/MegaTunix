@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-/* DO NOT include defines.h, as protos.h already does... */
+#include <defines.h>
 #include <protos.h>
 #include <globals.h>
 #include <configfile.h>

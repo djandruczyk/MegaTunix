@@ -92,7 +92,6 @@ int framebuild_dispatch(GtkWidget *, int);
 /* gui_handlers.c */
 void leave(GtkWidget *, gpointer *);
 int std_button_handler(GtkWidget *, gpointer *);
-int text_entry_handler(GtkWidget *, gpointer *);
 void update_statusbar(GtkWidget *, int, gchar *);
 int spinner_changed(GtkWidget *, gpointer *);
 int classed_spinner_changed(GtkWidget *, gpointer *);

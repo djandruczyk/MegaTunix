@@ -13,9 +13,6 @@
 
 /* Configfile structs. (derived from an older version of XMMS) */
 
-#ifndef _REQ_FUEL_H_
-#define _REQ_FUEL_H_
-
 #include <config.h>
 #include <gtk/gtk.h>
 #include <defines.h>
@@ -25,21 +22,9 @@
 int req_fuel_popup = FALSE;
 static int rpmk_offset = 99;
 static GtkWidget *popup;
+struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,8,19,14.7};
 extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
-
-//struct Reqd_Fuel
-//{
-//        GtkWidget *disp_spin;           /* Engine size  1-1000 Cu-in */
-//        GtkWidget *cyls_spin;           /* # of Cylinders  1-12 */
-//        GtkWidget *inj_rate_spin;       /* injector flow rate (lbs/hr) */
-//        GtkWidget *afr_spin;            /* Air fuel ratio 10-25.5 */
-//        gint disp;
-//        gint cyls;
-//        gint inj_rate;
-//        gfloat afr;
-//}reqd_fuel = { NULL,NULL,NULL,NULL,350,8,19,14.7};
-struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,8,19,14.7};
 
 
 
@@ -207,7 +192,4 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 
         return TRUE;
 }
-
-#endif
-
 

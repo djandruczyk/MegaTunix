@@ -17,7 +17,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <sys/poll.h>
-/* DO NOT include defines.h, as protos.h already does... */
+#include <defines.h>
 #include <protos.h>
 #include <globals.h>
 

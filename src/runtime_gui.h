@@ -20,6 +20,13 @@
 #include <sys/types.h>
 #include <gtk/gtk.h>
 
+	/* This structure contains all the gui pointers to the 
+	 * objects used on the runtime_gui.  These are needed  
+	 * so the handlers have something to reference when updating
+	 * the widget in question when data arrives....
+	 * A Struct was just more convienent and kept things together.
+	 */
+
 struct v1_2_Runtime_Gui
 {
 	GtkWidget *secl_lab;		/* Counter label */

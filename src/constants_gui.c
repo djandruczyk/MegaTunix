@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-/* DO NOT include defines.h, as protos.h already does... */
+#include <defines.h>
 #include <protos.h>
 #include <globals.h>
 #include <constants.h>
@@ -23,7 +23,7 @@
 extern struct v1_2_Constants constants;
 
 /* arrays of the info for the combo boxes... */
-const gchar *control_strat[] = {"Speed-Density", "Alpha-N"};
+const gchar *control_strategy[] = {"Speed-Density", "Alpha-N"};
 const gchar *inj_per_cycle[] = {"1-Squirt", "2-Squirts","3-Squirts","4-Squirts",
 			       "5-Squirts","6-Squirts","7-Squirts","8-Squirts"};
 const gchar *inj_staging[] = {"Simultaneous","Alternating"};
@@ -91,6 +91,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	
+	/* Required Fuel */
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
         gtk_widget_set_size_request(spinner,60,-1);
@@ -99,7 +100,7 @@ int build_constants(GtkWidget *parent_frame)
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_1));
         constants.req_fuel_1_spin = spinner;
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -113,7 +114,7 @@ int build_constants(GtkWidget *parent_frame)
 			GINT_TO_POINTER(REQ_FUEL_2));
 	gtk_widget_set_sensitive(spinner,FALSE);
         constants.req_fuel_2_spin = spinner;
-//	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -133,26 +134,26 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,60,-1);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(INJ_OPEN_TIME));
         constants.inj_open_time_spin = spinner;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,60,-1);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(BATT_CORR));
         constants.batt_corr_spin = spinner;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -189,7 +190,7 @@ int build_constants(GtkWidget *parent_frame)
 			GINT_TO_POINTER(PWM_CUR_LIM));
         constants.pwm_curr_lim_spin = spinner;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -202,7 +203,7 @@ int build_constants(GtkWidget *parent_frame)
 			GINT_TO_POINTER(PWM_TIME_THRES));
         constants.pwm_time_max_spin = spinner;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -236,7 +237,7 @@ int build_constants(GtkWidget *parent_frame)
 			GINT_TO_POINTER(FAST_IDLE_THRES));
         constants.fast_idle_thresh_spin = spinner;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(122));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(122));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -257,10 +258,11 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),10);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	total = sizeof(control_strat)/sizeof(gpointer);
+	total = sizeof(control_strategy)/sizeof(gpointer);
 	for (i=0;i<total;i++)
 	{
-		items = g_list_append(items, (gpointer)control_strat[i]);
+		items = g_list_append(items, (gpointer)control_strategy[i]);
+		//g_object_set_data(G_OBJECT(items),"value",GINT_TO_POINTER(i));
 	}
 
 	combo = gtk_combo_new();

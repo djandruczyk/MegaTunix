@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-/* DO NOT include defines.h, as protos.h already does... */
+#include <defines.h>
 #include <protos.h>
 #include <globals.h>
 

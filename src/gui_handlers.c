@@ -37,28 +37,10 @@ void leave(GtkWidget *widget, gpointer *data)
 	stop_serial_thread();
 	/* Free all buffers */
 	close_serial();
+	usleep(100000); /* make sure thread dies cleanly.. */
 	mem_dealloc();
 	gtk_main_quit();
 }
-
-int text_entry_handler(GtkWidget * widget, gpointer *data)
-{
-	gchar *entry_text;
-	gint offset;
-	if (paused_handlers)
-		return TRUE ;
-	entry_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-	offset = (gint)gtk_object_get_data(G_OBJECT(widget),"offset");
-	switch ((gint)data)
-	{
-		default:
-			break;
-	}
-	/* update the widget in case data was out of bounds */
-	return TRUE;
-}
-
-
 
 int std_button_handler(GtkWidget *widget, gpointer *data)
 {
@@ -113,8 +95,8 @@ int classed_spinner_changed(GtkWidget *widget, gpointer *data)
                 return TRUE;
         value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	/* Class is set to determine the course of action */
-	class = (gint) gtk_object_get_data(G_OBJECT(widget),"class");
-	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
+	class = (gint) g_object_get_data(G_OBJECT(widget),"class");
+	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	switch (class)
 	{
 		case WARMUP:
@@ -160,8 +142,9 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	gint tmpi = 0;
 	if (paused_handlers)
 		return TRUE;
+	printf("spinner changed handler \n");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
+	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	tmpi_x10 = (int)((value*10.0)+.001);
 	tmpi = (int)(value+.001);
 
@@ -173,6 +156,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 				if (raw_reader_running)
 					stop_serial_thread();
 				close_serial();
+				usleep(100000);
 			}
 			open_serial((int)value);
 			setup_serial_params();
@@ -364,89 +348,56 @@ void update_const_ve()
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.tps_trig_thresh_spin),
 			ve_constants->tps_trig_thresh/5.0);
-//	g_snprintf(buff,10,"%.2f",ve_constants->tps_trig_thresh/5.0);
-//	gtk_entry_set_text(GTK_ENTRY(constants.tps_trig_thresh_ent),
-//			buff);
 
 	/* Accel Enrich Duration */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.accel_duration_spin),
 			ve_constants->accel_duration/10.0);
-//	g_snprintf(buff,10,"%.1f",ve_constants->accel_duration/10.0);
-//	gtk_entry_set_text(GTK_ENTRY(constants.accel_duration_ent),
-//			buff);
 
 	/* Cold Accel Enrich Add On */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.cold_accel_addon_spin),
 			ve_constants->cold_accel_addon/10.0);
-//	g_snprintf(buff,10,"%.1f",ve_constants->cold_accel_addon/10.0);
-//	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_addon_ent),
-//			buff);
 
 	/* Cold Accel Enrich Multiplier */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.cold_accel_mult_spin),
 			ve_constants->cold_accel_mult);
-//	g_snprintf(buff,10,"%i",ve_constants->cold_accel_mult);
-//	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_mult_ent),
-//			buff);
 
 	/* Decel Fuel Cut*/
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.decel_cut_spin),
 			ve_constants->decel_cut);
-//	g_snprintf(buff,10,"%i",ve_constants->decel_cut);
-//	gtk_entry_set_text(GTK_ENTRY(constants.decel_cut_ent),
-//			buff);
 
 	/* EGO coolant activation temp */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.ego_temp_active_spin),
 			ve_constants->ego_temp_active-40);
-//	g_snprintf(buff,10,"%i",ve_constants->ego_temp_active-40);
-//	gtk_entry_set_text(GTK_ENTRY(constants.ego_temp_active_ent),
-//			buff);
 
 	/* EGO activation RPM */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.ego_rpm_active_spin),
 			ve_constants->ego_rpm_active*100);
-//	g_snprintf(buff,10,"%i",ve_constants->ego_rpm_active*100);
-//	gtk_entry_set_text(GTK_ENTRY(constants.ego_rpm_active_ent),
-//			buff);
 
 	/* EGO switching voltage */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.ego_sw_voltage_spin),
 			ve_constants->ego_sw_voltage/51.0);
-//	g_snprintf(buff,10,"%.2f",(ve_constants->ego_sw_voltage/255.0)*5);
-//	gtk_entry_set_text(GTK_ENTRY(constants.ego_sw_voltage_ent),
-//			buff);
 
 	/* EGO step percent */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.ego_step_spin),
 			ve_constants->ego_step);
-//	g_snprintf(buff,10,"%i",ve_constants->ego_step);
-//	gtk_entry_set_text(GTK_ENTRY(constants.ego_step_ent),
-//			buff);
 
 	/* EGO events between steps */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.ego_events_spin),
 			ve_constants->ego_events);
-//	g_snprintf(buff,10,"%i",ve_constants->ego_events);
-//	gtk_entry_set_text(GTK_ENTRY(constants.ego_events_ent),
-//			buff);
 
 	/* EGO limit % between steps */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.ego_limit_spin),
 			ve_constants->ego_limit);
-//	g_snprintf(buff,10,"%i",ve_constants->ego_limit);
-//	gtk_entry_set_text(GTK_ENTRY(constants.ego_limit_ent),
-//			buff);
 
 	/* VE table entries */
 	for (i=0;i<64;i++)
@@ -472,5 +423,4 @@ void update_const_ve()
 				ve_constants->rpm_bins[i]*100);
 	}
 
-	// Stub function, does nothing yet... 
 }

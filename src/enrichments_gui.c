@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-/* DO NOT include defines.h, as protos.h already does... */
+#include <defines.h>
 #include <protos.h>
 #include <globals.h>
 #include <constants.h>
@@ -65,7 +65,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CRANK_PULSE_NEG_40));
 	constants.cr_pulse_neg40_spin = spinner;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(65));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(65));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -83,7 +83,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CRANK_PULSE_170));
 	constants.cr_pulse_pos170_spin = spinner;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(66));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(66));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -101,7 +101,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CRANK_PRIMING_PULSE));
 	constants.cr_priming_pulse_spin = spinner;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(120));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(120));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -122,7 +122,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	/* Afterstart Enrich % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(35.0,1.0,255.0,1.0,10.0,0);
-	spinner = gtk_spin_button_new(adj,1,0);
+	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,55,-1);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
@@ -130,7 +130,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.as_enrich_spin = spinner;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(67));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(67));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -149,7 +149,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.as_num_cycles_spin = spinner;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(68));
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(68));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -187,9 +187,9 @@ int build_enrichments(GtkWidget *parent_frame)
 		constants.warmup_bins_spin[i] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		/* Bind data to the object */
-		gtk_object_set_data(G_OBJECT(spinner),"class", 
+		g_object_set_data(G_OBJECT(spinner),"class", 
 				GINT_TO_POINTER(WARMUP));
-		gtk_object_set_data(G_OBJECT(spinner),"offset", 
+		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(WARMUP_BINS_OFFSET+i));
 		gtk_table_attach (GTK_TABLE (table), spinner, i, i+1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
@@ -230,9 +230,9 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,1);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner), "offset", 
+	g_object_set_data(G_OBJECT(spinner), "offset", 
 			GINT_TO_POINTER(84));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(TPS_TRIG_THRESH));
 
@@ -251,14 +251,14 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,1);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(85));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(85));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(ACCEL_ENRICH_DUR));
-	constants.accel_duration_spin = spinner;
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+	constants.accel_duration_spin = spinner;
 
 	label = gtk_label_new("Accel Enrich\n Duration (Sec)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
@@ -270,8 +270,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,1);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(83));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(83));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(COLD_ACCEL_ENRICH));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 2, 3,
@@ -289,8 +289,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(124));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(124));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(COLD_ACCEL_MULT));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
@@ -331,9 +331,9 @@ int build_enrichments(GtkWidget *parent_frame)
 		constants.accel_bins_spin[i] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		/* Bind data to he object for the handlers */
-		gtk_object_set_data(G_OBJECT(spinner),"class", 
+		g_object_set_data(G_OBJECT(spinner),"class", 
 				GINT_TO_POINTER(ACCEL));
-		gtk_object_set_data(G_OBJECT(spinner),"offset", 
+		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(ACCEL_BINS_OFFSET+i));
 		gtk_table_attach (GTK_TABLE (table), spinner, i, i+1, 1, 2,
 				(GtkAttachOptions) (GTK_EXPAND),
@@ -356,8 +356,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(86));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(86));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(DECEL_CUT));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
@@ -387,8 +387,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(87));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(87));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(EGO_TEMP_ACTIVE));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
@@ -403,11 +403,11 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,100.0,25500.0,100,1000.0,0);
-	spinner = gtk_spin_button_new(adj,1,0);
+	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(EGO_RPM_ACTIVE));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
@@ -425,8 +425,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,2);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(123));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(123));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(EGO_SW_VOLTAGE));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 2, 3,
@@ -444,8 +444,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(89));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(89));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(EGO_STEP));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
@@ -463,8 +463,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(88));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(88));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(EGO_EVENTS));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 4, 5,
@@ -482,8 +482,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1,0);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(90));
-	g_signal_connect(G_OBJECT(spinner),"changed",
+	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(90));
+	g_signal_connect(G_OBJECT(spinner),"value_changed",
 			G_CALLBACK(spinner_changed),
 			GINT_TO_POINTER(EGO_LIMIT));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 4, 5,

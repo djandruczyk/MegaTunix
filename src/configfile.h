@@ -13,8 +13,8 @@
 
 /* Configfile structs. (derived from an older version of XMMS) */
 
-#ifndef MEGASQUIRT_LIN_CONFIGFILE_H
-#define MEGASQUIRT_LIN_CONFIGFILE_H
+#ifndef __CONFIGFILE_H__
+#define __CONFIGFILE_H__
 
 #include <glib.h>
 
