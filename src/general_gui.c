@@ -103,32 +103,17 @@ int build_general(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-	table = gtk_table_new(2,4,FALSE);
+	table = gtk_table_new(2,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
-
-	label = gtk_label_new("ECU Revision Number");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	entry = gtk_entry_new();
-	ms_ecu_revision_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 12);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,5);
 
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
 			"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, so we offer the choice to select the API to use below",NULL);
-	gtk_table_attach (GTK_TABLE (table), ebox, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
+	gtk_table_attach (GTK_TABLE (table), ebox, 3, 5, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	button = gtk_button_new_with_label("Interrogate ECU capabilities");
 	gtk_container_add(GTK_CONTAINER(ebox),button);
@@ -138,7 +123,7 @@ int build_general(GtkWidget *parent_frame)
 
 	frame = gtk_frame_new ("ECU Output");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-	gtk_table_attach (GTK_TABLE (table), frame, 0, 2, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), frame, 0, 2, 0, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -146,7 +131,7 @@ int build_general(GtkWidget *parent_frame)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
-	gtk_widget_set_size_request(sw,0,100);
+	gtk_widget_set_size_request(sw,275,100);
 	gtk_container_add(GTK_CONTAINER(frame),sw);
 
 	view = gtk_text_view_new ();
@@ -159,5 +144,19 @@ int build_general(GtkWidget *parent_frame)
 			"red", NULL);
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
+	label = gtk_label_new("ECU Revision Number");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+
+	entry = gtk_entry_new();
+	ms_ecu_revision_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 	return TRUE;
 }
