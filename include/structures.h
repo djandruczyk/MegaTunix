@@ -179,6 +179,7 @@ struct DynamicButtons
 	GtkWidget *baro_disa_but;		/* Toggle button */
 	GtkWidget *nbo2_but;			/* Toggle button */
 	GtkWidget *wbo2_but;			/* Toggle button */
+	GtkWidget *ve_import_but;
 	GtkWidget *ve_export_but;
 	GtkWidget *ve_clear_vex_but;
 	GtkWidget *stop_dlog_but;		/* Stop DataLogging */

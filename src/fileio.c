@@ -111,7 +111,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 	else /* Now see if it DOES exist.. */
 	{
-		if ((iotype == DATALOG_EXPORT) || (iotype == VE_EXPORT))
+		if ((iotype == DATALOG_EXPORT))
 		{
 			if (status.st_size > 0)
 				warn_file_not_empty();
@@ -145,7 +145,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			{
 				log_opened = FALSE;
 				opened = FALSE;
-				gtk_widget_set_sensitive(									buttons.stop_dlog_but,FALSE);
+				gtk_widget_set_sensitive(
+						buttons.stop_dlog_but,FALSE);
 				gtk_widget_set_sensitive(
 						buttons.start_dlog_but,FALSE);
 				g_snprintf(buff,100,"Failure opening DataLog File, Error Code: %s",strerror(errno));
@@ -163,6 +164,9 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 						selected_filename);
 				gtk_widget_set_sensitive(
 						buttons.ve_export_but,TRUE);
+				/* this needs to be put in VE_IMPORT or something */
+				gtk_widget_set_sensitive(
+						buttons.ve_import_but,TRUE);				
 				gtk_widget_set_sensitive(
 						buttons.ve_clear_vex_but,TRUE);
 				if (vex_comment == NULL)
@@ -183,10 +187,25 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			}
 			break;
 		case VE_IMPORT:
+			/* needs fixed - doesn't get called */
 			if (opened == TRUE)
 			{
 				vex_opened = TRUE;
 				io_file_name = g_strdup(selected_filename);
+				gtk_label_set_text(GTK_LABEL(
+							labels.vex_file_lab),
+						selected_filename);
+				gtk_widget_set_sensitive(
+						buttons.ve_import_but,TRUE);
+				gtk_widget_set_sensitive(
+						buttons.ve_clear_vex_but,TRUE);
+				if (vex_comment == NULL)
+					g_snprintf(buff,100,"VEX File Opened. Suggest setting a comment to describe the file above...");
+				else
+					g_snprintf(buff,100,"VEX File Opened, VEX Comment already stored");
+
+				update_statusbar(tools_statbar,
+						tools_context_id,buff);				
 			}
 			else
 			{
@@ -243,6 +262,8 @@ void close_file(FileIoType filetype)
 				gtk_widget_set_sensitive(
 						buttons.ve_export_but,FALSE);
 				gtk_widget_set_sensitive(
+						buttons.ve_import_but,FALSE);				
+				gtk_widget_set_sensitive(
 						buttons.ve_clear_vex_but,FALSE);
 				vex_opened = FALSE;
 			}
@@ -280,4 +301,3 @@ void truncate_file(FileIoType filetype)
 
 	}
 }
-

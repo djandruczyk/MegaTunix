@@ -592,6 +592,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 				if (!fahrenheit) /* using celsius, convert it */
 					value = (value*(9.0/5.0))+32;
 			}
+			printf("generic spinner at offset %i, val %f\n",offset,value);
 			dload_val = convert_before_download(
 					offset,value,page);
 			break;

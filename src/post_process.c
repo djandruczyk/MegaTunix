@@ -49,7 +49,7 @@ void post_process(void *input, void *output)
 	out->warmcorr = in->warmcorr;
 	out->rpm = in->rpm * 100;
 	out->pw = in->pw / 10.0;
-	out->dcycle = ((float)out->pw*2.0)/(6.0/(float)in->rpm);
+	out->dcycle = (float) out->pw / (1200.0 / (float) out->rpm);
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;

@@ -63,40 +63,52 @@ int build_tools(GtkWidget *parent_frame)
 			GTK_STATE_NORMAL,&white);
 
 
-	frame = gtk_frame_new("VE Table Export (VEX Files)");
+	frame = gtk_frame_new("VE Table Import/Export (VEX Files)");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-	hbox = gtk_hbox_new(FALSE,0);
+	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
 
 	button = gtk_button_new_with_label("Select VEX File");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(SELECT_VEXFILE));
 
-	label = gtk_label_new("No VEX File Selected Yet");
-	labels.vex_file_lab = label;
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,30);
+	button = gtk_button_new_with_label("Clear VEX File");
+	buttons.ve_clear_vex_but = button;
+	gtk_widget_set_sensitive(button,FALSE);
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(TRUNCATE_VEXFILE));
+
+	button = gtk_button_new_with_label("Import VE Table(s)");
+	buttons.ve_import_but = button;
+	gtk_widget_set_sensitive(button,FALSE);
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(IMPORT_VETABLE));
 
 	button = gtk_button_new_with_label("Export VE Table(s)");
 	buttons.ve_export_but = button;
 	gtk_widget_set_sensitive(button,FALSE);
-	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(EXPORT_VETABLE));
 
-	button = gtk_button_new_with_label("Clear VEX File");
-	buttons.ve_clear_vex_but = button;
-	gtk_widget_set_sensitive(button,FALSE);
-	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(TRUNCATE_VEXFILE));
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
+
+	label = gtk_label_new("No VEX File Selected Yet");
+	labels.vex_file_lab = label;
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);

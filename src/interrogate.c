@@ -16,7 +16,6 @@
 #include <config.h>
 #include <defines.h>
 #include <errno.h>
-#include <fcntl.h>
 #include <globals.h>
 #include <interrogate.h>
 #include <string.h>

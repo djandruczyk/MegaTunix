@@ -18,7 +18,6 @@
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
-#include <fcntl.h>
 #include <globals.h>
 #include <gui_handlers.h>
 #include <math.h>

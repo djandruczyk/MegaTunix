@@ -20,6 +20,11 @@
 /* Prototypes */
 gboolean vetable_export(void);
 gboolean vetable_import(void);
+gint process_vex_line(void);
+gint process_vex_rpm_range(void);
+gint process_vex_map_range(void);
+gint process_vex_table(void);
+gint read_number_from_line(void);
 void clear_vexfile(void);
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */

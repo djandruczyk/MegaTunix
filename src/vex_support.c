@@ -22,6 +22,10 @@
 #include <structures.h>
 #include <time.h>
 #include <vex_support.h>
+#include <glib.h>
+#include <string.h>
+#include <stdlib.h>
+#include <serialio.h>
 
 gchar *vex_comment;
 extern struct Tools tools;
@@ -30,6 +34,9 @@ extern gchar * io_file_name;
 extern GtkWidget *tools_statbar;
 extern gint tools_context_id;
 
+GIOChannel *gio_channel;
+extern struct Ve_Const_Std *ve_const_p0;
+
 gboolean vetable_export()
 {
 	struct tm *tm;
@@ -37,7 +44,6 @@ gboolean vetable_export()
 	gint i = 0;
 	gint j = 0;
 	unsigned char * ve_const_arr;
-	extern struct Ve_Const_Std *ve_const_p0;
 	//extern struct Ve_Const_Std *ve_const_p1;
 
 	tm = g_malloc(sizeof(struct tm));
@@ -134,8 +140,91 @@ gboolean vetable_export()
 	return TRUE; /* return TRUE on success, FALSE on failure */
 }
 
+gint read_number_from_line()
+{
+	gint result;
+	gchar *pos, *number;
+	GString *a_line = g_string_new("\0");
+	result = g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+	pos = g_strrstr(a_line->str,"=\0");
+	number = g_strdup(pos+sizeof(char));
+	g_strstrip(number);
+	result = atoi(number);
+	g_string_free(a_line, TRUE);
+	return result;
+}
+
+gint process_vex_rpm_range()
+{
+	gint i;
+	for (i=0; i<8; i++) {
+		ve_const_p0->rpm_bins[i] = read_number_from_line();
+	}
+	return TRUE;
+}
+
+gint process_vex_map_range()
+{
+	gint i;
+	for (i=0; i<8; i++) {
+		ve_const_p0->kpa_bins[i] = read_number_from_line();
+	}
+	return TRUE;
+}
+
+
+gint process_vex_table()
+{
+	gint i, j;
+	gchar *pos, *numbers;
+	GString *a_line = g_string_new("\0");
+	g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+	g_string_free(a_line, TRUE);
+	/* iterate over table */
+	for (i=0; i<8; i++) {
+		a_line = g_string_new("\0");
+		g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+		pos = g_strrstr(a_line->str,"=\0");
+		numbers = g_strdup(pos+sizeof(char));
+		for (j=0; j<8; j++) {
+			ve_const_p0->ve_bins[j+(i*8)] = (int)strtol(numbers,&numbers,10);
+		}		
+		g_string_free(a_line, TRUE);
+	}
+	return TRUE;
+}
+
+gint process_vex_line()
+{
+	gint result;
+	GString *a_line = g_string_new("\0");
+	result = g_io_channel_read_line_string(gio_channel, a_line, NULL, NULL);
+	// the order of this is important... sadly.
+	if (g_strrstr(a_line->str,"RPM Range\0") != NULL) {
+		process_vex_rpm_range();
+	} else if (g_strrstr(a_line->str,"Load Range\0") != NULL) {
+		process_vex_map_range();
+	} else if (g_strrstr(a_line->str,"VE Table\0") != NULL) {	
+		process_vex_table();
+	/*
+	} else {
+		printf("Unrecognized or otherwise useless line:\n %s \n", \
+			a_line->str);
+	*/
+	} 
+	g_string_free(a_line, TRUE);
+	return result;
+}
+
 gboolean vetable_import()
 {
+	GIOStatus status = G_IO_STATUS_NORMAL;	
+	gio_channel = g_io_channel_new_file(io_file_name, "r", NULL);
+	while (status != G_IO_STATUS_EOF)
+	{
+		status = process_vex_line();
+	}
+	update_ve_const();
 	return TRUE; /* return TRUE on success, FALSE on failure */
 }
 
