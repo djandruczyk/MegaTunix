@@ -1,5 +1,6 @@
 
 headers = \
+	3d_vetable.h \
 	about_gui.h \
         comms_gui.h \
         configfile.h \

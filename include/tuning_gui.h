@@ -16,40 +16,8 @@
 
 #include <gtk/gtk.h>
 
-/* GL includes */
-#include <gtk/gtkwidget.h>
-#include <gtk/gtkgl.h>
-#include <gdk/gdkglglext.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <pango/pangoft2.h>
-#include <gdk/gdkkeysyms.h>
-#include <gdk/gdkkeysyms.h>
-#include <gdk/gdkkeysyms.h>
-
 /* Prototypes */
 int build_tuning(GtkWidget *);
-GdkGLConfig* get_gl_config(void);
-void tuning_gui_realize (GtkWidget *, gpointer );
-gboolean tuning_gui_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);
-gboolean tuning_gui_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
-gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
-gboolean tuning_gui_motion_notify_event(GtkWidget *, GdkEventMotion *,gpointer);
-gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
-gboolean tuning_gui_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
-gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer );
-gboolean tuning_gui_focus_in_event (GtkWidget *, GdkEventFocus *, gpointer );
-void tuning_gui_draw_ve_grid(void);
-void tuning_gui_reset_ve_grid(void);
-void tuning_gui_normalize(float );
-void tuning_gui_draw_grid_point(float , float , float , int );
-void tuning_gui_draw_labels(void);
-void tuning_gui_draw_active_indicator(void);
-void tuning_gui_calculate_scaling(void);
-void tuning_gui_draw_axis(void);
-void tuning_gui_drawtext(char* text, float x, float y, float z);
-void tuning_gui_load_font_metrics(void);
-void reset_3d_view(void);
 /* Prototypes */
 
 #endif

@@ -180,7 +180,7 @@ int build_general(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	sw = gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
