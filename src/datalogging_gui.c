@@ -30,37 +30,42 @@
 #include <unistd.h>
 
 
+/* global vars (owned here...) */
 gchar *delim;
 gfloat cumu = 0.0;
 gint logging_mode = CUSTOM_LOG;
+gint max_logables = 0;
+GtkWidget *dlog_view;
+GtkWidget *logables_table;
+GtkWidget *delim_table;
+GtkWidget *tab_delim_button;
+struct Logables logables;
+
+/* External global vars */
+extern gint ready;
+extern struct Runtime_Common *runtime;
+extern struct DynamicButtons buttons;
+extern struct DynamicLabels labels;
+extern GdkColor white;
+
+/* Static vars to all functions in this file... */
 static gint total_logables = 0;
 static gint delimiter = SPACE;
+static gint offset_list[MAX_LOGABLES];
+static gint size_list[MAX_LOGABLES];
 static gboolean logging = FALSE;
 static gboolean header_needed = FALSE;
 static GtkWidget *file_selection;
 static GtkWidget *format_table;
 static GtkWidget *comma_delim_button;
 static GtkWidget *space_delim_button;
-gint max_logables = 0;
-static gint offset_list[MAX_LOGABLES];
-static gint size_list[MAX_LOGABLES];
-struct timeval now;
-struct timeval last;
-GtkWidget *dlog_view;
-GtkWidget *logables_table;
-GtkWidget *delim_table;
-GtkWidget *tab_delim_button;
-struct Logables logables;
-	/* basty hack to prevent a compiler warning... */
-gint max_limits = sizeof(limits)/sizeof(struct Limits);
 static GHashTable *custom_ord_hash;
 static GHashTable *classic_ord_hash;
 static GHashTable *full_ord_hash;
-extern gint ready;
-extern struct Runtime_Common *runtime;
-extern struct DynamicButtons buttons;
-extern struct DynamicLabels labels;
-extern GdkColor white;
+static struct timeval now;
+static struct timeval last;
+/* basty hack to prevent a compiler warning... */
+gint max_limits = sizeof(limits)/sizeof(struct Limits);
 
 void build_datalogging(GtkWidget *parent_frame)
 {

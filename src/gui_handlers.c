@@ -38,6 +38,7 @@
 extern gboolean interrogated;
 extern gboolean connected;
 extern gboolean raw_reader_running;
+extern gboolean logviewer_mode;
 extern gchar *delim;
 extern gint statuscounts_id;
 extern gint max_logables;
@@ -206,12 +207,14 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, TRUE);
 				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, TRUE);
 				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, TRUE);
+				logviewer_mode = FALSE;
 				break;
 			case PLAYBACK_VIEW:
 				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, FALSE);
 				gtk_widget_set_sensitive(buttons.logplay_sel_log_but, TRUE);
 				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, FALSE);
 				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, FALSE);
+				logviewer_mode = TRUE;
 				break;
 		}
 	}
@@ -428,11 +431,11 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
-	void *w_data = NULL;
+	void *object_data = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	if (GTK_IS_OBJECT(widget))
 	{
-		w_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
+		object_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 		reqd_fuel = (struct Reqd_Fuel *) 
 			g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	}
@@ -493,7 +496,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case CLOSE_LOGFILE:
 			stop_datalogging();
-			close_file(w_data);
+			close_file(object_data);
 			break;
 		case START_DATALOGGING:
 			start_datalogging();
@@ -517,7 +520,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			present_filesavebox(FULL_RESTORE);
 			break;
 		case SELECT_PARAMS:
-			present_viewer_choices(w_data);
+			present_viewer_choices(object_data);
 			break;
 		case REQD_FUEL_POPUP:
 			reqd_fuel_popup(reqd_fuel);

@@ -72,6 +72,8 @@ void read_logviewer_header(GIOChannel *iochannel, void *ptr)
 	GIOStatus  status = G_IO_STATUS_ERROR;
 	gchar *delim = NULL;
 	struct Log_Info *log_info = ptr;
+	extern struct DynamicButtons buttons;
+	extern GtkWidget *lv_darea;	
 
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
 
@@ -96,6 +98,9 @@ void read_logviewer_header(GIOChannel *iochannel, void *ptr)
 		/* Get total count of fields in there too... */
 		while (log_info->fields[log_info->field_count] != NULL)
 			log_info->field_count++;
+		/* Enable parameter selection button */
+		gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, TRUE);
+		g_object_set_data(G_OBJECT(lv_darea),"log_info",(gpointer)log_info);
 		
 	}
 	g_free(delim);

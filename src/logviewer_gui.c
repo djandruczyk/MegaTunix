@@ -29,6 +29,8 @@ static struct Logables viewables;
 static GHashTable *active_traces = NULL;
 GtkWidget * lv_darea;
 gint lv_scroll = 0;		/* logviewer scroll amount */
+gboolean logviewer_mode = FALSE;
+
 
 /* This table is the same dimensions as the table used for datalogging.
  * FALSE means it's greyed out as a choice for the logviewer, TRUE means
@@ -199,10 +201,12 @@ void present_viewer_choices(void *ptr)
 	gint k = 0;
 	gint table_rows;
 	gint table_cols = 5;
-	GtkWidget *special = NULL;
+	gchar * name = NULL;
+	GtkWidget *hand_me_down = NULL;
+	struct Log_Info *log_info = NULL;
 
 	if (ptr != NULL)
-		special = (GtkWidget *)ptr;
+		hand_me_down = (GtkWidget *)ptr;
 	else
 		g_printf("pointer fed was NULL (present_viewer_choices)\n");
 
@@ -211,9 +215,15 @@ void present_viewer_choices(void *ptr)
 	max_viewables = sizeof(mt_full_names)/sizeof(gchar *);
 	max_viewables = sizeof(logable_names)/sizeof(gchar *);
 
+
+	if (logviewer_mode)
+		log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(hand_me_down),"log_info");
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window),575,300);
-	gtk_window_set_title(GTK_WINDOW(window),"Logviewer Choices");
+	if (logviewer_mode)
+		gtk_window_set_title(GTK_WINDOW(window),"Playback Mode: Logviewer Choices");
+	else
+		gtk_window_set_title(GTK_WINDOW(window),"Realtime Mode: Logviewer Choices");
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -222,14 +232,20 @@ void present_viewer_choices(void *ptr)
 			(gpointer)window);
 
 	gtk_container_set_border_width(GTK_CONTAINER(window),5);
-	frame = gtk_frame_new("Select Variables to view/playback from the list below...");
+	if (logviewer_mode)
+		frame = gtk_frame_new("Select Variables to playback from the list below...");
+	else
+		frame = gtk_frame_new("Select Realtime Variables to view from the list below...");
 	gtk_container_add(GTK_CONTAINER(window),frame);
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox);
 
-	max_viewables = sizeof(logable_names)/sizeof(gchar *);
+	if (logviewer_mode)
+		max_viewables = log_info->field_count;
+	else
+		max_viewables = sizeof(logable_names)/sizeof(gchar *);
 	table_rows = ceil((float)max_viewables/(float)table_cols);
 	table = gtk_table_new(table_rows,table_cols,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -241,10 +257,17 @@ void present_viewer_choices(void *ptr)
 	k = 0;
 	for (i=0;i<max_viewables;i++)
 	{
-		button = gtk_check_button_new_with_label(logable_names[i]);
+		if (logviewer_mode)
+			name = g_strdup(log_info->fields[i]);
+		else
+			name = g_strdup(logable_names[i]);
+			
+		
+		button = gtk_check_button_new_with_label(name);
 		if (valid_logables[i] == FALSE)
 			gtk_widget_set_sensitive(button,FALSE);
-		gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
+		if (!logviewer_mode)
+			gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
 		if (viewables.index[i] == TRUE)
         		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
 			
@@ -265,6 +288,7 @@ void present_viewer_choices(void *ptr)
 			k++;
 			j = 0;
 		}
+		g_free(name);
 	}
 
 	sep = gtk_hseparator_new();
@@ -273,7 +297,7 @@ void present_viewer_choices(void *ptr)
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,TRUE,0);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(populate_viewer),
-			(gpointer)special);
+			(gpointer)hand_me_down);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -297,7 +321,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gboolean populate_viewer(GtkWidget * widget)
+gboolean populate_viewer(GtkWidget * d_area)
 {
 	struct Viewable_Value *v_value = NULL;
 	gint i = 0;
@@ -333,7 +357,7 @@ gboolean populate_viewer(GtkWidget * widget)
 			{
 				//g_printf("allocating struct and putting into table\n");
 				/* Call the build routine, feed it the drawing_area*/
-				v_value = build_v_value(widget,i);
+				v_value = build_v_value(d_area,i);
 					
 //				g_printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
 				g_hash_table_insert(active_traces,
@@ -367,62 +391,6 @@ gboolean populate_viewer(GtkWidget * widget)
 	}
 		
 	return FALSE; /* want other handlers to run... */
-}
-
-gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
-{
-	GdkPixmap *pixmap = NULL;
-	gint w = 0;
-	gint h = 0;
-
-	/* Get pointer to backing pixmap ... */
-	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
-			
-	if (widget->window)
-	{
-		if (pixmap)
-			g_object_unref(pixmap);
-
-		w=widget->allocation.width;
-		h=widget->allocation.height;
-		pixmap=gdk_pixmap_new(widget->window,
-				w,h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(pixmap,
-				widget->style->black_gc,
-				TRUE, 0,0,
-				w,h);
-		gdk_window_set_back_pixmap(widget->window,pixmap,0);
-		g_object_set_data(G_OBJECT(widget),"pixmap",pixmap);
-
-		if (active_traces)
-		{
-			tcount = 0;
-			g_hash_table_foreach(active_traces, trace_update, (gpointer)TRUE);
-			tcount = 0;
-		}
-		gdk_window_clear(widget->window);
-	}
-
-//	g_printf("configure event....\n");
-	return TRUE;
-}
-
-gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
-{
-	GdkPixmap *pixmap = NULL;
-	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
-
-	/* Expose event handler... */
-	gdk_draw_drawable(widget->window,
-                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                        pixmap,
-                        event->area.x, event->area.y,
-                        event->area.x, event->area.y,
-                        event->area.width, event->area.height);
-
-//	g_printf("expose event....\n");
-	return TRUE;
 }
 
 struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
@@ -799,4 +767,60 @@ void scroll_logviewer_traces()
 
 	tcount = 0;
 	gdk_window_clear(lv_darea->window);
+}
+
+gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+{
+	GdkPixmap *pixmap = NULL;
+	gint w = 0;
+	gint h = 0;
+
+	/* Get pointer to backing pixmap ... */
+	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
+			
+	if (widget->window)
+	{
+		if (pixmap)
+			g_object_unref(pixmap);
+
+		w=widget->allocation.width;
+		h=widget->allocation.height;
+		pixmap=gdk_pixmap_new(widget->window,
+				w,h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_rectangle(pixmap,
+				widget->style->black_gc,
+				TRUE, 0,0,
+				w,h);
+		gdk_window_set_back_pixmap(widget->window,pixmap,0);
+		g_object_set_data(G_OBJECT(widget),"pixmap",pixmap);
+
+		if (active_traces)
+		{
+			tcount = 0;
+			g_hash_table_foreach(active_traces, trace_update, (gpointer)TRUE);
+			tcount = 0;
+		}
+		gdk_window_clear(widget->window);
+	}
+
+//	g_printf("configure event....\n");
+	return TRUE;
+}
+
+gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{
+	GdkPixmap *pixmap = NULL;
+	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
+
+	/* Expose event handler... */
+	gdk_draw_drawable(widget->window,
+                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                        pixmap,
+                        event->area.x, event->area.y,
+                        event->area.x, event->area.y,
+                        event->area.width, event->area.height);
+
+//	g_printf("expose event....\n");
+	return TRUE;
 }
