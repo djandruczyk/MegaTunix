@@ -567,6 +567,8 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 	gint value = 0;
 	gint offset = 0;
 	gint dload_val = 0;
+	extern struct Ve_Widgets *page0_widgets;
+//	extern struct Ve_Widgets *page1_widgets;
 	#ifdef DEBUG	
 	printf("Key press event\n");
 	#endif
@@ -618,6 +620,10 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 				value = ve_const_p0->ve_bins[offset] + 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+						page0_widgets->widget[offset]),
+						value);
+
 			}
 			break;				
 
@@ -633,6 +639,9 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 				value = ve_const_p0->ve_bins[offset] - 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+						page0_widgets->widget[offset]),
+						value);
 			}
 			break;							
 
