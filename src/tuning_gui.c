@@ -24,27 +24,27 @@
 #include <gui_handlers.h>
 #include <tuning_gui.h>
 
-#define DEFAULT_WIDTH  320
+#define DEFAULT_WIDTH  400
 #define DEFAULT_HEIGHT 320                                                                                                                         
 
-int grid = 8;
-int beginX, beginY;
-int active_map, active_rpm = 0;
+static int grid = 8;
+static int beginX, beginY;
+static int active_map, active_rpm = 0;
   
-float dt = 0.008;
-float sphi = 45.0; 
-float stheta = 75.0; 
-float sdepth = 7.533;
-float zNear = 0.8;
-float zFar = 23;
-float aspect = 1.0;
-float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
-int rpm_max=0, kpa_max=0, ve_max=0;
-GtkWidget *drawing_area;
-gchar font_string[] = "sans 10";
-GLuint font_list_base;
-gint font_height;
-gchar label[6];
+static float dt = 0.008;
+static float sphi = 45.0; 
+static float stheta = 75.0; 
+static float sdepth = 7.533;
+static float zNear = 0.8;
+static float zFar = 23;
+static float aspect = 1.0;
+static float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
+static int rpm_max=0, kpa_max=0, ve_max=0;
+static GtkWidget *drawing_area;
+static gchar font_string[] = "sans 10";
+static GLuint font_list_base;
+static gint font_height;
+static gchar label[6];
 
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
@@ -63,14 +63,16 @@ int build_tuning(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
 	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
+	//frame = gtk_aspect_frame_new("VE Table 3D display",0.5,0,1,FALSE);
 	frame = gtk_frame_new("VE Table 3D display");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 
 	drawing_area = gtk_drawing_area_new();
 	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
+
 	gtk_widget_set_size_request (drawing_area, 
 			DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
@@ -107,7 +109,7 @@ int build_tuning(GtkWidget *parent_frame)
 
 	/* End of GL window, Now controls for it.... */
 	frame = gtk_frame_new("3D Display Controls");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
