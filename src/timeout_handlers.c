@@ -32,8 +32,9 @@ void start_realtime_tickler()
 {
 	extern GtkWidget *comms_view;
 	extern struct Serial_Params *serial_params;
+	extern gboolean connected;
 
-	if (realtime_id == 0)
+	if ((realtime_id == 0) && (connected))
 	{
 		realtime_id = g_timeout_add(serial_params->read_wait,
 				(GtkFunction)signal_read_rtvars,NULL);
@@ -65,18 +66,24 @@ void stop_realtime_tickler()
 gboolean signal_read_rtvars()
 {
 	gint length = 0;
+	extern gboolean connected;
 	extern GAsyncQueue *io_queue;
 
 	length = g_async_queue_length(io_queue);
 	/* IF queue depth is too great we should not make the problem worse
 	 * so we skip a call as we're probably trying to go faster than the 
-	 * MS and/or serai lport can go....
+	 * MS and/or serail port can go....
 	 */
 	if (length > 2)
 		return TRUE;
 
-	io_cmd(IO_REALTIME_READ,NULL);			
 	dbg_func(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n",SERIAL_RD|SERIAL_WR);
+
+	if (connected)
+		io_cmd(IO_REALTIME_READ,NULL);			
+	else
+		dbg_func(__FILE__": signal_read_rtvars()\n\tNOT connected, not queing message to thread handler....\n",CRITICAL);
+
 
 	return TRUE;	/* Keep going.... */
 }

@@ -128,7 +128,7 @@ gfloat lookup_data(GObject *object, gint offset)
 	//assert(lookuptable);
 	if (!lookuptable)
 	{
-		dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control bound to offset %i\n",offset),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")),CRITICAL);
 		return 0.0;
 	}
 	return lookuptable[offset];

@@ -79,7 +79,7 @@ void io_cmd(IoCommand cmd, gpointer data)
 			break;
 
 		case IO_INTERROGATE_ECU:
-			if (!connected)	// Attempt reconnect with comms test
+			if (!connected)// Attempt reconnect with comms test
 				io_cmd(IO_COMMS_TEST,NULL);
 			message = g_new0(struct Io_Message,1);
 			message->command = INTERROGATION;
@@ -171,7 +171,6 @@ void *serial_io_handler(gpointer data)
 	gint len=0;
 	gint i=0;
 	gint val=-1;
-	gboolean result = FALSE;
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gint mem_view_style[];
@@ -188,24 +187,45 @@ void *serial_io_handler(gpointer data)
 				dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu requested\n",SERIAL_RD|SERIAL_WR);
 				if (connected)
 					interrogate_ecu();
+				else
+					dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu request denied, NOT Connected!!\n",CRITICAL);
+				
 				break;
 			case COMMS_TEST:
 				dbg_func(__FILE__": serial_io_handler()\n\tcomms_test requested \n",SERIAL_RD|SERIAL_WR);
 				comms_test();
+				if (!connected)
+					dbg_func(__FILE__": serial_io_handler()\n\tComms Test failed, NOT Connected!!\n",CRITICAL);
 				break;
 			case READ_CMD:
 				dbg_func(g_strdup_printf(__FILE__": serial_io_handler()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD);
-				readfrom_ecu(message);
+				if (connected)
+					readfrom_ecu(message);
+				else
+					dbg_func(__FILE__": serial_io_handler()\n\treadfrom_ecu skipped, NOT Connected!!\n",CRITICAL);
 				break;
 			case WRITE_CMD:
 				dbg_func(__FILE__": serial_io_handler()\n\twrite_command requested\n",SERIAL_WR);
-				writeto_ecu(message);
+				if (connected)
+					writeto_ecu(message);
+				else
+					dbg_func(__FILE__": serial_io_handler()\n\twriteto_ecu skipped, NOT Connected!!\n",CRITICAL);
 				break;
 			case BURN_CMD:
 				dbg_func(__FILE__": serial_io_handler()\n\tburn_command requested\n",SERIAL_WR);
-				burn_ms_flash();
+				if (connected)
+					burn_ms_flash();
+				else
+					dbg_func(__FILE__": serial_io_handler()\n\tburn_ms_flash skipped, NOT Connected!!\n",CRITICAL);
+
 				break;
 
+		}
+		if (!connected) // Raise error window.... 
+		{
+			gdk_threads_enter();
+			no_ms_connection();
+			gdk_threads_leave();
 		}
 		/* If dispatch funcs are defined, run them from the thread
 		 * context. NOTE wrapping with gdk_threads_enter/leave, as 
@@ -225,8 +245,7 @@ void *serial_io_handler(gpointer data)
 						if (connected)
 						{
 							gdk_threads_enter();
-							result = load_realtime_map();
-							if (result == FALSE)
+							if (!load_realtime_map())
 							{
 								gdk_threads_leave();
 								goto breakout;
@@ -238,8 +257,7 @@ void *serial_io_handler(gpointer data)
 						if (connected)
 						{
 							gdk_threads_enter();
-							result = load_gui_tabs();
-							if (result == FALSE)
+							if (!load_gui_tabs())
 							{
 								gdk_threads_leave();
 								goto breakout;
@@ -252,34 +270,48 @@ void *serial_io_handler(gpointer data)
 						io_cmd(IO_READ_VE_CONST,NULL);
 						break;
 					case UPD_REALTIME:
-						update_runtime_vars();
+						if (connected)
+							update_runtime_vars();
 						break;
 					case UPD_VE_CONST:
-						gdk_threads_enter();
-						paused_handlers = TRUE;
-						update_ve_const();
-						paused_handlers = FALSE;
-						gdk_threads_leave();
+						if (connected)
+						{
+							gdk_threads_enter();
+							paused_handlers = TRUE;
+							update_ve_const();
+							paused_handlers = FALSE;
+							gdk_threads_leave();
+						}
 						break;
 					case UPD_STORE_BLACK:
-						gdk_threads_enter();
-						set_store_buttons_state(BLACK);
-						for (i=0;i<firmware->total_pages;i++)
-							set_reqfuel_state(BLACK,i);
-						gdk_threads_leave();
+						if (connected)
+						{
+							gdk_threads_enter();
+							set_store_buttons_state(BLACK);
+							for (i=0;i<firmware->total_pages;i++)
+								set_reqfuel_state(BLACK,i);
+							gdk_threads_leave();
+						}
 						break;
 					case UPD_LOGVIEWER:
-						gdk_threads_enter();
-						update_logview_traces();
-						gdk_threads_leave();
+						if (connected)
+						{
+							gdk_threads_enter();
+							update_logview_traces();
+							gdk_threads_leave();
+						}
 						break;
 					case UPD_RAW_MEMORY:
-						gdk_threads_enter();
-						update_raw_memory_view(mem_view_style[message->offset],message->offset);
-						gdk_threads_leave();
+						if (connected)
+						{
+							gdk_threads_enter();
+							update_raw_memory_view(mem_view_style[message->offset],message->offset);
+							gdk_threads_leave();
+						}
 						break;
 					case UPD_DATALOGGER:
-						run_datalog();
+						if (connected)
+							run_datalog();
 						break;
 				}
 			}

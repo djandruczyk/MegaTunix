@@ -250,7 +250,6 @@ dlog_field_name=LAMBDA
 offset=9
 lookuptable=nbo2_table
 alt_lookuptable=wbo2_table
-;conv_expr=x*1
 conv_expr=x/147.0
 depend_on=o2_sensor
 o2_sensor_type=_VE_EMB_BIT_

@@ -381,30 +381,10 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			reset_runtime_status();
 			break;
 		case READ_VE_CONST:
-			if (!connected)
-				io_cmd(IO_COMMS_TEST, NULL);
-			if (!connected)
-			{
-				no_ms_connection();
-				break;
-			}
-			if (!interrogated)
-				io_cmd(IO_INTERROGATE_ECU, NULL);
-
 			io_cmd(IO_READ_VE_CONST, NULL);
 			break;
 		case READ_RAW_MEMORY:
-			if (!interrogated)
-				io_cmd(IO_INTERROGATE_ECU, NULL);
-			if (!connected)
-				io_cmd(IO_COMMS_TEST, NULL);
-			if (!connected)
-			{
-				no_ms_connection();
-				break;
-			}
-			else
-				io_cmd(IO_READ_RAW_MEMORY,(gpointer)obj_data);
+			io_cmd(IO_READ_RAW_MEMORY,(gpointer)obj_data);
 			break;
 		case CHECK_ECU_COMMS:
 			io_cmd(IO_COMMS_TEST,NULL);
@@ -452,6 +432,8 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			present_filesavebox(FULL_RESTORE,(gpointer)widget);
 			break;
 		case SELECT_PARAMS:
+			if (!interrogated)
+				break;
 			present_viewer_choices(obj_data);
 			break;
 		case REQ_FUEL_POPUP:
