@@ -24,6 +24,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
+#include <gtk/gtkgl.h>
 #include <ms_structures.h>
 #include <notifications.h>
 #include <serialio.h>
