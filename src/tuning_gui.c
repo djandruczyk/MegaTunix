@@ -218,7 +218,7 @@ gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoin
 	glTranslatef(0.0,0.0,-sdepth);
 	glRotatef(-stheta, 1.0, 0.0, 0.0);
 	glRotatef(sphi, 0.0, 0.0, 1.0);
-	glTranslatef(-(float)((grid+1)/2-1), -(float)((grid+1)/2-1), -2.0);
+	glTranslatef(-(float)((grid)/2-0.3), -(float)((grid)/2-1), -2.0);
 
 	tuning_gui_calculate_scaling();
 	tuning_gui_draw_ve_grid();
