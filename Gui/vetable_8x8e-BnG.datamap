@@ -207,385 +207,385 @@ group=rpm
 
 #----- VE-Table Entries -----------------------------------------------------
 
-[veentry_(0,0)]
+[ve_entry_(0,0)]
 keys=offset
 key_types=_INT_
 offset=0
 group=vetable
 
-[veentry_(1,0)]
+[ve_entry_(1,0)]
 keys=offset
 key_types=_INT_
 offset=1
 group=vetable
 
-[veentry_(2,0)]
+[ve_entry_(2,0)]
 keys=offset
 key_types=_INT_
 offset=2
 group=vetable
 
-[veentry_(3,0)]
+[ve_entry_(3,0)]
 keys=offset
 key_types=_INT_
 offset=3
 group=vetable
 
-[veentry_(4,0)]
+[ve_entry_(4,0)]
 keys=offset
 key_types=_INT_
 offset=4
 group=vetable
 
-[veentry_(5,0)]
+[ve_entry_(5,0)]
 keys=offset
 key_types=_INT_
 offset=5
 group=vetable
 
-[veentry_(6,0)]
+[ve_entry_(6,0)]
 keys=offset
 key_types=_INT_
 offset=6
 group=vetable
 
-[veentry_(7,0)]
+[ve_entry_(7,0)]
 keys=offset
 key_types=_INT_
 offset=7
 group=vetable
 
-[veentry_(0,1)]
+[ve_entry_(0,1)]
 keys=offset
 key_types=_INT_
 offset=8
 group=vetable
 
-[veentry_(1,1)]
+[ve_entry_(1,1)]
 keys=offset
 key_types=_INT_
 offset=9
 group=vetable
 
-[veentry_(2,1)]
+[ve_entry_(2,1)]
 keys=offset
 key_types=_INT_
 offset=10
 group=vetable
 
-[veentry_(3,1)]
+[ve_entry_(3,1)]
 keys=offset
 key_types=_INT_
 offset=11
 group=vetable
 
-[veentry_(4,1)]
+[ve_entry_(4,1)]
 keys=offset
 key_types=_INT_
 offset=12
 group=vetable
 
-[veentry_(5,1)]
+[ve_entry_(5,1)]
 keys=offset
 key_types=_INT_
 offset=13
 group=vetable
 
-[veentry_(6,1)]
+[ve_entry_(6,1)]
 keys=offset
 key_types=_INT_
 offset=14
 group=vetable
 
-[veentry_(7,1)]
+[ve_entry_(7,1)]
 keys=offset
 key_types=_INT_
 offset=15
 group=vetable
 
-[veentry_(0,2)]
+[ve_entry_(0,2)]
 keys=offset
 key_types=_INT_
 offset=16
 group=vetable
 
-[veentry_(1,2)]
+[ve_entry_(1,2)]
 keys=offset
 key_types=_INT_
 offset=17
 group=vetable
 
-[veentry_(2,2)]
+[ve_entry_(2,2)]
 keys=offset
 key_types=_INT_
 offset=18
 group=vetable
 
-[veentry_(3,2)]
+[ve_entry_(3,2)]
 keys=offset
 key_types=_INT_
 offset=19
 group=vetable
 
-[veentry_(4,2)]
+[ve_entry_(4,2)]
 keys=offset
 key_types=_INT_
 offset=20
 group=vetable
 
-[veentry_(5,2)]
+[ve_entry_(5,2)]
 keys=offset
 key_types=_INT_
 offset=21
 group=vetable
 
-[veentry_(6,2)]
+[ve_entry_(6,2)]
 keys=offset
 key_types=_INT_
 offset=22
 group=vetable
 
-[veentry_(7,2)]
+[ve_entry_(7,2)]
 keys=offset
 key_types=_INT_
 offset=23
 group=vetable
 
-[veentry_(0,3)]
+[ve_entry_(0,3)]
 keys=offset
 key_types=_INT_
 offset=24
 group=vetable
 
-[veentry_(1,3)]
+[ve_entry_(1,3)]
 keys=offset
 key_types=_INT_
 offset=25
 group=vetable
 
-[veentry_(2,3)]
+[ve_entry_(2,3)]
 keys=offset
 key_types=_INT_
 offset=26
 group=vetable
 
-[veentry_(3,3)]
+[ve_entry_(3,3)]
 keys=offset
 key_types=_INT_
 offset=27
 group=vetable
 
-[veentry_(4,3)]
+[ve_entry_(4,3)]
 keys=offset
 key_types=_INT_
 offset=28
 group=vetable
 
-[veentry_(5,3)]
+[ve_entry_(5,3)]
 keys=offset
 key_types=_INT_
 offset=29
 group=vetable
 
-[veentry_(6,3)]
+[ve_entry_(6,3)]
 keys=offset
 key_types=_INT_
 offset=30
 group=vetable
 
-[veentry_(7,3)]
+[ve_entry_(7,3)]
 keys=offset
 key_types=_INT_
 offset=31
 group=vetable
 
-[veentry_(0,4)]
+[ve_entry_(0,4)]
 keys=offset
 key_types=_INT_
 offset=32
 group=vetable
 
-[veentry_(1,4)]
+[ve_entry_(1,4)]
 keys=offset
 key_types=_INT_
 offset=33
 group=vetable
 
-[veentry_(2,4)]
+[ve_entry_(2,4)]
 keys=offset
 key_types=_INT_
 offset=34
 group=vetable
 
-[veentry_(3,4)]
+[ve_entry_(3,4)]
 keys=offset
 key_types=_INT_
 offset=35
 group=vetable
 
-[veentry_(4,4)]
+[ve_entry_(4,4)]
 keys=offset
 key_types=_INT_
 offset=36
 group=vetable
 
-[veentry_(5,4)]
+[ve_entry_(5,4)]
 keys=offset
 key_types=_INT_
 offset=37
 group=vetable
 
-[veentry_(6,4)]
+[ve_entry_(6,4)]
 keys=offset
 key_types=_INT_
 offset=38
 group=vetable
 
-[veentry_(7,4)]
+[ve_entry_(7,4)]
 keys=offset
 key_types=_INT_
 offset=39
 group=vetable
 
-[veentry_(0,5)]
+[ve_entry_(0,5)]
 keys=offset
 key_types=_INT_
 offset=40
 group=vetable
 
-[veentry_(1,5)]
+[ve_entry_(1,5)]
 keys=offset
 key_types=_INT_
 offset=41
 group=vetable
 
-[veentry_(2,5)]
+[ve_entry_(2,5)]
 keys=offset
 key_types=_INT_
 offset=42
 group=vetable
 
-[veentry_(3,5)]
+[ve_entry_(3,5)]
 keys=offset
 key_types=_INT_
 offset=43
 group=vetable
 
-[veentry_(4,5)]
+[ve_entry_(4,5)]
 keys=offset
 key_types=_INT_
 offset=44
 group=vetable
 
-[veentry_(5,5)]
+[ve_entry_(5,5)]
 keys=offset
 key_types=_INT_
 offset=45
 group=vetable
 
-[veentry_(6,5)]
+[ve_entry_(6,5)]
 keys=offset
 key_types=_INT_
 offset=46
 group=vetable
 
-[veentry_(7,5)]
+[ve_entry_(7,5)]
 keys=offset
 key_types=_INT_
 offset=47
 group=vetable
 
-[veentry_(0,6)]
+[ve_entry_(0,6)]
 keys=offset
 key_types=_INT_
 offset=48
 group=vetable
 
-[veentry_(1,6)]
+[ve_entry_(1,6)]
 keys=offset
 key_types=_INT_
 offset=49
 group=vetable
 
-[veentry_(2,6)]
+[ve_entry_(2,6)]
 keys=offset
 key_types=_INT_
 offset=50
 group=vetable
 
-[veentry_(3,6)]
+[ve_entry_(3,6)]
 keys=offset
 key_types=_INT_
 offset=51
 group=vetable
 
-[veentry_(4,6)]
+[ve_entry_(4,6)]
 keys=offset
 key_types=_INT_
 offset=52
 group=vetable
 
-[veentry_(5,6)]
+[ve_entry_(5,6)]
 keys=offset
 key_types=_INT_
 offset=53
 group=vetable
 
-[veentry_(6,6)]
+[ve_entry_(6,6)]
 keys=offset
 key_types=_INT_
 offset=54
 group=vetable
 
-[veentry_(7,6)]
+[ve_entry_(7,6)]
 keys=offset
 key_types=_INT_
 offset=55
 group=vetable
 
-[veentry_(0,7)]
+[ve_entry_(0,7)]
 keys=offset
 key_types=_INT_
 offset=56
 group=vetable
 
-[veentry_(1,7)]
+[ve_entry_(1,7)]
 keys=offset
 key_types=_INT_
 offset=57
 group=vetable
 
-[veentry_(2,7)]
+[ve_entry_(2,7)]
 keys=offset
 key_types=_INT_
 offset=58
 group=vetable
 
-[veentry_(3,7)]
+[ve_entry_(3,7)]
 keys=offset
 key_types=_INT_
 offset=59
 group=vetable
 
-[veentry_(4,7)]
+[ve_entry_(4,7)]
 keys=offset
 key_types=_INT_
 offset=60
 group=vetable
 
-[veentry_(5,7)]
+[ve_entry_(5,7)]
 keys=offset
 key_types=_INT_
 offset=61
 group=vetable
 
-[veentry_(6,7)]
+[ve_entry_(6,7)]
 keys=offset
 key_types=_INT_
 offset=62
 group=vetable
 
-[veentry_(7,7)]
+[ve_entry_(7,7)]
 keys=offset
 key_types=_INT_
 offset=63

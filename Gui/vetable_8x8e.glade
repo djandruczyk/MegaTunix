@@ -100,6 +100,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -127,6 +128,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -154,6 +156,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -181,6 +184,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -208,6 +212,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -235,6 +240,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -262,6 +268,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -289,6 +296,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -373,7 +381,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,0)">
+				<widget class="GtkEntry" id="ve_entry_(0,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -390,6 +398,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -402,7 +411,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,1)">
+				<widget class="GtkEntry" id="ve_entry_(0,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -419,6 +428,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -431,7 +441,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,2)">
+				<widget class="GtkEntry" id="ve_entry_(0,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -448,6 +458,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -460,7 +471,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,3)">
+				<widget class="GtkEntry" id="ve_entry_(0,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -477,6 +488,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -489,7 +501,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,4)">
+				<widget class="GtkEntry" id="ve_entry_(0,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -506,6 +518,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -518,7 +531,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,5)">
+				<widget class="GtkEntry" id="ve_entry_(0,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -535,6 +548,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -547,7 +561,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,6)">
+				<widget class="GtkEntry" id="ve_entry_(0,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -564,6 +578,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -576,7 +591,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(0,7)">
+				<widget class="GtkEntry" id="ve_entry_(0,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -593,6 +608,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -605,7 +621,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,0)">
+				<widget class="GtkEntry" id="ve_entry_(1,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -622,6 +638,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -634,7 +651,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,1)">
+				<widget class="GtkEntry" id="ve_entry_(1,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -651,6 +668,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -663,7 +681,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,2)">
+				<widget class="GtkEntry" id="ve_entry_(1,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -680,6 +698,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -692,7 +711,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,3)">
+				<widget class="GtkEntry" id="ve_entry_(1,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -709,6 +728,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -721,7 +741,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,4)">
+				<widget class="GtkEntry" id="ve_entry_(1,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -738,6 +758,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -750,7 +771,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,5)">
+				<widget class="GtkEntry" id="ve_entry_(1,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -767,6 +788,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -779,7 +801,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,6)">
+				<widget class="GtkEntry" id="ve_entry_(1,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -796,6 +818,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -808,7 +831,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(1,7)">
+				<widget class="GtkEntry" id="ve_entry_(1,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -825,6 +848,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -837,7 +861,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,0)">
+				<widget class="GtkEntry" id="ve_entry_(2,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -854,6 +878,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -866,7 +891,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,1)">
+				<widget class="GtkEntry" id="ve_entry_(2,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -883,6 +908,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -895,7 +921,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,2)">
+				<widget class="GtkEntry" id="ve_entry_(2,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -912,6 +938,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -924,7 +951,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,3)">
+				<widget class="GtkEntry" id="ve_entry_(2,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -941,6 +968,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -953,7 +981,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,4)">
+				<widget class="GtkEntry" id="ve_entry_(2,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -970,6 +998,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -982,7 +1011,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,5)">
+				<widget class="GtkEntry" id="ve_entry_(2,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -999,6 +1028,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -1011,7 +1041,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,6)">
+				<widget class="GtkEntry" id="ve_entry_(2,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1028,6 +1058,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -1040,7 +1071,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(2,7)">
+				<widget class="GtkEntry" id="ve_entry_(2,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1057,6 +1088,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -1069,7 +1101,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,0)">
+				<widget class="GtkEntry" id="ve_entry_(3,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1086,6 +1118,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1098,7 +1131,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,1)">
+				<widget class="GtkEntry" id="ve_entry_(3,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1115,6 +1148,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1127,7 +1161,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,2)">
+				<widget class="GtkEntry" id="ve_entry_(3,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1144,6 +1178,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1156,7 +1191,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,3)">
+				<widget class="GtkEntry" id="ve_entry_(3,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1173,6 +1208,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1185,7 +1221,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,4)">
+				<widget class="GtkEntry" id="ve_entry_(3,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1202,6 +1238,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1214,7 +1251,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,5)">
+				<widget class="GtkEntry" id="ve_entry_(3,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1231,6 +1268,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1243,7 +1281,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,6)">
+				<widget class="GtkEntry" id="ve_entry_(3,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1260,6 +1298,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1272,7 +1311,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(3,7)">
+				<widget class="GtkEntry" id="ve_entry_(3,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1289,6 +1328,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">3</property>
@@ -1301,7 +1341,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,0)">
+				<widget class="GtkEntry" id="ve_entry_(4,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1318,6 +1358,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1330,7 +1371,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,1)">
+				<widget class="GtkEntry" id="ve_entry_(4,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1347,6 +1388,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1359,7 +1401,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,2)">
+				<widget class="GtkEntry" id="ve_entry_(4,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1376,6 +1418,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1388,7 +1431,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,3)">
+				<widget class="GtkEntry" id="ve_entry_(4,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1405,6 +1448,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1417,7 +1461,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,4)">
+				<widget class="GtkEntry" id="ve_entry_(4,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1434,6 +1478,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1446,7 +1491,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,5)">
+				<widget class="GtkEntry" id="ve_entry_(4,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1463,6 +1508,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1475,7 +1521,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,6)">
+				<widget class="GtkEntry" id="ve_entry_(4,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1492,6 +1538,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1504,7 +1551,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(4,7)">
+				<widget class="GtkEntry" id="ve_entry_(4,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1521,6 +1568,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">4</property>
@@ -1533,7 +1581,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,0)">
+				<widget class="GtkEntry" id="ve_entry_(5,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1550,6 +1598,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1562,7 +1611,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,1)">
+				<widget class="GtkEntry" id="ve_entry_(5,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1579,6 +1628,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1591,7 +1641,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,2)">
+				<widget class="GtkEntry" id="ve_entry_(5,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1608,6 +1658,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1620,7 +1671,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,3)">
+				<widget class="GtkEntry" id="ve_entry_(5,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1637,6 +1688,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1649,7 +1701,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,4)">
+				<widget class="GtkEntry" id="ve_entry_(5,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1666,6 +1718,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1678,7 +1731,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,5)">
+				<widget class="GtkEntry" id="ve_entry_(5,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1695,6 +1748,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1707,7 +1761,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,6)">
+				<widget class="GtkEntry" id="ve_entry_(5,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1724,6 +1778,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1736,7 +1791,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(5,7)">
+				<widget class="GtkEntry" id="ve_entry_(5,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1753,6 +1808,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">5</property>
@@ -1765,7 +1821,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,0)">
+				<widget class="GtkEntry" id="ve_entry_(6,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1782,6 +1838,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1794,7 +1851,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,1)">
+				<widget class="GtkEntry" id="ve_entry_(6,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1811,6 +1868,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1823,7 +1881,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,2)">
+				<widget class="GtkEntry" id="ve_entry_(6,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1840,6 +1898,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1852,7 +1911,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,3)">
+				<widget class="GtkEntry" id="ve_entry_(6,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1869,6 +1928,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1881,7 +1941,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,4)">
+				<widget class="GtkEntry" id="ve_entry_(6,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1898,6 +1958,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1910,7 +1971,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,5)">
+				<widget class="GtkEntry" id="ve_entry_(6,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1927,6 +1988,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1939,7 +2001,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,6)">
+				<widget class="GtkEntry" id="ve_entry_(6,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1956,6 +2018,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1968,7 +2031,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(6,7)">
+				<widget class="GtkEntry" id="ve_entry_(6,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1985,6 +2048,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">6</property>
@@ -1997,7 +2061,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,0)">
+				<widget class="GtkEntry" id="ve_entry_(7,0)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2014,6 +2078,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2026,7 +2091,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,1)">
+				<widget class="GtkEntry" id="ve_entry_(7,1)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2043,6 +2108,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2055,7 +2121,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,2)">
+				<widget class="GtkEntry" id="ve_entry_(7,2)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2072,6 +2138,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2084,7 +2151,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,3)">
+				<widget class="GtkEntry" id="ve_entry_(7,3)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2101,6 +2168,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2113,7 +2181,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,4)">
+				<widget class="GtkEntry" id="ve_entry_(7,4)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2130,6 +2198,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2142,7 +2211,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,5)">
+				<widget class="GtkEntry" id="ve_entry_(7,5)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2159,6 +2228,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2171,7 +2241,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,6)">
+				<widget class="GtkEntry" id="ve_entry_(7,6)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2188,6 +2258,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2200,7 +2271,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="veentry_(7,7)">
+				<widget class="GtkEntry" id="ve_entry_(7,7)">
 				  <property name="width_request">30</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2217,6 +2288,7 @@
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">7</property>
@@ -2313,6 +2385,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -2340,6 +2413,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -2367,6 +2441,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -2394,6 +2469,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -2421,6 +2497,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -2448,6 +2525,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -2475,6 +2553,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -2502,6 +2581,7 @@
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+		  	  	  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>

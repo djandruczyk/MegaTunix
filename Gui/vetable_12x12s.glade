@@ -462,7 +462,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -490,7 +490,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -518,7 +518,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -546,7 +546,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -574,7 +574,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -602,7 +602,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -630,7 +630,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -658,7 +658,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -686,7 +686,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -714,7 +714,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -742,7 +742,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -770,7 +770,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(0,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(0,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -798,7 +798,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -826,7 +826,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -854,7 +854,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -882,7 +882,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -910,7 +910,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -938,7 +938,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -966,7 +966,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -994,7 +994,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1022,7 +1022,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1050,7 +1050,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1078,7 +1078,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1106,7 +1106,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(1,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(1,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1134,7 +1134,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1162,7 +1162,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1190,7 +1190,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1218,7 +1218,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1246,7 +1246,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1274,7 +1274,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1302,7 +1302,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1330,7 +1330,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1358,7 +1358,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1386,7 +1386,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1414,7 +1414,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1442,7 +1442,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(2,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(2,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1470,7 +1470,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1498,7 +1498,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1526,7 +1526,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1554,7 +1554,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1582,7 +1582,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1610,7 +1610,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1638,7 +1638,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1666,7 +1666,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1694,7 +1694,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1722,7 +1722,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1750,7 +1750,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1778,7 +1778,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(3,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(3,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1806,7 +1806,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1834,7 +1834,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1862,7 +1862,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1890,7 +1890,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1918,7 +1918,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1946,7 +1946,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -1974,7 +1974,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2002,7 +2002,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2030,7 +2030,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2058,7 +2058,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2086,7 +2086,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2114,7 +2114,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(4,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(4,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2142,7 +2142,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2170,7 +2170,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2198,7 +2198,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2226,7 +2226,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2254,7 +2254,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2282,7 +2282,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2310,7 +2310,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2338,7 +2338,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2366,7 +2366,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2394,7 +2394,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2422,7 +2422,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2450,7 +2450,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(5,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(5,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2478,7 +2478,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2506,7 +2506,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2534,7 +2534,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2562,7 +2562,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2590,7 +2590,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2618,7 +2618,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2646,7 +2646,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2674,7 +2674,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2702,7 +2702,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2730,7 +2730,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2758,7 +2758,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2786,7 +2786,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(6,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(6,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2814,7 +2814,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2842,7 +2842,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2870,7 +2870,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2898,7 +2898,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2926,7 +2926,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2954,7 +2954,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -2982,7 +2982,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3010,7 +3010,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3038,7 +3038,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3066,7 +3066,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3094,7 +3094,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3122,7 +3122,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(7,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(7,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3150,7 +3150,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3178,7 +3178,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3206,7 +3206,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3234,7 +3234,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3262,7 +3262,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3290,7 +3290,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3318,7 +3318,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3346,7 +3346,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3374,7 +3374,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3402,7 +3402,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3430,7 +3430,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3458,7 +3458,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(8,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(8,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3486,7 +3486,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3514,7 +3514,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3542,7 +3542,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3570,7 +3570,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3598,7 +3598,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3626,7 +3626,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3654,7 +3654,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3682,7 +3682,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3710,7 +3710,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3738,7 +3738,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3766,7 +3766,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3794,7 +3794,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(9,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(9,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3822,7 +3822,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3850,7 +3850,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3878,7 +3878,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3906,7 +3906,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3934,7 +3934,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3962,7 +3962,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -3990,7 +3990,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4018,7 +4018,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4046,7 +4046,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4074,7 +4074,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4102,7 +4102,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4130,7 +4130,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(10,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(10,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4158,7 +4158,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,0)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,0)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4186,7 +4186,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,1)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,1)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4214,7 +4214,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,2)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,2)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4242,7 +4242,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,3)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,3)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4270,7 +4270,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,4)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,4)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4298,7 +4298,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,5)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,5)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4326,7 +4326,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,6)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,6)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4354,7 +4354,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,7)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,7)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4382,7 +4382,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,8)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,8)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4410,7 +4410,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,9)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,9)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4438,7 +4438,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,10)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,10)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
@@ -4466,7 +4466,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkSpinButton" id="vespin_(11,11)">
+				<widget class="GtkSpinButton" id="ve_spin_(11,11)">
 				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>

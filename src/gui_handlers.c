@@ -1078,6 +1078,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gint bitshift = -1;
 	gint bitmask = -1;
 	gint base = -1;
+	gint precision = -1;
 	gchar * toggle_group = NULL;
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
@@ -1104,6 +1105,8 @@ void update_widget(gpointer object, gpointer user_data)
 			"bitmask");
 	base = (gint)g_object_get_data(G_OBJECT(widget),
 			"base");
+	precision = (gint)g_object_get_data(G_OBJECT(widget),
+			"precision");
 	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
 			"temp_dep");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(widget),
@@ -1129,7 +1132,7 @@ void update_widget(gpointer object, gpointer user_data)
 		if (base == 10)
 		{
 			if (is_float)
-				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.1f",value));
+				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.*2$f",value,precision));
 			else
 				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)value));
 		}
@@ -1197,15 +1200,20 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	else if (GTK_IS_ENTRY(widget))
 		signal = g_strdup("activate");
 	value = ms_data[page][offset];
+	if (event->keyval == GDK_Shift_L)
+	{
+		if (event->type == GDK_KEY_PRESS)
+			grab_allowed = TRUE;
+		else
+			grab_allowed = FALSE;
+		return FALSE;
+	}
+
+	if (event->type == GDK_KEY_RELEASE)
+		return FALSE;
+
 	switch (event->keyval)
 	{
-		case GDK_Shift_L:
-			if (event->type == GDK_KEY_PRESS)
-				grab_allowed = TRUE;
-			else
-				grab_allowed = FALSE;
-			retval = FALSE;
-			break;
 		case GDK_Page_Up:
 			if (value < (upper-10))
 				ms_data[page][offset]+=10;

@@ -201,7 +201,7 @@ CMD_UPPER_S=32
 [gui]
 RealtimeMapFile=MSnS-Extra
 SliderMapFile=msns-extra-firmware
-LoadTabs=runtime,datalogging,logviewer,tools,vetable_12x12e,vetable_12x12e,vetable_12x12e,sparktable_12x12e,sparktable_12x12e,vetable_8x8e,vetable_8x8e,raweditor
+LoadTabs=runtime,datalogging,logviewer,tools,vetable_12x12e,vetable_12x12e,vetable_12x12e,sparktable_12x12e,sparktable_12x12e,afrtable_8x8e,afrtable_8x8e,raweditor
 TabConfs=runtime,datalogging,logviewer,tools,vetable_12x12e-E_1,vetable_12x12e-E_2,vetable_12x12e-E_3,sparktable_12x12e-E_1,sparktable_12x12e-E_2,afrtable_8x8e_E_1,afrtable_8x8e_E_2,raweditor
 
 [lookuptables]
