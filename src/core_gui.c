@@ -27,7 +27,6 @@
 #include <gui_handlers.h>
 #include <ignition_gui.h>
 #include <logviewer_gui.h>
-#include <lowlevel_gui.h>
 #include <memory_gui.h>
 #include <runtime_gui.h>
 #include <sparktable_gui.h>
@@ -53,30 +52,27 @@ static struct
 	gchar *frame_name;	/* Textual name at the top of the frame */
 	void (*Function) (GtkWidget *);	/* builder function */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
-	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
-	gboolean dt_specific;	/* Dualtable ONLY page */
-	gboolean ign_specific;	/* Ignition ONLY page */
+	gint capabilities;	/* What does it do */
 } notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",TRUE, FALSE, FALSE},
-{ "General MegaTunix Settings", build_general, "_General",TRUE, FALSE, FALSE},
-{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE, FALSE, FALSE},
-{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",TRUE, FALSE, FALSE},
-{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",TRUE, FALSE, FALSE},
-{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",TRUE, TRUE, FALSE},
-{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE, FALSE, FALSE},
-{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",TRUE, FALSE, FALSE},
-{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",TRUE, TRUE, FALSE},
-{ "MegaSquirtnSpark/EDIS Spark Table", build_sparktable, "_Spark Advance",TRUE, FALSE, TRUE},
-{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",TRUE, FALSE, TRUE},
-{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE, FALSE, FALSE},
-{ "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE, FALSE, FALSE},
-{ "MegaSquirt Tools", build_tools, "T_ools",TRUE, FALSE, FALSE},
-{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory",TRUE, FALSE, FALSE},
-{ "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE, FALSE, FALSE},
-{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE, FALSE, FALSE},
-{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE, FALSE, FALSE},
-{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",TRUE, FALSE, FALSE},
-{ "Debug Messages", build_debug, "_Debugging",TRUE, FALSE, FALSE},
+{ "About MegaTunix", build_about, "_About",STD},
+{ "General MegaTunix Settings", build_general, "_General",STD},
+{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STD},
+{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STD},
+{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STD},
+{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE},
+{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",STD},
+{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",STD},
+{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",DUALTABLE},
+{ "MegaSquirtnSpark/EDIS Spark Table", build_sparktable, "_Spark Advance",S_N_SPARK | S_N_EDIS},
+{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS},
+{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STD},
+{ "MegaSquirt Tuning", build_tuning, "_Tuning",STD},
+{ "MegaSquirt Tools", build_tools, "T_ools",STD},
+{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",STD},
+{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STD},
+{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STD},
+{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STD},
+{ "Debug Messages", build_debug, "_Debugging",STD}
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -126,26 +122,19 @@ int setup_gui()
 
 		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
 
-		if (notebook_tabs[i].dt_specific == TRUE)
+		if (notebook_tabs[i].capabilities & DUALTABLE)
 		{
 			dt_controls = g_list_append(dt_controls, 
 					(gpointer)frame);
 			dt_controls = g_list_append(dt_controls, 
 					(gpointer)label);
 		}
-
-		if (notebook_tabs[i].ign_specific == TRUE)
+		if (notebook_tabs[i].capabilities & (S_N_SPARK|S_N_EDIS))
 		{
 			ign_controls = g_list_append(ign_controls, 
 					(gpointer)frame);
 			ign_controls = g_list_append(ign_controls, 
 					(gpointer)label);
-		}
-
-		if (notebook_tabs[i].enabled == FALSE)
-		{
-			gtk_widget_set_sensitive(frame,FALSE);
-			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
 		}
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	}

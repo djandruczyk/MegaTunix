@@ -28,7 +28,6 @@ headers = \
         logviewer_core.h \
         logviewer_gui.h \
         lookuptables.h \
-        lowlevel_gui.h \
         main.h \
         memory_gui.h \
         mode_select.h \
