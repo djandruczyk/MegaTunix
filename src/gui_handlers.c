@@ -180,3 +180,10 @@ int calc_reqd_fuel_func(GtkWidget *widget, gpointer *data)
 	
 	return TRUE;
 }
+
+int spinner_changed(GtkWidget *widget, gpointer *data)
+{
+	printf("spinner_changed function called\n");
+	return TRUE;
+
+}

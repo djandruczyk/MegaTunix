@@ -34,8 +34,6 @@ int build_runtime(GtkWidget *parent_frame)
 	GtkWidget *entry;
 	GtkWidget *sep;
 
-	//	memset(runtime_data,0,sizeof(struct v1_2_Runtime_Gui));
-
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 

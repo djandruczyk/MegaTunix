@@ -171,6 +171,21 @@ struct ms_data_v1_and_v2 {
 #define	PWM_CUR_LIM		0x44
 #define	PWM_TIME_THRES		0x45
 #define	FAST_IDLE_THRES		0x46
+#define CRANK_PULSE_NEG_40	0x47
+#define CRANK_PULSE_170		0x48
+#define CRANK_PRIMING_PULSE	0x49
+#define AFTERSTART_ENRICH	0x4a
+#define AFTERSTART_NUM_CYCLES	0x4b
+#define WARMUP_NEG_40		0x4c
+#define WARMUP_NEG_20		0x4d
+#define WARMUP_0		0x4e
+#define WARMUP_20		0x4f
+#define WARMUP_40		0x50
+#define WARMUP_60		0x51
+#define WARMUP_80		0x52
+#define WARMUP_100		0x53
+#define WARMUP_130		0x54
+#define WARMUP_160		0x55
 
 /* Configfile structs. (derived from an older version of XMMS) */
 

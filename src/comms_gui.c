@@ -153,9 +153,9 @@ int build_comms(GtkWidget *parent_frame)
 	return(0);
 }
 
-int set_serial_port(GtkWidget *widget, gpointer data)
+int set_serial_port(GtkWidget *widget, gpointer *data)
 {
-	int port = gtk_spin_button_get_value_as_int(data);
+	int port = gtk_spin_button_get_value_as_int((gpointer)data);
 		if(serial_params.open)
 		{
 			if (raw_reader_running)

@@ -85,6 +85,7 @@ int std_button_handler(GtkWidget *, gpointer *);
 void text_entry_handler(GtkWidget *, gpointer *);
 void update_statusbar(GtkWidget *, int, gchar *);
 int calc_reqd_fuel_func(GtkWidget *, gpointer *);
+int spinner_changed(GtkWidget *, gpointer *);
 
 /* gui_handlers.c */
 
@@ -101,7 +102,7 @@ int build_about(GtkWidget *);
 
 /* comms_gui.c */
 int build_comms(GtkWidget *);
-int set_serial_port(GtkWidget *, gpointer);
+int set_serial_port(GtkWidget *, gpointer *);
 /* comms_gui.c */
 
 /* constants_gui.c */
