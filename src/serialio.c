@@ -57,7 +57,7 @@ void open_serial(int port_num)
 	 */
 	devicename = g_strdup_printf("/dev/ttyS%i",port_num-1);
 	/* Open Read/Write and NOT as the controlling TTY */
-	result = open(devicename, O_RDWR | O_NOCTTY);
+	result = open(devicename, O_RDWR | O_NOCTTY | O_NDELAY);
 	if (result >= 0)
 	{
 		/* SUCCESS */
