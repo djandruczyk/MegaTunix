@@ -27,7 +27,8 @@ static gint max_viewables = 0;
 static gint total_viewables = 0;
 static struct Logables viewables;
 static GHashTable *active_traces = NULL;
-static GtkWidget * lv_darea;
+GtkWidget * lv_darea;
+gint lv_scroll = 0;		/* logviewer scroll amount */
 
 /* This table is the same dimensions as the table used for datalogging.
  * FALSE means it's greyed out as a choice for the logviewer, TRUE means
@@ -56,7 +57,10 @@ void build_logviewer(GtkWidget *parent_frame)
 	GtkWidget *d_area;
 	GtkWidget *button;
 	GtkWidget *frame;
+	GtkWidget *label;
+	GtkWidget *spinner;
 	GdkPixmap *pixmap;
+	GtkAdjustment *adj;
 	extern struct DynamicButtons buttons;
 	GSList *group;
 
@@ -157,7 +161,22 @@ void build_logviewer(GtkWidget *parent_frame)
 
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 
-	/* Not written yet */
+	vbox3 = gtk_vbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
+
+	label = gtk_label_new("Scroll Speed");
+	gtk_box_pack_start(GTK_BOX(vbox3),label,TRUE,FALSE,5);
+
+	adj =  (GtkAdjustment *) gtk_adjustment_new((gfloat)lv_scroll,1.0,15.0,1.0,1.0,0);
+        spinner = gtk_spin_button_new(adj,1,0);
+        gtk_widget_set_size_request(spinner,45,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"info",(gpointer)d_area);
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinbutton_handler),
+                        GINT_TO_POINTER(LOGVIEW_SCROLL));
+	gtk_box_pack_start(GTK_BOX(vbox3),spinner,TRUE,FALSE,0);
+
 	return;
 }
 
@@ -360,8 +379,8 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 		if (pixmap)
 			g_object_unref(pixmap);
 
-		w=event->width;
-		h=event->height;
+		w=widget->allocation.width;
+		h=widget->allocation.height;
 		pixmap=gdk_pixmap_new(widget->window,
 				w,h,
 				gtk_widget_get_visual(widget)->depth);
@@ -665,7 +684,6 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	gfloat val = 0.0;
 	gfloat percent = 0.0;
 	gint size = 0;
-	gint scroll = 1;
 	gint last_grat = 0;
 	gint grat_interval = 0;
 	gint len = 0;
@@ -700,8 +718,8 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 		{
 			val = g_array_index(v_value->data_array,gfloat,len-i);
 			percent = 1.0-(val/(v_value->upper-v_value->lower));
-			pts[i].x = w-i;
-			pts[i].y = (gint) (percent*h);
+			pts[i].x = w-(i*lv_scroll);
+			pts[i].y = (gint) (percent*(h-2))+1;
 		}
 		gdk_draw_lines(pixmap,
 				v_value->trace_gc,
@@ -751,10 +769,10 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	
 	gdk_draw_line(pixmap,
 			v_value->trace_gc,
-			w-1-scroll,v_value->last_y,
-			w-1,(gint)(percent*h));
+			w-1-lv_scroll,v_value->last_y,
+			w-1,(gint)(percent*(h-2))+1);
 
-	v_value->last_y = (gint)(percent*h);
+	v_value->last_y = (gint)((percent*(h-2))+1);
 			
 	/* Update textual data */
 	draw_infotext(v_value);
@@ -766,11 +784,10 @@ void scroll_logviewer_traces()
 {
 	gint start = 0;
 	gint end = info_width;
-	gint scroll = 1;
 	gint w = lv_darea->allocation.width;
 	gint h = lv_darea->allocation.height;
 
-	start = end + scroll;
+	start = end + lv_scroll;
 	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(lv_darea),
 				"pixmap");
 	
@@ -786,11 +803,11 @@ void scroll_logviewer_traces()
 	gdk_draw_rectangle(pixmap,
 			lv_darea->style->black_gc,
 			TRUE,
-			w-scroll,0,
-			scroll,h);
+			w-lv_scroll,0,
+			lv_scroll,h);
 
 	// Update the graticule... 
-/*	v_value->last_grat -= scroll;
+/*	v_value->last_grat -= lv_scroll;
 	if ((last_grat + grat_interval) < w)
 	{
 		gdk_draw_line(v_value->trace_pmap,

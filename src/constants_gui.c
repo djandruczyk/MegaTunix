@@ -110,7 +110,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(NUM_CYLINDERS_1));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -140,7 +140,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(NUM_INJECTORS_1));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -172,7 +172,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(NUM_SQUIRTS_1));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -274,7 +274,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(REQ_FUEL_1));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -340,7 +340,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -366,7 +366,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -404,7 +404,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -429,7 +429,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -487,7 +487,7 @@ void build_constants_1(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
+                        G_CALLBACK (spinbutton_handler),
                         GINT_TO_POINTER(NUM_CYLINDERS_2));
         gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
@@ -517,7 +517,7 @@ void build_constants_1(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
+                        G_CALLBACK (spinbutton_handler),
                         GINT_TO_POINTER(NUM_INJECTORS_2));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
@@ -549,7 +549,7 @@ void build_constants_1(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
+                        G_CALLBACK (spinbutton_handler),
                         GINT_TO_POINTER(NUM_SQUIRTS_2));
         gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
@@ -636,7 +636,7 @@ void build_constants_1(GtkWidget *parent_frame)
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
+                        G_CALLBACK (spinbutton_handler),
                         GINT_TO_POINTER(REQ_FUEL_2));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
@@ -705,7 +705,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -731,7 +731,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -769,7 +769,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -794,7 +794,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(GENERIC));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),

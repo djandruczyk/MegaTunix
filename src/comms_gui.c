@@ -175,7 +175,7 @@ void build_comms(GtkWidget *parent_frame)
 			"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds.  This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
 
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(SER_POLL_TIMEO));
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->poll_timeout);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
@@ -207,7 +207,7 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,spinner,
 			"Sets the time delay between read attempts for getting the RealTime variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS.  This will control the rate at which the Runtime Display page updates.",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
+			G_CALLBACK (spinbutton_handler),
 			GINT_TO_POINTER(SER_INTERVAL_DELAY));
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->read_wait);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,

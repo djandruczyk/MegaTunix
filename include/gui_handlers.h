@@ -19,11 +19,10 @@
 /* Prototypes */
 void leave(GtkWidget *, gpointer);
 gint comm_port_change(GtkEditable *);
-gint std_button_handler(GtkWidget *, gpointer);
-gint toggle_button_handler(GtkWidget *, gpointer);
-gint bitmask_button_handler(GtkWidget *, gpointer);
-gint spinner_changed(GtkWidget *, gpointer);
-gint classed_spinner_changed(GtkWidget *, gpointer);
+gboolean std_button_handler(GtkWidget *, gpointer);
+gboolean toggle_button_handler(GtkWidget *, gpointer);
+gboolean bitmask_button_handler(GtkWidget *, gpointer);
+gboolean spinbutton_handler(GtkWidget *, gpointer);
 gint set_logging_mode(GtkWidget * widget, gpointer *data);
 void check_config11(unsigned char);
 void check_config13(unsigned char);

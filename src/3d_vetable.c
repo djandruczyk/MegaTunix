@@ -104,7 +104,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
         hbox = gtk_hbox_new(FALSE,5);
         gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
-        frame = gtk_frame_new("VE Table 3D display");
+        frame = gtk_frame_new("VE/Spark Table 3D display");
         gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
         drawing_area = gtk_drawing_area_new();

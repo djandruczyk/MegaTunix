@@ -172,7 +172,7 @@ gint comm_port_change(GtkEditable *editable)
 	return TRUE;
 }
 
-gint toggle_button_handler(GtkWidget *widget, gpointer data)
+gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
@@ -296,7 +296,7 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 	return TRUE;
 }
 
-gint bitmask_button_handler(GtkWidget *widget, gpointer data)
+gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint bit_pos = -1;
 	gint bit_val = -1;
@@ -425,7 +425,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gint std_button_handler(GtkWidget *widget, gpointer data)
+gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
 	void *w_data = NULL;
@@ -527,7 +527,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gint spinner_changed(GtkWidget *widget, gpointer data)
+gboolean spinbutton_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 
@@ -542,8 +542,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	gint tmpi = 0;
 	gint tmp = 0;
 	gfloat value = 0.0;
+	GtkWidget * info = NULL;
 	extern unsigned char * ms_data;
 	extern unsigned int ecu_caps;
+	extern gint lv_scroll;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Ignition_Table * ign_parms = NULL;
@@ -564,6 +566,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	if (ecu_caps & (S_N_EDIS|S_N_SPARK))
 		ign_parms = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 
+	info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
@@ -611,6 +614,12 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			req_fuel_total_2 = value;
 			check_req_fuel_limits();
 			break;
+		case LOGVIEW_SCROLL:
+			lv_scroll = tmpi;
+			g_signal_emit_by_name(info,"configure_event",NULL);
+
+			break;
+
 		case NUM_SQUIRTS_1:
 			/* This actuall effects another variable */
 			num_squirts_1 = tmpi;
