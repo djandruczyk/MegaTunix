@@ -16,14 +16,15 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <structures.h>
 
 /* Prototypes */
 void present_filesavebox(FileIoType, gpointer );
 void truncate_file(FileIoType, gchar *);
-void close_file(void * );
+void close_file(struct Io_File * );
 void check_filename(GtkWidget *, GtkFileSelection *);
-void backup_all_ms_settings(gchar  *);
-void restore_all_ms_settings(gchar  *);
+void backup_all_ecu_settings(gchar  *);
+void restore_all_ecu_settings(gchar  *);
 /* Prototypes */
 
 #endif

@@ -43,17 +43,15 @@ extern struct Serial_Params *serial_params;
 struct Firmware_Details *firmware = NULL;
 gboolean interrogated = FALSE;
 
+
+/*!
+ \brief interrogate_ecu() interrogates the target ECU to determine what
+ firmware it is running.  It does this by reading a list of tests, sending
+ those tests in turn, reading the responses and them comparing the group of
+ responses against a list of interrogation profiles until it finds a match.
+ */
 void interrogate_ecu()
 {
-	/* As of 10/26/2003 several MegaSquirt variants have arrived, the 
-	 * major ones being the DualTable Code, MegaSquirtnSpark, and
-	 * MegaSquirtnEDIS.  MegaTunix attempts to talk to all of them
-	 * and it is this functions job to try and determine which unit 
-	 * we are talking to.  The Std Version number query "Q" cannot be 
-	 * relied upon as severl of the forks use the same damn number.
-	 * So we use the approach of querying which commands respond to 
-	 * try and get as close as possible.
-	 */
 	struct Command *cmd = NULL;
 	struct Canidate *canidate = NULL;
 	extern GHashTable *dynamic_widgets;
@@ -222,9 +220,18 @@ void interrogate_ecu()
 }
 
 
-gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
+/*!
+ \brief determine_ecu() trys to match determine hte target firmware by 
+ loading hte interrogation profiles in turn and comparing hte data from our
+ test ECU adn a profile until a match is found, 
+ \param canidate (struct Canidate *) pointer to the Canidate structure
+ \param cmd_array (GArray *) pointer to the array of commands sent
+ \param cmd_details (GHashTable) details on the interrogation process with
+ the target ECU
+ \returns TRUE on successfull interrogation, FALSE on no match
+ */
+gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable *cmd_details)
 {
-	struct Canidate *canidate = (struct Canidate *)ptr;
 	struct Canidate *potential = NULL;
 	struct Command *cmd = NULL;
 	gint i = 0;
@@ -422,6 +429,14 @@ freeup:
 
 }
 
+
+/*!
+ \brief validate_and_load_tests() loads the list of tests from the system
+ checks them for validity, populates and array and returns it
+ \param cmd_details (GHashTable *) a hashtable where details regarding each 
+ command tested againsthte ECU arestored
+ \returns a dynamic GArray for commands
+ */
 GArray * validate_and_load_tests(GHashTable *cmd_details)
 {
 	ConfigFile *cfgfile;
@@ -490,6 +505,10 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 	return cmd_array;
 }
 
+
+/*!
+ \brief free_test_commands() deallocatss the data in the cmd_array array
+ */
 void free_test_commands(GArray * cmd_array)
 {
 	struct Command *cmd = NULL;
@@ -508,9 +527,13 @@ void free_test_commands(GArray * cmd_array)
 	g_array_free(cmd_array,TRUE);
 }
 
-void close_profile(void *ptr)
+/*!
+ \brief close_profile() closes the interrogation profile and deallocates and
+ memory associated with it..
+ \param canidate (struct Canidate *) pointer to the canidate structure
+ */
+void close_profile(struct Canidate *canidate)
 {
-	struct Canidate *canidate = (struct Canidate *) ptr;
 	gint i = 0;
 
 	dbg_func(__FILE__": close_profile(),\n\tDeallocating memory for potential canidate match\n",INTERROGATOR);
@@ -534,6 +557,10 @@ void close_profile(void *ptr)
 }
 
 
+/*!
+ \brief initialize_page_params() creates and initializes the page_params
+ datastructure to sane defaults and returns it
+ */
 struct Page_Params * initialize_page_params(void)
 {
 	struct Page_Params *page_params = NULL;
@@ -552,6 +579,10 @@ struct Page_Params * initialize_page_params(void)
 }
 
 
+/*!
+ \brief initialize_canidate() creates and initializes the Candidate
+ datastructure to sane defaults and returns it
+ */
 struct Canidate * initialize_canidate(void)
 {
 	struct Canidate *canidate = NULL;
@@ -582,7 +613,16 @@ struct Canidate * initialize_canidate(void)
 	return canidate;
 }
 		
-void * load_potential_match(GArray * cmd_array, gchar * filename)
+
+/*! 
+ \brief load_potential_match() loads an interrogation profile and loads only
+ the essentials on if needed to perform an interrogation against it.
+ \param cmd_array (GArray *) array of commands to load bytecounts for from
+ the interrogation profile
+ \param filename (gchr *) the name of hte interrogation profile filename
+ \returns a pointer to a Canidate structure
+ */
+struct Canidate * load_potential_match(GArray * cmd_array, gchar * filename)
 {
 	ConfigFile *cfgfile;
 	struct Canidate *canidate = NULL;
@@ -595,7 +635,7 @@ void * load_potential_match(GArray * cmd_array, gchar * filename)
 		dbg_func(g_strdup_printf(__FILE__": load_potential_match()\n\tfile:%s opened successfully\n",filename),INTERROGATOR);
 		canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->name);
-		load_bytecounts(cmd_array, canidate->bytecounts, (void *)cfgfile);
+		load_bytecounts(cmd_array, canidate->bytecounts, cfgfile);
 		if (!cfg_read_string(cfgfile,"parameters","SignatureQueryString",&canidate->sig_str))
 			dbg_func(g_strdup_printf(__FILE__": load_potential_match()\n\t\"SignatureQueryString\" NOT found in interrogation profile, ERROR\n"),CRITICAL);
 		if(!cfg_read_string(cfgfile,"parameters","ExtVerQueryString",&canidate->quest_str))
@@ -615,7 +655,14 @@ void * load_potential_match(GArray * cmd_array, gchar * filename)
 }
 
 		
-void load_profile_details(void *ptr)
+/*!
+ \brief load_profile_details() loads the profile details for the interrogation
+ profile.  This is only done on a match for final prep of megatunix data-
+ structures for use.
+ \param canidate (struct Canidate *) pointer to the canidate to store 
+ the rest of the data into
+ */
+void load_profile_details(struct Canidate *canidate)
 {
 	ConfigFile *cfgfile;
 	gchar * tmpbuf = NULL;
@@ -623,7 +670,6 @@ void load_profile_details(void *ptr)
 	gchar * section = NULL;
 	gchar ** list = NULL;
 	gint i = 0;
-	struct Canidate *canidate = ptr;
 
 	filename = g_strdup(canidate->filename);
 	cfgfile = cfg_open_file(filename);
@@ -784,12 +830,19 @@ void load_profile_details(void *ptr)
 	}
 }
 
-void load_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
+
+/*!
+ \brief load_bytecounts() loads the counts of bytes per command from the 
+ interrogation profile
+ \param cmd_array (GArray *) array of commands 
+ \param hash (GHashTable *) placeto put the data as we read it
+ \param cfgfile (ConfigFile *) configfileto get data from
+ */
+void load_bytecounts(GArray *cmd_array, GHashTable *hash, ConfigFile *cfgfile)
 {
 	struct Command *cmd = NULL;
 	gint i = 0;
 	gint bytecount = -2;
-	ConfigFile *cfgfile = (ConfigFile *) input;
 
 	for (i=0;i<cmd_array->len;i++)
 	{
@@ -805,6 +858,13 @@ void load_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 
 }
 
+
+/*!
+ \brief translate_capabilities() converts a stringlist into a mask of 
+ enumerations and returns it
+ \param string (gchar *) listing of capabilities in textual format
+ \returns an integer mask of the capabilites
+ */
 gint translate_capabilities(gchar *string)
 {
 	gchar **vector = NULL;
@@ -832,10 +892,18 @@ gint translate_capabilities(gchar *string)
 	return value;	
 }
 
-gboolean check_for_match(GArray *cmd_array, void *pot_ptr, void *can_ptr)
+
+/*!
+ \brief check_for_match() compares hte resutls ofhte interrogation with the
+ ECU to the canidates in turn.  when a match occurs TRUE is returns
+ otherwise it returns FALSE
+ \param cmd_array (GArray *) array of commands
+ \param potential (struct Canidate *) potential 
+ \param canidate (struct Canidate *) Canidate
+ \returns TRUE on match, FALSE on failure
+ */
+gboolean check_for_match(GArray *cmd_array, struct Canidate *potential, struct Canidate *canidate)
 {
-	struct Canidate *potential = (struct Canidate *)pot_ptr;
-	struct Canidate *canidate = (struct Canidate *)can_ptr;
 	gint num_tests = cmd_array->len;
 	gint cbytes = 0;
 	gint pbytes = 0;

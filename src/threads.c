@@ -34,15 +34,9 @@
 #include <unistd.h>
 
 
-GThread *raw_input_thread;			/* thread handle */
-GAsyncQueue *io_queue = NULL;
-GAsyncQueue *dispatch_queue = NULL;
-gboolean raw_reader_running;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
-extern GtkWidget * comms_view;
-extern struct Serial_Params *serial_params;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test"};
 
 
@@ -65,6 +59,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 	extern gboolean tabs_loaded;
 	extern struct Firmware_Details * firmware;
 	extern GHashTable *dynamic_widgets;
+	extern GAsyncQueue *io_queue;
 	gint tmp = -1;
 	gint i = 0;
 
@@ -211,6 +206,8 @@ void io_cmd(Io_Command cmd, gpointer data)
  */
 void *thread_dispatcher(gpointer data)
 {
+	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *dispatch_queue;
 	struct Io_Message *message = NULL;	
 
 	/* Endless Loop, wiat for message, processs and repeat... */
@@ -251,9 +248,9 @@ void *thread_dispatcher(gpointer data)
 			case BURN_CMD:
 				dbg_func(__FILE__": thread_dispatcher()\n\tburn_command requested\n",SERIAL_WR|THREADS);
 				if ((connected) || (offline))
-					burn_ms_flash();
+					burn_ecu_flash();
 				else
-					dbg_func(__FILE__": thread_dispatcher()\n\tburn_ms_flash skipped, NOT Connected!!\n",CRITICAL);
+					dbg_func(__FILE__": thread_dispatcher()\n\tburn_ecu_flash skipped, NOT Connected!!\n",CRITICAL);
 
 				break;
 

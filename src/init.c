@@ -35,7 +35,6 @@ extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
-extern gboolean raw_reader_running;
 extern gboolean tips_in_use;
 extern gint temp_units;
 extern gint main_x_origin;
@@ -53,8 +52,7 @@ gint **ms_data = NULL;
 gint **ms_data_last = NULL;
 gint **ms_data_backup = NULL;
 GList ***ve_widgets = NULL;
-GHashTable *interdep_vars_1 = NULL;
-GHashTable *interdep_vars_2 = NULL;
+GHashTable **interdep_vars = NULL;
 
 
 /*!
@@ -80,7 +78,6 @@ void init(void)
 	serial_params->read_wait = 100;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
-	raw_reader_running = FALSE;  /* We're not reading raw data yet... */
 	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
@@ -247,10 +244,7 @@ void mem_alloc()
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
 	 */
-	if (!interdep_vars_1)
-		interdep_vars_1 = g_hash_table_new(NULL,NULL);
-	if (!interdep_vars_2)
-		interdep_vars_2 = g_hash_table_new(NULL,NULL);
+
 
 
 	if (!ms_data)
@@ -261,8 +255,12 @@ void mem_alloc()
 		ms_data_backup = g_new0(gint *, firmware->total_pages);
 	if (!ve_widgets)
 		ve_widgets = g_new0(GList **, firmware->total_pages);
+	if (!interdep_vars)
+		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
+		interdep_vars[i] = g_hash_table_new(NULL,NULL);
+
 		if (!ms_data[i])
 			ms_data[i] = g_new0(gint, firmware->page_params[i]->length);
 		if (!ms_data_last[i])
@@ -305,6 +303,7 @@ void mem_dealloc()
 			g_free(ms_data[i]);
 			g_free(ms_data_last[i]);
 			g_free(ms_data_backup[i]);
+			g_hash_table_destroy(interdep_vars[i]);
 		}
 		if (firmware->name)
 			g_free(firmware->name);
@@ -320,8 +319,4 @@ void mem_dealloc()
 		g_free(ms_data_backup);
 	}
 
-	if (interdep_vars_1)
-		g_hash_table_destroy(interdep_vars_1);
-	if (interdep_vars_2)
-	g_hash_table_destroy(interdep_vars_2);
 }

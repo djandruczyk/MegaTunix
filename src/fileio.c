@@ -49,6 +49,14 @@ static gchar *vexfile;
 static gchar *dlogfile;
 static gchar *logviewfile;
 
+
+/*!
+ \brief present_filesavebox() displays a file chooser to choose a file for
+ import or export,  this is a generic routine used by several parts of 
+ MegaTunix
+ \param iotype (FileIoType enumeration) determines title used
+ \param dest_widget (gpointer) pass through widget passed to the sig handler
+ */
 void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 {
 	/* The idea is to present a filesavebox and bind the datatype
@@ -125,6 +133,13 @@ void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 
 }
 
+
+/*!
+ \brief check_filename() checks the filename passed to us from 
+ present_filesavebox is valid and can be used for it's selected purpose.
+ \param widget (GtkWidget *)
+ \param file_selector (GtkFileSelection *) pointer to file selector.
+ */
 void check_filename (GtkWidget *widget, GtkFileSelection *file_selector) 
 {
 	gchar *selected_filename;
@@ -260,7 +275,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			}
 			backup_open = TRUE;
 			close_file(iofile);
-			backup_all_ms_settings(selected_filename);
+			backup_all_ecu_settings(selected_filename);
 			backup_open = FALSE;
 			break;
 		case FULL_RESTORE:
@@ -272,7 +287,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			}
 			restore_open = TRUE;
 			close_file(iofile);
-			restore_all_ms_settings(selected_filename);
+			restore_all_ecu_settings(selected_filename);
 			restore_open = FALSE;
 			break;
 
@@ -316,16 +331,18 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 }
 
-void close_file(void *ptr)
+
+/*!
+ \brief close_file() closes the open file
+ \param iofile (struct Io_File *) pointer to the struct Io_File
+ */
+void close_file(struct Io_File *iofile)
 {
-	struct Io_File *iofile = NULL;
 	gchar *tmpbuf = NULL;
 	GIOStatus status;
 	GError *error = NULL;
 
-	if (ptr != NULL)
-		iofile = (struct Io_File *)ptr;
-	else
+	if (!iofile)
 	{
 //		dbg_func(__FILE__": close_file()\n\tIo_File pointer is NULL, REturning NOW!!\n",CRITICAL);
 		return;
@@ -390,6 +407,12 @@ void close_file(void *ptr)
 		g_free(tmpbuf);
 }
 
+
+/*!
+ \brief truncate_file() truncates the file to 0 bytes
+ \param filetype (FileIoType enumeration) used to select a course of action
+ \param filename (gchar *) filename to truncate
+ */
 void truncate_file(FileIoType filetype, gchar *filename)
 {
 	gchar *tmpbuf = NULL;
@@ -419,7 +442,12 @@ void truncate_file(FileIoType filetype, gchar *filename)
 	g_free(base);
 }
 
-void backup_all_ms_settings(gchar *filename)
+
+/*!
+ \brief backup_all_ecu_settings() backs up the ECU to a filename passed
+ \param filename (gchar *) filename to backup the ECU to
+ */
+void backup_all_ecu_settings(gchar *filename)
 {
 	extern struct Firmware_Details *firmware;
 	ConfigFile *cfgfile;
@@ -455,7 +483,14 @@ void backup_all_ms_settings(gchar *filename)
 		g_free(section);
 }
 
-void restore_all_ms_settings(gchar *filename)
+
+/*!
+ \brief restore_all_ecu_settings() reads the filename passed and if all checks
+ pass the file will be loaded and any values that differ from the values
+ currently in the ECU will be replaced.
+ \param filename (filename to read for ecu restoration
+ */
+void restore_all_ecu_settings(gchar *filename)
 {
 	extern struct Firmware_Details *firmware;
 	ConfigFile *cfgfile;
@@ -475,7 +510,7 @@ void restore_all_ms_settings(gchar *filename)
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
 		if (g_strcasecmp(tmpbuf,firmware->name) != 0)
 		{
-			dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),CRITICAL);
 			if (tmpbuf)
 				g_free(tmpbuf);
 			cfg_free(cfgfile);
@@ -486,12 +521,12 @@ void restore_all_ms_settings(gchar *filename)
 			section = g_strdup_printf("page_%i",i);
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
 				if (tmpi != firmware->page_params[i]->length)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[i]->length),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[i]->length),CRITICAL);
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
 				keys = parse_keys(tmpbuf,&num_keys,",");
 				if (num_keys != firmware->page_params[i]->length)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->length),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->length),CRITICAL);
 				for (x=0;x<num_keys;x++)
 				{
 					ms_data[i][x]=atoi(keys[x]);

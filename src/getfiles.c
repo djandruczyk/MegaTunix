@@ -19,6 +19,15 @@
 #include <structures.h>
 
 
+
+/*!
+ \brief get_files() returns a list of files located at the pathstub passed
+ this function will first search starting from ~/.MegaTunix+pathstub and
+ then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
+ the list as a vector char array. (free with g_strfreev)
+ \param pathstub (gchar *) partial path to search for files
+ \returns vector char array of filenames or NULL if none found
+ */
 gchar ** get_files(gchar *pathstub)
 {
 	gchar *path = NULL;
@@ -76,6 +85,13 @@ gchar ** get_files(gchar *pathstub)
 	return (g_strsplit(list,",",0));
 }
 
+
+/*!
+ \brief get_file() gets a single file defnied by pathstub, first searching in
+ ~/.MegaTunix+pathstub, and then in $PREFIX/share/MegaTunix/+pathstub,
+ \param pathstub (gchar *) partial path to filename
+ \returns filename if found or NULL if not found
+ */
 gchar * get_file(gchar *pathstub)
 {
 	gchar * filename = NULL;

@@ -20,7 +20,7 @@
 /* Prototypes */
 gboolean load_gui_tabs(void);
 void group_free(gpointer );
-void load_groups(ConfigFile *, GHashTable * );
+GHashTable * load_groups(ConfigFile *);
 void bind_data(GtkWidget *, gpointer);
 gint bind_group_data(GtkWidget *, GHashTable *, gchar *);
 void run_post_function_with_arg(gchar *, GtkWidget *);

@@ -87,7 +87,8 @@ gboolean load_gui_tabs()
 				bindgroup->cfgfile = cfgfile;
 				bindgroup->groups = groups;
 				bind_data(topframe,(gpointer)bindgroup);
-				g_hash_table_destroy(groups);
+				if (groups)
+					g_hash_table_destroy(groups);
 				populate_master(topframe,(gpointer)cfgfile);
 
 				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);

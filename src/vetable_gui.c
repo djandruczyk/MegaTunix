@@ -25,16 +25,15 @@
 /*!
  \brief rescale_table() is called to rescale a subset of a Table (doesn't
  matter what kind of table). 
- \param data (void *) is the widget name of the scaler widget that was used.
- From this widget we extract the table number and other needed data to 
- properly do the rescaling.
+ \param widget_name (gchar *) is the widget name of the scaler widget 
+ that was used. From this widget we extract the table number and other 
+ needed data to properly do the rescaling.
  */
-void rescale_table(void * data)
+void rescale_table(gchar * widget_name)
 {
 	extern struct Firmware_Details *firmware;
 	extern GList ***ve_widgets;
 	extern GHashTable *dynamic_widgets;
-	gchar *widget_name = (gchar *)data;
 	gint table_num = -1;
 	gint tbl_base = -1;
 	gint tbl_page = -1;

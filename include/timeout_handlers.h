@@ -23,8 +23,6 @@ void start_logviewer_playback(void);
 void stop_logviewer_playback(void);
 gboolean signal_read_rtvars(void);
 gboolean early_interrogation(void);
-void force_an_update(void);
-gboolean cancel_forced_update(void);
 /* Prototypes */
 
 #endif

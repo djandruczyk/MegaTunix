@@ -20,6 +20,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
+#include <gdk/gdkkeysyms.h>
 #include <gui_handlers.h>
 #include <glib.h>
 #include <init.h>
@@ -35,6 +36,7 @@
 #include <runtime_gui.h>
 #include <serialio.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <structures.h>
 #include <tabloader.h>
 #include <threads.h>
@@ -53,8 +55,6 @@ extern gint ready;
 extern GtkTooltips *tip;
 extern GList ***ve_widgets;
 extern struct Serial_Params *serial_params;
-extern GHashTable *interdep_vars_1;
-extern GHashTable *interdep_vars_2;
 
 gboolean tips_in_use;
 gint temp_units;
@@ -90,6 +90,13 @@ extern gfloat last_req_fuel_total_2;
 static gboolean err_flag = FALSE;
 gboolean leaving = FALSE;
 
+
+/*!
+ \brief leave() is the main shutdown function for MegaTunix. It shuts down
+ whatever runnign handlers are still going, deallocates memory and quits
+ \param widget (GtkWidget *) unused
+ \param data (gpointer) unused
+ */
 void leave(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dynamic_widgets;
@@ -135,7 +142,15 @@ void leave(GtkWidget *widget, gpointer data)
 	return;
 }
 
-gint comm_port_change(GtkEditable *editable)
+
+/*!
+ \brief comm_port_change() is called every time the comm port text entry
+ changes. it'll try to open the port and if it does it'll setup the serial 
+ parameters
+ \param editable (GtkWditable *) pointer to editable widget to extract text from
+ \returns TRUE
+ */
+gboolean comm_port_change(GtkEditable *editable)
 {
 	gchar *port;
 	gboolean result;
@@ -161,6 +176,13 @@ gint comm_port_change(GtkEditable *editable)
 	return TRUE;
 }
 
+
+/*!
+ \brief toggle_button_handler() handles all toggle buttons in MegaTunix
+ \param widget (GtkWidget *) the toggle button that changes
+ \param data (gpointer) unused in most cases
+ \returns TRUE
+ */
 EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	void *obj_data = NULL;
@@ -247,6 +269,16 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief bitmask_button_handler() handles all controls that refer to a group
+ of bits in a variable (i.e. a var shared by multiple controls),  most commonly
+ used for check/radio buttons referring to features that control single
+ bits in the firmware
+ \param widget (Gtkwidget *) widget being changed
+ \param data (gpointer) not really used 
+ \returns TRUE
+ */
 EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint bitshift = -1;
@@ -267,6 +299,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
+	extern GHashTable **interdep_vars;
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -334,7 +367,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				alternate_1 = bitval;
 				ms_data[page][offset] = bitval;
 				dload_val = bitval;
-				g_hash_table_insert(interdep_vars_1,
+				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 				check_req_fuel_limits();
@@ -354,6 +387,15 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief entry_changed_handler() gets called anytiem a text entries is changed
+ (i.e. during edit) it's main purpose is to turn hte entry red to signify
+ to the user it's being modified but not yet SENT to the ecu
+ \param widget (GtkWidget *) the widget being modified
+ \param data (gpointer) not used
+ \returns TRUE
+ */
 EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
 	if ((paused_handlers) || (!ready))
@@ -364,6 +406,16 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+/*!
+ \brief std_entry_handler() gets called when a text entries is "activated"
+ i.e. when the user hits enter. This function extracts the data, converts it
+ to a number (checking for base10 or base16) performs the proper conversion
+ and send it to the ECU and updates the gui to the closest value if the user
+ didn't enter in an exact value.
+ \param widget (GtkWidget *) the widget being modified
+ \param data (gpointer) not used
+ \returns TRUE
+ */
 EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
@@ -428,7 +480,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	 */
 	real_value = convert_after_upload(widget);
 	if (is_float)
-		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.*2$f",real_value,precision));
+		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%1$.*2$f",real_value,precision));
 	else
 	{
 		if (base == 10)
@@ -444,6 +496,13 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+ \brief std_button_handler() handles all standard non toggle/check/radio
+ buttons. 
+ \param widget (GtkWidget *) the widget being modified
+ \param data (gpointer) not used
+ \returns TRUE
+ */
 EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
@@ -583,6 +642,14 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief spin_button_handler() handles ALL spinbuttons in MegaTunix and does
+ whatever is needed for the data before sending it to the ECU
+ \param widget (GtkWidget *) the widget being modified
+ \param data (gpointer) not used
+ \returns TRUE
+ */
 EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
@@ -611,6 +678,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern struct Firmware_Details *firmware;
+	extern GHashTable **interdep_vars;
 
 	if ((paused_handlers) || (!ready))
 	{
@@ -710,7 +778,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						(float)num_squirts_1)+0.001);
 				ms_data[page][divider_offset] = dload_val;
 				divider_1 = dload_val;
-				g_hash_table_insert(interdep_vars_1,
+				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
@@ -737,7 +805,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp | ((tmpi-1) << bitshift);
 				ms_data[page][offset] = tmp;
 				dload_val = tmp;
-				g_hash_table_insert(interdep_vars_1,
+				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 
@@ -746,7 +814,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						(float)num_squirts_1)+0.001);
 				ms_data[page][divider_offset] = dload_val;
 				divider_1 = dload_val;
-				g_hash_table_insert(interdep_vars_1,
+				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
 						GINT_TO_POINTER(dload_val));
 
@@ -765,7 +833,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | ((tmpi-1) << bitshift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
-			g_hash_table_insert(interdep_vars_1,
+			g_hash_table_insert(interdep_vars[page],
 					GINT_TO_POINTER(offset),
 					GINT_TO_POINTER(dload_val));
 
@@ -790,7 +858,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						(float)num_squirts_2)+0.001);
 				ms_data[page][divider_offset] = dload_val;
 				divider_2 = dload_val;
-				g_hash_table_insert(interdep_vars_2,
+				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
@@ -817,7 +885,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp | ((tmpi-1) << bitshift);
 				ms_data[page][offset] = tmp;
 				dload_val = tmp;
-				g_hash_table_insert(interdep_vars_2,
+				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 
@@ -826,7 +894,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						(float)num_squirts_2)+0.001);
 				ms_data[page][divider_offset] = dload_val;
 				divider_2 = dload_val;
-				g_hash_table_insert(interdep_vars_2,
+				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
 						GINT_TO_POINTER(dload_val));
 
@@ -845,7 +913,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | ((tmpi-1) << bitshift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
-			g_hash_table_insert(interdep_vars_2,
+			g_hash_table_insert(interdep_vars[page],
 					GINT_TO_POINTER(offset),
 					GINT_TO_POINTER(dload_val));
 
@@ -913,6 +981,12 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 }
 
+
+/*!
+ \brief update_ve_const() is called after a read of the VE/Const block of 
+ data from the ECU.  It takes care of updating evey control that relates to
+ an ECU variable on screen
+ */
 void update_ve_const()
 {
 	gint page = 0;
@@ -1063,6 +1137,14 @@ void update_ve_const()
 	}
 }
 
+
+/*!
+ \brief update_widget() updates a widget on screen.  All parameters re the
+ conversions and where hte raw value is stored is embedded within the widget 
+ itself.
+ \param object (gpointer) pointer to the widget object
+ \user_data (gpointer) pointerto a widget to compare against to prevent a race
+ */
 void update_widget(gpointer object, gpointer user_data)
 {
 	GtkWidget * widget = object;
@@ -1131,7 +1213,7 @@ void update_widget(gpointer object, gpointer user_data)
 		if (base == 10)
 		{
 			if (is_float)
-				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.*2$f",value,precision));
+				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%1$.*2$f",value,precision));
 			else
 				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)value));
 		}
@@ -1178,6 +1260,14 @@ void update_widget(gpointer object, gpointer user_data)
 
 }
 
+
+/*!
+ \brief key_event() is triggered when a key is pressed on a widget that
+ has a key_press/release_event handler registered.
+ \param widget (GtkWidget *) widget where the event occurred
+ \param event (GdkEventKey) event struct, (contains key that was pressed)
+ \param data (gpointer) unused
+ */
 EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	gint page = 0;
@@ -1253,6 +1343,16 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	return retval;;
 }
 
+
+/*!
+ \brief widget_grab() used on Tables only to "select" the widget or 
+ group of widgets for rescaling . Requires shift key to be held down and click
+ on each spinner/entry that you want to select for rescaling
+ \param widget (GtkWidget *) widget being selected
+ \param event (GdkEventButton *) struct containing details on the event
+ \param data (gpointer) unused
+ \returns FALSE to allow other handlers to run
+ */
 EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
@@ -1315,6 +1415,16 @@ testit:
 
 }
 
+
+/*
+ \brief page_changed() is fired off whenever a new notebook page is chosen.
+ This fucntion jsutr sets a variabel markign hte current page.  this is to
+ prevent hte runtime sliders from being updated if they aren't visible
+ \param notebook (GtkNotebook *) nbotebook that emitted the event
+ \param page (GtkNotebookPage *) page
+ \param page_no (guint) page number that's now active
+ \param data (gpointer) unused
+ */
 void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint page_ident = 0;
@@ -1328,6 +1438,14 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 	return;
 }
 
+
+/*!
+ \brief switch_labels() swaps labels on  temp dependant controls that are 
+ dependant on the state of another control
+ \param widget_name (gchar *) widget name we are checking state of
+ \param state (gboolean) if TRUE we use hte alternate label, if FALSE we use
+ the default label
+ */
 void switch_labels(gchar * widget_name,gboolean state)
 {
 	extern GHashTable *dynamic_widgets;

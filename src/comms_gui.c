@@ -25,7 +25,6 @@
 #include <widgetmgmt.h>
 
 extern gint read_wait_time;
-extern gint raw_reader_running;
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
@@ -36,6 +35,12 @@ gint interval_step;
 gint interval_max;
 GdkColor white = { 0, 65535, 65535, 65535 };
 
+
+/*!
+ \brief build_comms() builds the comms Tab for megatunix providing controls
+ for selecting the serial port, ECU polloing speeds, and provides a textview
+ (comms_view) and status boxes shows the I/O status of comms with the ECU.
+ */
 void build_comms(GtkWidget *parent_frame)
 {
 	extern GtkTooltips *tip;
@@ -290,6 +295,12 @@ void build_comms(GtkWidget *parent_frame)
 	return;
 }
 
+
+/*!
+ \brief reset_errcounts() resets the error counters
+ \param widget (GtkWidget *) unused
+ \returns TRUE
+ */
 EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
 	ms_ve_goodread_count = 0;
@@ -299,6 +310,12 @@ EXPORT gboolean reset_errcounts(GtkWidget *widget)
 	return TRUE;
 }
 
+
+/*!
+ \brief update_errcounts() updates the text entries on the gui with the 
+ current statistical error and i/O counters
+ \returns TRUE
+ */
 gboolean update_errcounts()
 {
 	gchar *tmpbuf = NULL;

@@ -27,19 +27,21 @@
 
 struct Log_Info *log_info = NULL;
 
-void load_logviewer_file(void *ptr)
-{
-	struct Io_File *iofile = NULL;
 
-	if (ptr != NULL)
-		iofile = (struct Io_File*) ptr;
-	else
+/*! 
+ \brief load_logviewer_file() loads a datalog file for playback
+ \param ptr (void *) pointer to an Io_File
+ */
+void load_logviewer_file(struct Io_File *iofile)
+{
+	struct Log_Info *log_info = NULL;
+
+	if (!iofile)
 	{
 		dbg_func(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n",CRITICAL);
 		return;
 	}
-	log_info = g_malloc0(sizeof(struct Log_Info));
-	initialize_log_info(log_info);
+	log_info = initialize_log_info();
 	read_log_header(iofile->iochannel, log_info);
 	read_log_data(iofile->iochannel, log_info);
 	populate_limits(log_info);
@@ -48,25 +50,30 @@ void load_logviewer_file(void *ptr)
 }
 
 
-/* Initializer routine for the log_info datastructure */
-void initialize_log_info(void *ptr)
+/*!
+ \brielf initialixe_log_info() alocates, and sets to sane defaults the fields
+ of the log_info struture
+ \returns a pointer to an allocated Log_Info structure
+ */
+struct Log_Info * initialize_log_info(void)
 {
-	struct Log_Info *log_info;
-	log_info = ptr;
+	struct Log_Info *log_info = NULL;
+	log_info = g_malloc0(sizeof(struct Log_Info));
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
 	log_info->log_list = g_array_new(FALSE,FALSE,sizeof(GObject *));
-	return;
+	return log_info;
 }
 
-/* First we read the first line,  try to determine if the delimiter
- * is a COMMA, TAB or a SPACE.
- * If we detect SPACE delimiting,  we need to read one dataline because
- * the variable names can be space delimited and we need to figure out
- * how to discern thespace inthe name with the space in between variable names
- * This may be UGLY...
+/*!
+ \brief read_log_header() First we read the first line,  try to determine 
+ if the delimiter is a COMMA, TAB or a SPACE. If we detect SPACE delimiting,  
+ we need to read one dataline because the variable names can be space 
+ delimited and we need to figure out how to discern thespace inthe name with the space in between variable names
+ \param iochannel (GIOChannel *) iochannel that represents the input file
+ \param ptr (void *) pointer to the Log_Info structure
  */
-void read_log_header(GIOChannel *iochannel, void *ptr)
+void read_log_header(GIOChannel *iochannel, struct Log_Info *log_info )
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus  status = G_IO_STATUS_ERROR;
@@ -76,7 +83,6 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 	GArray *array = NULL;
 	GObject *object = NULL;
 	gint i = 0;
-	struct Log_Info *log_info = ptr;
 	extern GHashTable *dynamic_widgets;
 
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
@@ -120,12 +126,15 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 }
 
 
-void populate_limits(void *ptr)
+/*!
+ \brief populate_limits() scans the datalog data and sets the minimum and 
+ maximum values based on the span of hte data in the file
+ \param log_info (struct Log_Info *) pointer to log info structure
+ */
+void populate_limits(struct Log_Info *log_info)
 {
-	struct Log_Info *log_info = NULL;
 	gint i = 0;
 	gint j = 0;
-	log_info = ptr;
 	GObject * object = NULL;
 	GArray *array = NULL;
 	gfloat val = 0.0;
@@ -163,11 +172,15 @@ void populate_limits(void *ptr)
 }
 
 
-void read_log_data(GIOChannel *iochannel, void *ptr)
+/*! 
+ \brief read_log_data() reads the log data and sticks it into the arrays in
+ the log_info structure
+ \param iochannel (GIOChannel *) data source 
+ \param log_info (struct Log_Info *) pointer to log information struct
+ */
+void read_log_data(GIOChannel *iochannel, struct Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
-	//GIOStatus  status = G_IO_STATUS_ERROR;
-	struct Log_Info *log_info = ptr;
 	gchar **data = NULL;
 	gint i = 0;
 	GArray *tmp_array = NULL;
@@ -193,8 +206,8 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 }
 
 /*!
- * \brief frees data allocated by a datalog import, should be done when
- * switching logfiles
+ \brief free_log_info frees the data allocated by a datalog import, 
+ should be done when switching logfiles
  */
 void free_log_info()
 {

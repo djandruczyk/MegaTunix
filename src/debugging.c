@@ -20,6 +20,13 @@
 
 guint dbg_lvl = 0;
 
+
+/*!
+ \brief dbg_func() writes debugggin output to the console based on if the
+ passed debug level is marked in the current debugging mask.
+ \param str (gchar *) message to print out
+ \param class (Dbg_Class enumeration) the debug level
+ */
 void dbg_func(gchar *str, Dbg_Class class)
 {
 	if ((dbg_lvl & class))

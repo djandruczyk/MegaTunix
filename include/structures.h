@@ -407,4 +407,83 @@ struct BindGroup
 	GHashTable *groups;	/*! where the groups table goes */
 };
 
+
+/*!
+ \brief the Ve_View_3D structure contains all the field to create and 
+ manipulate a 3D view of a MegaSquirt VE/Spark table, and should work in
+ theory for any sized table
+ */
+struct Ve_View_3D
+{
+	gint beginX;
+	gint beginY;
+	gint active_y;
+	gint active_x;
+	gfloat dt;
+	gfloat sphi;
+	gfloat stheta;
+	gfloat sdepth;
+	gfloat zNear;
+	gfloat zFar;
+	gfloat aspect;
+	gfloat x_div;
+	gfloat y_div;
+	gfloat z_div;
+	gfloat h_strafe;
+	gfloat v_strafe;
+	gint x_max;
+	gint x_min;
+	gint y_max;
+	gint y_min;
+	gint z_max;
+	gint z_min;
+	gfloat z_offset;
+	gchar *x_source;
+	gchar *y_source;
+	gchar *z_source;
+	GtkWidget *drawing_area;
+	GtkWidget *window;
+	GtkWidget *burn_but;
+	gint y_base;
+	gint y_page;
+	gint y_bincount;
+	gint tbl_base;
+	gint tbl_page;
+	gint x_base;
+	gint x_page;
+	gint x_bincount;
+	gboolean is_spark;
+	gchar *table_name;
+	gint table_num;
+	gfloat z_scale;
+};
+
+
+/*!
+ \brief The Vex_Import structure holds all fields (lots) needed to load and
+ process a VEX (VEtabalt eXport file) and load it into megatunix.
+ \see vetable_import
+ \see vetable_export
+ */
+struct Vex_Import
+{	
+	gchar *version;		/* String */
+	gchar *revision;	/* String */
+	gchar *comment;		/* String */
+	gchar *date;		/* String */
+	gchar *time;		/* String */
+	gint page;		/* Int */
+	gint total_rpm_bins;	/* Int */
+	gint *rpm_bins;		/* Int Array, dynamic */
+	gint total_load_bins;	/* Int */
+	gint *load_bins;	/* Int Array, dynamic */
+	gint total_ve_bins;	/* Int */
+	gint *ve_bins;	/* Int Array, dynamic */
+	gboolean got_page;	/* Flag */
+	gboolean got_rpm;	/* Flag */
+	gboolean got_load;	/* Flag */
+	gboolean got_ve;	/* Flag */
+	
+};
+
 #endif

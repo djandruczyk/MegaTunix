@@ -12,11 +12,9 @@
  */
 
 #include <config.h>
-#include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
 #include <mode_select.h>
-#include <serialio.h>
 #include <structures.h>
 #include <threads.h>
 

@@ -466,8 +466,7 @@ void check_req_fuel_limits()
 	union config11 cfg11;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
-	extern GHashTable * interdep_vars_1;
-	extern GHashTable * interdep_vars_2;
+	extern GHashTable ** interdep_vars;
 	extern GHashTable *dynamic_widgets;
 	extern gint **ms_data;
 	extern struct Firmware_Details *firmware;
@@ -541,7 +540,7 @@ void check_req_fuel_limits()
 			ms_data[page][offset] = req_fuel_per_squirt;
 			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
-			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
+			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 
 		}
 
@@ -596,7 +595,7 @@ void check_req_fuel_limits()
 			ms_data[page][offset] = req_fuel_per_squirt;
 			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
-			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(page));
+			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 
 		}
 
@@ -687,7 +686,7 @@ void check_req_fuel_limits()
 			offset = firmware->page_params[page]->reqfuel_offset;
 			ms_data[page][offset] = req_fuel_per_squirt;
 			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
-			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
+			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 		}
 	} // End B&G style Req Fuel check 
 	return ;

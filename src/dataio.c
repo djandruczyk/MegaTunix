@@ -31,7 +31,15 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
 
-gboolean handle_ecu_data(InputHandler handler, void * msg)
+
+/*!
+ \brief handle_ecu_data() reads in the data from the ECU, checks to make sure
+ enough arrived, copies it to thedestination buffer and returns;
+ \param handler (InputHandler enumeration) determines a courseof action
+ \param message (struct Io_Message *) extra data for some handlers...
+ \returns TRUE on success, FALSE on failure 
+ */
+gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 {
 	gint res = 0;
 	gint i = 0;
@@ -43,7 +51,6 @@ gboolean handle_ecu_data(InputHandler handler, void * msg)
 	guchar buf[2048];
 	guchar *ptr = buf;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
-	struct Io_Message *message = (struct Io_Message *)msg;
 	extern gint **ms_data;
 	extern gint **ms_data_last;
 	extern struct Serial_Params *serial_params;

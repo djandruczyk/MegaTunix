@@ -15,6 +15,7 @@
 #define __3D_VETABLE_H__
 
 #include <gtk/gtk.h>
+#include <structures.h>
 
 /* GL includes */
 #include <gtk/gtkwidget.h>
@@ -24,8 +25,6 @@
 #endif
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <pango/pangoft2.h>
-#include <gdk/gdkkeysyms.h>
 
 /* Prototypes */
 gint create_ve3d_view(GtkWidget *, gpointer );
@@ -37,68 +36,16 @@ gboolean ve3d_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean ve3d_motion_notify_event(GtkWidget *, GdkEventMotion *,gpointer);
 gboolean ve3d_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
 gboolean ve3d_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
-void ve3d_calculate_scaling(void *);
-void ve3d_draw_ve_grid(void *);
-void ve3d_draw_active_indicator(void *);
-void ve3d_draw_runtime_indicator(void *);
-void ve3d_draw_axis(void *);
+void ve3d_calculate_scaling(struct Ve_View_3D *);
+void ve3d_draw_ve_grid(struct Ve_View_3D *);
+void ve3d_draw_active_indicator(struct Ve_View_3D *);
+void ve3d_draw_runtime_indicator(struct Ve_View_3D *);
+void ve3d_draw_axis(struct Ve_View_3D *);
 void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);
 void ve3d_load_font_metrics(void);
 void reset_3d_view(GtkWidget *);
-void initialize_ve3d_view(void *);
+struct Ve_View_3D * initialize_ve3d_view();
 
 /* Prototypes */
-
-/* Datastructures... */
-
-/*!
- \brief the Ve_View_3D structure contains all the field to create and 
- manipulate a 3D view of a MegaSquirt VE/Spark table, and should work in
- theory for any sized table
- */
-struct Ve_View_3D
-{
-	gint beginX;
-	gint beginY;
-	gint active_y;
-	gint active_x;
-	gfloat dt;
-	gfloat sphi;
-	gfloat stheta;
-	gfloat sdepth;
-	gfloat zNear;
-	gfloat zFar;
-	gfloat aspect;
-	gfloat x_div;
-	gfloat y_div;
-	gfloat z_div;
-	gfloat h_strafe;
-	gfloat v_strafe;
-	gint x_max;
-	gint x_min;
-	gint y_max;
-	gint y_min;
-	gint z_max;
-	gint z_min;
-	gfloat z_offset;
-	gchar *x_source;
-	gchar *y_source;
-	gchar *z_source;
-	GtkWidget *drawing_area;
-	GtkWidget *window;
-	GtkWidget *burn_but;
-	gint y_base;
-	gint y_page;
-	gint y_bincount;
-	gint tbl_base;
-	gint tbl_page;
-	gint x_base;
-	gint x_page;
-	gint x_bincount;
-	gboolean is_spark;
-	gchar *table_name;
-	gint table_num;
-	gfloat z_scale;
-};
 
 #endif

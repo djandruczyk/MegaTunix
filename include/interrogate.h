@@ -14,21 +14,22 @@
 #ifndef __INTERROGATE_H__
 #define __INTERROGATE_H__
 
+#include <configfile.h>
 #include <gtk/gtk.h>
 #include <structures.h>
 
 /* Prototypes */
 void interrogate_ecu(void);
-gboolean determine_ecu(void *, GArray *,GHashTable *);
+gboolean determine_ecu(struct Canidate *, GArray *,GHashTable *);
 GArray * validate_and_load_tests(GHashTable *);
 void free_test_commands(GArray *);
-void load_bytecounts(GArray *, GHashTable *, void *);
-void close_profile(void * );
-void * load_potential_match(GArray * , gchar * );
+void load_bytecounts(GArray *, GHashTable *, ConfigFile *);
+void close_profile(struct Canidate * );
+struct Canidate * load_potential_match(GArray * , gchar * );
 struct Canidate * initialize_canidate(void);
 struct Page_Params * initialize_page_params(void);
-gboolean check_for_match(GArray *, void *, void *);
-void load_profile_details(void * );
+gboolean check_for_match(GArray *, struct Canidate *, struct Canidate *);
+void load_profile_details(struct Canidate * );
 gint translate_capabilities(gchar *);
 /* Prototypes */
 

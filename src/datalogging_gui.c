@@ -43,6 +43,12 @@ static gboolean logging_active = FALSE;
 static gboolean header_needed = FALSE;
 
 
+/*!
+ \brief populate_dlog_choices() is called when hte datalogging tab is loaded
+ by glade AFTER the realtime variable definitions have been loaded and 
+ processed.  All of hte logable variables are then placed here to user 
+ selecting during datalogging.
+ */
 void populate_dlog_choices()
 {
 	gint i,j,k;
@@ -71,7 +77,7 @@ void populate_dlog_choices()
 	vbox = g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1");
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
-//	logables_table = table;
+	//	logables_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
@@ -97,7 +103,7 @@ void populate_dlog_choices()
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")),TRUE);
 			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")));
 			break;
-	
+
 	}
 	j = 0;	
 	k = 0;
@@ -141,6 +147,11 @@ void populate_dlog_choices()
 	return;
 }
 
+
+/*!
+ \brief start_datalogging() enables logging and if RT vars aren't running it
+ starts them.
+ */
 void start_datalogging(void)
 {
 	GtkWidget * widget = NULL;
@@ -164,6 +175,11 @@ void start_datalogging(void)
 	return;
 }
 
+
+/*!
+ \brief stop_datalogging() stops the datalog process. It DOES not stop realtime
+ variable readback though
+ */
 void stop_datalogging()
 {
 	extern GHashTable *dynamic_widgets;
@@ -181,6 +197,9 @@ void stop_datalogging()
 }
 
 
+/*!
+ \brief clear_logables() resets the logged choices to having NONE selected
+ */
 void clear_logables(void)
 {
 	gint i = 0;
@@ -198,6 +217,11 @@ void clear_logables(void)
 	}
 }
 
+
+/*! 
+ \brief log_value_set() gets called when a variable is selected for 
+ logging so that it can be marked as being logged
+ */
 gboolean log_value_set(GtkWidget * widget, gpointer data)
 {
 	GObject *object = NULL;
@@ -212,19 +236,21 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-void write_log_header(void *ptr)
+
+/*!
+ \brief write_log_header() writes the top line of the datalog with field names
+ \param iofile (struct Io_File *) pointer to the datalog output file 
+ */
+void write_log_header(struct Io_File *iofile)
 {
 	gint i = 0;
 	gint j = 0;
 	gint total_logables = 0;
 	gsize count = 0;
 	GString *output;
-	struct Io_File *iofile = NULL;
 	GObject * object = NULL;
 	gchar * string = NULL;
-	if (ptr != NULL)
-		iofile = (struct Io_File *)ptr;
-	else
+	if (!iofile)
 	{
 		dbg_func(__FILE__": write_log_header()\n\tIo_File pointer was undefined, returning NOW...\n",CRITICAL);
 		return;
@@ -256,6 +282,11 @@ void write_log_header(void *ptr)
 
 }
 
+
+/*!
+ \brief run_datalog() gets called each time data arrives after rtvar 
+ processing and logs the selected values to the file
+ */
 void run_datalog(void)
 {
 	gint i = 0;
@@ -326,7 +357,14 @@ void run_datalog(void)
 
 }
 
-EXPORT gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
+
+/*!
+ \brief set_logging_mode() is currently deprecated and does nothing 
+ \param widget (GtkWidget *)
+ \param data (gpointer ) unused
+ \returns TRUE
+ */
+EXPORT gboolean set_logging_mode(GtkWidget * widget, gpointer data)
 {
 	gint handler = 0;
 

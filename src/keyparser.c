@@ -20,6 +20,14 @@
 #include <stringmatch.h>
 
 
+/*!
+ \brief parse_keys() splits up a string list into a vector and returns it
+ and the number of keys
+ \param string (gchar *) input string
+ \param count (gint *) reference to dest to place number of keys
+ \param delimiter (gchar *) char to split the string with
+ \returns a string vector of the original string split up with the delimiter
+ */
 gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 {
 	gchar **result = NULL;	
@@ -38,6 +46,14 @@ gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 	return result;
 }
 
+/*!
+ \brief parse_key_types() splits up a string list and converts the individual 
+ values into enumerations
+ \param string (gchar *) input string
+ \param count (gint *) reference to dest to place number of keys
+ \param delimiter (gchar *) char to split the string with
+ \returns a dynamic integer array of the keystypes (enums)
+ */
 gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 {
 	gchar **vector = NULL;	

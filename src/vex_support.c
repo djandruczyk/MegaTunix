@@ -31,33 +31,6 @@
 gchar *vex_comment;
 
 /*!
- \brief The Vex_Import structure holds all fields (lots) needed to load and
- process a VEX (VEtabalt eXport file) and load it into megatunix.
- \see vetable_import
- \see vetable_export
- */
-struct Vex_Import
-{	
-	gchar *version;		/* String */
-	gchar *revision;	/* String */
-	gchar *comment;		/* String */
-	gchar *date;		/* String */
-	gchar *time;		/* String */
-	gint page;		/* Int */
-	gint total_rpm_bins;	/* Int */
-	gint *rpm_bins;		/* Int Array, dynamic */
-	gint total_load_bins;	/* Int */
-	gint *load_bins;	/* Int Array, dynamic */
-	gint total_ve_bins;	/* Int */
-	gint *ve_bins;	/* Int Array, dynamic */
-	gboolean got_page;	/* Flag */
-	gboolean got_rpm;	/* Flag */
-	gboolean got_load;	/* Flag */
-	gboolean got_ve;	/* Flag */
-	
-};
-
-/*!
  \brief import_handlers structure is used to hold the list of string 
  tags to search for and the function and function args to pass to the 
  appropriate handlers.
@@ -88,12 +61,12 @@ static struct
  There is a major problem with this in that the currect VEX 1.0 spec 
  doesn't allow for multiple tables per page, so import is likely to be 
  a problem.
- \param, ptr (void *) a pointer to the output file 
+ \param, iofile (struct Io_File *) a pointer to the output file 
  to write the data to.
  \see vetable_import
  \returns TRUE on success, FALSE on failure
  */
-gboolean vetable_export(void *ptr)
+gboolean vetable_export(struct Io_File *iofile)
 {
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -116,7 +89,6 @@ gboolean vetable_export(void *ptr)
 	gchar * tmpbuf = NULL;
 	GIOStatus status;
 	GString *output = NULL;
-	struct Io_File *iofile = (struct Io_File *)ptr;
 
 
 	/* For Page 0.... */
@@ -200,29 +172,26 @@ gboolean vetable_export(void *ptr)
 
 
 /*!
- \brief vetable_import(void *) is called to import Tables from a file.  
+ \brief vetable_import() is called to import Tables from a file.  
  There currently exists a big problem in that newer firmwares (msns-extra 
  and MS-II) have multiple tables per page and the VEX 1.0 spec does NOT 
  account for that. 
- \param ptr (void *) pointer to the (Io_File) file to read 
+ \param iofile (struct Io_File *) pointer to the (Io_File) file to read 
  the data from.
  */
-gboolean vetable_import(void *ptr)
+gboolean vetable_import(struct Io_File *iofile)
 {
-	struct Io_File *iofile = NULL;
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
-	struct Vex_Import *vex_import = NULL;
+	struct Vex_Import *vex = NULL;
 	extern GHashTable *dynamic_widgets;
 
-	if (ptr != NULL)
-		iofile = (struct Io_File *)ptr;
-	else
+	if (!iofile)
 	{
 		dbg_func(__FILE__": vetable_import()\n\tIo_File undefined, returning!!\n",CRITICAL);
 		return FALSE;
 	}
-	vex_import = g_new0(struct Vex_Import, 1);
+	vex = g_new0(struct Vex_Import, 1);
 
 	//reset_import_flags();
 	status = g_io_channel_seek_position(iofile->iochannel,0,G_SEEK_SET,NULL);
@@ -231,7 +200,7 @@ gboolean vetable_import(void *ptr)
 	/* process lines while we can */
 	while (go)
 	{
-		status = process_vex_line(vex_import,iofile->iochannel);
+		status = process_vex_line(vex,iofile->iochannel);
 		if (status == G_IO_STATUS_EOF)
 		{
 			go = FALSE;
@@ -241,23 +210,23 @@ gboolean vetable_import(void *ptr)
 		 * it to the ECU clear the data structure and start over...
 		 */
 		if ((status != G_IO_STATUS_EOF) 
-				& (vex_import->got_page) 
-				& (vex_import->got_load) 
-				& (vex_import->got_rpm) 
-				& (vex_import->got_ve))
+				& (vex->got_page) 
+				& (vex->got_load) 
+				& (vex->got_rpm) 
+				& (vex->got_ve))
 		{
-			feed_import_data_to_ecu(vex_import);
-			dealloc_vex_struct(vex_import);
-			vex_import = g_new0(struct Vex_Import, 1);
+			feed_import_data_to_ecu(vex);
+			dealloc_vex_struct(vex);
+			vex = g_new0(struct Vex_Import, 1);
 		}
 	}
-	dealloc_vex_struct(vex_import);
+	dealloc_vex_struct(vex);
 
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		dbg_func(g_strdup_printf(__FILE__": vetable_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex_import->got_page, vex_import->got_load, vex_import->got_rpm, vex_import->got_ve),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": vetable_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve),CRITICAL);
 		return FALSE;
 	}
 	return TRUE;
@@ -267,12 +236,12 @@ gboolean vetable_import(void *ptr)
 /*!
  \brief process_vex_line() is called for to read the VEX file and
  dispatch handlers to process sections of the file.
- \param ptr (void *) pointer to Vex_Import structure.
+ \param vex (struct Vex_Import *) pointer to Vex_Import structure.
  \param iochannel (GIOChannel *) the bytestream represented by the VEXfile
  \returns The status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL
  usually
  */
-GIOStatus process_vex_line(void * ptr, GIOChannel *iochannel)
+GIOStatus process_vex_line(struct Vex_Import * vex, GIOChannel *iochannel)
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
@@ -285,7 +254,7 @@ GIOStatus process_vex_line(void * ptr, GIOChannel *iochannel)
 		{
 			if (g_strrstr(a_line->str,import_handlers[i].import_tag) != NULL)
 			{
-				status = handler_dispatch(ptr, import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
+				status = handler_dispatch(vex, import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
 					dbg_func(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n",CRITICAL);
 				goto breakout;
@@ -303,7 +272,7 @@ breakout:
  It passes off the pointer to the Vex_Import struct, the function arg, 
  the string read, and the pointer to the IOchannel representing the 
  input bytestream.
- \param ptr (void *) The pointer to the Vex_Import datastructure.
+ \param vex (struct Vex_Import *) The pointer to the Vex_Import datastructure.
  \param function (ImportParserFunc) an enumeration used to determine 
  which handler to call.
  \param arg (ImportParserArg) another enumeration passed to the functiosn 
@@ -317,22 +286,22 @@ breakout:
  \returns a GIOStatus of the dispatched function (usually G_IO_STATUS_NORMAL
  or G_IO_STATUS_ERROR)
  */
-GIOStatus handler_dispatch(void *ptr, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
+GIOStatus handler_dispatch(struct Vex_Import *vex, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	switch (function)
 	{
 		case HEADER:
-			status = process_header(ptr, arg, string);
+			status = process_header(vex, arg, string);
 			break;
 		case PAGE:
-			status = process_page(ptr, string);
+			status = process_page(vex, string);
 			break;
 		case RANGE:
-			status = process_vex_range(ptr, arg, string, iochannel);
+			status = process_vex_range(vex, arg, string, iochannel);
 			break;
 		case TABLE:
-			status = process_vex_table(ptr, string, iochannel);
+			status = process_vex_table(vex, string, iochannel);
 			break;
 	}
 	return status;
@@ -341,16 +310,15 @@ GIOStatus handler_dispatch(void *ptr, ImportParserFunc function, ImportParserArg
 /*!
  \brief process_header() processes portions of the header of the VEX file 
  and populates the Vex_Import datastructure for this Table
- \param ptr (void *) pointer to the Vex_Import structure
+ \param vex (struct Vex_Import *) pointer to the Vex_Import structure
  \param arg (ImportPArserArg) enumeration of header portion to process
  \param string (gchar *) text of the header line to process
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
+GIOStatus process_header(struct Vex_Import *vex, ImportParserArg arg, gchar * string)
 {
 	gchar ** str_array = NULL;
 	gchar *result = NULL;
-	struct Vex_Import *vex_import = ptr;
 
 	if (!string)
 	{
@@ -363,23 +331,23 @@ GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
 	switch (arg)
 	{
 		case VEX_EVEME:
-			vex_import->version = g_strdup(result);
+			vex->version = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: EVEME %s",result),TRUE,FALSE);
 			break;
 		case VEX_USER_REV:	
-			vex_import->revision = g_strdup(result);
+			vex->revision = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Revision %s",result),TRUE,FALSE);
 			break;
 		case VEX_USER_COMMENT:	
-			vex_import->comment = g_strdup(result);
+			vex->comment = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: UserComment: %s",result),TRUE,FALSE);
 			break;
 		case VEX_DATE:	
-			vex_import->date = g_strdup(result);
+			vex->date = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Date %s",result),TRUE,FALSE);
 			break;
 		case VEX_TIME:	
-			vex_import->time = g_strdup(result);
+			vex->time = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Time %s",result),TRUE,FALSE);
 			break;
 		default:
@@ -394,18 +362,17 @@ GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
 /*!
  \brief process_page() extracts the page variable from the VEX file and 
  stores it in the Vex_Import Structure for this table.
- \param ptr (void *) Pointer to the Vex_Import structure
+ \param vex (struct Vex_Import *) Pointer to the Vex_Import structure
  \param string (gchar *) line of VEX file in which to extract the page out of
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_page(void *ptr, gchar *string)
+GIOStatus process_page(struct Vex_Import *vex, gchar *string)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gchar ** str_array = NULL;
 	gchar * tmpbuf= NULL;
 	gchar *msg_type = NULL;
 	gint page = -1;
-	struct Vex_Import *vex_import = ptr;
 	extern struct Firmware_Details *firmware;
 
 	if (!string)
@@ -425,8 +392,8 @@ GIOStatus process_page(void *ptr, gchar *string)
 	else
 	{
 		status = G_IO_STATUS_NORMAL;
-		vex_import->page = page;
-		vex_import->got_page = TRUE;
+		vex->page = page;
+		vex->got_page = TRUE;
 		tmpbuf = g_strdup_printf("VEX Import: Page %i\n",page);
 
 	}
@@ -478,7 +445,7 @@ GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
  allocate the memory for storing the data and call the needed functions to
  read the values into the arrays.
  \see read_number_from_line
- \param ptr (void *) pointer to the Vex_Import structure
+ \param vex (struct Vex_Import *) pointer to the Vex_Import structure
  \param arg (ImportParserArg) enumeration to decide which range we are going to
  read
  \param string (gchar *) Line of text passed to parse.
@@ -486,7 +453,7 @@ GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
  retrieving additional data.
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
+GIOStatus process_vex_range(struct Vex_Import *vex, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
 	gint i = 0;
@@ -496,7 +463,6 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 	gchar * result = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * msg_type = NULL;
-	struct Vex_Import *vex_import = ptr;
 
 	if (!string)
 	{
@@ -514,14 +480,14 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 	switch(arg)
 	{
 		case VEX_RPM_RANGE:
-			vex_import->total_rpm_bins = num_bins;
-			vex_import->rpm_bins = g_new0(gint, num_bins);
-			vex_import->got_rpm = TRUE;
+			vex->total_rpm_bins = num_bins;
+			vex->rpm_bins = g_new0(gint, num_bins);
+			vex->got_rpm = TRUE;
 			break;
 		case VEX_LOAD_RANGE:
-			vex_import->total_load_bins = num_bins;
-			vex_import->load_bins = g_new0(gint, num_bins);
-			vex_import->got_load = TRUE;
+			vex->total_load_bins = num_bins;
+			vex->load_bins = g_new0(gint, num_bins);
+			vex->got_load = TRUE;
 			break;
 		default:
 			break;
@@ -547,11 +513,11 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 			switch (arg)
 			{
 				case VEX_RPM_RANGE:
-					vex_import->rpm_bins[i] = value;
+					vex->rpm_bins[i] = value;
 					tmpbuf = g_strdup_printf("VEX Import: RPM bins loaded successfully \n");
 					break;
 				case VEX_LOAD_RANGE:
-					vex_import->load_bins[i] = value;
+					vex->load_bins[i] = value;
 					tmpbuf = g_strdup_printf("VEX Import: LOAD bins loaded successfully \n");
 					break;
 				default:
@@ -569,13 +535,13 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 /*!
  \brief process_vex_table() reads, processes and stores the Table data into
  the Vex_Import structure in preparation for import to the ECU.
- \param ptr (void *) pointer to the Vex_Import structure
+ \param vex (stuct Vex_Import *) pointer to the Vex_Import structure
  \param string (gchar *) pointer to the current line of the VEXfile
  \param iochannel (GIOChannel *), Pointer to the iochannel representing the
  VEX file for reading more data
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
-GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
+GIOStatus process_vex_table(struct Vex_Import *vex, gchar * string, GIOChannel *iochannel)
 {
 	gint i = 0, j = 0;
 	GString *a_line;
@@ -590,7 +556,6 @@ GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 	gint y_bins = 0;
 	gchar * tmpbuf = NULL;
 	gchar * msg_type = NULL;
-	struct Vex_Import *vex_import = ptr;
 
 	if (!string)
 	{
@@ -613,8 +578,8 @@ GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 	g_strfreev(str_array2);
 	y_bins = atoi(result);	
 
-	vex_import->total_ve_bins = x_bins*y_bins;
-	vex_import->ve_bins = g_new0(gint,(x_bins * y_bins));
+	vex->total_ve_bins = x_bins*y_bins;
+	vex->ve_bins = g_new0(gint,(x_bins * y_bins));
 
 	/* Need to skip down one line to the actual data.... */
 	a_line = g_string_new("\0");
@@ -656,7 +621,7 @@ GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 			}
 			else
 			{
-				vex_import->ve_bins[j+(i*x_bins)] = value;
+				vex->ve_bins[j+(i*x_bins)] = value;
 				tmpbuf = g_strdup_printf("VEX Import: VE-Table loaded successfully\n");
 			}
 		}		
@@ -668,7 +633,7 @@ breakout:
 	if (msg_type)
 		g_free(msg_type);
 	if (status == G_IO_STATUS_NORMAL)
-		vex_import->got_ve = TRUE;
+		vex->got_ve = TRUE;
 	return status;
 }
 
@@ -699,29 +664,29 @@ EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
 /*!
  \brief dealloc_vex_struct() deallocates the memory used by the Vex_Import
  datastructure
- \param ptr (void *) Pointer to the Vex_Import structure to deallocate.
+ \param vex (struct Vex_Import *) Pointer to the Vex_Import structure 
+ to deallocate.
  */
-void dealloc_vex_struct(void *ptr)
+void dealloc_vex_struct(struct Vex_Import *vex)
 {
-	struct Vex_Import *vex_import = ptr;
-	if (vex_import->version)
-		g_free(vex_import->version);
-	if (vex_import->revision)
-		g_free(vex_import->revision);
-	if (vex_import->comment)
-		g_free(vex_import->comment);
-	if (vex_import->date)
-		g_free(vex_import->date);
-	if (vex_import->time)
-		g_free(vex_import->time);
-	if (vex_import->rpm_bins)
-		g_free(vex_import->rpm_bins);
-	if (vex_import->load_bins)
-		g_free(vex_import->load_bins);
-	if (vex_import->ve_bins)
-		g_free(vex_import->ve_bins);
-	if (vex_import)
-		g_free(vex_import);
+	if (vex->version)
+		g_free(vex->version);
+	if (vex->revision)
+		g_free(vex->revision);
+	if (vex->comment)
+		g_free(vex->comment);
+	if (vex->date)
+		g_free(vex->date);
+	if (vex->time)
+		g_free(vex->time);
+	if (vex->rpm_bins)
+		g_free(vex->rpm_bins);
+	if (vex->load_bins)
+		g_free(vex->load_bins);
+	if (vex->ve_bins)
+		g_free(vex->ve_bins);
+	if (vex)
+		g_free(vex);
 }
 
 
@@ -729,9 +694,9 @@ void dealloc_vex_struct(void *ptr)
  \brief feed_import_data_to_ecu() Forwards the data in the VEX file to the
  ECU.  NOTE this may have problems with firmware using multiple tables in
  a page, as the VEX format 1.0 does NOT handle that condition.
- \param ptr (void *) pointer to the Vex_Impot datastructure.
+ \param vex (struct Vex_Import *) pointer to the Vex_Impot datastructure.
  */
-void feed_import_data_to_ecu(void *ptr)
+void feed_import_data_to_ecu(struct Vex_Import *vex)
 {
 	gint i = 0;
 	extern gint ** ms_data;
@@ -739,23 +704,22 @@ void feed_import_data_to_ecu(void *ptr)
 	extern gint ** ms_data_backup;
 	gchar * tmpbuf = NULL;
 	gint page = -1;
-	struct Vex_Import *vex_import = ptr;
 	extern struct Firmware_Details *firmware;
 
 	/* Since we assume the page is where the table is this can cause
 	 * major problems with some firmwares that use two tables inside
 	 * of one page....
 	 */
-	page = vex_import->page;
+	page = vex->page;
 	/* If dimensions do NOT match, ABORT!!! */
-	if (firmware->table_params[page]->x_bincount != vex_import->total_rpm_bins)
+	if (firmware->table_params[page]->x_bincount != vex->total_rpm_bins)
 	{
-		tmpbuf = g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->x_bincount,vex_import->total_rpm_bins);
+		tmpbuf = g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->x_bincount,vex->total_rpm_bins);
 		return;
 	}
-	if (firmware->table_params[page]->y_bincount != vex_import->total_load_bins)
+	if (firmware->table_params[page]->y_bincount != vex->total_load_bins)
 	{
-		tmpbuf = g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->y_bincount,vex_import->total_load_bins);
+		tmpbuf = g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->y_bincount,vex->total_load_bins);
 		return;
 	}
 
@@ -764,23 +728,23 @@ void feed_import_data_to_ecu(void *ptr)
 	memcpy(ms_data_backup[page], ms_data[page],sizeof(gint)*firmware->page_params[page]->length);
 			
 
-	for (i=0;i<vex_import->total_rpm_bins;i++)
+	for (i=0;i<vex->total_rpm_bins;i++)
 		ms_data[page][firmware->table_params[page]->x_base + i] =
-			vex_import->rpm_bins[i];
-	for (i=0;i<vex_import->total_load_bins;i++)
+			vex->rpm_bins[i];
+	for (i=0;i<vex->total_load_bins;i++)
 		ms_data[page][firmware->table_params[page]->y_base + i] =
-			vex_import->load_bins[i];
+			vex->load_bins[i];
 
-	for (i=0;i<((vex_import->total_load_bins)*(vex_import->total_rpm_bins));i++)
+	for (i=0;i<((vex->total_load_bins)*(vex->total_rpm_bins));i++)
 		ms_data[page][firmware->table_params[page]->tbl_base + i] =
-			vex_import->ve_bins[i];
+			vex->ve_bins[i];
 
 	for (i=0;i<firmware->page_params[page]->length;i++)
 		if (ms_data[page][i] != ms_data_last[page][i])
 			write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
 
 	//update_ve_const();	
-	tmpbuf = g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex_import->page);
+	tmpbuf = g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex->page);
 
 	update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
 	if (tmpbuf)

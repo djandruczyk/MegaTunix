@@ -19,6 +19,15 @@
 #include <debugging.h>
 #include <enums.h>
 
+
+/*!
+ \brief check_dependancies() extracts the dependancy information from the 
+ object and checks each one in turn until one evauates to false, in that
+ case it returns FALSE, otherwise if all deps succeed it'll return TRUE
+ \param object (GObject *) object containing dependacy information
+ \returns TRUE if dependancy evaluates to TRUE, FALSE on any dep in the chain 
+ evaluating to FALSE.
+ */
 gboolean check_dependancies(GObject *object )
 {
 	gint i = 0;

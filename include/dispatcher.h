@@ -15,12 +15,13 @@
 #define __DISPATCHER_H__
 
 #include <gtk/gtk.h>
+#include <structures.h>
 
 /* Prototypes */
 gboolean dispatcher(gpointer);
 gboolean textmessage_dispatcher(gpointer);
-void dealloc_textmessage(void * );
-void dealloc_message(void * );
+void dealloc_textmessage(struct Text_Message * );
+void dealloc_message(struct Io_Message * );
 /* Prototypes */
 
 #endif

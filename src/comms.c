@@ -132,13 +132,11 @@ void update_write_status(void)
 
 /*!
  \brief writeto_ecu() physiclaly sends the data to the ECU.
- \param ptr (void *) a pointer to a struct Io_Message, an OutputData struct
- is embedded within the Io_Message structure in the "payload" element
+ \param message (struct Io_Message *) a pointer to a struct Io_Message
  */
-void writeto_ecu(void *ptr)
+void writeto_ecu(struct Io_Message *message)
 {
 	extern gboolean connected;
-	struct Io_Message *message = (struct Io_Message *)ptr;
 	struct OutputData *data = message->payload;
 
 	gint page = data->page;
@@ -232,10 +230,10 @@ void writeto_ecu(void *ptr)
 
 
 /*!
- \brief burn_ms_flash() issues the commands to the ECU to burn the contents
+ \brief burn_ecu_flash() issues the commands to the ECU to burn the contents
  of RAM to flash.
  */
-void burn_ms_flash()
+void burn_ecu_flash()
 {
 	extern gint **ms_data;
 	extern gint **ms_data_last;
@@ -262,11 +260,11 @@ void burn_ms_flash()
 	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
 	if (res != 1)
 	{
-		dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
 	}
 	g_usleep(500000);
 
-	dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn to Flash\n"),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"),SERIAL_WR);
 
 	flush_serial(serial_params->fd, TCIOFLUSH);
 copyover:
@@ -284,11 +282,10 @@ copyover:
  written in this function to trigger the ECU to send back a block of data, 
  and then a handler is kicked off to handle the incoming data
  \see handle_ecu_data
- \param ptr (void *) pointer to a struct Io_Message
+ \param message (struct Io_Message *) pointer to a struct Io_Message
  */
-void readfrom_ecu(void *ptr)
+void readfrom_ecu(struct Io_Message *message)
 {
-	struct Io_Message *message = (struct Io_Message *)ptr;
 	gint result = 0;
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;

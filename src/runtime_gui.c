@@ -22,6 +22,7 @@
 #include <mode_select.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
+#include <stdlib.h>
 #include <structures.h>
 #include <vetable_gui.h>
 #include <warmwizard_gui.h>

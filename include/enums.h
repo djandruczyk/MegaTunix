@@ -130,7 +130,7 @@ typedef enum
 {	
 	RED=0xb0,
 	BLACK
-}GuiState;
+}GuiColor;
 
 typedef enum
 {

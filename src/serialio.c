@@ -33,8 +33,6 @@
 #endif
 
 
-extern gboolean raw_reader_running;
-extern GtkWidget *comms_view;
 struct Serial_Params *serial_params;
 gboolean connected;
        
@@ -230,7 +228,7 @@ void set_ms_page(gint ms_page)
 
 	if ((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0))))
 	{
-		burn_ms_flash();
+		burn_ecu_flash();
 	}
 
 	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);

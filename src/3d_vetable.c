@@ -23,11 +23,13 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <gdk/gdkkeysyms.h>
 #include <gui_handlers.h>
 #include <gtk/gtkgl.h>
 #include <listmgmt.h>
 #include <ms_structures.h>
 #include <notifications.h>
+#include <pango/pangoft2.h>
 #include <rtv_processor.h>
 #include <runtime_sliders.h>
 #include <serialio.h>
@@ -82,8 +84,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	else
 		g_hash_table_insert(winstat,(gpointer)table_num, (gpointer)TRUE);
 
-	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
-	initialize_ve3d_view((void *)ve_view);
+	ve_view = initialize_ve3d_view();
 	ve_view->z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"z_source"));
 	ve_view->x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"x_source"));
 	ve_view->y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"y_source"));
@@ -558,11 +559,10 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
  \brief ve3d_calculate_scaling is called during a redraw to recalculate the
  dimensions for the scales to make thing look pretty
  */
-void ve3d_calculate_scaling(void *ptr)
+void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 {
 	gint i=0;
 	extern gint **ms_data;
-	struct Ve_View_3D *ve_view = NULL;
 	gint x_page = 0;
 	gint y_page = 0;
 	gint tbl_page = 0;
@@ -573,8 +573,6 @@ void ve3d_calculate_scaling(void *ptr)
 	gint subtractor = 0;
 
 	dbg_func(__FILE__": ve3d_calculate_scaling()\n",OPENGL);
-
-	ve_view = (struct Ve_View_3D *)ptr;
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -629,11 +627,10 @@ void ve3d_calculate_scaling(void *ptr)
  \brief ve3d_draw_ve_grid is called during rerender and draws trhe VEtable grid 
  in 3D space
  */
-void ve3d_draw_ve_grid(void *ptr)
+void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 {
 	gint rpm=0, load=0;
 	extern gint **ms_data;
-	struct Ve_View_3D *ve_view = NULL;
 	gint x_page = 0;
 	gint y_page = 0;
 	gint tbl_page = 0;
@@ -642,8 +639,6 @@ void ve3d_draw_ve_grid(void *ptr)
 	gint tbl_base = 0;
 	gfloat divider = 0.0;
 	gint subtractor = 0;
-
-	ve_view = (struct Ve_View_3D *)ptr;
 
 	dbg_func(__FILE__": ve3d_draw_ve_grid() \n",OPENGL);
 
@@ -707,10 +702,8 @@ void ve3d_draw_ve_grid(void *ptr)
  red dot which tells where changes will be made to the table by the user.  
  The user moves this with the arrow keys..
  */
-void ve3d_draw_active_indicator(void *ptr)
+void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 {
-	struct Ve_View_3D *ve_view = NULL;
-	ve_view = (struct Ve_View_3D *)ptr;
 	extern gint **ms_data;
 	extern gint **ms_data_last;
 	gint x_page = 0;
@@ -765,10 +758,8 @@ void ve3d_draw_active_indicator(void *ptr)
  \brief ve3d_draw_runtiem_indicator is called during rerender and draws the
  green dot which tells where the engien is running at this instant.
  */
-void ve3d_draw_runtime_indicator(void *ptr)
+void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 {
-	struct Ve_View_3D *ve_view;
-	ve_view = (struct Ve_View_3D *)ptr;
 	gfloat x_val = 0.0;
 	gfloat y_val = 0.0;
 	gfloat z_val = 0.0;
@@ -800,15 +791,13 @@ void ve3d_draw_runtime_indicator(void *ptr)
  \brief ve3d_draw_axis is called during rerender and draws the
  border axis scales around the VEgrid.
  */
-void ve3d_draw_axis(void *ptr)
+void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 {
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0, rpm=0, load=0;
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
 	gchar *label;
-	struct Ve_View_3D *ve_view = NULL;
-	ve_view = (struct Ve_View_3D *)ptr;
 	extern gint **ms_data;
 	gint x_page = 0;
 	gint y_page = 0;
@@ -1143,10 +1132,10 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
  datastructure for use.  
  \see Ve_View
  */
-void initialize_ve3d_view(void *ptr)
+struct Ve_View_3D * initialize_ve3d_view()
 {
-	struct Ve_View_3D *ve_view; 
-	ve_view = ptr;
+	struct Ve_View_3D *ve_view = NULL; 
+	ve_view= g_new0(struct Ve_View_3D,1);
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
@@ -1180,6 +1169,6 @@ void initialize_ve3d_view(void *ptr)
 	ve_view->x_bincount = 0;
 	ve_view->y_bincount = 0;
 	ve_view->table_name = NULL;
-	return;
+	return ve_view;
 }
 

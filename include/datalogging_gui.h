@@ -15,6 +15,7 @@
 #define __DATALOGGING_GUI_H__
 
 #include <gtk/gtk.h>
+#include <structures.h>
 
 
 /* Prototypes */
@@ -23,9 +24,9 @@ void start_datalogging(void);
 void stop_datalogging(void);
 void clear_logables(void);
 gboolean log_value_set(GtkWidget *, gpointer);
-void write_log_header(void *);
+void write_log_header(struct Io_File *);
 void run_datalog(void);
-gboolean set_logging_mode(GtkWidget * widget, gpointer *data);
+gboolean set_logging_mode(GtkWidget * , gpointer);
 /* Prototypes */
 
 #endif

@@ -29,11 +29,11 @@ GHashTable *lookuptables = NULL;
  \brief load_lookuptables() loads the lookuptables specified in the ECU's
  interrogation profile. Any number of lookuptables are allowed and they 
  are referenced internally by a string name to a hashtable.
- \param ptr (void *) pointer to the canidate interrogation profile struct
+ \param canidate (struct Canidate *) pointer to the canidate 
+ interrogation profile struct
  */
-void load_lookuptables(void *ptr)
+void load_lookuptables(struct Canidate *canidate)
 {
-	struct Canidate *canidate = ptr;
 	g_hash_table_foreach(canidate->lookuptables,get_table,NULL);
 }
 

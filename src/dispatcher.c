@@ -42,6 +42,15 @@ extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
 extern gboolean interrogated;			/* valid connection with MS */
 
+
+/*!
+ \brief testmessage_dispatcher()  is a GTK+ timeout that runs 5-10 times per 
+ second checkign for messages from threeads to update textviews 
+ from a thread context. A thread will push the message across the queue to
+ here to do the update as it's unsafe in the thread context. (win32)
+ \param data (gpointer) unused
+ \returns TRUE
+ */
 gboolean textmessage_dispatcher(gpointer data)
 {
 	extern GAsyncQueue *textmessage_queue;
@@ -59,6 +68,15 @@ gboolean textmessage_dispatcher(gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief dispatcher() is a GTK+ timeout that runs 30 tiems per second checking
+ for message on the dispatch queue which handles gui operations after a thread
+ function runs, This will attempt to handle multiple messages at a time if the
+ queue has multiple message queued up.
+ \param data (gpointer) unused
+ \returns TRUE 
+ */
 gboolean dispatcher(gpointer data)
 {
 	extern struct Firmware_Details * firmware;
@@ -176,9 +194,14 @@ trypop:
 	return TRUE;
 }
 
-void dealloc_textmessage(void * ptr)
+
+/*!
+ \brief dealloc_textmessage() deallocates the structure used to pass a text
+ message from the thread to here..
+ \param message (struct Text_Message *) pointer to message data
+ */
+void dealloc_textmessage(struct Text_Message * message)
 {
-        struct Text_Message *message = (struct Text_Message *)ptr;
         if (message->view_name)
                 g_free(message->view_name);
         if (message->tagname)
@@ -190,9 +213,13 @@ void dealloc_textmessage(void * ptr)
 }
 
 
-void dealloc_message(void * ptr)
+/*!
+ \brief dealloc_message() deallocates the structure used to pass an I/O
+ message from the thread to here..
+ \param message (struct Io_Message *) pointer to message data
+ */
+void dealloc_message(struct Io_Message * message)
 {
-        struct Io_Message *message = (struct Io_Message *)ptr;
         if (message->out_str)
                 g_free(message->out_str);
         if (message->funcs)

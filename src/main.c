@@ -31,7 +31,7 @@
 
 extern gint temp_units;
 extern struct Serial_Params *serial_params;
-GThread * serio_thread = NULL;
+GThread * io_thread = NULL;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;
 gint dispatcher_id = -1;
@@ -40,7 +40,8 @@ gboolean gl_ability = FALSE;
 struct Serial_Params *serial_params;
 struct Io_Cmds *cmds;
 GAsyncQueue *textmessage_queue;
-
+GAsyncQueue *io_queue;
+GAsyncQueue *dispatch_queue;
 
 /*!
  \brief main() is the typical main function in a C program, it performs
@@ -52,9 +53,6 @@ GAsyncQueue *textmessage_queue;
  */
 gint main(gint argc, gchar ** argv)
 {
-	extern GAsyncQueue *io_queue;
-	extern GAsyncQueue *dispatch_queue;
-
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -86,7 +84,7 @@ gint main(gint argc, gchar ** argv)
 	open_serial(serial_params->port_name);
 	setup_serial_params();	/* Setup the serial port for I/O */
 	/* Startup the serial General I/O handler.... */
-	serio_thread = g_thread_create(thread_dispatcher,
+	io_thread = g_thread_create(thread_dispatcher,
 			NULL, // Thread args
 			TRUE, // Joinable
 			NULL); //GError Pointer

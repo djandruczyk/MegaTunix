@@ -24,6 +24,17 @@
 #include <stringmatch.h>
 
 
+
+/*!
+ \brief load_dependancies() is called when a "depend_on" key is found in
+ a datamap or realtimemap, and triggers the loading of al lthe keys/values that
+ will allow megatunix to process a dependancy (or multiple deps) on other
+ variables
+ \param object (GObject *) place to store the retrieved data
+ \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
+ \param section (gchar *) sectio nto read the data from
+ \see check_dependancies
+ */
 void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 {
 	gchar *tmpbuf = NULL;

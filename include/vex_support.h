@@ -14,21 +14,22 @@
 #ifndef __VEX_SUPPORT_H__
 #define __VEX_SUPPORT_H__
 
-#include <gtk/gtk.h>
 #include <enums.h>
+#include <gtk/gtk.h>
+#include <structures.h>
 
 /* Prototypes */
-gboolean vetable_export(void *);
-gboolean vetable_import(void *);
+gboolean vetable_export(struct Io_File *);
+gboolean vetable_import(struct Io_File *);
 GIOStatus process_vex_line();
-GIOStatus process_vex_range(void *, ImportParserArg, gchar *, GIOChannel * );
-GIOStatus process_vex_table(void *, gchar *, GIOChannel * );
+GIOStatus process_vex_range(struct Vex_Import *, ImportParserArg, gchar *, GIOChannel * );
+GIOStatus process_vex_table(struct Vex_Import *, gchar *, GIOChannel * );
 GIOStatus read_number_from_line(gint *, GIOChannel *);
-GIOStatus process_header(void *, ImportParserArg , gchar *);
-GIOStatus process_page(void *, gchar * );
-GIOStatus handler_dispatch(void *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
-void dealloc_vex_struct(void *);
-void feed_import_data_to_ecu(void *);
+GIOStatus process_header(struct Vex_Import *, ImportParserArg , gchar *);
+GIOStatus process_page(struct Vex_Import *, gchar * );
+GIOStatus handler_dispatch(struct Vex_Import *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
+void dealloc_vex_struct(struct Vex_Import *);
+void feed_import_data_to_ecu(struct Vex_Import *);
 void revert_to_previous_data();
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */

@@ -39,6 +39,11 @@ gboolean playback_mode = FALSE;
 extern struct Log_Info *log_info;
 
 
+/*!
+ \brief present_viewer_choices() presents the user with the a list of 
+ variabels form EIRHT the realtime vars (if in realtime mode) or from a 
+ datalog (playback mode)
+ */
 void present_viewer_choices(void)
 {
 	GtkWidget *window;
@@ -88,7 +93,7 @@ void present_viewer_choices(void)
 				"Realtime Mode: Logviewer Choices");
 		frame = gtk_frame_new("Select Realtime Variables to view from the list below...");
 		max_viewables = rtv_map->derived_total;
-		
+
 	}
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
@@ -118,7 +123,7 @@ void present_viewer_choices(void)
 		g_list_free(get_list("viewables"));
 		store_list("viewables",NULL);
 	}
-		
+
 	for (i=0;i<max_viewables;i++)
 	{
 		object = NULL;
@@ -133,18 +138,18 @@ void present_viewer_choices(void)
 		{
 			object =  g_array_index(rtv_map->rtv_list,GObject *,i);
 			name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
-                	tooltip = g_strdup(g_object_get_data(object,"tooltip"));
+			tooltip = g_strdup(g_object_get_data(object,"tooltip"));
 		}
 
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
-                gtk_label_set_markup(GTK_LABEL(label),name);
-                gtk_container_add(GTK_CONTAINER(button),label);
+		gtk_label_set_markup(GTK_LABEL(label),name);
+		gtk_container_add(GTK_CONTAINER(button),label);
 		store_list("viewables",g_list_append(
-                                get_list("viewables"),(gpointer)button));
+					get_list("viewables"),(gpointer)button));
 
-                if (tooltip)
-                        gtk_tooltips_set_tip(tip,button,tooltip,NULL);
+		if (tooltip)
+			gtk_tooltips_set_tip(tip,button,tooltip,NULL);
 
 		if (object)
 		{
@@ -200,6 +205,14 @@ void present_viewer_choices(void)
 	return;
 }
 
+
+/*!
+ \brief view_value_set() is called when a value to be viewed is selected
+ or not. We tag the widget with a marker if it is to be displayed
+ \param widget (GtkWidget *) button clicked, we extract the object this
+ represents and mark it
+ \param data (gpointer) unused
+ */
 gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	GObject *object = NULL;
@@ -217,15 +230,20 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	return FALSE;
 }
 
+
+/*!
+ \brief populate_viewer() creates/removes the list of viewable values from
+ the objects in use (playback list or realtiem vars list)
+ */
 void populate_viewer()
 {
 	gint i = 0;
 	gint total = 0;
 	struct Viewable_Value *v_value = NULL;
 	gchar * name = NULL;
-        gboolean being_viewed = FALSE;
-        extern struct Rtv_Map *rtv_map;
-        extern GHashTable *dynamic_widgets;
+	gboolean being_viewed = FALSE;
+	extern struct Rtv_Map *rtv_map;
+	extern GHashTable *dynamic_widgets;
 	GObject *object = NULL;
 
 	g_static_mutex_lock(&update_mutex);
@@ -313,6 +331,12 @@ void populate_viewer()
 	return; 
 }
 
+
+/*!
+ \breif reset_logviewer_state() deselects any traces, resets the position 
+ slider.  This function is called when switching from playback to rt mode
+ and back
+ */
 void reset_logviewer_state()
 {
 	extern GHashTable *dynamic_widgets;
@@ -352,6 +376,14 @@ void reset_logviewer_state()
 
 }
 
+
+/*!
+ \brief build_v_value() allocates a viewable_value structure and populates
+ it with sane defaults and returns it to the caller
+ \param d_area (GtkWidget *) pointer to the main drawing area
+ \param object (GObject *) objet to get soem of the data from
+ \returns a newly allocated and populated Viewable_Value structure
+ */
 struct Viewable_Value * build_v_value(GtkWidget * d_area, GObject *object)
 {
 	struct Viewable_Value *v_value = NULL;
@@ -410,6 +442,14 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, GObject *object)
 	return v_value;
 }
 
+
+/*!
+ \brief initialize_gc() allocates and initializes the graphics contexts for
+ the logviewer trace window.
+ \param drawable (GdkDrawable *) pointer to the drawable surface
+ \param type (GcType) Graphics Context type? (I donno for sure)
+ \returns Pointer to a GdkGC *
+ */
 GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 {
 	GdkColor color;
@@ -458,6 +498,13 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 	return gc;	
 }
 
+
+/*!
+ \breif get_colors_from_hue(gets a color back from an angle passed in degrees.
+ The degrees represent the arc aroudn a color circle.
+ \param hue_Angle (gfloat) degrees around hte color circle
+ \returns a GdkColor at the hue angle requested
+ */
 GdkColor get_colors_from_hue(gfloat hue_angle)
 {
 	GdkColor color;
@@ -521,11 +568,16 @@ GdkColor get_colors_from_hue(gfloat hue_angle)
 	return (color);	
 }
 
-void draw_infotext(void *data)
+
+/*!
+ \brief draw_infotext() draws the textual data for the trace on the left
+ hand side of the logviewer
+ \param v_value (struct Viewable_Value *) pointer to the viewable value
+ */
+void draw_infotext(struct Viewable_Value *v_value)
 {
 	// Draws the textual (static) info on the left side of the window..
 
-	struct Viewable_Value *v_value = (struct Viewable_Value *) data;
 	gint last_index = 0;
 	gfloat val = 0.0;
 	gint name_x = 10;
@@ -573,6 +625,14 @@ void draw_infotext(void *data)
 
 }
 
+
+/*!
+ \brief update_logview_traces() updates each trace in turn and then scrolls 
+ the display
+ \param force_redraw (gboolean) flag to force all data to be redrawn not 
+ just the new data...
+ \returns TRUE
+ */
 gboolean update_logview_traces(gboolean force_redraw)
 {
 
@@ -595,6 +655,14 @@ gboolean update_logview_traces(gboolean force_redraw)
 	return TRUE;
 }
 
+
+/*!
+ \brief trace_update() updates a trace onscreen,  this is run for EACH 
+ individual trace (yeah, not very optimized)
+ \param key (gpointer) unused
+ \param value (gpointer) pointer to the Viewable_Value struct for this trace
+ \param redraw_All (gpointer) flag to redraw all or jsut recent data
+ */
 void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 {
 	GdkPixmap * pixmap = NULL;
@@ -643,9 +711,9 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		len = v_value->data_array->len;
 		if (len == 0)	/* If empty */
 			return;
-//		printf("length is %i\n", len);
+		//		printf("length is %i\n", len);
 		len *= (log_pos/100.0);
-//		printf("length after is  %i\n", len);
+		//		printf("length after is  %i\n", len);
 
 		/* Determine total number of points that'll fit on the window
 		 * taking into account the scroll amount
@@ -697,7 +765,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		//printf("drawing from %i,%i to %i,%i\n",w-lv_zoom-1,v_value->last_y,w-1,(gint)(percent*(h-2))+1);
 
 		v_value->last_y = (gint)((percent*(h-2))+1);
-		
+
 		v_value->last_index = last_index + 1;
 		if (adj_scale)
 		{
@@ -707,7 +775,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 			blocked=FALSE;
 			g_object_set_data(G_OBJECT(v_value->d_area),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
 			adj_scale = FALSE;
-		//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
+			//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
 		}
 		draw_infotext(v_value);
 		return;
@@ -716,7 +784,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 	history = (gfloat *)g_object_get_data(v_value->object,"history");
 	last_entry = (gint)g_object_get_data(v_value->object,"last_entry");
 	val = history[last_entry];
-	
+
 	if (val > (v_value->max))
 		v_value->max = val;
 	if (val < (v_value->min))
@@ -761,7 +829,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 			adj_scale = FALSE;
 		}
 	}
-		/* Draw the data.... */
+	/* Draw the data.... */
 	v_value->last_y = (gint)((percent*(h-2))+1);
 
 
@@ -770,6 +838,10 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 
 }
 
+
+/*!
+ \brief scroll_logviewer_traces() scrolls the traces to the left
+ */
 void scroll_logviewer_traces()
 {
 	gint start = info_width;
@@ -809,6 +881,15 @@ void scroll_logviewer_traces()
 	gdk_window_clear(widget->window);
 }
 
+
+/*! 
+ \brief lv_configure_event() is the logviewer configure event that gets called
+ whenever the display is resized or created
+ \param widget (GtkWidget *) pointer to widget receiving event
+ \param event (GdkEventConfigure *) pointerto event structure
+ \param data (gpointer) unused)
+ \returns FALSE
+ */
 EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
@@ -848,6 +929,14 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 }
 
 
+/*!
+ \brief lv_expose_event() is alled whenever part of the display is uncovered
+ so that the screen can be redraw from the backing pixmap
+ \param widget (GtkWidget *) widget receivinghte event
+ \param event (GdkEventExpose *) event structure
+ \param data (gpointer) unused
+ \returns TRUE
+ */
 EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
@@ -864,6 +953,14 @@ EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoint
 	return TRUE;
 }
 
+
+/*!
+ \brief set_lview_choices_state() sets all the logables to either be 
+ selected or deselected (select all fucntionality)
+ \param widget (GtkWidget *) unused
+ \param data (gpointer) state to set the widgets to
+ \returns TRUE
+ */
 gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
 {
 	gboolean state = (gboolean)data;
@@ -874,6 +971,13 @@ gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+ \brief logviewer_log_position_change() gets called when the log position 
+ slider is moved by the user to fast forware/rewind through a datalog
+ \param widget (GtkWidget *) widget that received the event
+ \param data (gpointer) unused
+ \returns TRUE
+ */
 EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 {
 	gfloat val = 0.0;
@@ -898,6 +1002,10 @@ EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief set_playback_mode() sets things up for playback mode
+ */
 void set_playback_mode(void)
 {
 	extern GHashTable *dynamic_widgets;
@@ -911,6 +1019,10 @@ void set_playback_mode(void)
 	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
 }
 
+
+/*!
+ \brief set_realtime_mode() sets things up for realtime mode
+ */
 void set_realtime_mode(void)
 {
 	extern GHashTable *dynamic_widgets;
@@ -924,6 +1036,11 @@ void set_realtime_mode(void)
 	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
 }
 
+
+/*!
+ \brief finish_logviewer() sets button default states for the logviewer after
+ it is created from it's glade config file
+ */
 EXPORT void finish_logviewer(void)
 {
 	GtkWidget * widget = NULL;
@@ -942,6 +1059,9 @@ EXPORT void finish_logviewer(void)
 }
 
 
+/*!
+ \brief slider_ket_press_event() doesn't do anything yet (stub)
+ */
 EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	return FALSE;

@@ -16,9 +16,10 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <structures.h>
 
 /* Prototypes */
-gboolean handle_ms_data(InputHandler, void * );
+gboolean handle_ecu_data(InputHandler, struct Io_Message * );
 void dump_output(gint, guchar *);
 /* Prototypes */
 
