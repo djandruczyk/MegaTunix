@@ -14,7 +14,6 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-
 /* Definitions */
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */

@@ -347,7 +347,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	static gboolean queue_referenced =  FALSE;
 	extern GAsyncQueue *io_queue;
 	if (!GTK_IS_OBJECT(widget))
-		return;
+		return FALSE;
 
 	obj_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");

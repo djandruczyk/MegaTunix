@@ -169,7 +169,7 @@ void add_control(gchar *control_name, gchar *parameters)
 	struct Rt_Control *control = NULL;
 	control = g_malloc0(sizeof(struct Rt_Control));
 	GtkWidget *label;
-	GtkWidget *pbar;
+	GtkWidget *pbar = NULL;
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
