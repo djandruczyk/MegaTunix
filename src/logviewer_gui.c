@@ -330,7 +330,7 @@ gboolean populate_viewer()
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
-		g_signal_emit_by_name(G_OBJECT(lv_darea),"configure_event",NULL);
+		lv_configure_event(lv_darea,NULL,NULL);
 
 	return FALSE; /* want other handlers to run... */
 }
