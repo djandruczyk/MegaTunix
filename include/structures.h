@@ -26,7 +26,7 @@ struct Serial_Params
 {
         int fd;                 /* File descriptor */
         int comm_port;          /* DOS/Windows COM port number, 1-8 typically */
-        int open;               /* flag, 1 for open 0 for closed */
+        gboolean open;		/* flag, TRUE for open FALSE for closed */
         int poll_timeout;       /* Pollng interval in MILLISECONDS */
         int read_wait;          /* time delay between each read */
         int table0_size;	/* Size of VEtable/page_0 datablock */

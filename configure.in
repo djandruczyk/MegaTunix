@@ -12,10 +12,7 @@ AM_INIT_AUTOMAKE(megatunix, ${MEGATUNIX_LIN_VERSION})
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
-
-
 dnl Checks for programs.
-dnl AM_PROG_LIBTOOL
 AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -27,9 +24,6 @@ pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
-
-
-dnl Checks for libraries.
 
 
 dnl Replace `main' with a function in -lpthread:

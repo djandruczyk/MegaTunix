@@ -11,7 +11,7 @@ DIST_SUBDIRS = $(subdirs)
 
 DEPDIR = ${subdirs}/.deps
 
-CLEANFILES = *~ core -rf .dep*
+CLEANFILES = *~ core -rf autom4te.cache
 
 EXTRA_DIST = configure CREDITS VERSION AUTHORS TODO README INSTALL
 
