@@ -147,7 +147,9 @@ void rt_update_status(gpointer key, gpointer data)
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gint value = 0;
+	gint previous_value = 0;
 	gint current_entry = 0;
+	gint previous_entry = 0;
 	static GObject *object = NULL;
 	static gfloat * history = NULL;
 	static gchar * source = NULL;
@@ -166,19 +168,24 @@ void rt_update_status(gpointer key, gpointer data)
 		history = (gfloat *)g_object_get_data(object,"history");
 	}
 	current_entry = (gint)g_object_get_data(object,"current_entry");
+	previous_entry = (gint)g_object_get_data(object,"previous_entry");
 
 	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
 	
 	value = (gint)history[current_entry];
-	if (((value &bitmask) >> bitshift) == bitval) // enable it
+	previous_value = (gint)history[previous_entry];
+
+	/// if the value hasn't changed, don't bother continuing 
+	if (value == previous_value)
+		return;	
+	if (((value & bitmask) >> bitshift) == bitval) // enable it
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 	else	// disable it..
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 		
 	last_source = source;
-
 }
 
 
@@ -200,58 +207,60 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat lower = 0.0;
 	gchar * tmpbuf = NULL;
 	gint current_entry = 0;
-	gint hist_size = 0;
-	gfloat now = 0.0;
+	gint previous_entry = 0;
 	gfloat current = 0.0;
+	gfloat previous = 0.0;
 	gfloat percentage = 0.0;
 	gboolean is_float = FALSE;
 
 	current_entry = (gint)g_object_get_data(slider->object,"current_entry");
-	hist_size = (gint)g_object_get_data(slider->object,"hist_max");
+	previous_entry = (gint)g_object_get_data(slider->object,"previous_entry");
 	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
-	now = slider->history[current_entry];
-	if (current_entry == 0)
-		current = slider->history[hist_size-1];
-	else
-		current = slider->history[(current_entry-1)];
+	current = slider->history[current_entry];
+	previous = slider->history[previous_entry];
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
 	
-	if ((now != current) || (forced_update))
+	if ((current != previous) || (forced_update))
 	{
-		percentage = (now-lower)/(upper-lower);
+		percentage = (current-lower)/(upper-lower);
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
 		tmpf = tmpf >= 0.0 ? tmpf : 0.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(slider->pbar),
 				tmpf);
 
-		if ((abs(count-current) > 5) || (forced_update))
+		/* If changed by more than 5% or has been at least 5 
+		 * times withot an update or forced_update is set
+		 * */
+		
+		if ((abs(count-last_upd) > 3) || (forced_update))
 		{
 			if (is_float)
-				tmpbuf = g_strdup_printf("%.2f",now);
+				tmpbuf = g_strdup_printf("%.2f",current);
 			else
-				tmpbuf = g_strdup_printf("%i",(gint)now);
+				tmpbuf = g_strdup_printf("%i",(gint)current);
 			
 			gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 			g_free(tmpbuf);
 			last_upd = count;
 		}
+		slider->last_percentage = percentage;
 	}
-	else if ((count % 30 == 0))
+	else if ((abs(count-last_upd)%30) == 0)
 	{
 		if (is_float)
-			tmpbuf = g_strdup_printf("%.2f",now);
+			tmpbuf = g_strdup_printf("%.2f",current);
 		else
-			tmpbuf = g_strdup_printf("%i",(gint)now);
+			tmpbuf = g_strdup_printf("%i",(gint)current);
 		gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;
 	}
 
 	rate++;
-	if (rate >25)
+	if (rate > 25)
 		rate = 25;
 	if (last_upd > 5000)
 		last_upd = 0;

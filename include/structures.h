@@ -150,6 +150,7 @@ struct Rt_Slider
 	gint lower;		/*! Lower limit */
 	gint upper;		/*! Upper limit */
 	gfloat * history;	/*! where the data is from */
+	gfloat last_percentage;	/*! last percentage of on screen slider */
 	GObject *object;	/*! object of obsession.... */
 	gboolean enabled;	/*! Pretty obvious */
 	gint count;		/*! used to making sure things update */
