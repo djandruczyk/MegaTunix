@@ -186,13 +186,13 @@ void close_serial()
 void set_ms_page(gint ms_page)
 {
 	gint res = 0;
-	gchar buf;
 
-	buf = ms_page & 0xF;
+	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\"\n",ms_page),SERIAL_WR);
+	
 	res = write(serial_params->fd,"P",1);
 	if (res != 1)
 		dbg_func(__FILE__": set_ms_page()\n\tFAILURE sending \"P\" (change page) command to ECU \n",CRITICAL);
-	res = write(serial_params->fd,&buf,1);
+	res = write(serial_params->fd,&ms_page,1);
 	if (res != 1)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i\n",ms_page),CRITICAL);
 }

@@ -61,7 +61,7 @@ void interrogate_ecu()
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
-	gint j = 0;
+	//gint j = 0;
 	gint tests_to_run = 0;
 	gint total_read = 0;
 	gint total_wanted = 0;
@@ -71,7 +71,7 @@ void interrogate_ecu()
 	GArray *cmd_array = NULL;
 	guchar buf[size];
 	guchar *ptr = NULL;
-	guchar *p = NULL;
+	//guchar *p = NULL;
 	GHashTable *cmd_details = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 

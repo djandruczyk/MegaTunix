@@ -43,6 +43,8 @@ EXPORT void finish_memviewer(void)
 	extern GdkColor white;
 	extern GHashTable *dynamic_widgets;
 
+	printf("finishing memviewer\n");
+
 	raw_memory_widgets = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
 	base = 0;
 	range = 256;
@@ -136,6 +138,7 @@ EXPORT void finish_memviewer(void)
 		}
 
 		base += range;
+		gtk_widget_show_all(table);
 	}
 
 

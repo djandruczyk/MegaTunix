@@ -97,11 +97,12 @@ int setup_gui()
 	g_signal_connect(G_OBJECT(notebook),"switch-page",
 			G_CALLBACK(page_changed),NULL);
 
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
 
-	button = gtk_button_new_with_label("Exit");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,20);
+	button = gtk_button_new_with_label("            Exit           ");
+	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT(button),"pressed",
 			G_CALLBACK(leave),NULL);
 
