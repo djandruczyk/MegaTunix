@@ -43,7 +43,8 @@ typedef enum
 	REVERT_TO_BACKUP,
 	BACKUP_ALL,
 	RESTORE_ALL,
-	SELECT_PARAMS
+	SELECT_PARAMS,
+	REQD_FUEL_POPUP,
 }StdButton;
 
 /* Toggle/Radio buttons */

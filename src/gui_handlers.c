@@ -41,7 +41,6 @@ extern gchar *delim;
 extern gint statuscounts_id;
 extern gint max_logables;
 extern gint ready;
-extern gint req_fuel_popup;
 extern gint logging_mode;
 extern gint read_wait_time;
 extern gfloat ego_pbar_divisor;
@@ -504,7 +503,11 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case SELECT_PARAMS:
 			present_viewer_choices(w_data);
 			break;
-	}
+		case REQD_FUEL_POPUP:
+			reqd_fuel_popup(w_data);
+			req_fuel_change(w_data);
+			break;
+	}		
 	return TRUE;
 }
 
@@ -554,7 +557,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_RATED_INJ_FLOW:
-			reqd_fuel->rated_inj_flow = (gint)value;
+			reqd_fuel->rated_inj_flow = (gfloat)value;
 			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_RATED_PRESSURE:
@@ -571,12 +574,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			break;
 		case REQ_FUEL_1:
 			req_fuel_total_1 = value;
-			req_fuel_change(reqd_fuel);
 			check_req_fuel_limits();
 			break;
 		case REQ_FUEL_2:
 			req_fuel_total_2 = value;
-			req_fuel_change(reqd_fuel);
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS_1:
@@ -1555,28 +1556,12 @@ void set_dualtable_mode(gboolean state)
 	extern GList *dt_widgets;
 	extern GList *inv_dt_widgets;
 	dualtable = state;
-	GtkWidget *label;
 
-	/* get label widget for constants reqd_fuel table 1 */
-	label = gtk_frame_get_label_widget(
-			GTK_FRAME
-			(misc.tbl1_reqd_fuel_frame));
-			
 	g_list_foreach(inv_dt_widgets, set_widget_state,(gpointer)(!state));
 	g_list_foreach(dt_widgets, set_widget_state,(gpointer)state);
 
 	/* fahrenheit is a FLAG... */
 	reset_temps(GINT_TO_POINTER(fahrenheit));
-	if (state)
-	{
-		gtk_label_set_text(GTK_LABEL(label),"Required Fuel for Table 1");
-//		printf("enabling dualtable mode controls\n");
-	}
-	else
-	{
-		gtk_label_set_text(GTK_LABEL(label),"Required Fuel");
-//		printf("disabling dualtable mode controls\n");
-	}
 }
 
 void set_widget_state(gpointer widget, gpointer state)

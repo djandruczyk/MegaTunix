@@ -163,6 +163,7 @@ void save_config(void)
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
 
+	g_free(cfgfile);
 	g_free(filename);
 
 }

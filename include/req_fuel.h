@@ -18,8 +18,8 @@
 
 /* Prototypes */
 int reqd_fuel_popup();
-int update_reqd_fuel(GtkWidget *, gpointer);
-int close_popup(GtkWidget *, gpointer);
+gboolean save_reqd_fuel(GtkWidget *, gpointer);
+gboolean close_popup(GtkWidget *);
 void req_fuel_change(void *);
 /* Prototypes */
 

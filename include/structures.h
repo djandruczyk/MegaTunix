@@ -107,12 +107,10 @@ struct DynamicSpinners
 /* Controls for the Required Fuel Calculator... */
 struct Reqd_Fuel
 {
-        GtkWidget *disp_spin;		/* Spinbutton */
-        GtkWidget *cyls_spin;		/* Spinbutton */
-        GtkWidget *rated_inj_flow_spin;	/* Spinbutton */
-        GtkWidget *rated_pressure_spin;	/* Spinbutton */
-        GtkWidget *actual_pressure_spin;/* Spinbutton */
-        GtkWidget *afr_spin;		/* Spinbutton */
+	GtkWidget *popup;		/* the popup window */
+	GtkWidget *calcd_val_spin;	/* Preliminary value */
+	GtkWidget *reqd_fuel_spin;	/* Used value */
+	gfloat calcd_reqd_fuel;		/* calculated value... */
         gint disp;			/* Engine size  1-1000 Cu-in */
         gint cyls;			/* # of Cylinders  1-12 */
         gfloat rated_inj_flow;		/* Rated injector flow */
@@ -121,7 +119,9 @@ struct Reqd_Fuel
         gfloat actual_inj_flow;		/* injector flow rate (lbs/hr) */
         gfloat target_afr;		/* Air fuel ratio 10-25.5 */
         gint table;			/* Which table is this for */
+	gboolean visible;		/* Is it visible? */
 };
+
 
 /* These are defined as they are semi-dynamic and are modified
  * during run of MegaTunix for status or units related reasons

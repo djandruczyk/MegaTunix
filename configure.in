@@ -30,18 +30,12 @@ PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
-
-dnl Replace `main' with a function in -lpthread:
-AC_CHECK_LIB(pthread, main)
-
 dnl Checks for header files.
 AC_HEADER_TIME
 AC_HEADER_STDC
-AC_CHECK_HEADERS(string.h errno.h sys/poll.h sys/stat.h sys/types.h termios.h fcntl.h sys/ioctl.h sys/time.h unistd.h pthread.h)
-
+AC_CHECK_HEADERS(string.h errno.h sys/poll.h sys/stat.h sys/types.h termios.h fcntl.h sys/ioctl.h sys/time.h unistd.h )
 
 dnl optimizations
-
 CFLAGS="-O2"
 AC_SUBST(CFLAGS)
 
