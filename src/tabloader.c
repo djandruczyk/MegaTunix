@@ -16,6 +16,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <getfiles.h>
 #include <glade/glade.h>
 #include <stringmatch.h>
 #include <structures.h>
@@ -42,13 +43,10 @@ gboolean load_gui_tabs()
 	if (!firmware->tab_list[i])
 		return FALSE;
 
-
 	while (firmware->tab_list[i])
 	{
-		glade_file = g_strconcat(DATA_DIR,"/",GUI_DIR,"/",
-				firmware->tab_list[i],".glade",NULL);
-		map_file = g_strconcat(DATA_DIR,"/",GUI_DIR,"/",
-				firmware->tab_list[i],".datamap",NULL);
+		glade_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_list[i],".glade",NULL));
+		map_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_list[i],".datamap",NULL));
 		if ((g_file_test(glade_file,G_FILE_TEST_EXISTS)) &&
 				(g_file_test(map_file,G_FILE_TEST_EXISTS)))
 		{

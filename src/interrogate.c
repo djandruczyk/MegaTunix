@@ -423,15 +423,15 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 {
 	ConfigFile *cfgfile;
 	GArray * cmd_array = NULL;
-	gchar * filename;
+	gchar * filename = NULL;
 	gchar *section = NULL;
-	gchar * tmpbuf;
+	gchar * tmpbuf = NULL;
 	gint total_tests = 0;
 	gint i = 0;
 	gboolean tmpi = FALSE;
 	struct Command *cmd = NULL;
 
-	filename = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/","tests",NULL);
+	filename = get_file(g_strconcat(INTERROGATOR_DIR,"/","tests",NULL));
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{	

@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <getfiles.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_map_loader.h>
 #include <string.h>
@@ -52,7 +53,7 @@ gboolean load_realtime_map(void )
 
 	rtv_map = g_new0(struct RtvMap, 1);
 
-	filename = g_strconcat(DATA_DIR,"/",REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL);
+	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL));
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 	{
@@ -61,6 +62,7 @@ gboolean load_realtime_map(void )
 		return FALSE;
 	}
 	/* If file found we continue... */
+	g_free(filename);
 
 	if(!cfg_read_string(cfgfile,"realtime_map","firmware_name",&tmpbuf))
 		dbg_func(__FILE__": realtime_map_load(), can't find firmware name\n",CRITICAL);
@@ -69,10 +71,11 @@ gboolean load_realtime_map(void )
 		dbg_func(g_strdup_printf(__FILE__": realtime_map_load(), firmware name(%s) in this file(%s) does NOT match firmware name(%s) of loaded firmware, ABORT!\n",tmpbuf,filename,firmware->name),CRITICAL);
 		cfg_free(cfgfile);
 		g_free(cfgfile);
-		g_free(filename);
+		g_free(tmpbuf);
 		return FALSE;
 
 	}
+	g_free(tmpbuf);
 	/* OK, basic checks passed,  start loading data into
 	 * the main mapping structures...
 	 */
