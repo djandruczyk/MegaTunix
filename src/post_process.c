@@ -30,12 +30,12 @@ void post_process(void *input, void *output)
 	 * choose below which ones to take based on whether
 	 * dualtable is set or not..
 	 */
-	struct Raw_Runtime_Dualtable *in = input;
-	struct Raw_Runtime_Std *in_std = input;
+	struct Raw_Runtime_Std *in = input;
+	struct Raw_Runtime_Dualtable *in_dt = input;
 	struct Runtime_Common *out = output;
 	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const_p0 = (struct Ve_Const_Std *) ms_data;
-//	struct Ve_Const_Std *ve_const_p1 = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
+	struct Ve_Const_DT_1 *ve_const_p1 = (struct Ve_Const_DT_1 *) ms_data+MS_PAGE_SIZE;
 
 	gint divider = 0;
 	gint nsquirts = 0;
@@ -82,47 +82,51 @@ void post_process(void *input, void *output)
 	out->warmcorr = in->warmcorr;
 	out->rpm = in->rpm * 100;
 	out->pw1 = (float)in->pw1 / 10.0;
-	//out->dcycle1 = (float) out->pw1 / (1200.0 / (float) out->rpm);
-	/* Hopefully correct dutycycle calc from Eric Fahlgren */
-	nsquirts = (ve_const_p0->config11.bit.cylinders+1)/ve_const_p0->divider;
-	if (ve_const_p0->alternate)
-		divider = 2;
-	else
-		divider = 1;
-	if (ve_const_p0->config11.bit.eng_type == 1)
-		cycletime = 600.0 /(float) in->rpm;
-	else
-		cycletime = 1200.0 /(float) in->rpm;
-
-	out->dcycle1 = 100.0 *nsquirts/divider* (float) out->pw1 / cycletime;
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
 	out->vecurr1 = in->vecurr1;
-	if (dualtable)
+	//out->dcycle1 = (float) out->pw1 / (1200.0 / (float) out->rpm);
+	/* Hopefully correct dutycycle calc from Eric Fahlgren */
+	nsquirts = (ve_const_p0->config11.bit.cylinders+1)/ve_const_p0->divider;
+	if (!dualtable)
 	{
-/*
-		out->vecurr2 = in->vecurr2;
-		out->pw2 = (float)in->pw2 / 10.0;
-		nsquirts = (ve_const_p1->config11.bit.cylinders+1)/ve_const_p1->divider;
-		if (ve_const_p1->alternate)
+		if (ve_const_p0->alternate)
 			divider = 2;
 		else
 			divider = 1;
-		if (ve_const_p1->config11.bit.eng_type == 1)
+		if (ve_const_p0->config11.bit.eng_type == 1)
+			cycletime = 600.0 /(float) in->rpm;
+		else
+			cycletime = 1200.0 /(float) in->rpm;
+
+		out->dcycle1 = 100.0 *nsquirts/divider* (float) out->pw1 / cycletime;
+		out->bspot1 = in->bspot1;
+		out->bspot2 = in->bspot2;
+		out->bspot3 = in->bspot3;
+	}
+	else
+	{	/* Dualtable code.... */
+
+		out->vecurr2 = in_dt->vecurr2;
+		out->pw2 = (float)in_dt->pw2 / 10.0;
+		/* we use the config11bit  from page0 as it DOES NOT EXIST 
+		 * in page 1, yet we use the "divider" from page 1 */
+		nsquirts = (ve_const_p0->config11.bit.cylinders+1)/ve_const_p1->divider;
+/*
+	This needs work/input from Eric F 
+		if (ve_const_p1->tblcnf)
+			divider = 2;
+		else
+			divider = 1;
+*/
+		if (ve_const_p0->config11.bit.eng_type == 1)
 			cycletime = 600.0 /(float) in->rpm;
 		else
 			cycletime = 1200.0 /(float) in->rpm;
 
 		//out->dcycle2 = (float) out->pw2 / (1200.0 / (float) out->rpm);
 		out->dcycle2 = 100.0 *nsquirts/divider* (float) out->pw1 / cycletime;
-		out->idleDC = in->idleDC;
-*/
-	}
-	else
-	{
-		out->bspot1 = in_std->bspot1;
-		out->bspot2 = in_std->bspot2;
-		out->bspot3 = in_std->bspot3;
+		out->idleDC = in_dt->idleDC;
 	}
 }

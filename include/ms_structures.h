@@ -186,7 +186,8 @@ struct Ve_Const_Std
         unsigned char	pad4;			/* 127, Padding to 128 bytes */
 }; 
 
-struct Ve_Const_Dualtable
+	/* VE table and Constants for Page 0 */
+struct Ve_Const_DT_1
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char	ve_bins[64];		/* 0, VE table, 64 bytes */
@@ -233,5 +234,43 @@ struct Ve_Const_Dualtable
         unsigned char	slowidlespd;		/* 126, Slow idle speed RPM/10 */
         unsigned char	idlethresh;		/* 127, TPS A/D count threshold BELOW which idle PWM is used */
 }; 
+
+	/* VE table and Constants for Page 1 */
+struct Ve_Const_DT_2
+{
+        /* TYPE          Variable              Offset,  Comment */
+        unsigned char	ve_bins[64];		/* 128, VE table, 64 bytes */
+	unsigned char   unused[26];		/* 192, unused... */
+        unsigned char	req_fuel;		/* 218, require fuel */
+        unsigned char	divider;		/* 219, IRQ / factor for pulse*/
+        union tblcnf	tblcnf;			/* 220, inj config per table */
+        unsigned char	inj_open_time;		/* 221, inj open time */
+        unsigned char	inj_ocfuel;		/* 222, PW-correlated amount of 
+						 * fuel injected during open 
+                                                 */
+        unsigned char	pwm_curr_lim;		/* 223, curr limit PWM duty 
+						 * cycle
+ 						 */
+        unsigned char	pwm_time_max;		/* 224, Peak hold time */
+        unsigned char	batt_corr;		/* 225, Batt Voltage Corr */
+        unsigned short	rpmk;			/* 226, 12K/ncyl */
+        unsigned char	rpm_bins[8];		/* 228, VEtable RPM bins */
+        unsigned char	load_bins[8];		/* 236, VEtable KPA bins */
+	unsigned char	unused244;		/* 244, unused */
+	unsigned char	unused245;		/* 245, unused */
+	unsigned char	unused246;		/* 246, unused */
+	unsigned char	bcFreqDiv;		/* 247, PWM rate for boost */
+						/* 0-ERROR, 1=39hz, 2=19 Hz */
+						/* 3 = 10 Hz */
+	unsigned char	bcUpdate;		/* 248, milliseconds count for 
+						 * controller algorithm */
+	unsigned char	bcPgain;		/* 249, proportional Gain % */
+	unsigned char	bcDgain;		/* 250, derivative Gain % */
+	unsigned char	revlimit;		/* 251, rev limit (rpm/100) */ 
+	unsigned char	unused126;		/* 252, unused */
+	unsigned char	unused127;		/* 253, unused */
+	unsigned char	unused128;		/* 254, unused */
+	unsigned char	crank_rpm;		/* 255, rpm/100 */
+};
 
 #endif
