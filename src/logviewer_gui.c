@@ -180,7 +180,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 
-	label = gtk_label_new("Scroll Speed");
+	label = gtk_label_new("Zoom Level");
 	gtk_box_pack_start(GTK_BOX(vbox3),label,TRUE,FALSE,5);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new((gfloat)lv_scroll,1.0,15.0,1.0,1.0,0);
@@ -213,9 +213,6 @@ void present_viewer_choices(void *ptr)
 	gchar * name = NULL;
 	GtkWidget *hand_me_down = NULL;
 	extern unsigned int ecu_caps;
-	extern GList *dt_controls;
-	extern GList *iac_idle_controls;
-	extern GList *ign_controls;
 	struct Log_Info *log_info = NULL;
 
 	if (ptr != NULL)
@@ -282,15 +279,6 @@ void present_viewer_choices(void *ptr)
 			if (valid_logables[i] == FALSE)
 				gtk_widget_set_sensitive(button,FALSE);
 			gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
-			if (dlog_caps[i] == DUALTABLE)
-				dt_controls = g_list_append(dt_controls,
-						(gpointer)button);
-			if (dlog_caps[i] == IAC_PWM)
-				iac_idle_controls = g_list_append(iac_idle_controls,
-						(gpointer)button);
-			if (dlog_caps[i] == (S_N_SPARK|S_N_EDIS))
-				ign_controls = g_list_append(ign_controls,
-						(gpointer)button);
 		}
 		if (viewables.index[i] == TRUE)
         		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
