@@ -45,9 +45,6 @@ extern gint main_y_origin;
 extern gint lv_scroll;
 extern gint width;
 extern gint height;
-extern gint poll_min;
-extern gint poll_step;
-extern gint poll_max;
 extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
@@ -66,9 +63,6 @@ struct IoCmds *cmds;
 void init()
 {
 	/* defaults */
-	poll_min = 25;		/* 25 millisecond minimum poll delay */
-	poll_step = 5;		/* 5 ms steps */
-	poll_max = 500;		/* 500 millisecond maximum poll delay */
 	interval_min = 5;	/* 5 millisecond minimum interval delay */
 	interval_step = 5;	/* 5 ms steps */
 	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
@@ -80,7 +74,6 @@ void init()
 	/* initialize all global variables to known states */
 	serial_params->fd = 0; /* serial port file-descriptor */
 	serial_params->errcount = 0; /* I/O error count */
-	serial_params->poll_timeout = 40; /* poll wait time in milliseconds */
 	/* default for MS V 1.x and 2.x */
 	serial_params->read_wait = 100;	/* delay between reads in milliseconds */
 
@@ -117,8 +110,6 @@ gboolean read_config(void)
 				&main_y_origin);
 		cfg_read_string(cfgfile, "Serial", "port_name", 
 				&serial_params->port_name);
-		cfg_read_int(cfgfile, "Serial", "polling_timeout", 
-				&serial_params->poll_timeout);
 		cfg_read_int(cfgfile, "Serial", "read_delay", 
 				&serial_params->read_wait);
 		cfg_read_int(cfgfile, "Logviewer", "scroll_speed", &lv_scroll);
@@ -171,8 +162,6 @@ void save_config(void)
 	}
 	cfg_write_string(cfgfile, "Serial", "port_name", 
 			serial_params->port_name);
-	cfg_write_int(cfgfile, "Serial", "polling_timeout", 
-			serial_params->poll_timeout);
 	cfg_write_int(cfgfile, "Serial", "read_delay", 
 			serial_params->read_wait);
 	cfg_write_int(cfgfile, "Logviewer", "scroll_speed", lv_scroll);

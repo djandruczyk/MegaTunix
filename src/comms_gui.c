@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <structures.h>
-#include <sys/poll.h>
 #include <unistd.h>
 
 struct DynamicEntries entries;
@@ -32,9 +31,6 @@ extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
 extern struct Serial_Params *serial_params;
-gint poll_min;
-gint poll_step;
-gint poll_max;
 gint interval_min;
 gint interval_step;
 gint interval_max;
@@ -160,28 +156,6 @@ void build_comms(GtkWidget *parent_frame)
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),1);
 	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,0);
-
-	label = gtk_label_new("Polling Timeout (ms)");
-	gtk_misc_set_alignment (GTK_MISC (label), 0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	adj = (GtkAdjustment *) gtk_adjustment_new(
-			100,poll_min,poll_max,poll_step,poll_step,0);
-	spinner = gtk_spin_button_new(adj,0,0);
-	gtk_widget_set_size_request(spinner,55,-1);
-	gtk_tooltips_set_tip(tip,spinner,
-			"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds.  This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
-
-	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(SER_POLL_TIMEO));
-	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spin_button_handler),
-			NULL);
-	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->poll_timeout);
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	gtk_tooltips_set_tip(tip,button,

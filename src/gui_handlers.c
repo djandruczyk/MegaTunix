@@ -522,9 +522,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((SpinButton)handler)
 	{
-		case SER_POLL_TIMEO:
-			serial_params->poll_timeout = (gint)value;
-			break;
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
 			if (realtime_id > 0)

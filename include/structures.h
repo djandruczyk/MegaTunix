@@ -29,7 +29,6 @@ struct Serial_Params
         gint fd;		/* File descriptor */
         gchar *port_name;	/* textual name of comm port */
         gboolean open;		/* flag, TRUE for open FALSE for closed */
-        gint poll_timeout;	/* Pollng interval in MILLISECONDS */
         gint read_wait;		/* time delay between each read */
         gint errcount;		/* Serial I/O errors read error count */
         struct termios oldtio;	/* serial port settings before we touch it */
