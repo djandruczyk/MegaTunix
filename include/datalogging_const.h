@@ -37,16 +37,107 @@ static const gchar *logable_names[] =
 "INJ-2 Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 
-static const gchar *mt_compat_names[] = 
+static const gchar *mt_classic_names[] = 
 {
-"HR_Clock",	"Seconds",	"RPM",		"EngineBit",	"IdleDC",
+"Time",		"Seconds",	"RPM",		"EngineBit",	"IdleDC",
 "TPS_Volts",	"MAP_Volts",	"BARO_Volts",	"MAT_Volts",	"CLT_Volts",
 "TPS_Counts",	"MAP_Counts",	"BARO_Counts",	"MAT_Counts",	"CLT_Counts",
-"TPS_%",	"MAP_KPA",	"BARO_KPA",	"MAT_(Deg)",	"CLT_(Deg)",
+"TP",		"MAP",		"BARO", 	"MAT",		"CLT",
 "O2",		"O2_Counts",	"Gammae",	"BATT_Volts",	"BATT_Counts",
-"Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSaccel",
-"Gve",		"VE2",		"PW1",		"PW2",		"INJ-1_Dcycle",
+"Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSacc",
+"Gve",		"Gve2",		"PW",		"PW2",		"INJ-1_Dcycle",
 "INJ-2_Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+};
+
+static const gchar *mt_full_names[] = 
+{
+"Time",		"SecL",		"RPM",		"Engine",	"IdleDC",
+"TPS_Volts",	"MAP_Volts",	"BARO_Volts",	"MAT_Volts",	"CLT_Volts",
+"TPS_Counts",	"MAP_Counts",	"BARO_Counts",	"MAT_Counts",	"CLT_Counts",
+"TP",		"MAP",		"BARO", 	"MAT",		"CLT",
+"O2",		"O2_Counts",	"Gammae",	"BATT_Volts",	"BATT_Counts",
+"Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSacc",
+"Gve",		"Gve2",		"PW",		"PW2",		"INJ-1_Dcycle",
+"INJ-2_Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+};
+
+/* logging_offset_map is a mapping between the logable_names[] list above 
+ * and the byte offset into the Runtime_Common datastructure. The index 
+ * is the index number of the logable variable from above, The value at that
+ * index point is the offset into the struct for the data. Offset 0
+ * is the first value in the struct (secl), offset 99 is a special case
+ * for the Hi-Res clock which isn't stored in the structure...
+ */
+static const gint logging_offset_map[] =
+{
+        99,54,52,56,74,
+        24,16, 0,20, 8,
+        68,66,62,67,64,
+        44,60,59,50,48,
+        12,65,61, 4,63,
+        69,70,71,73,72,
+        57,58,36,40,28,
+        32,75,76,77,78,
+	79,80
+};
+
+/* mt_classic_order[] is an arry signifying the ORDER that the variables 
+ * are displayed in the logfile.  This is done ONLY to make the logs 
+ * 100% compatible with ms-tweek3K. -1 means it's not logged, anything from
+ * 1 on up signifies the order in which they get logged to the logfile...
+ */
+static const gint mt_classic_order[] = 
+{
+	-1, 0, 1, 4,-1,
+	-1,-1,-1,-1,-1,
+	-1,-1,-1,-1,-1,
+	-1, 2,-1,-1,-1,
+	 3,-1,10,-1,-1,
+	 6, 8, 5, 7,-1,
+	 9,-1,-1,-1,-1,
+	-1,-1,-1,-1,-1,
+	-1,-1
+};
+
+/* mt_full_order[] is an arry signifying the ORDER that the variables 
+ * are displayed in the logfile.  This is done ONLY to make the logs 
+ * 100% compatible with ms-tweek3K. -1 means it's not logged, anything from
+ * 0 on up signifies the order in which they get logged to the logfile...
+ */
+static const gint mt_full_order[] = 
+{
+	 0, 1, 2, 8,-1,
+	-1,-1,-1,-1,-1,
+	-1,-1,-1,-1,-1,
+	 4, 3,-1, 6, 7,
+	 5,-1,13,-1,-1,
+	10,12, 9,11,14,
+	15,17,16,18,-1.
+	-1,-1,-1,-1,-1,
+	-1,-1
+};
+
+/* Size of each logable variable in BYTES, so 4 = a 32 bit var 
+ * This strange array is needed only forthe fact that the datalogging
+ * functions get all of their data from the Runtime_Common struct.
+ * that struct has been deigned (And is necessary) to have all the 
+ * largest varibles first (floats before shorts before chars), so that
+ * the structure can be referenced in array notation, this way all data
+ * is accessible by the appropriate index.
+ * The values in this array correspond to the size of the referenced
+ * variable in that Runtime_Common struct.
+ */
+static const gint logging_datasizes_map[] =
+{
+        FLOAT,UCHAR,SHORT,UCHAR,UCHAR,
+        FLOAT,FLOAT,FLOAT,FLOAT,FLOAT,
+        UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
+        FLOAT,UCHAR,UCHAR,SHORT,UCHAR,
+        FLOAT,UCHAR,UCHAR,FLOAT,UCHAR,
+        UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
+        UCHAR,UCHAR,FLOAT,FLOAT,FLOAT,
+        FLOAT,UCHAR,UCHAR,UCHAR,UCHAR,
+	UCHAR,UCHAR
 };
 
 
@@ -141,47 +232,4 @@ static const gchar * logable_names_tips[] =
 "\"BSPOT2\" is one of three blank spots returned in the runtime variables for standard MegaSquirt ECUs. Some of the less known MS variants use these to communicate back additional data.  These are loggable just for this reasons.  Units are 0-255, resolution of 1.",
 "\"BSPOT3\" is one of three blank spots returned in the runtime variables for standard MegaSquirt ECUs. Some of the less known MS variants use these to communicate back additional data.  These are loggable just for this reasons.  Units are 0-255, resolution of 1."
 };
-/* logging_offset_map is a mapping between the logable_names[] list above 
- * and the byte offset into the Runtime_Common datastructure. The index 
- * is the index number of the logable variable from above, The value at that
- * index point is the offset into the struct for the data. Offset 0
- * is the first value in the struct (secl), offset 99 is a special case
- * for the Hi-Res clock which isn't stored in the structure...
- */
-static const gint logging_offset_map[] =
-{
-        99,54,52,56,74,
-        24,16, 0,20, 8,
-        68,66,62,67,64,
-        44,60,59,50,48,
-        12,65,61, 4,63,
-        69,70,71,73,72,
-        57,58,36,40,28,
-        32,75,76,77,78,
-	79,80
-};
-
-/* Size of each logable variable in BYTES, so 4 = a 32 bit var 
- * This strange array is needed only forthe fact that the datalogging
- * functions get all of their data from the Runtime_Common struct.
- * that struct has been deigned (And is necessary) to have all the 
- * largest varibles first (floats before shorts before chars), so that
- * the structure can be referenced in array notation, this way all data
- * is accessible by the appropriate index.
- * The values in this array correspond to the size of the referenced
- * variable in that Runtime_Common struct.
- */
-static const gint logging_datasizes_map[] =
-{
-        FLOAT,UCHAR,SHORT,UCHAR,UCHAR,
-        FLOAT,FLOAT,FLOAT,FLOAT,FLOAT,
-        UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
-        FLOAT,UCHAR,UCHAR,SHORT,UCHAR,
-        FLOAT,UCHAR,UCHAR,FLOAT,UCHAR,
-        UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
-        UCHAR,UCHAR,FLOAT,FLOAT,FLOAT,
-        FLOAT,UCHAR,UCHAR,UCHAR,UCHAR,
-	UCHAR,UCHAR
-};
-
 #endif

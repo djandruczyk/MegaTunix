@@ -145,7 +145,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	else
 		new_file = TRUE;
 
-	/* If it's a new file, but we wantto read, throw a warning... */
+	/* If it's a new file, but we want to read, throw a warning... */
 	if ((new_file) && ((iotype == FULL_RESTORE) || (iotype == VE_IMPORT)))
 	{
 		warn_input_file_not_exist(iotype, selected_filename);
@@ -164,12 +164,12 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			{
 				if (iotype == DATALOG_EXPORT)
 				{
-					tmpbuf = g_strdup("File chosen for datalog already contained data, user chose not to over-write it...\n");
+					tmpbuf = g_strdup("File chosen for datalog already contained data, user has chosen not to over-write it...\n");
 					update_logbar(dlog_view,"warning",tmpbuf,TRUE,FALSE);
 				}
 				else
 				{
-					tmpbuf = g_strdup("File chosen already had data, user chose not to over-write it...\n");
+					tmpbuf = g_strdup("File chosen already had data, user has chosen not to over-write it...\n");
 					update_logbar(tools_view,"warning",tmpbuf,TRUE,FALSE);
 				}
 				g_free(tmpbuf);
@@ -213,7 +213,6 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			gtk_widget_set_sensitive(buttons.start_dlog_but,TRUE);
 			g_object_set_data(G_OBJECT(buttons.close_dlog_but),
 					"data",(gpointer)iofile);
-
 			gtk_label_set_text(GTK_LABEL(
 						labels.dlog_file_lab),
 					selected_filename);
@@ -387,7 +386,6 @@ void truncate_file(FileIoType filetype, gchar *filename)
 void backup_all_ms_settings(void *ptr)
 {
 	fprintf(stderr,__FILE__": backup all MS settings to file isn't written yet...\n");
-	//fprintf(stderr,__FILE__": should backup to %s\n",filename);
 
 }
 

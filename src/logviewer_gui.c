@@ -158,7 +158,8 @@ void present_viewer_choices( void *ptr)
 		printf("pointer fed was NULL (present_viewer_choices)\n");
 
 	/* basty hack to prevent a compiler warning... */
-	max_viewables = sizeof(mt_compat_names)/sizeof(gchar *);
+	max_viewables = sizeof(mt_classic_names)/sizeof(gchar *);
+	max_viewables = sizeof(mt_full_names)/sizeof(gchar *);
 	max_viewables = sizeof(logable_names)/sizeof(gchar *);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);

@@ -31,12 +31,6 @@
 #include <unistd.h>
 
 
-extern gint ready;
-extern struct Runtime_Common *runtime;
-extern struct DynamicButtons buttons;
-extern struct DynamicLabels labels;
-extern GdkColor white;
-extern gboolean dualtable;
 gchar *delim;
 gfloat cumu = 0.0;
 gint logging_mode = CUSTOM_LOG;
@@ -60,7 +54,15 @@ GtkWidget *tab_delim_button;
 struct Logables logables;
 	/* basty hack to prevent a compiler warning... */
 gint max_limits = sizeof(limits)/sizeof(struct Limits);
-
+static GHashTable *custom_ord_hash;
+static GHashTable *classic_ord_hash;
+static GHashTable *full_ord_hash;
+extern gint ready;
+extern struct Runtime_Common *runtime;
+extern struct DynamicButtons buttons;
+extern struct DynamicLabels labels;
+extern GdkColor white;
+extern gboolean dualtable;
 
 void build_datalogging(GtkWidget *parent_frame)
 {
@@ -81,6 +83,9 @@ void build_datalogging(GtkWidget *parent_frame)
 	GSList  *group;
 	gint table_rows = 0;
 
+	custom_ord_hash = g_hash_table_new(NULL,NULL);
+	classic_ord_hash = g_hash_table_new(NULL,NULL);
+	full_ord_hash = g_hash_table_new(NULL,NULL);
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -166,6 +171,12 @@ void build_datalogging(GtkWidget *parent_frame)
 		//			gtk_widget_set_sensitive(button,FALSE);
 		g_object_set_data(G_OBJECT(button),"index",
 				GINT_TO_POINTER(i));
+		g_object_set_data(G_OBJECT(button),"mt_classic_order",
+				GINT_TO_POINTER(mt_classic_order[i]));
+		g_object_set_data(G_OBJECT(button),"mt_full_order",
+				GINT_TO_POINTER(mt_full_order[i]));
+		g_object_set_data(G_OBJECT(button),"size",
+				GINT_TO_POINTER(logging_datasizes_map[i]));
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
 				NULL);
@@ -378,16 +389,44 @@ void clear_logables(void)
 gint log_value_set(GtkWidget * widget, gpointer data)
 {
 	gint index = 0;
+	gint size = 0;
+	gint classic_ord = -1;
+	gint full_ord = -1;
 	gint i = 0;
 
 	index = (gint)g_object_get_data(G_OBJECT(widget),"index");
+	size = (gint)g_object_get_data(G_OBJECT(widget),"size");
+	classic_ord = (gint)g_object_get_data(G_OBJECT(widget),
+				"mt_classic_order");
+	full_ord = (gint)g_object_get_data(G_OBJECT(widget),
+				"mt_full_order");
 
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-		logables.index[index] = TRUE;
+	/* Set state in array so total count can be determined... */
+	logables.index[index] = gtk_toggle_button_get_active 
+					(GTK_TOGGLE_BUTTON (widget));
+
+	/* insert into hash table for ordered printout (megatune compat) */
+	if (logables.index[index])
+	{
+		g_hash_table_insert(classic_ord_hash,
+				GINT_TO_POINTER(classic_ord),(gpointer)index+1);
+		g_hash_table_insert(full_ord_hash,
+				GINT_TO_POINTER(full_ord),(gpointer)index+1);
+		g_hash_table_insert(custom_ord_hash,
+				GINT_TO_POINTER(index),(gpointer)index+1);
+	}
 	else
-		logables.index[index] = FALSE;
+	{
+		g_hash_table_remove(classic_ord_hash,
+				GINT_TO_POINTER(classic_ord));
+		g_hash_table_remove(full_ord_hash,
+				GINT_TO_POINTER(full_ord));
+		g_hash_table_remove(custom_ord_hash,
+				GINT_TO_POINTER(index));
+	}
 
 	total_logables = 0;
+	// Update total count....
 	for (i=0;i<max_logables;i++)
 	{
 		if (logables.index[i])
@@ -473,7 +512,7 @@ void run_datalog(void)
 							output,"%i",short_ptr[offset/SHORT]);
 						break;
 					default:
-						printf("SIZE not defiend\n");
+						printf("SIZE not defined (%i)\n",i);
 						break;
 				}
 
@@ -497,6 +536,7 @@ void write_log_header(void *ptr)
 	gint j = 0;
 	gint total_logables = 0;
 	gsize count = 0;
+	gint index = -1;
 	GString *output;
 	struct Io_File *iofile = NULL;
 	if (ptr != NULL)
@@ -506,28 +546,57 @@ void write_log_header(void *ptr)
 		
 	output = g_string_sized_new(64); /*pre-allccate for 4 chars */
 
+	// Get total number of logables....
 	for (i=0;i<max_logables;i++)
-		if (logables.index[i])/* If bit is set, increment counter */
+		if (logables.index[i])
 			total_logables++;
 
 	for (i=0;i<max_logables;i++)
 	{
-		if (logables.index[i]) /* If bit is set, we log this variable */
+		index = -1;
+		if (logging_mode == MT_CLASSIC_LOG)
 		{
-			offset_list[j] = logging_offset_map[i];
-			size_list[j] = logging_datasizes_map[i];
+			index = (gint)g_hash_table_lookup(classic_ord_hash,
+					GINT_TO_POINTER(i));
+			if (index == 0)
+				continue;
+			index -= 1;
+			output = g_string_append(output, 
+					mt_classic_names[index]);
+			offset_list[j] = logging_offset_map[index];
+			size_list[j] = logging_datasizes_map[index];
 			j++;
-			if ((logging_mode == MT_CLASSIC_LOG) || 
-					(logging_mode == MT_FULL_LOG))
-				output = g_string_append(output, 
-						mt_compat_names[i]);
-			else
-				output = g_string_append(output, 
-						logable_names[i]);
-
-			if (j < (total_logables))
-				output = g_string_append(output,delim);
 		}
+		else if (logging_mode == MT_FULL_LOG)
+		{
+			index = (gint)g_hash_table_lookup(full_ord_hash,
+					GINT_TO_POINTER(i));
+			if (index == 0)
+				continue;
+			index -= 1;
+			output = g_string_append(output, 
+					mt_full_names[index]);
+			offset_list[j] = logging_offset_map[index];
+			size_list[j] = logging_datasizes_map[index];
+			j++;
+		}
+		else
+		{
+			index = (gint)g_hash_table_lookup(custom_ord_hash,
+					GINT_TO_POINTER(i));
+			if (index == 0)
+				continue;
+			index -= 1;
+			printf("i %i, index %i\n",i,index);
+			output = g_string_append(output, 
+					logable_names[index]);
+			offset_list[j] = logging_offset_map[index];
+			size_list[j] = logging_datasizes_map[index];
+			j++;
+		}
+
+		if (j < (total_logables))
+			output = g_string_append(output,delim);
 	}
 	output = g_string_append(output,"\n");
 	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
