@@ -41,7 +41,7 @@ gboolean update_runtime_vars()
 	struct Ve_View_3D * ve_view = NULL;
 	extern GHashTable *rt_sliders;
 	extern GHashTable *ww_sliders;
-	extern GHashTable *ve3d_sliders;
+	extern GHashTable **ve3d_sliders;
 	GtkWidget * tmpwidget=NULL;
 	extern struct Firmware_Details *firmware;
 	extern GHashTable * dynamic_widgets;
@@ -60,7 +60,7 @@ gboolean update_runtime_vars()
 					G_OBJECT(tmpwidget),"ve_view");
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
 				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
-			g_hash_table_foreach(ve3d_sliders,rt_update_values,NULL);
+			g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}
 	}
 

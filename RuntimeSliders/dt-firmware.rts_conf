@@ -80,7 +80,7 @@ source=dcycle2
 slider_name=vecurr1
 table=2
 row=0
-source=vecurr1
+source=vecurr
 
 [rt_slider_13]
 slider_name=aircorr

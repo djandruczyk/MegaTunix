@@ -493,7 +493,7 @@ tooltip="TPSaccel\" is the amount of Acceleration enrichment being dispensed. Un
 [derived_32]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=vecurr1
+internal_name=vecurr
 dlog_gui_name=VE 1
 dlog_field_name=VE1
 offset=18

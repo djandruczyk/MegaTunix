@@ -29,6 +29,7 @@
 #include <ms_structures.h>
 #include <notifications.h>
 #include <rtv_processor.h>
+#include <runtime_sliders.h>
 #include <serialio.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -63,9 +64,10 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
 	extern struct Firmware_Details *firmware;
-	extern GHashTable *dynamic_widgets;
 	gchar *tmpbuf = NULL;
-	gint table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+	gint table_num =  -1;
+	
+	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 
 	if (winstat[table_num] == TRUE)
 		return TRUE;
@@ -74,6 +76,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
 	initialize_ve3d_view((void *)ve_view);
+	ve_view->z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"z_source"));
 	ve_view->table_num = table_num;
 	ve_view->rpm_bincount = firmware->table_params[table_num]->rpm_bincount;
 	ve_view->load_bincount = firmware->table_params[table_num]->load_bincount; 
@@ -101,6 +104,9 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	register_widget(g_strdup_printf("ve_view_%i",table_num),
 			(gpointer)object);
 
+	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+			G_CALLBACK(free_ve3d_sliders),
+			GINT_TO_POINTER(table_num));
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(free_ve3d_view),
 			(gpointer) window);
@@ -207,6 +213,9 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	button = gtk_button_new_with_label("Close Window");
 	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
+			G_CALLBACK(free_ve3d_sliders),
+			GINT_TO_POINTER(table_num));
+	g_signal_connect_swapped(G_OBJECT(button), "clicked",
 			G_CALLBACK(free_ve3d_view),
 			(gpointer) window);
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
@@ -221,13 +230,17 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	hbox = gtk_hbox_new(TRUE,5);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-	table = g_hash_table_lookup(dynamic_widgets,"ve3d_rt_table0");
-	if (GTK_IS_WIDGET(table))
-		gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+	table = gtk_table_new(2,2,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+	register_widget(g_strdup_printf("ve3d_rt_table0_%i",table_num),table);
 
-	table = g_hash_table_lookup(dynamic_widgets,"ve3d_rt_table1");
-	if (GTK_IS_WIDGET(table))
-		gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+	table = gtk_table_new(2,2,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+	register_widget(g_strdup_printf("ve3d_rt_table1_%i",table_num),table);
+
+	load_ve3d_sliders(table_num);
 
 	gtk_widget_show_all(window);
 
@@ -235,7 +248,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 }
 
 /*!
- \brief free_ve3d_view is caleld on close of the 3D vetable viewer/editor, it
+ \brief free_ve3d_view is called on close of the 3D vetable viewer/editor, it
  deallocates memory disconencts handlers and then the widget is deleted with
  gtk_widget_destroy
  */
@@ -250,7 +263,7 @@ gint free_ve3d_view(GtkWidget *widget)
 	winstat[ve_view->table_num] = FALSE;
 	g_object_set_data(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("ve_view_%i",ve_view->table_num)),"ve_view",NULL);
 	deregister_widget(g_strdup_printf("ve_view_%i",ve_view->table_num));
-
+	g_free(ve_view->z_source);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 
@@ -686,14 +699,13 @@ void ve3d_draw_runtime_indicator(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n",OPENGL);
 
-	if (ve_view->table_num == 0) /* all std code derivatives..*/
-		lookup_current_value("vecurr",&actual_ve);
-	else if ((ve_view->table_num == 1) && (!(ve_view->is_spark)))
-		lookup_current_value("vecurr2",&actual_ve);
-	else if (ve_view->is_spark)
-		lookup_current_value("sparkangle",&actual_ve);
-	else
-		dbg_func(__FILE__"\tve3d_draw_runtime_indicator()\n\tProblem, table_num out of range..\n",CRITICAL);
+	if (!ve_view->z_source)
+	{
+		dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n",CRITICAL);
+		return;
+	}
+
+	lookup_current_value(ve_view->z_source,&actual_ve);
 
 	if (!lookup_current_value("raw_rpm",&rpm))
 		dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n\t Failed finding \"raw_rpm\" datasource...\n",CRITICAL);
@@ -1051,6 +1063,7 @@ void initialize_ve3d_view(void *ptr)
 {
 	struct Ve_View_3D *ve_view; 
 	ve_view = ptr;
+	ve_view->z_source = NULL;
 	ve_view->beginX = 0;
 	ve_view->beginY = 0;
 	ve_view->active_load = 0;

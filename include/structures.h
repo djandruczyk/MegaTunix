@@ -137,23 +137,23 @@ struct Viewable_Value
  */
 struct Rt_Slider
 {
-	gchar *ctrl_name; /*! Control name in config file (key in hashtable) */
-	GtkWidget *parent;/*! Parent of the table below  */
-	GtkWidget *table; /*! Table to contain the next 3 widgets */
-	GtkWidget *label; /*! Label in runtime display */
-	GtkWidget *textval; /*! Label in runtime display */
-	GtkWidget *pbar;  /*! progress bar for the data */
-	gint tbl;	  /*! Table number (0-3) */
-	gint row;	  /*! Starting row */
-	gchar *friendly_name; /*! text for Label above */
-	gint lower;	 /*! Offset into limits[] structure array */
-	gint upper;	 /*! offset into Runtime_Common struct (using []) */
-	gfloat * history;/*! where the data is from the runtime section */
-	GObject *object;  /*! object of obsession.... */
-	gboolean enabled; /*! Pretty obvious */
-	gint count;	  /*! used to making sure things update */
-	gint rate;	  /*! used to making sure things update */
-	gint last_upd;	  /*! used to making sure things update */
+	gchar *ctrl_name;	/*! Ctrl name in config file (key in hash) */
+	GtkWidget *parent;	/*! Parent of the table below  */
+	GtkWidget *label;	/*! Label in runtime display */
+	GtkWidget *textval;	/*! Label in runtime display */
+	GtkWidget *pbar;	/*! progress bar for the data */
+	gint table_num;		/*! Refers to the table number in the profile*/
+	gint tbl;		/*! Table number (0-3) */
+	gint row;		/*! Starting row */
+	gchar *friendly_name;	/*! text for Label above */
+	gint lower;		/*! Lower limit */
+	gint upper;		/*! Upper limit */
+	gfloat * history;	/*! where the data is from */
+	GObject *object;	/*! object of obsession.... */
+	gboolean enabled;	/*! Pretty obvious */
+	gint count;		/*! used to making sure things update */
+	gint rate;		/*! used to making sure things update */
+	gint last_upd;		/*! used to making sure things update */
 };
 
 

@@ -20,7 +20,11 @@
 
 /* Prototypes */
 void load_sliders(void );
-void add_slider(gchar *, gint, gint, gchar *,PageIdent );
+void load_ve3d_sliders(gint );
+struct Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,PageIdent );
+void slider_key_destroy(gpointer);
+void slider_value_destroy(gpointer);
+gboolean free_ve3d_sliders(gint);
 /* Prototypes */
 
 #endif

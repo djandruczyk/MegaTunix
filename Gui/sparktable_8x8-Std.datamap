@@ -37,10 +37,11 @@ page=1
 bind_to_list=burners
 
 [3d_view_button]
-keys=page,table_num
-key_types=_INT_,_INT_
+keys=page,table_num,z_source
+key_types=_INT_,_INT_,_STRING_
 page=1
 table_num=1
+z_source=sparkangle
 
 [recalc_scaling_button]
 keys=page,handler,data

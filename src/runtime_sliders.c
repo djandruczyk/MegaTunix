@@ -15,20 +15,127 @@
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>
+#include <glib.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <structures.h>
+#include <widgetmgmt.h>
 
 GHashTable *rt_sliders = NULL;
 GHashTable *ww_sliders = NULL;
-GHashTable *ve3d_sliders = NULL;
+GHashTable **ve3d_sliders = NULL;
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
 
 void load_sliders()
 {
 	ConfigFile *cfgfile = NULL;
+	struct Rt_Slider *slider = NULL;
+	extern struct Firmware_Details *firmware;
+	gchar *filename = NULL;
+	gint count = 0;
+	gint table = 0;
+	gint row = 0;
+	gchar *ctrl_name = NULL;
+	gchar *source = NULL;
+	gchar *section = NULL;
+	gint i = 0;
+	extern gboolean tabs_loaded;
+	extern gboolean rtvars_loaded;
+
+	if (!tabs_loaded)
+		return;
+	if (!rtvars_loaded)
+	{
+		dbg_func(__FILE__": load_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
+		return;
+	}
+	if (!rt_sliders)
+		rt_sliders = g_hash_table_new_full(NULL,NULL,slider_key_destroy,slider_value_destroy);
+	if (!ww_sliders)
+		ww_sliders = g_hash_table_new_full(NULL,NULL,slider_key_destroy,slider_value_destroy);
+
+	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,".rts_conf",NULL));
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
+	{
+		if(!cfg_read_int(cfgfile,"global","rt_total_sliders",&count))
+		{
+			dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t could NOT read \"rt_total_sliders\" value from\n\t file \"%s\"\n",filename),CRITICAL);
+			goto do_ww_sliders;
+		}
+		size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+		size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+		for (i=0;i<count;i++)
+		{
+			slider = NULL;
+			row = -1;
+			table = -1;
+			section = g_strdup_printf("rt_slider_%i",i);
+			if(!cfg_read_string(cfgfile,section,"slider_name",&ctrl_name))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"slider_name\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"table",&table))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if (!cfg_read_int(cfgfile,section,"row",&row))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if (!cfg_read_string(cfgfile,section,"source",&source))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+
+			slider = add_slider(ctrl_name,table,0,row,source,RUNTIME_PAGE);
+			if (slider)
+			{
+				if (g_hash_table_lookup(rt_sliders,g_strdup(ctrl_name))==NULL)
+					g_hash_table_insert(rt_sliders,g_strdup(ctrl_name),(gpointer)slider);
+			}
+			g_free(section);
+			g_free(ctrl_name);
+			g_free(source);
+		}
+		// Now warmup wizard.....
+do_ww_sliders:
+		if (!cfg_read_int(cfgfile,"global","ww_total_sliders",&count))
+		{
+			dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t could NOT read \"ww_total_sliders\" value from\n\t file \"%s\"\n",filename),CRITICAL);
+			goto finish_off;
+		}
+		for (i=0;i<count;i++)
+		{
+			slider = NULL;
+			row = -1;
+			table = -1;
+			section = g_strdup_printf("ww_slider_%i",i);
+			if(!cfg_read_string(cfgfile,section,"slider_name",&ctrl_name))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"slider_name\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"table",&table))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if (!cfg_read_int(cfgfile,section,"row",&row))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if (!cfg_read_string(cfgfile,section,"source",&source))
+				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+
+			slider = add_slider(ctrl_name,table,0,row,source,WARMUP_WIZ_PAGE);
+			if (slider)
+			{
+				if (g_hash_table_lookup(ww_sliders,g_strdup(ctrl_name))==NULL)
+					g_hash_table_insert(ww_sliders,g_strdup(ctrl_name),(gpointer)slider);
+			}
+			g_free(section);
+			g_free(ctrl_name);
+			g_free(source);
+		}
+finish_off:
+		cfg_free(cfgfile);
+	}
+	else
+		dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename),CRITICAL);
+	g_free(filename);
+}
+
+void load_ve3d_sliders(gint table_num)
+{
+	ConfigFile *cfgfile = NULL;
+	struct Rt_Slider *slider = NULL;
 	extern struct Firmware_Details *firmware;
 	gchar *filename = NULL;
 	gint count = 0;
@@ -49,64 +156,22 @@ void load_sliders()
 		return;
 	}
 
+	if (!ve3d_sliders)
+		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
+
+	if (!ve3d_sliders[table_num])
+	{
+		ve3d_sliders[table_num] = g_hash_table_new_full(NULL,NULL,slider_key_destroy,slider_value_destroy);
+	}
+
+
 	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,".rts_conf",NULL));
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		if(!cfg_read_int(cfgfile,"global","rt_total_sliders",&count))
-		{
-			dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t could NOT read \"rt_total_sliders\" value from\n\t file \"%s\"\n",filename),CRITICAL);
-			goto do_ww_sliders;
-		}
 		size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 		size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-		for (i=0;i<count;i++)
-		{
-			row = -1;
-			table = -1;
-			section = g_strdup_printf("rt_slider_%i",i);
-			if(!cfg_read_string(cfgfile,section,"slider_name",&ctrl_name))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"slider_name\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"table",&table))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
-			if (!cfg_read_int(cfgfile,section,"row",&row))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
-			if (!cfg_read_string(cfgfile,section,"source",&source))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 
-			add_slider(ctrl_name,table,row,source,RUNTIME_PAGE);
-			g_free(section);
-			g_free(ctrl_name);
-			g_free(source);
-		}
-		// Now warmup wizard.....
-do_ww_sliders:
-		if (!cfg_read_int(cfgfile,"global","ww_total_sliders",&count))
-		{
-			dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t could NOT read \"ww_total_sliders\" value from\n\t file \"%s\"\n",filename),CRITICAL);
-			goto do_ve3d_sliders;
-		}
-		for (i=0;i<count;i++)
-		{
-			row = -1;
-			table = -1;
-			section = g_strdup_printf("ww_slider_%i",i);
-			if(!cfg_read_string(cfgfile,section,"slider_name",&ctrl_name))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"slider_name\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"table",&table))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
-			if (!cfg_read_int(cfgfile,section,"row",&row))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
-			if (!cfg_read_string(cfgfile,section,"source",&source))
-				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
-
-			add_slider(ctrl_name,table,row,source,WARMUP_WIZ_PAGE);
-			g_free(section);
-			g_free(ctrl_name);
-			g_free(source);
-		}
-		/* VE3D sliders... */
-do_ve3d_sliders:
 		if (!cfg_read_int(cfgfile,"global","ve3d_total_sliders",&count))
 		{
 			dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t could NOT read \"ve3d_total_sliders\" value from\n\t file \"%s\"\n",filename),CRITICAL);
@@ -114,6 +179,7 @@ do_ve3d_sliders:
 		}
 		for (i=0;i<count;i++)
 		{
+			slider = NULL;
 			row = -1;
 			table = -1;
 			section = g_strdup_printf("ve3d_slider_%i",i);
@@ -126,7 +192,13 @@ do_ve3d_sliders:
 			if (!cfg_read_string(cfgfile,section,"source",&source))
 				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 
-			add_slider(ctrl_name,table,row,source,VE3D_VIEWER_PAGE);
+			slider = add_slider(ctrl_name,table,table_num,row,source,VE3D_VIEWER_PAGE);
+			if (slider)
+			{
+				if (g_hash_table_lookup(ve3d_sliders[table_num],ctrl_name)==NULL)
+					g_hash_table_insert(ve3d_sliders[table_num],g_strdup(ctrl_name),(gpointer)slider);
+			}
+					
 			g_free(section);
 			g_free(ctrl_name);
 			g_free(source);
@@ -134,12 +206,9 @@ do_ve3d_sliders:
 finish_off:
 		cfg_free(cfgfile);
 	}
-	else
-		dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename),CRITICAL);
-	g_free(filename);
 }
 
-void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent ident)
+struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, PageIdent ident)
 {
 	struct Rt_Slider *slider = NULL;
 	GtkWidget *label = NULL;
@@ -153,22 +222,16 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 
 	slider = g_malloc0(sizeof(struct Rt_Slider));
 
-	if (!rt_sliders)
-		rt_sliders = g_hash_table_new(NULL,NULL);
-	if (!ww_sliders)
-		ww_sliders = g_hash_table_new(NULL,NULL);
-	if (!ve3d_sliders)
-		ve3d_sliders = g_hash_table_new(NULL,NULL);
-
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
 	{
 		dbg_func(g_strdup_printf(__FILE__": add_slider()\n\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
-		return;
+		return NULL;
 	}
 
 	slider->ctrl_name = g_strdup(ctrl_name);
 	slider->tbl = tbl;
+	slider->table_num = table_num;
 	slider->row = row;
 	slider->friendly_name = (gchar *) g_object_get_data(object,"dlog_gui_name");
 	slider->lower = (gint)g_object_get_data(object,"lower_limit");
@@ -182,21 +245,18 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 	else if (ident == WARMUP_WIZ_PAGE)
 		name = g_strdup_printf("ww_rt_table%i",slider->tbl);
 	else if (ident == VE3D_VIEWER_PAGE)
-		name = g_strdup_printf("ve3d_rt_table%i",slider->tbl);
+		name = g_strdup_printf("ve3d_rt_table%i_%i",slider->tbl,slider->table_num);
 	else
 	{
 		dbg_func(g_strdup_printf(__FILE__": add_slider()\n\tpage ident passed is not handled, ERROR, widget add aborted\n"),CRITICAL);
-		return;
+		return NULL;
 	}
 	table = g_hash_table_lookup(dynamic_widgets,name);
 	if (!table)
 	{
-//		dbg_func(g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name),CRITICAL);
-//		g_free(name);
-//		return;
-		table = gtk_table_new(2,2,FALSE);
-		gtk_table_set_col_spacings(GTK_TABLE(table),5);
-		register_widget(name,table);
+		dbg_func(g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name),CRITICAL);
+		g_free(name);
+		return NULL;
 	}
 	g_free(name);
 	hbox = gtk_hbox_new(FALSE,5);
@@ -238,23 +298,35 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 	slider->parent = table;
 	gtk_widget_show_all(slider->parent);
 
-	if (ident == RUNTIME_PAGE)
-	{
-		if (g_hash_table_lookup(rt_sliders,g_strdup(ctrl_name))==NULL)
-			g_hash_table_insert(rt_sliders,g_strdup(ctrl_name),
-					(gpointer)slider);
-	}
-	else if (ident == WARMUP_WIZ_PAGE)
-	{
-		if (g_hash_table_lookup(ww_sliders,g_strdup(ctrl_name))==NULL)
-			g_hash_table_insert(ww_sliders,g_strdup(ctrl_name),
-					(gpointer)slider);
-	}
-	else if (ident == VE3D_VIEWER_PAGE)
-	{
-		if (g_hash_table_lookup(ve3d_sliders,g_strdup(ctrl_name))==NULL)
-			g_hash_table_insert(ve3d_sliders,g_strdup(ctrl_name),
-					(gpointer)slider);
-	}
-	return;
+	return slider;
 }
+
+
+gboolean free_ve3d_sliders(gint table_num)
+{
+	extern GHashTable **ve3d_sliders;
+	g_hash_table_destroy(ve3d_sliders[table_num]);
+	deregister_widget(g_strdup_printf("ve3d_rt_table0_%i",table_num));
+	deregister_widget(g_strdup_printf("ve3d_rt_table1_%i",table_num));
+	ve3d_sliders[table_num] = NULL;
+	return FALSE;
+}
+
+void slider_key_destroy(gpointer key)
+{
+	g_free(key);
+}
+
+void slider_value_destroy(gpointer value)
+{
+	struct Rt_Slider *slider = value;
+	if (slider->ctrl_name)
+		g_free(slider->ctrl_name);
+	/* We do NOT free the object,history and friendly_name as they
+	 * are just pointers to data in another structure 
+	 * and if we delete them, we hose the other struct.
+	 */
+	g_free(slider);
+}
+
+
