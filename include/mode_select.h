@@ -23,6 +23,7 @@ void set_enhanced_idle_state(gboolean);
 void set_dt_table_mapping_state(gboolean);
 void set_dualtable_mode(gboolean);
 void set_ignition_mode(gboolean);
+void set_enhanced_mode(gboolean);
 void set_iac_mode(gboolean);
 void set_launch_ctrl_mode(gboolean);
 gboolean drain_hashtable(gpointer, gpointer, gpointer);

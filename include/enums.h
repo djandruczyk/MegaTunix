@@ -172,13 +172,14 @@ typedef enum
 	DUALTABLE	= 1<<0,
 	S_N_SPARK	= 1<<1,
 	S_N_EDIS	= 1<<2,
-	IAC_PWM		= 1<<3,
-	IAC_STEPPER	= 1<<4,
-	BOOST_CTRL	= 1<<5,
-	OVERBOOST_SFTY	= 1<<6,
-	LAUNCH_CTRL	= 1<<7,
-	TEMP_DEP	= 1<<8,	/* Temp units dependancy, used by Rt_Controls */
-	O2_DEP		= 1<<9	/* O2 scale dependancy, used by Rt_Controls */
+	ENHANCED	= 1<<3,
+	IAC_PWM		= 1<<4,
+	IAC_STEPPER	= 1<<5,
+	BOOST_CTRL	= 1<<6,
+	OVERBOOST_SFTY	= 1<<7,
+	LAUNCH_CTRL	= 1<<8,
+	TEMP_DEP	= 1<<9,	/* Temp units dependancy, used by Rt_Controls */
+	O2_DEP		= 1<<10	/* O2 scale dependancy, used by Rt_Controls */
 }Capabilities;
 
 typedef enum

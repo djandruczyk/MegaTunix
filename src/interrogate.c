@@ -78,12 +78,9 @@ static struct Canidate
 	{ {22,1,1,125,125,0,0,99,0,255,255},NULL,NULL,NULL,NULL,13,
 			"MegaSquirt'N'Spark Extended 3.0.1\0",
 			S_N_SPARK|LAUNCH_CTRL},
-	{ {26,1,1,128,128,38,0,95,254,0,0},NULL,NULL,"MBJ - Mod-e\0",NULL,30,
-			"** V3.01 Embedded Code by MBJ - Mod-e\0",
-			S_N_SPARK|LAUNCH_CTRL},
 	{ {26,1,1,128,128,41,0,128,255,0,0},NULL,NULL,"MBJ - Mod-e\0",NULL,30,
 			"** V3.01 Embedded Code by MBJ - Mod-e1**\0",
-			S_N_SPARK|LAUNCH_CTRL}
+			S_N_SPARK|ENHANCED}
 };
 
 static struct 

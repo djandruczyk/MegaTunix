@@ -113,6 +113,39 @@ struct Raw_Runtime_Ignition
 	unsigned char	sparkangle;	/* Offset 21 */
 };
 
+struct Raw_Runtime_Enhanced 
+{       /* This is RAW data that comes in via serial from the MegaSquirt
+	 * these values will be modified by post_process():
+	 * and fed into Runtime_Common (struct)
+	 */
+	unsigned char	secl;		/* Offset 0 */
+	union squirt	squirt;		/* Offset 1 */
+	union engine	engine;		/* Offset 2 */
+	unsigned char	baro;		/* Offset 3 */
+	unsigned char	map;		/* Offset 4 */
+	unsigned char	mat;		/* Offset 5 */
+	unsigned char	clt;		/* Offset 6 */
+	unsigned char	tps;		/* Offset 7 */
+	unsigned char	batt;		/* Offset 8 */
+	unsigned char	ego;		/* Offset 9 */
+	unsigned char	egocorr;	/* Offset 10 */
+	unsigned char	aircorr;	/* Offset 11 */
+	unsigned char	warmcorr;	/* Offset 12 */
+	unsigned char	rpm;		/* Offset 13 */
+	unsigned char	pw1;		/* Offset 14 */
+	unsigned char	tpsaccel;	/* Offset 15 */
+	unsigned char	barocorr;	/* Offset 16 */
+	unsigned char	gammae;		/* Offset 17 */
+	unsigned char	vecurr1;	/* Offset 18 */
+	unsigned char	ctimecommH;	/* Offset 19 */
+	unsigned char	ctimecommL;	/* Offset 20 */
+	unsigned char	sparkangle;	/* Offset 21 */
+	unsigned char	afrtarget;	/* Offset 22 */
+	unsigned char	fpadc;		/* Offset 23 */
+	unsigned char	egtadc;		/* Offset 24 */
+	unsigned char	cltiatangle;	/* Offset 25 */
+};
+
 
 struct Runtime_Common 
 {	/* This is the OUTPUT after the raw runtime structure has been 

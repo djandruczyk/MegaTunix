@@ -40,6 +40,7 @@ void post_process(void *input, void *output)
 	gfloat ign_int = 0.0;
 	struct Raw_Runtime_Std *in = input;
 	struct Raw_Runtime_Dualtable *in_dt = input;
+//	struct Raw_Runtime_Enhanced *in_enh = input;
 	struct Runtime_Common *out = output;
 	struct Raw_Runtime_Ignition *ign_in = input;
 	struct Ve_Const_Std *ve_const = NULL;

@@ -19,6 +19,7 @@
 #include <structures.h>
 
 GList *launch_controls;
+GList *enhanced_controls;
 
 void build_ignition(GtkWidget *parent_frame)
 {
