@@ -79,9 +79,6 @@ void interrogate_ecu()
 	if (!connected)
 	{
 		dbg_func(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n",CRITICAL);
-		gdk_threads_enter();
-		no_ms_connection();
-		gdk_threads_leave();
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
