@@ -90,8 +90,9 @@ static struct
  There is a major problem with this in that the currect VEX 1.0 spec 
  doesn't allow for multiple tables per page, so import is likely to be 
  a problem.
- \param, ptr (void *) a pointer to the output file \see struct Io_File 
+ \param, ptr (void *) a pointer to the output file 
  to write the data to.
+ \see vetable_import
  \returns TRUE on success, FALSE on failure
  */
 gboolean vetable_export(void *ptr)
@@ -205,7 +206,7 @@ gboolean vetable_export(void *ptr)
  There currently exists a big problem in that newer firmwares (msns-extra 
  and MS-II) have multiple tables per page and the VEX 1.0 spec does NOT 
  account for that. 
- \param ptr (void *) pointer to the file \see struct Io_File to read 
+ \param ptr (void *) pointer to the (Io_File) file to read 
  the data from.
  */
 gboolean vetable_import(void *ptr)
@@ -247,12 +248,12 @@ gboolean vetable_import(void *ptr)
 				& (vex_import->got_rpm) 
 				& (vex_import->got_ve))
 		{
-			feed_import_data_to_ms(vex_import);
-			dealloc_ve_struct(vex_import);
+			feed_import_data_to_ecu(vex_import);
+			dealloc_vex_struct(vex_import);
 			vex_import = g_new0(struct Vex_Import, 1);
 		}
 	}
-	dealloc_ve_struct(vex_import);
+	dealloc_vex_struct(vex_import);
 
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),TRUE);
 
@@ -269,8 +270,9 @@ gboolean vetable_import(void *ptr)
  \brief process_vex_line() is called for to read the VEX file and
  dispatch handlers to process sections of the file.
  \param ptr (void *) pointer to Vex_Import structure.
- \see struct Vex_Import
  \param iochannel (GIOChannel *) the bytestream represented by the VEXfile
+ \returns The status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL
+ usually
  */
 GIOStatus process_vex_line(void * ptr, GIOChannel *iochannel)
 {
@@ -312,7 +314,6 @@ breakout:
  handlers than only need 1 lines's worth of data
  \param iochannel (GIOChannel *) the pointer to the input stream of the 
  vexfile for reading additional data (used by some dispatched functions)
- \see struct Vex_Import
  \see ImportParserFunc
  \see ImportParserArg
  \returns a GIOStatus of the dispatched function (usually G_IO_STATUS_NORMAL
@@ -339,6 +340,14 @@ GIOStatus handler_dispatch(void *ptr, ImportParserFunc function, ImportParserArg
 	return status;
 }
 
+/*!
+ \brief process_header() processes portions of the header of the VEX file 
+ and populates the Vex_Import datastructure for this Table
+ \param ptr (void *) pointer to the Vex_Import structure
+ \param arg (ImportPArserArg) enumeration of header portion to process
+ \param stricg (gchar *) text of the header line to process
+ \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
+ */
 GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
 {
 	gchar ** str_array = NULL;
@@ -384,6 +393,13 @@ GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
 
 }
 
+/*!
+ \brief process_page() extracts the page variable from the VEX file and 
+ stores it in the Vex_Import Structure for this table.
+ \param ptr (void *) Pointer to the Vex_Import structure
+ \param string (gchar *) line of VEX file in which to extract the page out of
+ \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
+ */
 GIOStatus process_page(void *ptr, gchar *string)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
@@ -424,6 +440,14 @@ GIOStatus process_page(void *ptr, gchar *string)
 	return status;
 }
 
+/*!
+ \brief read_number_from_line() is used to read the RPM/LOAD values from the
+ VEX file and store them in the Vex_Import structure
+ \param dest (gint *) pointer to array within the Vex_Import struct
+ \param iochannel (GIOChannel *) pointer to the iochannel representing the
+ VEX file
+ \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
+ */
 GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
 {
 	GIOStatus status;
@@ -451,6 +475,19 @@ GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
 	return status;
 }
 
+/*!
+ \brief process_vex_range() is used to read the vex_ranges for RPM/LOAD 
+ allocate the memory for storing the data and call the needed functions to
+ read the values into the arrays.
+ \see read_number_from_line
+ \param ptr (void *) pointer to the Vex_Import structure
+ \param arg (ImportParserArg) enumeration to decide which range we are going to
+ read
+ \param string (gchar *) Line of text passed to parse.
+ \param iochannel (GIOChannel *) Pointer to iochannel representing VEXfile for
+ retrieving additional data.
+ \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
+ */
 GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
@@ -530,6 +567,16 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 	return status;
 }
 
+
+/*!
+ \brief process_vex_table() reads, processes and stores the Table data into
+ the Vex_Import structure in preparation for import to the ECU.
+ \param ptr (void *) pointer to the Vex_Import structure
+ \param string (gchar *) pointer to the current line of the VEXfile
+ \param iochannel (GIOChannel *), Pointer to the iochannel representing the
+ VEX file for reading more data
+ \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
+ */
 GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 {
 	gint i = 0, j = 0;
@@ -627,7 +674,16 @@ breakout:
 	return status;
 }
 
-EXPORT gint vex_comment_parse(GtkWidget *widget, gpointer data)
+
+/*!
+ \breif vex_comment_parse() stores the comment field  as entered by the
+ user on the Megatunix GUI for VEX export.
+ \param widget (GtkWidget *) pointer to textentry widget where user enters
+ the comment
+ \param data (gpointer) unused
+ \returns TRUE
+ */
+EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
 {
 	gchar *tmpbuf = NULL;;
 	/* Gets data from VEX comment field in tools gui and stores it 
@@ -641,7 +697,13 @@ EXPORT gint vex_comment_parse(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-void dealloc_ve_struct(void *ptr)
+
+/*!
+ \brief dealloc_vex_struct() deallocates the memory used by the Vex_Import
+ datastructure
+ \param ptr (void *) Pointer to the Vex_Import structure to deallocate.
+ */
+void dealloc_vex_struct(void *ptr)
 {
 	struct Vex_Import *vex_import = ptr;
 	if (vex_import->version)
@@ -664,7 +726,14 @@ void dealloc_ve_struct(void *ptr)
 		g_free(vex_import);
 }
 
-void feed_import_data_to_ms(void *ptr)
+
+/*!
+ \brief feed_import_data_to_ecu() Forwards the data in the VEX file to the
+ ECU.  NOTE this may have problems with firmware using multiple tables in
+ a page, as the VEX format 1.0 does NOT handle that condition.
+ \param ptr (void *) pointer to the Vex_Impot datastructure.
+ */
+void feed_import_data_to_ecu(void *ptr)
 {
 	gint i = 0;
 	extern gint ** ms_data;
@@ -715,6 +784,11 @@ void feed_import_data_to_ms(void *ptr)
 		g_free(tmpbuf);
 }
 
+
+/*!
+ \brief revert_to_previous_data() reverts the VEX import by using the backup
+ of the internal datastructures.
+ */
 void revert_to_previous_data()
 {
 	gint i=0;
@@ -726,9 +800,13 @@ void revert_to_previous_data()
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->length);
+	    for (j = 0;j<firmware->page_params[i]->length;j++)
+	    {
+		if (ms_data_backup[i][j] != ms_data[i][j])
+		    write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark)
+	    }
+	    memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->length);
 	}
-	update_ve_const();
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),FALSE);
 	update_logbar("tools_view","warning","Reverting to previous settings....\n",TRUE,FALSE);
 }
