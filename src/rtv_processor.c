@@ -28,6 +28,7 @@ void process_rt_vars(void *incoming)
 {
 	extern struct RtvMap *rtv_map;
 	extern struct Firmware_Details *firmware;
+	extern gint temp_units;
 	unsigned char *raw_realtime = incoming;
 	GObject * object = NULL;
 	gint len =  0;
@@ -37,6 +38,7 @@ void process_rt_vars(void *incoming)
 	gfloat x = 0;
 	gint offset = 0;
 	gfloat result = 0.0;
+	gfloat tmpf = 0.0;
 	void *evaluator = NULL;
 	
 	len = firmware->rtvars_size;
@@ -69,7 +71,12 @@ void process_rt_vars(void *incoming)
 
 			evaluator = (void *)g_object_get_data(object,"evaluator");
 			assert(evaluator);
-			result = evaluator_evaluate_x(evaluator,x);
+			tmpf = evaluator_evaluate_x(evaluator,x);
+			if (temp_units == CELSIUS)
+				result = (tmpf-32)*(5.0/9.0);
+			else
+				result = tmpf;
+
 		}
 	}
 	return;
@@ -82,10 +89,10 @@ gfloat lookup_data(GObject *object, gint offset)
 	gchar *table = NULL;
 
 	table = (gchar *)g_object_get_data(object,"lookuptable");
-	printf("Looking for table %s\n",table);
 	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
-	assert(lookuptable);
-	
+	//assert(lookuptable);
+	if (!lookuptable)
+		return 0;
 	return lookuptable[offset];
 }
 

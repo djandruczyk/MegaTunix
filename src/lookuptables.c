@@ -85,7 +85,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 		g_string_free(a_line,TRUE);
 	}
 		
-	array = g_memdup(&tmparray,256);
+	array = g_memdup(&tmparray,256*sizeof(gint));
 	if (!lookuptables)
 		lookuptables = g_hash_table_new(g_str_hash,g_str_equal);
 	g_hash_table_insert(lookuptables,table_name,array);

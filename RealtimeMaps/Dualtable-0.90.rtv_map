@@ -179,14 +179,15 @@ conv_expr=x-40
 temp_dep=TRUE
 
 [derived_19]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,conv_expr,temp_dep
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_
 internal_name=cltdeg
 dlog_gui_name=CLT (\302\260)
 dlog_field_name=CLTDEG
 offset=6
 lookuptable=clt_table
 conv_expr=x-40
+temp_dep=TRUE
 
 [derived_20]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
