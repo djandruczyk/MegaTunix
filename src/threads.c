@@ -160,7 +160,7 @@ void *raw_reader_thread(void *params)
 		}
 
 		gdk_threads_enter();
-		update_errcounts();
+		update_errcounts(NULL,FALSE);
 		gdk_threads_leave();
 
 		pthread_testcancel();

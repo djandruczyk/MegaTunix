@@ -574,6 +574,14 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
+	button = gtk_button_new_with_label("Reset Status Counters...");
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (update_errcounts), \
+			GINT_TO_POINTER(TRUE));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 

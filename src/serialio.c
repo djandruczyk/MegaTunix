@@ -291,7 +291,7 @@ void read_ve_const()
 	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 			connected);
 
-	update_errcounts();
+	update_errcounts(NULL,FALSE);
 
 	/* restore previous serial port settings */
 	serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/

@@ -38,7 +38,7 @@ int build_about(GtkWidget *);
 
 /* comms_gui.c */
 int build_comms(GtkWidget *);
-void update_errcounts(void);
+void update_errcounts(GtkWidget *, gboolean);
 /* comms_gui.c */
 
 /* configfile.c function protos, derived from XMMS */
@@ -134,7 +134,6 @@ void mem_dealloc(void);
 
 /* interrogate.c */
 void interrogate_ecu(void);
-void update_gui_with_type(void);
 /* interrogate.c */
 
 /* lowlevel_gui.c */
