@@ -40,17 +40,17 @@ gboolean ve_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
 gboolean ve_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
 gboolean ve_key_press_event (GtkWidget *, GdkEventKey *, gpointer );
 gboolean ve_focus_in_event (GtkWidget *, GdkEventFocus *, gpointer );
-void ve_draw_ve_grid(void);
+void ve_draw_ve_grid(gint);
 void ve_reset_ve_grid(void);
 void ve_normalize(float );
 void ve_draw_grid_point(float , float , float , int );
 void ve_draw_labels(void);
-void ve_draw_active_indicator(void);
-void ve_calculate_scaling(void);
-void ve_draw_axis(void);
+void ve_draw_active_indicator(gint);
+void ve_calculate_scaling(gint);
+void ve_draw_axis(gint);
 void ve_drawtext(char* text, float x, float y, float z);
 void ve_load_font_metrics(void);
-void reset_3d_view(void);
+void reset_3d_view(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif
