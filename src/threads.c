@@ -133,7 +133,8 @@ void io_cmd(IoCommand cmd, gpointer data)
 		case IO_READ_RAW_MEMORY:
 			message = g_new0(struct Io_Message,1);
 			message->command = READ_CMD;
-			message->page = (gint)data;
+			message->page = 0;
+			message->offset = (gint)data;
 			message->out_str = g_strdup(cmds->raw_mem_cmd);
 			message->out_len = cmds->raw_mem_cmd_len;
 			message->handler = RAW_MEMORY_DUMP;
@@ -267,7 +268,7 @@ void *serial_io_handler(gpointer data)
 						break;
 					case UPD_RAW_MEMORY:
 						gdk_threads_enter();
-						update_raw_memory_view(mem_view_style[message->page],message->page);
+						update_raw_memory_view(mem_view_style[message->offset],message->offset);
 						gdk_threads_leave();
 						break;
 					case UPD_DATALOGGER:
@@ -318,9 +319,9 @@ void readfrom_ecu(void *ptr)
 		dbg_func(__FILE__": readfrom_ecu() write command to ECU failed\n",CRITICAL);
 
 	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu() Sent %s to the ECU\n",message->out_str),SERIAL_WR);
-	// If reading raw_memory, need a second arg for the page... 
 	if (message->handler == RAW_MEMORY_DUMP)
-		result = write(serial_params->fd,&message->page,1);
+               result = write(serial_params->fd,&message->offset,1);
+
 
 	/* check for data,,,, */
         result = poll (&ufds,1,5*serial_params->poll_timeout);
@@ -336,7 +337,7 @@ void readfrom_ecu(void *ptr)
                 dbg_func(g_strdup_printf(__FILE__": reading %s\n",
 				handler_types[message->handler]),SERIAL_RD);
 		if (message->handler != -1)
-                	handle_ms_data(message->handler,message->page);
+                	handle_ms_data(message->handler,message);
 
         }	
 }
@@ -374,7 +375,7 @@ void comms_test()
 	result = poll (&ufds,1,serial_params->poll_timeout*5);
 	if (result)
 	{
-		handle_ms_data(C_TEST,-1);
+		handle_ms_data(C_TEST,NULL);
 		connected = TRUE;
 
 		tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");

@@ -33,7 +33,7 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
        
-void handle_ms_data(InputHandler handler, gint page)
+void handle_ms_data(InputHandler handler, void * msg)
 {
 	gint res = 0;
 	gint total_read = 0;
@@ -43,6 +43,7 @@ void handle_ms_data(InputHandler handler, gint page)
 	unsigned char buf[2048];
 	unsigned char *ptr = buf;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
+	struct Io_Message *message = (struct Io_Message *)msg;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
 	extern struct Serial_Params *serial_params;
@@ -160,12 +161,12 @@ void handle_ms_data(InputHandler handler, gint page)
 
 		case VE_BLOCK:
 			total_read = 0;
-			total_wanted = firmware->page_params[page]->size;
+			total_wanted = firmware->page_params[message->page]->size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf(__FILE__": VE_BLOCK, page %i, requesting %i bytes, ",page,total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__": VE_BLOCK, page %i, requesting %i bytes, ",message->page,total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -185,7 +186,7 @@ void handle_ms_data(InputHandler handler, gint page)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup_printf(__FILE__":  Error reading VE-BlockConstants for page %i\n",page),CRITICAL);
+				dbg_func(g_strdup_printf(__FILE__":  Error reading VE-BlockConstants for page %i\n",message->page),CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -194,8 +195,8 @@ void handle_ms_data(InputHandler handler, gint page)
 			 * comparison against to know if we have 
 			 * to burn stuff to flash.
 			 */
-			memcpy(ms_data[page],buf,total_wanted);
-			memcpy(ms_data_last[page],buf,total_wanted);
+			memcpy(ms_data[message->page],buf,total_wanted);
+			memcpy(ms_data_last[message->page],buf,total_wanted);
 			ms_ve_goodread_count++;
 			break;
 
@@ -230,7 +231,7 @@ void handle_ms_data(InputHandler handler, gint page)
 				serial_params->errcount++;
 				goto jumpout;
 			}
-			post_process_raw_memory((void *)buf, page);
+			post_process_raw_memory((void *)buf, message->offset);
 			break;
 		default:
 			dbg_func("handle_ms_data, improper case, contact author\n",CRITICAL);

@@ -253,9 +253,12 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 	{
 		value = -1;
 		label = g_array_index(raw_memory_widgets, GtkWidget *, i+(256*page_offset));
+		if (label == NULL)
+			return;
+		if (raw_memory_data == NULL)
+			return;
 		/* if data array doesn't exist, just break out... */
 		value = g_array_index(raw_memory_data, unsigned char, i+(256*page_offset));
-	
 		switch ((ToggleButton)type)
 		{
 			case DECIMAL_VIEW:
