@@ -14,6 +14,7 @@
 #include <3d_vetable.h>
 #include <config.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
 #include <glib/gprintf.h>
 #include <gui_handlers.h>
@@ -497,9 +498,7 @@ void hilite_ve_entries(gint rpm, gint map, gint table)
 					GTK_STATE_NORMAL,&white);
 		}
 	}
-#ifdef DEBUG
-	g_printf("rpm %i,%i, kpa %i,%i\n",rpm_index[table].low,rpm_index[table].high,kpa_index[table].low,kpa_index[table].high);
-#endif
+	dbg_func(g_strdup_printf(__FILE__": hilite_ve_entries() rpm %i,%i, kpa %i,%i\n",rpm_index[table].low,rpm_index[table].high,kpa_index[table].low,kpa_index[table].high),IO_PROCESS);
 
 	index[table][0] = (kpa_index[table].low * 8) + rpm_index[table].low;
 	index[table][1] = (kpa_index[table].low * 8) + rpm_index[table].high;

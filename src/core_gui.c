@@ -115,7 +115,7 @@ int setup_gui()
 	for (i=0;i<num_tabs;i++)
 	{
 		frame = gtk_frame_new (notebook_tabs[i].frame_name);
-		gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
+		gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
 
 		notebook_tabs[i].Function(frame);
 

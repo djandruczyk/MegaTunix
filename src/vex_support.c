@@ -14,6 +14,7 @@
 #include <config.h>
 #include <datalogging_gui.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
 #include <glib/gprintf.h>
@@ -196,9 +197,7 @@ gboolean vetable_export(void *ptr)
 	if (status != G_IO_STATUS_NORMAL)
 		g_fprintf(stderr,__FILE__": Error exporting VEX file\n");
 
-#ifdef DEBUG
-	g_fprintf(stderr,__FILE__": count of bytes written: %i\n",(gint)count);
-#endif
+//	dbg_func(g_strdup_printf(__FILE__": vetable_export() count of bytes written: %i\n",(gint)count),VETABLE);
 
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
 	update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
@@ -545,9 +544,7 @@ GIOStatus process_vex_table(gchar * string, GIOChannel *iochannel)
 		for (j=0; j<x_bins; j++) 
 		{
 			value = (int)strtol(numbers,&numbers,10);
-#ifdef DEBUG
-			g_printf("(%i,%i) %i ",i,j,value);
-#endif
+//			dbg_func(g_strdup_printf("(%i,%i) %i ",i,j,value),VETABLE);
 			if ((value < 0) || (value > 255))
 			{
 				status = G_IO_STATUS_ERROR;
@@ -561,9 +558,6 @@ GIOStatus process_vex_table(gchar * string, GIOChannel *iochannel)
 				tmpbuf = g_strdup_printf("VEX Import: VE-Table loaded successfully\n");
 			}
 		}		
-#ifdef DEBUG
-		g_printf("\n");
-#endif
 		g_string_free(a_line, TRUE);
 	}
 breakout:
