@@ -114,6 +114,11 @@ is_spark
   - Boolean,  if this table is a spark table and uses the unusualy 2.84 
   conversion factor then this flag is set to TRUE, otherwise FALSE.
 
+table_name
+  - String, a Textual name used for the Title of the 3D table editor window
+  Used to help the user differentiate which tabel they are editing at any one
+  time...
+
 rpm_page
   - Integer, lists the page number that the rpm array lives in
 

@@ -19,6 +19,7 @@ TotalPages=2
 
 [table_0]
 is_spark=FALSE
+table_name=VE-Table 0, SquirtnSpark-3.0/3.0.1
 rpm_page=0
 load_page=0
 tbl_page=0
@@ -41,6 +42,7 @@ cfg13_offset=118
 
 [table_1]
 is_spark=TRUE
+table_name=Spark Advance Table, SquirtnSpark-3.0/3.0.1
 rpm_page=1
 tbl_page=1
 load_page=1

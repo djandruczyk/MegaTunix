@@ -85,6 +85,7 @@ EXPORT void finish_raweditor(void)
 			gtk_entry_set_alignment(GTK_ENTRY(entry),0.5);
 			g_object_set_data(G_OBJECT(entry),"page",GINT_TO_POINTER(i));
 			g_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(j));
+			g_object_set_data(G_OBJECT(entry),"base",GINT_TO_POINTER(16));
 			if (firmware->page_params[i]->is_spark)
 				g_object_set_data(G_OBJECT(entry),"ign_parm",GINT_TO_POINTER(TRUE));
 

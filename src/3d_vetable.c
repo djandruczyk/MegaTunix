@@ -391,7 +391,6 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
-	printf("expose event\n");
 	dbg_func(__FILE__": ve3d_expose_event() 3D View Expose Event\n",OPENGL);
 
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){

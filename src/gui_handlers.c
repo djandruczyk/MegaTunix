@@ -369,6 +369,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gchar *text = NULL;
 	gint value = 0;
 	gint page = 0;
+	gint base = 0;
 	gint offset = 0;
 	gint dload_val = 0;
 	gboolean ign_parm = 0;
@@ -386,10 +387,11 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+	base = (gint)g_object_get_data(G_OBJECT(widget),"base");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	value = (gint)strtol(text,NULL,16);
+	value = (gint)strtol(text,NULL,base);
 	g_free(text);
 	dload_val = convert_before_download(widget,value);
 

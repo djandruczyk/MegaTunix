@@ -18,6 +18,7 @@ TotalPages=1
 
 [table_0]
 is_spark=FALSE
+table_name=VE-Table 0, B&G 2.0-3.01
 rpm_page=0
 load_page=0
 tbl_page=0

@@ -747,6 +747,8 @@ void load_profile_details(void *ptr)
 				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"load_bincount",&canidate->table_params[i]->load_bincount))
 				dbg_func(__FILE__": load_profile_details()\n\t\"load_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_string(cfgfile,section,"table_name",&canidate->table_params[i]->table_name))
+				dbg_func(__FILE__": load_profile_details()\n\t\"table_name\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			g_free(section);
 		}
 

@@ -20,6 +20,7 @@ TotalPages=2
 
 [table_0]
 is_spark=FALSE
+table_name=VE-Table 0, Dualtable v0.9-1.0
 rpm_page=0
 load_page=0
 tbl_page=0
@@ -42,6 +43,7 @@ cfg13_offset=118
 
 [table_1]
 is_spark=FALSE
+table_name=VE-Table 1, Dualtable v0.9-1.0
 rpm_page=1
 load_page=1
 tbl_page=1
