@@ -14,12 +14,15 @@
 #ifndef __POST_PROCESS_H__
 #define __POST_PROCESS_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
 #include <ms_structures.h>
 
 /* Prototypes */
 void post_process_realtime_vars(void *, void * );
 void post_process_raw_memory(void *, int);
+void update_raw_memory_view(ToggleButton, int);
+gchar * get_bin(gint );
 /* Prototypes */
 
 #endif

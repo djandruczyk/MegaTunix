@@ -58,7 +58,10 @@ typedef enum
 	TAB,
 	SPACE,
 	REALTIME_VIEW,
-	PLAYBACK_VIEW
+	PLAYBACK_VIEW,
+	HEX_VIEW,
+	BINARY_VIEW,
+	DECIMAL_VIEW,
 }ToggleButton;
 
 typedef enum

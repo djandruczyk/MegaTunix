@@ -18,7 +18,10 @@
 #include <memory_gui.h>
 
 GList *raw_mem_controls = NULL;
-GArray *raw_memory = NULL;
+GArray *raw_memory_widgets = NULL;
+static gint num_pages = 4;
+gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
+
 
 void build_memory(GtkWidget *parent_frame)
 {
@@ -33,6 +36,7 @@ void build_memory(GtkWidget *parent_frame)
 	GtkWidget *ebox;
 	GtkWidget *frame;
 	GtkWidget *sw;
+	GSList * group = NULL;
 	extern GdkColor white;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	gint rows = 32;
@@ -51,10 +55,10 @@ void build_memory(GtkWidget *parent_frame)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK (notebook), GTK_POS_TOP);
 	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
 	
-	raw_memory = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
+	raw_memory_widgets = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
 	base = 0;
 	range = 256;
-	for (z=0;z<4;z++)
+	for (z=0;z<num_pages;z++)
 	{
 		frame = gtk_frame_new(g_strdup_printf("256 bytes from address 0x%.4X",base));
 		label = gtk_label_new(g_strdup_printf("0x%.4X-0x%.4X",base,base+range-1));
@@ -118,7 +122,7 @@ void build_memory(GtkWidget *parent_frame)
 				 * order with 1024 widgets assuming z=4, and 
 				 * range = 256 (number of elements per table)
 				 */
-				raw_memory = g_array_insert_val(raw_memory,(z*range)+(y*8)+(x),label);
+				raw_memory_widgets = g_array_insert_val(raw_memory_widgets,(z*range)+(y*8)+(x),label);
 				gtk_container_add(GTK_CONTAINER(ebox),label);
 				if (y%2)
 					gtk_widget_modify_bg(ebox,GTK_STATE_NORMAL,&purple);
@@ -132,6 +136,7 @@ void build_memory(GtkWidget *parent_frame)
 
 		hbox = gtk_hbox_new(FALSE,5);
 		gtk_container_add(GTK_CONTAINER(frame),hbox);
+		gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
 
 		button = gtk_button_new_with_label(g_strdup_printf("Read Memory from 0x%.4X to 0x%.4X",base,base+range-1));
 		/* Memory offset to retrieve... */
@@ -141,6 +146,37 @@ void build_memory(GtkWidget *parent_frame)
 				GINT_TO_POINTER(READ_RAW_MEMORY));
 		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
 	
+		button = gtk_radio_button_new_with_label(NULL,"Hex");
+		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
+		if (mem_view_style[z] == HEX_VIEW)
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+		g_signal_connect(G_OBJECT(button),"clicked",
+				G_CALLBACK(toggle_button_handler),
+				GINT_TO_POINTER(HEX_VIEW));
+		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
+
+		button = gtk_radio_button_new_with_label(group,"Binary");
+		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
+		if (mem_view_style[z] == BINARY_VIEW)
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+		g_signal_connect(G_OBJECT(button),"clicked",
+				G_CALLBACK(toggle_button_handler),
+				GINT_TO_POINTER(BINARY_VIEW));
+		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
+
+		button = gtk_radio_button_new_with_label(group,"Decimal");
+		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
+		if (mem_view_style[z] == DECIMAL_VIEW)
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+		g_signal_connect(G_OBJECT(button),"clicked",
+				G_CALLBACK(toggle_button_handler),
+				GINT_TO_POINTER(DECIMAL_VIEW));
+
+		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
+
 		base += range;
 	}
 
