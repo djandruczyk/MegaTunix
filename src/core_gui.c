@@ -129,7 +129,7 @@ int setup_gui()
 	return TRUE;
 }
 
-int framebuild_dispatch(GtkWidget *frame, GuiFramePage data, gboolean frame_enabled)
+gboolean framebuild_dispatch(GtkWidget *frame, GuiFramePage data, gboolean frame_enabled)
 {
 	switch (data)
 	{

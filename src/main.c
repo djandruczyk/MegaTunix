@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <comms_gui.h>
 #include <config.h>
 #include <conversions.h>
 #include <core_gui.h>
@@ -28,12 +29,15 @@ gint def_comm_port;
 extern gboolean fahrenheit;
 extern struct Serial_Params *serial_params;
 gboolean ready = FALSE;
+gint statuscounts_id = -1;
 
 int main(int argc, char ** argv)
 {
 	gint cfg_result;
 
-	g_thread_init(NULL);
+	if(!g_thread_supported())
+		g_thread_init(NULL);
+
 	gdk_threads_init();
 
 	gtk_init(&argc, &argv);
@@ -68,6 +72,7 @@ int main(int argc, char ** argv)
 		reset_temps(GINT_TO_POINTER(CELSIUS));
 
 	ready = TRUE;
+	statuscounts_id = gtk_timeout_add(50,(GtkFunction)update_errcounts,NULL);
 	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();

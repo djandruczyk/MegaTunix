@@ -27,7 +27,7 @@ extern struct DynamicEntries entries;
 struct Tools tools;
 GtkWidget *tools_view;
 
-int build_tools(GtkWidget *parent_frame)
+gboolean build_tools(GtkWidget *parent_frame)
 {
 	GtkWidget *hbox;
 	GtkWidget *vbox;

@@ -30,7 +30,7 @@ extern struct Ve_Widgets *page0_widgets;
 extern GdkColor red;
 
 
-int build_warmwizard(GtkWidget *parent_frame)
+gboolean build_warmwizard(GtkWidget *parent_frame)
 {
 	gint i = 0;
 	GtkWidget *button;

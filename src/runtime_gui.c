@@ -38,7 +38,7 @@ extern struct DynamicLabels labels;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 
-int build_runtime(GtkWidget *parent_frame)
+gboolean build_runtime(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
@@ -573,9 +573,9 @@ int build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Reset Status Counters...");
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (update_errcounts), \
-			GINT_TO_POINTER(TRUE));
+	g_signal_connect_swapped(G_OBJECT (button), "clicked",
+			G_CALLBACK (reset_errcounts), \
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
@@ -626,7 +626,7 @@ int build_runtime(GtkWidget *parent_frame)
 	return TRUE;
 }
 
-void update_runtime_vars()
+gboolean update_runtime_vars()
 {
 	gchar *tmpbuf;
 	gfloat tmpf;
@@ -636,8 +636,9 @@ void update_runtime_vars()
 	struct Ve_View_3D * ve_view1 = NULL;
 	extern struct Ve_Widgets *page0_widgets;
 	extern struct Ve_Widgets *page1_widgets;
-	GtkWidget *drawing_area_ptr = NULL;
-	
+
+	gdk_threads_enter();
+
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(page0_widgets->widget[0]),"data");
 	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
@@ -647,19 +648,17 @@ void update_runtime_vars()
 	 * where ve_view can exist, but the window doesn't yet.
 	 * It's a small window, but I hit it several times.
 	 */
-	gdk_threads_enter();
 
-	if ((ve_view0 != NULL) && (ve_view0->drawing_area->window != NULL)) {
-		drawing_area_ptr = ve_view0->drawing_area;
-	        gdk_window_invalidate_rect (drawing_area_ptr->window, &drawing_area_ptr->allocation, FALSE);
-		drawing_area_ptr = NULL;
-	}
+	if ((ve_view0 != NULL) && (ve_view0->drawing_area->window != NULL)) 
+	        gdk_window_invalidate_rect (ve_view0->drawing_area->window, 
+					&ve_view0->drawing_area->allocation, 
+					FALSE);
 
-	if ((ve_view1 != NULL) && (ve_view1->drawing_area->window != NULL)) {
-		drawing_area_ptr = ve_view1->drawing_area;
-	        gdk_window_invalidate_rect (drawing_area_ptr->window, &drawing_area_ptr->allocation, FALSE);
-		drawing_area_ptr = NULL;
-	}
+	if ((ve_view1 != NULL) && (ve_view1->drawing_area->window != NULL)) 
+	        gdk_window_invalidate_rect (ve_view1->drawing_area->window, 
+					&ve_view1->drawing_area->allocation, 
+					FALSE);
+	
 	
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
@@ -897,6 +896,7 @@ void update_runtime_vars()
 	if (forced_update)
 		forced_update = FALSE;
 	gdk_threads_leave();
+	return TRUE;
 }
 
 void reset_runtime_status()

@@ -17,7 +17,7 @@
 #include <ignition_gui.h>
 
 
-int build_ignition(GtkWidget *parent_frame)
+gboolean build_ignition(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *label;

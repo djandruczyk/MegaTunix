@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-int build_warmwizard(GtkWidget *);
+gboolean build_warmwizard(GtkWidget *);
 void warmwizard_update_status(gfloat );
 /* Prototypes */
 

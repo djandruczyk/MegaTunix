@@ -271,16 +271,22 @@ void read_ve_const()
 	gboolean restart_reader = FALSE;
 	struct pollfd ufds;
 	int res = 0;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
 
 	if (!connected)
 	{
 		no_ms_connection();
+		g_static_mutex_unlock(&mutex);
 		return;		/* can't do anything if not connected */
 	}
 	if (raw_reader_running)
 	{
+		//printf("stopping thread\n");
 		restart_reader = TRUE;
 		stop_serial_thread(); /* stops realtime read */
+		//printf(" thread stopped\n");
 	}
 
 	ufds.fd = serial_params->fd;
@@ -327,13 +333,12 @@ void read_ve_const()
 	gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
 			connected);
 
-	update_errcounts(NULL,FALSE);
-
 	tcflush(serial_params->fd, TCIOFLUSH);
 
 	if (restart_reader)
 		start_serial_thread();
 
+	g_static_mutex_unlock(&mutex);
 	return;
 }
 
@@ -359,7 +364,7 @@ void write_ve_const(gint value, gint offset, gint page)
 	gint highbyte = 0;
 	gint lowbyte = 0;
 	gboolean twopart = 0;
-//	gboolean restart_reader = FALSE;
+	gboolean restart_reader = FALSE;
 	gint res = 0;
 	gint count = 0;
 	char lbuff[3] = {0, 0, 0};
@@ -373,14 +378,11 @@ void write_ve_const(gint value, gint offset, gint page)
 	printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
 #endif
 	/* If realtime reader thread is running shut it down... */
-/*
 	if (raw_reader_running)
 	{
-		printf("serial thread being stopped\n");
 		restart_reader = TRUE;
 		stop_serial_thread(); // stops realtime read 
 	}
-*/
 	if (value > 255)
 	{
 		//	printf("large value, %i, offset %i\n",value,offset);
@@ -429,32 +431,25 @@ void write_ve_const(gint value, gint offset, gint page)
 		set_store_buttons_state(RED);
 		burn_needed = TRUE;
 	}
-/*
 	if (restart_reader)
-	{
-		printf("starting serial thread\n");
 		start_serial_thread();
-	}
-*/
 
 }
 
 void burn_flash()
 {
-//	gboolean restart_reader = FALSE;
+	gboolean restart_reader = FALSE;
 
 	if (!connected)
 	{
 		no_ms_connection();
 		return;		/* can't burn if disconnected */
 	}
-/*
 	if (raw_reader_running)
 	{
 		restart_reader = TRUE;
 		stop_serial_thread();
 	}
-*/
 	/* doing this may NOT be necessary,  but who knows... */
 	write (serial_params->fd,"B",1);	/* Send Burn command */
 
@@ -464,8 +459,6 @@ void burn_flash()
 	/* Take away the red on the "Store" button */
 	set_store_buttons_state(BLACK);
 	burn_needed = FALSE;
-/*	if (restart_reader)
+	if (restart_reader)
 		start_serial_thread();
-	printf("leaving write function\n\n");
-*/
 }

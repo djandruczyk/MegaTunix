@@ -27,7 +27,7 @@ struct DynamicButtons buttons;
 extern struct Ve_Widgets *page0_widgets;
 extern GdkColor black;
 
-int build_constants(GtkWidget *parent_frame)
+gboolean build_constants(GtkWidget *parent_frame)
 {
 	GtkWidget *sep;
 	GtkWidget *button;

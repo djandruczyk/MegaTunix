@@ -36,8 +36,8 @@ extern gboolean dualtable;
 extern gboolean connected;
 extern gboolean force_status_update;
 extern gboolean raw_reader_running;
-extern gboolean raw_reader_stopped;
 extern gchar *delim;
+extern gint statuscounts_id;
 extern gint max_logables;
 extern gint ready;
 static gint num_squirts = 1;
@@ -67,6 +67,8 @@ extern struct DynamicMisc misc;
 extern struct Logables logables;
 extern struct Serial_Params *serial_params;
 
+static gint update_rate = 20;
+static gint runtime_id = -1;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean fahrenheit;
@@ -116,6 +118,10 @@ static gint page_data[5]; /* Only 4 interdependant vars... */
 
 void leave(GtkWidget *widget, gpointer data)
 {
+	if (statuscounts_id)
+		gtk_timeout_remove(statuscounts_id);
+	statuscounts_id = 0;
+
 	struct Io_File * iofile = NULL;
 	iofile = (struct Io_File *) g_object_get_data(
 			G_OBJECT(buttons.close_dlog_but),"data");
@@ -370,12 +376,14 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 				paused_handlers = FALSE;
 				constants_loaded = TRUE;
 			}
+			start_runtime_display();
 			start_serial_thread();
 			break;
 		case STOP_REALTIME:
 			stop_serial_thread();
 			reset_runtime_status();
 			force_status_update = TRUE;
+			stop_runtime_display();
 			stop_datalogging();
 			break;
 		case REQD_FUEL_POPUP:
@@ -1022,3 +1030,14 @@ void set_dualtable_mode(gboolean state)
 	}
 }
 
+void start_runtime_display()
+{
+	runtime_id = gtk_timeout_add((int)((1.0/(float)update_rate)*1000.0),
+			(GtkFunction)update_runtime_vars,NULL);
+}
+void stop_runtime_display()
+{
+	if (runtime_id)
+		gtk_timeout_remove(runtime_id);
+	runtime_id = 0;
+}

@@ -26,7 +26,7 @@ extern struct DynamicLabels labels;
 extern struct Ve_Widgets *page0_widgets;
 extern struct Ve_Widgets *page1_widgets;
 
-int build_vetable(GtkWidget *parent_frame)
+gboolean build_vetable(GtkWidget *parent_frame)
 {
 	GtkWidget *sep;
 	GtkWidget *vbox;

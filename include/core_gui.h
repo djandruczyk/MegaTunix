@@ -19,7 +19,7 @@
 
 /* Prototypes */
 int setup_gui(void);
-int framebuild_dispatch(GtkWidget *, GuiFramePage, gboolean);
+gboolean framebuild_dispatch(GtkWidget *, GuiFramePage, gboolean);
 /* Prototypes */
 
 #endif

@@ -18,7 +18,7 @@
 #include <logo.h>
 
 
-int build_about(GtkWidget *frame)
+gboolean build_about(GtkWidget *frame)
 {
 	char *buffer;
 	GtkWidget *label;

@@ -17,7 +17,7 @@
 #include <tuning_gui.h>
 
 
-int build_tuning(GtkWidget *parent_frame)
+gboolean build_tuning(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *label;

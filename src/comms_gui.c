@@ -41,7 +41,7 @@ gint interval_step;
 gint interval_max;
 GdkColor white = { 0, 65535, 65535, 65535 };
 
-int build_comms(GtkWidget *parent_frame)
+gboolean build_comms(GtkWidget *parent_frame)
 {
 	extern GtkTooltips *tip;
 	GtkWidget *frame;
@@ -300,9 +300,9 @@ int build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Reset Status Counters...");
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (update_errcounts), \
-			GINT_TO_POINTER(TRUE));
+	g_signal_connect_swapped(G_OBJECT (button), "clicked",
+			G_CALLBACK (reset_errcounts), \
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
@@ -311,17 +311,19 @@ int build_comms(GtkWidget *parent_frame)
 	return(0);
 }
 
-void update_errcounts(GtkWidget *widget, gboolean reset)
+gboolean reset_errcounts(GtkWidget *widget)
+{
+	ms_ve_goodread_count = 0;
+	ms_goodread_count = 0;
+	ms_reset_count = 0;
+	serial_params->errcount = 0;
+	return TRUE;
+}
+
+gboolean update_errcounts()
 {
 	gchar *tmpbuf;
 
-	if (reset == TRUE)
-	{
-		ms_ve_goodread_count = 0;
-		ms_goodread_count = 0;
-		ms_reset_count = 0;
-		serial_params->errcount = 0;
-	}
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
 	gtk_entry_set_text(GTK_ENTRY(entries.comms_ve_readcount_entry),tmpbuf);
 	gtk_entry_set_text(GTK_ENTRY(entries.runtime_ve_readcount_entry),tmpbuf);
@@ -342,5 +344,5 @@ void update_errcounts(GtkWidget *widget, gboolean reset)
 	gtk_entry_set_text(GTK_ENTRY(entries.runtime_sioerr_entry),tmpbuf);
 	g_free(tmpbuf);
 
-	return;
+	return TRUE;
 }

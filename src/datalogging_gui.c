@@ -65,7 +65,7 @@ GtkWidget *tab_delim_button;
 struct Logables logables;
 
 
-int build_datalogging(GtkWidget *parent_frame)
+gboolean build_datalogging(GtkWidget *parent_frame)
 {
 	gint i,j,k;
 	GtkWidget *vbox;
