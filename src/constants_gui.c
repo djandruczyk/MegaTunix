@@ -295,7 +295,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Alpha-N");
@@ -310,7 +310,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	sep = gtk_hseparator_new();
@@ -344,7 +344,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
@@ -359,7 +359,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	sep = gtk_hseparator_new();
@@ -393,7 +393,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
@@ -408,7 +408,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	sep = gtk_hseparator_new();
@@ -442,7 +442,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Odd Fire");
@@ -457,7 +457,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	sep = gtk_hseparator_new();
@@ -491,7 +491,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"250 kPa");
@@ -506,7 +506,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	sep = gtk_hseparator_new();
@@ -540,7 +540,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Disabled");
@@ -555,7 +555,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	sep = gtk_hseparator_new();
@@ -587,7 +587,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Alternate");
@@ -600,7 +600,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(toggle_button_handler),
+			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
 	/* Injection Control cyls/injectors, etc.. */

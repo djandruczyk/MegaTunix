@@ -27,6 +27,8 @@ extern gint req_fuel_popup;
 extern unsigned char *kpa_conversion;
 extern unsigned char na_map[];
 extern unsigned char turbo_map[];
+extern GtkTooltips *tip;
+gint tips_in_use;
 static gint paused_handlers = FALSE;
 static gint constants_loaded = FALSE;
 extern gint raw_reader_running;
@@ -67,6 +69,30 @@ void leave(GtkWidget *widget, gpointer data)
 }
 
 int toggle_button_handler(GtkWidget *widget, gpointer data)
+{
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
+	{	/* It's pressed (or checked) */
+		switch ((gint)data)
+		{
+			case TOOLTIPS_STATE:
+				gtk_tooltips_enable(tip);
+				tips_in_use = TRUE;
+				break;
+		}
+	}
+	else
+	{	/* not pressed */
+		switch ((gint)data)
+		{
+			case TOOLTIPS_STATE:
+				gtk_tooltips_disable(tip);
+				tips_in_use = FALSE;
+				break;
+		}
+	}
+	return TRUE;
+}
+int bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint config_num = 0;
 	gint bit_pos = 0;

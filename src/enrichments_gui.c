@@ -453,7 +453,7 @@ int build_enrichments(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(toggle_button_handler),
+                        G_CALLBACK(bitmask_button_handler),
                         NULL);
 
         button = gtk_radio_button_new_with_label(group,"Wide-Band");
@@ -468,7 +468,7 @@ int build_enrichments(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(toggle_button_handler),
+                        G_CALLBACK(bitmask_button_handler),
                         NULL);
 
 	sep = gtk_hseparator_new();

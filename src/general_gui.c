@@ -19,6 +19,10 @@
 #include <protos.h>
 #include <globals.h>
 
+extern gint tips_in_use;
+
+
+
 int build_general(GtkWidget *parent_frame)
 {
         extern GtkTooltips *tip;
@@ -27,11 +31,31 @@ int build_general(GtkWidget *parent_frame)
         GtkWidget *label;
         GtkWidget *frame;
         GtkWidget *hbox;
+        GtkWidget *button;
 
         vbox = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
+	frame = gtk_frame_new("Context Sensitive Help");
+	gtk_container_set_border_width(GTK_CONTAINER(frame),5);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	
+	hbox = gtk_hbox_new(TRUE,0);
+        gtk_container_add(GTK_CONTAINER(frame),hbox);
+	
+	button = gtk_check_button_new_with_label("Use ToolTips");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),tips_in_use);
+	g_signal_connect (G_OBJECT(button), "toggled",
+                        G_CALLBACK (toggle_button_handler),
+                        GINT_TO_POINTER(TOOLTIPS_STATE));
 
-	/* Not written yet */
+
+	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
+
+
+
+
+	
+
 	return TRUE;
 }

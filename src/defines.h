@@ -59,6 +59,7 @@
 #define COMMA			0x3c
 #define TAB			0x3d
 #define SPACE			0x3e
+#define TOOLTIPS_STATE		0x3f
 
 /* Spinbuttons */
 #define REQ_FUEL_DISP		0x40

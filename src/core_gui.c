@@ -27,6 +27,7 @@ int width;
 int height;
 int main_x_origin;
 int main_y_origin;
+extern gint tips_in_use;
 GtkWidget *main_window;
 GtkTooltips *tip;
 static struct 
@@ -98,7 +99,11 @@ int setup_gui()
         g_signal_connect(G_OBJECT(button),"pressed",
                         G_CALLBACK(leave),NULL);
 
-	gtk_tooltips_enable(tip);
+	if(tips_in_use)
+		gtk_tooltips_enable(tip);
+	else
+		gtk_tooltips_disable(tip);
+
 	gtk_widget_show_all(main_window);
 
 	return TRUE;

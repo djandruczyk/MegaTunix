@@ -94,6 +94,7 @@ int framebuild_dispatch(GtkWidget *, int);
 void leave(GtkWidget *, gpointer);
 int std_button_handler(GtkWidget *, gpointer);
 int toggle_button_handler(GtkWidget *, gpointer);
+int bitmask_button_handler(GtkWidget *, gpointer);
 int spinner_changed(GtkWidget *, gpointer);
 int classed_spinner_changed(GtkWidget *, gpointer);
 void check_req_fuel_limits(void);
