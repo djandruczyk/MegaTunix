@@ -29,9 +29,7 @@
 extern gboolean raw_reader_running;
 extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
-extern GtkWidget *ms_ecu_revision_entry;
 char buff[60];
-gfloat ecu_version;
 static gboolean burn_needed = FALSE;
 extern struct v1_2_Runtime_Gui runtime_data;
 extern struct ve_const_std *ve_constants;
@@ -176,7 +174,8 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         gint tmp;
         gint res;
         struct pollfd ufds;
-	char buf[2];
+	gint size = 44;
+	char buf[size];
         gint restart_reader = FALSE;
 	gint count;
 	static gboolean locked;
@@ -212,7 +211,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			/* Command succeeded,  but we still need to drain the
 			 * buffer...
 			 */
-			count = 44;	/* Arbritrary number */
+			count = size;	/* Arbritrary number */
 			while (poll(&ufds,1,serial_params.poll_timeout))
 				res = read(serial_params.fd,&buf,count);
 
