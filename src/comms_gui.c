@@ -25,8 +25,7 @@
 #include <unistd.h>
 
 struct DynamicEntries entries;
-gint ser_context_id;			/* for ser_statbar */
-GtkWidget *ser_statbar;			/* serial statusbar */ 
+GtkWidget *comms_view;
 extern gint read_wait_time;
 extern gint raw_reader_running;
 extern gint ms_reset_count;
@@ -56,6 +55,9 @@ int build_comms(GtkWidget *parent_frame)
 	GtkWidget *spinner;
 	GtkWidget *ebox;
 	GtkWidget *entry;
+	GtkWidget *view;
+	GtkWidget *sw;
+	GtkTextBuffer * textbuffer;
 	GtkAdjustment *adj;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -63,6 +65,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
 
 	frame = gtk_frame_new("Serial Status Messages");
+        gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
@@ -71,15 +74,24 @@ int build_comms(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
-	ser_statbar = gtk_statusbar_new();
-	gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(ser_statbar),FALSE);
-	gtk_container_add(GTK_CONTAINER(ebox),ser_statbar);
-	ser_context_id = gtk_statusbar_get_context_id(
-			GTK_STATUSBAR(ser_statbar),
-			"Serial Status");
-	gtk_widget_modify_bg(GTK_WIDGET(ebox),
-                        GTK_STATE_NORMAL,&white);
 
+        sw = gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+			GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC);
+        gtk_widget_set_size_request(sw,0,55);
+        gtk_container_add(GTK_CONTAINER(ebox),sw);
+
+	view = gtk_text_view_new();
+	comms_view = view;
+        gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+        gtk_text_buffer_create_tag(textbuffer,
+                                "warning",
+                                "foreground",
+                                "red", NULL);
+
+	gtk_container_add(GTK_CONTAINER(sw),view);
 
 	hbox = gtk_hbox_new(TRUE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);

@@ -20,6 +20,7 @@
 /* Prototypes */
 void set_store_buttons_state(GuiState);
 void update_statusbar(GtkWidget *, int, gchar *);
+void update_logbar(GtkWidget *, gchar *, gchar *);
 void no_ms_connection(void);
 void warn_user(gchar *);
 void squirt_cyl_inj_set_state(GuiState);

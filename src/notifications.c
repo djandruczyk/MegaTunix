@@ -91,6 +91,27 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
                         message);
 }
 
+void update_logbar(GtkWidget *view, gchar * tagname, gchar * message)
+{
+	GtkTextIter iter;
+	GtkTextBuffer * textbuffer;
+	GtkWidget *parent;
+	GtkAdjustment * adj;
+
+	parent = gtk_widget_get_parent(view);
+	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
+	adj->value = adj->upper;
+	gtk_adjustment_changed(GTK_ADJUSTMENT(adj));
+
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+	gtk_text_buffer_get_end_iter (textbuffer, &iter);
+	if (tagname == NULL)
+		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
+	else
+		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,
+				message,-1,tagname,NULL);
+	return;	
+}
 void no_ms_connection(void)
 {
 	gchar *buff;

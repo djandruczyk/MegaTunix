@@ -142,7 +142,10 @@ int build_general(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	sw = gtk_scrolled_window_new(NULL,NULL);
-	gtk_widget_set_size_request(sw,0,150);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+			GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC);
+	gtk_widget_set_size_request(sw,0,100);
 	gtk_container_add(GTK_CONTAINER(frame),sw);
 
 	view = gtk_text_view_new ();
