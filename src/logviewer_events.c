@@ -17,6 +17,7 @@
 #include <enums.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
+#include <math.h>
 #include <structures.h>
 
 
@@ -105,6 +106,107 @@ EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoint
  */
 EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
-	printf("lv_motion_event\n");
+	gint x = 0;
+	gint y = 0;
+	gint tnum = 0;
+	GdkModifierType state;
+	extern struct Logview_Data *lv_data;
+	extern gint info_width;
+	struct Viewable_Value *v_value = NULL;
+
+	x = event->x;
+	y = event->y;
+	state = event->state;
+
+	if (lv_data->active_traces == 0)
+		return FALSE;
+	if (x > info_width) /* If out of bounds just return... */
+	{
+		highlight_tinfo(lv_data->tselect,FALSE);
+		lv_data->tselect = -1;
+		return FALSE;
+	}
+
+	tnum = ceil(y/lv_data->spread);
+	if (tnum >= g_list_length(lv_data->tlist))
+		return FALSE;
+	v_value = g_list_nth_data(lv_data->tlist,tnum);
+	if (lv_data->tselect !=tnum)
+	{
+		highlight_tinfo(lv_data->tselect,FALSE);
+		lv_data->tselect = tnum;
+		highlight_tinfo(tnum,TRUE);
+	}
+
+	return TRUE;
+
+}
+
+
+/*!
+ \brief higlight_tinfo() highlights the trace info box on the left side 
+ of the logviewer when the mouse goes in there..
+ \param tnum (gint) trace number starting from 0
+ \returns void
+ */
+void highlight_tinfo(gint tnum, gboolean state)
+{
+	extern gint info_width;
+	GdkRectangle rect;
+
+	rect.x = 0;
+	rect.y = lv_data->spread*tnum;
+	rect.width =  info_width-1;
+	rect.height = lv_data->spread;
+
+	extern struct Logview_Data *lv_data;
+	if (state)
+		gdk_draw_rectangle(lv_data->pixmap,
+				lv_data->highlight_gc,
+				FALSE, rect.x,rect.y,
+				rect.width,rect.height);
+	else
+		gdk_draw_rectangle(lv_data->pixmap,
+				lv_data->darea->style->white_gc,
+				FALSE, rect.x,rect.y,
+				rect.width,rect.height);
+
+	rect.width+=1;
+	rect.height+=1;
+	gdk_window_invalidate_rect(lv_data->darea->window,
+				&rect,
+				TRUE);
+
+	return;
+
+}
+
+
+
+EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	gint x = 0;
+	gint y = 0;
+	gint tnum = 0;
+	GdkModifierType state;
+	extern struct Logview_Data *lv_data;
+	extern gint info_width;
+	struct Viewable_Value *v_value = NULL;
+
+	x = event->x;
+	y = event->y;
+	state = event->state;
+
+	if (x > info_width) /* If out of bounds just return... */
+		return TRUE;
+
+	if (lv_data->active_traces == 0)
+		return TRUE;
+	tnum = ceil(y/lv_data->spread);
+	if (tnum >= g_list_length(lv_data->tlist))
+		return TRUE;
+	v_value = g_list_nth_data(lv_data->tlist,tnum);
+	printf("Should print trace info on this trace...\n");
+
 	return TRUE;
 }

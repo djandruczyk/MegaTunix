@@ -26,7 +26,7 @@
 #include <tabloader.h>
 #include <timeout_handlers.h>
 
-static gint info_width = 120;
+gint info_width = 120;
 static gint max_viewables = 0;
 static gboolean adj_scale = TRUE;
 static gboolean blocked = FALSE;
@@ -497,6 +497,16 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 
 	switch((GcType)type)
 	{
+		case HIGHLIGHT:
+			color.red = 60000;
+			color.green = 0;
+			color.blue = 0;
+			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
+			values.foreground = color;
+			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
+					&values,
+					GDK_GC_FOREGROUND);
+			break;
 		case FONT:
 			color.red = 60000;
 			color.green = 60000;
@@ -631,7 +641,7 @@ void draw_infotext()
 {
 	// Draws the textual (static) info on the left side of the window..
 
-	gfloat spread = 0.0;
+	gint spread = 0.0;
 	gint name_x = 0;
 	gint name_y = 0;
 	gint info_ctr = 0;
@@ -650,6 +660,8 @@ void draw_infotext()
 
 	if (!lv_data->font_desc)
 		lv_data->font_desc = pango_font_description_from_string("courier 11");
+	if (!lv_data->highlight_gc)
+		lv_data->highlight_gc = initialize_gc(lv_data->pixmap,HIGHLIGHT);
 	
 	spread = (gint)((float)h/(float)lv_data->active_traces);
 	name_x = 10;
@@ -669,6 +681,7 @@ void draw_infotext()
 				FALSE, 0,info_ctr-(spread/2),
 				info_width-1,spread);
 	}
+	lv_data->spread = spread;
 
 }
 

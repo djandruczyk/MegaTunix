@@ -26,6 +26,7 @@
 #include <keyparser.h>
 #include <listmgmt.h>
 #include <logviewer_core.h>
+#include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <offline.h>
 #include <mode_select.h>

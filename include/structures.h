@@ -570,12 +570,15 @@ struct Vex_Import
  */
 struct Logview_Data
 {
+	GdkGC *highlight_gc;	/*! GC used for the highlight */
 	GtkWidget *darea;	/*! Trace drawing area... */
 	GdkPixmap *pixmap;	/*! pointer to backing pixmap... */
 	GHashTable *traces;	/*! Hash table of v_values key'd by name */
 	GList *tlist;		/*! Doubly linked lists of v_Values*/
 	GList *used_colors;	/*! List of colors in use.... */
 	gint active_traces;	/*! how many are active */
+	gint spread;		/*! Pixel spread between trace info blocks */
+	gint tselect;		/*! Trace that is currently selected */
 	PangoFontDescription *font_desc; /*! Font used for text... */
 };
 

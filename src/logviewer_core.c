@@ -20,6 +20,7 @@
 #include <keyparser.h>
 #include <logviewer_core.h>
 #include <logviewer_gui.h>
+#include <math.h>
 #include <string.h>
 #include <structures.h>
 #include <tabloader.h>

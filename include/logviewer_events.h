@@ -21,6 +21,8 @@
 gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean lv_motion_event(GtkWidget *, GdkEventMotion *, gpointer);
+gboolean lv_button_event(GtkWidget *, GdkEventButton *, gpointer);
+void highlight_tinfo(gint, gboolean );
 
 /* Prototypes */
 

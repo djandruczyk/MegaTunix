@@ -164,7 +164,8 @@ typedef enum
 {
 	FONT=0xe0,
 	TRACE,
-	GRATICULE
+	GRATICULE,
+	HIGHLIGHT,
 }GcType;
 
 typedef enum

@@ -63,8 +63,6 @@ int setup_gui()
 	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	/* set name so MegaTunixrc can alter the settings */
-	gtk_widget_set_name(main_window, "main window");
 	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
 	gtk_widget_set_size_request(main_window,def_width,def_height);
 	gtk_window_set_default_size(GTK_WINDOW(main_window),width,height);

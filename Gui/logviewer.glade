@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="window1">
   <property name="visible">True</property>
@@ -41,19 +42,16 @@
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkEventBox" id="logviewer_trace_eventbox">
+		    <widget class="GtkDrawingArea" id="logviewer_trace_darea">
 		      <property name="visible">True</property>
-		      <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
-		      <signal name="motion_notify_event" handler="lv_motion_event" last_modification_time="Sun, 06 Mar 2005 21:12:02 GMT"/>
-
-		      <child>
-			<widget class="GtkDrawingArea" id="logviewer_trace_darea">
-			  <property name="visible">True</property>
-			  <property name="events">GDK_EXPOSURE_MASK</property>
-			  <signal name="configure_event" handler="lv_configure_event" last_modification_time="Sat, 27 Nov 2004 17:55:32 GMT"/>
-			  <signal name="expose_event" handler="lv_expose_event" last_modification_time="Sat, 27 Nov 2004 17:55:47 GMT"/>
-			</widget>
-		      </child>
+		      <property name="can_focus">True</property>
+		      <property name="has_focus">True</property>
+		      <property name="events">GDK_POINTER_MOTION_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+		      <signal name="configure_event" handler="lv_configure_event" last_modification_time="Sat, 27 Nov 2004 17:55:32 GMT"/>
+		      <signal name="expose_event" handler="lv_expose_event" last_modification_time="Sat, 27 Nov 2004 17:55:47 GMT"/>
+		      <signal name="motion_notify_event" handler="lv_motion_event" last_modification_time="Mon, 07 Mar 2005 14:44:22 GMT"/>
+		      <signal name="button_press_event" handler="lv_button_event" last_modification_time="Mon, 07 Mar 2005 14:46:19 GMT"/>
+		      <signal name="button_release_event" handler="lv_button_event" last_modification_time="Mon, 07 Mar 2005 14:46:29 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
