@@ -132,3 +132,30 @@ gboolean get_state(gchar *string, gint index)
 	return state;
 }
 
+
+void alter_widget_state(gpointer key, gpointer data)
+{
+	GtkWidget * widget = key;
+	gchar * tmpbuf;
+	gchar ** groups;
+	gint num_groups;
+	gint i = 0;
+	gpointer value;
+	gboolean state;
+	extern GHashTable *widget_group_states;
+
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"bind_to_list");
+	groups = parse_keys(tmpbuf,&num_groups,",");
+	state = TRUE;
+	for (i=0;i<num_groups;i++)
+	{
+		value = g_hash_table_lookup(widget_group_states,groups[i]);
+		if ((gboolean)value == FALSE)
+		{
+			state = FALSE;
+			break;
+		}
+	}
+	g_strfreev(groups);
+	gtk_widget_set_sensitive(GTK_WIDGET(widget),state);
+}

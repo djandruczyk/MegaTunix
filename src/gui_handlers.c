@@ -284,6 +284,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
+	extern GHashTable *widget_group_states;
 	extern struct Firmware_Details *firmware;
 
 	if ((paused_handlers) || (!ready))
@@ -373,7 +374,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		{
 			tmp_state = get_state(group_states,i);
 			state = tmp_state == TRUE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-			g_list_foreach(get_list(groups[i]),set_widget_sensitive,(gpointer)state);
+			g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
+			g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 		}
 		g_strfreev(groups);
 	}
@@ -1123,6 +1125,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	GdkColor color;
 	extern gint ** ms_data;
+	extern GHashTable *widget_group_states;
 
 	upd_count++;
 	if ((upd_count%64) == 0)
@@ -1249,7 +1252,8 @@ void update_widget(gpointer object, gpointer user_data)
 		{
 			tmp_state = get_state(group_states,i);
 			state = tmp_state == TRUE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-			g_list_foreach(get_list(groups[i]),set_widget_sensitive,(gpointer)state);
+			g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
+			g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 		}
 		g_strfreev(groups);
 	}

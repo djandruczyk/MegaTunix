@@ -21,6 +21,7 @@ void populate_master(GtkWidget *, gpointer );
 void register_widget(gchar *, GtkWidget *);
 gboolean deregister_widget(gchar *);
 gboolean get_state(gchar *, gint );
+void alter_widget_state(gpointer, gpointer);
 /* Prototypes */
 
 #endif

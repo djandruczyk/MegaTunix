@@ -1001,10 +1001,12 @@ void scroll_logviewer_traces()
 	gint w = 0;
 	gint h = 0;
 	GdkPixmap *pixmap = NULL;
-	GtkWidget * widget = NULL;
+	static GtkWidget * widget = NULL;
 	extern GHashTable *dynamic_widgets;
 
-	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
+
+	if (!widget)
+		widget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
 	if (!widget)
 		return;
 	pixmap = lv_data->pixmap;

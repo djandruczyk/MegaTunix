@@ -45,7 +45,7 @@ bind_to_list=nos_subfeatures
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=nos_subfeatures
+bind_to_list=dt_controls,nos_subfeatures
 
 [nos_feature_label]
 keys=page,bind_to_list

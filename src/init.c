@@ -52,6 +52,7 @@ gint **ms_data_last = NULL;
 gint **ms_data_backup = NULL;
 GList ***ve_widgets = NULL;
 GHashTable **interdep_vars = NULL;
+GHashTable *widget_group_states = NULL;
 
 
 /*!
@@ -258,6 +259,8 @@ void mem_alloc()
 		ms_data_backup = g_new0(gint *, firmware->total_pages);
 	if (!ve_widgets)
 		ve_widgets = g_new0(GList **, firmware->total_pages);
+	if (!widget_group_states)
+		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	if (!interdep_vars)
 		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
@@ -323,6 +326,7 @@ void mem_dealloc()
 		g_free(ms_data_last);
 		g_free(ms_data_backup);
 	}
+	g_hash_table_destroy(widget_group_states);
 
 }
 
