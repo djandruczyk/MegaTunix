@@ -108,8 +108,8 @@ struct Raw_Runtime_Ignition
 	unsigned char	barocorr;	/* Offset 16 */
 	unsigned char	gammae;		/* Offset 17 */
 	unsigned char	vecurr1;	/* Offset 18 */
-	unsigned char	ctimecommH;	/* Offset 19 */
-	unsigned char	ctimecommL;	/* Offset 20 */
+	unsigned char	ctimeH;		/* Offset 19 */
+	unsigned char	ctimeL;		/* Offset 20 */
 	unsigned char	sparkangle;	/* Offset 21 */
 };
 
@@ -137,8 +137,8 @@ struct Raw_Runtime_Enhanced
 	unsigned char	barocorr;	/* Offset 16 */
 	unsigned char	gammae;		/* Offset 17 */
 	unsigned char	vecurr1;	/* Offset 18 */
-	unsigned char	ctimecommH;	/* Offset 19 */
-	unsigned char	ctimecommL;	/* Offset 20 */
+	unsigned char	ctimeH;		/* Offset 19 */
+	unsigned char	ctimeL;		/* Offset 20 */
 	unsigned char	sparkangle;	/* Offset 21 */
 	unsigned char	afrtarget;	/* Offset 22 */
 	unsigned char	fpadc;		/* Offset 23 */
@@ -195,8 +195,8 @@ struct Runtime_Common
         unsigned char	tpsaccel;	/* 72 Acceleration enrichment % */
         unsigned char	warmcorr;	/* 73 Total Warmup Correction % */
         unsigned char	idledc;		/* 74 IdlePWM dutycycle */
-        unsigned char	ctimecommH;	/* 75 SquirtnSpark Cycletime H */
-        unsigned char	ctimecommL;	/* 76 SquirtnSpark Cycletime H */
+        unsigned char	ctimeH;		/* 75 SquirtnSpark Cycletime H */
+        unsigned char	ctimeL;		/* 76 SquirtnSpark Cycletime H */
         unsigned char	sparkangle;	/* 77 SquirtnSpark sparkangle */
 	unsigned char	bspot1;		/* 78 blank spot 1 (for Std Runtime) */
 	unsigned char	bspot2;		/* 79 blank spot 2 (for Std Runtime) */

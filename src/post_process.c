@@ -36,6 +36,8 @@ void post_process_realtime_vars(void *input, void *output)
 	extern unsigned int ecu_caps;
 	extern gint temp_units;
 	gfloat ign_int = 0.0;
+	gint rpmconstant = 0;
+	gint cyls = 0;
 	struct Raw_Runtime_Std *in = input;
 	struct Raw_Runtime_Dualtable *in_dt = input;
 //	struct Raw_Runtime_Enhanced *in_enh = input;
@@ -109,17 +111,24 @@ void post_process_realtime_vars(void *input, void *output)
 	else	 /* Spark variants,  SquirtnSpark and SquirtnEDIS */
 	{
 		/* Funky high resolution RPM output from MegaSquirtnSpark */
-		out->ctimecommH = ign_in->ctimecommH;
-		out->ctimecommL = ign_in->ctimecommL;
+		out->ctimeH = ign_in->ctimeH;
+		out->ctimeL = ign_in->ctimeL;
+
+		cyls = ve_const->config11.bit.cylinders+1;
+                if (ve_const->config11.bit.eng_type)
+                        rpmconstant = (int)(6000.0/((float)cyls));
+                else
+                        rpmconstant = (int)(12000.0/((float)cyls));
 		/* 0.92 is there cause of clock of 7.3728 mhz....
 		 * if clock goes to 8 mhz, get rid of 0.92 factor...
 		 */
 
-		ign_int = (((out->ctimecommH*256)+out->ctimecommL)/0.92)/1000;
+		ign_int = (((float)(out->ctimeH*256.0)+out->ctimeL)/0.92)/10000;
+
 		if (ign_in->rpm < 5)
 			out->rpm = ign_in->rpm*100;
 		else
-			out->rpm = (float)ve_const->rpmk/(float)ign_int;
+			out->rpm = (float)rpmconstant/ign_int;
 
 		if (out->rpm > 25500)
 			out->rpm = 25500;

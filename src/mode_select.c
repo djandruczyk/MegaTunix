@@ -92,7 +92,7 @@ void set_ignition_mode(gboolean state)
 		gtk_button_set_label(GTK_BUTTON(buttons.invert_out_but),"Inverted");
 	}
 	else
-		dbg_func(__FILE__": set_ignition_mode, ecu_caps doesn't have an ignition variant enabled\n",CRITICAL);
+		;;
 
 }
 

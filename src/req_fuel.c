@@ -503,6 +503,24 @@ void check_req_fuel_limits()
 
 			if (paused_handlers)
 				return;
+
+			/* Send rpmk value as it's needed for rpm calc on 
+			 * spark firmwares... */
+			if (ve_const_dt1->config11.bit.eng_type)
+				ve_const_dt1->rpmk = (int)(6000.0/((double)num_cylinders_1));
+			else
+				ve_const_dt1->rpmk = (int)(12000.0/((double)num_cylinders_1));
+
+			dload_val = ve_const_dt1->rpmk;
+			write_ve_const(dload_val, rpmk_offset, FALSE);
+			if (ve_const_dt2->config11.bit.eng_type)
+				ve_const_dt2->rpmk = (int)(6000.0/((double)num_cylinders_2));
+			else
+				ve_const_dt2->rpmk = (int)(12000.0/((double)num_cylinders_2));
+
+			dload_val = ve_const_dt1->rpmk;
+			write_ve_const(dload_val, rpmk_offset+MS_PAGE_SIZE, FALSE);
+
 			offset = 90 + MS_PAGE_SIZE;
 			dload_val = convert_before_download(offset,
 					req_fuel_per_squirt,FALSE);
@@ -576,6 +594,18 @@ void check_req_fuel_limits()
 			 */
 			if (paused_handlers)
 				return;
+			/* Send rpmk value as it's needed for rpm calc on 
+			 * spark firmwares... */
+			/* Top is two stroke, botton is four stroke.. */
+			if (ve_const->config11.bit.eng_type)
+				ve_const->rpmk = (int)(6000.0/((double)num_cylinders_1));
+			else
+				ve_const->rpmk = (int)(12000.0/((double)num_cylinders_1));
+
+			dload_val = ve_const->rpmk;
+			write_ve_const(dload_val, rpmk_offset, FALSE);
+
+			/* Send reqd_fuel_per_squirt */
 			offset = 90;
 			dload_val = convert_before_download(offset,
 					req_fuel_per_squirt,FALSE);

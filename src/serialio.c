@@ -475,10 +475,12 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 	}
 	if (value > 255)
 	{
-		//	g_printf("large value, %i, offset %i\n",value,offset);
+		dbg_func(g_strdup_printf(__FILE__": Large value being sent: %i, to offset %i\n",value,offset),SERIAL_WR);
+
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
 		twopart = TRUE;
+		dbg_func(g_strdup_printf(__FILE__": Highbyte: %i, Lowbyte %i\n",highbyte,lowbyte),SERIAL_WR);
 	}
 	if (value < 0)
 	{
@@ -510,21 +512,27 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 		write_cmd = g_strdup("W");
 
 	lbuff[0]=offset;
-	if(twopart)
+	if (twopart)
 	{
 		lbuff[1]=highbyte;
 		lbuff[2]=lowbyte;
 		count = 3;
+		dbg_func(__FILE__": Sending 16 bit value to ECU\n",SERIAL_WR);
 	}
 	else
 	{
 		lbuff[1]=value;
 		count = 2;
+		dbg_func(__FILE__": Sending 8 bit value to ECU\n",SERIAL_WR);
 	}
 
 
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
+	if (res != 1 )
+		dbg_func("Sending write command FAILED!!!\n",CRITICAL);
 	res = write (serial_params->fd,lbuff,count);	/* Send write command */
+	if (res != count )
+		dbg_func("Sending offset+data FAILED!!!\n",CRITICAL);
 	if (ecu_caps & DUALTABLE)
 		set_ms_page(0);
 	g_free(write_cmd);
