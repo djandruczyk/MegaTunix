@@ -114,7 +114,7 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(BURN_MS_FLASH));
 	/* mappings to lists of controls */
 
-	g_hash_table_foreach(str_2_enum,dump_hash,NULL);
+	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 
 }
 void dump_hash(gpointer key, gpointer value, gpointer user_data)

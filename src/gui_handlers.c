@@ -502,11 +502,17 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
 		value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	}
+	else
+	{
+		dbg_func(__FILE__": widget pointer is NOT valid\n",CRITICAL);
+		return FALSE;
+	}
 
 	if (ecu_caps & DUALTABLE)
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 
 	tmpi = (int)(value+.001);
+
 
 	switch ((SpinButton)handler)
 	{
@@ -546,16 +552,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_1:
-			printf("req_fuel_1\n");
 			req_fuel_total_1 = value;
 			check_req_fuel_limits();
-			printf("req_fuel_1_breakout\n");
 			break;
 		case REQ_FUEL_2:
-			printf("req_fuel_2\n");
 			req_fuel_total_2 = value;
 			check_req_fuel_limits();
-			printf("req_fuel_2_breakout\n");
 			break;
 		case LOGVIEW_ZOOM:
 			lv_scroll = tmpi;
@@ -563,13 +565,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case NUM_SQUIRTS_1:
-			printf("num_squirts_1\n");
 			/* This actuall effects another variable */
 			num_squirts_1 = tmpi;
 			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,1);
+				set_reqfuel_state(RED,page);
 			}
 			else
 			{
@@ -581,12 +582,11 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,1);
+				set_reqfuel_state(BLACK,page);
 				check_req_fuel_limits();
 			}
 			break;
 		case NUM_CYLINDERS_1:
-			printf("num_cyls_1\n");
 			/* Updates a shared bitfield */
 			num_cylinders_1 = tmpi;
 			tmp = ve_const->config11.value;
@@ -608,17 +608,16 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,1);	
+				set_reqfuel_state(RED,page);	
 			}
 			else
 			{
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,1);	
+				set_reqfuel_state(BLACK,page);	
 				check_req_fuel_limits();
 			}
 			break;
 		case NUM_INJECTORS_1:
-			printf("num_injectors_1\n");
 			/* Updates a shared bitfield */
 			num_injectors_1 = tmpi;
 			tmp = ve_const->config12.value;
@@ -633,13 +632,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS_2:
-			printf("num_squirts_2\n");
 			/* This actuall effects another variable */
 			num_squirts_2 = tmpi;
 			if (num_cylinders_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,2);
+				set_reqfuel_state(RED,page);
 			}
 			else
 			{
@@ -651,13 +649,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,2);
+				set_reqfuel_state(BLACK,page);
 				check_req_fuel_limits();
 			}
 			break;
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
-			printf("num_cylinders_2\n");
 			num_cylinders_2 = tmpi;
 			tmp = ve_const_dt2->config11.value;
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
@@ -678,17 +675,16 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (num_cylinders_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,2);	
+				set_reqfuel_state(RED,page);	
 			}
 			else
 			{
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,2);	
+				set_reqfuel_state(BLACK,page);	
 				check_req_fuel_limits();
 			}
 			break;
 		case NUM_INJECTORS_2:
-			printf("num_injectors_2\n");
 			/* Updates a shared bitfield */
 			num_injectors_2 = tmpi;
 			tmp = ve_const_dt2->config12.value;
@@ -759,7 +755,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			dl_type = 0;  
 			break;
 	}
-	printf("end of switch\n\n");
 	if (dl_type == IMMEDIATE) 
 		write_ve_const(page, offset, dload_val, ign_parm);
 	return TRUE;
@@ -901,8 +896,8 @@ void update_ve_const()
 				(g_hash_table_lookup(dynamic_widgets,"inj_per_cycle_2_spin")),
 				num_squirts_2);
 
-		set_reqfuel_state(BLACK,1);
-		set_reqfuel_state(BLACK,2);
+		set_reqfuel_state(BLACK,page);
+		set_reqfuel_state(BLACK,page);
 		//		check_req_fuel_limits();
 
 		//check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
@@ -972,7 +967,7 @@ void update_ve_const()
 				tmp);
 		num_squirts_1 = (gint)tmp;
 
-		set_reqfuel_state(BLACK,1);
+		set_reqfuel_state(BLACK,page);
 		//		check_req_fuel_limits();
 	}	// End of B&G specific code...
 

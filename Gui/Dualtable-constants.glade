@@ -888,7 +888,6 @@
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
 			      <property name="adjustment">1 0 25.5 0.1 1 1</property>
-			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 26 Sep 2004 23:18:02 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -1520,7 +1519,6 @@ Threshold (ms.)</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
 			      <property name="adjustment">1 0 25.5 0.1 1 1</property>
-			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 26 Sep 2004 23:18:02 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>

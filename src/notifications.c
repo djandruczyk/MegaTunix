@@ -49,14 +49,9 @@ void set_interdep_state(GuiState state, gint table)
 		dbg_func(g_strdup_printf(__FILE__": set_interdep_state(), invalid table number %i\n",table),CRITICAL);
 }
 
-void set_reqfuel_state(GuiState state, gint table)
+void set_reqfuel_state(GuiState state, gint page)
 {
-	if (table == 1)
-		g_list_foreach(get_list("reqfuel_1_ctrl"), set_widget_color,(gpointer)state);
-	else if (table == 2)
-		g_list_foreach(get_list("reqfuel_2_ctrl"), set_widget_color,(gpointer)state);
-	else
-		dbg_func(g_strdup_printf(__FILE__": set_reqfuel_state(), invalid table number %i\n",table),CRITICAL);
+	g_list_foreach(get_list(g_strdup_printf("reqfuel_%i_ctrl",page+1)), set_widget_color,(gpointer)state);
 }
 
 void set_widget_color(gpointer widget, gpointer state)
