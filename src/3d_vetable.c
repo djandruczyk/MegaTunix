@@ -65,8 +65,14 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
 	extern struct Firmware_Details *firmware;
+	extern gboolean gl_ability;
 	gint table_num =  -1;
 	
+	if (!gl_ability)
+	{
+		dbg_func(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n",CRITICAL);
+		return FALSE;
+	}
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 
 	if (winstat[table_num] == TRUE)
@@ -385,6 +391,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
+	printf("expose event\n");
 	dbg_func(__FILE__": ve3d_expose_event() 3D View Expose Event\n",OPENGL);
 
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){
