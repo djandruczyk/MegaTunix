@@ -216,7 +216,7 @@ gfloat convert_after_upload(gint offset, gboolean ign_var)
 			return_value = ve_const_arr[index];
 			break;
 		default:
-			g_printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
+			g_printf("Convert_after_upload() NO CONVERSION defined, index %i BUG!!!\n",index);
 			break;
 
 	}

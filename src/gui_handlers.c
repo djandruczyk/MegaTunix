@@ -532,6 +532,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	extern unsigned int ecu_caps;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
+	struct Ignition_Table * ign_parms = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -545,6 +546,9 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 
 	if (ecu_caps & DUALTABLE)
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+
+	if (ecu_caps & (S_N_EDIS|S_N_SPARK))
+		ign_parms = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
@@ -727,6 +731,40 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 
 			check_req_fuel_limits();
 			break;
+		case TRIGGER_ANGLE:
+			if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
+				fprintf(stderr,__FILE__": ERROR, Trigger angle set but not using Ignition Firmware\n");
+			if (value > 112.15)	/* Extra long trigger needed */	
+			{
+				tmp = ign_parms->spark_config1.value;
+				tmp = tmp & ~0x3; /*clears lower 2 bits */
+				tmp = tmp | (1 << 1);	/* Set xlong_trig */
+				ign_parms->spark_config1.value = tmp;
+				write_ve_const(tmp, SPARK_CONFIG1, ign_parm);
+				value -= 45.0;
+				dload_val = convert_before_download(offset,value,ign_parm);
+			}
+			else if (value > 89.65) /* Long trigger needed */
+			{
+				tmp = ign_parms->spark_config1.value;
+				tmp = tmp & ~0x3; /*clears lower 2 bits */
+				tmp = tmp | (1 << 0);	/* Set long_trig */
+				ign_parms->spark_config1.value = tmp;
+				write_ve_const(tmp, SPARK_CONFIG1, ign_parm);
+				value -= 22.5;
+				dload_val = convert_before_download(offset,value,ign_parm);
+			}
+			else	// value <= 89.65 degrees, no long trigger
+			{
+				tmp = ign_parms->spark_config1.value;
+				tmp = tmp & ~0x3; /*clears lower 2 bits */
+				ign_parms->spark_config1.value = tmp;
+				write_ve_const(tmp, SPARK_CONFIG1, ign_parm);
+				dload_val = convert_before_download(offset,value,ign_parm);
+			}
+			
+			break;
+	 
 		case GENERIC:	/* Handles almost ALL other variables */
 			temp_dep = (gboolean)g_object_get_data(
 					G_OBJECT(ve_widgets[offset]),

@@ -187,8 +187,8 @@ union spark_config1
 	struct
 	{
 		unsigned char unused	:4;
-		unsigned char boost_ret	:1;	/* Boost Retard ? */
-		unsigned char multi_sp	:1;	/* Multi-Spark mode ? */
+		unsigned char boost_ret	:1;	/* (EDIS) Boost Retard ? */
+		unsigned char multi_sp	:1;	/* (EDIS) Multi-Spark mode ? */
 		unsigned char xlong_trig:1;	/* Mask xtra long trigger ? */
 		unsigned char long_trig	:1;	/* Mask long trigger ? */
 	} bit;
@@ -351,8 +351,8 @@ union spark_config1
 	{
 		unsigned char long_trig	:1;	/* Mask long trigger ? */
 		unsigned char xlong_trig:1;	/* Mask xtra long trigger ? */
-		unsigned char multi_sp	:1;	/* Multi-Spark mode ? */
-		unsigned char boost_ret	:1;	/* Boost Retard ? */
+		unsigned char multi_sp	:1;	/* (EDIS) Multi-Spark mode ? */
+		unsigned char boost_ret	:1;	/* (EDIS) Boost Retard ? */
 		unsigned char unused	:4;
 	} bit;
 };

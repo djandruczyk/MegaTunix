@@ -34,6 +34,7 @@
 #define IGN_TABLE_OFFSET	0	/* From ign table boundary */
 #define IGN_RPM_BINS_OFFSET	64	/* From ign table boundary */
 #define IGN_KPA_BINS_OFFSET	72	/* From ign table boundary */
+#define SPARK_CONFIG1		85	/* From ign table boundary */
 
 /* Download modes */
 #define IMMEDIATE		0x10

@@ -105,7 +105,7 @@ void build_sparktable(GtkWidget *parent_frame)
 
 	}
 
-	frame = gtk_frame_new("Spark Advance (deg)");
+	frame = gtk_frame_new("Spark Timing (\302\260 BTDC)");
 	gtk_table_attach (GTK_TABLE (basetable), frame, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -127,7 +127,7 @@ void build_sparktable(GtkWidget *parent_frame)
 		for (x=0;x<8;x++)
 		{
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
-					0.0,0.0,89.8,0.40,10,0);
+					0.0,0.0,89.648,0.3516,3.516,0);
 			spinner = gtk_spin_button_new(adj,1,1);
 			ign_widgets[IGN_TABLE_OFFSET+index] = spinner;
 			/* Bind data to object for handlers */
