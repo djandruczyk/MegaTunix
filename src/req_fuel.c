@@ -231,7 +231,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 
 	// Rated Injector Flow
 	adj =  (GtkAdjustment *) gtk_adjustment_new(
-			reqd_fuel->rated_inj_flow,10.0,25.5,0.1,0.1,0);
+			reqd_fuel->rated_inj_flow,10.0,255,0.1,1,0);
 			
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);

@@ -163,6 +163,7 @@ void *serial_io_handler(gpointer data)
 	gint i=0;
 	gint val=-1;
 	gboolean result = FALSE;
+	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gint mem_view_style[];
 	/* Create Queue to listen for commands */
@@ -216,9 +217,13 @@ void *serial_io_handler(gpointer data)
 						{
 							gdk_threads_enter();
 							result = load_gui_tabs();
-							gdk_threads_leave();
 							if (result == FALSE)
+							{
+								gdk_threads_leave();
 								goto breakout;
+							}
+							reset_temps(GINT_TO_POINTER(temp_units));
+							gdk_threads_leave();
 						}
 						break;
 					case UPD_READ_VE_CONST:
