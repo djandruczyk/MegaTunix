@@ -53,22 +53,22 @@ static struct Canidate
 } canidates[] = 
 {
 	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,20,
-			"Standard B&G (2.0-3.01)",FALSE,FALSE,FALSE},
+			"Standard B&G (2.0-3.01)\0",FALSE,FALSE,FALSE},
 	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,NULL,NULL,1,
-			"Dualtable 0.90-1.0",TRUE,FALSE,FALSE},
+			"Dualtable 0.90-1.0\0",TRUE,FALSE,FALSE},
 	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,"v.1.01",NULL,1,
-			"Dualtable 1.01",TRUE,FALSE,FALSE},
+			"Dualtable 1.01\0",TRUE,FALSE,FALSE},
 	{ {22,1,1,128,128,19,0,0,255,255},NULL,NULL,"v.1.02",NULL,1,
-			"Dualtable 1.02",TRUE,FALSE,TRUE},
+			"Dualtable 1.02\0",TRUE,FALSE,TRUE},
 	{ {22,1,1,125,125,31,0,0,0,0},NULL,NULL,"GM-IAC",NULL,29,
-			"MS-2.9 GM-IAC",FALSE,FALSE,TRUE},
+			"MS-2.9 GM-IAC\0",FALSE,FALSE,TRUE},
 	{ {22,1,1,125,125,0,0,81,0,0},NULL,NULL,NULL,NULL,20,
-			"SquirtnSpark 2.02 or SquirtnEdis 0.108",
+			"SquirtnSpark 2.02 or SquirtnEdis 0.108\0",
 			FALSE,TRUE,FALSE},
 	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,NULL,NULL,30,
-			"SquirtnSpark 3.0",FALSE,TRUE,FALSE},
+			"SquirtnSpark 3.0\0",FALSE,TRUE,FALSE},
 	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.005",30,
-			"MegaSquirtnEDIS 3.05",FALSE,TRUE,FALSE}
+			"MegaSquirtnEDIS 3.05\0",FALSE,TRUE,FALSE}
 };
 
 static struct 
@@ -174,6 +174,7 @@ void interrogate_ecu()
 		set_ms_page(cmds[i].page);
 		string = g_strdup(cmds[i].cmd_string);
 		res = write(serial_params->fd,string,len);
+		g_free(string);
 		if (res != len)
 			fprintf(stderr,__FILE__": Error writing data to the ECU\n");
 		res = poll (&ufds,1,25);
@@ -209,7 +210,7 @@ void interrogate_ecu()
 			/* copy data from tmp buffer to struct pointer */
 	
 		}
-		g_free(string);
+
 		canidate->bytes[i] = total;
 	}
 	/* Reset page to 0 just to be 100% sure... */
@@ -236,7 +237,7 @@ void determine_ecu(void *ptr)
 	gint num_choices = sizeof(canidates)/sizeof(canidates[0]);
 	gint passcount = 0;
 	gint match = -1;
-	gchar * tmpbuf;
+	gchar * tmpbuf = NULL;
 
 	/* compare the canidate to all the choices.  As OF now we are ONLY
 	 * comparing byte counts as that is enough to guarantee unique-ness
@@ -304,7 +305,7 @@ void determine_ecu(void *ptr)
 			if (canidate->bytes[i] == 0)
 				tmpbuf = g_strdup("");
 			else
-				tmpbuf = g_strdup(canidate->sig_str);
+				tmpbuf = g_strndup(canidate->sig_str,canidate->bytes[i]);
 			gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
 			g_free(tmpbuf);
 		}
@@ -313,7 +314,7 @@ void determine_ecu(void *ptr)
 			if (canidate->bytes[i] == 0)
 				tmpbuf = g_strdup("");
 			else
-				tmpbuf = g_strdup(canidate->quest_str);
+				tmpbuf = g_strndup(canidate->quest_str,canidate->bytes[i]);
 			gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
 			g_free(tmpbuf);
 		}
@@ -323,183 +324,11 @@ void determine_ecu(void *ptr)
 			canidates[match].firmware_name);
 	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 	g_free(tmpbuf);
+
+	g_free(canidate->sig_str);
+	g_free(canidate->quest_str);
+	g_free(canidate->v0_data);
+	g_free(canidate->v1_data);
+	g_free(canidate);
 	
 }
-
-
-/*
-{
-
-	for (i=0;i<tests_to_run;i++)
-	{
-		// Per command section 
-		if ((strstr(commands[i].cmd_string,"V") && (commands[i].page == 0)))
-		{
-			serial_params->table0_size = commands[i].count;
-			v0_bytes = commands[i].count;
-			table0_index = i;
-		}
-		else if ((strstr(commands[i].cmd_string,"V") && (commands[i].page == 1)))
-		{
-			serial_params->table1_size = commands[i].count;
-			v1_bytes = commands[i].count;
-			table1_index = i;
-		}
-		else if (strstr(commands[i].cmd_string,"S"))
-		{
-			s_bytes = commands[i].count;
-			s_index = i;
-		}
-		else if (strstr(commands[i].cmd_string,"?"))
-		{
-			quest_bytes = commands[i].count;
-			quest_index = i;
-		}
-		else if (strstr(commands[i].cmd_string,"Q"))
-		{
-			q_bytes = commands[i].count;
-			q_index = i;
-		}
-		else if (strstr(commands[i].cmd_string,"A"))
-		{
-			serial_params->rtvars_size = commands[i].count;
-			// if A command doesn't come back with 22 something
-			// went wrong...  re-interrogate..
-			//
-			if (commands[i].count != 22)
-				fprintf(stderr,__FILE__": Interrogate returned an invalid response to the \"A\" Command (runtime variables), which should always return 22 bytes.  We got %i bytes instead.  Seems like the MS is in an undefined state, powercycle the ECU and re-interrogate.\n\n",commands[i].count);
-		}	
-		else if (strstr(commands[i].cmd_string,"I"))
-			i_bytes = commands[i].count;
-	}
-	if (v0_bytes == 128) // dualtable potential 
-	{
-		res = memcmp(	commands[table0_index].buffer, 
-				commands[table1_index].buffer,128);
-		if (res != 0)
-			set_dualtable_mode(TRUE);
-		else
-			set_dualtable_mode(FALSE);
-	}
-	else
-	{
-		commands[table1_index].count = 0;
-		set_dualtable_mode(FALSE);
-	}
-		
-
-	for (i=0;i<tests_to_run;i++)
-	{
-		if (commands[i].count > 0)
-		{
-			tmpbuf = g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",
-					commands[i].cmd_string, 
-					commands[i].cmd_desc, 
-					commands[i].count);
-			// Store counts for VE/realtime readback... 
-
-			update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
-			g_free(tmpbuf);
-		}
-		else
-		{
-			tmpbuf = g_strdup_printf("Command \"%s\" (%s), isn't supported...\n",
-					commands[i].cmd_string,
-					commands[i].cmd_desc);
-			update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
-			g_free(tmpbuf);
-		}
-	}
-	
-	if (q_bytes > 0) // ECU reponded to basic version query 
-	{
-		memcpy(&tmp,commands[q_index].buffer,commands[q_index].count);
-		tmpbuf = g_strdup_printf("%.1f",((float)tmp/10.0));
-		gtk_entry_set_text(GTK_ENTRY(entries.ecu_revision_entry),tmpbuf);
-		g_free(tmpbuf);
-	}
-	else
-	{
-		tmpbuf = g_strdup("");
-		gtk_entry_set_text(GTK_ENTRY(entries.ecu_revision_entry),tmpbuf);
-		g_free(tmpbuf);
-	}
-
-	if (s_bytes > 0) // ECU reponded to basic version query 
-	{
-		tmpbuf = g_strdup(commands[s_index].buffer);
-		gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
-		g_free(tmpbuf);
-	}
-	else
-	{
-		tmpbuf = g_strdup("");
-		gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
-		g_free(tmpbuf);
-	}
-	if (quest_bytes > 0) // ECU reponded to basic version query 
-	{
-		tmpbuf = g_strdup(commands[quest_index].buffer);
-		gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
-		g_free(tmpbuf);
-	}
-	else
-	{
-		tmpbuf = g_strdup("");
-		gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
-		g_free(tmpbuf);
-	}
-
-	if (v0_bytes > 125)
-	{
-		update_logbar(interr_view,"warning","Code is DualTable version: ",FALSE,FALSE);
-		if (s_bytes == 0)
-			update_logbar(interr_view,"warning","0.90, 0.99b, or 1.00\n",FALSE,FALSE);
-		if (s_bytes == 18)
-			update_logbar(interr_view,"warning","1.01\n",FALSE,FALSE);
-		if (s_bytes == 19)
-			update_logbar(interr_view,"warning","1.02\n",FALSE,FALSE);
-	}
-	else
-	{
-		if (quest_bytes > 0)
-			update_logbar(interr_view,"warning","Code is MegaSquirtnEDIS v3.05 code\n",FALSE,FALSE);
-
-
-		else
-		{
-			switch (i_bytes)
-			{
-				case 0:
-					update_logbar(interr_view,"warning","Code is Standard B&G 2.x code\n",FALSE,FALSE);
-					break;
-				case 83:
-					update_logbar(interr_view,"warning","Code is SquirtnSpark 2.02 or SquirtnEDIS 0.108\n",FALSE,FALSE);
-					break;
-				case 95:
-					update_logbar(interr_view,"warning","Code is SquirtnSpark 3.0\n",FALSE,FALSE);
-					break;
-				default:
-					update_logbar(interr_view,"warning","Code is not recognized\n Contact author!!!\n",FALSE,FALSE);
-					break;
-			}
-		}
-	}
-
-	for (i=0;i<tests_to_run;i++)
-	{
-		if (commands[i].buffer != NULL)
-		{
-			g_free(commands[i].buffer);
-			commands[i].buffer = NULL;
-		}
-	}
-
-	interrogated = TRUE;
-	if (restart_reader)
-		start_serial_thread();
-
-	g_static_mutex_unlock(&mutex);
-	return;
-}
-*/
