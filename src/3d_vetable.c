@@ -938,7 +938,7 @@ void ve_draw_axis(void *ptr)
 
 void ve_drawtext(char* text, float x, float y, float z)
 {
-	glColor3f(0.7,0.8,0.7);
+	glColor3f(0.1,0.8,0.8);
 	/* Set rendering postition */
 	glRasterPos3f (x, y, z);
 	/* Render each letter of text as stored in the display list */
