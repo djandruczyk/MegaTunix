@@ -249,8 +249,8 @@ gboolean populate_viewer(GtkWidget * widget)
 			{
 				printf("allocating struct and putting into table\n");
 				/* Call the build routine, feed it it's parent*/
-				v_value = (struct Viewable_Value *)
-						build_v_value(widget,i);
+				v_value = build_v_value(widget,i);
+					
 				printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
 				g_hash_table_insert(active_traces,
 						GINT_TO_POINTER(i),
@@ -284,7 +284,7 @@ gboolean populate_viewer(GtkWidget * widget)
 
 gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
-	GdkPixmap *pixmap = NULL;
+	GdkPixmap *trace_pmap = NULL;
 	gint w = 0;
 	gint h = 0;
 	struct Viewable_Value *v_value = NULL;
@@ -292,66 +292,109 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	/* Get rest of important data... */
 	v_value = (struct Viewable_Value *)g_object_get_data(G_OBJECT(widget),
 			"data");
-	//	w= v_value->
-	//	h= v_value->
-	w=300;  /* HACK FIXME!!!! */
-	h=50;
-	pixmap = v_value->pmap;
+	trace_pmap = v_value->trace_pmap;
 
-	if ((w!=event->width)||(h!=event->height))
-	{
-		if (pixmap)
-			g_object_unref(pixmap);
+	if (trace_pmap)
+		g_object_unref(trace_pmap);
 
-		w=event->width;
-		h=event->height;
-		pixmap=gdk_pixmap_new(widget->window,
-				w,h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(pixmap,
-				widget->style->black_gc,
-				TRUE, 0,0,
-				w,h);
-		gdk_window_set_back_pixmap(widget->window,pixmap,0);
-	}
-	v_value->pmap = pixmap;
+	w=event->width;
+	h=event->height;
+	trace_pmap=gdk_pixmap_new(widget->window,
+			w,h,
+			gtk_widget_get_visual(widget)->depth);
+	gdk_draw_rectangle(trace_pmap,
+			widget->style->black_gc,
+			TRUE, 0,0,
+			w,h);
+	gdk_window_set_back_pixmap(widget->window,trace_pmap,0);
+
+	v_value->trace_pmap = trace_pmap;
+
+	create_info_pmap(v_value);
+
 	gdk_window_clear(widget->window);
-
-
-
 	printf("configure event....\n");
 	return TRUE;
 }
 
+void create_info_pmap(void *data)
+{
+	gint w;
+	gint h;
+	gint parent_w;
+	gint parent_h;
+	GdkPixmap *info_pmap = NULL;
+	struct Viewable_Value * v_value = NULL;
+	v_value = (struct Viewable_Value *)data;
+
+	info_pmap = v_value->info_pmap;
+	if (info_pmap)
+		g_object_unref(info_pmap);
+	
+	parent_w = v_value->d_area->allocation.width;
+	parent_h = v_value->d_area->allocation.height;
+
+	w = 80;
+	h = parent_h;
+	info_pmap = gdk_pixmap_new(v_value->d_area->window,w,h,
+			gtk_widget_get_visual(v_value->d_area)->depth);
+	gdk_draw_rectangle(info_pmap,
+			v_value->d_area->style->black_gc,
+			TRUE, 0,0,
+			w,h);
+	v_value->info_width = w;
+	v_value->info_pmap = info_pmap;
+}
+
 gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	GdkPixmap *pixmap = NULL;
+	GdkPixmap *trace_pmap = NULL;
+	GdkPixmap *info_pmap = NULL;
 	struct Viewable_Value *v_value = NULL;
 	v_value = (struct Viewable_Value *)g_object_get_data(G_OBJECT(widget),
 				"data");
 
 	/* Expose event handler... */
-	pixmap = v_value->pmap;
+	trace_pmap = v_value->trace_pmap;
 	gdk_draw_drawable(widget->window,
                         widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                        pixmap,
+                        trace_pmap,
                         event->area.x, event->area.y,
                         event->area.x, event->area.y,
                         event->area.width, event->area.height);
+
+	info_pmap = v_value->info_pmap;
+	if (event->area.x < v_value->info_width)
+	{
+		printf("exposing info_pmap area...\n");
+		gdk_draw_drawable(widget->window,
+                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                        info_pmap,
+                        event->area.x, event->area.y,
+                        event->area.x, event->area.y,
+                        -1,-1);
+	}
+			
 
 	printf("expose event....\n");
 	return TRUE;
 }
 
-void * build_v_value(GtkWidget * widget, gint offset)
+struct Viewable_Value * build_v_value(GtkWidget * widget, gint offset)
 {
 	struct Viewable_Value *v_value = NULL;
 	v_value = g_malloc(sizeof(struct Viewable_Value));		
+
 	v_value->parent = widget;
 	v_value->d_area = gtk_drawing_area_new();
 
 
-	v_value->pmap = gdk_pixmap_new(
+	v_value->trace_pmap = gdk_pixmap_new(
+			v_value->d_area->window, 
+			10,10, 
+			gtk_widget_get_visual(v_value->d_area)->depth);
+
+	v_value->info_pmap = gdk_pixmap_new(
 			v_value->d_area->window, 
 			10,10, 
 			gtk_widget_get_visual(v_value->d_area)->depth);
@@ -380,9 +423,9 @@ void * build_v_value(GtkWidget * widget, gint offset)
 	g_object_set_data(G_OBJECT(v_value->d_area),
 			"data",(gpointer)v_value);
 
-	v_value->font_gc = initialize_gc(v_value->pmap, FONT);
-	v_value->trace_gc = initialize_gc(v_value->pmap, TRACE);
-	v_value->grat_gc = initialize_gc(v_value->pmap, GRATICULE);
+	v_value->font_gc = initialize_gc(v_value->trace_pmap, FONT);
+	v_value->trace_gc = initialize_gc(v_value->trace_pmap, TRACE);
+	v_value->grat_gc = initialize_gc(v_value->trace_pmap, GRATICULE);
 
 	v_value->runtime_offset = logging_offset_map[offset];
 	v_value->size = logging_datasizes_map[offset];
