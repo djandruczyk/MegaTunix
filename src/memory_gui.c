@@ -19,7 +19,7 @@
 
 GList *raw_mem_controls = NULL;
 GArray *raw_memory_widgets = NULL;
-static gint num_pages = 4;
+gint num_mem_pages = 4;
 gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
 
 
@@ -58,9 +58,9 @@ void build_memory(GtkWidget *parent_frame)
 	raw_memory_widgets = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
 	base = 0;
 	range = 256;
-	for (z=0;z<num_pages;z++)
+	for (z=0;z<num_mem_pages;z++)
 	{
-		frame = gtk_frame_new(g_strdup_printf("256 bytes from address 0x%.4X",base));
+		frame = gtk_frame_new(g_strdup_printf("256 bytes from address 0x%.4X to 0x%.4x",base,base+range-1));
 		label = gtk_label_new(g_strdup_printf("0x%.4X-0x%.4X",base,base+range-1));
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
 

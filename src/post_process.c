@@ -212,10 +212,16 @@ void post_process_raw_memory(void *input, gint offset)
 	gint i = 0;
 	unsigned char *ptr = input;
 	extern gint mem_view_style[];
+	gint init_val = 0;
+	extern gint num_mem_pages;
 
-//	dbg_func(g_strdup_printf(__FILE__": post_process_raw_memory(), not written yet, offset fed was %i\n",offset),CRITICAL);
 	if (raw_memory_data == NULL)
-		raw_memory_data = g_array_new(FALSE,TRUE,sizeof(unsigned char));
+	{
+		raw_memory_data = g_array_sized_new(FALSE,TRUE,sizeof(unsigned char),(256*num_mem_pages));
+		/* Array initialization..... */
+		for (i=0;i<(256*num_mem_pages);i++)
+			raw_memory_data = g_array_insert_val(raw_memory_data,i,init_val);
+	}
 
 	for (i=0;i<256;i++)
 		raw_memory_data = g_array_insert_val(raw_memory_data,i+(256*offset),ptr[i]);
@@ -236,10 +242,11 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 
 	for (i=0;i<256;i++)
 	{
+		value = -1;
 		label = g_array_index(raw_memory_widgets, GtkWidget *, i+(256*page_offset));
-		if (raw_memory_data == NULL)
-			break;
+		/* if data array doesn't exist, just break out... */
 		value = g_array_index(raw_memory_data, unsigned char, i+(256*page_offset));
+	
 		switch ((ToggleButton)type)
 		{
 			case DECIMAL_VIEW:

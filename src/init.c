@@ -29,6 +29,7 @@ gint minor_ver;
 gint micro_ver;
 unsigned int ecu_caps = 0;	/* Assume stock B&G code */
 unsigned char *kpa_conversion; 
+extern gint mem_view_style[];
 extern unsigned char turbo_map[];
 extern unsigned char na_map[];
 extern gint ms_reset_count;
@@ -120,6 +121,10 @@ int read_config(void)
 		cfg_read_int(cfgfile, "Serial", "read_delay", 
 				&serial_params->read_wait);
 		cfg_read_int(cfgfile, "Logviewer", "scroll_speed", &lv_scroll);
+		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
+		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
+		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
+		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
 		g_free(filename);
 		return(0);
@@ -168,6 +173,10 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Serial", "read_delay", 
 			serial_params->read_wait);
 	cfg_write_int(cfgfile, "Logviewer", "scroll_speed", lv_scroll);
+	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
+	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);
+	cfg_write_int(cfgfile, "MemViewer", "page2_style", mem_view_style[2]);
+	cfg_write_int(cfgfile, "MemViewer", "page3_style", mem_view_style[3]);
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
