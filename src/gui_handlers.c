@@ -304,12 +304,14 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint dload_val = -1;
 	unsigned char tmp = 0;
 	gint offset = -1;
+	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
 	gint single = -1;
 	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
+	//struct Ignition_Table *ign_table = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
 
 	if (dualtable)
@@ -321,6 +323,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (paused_handlers)
 		return TRUE;
 
+	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
@@ -419,8 +422,13 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
 	void *w_data = NULL;
+	struct Reqd_Fuel *reqd_fuel = NULL;
 	if (GTK_IS_OBJECT(widget))
+	{
 		w_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
+		reqd_fuel = (struct Reqd_Fuel *) 
+			g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+	}
 	switch ((StdButton)data)
 	{
 		case START_REALTIME:
@@ -500,8 +508,8 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			present_viewer_choices(w_data);
 			break;
 		case REQD_FUEL_POPUP:
-			reqd_fuel_popup(w_data);
-			req_fuel_change(w_data);
+			reqd_fuel_popup(reqd_fuel);
+			req_fuel_change(reqd_fuel);
 			break;
 	}		
 	return TRUE;
@@ -514,26 +522,36 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	 * if necessary.  works well,  one generic function with a 
 	 * select/case branch to handle the choices..
 	 */
-	gfloat value = 0.0;
-	gint offset;
+	gint dl_type = -1;
+	gint offset = -1;
+	gint dload_val = -1;
+	gboolean ign_parm = FALSE;
+	gboolean temp_dep = FALSE;
 	gint tmpi = 0;
 	gint tmp = 0;
-	gint dload_val = -1;
-	gint dl_type = 0;
-	gboolean temp_dep = FALSE;
+	gfloat value = 0.0;
 	extern unsigned char * ms_data;
-	struct Reqd_Fuel *reqd_fuel;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
-	struct Ve_Const_DT_2 * ve_const_dt2 = 
-			(struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
-	reqd_fuel = (struct Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),
-			"data");
+	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
+	struct Reqd_Fuel *reqd_fuel = NULL;
+	if (GTK_IS_OBJECT(widget))
+	{
+		reqd_fuel = (struct Reqd_Fuel *) 
+			g_object_get_data(G_OBJECT(widget),"reqd_fuel");
+
+	}
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
-	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+
+	if (dualtable)
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+
+	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
+
+	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	tmpi = (int)(value+.001);
 
 	switch ((SpinButton)data)

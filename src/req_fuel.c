@@ -122,7 +122,7 @@ gboolean reqd_fuel_popup(void * data)
 	g_free(tmpbuf);
 	gtk_container_set_border_width(GTK_CONTAINER(popup),10);
 	gtk_widget_realize(popup);
-	g_object_set_data(G_OBJECT(popup),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(popup),"reqd_fuel",reqd_fuel);
 	g_signal_connect_swapped(G_OBJECT(popup),"delete_event",
 			G_CALLBACK (close_popup),
 			(gpointer)popup);
@@ -187,7 +187,7 @@ gboolean reqd_fuel_popup(void * data)
 			
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_DISP));
@@ -202,7 +202,7 @@ gboolean reqd_fuel_popup(void * data)
 			
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_CYLS));
@@ -217,7 +217,7 @@ gboolean reqd_fuel_popup(void * data)
 			
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_AFR));
@@ -232,7 +232,7 @@ gboolean reqd_fuel_popup(void * data)
 			
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_RATED_INJ_FLOW));
@@ -246,7 +246,7 @@ gboolean reqd_fuel_popup(void * data)
 			reqd_fuel->rated_pressure,0.1,10.0,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_RATED_PRESSURE));
@@ -261,7 +261,7 @@ gboolean reqd_fuel_popup(void * data)
 			
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_ACTUAL_PRESSURE));
@@ -289,7 +289,7 @@ gboolean reqd_fuel_popup(void * data)
 	spinner = gtk_spin_button_new(adj,0,1);
 	reqd_fuel->calcd_val_spin = spinner;
 	gtk_widget_set_size_request(spinner,65,-1);
-	g_object_set_data(G_OBJECT(spinner),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table2), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -303,18 +303,18 @@ gboolean reqd_fuel_popup(void * data)
 
 	button = gtk_button_new_with_label("Save and Close");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
-	g_object_set_data(G_OBJECT(button),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(button),"reqd_fuel",reqd_fuel);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(save_reqd_fuel),
 			NULL);
-	g_object_set_data(G_OBJECT(button),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(button),"reqd_fuel",reqd_fuel);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK (close_popup),
 			(gpointer)popup);
 
 	button = gtk_button_new_with_label("Cancel");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
-	g_object_set_data(G_OBJECT(button),"data",reqd_fuel);
+	g_object_set_data(G_OBJECT(button),"reqd_fuel",reqd_fuel);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK (close_popup),
 			(gpointer)popup);
@@ -334,7 +334,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	gchar *filename;
 	gchar *tmpbuf;
 
-	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"data");
+	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	if (reqd_fuel->table == 1)
 		ve_const = (struct Ve_Const_Std *)ms_data;
 	else if (reqd_fuel->table == 2)
@@ -393,7 +393,7 @@ gboolean close_popup(GtkWidget * widget)
 {
 	struct Reqd_Fuel *reqd_fuel = NULL;
 
-	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"data");
+	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	gtk_widget_destroy(reqd_fuel->popup);
 	reqd_fuel->visible = FALSE;
 	return TRUE;

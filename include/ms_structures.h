@@ -306,7 +306,7 @@ struct Ve_Const_DT_2
 };
 
 	/* MegaSquirtnEDIS Ignition table and Constants */
-struct Ignition_Table_EDIS
+struct Ignition_Table
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char	spark_table[64];	/* 0, Spark table, 64 bytes */

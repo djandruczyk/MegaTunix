@@ -242,7 +242,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 	
 	button = gtk_button_new_with_label("Calculate Required Fuel");
-	g_object_set_data(G_OBJECT(button),"data",(gpointer)reqd_fuel_1);
+	g_object_set_data(G_OBJECT(button),"reqd_fuel",(gpointer)reqd_fuel_1);
         gtk_table_attach (GTK_TABLE (table), button, 0, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
@@ -602,7 +602,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
         button = gtk_button_new_with_label("Calculate Required Fuel");
-        g_object_set_data(G_OBJECT(button),"data",(gpointer)reqd_fuel_2);
+        g_object_set_data(G_OBJECT(button),"reqd_fuel",(gpointer)reqd_fuel_2);
         gtk_table_attach (GTK_TABLE (table), button, 0, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
