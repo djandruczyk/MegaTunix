@@ -166,13 +166,12 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	gint res;
 	struct pollfd ufds;
 	gint restart_reader = FALSE;
-	static gboolean locked;
 	gchar *tmpbuf;
+	gchar buff[1024];
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	if (locked)
-		return 0;
-	else
-		locked = TRUE;
+	g_static_mutex_lock(&mutex);
+
 	/* If port isn't opened no sense trying here... */
 	if(serial_params->open)
 	{
@@ -201,7 +200,10 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			/* Command succeeded,  but we still need to drain the
 			 * buffer...
 			 */
-			tcflush(serial_params->fd, TCIOFLUSH);
+			while (poll(&ufds,1,25))
+                        {
+                                read(serial_params->fd,buff,64);
+                        }
 
 			tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 			/* COMMS test succeeded */
@@ -240,7 +242,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
-	locked = FALSE;
+	g_static_mutex_unlock(&mutex);
 	return (connected);
 
 }

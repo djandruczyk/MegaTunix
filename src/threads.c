@@ -127,6 +127,8 @@ int stop_serial_thread()
 		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
+	tcflush(serial_params->fd, TCIOFLUSH);
+
 	g_static_mutex_unlock(&mutex);
 
 	return 0;

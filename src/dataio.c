@@ -84,13 +84,15 @@ int handle_ms_data(InputData which_data)
 				if (zerocount == 3)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
-					break;
+					goto jumpout;
 				}
 			}
 			if (bad_read)
 			{
+				fprintf(stderr,__FILE__":  Error reading Real-Time Variables \n");
+				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
-				break;
+				goto jumpout;
 			}
 
 			raw_runtime = (struct Raw_Runtime_Std *)buf;
@@ -145,15 +147,16 @@ int handle_ms_data(InputData which_data)
 				if (zerocount == 3)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
-					break;
+					goto jumpout;
 				}
 			}
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
 				fprintf(stderr,__FILE__":  Error reading VE/Constants for page 0\n");
+				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
-				break;
+				goto jumpout;
 			}
 			/* Two copies, working copy and temp for 
 			 * comparison against to know if we have 
@@ -188,15 +191,16 @@ int handle_ms_data(InputData which_data)
 				if (zerocount == 3)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
-					break;
+					goto jumpout;
 				}
 			}
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
 				fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
+				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
-				break;
+				goto jumpout;
 			}
 			/* Two copies, working copy and temp for 
 			 * comparison against to know if we have 
@@ -220,6 +224,7 @@ int handle_ms_data(InputData which_data)
 			printf("handle_ms_data, improper case, contact author\n");
 			break;
 	}
+	jumpout:
 
 	//printf("leaving\n");
 	return TRUE;
