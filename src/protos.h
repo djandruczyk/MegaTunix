@@ -90,7 +90,7 @@ int framebuild_dispatch(GtkWidget *, int);
 /* gui_handlers.c */
 void leave(GtkWidget *, gpointer *);
 int std_button_handler(GtkWidget *, gpointer *);
-void text_entry_handler(GtkWidget *, gpointer *);
+int text_entry_handler(GtkWidget *, gpointer *);
 void update_statusbar(GtkWidget *, int, gchar *);
 int reqd_fuel_popup();
 int update_reqd_fuel(GtkWidget *widget, gpointer *data);

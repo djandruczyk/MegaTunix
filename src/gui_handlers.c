@@ -22,8 +22,9 @@
 #include "constants.h"
 
 
-static int req_fuel_popup=FALSE;
+static int req_fuel_popup = FALSE;
 static GtkWidget *popup;
+static int paused_handlers = FALSE;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
 extern int ser_context_id;
@@ -48,18 +49,63 @@ void leave(GtkWidget *widget, gpointer *data)
         gtk_main_quit();
 }
 
-void text_entry_handler(GtkWidget * widget, gpointer *data)
+int text_entry_handler(GtkWidget * widget, gpointer *data)
 {
 	gchar *entry_text;
-	gfloat tmpf = 0;
+	gfloat tmpf = 0.0;
+	gint tmpi = 0;
+	gint offset;
+	if (paused_handlers)
+		return TRUE ;
 	entry_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
+	offset = (gint)gtk_object_get_data(G_OBJECT(widget),"offset");
 	switch ((gint)data)
 	{
-		case INJ_OPEN_TIME:
-			tmpf = atof(entry_text);
-			printf("inj open time set to %f\n",tmpf);
+		case WARMUP_NEG_40:
+			ve_constants->warmup_bins[0] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[0], offset);
+			break;
+		case WARMUP_NEG_20:
+			ve_constants->warmup_bins[1] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[1], offset);
+			break;
+		case WARMUP_0:
+			ve_constants->warmup_bins[2] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[2], offset);
+			break;
+		case WARMUP_20:
+			ve_constants->warmup_bins[3] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[3], offset);
+			break;
+		case WARMUP_40:
+			ve_constants->warmup_bins[4] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[4], offset);
+			break;
+		case WARMUP_60:
+			ve_constants->warmup_bins[5] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[5], offset);
+			break;
+		case WARMUP_80:
+			ve_constants->warmup_bins[6] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[6], offset);
+			break;
+		case WARMUP_100:
+			ve_constants->warmup_bins[7] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[7], offset);
+			break;
+		case WARMUP_130:
+			ve_constants->warmup_bins[8] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[8], offset);
+			break;
+		case WARMUP_160:
+			ve_constants->warmup_bins[9] = atoi(entry_text);
+			write_ve_const(ve_constants->warmup_bins[9], offset);
+			break;
+		default:
+			break;
 	}
 	/* update the widget in case data was out of bounds */
+	return TRUE;
 }
 
 
@@ -79,8 +125,10 @@ int std_button_handler(GtkWidget *widget, gpointer *data)
 				reqd_fuel_popup();
 			break;
 		case READ_FROM_MS:
+			paused_handlers = TRUE;
 			read_ve_const();
 			update_const_ve();
+			paused_handlers = FALSE;
 			break;
 		case WRITE_TO_MS:
 			//write_ve_const();
@@ -266,9 +314,11 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	gfloat value = 0.0;
 	gint offset;
 	gint tmp = 0;
+	if (paused_handlers)
+		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
-//	printf("spinner value: %f ,offset %i\n",value,offset);
+	printf("spinner value: %f ,offset %i\n",value,offset);
 	
 	switch ((gint)data)
 	{

@@ -23,6 +23,9 @@
 struct v1_2_Constants constants;
 const gchar *warmup_labels[] = {"-40","-20",  "0", "20", "40",
 			         "60", "80","100","130","160"};
+const gint warmup_ptrs[] = {WARMUP_NEG_40,WARMUP_NEG_20,WARMUP_0,WARMUP_20,
+				WARMUP_40,WARMUP_60,WARMUP_80,WARMUP_100,
+				WARMUP_130,WARMUP_160};
 const gchar *accel_labels[] = {"2V/Sec","4V/sec","8V/Sec","15V/Sec"};
 static gint warmup_bins_offset = 69;
 static gint accel_bins_offset = 79;
@@ -185,9 +188,13 @@ int build_enrichments(GtkWidget *parent_frame)
 		gtk_table_attach (GTK_TABLE (table), entry, i, i+1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
-		gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
+		gtk_entry_set_width_chars(GTK_ENTRY (entry), 4);
+		gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
 		gtk_object_set_data(G_OBJECT(entry),"offset", GINT_TO_POINTER(warmup_bins_offset+i));
 		constants.warmup_bins_ent[i] = entry;
+		g_signal_connect(G_OBJECT(entry),"changed",
+				G_CALLBACK(text_entry_handler),
+				GINT_TO_POINTER(warmup_ptrs[i]));
 
 		label = gtk_label_new (warmup_labels[i]);
 		gtk_table_attach (GTK_TABLE (table), label, i, i+1, 1, 2,
@@ -221,11 +228,15 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	/* TPS trigger threashold */
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars(GTK_ENTRY (entry), 8);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(84));
 	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(84));
+//	g_signal_connect(G_OBJECT(entry),"changed",
+//			G_CALLBACK(text_entry_handler)
+//			GINT_TO_POINTER(
 	constants.tps_trig_thresh_ent = entry;
 
 	label = gtk_label_new("TPS Trigger Threshold\n(V/Sec)");
@@ -235,11 +246,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars(GTK_ENTRY (entry), 8);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(85));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(85));
 	constants.accel_duration_ent = entry;
 
 	label = gtk_label_new("Accel Enrich\n Duration (Sec)");
@@ -249,11 +261,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars(GTK_ENTRY (entry), 8);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(84));
 	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(84));
 	constants.cold_accel_addon_ent = entry;
 
 	label = gtk_label_new("Cold Accel Enrich\nAdd-On (ms)");
@@ -263,11 +276,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars(GTK_ENTRY (entry), 8);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(124));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(124));
 	constants.cold_accel_mult_ent = entry;
 
 	label = gtk_label_new("Cold Accel Enrich\nMultiplier (%)");
@@ -295,11 +309,13 @@ int build_enrichments(GtkWidget *parent_frame)
 	for(i=0;i<4;i++)
 	{
 		entry = gtk_entry_new ();
+		gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+		gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+		gtk_object_set_data(G_OBJECT(entry),"offset",
+				GINT_TO_POINTER(accel_bins_offset+i));
 		gtk_table_attach (GTK_TABLE (table), entry, i, i+1, 1, 2,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
-		gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-		gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(accel_bins_offset+i));
 		constants.accel_bins_ent[i] = entry;
 
 		label = gtk_label_new(accel_labels[i]);
@@ -316,11 +332,12 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 	
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(86));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(86));
 	constants.decel_cut_ent = entry;
 
 	label = gtk_label_new("Decel Fuel Cut\n(Percent)");
@@ -342,11 +359,12 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_row_spacing(GTK_TABLE(table),3,20);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(87));
 	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(87));
 	constants.ego_temp_active_ent = entry;
 
 	label = gtk_label_new("Coolant Temp\nActivation(Deg F.)");
@@ -356,11 +374,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(121));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(121));
 	constants.ego_rpm_active_ent = entry;
 
 	label = gtk_label_new("EGO Active RPM");
@@ -370,11 +389,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(123));
 	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(123));
 	constants.ego_sw_voltage_ent = entry;
 
 	label = gtk_label_new("EGO Switching\nVoltage");
@@ -384,11 +404,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(89));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(89));
 	constants.ego_step_ent = entry;
 
 	label = gtk_label_new("EGO Step\n(Percent)");
@@ -398,11 +419,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(88));
 	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 4, 5,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(88));
 	constants.ego_events_ent = entry;
 
 	label = gtk_label_new("# of Ignition Events\nBetween Steps");
@@ -412,11 +434,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new ();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(90));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(90));
 	constants.ego_limit_ent = entry;
 
 	label = gtk_label_new("EGO +/- Limit\n(Percent)");
@@ -448,10 +471,6 @@ int build_enrichments(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(WRITE_TO_MS));
 	
-	
-
-
-
 	/* Not written yet */
 	return TRUE;
 }
