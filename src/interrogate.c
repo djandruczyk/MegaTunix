@@ -182,9 +182,8 @@ void interrogate_ecu()
 	/* Flush the toilet.... */
 //	tcflush(serial_params->fd, TCIOFLUSH);
 
-	interrogated = TRUE;
 
-	determine_ecu(canidate,cmd_array,cmd_details);	
+	interrogated = determine_ecu(canidate,cmd_array,cmd_details);	
 
 	if (canidate)
 		g_free(canidate);
@@ -198,7 +197,7 @@ void interrogate_ecu()
 	return;
 }
 
-void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
+gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 {
 	struct Canidate *canidate = (struct Canidate *)ptr;
 	struct Canidate *potential = NULL;
@@ -235,9 +234,9 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 
 		// Store counts for VE/realtime readback... 
 		dbg_func(g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
-                                cmd->string,
-                                cmd->desc,
-                                (gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page))),INTERROGATOR);
+					cmd->string,
+					cmd->desc,
+					(gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page))),INTERROGATOR);
 		gdk_threads_enter();
 		update_logbar("interr_view",NULL,tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();
@@ -252,7 +251,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 			gdk_threads_enter();
 			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_revision_entry")))
 				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-					
+
 			gdk_threads_leave();
 			g_free(tmpbuf);
 		}
@@ -432,7 +431,10 @@ freeup:
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
 		g_free(canidate->quest_str);
-	return;
+	if (match)
+		return TRUE;
+	else
+		return FALSE;
 
 }
 

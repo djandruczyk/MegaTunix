@@ -18,7 +18,7 @@
 
 /* Prototypes */
 void interrogate_ecu(void);
-void determine_ecu(void *, GArray *,GHashTable *);
+gboolean determine_ecu(void *, GArray *,GHashTable *);
 GArray * validate_and_load_tests(GHashTable *);
 void free_test_commands(GArray *);
 void load_bytecounts(GArray *, GHashTable *, void *);

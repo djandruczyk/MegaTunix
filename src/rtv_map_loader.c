@@ -50,7 +50,11 @@ gboolean load_realtime_map(void )
 	GObject * object = NULL;
 	GList * list = NULL;
 	gfloat *history = NULL;
+	extern gboolean interrogated;
 
+
+	if (!interrogated)
+		return FALSE;
 	rtv_map = g_new0(struct RtvMap, 1);
 
 	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL));
