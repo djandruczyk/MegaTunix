@@ -126,8 +126,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 	GIOStatus  status = G_IO_STATUS_ERROR;
 	gchar *delimiter = NULL;
 	struct Log_Info *log_info = ptr;
-	extern struct DynamicButtons buttons;
-	extern GtkWidget *lv_darea;	
+	extern GHashTable *dynamic_widgets;
 
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
 
@@ -156,8 +155,8 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 			log_info->field_count++;
 		}
 		/* Enable parameter selection button */
-		gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, TRUE);
-		g_object_set_data(G_OBJECT(lv_darea),"log_info",(gpointer)log_info);
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
+		g_object_set_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"log_info",(gpointer)log_info);
 
 	}
 	g_free(delimiter);
@@ -193,8 +192,7 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
 
-	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) 
-			== G_IO_STATUS_NORMAL) 
+	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) == G_IO_STATUS_NORMAL) 
 	{
 		data = g_strsplit(a_line->str,log_info->delimiter,0);
 		for (i=0;i<(log_info->field_count);i++)

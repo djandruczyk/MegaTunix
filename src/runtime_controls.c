@@ -126,7 +126,6 @@ void load_controls()
 	}
 	if ((ctrl_list == NULL) && (defaults))
 	{
-		//		g_printf("Using defaults\n");
 		control_names = g_strsplit(defaults, ",", 0);
 		i = 0;
 		while (control_names[i] != NULL)
@@ -143,7 +142,6 @@ void load_controls()
 	}
 	else
 	{
-		//		g_printf("using user specified controls\n");
 		control_names = g_strsplit(ctrl_list, ",", 0);
 		i = 0;
 		while (control_names[i] != NULL)

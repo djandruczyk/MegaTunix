@@ -117,11 +117,21 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(START_DATALOGGING));
 	g_hash_table_insert(str_2_enum,"_STOP_DATALOGGING_",
 			GINT_TO_POINTER(STOP_DATALOGGING));
+	g_hash_table_insert(str_2_enum,"_START_REALTIME_",
+			GINT_TO_POINTER(START_REALTIME));
+	g_hash_table_insert(str_2_enum,"_STOP_REALTIME_",
+			GINT_TO_POINTER(STOP_REALTIME));
+	g_hash_table_insert(str_2_enum,"_SELECT_PARAMS_",
+			GINT_TO_POINTER(SELECT_PARAMS));
+	g_hash_table_insert(str_2_enum,"_SELECT_DLOG_IMP_",
+			GINT_TO_POINTER(SELECT_DLOG_IMP));
 	g_hash_table_insert(str_2_enum,"_SELECT_DLOG_EXP_",
 			GINT_TO_POINTER(SELECT_DLOG_EXP));
 	g_hash_table_insert(str_2_enum,"_CLOSE_LOGFILE_",
 			GINT_TO_POINTER(CLOSE_LOGFILE));
-	/* Datalogging */
+	g_hash_table_insert(str_2_enum,"_LOGVIEW_ZOOM_",
+			GINT_TO_POINTER(LOGVIEW_ZOOM));
+	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
 			GINT_TO_POINTER(COMMA));
 	g_hash_table_insert(str_2_enum,"_TAB_",
@@ -134,6 +144,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(MT_FULL_LOG));
 	g_hash_table_insert(str_2_enum,"_CUSTOM_LOG_",
 			GINT_TO_POINTER(CUSTOM_LOG));
+	g_hash_table_insert(str_2_enum,"_REALTIME_VIEW_",
+			GINT_TO_POINTER(REALTIME_VIEW));
+	g_hash_table_insert(str_2_enum,"_PLAYBACK_VIEW_",
+			GINT_TO_POINTER(PLAYBACK_VIEW));
 
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 

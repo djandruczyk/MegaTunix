@@ -35,13 +35,11 @@ void check_config11(guchar tmp)
 	{
 		kpa_conversion = na_map;
 		map_pbar_divisor = 115.0;
-		//	g_printf("using 115KPA map sensor\n");
 	}
 	if ((tmp &0x3) == 1)	
 	{
 		kpa_conversion = turbo_map;
 		map_pbar_divisor = 255.0;
-		//	g_printf("using 250KPA map sensor\n");
 	}
 }
 

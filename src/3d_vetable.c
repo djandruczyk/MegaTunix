@@ -370,7 +370,6 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	{
 		ve_view->h_strafe -= (gfloat)(event->x -ve_view->beginX) / 40.0;
 		ve_view->v_strafe += (gfloat)(event->y -ve_view->beginY) / 40.0;
-		//		g_printf("h_strafe %f, v_strafe %f\n",ve_view->h_strafe,ve_view->v_strafe);
 		redraw = TRUE;
 	}
 	// Right Button

@@ -153,13 +153,14 @@ gint comm_port_change(GtkEditable *editable)
 
 gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *obj_data = NULL;
+	void *obj_data = NULL;
 	gint handler = 0; 
 	extern gint preferred_delimiter;
+	extern GHashTable *dynamic_widgets;
 
 	if (GTK_IS_OBJECT(widget))
 	{
-		obj_data = g_object_get_data(G_OBJECT(widget),"data");
+		obj_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 		handler = (ToggleButton)g_object_get_data(G_OBJECT(widget),"handler");
 	}
 
@@ -203,20 +204,20 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				delimiter = g_strdup(" ");
 				break;
 			case REALTIME_VIEW:
-				gtk_widget_set_sensitive(buttons.logplay_sel_log_but, FALSE);
-				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, TRUE);
-				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, TRUE);
-				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, TRUE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), FALSE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), TRUE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), TRUE);
 				logviewer_mode = FALSE;
-				g_signal_emit_by_name(G_OBJECT(obj_data),"configure_event",NULL);
+				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
 				break;
 			case PLAYBACK_VIEW:
-				gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, FALSE);
-				gtk_widget_set_sensitive(buttons.logplay_sel_log_but, TRUE);
-				gtk_widget_set_sensitive(buttons.logplay_start_rt_but, FALSE);
-				gtk_widget_set_sensitive(buttons.logplay_stop_rt_but, FALSE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), FALSE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), TRUE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), FALSE);
+				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), FALSE);
 				logviewer_mode = TRUE;
-				g_signal_emit_by_name(G_OBJECT(obj_data),"configure_event",NULL);
+				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
 				break;
 			case HEX_VIEW:
 			case DECIMAL_VIEW:
@@ -470,7 +471,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint tmp = 0;
 	gint handler = -1;
 	gfloat value = 0.0;
-	GtkWidget * info = NULL;
+	GtkWidget * tmpwidget = NULL;
 	extern gint realtime_id;
 	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
@@ -478,6 +479,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data[0];
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
+	extern GHashTable *dynamic_widgets;
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -491,7 +493,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(
 			G_OBJECT(widget),"reqd_fuel");
 	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
-	info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
@@ -552,7 +553,9 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case LOGVIEW_ZOOM:
 			lv_scroll = tmpi;
-			g_signal_emit_by_name(info,"configure_event",NULL);
+			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");	
+			if (tmpwidget)
+				g_signal_emit_by_name(tmpwidget,"configure_event",NULL);
 			break;
 
 		case NUM_SQUIRTS_1:
@@ -791,13 +794,6 @@ void update_ve_const()
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data[0];
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 
-		//		g_printf("updating screen, ptr addy for table 1 %p, table2 %p\n",ve_const_dt1,ve_const_dt2);
-		/*g_printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
-		  ve_const_dt1->req_fuel,
-		  ve_const_dt1->config12.bit.injectors+1,
-		  ve_const_dt1->config11.bit.cylinders+1,
-		  ve_const_dt1->divider);
-		 */
 		/* Table 1 */
                 tmp =   (float)(ve_const_dt1->config12.bit.injectors+1) /
                         (float)(ve_const_dt1->divider);

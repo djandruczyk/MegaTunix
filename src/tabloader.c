@@ -65,13 +65,6 @@ gboolean load_gui_tabs()
 				gtk_container_foreach(GTK_CONTAINER(topframe),populate_master,NULL);
 				cfg_free(cfgfile);
 			}
-			else
-			{
-				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: %s NOT FOUND\n",map_file),CRITICAL);
-				g_free(map_file);
-				g_free(glade_file);
-				return FALSE;
-			}
 
 			g_free(map_file);
 			g_free(glade_file);
@@ -89,11 +82,15 @@ gboolean load_gui_tabs()
 				glade_xml_signal_autoconnect(xml);
 			}
 			g_free(xml);
-			
 
 		}
 		else
-			dbg_func(__FILE__": load_gui_tabs()\n\t.glade/.datamap file NOT FOUND!! \n",CRITICAL);
+		{
+			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
+			g_free(map_file);
+			g_free(glade_file);
+		}
 		i++;
 
 	}

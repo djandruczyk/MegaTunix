@@ -220,15 +220,16 @@ void present_viewer_choices(void *ptr)
 	gint table_rows = 0;
 	gint table_cols = 5;
 	gchar * name = NULL;
-	GtkWidget *hand_me_down = NULL;
+	GtkWidget *darea = NULL;
 	extern gint ecu_caps;
 	struct Log_Info *log_info = NULL;
+	extern GHashTable *dynamic_widgets;
 
-	if (ptr != NULL)
-		hand_me_down = (GtkWidget *)ptr;
-	else
+	darea = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
+
+	if (!darea)
 	{
-		dbg_func(__FILE__": present_viewer_choices()\n\tpointer fed was NULL, returning!!!\n",CRITICAL);
+		dbg_func(__FILE__": present_viewer_choices()\n\tpointer to drawing area was NULL, returning!!!\n",CRITICAL);
 		return;
 	}
 
@@ -241,7 +242,7 @@ void present_viewer_choices(void *ptr)
 	gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
 	if (logviewer_mode)
 	{
-		log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(hand_me_down),"log_info");
+		log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(darea),"log_info");
 		gtk_window_set_title(GTK_WINDOW(window),
 				"Playback Mode: Logviewer Choices");
 		frame = gtk_frame_new("Select Variables to playback from the list below...");
@@ -335,7 +336,7 @@ void present_viewer_choices(void *ptr)
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,TRUE,0);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(populate_viewer),
-			(gpointer)hand_me_down);
+			(gpointer)darea);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
