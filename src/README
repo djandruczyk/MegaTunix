@@ -4,8 +4,8 @@ MegaTunix designed and written by David J. Andruczyk
 	Inspiration for this code came from Bruce Bowling and Al Grippo, 
 designers of the MegaSquirt DIY Fuel Injection ECU.  This code is 
 modelled slightly after Bruce and Al's MegaSquirt PCC tuning software 
-for Windows.  Inspiration also came from Eric Fahlgrens' MegaTune,
-also for Windows.
+for Windows.  Inspiration also came from Eric Fahlgrens and Guy Hill's
+MegaTune, also for Windows.
 
 NOTE about fonts:
 	Some people have complained that MegaTunix comes up with abnormally
@@ -18,24 +18,7 @@ point size.  On the authors' system a Application Font of "Sans" at 8pt,
 looks the best.  The author runs at 1600x1200 on an ancient 21 inch monitor 
 so your ideal font size may vary.
 
-	Currently all Serial I/O is working. Reading of Realtime vars works.  
-Reading of VEtable/Constants works fine.  Changing any var checks for limits
-and sends directly to the MS (new as of 5/25/2003). Flash burn works..
-	As of July something-or-other,  datalogging is complete and works.
-It's more flexible than any existing logging on any of the windows editions.
-Currently it can do a MegaTune style "classic" datalog in the same format which
-should be readable by mstweek3K (mstweek3k only runs under windows 
-unfortunately). It can also log any of the runtime variables along with the 
-addition of a high resolution clock which can be used to track things 
-precisely in time...
-
-NOTE: a new folder "Interrogation_profiles" exists in the src/ dir do not
-fiddle with those files,  they are currently a work in progress. (7-26-2004)
-
-The only things not done yet are the Tuning gui (graphical gauges, planned
-implementation will use phot-realistic gauges that are graphically efficient
-on resources with minimal cpu usage (without looking like crap..)
-
 Suggestions are welcomed for improving the functionality of MegaTunix...
-Send suggestion (SPAM not welcome) at djandruczyk <at> yahoo <dot> com
+Send suggestions, bug reports and general feedback to (SPAM not welcome) 
+djandruczyk <at> yahoo <dot> com
 

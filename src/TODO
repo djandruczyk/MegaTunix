@@ -2,12 +2,3 @@
 GaugeEngine.  Gauges using libgnomecanvas and XML or other based config files
 defining gauge look/feel (photorealistic and scalable if possible)
 
-Works in progress:
-	Moving of interrogation profiles to external files. (complete 8/1/04)
-	defining of realtime vars and derived variables outside of the code
-and loaded after interrogation sequence completes.  (in design and initial 
-implementation stages (8/7/04).
-	Defining of all major controls outside of the sourcecode and loaded
-after interrogation procedure completes.  (in design, implementation scheduled
-for sept/oct 2004)  This will allow massive customization by end users...
-
