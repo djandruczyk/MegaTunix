@@ -56,8 +56,8 @@ static struct
 	{ 0,"S", "Signature Echo", 1, 0,NULL },
 	{ 0,"I", "Ignition Vars", 1, 0,NULL },
 	{ 0,"?", "Extended Version", 1, 0,NULL },
-	{ 0,"F0", "Memory readback 1st 256 bytes ", 2, 0,NULL },
-	{ 0,"F1", "Memory readback 2nd 256 bytes ", 2, 0,NULL }
+	{ 0,"F0", "Memory readback 1st 256 bytes", 2, 0,NULL },
+	{ 0,"F1", "Memory readback 2nd 256 bytes", 2, 0,NULL }
 };
 /*
  * The Various MegaSquirt variants that MegaTunix attempts to support
