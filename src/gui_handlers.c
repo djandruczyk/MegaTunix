@@ -445,15 +445,15 @@ void update_const_ve()
 
 	/* req-fuel  */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_1_spin),
-			ve_constants->req_fuel_1/10);
+			ve_constants->req_fuel_1/5.0);
 
 	/* inj_open_time */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.inj_open_time_spin),
-			ve_constants->inj_open_time/10);
+			ve_constants->inj_open_time/10.0);
 
 	/* batt_corr */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.batt_corr_spin),
-			ve_constants->batt_corr/10);
+			ve_constants->batt_corr/60.0);
 
 	/* pwm_curr_lim */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.pwm_curr_lim_spin),
@@ -461,23 +461,23 @@ void update_const_ve()
 
 	/* pwm_time_thresh */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.pwm_time_max_spin),
-			ve_constants->pwm_time_max/10);
+			ve_constants->pwm_time_max/10.0);
 
 	/* fast_idle_thresh */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.fast_idle_thresh_spin),
-			ve_constants->fast_idle_thresh);
+			ve_constants->fast_idle_thresh-40.0);
 
 	/* crank pulse -40 */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_pulse_neg40_spin),
-			ve_constants->cr_pulse_neg40/10);
+			ve_constants->cr_pulse_neg40/10.0);
 
 	/* crank pulse 170 */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_pulse_pos170_spin),
-			ve_constants->cr_pulse_pos170/10);
+			ve_constants->cr_pulse_pos170/10.0);
 
 	/* Priming pulse */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_priming_pulse_spin),
-			ve_constants->cr_priming_pulse/10);
+			ve_constants->cr_priming_pulse/10.0);
 
 	/* Afterstart Enrich % */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.as_enrich_spin),
@@ -503,7 +503,7 @@ void update_const_ve()
 	}
 
 	/* TPS Trigger Threshold */
-	g_snprintf(buff,10,"%.1f",ve_constants->tps_trig_thresh/5.0);
+	g_snprintf(buff,10,"%.2f",ve_constants->tps_trig_thresh/5.0);
 	gtk_entry_set_text(GTK_ENTRY(constants.tps_trig_thresh_ent),
 			buff);
 
@@ -538,7 +538,7 @@ void update_const_ve()
 			buff);
 
 	/* EGO switching voltage */
-	g_snprintf(buff,10,"%.1f",ve_constants->ego_sw_voltage/10.0);
+	g_snprintf(buff,10,"%.2f",(ve_constants->ego_sw_voltage/255.0)*5);
 	gtk_entry_set_text(GTK_ENTRY(constants.ego_sw_voltage_ent),
 			buff);
 

@@ -186,7 +186,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1.0,0);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
