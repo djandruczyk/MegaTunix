@@ -56,6 +56,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	extern GtkTooltips *tip;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern GList *lists[];
+	extern struct Firmware_Details *firmware;
 	gchar *tmpbuf;
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 
@@ -67,12 +68,12 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
 	initialize_ve_view((void *)ve_view);
 	ve_view->page = page;
-	ve_view->load_bincount = (gint)g_object_get_data(G_OBJECT(widget),"load_bincount"); 
-	ve_view->rpm_bincount = (gint)g_object_get_data(G_OBJECT(widget),"rpm_bincount"); 
-	ve_view->ve_base_offset = (gint)g_object_get_data(G_OBJECT(widget),"ve_base_offset"); 
-	ve_view->load_base_offset = (gint)g_object_get_data(G_OBJECT(widget),"load_base_offset"); 
-	ve_view->rpm_base_offset = (gint)g_object_get_data(G_OBJECT(widget),"rpm_base_offset"); 
-	ve_view->is_spark = (gboolean)g_object_get_data(G_OBJECT(widget),"is_spark"); 
+	ve_view->rpm_bincount = firmware->page_params[page]->rpm_bincount;
+	ve_view->load_bincount = firmware->page_params[page]->load_bincount; 
+	ve_view->ve_base = firmware->page_params[page]->ve_base;
+	ve_view->load_base = firmware->page_params[page]->load_base;
+	ve_view->rpm_base = firmware->page_params[page]->rpm_base;
+	ve_view->is_spark = firmware->page_params[page]->is_spark;
 	if(ve_view->is_spark)
 		tmpbuf = g_strdup("3D Spark Advance Table");
 	else
@@ -459,9 +460,9 @@ void ve_calculate_scaling(void *ptr)
 	ve_view = (struct Ve_View_3D *)ptr;
 
 	ve_ptr = (unsigned char *)ms_data[ve_view->page];
-	rpm_base = ve_view->rpm_base_offset;
-	load_base = ve_view->load_base_offset;
-	ve_base = ve_view->ve_base_offset;
+	rpm_base = ve_view->rpm_base;
+	load_base = ve_view->load_base;
+	ve_base = ve_view->ve_base;
 
 	ve_view->rpm_max = 0;
 	ve_view->load_max = 0;
@@ -511,9 +512,9 @@ void ve_draw_ve_grid(void *ptr)
 	dbg_func(__FILE__": 3D View Draw VE Grid \n",OPENGL);
 
 	ve_ptr = (unsigned char *) ms_data[ve_view->page];
-	rpm_base = ve_view->rpm_base_offset;
-	load_base = ve_view->load_base_offset;
-	ve_base = ve_view->ve_base_offset;
+	rpm_base = ve_view->rpm_base;
+	load_base = ve_view->load_base;
+	ve_base = ve_view->ve_base;
 
 	glColor3f(1.0, 1.0, 1.0);
 	glLineWidth(1.5);
@@ -573,9 +574,9 @@ void ve_draw_active_indicator(void *ptr)
 	dbg_func(__FILE__": 3D View Draw Active Inicator\n",OPENGL);
 
 	ve_ptr = (unsigned char *) ms_data[ve_view->page];
-	rpm_base = ve_view->rpm_base_offset;
-	load_base = ve_view->load_base_offset;
-	ve_base = ve_view->ve_base_offset;
+	rpm_base = ve_view->rpm_base;
+	load_base = ve_view->load_base;
+	ve_base = ve_view->ve_base;
 
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
 	if (ve_view->is_spark)
@@ -641,9 +642,9 @@ void ve_draw_axis(void *ptr)
 	dbg_func(__FILE__": 3D View Draw Axis\n",OPENGL);
 
 	ve_ptr = (unsigned char *) ms_data[ve_view->page];
-	rpm_base = ve_view->rpm_base_offset;
-	load_base = ve_view->load_base_offset;
-	ve_base = ve_view->ve_base_offset;
+	rpm_base = ve_view->rpm_base;
+	load_base = ve_view->load_base;
+	ve_base = ve_view->ve_base;
 	rpm_bincount = ve_view->rpm_bincount;
 	load_bincount = ve_view->load_bincount;
 
@@ -835,9 +836,9 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	ve_ptr = (unsigned char *) ms_data[ve_view->page];
 	load_bincount = ve_view->load_bincount;
 	rpm_bincount = ve_view->rpm_bincount;
-	rpm_base = ve_view->rpm_base_offset;
-	load_base = ve_view->load_base_offset;
-	ve_base = ve_view->ve_base_offset;
+	rpm_base = ve_view->rpm_base;
+	load_base = ve_view->load_base;
+	ve_base = ve_view->ve_base;
 
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
 	if (ve_view->is_spark)
@@ -973,9 +974,9 @@ void initialize_ve_view(void *ptr)
 	ve_view->load_max = 0;
 	ve_view->ve_max = 0;
 	ve_view->is_spark = FALSE;
-	ve_view->rpm_base_offset = 0;
-	ve_view->load_base_offset = 0;
-	ve_view->ve_base_offset = 0;
+	ve_view->rpm_base = 0;
+	ve_view->load_base = 0;
+	ve_view->ve_base = 0;
 	ve_view->rpm_bincount = 0;
 	ve_view->load_bincount = 0;
 	return;

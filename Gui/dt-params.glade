@@ -1470,7 +1470,7 @@ Actuator Speed</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
 			      <property name="group">pwm_idle_radio_button</property>
-			      <signal name="toggled" handler="butmask_button_handler" last_modification_time="Fri, 17 Sep 2004 23:55:58 GMT"/>
+			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Fri, 17 Sep 2004 23:55:58 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">0</property>

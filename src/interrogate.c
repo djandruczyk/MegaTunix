@@ -338,11 +338,7 @@ end_of_loop:
 
 	/* Set expected sizes for commands */
 	if (!firmware)
-		firmware = g_malloc0(sizeof(struct Firmware_Details));
-	firmware->table0_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"CMD_V_0");
-	firmware->table1_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"CMD_V_1");
+		firmware = g_new0(struct Firmware_Details,1);
 	firmware->rtvars_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_A_0");
 	firmware->ignvars_size = (gint)g_hash_table_lookup(
@@ -354,7 +350,22 @@ end_of_loop:
 	firmware->multi_page = potential->multi_page;
 	firmware->total_pages = potential->total_pages;
 
-	/* use commands defined in hte interogation profile to map the proper
+	for (i=0;i<firmware->total_pages;i++)
+	{
+		firmware->page_params[i] = g_new0(struct Page_Params, 1);
+				
+		firmware->page_params[i]->size = (gint)g_hash_table_lookup(
+				potential->bytecounts,
+				g_strdup_printf("CMD_V_%i",i));
+		firmware->page_params[i]->ve_base = potential->page_params[i]->ve_base;
+		firmware->page_params[i]->rpm_base = potential->page_params[i]->rpm_base;
+		firmware->page_params[i]->load_base = potential->page_params[i]->load_base;
+		firmware->page_params[i]->rpm_bincount = potential->page_params[i]->rpm_bincount;
+		firmware->page_params[i]->load_bincount = potential->page_params[i]->load_bincount;
+		firmware->page_params[i]->is_spark = potential->page_params[i]->is_spark;
+	}
+
+	/* use commands defined in the interogation profile to map the proper
 	 * command to the I/O routines...  Looks ugly but should (hopefully)
 	 * be more flexible in the long run....
 	 */
@@ -432,10 +443,13 @@ cleanup:
 	parse_ecu_capabilities(ecu_caps);
 
 	if (!firmware)
+	{
 		firmware = g_malloc0(sizeof(struct Firmware_Details));
+		firmware->page_params[0] = g_new(struct Page_Params,1);
+	}
+	
 	firmware->tab_list = g_strsplit("",",",0);
-	firmware->table0_size = 125;	/* assumptions!!!! */
-	firmware->table1_size = 0;	/* assumptions!!!! */
+	firmware->page_params[0]->size = 125;	/* assumptions!!!! */
 	firmware->rtvars_size = 22;	/* assumptions!!!! */
 
 freeup:
@@ -531,8 +545,11 @@ void free_test_commands(GArray * cmd_array)
 void close_profile(void *ptr)
 {
 	struct Canidate *canidate = (struct Canidate *) ptr;
+	gint i = 0;
 	
 	dbg_func(__FILE__": close_profile(),\n\tdeallocating memory for potential canidate match\n",INTERROGATOR);
+	for (i=0;i<(canidate->total_pages);i++)
+		g_free(canidate->page_params[i]);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
@@ -552,6 +569,8 @@ void * load_profile(GArray * cmd_array, gchar * file)
 	ConfigFile *cfgfile;
 	gchar * tmpbuf;
 	gchar * filename;
+	gchar * section;
+	gint i = 0;
 	struct Canidate *canidate = NULL;
 
 	filename = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/Profiles/",file,NULL);
@@ -560,7 +579,7 @@ void * load_profile(GArray * cmd_array, gchar * file)
 	{	
 		canidate = g_malloc0(sizeof(struct Canidate));
 		dbg_func(g_strdup_printf(__FILE__": load_profile() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
-		canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
+		canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->firmware_name);
 		parse_bytecounts(cmd_array, canidate->bytecounts, (void *)cfgfile);
 		cfg_read_string(cfgfile,"parameters","SignatureQueryString",
@@ -588,12 +607,36 @@ void * load_profile(GArray * cmd_array, gchar * file)
 		cfg_read_string(cfgfile,"gui","LoadTabs",
 				&canidate->load_tabs);
 
+
+		/* Allocate space Table Offsets structures.... */
+		for (i=0;i<canidate->total_pages;i++)
+		{
+			canidate->page_params[i] = g_new0(struct Page_Params,1);
+			section = g_strdup_printf("page_%i",i);
+			cfg_read_int(cfgfile,section,"ve_base_offset",
+				&canidate->page_params[i]->ve_base);
+			cfg_read_int(cfgfile,section,"rpm_base_offset",
+				&canidate->page_params[i]->rpm_base);
+			cfg_read_int(cfgfile,section,"load_base_offset",
+				&canidate->page_params[i]->load_base);
+			cfg_read_int(cfgfile,section,"rpm_bincount",
+				&canidate->page_params[i]->rpm_bincount);
+			cfg_read_int(cfgfile,section,"load_bincount",
+				&canidate->page_params[i]->load_bincount);
+			cfg_read_boolean(cfgfile,section,"is_spark",
+				&canidate->page_params[i]->is_spark);
+			g_free(section);
+		}
+
 		cfg_free(cfgfile);
 		g_free(filename);
 		
 	}
 	else
+	{
 		dbg_func(g_strdup_printf(__FILE__": load_profile() failure opening file:\n\t%s\n",filename),CRITICAL);
+		g_free(filename);
+	}
 	return canidate;
 }
 

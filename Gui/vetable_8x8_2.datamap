@@ -45,15 +45,9 @@ page=1
 bind_to_list=_STORE_CTRL_
 
 [VE2_3d_view_button]
-keys=page,ve_base_offset,load_base_offset,rpm_base_offset,load_bincount,rpm_bincount,is_spark
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_
+keys=page
+key_types=_INT_
 page=1
-ve_base_offset=0
-load_base_offset=108
-rpm_base_offset=100
-load_bincount=8
-rpm_bincount=8
-is_spark=FALSE
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 

@@ -45,15 +45,9 @@ page=1
 bind_to_list=_STORE_CTRL_
 
 [SP1_3d_view_button]
-keys=page,ve_base_offset,load_base_offset,rpm_base_offset,load_bincount,rpm_bincount,is_spark
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_
+keys=page
+key_types=_INT_
 page=1
-ve_base_offset=0
-load_base_offset=72
-rpm_base_offset=64
-load_bincount=8
-rpm_bincount=8
-is_spark=TRUE
 
 #----- Temp Timing Controls --------------------------------------------------
 [SP1_trimangle_spin]
@@ -81,8 +75,8 @@ ign_param=TRUE
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 
 [SP1_load_spin_1]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=72
 conv_type=_NOTHING_
@@ -91,8 +85,8 @@ handler=_GENERIC_
 ign_param=TRUE
 
 [SP1_load_spin_2]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=73
 conv_type=_NOTHING_
@@ -101,8 +95,8 @@ handler=_GENERIC_
 ign_param=TRUE
 
 [SP1_load_spin_3]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=74
 conv_type=_NOTHING_
@@ -111,8 +105,8 @@ handler=_GENERIC_
 ign_param=TRUE
 
 [SP1_load_spin_4]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=75
 conv_type=_NOTHING_
@@ -121,8 +115,8 @@ handler=_GENERIC_
 ign_param=TRUE
 
 [SP1_load_spin_5]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=76
 conv_type=_NOTHING_
@@ -131,8 +125,8 @@ handler=_GENERIC_
 ign_param=TRUE
 
 [SP1_load_spin_6]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=77
 conv_type=_NOTHING_
@@ -141,8 +135,8 @@ handler=_GENERIC_
 ign_param=TRUE
 
 [SP1_load_spin_7]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=78
 conv_type=_NOTHING_
@@ -151,8 +145,8 @@ handler=_GENERIC_
 ign_param=TRUE
 
 [SP1_load_spin_8]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,conv_type,dl_type,handler,ign_param
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=79
 conv_type=_NOTHING_

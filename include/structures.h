@@ -40,15 +40,12 @@ struct Firmware_Details
 {
 	gchar *firmware_name;	/* textual name*/
 	gchar **tab_list;	/* vector string of tabs to load */
-        gint table0_size;       /* Size of VEtable/page_0 datablock */
-        gint table1_size;       /* Size of VEtable/page_1 datablock */
-        gint table2_size;       /* Size of VEtable/page_1 datablock */
-        gint table3_size;       /* Size of VEtable/page_1 datablock */
         gint rtvars_size;       /* Size of Realtime vars datablock */
         gint ignvars_size;      /* Size of Realtime vars datablock */
         gint memblock_size;     /* Size of Raw_Memory datablock */
 	gboolean multi_page;	/* Multi-page firmware? */
 	gint total_pages;	/* How many pages do we handle? */
+	struct Page_Params *page_params[8];	/* details on data per page.. */
 };
 
 /* Progress bars that are updated from various functions... */
@@ -74,9 +71,6 @@ struct DynamicMisc
  */
 struct DynamicSpinners
 {
-	GtkWidget *fast_idle_temp_spin;		/* Spinner */
-	GtkWidget *slow_idle_temp_spin;		/* Spinner */
-	GtkWidget *ego_temp_active_spin;	/* Spinner */
 	GtkWidget *req_fuel_total_1_spin;	/* Spinner */
 	GtkWidget *req_fuel_per_squirt_1_spin;	/* Spinner */
 	GtkWidget *inj_per_cycle_1_spin;	/* Spinner */
@@ -88,7 +82,6 @@ struct DynamicSpinners
 	GtkWidget *injectors_2_spin;		/* Spinner */
 	GtkWidget *cylinders_2_spin;		/* Spinner */
 	GtkWidget *warmwizard[10];		/* Spinner */
-	GtkWidget *cooling_fan_temp_spin;
 };
 
 /* Controls for the Required Fuel Calculator... */
@@ -116,22 +109,13 @@ struct Reqd_Fuel
 struct DynamicLabels
 {
 	GtkWidget *req_fuel_lab;
-	GtkWidget *fast_idle_temp_lab;
-	GtkWidget *cr_pulse_hightemp_lab;
 	GtkWidget *ww_cr_pulse_hightemp_lab;
-	GtkWidget *warmup_bins_lab[10];
 	GtkWidget *warmwizard_lab[10];
-	GtkWidget *warmup_lab;
-	GtkWidget *p0_map_tps_lab;
-	GtkWidget *p1_map_tps_lab;
 	GtkWidget *dlog_file_lab;
 	GtkWidget *ww_clt_lab;
 	GtkWidget *ww_warmcorr_lab;
 	GtkWidget *ww_ego_lab;
 	GtkWidget *ww_map_lab;
-        GtkWidget *cooling_fan_temp_lab;
-	GtkWidget *timing_multi_lab;
-	GtkWidget *output_boost_lab;
 
 };
 
@@ -164,28 +148,6 @@ struct DynamicButtons
 	GtkWidget *logplay_sel_parm_but;	/* Select rt parms for play */
 	GtkWidget *logplay_start_rt_but;	/* Logplay star realtime */
 	GtkWidget *logplay_stop_rt_but;		/* Logplay stop realtime */
-	GtkWidget *onoff_idle_but;		/* B&G idle method */
-	GtkWidget *pwm_idle_but;		/* Fielding PWM idle method */
-	GtkWidget *dt_mode;			/* Dualtable mode select */
-	GtkWidget *inj1_not_driven;		/* Inj1 not driven */
-	GtkWidget *inj1_table1;			/* Inj1 driven from table 1 */
-	GtkWidget *inj1_table2;			/* Inj1 driven from table 2 */
-	GtkWidget *inj2_not_driven;		/* Inj2 not driven */
-	GtkWidget *inj2_table1;			/* Inj2 driven from table 1 */
-	GtkWidget *inj2_table2;			/* Inj2 driven from table 2 */
-	GtkWidget *inj1_gammae;			/* Inj1 gammae */
-	GtkWidget *inj2_gammae;			/* Inj2 gammae */
-	GtkWidget *boost_39hz;
-	GtkWidget *boost_19hz;
-	GtkWidget *boost_10hz;
-	GtkWidget *time_based_but;
-	GtkWidget *trig_return_but;
-	GtkWidget *normal_out_but;
-	GtkWidget *invert_out_but;
-	GtkWidget *multi_spark_but;
-	GtkWidget *norm_spark_but;
-	GtkWidget *boost_retard_but;
-	GtkWidget *noboost_retard_but;
 };
 
 /* Simple struct to store the pointers to the entry and button
@@ -316,6 +278,16 @@ struct Log_Info
 	GArray *uppers;		/* Array of upper limits for each field */
 };
 
+struct Page_Params
+{
+	gint size;		/* total size of this page as returned... */
+	gint ve_base;		/* where the vetable starts */
+	gint rpm_base;		/* where rpm table starts */
+	gint load_base;		/* where load table starts */
+	gint rpm_bincount;	/* how many RPM bins */
+	gint load_bincount;	/* how many load bins... */
+	gboolean is_spark;	/* is this a spark table?? */
+};
 	/* Interrogator structures.... */
 struct Canidate
 {
@@ -332,6 +304,7 @@ struct Canidate
 	gchar * raw_mem_cmd_key;/* string key to hashtable for RAW command */
 	gboolean multi_page;	/* Multi-page firmware ??? */
 	gint total_pages;	/* how many pages do we handle? */
+	struct Page_Params *page_params[8];/* details on ve/rpm/load tables*/
 };
 
 struct Command

@@ -13,6 +13,22 @@ Raw_Mem_Cmd_Key=CMD_F_0
 MultiPage=TRUE
 TotalPages=2
 
+[page_0]
+ve_base_offset=0
+rpm_base_offset=100
+load_base_offset=108
+rpm_bincount=8
+load_bincount=8
+is_spark=FALSE
+
+[page_1]
+ve_base_offset=0
+rpm_base_offset=64
+load_base_offset=72
+rpm_bincount=8
+load_bincount=8
+is_spark=TRUE
+
 [bytecounts]
 CMD_A_0=22
 CMD_C_0=1

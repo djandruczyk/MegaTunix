@@ -158,7 +158,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 
 		case VE_AND_CONSTANTS_0:
 			total_read = 0;
-			total_wanted = firmware->table0_size;
+			total_wanted = firmware->page_params[0]->size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )
@@ -199,7 +199,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 
 		case VE_AND_CONSTANTS_1:
 			total_read = 0;
-			total_wanted = firmware->table1_size;
+			total_wanted = firmware->page_params[1]->size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )

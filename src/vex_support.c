@@ -97,8 +97,14 @@ gboolean vetable_export(void *ptr)
 	time_t *t;
 	gint i = 0;
 	gint j = 0;
+	gint page = -1;
 	gsize count = 0;
 	gint index = 0;
+	gint load_base = 0;
+	gint ve_base = 0;
+	gint rpm_base = 0;
+	gint rpm_bincount = 0;
+	gint load_bincount = 0;
 	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
 	unsigned char * ve_const_arr = NULL;
 	extern gint ecu_caps;
@@ -106,6 +112,19 @@ gboolean vetable_export(void *ptr)
 	GIOStatus status;
 	GString *output;
 	struct Io_File *iofile = (struct Io_File *)ptr;
+	GtkWidget * widget = NULL;
+	extern GHashTable *dynamic_widgets;
+
+
+	/* For Page 0.... */
+	widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,"VE1_3d_view_button");
+	load_base = (gint)g_object_get_data(G_OBJECT(widget),"load_base_offset");
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	ve_base = (gint)g_object_get_data(G_OBJECT(widget),"ve_base_offset");
+	rpm_base = (gint)g_object_get_data(G_OBJECT(widget),"rpm_base_offset");
+	load_bincount = (gint)g_object_get_data(G_OBJECT(widget),"load_bincount");
+	rpm_bincount = (gint)g_object_get_data(G_OBJECT(widget),"rpm_bincount");
+	
 
 	t = g_malloc(sizeof(time_t));
 	time(t);
@@ -120,68 +139,99 @@ gboolean vetable_export(void *ptr)
 	output = g_string_append(output, g_strdup_printf("Date: %i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year)));
 			
 	output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
-	output = g_string_append(output, "Page 0\n");
-	output = g_string_append(output, "VE Table RPM Range              [ 8]\n");
-	ve_const_arr = (unsigned char *)ms_data[0];
-	for (i=0;i<8;i++)
-		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE1_RPM_BINS_OFFSET]));
+	output = g_string_append(output, g_strdup_printf("Page %i\n",page));
+	output = g_string_append(output, g_strdup_printf("VE Table RPM Range              [%2i]\n",rpm_bincount));
+
+	ve_const_arr = (unsigned char *)ms_data[page];
+	for (i=0;i<rpm_bincount;i++)
+		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[rpm_base+i]));
 				
-	output = g_string_append(output, "VE Table Load Range (MAP)       [ 8]\n");
-	for (i=0;i<8;i++)
-		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE1_KPA_BINS_OFFSET]));
+	output = g_string_append(output, g_strdup_printf("VE Table Load Range (MAP)       [%2i]\n",load_bincount));
+	for (i=0;i<load_bincount;i++)
+		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[load_base+i]));
 				
-	output = g_string_append(output, "VE Table                        [  8][  8]\n");
-	output = g_string_append(output, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
+	output = g_string_append(output, g_strdup_printf("VE Table                        [%3i][%3i]\n",rpm_bincount,load_bincount));
+	output = g_string_append(output, "           ");
+	for (i=0;i<rpm_bincount;i++)
+	{
+		output = g_string_append(output, g_strdup_printf("[%3d]",i));
+		if (i < (rpm_bincount-1))
+			output = g_string_append(output, " ");
+	}
+		output = g_string_append(output, "\n");
 	index = 0;
-	for (i=0;i<8;i++)
+	for (i=0;i<rpm_bincount;i++)
 	{
 		output = g_string_append(output,g_strdup_printf("   [%3d] =",i));
-		for (j=0;j<8;j++)
+		for (j=0;j<load_bincount;j++)
 		{
 			if (j == 0)
 				output = g_string_append (output,
 						g_strdup_printf("  %3d",
 						ve_const_arr[index
-						+VE1_TABLE_OFFSET]));
+						+ve_base]));
                                                 
 			else
 				output = g_string_append (output,
 						g_strdup_printf("   %3d",
 						ve_const_arr[index
-						+VE1_TABLE_OFFSET]));
+						+ve_base]));
 			index++;
 		}
 		output = g_string_append(output,"\n");
 	}
 	if (ecu_caps & DUALTABLE)
 	{
-		output = g_string_append(output, "Page 1\n");
-		output = g_string_append(output, "VE Table RPM Range              [ 8]\n");
-		for (i=0;i<8;i++)
-			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE2_RPM_BINS_OFFSET]));
-					
-		output = g_string_append(output, "VE Table Load Range (MAP)       [ 8]\n");
-		for (i=0;i<8;i++)
-			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+VE2_KPA_BINS_OFFSET]));
-					
-		output = g_string_append(output, "VE Table                        [  8][  8]\n");
-		output = g_string_append(output, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
+		widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,
+				"VE2_3d_view_button");
+		load_base = (gint)g_object_get_data(G_OBJECT(widget),
+				"load_base_offset");
+		page = (gint)g_object_get_data(G_OBJECT(widget),
+				"page");
+		ve_base = (gint)g_object_get_data(G_OBJECT(widget),
+				"ve_base_offset");
+		rpm_base = (gint)g_object_get_data(G_OBJECT(widget),
+				"rpm_base_offset");
+		load_bincount = (gint)g_object_get_data(G_OBJECT(widget),
+				"load_bincount");
+		rpm_bincount = (gint)g_object_get_data(G_OBJECT(widget),
+				"rpm_bincount");
+		ve_const_arr = (unsigned char *)ms_data[page];
+
+		output = g_string_append(output, g_strdup_printf("Page %i\n",page));
+		output = g_string_append(output, g_strdup_printf("VE Table RPM Range              [%2i]\n",rpm_bincount));
+		for (i=0;i<rpm_bincount;i++)
+			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+rpm_base]));
+
+		output = g_string_append(output, g_strdup_printf("VE Table Load Range (MAP)       [%2i]\n",load_bincount));
+		for (i=0;i<load_bincount;i++)
+			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ve_const_arr[i+load_base]));
+
+		output = g_string_append(output, g_strdup_printf("VE Table                        [%3i][%3i]\n",rpm_bincount,load_bincount));
+		output = g_string_append(output, "           ");
+		for (i=0;i<rpm_bincount;i++)
+		{
+			output = g_string_append(output, g_strdup_printf("[%3i]",i));
+			if (i<(rpm_bincount-1))
+				output = g_string_append(output, " ");
+		}
+		output = g_string_append(output, "\n");
 		index = 0;
-		for (i=0;i<8;i++)
+		for (i=0;i<rpm_bincount;i++)
 		{
 			output = g_string_append(output,g_strdup_printf("   [%3d] =",i));
-			for (j=0;j<8;j++)
+			for (j=0;j<load_bincount;j++)
 			{
 				if (j == 0)
 					output = g_string_append (output,
 							g_strdup_printf("  %3d",
-							ve_const_arr[index
-							+VE2_TABLE_OFFSET]));
+								ve_const_arr[index
+								+ve_base]));
 				else
 					output = g_string_append (output,
 							g_strdup_printf("   %3d",
-							ve_const_arr[index
-							+VE2_TABLE_OFFSET]));
+								ve_const_arr[index
+								+ve_base]));
 				index++;
 			}
 			output = g_string_append(output,"\n");

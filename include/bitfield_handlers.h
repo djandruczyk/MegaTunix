@@ -19,8 +19,6 @@
 /* Prototypes */
 void check_config11(unsigned char);
 void check_config13(unsigned char);
-void check_tblcnf(unsigned char, gboolean);
-void check_bcfreq(unsigned char, gboolean);
 /* Prototypes */
 
 #endif

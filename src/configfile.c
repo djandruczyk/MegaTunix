@@ -43,8 +43,11 @@ ConfigFile *cfg_open_file(gchar * filename)
 	ConfigFile *cfg;
 
 	FILE *file;
-	gchar *buffer, **lines, *tmp;
-	gint i;
+	gchar *buffer=NULL;
+	gchar **lines = NULL;
+	gchar *tmp = NULL;
+	gchar *decomp = NULL;
+	gint i = 0;
 	struct stat stats;
 	ConfigSection *section = NULL;
 
@@ -53,7 +56,7 @@ ConfigFile *cfg_open_file(gchar * filename)
 	if (!(file = fopen(filename, "rb")))
 		return NULL;
 
-	buffer = g_malloc(stats.st_size + 1);
+	buffer = g_malloc0(stats.st_size + 1);
 	if (fread(buffer, 1, stats.st_size, file) != stats.st_size)
 	{
 		g_free(buffer);
@@ -85,13 +88,17 @@ ConfigFile *cfg_open_file(gchar * filename)
 				*tmp = '\0';
 				tmp++;
 				/* Allow extended chars */
-				tmp = g_strcompress(tmp);
-				cfg_create_string(section, lines[i], tmp);
+				decomp = g_strcompress(tmp);
+				cfg_create_string(section, lines[i], 
+						decomp);
+				g_free(decomp);
 			}
 		}
 		i++;
 	}
 	g_strfreev(lines);
+	if (tmp)
+		g_free(tmp);
 	return cfg;
 }
 

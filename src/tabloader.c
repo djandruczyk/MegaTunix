@@ -37,11 +37,11 @@ gboolean load_gui_tabs()
 	gchar * tmpbuf = NULL;
 	GtkWidget * label = NULL;
 	extern GtkWidget * notebook;
-	
+
 	if (!firmware->tab_list[i])
 		return FALSE;
 
-	
+
 	while (firmware->tab_list[i])
 	{
 		glade_file = g_strconcat(DATA_DIR,"/",GUI_DIR,"/",
@@ -64,22 +64,22 @@ gboolean load_gui_tabs()
 			}
 			else
 				dbg_func(g_strdup_printf("DATAMAP: %s NOT FOUND\n",map_file),CRITICAL);
-			
+
 			g_free(map_file);
 			g_free(glade_file);
 			frame = glade_xml_get_widget(xml,"topframe");
 			if (frame == NULL)
 				dbg_func(__FILE__": load_gui_tabs() \"topframe\" not found in xml\n",CRITICAL);
-			
+
 			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
 			gtk_widget_show_all(frame);
 			glade_xml_signal_autoconnect(xml);
-			
+
 		}
 		else
 			dbg_func(__FILE__": load_gui_tabs() .glade/.datamap file NOT FOUND!! \n",CRITICAL);
 		i++;
-		
+
 	}
 	tabs_loaded = TRUE;
 	return TRUE;
@@ -122,15 +122,20 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	extern GList *lists[];
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
-	if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
+	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
+	{
+		keys = parse_keys(tmpbuf,&num_keys);
+		dbg_func(g_strdup_printf(__FILE__": bind_data() number_keys for %s is %i\n",section,num_keys),TABLOADER);
+		g_free(tmpbuf);
+	}
+	else
 		return;
 
-	keys = parse_keys(tmpbuf,&num_keys);
-	dbg_func(g_strdup_printf(__FILE__": bind_data() number_keys for %s is %i\n",section,num_keys),TABLOADER);
-
-	g_free(tmpbuf);
-	cfg_read_string(cfgfile,section,"key_types",&tmpbuf);
-	parse_keytypes(tmpbuf,keytypes, &num_keytypes);
+	if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
+	{
+		parse_keytypes(tmpbuf,keytypes, &num_keytypes);
+		g_free(tmpbuf);
+	}
 
 	if (num_keytypes != num_keys)
 	{
@@ -169,35 +174,53 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 		switch((DataTypes)keytypes[i])
 		{
 			case MTX_INT:
-				cfg_read_int(cfgfile,section,keys[i],&tmpi);
-				g_object_set_data(G_OBJECT(widget),
-						g_strdup(keys[i]),
-						GINT_TO_POINTER(tmpi));	
-				dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
+				{
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+					g_object_set_data(G_OBJECT(widget),
+							g_strdup(keys[i]),
+							GINT_TO_POINTER(tmpi));	
+				}
+				else
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_INT: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_ENUM:
-				cfg_read_string(cfgfile,section,keys[i],&tmpbuf);
-				tmpi = translate_string(tmpbuf);
-				g_free(tmpbuf);
-				g_object_set_data(G_OBJECT(widget),
-						g_strdup(keys[i]),
-						GINT_TO_POINTER(tmpi));	
-				dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
+				{
+					tmpi = translate_string(tmpbuf);
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding ENUM %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+					g_object_set_data(G_OBJECT(widget),
+							g_strdup(keys[i]),
+							GINT_TO_POINTER(tmpi));	
+					g_free(tmpbuf);
+				}
+				else
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_ENUM: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_BOOL:
-				cfg_read_boolean(cfgfile,section,keys[i],&tmpi);
-				g_object_set_data(G_OBJECT(widget),
-						g_strdup(keys[i]),
-						GINT_TO_POINTER(tmpi));	
-				dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
+				{
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+					g_object_set_data(G_OBJECT(widget),
+							g_strdup(keys[i]),
+							GINT_TO_POINTER(tmpi));	
+				}
+				else
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_BOOL: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_STRING:
-				cfg_read_string(cfgfile,section,keys[i],&tmpbuf);
-				g_object_set_data(G_OBJECT(widget),
-						g_strdup(keys[i]),
-						g_strdup(tmpbuf));
+				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
+				{
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING key:%s value:%s to widget %s\n",keys[i],tmpbuf,section),TABLOADER);
+					g_object_set_data(G_OBJECT(widget),
+							g_strdup(keys[i]),
+							g_strdup(tmpbuf));
+					g_free(tmpbuf);
+				}
+				else
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_STRING: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
 				break;
-		
+
 		}
 	}
 

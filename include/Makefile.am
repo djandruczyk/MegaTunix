@@ -15,7 +15,6 @@ headers = \
         defines.h \
         default_controls.h \
         default_limits.h \
-	dt_params_gui.h \
 	eng_vitals_gui.h \
 	enums.h \
 	fileio.h \

@@ -82,9 +82,9 @@ struct Ve_View_3D
 	gint page;
 	gint load_bincount;
 	gint rpm_bincount;
-	gint ve_base_offset;
-	gint load_base_offset;
-	gint rpm_base_offset;
+	gint ve_base;
+	gint rpm_base;
+	gint load_base;
 	gboolean is_spark;
 };
 
