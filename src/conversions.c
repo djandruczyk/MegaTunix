@@ -19,6 +19,7 @@
 #include <notifications.h>
 #include <stdio.h>
 #include <structures.h>
+#include <tabloader.h>
 
 /* Conversions.c
  * 
@@ -35,7 +36,6 @@
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
-GList *lists[10];	/* BAD idea to be static... */
 
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {
@@ -190,6 +190,6 @@ void convert_temps(gpointer widget, gpointer units)
 void reset_temps(gpointer type)
 {
 	/* Better way.. :) */
-	g_list_foreach(lists[TEMP_DEP],convert_temps,type);
+	g_list_foreach(get_list("temperature"),convert_temps,type);
 
 }

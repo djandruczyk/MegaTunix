@@ -184,6 +184,7 @@ typedef enum
 	BOOST_CTRL	= 1<<8,
 	OVERBOOST_SFTY	= 1<<9,
 	LAUNCH_CTRL	= 1<<10,
+	TEMP_DEP	= 1<<11,
 }Capabilities;
 
 typedef enum
@@ -275,13 +276,5 @@ typedef enum
 	DATALOGGING_PAGE,
 	LOGVIEWER_PAGE,
 }PageIdent;
-
-typedef enum
-{
-	STORE_CTRL=1,
-	TEMP_DEP,
-	INTERDEP_1,
-	INTERDEP_2,
-}ListIndexes;
 
 #endif

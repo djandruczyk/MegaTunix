@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <structures.h>
+#include <tabloader.h>
 
 GHashTable *rt_controls = NULL;
 extern GtkWidget *rt_table[];
@@ -171,7 +172,6 @@ void add_control(gchar *control_name, gchar *parameters)
 	GtkWidget *pbar;
 	extern GList *dt_controls;
 	extern GList *ign_controls;
-	extern GList *lists[];
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
@@ -230,7 +230,8 @@ void add_control(gchar *control_name, gchar *parameters)
 	}
 	if (control->flags & TEMP_DEP)	/* name has temp unit in it */
 	{
-		lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)control->label);
+		store_list("temperature",g_list_append(
+				get_list("temperature"),(gpointer)control->label));
 	}
 
 	if (g_hash_table_lookup(rt_controls,g_strdup(control_name))==NULL)

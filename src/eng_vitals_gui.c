@@ -17,6 +17,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <structures.h>
+#include <tabloader.h>
 
 
 struct DynamicLabels labels;
@@ -46,7 +47,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	GSList	*group;
 	extern GtkTooltips *tip;
 	extern GList *dt_controls;
-	extern GList *lists[];
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -539,7 +539,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	label = gtk_label_new("Cooling Fan Turn-On Temp (\302\260F.)");
-	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)label);
+	store_list("temperature",g_list_append(
+			get_list("temperature"),(gpointer)label));
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -548,7 +549,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Cooling Fan Turn-On Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)spinner);
+	store_list("temperature",g_list_append(
+			get_list("temperature"),(gpointer)spinner));
 	ve_widgets[0][121] = g_list_append(ve_widgets[0][121],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -601,7 +603,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			g_strdup("Fast Idle Temp (\302\260F.)"));
 	g_object_set_data(G_OBJECT(label),"c_label",
 			g_strdup("Fast Idle Temp (\302\260C.)"));
-	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)label);
+	store_list("temperature",g_list_append(
+			get_list("temperature"),(gpointer)label));
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -622,7 +625,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	tmpspin = g_list_nth_data(ve_widgets[0][121],0);
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
         spinner = gtk_spin_button_new(adj,0,0);
-	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)spinner);
+	store_list("temperature",g_list_append(
+			get_list("temperature"),(gpointer)spinner));
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
@@ -671,7 +675,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			g_strdup("Slow Idle Temp (\302\260F.)"));
 	g_object_set_data(G_OBJECT(label),"c_label",
 			g_strdup("Slow Idle Temp (\302\260C.)"));
-	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)label);
+	store_list("temperature",g_list_append(
+			get_list("temperature"),(gpointer)label));
 	dt_controls = g_list_append(dt_controls, (gpointer)label);
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)label);
 	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)label);
@@ -682,7 +687,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Slow Idle Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(145.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)spinner);
+	store_list("temperature",g_list_append(
+			get_list("temperature"),(gpointer)spinner));
 	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
 	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
@@ -807,7 +813,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_button_new_with_label("Permanently Store Data in ECU");
-        lists[STORE_CTRL] = g_list_append(lists[STORE_CTRL],(gpointer)button);
+	store_list("burners",g_list_append(
+			get_list("burners"),(gpointer)button));
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,

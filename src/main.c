@@ -68,7 +68,7 @@ int main(int argc, char ** argv)
 	 */
 
 	/* Kickoff fast interrogation */
-//	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
+	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
 
 	/* Startup status counters timeout handler... */
 	/* Run it about 15 times/second.. proc use seems negligable... */

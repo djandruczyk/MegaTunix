@@ -17,6 +17,7 @@
 #include <gui_handlers.h>
 #include <ignition_gui.h>
 #include <structures.h>
+#include <tabloader.h>
 
 GList *launch_controls;
 GList *enhanced_controls;
@@ -33,7 +34,6 @@ void build_ignition(GtkWidget *parent_frame)
 	GtkWidget *spinner;
 	GtkAdjustment  *adj;
 	extern GtkTooltips *tip;
-	extern GList *lists[];
 	GSList *group;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern struct DynamicButtons buttons;
@@ -65,7 +65,8 @@ void build_ignition(GtkWidget *parent_frame)
 			NULL);
 
         button = gtk_button_new_with_label("Permanently Store Data in ECU");
-        lists[STORE_CTRL] = g_list_append(lists[STORE_CTRL],(gpointer)button);
+	store_list("burners",g_list_append(
+			get_list("burners"),(gpointer)button));
         gtk_tooltips_set_tip(tip,button,
                         "Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
         gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,

@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 #include <notifications.h>
 #include <structures.h>
+#include <tabloader.h>
 
 extern GdkColor red;
 extern GdkColor black;
@@ -26,7 +27,6 @@ extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;
-extern GList *lists[];	/* list of widgets that have color change attributes*/
 GList *interdep_1_controls;/* list of widgets that have color change attributes*/
 GList *interdep_2_controls;/* list of widgets that have color change attributes*/
 GList *reqfuel_1_controls;	/* list of widgets that have color change attributes*/
@@ -35,7 +35,8 @@ GList *reqfuel_2_controls;	/* list of widgets that have color change attributes*
 
 void set_store_buttons_state(GuiState state)
 {
-	g_list_foreach(lists[STORE_CTRL], set_widget_color,(gpointer)state);
+	g_list_foreach(get_list("burners"), 
+			set_widget_color,(gpointer)state);
 }
 
 void set_interdep_state(GuiState state, gint table)

@@ -24,6 +24,7 @@
 
 gboolean tabs_loaded = FALSE;
 GHashTable *dynamic_widgets = NULL;
+static GHashTable *lists_hash = NULL;
 
 gboolean load_gui_tabs()
 {
@@ -111,15 +112,16 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = (GtkWidget *) value;
 	gchar * section = g_strdup((gchar *)widget_name);
-	gchar ** keys = NULL;
 	gint keytypes[50];	/* bad idea to be fixed size!! */
+	gchar ** bind_keys = NULL;
+	gint bind_num_keys = 0;
+	gchar ** keys = NULL;
 	gint num_keys = 0;
 	gint num_keytypes = 0;
 	gint i = 0;
 	gint tmpi = 0;
 	gint offset = 0;
 	gint page = 0;
-	extern GList *lists[];
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
@@ -147,14 +149,23 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	if (!cfg_read_int(cfgfile,section,"page",&page))
 		dbg_func(g_strdup_printf(__FILE__": bind_data(), Object %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
 	
-	/* Bind widgets to lists if thy have hte bind_to_list flag set...
+	/* Bind widgets to lists if thy have the bind_to_list flag set...
 	 */
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
 	{
-		tmpi=0;
-		tmpi = translate_string(tmpbuf);
-		lists[tmpi] = g_list_append(lists[tmpi],(gpointer)widget);
+		bind_keys = parse_keys(tmpbuf,&bind_num_keys);
 		g_free(tmpbuf);
+		/* This looks convoluted,  but it allows for an arbritrary 
+		 * number of lists, that are indexed by a keyword.
+		 * The get_list function looks the list up in a hashtable, if
+		 * it isn't found (i.e. new list) it returns NULL which is OK
+		 * as g_list_append() uses that to create a new list,  that
+		 * returned list is used to store back into the hashtable so
+		 * that the list is always stored and up to date...
+		 */
+		for (i=0;i<bind_num_keys;i++)
+			store_list(bind_keys[i],g_list_append(get_list(bind_keys[i]),(gpointer)widget));
+		g_strfreev(bind_keys);
 	}
 
 	offset = -1;
@@ -223,7 +234,21 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 
 		}
 	}
+	g_strfreev(keys);
 
+}
+
+GList * get_list(gchar * key)
+{
+	if (!lists_hash)
+		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+	return (GList *)g_hash_table_lookup(lists_hash,key);
+}
+
+void store_list(gchar * key, GList * list)
+{
+	g_hash_table_insert(lists_hash,g_strdup(key),(gpointer)list);
+	return;
 }
 
 gchar ** parse_keys(gchar * string, gint * count)

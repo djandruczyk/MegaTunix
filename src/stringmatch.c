@@ -72,10 +72,6 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",GINT_TO_POINTER(READ_VE_CONST));
 	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",GINT_TO_POINTER(BURN_MS_FLASH));
 	/* mappings to lists of controls */
-	g_hash_table_insert(str_2_enum,"_STORE_CTRL_",GINT_TO_POINTER(STORE_CTRL));
-	g_hash_table_insert(str_2_enum,"_TEMP_DEP_",GINT_TO_POINTER(TEMP_DEP));
-	g_hash_table_insert(str_2_enum,"_INTERDEP_1_",GINT_TO_POINTER(INTERDEP_1));
-	g_hash_table_insert(str_2_enum,"_INTERDEP_2_",GINT_TO_POINTER(INTERDEP_2));
 
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 

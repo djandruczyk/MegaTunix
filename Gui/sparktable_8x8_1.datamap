@@ -39,10 +39,10 @@ page=1
 
 [SP1_burn_button]
 keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_ENUM_
+key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_
 page=1
-bind_to_list=_STORE_CTRL_
+bind_to_list=burners
 
 [SP1_3d_view_button]
 keys=page
