@@ -69,7 +69,7 @@ static gint logviewer_id = -1;
 static gint hilite_id = -1;
 gboolean tips_in_use;
 gboolean forced_update;
-gboolean fahrenheit;
+gboolean temp_units;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
@@ -181,13 +181,13 @@ gint toggle_button_handler(GtkWidget *widget, gpointer data)
 				tips_in_use = TRUE;
 				break;
 			case FAHRENHEIT:
-				fahrenheit = TRUE;
-				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
+				temp_units = FAHRENHEIT;
+				reset_temps(GINT_TO_POINTER(temp_units));
 				forced_update = TRUE;
 				break;
 			case CELSIUS:
-				fahrenheit = FALSE;
-				reset_temps(GINT_TO_POINTER(CELSIUS));
+				temp_units = CELSIUS;
+				reset_temps(GINT_TO_POINTER(temp_units));
 				forced_update = TRUE;
 				break;
 			case COMMA:
@@ -735,7 +735,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 
 			if (temp_dep)
 			{
-				if (!fahrenheit) /* using celsius, convert it */
+				if (temp_units == FAHRENHEIT)
 					value = (value*(9.0/5.0))+32;
 			}
 			dload_val = convert_before_download(offset,value);
@@ -1081,7 +1081,7 @@ void update_ve_const()
 				value = convert_after_upload(i);  
 			if (temp_dep)
 			{
-				if (!fahrenheit)
+				if (temp_units == CELSIUS)
 					value = (value-32)*(5.0/9.0);
 			}
 
@@ -1191,13 +1191,13 @@ void check_config13(unsigned char tmp)
 	{
 		g_list_foreach(enh_idle_widgets, 
 				set_widget_state,(gpointer)TRUE);
-		reset_temps(GINT_TO_POINTER(fahrenheit));
+		reset_temps(GINT_TO_POINTER(temp_units));
 	}
 	else
 	{
 		g_list_foreach(enh_idle_widgets, 
 				set_widget_state,(gpointer)FALSE);
-		reset_temps(GINT_TO_POINTER(fahrenheit));
+		reset_temps(GINT_TO_POINTER(temp_units));
 	}
       
 		

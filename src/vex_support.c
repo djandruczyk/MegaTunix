@@ -256,7 +256,7 @@ gboolean vetable_import(void *ptr)
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		printf("Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve);
+		fprintf(stderr,__FILE__": Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve);
 		return FALSE;
 	}
 	return TRUE;
@@ -277,7 +277,7 @@ GIOStatus process_vex_line(GIOChannel *iochannel)
 			{
 				status = handler_dispatch(import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
-					printf("VEX_line parsing ERROR\n");
+					fprintf(stderr,__FILE__": VEX_line parsing ERROR\n");
 				goto breakout;
 			}
 		}

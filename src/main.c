@@ -24,7 +24,7 @@
 #include <structures.h>
 
 
-extern gboolean fahrenheit;
+extern gboolean temp_units;
 extern struct Serial_Params *serial_params;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;
@@ -60,10 +60,7 @@ int main(int argc, char ** argv)
 	/* Convert the gui based on temp preference.  This MUST BE DONE
 	 * AFTER data has been read once to make sure it's displayed correctly
 	 */
-	if (fahrenheit)
-		reset_temps(GINT_TO_POINTER(FAHRENHEIT));
-	else
-		reset_temps(GINT_TO_POINTER(CELSIUS));
+	reset_temps(GINT_TO_POINTER(temp_units));
 
 
 	/* Populate the gui in 250 milliseconds after entering gtk_main */

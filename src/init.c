@@ -37,7 +37,7 @@ extern gint ms_goodread_count;
 extern gboolean just_starting;
 extern gboolean raw_reader_running;
 extern gboolean tips_in_use;
-extern gboolean fahrenheit;
+extern gboolean temp_units;
 extern gint main_x_origin;
 extern gint main_y_origin;
 extern gint width;
@@ -90,7 +90,7 @@ void init()
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
 	kpa_conversion = turbo_map;
 	tips_in_use = TRUE;	/* Use tooltips by default */
-	fahrenheit = TRUE;	/* Use SAE units by default */
+	temp_units = FAHRENHEIT;/* Use SAE units by default */
 }
 
 int read_config(void)
@@ -105,7 +105,7 @@ int read_config(void)
 		//cfg_read_int(cfgfile, "Global", "minor_ver", &minor_ver);
 		//cfg_read_int(cfgfile, "Global", "micro_ver", &micro_ver);
 		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
-		cfg_read_boolean(cfgfile, "Global", "Fahrenheit", &fahrenheit);
+		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
 		cfg_read_int(cfgfile, "Window", "width", &width);
 		cfg_read_int(cfgfile, "Window", "height", &height);
 		cfg_read_int(cfgfile, "Window", "main_x_origin", 
@@ -146,7 +146,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
 	cfg_write_boolean(cfgfile, "Global", "Tooltips", tips_in_use);
-	cfg_write_boolean(cfgfile, "Global", "Fahrenheit", fahrenheit);
+	cfg_write_int(cfgfile, "Global", "Temp_Scale", temp_units);
 
 	gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
 	cfg_write_int(cfgfile, "Window", "width", tmp_width);

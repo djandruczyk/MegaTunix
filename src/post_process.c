@@ -21,7 +21,7 @@
 #include <post_process.h>
 
 extern unsigned char *kpa_conversion;
-extern gboolean fahrenheit;
+extern gboolean temp_units;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
 
@@ -69,14 +69,14 @@ void post_process(void *input, void *output)
 
 	out->clt_volts = (float)in->clt * (5.0/255.0);
 	out->clt_raw = in->clt;
-	if (fahrenheit)
+	if (temp_units == FAHRENHEIT)
 		out->clt = thermfactor[in->clt]-40;
 	else
 		out->clt = (short)((thermfactor[in->clt]-40-32)*(5.0/9.0));
 
 	out->mat_volts = (float)in->mat * (5.0/255.0);
 	out->mat_raw = in->mat;
-	if (fahrenheit)
+	if (temp_units == FAHRENHEIT)
 		out->mat = thermfactor[in->mat]-40;
 	else
 		out->mat = (short)((thermfactor[in->mat]-40-32)*(5.0/9.0));

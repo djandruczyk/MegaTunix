@@ -18,7 +18,7 @@
 #include <serialio.h>
 #include <structures.h>
 
-extern gboolean fahrenheit;
+extern gboolean temp_units;
 
 void parse_ecu_flags(unsigned int ecu_flags)
 {
@@ -44,17 +44,17 @@ void set_ignition_mode(gboolean state)
 {
         extern GList *ign_widgets;
         extern GList *inv_ign_widgets;
-	printf("setting ign mode to %i\n",state);
+
         g_list_foreach(ign_widgets, set_widget_state,(gpointer)state);
         g_list_foreach(inv_ign_widgets, set_widget_state,(gpointer)(!state));
-        reset_temps(GINT_TO_POINTER(fahrenheit));
+        reset_temps(GINT_TO_POINTER(temp_units));
 }
 
 void set_iac_mode(gboolean state)
 {
         extern GList *iac_idle_widgets;
         extern GList *enh_idle_widgets;
-	printf("setting iac mode to %i\n",state);
+
         g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
         g_list_foreach(iac_idle_widgets, set_widget_state,(gpointer)state);
 }
@@ -64,12 +64,11 @@ void set_dualtable_mode(gboolean state)
         extern GList *dt_widgets;
         extern GList *inv_dt_widgets;
 
-	printf("setting dt mode to %i\n",state);
         g_list_foreach(dt_widgets, set_widget_state,(gpointer)state);
         g_list_foreach(inv_dt_widgets, set_widget_state,(gpointer)(!state));
 
-        /* fahrenheit is a FLAG... */
-        reset_temps(GINT_TO_POINTER(fahrenheit));
+        /* temp_units is a FLAG... */
+        reset_temps(GINT_TO_POINTER(temp_units));
 }
 
 void set_widget_state(gpointer widget, gpointer state)

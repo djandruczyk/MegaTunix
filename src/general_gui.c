@@ -20,7 +20,7 @@
 #include <structures.h>
 
 extern gboolean tips_in_use;
-extern gboolean fahrenheit;
+extern gboolean temp_units;
 extern struct DynamicEntries entries;
 extern GdkColor black;
 GtkWidget *ms_ecu_revision_entry;
@@ -76,7 +76,7 @@ void build_general(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	if (fahrenheit)
+	if (temp_units == FAHRENHEIT)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
@@ -88,7 +88,7 @@ void build_general(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	if (!fahrenheit)
+	if (temp_units == CELSIUS)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),

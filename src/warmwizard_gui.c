@@ -379,7 +379,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 void warmwizard_update_status(gfloat temp)
 {
-	extern gboolean fahrenheit;
+	extern gboolean temp_units;
 	extern GdkColor red;
 	extern GdkColor black;
 	gboolean skipnext = FALSE;
@@ -390,7 +390,7 @@ void warmwizard_update_status(gfloat temp)
 	{-40,-28.8,-17.7,-6.6,4.4,15.5,26.6,37.7,54.4,71.1};
 	gfloat *range;
 
-	if (fahrenheit)	
+	if (temp_units == FAHRENHEIT)	
 		range = F_temps;
 	else
 		range = C_temps;
