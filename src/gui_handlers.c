@@ -28,7 +28,8 @@ extern unsigned char *kpa_conversion;
 extern unsigned char na_map[];
 extern unsigned char turbo_map[];
 extern GtkTooltips *tip;
-gint tips_in_use;
+gboolean tips_in_use;
+gboolean fahrenheit;
 static gboolean paused_handlers = FALSE;
 static gboolean constants_loaded = FALSE;
 extern gboolean raw_reader_running;
@@ -81,6 +82,14 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 			case TOOLTIPS_STATE:
 				gtk_tooltips_enable(tip);
 				tips_in_use = TRUE;
+				break;
+			case FAHRENHEIT:
+				fahrenheit = TRUE;
+				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
+				break;
+			case CELSIUS:
+				fahrenheit = FALSE;
+				reset_temps(GINT_TO_POINTER(CELSIUS));
 				break;
 		}
 	}

@@ -74,6 +74,7 @@ int build_constants(GtkWidget *);
 
 /* conversions.c */
 void read_conversions(void);
+void reset_temps(gpointer);
 gint convert_before_download(gint, gfloat);
 gfloat convert_after_upload(gint);
 /* conversions.c */
@@ -165,7 +166,7 @@ void reset_runtime_status(void);
 /* runtime_gui.c */
 
 /* serialio.c */
-int open_serial(int); 
+void open_serial(int); 
 int setup_serial_params(void); 
 void close_serial(void); 
 int handle_ms_data(int); 

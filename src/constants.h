@@ -92,12 +92,32 @@ struct Reqd_Fuel
         gfloat afr;			/* Air fuel ratio 10-25.5 */
 };
 
+/* These are defined as they are semi-dynamic and are modified
+ * during run of MEgaTunix for status or units related reasons
+ */
 struct Labels
 {
 	GtkWidget *req_fuel_lab;
 	GtkWidget *squirts_lab;
 	GtkWidget *injectors_lab;
 	GtkWidget *cylinders_lab;
+	GtkWidget *fastidletemp_lab;
+	GtkWidget *cr_pulse_lowtemp_lab;
+	GtkWidget *cr_pulse_hightemp_lab;
+	GtkWidget *warmup_bins_lab[10];
+	GtkWidget *warmup_title;
+	GtkWidget *ego_temp_lab;
+	GtkWidget *runtime_clt_lab;
+	GtkWidget *runtime_mat_lab;
+};
+
+/* These are defined as they are semi-dynamic and are modified
+ * during run of MEgaTunix for status or units related reasons
+ */
+struct Adjustments
+{
+	GtkAdjustment *fast_idle_temp_adj;
+	GtkAdjustment *ego_temp_adj;
 };
 
 struct Buttons

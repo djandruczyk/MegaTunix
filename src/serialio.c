@@ -36,17 +36,18 @@ extern struct ve_const_std *ve_constants;
 extern struct ve_const_std *ve_const_tmp;
 gboolean connected;
        
-int open_serial(int port_num)
+void open_serial(int port_num)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
+	gint result = -1;
 	char devicename[11]; /* temporary unix name of the serial port */
 	serial_params.comm_port = port_num;
 	g_snprintf(devicename,11,"/dev/ttyS%i",port_num-1);
-	serial_params.fd = open(devicename, O_RDWR | O_NOCTTY);
-	if (serial_params.fd < 0)
+	result = open(devicename, O_RDWR | O_NOCTTY);
+	if (result < 0)
 	{
 		/* FAILURE */
 		/* An Error occurred opening the port */
@@ -59,16 +60,19 @@ int open_serial(int port_num)
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
 		serial_params.open = TRUE;
+		serial_params.fd = result;
+		/* Save serial port status */
+		tcgetattr(serial_params.fd,&serial_params.oldtio);
 		g_snprintf(buff,60,"COM%i Opened Successfully, Suggest Testing ECU Comms",port_num);
 		update_statusbar(ser_statbar,ser_context_id,buff);
 
 	}
-	return serial_params.fd;
+	
+	return;
 }
 	
 int setup_serial_params()
 {
-	tcgetattr(serial_params.fd,&serial_params.oldtio); /* save current port settings */
 
 	bzero(&serial_params.newtio, sizeof(serial_params.newtio)); /*clear struct for new settings*/
 	/* 
@@ -146,7 +150,7 @@ void close_serial()
 	close(serial_params.fd);
 	serial_params.open = FALSE;
 	connected = FALSE;
-        gtk_widget_set_sensitive(runtime_data.status[0],
+        gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
                         connected);
 
 	g_snprintf(buff,60,"COM Port Closed ");
@@ -187,7 +191,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			/* An I/O Error occurred with the MegaSquirt ECU */
 			update_statusbar(ser_statbar,ser_context_id,buff);
 			connected = FALSE;
-			gtk_widget_set_sensitive(runtime_data.status[0],
+			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 					connected);
 		}
 		else
@@ -196,7 +200,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			/* COMMS test succeeded */
 			update_statusbar(ser_statbar,ser_context_id,buff);
 			connected = TRUE;
-			gtk_widget_set_sensitive(runtime_data.status[0],
+			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 					connected);
 		}
 
@@ -258,7 +262,7 @@ void read_ve_const()
 		res = handle_ms_data(VE_AND_CONSTANTS);
 		
 	}
-	gtk_widget_set_sensitive(runtime_data.status[0],
+	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 			connected);
 
 	update_errcounts();

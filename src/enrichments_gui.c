@@ -22,9 +22,13 @@
 
 struct v1_2_Constants constants;
 extern struct Buttons buttons;
+extern struct Adjustments adjustments;
+extern struct Labels labels;
 extern GtkWidget *veconst_widgets_1[];
-const gchar *warmup_labels[] = {"-40","-20",  "0", "20", "40",
+const gchar *F_warmup_labels[] = {"-40","-20",  "0", "20", "40",
 			         "60", "80","100","130","160"};
+const gchar *C_warmup_labels[] = {"-40","-28.8",  "-17.7", "-6.6", "4.4",
+			         "15.5", "26.6","37.7","54.4","71.1"};
 const gchar *accel_labels[] = {"2V/Sec","4V/sec","8V/Sec","15V/Sec"};
 
 int build_enrichments(GtkWidget *parent_frame)
@@ -87,7 +91,8 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("-40 Deg. F");
+		label = gtk_label_new("-40 Deg. F");
+	labels.cr_pulse_lowtemp_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -114,6 +119,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("170 Deg. F");
+	labels.cr_pulse_hightemp_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -251,7 +257,8 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 
-		label = gtk_label_new (warmup_labels[i]);
+		label = gtk_label_new (F_warmup_labels[i]);
+		labels.warmup_bins_lab[i]=label;
 		gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 		gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 		gtk_table_attach (GTK_TABLE (table), label, i, i+1, 1, 2,
@@ -259,7 +266,8 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (0), 0, 0);
 	}
 
-	label = gtk_label_new ("Engine Temperature");
+	label = gtk_label_new("Engine Temperature in Degrees Fahrenheit");
+	labels.warmup_title = label;
 	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 10, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
@@ -548,6 +556,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	/* EGO Temp Activation */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
+	adjustments.ego_temp_adj = adj;
 	spinner = gtk_spin_button_new(adj,1,0);
 	constants.ego_temp_active_spin = spinner;
 	veconst_widgets_1[86] = spinner;
@@ -567,7 +576,8 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Coolant Temp\nActivation(Deg F.)");
+		label = gtk_label_new("Coolant Temp\nActivation(Deg F.)");
+	labels.ego_temp_lab = label;
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),

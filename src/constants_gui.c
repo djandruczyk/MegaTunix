@@ -21,6 +21,7 @@
 #include <constants.h>
 
 extern struct v1_2_Constants constants;
+struct Adjustments adjustments;
 struct Labels labels;
 struct Buttons buttons;
 extern GtkWidget *veconst_widgets_1[];
@@ -263,6 +264,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	/* Fast Idle Temp Threshold */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
+	adjustments.fast_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
         constants.fast_idle_thresh_spin = spinner;
         veconst_widgets_1[121] = spinner;
@@ -282,7 +284,8 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Fast Idle Threshold\n(Degrees F)");
+	label = gtk_label_new("Fast Idle Threshold\n(Degrees F.)");
+	labels.fastidletemp_lab = label;
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 2,
 			(GtkAttachOptions) (GTK_EXPAND),

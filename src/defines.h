@@ -97,5 +97,22 @@
 #define IMMEDIATE		0x90
 #define DEFERRED		0x91
 
+/* Enumerations */
+typedef enum 
+{	CONNECTED, 
+	CRANKING, 
+	RUNNING, 
+	WARMUP, 
+	AS_ENRICH, 
+	ACCEL, 
+	DECEL
+}RuntimeStatusType;
+
+typedef enum
+{
+	FAHRENHEIT,
+	CELSIUS
+}UnitsType;
+
 
 #endif

@@ -25,6 +25,7 @@
 
 
 gint def_comm_port;
+extern gboolean fahrenheit;
 gboolean ready = FALSE;
 
 int main(int argc, char ** argv)
@@ -56,6 +57,14 @@ int main(int argc, char ** argv)
 	
 	/* Force a read of constants to populate the gui */
 	std_button_handler(NULL,GINT_TO_POINTER(READ_FROM_MS));
+
+	/* Convert the gui based on temp preference.  This MUST BE DONE
+	 * AFTER data has been read once to make sure it's displayed correctly
+	 */
+	if (fahrenheit)
+		reset_temps(GINT_TO_POINTER(FAHRENHEIT));
+	else
+		reset_temps(GINT_TO_POINTER(CELSIUS));
 
 	ready = TRUE;
 	gdk_threads_enter();

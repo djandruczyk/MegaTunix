@@ -18,6 +18,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
+#include <constants.h>
 #include <conversions.h>
 
 /* Conversions.c
@@ -39,6 +40,8 @@ extern unsigned char * ve_const_arr;
 struct Conversion_Chart std_conversions;
 extern GtkWidget * veconst_widgets_1[];
 extern GtkWidget * veconst_widgets_2[];
+extern struct Labels labels;
+extern struct Adjustments adjustments;
 
 void read_conversions(void)
 {
@@ -139,4 +142,42 @@ gfloat convert_after_upload(gint offset)
 
 	}
 	return (return_value);
+}
+
+void reset_temps(gpointer type)
+{
+	gint i;
+	extern const gchar * F_warmup_labels[];
+	extern const gchar * C_warmup_labels[];
+	switch ((gint)type)
+	{
+		case FAHRENHEIT:
+			printf("reset_temps F\n");
+			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_lowtemp_lab),"-40 Deg. F");
+			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_hightemp_lab),"170 Deg. F");
+			gtk_label_set_text(GTK_LABEL(labels.warmup_title),"Engine Temp in Degrees Fahrenheit");
+			gtk_label_set_text(GTK_LABEL(labels.ego_temp_lab),"Coolant Temp\nActivation(Deg F.)");
+			gtk_label_set_text(GTK_LABEL(labels.fastidletemp_lab),"Fast Idle Threshold\n(Degrees F.)");
+			gtk_label_set_text(GTK_LABEL(labels.runtime_clt_lab),"Coolant (F)");
+			gtk_label_set_text(GTK_LABEL(labels.runtime_mat_lab),"MAT (F)");
+			for (i=0;i<10;i++)
+				gtk_label_set_text(GTK_LABEL(labels.warmup_bins_lab[i]),F_warmup_labels[i]);
+			
+			
+			break;
+
+		case CELSIUS:
+			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_lowtemp_lab),"-40 Deg. C");
+			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_hightemp_lab),"77 Deg. C");
+			gtk_label_set_text(GTK_LABEL(labels.warmup_title),"Engine Temp in Degrees Celsius");
+			gtk_label_set_text(GTK_LABEL(labels.ego_temp_lab),"Coolant Temp\nActivation(Deg C.)");
+			gtk_label_set_text(GTK_LABEL(labels.fastidletemp_lab),"Fast Idle Threshold\n(Degrees C.)");
+			gtk_label_set_text(GTK_LABEL(labels.runtime_clt_lab),"Coolant (C)");
+			gtk_label_set_text(GTK_LABEL(labels.runtime_mat_lab),"MAT (C)");
+			for (i=0;i<10;i++)
+				gtk_label_set_text(GTK_LABEL(labels.warmup_bins_lab[i]),C_warmup_labels[i]);
+			printf("reset_temps C\n");
+			break;
+	}
+	return;	
 }

@@ -18,6 +18,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
+#include <constants.h>
 #include <runtime_gui.h>
 
 
@@ -27,6 +28,7 @@ const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 gboolean force_status_update = TRUE;
 extern gboolean connected;
 extern GdkColor white;
+extern struct Labels labels;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 
@@ -76,7 +78,7 @@ int build_runtime(GtkWidget *parent_frame)
 
 	/* O2 Voltage Label*/
 	label = gtk_label_new(NULL);
-	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> (V)");
+	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> (Volts)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
@@ -101,6 +103,7 @@ int build_runtime(GtkWidget *parent_frame)
 
 	/* Coolant */
 	label = gtk_label_new("Coolant (F)");
+	labels.runtime_clt_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
@@ -124,7 +127,7 @@ int build_runtime(GtkWidget *parent_frame)
 	
 	
 	/* Battery Voltage */
-	label = gtk_label_new("Batt (V)");
+	label = gtk_label_new("Batt (Volts)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
@@ -234,6 +237,7 @@ int build_runtime(GtkWidget *parent_frame)
 	
 	/* Manifold Air Temp */
 	label = gtk_label_new("MAT (F)");
+	labels.runtime_mat_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
@@ -699,29 +703,29 @@ void update_runtime_vars()
 	}
 
 	/* Connected */
-	gtk_widget_set_sensitive(runtime_data.status[0],
+	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 			connected);
 		
 	if ((force_status_update) || (runtime->engine.value != runtime_last->engine.value))
 	{
 		force_status_update = FALSE;
 		/* Cranking */
-		gtk_widget_set_sensitive(runtime_data.status[1],
+		gtk_widget_set_sensitive(runtime_data.status[CRANKING],
 				runtime->engine.bit.crank);
 		/* Running */
-		gtk_widget_set_sensitive(runtime_data.status[2],
+		gtk_widget_set_sensitive(runtime_data.status[RUNNING],
 				runtime->engine.bit.running);
 		/* Warmup */
-		gtk_widget_set_sensitive(runtime_data.status[3],
+		gtk_widget_set_sensitive(runtime_data.status[WARMUP],
 				runtime->engine.bit.warmup);
 		/* Afterstart Enrichment */
-		gtk_widget_set_sensitive(runtime_data.status[4],
+		gtk_widget_set_sensitive(runtime_data.status[AS_ENRICH],
 				runtime->engine.bit.startw);
 		/* Accel Enrichment */
-		gtk_widget_set_sensitive(runtime_data.status[5],
+		gtk_widget_set_sensitive(runtime_data.status[ACCEL],
 				runtime->engine.bit.tpsaen);
 		/* Decel Enleanment */
-		gtk_widget_set_sensitive(runtime_data.status[6],
+		gtk_widget_set_sensitive(runtime_data.status[DECEL],
 				runtime->engine.bit.tpsden);
 		
 	}
@@ -730,17 +734,11 @@ void update_runtime_vars()
 
 void reset_runtime_status()
 {
-		gtk_widget_set_sensitive(runtime_data.status[1],
+	gint i;
+	for(i=1;i<7;i++)
+	{
+		gtk_widget_set_sensitive(runtime_data.status[i],
 				FALSE);
-		gtk_widget_set_sensitive(runtime_data.status[2],
-				FALSE);
-		gtk_widget_set_sensitive(runtime_data.status[3],
-				FALSE);
-		gtk_widget_set_sensitive(runtime_data.status[4],
-				FALSE);
-		gtk_widget_set_sensitive(runtime_data.status[5],
-				FALSE);
-		gtk_widget_set_sensitive(runtime_data.status[6],
-				FALSE);
+	}
 }
 	
