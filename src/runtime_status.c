@@ -31,8 +31,8 @@
 
 gint status_x_origin = 100;
 gint status_y_origin = 100;
-gint status_x_width = 100;
-gint status_y_height = 100;
+gint status_width = 50;
+gint status_height = 100;
 
 void load_status(void)
 {
@@ -74,6 +74,8 @@ void load_status(void)
 		}
 
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+		gtk_window_move(GTK_WINDOW(window),status_x_origin,status_y_origin);
+		gtk_window_set_default_size(GTK_WINDOW(window),status_width,status_height);
 		g_signal_connect(G_OBJECT(window),"delete_event",
 				G_CALLBACK(prevent_close),NULL);
 		register_widget("status_window",window);

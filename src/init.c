@@ -17,10 +17,12 @@
 #include <defines.h>
 #include <debugging.h>
 #include <init.h>
+#include <listmgmt.h>
 #include <structures.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <widgetmgmt.h>
 #include <unistd.h>
 
 gint major_ver;
@@ -36,9 +38,13 @@ extern gint ms_goodread_count;
 extern gboolean just_starting;
 extern gboolean tips_in_use;
 extern gint temp_units;
+extern gint status_x_origin;
+extern gint status_y_origin;
 extern gint main_x_origin;
 extern gint main_y_origin;
 extern gint lv_zoom;
+extern gint status_width;
+extern gint status_height;
 extern gint width;
 extern gint height;
 extern gint interval_min;
@@ -66,8 +72,8 @@ void init(void)
 	interval_min = 5;	/* 5 millisecond minimum interval delay */
 	interval_step = 5;	/* 5 ms steps */
 	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
-	width = 717;		/* min window width */
-	height = 579;		/* min window height */
+	width = 717;		/* window width */
+	height = 579;		/* window height */
 	main_x_origin = 160;	/* offset from left edge of screen */
 	main_y_origin = 120;	/* offset from top edge of screen */
 
@@ -110,6 +116,12 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
+		cfg_read_int(cfgfile, "Window", "status_width", &status_width);
+		cfg_read_int(cfgfile, "Window", "status_height", &status_height);
+		cfg_read_int(cfgfile, "Window", "status_x_origin", 
+				&status_x_origin);
+		cfg_read_int(cfgfile, "Window", "status_y_origin", 
+				&status_y_origin);
 		cfg_read_int(cfgfile, "Window", "width", &width);
 		cfg_read_int(cfgfile, "Window", "height", &height);
 		cfg_read_int(cfgfile, "Window", "main_x_origin", 
@@ -156,6 +168,7 @@ void save_config(void)
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	extern GHashTable *dynamic_widgets;
 
 	g_static_mutex_lock(&mutex);
 
@@ -178,6 +191,12 @@ void save_config(void)
 		gdk_window_get_position(main_window->window,&x,&y);
 		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
+		gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window, &tmp_width,&tmp_height);
+		cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
+		cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
+		gdk_window_get_position(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window,&x,&y);
+		cfg_write_int(cfgfile, "Window", "status_x_origin", x);
+		cfg_write_int(cfgfile, "Window", "status_y_origin", y);
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
 	if (serial_params->port_name)
