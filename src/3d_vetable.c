@@ -55,10 +55,10 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	gchar *tmpbuf;
 	gint tbl = (gint)data;
 
-	if (winstat[tbl] == TRUE)
+	if (winstat[tbl-1] == TRUE)
 		return TRUE;
 	else
-		winstat[tbl] = TRUE;
+		winstat[tbl-1] = TRUE;
 	
 	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
 	initialize_ve_view((void *)ve_view);
@@ -202,7 +202,7 @@ gint reset_3d_winstat(GtkWidget *widget)
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 	store_widgets = g_list_remove(store_widgets,(gpointer)ve_view->burn_but);	
 	tbl = ve_view->table;
-	winstat[ve_view->table] = FALSE;
+	winstat[(ve_view->table)-1] = FALSE;
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 	if (tbl == 1)
