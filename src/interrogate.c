@@ -15,6 +15,8 @@
 
 #include <config.h>
 #include <defines.h>
+#include <debugging.h>
+#include <enums.h>
 #include <errno.h>
 #include <glib/gprintf.h>
 #include <interrogate.h>
@@ -132,9 +134,11 @@ void interrogate_ecu()
 	gint i = 0;
 	gint len = 0;
 	gint total = 0;
+	gint last_page = 0;
 	extern gboolean raw_reader_running;
 	gboolean restart_reader = FALSE;
 	gchar *string;
+	gchar *tmpbuf;
 	gboolean con_status = FALSE;
 	gint tests_to_run = sizeof(cmds)/sizeof(cmds[0]);
 	struct Canidate *canidate;
@@ -182,13 +186,18 @@ void interrogate_ecu()
 		ptr = buf;
 		len = cmds[i].cmd_len;
 		/* set page */
-		set_ms_page(cmds[i].page);
+		if (last_page != cmds[i].page)
+			set_ms_page(cmds[i].page);
+		last_page = cmds[i].page;
+
 		string = g_strdup(cmds[i].cmd_string);
 		res = write(serial_params->fd,string,len);
-		printf("sent command \"%s\"\n",string);
+		tmpbuf = g_strdup_printf("sent command \"%s\"\n",string);
+		dbg_func(tmpbuf,INTERROGATOR);
+		g_free(tmpbuf);
 		g_free(string);
 		if (res != len)
-			g_fprintf(stderr,__FILE__": Error writing data to the ECU\n");
+			dbg_func(__FILE__": Error writing data to the ECU\n",CRITICAL);
 		res = poll (&ufds,1,25);
 		if (res)
 		{	
@@ -196,7 +205,9 @@ void interrogate_ecu()
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
 			}
-			g_printf("total %i\n",total);
+			tmpbuf = g_strdup_printf("total %i\n",total);
+			dbg_func(tmpbuf,INTERROGATOR);
+			g_free(tmpbuf);
 
 			ptr = buf;
 			switch (i)
@@ -239,7 +250,7 @@ void interrogate_ecu()
 		start_serial_thread();
 	determine_ecu(canidate);	
 	if (canidate)
-//		g_free(canidate);
+		g_free(canidate);
 
 	g_static_mutex_unlock(&mutex);
 	return;
@@ -344,6 +355,7 @@ void determine_ecu(void *ptr)
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, contact author with the contents of this window\n");
 		// Store counts for VE/realtime readback... 
 
+		dbg_func(tmpbuf,INTERROGATOR);
 		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 		g_free(tmpbuf);
 		goto cleanup;
@@ -363,6 +375,7 @@ void determine_ecu(void *ptr)
 	/* Display firmware version in the window... */
 	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",canidates[match].firmware_name);
 
+	dbg_func(tmpbuf,INTERROGATOR);
 	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 	g_free(tmpbuf);
 

@@ -240,10 +240,12 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint bitmask = -1;
 	gint dload_val = -1;
 	unsigned char tmp = 0;
+	guint32 tmp32 = 0;
 	gint offset = -1;
 	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
 	gboolean single = FALSE;
+	extern gint dbg_lvl;
 	extern unsigned char *ms_data;
 	extern unsigned int ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
@@ -276,7 +278,9 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		bit_val = gtk_toggle_button_get_active( 
 				GTK_TOGGLE_BUTTON (widget));
 
-	if ((offset == 92) || (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
+	/* Note to self,  WTF is this next line for anyways???
+	*/
+//	if ((offset == 92) || (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
 	{
 		switch (offset)
 		{
@@ -349,6 +353,13 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp | (bit_val << bit_pos);
 				ve_const_dt2->bcfreq.value = tmp;
 				dload_val = tmp;
+				break;
+			case 666:
+				/* Debugging selection buttons */
+				tmp32 = dbg_lvl;
+				tmp32 = tmp32 & ~bitmask;
+				tmp32 = tmp32 | (bit_val << bit_pos);
+				dbg_lvl = tmp32;
 				break;
 			default:
 				g_printf(" Toggle button NOT handled ERROR!!, contact author\n");

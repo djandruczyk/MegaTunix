@@ -18,14 +18,13 @@
 #include <glib/gprintf.h>
 
 
+gint dbg_lvl = 0;
+
 void dbg_func(gchar *str, Dbg_Class class)
 {
-	gint debug_lvl = SERIAL_WR;
-	if (debug_lvl & class)
+	if ((dbg_lvl & class))
 	{
 		g_fprintf(stderr,str);
 	}
-	else
-		g_printf("no showing debug output\n");
 
 }

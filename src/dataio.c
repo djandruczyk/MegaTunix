@@ -14,6 +14,7 @@
 #include <config.h>
 #include <dataio.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
 #include <glib/gprintf.h>
 #include <ms_structures.h>
@@ -49,7 +50,7 @@ int handle_ms_data(InputData which_data)
 	extern struct Serial_Params *serial_params;
 	extern struct Runtime_Common *runtime;
 
-	//g_printf("handle_ms_data\n");
+	dbg_func(__FILE__": handle_ms_data()\n",IO_PROCESS);
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
@@ -69,7 +70,7 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
-				//g_printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+				dbg_func(g_strdup_printf(__FILE__": RT_VARS requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -79,7 +80,7 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
-				//g_printf("read %i bytes, count %i\n",res,count);
+				dbg_func(g_strdup_printf("\tRT_VARS read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -88,7 +89,7 @@ int handle_ms_data(InputData which_data)
 			}
 			if (bad_read)
 			{
-				g_fprintf(stderr,__FILE__":  Error reading Real-Time Variables \n");
+				dbg_func(__FILE__":  Error reading Real-Time Variables \n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -128,9 +129,7 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
-#ifdef DEBUG
-				g_printf("requesting %i bytes, ",total_wanted-total_read);
-#endif
+				dbg_func(g_strdup_printf(__FILE__": VE_CONST_0, requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -140,9 +139,7 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
-#ifdef DEBUG
-				g_printf("read %i bytes, running total: %i\n",res,total_read);
-#endif
+				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -152,7 +149,7 @@ int handle_ms_data(InputData which_data)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				g_fprintf(stderr,__FILE__":  Error reading VE/Constants for page 0\n");
+				dbg_func(__FILE__":  Error reading VE/Constants for page 0\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -176,9 +173,7 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
-#ifdef DEBUG
-				g_printf("requesting %i bytes, ",total_wanted-total_read);
-#endif
+				dbg_func(g_strdup_printf(__FILE__": VE_CONST_1, requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -188,9 +183,7 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
-#ifdef DEBUG
-				g_printf("read %i bytes, running total: %i\n",res,total_read);
-#endif
+				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -200,7 +193,7 @@ int handle_ms_data(InputData which_data)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				g_fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
+				dbg_func(__FILE__":  Error reading VE/Constants for page 1\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -224,6 +217,7 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
+				dbg_func(g_strdup_printf(__FILE__": IGNITON_VARS, requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
@@ -232,6 +226,7 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
+				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -241,7 +236,7 @@ int handle_ms_data(InputData which_data)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				g_fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
+				dbg_func(__FILE__": Error reading Spark Table\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -262,14 +257,13 @@ int handle_ms_data(InputData which_data)
 			ms_ve_goodread_count++;
 			break;
 		case RAW_MEMORY:
-			g_printf("Not designed yet...\n");
+			dbg_func("RAW_MEMORY read not designed yet...\n",CRITICAL);
 			break;
 		default:
-			g_printf("handle_ms_data, improper case, contact author\n");
+			dbg_func("handle_ms_data, improper case, contact author\n",CRITICAL);
 			break;
 	}
 	jumpout:
 
-	//g_printf("leaving\n");
 	return TRUE;
 }

@@ -14,6 +14,7 @@
 #include <comms_gui.h>
 #include <config.h>
 #include <defines.h>
+#include <debugging.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <glib/gprintf.h>
@@ -61,6 +62,7 @@ void open_serial(gchar * port_name)
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
 		tmpbuf = g_strdup_printf("%s Opened Successfully\n",device);
+		dbg_func(tmpbuf,SERIAL_GEN);
 		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
@@ -71,6 +73,7 @@ void open_serial(gchar * port_name)
 		serial_params->open = FALSE;
 		tmpbuf = g_strdup_printf("Error Opening %s Error Code: %s\n",
 				device,g_strerror(errno));
+		dbg_func(tmpbuf,CRITICAL);
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
@@ -157,6 +160,7 @@ void close_serial()
 
 	tmpbuf = g_strdup_printf("COM Port Closed\n");
 	/* An Closing the comm port */
+	dbg_func(tmpbuf,SERIAL_GEN);
 	update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
 }
@@ -191,8 +195,9 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 		while (write(serial_params->fd,"A",1) != 1)
 		{
 			usleep(1000);
-			g_fprintf(stderr,__FILE__": Error writing \"A\" to the ecu in check_ecu_comms()\n");
+			dbg_func(__FILE__": Error writing \"A\" to the ecu in check_ecu_comms()\n",CRITICAL);
 		}
+		dbg_func(__FILE__": check_ecu_comms() Requesting one batch of realtime vars (\"A\" cmd)\n",SERIAL_RD);
 			
 		res = poll (&ufds,1,serial_params->poll_timeout*5);
 		if (res)
@@ -207,6 +212,7 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 
 			tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 			/* COMMS test succeeded */
+			dbg_func(tmpbuf,SERIAL_RD);
 			update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			connected = TRUE;
@@ -220,6 +226,7 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 		{
 			tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 			/* An I/O Error occurred with the MegaSquirt ECU */
+			dbg_func(tmpbuf,CRITICAL);
 			update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			connected = FALSE;
@@ -239,6 +246,7 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 	{
 		tmpbuf = g_strdup_printf("Serial Port NOT Opened, Can NOT Test ECU Communications\n");
 		/* Serial port not opened, can't test */
+		dbg_func(tmpbuf,CRITICAL);
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
@@ -265,10 +273,8 @@ void read_ve_const()
 	}
 	if (raw_reader_running)
 	{
-		//g_printf("stopping thread\n");
 		restart_reader = TRUE;
 		stop_serial_thread(); /* stops realtime read */
-		//g_printf(" thread stopped\n");
 	}
 
 	ufds.fd = serial_params->fd;
@@ -283,13 +289,14 @@ void read_ve_const()
 	res = poll (&ufds,1,serial_params->poll_timeout);
 	if (res == 0)	/* Error */
 	{
-		g_fprintf(stderr,__FILE__": failure reading VE-Table\n");
+		dbg_func(__FILE__": failure reading VE-Table\n",CRITICAL);
 		serial_params->errcount++;
 		connected = FALSE;
 	}
 	else		/* Data arrived */
 	{
 		connected = TRUE;
+		dbg_func(__FILE__": reading VE-Table(0)\n",SERIAL_RD);
 		res = handle_ms_data(VE_AND_CONSTANTS_1);
 
 	}
@@ -300,13 +307,14 @@ void read_ve_const()
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)	// Error 
 		{
-			g_fprintf(stderr,__FILE__": failure reading VE-Table (DT page 1)\n");
+			dbg_func(__FILE__": failure reading VE-Table(1)\n",CRITICAL);
 			serial_params->errcount++;
 			connected = FALSE;
 		}
 		else		// Data arrived 
 		{
 			connected = TRUE;
+			dbg_func(__FILE__": reading VE-Table(1)\n",SERIAL_RD);
 			res = handle_ms_data(VE_AND_CONSTANTS_2);
 
 		}
@@ -318,13 +326,14 @@ void read_ve_const()
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)	// Error 
 		{
-			g_fprintf(stderr,__FILE__": failure reading Ignition-Table\n");
+			dbg_func(__FILE__": failure reading Spark-Table\n",CRITICAL);
 			serial_params->errcount++;
 			connected = FALSE;
 		}
 		else		// Data arrived 
 		{
 			connected = TRUE;
+			dbg_func(__FILE__": reading Spark-Table(1)\n",SERIAL_RD);
 			res = handle_ms_data(IGNITION_VARS);
 		}
 	}
@@ -347,17 +356,26 @@ void set_ms_page(gint ms_page)
 {
 	gint res = 0;
 	gchar buf;
+	gchar *tmpbuf;
 
 	if ((ms_page > 1) || (ms_page < 0))
-		g_fprintf(stderr,__FILE__": page choice %i is out of range(0,1)\n",ms_page);
+	{
+		tmpbuf = g_strdup_printf(__FILE__": page choice %i is out of range(0,1)\n",ms_page);
+		dbg_func(tmpbuf,CRITICAL);
+		g_free(tmpbuf);
+	}
 	
 	buf = ms_page & 0x01;
 	res = write(serial_params->fd,"P",1);
 	if (res != 1)
-		g_fprintf(stderr,__FILE__": FAILURE sending \"P\" command to ECU \n");
+		dbg_func(__FILE__": FAILURE sending \"P\" (change page) command to ECU \n",CRITICAL);
 	res = write(serial_params->fd,&buf,1);
 	if (res != 1)
-		g_fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);
+	{
+		tmpbuf = g_strdup_printf(__FILE__": FAILURE changing page on ECU to %i\n",ms_page);
+		dbg_func(tmpbuf,CRITICAL);
+		g_free(tmpbuf);
+	}
 }
 
 void write_ve_const(gint value, gint offset, gboolean ign_var)
@@ -400,7 +418,7 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 	}
 	if (value < 0)
 	{
-		g_printf("WARNING!!, value sent is below 0\n");
+		dbg_func(__FILE__": WARNING!!, value sent is below 0\n",CRITICAL);
 		return;
 	}
 
@@ -411,7 +429,11 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 		if (ecu_caps & DUALTABLE)
 			set_ms_page(1);
 		else
-			g_fprintf(stderr,__FILE__": High offset (%i), but no DT flag\n",offset+MS_PAGE_SIZE);
+		{
+			tmpbuf = g_strdup_printf(__FILE__": High offset (%i), but no DT flag\n",offset+MS_PAGE_SIZE);
+			dbg_func(tmpbuf,CRITICAL);
+			g_free(tmpbuf);
+		}
 	
 	}
 	/* NOT high offset, but if using DT switch page back to 0 */
@@ -470,6 +492,7 @@ void burn_flash()
 	gint res = 0;
 	gboolean restart_reader = FALSE;
 	extern unsigned int ecu_caps;
+	gchar * tmpbuf;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -492,7 +515,10 @@ void burn_flash()
 	/* doing this may NOT be necessary,  but who knows... */
 	res = write (serial_params->fd,"B",1);	/* Send Burn command */
 	if (res != 1)
-		g_fprintf(stderr,__FILE__": Burn Failure, write command failed %i\n",res);
+	{
+		tmpbuf = g_strdup_printf(__FILE__": Burn Failure, write command failed %i\n",res);
+		dbg_func(tmpbuf,CRITICAL);
+	}
 
 	dbg_func(__FILE__": Burn to Flash\n",SERIAL_WR);
 

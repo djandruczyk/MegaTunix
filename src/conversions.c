@@ -91,7 +91,7 @@ void read_conversions(void)
 			conv_chart->conv_factor[i] = 1.0;
 		}
 
-		tmpbuf = g_strdup_printf(__FILE__":\t Load_Conversions() BASE Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
+		tmpbuf = g_strdup_printf(__FILE__": load_conversions() BASE Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
 		dbg_func(tmpbuf,DL_CONV);
 		g_free(tmpbuf);
 	}
@@ -122,7 +122,7 @@ void read_conversions(void)
 				}
 
 			}
-			tmpbuf = g_strdup_printf(__FILE__":\t Load_Conversions() Ignition Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
+			tmpbuf = g_strdup_printf(__FILE__": load_conversions() Ignition Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
 			dbg_func(tmpbuf,DL_CONV);
 			g_free(tmpbuf);
 		}
@@ -166,12 +166,12 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 			return_value = tmp_val;
 			break;
 		default:
-			tmpbuf = g_strdup_printf(__FILE__":\tConvert_before_download(): NO CONVERSION defined, BUG!!! offset: %i\n",offset);
+			tmpbuf = g_strdup_printf(__FILE__": convert_before_dl(): NO CONVERSION defined, BUG!!! offset: %i\n",offset);
 			dbg_func(tmpbuf,DL_CONV);
 			g_free(tmpbuf);
 			break;
 	}
-	tmpbuf = g_strdup_printf(__FILE__":\tconvert_before_dl(): offset %i, raw %.2f, sent %i, ign_parm %i\n",offset,value,return_value,(gint)ign_var);
+	tmpbuf = g_strdup_printf(__FILE__": convert_before_dl(): offset %i, raw %.2f, sent %i, ign_parm %i\n",offset,value,return_value,(gint)ign_var);
 	dbg_func(tmpbuf,DL_CONV);
 	g_free(tmpbuf);
 
@@ -236,13 +236,13 @@ gfloat convert_after_upload(gint offset, gboolean ign_var)
 			return_value = ve_const_arr[index];
 			break;
 		default:
-			tmpbuf = g_strdup_printf(__FILE__":\tConvert_after_upload() NO CONVERSION defined, index %i BUG!!!\n",index);
+			tmpbuf = g_strdup_printf(__FILE__": convert_after_ul() NO CONVERSION defined, index %i BUG!!!\n",index);
 			dbg_func(tmpbuf,UL_CONV);
 			g_free(tmpbuf);
 			break;
 
 	}
-	tmpbuf = g_strdup_printf(__FILE__":\tconvert_after_ul(),offset %i, raw %i, val %f, ign_parm %i\n",offset,ve_const_arr[index],return_value,(gint)ign_var);
+	tmpbuf = g_strdup_printf(__FILE__": convert_after_ul(),offset %i, raw %i, val %f, ign_parm %i\n",offset,ve_const_arr[index],return_value,(gint)ign_var);
 	dbg_func(tmpbuf,UL_CONV);
 	g_free(tmpbuf);
 	return (return_value);

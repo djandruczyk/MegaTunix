@@ -16,6 +16,7 @@
 #include <dataio.h>
 #include <datalogging_gui.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
 #include <glib/gprintf.h>
 #include <notifications.h>
@@ -53,6 +54,7 @@ void start_serial_thread()
 	{
 		tmpbuf = g_strdup_printf("Serial Port Not Open, Can NOT Start Thread in This State\n");
 		/* Serial not opened, can't start thread in this state */
+		dbg_func(tmpbuf,CRITICAL);
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 		g_static_mutex_unlock(&mutex);
@@ -62,6 +64,7 @@ void start_serial_thread()
 	{
 		tmpbuf = g_strdup_printf("Serial Reader Thread ALREADY Running\n");
 		/* Thread already running, can't run more than 1 */
+		dbg_func(tmpbuf,THREADS);
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 		g_static_mutex_unlock(&mutex);
@@ -79,6 +82,7 @@ void start_serial_thread()
 		/* SUCCESS */
 		tmpbuf = g_strdup_printf("Successfull Start of Realtime Reader Thread\n");
 		/* Thread started successfully */
+		dbg_func(tmpbuf,THREADS);
 		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
@@ -87,6 +91,7 @@ void start_serial_thread()
 		/* FAILURE */
 		tmpbuf = g_strdup_printf("FAILURE Attempting To Start Realtime Reader Thread\n");
 		/* Thread failed to start */
+		dbg_func(tmpbuf,CRITICAL);
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
@@ -104,6 +109,7 @@ int stop_serial_thread()
 	{
 		tmpbuf = g_strdup_printf("Realtime Reader Thread ALREADY Stopped\n");
 		/* Thread not running, can't stop what hasn't started yet*/
+		dbg_func(tmpbuf,THREADS);
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 		g_static_mutex_unlock(&mutex);
@@ -122,6 +128,7 @@ int stop_serial_thread()
 		//g_printf("thread stopped\n");
 
 		tmpbuf = g_strdup_printf("Realtime Reader Thread Stopped Normally\n");
+		dbg_func(tmpbuf,THREADS);
 		/* Thread stopped normally */
 		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
@@ -157,13 +164,14 @@ void *raw_reader_thread(void *params)
 		res = poll (&ufds,1,startup+serial_params->poll_timeout);
 		if (res == 0)
 		{
-			g_fprintf(stderr,__FILE__": Error polling for RealTime vars\n");
+			dbg_func(__FILE__": Error polling for RealTime vars\n",CRITICAL);
 			serial_params->errcount++;
 			connected = FALSE;
 		}
 		else
 		{
 			startup = 0;	
+			dbg_func(__FILE__": Successfull read of RealTime vars\n",SERIAL_RD);
 			res = handle_ms_data(REALTIME_VARS);
 			if(res)
 			{
@@ -171,7 +179,7 @@ void *raw_reader_thread(void *params)
 				run_datalog();
 			}
 			else
-				g_printf("handle_ms_data reported a fault\n");
+				dbg_func(__FILE__": handle_ms_data() reported a fault\n",CRITICAL);
 		}
 
 		gtk_widget_set_sensitive(misc.status[0],

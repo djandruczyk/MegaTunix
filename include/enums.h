@@ -213,15 +213,16 @@ typedef enum
 
 typedef enum
 {
-	NO_DEBUG 	= 1<<0,
-	INTERROGATOR 	= 1<<1,
-	OPENGL		= 1<<2,
-	DL_CONV		= 1<<3,
-	UL_CONV		= 1<<4,
-	SERIAL_WR	= 1<<5,
-	SERIAL_RD	= 1<<6,
-	SERIAL_GEN	= 1<<7,
-	IO_PROCESS	= 1<<8,
+	NO_DEBUG 	= 0,
+	INTERROGATOR 	= 1<<0,
+	OPENGL		= 1<<1,
+	DL_CONV		= 1<<2,
+	UL_CONV		= 1<<3,
+	SERIAL_WR	= 1<<4,
+	SERIAL_RD	= 1<<5,
+	SERIAL_GEN	= 1<<6,
+	IO_PROCESS	= 1<<7,
+	THREADS		= 1<<8,
 	CRITICAL	= 1<<9
 }Dbg_Class;
 

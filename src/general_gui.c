@@ -99,6 +99,144 @@ void build_general(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
+			"This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will appear on the console that MegaTunix was started from...",NULL);
+
+	frame = gtk_frame_new("MegaTunix Debugging");
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+
+	table = gtk_table_new(2,5,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,5);
+
+	button = gtk_check_button_new_with_label("Interrogation");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("OpenGL");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Download Conversions");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Upload Conversions");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Serial Writes");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(16));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Serial Reads");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(5));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(32));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("General Serial");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(6));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(64));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("I/O Processing");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(7));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(128));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Threads");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(8));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(256));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Critical Errors");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(9));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(512));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,
 			"This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match.",NULL);
 
 	frame = gtk_frame_new("MegaSquirt ECU Information");
@@ -110,7 +248,7 @@ void build_general(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,5);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
 
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
@@ -178,22 +316,23 @@ void build_general(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,
 			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100\% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"?\" command (Extend version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU, This is only supported on some firmware and is used for debugging and manipulating features that do NOT have gui controls yet.  As of April 2004 MegaTunix does NOT yet support raw memory viewing/editing.",NULL);
 
-	frame = gtk_frame_new ("ECU Output");
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 3, 4,
+			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL), 0, 0);
 
+	frame = gtk_frame_new ("ECU Output");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
-	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 3, 4,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
+
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
 	sw = gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
-	gtk_widget_set_size_request(sw,-1,260);
-	gtk_box_pack_start(GTK_BOX(hbox),sw,TRUE,TRUE,5);
+//	gtk_widget_set_size_request(sw,-1,200);
+	gtk_box_pack_start(GTK_BOX(vbox2),sw,TRUE,TRUE,5);
 
 	view = gtk_text_view_new ();
 	interr_view = view;
