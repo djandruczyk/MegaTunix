@@ -16,7 +16,6 @@
 #include <config.h>
 #include <defines.h>
 #include <errno.h>
-//#include <gui_handlers.h>
 #include <interrogate.h>
 #include <mode_select.h>
 #include <notifications.h>
@@ -53,8 +52,11 @@ static struct Canidate
 	gboolean iac_cap;	/* Extended IAC ability... */
 } canidates[] = 
 {
+	{ {22,0,0,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,0,
+			"Old Bowling & Grippo 1.0\0",FALSE,FALSE,FALSE},
 	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,20,
-			"Standard B&G (2.0-3.01)\0",FALSE,FALSE,FALSE},
+			"Standard Bowling & Grippo (2.0-3.01)\0",
+			FALSE,FALSE,FALSE},
 	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,NULL,NULL,1,
 			"Dualtable 0.90-1.0\0",TRUE,FALSE,FALSE},
 	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,"v.1.01\0",NULL,1,
