@@ -514,6 +514,7 @@ struct Vex_Import
 	gchar *date;		/* String */
 	gchar *time;		/* String */
 	gint page;		/* Int */
+	gint table;		/* Int */
 	gint total_rpm_bins;	/* Int */
 	gint *rpm_bins;		/* Int Array, dynamic */
 	gint total_load_bins;	/* Int */

@@ -64,7 +64,6 @@ GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
 
 gboolean paused_handlers = FALSE;
-static gboolean constants_loaded = FALSE;
 extern gint num_squirts_1;
 extern gint num_squirts_2;
 extern gint num_cyls_1;
@@ -547,8 +546,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			no_update = FALSE;
 			if (!interrogated)
 				io_cmd(IO_INTERROGATE_ECU, NULL);
-			if (!constants_loaded)
-				io_cmd(IO_READ_VE_CONST, NULL);
 			start_realtime_tickler();
 			forced_update = TRUE;
 			break;

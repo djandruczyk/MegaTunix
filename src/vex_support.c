@@ -115,7 +115,11 @@ gboolean vetable_export(struct Io_File *iofile)
 
 		output = g_string_append(output, "EVEME 1.0\n");
 		output = g_string_append(output, "UserRev: 1.00\n");
-		output = g_string_append(output, g_strdup_printf("UserComment: %s\n",vex_comment));
+		if (firmware->total_tables != firmware->total_pages)
+			output = g_string_append(output, g_strdup_printf("UserComment: Table %i; %s\n",table,vex_comment));
+		else
+			output = g_string_append(output, g_strdup_printf("UserComment: %s\n",vex_comment));
+
 		output = g_string_append(output, g_strdup_printf("Date: %i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year)));
 
 		output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
@@ -201,7 +205,7 @@ gboolean vetable_import(struct Io_File *iofile)
 	while (go)
 	{
 		status = process_vex_line(vex,iofile->iochannel);
-		if (status == G_IO_STATUS_EOF)
+		if ((status == G_IO_STATUS_EOF)||(status == G_IO_STATUS_ERROR))
 		{
 			go = FALSE;
 			break;
@@ -402,8 +406,48 @@ GIOStatus process_page(struct Vex_Import *vex, gchar *string)
 	g_free(tmpbuf);
 	if (msg_type)
 		g_free(msg_type);
+	status = process_table(vex);
 	return status;
 }
+
+
+/*!
+ \brief process_table() extracts the table_number out of the comment field
+ stores it in the Vex_Import Structure for this table.
+ \param vex (struct Vex_Import *) Pointer to the Vex_Import structure
+ \param string (gchar *) unused in this function
+ \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
+ */
+GIOStatus process_table(struct Vex_Import *vex)
+{
+	gchar **string = NULL;
+	extern struct Firmware_Details *firmware;
+
+	printf("process_table\n");
+	if (firmware->total_tables == firmware->total_pages)
+		vex->table = vex->page;
+	else
+	{
+		string = g_strsplit(vex->comment,";",-1);
+		if ((string[0] == NULL) || (!g_strrstr(string[0],"Table")))
+		{
+			update_logbar("tools_view","warning","VEX Import: Multi Table per page firmware,\n\tbut table not defined in comment field, load aborted!!!\n",TRUE,FALSE);
+			vex->table = -1;
+			g_strfreev(string);
+			return G_IO_STATUS_ERROR;
+		}
+		else
+		{
+			/* the +5 gets us past theword "Table" */
+			vex->table = (gint)g_ascii_strtod(string[0]+5,NULL);
+			g_strfreev(string);
+		}
+
+	}
+	update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: Table %i\n",vex->table),TRUE,FALSE);
+	return G_IO_STATUS_NORMAL;
+}
+
 
 /*!
  \brief read_number_from_line() is used to read the RPM/LOAD values from the
@@ -704,6 +748,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	extern gint ** ms_data_backup;
 	gchar * tmpbuf = NULL;
 	gint page = -1;
+	gint table = -1;
 	extern struct Firmware_Details *firmware;
 
 	/* Since we assume the page is where the table is this can cause
@@ -711,32 +756,41 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	 * of one page....
 	 */
 	page = vex->page;
-	/* If dimensions do NOT match, ABORT!!! */
-	if (firmware->table_params[page]->x_bincount != vex->total_rpm_bins)
+	table = vex->table;
+	if ((table < 0) || (table >= firmware->total_tables))
 	{
-		tmpbuf = g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->x_bincount,vex->total_rpm_bins);
+		dbg_func(__FILE__": feed_import_data_to_ecu()\n\ttable passed is out of range\n",CRITICAL);
 		return;
 	}
-	if (firmware->table_params[page]->y_bincount != vex->total_load_bins)
+	/* If dimensions do NOT match, ABORT!!! */
+	if (firmware->table_params[table]->x_bincount != vex->total_rpm_bins)
 	{
-		tmpbuf = g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[page]->y_bincount,vex->total_load_bins);
+		tmpbuf = g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_rpm_bins);
+		return;
+	}
+	if (firmware->table_params[table]->y_bincount != vex->total_load_bins)
+	{
+		tmpbuf = g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_load_bins);
 		return;
 	}
 
-	/* Backup the ms data first... */
-	memset((void *)ms_data_backup[page], 0, sizeof(gint)*firmware->page_params[page]->length);
-	memcpy(ms_data_backup[page], ms_data[page],sizeof(gint)*firmware->page_params[page]->length);
+	/* Backup the ALL pages of data first... */
+	for (i=0;i<firmware->total_pages;i++)
+	{
+		memset((void *)ms_data_backup[i], 0, sizeof(gint)*firmware->page_params[i]->length);
+		memcpy(ms_data_backup[i], ms_data[i],sizeof(gint)*firmware->page_params[i]->length);
+	}
 			
 
 	for (i=0;i<vex->total_rpm_bins;i++)
-		ms_data[page][firmware->table_params[page]->x_base + i] =
+		ms_data[page][firmware->table_params[table]->x_base + i] =
 			vex->rpm_bins[i];
 	for (i=0;i<vex->total_load_bins;i++)
-		ms_data[page][firmware->table_params[page]->y_base + i] =
+		ms_data[page][firmware->table_params[table]->y_base + i] =
 			vex->load_bins[i];
 
 	for (i=0;i<((vex->total_load_bins)*(vex->total_rpm_bins));i++)
-		ms_data[page][firmware->table_params[page]->z_base + i] =
+		ms_data[page][firmware->table_params[table]->z_base + i] =
 			vex->ve_bins[i];
 
 	for (i=0;i<firmware->page_params[page]->length;i++)

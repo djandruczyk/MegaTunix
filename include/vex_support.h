@@ -27,6 +27,7 @@ GIOStatus process_vex_table(struct Vex_Import *, gchar *, GIOChannel * );
 GIOStatus read_number_from_line(gint *, GIOChannel *);
 GIOStatus process_header(struct Vex_Import *, ImportParserArg , gchar *);
 GIOStatus process_page(struct Vex_Import *, gchar * );
+GIOStatus process_table(struct Vex_Import *);
 GIOStatus handler_dispatch(struct Vex_Import *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
 void dealloc_vex_struct(struct Vex_Import *);
 void feed_import_data_to_ecu(struct Vex_Import *);
