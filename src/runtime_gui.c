@@ -35,6 +35,7 @@ extern GdkColor red;
 
 gboolean forced_update = TRUE;
 gboolean no_update = FALSE;
+GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
 
 
 /*!
@@ -59,6 +60,8 @@ gboolean update_runtime_vars()
 
 	if(no_update)
 		return FALSE;
+
+	g_static_mutex_lock(&rtv_mutex);
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)
 	{
@@ -118,7 +121,7 @@ breakout:
 	}
 
 	forced_update = FALSE;
-
+	g_static_mutex_unlock(&rtv_mutex);
 	return TRUE;
 }
 

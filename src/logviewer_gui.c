@@ -30,7 +30,6 @@ gint info_width = 120;
 static gint max_viewables = 0;
 static gboolean adj_scale = TRUE;
 static gboolean blocked = FALSE;
-static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
 static gfloat hue = -60.0;
 static gfloat col_sat = 1.0;
 static gfloat col_val = 1.0;
@@ -38,6 +37,7 @@ static gfloat col_val = 1.0;
 struct Logview_Data *lv_data = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
 gboolean playback_mode = FALSE;
+static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
 extern struct Log_Info *log_info;
 
 

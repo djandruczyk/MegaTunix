@@ -160,6 +160,12 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			}
 			dump_output(total_read,buf);
 			flush_serial(serial_params->fd, TCIOFLUSH);
+			if (total_read <= 1)
+			{
+				thread_update_logbar("error_status_view",NULL,g_strdup("No ECU Errors were reported....\n"),FALSE,FALSE);
+				break;
+			}
+
 			if (g_utf8_validate(buf+1,total_read-1,NULL))
 				thread_update_logbar("error_status_view",NULL,g_strndup(buf+1,total_read-1),FALSE,FALSE);
 			else

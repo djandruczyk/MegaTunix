@@ -25,6 +25,7 @@
 
 gint realtime_id = 0;
 gint playback_id = 0;
+extern GStaticMutex rtv_mutex;
 
 
 /*!
@@ -36,6 +37,7 @@ void start_realtime_tickler()
 {
 	extern struct Serial_Params *serial_params;
 
+	g_static_mutex_lock(&rtv_mutex);
 	if (realtime_id == 0)
 	{
 		flush_rt_arrays();
@@ -45,6 +47,7 @@ void start_realtime_tickler()
 	}
 	else
 		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY started\n"),TRUE,FALSE);
+	g_static_mutex_unlock(&rtv_mutex);
 }
 
 
@@ -91,6 +94,7 @@ void stop_realtime_tickler()
 	extern gint dispatcher_id;
 	extern gboolean leaving;
 
+	g_static_mutex_lock(&rtv_mutex);
 	if (realtime_id)
 	{
 		g_source_remove(realtime_id);
@@ -105,6 +109,7 @@ void stop_realtime_tickler()
 	else
 		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY stopped\n"),TRUE,FALSE);
 
+	g_static_mutex_unlock(&rtv_mutex);
 	reset_runtime_status();
 }
 

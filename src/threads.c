@@ -40,7 +40,7 @@
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
-gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test"};
+gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 
 
 /*!
