@@ -45,6 +45,7 @@ static struct
 { "MegaSquirt Runtime Display", RUNTIME_PAGE, "Runtime Disp."},
 { "MegaSquirt Tuning", TUNING_PAGE, "Tuning"},
 { "MegaSquirt Tools", TOOLS_PAGE, "Tools"},
+{ "MegaSquirt Advanced Diagnostics", LOWLEVEL_PAGE, "Low-Level"},
 { "MegaSquirt DataLogging", DATALOGGING_PAGE, "DataLogging"}
 };
 
@@ -139,6 +140,9 @@ int framebuild_dispatch(GtkWidget *frame, gint data)
 			break;
 		case TOOLS_PAGE:
 			build_tools(frame);
+			break;
+		case LOWLEVEL_PAGE:
+			build_lowlevel(frame);
 			break;
 		case DATALOGGING_PAGE:
 			build_datalogging(frame);

@@ -26,6 +26,7 @@ megatunix_SOURCES = \
 	general_gui.c \
 	gui_handlers.c \
 	init.c \
+	lowlevel_gui.c \
 	main.c \
 	ms_constants.c \
 	notifications.c \

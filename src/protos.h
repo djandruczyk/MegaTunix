@@ -152,6 +152,10 @@ int build_tuning(GtkWidget *);
 int build_tools(GtkWidget *);
 /* tools_gui.c */
 
+/* lowlevel_gui.c */
+int build_lowlevel(GtkWidget *);
+/* lowlevel_gui.c */
+
 /* datalogging_gui.c */
 int build_datalogging(GtkWidget *);
 void create_dlog_filesel(void);

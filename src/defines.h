@@ -38,6 +38,7 @@
 #define TUNING_PAGE		0x08
 #define TOOLS_PAGE		0x09
 #define DATALOGGING_PAGE	0x0a
+#define LOWLEVEL_PAGE		0x0b
 
 /* Serial I/O READ case handling */
 #define REALTIME_VARS		0x20
