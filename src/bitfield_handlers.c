@@ -18,6 +18,7 @@
 #include <glib/gprintf.h>
 #include <mode_select.h>
 #include <structures.h>
+#include <timeout_handlers.h>
 
 
 void check_bcfreq(unsigned char tmp, gboolean update)
@@ -77,7 +78,6 @@ void check_config13(unsigned char tmp)
 {
 	GtkWidget *label;
 	extern GList *enh_idle_controls;
-	extern gboolean forced_update;
 	extern gfloat ego_pbar_divisor;
 	extern struct DynamicMisc misc;
 	extern struct DynamicLabels labels;
@@ -92,12 +92,12 @@ void check_config13(unsigned char tmp)
 	if (((tmp >> 1)&0x1) == 1)
 	{
 		ego_pbar_divisor = 5.0;
-		forced_update = TRUE;
+		force_an_update();
 	}
 	else
 	{
 		ego_pbar_divisor = 1.2;
-		forced_update = TRUE;
+		force_an_update();
 	}
 
 	/* Check SD/Alpha-N button and adjust VEtable labels

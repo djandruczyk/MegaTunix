@@ -30,7 +30,6 @@ extern struct DynamicEntries entries;
 extern struct DynamicLabels labels;
 extern struct DynamicMisc misc;
 extern gboolean connected;
-extern gboolean forced_update;
 extern gint active_page;
 extern GdkColor white;
 extern GdkColor black;
@@ -38,7 +37,7 @@ extern GdkColor red;
 
 struct DynamicProgress progress;
 GtkWidget *rt_table[4];
-gboolean force_status_update = TRUE;
+gboolean forced_update;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
@@ -258,7 +257,6 @@ gboolean update_runtime_vars()
 	extern GHashTable *rt_controls;
 	gchar * tmpbuf = NULL;
 	gfloat tmpf = 0.0;
-	static gint count = 0;
 
 
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
@@ -332,9 +330,8 @@ gboolean update_runtime_vars()
 
 	if (active_page == WARMUP_WIZARD) /* Warmup wizard visible... */
 	{
-		count++;
 		/* Update all the controls on the warmup wizrd page... */
-		if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update) || (count > 5))
+		if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
 			gtk_label_set_text(GTK_LABEL(labels.ww_ego_lab),tmpbuf);
@@ -345,7 +342,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if ((runtime->map != runtime_last->map) || (forced_update) || (count > 5))
+		if ((runtime->map != runtime_last->map) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->map);
 			gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
@@ -356,7 +353,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if ((runtime->clt != runtime_last->clt) || (forced_update) || (count > 5))
+		if ((runtime->clt != runtime_last->clt) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
 			gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
@@ -367,7 +364,7 @@ gboolean update_runtime_vars()
 			g_free(tmpbuf);
 			warmwizard_update_status(runtime->clt);
 		}
-		if ((runtime->warmcorr != runtime_last->warmcorr) || (forced_update) || (count > 5))
+		if ((runtime->warmcorr != runtime_last->warmcorr) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->warmcorr);
 			gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
@@ -377,7 +374,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if ((forced_update) || (runtime->engine.value != runtime_last->engine.value) || (count > 5))
+		if ((forced_update) || (runtime->engine.value != runtime_last->engine.value))
 		{
 			/* Cranking */
 			gtk_widget_set_sensitive(misc.ww_status[CRANKING],
@@ -406,11 +403,8 @@ gboolean update_runtime_vars()
 		/* Color the boxes on the VEtable closest to the operating point */
 
 	}
-	if (count > 5)
-		count = 0;
-
-	if (forced_update)
-		forced_update = FALSE;
+//	if (forced_update)
+//		forced_update = FALSE;
 	gdk_threads_leave();
 	return TRUE;
 }
@@ -443,17 +437,11 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat fvalue = 0.0;
 	gfloat tmpf;
 	gchar * tmpbuf = NULL;
-//	gint count = -1;
-
-//	control->count++;
-//	count = control->count;
-	
 
 	if (control->size == UCHAR)
 	{
 		uc_ptr = (unsigned char *) runtime;
 		l_uc_ptr = (unsigned char *) runtime_last;
-		//if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]))
 		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (forced_update))
 		{
 			ivalue = uc_ptr[offset];
@@ -464,15 +452,12 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 			g_free(tmpbuf);
-//			if (control->count > 5)
-//				control->count = 0;
 		}
 	}
 	else if (control->size == SHORT)
 	{
 		sh_ptr = (short *) runtime;
 		l_sh_ptr = (short *) runtime_last;
-		//if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT])) 
 		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (forced_update))
 		{
 			svalue = sh_ptr[offset/SHORT];
@@ -483,8 +468,6 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 			g_free(tmpbuf);
-//			if (control->count > 5)
-//				control->count = 0;
 		}
 	}
 	else if (control->size == FLOAT)
@@ -501,8 +484,6 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 			g_free(tmpbuf);
-//			if (control->count > 5)
-//				control->count = 0;
 		}
 	}
 	else

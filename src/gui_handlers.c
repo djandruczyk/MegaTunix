@@ -70,7 +70,6 @@ extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;
 
 gboolean tips_in_use;
-gboolean forced_update;
 gint temp_units;
 gint active_page = -1;
 GdkColor red = { 0, 65535, 0, 0};
@@ -187,12 +186,12 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case FAHRENHEIT:
 				temp_units = FAHRENHEIT;
 				reset_temps(GINT_TO_POINTER(temp_units));
-				forced_update = TRUE;
+				force_an_update();
 				break;
 			case CELSIUS:
 				temp_units = CELSIUS;
 				reset_temps(GINT_TO_POINTER(temp_units));
-				forced_update = TRUE;
+				force_an_update();
 				break;
 			case COMMA:
 				delimiter = g_strdup(",");
@@ -392,12 +391,12 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			}
 			start_serial_thread();
 			start_runtime_display();
-			forced_update = TRUE;
+			force_an_update();
 			break;
 		case STOP_REALTIME:
 			stop_serial_thread();
 			reset_runtime_status();
-			forced_update = TRUE;
+			force_an_update();
 			stop_runtime_display();
 			stop_datalogging();
 			break;
@@ -1205,7 +1204,7 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 {
 //	printf("page changed to %i\n",page_no);
 	active_page = page_no;
-	forced_update = TRUE;
+	force_an_update();
 
 	return;
 }
