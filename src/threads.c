@@ -93,15 +93,10 @@ void start_serial_thread()
 
 int stop_serial_thread()
 {
-	static gboolean locked;
 	gchar *tmpbuf;
-	if (locked == TRUE)
-	{
-		printf("stop_serial_thread() locked, returning\n");
-		return 0;
-	}
-	else
-		locked = TRUE;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
 	if (raw_reader_stopped)
 	{
 		tmpbuf = g_strdup_printf("Realtime Reader Thread ALREADY Stopped\n");
@@ -110,21 +105,24 @@ int stop_serial_thread()
 		g_free(tmpbuf);
 		raw_reader_running = FALSE;
 		raw_reader_stopped = TRUE;
-		locked = FALSE;
+		g_static_mutex_unlock(&mutex);
 		return 0;	/* its already stopped */
 	}
 	else
 	{
 		pthread_cancel(raw_input_thread);
+		/* this should be recoded as it's WRONG!!!! */
 		while (raw_reader_stopped == FALSE)
-			usleep(100);
+			usleep(10000);
+
 		tmpbuf = g_strdup_printf("Realtime Reader Thread Stopped Normally\n");
 		/* Thread stopped normally */
 		update_logbar(comms_view,NULL,tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
 	usleep(100000);	/* a bug in here somewhere....  deadlocks without it */
-	locked = FALSE;
+	g_static_mutex_unlock(&mutex);
+
 	return 0;
 }
 		
@@ -178,12 +176,13 @@ void *raw_reader_thread(void *params)
 			else
 				printf("handle_ms_data reported a fault\n");
 		}
+		gdk_threads_enter();
+
 		gtk_widget_set_sensitive(misc.status[0],
 				connected);
 		gtk_widget_set_sensitive(misc.ww_status[0],
 				connected);
 
-		gdk_threads_enter();
 		update_errcounts(NULL,FALSE);
 		gdk_threads_leave();
 

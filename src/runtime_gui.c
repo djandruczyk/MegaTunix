@@ -647,6 +647,8 @@ void update_runtime_vars()
 	 * where ve_view can exist, but the window doesn't yet.
 	 * It's a small window, but I hit it several times.
 	 */
+	gdk_threads_enter();
+
 	if ((ve_view0 != NULL) && (ve_view0->drawing_area->window != NULL)) {
 		drawing_area_ptr = ve_view0->drawing_area;
 	        gdk_window_invalidate_rect (drawing_area_ptr->window, &drawing_area_ptr->allocation, FALSE);
@@ -666,7 +668,6 @@ void update_runtime_vars()
 	 * flicker the text widgets at high update rates
 	 */
 
-	gdk_threads_enter();
 	if (runtime->secl != runtime_last->secl)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->secl);
