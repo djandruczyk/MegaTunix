@@ -13,7 +13,7 @@
 
 #include <defines.h>
 #include <protos.h>
-#include <constants.h>
+#include <structures.h>
 #include <globals.h>
 #include <gtk/gtk.h>
 

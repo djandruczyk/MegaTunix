@@ -19,11 +19,9 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
+#include <structures.h>
 
-static GtkWidget *ms_reset_entry;	/* MS reset count */
-static GtkWidget *ms_sioerr_entry;	/* MS Serial I/O error count */
-static GtkWidget *ms_readcount_entry;	/* MS Good read counter */
-static GtkWidget *ms_ve_readcount_entry;	/* MS Good read counter */
+struct Counts counts;
 gint ser_context_id;			/* for ser_statbar */
 GtkWidget *ser_statbar;			/* serial statusbar */ 
 extern gint read_wait_time;
@@ -32,7 +30,6 @@ extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
-extern GdkColor white;
 gint poll_min;
 gint poll_step;
 gint poll_max;
@@ -236,7 +233,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	ms_ve_readcount_entry = entry;
+	counts.comms_ve_readcount_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
@@ -252,7 +249,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
      
 	entry = gtk_entry_new();
-	ms_readcount_entry = entry;
+	counts.comms_readcount_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
@@ -267,7 +264,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	entry = gtk_entry_new();
-	ms_reset_entry = entry;
+	counts.comms_reset_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
@@ -282,7 +279,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	entry = gtk_entry_new();
-	ms_sioerr_entry = entry;
+	counts.comms_sioerr_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
@@ -299,16 +296,20 @@ void update_errcounts()
 	char buff[10];
 
 	g_snprintf(buff,10,"%i",ms_ve_goodread_count);
-	gtk_entry_set_text(GTK_ENTRY(ms_ve_readcount_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.comms_ve_readcount_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.runtime_ve_readcount_entry),buff);
 
 	g_snprintf(buff,10,"%i",ms_goodread_count);
-	gtk_entry_set_text(GTK_ENTRY(ms_readcount_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.comms_readcount_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.runtime_readcount_entry),buff);
 
 	g_snprintf(buff,10,"%i",ms_reset_count);
-	gtk_entry_set_text(GTK_ENTRY(ms_reset_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.comms_reset_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.runtime_reset_entry),buff);
 
 	g_snprintf(buff,10,"%i",serial_params.errcount);
-	gtk_entry_set_text(GTK_ENTRY(ms_sioerr_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.comms_sioerr_entry),buff);
+	gtk_entry_set_text(GTK_ENTRY(counts.runtime_sioerr_entry),buff);
 
 	return;
 }

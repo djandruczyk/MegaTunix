@@ -75,7 +75,7 @@ void init()
 	serial_params.fd = 0; /* serial port file-descriptor */
 	serial_params.errcount = 0; /* I/O error count */
 	serial_params.poll_timeout = 40; /* poll wait time in milliseconds */
-	/* default for MS V 1.1 and 2.2 */
+	/* default for MS V 1.x and 2.x */
 	serial_params.raw_bytes = 22; /* number of bytes for realtime vars */
 	serial_params.veconst_size = 128; /* VE/Constants datablock size */
 	serial_params.read_wait = 100;	/* delay between reads in milliseconds */
@@ -99,9 +99,9 @@ int read_config(void)
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		cfg_read_int(cfgfile, "Global", "major_ver", &major_ver);
-		cfg_read_int(cfgfile, "Global", "minor_ver", &minor_ver);
-		cfg_read_int(cfgfile, "Global", "micro_ver", &micro_ver);
+		//cfg_read_int(cfgfile, "Global", "major_ver", &major_ver);
+		//cfg_read_int(cfgfile, "Global", "minor_ver", &minor_ver);
+		//cfg_read_int(cfgfile, "Global", "micro_ver", &micro_ver);
 		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
 		cfg_read_boolean(cfgfile, "Global", "Fahrenheit", &fahrenheit);
 		cfg_read_int(cfgfile, "Window", "width", &width);
@@ -114,6 +114,8 @@ int read_config(void)
 				&serial_params.comm_port);
 		cfg_read_int(cfgfile, "Serial", "polling_timeout", 
 				&serial_params.poll_timeout);
+		cfg_read_int(cfgfile, "Serial", "read_delay", 
+				&serial_params.read_wait);
 		cfg_free(cfgfile);
 		g_free(filename);
 		return(0);

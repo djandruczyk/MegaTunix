@@ -13,8 +13,8 @@
 
 /* Constants/Enrichments Gui Adjustment Structures */
 
-#ifndef __CONSTANTS_H__
-#define __CONSTANTS_H__
+#ifndef __STRUCTURES_H__
+#define __STRUCTURES_H__
 
 #include <config.h>
 #include <sys/types.h>
@@ -125,6 +125,18 @@ struct Buttons
 	GtkWidget *const_store_but;
 	GtkWidget *enrich_store_but;
 	GtkWidget *vetable_store_but;
+};
+
+struct Counts
+{
+	GtkWidget *comms_reset_entry;
+	GtkWidget *runtime_reset_entry;
+	GtkWidget *comms_sioerr_entry;
+	GtkWidget *runtime_sioerr_entry;
+	GtkWidget *comms_readcount_entry;
+	GtkWidget *runtime_readcount_entry;
+	GtkWidget *comms_ve_readcount_entry;
+	GtkWidget *runtime_ve_readcount_entry;
 };
 
 	

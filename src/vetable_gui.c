@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <constants.h>
+#include <structures.h>
 #include <protos.h>
 #include <globals.h>
 

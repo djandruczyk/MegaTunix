@@ -120,13 +120,17 @@ int build_general(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
-	button = gtk_button_new_with_label("Get ECU Revision #...");
-	g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (check_ecu_comms), \
-                        NULL);
-        gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+	ebox = gtk_event_box_new();
+        gtk_tooltips_set_tip(tip,ebox,
+        "This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, so we offer the choice to select the API to use below",NULL);
+        gtk_table_attach (GTK_TABLE (table), ebox, 2, 3, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
+	button = gtk_button_new_with_label("Interrogate ECU capabilities");
+	gtk_container_add(GTK_CONTAINER(ebox),button);
+	g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (interrogate_ecu), \
+                        NULL);
 
 
 	

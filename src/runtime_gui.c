@@ -18,11 +18,12 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
-#include <constants.h>
+#include <structures.h>
 #include <runtime_gui.h>
 
 
 struct v1_2_Runtime_Gui runtime_data;
+extern struct Counts counts;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
 gboolean force_status_update = TRUE;
@@ -30,6 +31,7 @@ extern gboolean connected;
 extern gboolean fahrenheit;
 extern gboolean forced_update;
 extern GdkColor white;
+extern GdkColor black;
 extern struct Labels labels;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
@@ -44,6 +46,9 @@ int build_runtime(GtkWidget *parent_frame)
 	GtkWidget *table;
 	GtkWidget *pbar;
 	GtkWidget *button;
+	GtkWidget *entry;
+	GtkWidget *ebox;
+	extern GtkTooltips *tip;
 	gint i=0;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -490,7 +495,85 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
                         (GtkAttachOptions) (0), 0, 0);
 	runtime_data.tpsaccel_pbar = pbar;
-	
+
+	ebox = gtk_event_box_new();
+        gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+        gtk_tooltips_set_tip(tip,ebox,
+        "This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
+
+	frame = gtk_frame_new("MegaSquirt I/O Status");
+        gtk_container_add(GTK_CONTAINER(ebox),frame);
+
+        hbox = gtk_hbox_new(TRUE,0);
+        gtk_container_add(GTK_CONTAINER(frame),hbox);
+
+        table = gtk_table_new(3,4,FALSE);
+        gtk_table_set_row_spacings(GTK_TABLE(table),7);
+        gtk_table_set_col_spacings(GTK_TABLE(table),5);
+        gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
+
+        label = gtk_label_new("Good VE/Constants Reads");
+        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        entry = gtk_entry_new();
+        counts.runtime_ve_readcount_entry = entry;
+        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+        gtk_widget_set_sensitive(entry,FALSE);
+        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+
+        label = gtk_label_new("Good RealTime Reads");
+        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+        entry = gtk_entry_new();
+        counts.runtime_readcount_entry = entry;
+        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+        gtk_widget_set_sensitive(entry,FALSE);
+        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+        gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        label = gtk_label_new("Hard Reset Count");
+        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+        entry = gtk_entry_new();
+        counts.runtime_reset_entry = entry;
+        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+        gtk_widget_set_sensitive(entry,FALSE);
+        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        label = gtk_label_new("Serial I/O Error Count");
+        gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+        entry = gtk_entry_new();
+        counts.runtime_sioerr_entry = entry;
+        gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+        gtk_widget_set_sensitive(entry,FALSE);
+        gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+        gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
@@ -517,7 +600,7 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Runtime Status");
-        gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+        gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
         vbox2 = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(frame),vbox2);
@@ -533,7 +616,7 @@ int build_runtime(GtkWidget *parent_frame)
 		gtk_container_add(GTK_CONTAINER(frame),runtime_data.status[i]);
 		gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 	}
-
+	
 	return TRUE;
 }
 

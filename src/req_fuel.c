@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 #include <defines.h>
 #include <protos.h>
-#include <constants.h>
+#include <structures.h>
 
 gboolean req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;

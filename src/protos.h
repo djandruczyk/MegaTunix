@@ -129,6 +129,11 @@ void mem_alloc(void);
 void mem_dealloc(void);
 /* init.c */
 
+/* interrogate.c */
+void interrogate_ecu(void);
+/* interrogate.c */
+
+
 /* lowlevel_gui.c */
 int build_lowlevel(GtkWidget *);
 /* lowlevel_gui.c */

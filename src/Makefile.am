@@ -7,7 +7,7 @@ megatunix_SOURCES = \
 	Makefile \
 	c_gauge.h \
 	configfile.h \
-	constants.h \
+	structures.h \
 	datalogging.h \
 	defines.h \
 	globals.h \
@@ -29,6 +29,7 @@ megatunix_SOURCES = \
 	gui_handlers.c \
 	ignition.c \
 	init.c \
+	interrogate.c \
 	lowlevel_gui.c \
 	main.c \
 	notifications.c \

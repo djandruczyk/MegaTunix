@@ -19,7 +19,7 @@
 #include <protos.h>
 #include <defines.h>
 #include <globals.h>
-#include <constants.h>
+#include <structures.h>
 #include <datalogging.h>
 
 

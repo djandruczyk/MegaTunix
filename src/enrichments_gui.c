@@ -18,7 +18,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
-#include <constants.h>
+#include <structures.h>
 
 struct v1_2_Constants constants;
 extern struct Buttons buttons;

@@ -18,7 +18,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
-#include <constants.h>
+#include <structures.h>
 #include <conversions.h>
 
 /* Conversions.c

@@ -20,7 +20,7 @@
 #include <string.h>
 #include <defines.h>
 #include <protos.h>
-#include <constants.h>
+#include <structures.h>
 #include <globals.h>
 #include <runtime_gui.h>
 #include <errno.h>
@@ -186,63 +186,32 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		tcflush(serial_params.fd, TCIFLUSH);
 		tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
-		res = write(serial_params.fd,"C",1);
+		/* request oen batch of relatime vars */
+		res = write(serial_params.fd,"A",1);
 		res = poll (&ufds,1,serial_params.poll_timeout);
-		if (res == 0)
+		if (res)
 		{
-			//printf("Failure to respond to \"C\" command\n");
-			//printf("Attempting alternate test, (might be V1 ECU)\n");
-			res = write(serial_params.fd,"A",1);
-			res = poll (&ufds,1,serial_params.poll_timeout);
-			if (res)
-			{
-				count = 22;
-				while (count > 0)
-				{
-					//printf("atempting to read %i bytes from MS\n",count);
-					count -= read(serial_params.fd,&buf,count);
-				}
-
-
-				//printf("MS is V1 and responded to runtime cmd\n");
-				g_snprintf(buff,60,"v1.0x");
-				gtk_entry_set_text(GTK_ENTRY(ms_ecu_revision_entry),buff);
-				g_snprintf(buff,60,"ECU Comms Test Successfull");
-				/* COMMS test succeeded */
-				update_statusbar(ser_statbar,ser_context_id,buff);
-				connected = TRUE;
-				gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
-						connected);
-			}
-			else
-			{
-				g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
-				/* An I/O Error occurred with the MegaSquirt ECU */
-				update_statusbar(ser_statbar,ser_context_id,buff);
-				connected = FALSE;
-				gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
-						connected);
-			}
-		}
-		else
-		{
-			/* Reads out the secl # from the buffer.. */
-			res=read(serial_params.fd,&buf,1);
-			/* Request MS's version number... */
-			res = write(serial_params.fd,"Q",1);
-			res = poll(&ufds,1,serial_params.poll_timeout);
-			res = read(serial_params.fd,&buf,1);
-			ecu_version = (gfloat)buf[0]/10.0;
-			g_snprintf(buff,60,"v%.2f",ecu_version);
-			gtk_entry_set_text(GTK_ENTRY(ms_ecu_revision_entry),buff);
-			//printf("result of reading ecu version is %f\n",ecu_version);
+			
+			count = 44;
+			while (poll(&ufds,1,serial_params.poll_timeout))
+				res = read(serial_params.fd,&buf,count);
 
 			g_snprintf(buff,60,"ECU Comms Test Successfull");
 			/* COMMS test succeeded */
 			update_statusbar(ser_statbar,ser_context_id,buff);
 			connected = TRUE;
 			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+						connected);
+		}
+		else
+		{
+			g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
+			/* An I/O Error occurred with the MegaSquirt ECU */
+			update_statusbar(ser_statbar,ser_context_id,buff);
+			connected = FALSE;
+			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 					connected);
+		
 		}
 
 		serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
