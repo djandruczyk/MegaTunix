@@ -103,14 +103,29 @@ void comms_test()
  \brief update_write_status() checks the differences between the current ECU
  data snapshot and the last one, if there are any differences (things need to
  be burnt) then it turns all the widgets in the "burners" group to RED
+ \param data (struct Output_Data *) pointer to data sent to ECU used to
+ update other widgets that refer to that Page/Offset
  */
-void update_write_status(void)
+void update_write_status(struct Output_Data *data)
 {
 	extern gint **ms_data;
 	extern gint **ms_data_last;
 	gint i = 0;
 	extern struct Firmware_Details *firmware;
+	extern GList ***ve_widgets;
+	extern gboolean paused_handlers;
 
+
+	if ((g_list_length(ve_widgets[data->page][data->offset]) > 1))
+	{
+		paused_handlers = TRUE;
+		for (i=0;i<g_list_length(ve_widgets[data->page][data->offset]);i++)
+		{
+			if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[data->page][data->offset],i)),"dl_type") != DEFERRED)
+				update_widget(g_list_nth_data(ve_widgets[data->page][data->offset],i),NULL);
+		}
+		paused_handlers = FALSE;
+	}
 	/* We check to see if the last burn copy of the VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
@@ -126,6 +141,7 @@ void update_write_status(void)
 	}
 
 	set_group_color(BLACK,"burners");
+
 	return;
 }
 
@@ -137,7 +153,7 @@ void update_write_status(void)
 void writeto_ecu(struct Io_Message *message)
 {
 	extern gboolean connected;
-	struct OutputData *data = message->payload;
+	struct Output_Data *data = message->payload;
 
 	gint page = data->page;
 	gint offset = data->offset;
@@ -152,6 +168,7 @@ void writeto_ecu(struct Io_Message *message)
 	gchar * write_cmd = NULL;
 	extern struct Firmware_Details *firmware;
 	extern struct Serial_Params *serial_params;
+	extern gint **ms_data;
 	extern gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -220,6 +237,7 @@ void writeto_ecu(struct Io_Message *message)
 	else
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
 
+	ms_data[page][offset] = value;
 	g_usleep(5000);
 
 	g_free(write_cmd);

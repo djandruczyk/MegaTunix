@@ -511,13 +511,13 @@ GIOStatus process_vex_range(struct Vex_Import *vex, ImportParserArg arg, gchar *
 	switch(arg)
 	{
 		case VEX_RPM_RANGE:
-			vex->total_rpm_bins = num_bins;
-			vex->rpm_bins = g_new0(gint, num_bins);
+			vex->total_x_bins = num_bins;
+			vex->x_bins = g_new0(gint, num_bins);
 			vex->got_rpm = TRUE;
 			break;
 		case VEX_LOAD_RANGE:
-			vex->total_load_bins = num_bins;
-			vex->load_bins = g_new0(gint, num_bins);
+			vex->total_y_bins = num_bins;
+			vex->y_bins = g_new0(gint, num_bins);
 			vex->got_load = TRUE;
 			break;
 		default:
@@ -542,11 +542,11 @@ GIOStatus process_vex_range(struct Vex_Import *vex, ImportParserArg arg, gchar *
 			switch (arg)
 			{
 				case VEX_RPM_RANGE:
-					vex->rpm_bins[i] = value;
+					vex->x_bins[i] = value;
 					update_logbar("tools_view",NULL,g_strdup("VEX Import: RPM bins loaded successfully \n"),TRUE,FALSE);
 					break;
 				case VEX_LOAD_RANGE:
-					vex->load_bins[i] = value;
+					vex->y_bins[i] = value;
 					update_logbar("tools_view",NULL,g_strdup("VEX Import: LOAD bins loaded successfully \n"),TRUE,FALSE);
 					break;
 				default:
@@ -601,8 +601,8 @@ GIOStatus process_vex_table(struct Vex_Import *vex, gchar * string, GIOChannel *
 	g_strfreev(str_array2);
 	y_bins = atoi(result);	
 
-	vex->total_ve_bins = x_bins*y_bins;
-	vex->ve_bins = g_new0(gint,(x_bins * y_bins));
+	vex->total_tbl_bins = x_bins*y_bins;
+	vex->tbl_bins = g_new0(gint,(x_bins * y_bins));
 
 	/* Need to skip down one line to the actual data.... */
 	a_line = g_string_new("\0");
@@ -640,7 +640,7 @@ GIOStatus process_vex_table(struct Vex_Import *vex, gchar * string, GIOChannel *
 			}
 			else
 			{
-				vex->ve_bins[j+(i*x_bins)] = value;
+				vex->tbl_bins[j+(i*x_bins)] = value;
 				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table loaded successfully\n"),TRUE,FALSE);
 			}
 		}		
@@ -690,12 +690,12 @@ void dealloc_vex_struct(struct Vex_Import *vex)
 		g_free(vex->date);
 	if (vex->time)
 		g_free(vex->time);
-	if (vex->rpm_bins)
-		g_free(vex->rpm_bins);
-	if (vex->load_bins)
-		g_free(vex->load_bins);
-	if (vex->ve_bins)
-		g_free(vex->ve_bins);
+	if (vex->x_bins)
+		g_free(vex->x_bins);
+	if (vex->y_bins)
+		g_free(vex->y_bins);
+	if (vex->tbl_bins)
+		g_free(vex->tbl_bins);
 	if (vex)
 		g_free(vex);
 }
@@ -714,6 +714,8 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	extern gint ** ms_data_last;
 	extern gint ** ms_data_backup;
 	gint page = -1;
+	gint base = 0;
+	gboolean is_spark = 0;
 	gint table = -1;
 	gint writecount = 0;
 	extern struct Firmware_Details *firmware;
@@ -730,14 +732,14 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 		return;
 	}
 	/* If dimensions do NOT match, ABORT!!! */
-	if (firmware->table_params[table]->x_bincount != vex->total_rpm_bins)
+	if (firmware->table_params[table]->x_bincount != vex->total_x_bins)
 	{
-		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_rpm_bins),TRUE,FALSE);
+		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins),TRUE,FALSE);
 		return;
 	}
-	if (firmware->table_params[table]->y_bincount != vex->total_load_bins)
+	if (firmware->table_params[table]->y_bincount != vex->total_y_bins)
 	{
-		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_load_bins),TRUE,FALSE);
+		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins),TRUE,FALSE);
 		return;
 	}
 
@@ -749,21 +751,14 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	}
 
 
-	for (i=0;i<vex->total_rpm_bins;i++)
-		ms_data[firmware->table_params[table]->x_page][firmware->table_params[table]->x_base + i] = vex->rpm_bins[i];
-	for (i=0;i<vex->total_load_bins;i++)
-		ms_data[firmware->table_params[table]->y_page][firmware->table_params[table]->y_base + i] = vex->load_bins[i];
-	for (i=0;i<((vex->total_load_bins)*(vex->total_rpm_bins));i++)
-		ms_data[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + i] = vex->ve_bins[i];
-
-	/* Set page to the page defined for the X axis group variable */
 	page = firmware->table_params[table]->x_page;
-	writecount = 0;
-	for (i=0;i<firmware->page_params[firmware->table_params[table]->x_page]->length;i++)
+	base = firmware->table_params[table]->x_base;
+	is_spark = firmware->page_params[firmware->table_params[table]->x_page]->is_spark;
+	for (i=0;i<vex->total_x_bins;i++)
 	{
-		if (ms_data[page][i] != ms_data_last[page][i])
+		if (vex->x_bins[i] != ms_data_last[page][base+i])
 		{
-			write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
+			write_ve_const(NULL,page,base+i,vex->x_bins[i],is_spark);
 			writecount++;
 		}
 	}
@@ -771,43 +766,38 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 		io_cmd(IO_BURN_MS_FLASH,NULL);
 
 	writecount = 0;
-	/* If Y page is different then the page we just updated, iterate
-	 * through the data chek for changes and send differences
-	 */
-	if (page != firmware->table_params[table]->y_page)
+
+	page = firmware->table_params[table]->y_page;
+	base = firmware->table_params[table]->y_base;
+	is_spark = firmware->page_params[firmware->table_params[table]->y_page]->is_spark;
+	for (i=0;i<vex->total_y_bins;i++)
 	{
-		page = firmware->table_params[table]->y_page;
-		for (i=0;i<firmware->page_params[firmware->table_params[table]->y_page]->length;i++)
+		if (vex->y_bins[i] != ms_data_last[page][base+i])
 		{
-			if (ms_data[page][i] != ms_data_last[page][i])
-			{
-				write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
-				writecount++;
-			}
+			write_ve_const(NULL,page,base+i,vex->y_bins[i],is_spark);
+			writecount++;
 		}
-		if (writecount > 0)
-			io_cmd(IO_BURN_MS_FLASH,NULL);
 	}
+	if (writecount > 0)
+		io_cmd(IO_BURN_MS_FLASH,NULL);
 
 	writecount = 0;
 
-	/* If Z page is different then the page we just updated, iterate
-	 * through the data chek for changes and send differences
-	 */
-	if (page != firmware->table_params[table]->z_page)
+	page = firmware->table_params[table]->z_page;
+	base = firmware->table_params[table]->z_base;
+	is_spark = firmware->page_params[firmware->table_params[table]->z_page]->is_spark;
+	for (i=0;i<((vex->total_y_bins)*(vex->total_x_bins));i++)
 	{
-		page = firmware->table_params[table]->z_page;
-		for (i=0;i<firmware->page_params[firmware->table_params[table]->z_page]->length;i++)
+		if (vex->tbl_bins[i] != ms_data_last[page][base+i])
 		{
-			if (ms_data[page][i] != ms_data_last[page][i])
-			{
-				write_ve_const(NULL,page,i,ms_data[page][i],firmware->page_params[page]->is_spark);
-				writecount++;
-			}
+			write_ve_const(NULL,page,base+i,vex->tbl_bins[i],is_spark);
+			writecount++;
 		}
-		if (writecount > 0)
-			io_cmd(IO_BURN_MS_FLASH,NULL);
 	}
+	if (writecount > 0)
+		io_cmd(IO_BURN_MS_FLASH,NULL);
+
+	writecount = 0;
 
 	update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex->page),TRUE,FALSE);
 }

@@ -37,8 +37,8 @@ void rescale_table(gchar * widget_name)
 	gint table_num = -1;
 	gint z_base = -1;
 	gint z_page = -1;
-	gint rpm_bins = -1;
-	gint load_bins = -1;
+	gint x_bins = -1;
+	gint y_bins = -1;
 	gint page = 0;
 	gint offset = 0;
 	gboolean ign_parm = FALSE;
@@ -55,12 +55,12 @@ void rescale_table(gchar * widget_name)
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
 	table_num = (gint)g_object_get_data(G_OBJECT(scaler),"table_num");
 	z_base = firmware->table_params[table_num]->z_base;
-	rpm_bins = firmware->table_params[table_num]->x_bincount;
-	load_bins = firmware->table_params[table_num]->y_bincount;
+	x_bins = firmware->table_params[table_num]->x_bincount;
+	y_bins = firmware->table_params[table_num]->y_bincount;
 	z_page = firmware->table_params[table_num]->z_page;
 
 	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(scaler));
-	for (i=z_base;i<(rpm_bins*load_bins);i++)
+	for (i=z_base;i<(x_bins*y_bins);i++)
 	{
 		if (NULL != (list = ve_widgets[z_page][i]))
 		{
@@ -75,7 +75,7 @@ void rescale_table(gchar * widget_name)
 					offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 					value = ms_data[page][offset];
 					value = (value*percentage)/100.0;
-					ms_data[page][offset] = (gint)value;
+					//ms_data[page][offset] = (gint)value;
 					write_ve_const(widget,page,offset,(gint)value,ign_parm);
 					g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
 

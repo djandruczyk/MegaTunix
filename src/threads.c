@@ -285,27 +285,15 @@ void *thread_dispatcher(gpointer data)
  */
 void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm)
 {
-	gint i = 0;
-	struct OutputData *output = NULL;
+	struct Output_Data *output = NULL;
 	extern GList ***ve_widgets;
-	extern gboolean paused_handlers;
 	extern gboolean offline;
 
-	if ((g_list_length(ve_widgets[page][offset]) > 1))
-	{
-		paused_handlers = TRUE;
-		for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-		{
-			if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[page][offset],i)),"dl_type") == IMMEDIATE)
-				update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
-		}
-		paused_handlers = FALSE;
-	}
 	if (offline)
 		return;
 
 	dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm),SERIAL_WR);
-	output = g_new0(struct OutputData, 1);
+	output = g_new0(struct Output_Data, 1);
 	output->page = page;
 	output->offset = offset;
 	output->value = value;

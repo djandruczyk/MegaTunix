@@ -21,7 +21,7 @@
 /* Prototypes */
 void comms_test(void);			/* new check_ecu_comms function */
 void update_comms_status(void);		/* gui updater for comms status */
-void update_write_status(void);		/* gui updater for write status */
+void update_write_status(struct Output_Data *);	/* gui updater for write status */
 void readfrom_ecu(struct Io_Message *);	/* Function to get data FROM ecu */
 void writeto_ecu(struct Io_Message *);	/* Func to send data to the ECU */
 void burn_ecu_flash(void);		/* run after burn completion */

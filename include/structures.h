@@ -390,10 +390,10 @@ struct Io_Cmds
 };
 
 /*! 
- \brief OutputData A simple wrapper struct to pass data to the output 
+ \brief Output_Data A simple wrapper struct to pass data to the output 
  function which makes the function a lot simpler.
  */
-struct OutputData
+struct Output_Data
 {
 	gint page;		/*! Page in ECU */
 	gint offset;		/*! Offset in block */
@@ -542,12 +542,12 @@ struct Vex_Import
 	gchar *time;		/* String */
 	gint page;		/* Int */
 	gint table;		/* Int */
-	gint total_rpm_bins;	/* Int */
-	gint *rpm_bins;		/* Int Array, dynamic */
-	gint total_load_bins;	/* Int */
-	gint *load_bins;	/* Int Array, dynamic */
-	gint total_ve_bins;	/* Int */
-	gint *ve_bins;	/* Int Array, dynamic */
+	gint total_x_bins;	/* Int */
+	gint *x_bins;		/* Int Array, dynamic */
+	gint total_y_bins;	/* Int */
+	gint *y_bins;		/* Int Array, dynamic */
+	gint total_tbl_bins;	/* Int */
+	gint *tbl_bins;		/* Int Array, dynamic */
 	gboolean got_page;	/* Flag */
 	gboolean got_rpm;	/* Flag */
 	gboolean got_load;	/* Flag */

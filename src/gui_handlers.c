@@ -318,7 +318,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
 			tmp = tmp | (bitval << bitshift);
-			ms_data[page][offset] = tmp;
+			//ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			break;
 		case DEBUG_LEVEL:
@@ -336,7 +336,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ms_data[page][offset];
 				tmp = tmp & ~bitmask;// clears bits 
 				tmp = tmp | (bitval << bitshift);
-				ms_data[page][offset] = tmp;
+				//ms_data[page][offset] = tmp;
 				dload_val = tmp;
 			}
 			else
@@ -344,7 +344,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
-				ms_data[page][offset] = bitval;
+				//ms_data[page][offset] = bitval;
 				dload_val = bitval;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
@@ -410,6 +410,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gfloat real_value = 0.0;
 	gboolean is_float = FALSE;
 	gboolean ign_parm = FALSE;
+	extern gint **ms_data;
 
 
 	if ((paused_handlers) || (!ready))
@@ -462,6 +463,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	 * will give us an exact value if the user inputs something in
 	 * between,  thus we can reset the display to a sane value...
 	 */
+	ms_data[page][offset] = dload_val;
+
 	real_value = convert_after_upload(widget);
 	if (is_float)
 	{
@@ -793,7 +796,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			{
 				dload_val = (gint)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
 
-				ms_data[page][divider_offset] = dload_val;
+				//ms_data[page][divider_offset] = dload_val;
 				firmware->rf_params[table_num]->divider = dload_val;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
@@ -822,7 +825,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ms_data[page][offset];
 				tmp = tmp & ~bitmask;	/*clears top 4 bits */
 				tmp = tmp | ((tmpi-1) << bitshift);
-				ms_data[page][offset] = tmp;
+				//ms_data[page][offset] = tmp;
 				dload_val = tmp;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
@@ -831,7 +834,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				dload_val = 
 					(gint)(((float)firmware->rf_params[table_num]->num_cyls/
 						(float)firmware->rf_params[table_num]->num_squirts)+0.001);
-				ms_data[page][divider_offset] = dload_val;
+				//ms_data[page][divider_offset] = dload_val;
 				firmware->rf_params[table_num]->divider = dload_val;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
@@ -852,7 +855,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << bitshift);
-			ms_data[page][offset] = tmp;
+			//ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars[page],
 					GINT_TO_POINTER(offset),
@@ -874,7 +877,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 1);	/* Set xlong_trig */
-				ms_data[page][spconfig_offset] = tmp;
+				//ms_data[page][spconfig_offset] = tmp;
 				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
 				value -= 45.0;
 				dload_val = convert_before_download(widget,value);
@@ -884,7 +887,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 0);	/* Set long_trig */
-				ms_data[page][spconfig_offset] = tmp;
+				//ms_data[page][spconfig_offset] = tmp;
 				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
 				value -= 22.5;
 				dload_val = convert_before_download(widget,value);
@@ -893,7 +896,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			{
 				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
-				ms_data[page][spconfig_offset] = tmp;
+				//ms_data[page][spconfig_offset] = tmp;
 				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
 				dload_val = convert_before_download(widget,value);
 			}
@@ -1169,6 +1172,7 @@ void update_widget(gpointer object, gpointer user_data)
 			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33);
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 		}
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
 	{
@@ -1228,6 +1232,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint value = 0;
 	gint lower = 0;
 	gint upper = 0;
+	gint dload_val = 0;
 	gboolean ign_parm = 0;
 	gboolean retval = FALSE;
 	extern gint **ms_data;
@@ -1256,12 +1261,12 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	{
 		case GDK_Page_Up:
 			if (value < (upper-10))
-				ms_data[page][offset]+=10;
+				dload_val = ms_data[page][offset] + 10;
 			retval = TRUE;
 			break;
 		case GDK_Page_Down:
 			if (value > (lower+10))
-				ms_data[page][offset]-=10;
+				dload_val = ms_data[page][offset] - 10;
 			retval = TRUE;
 			break;
 		case GDK_plus:
@@ -1269,13 +1274,13 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_KP_Equal:
 		case GDK_equal:
 			if (value < (upper-1))
-				ms_data[page][offset]+=1;
+				dload_val = ms_data[page][offset] + 1;
 			retval = TRUE;
 			break;
 		case GDK_minus:
 		case GDK_KP_Subtract:
 			if (value > (lower+1))
-				ms_data[page][offset]-=1;
+				dload_val = ms_data[page][offset] - 1;
 			retval = TRUE;
 			break;
 		case GDK_Escape:
@@ -1288,10 +1293,10 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	}
 	if (retval)
 	{
-		write_ve_const(widget,page,offset,ms_data[page][offset],ign_parm);
-		paused_handlers = TRUE;
-		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-		paused_handlers = FALSE;
+		write_ve_const(widget,page,offset,dload_val,ign_parm);
+//		paused_handlers = TRUE;
+//		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+//		paused_handlers = FALSE;
 	}
 	return retval;
 }

@@ -1081,12 +1081,11 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	gint y_base = 0;
 	gint x_base = 0;
 	gint z_base = 0;
+	gint dload_val = 0;
 	gboolean update_widgets = FALSE;
 	struct Ve_View_3D *ve_view = NULL;
 	extern gint **ms_data;
 	extern struct Firmware_Details *firmware;
-	extern gboolean paused_handlers;
-	extern GList ***ve_widgets;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
@@ -1141,7 +1140,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] <= 245)
 			{
-				ms_data[z_page][offset] += 10;
+				dload_val = ms_data[z_page][offset] + 10;
+				//ms_data[z_page][offset] += 10;
 				update_widgets = TRUE;
 			}
 			break;				
@@ -1154,7 +1154,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] < 255)
 			{
-				ms_data[z_page][offset] += 1;
+				dload_val = ms_data[z_page][offset] + 1;
+				//ms_data[z_page][offset] += 1;
 				update_widgets = TRUE;
 			}
 			break;				
@@ -1164,7 +1165,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] >= 10)
 			{
-				ms_data[z_page][offset] -= 10;
+				dload_val = ms_data[z_page][offset] - 10;
+				//ms_data[z_page][offset] -= 10;
 				update_widgets = TRUE;
 			}
 			break;							
@@ -1177,7 +1179,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] > 0)
 			{
-				ms_data[z_page][offset] -= 1;
+				dload_val = ms_data[z_page][offset] - 1;
+				//ms_data[z_page][offset] -= 1;
 				update_widgets = TRUE;
 			}
 			break;							
@@ -1188,10 +1191,10 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	}
 	if (update_widgets)
 	{
-		write_ve_const(widget,z_page,offset,ms_data[z_page][offset],firmware->page_params[z_page]->is_spark);
-		paused_handlers = TRUE;
-		g_list_foreach(ve_widgets[z_page][offset],update_widget,NULL);
-		paused_handlers = FALSE;
+		write_ve_const(widget,z_page,offset,dload_val,firmware->page_params[z_page]->is_spark);
+		//		paused_handlers = TRUE;
+		//		g_list_foreach(ve_widgets[z_page][offset],update_widget,NULL);
+		//		paused_handlers = FALSE;
 	}
 
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);

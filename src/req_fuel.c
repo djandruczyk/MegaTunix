@@ -349,13 +349,6 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 {
 	struct Reqd_Fuel * reqd_fuel = NULL;
-	gint dload_val = 0;
-	gint rpmk_offset = 0;
-	gint page = 0;
-	gint table_num = 0;
-	union config11 cfg11;
-	extern struct Firmware_Details *firmware;
-	extern gint **ms_data;
 	extern GHashTable *dynamic_widgets;
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
@@ -369,19 +362,13 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 			reqd_fuel->calcd_reqd_fuel);
 	g_free(tmpbuf);
 
-	/* Top is two stroke, botton is four stroke.. */
-	table_num = reqd_fuel->table_num;
-	page = reqd_fuel->page;
-	cfg11.value = ms_data[page][firmware->table_params[table_num]->cfg11_offset];
-	rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
-	if (cfg11.bit.eng_type)
-		ms_data[page][rpmk_offset] = (int)(6000.0/((double)reqd_fuel->cyls));
-	else
-		ms_data[page][rpmk_offset] = (int)(12000.0/((double)reqd_fuel->cyls));
+	tmpbuf = g_strdup_printf("num_cylinders_%i_spin",reqd_fuel->table_num);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON
+			(g_hash_table_lookup(dynamic_widgets,tmpbuf)),
+			reqd_fuel->cyls);
+	g_free(tmpbuf);
 
 	check_req_fuel_limits(reqd_fuel->table_num);
-	dload_val = ms_data[page][rpmk_offset];
-	write_ve_const(widget, reqd_fuel->page, rpmk_offset, dload_val, FALSE);
 
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",reqd_fuel->page);
@@ -509,7 +496,7 @@ void check_req_fuel_limits(gint table_num)
 				(divider == last_divider))
 			return;
 
-		tmp = (float)(num_inj)/(float)(ms_data[page][firmware->table_params[table_num]->divider_offset]);
+		tmp = (float)num_inj/(float)divider;
 		rf_per_squirt = ((float)rf_total * 10.0)/tmp;
 
 		if (rf_per_squirt > 255)
@@ -539,15 +526,13 @@ void check_req_fuel_limits(gint table_num)
 			cfg11.value = ms_data[page][firmware->table_params[table_num]->cfg11_offset];
 			rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
 			if (cfg11.bit.eng_type)
-				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls));
+				dload_val = (int)(6000.0/((double)num_cyls));
 			else
-				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls));
+				dload_val = (int)(12000.0/((double)num_cyls));
 
-			dload_val = ms_data[page][rpmk_offset];
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			offset = firmware->table_params[table_num]->reqfuel_offset;
-			ms_data[page][offset] = rf_per_squirt;
 			write_ve_const(widget, page, offset, rf_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
@@ -602,8 +587,6 @@ void check_req_fuel_limits(gint table_num)
 				(divider == last_divider))
 			return;
 
-		divider = ms_data[page][firmware->table_params[table_num]->divider_offset];
-		alternate = ms_data[page][firmware->table_params[table_num]->alternate_offset];
 		tmp =	((float)(num_inj))/((float)divider*(float)(alternate+1));
 
 		/* This is 1/10 the value as the on screen stuff is 1/10th 
@@ -649,15 +632,14 @@ void check_req_fuel_limits(gint table_num)
 			cfg11.value = ms_data[page][firmware->table_params[table_num]->cfg11_offset];
 			rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
 			if (cfg11.bit.eng_type)
-				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls));
+				dload_val = (int)(6000.0/((double)num_cyls));
 			else
-				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls));
-			dload_val = ms_data[page][rpmk_offset];
+				dload_val = (int)(12000.0/((double)num_cyls));
+
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			/* Send reqd_fuel_per_squirt */
 			offset = firmware->table_params[table_num]->reqfuel_offset;
-			ms_data[page][offset] = rf_per_squirt;
 			write_ve_const(widget, page, offset, rf_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 		}

@@ -201,7 +201,7 @@ trypop:
 					update_comms_status();
 					break;
 				case UPD_WRITE_STATUS:
-					update_write_status();
+					update_write_status(message->payload);
 					break;
 
 			}

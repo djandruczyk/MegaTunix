@@ -476,14 +476,14 @@ void restore_all_ecu_settings(gchar *filename)
 	extern struct Firmware_Details *firmware;
 	ConfigFile *cfgfile;
 	gchar * section = NULL;
-	gint i = 0;
-	gint x = 0;
+	gint page = 0;
+	gint offset = 0;
 	gint writecount = 0;
 	gint tmpi = 0;
 	gchar *tmpbuf = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
-	extern gint **ms_data;
+	gint dload_val = 0;
 	extern gint **ms_data_last;
 
 	cfgfile = cfg_open_file(filename);
@@ -498,25 +498,25 @@ void restore_all_ecu_settings(gchar *filename)
 			cfg_free(cfgfile);
 			return;
 		}
-		for (i=0;i<firmware->total_pages;i++)
+		for (page=0;page<firmware->total_pages;page++)
 		{
 			writecount = 0;
-			section = g_strdup_printf("page_%i",i);
+			section = g_strdup_printf("page_%i",page);
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
-				if (tmpi != firmware->page_params[i]->length)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[i]->length),CRITICAL);
+				if (tmpi != firmware->page_params[page]->length)
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[page]->length),CRITICAL);
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
 				keys = parse_keys(tmpbuf,&num_keys,",");
-				if (num_keys != firmware->page_params[i]->length)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->length),CRITICAL);
-				for (x=0;x<num_keys;x++)
+				if (num_keys != firmware->page_params[page]->length)
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[page]->length),CRITICAL);
+				for (offset=0;offset<num_keys;offset++)
 				{
-					ms_data[i][x]=atoi(keys[x]);
-					if (ms_data[i][x] != ms_data_last[i][x])
+					dload_val = atoi(keys[offset]);
+					if (dload_val != ms_data_last[page][offset])
 					{
+						write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark);
 						writecount++;
-						write_ve_const(NULL,i,x,ms_data[i][x],firmware->page_params[i]->is_spark);
 					}
 				}
 
@@ -525,7 +525,6 @@ void restore_all_ecu_settings(gchar *filename)
 			}
 			if (writecount > 0)
 				io_cmd(IO_BURN_MS_FLASH,NULL);
-
 		}
 	}
 	update_ve_const();

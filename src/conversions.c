@@ -45,7 +45,6 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	gint offset = -1;
 	gint lower = -1;
 	gint upper = -1;
-	extern gint **ms_data;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -78,7 +77,6 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 			dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (no eval)!!\n"),CRITICAL);
 			value = lower;
 		}
-		ms_data[page][offset] = (gint)value;
 		g_static_mutex_unlock(&mutex);
 		return ((gint)value);		
 	}
@@ -103,7 +101,6 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		return_value = lower;
 	}
 
-	ms_data[page][offset] = return_value;
 
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
@@ -120,7 +117,6 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 gfloat convert_after_upload(GtkWidget * widget)
 {
 	gfloat return_value = 0.0;
-	gint *ve_const_arr = NULL;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
 	extern gint **ms_data;
@@ -143,10 +139,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"ul_conv_expr");
 	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"ul_evaluator");
 
-	ve_const_arr = (gint *)ms_data[page];
 	if (conv_expr == NULL)
 	{
-		return_value = ve_const_arr[offset];
+		return_value = ms_data[page][offset];
 		dbg_func(g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i, value %f\n",page, offset, return_value),CONVERSIONS);
 		g_static_mutex_unlock(&mutex);
 		return (return_value);		
@@ -157,9 +152,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 		assert(evaluator);
 		g_object_set_data(G_OBJECT(widget),"ul_evaluator",(gpointer)evaluator);
 	}
-	return_value = evaluator_evaluate_x(evaluator,ve_const_arr[offset])+0.001;
+	return_value = evaluator_evaluate_x(evaluator,ms_data[page][offset])+0.001;
 
-	dbg_func(g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,ve_const_arr[offset],return_value),CONVERSIONS);
+	dbg_func(g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,ms_data[page][offset],return_value),CONVERSIONS);
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
 }
