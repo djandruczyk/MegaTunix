@@ -31,6 +31,8 @@ extern gint raw_reader_running;
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
+extern GdkColor black;
+extern GdkColor white;
 gint poll_min;
 gint poll_step;
 gint poll_max;
@@ -52,6 +54,7 @@ int build_comms(GtkWidget *parent_frame)
 	GtkWidget *label;
 	GtkWidget *spinner;
 	GtkWidget *ebox;
+	GtkWidget *entry;
 	GtkAdjustment *adj;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -232,9 +235,12 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
-	ms_ve_readcount_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_ve_readcount_entry), 8);
-	gtk_table_attach (GTK_TABLE (table), ms_ve_readcount_entry, 1, 2, 0, 1,
+	entry = gtk_entry_new();
+	ms_ve_readcount_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
@@ -245,9 +251,12 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
      
-	ms_readcount_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_readcount_entry), 8);
-	gtk_table_attach (GTK_TABLE (table), ms_readcount_entry, 3, 4, 0, 1,
+	entry = gtk_entry_new();
+	ms_readcount_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
@@ -257,9 +266,12 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
-	ms_reset_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 8);
-	gtk_table_attach (GTK_TABLE (table), ms_reset_entry, 1, 2, 1, 2,
+	entry = gtk_entry_new();
+	ms_reset_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
@@ -269,9 +281,12 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
-	ms_sioerr_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 8);
-	gtk_table_attach (GTK_TABLE (table), ms_sioerr_entry, 3, 4, 1, 2,
+	entry = gtk_entry_new();
+	ms_sioerr_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 

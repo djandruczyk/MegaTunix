@@ -30,6 +30,7 @@ extern gboolean raw_reader_running;
 extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
 char buff[60];
+gfloat ecu_version;
 static gboolean burn_needed = FALSE;
 extern struct v1_2_Runtime_Gui runtime_data;
 extern struct ve_const_std *ve_constants;
@@ -73,8 +74,8 @@ void open_serial(int port_num)
 	
 int setup_serial_params()
 {
-
-	bzero(&serial_params.newtio, sizeof(serial_params.newtio)); /*clear struct for new settings*/
+	/*clear struct for new settings*/
+	bzero(&serial_params.newtio, sizeof(serial_params.newtio)); 
 	/* 
 	 * BAUDRATE: Set bps rate. You could also use cfsetispeed and 
 	 * cfsetospeed
@@ -163,7 +164,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         gint tmp;
         gint res;
         struct pollfd ufds;
-	gchar buff[60];
+	char buf[2];
         gint restart_reader = FALSE;
 
         if(serial_params.open)
@@ -196,6 +197,15 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
+			/* Reads out the secl # from the buffer.. */
+			res=read(serial_params.fd,&buf,1);
+
+			res = write(serial_params.fd,"Q",1);
+			res = poll(&ufds,1,serial_params.poll_timeout);
+			res = read(serial_params.fd,&buf,1);
+			ecu_version = (gfloat)buf[0]/10.0;
+			//printf("result of reading ecu version is %f\n",ecu_version);
+
 			g_snprintf(buff,60,"ECU Comms Test Successfull");
 			/* COMMS test succeeded */
 			update_statusbar(ser_statbar,ser_context_id,buff);
@@ -288,7 +298,7 @@ void write_ve_const(gint value, gint offset, gint page)
 	gint twopart = 0;
 	gint res = 0;
 	gint count = 0;
-	char buff[3] = {0, 0, 0};
+	char lbuff[3] = {0, 0, 0};
 
 	if (!connected)
 	{
@@ -311,29 +321,29 @@ void write_ve_const(gint value, gint offset, gint page)
 		return;
 	}
 
-	buff[0]=offset;
+	lbuff[0]=offset;
 	if(twopart)
 	{
-		buff[1]=highbyte;
-		buff[2]=lowbyte;
+		lbuff[1]=highbyte;
+		lbuff[2]=lowbyte;
 		count = 3;
 	}
 	else
 	{
-		buff[1]=value;
+		lbuff[1]=value;
 		count = 2;
 	}
 	if (page == 0)
 	{
 		res = write (serial_params.fd,"W",1);	/* Send write command */
-		res = write (serial_params.fd,buff,count);	/* Send write command */
+		res = write (serial_params.fd,lbuff,count);	/* Send write command */
 	}
 	else if (page == 1)
 	{	/* DUAL Table code only thus far.... */
 		printf("DualTable write operation...\n");
 		res = write (serial_params.fd,"P1",2);	/* Send write command */
 		res = write (serial_params.fd,"W",1);	/* Send write command */
-		res = write (serial_params.fd,buff,count);	/* Send write command */
+		res = write (serial_params.fd,lbuff,count);	/* Send write command */
 	
 	}
 

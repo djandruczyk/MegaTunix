@@ -25,6 +25,7 @@ struct Adjustments adjustments;
 struct Labels labels;
 struct Buttons buttons;
 extern GtkWidget *veconst_widgets_1[];
+extern GdkColor black;
 
 int build_constants(GtkWidget *parent_frame)
 {
@@ -106,6 +107,7 @@ int build_constants(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1.0,1);
         constants.req_fuel_per_squirt_spin = spinner;
 	gtk_widget_set_sensitive(spinner,FALSE);
+	gtk_widget_modify_text(spinner,GTK_STATE_INSENSITIVE,&black);
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,

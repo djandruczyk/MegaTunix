@@ -1,5 +1,5 @@
 
-MegaTunix x.y.z. designed and written by Dave J. Andruczyk
+MegaTunix designed and written by David J. Andruczyk
 
 Inspiration for this code came from Bruce Bowling and Al Grippo, 
 designers of the MegaSquirt DIY Fuel Injection ECU.  This code is 
@@ -24,9 +24,10 @@ and sends directly to the MS (new as of 5/25/2003). Flash burn works..
 	As of July something-or-other,  datalogging is complete and works.
 It's more flexible than any existing logging on any of the windows editions.
 Currently it can do a MegaTune style "classic" datalog in the same format which
-should be readable by mstweek3K (under winblows unfortunately). It can also log
-any of the runtime variables along with the addition of a high resolution clock
-which can be used to track things precisely in time...
+should be readable by mstweek3K (mstweek3k only runs under windows 
+unfortunately). It can also log any of the runtime variables along with the 
+addition of a high resolution clock which can be used to track things 
+precisely in time...
 
 The only things not done yet are the Tuning gui (guages, VEtable graphical
 editor..) and the low-level and tools pages.
