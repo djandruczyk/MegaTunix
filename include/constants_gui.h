@@ -19,6 +19,7 @@
 /* Prototypes */
 void build_constants_1(GtkWidget *);
 void build_constants_2(GtkWidget *);
+void initialize_reqd_fuel(void *, gint );
 /* Prototypes */
 
 #endif

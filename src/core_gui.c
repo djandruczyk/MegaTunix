@@ -50,23 +50,25 @@ static struct
 	void (*Function) (GtkWidget *);	/* builder function */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
 	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
+	gboolean dt_specific;	/* Dualtable ONLY page */
 } notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",TRUE},
-{ "General MegaTunix Settings", build_general, "_General",TRUE},
-{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE},
-{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",TRUE},
-{ "MegaSquirt Constants", build_constants_1, "Table1 _Constants",TRUE},
-{ "MegaSquirt Constants", build_constants_2, "Table2 _Constants",TRUE},
-{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE},
-{ "MegaSquirt VE Table(s)", build_vetable, "_VE Table(s)",TRUE},
-{ "MegaSquirt Ignition Settings", build_ignition, "_Ignition Settings",FALSE},
-{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE},
-{ "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE},
-{ "MegaSquirt Tools", build_tools, "T_ools",TRUE},
-{ "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE},
-{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE},
-{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE},
-{ "MegaSquirt DataLog Viewer", build_logviewer, "Log _Playback",TRUE},
+{ "About MegaTunix", build_about, "_About",TRUE, FALSE},
+{ "General MegaTunix Settings", build_general, "_General",TRUE, FALSE},
+{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE, FALSE},
+{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",TRUE, FALSE},
+{ "MegaSquirt Constants", build_constants_1, "Table1 _Constants",TRUE, FALSE},
+{ "MegaSquirt Constants", build_constants_2, "Table2 _Constants",TRUE, TRUE},
+{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE, FALSE},
+{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",TRUE, FALSE},
+{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",TRUE, TRUE},
+{ "MegaSquirt Ignition Settings", build_ignition, "_Ignition Settings",FALSE, FALSE},
+{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE, FALSE},
+{ "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE, FALSE},
+{ "MegaSquirt Tools", build_tools, "T_ools",TRUE, FALSE},
+{ "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE, FALSE},
+{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE, FALSE},
+{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE, FALSE},
+{ "MegaSquirt DataLog Viewer", build_logviewer, "Log _Playback",TRUE, FALSE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -78,6 +80,7 @@ int setup_gui()
 	GtkWidget *label;
 	GtkWidget *vbox;
 	GtkWidget *button;
+	extern GList *dt_widgets;
 	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -110,14 +113,23 @@ int setup_gui()
 		gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 
 		notebook_tabs[i].Function(frame);
-		if (notebook_tabs[i].enabled == FALSE)
-			gtk_widget_set_sensitive(frame,FALSE);
 
 		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
-		if (notebook_tabs[i].enabled == FALSE)
-			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
-		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 
+		if (notebook_tabs[i].dt_specific == TRUE)
+		{
+			dt_widgets = g_list_append(dt_widgets, 
+					(gpointer)frame);
+			dt_widgets = g_list_append(dt_widgets, 
+					(gpointer)label);
+		}
+
+		if (notebook_tabs[i].enabled == FALSE)
+		{
+			gtk_widget_set_sensitive(frame,FALSE);
+			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
+		}
+		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	}
 
 	button = gtk_button_new_with_label("Exit");

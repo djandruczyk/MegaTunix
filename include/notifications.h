@@ -19,13 +19,13 @@
 
 /* Prototypes */
 void set_store_buttons_state(GuiState);
+void set_interdep_state(GuiState );
+void set_reqfuel_state(GuiState );
+void set_widget_color(gpointer, gpointer );
 void update_logbar(GtkWidget *, gchar *, gchar *, gboolean, gboolean);
 void no_ms_connection(void);
 void warn_user(gchar *);
-void squirt_cyl_inj_set_state(GuiState);
-void interdep_state(GuiState, gint );
 void warn_input_file_not_exist(FileIoType, gchar *);
-void set_button_color(gpointer, gpointer );
 
 gboolean warn_file_not_empty(FileIoType,gchar *);
 gint close_dialog(GtkWidget *, gpointer);

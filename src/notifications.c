@@ -15,6 +15,7 @@
 #include <fileio.h>
 #include <gtk/gtk.h>
 #include <notifications.h>
+#include <stdio.h>
 #include <structures.h>
 
 extern GdkColor red;
@@ -25,29 +26,75 @@ extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;
-GList *store_buttons;	/* list of buttons that have color change attributes*/
+GList *store_widgets;	/* list of widgets that have color change attributes*/
+GList *interdep_widgets;/* list of widgets that have color change attributes*/
+GList *reqfuel_widgets;	/* list of widgets that have color change attributes*/
 
 
 void set_store_buttons_state(GuiState state)
 {
-	g_list_foreach(store_buttons, set_button_color,(gpointer)state);
+	g_list_foreach(store_widgets, set_widget_color,(gpointer)state);
 }
 
-void set_button_color(gpointer button, gpointer state)
+void set_interdep_state(GuiState state)
+{
+	g_list_foreach(interdep_widgets, set_widget_color,(gpointer)state);
+}
+
+void set_reqfuel_state(GuiState state)
+{
+	g_list_foreach(reqfuel_widgets, set_widget_color,(gpointer)state);
+}
+
+void set_widget_color(gpointer widget, gpointer state)
 {
 	switch ((GuiState)state)
 	{
 		case RED:
-			gtk_widget_modify_fg(GTK_BIN(button)->child,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(GTK_BIN(button)->child,
-					GTK_STATE_PRELIGHT,&red);
+			if (GTK_IS_BUTTON(widget))
+			{
+				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+						GTK_STATE_PRELIGHT,&red);
+			}
+			else if (GTK_IS_LABEL(widget))
+			{
+				gtk_widget_modify_fg(widget,
+						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_fg(widget,
+						GTK_STATE_PRELIGHT,&red);
+			}
+			else
+			{
+				gtk_widget_modify_text(GTK_WIDGET(widget),
+						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_text(GTK_WIDGET(widget),
+						GTK_STATE_INSENSITIVE,&red);
+			}
 			break;
 		case BLACK:
-			gtk_widget_modify_fg(GTK_BIN(button)->child,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(GTK_BIN(button)->child,
-					GTK_STATE_PRELIGHT,&black);
+			if (GTK_IS_BUTTON(widget))
+			{
+				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+						GTK_STATE_PRELIGHT,&black);
+			}
+			else if (GTK_IS_LABEL(widget))
+			{
+				gtk_widget_modify_fg(widget,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_fg(widget,
+						GTK_STATE_PRELIGHT,&black);
+			}
+			else
+			{	
+				gtk_widget_modify_text(GTK_WIDGET(widget),
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_text(GTK_WIDGET(widget),
+						GTK_STATE_INSENSITIVE,&black);
+			}
 			break;
 	}
 }
@@ -140,79 +187,6 @@ gint close_dialog(GtkWidget *widget, gpointer data)
 	gtk_widget_destroy(widget);
 	warning_present = FALSE;
 	return TRUE;
-}
-
-void squirt_cyl_inj_set_state(GuiState state)
-{
-	switch (state)
-	{
-		case RED:
-			gtk_widget_modify_fg(labels.squirts_lab,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(labels.cylinders_lab,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.cylinders_spin,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-					GTK_STATE_NORMAL,&red);
-			break;
-		case BLACK:
-			gtk_widget_modify_fg(labels.squirts_lab,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(labels.cylinders_lab,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(spinners.cylinders_spin,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-					GTK_STATE_NORMAL,&black);
-			break;
-	}
-}
-
-void interdep_state(GuiState state, gint page)
-{
-	switch (state)
-	{
-		case RED:
-			gtk_widget_modify_fg(labels.squirts_lab,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(labels.injectors_lab,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(labels.cylinders_lab,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.req_fuel_total_spin,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.cylinders_spin,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.injectors_spin,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(
-					spinners.req_fuel_per_squirt_spin,
-					GTK_STATE_INSENSITIVE,&red);
-			break;
-		case BLACK:
-			gtk_widget_modify_fg(labels.squirts_lab,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(labels.injectors_lab,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(labels.cylinders_lab,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(spinners.req_fuel_total_spin,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(spinners.inj_per_cycle_spin,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(spinners.cylinders_spin,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(spinners.injectors_spin,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(
-					spinners.req_fuel_per_squirt_spin,
-					GTK_STATE_INSENSITIVE,&black);
-
-			break;
-	}
 }
 
 void warn_input_file_not_exist(FileIoType iotype, gchar * filename)

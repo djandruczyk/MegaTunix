@@ -27,7 +27,7 @@
 gboolean req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;
 static GtkWidget *popup;
-struct Reqd_Fuel reqd_fuel = {NULL,NULL,NULL,NULL,NULL,NULL,300,8,19,2.7,3.5,0.0,14.7};
+//struct Reqd_Fuel reqd_fuel = {NULL,NULL,NULL,NULL,NULL,NULL,300,8,19,2.7,3.5,0.0,14.7};
 extern struct DynamicSpinners spinners;
 extern struct DynamicAdjustments adjustments;
 extern gint num_cylinders;
@@ -35,6 +35,7 @@ extern gint num_cylinders;
 
 int reqd_fuel_popup()
 {
+/*
 	GtkWidget *button;
 	GtkWidget *spinner;
 	GtkWidget *frame;
@@ -103,7 +104,7 @@ int reqd_fuel_popup()
 			(GtkAttachOptions) (0), 0, 0);
 
 
-	/* Engine Displacement */
+	// Engine Displacement 
 	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.disp,1.0,1000,
 			1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,0,0);
@@ -117,7 +118,7 @@ int reqd_fuel_popup()
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	/* Number of Cylinders */
+	// Number of Cylinders 
 	reqd_fuel.cyls = num_cylinders;
 	spinner = gtk_spin_button_new(adjustments.cylinders_adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
@@ -130,7 +131,7 @@ int reqd_fuel_popup()
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	/* Rated fuel injector flow in lbs/hr */
+	// Rated fuel injector flow in lbs/hr 
 	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.rated_inj_flow,1.0,100.0,
 			1.0,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,0);
@@ -144,7 +145,7 @@ int reqd_fuel_popup()
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	/* Rated fuel pressure in bar */
+	// Rated fuel pressure in bar 
 	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.rated_pressure,1.0,10.0,
 			0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
@@ -158,7 +159,7 @@ int reqd_fuel_popup()
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	/* Actual fuel pressure in bar */
+	// Actual fuel pressure in bar 
 	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.actual_pressure,1.0,10.0,
 			0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
@@ -173,7 +174,7 @@ int reqd_fuel_popup()
 			(GtkAttachOptions) (0), 0, 0);
 
 
-	/* Target Air Fuel Ratio */
+	// Target Air Fuel Ratio 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.afr,10.0,25.5,
 			0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
@@ -210,6 +211,7 @@ int reqd_fuel_popup()
 
 	gtk_widget_show_all(popup);
 
+*/
 	return TRUE;
 }
 
@@ -222,6 +224,7 @@ int close_popup(GtkWidget *widget, gpointer data)
 
 int update_reqd_fuel(GtkWidget *widget, gpointer data)
 {
+	/*
 	gfloat tmp1,tmp2;
 	gint dload_val;
 	extern unsigned char *ms_data;
@@ -246,6 +249,7 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_total_spin),
 			ve_const->req_fuel/10.0);
 
+	*/
 	/* No need to set cyls value, or the bitfield as the two spinbuttons
 	 * share the same adjustment and signal handlers so altering the cyls
 	 * spinbutton on the main gui or in req_fuel_popup will both get 
@@ -253,6 +257,7 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
 	 */
 
 	/* Top is two stroke, botton is four stroke.. */
+	/*
 	if (ve_const->config11.bit.eng_type)
 		ve_const->rpmk = (int)(6000.0/((double)reqd_fuel.cyls));
 	else
@@ -262,5 +267,6 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
 	dload_val = ve_const->rpmk;
 	write_ve_const(dload_val, rpmk_offset);
 
+	*/
 	return TRUE;
 }

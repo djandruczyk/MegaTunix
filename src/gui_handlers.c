@@ -59,7 +59,6 @@ extern unsigned char turbo_map[];
 extern struct Ve_Widgets *ve_widgets;
 extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
-extern struct Reqd_Fuel reqd_fuel;
 extern struct DynamicLabels labels;
 extern struct DynamicMisc misc;
 extern struct Logables logables;
@@ -422,10 +421,6 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			stop_runtime_display();
 			stop_datalogging();
 			break;
-		case REQD_FUEL_POPUP:
-			if (!req_fuel_popup)
-				reqd_fuel_popup();
-			break;
 		case READ_VE_CONST:
 			if (!interrogated)
 				interrogate_ecu();
@@ -497,7 +492,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	gint dl_type = 0;
 	gboolean temp_dep = FALSE;
 	extern unsigned char * ms_data;
+	struct Reqd_Fuel *reqd_fuel;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
+	reqd_fuel = (struct Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),
+			"data");
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -508,18 +506,6 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 
 	switch ((SpinButton)data)
 	{
-/*
-		case SET_SER_PORT:
-			if(serial_params->open)
-			{
-				if (raw_reader_running)
-					stop_serial_thread();
-				close_serial();
-			}
-			open_serial((int)value);
-			setup_serial_params();
-			break;
-*/
 		case SER_POLL_TIMEO:
 			serial_params->poll_timeout = (gint)value;
 			break;
@@ -527,22 +513,22 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			serial_params->read_wait = (gint)value;
 			break;
 		case REQ_FUEL_DISP:
-			reqd_fuel.disp = (gint)value;
+			reqd_fuel->disp = (gint)value;
 			break;
 		case REQ_FUEL_CYLS:
-			reqd_fuel.cyls = (gint)value;
+			reqd_fuel->cyls = (gint)value;
 			break;
 		case REQ_FUEL_RATED_INJ_FLOW:
-			reqd_fuel.rated_inj_flow = (gint)value;
+			reqd_fuel->rated_inj_flow = (gint)value;
 			break;
 		case REQ_FUEL_RATED_PRESSURE:
-			reqd_fuel.rated_pressure = (gfloat)value;
+			reqd_fuel->rated_pressure = (gfloat)value;
 			break;
 		case REQ_FUEL_ACTUAL_PRESSURE:
-			reqd_fuel.actual_pressure = (gfloat)value;
+			reqd_fuel->actual_pressure = (gfloat)value;
 			break;
 		case REQ_FUEL_AFR:
-			reqd_fuel.afr = value;
+			reqd_fuel->target_afr = value;
 			break;
 		case REQ_FUEL:
 			req_fuel_total = value;
@@ -572,12 +558,12 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = TRUE;
-				squirt_cyl_inj_set_state(RED);
+				set_reqfuel_state(RED);
 			}
 			else
 			{
 				err_flag = FALSE;
-				squirt_cyl_inj_set_state(BLACK);
+				set_reqfuel_state(BLACK);
 				check_req_fuel_limits();
 			}
 			break;
@@ -609,12 +595,12 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = TRUE;
-				squirt_cyl_inj_set_state(RED);
+				set_reqfuel_state(RED);	
 			}
 			else
 			{
 				err_flag = FALSE;
-				squirt_cyl_inj_set_state(BLACK);
+				set_reqfuel_state(BLACK);	
 				check_req_fuel_limits();
 			}
 			break;
@@ -917,14 +903,14 @@ void check_req_fuel_limits()
 		 * change the color of the potential offenders onscreen to
 		 * let the user know something is wrong..
 		 */
-		interdep_state(RED, page);
+		set_interdep_state(RED);
 	}
 	else
 	{	/*
 		 * Everything is OK with all inter-dependant variables.
 		 * settings all previous gui enties to normal state...
 		 */
-		interdep_state(BLACK, page);
+		set_interdep_state(BLACK);
 
 		/* All Tested succeeded, download Required fuel, 
 		 * then iterate through the list of offsets of changed
@@ -1028,19 +1014,31 @@ void check_config13(int tmp)
 
 void set_dualtable_mode(gboolean state)
 {
-	extern GList *dt_controls;
+	extern GList *dt_widgets;
+	extern GList *inv_dt_widgets;
 	dualtable = state;
-	/* These two can't be in the list as their state needs to be inverted*/
-	gtk_widget_set_sensitive(buttons.alternate_but,!state);
-	gtk_widget_set_sensitive(buttons.simul_but,!state);
-	g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
+	GtkWidget *label;
+
+	/* get label widget for constants reqd_fuel table 1 */
+	label = gtk_frame_get_label_widget(
+			GTK_FRAME
+			(misc.tbl1_reqd_fuel_frame));
+			
+	g_list_foreach(inv_dt_widgets, set_widget_state,(gpointer)(!state));
+	g_list_foreach(dt_widgets, set_widget_state,(gpointer)state);
 
 	/* fahrenheit is a FLAG... */
 	reset_temps(GINT_TO_POINTER(fahrenheit));
 	if (state)
+	{
+		gtk_label_set_text(GTK_LABEL(label),"Required Fuel for Table 1");
 		printf("enabling dualtable mode controls\n");
+	}
 	else
+	{
+		gtk_label_set_text(GTK_LABEL(label),"Required Fuel");
 		printf("disabling dualtable mode controls\n");
+	}
 }
 
 void set_widget_state(gpointer widget, gpointer state)
