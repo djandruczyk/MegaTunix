@@ -24,9 +24,9 @@ static gint max_viewables = 0;
 static gint total_viewables = 0;
 static struct Logables viewables;
 static GHashTable *active_traces = NULL;
-static guint16 red = 0;
-static guint16 green = 32768;
-static guint16 blue = 65535;
+static gint red = 0;
+static gint green = 32768;
+static gint blue = 65535;
 
 /* This table is the same dimensions as the table used for datalogging.
  * FALSE means it's greyed out as a choice for the logviewer, TRUE means
@@ -350,6 +350,7 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 
 	draw_graticule(v_value);
 	draw_infotext(v_value);
+	draw_old_data(v_value);
 
 	gdk_window_clear(widget->window);
 //	printf("configure event....\n");
@@ -376,18 +377,37 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	return TRUE;
 }
 
-struct Viewable_Value * build_v_value(GtkWidget * widget, gint offset)
+struct Viewable_Value * build_v_value(GtkWidget * parent_widget, gint offset)
 {
 	struct Viewable_Value *v_value = NULL;
 	v_value = g_malloc(sizeof(struct Viewable_Value));		
 
-	v_value->parent = widget;
-	v_value->d_area = gtk_drawing_area_new();
-
+	/* Set limits of this variable. (it's ranges, used for scaling */
 	v_value->lower = limits[offset].lower;
 	v_value->upper = limits[offset].upper;
+	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 
+	/* Tell where we get the data from */
+	v_value->runtime_offset = logging_offset_map[offset];
+	/* How big the data is (needed when indexing into the datablock */
+	v_value->size = logging_datasizes_map[offset];
+	/* textual name of the variabel we're viewing.. */
+	v_value->vname = g_strdup(logable_names[offset]);
+
+	/* Array to keep history for resize/redraw and export to datalog
+	 * we use the _sized_ version to give a big enough size to prevent
+	 * reallocating memory too often. (more initial mem usage,  but less
+	 * calls to malloc...
+	 */
+	v_value->data_array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+
+	/* Set parent widget... */
+	v_value->parent = parent_widget;
+	/* create new drawing area... */
+	v_value->d_area = gtk_drawing_area_new();
+
+	/* Pixmap for the drawingarea for this logable value... */
 	v_value->trace_pmap = gdk_pixmap_new(
 			v_value->d_area->window, 
 			10,10, 
@@ -396,10 +416,12 @@ struct Viewable_Value * build_v_value(GtkWidget * widget, gint offset)
 	/* space set aside for textual information... */
 	v_value->info_width = 100;
 
-	gtk_box_pack_start(GTK_BOX(widget),
+	/* place it */
+	gtk_box_pack_start(GTK_BOX(parent_widget),
 			v_value->d_area,
 			TRUE,TRUE,0);
 
+	/* Add events to capture mouse button presses (for popup menus...) */
 	gtk_widget_add_events(v_value->d_area,
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
@@ -417,20 +439,18 @@ struct Viewable_Value * build_v_value(GtkWidget * widget, gint offset)
 			G_CALLBACK(lv_expose_event),
 			NULL);
 
+	/* Bind a pointer to the datastructure that contains all the info 
+	 * on this viewed trace, so the signal handlers can do their job
+	 * without needing a million ugly global variables... */
 	g_object_set_data(G_OBJECT(v_value->d_area),
 			"data",(gpointer)v_value);
 
+	/* Allocate the colors (GC's) for the font, trace and graticule */
 	v_value->font_gc = initialize_gc(v_value->trace_pmap, FONT);
 	v_value->trace_gc = initialize_gc(v_value->trace_pmap, TRACE);
 	v_value->grat_gc = initialize_gc(v_value->trace_pmap, GRATICULE);
 
-	v_value->runtime_offset = logging_offset_map[offset];
-	v_value->size = logging_datasizes_map[offset];
-	v_value->vname = g_strdup(logable_names[offset]);
-
-	
-
-	gtk_widget_show_all(widget);
+	gtk_widget_show_all(parent_widget);
 	return v_value;
 }
 
@@ -503,8 +523,46 @@ void draw_infotext(void *data)
 	layout = gtk_widget_create_pango_layout(v_value->d_area,v_value->vname);
 	pango_layout_set_font_description(layout,font_desc);
 	gdk_draw_layout(v_value->trace_pmap,v_value->font_gc,0,0,layout);
-	gdk_window_clear(v_value->d_area->window);
 
+}
+
+void draw_old_data(void *data)
+{
+	gint lo_width = 0;
+	gint w = 0;
+	gint h = 0;
+	gint total = 0;
+	gint len = 0;
+	gint i = 0;
+	gfloat val = 0.0;
+	gfloat percent = 0.0;
+	GdkPoint pts[2048];	/*bad idea as static... */
+	struct Viewable_Value *v_value = (struct Viewable_Value *)data;
+
+	w = v_value->d_area->allocation.width;
+	h = v_value->d_area->allocation.height;
+
+	lo_width = v_value->d_area->allocation.width-v_value->info_width;
+	total = v_value->data_array->len < lo_width  
+		? v_value->data_array->len : lo_width;
+
+	len = v_value->data_array->len;
+	/* Draw is reverse order, from right to left, easier to think out
+	 * in my head... :) 
+	 */
+	for (i=0;i<total;i++)
+	{
+		val = g_array_index(v_value->data_array,gfloat,len-i);
+		percent = 1.0-(val/(v_value->upper-v_value->lower));
+		pts[i].x = w-i;
+		pts[i].y = (gint) (percent*h);
+	}
+	gdk_draw_lines(v_value->trace_pmap,
+			v_value->trace_gc,
+			pts,
+			total);
+
+	return;
 }
 
 void draw_graticule(void * data)
@@ -548,8 +606,6 @@ void draw_graticule(void * data)
 	gdk_draw_segments(v_value->trace_pmap,v_value->grat_gc,segs,count);
 */
 		
-	gdk_window_clear(v_value->d_area->window);
-
 }
 
 gboolean update_logview_traces()
@@ -610,6 +666,8 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 		v_value->max = val;
 	if (val < (v_value->min))
 		v_value->min = val;
+
+	g_array_append_val(v_value->data_array,val);
 
 	last_grat = v_value->last_grat;
 	grat_interval = v_value->grat_interval;

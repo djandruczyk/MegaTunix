@@ -257,7 +257,7 @@ struct Viewable_Value
 	gint info_width;		/* width in pixels of the info_pmap */
 	gchar *vname;			/* Name of widget being logged */
 	gint runtime_offset;		/* Offset into runtime struct */
-	gint size;			/* 1=byte, 2=float, 4=float */
+	gint size;			/* 1=byte, 2=short, 4=float */
 	gint last_y;			/* Last point on screen of trace */
 	gfloat min;			/* for auto-scaling */
 	gfloat max;			/* for auto-scaling */
@@ -265,6 +265,7 @@ struct Viewable_Value
 	gint grat_interval;		/* graticule interval in pixels */
 	gfloat lower;			/* limits to use for scaling */
 	gfloat upper;			/* limits to use for scaling */
+	GArray *data_array;		/* History of all values recorded */
 };
 	
 struct Limits

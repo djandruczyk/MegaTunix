@@ -25,6 +25,7 @@ struct Viewable_Value * build_v_value(GtkWidget *, gint );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 void draw_graticule(void * );
 void draw_infotext(void * );
+void draw_old_data(void * );
 gboolean update_logview_traces(void);
 void trace_update(gpointer, gpointer, gpointer );
 

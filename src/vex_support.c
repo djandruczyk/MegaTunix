@@ -227,7 +227,7 @@ gboolean vetable_import(void *ptr)
 	else
 	{
 		fprintf(stderr,__FILE__": vetable_import, iofile undefined\n");
-		exit;
+		exit(-1);
 	}
 	reset_import_flags();
 	status = g_io_channel_seek_position(iofile->iochannel,0,G_SEEK_SET,NULL);
