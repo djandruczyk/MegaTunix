@@ -221,8 +221,8 @@ void interrogate_ecu()
 
 
 /*!
- \brief determine_ecu() trys to match determine hte target firmware by 
- loading hte interrogation profiles in turn and comparing hte data from our
+ \brief determine_ecu() trys to match determine the target firmware by 
+ loading the interrogation profiles in turn and comparing the data from our
  test ECU adn a profile until a match is found, 
  \param canidate (struct Canidate *) pointer to the Canidate structure
  \param cmd_array (GArray *) pointer to the array of commands sent
@@ -434,7 +434,7 @@ freeup:
  \brief validate_and_load_tests() loads the list of tests from the system
  checks them for validity, populates and array and returns it
  \param cmd_details (GHashTable *) a hashtable where details regarding each 
- command tested againsthte ECU arestored
+ command tested against the ECU arestored
  \returns a dynamic GArray for commands
  */
 GArray * validate_and_load_tests(GHashTable *cmd_details)
@@ -619,7 +619,7 @@ struct Canidate * initialize_canidate(void)
  the essentials on if needed to perform an interrogation against it.
  \param cmd_array (GArray *) array of commands to load bytecounts for from
  the interrogation profile
- \param filename (gchr *) the name of hte interrogation profile filename
+ \param filename (gchr *) the name of the interrogation profile filename
  \returns a pointer to a Canidate structure
  */
 struct Canidate * load_potential_match(GArray * cmd_array, gchar * filename)
@@ -894,7 +894,7 @@ gint translate_capabilities(gchar *string)
 
 
 /*!
- \brief check_for_match() compares hte resutls ofhte interrogation with the
+ \brief check_for_match() compares the resutls of the interrogation with the
  ECU to the canidates in turn.  when a match occurs TRUE is returns
  otherwise it returns FALSE
  \param cmd_array (GArray *) array of commands

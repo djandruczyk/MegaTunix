@@ -177,7 +177,7 @@ store_it:
  \param incoming (void *) pointer to the raw data
  \param type (ConvType) enumeration stating if this is an upload or 
  download conversion
- \returns a float of hte result of the mathematical expression
+ \returns a float of the result of the mathematical expression
  */
 gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 {
@@ -329,7 +329,7 @@ gfloat handle_special(GObject *object,gchar *handler_name)
 
 
 /*!
- \breif lookup_current_value() gets the current value of the derived
+ \brief lookup_current_value() gets the current value of the derived
  variable requested by name.
  \param internal_name (gchar *) name of the variable to get the data for.
  \param value (gflaot *) where to put the value

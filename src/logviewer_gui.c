@@ -333,7 +333,7 @@ void populate_viewer()
 
 
 /*!
- \breif reset_logviewer_state() deselects any traces, resets the position 
+ \brief reset_logviewer_state() deselects any traces, resets the position 
  slider.  This function is called when switching from playback to rt mode
  and back
  */
@@ -500,9 +500,9 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 
 
 /*!
- \breif get_colors_from_hue(gets a color back from an angle passed in degrees.
+ \brief get_colors_from_hue(gets a color back from an angle passed in degrees.
  The degrees represent the arc aroudn a color circle.
- \param hue_Angle (gfloat) degrees around hte color circle
+ \param hue_Angle (gfloat) degrees around the color circle
  \returns a GdkColor at the hue angle requested
  */
 GdkColor get_colors_from_hue(gfloat hue_angle)
@@ -932,7 +932,7 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 /*!
  \brief lv_expose_event() is alled whenever part of the display is uncovered
  so that the screen can be redraw from the backing pixmap
- \param widget (GtkWidget *) widget receivinghte event
+ \param widget (GtkWidget *) widget receiving the event
  \param event (GdkEventExpose *) event structure
  \param data (gpointer) unused
  \returns TRUE

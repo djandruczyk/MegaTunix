@@ -97,7 +97,7 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 }
 
 /*!
- \breif get_bin(gint) converts a decimal number into binary and returns it
+ \brief get_bin(gint) converts a decimal number into binary and returns it
  as a gchar *. used in the memory viewer to print numbers in binary
  \param x (gint) the value to conver to binary
  \returns a textual string of the value in binary

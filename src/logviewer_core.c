@@ -128,7 +128,7 @@ void read_log_header(GIOChannel *iochannel, struct Log_Info *log_info )
 
 /*!
  \brief populate_limits() scans the datalog data and sets the minimum and 
- maximum values based on the span of hte data in the file
+ maximum values based on the span of the data in the file
  \param log_info (struct Log_Info *) pointer to log info structure
  */
 void populate_limits(struct Log_Info *log_info)

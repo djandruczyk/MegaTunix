@@ -44,9 +44,9 @@ static gboolean header_needed = FALSE;
 
 
 /*!
- \brief populate_dlog_choices() is called when hte datalogging tab is loaded
+ \brief populate_dlog_choices() is called when the datalogging tab is loaded
  by glade AFTER the realtime variable definitions have been loaded and 
- processed.  All of hte logable variables are then placed here to user 
+ processed.  All of the logable variables are then placed here to user 
  selecting during datalogging.
  */
 void populate_dlog_choices()

@@ -390,7 +390,7 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
  \brief ve3d_expose_event is called when the part or all of the GL area
  needs to be redrawn due to being "exposed" (uncovered), this kicks off all
  the other renderers for updating the axis and status indicators. This 
- method is NOT like I'd like it and is a CPU pig as 99.5% of hte time we don't
+ method is NOT like I'd like it and is a CPU pig as 99.5% of the time we don't
  even need to redraw at all..  :(
  /bug this code is slow, and needs to be optimized or redesigned
  */
@@ -513,7 +513,7 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 }
 
 /*!
- \brief ve3d_realize is called when hte window is created and sets the main
+ \brief ve3d_realize is called when the window is created and sets the main
  OpenGL parameters of the window (this only needs to be done once I think)
  */
 void ve3d_realize (GtkWidget *widget, gpointer data)

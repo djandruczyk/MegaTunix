@@ -390,7 +390,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 /*!
  \brief entry_changed_handler() gets called anytiem a text entries is changed
- (i.e. during edit) it's main purpose is to turn hte entry red to signify
+ (i.e. during edit) it's main purpose is to turn the entry red to signify
  to the user it's being modified but not yet SENT to the ecu
  \param widget (GtkWidget *) the widget being modified
  \param data (gpointer) not used
@@ -1140,7 +1140,7 @@ void update_ve_const()
 
 /*!
  \brief update_widget() updates a widget on screen.  All parameters re the
- conversions and where hte raw value is stored is embedded within the widget 
+ conversions and where the raw value is stored is embedded within the widget 
  itself.
  \param object (gpointer) pointer to the widget object
  \user_data (gpointer) pointerto a widget to compare against to prevent a race
@@ -1418,8 +1418,8 @@ testit:
 
 /*
  \brief page_changed() is fired off whenever a new notebook page is chosen.
- This fucntion jsutr sets a variabel markign hte current page.  this is to
- prevent hte runtime sliders from being updated if they aren't visible
+ This fucntion jsutr sets a variabel markign the current page.  this is to
+ prevent the runtime sliders from being updated if they aren't visible
  \param notebook (GtkNotebook *) nbotebook that emitted the event
  \param page (GtkNotebookPage *) page
  \param page_no (guint) page number that's now active
@@ -1443,7 +1443,7 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
  \brief switch_labels() swaps labels on  temp dependant controls that are 
  dependant on the state of another control
  \param widget_name (gchar *) widget name we are checking state of
- \param state (gboolean) if TRUE we use hte alternate label, if FALSE we use
+ \param state (gboolean) if TRUE we use the alternate label, if FALSE we use
  the default label
  */
 void switch_labels(gchar * widget_name,gboolean state)

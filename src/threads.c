@@ -269,7 +269,7 @@ void *thread_dispatcher(gpointer data)
  interdependancy issues) and then will check if there are more than 1 widgets
  that are associated with this page/offset and update those widgets before
  sending the value to the ECU.
- \param widget (GtkWidget *) pointer to hte widget that was modified or NULL
+ \param widget (GtkWidget *) pointer to the widget that was modified or NULL
  \param page (gint) page in which the value refers to.
  \param offset (gint) offset from the beginning of the page that this data
  refers to.

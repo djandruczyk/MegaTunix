@@ -164,7 +164,7 @@ gboolean signal_read_rtvars()
 
 /*!
  \brief early interrogation() is called from a one shot timeout from main
- in order to start the interrogation process as soon as hte gui is up and 
+ in order to start the interrogation process as soon as the gui is up and 
  running.
  */
 gboolean early_interrogation()

@@ -113,7 +113,7 @@ void set_widget_color(gpointer widget, gpointer color)
 
 /*!
  \brief update_logbar() updates the logbar passed with the text passed to it
- \param view_name (gchar *) textual name of the textview hte text is supposed 
+ \param view_name (gchar *) textual name of the textview the text is supposed 
  to go to. (required)
  \param tagname (gchar *) textual tagname to be used to set attributes on the
  text (optional, can be NULL)

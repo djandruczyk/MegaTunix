@@ -78,7 +78,7 @@ void win32_setup_serial_params()
 
 	// Set the port properties and write the string out the port.
 	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&dcb) == 0)
-		printf("ERROR setting serial attributes\n");
+		dbg_func(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n",CRITICAL);
 
 	/* Set timeout params in a fashion that mimics linux behavior */
 	timeouts.ReadIntervalTimeout         = 0;

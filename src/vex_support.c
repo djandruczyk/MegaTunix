@@ -277,7 +277,7 @@ breakout:
  which handler to call.
  \param arg (ImportParserArg) another enumeration passed to the functiosn 
  being dispatched from here
- \param string (gchar *) The current line of hte VEXfile just read.  Used for
+ \param string (gchar *) The current line of the VEXfile just read.  Used for
  handlers than only need 1 lines's worth of data
  \param iochannel (GIOChannel *) the pointer to the input stream of the 
  vexfile for reading additional data (used by some dispatched functions)
@@ -639,7 +639,7 @@ breakout:
 
 
 /*!
- \breif vex_comment_parse() stores the comment field  as entered by the
+ \brief vex_comment_parse() stores the comment field  as entered by the
  user on the Megatunix GUI for VEX export.
  \param widget (GtkWidget *) pointer to textentry widget where user enters
  the comment

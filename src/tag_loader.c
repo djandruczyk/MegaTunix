@@ -29,11 +29,11 @@
  \brief load_tags() loads tags from the datamap file in reference to a 
  textview.  A tag defines a set of attributes that can be applied to
  text. 
- \param object (GObject *) pointer to hte object where the attributes are
+ \param object (GObject *) pointer to the object where the attributes are
  to be stored
  \param cfgfile (ConfigFile *) pointer to the configfile to read the 
  necessary data from.
- \param section (gchar *) section name in hte config file to search for the
+ \param section (gchar *) section name in the config file to search for the
  tags
  */
 void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)

@@ -47,7 +47,7 @@ static struct DebugLevel dbglevels[] = {
 
 
 /*!
- \brief build_general() Builds the general Tab for hte MegaTunix gui which
+ \brief build_general() Builds the general Tab for the MegaTunix gui which
  houses the butons for tooltips, temp scale selection and most importantly
  the Interrogation status windows and offline mode selectio buttons
  \param parent_frame (GtkWidget *) pointer to the parent frame
