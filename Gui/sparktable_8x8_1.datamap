@@ -127,7 +127,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_1]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=64
 dl_conv_expr=x/100
@@ -138,7 +138,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_2]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=65
 dl_conv_expr=x/100
@@ -149,7 +149,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_3]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=66
 dl_conv_expr=x/100
@@ -160,7 +160,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_4]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=67
 dl_conv_expr=x/100
@@ -171,7 +171,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_5]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=68
 dl_conv_expr=x/100
@@ -182,7 +182,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_6]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=69
 dl_conv_expr=x/100
@@ -193,7 +193,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_7]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=70
 dl_conv_expr=x/100
@@ -204,7 +204,7 @@ ign_parm=TRUE
 
 [SP1_rpm_spin_8]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=71
 dl_conv_expr=x/100
@@ -216,8 +216,8 @@ ign_parm=TRUE
 #----- VE-Table Spinners -----------------------------------------------------
 
 [SP1_sparkspin_(1,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=0
 dl_conv_expr=x*2.84
@@ -227,8 +227,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=1
 dl_conv_expr=x*2.84
@@ -238,8 +238,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=2
 dl_conv_expr=x*2.84
@@ -249,8 +249,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=3
 dl_conv_expr=x*2.84
@@ -260,8 +260,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=4
 dl_conv_expr=x*2.84
@@ -271,8 +271,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=5
 dl_conv_expr=x*2.84
@@ -282,8 +282,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=6
 dl_conv_expr=x*2.84
@@ -293,8 +293,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,1)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=7
 dl_conv_expr=x*2.84
@@ -304,8 +304,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(1,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=8
 dl_conv_expr=x*2.84
@@ -315,8 +315,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=9
 dl_conv_expr=x*2.84
@@ -326,8 +326,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=10
 dl_conv_expr=x*2.84
@@ -337,8 +337,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=11
 dl_conv_expr=x*2.84
@@ -348,8 +348,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=12
 dl_conv_expr=x*2.84
@@ -359,8 +359,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=13
 dl_conv_expr=x*2.84
@@ -370,8 +370,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=14
 dl_conv_expr=x*2.84
@@ -381,8 +381,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,2)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=15
 dl_conv_expr=x*2.84
@@ -392,8 +392,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(1,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=16
 dl_conv_expr=x*2.84
@@ -403,8 +403,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=17
 dl_conv_expr=x*2.84
@@ -414,8 +414,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=18
 dl_conv_expr=x*2.84
@@ -425,8 +425,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=19
 dl_conv_expr=x*2.84
@@ -436,8 +436,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=20
 dl_conv_expr=x*2.84
@@ -447,8 +447,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=21
 dl_conv_expr=x*2.84
@@ -458,8 +458,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=22
 dl_conv_expr=x*2.84
@@ -469,8 +469,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,3)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=23
 dl_conv_expr=x*2.84
@@ -480,8 +480,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(1,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=24
 dl_conv_expr=x*2.84
@@ -491,8 +491,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=25
 dl_conv_expr=x*2.84
@@ -502,8 +502,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=26
 dl_conv_expr=x*2.84
@@ -513,8 +513,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=27
 dl_conv_expr=x*2.84
@@ -524,8 +524,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=28
 dl_conv_expr=x*2.84
@@ -535,8 +535,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=29
 dl_conv_expr=x*2.84
@@ -546,8 +546,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=30
 dl_conv_expr=x*2.84
@@ -557,8 +557,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,4)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=31
 dl_conv_expr=x*2.84
@@ -568,8 +568,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(1,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=32
 dl_conv_expr=x*2.84
@@ -579,8 +579,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=33
 dl_conv_expr=x*2.84
@@ -590,8 +590,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=34
 dl_conv_expr=x*2.84
@@ -601,8 +601,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=35
 dl_conv_expr=x*2.84
@@ -612,8 +612,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=36
 dl_conv_expr=x*2.84
@@ -623,8 +623,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=37
 dl_conv_expr=x*2.84
@@ -634,8 +634,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=38
 dl_conv_expr=x*2.84
@@ -645,8 +645,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,5)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=39
 dl_conv_expr=x*2.84
@@ -656,8 +656,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(1,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=40
 dl_conv_expr=x*2.84
@@ -667,8 +667,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=41
 dl_conv_expr=x*2.84
@@ -678,8 +678,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=42
 dl_conv_expr=x*2.84
@@ -689,8 +689,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=43
 dl_conv_expr=x*2.84
@@ -700,8 +700,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=44
 dl_conv_expr=x*2.84
@@ -711,8 +711,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=45
 dl_conv_expr=x*2.84
@@ -722,8 +722,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=46
 dl_conv_expr=x*2.84
@@ -733,8 +733,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,6)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=47
 dl_conv_expr=x*2.84
@@ -744,8 +744,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(1,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=48
 dl_conv_expr=x*2.84
@@ -755,8 +755,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=49
 dl_conv_expr=x*2.84
@@ -766,8 +766,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=50
 dl_conv_expr=x*2.84
@@ -777,8 +777,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=51
 dl_conv_expr=x*2.84
@@ -788,8 +788,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=52
 dl_conv_expr=x*2.84
@@ -799,8 +799,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=53
 dl_conv_expr=x*2.84
@@ -810,8 +810,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=54
 dl_conv_expr=x*2.84
@@ -821,8 +821,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,7)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=55
 dl_conv_expr=x*2.84
@@ -832,8 +832,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(1,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=56
 dl_conv_expr=x*2.84
@@ -843,8 +843,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(2,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=57
 dl_conv_expr=x*2.84
@@ -854,8 +854,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(3,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=58
 dl_conv_expr=x*2.84
@@ -865,8 +865,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(4,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=59
 dl_conv_expr=x*2.84
@@ -876,8 +876,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(5,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=60
 dl_conv_expr=x*2.84
@@ -887,8 +887,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(6,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=61
 dl_conv_expr=x*2.84
@@ -898,8 +898,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(7,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=62
 dl_conv_expr=x*2.84
@@ -909,8 +909,8 @@ handler=_GENERIC_
 ign_parm=TRUE
 
 [SP1_sparkspin_(8,8)]
-keys=page,offset,ul_conv_expr,dl_conv_expr,dl_type,handler,ign_parm
-key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=63
 dl_conv_expr=x*2.84

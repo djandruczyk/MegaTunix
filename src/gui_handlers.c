@@ -332,7 +332,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		default:
-			dbg_func(__FILE__": bitmask_button_handler() bitmask button NOT handled ERROR!!, contact author\n",CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": bitmask_button_handler() bitmask button at page: %i, offset %i, NOT handled ERROR!!, contact author\n",page,offset),CRITICAL);
 			return FALSE;
 			break;
 

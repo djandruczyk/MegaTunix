@@ -44,7 +44,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		evaluator = evaluator_create(conv_expr);
 		g_object_set_data(G_OBJECT(widget),"dl_evaluator",(gpointer)evaluator);
 	}
-	return_value = evaluator_evaluate_x(evaluator,value);
+	return_value = evaluator_evaluate_x(evaluator,value)+0.001;
 
 	dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): offset %i, raw %.2f, sent %i, page %i,\n",offset,value,return_value,page),DL_CONV);
 
@@ -77,7 +77,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 		evaluator = evaluator_create(conv_expr);
 		g_object_set_data(G_OBJECT(widget),"ul_evaluator",(gpointer)evaluator);
 	}
-	return_value = evaluator_evaluate_x(evaluator,ve_const_arr[offset]);
+	return_value = evaluator_evaluate_x(evaluator,ve_const_arr[offset])+0.001;
 
 	dbg_func(g_strdup_printf(__FILE__": convert_after_ul(),offset %i, raw %i, val %f, page %i\n",offset,ve_const_arr[offset],return_value,page),UL_CONV);
 	return (return_value);
