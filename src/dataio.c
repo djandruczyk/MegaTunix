@@ -23,7 +23,6 @@
 #include <serialio.h>
 #include <string.h>
 #include <structures.h>
-#include <sys/poll.h>
 #include <unistd.h>
 
 
@@ -43,7 +42,6 @@ int handle_ms_data(InputData which_data, gint offset)
 	gboolean bad_read = FALSE;
 	unsigned char buf[2048];
 	unsigned char *ptr = buf;
-	struct pollfd ufds;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
@@ -51,8 +49,6 @@ int handle_ms_data(InputData which_data, gint offset)
 	extern struct Runtime_Common *runtime;
 
 	dbg_func(__FILE__": handle_ms_data()\n",IO_PROCESS);
-	ufds.fd = serial_params->fd;
-	ufds.events = POLLIN;
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 

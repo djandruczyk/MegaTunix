@@ -17,17 +17,17 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean drain_hashtable(gpointer, gpointer, gpointer);
 void parse_ecu_capabilities(unsigned int);
-void set_widget_state(gpointer, gpointer);
-void set_enhanced_idle_state(gboolean);
 void set_dt_table_mapping_state(gboolean);
 void set_dualtable_mode(gboolean);
-void set_ignition_mode(gboolean);
+void set_enhanced_idle_state(gboolean);
 void set_enhanced_mode(gboolean);
+void set_ignition_mode(gboolean);
 void set_raw_memory_mode(gboolean);
 void set_iac_mode(gboolean);
 void set_launch_ctrl_mode(gboolean);
-gboolean drain_hashtable(gpointer, gpointer, gpointer);
+void set_widget_state(gpointer, gpointer);
 /* Prototypes */
 
 #endif

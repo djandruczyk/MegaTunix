@@ -72,8 +72,10 @@ void interrogate_ecu()
 	extern gboolean raw_reader_running;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);
 	
+
 	if (!connected)
 	{
 		con_status = check_ecu_comms(NULL,NULL);
@@ -95,7 +97,7 @@ void interrogate_ecu()
 		stop_serial_thread();
 	}
 
-	/* Allocate memory tostore interrogation results */
+	/* Allocate memory to store interrogation results */
 	canidate = g_malloc0(sizeof(struct Canidate));
 	canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
 
@@ -141,7 +143,8 @@ void interrogate_ecu()
 			}
 			dbg_func(g_strdup_printf(__FILE__": interrogate_ecu() received %i bytes\n",total),INTERROGATOR);
 			ptr = buf;
-		
+
+			/* copy data from tmp buffer to struct pointer */
 			switch (cmd->store_type)
 			{
 				case SIG:
@@ -156,10 +159,9 @@ void interrogate_ecu()
 				default:
 					break;
 			}
-			/* copy data from tmp buffer to struct pointer */
-	
 		}
 
+		/* store number of bytes received in counter variable */
 		g_hash_table_insert(canidate->bytecounts,cmd->handle,
 				GINT_TO_POINTER(total));
 	}
@@ -170,18 +172,21 @@ void interrogate_ecu()
 
 	interrogated = TRUE;
 
-
-	if (restart_reader)
-		start_serial_thread();
-
 	determine_ecu(canidate,cmd_array);	
+
 	if (canidate)
 		g_free(canidate);
 
 	free_test_commands(cmd_array);
+
+	if (restart_reader)
+		start_serial_thread();
+
 	g_static_mutex_unlock(&mutex);
+
 	return;
 }
+
 void determine_ecu(void *ptr, GArray *cmd_array)
 {
 	struct Canidate *canidate = (struct Canidate *)ptr;
@@ -257,11 +262,9 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 			match = i;
 			break;
 		}
-		end_of_loop:
+end_of_loop:
 		i++;
 		filename =(gchar *) g_dir_read_name(dir);
-		if (0)	/* THIS IS an UGLY HACK!!!! */
-			;; /* Only here to suppress GCC warning!!!! */
 	}
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
@@ -271,9 +274,10 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 				cmd->string, 
 				cmd->desc, 
 				(gint) g_hash_table_lookup(
-					canidate->bytecounts, cmd->handle));
+						canidate->bytecounts, 
+						cmd->handle));
 		// Store counts for VE/realtime readback... 
-
+		dbg_func(tmpbuf,INTERROGATOR);
 		update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
 		g_free(tmpbuf);
 		if (cmd->store_type == VNUM)
@@ -313,10 +317,8 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 	}
 	if (match == -1) // (we DID NOT find one)
 	{
-		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, contact author with the contents of this window\n");
-		// Store counts for VE/realtime readback... 
-
-		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu() Firmware NOT detected, send contents of interrogation window\nand the firmware details to the MegaTunix author\n"),CRITICAL);
+		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, Expect MegaTunix to NOT behave properly \nContact the author with the contents of this window\n");
+		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu() Firmware NOT DETECTED, send contents of the\ninterrogation window and the firmware details to the MegaTunix author\n"),CRITICAL);
 		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 		g_free(tmpbuf);
 		goto cleanup;
@@ -349,8 +351,15 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 
 
 cleanup:
-	serial_params->table0_size = 128;  /* assumptions!!!! */
-	serial_params->rtvars_size = 22;  /* assumptions!!!! */
+	/* Set flags */
+	ecu_caps = 0;				// no flags 
+
+	/* Enable/Disable Controls */
+	parse_ecu_capabilities(ecu_caps);
+
+	serial_params->table0_size = 125;	/* assumptions!!!! */
+	serial_params->table1_size = 0;		/* assumptions!!!! */
+	serial_params->rtvars_size = 22;	/* assumptions!!!! */
 
 freeup:
 	if (canidate->sig_str)

@@ -1136,10 +1136,10 @@ void update_ve_const()
 		/* Boost retard enabled, or not? */
 		if (ign_table->spark_config1.bit.boost_ret)
 			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.boost_retard_but),TRUE);
+					GTK_TOGGLE_BUTTON(buttons.noboost_retard_but),TRUE);
 		else
 			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.noboost_retard_but),TRUE);
+					GTK_TOGGLE_BUTTON(buttons.boost_retard_but),TRUE);
 					
 	}
 

@@ -123,6 +123,8 @@ struct DynamicLabels
 	GtkWidget *ww_ego_lab;
 	GtkWidget *ww_map_lab;
         GtkWidget *cooling_fan_temp_lab;
+	GtkWidget *timing_multi_lab;
+	GtkWidget *output_boost_lab;
 
 };
 
