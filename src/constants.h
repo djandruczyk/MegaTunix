@@ -96,5 +96,13 @@ struct Labels
 	GtkWidget *injectors_lab;
 	GtkWidget *cylinders_lab;
 };
+
+struct Buttons
+{
+	GtkWidget *const_store_but;
+	GtkWidget *enrich_store_but;
+	GtkWidget *vetable_store_but;
+};
+
 	
 #endif

@@ -36,8 +36,8 @@ gint num_cylinders = 1;
 static gint num_injectors = 1;
 static gfloat req_fuel_sav = 0.0;
 static gint err_flag = 0;
-static GdkColor red = { 0, 65535, 0, 0};
-static GdkColor black = { 0, 0, 0, 0};
+GdkColor red = { 0, 65535, 0, 0};
+GdkColor black = { 0, 0, 0, 0};
 static GList *offsets = NULL;
 static gint offset_data[5]; /* Only 4 interdependant vars... */
 
@@ -844,6 +844,12 @@ void check_req_fuel_limits()
 		 * the companion array, and send to ECU.  Then free
 		 * the offset GList, and clear the array...
 		 */
+
+		 /* Handlers get paused during a read of MS VE/Constants. We
+		  * don't need to write anything back during this window. 
+		  */
+		if (paused_handlers)
+			return;
 		dload_val = (gint)(req_fuel_dl);
 		offset = 90;
 		write_ve_const(dload_val, offset);

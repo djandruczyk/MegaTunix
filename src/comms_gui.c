@@ -98,6 +98,7 @@ int build_comms(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
 	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
@@ -145,6 +146,7 @@ int build_comms(GtkWidget *parent_frame)
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			100,poll_min,poll_max,poll_step,poll_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_tooltips_set_tip(tip,spinner,
 	"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds. This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
 
@@ -177,6 +179,7 @@ int build_comms(GtkWidget *parent_frame)
 			100,interval_min,interval_max,
 			interval_step,interval_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_tooltips_set_tip(tip,spinner,
 	"Sets the time delay between read attempts for getting the RT variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS. This will control the rate at which the Runtime Display page updates.",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -221,7 +224,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	ms_ve_readcount_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_ve_readcount_entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_ve_readcount_entry), 8);
 	gtk_table_attach (GTK_TABLE (table), ms_ve_readcount_entry, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -234,7 +237,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
      
 	ms_readcount_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_readcount_entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_readcount_entry), 8);
 	gtk_table_attach (GTK_TABLE (table), ms_readcount_entry, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -246,7 +249,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	ms_reset_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 8);
 	gtk_table_attach (GTK_TABLE (table), ms_reset_entry, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -258,7 +261,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	ms_sioerr_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 8);
 	gtk_table_attach (GTK_TABLE (table), ms_sioerr_entry, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
