@@ -50,7 +50,9 @@ gboolean load_gui_tabs()
 
 	if (!firmware)
 		return FALSE;
-	if (!firmware->tab_list[i])
+	if (!firmware->tab_list)
+		return FALSE;
+	if (!firmware->tab_confs)
 		return FALSE;
 
 

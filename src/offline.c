@@ -63,6 +63,7 @@ void set_offline_mode(void)
 
 	firmware->name = g_strdup(canidate->name);
 	firmware->tab_list = g_strsplit(canidate->load_tabs,",",0);
+	firmware->tab_confs = g_strsplit(canidate->tab_confs,",",0);
 	firmware->rtv_map_file = g_strdup(canidate->rtv_map_file);
 	firmware->sliders_map_file = g_strdup(canidate->sliders_map_file);
 	firmware->multi_page = canidate->multi_page;

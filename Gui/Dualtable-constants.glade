@@ -49,29 +49,6 @@
 		      <property name="column_spacing">0</property>
 
 		      <child>
-			<widget class="GtkLabel" id="fuel_inj_strat_label">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Fuel Injection Control Strategy</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">0</property>
-			  <property name="bottom_attach">1</property>
-			  <property name="x_options">expand</property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkRadioButton" id="alpha_n_radio_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
@@ -132,7 +109,7 @@
 			<widget class="GtkRadioButton" id="tbi_radio_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Throttle-Body</property>
+			  <property name="label" translatable="yes">TBI</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="active">False</property>
@@ -182,52 +159,6 @@
 			  <property name="bottom_attach">6</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="inj_style_label">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Injection Style</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">3</property>
-			  <property name="bottom_attach">4</property>
-			  <property name="x_options">expand</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="stroke_label">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Engine Stroke</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">6</property>
-			  <property name="bottom_attach">7</property>
-			  <property name="x_options">expand</property>
 			</packing>
 		      </child>
 
@@ -289,29 +220,6 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkLabel" id="firing_style_label">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Engine Firing Style</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">9</property>
-			  <property name="bottom_attach">10</property>
-			  <property name="x_options">expand</property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkRadioButton" id="odd_fire_radio_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
@@ -351,6 +259,102 @@
 			  <property name="top_attach">10</property>
 			  <property name="bottom_attach">11</property>
 			  <property name="x_padding">15</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="inj_style_label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Injection Style</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">3</property>
+			  <property name="bottom_attach">4</property>
+			  <property name="x_options">expand|shrink</property>
+			  <property name="y_options">expand|shrink|fill</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="fuel_inj_strat_label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Fuel Injection Control Strategy</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">0</property>
+			  <property name="bottom_attach">1</property>
+			  <property name="x_options">expand|shrink</property>
+			  <property name="y_options">expand|shrink|fill</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="stroke_label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Engine Stroke</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">6</property>
+			  <property name="bottom_attach">7</property>
+			  <property name="x_options">expand|shrink</property>
+			  <property name="y_options">expand|shrink|fill</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="firing_style_label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Engine Firing Style</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">9</property>
+			  <property name="bottom_attach">10</property>
+			  <property name="x_options">expand|shrink</property>
+			  <property name="y_options">expand|shrink|fill</property>
 			</packing>
 		      </child>
 		    </widget>
@@ -397,29 +401,6 @@
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">0</property>
 		      <property name="column_spacing">0</property>
-
-		      <child>
-			<widget class="GtkLabel" id="map_type_label">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">MAP Sensor Type</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">0</property>
-			  <property name="bottom_attach">1</property>
-			  <property name="x_options">expand</property>
-			</packing>
-		      </child>
 
 		      <child>
 			<widget class="GtkRadioButton" id="250kpa_map_radio_button">
@@ -475,29 +456,6 @@
 			  <property name="bottom_attach">3</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="barocorr_label">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Barometer Correction</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">3</property>
-			  <property name="bottom_attach">4</property>
-			  <property name="x_options">expand</property>
 			</packing>
 		      </child>
 
@@ -620,7 +578,56 @@
 			  <property name="right_attach">2</property>
 			  <property name="top_attach">6</property>
 			  <property name="bottom_attach">7</property>
-			  <property name="x_options">expand</property>
+			  <property name="x_options">expand|shrink</property>
+			  <property name="y_options">expand|shrink|fill</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="barocorr_label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Barometer Correction</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">3</property>
+			  <property name="bottom_attach">4</property>
+			  <property name="x_options">expand|shrink</property>
+			  <property name="y_options">expand|shrink|fill</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="map_type_label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">MAP Sensor Type</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">0</property>
+			  <property name="bottom_attach">1</property>
+			  <property name="x_options">expand|shrink</property>
+			  <property name="y_options">expand|shrink|fill</property>
 			</packing>
 		      </child>
 		    </widget>
@@ -685,7 +692,7 @@
 			  <property name="n_rows">5</property>
 			  <property name="n_columns">3</property>
 			  <property name="homogeneous">False</property>
-			  <property name="row_spacing">2</property>
+			  <property name="row_spacing">1</property>
 			  <property name="column_spacing">0</property>
 
 			  <child>
@@ -739,7 +746,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="num_squirts_per_cycle_1_label">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Squirts/Cycle</property>
+			      <property name="label" translatable="yes">Squirts/Cyc.</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -828,25 +835,6 @@
 			      <property name="top_attach">1</property>
 			      <property name="bottom_attach">2</property>
 			      <property name="x_options">expand</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkButton" id="calc_req_fuel_1_button">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Calculate Required Fuel</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 27 Sep 2004 00:19:50 GMT"/>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">3</property>
-			      <property name="top_attach">2</property>
-			      <property name="bottom_attach">3</property>
-			      <property name="x_options">fill</property>
 			      <property name="y_options"></property>
 			    </packing>
 			  </child>
@@ -942,6 +930,26 @@
 			      <property name="bottom_attach">5</property>
 			      <property name="x_options">fill</property>
 			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkButton" id="calc_req_fuel_1_button">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Calculate Required Fuel</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 27 Sep 2004 00:19:50 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">3</property>
+			      <property name="top_attach">2</property>
+			      <property name="bottom_attach">3</property>
+			      <property name="x_padding">15</property>
+			      <property name="x_options">shrink|fill</property>
+			      <property name="y_options">shrink</property>
 			    </packing>
 			  </child>
 			</widget>
@@ -1267,7 +1275,7 @@ Threshold (ms.)</property>
 			  <property name="n_rows">5</property>
 			  <property name="n_columns">3</property>
 			  <property name="homogeneous">False</property>
-			  <property name="row_spacing">2</property>
+			  <property name="row_spacing">1</property>
 			  <property name="column_spacing">0</property>
 
 			  <child>
@@ -1321,7 +1329,7 @@ Threshold (ms.)</property>
 			  <child>
 			    <widget class="GtkLabel" id="num_squirts_per_cycle_2_label">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Squirts/Cycle</property>
+			      <property name="label" translatable="yes">Squirts/Cyc.</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1410,25 +1418,6 @@ Threshold (ms.)</property>
 			      <property name="top_attach">1</property>
 			      <property name="bottom_attach">2</property>
 			      <property name="x_options">expand</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkButton" id="calc_req_fuel_2_button">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Calculate Required Fuel</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 27 Sep 2004 00:19:58 GMT"/>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">3</property>
-			      <property name="top_attach">2</property>
-			      <property name="bottom_attach">3</property>
-			      <property name="x_options">fill</property>
 			      <property name="y_options"></property>
 			    </packing>
 			  </child>
@@ -1524,6 +1513,26 @@ Threshold (ms.)</property>
 			      <property name="bottom_attach">5</property>
 			      <property name="x_options">expand</property>
 			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkButton" id="calc_req_fuel_2_button">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Calculate Required Fuel</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 27 Sep 2004 00:19:58 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">3</property>
+			      <property name="top_attach">2</property>
+			      <property name="bottom_attach">3</property>
+			      <property name="x_padding">15</property>
+			      <property name="x_options">shrink|fill</property>
+			      <property name="y_options">shrink</property>
 			    </packing>
 			  </child>
 			</widget>
