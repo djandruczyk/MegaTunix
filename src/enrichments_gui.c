@@ -125,7 +125,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
-	label = gtk_label_new("Num of Ign. Cycles");
+	label = gtk_label_new("Num of Cycles");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,1,2,1,2);
 
 	/* Warmup enrichments */
@@ -293,8 +293,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-	label = gtk_label_new ("Engine Coolant Temperature");
-	gtk_table_attach (GTK_TABLE (table), label, 1, 10, 2, 3,
+	label = gtk_label_new ("Engine Temperature");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 10, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);

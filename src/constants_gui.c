@@ -50,7 +50,8 @@ int build_constants(GtkWidget *parent_frame)
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox2),10);
+
 	button = gtk_button_new_with_label("Calculate\nRequired Fuel...");
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(reqd_fuel_popup),
@@ -88,7 +89,9 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox3);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox3),0);
 
-	table = gtk_table_new(1,2,FALSE);
+	table = gtk_table_new(2,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),10);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 	
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
@@ -116,18 +119,15 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	table = gtk_table_new(1,2,FALSE);
-	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,0);
-
 	label = gtk_label_new("Inj. Open Time\n(ms)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Batt Voltage\nCorrection (ms/Volt)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -138,7 +138,9 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox3);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox3),0);
 
-	table = gtk_table_new(1,2,FALSE);
+	table = gtk_table_new(2,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),10);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
@@ -165,30 +167,26 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	table = gtk_table_new(1,2,FALSE);
-	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,0);
-
 	label = gtk_label_new("PWM Current Limit\n(Percent)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Time Threshold for\nPWM mode (ms)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-
 
 	frame = gtk_frame_new("Fast Idle Control");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
 
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox3);
 
-	hbox2 = gtk_hbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(vbox3),hbox2,FALSE,FALSE,4);
+	table = gtk_table_new(2,3,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(140.0,0.0,250.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
@@ -198,11 +196,16 @@ int build_constants(GtkWidget *parent_frame)
 			GINT_TO_POINTER(FAST_IDLE_THRES));
         constants.fast_idle_thresh = adj;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_box_pack_start(GTK_BOX(hbox2),spinner,FALSE,FALSE,65);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Fast Idle Threshold\n(Degrees F)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
+//	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
 
 
 	frame = gtk_frame_new("Fuel Injection Control Strategy");

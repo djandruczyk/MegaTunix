@@ -26,9 +26,6 @@ struct v1_2_Runtime_Gui runtime_data;
 int build_runtime(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
-	GtkWidget *vbox2;
-	GtkWidget *vbox3;
-	GtkWidget *hbox;
 	GtkWidget *frame;
 	GtkWidget *label;
 	GtkWidget *entry;

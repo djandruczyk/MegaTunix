@@ -12,17 +12,17 @@
 
 # this file gets included from testgtkrc
 
-style 'main_buttons'
+style "defaultfont"
 {
-  font_name = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
-  bg[PRELIGHT] = { 1.0, 0.80, 0.80 }
+  font_name = "fixed 13"
 }
 
-style 'frame_fonts'
+style 'main_buttons'
 {
-  font_name = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+  bg[PRELIGHT] = { 1.0, 0.80, 0.80 }
 }
 
 widget "main window.*GtkButton*" style "main_buttons"
 
-widget "main window.*GtkFrame*" style "frame_fonts"
+class "GtkWidget" style "defaultfont"
+

@@ -102,13 +102,12 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	GtkWidget *spinner;
 	GtkWidget *frame;
 	GtkWidget *vbox;
-	GtkWidget *vbox2;
 	GtkWidget *hbox;
 	GtkWidget *label;
+	GtkWidget *table;
 	GtkAdjustment *adj;
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_widget_set_size_request(window,250,163);
 	gtk_window_set_title(GTK_WINDOW(window),"Required Fuel Calc");
 	gtk_container_set_border_width(GTK_CONTAINER(window),10);
 	g_signal_connect(G_OBJECT(window),"delete_event",
@@ -122,61 +121,74 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	gtk_container_add(GTK_CONTAINER(window),vbox);
 	frame = gtk_frame_new("Constants for your vehicle");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-	hbox = gtk_hbox_new(FALSE,10);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
 	
-	/* left column */
-	vbox2 = gtk_vbox_new(TRUE,2);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	table =gtk_table_new(4,3,FALSE);	
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	
 	label = gtk_label_new("Engine Displacement (CID)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Number of Cylinders");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Injector Flow (lbs/hr)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Air-Fuel Ratio");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
-
-	/* right column */
-	vbox2 = gtk_vbox_new(TRUE,2);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	/* Engine Displacement */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(350.0,1.0,1000,1.0,10.0,0);
-        spinner = gtk_spin_button_new(adj,0,1);
+        spinner = gtk_spin_button_new(adj,0,0);
         gtk_widget_set_size_request(spinner,55,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_DISP));
         reqd_fuel.displacement = adj;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_box_pack_start(GTK_BOX(vbox2),spinner,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	/* Number of Cylinders */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(8.0,1.0,16,1,1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
+        spinner = gtk_spin_button_new(adj,0,0);
         gtk_widget_set_size_request(spinner,55,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_CYLS));
         reqd_fuel.cyls = adj;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_box_pack_start(GTK_BOX(vbox2),spinner,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	/* Fuel injector flow rate in lbs/hr */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(19.0,1.0,100.0,1.0,1.0,0);
-        spinner = gtk_spin_button_new(adj,0,1);
+        spinner = gtk_spin_button_new(adj,0,0);
         gtk_widget_set_size_request(spinner,55,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_INJ_RATE));
         reqd_fuel.inj_rate = adj;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_box_pack_start(GTK_BOX(vbox2),spinner,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	/* Target Air Fuel Ratio */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(14.7,10.0,25.5,0.1,0.1,0);
@@ -187,12 +199,16 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
                         GINT_TO_POINTER(REQ_FUEL_AFR));
         reqd_fuel.afr = adj;
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_box_pack_start(GTK_BOX(vbox2),spinner,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 3, 4,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	
 	frame = gtk_frame_new("Exit");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
+
 	button = gtk_button_new_with_label("OK");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
 	g_signal_connect(G_OBJECT(button),"clicked",

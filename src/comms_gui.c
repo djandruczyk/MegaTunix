@@ -71,8 +71,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox2), 5);
 
-	label = gtk_label_new("COMM PORT");
-
+	label = gtk_label_new("COMM Port");
 	gtk_box_pack_start(GTK_BOX(hbox2),label,FALSE,TRUE,0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
@@ -108,7 +107,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
 
-	label = gtk_label_new("Serial polling timeout (ms)");
+	label = gtk_label_new("Polling Timeout (ms)");
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
@@ -120,7 +119,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.poll_timeout);
 	gtk_box_pack_start(GTK_BOX(hbox),spinner,FALSE,FALSE,0);
 
-	button = gtk_button_new_with_label("Start Reading RealTime vars");
+	button = gtk_button_new_with_label("Start Reading RT Vars");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
@@ -142,7 +141,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.read_wait);
 	gtk_box_pack_start(GTK_BOX(hbox),spinner,FALSE,FALSE,0);
 
-	button = gtk_button_new_with_label("Stop Reading RealTime vars");
+	button = gtk_button_new_with_label("Stop Reading RT vars");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
@@ -156,45 +155,43 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 
-	table = gtk_table_new(3,2,TRUE);
+	table = gtk_table_new(3,4,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
         gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,5);
 
-	label = gtk_label_new("Good RealTime var Reads");
-//	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
+	label = gtk_label_new("Good RealTime Reads");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
      
 	ms_readcount_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_readcount_entry), 7);
-	gtk_table_attach (GTK_TABLE (table), ms_readcount_entry, 1, 2, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), ms_readcount_entry, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
-
 	label = gtk_label_new("Hard Reset Count\n");
-//	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_misc_set_alignment(GTK_MISC(label),1.0,0.0);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	ms_reset_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 7);
-	gtk_table_attach (GTK_TABLE (table), ms_reset_entry, 1, 2, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), ms_reset_entry, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Serial I/O Error Count\n");
-//	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-                        (GtkAttachOptions) (GTK_EXPAND),
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	ms_sioerr_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 7);
-	gtk_table_attach (GTK_TABLE (table), ms_sioerr_entry, 1, 2, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), ms_sioerr_entry, 3, 4, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 

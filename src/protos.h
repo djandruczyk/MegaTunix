@@ -144,4 +144,8 @@ int build_datalogging(GtkWidget *);
 int build_general(GtkWidget *);
 /* general_gui.c */
 
+/* main.c */
+gboolean file_exists(const char *);
+/* main.c */
+
 #endif
