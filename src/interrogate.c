@@ -129,6 +129,9 @@ void interrogate_ecu()
 	gchar *string;
 	gboolean con_status = FALSE;
 	gint tests_to_run = sizeof(commands)/sizeof(commands[0]);
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
 
 	if (!connected)
 	{
@@ -137,6 +140,7 @@ void interrogate_ecu()
 		{
 			interrogated = FALSE;
 			no_ms_connection();
+			g_static_mutex_unlock(&mutex);
 			return;
 		}
 	}
@@ -150,7 +154,7 @@ void interrogate_ecu()
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
-	tcflush(serial_params->fd, TCIFLUSH);
+	tcflush(serial_params->fd, TCIOFLUSH);
 
 	for (i=0;i<tests_to_run;i++)
 	{
@@ -167,11 +171,11 @@ void interrogate_ecu()
 		res = write(serial_params->fd,string,len);
 		if (res != len)
 			fprintf(stderr,__FILE__": Error writing data to the ECU\n");
-		res = poll (&ufds,1,10);
+		res = poll (&ufds,1,25);
 		if (res)
 		{	
 			//printf("command %s returned ",string);
-			while (poll(&ufds,1,10))
+			while (poll(&ufds,1,25))
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
 				//printf("count %i, total %i\n",count,total);
@@ -188,7 +192,7 @@ void interrogate_ecu()
 	/* Reset page to 0 just to be 100% sure... */
 	set_ms_page(0);
 	/* flush serial port */
-	tcflush(serial_params->fd, TCIFLUSH);
+	tcflush(serial_params->fd, TCIOFLUSH);
 
 	for (i=0;i<tests_to_run;i++)
 	{
@@ -221,7 +225,14 @@ void interrogate_ecu()
 			q_index = i;
 		}
 		else if (strstr(commands[i].cmd_string,"A"))
+		{
 			serial_params->rtvars_size = commands[i].count;
+			/* if A command doesn't come back with 22 something
+			 * went wrong...  re-interrogate..
+			 */
+			if (commands[i].count != 22)
+				fprintf(stderr,__FILE__": Interrogate returned an invalid response to the \"A\" Command (runtime variables), which should always return 22 bytes.  We got %i bytes instead.  Seems like the MS is in an undefined state, powercycle the ECU and re-interrogate.\n\n",commands[i].count);
+		}	
 		else if (strstr(commands[i].cmd_string,"I"))
 			i_bytes = commands[i].count;
 	}
@@ -327,5 +338,7 @@ void interrogate_ecu()
 	interrogated = TRUE;
 	if (restart_reader)
 		start_serial_thread();
+
+	g_static_mutex_unlock(&mutex);
 	return;
 }

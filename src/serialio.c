@@ -147,7 +147,7 @@ int setup_serial_params()
 	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
 	serial_params->newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
 
-	tcflush(serial_params->fd, TCIFLUSH);
+	tcflush(serial_params->fd, TCIOFLUSH);
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	/* No hurt in checking to see if the MS is present, if it is
@@ -207,7 +207,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		/* save state */
 		tmp = serial_params->newtio.c_cc[VMIN];
 		serial_params->newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
-		tcflush(serial_params->fd, TCIFLUSH);
+		tcflush(serial_params->fd, TCIOFLUSH);
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request one batch of realtime vars */
@@ -248,7 +248,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		}
 
 		serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
-		tcflush(serial_params->fd, TCIFLUSH);
+		tcflush(serial_params->fd, TCIOFLUSH);
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		if (restart_reader)
@@ -287,7 +287,7 @@ void read_ve_const()
 	ufds.events = POLLIN;
 
 	/* Flush serial port... */
-	tcflush(serial_params->fd, TCIFLUSH);
+	tcflush(serial_params->fd, TCIOFLUSH);
 
 	if (dualtable)
 		set_ms_page(0);
@@ -329,7 +329,7 @@ void read_ve_const()
 
 	update_errcounts(NULL,FALSE);
 
-	tcflush(serial_params->fd, TCIFLUSH);
+	tcflush(serial_params->fd, TCIOFLUSH);
 
 	if (restart_reader)
 		start_serial_thread();
