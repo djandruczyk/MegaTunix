@@ -42,7 +42,7 @@ raw_upper=255
 dl_conv_expr=(x/5)*255
 ul_conv_expr=(x/255)*5
 is_float=TRUE
-precision=2
+precision=3
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 

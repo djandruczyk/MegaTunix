@@ -265,7 +265,7 @@ void build_general(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL), 0, 0);
 
-	frame = gtk_frame_new ("ECU Output");
+	frame = gtk_frame_new ("Interrogation/Tab load Status");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -287,6 +287,10 @@ void build_general(GtkWidget *parent_frame)
 			"warning",
 			"foreground",
 			"red", NULL);
+	gtk_text_buffer_create_tag(textbuffer,
+			"info",
+			"foreground",
+			"dark green", NULL);
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
 	return;

@@ -299,6 +299,22 @@ struct Io_Message
 	gboolean need_page_change; /*! flag to set if we need to change page */
 };
 
+/*
+ \brief Text_Message strcture is used for a thread to pass messages up
+ a GAsyncQueue to the main gui thread for updating a textview in a thread
+ safe manner. A dispatch queue runs 5 times per second checking for messages
+ to dispatch...
+ */
+struct Text_Message
+{
+	gchar *view_name;	/*! Textview name */
+	gchar *tagname;		/*! Texttag to use */
+	gchar *msg;		/*! message to display */
+	gboolean count;		/*! display a counter */
+	gboolean clear;		/*! Clear the window? */
+};
+
+
 /*!
  \brief Io_Cmds stores the basic data for the critical megasquirt command
  codes. (realtime, VE, ign and spark) including the length of each of those

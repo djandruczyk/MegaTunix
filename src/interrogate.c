@@ -137,26 +137,28 @@ void interrogate_ecu()
 		while (total_read < total_wanted )
 		{
 			dbg_func(g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",cmd->string,total_wanted-total_read),INTERROGATOR);
-//			read_amount = (total_wanted-total_read) > 8? 8:total_wanted-total_read;
+			//			read_amount = (total_wanted-total_read) > 8? 8:total_wanted-total_read;
 			total_read += res = read(serial_params->fd,
 					ptr+total_read,
-				//	read_amount);
-					total_wanted-total_read);
+					//	read_amount);
+				   total_wanted-total_read);
 
 			dbg_func(g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",cmd->string,res,total_read),INTERROGATOR);
 			// If we get nothing back (i.e. timeout, assume done)
 			if (res == 0)
 				zerocount++;
-//				break;
+			//				break;
 
 			if (zerocount > 1)
 				break;
 
 		}
-		
-	
+
+
 		if (total_read > 0)
 		{
+			thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",cmd->string, cmd->desc,total_read),FALSE,FALSE);
+
 			dbg_func(g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",cmd->string),SERIAL_RD);
 			dbg_func(g_strdup_printf("Data is in HEX!!\n"),SERIAL_RD);
 			p = buf;
@@ -168,8 +170,8 @@ void interrogate_ecu()
 			}
 			dbg_func("\n\n",SERIAL_RD);
 		}
-		
-	
+
+
 		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);
 		ptr = buf;
 
@@ -219,6 +221,7 @@ void interrogate_ecu()
 	return;
 }
 
+
 gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 {
 	struct Canidate *canidate = (struct Canidate *)ptr;
@@ -259,19 +262,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 					cmd->string,
 					cmd->desc,
 					(gint) g_hash_table_lookup(canidate->bytecounts, cmd->key)),INTERROGATOR);
-		if ((gint) g_hash_table_lookup(canidate->bytecounts,g_strdup(cmd->key)) > 0)
-		{
-			tmpbuf = g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",
-					cmd->string, 
-					cmd->desc, 
-					(gint) g_hash_table_lookup(canidate->bytecounts, cmd->key));
-
-			// Store counts for VE/realtime readback... 
-			gdk_threads_enter();
-			update_logbar("interr_view",NULL,tmpbuf,FALSE,FALSE);
-			gdk_threads_leave();
-			g_free(tmpbuf);
-		}
+		//		if ((gint) g_hash_table_lookup(canidate->bytecounts,g_strdup(cmd->key)) > 0)
 		if (cmd->store_type == VNUM)
 		{
 			if (canidate->ver_num == 0)
@@ -325,9 +316,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	{
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, Expect MegaTunix to NOT behave properly \nContact the author with the contents of this window\n");
 		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, send contents of the interrogation window\n\tand the firmware details to the MegaTunix author\n"),CRITICAL);
-		gdk_threads_enter();
-		update_logbar("interr_view","warning",tmpbuf,FALSE,FALSE);
-		gdk_threads_leave();
+		thread_update_logbar("interr_view","warning",tmpbuf,FALSE,FALSE);
 		g_free(tmpbuf);
 		goto freeup;
 	}
@@ -415,13 +404,9 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 
 
 	/* Display firmware version in the window... */
-	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",potential->name);
 
 	dbg_func(g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",potential->name),INTERROGATOR);
-	gdk_threads_enter();
-	update_logbar("interr_view","warning",tmpbuf,FALSE,FALSE);
-	gdk_threads_leave();
-	g_free(tmpbuf);
+	thread_update_logbar("interr_view","warning",g_strdup_printf("Detected Firmware: %s\n",potential->name),FALSE,FALSE);
 	goto freeup;
 
 

@@ -113,16 +113,18 @@ rescaler_frame=SP1_rescale_frame
 
 #----- Temp Timing Controls --------------------------------------------------
 
-[trimangle_spin]
-keys=offset
-key_types=_INT_
-offset=82
+[trimangle_entry]
+keys=offset,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_STRING_,_STRING_
+offset=170
 group=sparktable
+dl_conv_expr=x/0.352
+ul_conv_expr=x*0.352
 
-[fixedangle_spin]
+[fixedangle_entry]
 keys=offset
 key_types=_INT_
-offset=81
+offset=169
 group=sparktable
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------

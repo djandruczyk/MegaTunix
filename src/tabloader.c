@@ -23,6 +23,7 @@
 #include <keyparser.h>
 #include <listmgmt.h>
 #include <memory_gui.h>
+#include <notifications.h>
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
@@ -116,9 +117,24 @@ gboolean load_gui_tabs()
 		{
 			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
 			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
+		if (g_file_test(glade_file,G_FILE_TEST_EXISTS))
+		{
+			update_logbar("interr_view","warning",g_strdup_printf("Load of glade file: "),FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(" FAILED!\n"),FALSE,FALSE);
+		}
+		if (g_file_test(map_file,G_FILE_TEST_EXISTS))
+		{
+			update_logbar("interr_view","warning",g_strdup_printf("Load of datamap file: "),FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(" FAILED!\n"),FALSE,FALSE);
+		}
 			g_free(map_file);
 			g_free(glade_file);
 		}
+		update_logbar("interr_view",NULL,g_strdup_printf("Load of tab: "),FALSE,FALSE);
+		update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
+		update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 		i++;
 
 	}

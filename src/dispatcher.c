@@ -42,6 +42,23 @@ extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
 extern gboolean interrogated;			/* valid connection with MS */
 
+gboolean textmessage_dispatcher(gpointer data)
+{
+	extern GAsyncQueue *textmessage_queue;
+	struct Text_Message *message = NULL;
+
+	if (!textmessage_queue) /*queue not built yet... */
+		return TRUE;
+
+	message = g_async_queue_try_pop(textmessage_queue);
+	if (!message)
+		return TRUE;
+
+	update_logbar(message->view_name,message->tagname,message->msg,message->count,message->clear);
+	dealloc_textmessage(message);
+	return TRUE;
+}
+
 gboolean dispatcher(gpointer data)
 {
 	extern struct Firmware_Details * firmware;
@@ -59,7 +76,7 @@ gboolean dispatcher(gpointer data)
 		return TRUE;
 	/* Endless Loop, wiat for message, processs and repeat... */
 trypop:
-	//printf("dispatch queue length %i\n",g_async_queue_length(dispatch_queue));
+
 	message = g_async_queue_try_pop(dispatch_queue);
 	if (!message)
 		return TRUE;
@@ -158,6 +175,20 @@ trypop:
 		goto trypop;
 	return TRUE;
 }
+
+void dealloc_textmessage(void * ptr)
+{
+        struct Text_Message *message = (struct Text_Message *)ptr;
+        if (message->view_name)
+                g_free(message->view_name);
+        if (message->tagname)
+                g_free(message->tagname);
+        if (message->msg)
+                g_free(message->msg);
+	g_free(message);
+
+}
+
 
 void dealloc_message(void * ptr)
 {

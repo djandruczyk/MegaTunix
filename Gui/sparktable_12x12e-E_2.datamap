@@ -114,15 +114,19 @@ rescaler_frame=SP2_rescale_frame
 #----- Temp Timing Controls --------------------------------------------------
 
 [trimangle_entry]
-keys=offset
-key_types=_INT_
-offset=82
+keys=page,offset,dl_conv_expr,ul_conv_expr
+key_types=_INT_,_INT_,_STRING_,_STRING_
+page=3
+offset=170
 group=sparktable
+dl_conv_expr=x/0.352
+ul_conv_expr=x*0.352
 
 [fixedangle_entry]
-keys=offset
-key_types=_INT_
-offset=81
+keys=page,offset,page
+key_types=_INT_,_INT_,_INT_
+page=3
+offset=169
 group=sparktable
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------

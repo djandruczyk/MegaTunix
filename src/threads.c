@@ -271,3 +271,28 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 	io_cmd(IO_WRITE_DATA,output);
 	return;
 }
+
+
+void  thread_update_logbar(
+		gchar * view_name, 
+		gchar * tagname, 
+		gchar * msg,
+		gboolean count,
+		gboolean clear)
+{
+	struct Text_Message *message = NULL;
+	extern GAsyncQueue *textmessage_queue;
+
+	message = g_new0(struct Text_Message, 1);
+	message->view_name = g_strdup(view_name);
+	message->tagname = g_strdup(tagname);
+	message->msg = g_strdup(msg);
+	message->count = count;
+	message->clear = clear;
+
+	g_async_queue_ref(textmessage_queue);
+	g_async_queue_push(textmessage_queue,(gpointer)message);
+	g_async_queue_unref(textmessage_queue);
+}
+
+

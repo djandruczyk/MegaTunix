@@ -35,9 +35,11 @@ GThread * serio_thread = NULL;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;
 gint dispatcher_id = -1;
+gint textdispatcher_id = -1;
 gboolean gl_ability = FALSE;
 struct Serial_Params *serial_params;
 struct Io_Cmds *cmds;
+GAsyncQueue *textmessage_queue;
 
 gint main(gint argc, gchar ** argv)
 {
@@ -67,6 +69,7 @@ gint main(gint argc, gchar ** argv)
 	/* Create Queue to listen for commands */
 	io_queue = g_async_queue_new();
 	dispatch_queue = g_async_queue_new();
+	textmessage_queue = g_async_queue_new();
 
 	read_config();
 	setup_gui();		
@@ -80,7 +83,7 @@ gint main(gint argc, gchar ** argv)
 			NULL); //GError Pointer
 
 	dispatcher_id = gtk_timeout_add(10,(GtkFunction)dispatcher,NULL);
-
+	textdispatcher_id = gtk_timeout_add(200,(GtkFunction)textmessage_dispatcher,NULL);
 	/* Kickoff fast interrogation */
 	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
 

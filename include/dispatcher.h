@@ -18,6 +18,8 @@
 
 /* Prototypes */
 gboolean dispatcher(gpointer);
+gboolean textmessage_dispatcher(gpointer);
+void dealloc_textmessage(void * );
 void dealloc_message(void * );
 /* Prototypes */
 
