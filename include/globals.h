@@ -170,7 +170,7 @@ struct Ve_Const_Std
         unsigned char   batt_corr;              /* 97, Batt Voltage Corr */
         unsigned short  rpmk;                   /* 98, 12K/ncyl */
         unsigned char   rpm_bins[8];            /* 100, VEtable RPM bins */
-        unsigned char   kpa_bins[8];            /* 108, VEtable KPA bins */
+        unsigned char   load_bins[8];            /* 108, VEtable KPA bins */
 
         union   config11 config11;              /* 116, Config for PC Config */
         union   config12 config12;              /* 117, Config for PC Config */
@@ -217,7 +217,7 @@ struct Ve_Const_Dualtable
         unsigned char   batt_corr;              /* 97, Batt Voltage Corr */
         unsigned short  rpmk;                   /* 98, 12K/ncyl */
         unsigned char   rpm_bins[8];            /* 100, VEtable RPM bins */
-        unsigned char   kpa_bins[8];            /* 108, VEtable KPA bins */
+        unsigned char   load_bins[8];            /* 108, VEtable KPA bins */
 
         union   config11 config11;              /* 116, Config for PC Config */
         union   config12 config12;              /* 117, Config for PC Config */

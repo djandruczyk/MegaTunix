@@ -29,8 +29,9 @@
 #include <time.h>
 
 static int grid = 8;
+/*
 static int beginX, beginY;
-static int active_map, active_rpm = 0;
+static int active_load, active_rpm = 0;
   
 static float dt = 0.008;
 static float sphi = 35.0; // 45.0
@@ -39,8 +40,9 @@ static float sdepth = 7.533;
 static float zNear = 0.8;
 static float zFar = 23;
 static float aspect = 1.0;
-static float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
-static int rpm_max=0, kpa_max=0, ve_max=0;
+static float rpm_div=0.0, load_div=0.0,ve_div=0.0;
+static int rpm_max=0, load_max=0, ve_max=0;
+*/
 static gchar font_string[] = "sans 10";
 static GLuint font_list_base;
 static gint font_height;
@@ -50,7 +52,7 @@ extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
 
 
-#define DEFAULT_WIDTH  400
+#define DEFAULT_WIDTH  475
 #define DEFAULT_HEIGHT 320                                                                                  
 static gboolean winstat[2] = {FALSE,FALSE};
 extern struct DynamicButtons buttons;
@@ -65,6 +67,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *hbox;
 	GtkWidget *drawing_area;
         GdkGLConfig *gl_config;
+	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
 	gchar *tmpbuf;
 	gint tbl = (gint)data;
@@ -74,15 +77,20 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	else
 		winstat[tbl] = TRUE;
 	
+	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
+	initialize_ve_view((void *)ve_view);
+	ve_view->table = tbl;
+
 	tmpbuf = g_strdup_printf("3D VE-Table for table %i\n",tbl);
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), tmpbuf);
 	g_free(tmpbuf);
 	gtk_widget_set_size_request(window,DEFAULT_WIDTH,DEFAULT_HEIGHT);
 	gtk_container_set_border_width(GTK_CONTAINER(window),0);
-	g_object_set_data(G_OBJECT(window),"table",GINT_TO_POINTER(tbl));
+	ve_view->window = window;
+	g_object_set_data(G_OBJECT(window),"data",(gpointer)ve_view);
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(reset_3d_status),
+			G_CALLBACK(reset_3d_winstat),
 			(gpointer) window);
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(gtk_widget_destroy),
@@ -97,9 +105,11 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 
         frame = gtk_frame_new("VE Table 3D display");
         gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
-        gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
+//        gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 
         drawing_area = gtk_drawing_area_new();
+	g_object_set_data(G_OBJECT(drawing_area),"data",(gpointer)ve_view);
+	ve_view->drawing_area = drawing_area;
         gtk_container_add(GTK_CONTAINER(frame),drawing_area);
 
         gl_config = get_gl_config();
@@ -142,10 +152,9 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 
         button = gtk_button_new_with_label("Reset Display");
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-	g_object_set_data(G_OBJECT(button),"table",GINT_TO_POINTER(tbl));
-        g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (reset_3d_view), \
-                        (gpointer)drawing_area);
+	g_object_set_data(G_OBJECT(button),"data",(gpointer)ve_view);
+        g_signal_connect_swapped(G_OBJECT (button), "clicked",
+                        G_CALLBACK (reset_3d_view), (gpointer)button);
 
         button = gtk_button_new_with_label("Get Data from ECU");
         g_signal_connect(G_OBJECT(button), "clicked",
@@ -170,31 +179,33 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 
 	return TRUE;
 }
-gint reset_3d_status(GtkWidget * widget)
+gint reset_3d_winstat(GtkWidget *widget)
 {
-	gint tbl = (gint)g_object_get_data(G_OBJECT(widget),"table");
-	winstat[(gint)tbl] = FALSE;
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
+	winstat[ve_view->table] = FALSE;
+	g_free(ve_view);/* free up the memory */
+	ve_view = NULL;
 	return FALSE;  /* MUST return false otherwise 
 			* other handlers WILL NOT run.
 			*/
 }
 	
-void reset_3d_view(GtkWidget * widget, gpointer data)
+void reset_3d_view(GtkWidget * widget)
 {
-	gint table = -1;
-	grid = 8;
-	active_map = 0;
-	active_rpm = 0;
-	dt = 0.008;
-	sphi = 35.0; 
-	stheta = 75.0; 
-	sdepth = 7.533;
-	zNear = 0.8;
-	zFar = 23;
-	aspect = 1.333;
-	table = (gint)g_object_get_data(G_OBJECT(widget),"table");
-	ve_configure_event((GtkWidget *)(data), NULL,NULL);
-	ve_expose_event((GtkWidget *)data, NULL,GINT_TO_POINTER(table));
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
+	ve_view->active_load = 0;
+	ve_view->active_rpm = 0;
+	ve_view->dt = 0.008;
+	ve_view->sphi = 35.0; 
+	ve_view->stheta = 75.0; 
+	ve_view->sdepth = 7.533;
+	ve_view->zNear = 0.8;
+	ve_view->zFar = 23;
+	ve_view->aspect = 1.333;
+	ve_configure_event(ve_view->drawing_area, NULL,NULL);
+	ve_expose_event(ve_view->drawing_area, NULL,GINT_TO_POINTER(ve_view->table));
 }
 
 GdkGLConfig* get_gl_config(void)
@@ -228,6 +239,8 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
@@ -240,7 +253,7 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
 
-	aspect = (float)w/(float)h;
+	ve_view->aspect = (float)w/(float)h;
 	glViewport (0, 0, w, h);
 
 	gdk_gl_drawable_gl_end (gldrawable);
@@ -250,7 +263,8 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 
 gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	gint tbl = (gint)data;
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){
 		gtk_widget_grab_focus(widget);
 	}
@@ -270,19 +284,19 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(64.0, aspect, zNear, zFar);
+	gluPerspective(64.0, ve_view->aspect, ve_view->zNear, ve_view->zFar);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glTranslatef(0.0,0.0,-sdepth);
-	glRotatef(-stheta, 1.0, 0.0, 0.0);
-	glRotatef(sphi, 0.0, 0.0, 1.0);
+	glTranslatef(0.0,0.0,-ve_view->sdepth);
+	glRotatef(-ve_view->stheta, 1.0, 0.0, 0.0);
+	glRotatef(ve_view->sphi, 0.0, 0.0, 1.0);
 	glTranslatef(-(float)((grid)/2-0.3), -(float)((grid)/2-1), -2.0);
 
-	ve_calculate_scaling(tbl);
-	ve_draw_ve_grid(tbl);
-	ve_draw_active_indicator(tbl);
-	ve_draw_axis(tbl);
+	ve_calculate_scaling(ve_view);
+	ve_draw_ve_grid(ve_view);
+	ve_draw_active_indicator(ve_view);
+	ve_draw_axis(ve_view);
 
 	/* Swap buffers */
 	if (gdk_gl_drawable_is_double_buffered (gldrawable))
@@ -301,22 +315,24 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	gboolean redraw = FALSE;
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 
 	if (event->state & GDK_BUTTON1_MASK)
 	{
-		sphi += (float)(event->x - beginX) / 4.0;
-		stheta += (float)(beginY - event->y) / 4.0;
+		ve_view->sphi += (float)(event->x - ve_view->beginX) / 4.0;
+		ve_view->stheta += (float)(ve_view->beginY - event->y) / 4.0;
 		redraw = TRUE;
 	}
 
 	if (event->state & GDK_BUTTON2_MASK)
 	{
-		sdepth -= ((event->y - beginY)/(widget->allocation.height))*(grid);
+		ve_view->sdepth -= ((event->y - ve_view->beginY)/(widget->allocation.height))*(grid);
 		redraw = TRUE;
 	}
 
-	beginX = event->x;
-	beginY = event->y;
+	ve_view->beginX = event->x;
+	ve_view->beginY = event->y;
 
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
 
@@ -325,19 +341,21 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 
 gboolean ve_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 	gtk_widget_grab_focus (widget);
 	
 	if (event->button == 1)
 	{
-		beginX = event->x;
-		beginY = event->y;
+		ve_view->beginX = event->x;
+		ve_view->beginY = event->y;
 		return TRUE;
 	}
 
 	if (event->button == 2)
 	{
-		beginX = event->x;
-		beginY = event->y;
+		ve_view->beginX = event->x;
+		ve_view->beginY = event->y;
 		return TRUE;
 	}
 
@@ -381,47 +399,59 @@ void ve_realize (GtkWidget *widget, gpointer data)
 	/*** OpenGL END ***/
 }
 
-void ve_calculate_scaling(gint table)
+void ve_calculate_scaling(void *ptr)
 {
 	int i=0;
-	rpm_max = 0;
-	kpa_max = 0;
-	ve_max = 0;
 	struct Ve_Const_Std *ve_ptr = NULL;
-	if (table == 1) /* all std code derivatives..*/
+	struct Ve_View_3D *ve_view;
+
+	ve_view = (struct Ve_View_3D *)ptr;
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (table == 2)
+	else if (ve_view->table == 2)
 		ve_ptr = ve_const_p1;
+	else
+		fprintf(stderr,__FILE__": Problem, ve_calculate_scaling(), table out of range..\n");
 	
+	ve_view->rpm_max = 0;
+	ve_view->load_max = 0;
+	ve_view->ve_max = 0;
+
 	/* calculate scaling */
 	for (i=0;i<grid;i++) {
-		if (ve_ptr->rpm_bins[i] > rpm_max) {
-			rpm_max=ve_ptr->rpm_bins[i];
+		if (ve_ptr->rpm_bins[i] > ve_view->rpm_max) {
+			ve_view->rpm_max=ve_ptr->rpm_bins[i];
 		}
-		if (ve_ptr->kpa_bins[i] > kpa_max) {
-			kpa_max=ve_ptr->kpa_bins[i];
+		if (ve_ptr->load_bins[i] > ve_view->load_max) {
+			ve_view->load_max=ve_ptr->load_bins[i];
 		}
 	}
 
 	for (i=0;i<grid*8;i++) {
-		if (ve_ptr->ve_bins[i] > ve_max) {
-			ve_max=ve_ptr->ve_bins[i];
+		if (ve_ptr->ve_bins[i] > ve_view->ve_max) {
+			ve_view->ve_max=ve_ptr->ve_bins[i];
 		}
 	}	
 
-	rpm_div = ((float)rpm_max/8.0);
-	kpa_div = ((float)kpa_max/8.0);
-	ve_div  = ((float)ve_max/4.0);	
+	ve_view->rpm_div = ((float)ve_view->rpm_max/8.0);
+	ve_view->load_div = ((float)ve_view->load_max/8.0);
+	ve_view->ve_div  = ((float)ve_view->ve_max/4.0);	
 }
 
-void ve_draw_ve_grid(gint table)
+void ve_draw_ve_grid(void *ptr)
 {
-	int rpm=0, map=0;
+	int rpm=0, load=0;
 	struct Ve_Const_Std *ve_ptr = NULL;
-	if (table == 1) /* all std code derivatives..*/
+	struct Ve_View_3D *ve_view;
+
+	ve_view = (struct Ve_View_3D *)ptr;
+
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (table == 2)
+	else if (ve_view->table == 2)	/* DT code */
 		ve_ptr = ve_const_p1;
+	else
+		fprintf(stderr,__FILE__": Problem, ve_draw_ve_grid(), table out of range..\n");
 	
 
 	glColor3f(1.0, 1.0, 1.0);
@@ -431,79 +461,90 @@ void ve_draw_ve_grid(gint table)
 	for(rpm=0;rpm<grid;rpm++)
 	{
 		glBegin(GL_LINE_STRIP);
-		for(map=0;map<grid;map++) {
+		for(load=0;load<grid;load++) {
 			glVertex3f(
-					(float)(ve_ptr->rpm_bins[rpm])/rpm_div,			
-					(float)(ve_ptr->kpa_bins[map])/kpa_div, 	 	
-					(float)(ve_ptr->ve_bins[(map*8)+rpm])/ve_div);
+					(float)(ve_ptr->rpm_bins[rpm])/ve_view->rpm_div,			
+					(float)(ve_ptr->load_bins[load])/ve_view->load_div, 	 	
+					(float)(ve_ptr->ve_bins[(load*8)+rpm])/ve_view->ve_div);
 		}
 		glEnd();
 	}
 	
 	/* Draw lines on MAP axis */
-	for(map=0;map<grid;map++)
+	for(load=0;load<grid;load++)
 	{
 		glBegin(GL_LINE_STRIP);
 		for(rpm=0;rpm<grid;rpm++){
 			glVertex3f(	
-					(float)(ve_ptr->rpm_bins[rpm])/rpm_div,
-					(float)(ve_ptr->kpa_bins[map])/kpa_div,			
-					(float)(ve_ptr->ve_bins[(map*8)+rpm])/ve_div);	
+					(float)(ve_ptr->rpm_bins[rpm])/ve_view->rpm_div,
+					(float)(ve_ptr->load_bins[load])/ve_view->load_div,			
+					(float)(ve_ptr->ve_bins[(load*8)+rpm])/ve_view->ve_div);	
 		}
 		glEnd();
 	}
 }
 
-void ve_draw_active_indicator(gint table)
+void ve_draw_active_indicator(void *ptr)
 {
 	struct Ve_Const_Std *ve_ptr = NULL;
-	if (table == 1) /* all std code derivatives..*/
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)ptr;
+
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (table == 2)
+	else if (ve_view->table == 2)
 		ve_ptr = ve_const_p1;
+	else
+		fprintf(stderr,__FILE__": Problem, ve_draw_active_indicator(), table out of range..\n");
 	/* Render a red dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
-			(float)(ve_ptr->rpm_bins[active_rpm])/rpm_div,
-			(float)(ve_ptr->kpa_bins[active_map])/kpa_div,	
-			(float)(ve_ptr->ve_bins[(active_map*8)+active_rpm])/ve_div);
+			(float)(ve_ptr->rpm_bins[ve_view->active_rpm])/ve_view->rpm_div,
+			(float)(ve_ptr->load_bins[ve_view->active_load])/ve_view->load_div,	
+			(float)(ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm])/ve_view->ve_div);
 	glEnd();	
 }
 
 
-void ve_draw_axis(gint table)
+void ve_draw_axis(void *ptr)
 {
 	/* Set vars and an asthetically pleasing maximum value */
-	int i=0, rpm=0, map=0;
-	float top = ((float)(ve_max+20))/ve_div;
+	int i=0, rpm=0, load=0;
+	float top = 0.0;
 	struct Ve_Const_Std *ve_ptr = NULL;
-	if (table == 1) /* all std code derivatives..*/
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)ptr;
+
+	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = ve_const_p0;
-	else if (table == 2)
+	else if (ve_view->table == 2)
 		ve_ptr = ve_const_p1;
+	else
+		fprintf(stderr,__FILE__": Problem, ve_draw_axis(), table out of range..\n");
 	
+	top = ((float)(ve_view->ve_max+20))/ve_view->ve_div;
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.7,0.7,0.7);
 	
 	/* Draw horizontal background grid lines  
 	   starting at 0 VE and working up to VE+20% */
-	for (i=0;i<(ve_max+20);i = i + 10){
+	for (i=0;i<(ve_view->ve_max+20);i = i + 10){
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(
-			((ve_ptr->rpm_bins[0])/rpm_div),
-			((ve_ptr->kpa_bins[7])/kpa_div),		
-			((float)i)/ve_div);
+			((ve_ptr->rpm_bins[0])/ve_view->rpm_div),
+			((ve_ptr->load_bins[7])/ve_view->load_div),		
+			((float)i)/ve_view->ve_div);
 		glVertex3f(
-			((ve_ptr->rpm_bins[7])/rpm_div),
-			((ve_ptr->kpa_bins[7])/kpa_div),		
-			((float)i)/ve_div);
+			((ve_ptr->rpm_bins[7])/ve_view->rpm_div),
+			((ve_ptr->load_bins[7])/ve_view->load_div),		
+			((float)i)/ve_view->ve_div);
 		glVertex3f(
-			((ve_ptr->rpm_bins[7])/rpm_div),
-			((ve_ptr->kpa_bins[0])/kpa_div),		
-			((float)i)/ve_div);
+			((ve_ptr->rpm_bins[7])/ve_view->rpm_div),
+			((ve_ptr->load_bins[0])/ve_view->load_div),		
+			((float)i)/ve_view->ve_div);
 		glEnd();	
 	}
 	
@@ -511,12 +552,12 @@ void ve_draw_axis(gint table)
 	for (i=0;i<8;i++){
 		glBegin(GL_LINES);
 		glVertex3f(
-			((ve_ptr->rpm_bins[7])/rpm_div),
-			((ve_ptr->kpa_bins[i])/kpa_div),		
+			((ve_ptr->rpm_bins[7])/ve_view->rpm_div),
+			((ve_ptr->load_bins[i])/ve_view->load_div),		
 			0.0);
 		glVertex3f(
-			((ve_ptr->rpm_bins[7])/rpm_div),
-			((ve_ptr->kpa_bins[i])/kpa_div),		
+			((ve_ptr->rpm_bins[7])/ve_view->rpm_div),
+			((ve_ptr->load_bins[i])/ve_view->load_div),		
 			top);
 		glEnd();
 	}
@@ -525,12 +566,12 @@ void ve_draw_axis(gint table)
 	for (i=0;i<8;i++){
 		glBegin(GL_LINES);
 		glVertex3f(
-			((ve_ptr->rpm_bins[i])/rpm_div),		
-			((ve_ptr->kpa_bins[7])/kpa_div),
+			((ve_ptr->rpm_bins[i])/ve_view->rpm_div),		
+			((ve_ptr->load_bins[7])/ve_view->load_div),
 			0.0);
 		glVertex3f(
-			((ve_ptr->rpm_bins[i])/rpm_div),
-			((ve_ptr->kpa_bins[7])/kpa_div),		
+			((ve_ptr->rpm_bins[i])/ve_view->rpm_div),
+			((ve_ptr->load_bins[7])/ve_view->load_div),		
 			top);
 		glEnd();
 	}
@@ -538,59 +579,59 @@ void ve_draw_axis(gint table)
 	/* Add the back corner top lines */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(
-		((ve_ptr->rpm_bins[0])/rpm_div),	
-		((ve_ptr->kpa_bins[7])/kpa_div),
+		((ve_ptr->rpm_bins[0])/ve_view->rpm_div),	
+		((ve_ptr->load_bins[7])/ve_view->load_div),
 		top);
 	glVertex3f(
-		((ve_ptr->rpm_bins[7])/rpm_div),	
-		((ve_ptr->kpa_bins[7])/kpa_div),
+		((ve_ptr->rpm_bins[7])/ve_view->rpm_div),	
+		((ve_ptr->load_bins[7])/ve_view->load_div),
 		top);
 	glVertex3f(
-		((ve_ptr->rpm_bins[7])/rpm_div),
-		((ve_ptr->kpa_bins[0])/kpa_div),	
+		((ve_ptr->rpm_bins[7])/ve_view->rpm_div),
+		((ve_ptr->load_bins[0])/ve_view->load_div),	
 		top);
 	glEnd();
 	
 	/* Add front corner base lines */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(
-		((ve_ptr->rpm_bins[0])/rpm_div),	
-		((ve_ptr->kpa_bins[7])/kpa_div),
+		((ve_ptr->rpm_bins[0])/ve_view->rpm_div),	
+		((ve_ptr->load_bins[7])/ve_view->load_div),
 		0.0);
 	glVertex3f(
-		((ve_ptr->rpm_bins[0])/rpm_div),	
-		((ve_ptr->kpa_bins[0])/kpa_div),
+		((ve_ptr->rpm_bins[0])/ve_view->rpm_div),	
+		((ve_ptr->load_bins[0])/ve_view->load_div),
 		0.0);
 	glVertex3f(
-		((ve_ptr->rpm_bins[7])/rpm_div),
-		((ve_ptr->kpa_bins[0])/kpa_div),
+		((ve_ptr->rpm_bins[7])/ve_view->rpm_div),
+		((ve_ptr->load_bins[0])/ve_view->load_div),
 		0.0);
 	glEnd();
 	
 	/* Draw RPM and KPA labels */
 	for (i=0;i<8;i++){
 		rpm = (ve_ptr->rpm_bins[i])*100;
-		map = (ve_ptr->kpa_bins[i]);
-		sprintf(label,"%i",map);
+		load = (ve_ptr->load_bins[i]);
+		sprintf(label,"%i",load);
 		ve_drawtext(label,
-			((ve_ptr->rpm_bins[0])/rpm_div),
-			((ve_ptr->kpa_bins[i])/kpa_div),
+			((ve_ptr->rpm_bins[0])/ve_view->rpm_div),
+			((ve_ptr->load_bins[i])/ve_view->load_div),
 			0.0);
 		
 		sprintf(label,"%i",rpm);
 		ve_drawtext(label,
-			((ve_ptr->rpm_bins[i])/rpm_div),
-			((ve_ptr->kpa_bins[0])/kpa_div),
+			((ve_ptr->rpm_bins[i])/ve_view->rpm_div),
+			((ve_ptr->load_bins[0])/ve_view->load_div),
 			0.0);
 	}
 	
 	/* Draw VE labels */
-	for (i=0;i<(ve_max+20);i=i+10){
+	for (i=0;i<(ve_view->ve_max+20);i=i+10){
 		sprintf(label,"%i",i);
 		ve_drawtext(label,
-			((ve_ptr->rpm_bins[0])/rpm_div),
-			((ve_ptr->kpa_bins[7])/kpa_div),
-			(float)i/ve_div);
+			((ve_ptr->rpm_bins[0])/ve_view->rpm_div),
+			((ve_ptr->load_bins[7])/ve_view->load_div),
+			(float)i/ve_view->ve_div);
 	}
 	
 }
@@ -635,22 +676,24 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	gint value = 0;
 	gint offset = 0;
 	gint dload_val = 0;
-	gint table = (gint)data;
 	extern struct Ve_Widgets *page0_widgets;
 	extern struct Ve_Widgets *page1_widgets;
 	struct Ve_Const_Std *ve_ptr = NULL;
 	struct Ve_Widgets *widget_ptr = NULL;
-
-	if (table == 1) /* all std code derivatives..*/
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
+	if (ve_view->table == 1) /* all std code derivatives..*/
 	{
 		ve_ptr = ve_const_p0;
 		widget_ptr = page0_widgets;
 	}
-	else if (table == 2)
+	else if (ve_view->table == 2)
 	{
 		ve_ptr = ve_const_p1;
 		widget_ptr = page1_widgets;
 	}
+	else
+		fprintf(stderr,__FILE__": Problem, ve_key_press_event(), table out of range..\n");
 	
 	#ifdef GLDEBUG	
 	printf("Key press event\n");
@@ -661,32 +704,32 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			#ifdef GLDEBUG
 			printf("UP\n");
 			#endif
-			if (active_map < 7)
-				active_map += 1;
+			if (ve_view->active_load < 7)
+				ve_view->active_load += 1;
 			break;
 
 		case GDK_Down:
 			#ifdef GLDEBUG
 			printf("DOWN\n");
 			#endif
-			if (active_map > 0)
-				active_map -= 1;
+			if (ve_view->active_load > 0)
+				ve_view->active_load -= 1;
 			break;				
 
 		case GDK_Left:
 			#ifdef GLDEBUG
 			printf("LEFT\n");
 			#endif
-			if (active_rpm > 0)
-				active_rpm -= 1;
+			if (ve_view->active_rpm > 0)
+				ve_view->active_rpm -= 1;
 			break;					
 
 		case GDK_Right:
 			#ifdef GLDEBUG
 			printf("RIGHT\n");
 			#endif
-			if (active_rpm < 7)
-				active_rpm += 1;
+			if (ve_view->active_rpm < 7)
+				ve_view->active_rpm += 1;
 			break;				
 
 		case GDK_plus:
@@ -694,10 +737,10 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			#ifdef GLDEBUG
 			printf("PLUS\n");
 			#endif
-			if (ve_ptr->ve_bins[(active_map*8)+active_rpm] < 255)
+			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] < 255)
 			{
 				page = 0;  // < Change this when dualtable works
-				offset = (active_map*8)+active_rpm;
+				offset = (ve_view->active_load*8)+ve_view->active_rpm;
 				value = ve_ptr->ve_bins[offset] + 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
@@ -713,10 +756,10 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			#ifdef GLDEBUG
 			printf("MINUS\n");
 			#endif
-			if (ve_ptr->ve_bins[(active_map*8)+active_rpm] > 0)
+			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] > 0)
 			{
 				page = 0;  // < Change this when dualtable works
-				offset = (active_map*8)+active_rpm;
+				offset = (ve_view->active_load*8)+ve_view->active_rpm;
 				value = ve_ptr->ve_bins[offset] - 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
@@ -741,4 +784,27 @@ gboolean ve_focus_in_event (GtkWidget *widget, GdkEventFocus *event, gpointer da
 	gtk_widget_map(widget);
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
 	return TRUE;
+}
+void initialize_ve_view(void *ptr)
+{
+	struct Ve_View_3D *ve_view; 
+	ve_view = ptr;
+	ve_view->beginX = 0;
+	ve_view->beginY = 0;
+	ve_view->active_load = 0;
+	ve_view->active_rpm = 0;
+	ve_view->dt = 0.008;
+	ve_view->sphi = 35.0;
+	ve_view->stheta = 75.0;
+	ve_view->sdepth = 7.533;
+	ve_view->zNear = 0.8;
+	ve_view->zFar = 23.0;
+	ve_view->aspect = 1.0;
+	ve_view->rpm_div = 0.0;
+	ve_view->load_div = 0.0;
+	ve_view->ve_div = 0.0;
+	ve_view->rpm_max = 0;
+	ve_view->load_max = 0;
+	ve_view->ve_max = 0;
+	return;
 }

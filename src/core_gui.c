@@ -82,7 +82,7 @@ int setup_gui()
 	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
 	gtk_widget_set_size_request(main_window,def_width,def_height);
 	gtk_window_set_default_size(GTK_WINDOW(main_window),width,height);
-	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix " VERSION);
+	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix "VERSION);
 	gtk_container_set_border_width(GTK_CONTAINER(main_window),0);
 	g_signal_connect(G_OBJECT(main_window),"destroy_event",
 			G_CALLBACK(leave),NULL);

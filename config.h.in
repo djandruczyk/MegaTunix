@@ -42,9 +42,5 @@
 /* Define if you have the pthread library (-lpthread).  */
 #undef HAVE_LIBPTHREAD
 
-/* Name of package */
-#undef PACKAGE
-
-/* Version number of package */
+/* Version number string */
 #undef VERSION
-
