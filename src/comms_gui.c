@@ -48,6 +48,7 @@ int build_comms(GtkWidget *parent_frame)
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 
 	ser_statbar = gtk_statusbar_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ser_statbar,TRUE,TRUE,0);
@@ -62,11 +63,9 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-
 	hbox2 = gtk_hbox_new(FALSE,10);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox2,FALSE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox2);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox2), 5);
 
 	label = gtk_label_new("COMM PORT");
 
@@ -74,8 +73,8 @@ int build_comms(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
 	spinner = gtk_spin_button_new(adj,0,0);
-	gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-			GTK_SIGNAL_FUNC (set_serial_port),
+	g_signal_connect (G_OBJECT(adj), "value_changed",
+			G_CALLBACK (set_serial_port),
 			(gpointer)spinner);
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.comm_port);
 
@@ -85,12 +84,14 @@ int build_comms(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Verify ECU Communication");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
+
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
 	button = gtk_button_new_with_label("Test ECU Communication");
 	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,TRUE,0);
-	gtk_signal_connect(GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (check_ecu_comms), \
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (check_ecu_comms), \
 			NULL);
 
 	frame = gtk_frame_new("Runtime Parameters Configuration");
@@ -100,6 +101,7 @@ int build_comms(GtkWidget *parent_frame)
 	vbox2 = gtk_vbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 	hbox = gtk_hbox_new(TRUE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
 
 	label = gtk_label_new("Serial polling timeout in milliseconds");
@@ -108,14 +110,14 @@ int build_comms(GtkWidget *parent_frame)
 	sprintf(buff,"%i",serial_params.poll_timeout);
 	gtk_entry_set_text(GTK_ENTRY(entry),buff);
 	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
-	gtk_entry_set_editable(GTK_ENTRY(entry),TRUE);
-	gtk_signal_connect(GTK_OBJECT(entry), "activate",
-                       GTK_SIGNAL_FUNC(text_entry_handler),
-                       (gpointer)SER_POLL_TIMEO);
+	g_signal_connect(G_OBJECT(entry), "activate",
+                       G_CALLBACK(text_entry_handler),
+                       GINT_TO_POINTER (SER_POLL_TIMEO));
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
 
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
 
 	label = gtk_label_new("Serial interval delay between samples");
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
@@ -123,27 +125,27 @@ int build_comms(GtkWidget *parent_frame)
 	sprintf(buff,"%i",read_wait_time);
 	gtk_entry_set_text(GTK_ENTRY(entry),buff);
 	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
-	gtk_entry_set_editable(GTK_ENTRY(entry),TRUE);
-	gtk_signal_connect(GTK_OBJECT(entry), "activate",
-                       GTK_SIGNAL_FUNC(text_entry_handler),
-                       (gpointer)SER_INTERVAL_DELAY);
+	g_signal_connect(G_OBJECT(entry), "activate",
+                       G_CALLBACK(text_entry_handler),
+                       GINT_TO_POINTER(SER_INTERVAL_DELAY));
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
 
 
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
 
 	button = gtk_button_new_with_label("Start Reading RealTime vars");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
-	gtk_signal_connect(GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (std_button_handler), \
-			(gpointer)START_REALTIME);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(START_REALTIME));
 
 	button = gtk_button_new_with_label("Stop Reading RealTime vars");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
-	gtk_signal_connect(GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (std_button_handler), \
-			(gpointer)STOP_REALTIME);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(STOP_REALTIME));
 
 
 

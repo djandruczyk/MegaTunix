@@ -112,7 +112,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
 
-	gdk_window_get_size(main_window->window, &tmp_width,&tmp_height);
+	gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
 	cfg_write_int(cfgfile, "Window", "width", tmp_width);
 	cfg_write_int(cfgfile, "Window", "height", tmp_height);
 	gdk_window_get_position(main_window->window,&x,&y);

@@ -24,21 +24,21 @@ struct v1_2_Constants constants;
 
 int build_enrichments(GtkWidget *parent_frame)
 {
-        GtkWidget *vbox;
-        GtkWidget *vbox2;
-        GtkWidget *vbox3;
-        GtkWidget *hbox;
-        GtkWidget *hbox2;
-        GtkWidget *hbox3;
-        GtkWidget *entry;
-        GtkWidget *frame;
-        GtkWidget *label;
-        GtkWidget *table;
+	GtkWidget *vbox;
+	GtkWidget *vbox2;
+	GtkWidget *vbox3;
+	GtkWidget *hbox;
+	GtkWidget *hbox2;
+	GtkWidget *hbox3;
+	GtkWidget *entry;
+	GtkWidget *frame;
+	GtkWidget *label;
+	GtkWidget *table;
 	GtkAdjustment *adj;
 	GtkWidget *spinner;
 
-        vbox = gtk_vbox_new(FALSE,0);
-        gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
+	vbox = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 
 	hbox = gtk_hbox_new(FALSE,0);
@@ -48,48 +48,48 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	table = gtk_table_new(2,3,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
-
+	/* Cranking pulsewidth at -40deg F */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-	gtk_widget_set_usize(spinner,32,20);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)CRANK_PULSE_NEG_40);
+	spinner = gtk_spin_button_new(adj,0,1);
+	gtk_widget_set_size_request(spinner,55,-1);
+	g_signal_connect (G_OBJECT(adj), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(CRANK_PULSE_NEG_40));
 	constants.crank_pulse_40 = adj;
-
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
-
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)CRANK_PULSE_170);
-	constants.crank_pulse_170 = adj;
-
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
-
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)CRANK_PRIMING_PULSE);
-	constants.crank_priming_pulse = adj;
-
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,2,3,0,1);
-
 	label = gtk_label_new("-40 Deg. F");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,0,1,1,2);
 
+	/* Cranking pulsewidth at 170deg F */
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
+	spinner = gtk_spin_button_new(adj,0,1);
+	gtk_widget_set_size_request(spinner,55,-1);
+	g_signal_connect (G_OBJECT(adj), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(CRANK_PULSE_170));
+	constants.crank_pulse_170 = adj;
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
 	label = gtk_label_new("170 Deg. F");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,1,2,1,2);
 
+	/* Priming pulse  */
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
+	spinner = gtk_spin_button_new(adj,0,1);
+	gtk_widget_set_size_request(spinner,55,-1);
+	g_signal_connect (G_OBJECT(adj), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(CRANK_PRIMING_PULSE));
+	constants.crank_priming_pulse = adj;
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_table_attach_defaults(GTK_TABLE(table),spinner,2,3,0,1);
 	label = gtk_label_new("Priming Pulse");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,2,3,1,2);
 
@@ -98,176 +98,200 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	table = gtk_table_new(2,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
+	/* Afterstart Enrichment % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-	gtk_widget_set_usize(spinner,32,20);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)AFTERSTART_ENRICH);
+	spinner = gtk_spin_button_new(adj,0,1);
+	gtk_widget_set_size_request(spinner,55,-1);
+	g_signal_connect (G_OBJECT(adj), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(AFTERSTART_ENRICH));
 	constants.afterstart_enrich = adj;
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
-
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)CRANK_PULSE_170);
-	constants.afterstart_num_cycles = adj;
-
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
-
 	label = gtk_label_new("Enrichment (%)");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,0,1,1,2);
+
+	/* Afterstart Enrichment Number of engine cycles */
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
+	spinner = gtk_spin_button_new(adj,0,1);
+	gtk_widget_set_size_request(spinner,55,-1);
+	g_signal_connect (G_OBJECT(adj), "value_changed",
+			G_CALLBACK (spinner_changed),
+			GINT_TO_POINTER(CRANK_PULSE_170));
+	constants.afterstart_num_cycles = adj;
+
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
 	label = gtk_label_new("Num of Ign. Cycles");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,1,2,1,2);
 
-
 	/* Warmup enrichments */
-	frame = gtk_frame_new("Warmup Enrichment Bins (Percent)");
+	frame = gtk_frame_new(NULL);
+	label = gtk_label_new ("Warmup Enrichment Bins (Percent)");
+	gtk_frame_set_label_widget (GTK_FRAME (frame), label);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
-	table = gtk_table_new(2,10,TRUE);
+	table = gtk_table_new(3,10,FALSE);
 
 	gtk_container_add(GTK_CONTAINER(frame),table);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 10);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_NEG_40);
-	constants.warmup_neg_40 = adj;
+	/* -40 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
+	/* -20 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_NEG_20);
-	constants.warmup_neg_20 = adj;
+	/* 0 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
+	/* 20 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_0);
-	constants.warmup_0 = adj;
+	/* 40 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,2,3,0,1);
+	/* 60 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 5, 6, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_20);
-	constants.warmup_20 = adj;
+	/* 80 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 6, 7, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,3,4,0,1);
+	/* 100 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 7, 8, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_40);
-	constants.warmup_40 = adj;
+	/* 130 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 8, 9, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,4,5,0,1);
+	/* 160 deg entry */
+	entry = gtk_entry_new ();
+	gtk_table_attach (GTK_TABLE (table), entry, 9, 10, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_60);
-	constants.warmup_60 = adj;
+	label = gtk_label_new ("-40");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,5,6,0,1);
+	label = gtk_label_new ("-20");
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_80);
-	constants.warmup_80 = adj;
+	label = gtk_label_new ("0");
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,6,7,0,1);
+	label = gtk_label_new ("20");
+	gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_100);
-	constants.warmup_100 = adj;
+	label = gtk_label_new ("40");
+	gtk_table_attach (GTK_TABLE (table), label, 4, 5, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,7,8,0,1);
+	label = gtk_label_new ("60");
+	gtk_table_attach (GTK_TABLE (table), label, 5, 6, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_130);
-	constants.warmup_130 = adj;
+	label = gtk_label_new ("80");
+	gtk_table_attach (GTK_TABLE (table), label, 6, 7, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,8,9,0,1);
+	label = gtk_label_new ("100");
+	gtk_table_attach (GTK_TABLE (table), label, 7, 8, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
-        spinner = gtk_spin_button_new(adj,0,0);
-        gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
-                        GTK_SIGNAL_FUNC (spinner_changed),
-			(gpointer)WARMUP_160);
-	constants.warmup_160 = adj;
+	label = gtk_label_new ("130");
+	gtk_table_attach (GTK_TABLE (table), label, 8, 9, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(table),spinner,9,10,0,1);
+	label = gtk_label_new ("160");
+	gtk_table_attach (GTK_TABLE (table), label, 9, 10, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
-	label = gtk_label_new("-40");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,0,1,1,2);
-	label = gtk_label_new("-20");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,1,2,1,2);
-	label = gtk_label_new("0");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,2,3,1,2);
-	label = gtk_label_new("20");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,3,4,1,2);
-	label = gtk_label_new("40");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,4,5,1,2);
-	label = gtk_label_new("60");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,5,6,1,2);
-	label = gtk_label_new("80");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,6,7,1,2);
-	label = gtk_label_new("100");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,7,8,1,2);
-	label = gtk_label_new("130");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,8,9,1,2);
-	label = gtk_label_new("160 deg");
-	gtk_misc_set_alignment(GTK_MISC(label),0.2,0.0);
-	gtk_table_attach_defaults(GTK_TABLE(table),label,9,10,1,2);
-	
+	label = gtk_label_new ("Engine Coolant Temperature");
+	gtk_table_attach (GTK_TABLE (table), label, 1, 10, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 
 	/* Not written yet */
 	return TRUE;

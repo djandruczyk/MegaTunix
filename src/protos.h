@@ -28,7 +28,7 @@ int open_serial(int); /* arg is COMM (dos/win style) port number */
 int setup_serial_params(void); /* Setups serial i/o settings */
 void close_serial(void); /* arg is filedescriptor that was opened */
 void handle_ms_data(int); /* arg is filedescriptor that was opened */
-int check_ecu_comms(GtkWidget *, gpointer);
+int check_ecu_comms(GtkWidget *, gpointer *);
 /* serialio.c */
 
 /* threads.c */
@@ -84,7 +84,9 @@ void leave(GtkWidget *, gpointer *);
 int std_button_handler(GtkWidget *, gpointer *);
 void text_entry_handler(GtkWidget *, gpointer *);
 void update_statusbar(GtkWidget *, int, gchar *);
-int calc_reqd_fuel_func(GtkWidget *, gpointer *);
+int reqd_fuel_popup(GtkWidget *, gpointer *);
+int update_reqd_fuel(GtkWidget *widget, gpointer *data);
+int close_window(GtkWidget *widget, gpointer *data);
 int spinner_changed(GtkWidget *, gpointer *);
 
 /* gui_handlers.c */

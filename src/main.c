@@ -45,8 +45,6 @@ int main(int argc, char ** argv)
 
 	gtk_rc_add_default_file ("MegaTunixrc");
 
-	gdk_rgb_init();
-
 	init();			/* initialize global vars */
 	make_megasquirt_dirs();	/*Create config file dirs if missing */
 

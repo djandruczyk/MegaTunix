@@ -163,11 +163,18 @@ struct ms_data_v1_and_v2 {
 #define START_REALTIME		0x30
 #define STOP_REALTIME		0x31
 
+/* Spinbuttons */
+#define REQ_FUEL_DISP		0x40
+#define REQ_FUEL_CYLS		0x41
+#define REQ_FUEL_INJ_RATE	0x42
+#define REQ_FUEL_AFR		0x43
+#define REQ_FUEL		0x44
+#define	INJ_OPEN_TIME		0x45
+#define	BATT_CORR		0x46
+
 /* text entries */
 #define	SER_POLL_TIMEO		0x40
 #define	SER_INTERVAL_DELAY	0x41
-#define	INJ_OPEN_TIME		0x42
-#define	BATT_CORR		0x43
 #define	PWM_CUR_LIM		0x44
 #define	PWM_TIME_THRES		0x45
 #define	FAST_IDLE_THRES		0x46
