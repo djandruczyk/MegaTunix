@@ -22,6 +22,8 @@
 
 GHashTable *rt_sliders = NULL;
 GHashTable *ww_sliders = NULL;
+static GtkSizeGroup *size_group_left = NULL;
+static GtkSizeGroup *size_group_right = NULL;
 
 void load_sliders()
 {
@@ -52,6 +54,8 @@ void load_sliders()
 	{
 		if(!cfg_read_int(cfgfile,"global","rt_total_sliders",&count))
 			dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t could NOT read \"rt_total_sliders\" value from\n\t file \"%s\"\n",filename),CRITICAL);
+		size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+		size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 		for (i=0;i<count;i++)
 		{
 			row = -1;
@@ -106,6 +110,7 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 	GtkWidget *label = NULL;
 	GtkWidget *pbar = NULL;
 	GtkWidget *table = NULL;
+	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern struct RtvMap *rtv_map;
@@ -135,9 +140,6 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 	slider->history = (gfloat *) g_object_get_data(object,"history");
 	slider->object = object;
 
-	label = gtk_label_new(NULL);
-	gtk_label_set_markup(GTK_LABEL(label),g_strdup(slider->friendly_name));
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	if (ident == RUNTIME_PAGE)
 		name = g_strdup_printf("runtime_rt_table%i",slider->tbl);
 	else if (ident == WARMUP_WIZ_PAGE)
@@ -155,23 +157,41 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 		return;
 	}
 	g_free(name);
-	gtk_table_attach (GTK_TABLE (table),label,
-			0,1,slider->row,(slider->row)+1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
-	slider->label = label;
+	hbox  = gtk_hbox_new(FALSE,10);
 
 	label = gtk_label_new(NULL);
-	gtk_widget_set_size_request(label,55,-1);
-	gtk_table_attach (GTK_TABLE (table),label,
-			1,2,slider->row,(slider->row)+1,
-			(GtkAttachOptions) (GTK_SHRINK),
-			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
+	slider->label = label;
+	gtk_label_set_markup(GTK_LABEL(label),g_strdup(slider->friendly_name));
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
+
+	//gtk_table_attach (GTK_TABLE (table),label,
+	//		0,1,slider->row,(slider->row)+1,
+	//		(GtkAttachOptions) (GTK_FILL),
+	//		(GtkAttachOptions) (GTK_FILL), 0, 0);
+
+	label = gtk_label_new(NULL);
 	slider->textval = label;
+	gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
+	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
+
+	if (ident == RUNTIME_PAGE)
+	{
+		if (((tbl+1) % 2) == 0)
+			gtk_size_group_add_widget(size_group_right,hbox);
+		else
+			gtk_size_group_add_widget(size_group_left,hbox);
+	}
+
+	gtk_table_attach (GTK_TABLE (table),hbox,
+			0,2,slider->row,(slider->row)+1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
+	
 	gtk_table_attach (GTK_TABLE (table),pbar,
 			2,3,slider->row,(slider->row)+1,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),

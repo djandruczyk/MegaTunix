@@ -47,6 +47,7 @@ gboolean dispatcher()
 	gint len=0;
 	gint i=0;
 	gint val=-1;
+	gint count = 0;
 	struct Io_Message *message = NULL;
 	extern gint temp_units;
 	extern gboolean paused_handlers;
@@ -55,6 +56,8 @@ gboolean dispatcher()
 	if (!dispatch_queue) /*queue not built yet... */
 		return TRUE;
 	/* Endless Loop, wiat for message, processs and repeat... */
+trypop:
+	//printf("dispatch queue length %i\n",g_async_queue_length(dispatch_queue));
 	message = g_async_queue_try_pop(dispatch_queue);
 	if (!message)
 		return TRUE;
@@ -138,6 +141,13 @@ gboolean dispatcher()
 		}
 	}
 	dealloc_message(message);
+	count++;
+	/* try to handle up to 4 messages at a time.  If this is 
+	 * set too high, we can cause the timeout to hog the gui if it's
+	 * too low, things can fall behind. (GL redraw ;( )
+	 * */
+	if(count < 3)
+		goto trypop;
 	return TRUE;
 }
 

@@ -60,7 +60,7 @@ AC_ARG_ENABLE(debug,
 [  --enable-debug         enable debugging [default=no]],, enable_debug=no)
 
 if test "$enable_debug" = yes; then
-DEBUG_FLAGS="$DEBUG_FLAGS -ggdb -DDEBUG"
+DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
 fi
 AC_SUBST(DEBUG_FLAGS)
 

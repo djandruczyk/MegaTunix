@@ -293,7 +293,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		update_logbar("interr_view","warning",tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();
 		g_free(tmpbuf);
-		goto cleanup;
+		goto freeup;
 	}
 
 	load_profile_details(potential);
@@ -411,23 +411,6 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	g_free(tmpbuf);
 	goto freeup;
 
-
-cleanup:
-	/* Set flags */
-	ecu_caps = 0;				// no flags 
-
-	/* Enable/Disable Controls */
-	parse_ecu_capabilities(ecu_caps);
-
-	if (!firmware)
-	{
-		firmware = g_malloc0(sizeof(struct Firmware_Details));
-		firmware->page_params = (struct Page_Params **)g_new(struct Page_Params,1);
-	}
-
-	firmware->tab_list = g_strsplit("",",",0);
-	firmware->page_params[0]->size = 125;	/* assumptions!!!! */
-	firmware->rtvars_size = 22;	/* assumptions!!!! */
 
 freeup:
 	if (canidate->sig_str)

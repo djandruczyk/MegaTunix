@@ -32,6 +32,7 @@ extern struct Serial_Params *serial_params;
 GThread * serio_thread = NULL;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;
+gint dispatcher_id = -1;
 struct Serial_Params *serial_params;
 struct Io_Cmds *cmds;
 
@@ -64,7 +65,7 @@ gint main(gint argc, gchar ** argv)
 			TRUE, // Joinable
 			NULL); //GError Pointer
 
-	gtk_timeout_add(10,(GtkFunction)dispatcher,NULL);
+	dispatcher_id = gtk_timeout_add(10,(GtkFunction)dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
 	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);

@@ -46,11 +46,20 @@ void start_realtime_tickler()
 
 void stop_realtime_tickler()
 {
+	extern GAsyncQueue *io_queue;
+	extern gint dispatcher_id;
+	extern gboolean leaving;
+
 	if (realtime_id)
 	{
 		g_source_remove(realtime_id);
 		update_logbar("comms_view",NULL,"Realtime Reader stopped\n",TRUE,FALSE);
 		realtime_id = 0;
+		while (leaving && ((g_async_queue_length(io_queue) > 0) || (dispatcher_id != 0)))
+		{
+		//	printf("waiting for queue to finish\n");
+			usleep(10000);
+		}
 	}
 	else
 	{

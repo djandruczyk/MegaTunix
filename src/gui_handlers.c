@@ -47,7 +47,6 @@ extern gboolean interrogated;
 extern gboolean connected;
 extern gboolean playback_mode;
 extern gchar *delimiter;
-extern gint statuscounts_id;
 extern gint ready;
 extern GtkTooltips *tip;
 extern GList ***ve_widgets;
@@ -85,25 +84,36 @@ extern gfloat req_fuel_total_2;
 extern gfloat last_req_fuel_total_1;
 extern gfloat last_req_fuel_total_2;
 static gboolean err_flag = FALSE;
+gboolean leaving = FALSE;
 
 void leave(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dynamic_widgets;
 	extern gint realtime_id;
+	extern gint dispatcher_id;
+	extern gint statuscounts_id;
 	struct Io_File * iofile = NULL;
+
+	/* Stop timeout functions */
+	leaving = TRUE;
 
 	if (statuscounts_id)
 		gtk_timeout_remove(statuscounts_id);
 	statuscounts_id = 0;
 
+	if (dispatcher_id)
+		gtk_timeout_remove(dispatcher_id);
+	dispatcher_id = 0;
+
+	if(realtime_id)
+		stop_realtime_tickler();
+	realtime_id = 0;
+
 	if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
 		iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
 				
 	stop_datalogging();
-	if(realtime_id)
-		stop_realtime_tickler();
 	save_config();
-	usleep(100000);
 	close_serial();
 	if (iofile)	
 		close_file(iofile);
