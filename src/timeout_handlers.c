@@ -32,9 +32,8 @@ void start_realtime_tickler()
 {
 	extern GtkWidget *comms_view;
 	extern struct Serial_Params *serial_params;
-	extern gboolean connected;
 
-	if ((realtime_id == 0) && (connected))
+	if (realtime_id == 0)
 	{
 		realtime_id = g_timeout_add(serial_params->read_wait,
 				(GtkFunction)signal_read_rtvars,NULL);

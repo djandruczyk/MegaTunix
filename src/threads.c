@@ -40,6 +40,7 @@ GThread *raw_input_thread;			/* thread handle */
 GAsyncQueue *io_queue = NULL;
 gboolean raw_reader_running;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
+extern gboolean interrogated;			/* valid connection with MS */
 extern GtkWidget * comms_view;
 extern struct DynamicMisc misc;
 extern struct Serial_Params *serial_params;
@@ -64,6 +65,7 @@ void io_cmd(IoCommand cmd, gpointer data)
 	{
 		case IO_REALTIME_READ:
 			message = g_new0(struct Io_Message,1);
+			message->cmd = cmd;
 			message->command = READ_CMD;
 			message->out_str = g_strdup(cmds->realtime_cmd);
 			message->out_len = cmds->rt_cmd_len;
@@ -79,9 +81,10 @@ void io_cmd(IoCommand cmd, gpointer data)
 			break;
 
 		case IO_INTERROGATE_ECU:
-			if (!connected)// Attempt reconnect with comms test
-				io_cmd(IO_COMMS_TEST,NULL);
+//			if (!connected)// Attempt reconnect with comms test
+//				io_cmd(IO_COMMS_TEST,NULL);
 			message = g_new0(struct Io_Message,1);
+			message->cmd = cmd;
 			message->command = INTERROGATION;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
 			if (!tabs_loaded)
@@ -97,6 +100,7 @@ void io_cmd(IoCommand cmd, gpointer data)
 			break;
 		case IO_COMMS_TEST:
 			message = g_new0(struct Io_Message,1);
+			message->cmd = cmd;
 			message->command = COMMS_TEST;
 			message->page = 0;
 			message->out_str = g_strdup("Q");
@@ -136,6 +140,7 @@ void io_cmd(IoCommand cmd, gpointer data)
 			break;
 		case IO_READ_RAW_MEMORY:
 			message = g_new0(struct Io_Message,1);
+			message->cmd = cmd;
 			message->command = READ_CMD;
 			message->page = 0;
 			message->offset = (gint)data;
@@ -149,6 +154,7 @@ void io_cmd(IoCommand cmd, gpointer data)
 			break;
 		case IO_BURN_MS_FLASH:
 			message = g_new0(struct Io_Message,1);
+			message->cmd = cmd;
 			message->command = BURN_CMD;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 			tmp = UPD_STORE_BLACK;
@@ -157,6 +163,7 @@ void io_cmd(IoCommand cmd, gpointer data)
 			break;
 		case IO_WRITE_DATA:
 			message = g_new0(struct Io_Message,1);
+			message->cmd = cmd;
 			message->command = WRITE_CMD;
 			message->payload = data;
 			g_async_queue_push(io_queue,(gpointer)message);
@@ -184,35 +191,36 @@ void *serial_io_handler(gpointer data)
 		switch ((CmdType)message->command)
 		{
 			case INTERROGATION:
-				dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu requested\n",SERIAL_RD|SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu requested\n",SERIAL_RD|SERIAL_WR|THREADS);
+				if (!connected)
+					comms_test();
 				if (connected)
 					interrogate_ecu();
 				else
 					dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu request denied, NOT Connected!!\n",CRITICAL);
-				
 				break;
 			case COMMS_TEST:
-				dbg_func(__FILE__": serial_io_handler()\n\tcomms_test requested \n",SERIAL_RD|SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\tcomms_test requested \n",SERIAL_RD|SERIAL_WR|THREADS);
 				comms_test();
 				if (!connected)
 					dbg_func(__FILE__": serial_io_handler()\n\tComms Test failed, NOT Connected!!\n",CRITICAL);
 				break;
 			case READ_CMD:
-				dbg_func(g_strdup_printf(__FILE__": serial_io_handler()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD);
+				dbg_func(g_strdup_printf(__FILE__": serial_io_handler()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD|THREADS);
 				if (connected)
 					readfrom_ecu(message);
 				else
-					dbg_func(__FILE__": serial_io_handler()\n\treadfrom_ecu skipped, NOT Connected!!\n",CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": serial_io_handler()\n\treadfrom_ecu skipped, NOT Connected initiator %i!!\n",message->cmd),CRITICAL);
 				break;
 			case WRITE_CMD:
-				dbg_func(__FILE__": serial_io_handler()\n\twrite_command requested\n",SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\twrite_command requested\n",SERIAL_WR|THREADS);
 				if (connected)
 					writeto_ecu(message);
 				else
 					dbg_func(__FILE__": serial_io_handler()\n\twriteto_ecu skipped, NOT Connected!!\n",CRITICAL);
 				break;
 			case BURN_CMD:
-				dbg_func(__FILE__": serial_io_handler()\n\tburn_command requested\n",SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\tburn_command requested\n",SERIAL_WR|THREADS);
 				if (connected)
 					burn_ms_flash();
 				else
@@ -226,8 +234,13 @@ void *serial_io_handler(gpointer data)
 			gdk_threads_enter();
 			no_ms_connection();
 			gdk_threads_leave();
+			goto breakout;
+			
 		}
-		/* If dispatch funcs are defined, run them from the thread
+		/* NOTE if !connected we ABORT All dispatchers as they all
+		 * depend on a "connected" status.
+		 *
+		 * If dispatch funcs are defined, run them from the thread
 		 * context. NOTE wrapping with gdk_threads_enter/leave, as 
 		 * that is NECESSARY to to do when making gtk calls inside
 		 * the thread....
@@ -242,76 +255,56 @@ void *serial_io_handler(gpointer data)
 				switch ((UpdateFunction)val)
 				{
 					case UPD_LOAD_REALTIME_MAP:
-						if (connected)
+						gdk_threads_enter();
+						if (!load_realtime_map())
 						{
-							gdk_threads_enter();
-							if (!load_realtime_map())
-							{
-								gdk_threads_leave();
-								goto breakout;
-							}
 							gdk_threads_leave();
+							goto breakout;
 						}
+						gdk_threads_leave();
 						break;
 					case UPD_LOAD_GUI_TABS:
-						if (connected)
+						gdk_threads_enter();
+						if (!load_gui_tabs())
 						{
-							gdk_threads_enter();
-							if (!load_gui_tabs())
-							{
-								gdk_threads_leave();
-								goto breakout;
-							}
-							reset_temps(GINT_TO_POINTER(temp_units));
 							gdk_threads_leave();
+							goto breakout;
 						}
+						reset_temps(GINT_TO_POINTER(temp_units));
+						gdk_threads_leave();
 						break;
 					case UPD_READ_VE_CONST:
 						io_cmd(IO_READ_VE_CONST,NULL);
 						break;
 					case UPD_REALTIME:
-						if (connected)
-							update_runtime_vars();
+						update_runtime_vars();
 						break;
 					case UPD_VE_CONST:
-						if (connected)
-						{
-							gdk_threads_enter();
-							paused_handlers = TRUE;
-							update_ve_const();
-							paused_handlers = FALSE;
-							gdk_threads_leave();
-						}
+						gdk_threads_enter();
+						paused_handlers = TRUE;
+						update_ve_const();
+						paused_handlers = FALSE;
+						gdk_threads_leave();
 						break;
 					case UPD_STORE_BLACK:
-						if (connected)
-						{
-							gdk_threads_enter();
-							set_store_buttons_state(BLACK);
-							for (i=0;i<firmware->total_pages;i++)
-								set_reqfuel_state(BLACK,i);
-							gdk_threads_leave();
-						}
+						gdk_threads_enter();
+						set_store_buttons_state(BLACK);
+						for (i=0;i<firmware->total_pages;i++)
+							set_reqfuel_state(BLACK,i);
+						gdk_threads_leave();
 						break;
 					case UPD_LOGVIEWER:
-						if (connected)
-						{
-							gdk_threads_enter();
-							update_logview_traces();
-							gdk_threads_leave();
-						}
+						gdk_threads_enter();
+						update_logview_traces();
+						gdk_threads_leave();
 						break;
 					case UPD_RAW_MEMORY:
-						if (connected)
-						{
-							gdk_threads_enter();
-							update_raw_memory_view(mem_view_style[message->offset],message->offset);
-							gdk_threads_leave();
-						}
+						gdk_threads_enter();
+						update_raw_memory_view(mem_view_style[message->offset],message->offset);
+						gdk_threads_leave();
 						break;
 					case UPD_DATALOGGER:
-						if (connected)
-							run_datalog();
+						run_datalog();
 						break;
 				}
 			}
@@ -339,6 +332,7 @@ void readfrom_ecu(void *ptr)
 	struct Io_Message *message = (struct Io_Message *)ptr;
 	gint result = 0;
 	extern gint ecu_caps;
+	static gint seqerrcount = 0;
 
 	if(serial_params->open == FALSE)
 		return;
@@ -374,12 +368,15 @@ void readfrom_ecu(void *ptr)
 	if (result)
 	{
 		connected = TRUE;
+		seqerrcount=0;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tDone Reading %s\n",handler_types[message->handler]),SERIAL_RD);
 					
 	}
 	else
 	{
-		connected = FALSE;
+		seqerrcount++;
+		if (seqerrcount > 5)
+			connected = FALSE;
 		serial_params->errcount++;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),CRITICAL);
 	}

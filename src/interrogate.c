@@ -147,10 +147,12 @@ void interrogate_ecu()
 			dbg_func(g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",cmd->string,res,total_read),INTERROGATOR);
 			// If we get nothing back (i.e. timeout, assume done)
 			if (res == 0)
-				zerocount++;
+				break;
+/*				zerocount++;
 
 			if (zerocount > 1)
 				break;
+*/
 		}
 		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);
 		ptr = buf;

@@ -367,8 +367,6 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case START_REALTIME:
-			if (!connected)
-				io_cmd(IO_COMMS_TEST, NULL);
 			if (!interrogated)
 				io_cmd(IO_INTERROGATE_ECU, NULL);
 			if (!constants_loaded)

@@ -290,6 +290,7 @@ struct Command
 
 struct Io_Message
 {
+	IoCommand cmd;		/* Source command (initiator)*/
 	CmdType command;	/* Command type */
 	gchar *out_str;		/* Data sent to the ECU  for READ_CMD's */
 	gint page;		/* multipage firmware specific */

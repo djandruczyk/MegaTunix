@@ -126,7 +126,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			}
 			if (bad_read)
 			{
-				dbg_func("\tError reading Real-Time Variables \n",CRITICAL);
+				dbg_func(__FILE__": handle_ms_data()\n\tError reading Real-Time Variables \n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -188,7 +188,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup_printf("\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
+				dbg_func(g_strdup_printf(__FILE__"handle_ms_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -229,7 +229,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func("\tError reading Raw Memory Block\n",CRITICAL);
+				dbg_func(__FILE__"handle_ms_data()\n\tError reading Raw Memory Block\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
