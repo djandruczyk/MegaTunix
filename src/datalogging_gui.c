@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <datalogging_const.h>
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <enums.h>
@@ -33,10 +34,6 @@
 #define TABLE_COLS 6
 #define MAX_LOGABLES 64
 /* Local #defines */
-
-#define UCHAR sizeof(unsigned char)
-#define FLOAT sizeof(float)
-#define SHORT sizeof(short)
 
 extern gint ready;
 extern struct Runtime_Common *runtime;
@@ -68,60 +65,6 @@ GtkWidget *tab_delim_button;
 extern FILE * io_file;			/* DataLog File Handle*/
 gchar * io_file_name;			/* log file pathname */
 struct Logables logables;
-/* logable_names[] is an array of textual names corresponding to all logable
- * variables from the MS
- */
-const gchar *logable_names[] = 
-{
-"HR Clock",	"MS Clock",	"RPM",		"EngineBits",	"IdleDC",
-"TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
-"TPS Counts",	"MAP Counts",	"BARO Counts",	"MAT Counts",	"CLT Counts",
-"TPS %",	"MAP KPA",	"BARO KPA",	"MAT (Deg)",	"CLT (Deg)",
-"O2 Volts",	"O2 Counts",	"GammaE",	"BATT Volts",	"BATT Counts",
-"AIRcorr",	"BAROcorr",	"EGOcorr",	"WARMcorr",	"TPSaccel",
-"VE1",		"VE2",		"PW1",		"PW2",		"INJ-1 DCYCLE",
-"INJ-2 DCYCLE",	"BSPOT1",	"BSPOT2",	"BSPOT3"
-};
-/* logging_offset_map is a mapping between the logable_names[] list above 
- * and the byte offset into the Runtime_Common datastructure. The index 
- * is the index number of the logable variable from above, The value at that
- * index point is the offset into the struct for the data. Offset 0
- * is the first value in the struct (secl), offset 99 is a special case
- * for the Hi-Res clock which isn't stored in the structure...
- */
-const gint logging_offset_map[] = 
-{ 
-	99,54,52,56,74,
-	24,16, 0,20, 8,
-	68,66,62,67,64,
-	44,60,59,50,48,
-	12,65,61, 4,63,
-	69,70,71,73,72,
-	57,58,36,40,28,
-	32,75,76,77
-}; 
-
-/* Size of each logable vaiable in BYTES, so 4 = a 32 bit var 
- * This strange array is needed only forthe fact that the datalogging
- * functions get all of their data from the Runtime_Common struct.
- * that struct has been deigned (And is necessary) to have all the 
- * largest varibles first (floats before shorts before chars), so that
- * the structure can be referenced in array notation, this way all data
- * is accessible byu the appropriate index.
- * The values in this array correspond to the size of the referenced
- * variable in that Runtime_Common struct.
- */
-const gint logging_datasizes_map[] = 
-{ 
-	FLOAT,UCHAR,SHORT,UCHAR,UCHAR,
-	FLOAT,FLOAT,FLOAT,FLOAT,FLOAT,
-	UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
-	FLOAT,UCHAR,UCHAR,SHORT,UCHAR,
-	FLOAT,UCHAR,UCHAR,FLOAT,UCHAR,
-	UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
-	UCHAR,UCHAR,FLOAT,FLOAT,FLOAT,
-	FLOAT,UCHAR,UCHAR,UCHAR 
-}; 
 
 
 int build_datalogging(GtkWidget *parent_frame)
@@ -138,6 +81,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	GtkWidget *sw;
 	GtkWidget *view;
 	GtkTextBuffer *textbuffer;
+	extern GtkTooltips *tip;
 	GSList  *group;
 	gint table_rows = 0;
 
@@ -225,6 +169,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	for (i=0;i<max_logables;i++)
 	{
 		button = gtk_check_button_new_with_label(logable_names[i]);
+		gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
 		logables.widgets[i] = button;
 //		if ((dualtable) && (i >= STD_LOGABLES))
 //			gtk_widget_set_sensitive(button,FALSE);

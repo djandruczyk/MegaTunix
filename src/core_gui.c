@@ -33,8 +33,8 @@
 
 
 /* Default window size and MINIMUM size as well... */
-static int def_width=690;
-static int def_height=530;
+static int def_width=717;
+static int def_height=559;
 int width;
 int height;
 int main_x_origin;
