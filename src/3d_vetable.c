@@ -372,13 +372,15 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
 	ve_view->dt = 0.008;
-	ve_view->sphi = 35.0; 
-	ve_view->stheta = 75.0; 
-	ve_view->sdepth = 7.533;
+	//ve_view->sphi = 35.0; 
+	//ve_view->stheta = 75.0; 
+	ve_view->sphi = 40.5; 
+	ve_view->stheta = 70.25; 
+	ve_view->sdepth = 7.667456;
 	ve_view->zNear = 0.8;
 	ve_view->zFar = 23;
-	ve_view->h_strafe = 0;
-	ve_view->v_strafe = 0;
+	ve_view->h_strafe = -1.575;
+	ve_view->v_strafe = -2.2;
 	ve_view->aspect = 1.333;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
@@ -476,10 +478,12 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+//	printf("sdepth %f, stheta %f, sphi %f, hstrafe %f, vstrafe %f\n",ve_view->sdepth,ve_view->stheta,ve_view->sphi,ve_view->h_strafe,ve_view->v_strafe);
 	glTranslatef(0.0,0.0,-ve_view->sdepth);
 	glRotatef(-ve_view->stheta, 1.0, 0.0, 0.0);
 	glRotatef(ve_view->sphi, 0.0, 0.0, 1.0);
-	glTranslatef(-(gfloat)((ve_view->x_bincount/2)-0.3)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
+	//glTranslatef(-(gfloat)((ve_view->x_bincount/2)-0.3)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
+	glTranslatef(-(gfloat)((ve_view->x_bincount/2)-1)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
 
 	ve3d_calculate_scaling(ve_view);
 	ve3d_draw_ve_grid(ve_view);
@@ -1225,12 +1229,17 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->beginX = 0;
 	ve_view->beginY = 0;
 	ve_view->dt = 0.008;
-	ve_view->sphi = 35.0;
-	ve_view->stheta = 75.0;
-	ve_view->sdepth = 7.533;
+	//ve_view->sphi = 35.0;
+	ve_view->sphi = 40.5;
+	//ve_view->stheta = 75.0;
+	ve_view->stheta = 70.25;
+	//ve_view->sdepth = 7.533;
+	ve_view->sdepth = 7.667456;
 	ve_view->zNear = 0.8;
 	ve_view->zFar = 23.0;
 	ve_view->aspect = 1.0;
+	ve_view->h_strafe = -1.575;
+	ve_view->v_strafe = -2.2;
 	ve_view->z_scale = 4.0;
 	ve_view->x_div = 0.0;
 	ve_view->x_max = 0.0;

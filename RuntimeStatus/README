@@ -1,0 +1,61 @@
+This README describes the contents of this dir and their file structure.
+
+Last Edited, Mar 25th 19:23:12 PM
+
+Inside this dir (RuntimeStatus) are files with an .stat_conf extension.  They
+are ASCII text files in .ini file format, using the common "section", 
+"key", and "value" layout as shown below.
+
+[section]
+key=value
+
+The *.stat_conf files define the layout and buttons in the floating runtime
+status window that can show the status of an an engine variable (limited to
+the status of bitfields for now).
+
+
+NOTES regarding the files:
+
+- The value names are CaSe SeNsItIvE, so be warned.  Ironically the
+keys themselves are not, as the string compare functions are case insensitive.
+
+[global] section
+contains a "description" key (not really used in the code, but may be in the 
+future
+Also contains two more integer keys, total_status defining the total number of
+status indicators...
+
+Following that are sections for each indicator.
+
+The sections are named [status_xx], 
+the xx is a number starting at 0 and going up to total_status-1 
+(since we start from 0 not 1)
+
+Inside each section are 4 keys;
+create_label	[string] The on-screen label used to show the status of this
+		bit. Typical values are all in uppercase for appearance.
+keys		[string]  list of keys that require BINDING to the control.
+		this is usually the bit* fields and the source and the 
+		bind_to_list key so that the update handlers know it exists.
+key_types	[comma separated enumeration list] used to determine how
+		to read the data correctly..
+bind_to_list	[comma separated list of strings]  List of lists to bind this
+		control to. Used by internal handlers to locate it for updating
+row		[integer] Which row this is on.  DO NOT have multiple lables
+		on the same row as they will write over eachover...
+col		[integer], which column this is on.  for now we assume 1 col
+		more than one might throw an error, but is easily fixed..
+source		[string]  This is the datasource name,  you get these from 
+		looking into the RealTimeMap file and looking for the 
+		"internal_name" key for the variable you're interested in.  
+		Everything else is automagic. This is CaSe SenSiTiVe just so
+		you know....
+bitval		[int] the value this bit needs to be to have the label become
+		"active"  (this can match on a singla bit or a range of 
+		contiguous bits)
+bitmask		[int] mask to apply to hte variable to mask out the appropriate
+		bits to check against..
+bitshift	[int] the number of bits to shift the value to the right 
+		for checking. 
+
+

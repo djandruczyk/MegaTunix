@@ -28,8 +28,9 @@
 #include <mode_select.h>
 #include <notifications.h>
 #include <post_process.h>
-#include <runtime_sliders.h>
 #include <runtime_gui.h>
+#include <runtime_sliders.h>
+#include <runtime_status.h>
 #include <rtv_map_loader.h>
 #include <serialio.h>
 #include <stdlib.h>
@@ -134,6 +135,14 @@ trypop:
 					{
 						set_title("Populating Datalogger...");
 						populate_dlog_choices();
+					}
+					break;
+				case UPD_LOAD_RT_STATUS:
+					if (connected)
+					{
+						set_title("Loading RT Status...");
+						load_status();
+						set_title("RT Status Loaded...");
 					}
 					break;
 				case UPD_LOAD_RT_SLIDERS:

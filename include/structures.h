@@ -56,6 +56,7 @@ struct Firmware_Details
 	gchar **tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
+	gchar *status_map_file;	/*! runtime status map filename */
         gint rtvars_size;       /*! Size of Realtime vars datablock */
         gint ignvars_size;      /*! Size of Realtime vars datablock */
         gint memblock_size;     /*! Size of Raw_Memory datablock */
@@ -266,6 +267,7 @@ struct Canidate
 	gchar *tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! name of realtime vars map file */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
+	gchar *status_map_file;	/*! runtime status map filename */
 	Capability capabilities;/*! Bitmask of capabilities.... */
 	gchar *rt_cmd_key;	/*! string key to hashtable for RT command */
 	gchar *ve_cmd_key;	/*! string key to hashtable for VE command */

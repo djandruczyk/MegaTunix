@@ -21,6 +21,7 @@ headers = \
         gui_handlers.h \
         init.h \
         interrogate.h \
+	keybinder.h \
 	keyparser.h \
 	listmgmt.h \
         logo.h \
@@ -41,6 +42,7 @@ headers = \
 	rtv_processor.h \
         runtime_gui.h \
         runtime_sliders.h \
+        runtime_status.h \
         serialio.h \
 	stringmatch.h \
         structures.h \

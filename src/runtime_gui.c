@@ -29,6 +29,7 @@
 
 extern gboolean connected;
 extern gint active_page;
+extern gboolean forced_update;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
@@ -57,11 +58,20 @@ gboolean update_runtime_vars()
 	gfloat x,y,z = 0.0;
 	gfloat xl,yl,zl = 0.0;
 	gchar * string = NULL;
+	static gint count = 0;
+	static gboolean conn_status = FALSE;
 
 	if(no_update)
 		return FALSE;
 
 	g_static_mutex_lock(&rtv_mutex);
+	count++;
+	if (conn_status != connected)
+	{
+		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,(gpointer)connected);
+		conn_status = connected;
+	}
+		
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)
 	{
@@ -94,20 +104,18 @@ breakout:
 			g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}
 	}
+	if ((count > 60) && (!forced_update))
+		forced_update = TRUE;
+	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
+	forced_update=FALSE;
 
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
-	{
 		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
-		g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
-		// "Connected" Status box
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-	}
 
 	if (active_page == WARMUP_WIZ_PAGE)	/* Warmup wizard is visible */
 	{
 		g_hash_table_foreach(ww_sliders,rt_update_values,NULL);
-		g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
 			dbg_func(g_strdup(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n"),CRITICAL);
@@ -115,10 +123,9 @@ breakout:
 			warmwizard_update_status(coolant);
 		last_coolant = coolant;
 
-		// "Connected" Status box
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
-
 	}
+	if (count > 60 )
+		count = 0;
 
 	forced_update = FALSE;
 	g_static_mutex_unlock(&rtv_mutex);
@@ -187,7 +194,7 @@ void rt_update_status(gpointer key, gpointer data)
 	
 
 	/// if the value hasn't changed, don't bother continuing 
-	if (value == previous_value)
+	if (((value & bitmask) == (previous_value & bitmask)) && (!forced_update))
 		return;	
 	if (((value & bitmask) >> bitshift) == bitval) // enable it
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);

@@ -279,6 +279,12 @@ handler=_GENERIC_
 
 #------- WarmupWiard Status Indicators ---------------------------------------
 
+[ww_connected_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=connected_widgets
+
 [ww_cranking_label]
 keys=page,bind_to_list,source,bitval,bitshift,bitmask
 key_types=_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_

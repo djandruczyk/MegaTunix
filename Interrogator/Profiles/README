@@ -192,6 +192,11 @@ RealTimeMapFile
 SliderMapFile
   - String, The name of the rtsliders map file (sans extension)
 
+StatusMapFile
+  - String, The name of the rtstatus map file (sans extension) This defines
+  the status indicators in the floating window for engine status.. All of them
+  are configurable as well.. ;)
+
 LoadTabs
   - Comma Separated list.  A list of GLADE files to load in sequence for this 
   firmware. See TabConfs for hte matching list of config files that go with 

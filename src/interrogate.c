@@ -316,6 +316,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->tab_confs = g_strsplit(potential->tab_confs,",",0);
 	firmware->rtv_map_file = g_strdup(potential->rtv_map_file);
 	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
+	firmware->status_map_file = g_strdup(potential->status_map_file);
 	firmware->multi_page = potential->multi_page;
 	firmware->require_page = potential->require_page;
 	firmware->total_tables = potential->total_tables;
@@ -652,6 +653,9 @@ void load_profile_details(struct Canidate *canidate)
 		if(!cfg_read_string(cfgfile,"gui","SliderMapFile",
 					&canidate->sliders_map_file))
 			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
+		if(!cfg_read_string(cfgfile,"gui","StatusMapFile",
+					&canidate->status_map_file))
+			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
 		if (!cfg_read_string(cfgfile,"lookuptables","tables",
 					&tmpbuf))
 			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"tables\" lookuptable name not found in interrogation profile, ERROR\n"),CRITICAL);

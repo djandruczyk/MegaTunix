@@ -27,6 +27,7 @@ megatunix_SOURCES = \
 	gui_handlers.c \
 	init.c \
 	interrogate.c \
+	keybinder.c \
 	keyparser.c \
 	listmgmt.c \
 	logviewer_core.c \
@@ -45,6 +46,7 @@ megatunix_SOURCES = \
 	rtv_processor.c \
 	runtime_gui.c \
 	runtime_sliders.c \
+	runtime_status.c \
 	serialio.c \
 	stringmatch.c \
 	tabloader.c \

@@ -20,6 +20,7 @@
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <gmodule.h>
+#include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
 #include <memory_gui.h>
@@ -192,7 +193,6 @@ void group_free(gpointer value)
  */
 GHashTable * load_groups(ConfigFile *cfgfile)
 {
-	gint i = 0;
 	gint x = 0;
 	gint tmpi = 0;
 	gchar * tmpbuf = NULL;
@@ -250,60 +250,8 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			group->page = tmpi;
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		for (i=0;i<group->num_keys;i++)
-		{
-			switch((DataType)group->keytypes[i])
-			{
-				case MTX_INT:
-					if (cfg_read_int(cfgfile,section,group->keys[i],&tmpi))
-					{
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
-						g_object_set_data(G_OBJECT(group->object),
-								g_strdup(group->keys[i]),
-								GINT_TO_POINTER(tmpi));	
-					}
-					else
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
-					break;
-				case MTX_ENUM:
-					if (cfg_read_string(cfgfile,section,group->keys[i],&tmpbuf))
-					{
-						tmpi = translate_string(tmpbuf);
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
-						g_object_set_data(G_OBJECT(group->object),
-								g_strdup(group->keys[i]),
-								GINT_TO_POINTER(tmpi));	
-						g_free(tmpbuf);
-					}
-					else
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
-					break;
-				case MTX_BOOL:
-					if (cfg_read_boolean(cfgfile,section,group->keys[i],&tmpi))
-					{
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
-						g_object_set_data(G_OBJECT(group->object),
-								g_strdup(group->keys[i]),
-								GINT_TO_POINTER(tmpi));	
-					}
-					else
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
-					break;
-				case MTX_STRING:
-					if(cfg_read_string(cfgfile,section,group->keys[i],&tmpbuf))
-					{
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",group->keys[i],tmpbuf,section),TABLOADER);
-						g_object_set_data(G_OBJECT(group->object),
-								g_strdup(group->keys[i]),
-								g_strdup(tmpbuf));
-						g_free(tmpbuf);
-					}
-					else
-						dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
-					break;
 
-			}
-		}
+		bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
 		/* Store it in the hashtable... */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
 		g_free(section);
@@ -375,7 +323,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	GHashTable *groups = bindgroup->groups;
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
-	gchar ** bind_keys = NULL;
+	gchar ** tmpvector = NULL;
 	gint bind_num_keys = 0;
 	gchar ** keys = NULL;
 	gint * keytypes = NULL;
@@ -384,7 +332,6 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint i = 0;
 	gint offset = 0;
 	gint page = 0;
-	gint tmpi = 0;
 	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
 
@@ -433,7 +380,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	*/
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
 	{
-		bind_keys = parse_keys(tmpbuf,&bind_num_keys,",");
+		tmpvector = parse_keys(tmpbuf,&bind_num_keys,",");
 		g_free(tmpbuf);
 		/* This looks convoluted,  but it allows for an arbritrary 
 		 * number of lists, that are indexed by a keyword.
@@ -444,8 +391,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		 * that the list is always stored and up to date...
 		 */
 		for (i=0;i<bind_num_keys;i++)
-			store_list(bind_keys[i],g_list_append(get_list(bind_keys[i]),(gpointer)widget));
-		g_strfreev(bind_keys);
+			store_list(tmpvector[i],g_list_append(get_list(tmpvector[i]),(gpointer)widget));
+		g_strfreev(tmpvector);
 	}
 
 	/* If this widget has a "depend_on" tag we need to load the dependancy
@@ -493,67 +440,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 				ve_widgets[page][offset],
 				(gpointer)widget);
 	}
-	/* If there is a "group" key in a sectio nit means that it gets the
+	/* If there is a "group" key in a section it means that it gets the
 	 * rest of it's setting from the groupname listed.  This reduces
 	 * redundant keys all throughout the file...
 	 */
 
-	for (i=0;i<num_keys;i++)
-	{
-		switch((DataType)keytypes[i])
-		{
-			case MTX_INT:
-				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
-				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
-					g_object_set_data(G_OBJECT(widget),
-							g_strdup(keys[i]),
-							GINT_TO_POINTER(tmpi));	
-				}
-				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
-				break;
-			case MTX_ENUM:
-				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
-				{
-					tmpi = translate_string(tmpbuf);
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
-					g_object_set_data(G_OBJECT(widget),
-							g_strdup(keys[i]),
-							GINT_TO_POINTER(tmpi));	
-					g_free(tmpbuf);
-				}
-				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
-				break;
-			case MTX_BOOL:
-				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
-				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
-					g_object_set_data(G_OBJECT(widget),
-							g_strdup(keys[i]),
-							GINT_TO_POINTER(tmpi));	
-					if (strstr(keys[i],"ul_complex"))
-						load_complex_params(G_OBJECT(widget),cfgfile,section);
-				}
-				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
-				break;
-			case MTX_STRING:
-				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
-				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),TABLOADER);
-					g_object_set_data(G_OBJECT(widget),
-							g_strdup(keys[i]),
-							g_strdup(tmpbuf));
-					g_free(tmpbuf);
-				}
-				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
-				break;
+	bind_keys(G_OBJECT(widget),cfgfile,section,keys,keytypes,num_keys);
 
-		}
-	}
+
 	if (cfg_read_string(cfgfile,section,"post_function_with_arg",&tmpbuf))
 	{
 		run_post_function_with_arg(tmpbuf,widget);
