@@ -19,8 +19,6 @@
 #include <structures.h>
 
 
-extern struct DynamicSpinners spinners;
-struct DynamicAdjustments adjustments;
 struct DynamicLabels labels;
 struct DynamicButtons buttons;
 extern GtkWidget *ve_widgets[];
@@ -475,7 +473,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	label = gtk_label_new("Cooling Fan Turn-On Temp (\302\260 F.)");
-        labels.cooling_fan_temp_lab = label;
+	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -484,6 +482,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Cooling Fan Turn-On Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
+	temp_dep = g_list_append(temp_dep,(gpointer)spinner);
         ve_widgets[121] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -546,9 +545,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Fast Idle Temp (tied to "Cooling Fan Temp" (MSnEDIS/spark ) */
 	tmpspin = ve_widgets[121];
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
-        adjustments.fast_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
-        spinners.fast_idle_temp_spin = spinner;
+	temp_dep = g_list_append(temp_dep,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
@@ -598,12 +596,11 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
         /* Slow Idle Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(145.0,-40.0,215.0,1.0,10.0,0);
-        adjustments.slow_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
+	temp_dep = g_list_append(temp_dep,(gpointer)spinner);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
 	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)spinner);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
-        spinners.slow_idle_temp_spin = spinner;
         ve_widgets[124] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);

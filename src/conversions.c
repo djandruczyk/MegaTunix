@@ -172,32 +172,89 @@ void convert_temps(gpointer widget, gpointer units)
 	gchar *text = NULL;
 	gchar * newtext = NULL;
 	gchar **array = NULL;
-	text = g_strdup(gtk_label_get_text(GTK_LABEL(widget)));
+	gfloat upper, value;
+	GtkAdjustment * adj;
+
 	if ((int)units == FAHRENHEIT)
 	{
-		array = g_strsplit(text,"C.",0);
-		if (array[1] == NULL)// IF null, means not needed to change it
-			return;
-		newtext = g_strdup_printf("%sF.%s",array[0],array[1]);	
+		if (GTK_IS_LABEL(widget))
+		{
+			text = g_strdup(gtk_label_get_text(GTK_LABEL(widget)));
+			array = g_strsplit(text,"C.",0);
+			if (array[1] == NULL)// If null, means not needed
+			{
+				g_free(text);
+				g_strfreev(array);
+				return;
+			}
+			newtext = g_strdup_printf("%sF.%s",array[0],array[1]);	
+			gtk_label_set_text(GTK_LABEL(widget),newtext);
+			g_free(text);
+			g_strfreev(array);
+			g_free(newtext);
+		}
+
+		if (GTK_IS_SPIN_BUTTON(widget))
+		{
+			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
+					GTK_SPIN_BUTTON(widget));
+			upper = adj->upper;
+			if (upper < 215) /* if so it was celsius, if not skip*/
+			{
+				value = adj->value;
+				adj->upper = 215.0;
+				adj->value = (value *(9.0/5.0))+32;
+
+				gtk_adjustment_changed(adj);
+				gtk_spin_button_set_value(
+						GTK_SPIN_BUTTON(widget),
+						adj->value);
+			}
+		}
+
 	}
-	else
+	else // CELSIUS Temp scale
 	{
-		array = g_strsplit(text,"F.",0);
-		if (array[1] == NULL)// IF null, means not needed to change it
-			return;
-		newtext = g_strdup_printf("%sC.%s",array[0],array[1]);	
+		if (GTK_IS_LABEL(widget))
+		{
+			text = g_strdup(gtk_label_get_text(GTK_LABEL(widget)));
+			array = g_strsplit(text,"F.",0);
+			if (array[1] == NULL)// If null, means not needed
+			{
+				g_free(text);
+				g_strfreev(array);
+				return;
+			}
+			newtext = g_strdup_printf("%sC.%s",array[0],array[1]);	
+			gtk_label_set_text(GTK_LABEL(widget),newtext);
+			g_free(text);
+			g_strfreev(array);
+			g_free(newtext);
+		}
+
+		if (GTK_IS_SPIN_BUTTON(widget))
+		{
+			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
+					GTK_SPIN_BUTTON(widget));
+			upper = adj->upper;
+			if (upper > 102) // if so it was fahren, if not skip
+			{	
+				value = adj->value;
+				adj->upper = 101.6;
+				adj->value = (value-32)*(5.0/9.0);
+				gtk_adjustment_changed(adj);
+				gtk_spin_button_set_value(
+						GTK_SPIN_BUTTON(widget),
+						adj->value);
+			}
+		}
 	}
-	gtk_label_set_text(GTK_LABEL(widget),newtext);
-	g_free(text);
-	g_free(newtext);
-	g_strfreev(array);
+
 }
 
 void reset_temps(gpointer type)
 {
 	gint i;
-	gfloat value;
-	gfloat upper;
 	gchar * string;
 	extern unsigned int ecu_caps;
 	extern const gchar * F_warmup_labels[];
@@ -210,14 +267,11 @@ void reset_temps(gpointer type)
 	{
 		case FAHRENHEIT:
 			gtk_label_set_text(
-					GTK_LABEL(labels.cr_pulse_lowtemp_lab),
-					"-40\302\260 F.");
-			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
 					"170\302\260 F.");
 			gtk_label_set_text(
-					GTK_LABEL(labels.warmup_lab),
-					"Engine Temp in Degrees Fahrenheit");
+					GTK_LABEL(labels.ww_cr_pulse_hightemp_lab),
+					"Pulsewidth at 170 \302\260 F.");
 			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
@@ -226,12 +280,6 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Cutoff Temp (\302\260 F.)");
-			if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-			{
-				gtk_label_set_text(
-						GTK_LABEL(labels.cooling_fan_temp_lab),
-						"Cooling Fan Turn-On Temp (\302\260 F.)");
-			}
 			for (i=0;i<10;i++)
 			{
 				string = g_strdup_printf("%s\302\260",
@@ -247,61 +295,15 @@ void reset_temps(gpointer type)
 						string);
 				g_free(string);
 			}
-			/* Cooling Fan Temp  (MSnEDIS/Spark ONLY) */
-			/* Fast Idle Temp */
-			upper = adjustments.fast_idle_temp_adj->upper;
-			if (upper < 215) /* if so it was celsius, if not skip*/
-			{	
-				value = adjustments.fast_idle_temp_adj->value;
-				adjustments.fast_idle_temp_adj->upper=215.0;
-				adjustments.fast_idle_temp_adj->value=
-					(value *(9.0/5.0))+32;
-				gtk_adjustment_changed(
-						adjustments.fast_idle_temp_adj);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.fast_idle_temp_spin),
-						(value*(9.0/5.0))+32);
-			}
-			/* Slow Idle Temp */
-			upper = adjustments.slow_idle_temp_adj->upper;
-			if (upper < 215) /* if so it was celsius, if not skip*/
-			{	
-				value = adjustments.slow_idle_temp_adj->value;
-				adjustments.slow_idle_temp_adj->upper=215.0;
-				adjustments.slow_idle_temp_adj->value=
-					(value *(9.0/5.0))+32;
-				gtk_adjustment_changed(
-						adjustments.slow_idle_temp_adj);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.slow_idle_temp_spin),
-						(value*(9.0/5.0))+32);
-			}
-			/* EGO Activation Temp */
-			upper = adjustments.ego_temp_adj->upper;
-			if (upper < 215) /* if so it was celsius, if not skip*/
-			{	
-				value = adjustments.ego_temp_adj->value;
-				adjustments.ego_temp_adj->upper=215.0;
-				adjustments.ego_temp_adj->value=
-					(value *(9.0/5.0))+32;
-				gtk_adjustment_changed(
-						adjustments.ego_temp_adj);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.ego_temp_active_spin),
-						(value*(9.0/5.0))+32);
-			}
 			break;
 
 		case CELSIUS:
 			gtk_label_set_text(
-					GTK_LABEL(labels.cr_pulse_lowtemp_lab),
-					"-40\302\260 C.");
-			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
 					"77\302\260 C.");
 			gtk_label_set_text(
-					GTK_LABEL(labels.warmup_lab),
-					"Engine Temp in Degrees Celsius");
+					GTK_LABEL(labels.ww_cr_pulse_hightemp_lab),
+					"Pulsewidth at 77 \302\260 C.");
 			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
@@ -310,12 +312,6 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Cutoff Temp (\302\260 C.)");
-			if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-			{
-				gtk_label_set_text(
-						GTK_LABEL(labels.cooling_fan_temp_lab),
-						"Cooling Fan Turn-On Temp (\302\260 C.)");
-			}
 			for (i=0;i<10;i++)
 			{
 				string = g_strdup_printf("%s\302\260",
@@ -331,50 +327,8 @@ void reset_temps(gpointer type)
 						string);
 				g_free(string);
 			}
-
-			/* Fast Idle Temp */
-			upper = adjustments.fast_idle_temp_adj->upper;
-			if (upper > 102) /* if so it was fahren, if not skip*/
-			{
-				value = adjustments.fast_idle_temp_adj->value;
-				adjustments.fast_idle_temp_adj->upper=101.6;
-				adjustments.fast_idle_temp_adj->value=
-					(value-32)*(5.0/9.0);
-				gtk_adjustment_changed(
-						adjustments.fast_idle_temp_adj);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.fast_idle_temp_spin),
-						(value-32)*(5.0/9.0));
-			}
-			/* Slow Idle Temp */
-			upper = adjustments.slow_idle_temp_adj->upper;
-			if (upper > 102) /* if so it was fahren, if not skip*/
-			{
-				value = adjustments.slow_idle_temp_adj->value;
-				adjustments.slow_idle_temp_adj->upper=101.6;
-				adjustments.slow_idle_temp_adj->value=
-					(value-32)*(5.0/9.0);
-				gtk_adjustment_changed(
-						adjustments.slow_idle_temp_adj);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.slow_idle_temp_spin),
-						(value-32)*(5.0/9.0));
-			}
-			/* EGO Activation Temp */
-			upper = adjustments.ego_temp_adj->upper;
-			if (upper > 102) /* if so it was fahren, if not skip*/
-			{	
-				value = adjustments.ego_temp_adj->value;
-				adjustments.ego_temp_adj->upper=101.6;
-				adjustments.ego_temp_adj->value=
-					(value-32)*(5.0/9.0);
-				gtk_adjustment_changed(
-						adjustments.ego_temp_adj);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.ego_temp_active_spin),
-						(value-32)*(5.0/9.0));
-			}
 			break;
+
 	}
 	return;	
 }

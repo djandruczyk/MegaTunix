@@ -44,28 +44,6 @@ struct Serial_Params
 /* Progress bars that are updated from various functions... */
 struct DynamicProgress
 {
-        GtkWidget *secl_pbar;            /* O2 Voltage bar */
-        GtkWidget *ego_pbar;            /* O2 Voltage bar */
-        GtkWidget *baro_pbar;           /* O2 Voltage bar */
-        GtkWidget *map_pbar;            /* map value for bar */
-        GtkWidget *mat_pbar;            /* map value for bar */
-        GtkWidget *clt_pbar;            /* map value for bar */
-        GtkWidget *tps_pbar;            /* map value for bar */
-        GtkWidget *batt_pbar;           /* map value for bar */
-        GtkWidget *egocorr_pbar;        /* egocorr label from MS */
-        GtkWidget *aircorr_pbar;        /* aircorr label from MS */
-        GtkWidget *warmcorr_pbar;       /* warmcorr label from MS */
-        GtkWidget *rpm_pbar;            /* rpm label from MS */
-        GtkWidget *pw1_pbar;             /* pw label from MS */
-        GtkWidget *pw2_pbar;             /* pw label from MS */
-        GtkWidget *tpsaccel_pbar;       /* tpsaccel label from MS */
-        GtkWidget *barocorr_pbar;       /* barocorr label from MS */
-        GtkWidget *gammae_pbar;         /* gammae label from MS */
-        GtkWidget *vecurr1_pbar;         /* vecurr1 label from MS */
-        GtkWidget *vecurr2_pbar;         /* vecurr2 label from MS */
-        GtkWidget *dcycle1_pbar;         /* vecurr1 label from MS */
-        GtkWidget *dcycle2_pbar;         /* vecurr2 label from MS */
-	GtkWidget *idledc_pbar;
 	GtkWidget *ww_clt_pbar;
 	GtkWidget *ww_warmcorr_pbar;
 	GtkWidget *ww_ego_pbar;
@@ -129,59 +107,22 @@ struct Reqd_Fuel
  */
 struct DynamicLabels
 {
-        GtkWidget *secl_lab;		/* Counter label */
-        GtkWidget *ego_lab;		/* O2 Voltage */
-        GtkWidget *baro_lab;		/* baro label from MS */
-        GtkWidget *map_lab;		/* map label from MS */
-        GtkWidget *mat_lab;		/* mat label from MS */
-        GtkWidget *clt_lab;		/* clt label from MS */
-        GtkWidget *tps_lab;		/* tps label from MS */
-        GtkWidget *batt_lab;		/* batt label from MS */
-        GtkWidget *egocorr_lab;		/* egocorr label from MS */
-        GtkWidget *aircorr_lab;		/* aircorr label from MS */
-        GtkWidget *warmcorr_lab;	/* warmcorr label from MS */
-        GtkWidget *rpm_lab;		/* rpm label from MS */
-        GtkWidget *pw1_lab;		/* pw label from MS */
-        GtkWidget *pw2_lab;		/* pw label from MS */
-        GtkWidget *tpsaccel_lab;	/* tpsaccel label from MS */
-        GtkWidget *barocorr_lab;	/* barocorr label from MS */
-        GtkWidget *gammae_lab;		/* gammae label from MS */
-        GtkWidget *vecurr1_lab;		/* vecurr label from MS */
-        GtkWidget *dcycle1_lab;		/* vecurr label from MS */
-        GtkWidget *dcycle2_lab;		/* vecurr label from MS */
-        GtkWidget *idledc_lab;		/* idledc label from MS */
 	GtkWidget *req_fuel_lab;
 	GtkWidget *fast_idle_temp_lab;
-	GtkWidget *slow_idle_temp_lab;
-	GtkWidget *cr_pulse_lowtemp_lab;
 	GtkWidget *cr_pulse_hightemp_lab;
+	GtkWidget *ww_cr_pulse_hightemp_lab;
 	GtkWidget *warmup_bins_lab[10];
 	GtkWidget *warmwizard_lab[10];
 	GtkWidget *warmup_lab;
-	GtkWidget *ego_temp_lab;
-	GtkWidget *runtime_clt_lab;
-	GtkWidget *runtime_mat_lab;
 	GtkWidget *p0_map_tps_lab;
 	GtkWidget *p1_map_tps_lab;
 	GtkWidget *dlog_file_lab;
-	GtkWidget *warmwiz_clt_lab;
 	GtkWidget *ww_clt_lab;
 	GtkWidget *ww_warmcorr_lab;
 	GtkWidget *ww_ego_lab;
 	GtkWidget *ww_map_lab;
-	GtkWidget *cooling_fan_temp_lab;
-};
+        GtkWidget *cooling_fan_temp_lab;
 
-/* These are defined as they are semi-dynamic and are modified
- * during run of MegaTunix for status or units related reasons
- */
-struct DynamicAdjustments
-{
-	GtkAdjustment *cooling_fan_temp_adj;
-	GtkAdjustment *fast_idle_temp_adj;
-	GtkAdjustment *slow_idle_temp_adj;
-	GtkAdjustment *ego_temp_adj;
-	GtkAdjustment *cylinders_adj;		/* Adjustment */
 };
 
 /* These are defined here instead of the individual .c files as

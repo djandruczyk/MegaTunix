@@ -122,12 +122,15 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Pulsewidth at -40 \302\260 F.");
+	temp_dep = g_list_append(temp_dep, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Pulsewidth at 170 \302\260 F.");
+	labels.ww_cr_pulse_hightemp_lab = label;
+	temp_dep = g_list_append(temp_dep, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
@@ -224,7 +227,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 10, 0);
 
-	label = gtk_label_new("Coolant (F)");
+	label = gtk_label_new("Coolant (\302\260 F.)");
 	temp_dep = g_list_append(temp_dep, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,

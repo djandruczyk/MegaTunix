@@ -20,7 +20,6 @@
 
 struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
-extern struct DynamicAdjustments adjustments;
 extern struct DynamicLabels labels;
 extern GtkWidget *ve_widgets[];
 const gchar *F_warmup_labels[] = {"-40","-20",  "0", "20", "40",
@@ -89,7 +88,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("-40 \302\260 F.");
-	labels.cr_pulse_lowtemp_lab = label;
+	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -257,8 +256,8 @@ void build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (0), 0, 0);
 	}
 
-	label = gtk_label_new("Engine Temperature in Degrees Fahrenheit");
-	labels.warmup_lab = label;
+	label = gtk_label_new("Engine Temperature in \302\260 F.");
+	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 10, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
@@ -494,8 +493,8 @@ void build_enrichments(GtkWidget *parent_frame)
 
 	/* EGO Temp Activation */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
-	adjustments.ego_temp_adj = adj;
 	spinner = gtk_spin_button_new(adj,1,0);
+	temp_dep = g_list_append(temp_dep,(gpointer)spinner);
 	spinners.ego_temp_active_spin = spinner;
 	ve_widgets[86] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);

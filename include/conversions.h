@@ -20,6 +20,7 @@
 /* Prototypes */
 void read_conversions(void);
 void reset_temps(gpointer);
+void convert_temps(gpointer,gpointer);
 gint convert_before_download(gint, gfloat);
 gfloat convert_after_upload(gint);
 /* Prototypes */
