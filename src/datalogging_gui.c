@@ -57,12 +57,11 @@ static GtkWidget *file_selection;
 static GtkWidget *format_table;
 static GtkWidget *comma_delim_button;
 static GtkWidget *space_delim_button;
-static gchar buff[100];				/* General purpose buffer */
 static gint max_logables = 0;
 static gint offset_list[MAX_LOGABLES];
 struct timeval now;
 struct timeval last;
-GtkWidget *dlog_statbar;
+GtkWidget *dlog_view;
 GtkWidget *logables_table;
 GtkWidget *delim_table;
 GtkWidget *tab_delim_button;
@@ -94,6 +93,9 @@ int build_datalogging(GtkWidget *parent_frame)
 	GtkWidget *button;
 	GtkWidget *ebox;
 	GtkWidget *label;
+	GtkWidget *sw;
+	GtkWidget *view;
+	GtkTextBuffer *textbuffer;
         GSList  *group;
 	gint table_rows = 0;
 
@@ -103,6 +105,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
 	frame = gtk_frame_new("DataLogging Status Messages");
+	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
         gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
         vbox2 = gtk_vbox_new(FALSE,0);
@@ -111,15 +114,23 @@ int build_datalogging(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
         gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
-        dlog_statbar = gtk_statusbar_new();
-        gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(dlog_statbar),FALSE);
-	gtk_container_add(GTK_CONTAINER(ebox),dlog_statbar);
-        dlog_context_id = gtk_statusbar_get_context_id(
-                        GTK_STATUSBAR(dlog_statbar),
-                        "DataLogging Status");
-        gtk_widget_modify_bg(GTK_WIDGET(ebox),
-                        GTK_STATE_NORMAL,&white);
+	
+	sw = gtk_scrolled_window_new(NULL,NULL);
+        gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+                        GTK_POLICY_AUTOMATIC,
+                        GTK_POLICY_AUTOMATIC);
+        gtk_widget_set_size_request(sw,0,55);
+        gtk_container_add(GTK_CONTAINER(ebox),sw);
 
+        view = gtk_text_view_new();
+        dlog_view = view;
+        gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
+        textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+        gtk_text_buffer_create_tag(textbuffer,
+                                "warning",
+                                "foreground",
+                                "red", NULL);
+	gtk_container_add(GTK_CONTAINER(sw),view);
 
 	frame = gtk_frame_new("Data Log File Selection");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
@@ -336,6 +347,7 @@ int build_datalogging(GtkWidget *parent_frame)
 
 void start_datalogging()
 {
+	gchar * tmpbuf;
 	if (logging)
 		return;   /* Logging already running ... */
 	else
@@ -347,14 +359,16 @@ void start_datalogging()
 		gtk_widget_set_sensitive(file_selection,FALSE);
 		header_needed = TRUE;
 		logging = TRUE;
-		g_snprintf(buff,100,"DataLogging Started...");
-		update_statusbar(dlog_statbar,dlog_context_id,buff);
+		tmpbuf = g_strdup_printf("DataLogging Started...\n");
+		update_logbar(dlog_view,NULL,tmpbuf);
+		g_free(tmpbuf);
 	}
 	return;
 }
 
 void stop_datalogging()
 {
+	gchar *tmpbuf;
 	logging = FALSE;
 	if (logging_mode == CUSTOM_LOG)
 	{
@@ -363,8 +377,9 @@ void stop_datalogging()
 	}
 	gtk_widget_set_sensitive(format_table,TRUE);
 	gtk_widget_set_sensitive(file_selection,TRUE);
-	g_snprintf(buff,100,"DataLogging Stopped...");
-	update_statusbar(dlog_statbar,dlog_context_id,buff);
+	tmpbuf = g_strdup_printf("DataLogging Stopped...\n");
+	update_logbar(dlog_view,NULL,tmpbuf);
+	g_free(tmpbuf);
 	return;
 }
 

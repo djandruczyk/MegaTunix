@@ -31,8 +31,7 @@ gchar *vex_comment;
 extern struct Tools tools;
 extern FILE * io_file;
 extern gchar * io_file_name;
-extern GtkWidget *tools_statbar;
-extern gint tools_context_id;
+extern GtkWidget *tools_view;
 
 GIOChannel *gio_channel;
 extern struct Ve_Const_Std *ve_const_p0;
@@ -44,6 +43,7 @@ gboolean vetable_export()
 	gint i = 0;
 	gint j = 0;
 	unsigned char * ve_const_arr;
+	gchar * tmpbuf;
 	//extern struct Ve_Const_Std *ve_const_p1;
 
 	tm = g_malloc(sizeof(struct tm));
@@ -133,6 +133,10 @@ gboolean vetable_export()
         }
 	*/
 	
+	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
+	update_logbar(tools_view,NULL,tmpbuf);
+
+	g_free(tmpbuf);
 	g_free(tm);
 	g_free(t);
 	g_free(vex_comment);
@@ -230,13 +234,14 @@ gboolean vetable_import()
 
 gint vex_comment_parse(GtkWidget *widget, gpointer data)
 {
-	gchar buff[100];
+	gchar *tmpbuf;
 	/* Gets data from VEX comment field in tools gui and stores it 
 	 * so that it gets written to the vex file 
 	 */
 	vex_comment = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-	g_snprintf(buff,100,"VEX Comment Stored");
-	update_statusbar(tools_statbar,tools_context_id,buff);
+	tmpbuf = g_strdup_printf("VEX Comment Stored\n");
+	update_logbar(tools_view,NULL,tmpbuf);
+	g_free(tmpbuf);
 
 	return TRUE;
 }

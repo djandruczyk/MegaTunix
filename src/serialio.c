@@ -39,7 +39,6 @@ extern struct Ve_Const_Std *ve_const_p1;
 extern struct Ve_Const_Std *ve_const_p1_tmp;
 struct Serial_Params *serial_params;
 gboolean connected;
-char buff[60];
 static gboolean burn_needed = FALSE;
        
 void open_serial(int port_num)
@@ -49,13 +48,14 @@ void open_serial(int port_num)
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
 	gint result = -1;
-	char devicename[11]; /* temporary unix name of the serial port */
+	gchar *tmpbuf;
+	gchar *devicename;	/* temporary unix name of the serial port */
 	serial_params->comm_port = port_num; /* DOS/Win32 semantics here */
 
 	/* Unix port names are always 1 lower than the DOS/Win32 semantics. 
 	 * Thus com1 = /dev/ttyS0 on unix 
 	 */
-	g_snprintf(devicename,11,"/dev/ttyS%i",port_num-1);
+	devicename = g_strdup_printf("/dev/ttyS%i",port_num-1);
 	/* Open Read/Write and NOT as the controlling TTY */
 	result = open(devicename, O_RDWR | O_NOCTTY);
 	if (result >= 0)
@@ -66,19 +66,22 @@ void open_serial(int port_num)
 		serial_params->fd = result;
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
-		g_snprintf(buff,60,"COM%i Opened Successfully\nSuggest Testing ECU Comms\n",port_num);
-		update_logbar(comms_view,NULL,buff);
+		tmpbuf = g_strdup_printf("COM%i Opened Successfully\n",port_num);
+		update_logbar(comms_view,NULL,tmpbuf);
+		g_free(tmpbuf);
 	}
 	else
 	{
 		/* FAILURE */
 		/* An Error occurred opening the port */
 		serial_params->open = FALSE;
-		g_snprintf(buff,60,"Error Opening COM%i Error Code: %s\n",
+		tmpbuf = g_strdup_printf("Error Opening COM%i Error Code: %s\n",
 				port_num,strerror(errno));
-		update_logbar(comms_view,"warning",buff);
+		update_logbar(comms_view,"warning",tmpbuf);
+		g_free(tmpbuf);
 	}
 	
+	g_free(devicename);
 	return;
 }
 	
@@ -151,7 +154,7 @@ int setup_serial_params()
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	/* No hurt in checking to see if the MS is present, if it is
-	 * It'll update the serial statusbar, and set the "Connected" flag
+	 * It'll update the serial status log, and set the "Connected" flag
 	 * which is visible in the Runtime screen 
 	 */
 	check_ecu_comms(NULL,NULL);
@@ -161,6 +164,7 @@ int setup_serial_params()
 
 void close_serial()
 {
+	gchar *tmpbuf;
 
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->oldtio);
 	close(serial_params->fd);
@@ -169,9 +173,10 @@ void close_serial()
         gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
                         connected);
 
-	g_snprintf(buff,60,"COM Port Closed\n");
+	tmpbuf = g_strdup_printf("COM Port Closed\n");
 	/* An Closing the comm port */
-	update_logbar(comms_view,NULL,buff);
+	update_logbar(comms_view,NULL,tmpbuf);
+	g_free(tmpbuf);
 }
 
 int check_ecu_comms(GtkWidget *widget, gpointer data)
@@ -182,6 +187,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	char buf[1024];
         gint restart_reader = FALSE;
 	static gboolean locked;
+	gchar *tmpbuf;
 
 	if (locked)
 		return 0;
@@ -217,18 +223,20 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			while (poll(&ufds,1,serial_params->poll_timeout))
 				res = read(serial_params->fd,&buf,64);
 
-			g_snprintf(buff,60,"ECU Comms Test Successfull\n");
+			tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 			/* COMMS test succeeded */
-			update_logbar(comms_view,NULL,buff);
+			update_logbar(comms_view,NULL,tmpbuf);
+			g_free(tmpbuf);
 			connected = TRUE;
 			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 						connected);
 		}
 		else
 		{
-			g_snprintf(buff,60,"I/O with MegaSquirt Timeout\n");
+			tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 			/* An I/O Error occurred with the MegaSquirt ECU */
-			update_logbar(comms_view,"warning",buff);
+			update_logbar(comms_view,"warning",tmpbuf);
+			g_free(tmpbuf);
 			connected = FALSE;
 			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 					connected);
@@ -244,9 +252,10 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	}
         else
         {
-                g_snprintf(buff,60,"Serial Port NOT Opened, Can NOT Test ECU Communications\n");
+                tmpbuf = g_strdup_printf("Serial Port NOT Opened, Can NOT Test ECU Communications\n");
                 /* Serial port not opened, can't test */
-		update_logbar(comms_view,"warning",buff);
+		update_logbar(comms_view,"warning",tmpbuf);
+		g_free(tmpbuf);
         }
 	locked = FALSE;
         return (0);

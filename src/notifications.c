@@ -74,42 +74,47 @@ void set_store_buttons_state(GuiState state)
 }
 
 
-void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
-{
-        /* takes 3 args, 
-         * the GtkWidget pointer to the statusbar,
-         * the context_id of the statusbar in arg[0],
-         * and the string to be sent to that bar
-         *
-         * Fairly generic, works for multiple statusbars
-         */
-
-        gtk_statusbar_pop(GTK_STATUSBAR(status_bar),
-                        context_id);
-        gtk_statusbar_push(GTK_STATUSBAR(status_bar),
-                        context_id,
-                        message);
-}
-
 void update_logbar(GtkWidget *view, gchar * tagname, gchar * message)
 {
 	GtkTextIter iter;
 	GtkTextBuffer * textbuffer;
 	GtkWidget *parent;
 	GtkAdjustment * adj;
+	gint counter;
+	gchar *tmpbuf;
+	gpointer result;
 
-	parent = gtk_widget_get_parent(view);
-	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
-	adj->value = adj->upper;
-	gtk_adjustment_changed(GTK_ADJUSTMENT(adj));
-
+	/* Add the message to the end of the textview */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
+	result = g_object_get_data(G_OBJECT(view),"counter");	
+	if (result == NULL)
+		counter = 0;
+	else
+		counter = (gint)result;
+	
+	counter++;
+	tmpbuf = g_strdup_printf("%i. ",counter);
+	g_object_set_data(G_OBJECT(view),"counter",GINT_TO_POINTER(counter));	
+			
+	gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 	if (tagname == NULL)
 		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
 	else
 		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,
 				message,-1,tagname,NULL);
+
+	/* Get it's parent (the scrolled window) and slide it to the
+	 * bottom so the new message is visible... 
+	 */
+	parent = gtk_widget_get_parent(view);
+	if (parent != NULL)
+	{
+		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
+		adj->value = adj->upper;
+		gtk_adjustment_changed(GTK_ADJUSTMENT(adj));
+	}
+
 	return;	
 }
 void no_ms_connection(void)

@@ -133,7 +133,7 @@ int build_comms(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-	"Attempts to communicate with the MegaSquirt Controller.  Check the statusbar at the bottom of the window for the results of this test.",NULL);
+	"Attempts to communicate with the MegaSquirt Controller.  Check the status log at the bottom of the window for the results of this test.",NULL);
 
 	frame = gtk_frame_new("Verify ECU Communication");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -317,7 +317,7 @@ int build_comms(GtkWidget *parent_frame)
 
 void update_errcounts(GtkWidget *widget, gboolean reset)
 {
-	char buff[10];
+	gchar *tmpbuf;
 
 	if (reset == TRUE)
 	{
@@ -326,21 +326,25 @@ void update_errcounts(GtkWidget *widget, gboolean reset)
 		ms_reset_count = 0;
 		serial_params->errcount = 0;
 	}
-	g_snprintf(buff,10,"%i",ms_ve_goodread_count);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_ve_readcount_entry),buff);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_ve_readcount_entry),buff);
+	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
+	gtk_entry_set_text(GTK_ENTRY(entries.comms_ve_readcount_entry),tmpbuf);
+	gtk_entry_set_text(GTK_ENTRY(entries.runtime_ve_readcount_entry),tmpbuf);
+	g_free(tmpbuf);
 
-	g_snprintf(buff,10,"%i",ms_goodread_count);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_readcount_entry),buff);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_readcount_entry),buff);
+	tmpbuf = g_strdup_printf("%i",ms_goodread_count);
+	gtk_entry_set_text(GTK_ENTRY(entries.comms_readcount_entry),tmpbuf);
+	gtk_entry_set_text(GTK_ENTRY(entries.runtime_readcount_entry),tmpbuf);
+	g_free(tmpbuf);
 
-	g_snprintf(buff,10,"%i",ms_reset_count);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_reset_entry),buff);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_reset_entry),buff);
+	tmpbuf = g_strdup_printf("%i",ms_reset_count);
+	gtk_entry_set_text(GTK_ENTRY(entries.comms_reset_entry),tmpbuf);
+	gtk_entry_set_text(GTK_ENTRY(entries.runtime_reset_entry),tmpbuf);
+	g_free(tmpbuf);
 
-	g_snprintf(buff,10,"%i",serial_params->errcount);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_sioerr_entry),buff);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_sioerr_entry),buff);
+	tmpbuf = g_strdup_printf("%i",serial_params->errcount);
+	gtk_entry_set_text(GTK_ENTRY(entries.comms_sioerr_entry),tmpbuf);
+	gtk_entry_set_text(GTK_ENTRY(entries.runtime_sioerr_entry),tmpbuf);
+	g_free(tmpbuf);
 
 	return;
 }

@@ -629,7 +629,7 @@ int build_runtime(GtkWidget *parent_frame)
 
 void update_runtime_vars()
 {
-	char buff[120];
+	gchar *tmpbuf;
 	gfloat tmpf;
 	gint tmpi;
 	extern struct Runtime_Std *runtime;
@@ -644,28 +644,31 @@ void update_runtime_vars()
 	gdk_threads_enter();
 	if (runtime->secl != runtime_last->secl)
 	{
-		g_snprintf(buff,10,"%i",runtime->secl);
-		gtk_label_set_text(GTK_LABEL(runtime_data.secl_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->secl);
+		gtk_label_set_text(GTK_LABEL(runtime_data.secl_lab),tmpbuf);
+		g_free(tmpbuf);
 	}
 	if (runtime->ego != runtime_last->ego)
 	{
-		g_snprintf(buff,10,"%.2f",runtime->ego);
-		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),buff);
+		tmpbuf = g_strdup_printf("%.2f",runtime->ego);
+		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),tmpbuf);
 		tmpf = runtime->ego/ego_pbar_divisor <= 1.0 
 				? runtime->ego/ego_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.ego_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->map != runtime_last->map)
 	{
-		g_snprintf(buff,10,"%i",runtime->map);
-		gtk_label_set_text(GTK_LABEL(runtime_data.map_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->map);
+		gtk_label_set_text(GTK_LABEL(runtime_data.map_lab),tmpbuf);
 		tmpf = runtime->map/map_pbar_divisor <= 1.0 
 				? runtime->map/map_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.map_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if ((runtime->clt != runtime_last->clt) || (forced_update))
 	{
@@ -674,30 +677,33 @@ void update_runtime_vars()
 		else	/* subtract 40 and then to F->C conversion */
 			tmpi = (runtime->clt-40-32)*(5.0/9.0);
 	
-		g_snprintf(buff,10,"%i",tmpi);
-		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),buff);
+		tmpbuf = g_strdup_printf("%i",tmpi);
+		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),tmpbuf);
 		tmpf = runtime->clt/255.0 <= 1.0 ? runtime->clt/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.clt_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->batt != runtime_last->batt)
 	{
-		g_snprintf(buff,10,"%.2f",runtime->batt);
-		gtk_label_set_text(GTK_LABEL(runtime_data.batt_lab),buff);
+		tmpbuf = g_strdup_printf("%.2f",runtime->batt);
+		gtk_label_set_text(GTK_LABEL(runtime_data.batt_lab),tmpbuf);
 		tmpf = runtime->batt/18.0 <= 1.0 ? runtime->batt/18.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.batt_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->gammae != runtime_last->gammae)
 	{
-		g_snprintf(buff,10,"%i",runtime->gammae);
-		gtk_label_set_text(GTK_LABEL(runtime_data.gammae_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->gammae);
+		gtk_label_set_text(GTK_LABEL(runtime_data.gammae_lab),tmpbuf);
 		tmpf = runtime->gammae/200.0 <= 1.0 ? runtime->gammae/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.gammae_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if ((runtime->mat != runtime_last->mat) || (forced_update))
 	{
@@ -706,103 +712,114 @@ void update_runtime_vars()
 		else	/* subtract 40 and then to F->C conversion */
 			tmpi = (runtime->mat-40-32)*(5.0/9.0);
 			
-		g_snprintf(buff,10,"%i",tmpi);
-		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),buff);
+		tmpbuf = g_strdup_printf("%i",tmpi);
+		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),tmpbuf);
 		tmpf = runtime->mat/255.0 <= 1.0 ? runtime->mat/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.mat_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->tps != runtime_last->tps)
 	{
-		g_snprintf(buff,10,"%i",runtime->tps);
-		gtk_label_set_text(GTK_LABEL(runtime_data.tps_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->tps);
+		gtk_label_set_text(GTK_LABEL(runtime_data.tps_lab),tmpbuf);
 		tmpf = runtime->tps/100.0 <= 1.0 ? runtime->tps/100.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.tps_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->rpm != runtime_last->rpm)
 	{
-		g_snprintf(buff,10,"%i",runtime->rpm);
-		gtk_label_set_text(GTK_LABEL(runtime_data.rpm_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->rpm);
+		gtk_label_set_text(GTK_LABEL(runtime_data.rpm_lab),tmpbuf);
 		tmpf = runtime->rpm/8000.0 <= 1.0 ? runtime->rpm/8000.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.rpm_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->pw != runtime_last->pw)
 	{
-		g_snprintf(buff,10,"%.1f",runtime->pw);
-		gtk_label_set_text(GTK_LABEL(runtime_data.pw_lab),buff);
+		tmpbuf = g_strdup_printf("%.1f",runtime->pw);
+		gtk_label_set_text(GTK_LABEL(runtime_data.pw_lab),tmpbuf);
 		tmpf = runtime->pw/25.5 <= 1.0 ? runtime->pw/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.pw_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->egocorr != runtime_last->egocorr)
 	{
-		g_snprintf(buff,10,"%i",runtime->egocorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.egocorr_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->egocorr);
+		gtk_label_set_text(GTK_LABEL(runtime_data.egocorr_lab),tmpbuf);
 		tmpf = runtime->egocorr/200.0 <= 1.0 ? runtime->egocorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.egocorr_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->barocorr != runtime_last->barocorr)
 	{
-		g_snprintf(buff,10,"%i",runtime->barocorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.barocorr_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->barocorr);
+		gtk_label_set_text(GTK_LABEL(runtime_data.barocorr_lab),tmpbuf);
 		tmpf = runtime->barocorr/200.0 <= 1.0 ? runtime->barocorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.barocorr_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->warmcorr != runtime_last->warmcorr)
 	{
-		g_snprintf(buff,10,"%i",runtime->warmcorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.warmcorr_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->warmcorr);
+		gtk_label_set_text(GTK_LABEL(runtime_data.warmcorr_lab),tmpbuf);
 		tmpf = runtime->warmcorr/200.0 <= 1.0 ? runtime->warmcorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.warmcorr_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->aircorr != runtime_last->aircorr)
 	{
-		g_snprintf(buff,10,"%i",runtime->aircorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.aircorr_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->aircorr);
+		gtk_label_set_text(GTK_LABEL(runtime_data.aircorr_lab),tmpbuf);
 		tmpf = runtime->aircorr/200.0 <= 1.0 ? runtime->aircorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.aircorr_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->vecurr != runtime_last->vecurr)
 	{
-		g_snprintf(buff,10,"%i",runtime->vecurr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.vecurr_lab),buff);
+		tmpbuf = g_strdup_printf("%i",runtime->vecurr);
+		gtk_label_set_text(GTK_LABEL(runtime_data.vecurr_lab),tmpbuf);
 		tmpf = runtime->vecurr/200.0 <= 1.0 ? runtime->vecurr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.vecurr_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->tpsaccel != runtime_last->tpsaccel)
 	{
-		g_snprintf(buff,10,"%.1f",runtime->tpsaccel/10.0);
-		gtk_label_set_text(GTK_LABEL(runtime_data.tpsaccel_lab),buff);
+		tmpbuf = g_strdup_printf("%.1f",runtime->tpsaccel/10.0);
+		gtk_label_set_text(GTK_LABEL(runtime_data.tpsaccel_lab),tmpbuf);
 		tmpf = (runtime->tpsaccel/10.0)/25.5 <= 1.0 
 				? (runtime->tpsaccel/10.0)/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.tpsaccel_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 	if (runtime->dcycle != runtime_last->dcycle)
 	{
-		g_snprintf(buff,10,"%.1f",runtime->dcycle);
+		tmpbuf = g_strdup_printf("%.1f",runtime->dcycle);
 		tmpf = runtime->dcycle/100.0 <= 1.0 ? runtime->dcycle/100.0: 1.0;
-		gtk_label_set_text(GTK_LABEL(runtime_data.dcycle_lab),buff);
+		gtk_label_set_text(GTK_LABEL(runtime_data.dcycle_lab),tmpbuf);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.dcycle_pbar),
 				tmpf);
+		g_free(tmpbuf);
 	}
 
 	/* Connected */
