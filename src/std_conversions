@@ -33,7 +33,7 @@ conv_factor=10
 
 [Offset 83]
 conv_type=MULT
-conv_factor=5
+conv_factor=5.12
 
 [Offset 84]
 conv_type=MULT

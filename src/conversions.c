@@ -46,8 +46,7 @@
  * allow MegaTunix to be extended in an easier manner in the future.
  */
 
-#define VEBLOCK_SIZE 128
-extern char * ve_const_arr;
+extern unsigned char * ve_const_arr;
 struct Conversion_Chart std_conversions;
 
 gboolean read_conversions(char *filename)
@@ -74,7 +73,7 @@ gboolean read_conversions(char *filename)
 			cfg_read_string(cfgfile, section,"conv_type",\
 					&std_conversions.conv_type[i]);
 					
-			cfg_read_int(cfgfile, section,"conv_factor",\
+			cfg_read_float(cfgfile, section,"conv_factor",\
 					&std_conversions.conv_factor[i]);
 		}
 		g_free(section);
@@ -95,7 +94,7 @@ gint convert_before_download(gint offset, gfloat value)
 {
 	gint return_value = 0;
 	gint tmp_val = (gint)(value+0.001);
-	gint factor = std_conversions.conv_factor[offset];
+	gfloat factor = std_conversions.conv_factor[offset];
 
 //	printf("offset provided, %i\n",offset);
 	if(std_conversions.conv_type[offset] == NULL)
@@ -119,7 +118,7 @@ gint convert_before_download(gint offset, gfloat value)
 		}
 		else if((strcmp(std_conversions.conv_type[offset],"DIV")) == 0)
 		{	/* Division of value by conv_factor */
-			return_value = (gint)((value/(gfloat)factor)+0.001);
+			return_value = (gint)((value/factor)+0.001);
 		}
 		else
 		{
@@ -131,7 +130,43 @@ gint convert_before_download(gint offset, gfloat value)
 	return -1;	/* will get caught by burn routine as error */
 }
 
-gfloat convert_after_upload(gint offset, gfloat value)
+gfloat convert_after_upload(gint offset)
 {
-	return 0.0;
+	gfloat return_value = 0.0;
+	gfloat factor = std_conversions.conv_factor[offset];
+
+//	printf("offset provided, %i\n",offset);
+	if(std_conversions.conv_type[offset] == NULL)
+	{	/* return the Integer version of value */
+		return_value = ve_const_arr[offset];
+		//printf("no conversion on file... returning %f\n",return_value);
+		return return_value;
+	}
+	else
+	{	/* On upload we use the CONVERSE function to translate BACK */
+		//printf("input value %u\n",ve_const_arr[offset]);
+		if ((strcmp(std_conversions.conv_type[offset],"ADD")) == 0 )
+		{	/* subtraction of conv_factor to valueR*/
+			return_value = ve_const_arr[offset]-factor;
+		}
+		else if((strcmp(std_conversions.conv_type[offset],"SUB")) == 0)
+		{	/* Addition of conv_factor from value */
+			return_value = ve_const_arr[offset]+factor;
+		}
+		else if((strcmp(std_conversions.conv_type[offset],"MULT")) == 0)
+		{	/* Division of value by conv_factor */
+			return_value = (gfloat)ve_const_arr[offset]/factor;
+		}
+		else if((strcmp(std_conversions.conv_type[offset],"DIV")) == 0)
+		{	/* Multiplication of value by conv_factor */
+			return_value = (gfloat)ve_const_arr[offset]*factor;
+		}
+		else
+		{
+			printf("ERROR\n");
+		}
+		//printf("conversion complete... returning %f\n",return_value);
+		return (return_value);
+	}
+	return -1;	/* will get caught by burn routine as error */
 }

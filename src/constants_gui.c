@@ -23,6 +23,7 @@
 extern struct v1_2_Constants constants;
 struct Labels labels;
 struct Buttons buttons;
+extern GtkWidget *veconst_widgets_1[];
 
 int build_constants(GtkWidget *parent_frame)
 {
@@ -126,6 +127,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         constants.inj_open_time_spin = spinner;
+        veconst_widgets_1[93] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -149,6 +151,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         constants.batt_corr_spin = spinner;
+        veconst_widgets_1[97] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -187,6 +190,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
         constants.pwm_curr_lim_spin = spinner;
+        veconst_widgets_1[95] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -210,6 +214,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
         constants.pwm_time_max_spin = spinner;
+        veconst_widgets_1[96] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -244,6 +249,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
         constants.fast_idle_thresh_spin = spinner;
+        veconst_widgets_1[121] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -521,7 +527,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Baro Correction Selectors */
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   Do you want to use barometer correction?  If this is enabled, on power up of the MS, it will read the MAP sensor (before the engine hopefully is cranked over) and store this value as the reference barometer and use this to compensate for altitude changes,  Beware that if your MS resets  when the engine is running due to power problems, this will cause it to record an erroneous value and skew the fuel calculations.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   Do you want to use barometer correction?  If this is enabled, on power up of the MS, it will read the MAP sensor (before the engine hopefully is cranked over) and store this value as the reference barometer and use this to compensate for altitude changes,  Beware that if your MegaSquirt ECU resets when the engine is running due to power problems, this will cause it to record an erroneous value and skew the fuel calculations.",NULL);
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),0);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);

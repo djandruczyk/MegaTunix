@@ -75,7 +75,7 @@ int build_constants(GtkWidget *);
 /* conversions.c */
 gboolean read_conversions(char *);
 gint convert_before_download(gint, gfloat);
-gfloat convert_after_upload(gint, gfloat);
+gfloat convert_after_upload(gint);
 /* conversions.c */
 
 /* core_gui.c */

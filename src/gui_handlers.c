@@ -35,7 +35,6 @@ extern gboolean raw_reader_running;
 extern gboolean raw_reader_stopped;
 extern gint read_wait_time;
 extern struct ve_const_std *ve_constants;
-extern char *ve_const_arr;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
@@ -56,6 +55,8 @@ GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
 static GList *offsets = NULL;
 static gint offset_data[5]; /* Only 4 interdependant vars... */
+GtkWidget *veconst_widgets_1[VEBLOCK_SIZE];
+GtkWidget *veconst_widgets_2[VEBLOCK_SIZE];
 
 void leave(GtkWidget *widget, gpointer data)
 {
@@ -100,6 +101,7 @@ int bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint bit_pos = 0;
 	gint bit_val = 0;
 	gint bitmask = 0;
+	gint page = -1;
 	gint dload_val = 0;
 	unsigned char tmp = 0;
 	gint offset = 0;
@@ -113,6 +115,9 @@ int bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	if (page == -1)
+		printf("Page not defined for bitmask button config_num %i\n",config_num);
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{
@@ -219,18 +224,19 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 				reqd_fuel_popup();
 			break;
 		case READ_FROM_MS:
-			check_ecu_comms(NULL,NULL);
+			if (!raw_reader_running)
+				check_ecu_comms(NULL,NULL);
 			if (!connected)
-			{
 				no_ms_connection();
-				break;
+			else
+			{
+				paused_handlers = TRUE;
+				read_ve_const();
+				update_ve_const();
+				set_store_black();
+				paused_handlers = FALSE;
+				constants_loaded = TRUE;
 			}
-			paused_handlers = TRUE;
-			read_ve_const();
-			update_ve_const();
-			set_store_black();
-			paused_handlers = FALSE;
-			constants_loaded = TRUE;
 			break;
 		case WRITE_TO_MS:
 			burn_flash();
@@ -264,7 +270,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 	 */
 	gfloat value = 0.0;
 	gint offset;
-	gint page;
+	gint page = -1;
 	gint tmpi = 0;
 	gint tmp = 0;
 	gint dload_val = 0;
@@ -276,6 +282,8 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
 	tmpi = (int)(value+.001);
+	if (page == -1)
+		printf("ERROR, page not defined for variable at offset %i\n",offset);
 
 	switch ((gint)data)
 	{
@@ -384,6 +392,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			break;
 		case NUM_INJECTORS:
 			/* Updates a shared bitfield */
+			printf("number of injectors changed\n");
 			num_injectors = tmpi;
 			tmp = ve_constants->config12.value;
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
@@ -406,7 +415,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			check_req_fuel_limits();
 			break;
-		case GENERIC:
+		case GENERIC:	/* Handles almost ALL other variables */
 			dload_val = convert_before_download(offset,value);
 			break;
 		default:
@@ -423,8 +432,10 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 
 void update_ve_const()
 {
-	gint i;
-	gfloat tmp;
+	gint i = 0;
+	gint dl_type = 0;
+	gfloat tmp = 0.0;
+	gfloat value = 0.0;
 
 	check_config11(ve_constants->config11.value);
 	check_config13(ve_constants->config13.value);
@@ -448,10 +459,11 @@ void update_ve_const()
 			tmp);
 
 	
-//	/* req-fuel info box  */
+	/* req-fuel info box  */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_base_spin),
 			ve_constants->req_fuel/10.0);
 
+	/* CONFIG11-13 related buttons */
 	/* Cylinders */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.cylinders_spin),
@@ -472,140 +484,6 @@ void update_ve_const()
 			tmp);
 	num_squirts = (gint)tmp;
 
-	/* inj_open_time */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.inj_open_time_spin),
-			ve_constants->inj_open_time/10.0);
-
-	/* batt_corr */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.batt_corr_spin),
-			ve_constants->batt_corr/60.0);
-
-	/* pwm_curr_lim */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.pwm_curr_lim_spin),
-			ve_constants->pwm_curr_lim);
-
-	/* pwm_time_thresh */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.pwm_time_max_spin),
-			ve_constants->pwm_time_max/10.0);
-
-	/* fast_idle_thresh */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.fast_idle_thresh_spin),
-			ve_constants->fast_idle_thresh-40.0);
-
-	/* crank pulse -40 */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_pulse_neg40_spin),
-			ve_constants->cr_pulse_neg40/10.0);
-
-	/* crank pulse 170 */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_pulse_pos170_spin),
-			ve_constants->cr_pulse_pos170/10.0);
-
-	/* Priming pulse */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_priming_pulse_spin),
-			ve_constants->cr_priming_pulse/10.0);
-
-	/* Afterstart Enrich % */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.as_enrich_spin),
-			ve_constants->as_enrich);
-
-	/* Afterstart Enrich # of cycles */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.as_num_cycles_spin),
-			ve_constants->as_num_cycles);
-
-	/* Warmup Enrichment bins */
-	for (i=0;i<10;i++)
-	{
-		gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.warmup_bins_spin[i]),
-			ve_constants->warmup_bins[i]);
-	}
-	/* Accel Enrichments */
-	for (i=0;i<4;i++)
-	{
-		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(constants.accel_bins_spin[i]),
-				ve_constants->accel_bins[i]/10.0);
-	}
-
-	/* TPS Trigger Threshold */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.tps_trig_thresh_spin),
-			ve_constants->tps_trig_thresh/5.0);
-
-	/* Accel Enrich Duration */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.accel_duration_spin),
-			ve_constants->accel_duration/10.0);
-
-	/* Cold Accel Enrich Add On */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.cold_accel_addon_spin),
-			ve_constants->cold_accel_addon/10.0);
-
-	/* Cold Accel Enrich Multiplier */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.cold_accel_mult_spin),
-			ve_constants->cold_accel_mult);
-
-	/* Decel Fuel Cut*/
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.decel_cut_spin),
-			ve_constants->decel_cut);
-
-	/* EGO coolant activation temp */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.ego_temp_active_spin),
-			ve_constants->ego_temp_active-40);
-
-	/* EGO activation RPM */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.ego_rpm_active_spin),
-			ve_constants->ego_rpm_active*100);
-
-	/* EGO switching voltage */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.ego_sw_voltage_spin),
-			ve_constants->ego_sw_voltage/51.2);
-
-	/* EGO step percent */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.ego_step_spin),
-			ve_constants->ego_step);
-
-	/* EGO events between steps */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.ego_events_spin),
-			ve_constants->ego_events);
-
-	/* EGO limit % between steps */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.ego_limit_spin),
-			ve_constants->ego_limit);
-
-	/* VE table entries */
-	for (i=0;i<64;i++)
-	{
-		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(constants.ve1_bins_spin[i]),
-				ve_constants->ve_bins[i]);
-	}
-
-	/* KPA axis VE table entries */
-	for (i=0;i<8;i++)
-	{
-		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(constants.ve1_kpa_bins_spin[i]),
-				ve_constants->kpa_bins[i]);
-	}
-
-	/* RPM axis VE table entries */
-	for (i=0;i<8;i++)
-	{
-		gtk_spin_button_set_value(
-				GTK_SPIN_BUTTON(constants.ve1_rpm_bins_spin[i]),
-				ve_constants->rpm_bins[i]*100);
-	}
-	/* CONFIG11-13 related buttons */
 	/* Speed Density or Alpha-N */
 	if (ve_constants->config13.bit.inj_strat)
 		gtk_toggle_button_set_active(
@@ -628,22 +506,17 @@ void update_ve_const()
 	if (ve_constants->config13.bit.ego_type)
 	{
 		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(constants.wbo2_but),
-                                TRUE);
-		ego_pbar_divisor = 5.0;
+				GTK_TOGGLE_BUTTON(constants.wbo2_but),TRUE);
 	}
 	else
 	{
 		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(constants.nbo2_but),
-                                TRUE);
-		ego_pbar_divisor = 1.2;
+				GTK_TOGGLE_BUTTON(constants.nbo2_but),TRUE);
 	}
 	/* Baro Correction, enabled or disabled */
 	if (ve_constants->config13.bit.baro_corr)
 		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(constants.baro_ena_but),
-                                TRUE);
+				GTK_TOGGLE_BUTTON(constants.baro_ena_but),TRUE);
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.baro_disa_but),
@@ -653,16 +526,14 @@ void update_ve_const()
 	if (ve_constants->config11.bit.map_type)
 	{
 		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(constants.map_250_but),
-                                TRUE);
+				GTK_TOGGLE_BUTTON(constants.map_250_but),TRUE);
 		kpa_conversion = turbo_map;
 		map_pbar_divisor = 255.0;
 	}
 	else
 	{
 		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(constants.map_115_but),
-                                TRUE);
+				GTK_TOGGLE_BUTTON(constants.map_115_but),TRUE);
 		kpa_conversion = na_map;
 		map_pbar_divisor = 115.0;
 	}
@@ -678,13 +549,13 @@ void update_ve_const()
 	/* Multi-Port or TBI */
 	if (ve_constants->config11.bit.inj_type)
 		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(constants.tbi_but),
-                                TRUE);
+				GTK_TOGGLE_BUTTON(constants.tbi_but),TRUE);
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.multi_port_but),
                                 TRUE);
 
+	/* THIS is NOT compatible with DualTable code,  must be changed */
 	if (ve_constants->alternate > 0)
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.alternate_but),
@@ -694,8 +565,23 @@ void update_ve_const()
 				GTK_TOGGLE_BUTTON(constants.simul_but),
                                 TRUE);
 
+
+	/* Table 1 for dualtable, and all std megasquirt units */
+	for (i=0;i<VEBLOCK_SIZE;i++)
+	{
+		if (GTK_IS_OBJECT(veconst_widgets_1[i]))
+		{
+			dl_type = (gint)g_object_get_data(
+				G_OBJECT(veconst_widgets_1[i]),"dl_type");
+			if (dl_type == IMMEDIATE)
+				value = convert_after_upload(i);  /* i is the offset */
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+					veconst_widgets_1[i]),
+					value);
+		}
+	}
 	check_req_fuel_limits();
-	
+			
 }
 void check_req_fuel_limits()
 {

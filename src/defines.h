@@ -16,7 +16,7 @@
 
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
-
+#define VEBLOCK_SIZE 128
 
 /* Definitions */
 
