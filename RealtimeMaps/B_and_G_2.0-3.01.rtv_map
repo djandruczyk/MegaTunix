@@ -148,8 +148,8 @@ offset=7
 conv_expr=(x/255.0)*100.0
 
 [derived_16]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,conv_expr
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,conv_expr,depend_on
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 internal_name=mapkpa
 dlog_gui_name=MAP KpA
 dlog_field_name=MAPKPA
@@ -157,10 +157,17 @@ offset=4
 lookuptable=115_map
 alt_lookup_table=250_map
 conv_expr=x*1
+depend_on=map_sensor
+map_sensor_type=_VE_EMB_BIT_
+map_sensor_page=0
+map_sensor_offset=116
+map_sensor_bitmask=3
+map_sensor_bitshift=0
+map_sensor_bitval=1
 
 [derived_17]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,conv_expr
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,conv_expr,depend_on
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 internal_name=barokpa
 dlog_gui_name=BARO KpA
 dlog_field_name=BAROKPA
@@ -168,6 +175,13 @@ offset=3
 lookuptable=115_map
 alt_lookup_table=250_map
 conv_expr=x*1
+depend_on=map_sensor
+map_sensor_type=_VE_EMB_BIT_
+map_sensor_page=0
+map_sensor_offset=116
+map_sensor_bitmask=3
+map_sensor_bitshift=0
+map_sensor_bitval=1
 
 [derived_18]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,conv_expr,temp_dep

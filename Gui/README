@@ -60,15 +60,17 @@ keys themselves are not, as the string compare functions are case insensitive.
 	f_label		(string)  Fahrenheit label for temp dependant widgets
 	alt_c_label	(string)  Celsius label for temp dependant widget when
 			another widget is at a specific state (see 
-			alt_depend_on and alt_depend_state)
+			depend_on)
 	alt_f_label	(string)  Celsius label for temp dependant widget when
 			another widget is at a specific state (see 
-			alt_depend_on and alt_depend_state)
-	alt_depend_on   (string) Widget name that we check to see if we use the
-			c/f_label or alt_c/f_labels. 
-	alt_depend_state (bool) State of alt_depend_on widget that we check for
-			Currently only toggle/radio buttons are supported with
-			this.
+			depend_on)
+	depend_on	(string) Name used to prepend the following vars (*)
+	*_type		(enum) Types of vars to depend on
+	*_page		(integer) Page in ve_vars
+	*_offset	(integer) Offset in ve_Vars)
+	*_bitmask	(integer) bitmask to mask value at page,offset
+	*_bitshift	(integer) how many bits to shift by before testing
+	*_bitval	(integer) value to match against for above 4 params
 	bind_to_list	(string)  A list of strings (keys) of lists that this
 			widget is bound to.  Used mainly to bind related 
 			controls together for combined operations on them with

@@ -16,6 +16,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_processor.h>
 #include <enums.h>
 #include <notifications.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -105,23 +106,22 @@ void convert_temps(gpointer widget, gpointer units)
 	gfloat value = 0.0;
 	GtkAdjustment * adj = NULL;
 	gchar *text = NULL;
-	gchar *alt_depend_on = NULL;
+	gchar *depend_on = NULL;
 	gboolean state = FALSE;
-	extern GHashTable *dynamic_widgets;
 
-	/* If widget has the "alt_depend_on" data bound to it (A widget name)
-	 * then get state of that widget (toggle button only so far) so that
-	 * we can use the right labels if needed...
+	/* If this widgt depends on anything call check_dependancy which will
+	 * return TRUE/FALSE.  True if what it depends on is in the matching
+	 * state, FALSE otherwise...
 	 */
-	alt_depend_on = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_depend_on");
-	if (alt_depend_on)
-		state = (gboolean)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,alt_depend_on)));
+	depend_on = (gchar *)g_object_get_data(G_OBJECT(widget),"depend_on");
+	if (depend_on)
+		state = check_dependancy(G_OBJECT(widget));
 
 	if ((int)units == FAHRENHEIT)
 	{
 		if (GTK_IS_LABEL(widget))
 		{
-			if ((alt_depend_on) && (state))	
+			if ((depend_on) && (state))	
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_f_label");
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
@@ -151,7 +151,7 @@ void convert_temps(gpointer widget, gpointer units)
 	{
 		if (GTK_IS_LABEL(widget))
 		{
-			if ((alt_depend_on) && (state))	
+			if ((depend_on) && (state))	
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_c_label");
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");

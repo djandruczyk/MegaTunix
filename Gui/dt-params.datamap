@@ -312,8 +312,8 @@ bind_to_list=enh_idle
 #----- Labels ---------------------------------------------------------------
 
 [fast_idle_temp_label]
-keys=page,c_label,f_label,alt_c_label,alt_f_label,temp_dep,bind_to_list,alt_depend_on,alt_depend_state
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_,_BOOL_
+keys=page,c_label,f_label,alt_c_label,alt_f_label,temp_dep,bind_to_list,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=0
 c_label=Fast Idle Temp (\302\260C.)
 f_label=Fast Idle Temp (\302\260F.)
@@ -321,8 +321,13 @@ alt_c_label=Fast Idle Cutoff Temp (\302\260C.)
 alt_f_label=Fast Idle Cutoff Temp (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
-alt_depend_on=b_n_g_idle_radio_button
-alt_depend_state=TRUE
+depend_on=idle_mode_button
+idle_mode_button_type=_VE_EMB_BIT_
+idle_mode_button_page=0
+idle_mode_button_offset=118
+idle_mode_button_bitshift=4
+idle_mode_button_bitmask=16
+idle_mode_button_bitval=0
 
 [slow_idle_temp_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list

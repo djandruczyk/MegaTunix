@@ -15,6 +15,7 @@
 #include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_loader.h>
 #include <enums.h>
 #include <getfiles.h>
 #include <glade/glade.h>
@@ -192,6 +193,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 			store_list(bind_keys[i],g_list_append(get_list(bind_keys[i]),(gpointer)widget));
 		g_strfreev(bind_keys);
 	}
+	/* If this widget has a "depend_on" tag we need to load the dependancy
+	 * information  and store it for use when needed...
+	 */
+	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
+		load_dependancy(G_OBJECT(widget),cfgfile,section);
 
 	offset = -1;
 	cfg_read_int(cfgfile,section,"offset",&offset);
