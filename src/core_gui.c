@@ -48,6 +48,11 @@ static struct
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
 
+
+/*!
+ \brief setup_gui() creates the main window, main notebook, and the static
+ tabs and populates them with data
+ */
 int setup_gui()
 {
 	GtkWidget *frame;

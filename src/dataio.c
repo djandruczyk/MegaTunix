@@ -31,8 +31,7 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
 
-/// Returns true on success or false for failure....
-gboolean handle_ms_data(InputHandler handler, void * msg)
+gboolean handle_ecu_data(InputHandler handler, void * msg)
 {
 	gint res = 0;
 	gint i = 0;
@@ -50,7 +49,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 
-	dbg_func("\n"__FILE__": handle_ms_data()\tENTERED...\n\n",IO_PROCESS);
+	dbg_func("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n",IO_PROCESS);
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
@@ -88,7 +87,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			}
 			if (bad_read)
 			{
-				dbg_func(__FILE__": handle_ms_data()\n\tError reading ECU Clock (C_TEST)\n",CRITICAL);
+				dbg_func(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n",CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -127,7 +126,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			}
 			if (bad_read)
 			{
-				dbg_func(__FILE__": handle_ms_data()\n\tError reading Real-Time Variables \n",CRITICAL);
+				dbg_func(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n",CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -188,7 +187,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup_printf(__FILE__"handle_ms_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
+				dbg_func(g_strdup_printf(__FILE__"handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -231,7 +230,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(__FILE__"handle_ms_data()\n\tError reading Raw Memory Block\n",CRITICAL);
+				dbg_func(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n",CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -241,16 +240,23 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			dump_output(total_read,buf);
 			break;
 		default:
-			dbg_func(__FILE__": handle_ms_data()\n\timproper case, contact author!\n",CRITICAL);
+			dbg_func(__FILE__": handle_ecu_data()\n\timproper case, contact author!\n",CRITICAL);
 			state = FALSE;
 			break;
 	}
 jumpout:
 
-	dbg_func("\n"__FILE__": handle_ms_data\tLEAVING...\n\n",IO_PROCESS);
+	dbg_func("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n",IO_PROCESS);
 	return state;
 }
 
+
+/*!
+ \brief dump_output() dumps the newly read data to the console in HEX for
+ debugging purposes
+ \param total_read (gint) total bytesto printout
+ \param buf (guchar *) pointer to data to write to console
+ */
 void dump_output(gint total_read, guchar *buf)
 {
 	guchar *p = NULL;

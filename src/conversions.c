@@ -27,6 +27,15 @@
 #include <tabloader.h>
 
 
+
+/*!
+ \brief convert_before_download() converts the value passed using the
+ conversions bound to the widget
+ \param widget (GtkWidget *) widget to extract the conversion info from
+ \param value (gfloat *) the "real world" value from the tuning gui before
+ translation to MS-units
+ \returns the integere ms-units form after conversion
+ */
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	gint return_value = 0;
@@ -99,6 +108,14 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	return (return_value);
 }
 
+
+/*!
+ \brief convert_after_upload() converts the ms-units dat to the real world
+ units for display on the GUI
+ \param widget (GtkWidget *) to extract the conversion info from to perform
+ the necessary math
+ \returns the real world value for the GUI
+ */
 gfloat convert_after_upload(GtkWidget * widget)
 {
 	gfloat return_value = 0.0;
@@ -146,6 +163,14 @@ gfloat convert_after_upload(GtkWidget * widget)
 	return (return_value);
 }
 
+
+/*!
+ \brief convert_temps() changes the values of controls based on the currently
+ selected temperature scale.  IT works for labels, spinbuttons, etc...
+ \param widget (gpointer) pointer to the widget that contains the necessary
+ paramaters re temp (Alt label, etc)
+ \param units (gpointer) the temp scale selected
+ */
 void convert_temps(gpointer widget, gpointer units)
 {
 	gfloat upper = 0.0;
@@ -224,6 +249,12 @@ void convert_temps(gpointer widget, gpointer units)
 
 }
 
+
+/*!
+ \brief reset_temps() calls the convert_temps function for each widget in
+ the "temperature" list
+ \param type (gpointer) the temp scale now selected
+ */
 void reset_temps(gpointer type)
 {
 	/* Better way.. :) */

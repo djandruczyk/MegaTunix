@@ -55,7 +55,7 @@ void update_comms_status(void)
  checks the response.  if nothing comes back, MegaTunix assumes the ecu isn't
  connected or powered down. NO Gui updates are done from this function as it
  gets called from a thread. update_comms_status is dispatched after this
- function ends from the main context to update hte GUI.
+ function ends from the main context to update the GUI.
  \see update_comms_status
  */
 
@@ -80,7 +80,7 @@ void comms_test()
 		dbg_func(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n",CRITICAL);
 	}
 	dbg_func(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n",SERIAL_RD);
-	result = handle_ms_data(C_TEST,NULL);
+	result = handle_ecu_data(C_TEST,NULL);
 	if (result)	// Success
 	{
 		// COMMS test succeeded 
@@ -98,6 +98,12 @@ void comms_test()
 	return;
 }
 
+
+/*!
+ \brief update_write_status() checks the differences between the current ECU
+ data snapshot and the last one, if there are any differences (things need to
+ be burnt) then it turns all the widgets in the "burners" group to RED
+ */
 void update_write_status(void)
 {
 	extern gint **ms_data;
@@ -123,6 +129,12 @@ void update_write_status(void)
 	return;
 }
 
+
+/*!
+ \brief writeto_ecu() physiclaly sends the data to the ECU.
+ \param ptr (void *) a pointer to a struct Io_Message, an OutputData struct
+ is embedded within the Io_Message structure in the "payload" element
+ */
 void writeto_ecu(void *ptr)
 {
 	extern gboolean connected;
@@ -218,6 +230,11 @@ void writeto_ecu(void *ptr)
 	return;
 }
 
+
+/*!
+ \brief burn_ms_flash() issues the commands to the ECU to burn the contents
+ of RAM to flash.
+ */
 void burn_ms_flash()
 {
 	extern gint **ms_data;
@@ -262,6 +279,13 @@ copyover:
 }
 
 
+/*!
+ \brief readfrom_ecu() reads arbritrary data from the ECU.  Data is actually
+ written in this function to trigger the ECU to send back a block of data, 
+ and then a handler is kicked off to handle the incoming data
+ \see handle_ecu_data
+ \param ptr (void *) pointer to a struct Io_Message
+ */
 void readfrom_ecu(void *ptr)
 {
 	struct Io_Message *message = (struct Io_Message *)ptr;
@@ -306,7 +330,7 @@ void readfrom_ecu(void *ptr)
 	}
 
 	if (message->handler != -1)
-		result = handle_ms_data(message->handler,message);
+		result = handle_ecu_data(message->handler,message);
 	else
 	{
 		dbg_func(__FILE__": readfrom_ecu()\n\t message->handler is -1, bad things, EXITING!\n",CRITICAL);
