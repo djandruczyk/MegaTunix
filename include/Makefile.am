@@ -17,7 +17,6 @@ headers = \
 	enums.h \
 	fileio.h \
 	general_gui.h \
-	glade-private.h \
         gui_handlers.h \
         init.h \
         interrogate.h \

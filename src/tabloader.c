@@ -20,7 +20,6 @@
 #include <stringmatch.h>
 #include <structures.h>
 #include <tabloader.h>
-#include <glade-private.h>
 
 gboolean tabs_loaded = FALSE;
 GHashTable *dynamic_widgets = NULL;
@@ -37,6 +36,7 @@ gboolean load_gui_tabs()
 	GtkWidget *frame = NULL;
 	gchar * tmpbuf = NULL;
 	GtkWidget * label = NULL;
+	GtkWidget *topframe = NULL;
 	extern GtkWidget * notebook;
 
 	if (!firmware->tab_list[i])
@@ -59,8 +59,9 @@ gboolean load_gui_tabs()
 				cfg_read_string(cfgfile,"global","tab_name",&tmpbuf);
 				label = gtk_label_new_with_mnemonic(g_strdup(tmpbuf));
 				g_free(tmpbuf);
-				g_hash_table_foreach(xml->priv->name_hash,bind_data,(gpointer)cfgfile);
-				g_hash_table_foreach(xml->priv->name_hash,populate_master,(gpointer)map_file);
+				topframe = glade_xml_get_widget(xml,"topframe");
+				gtk_container_foreach(GTK_CONTAINER(topframe),bind_data,(gpointer)cfgfile);
+				gtk_container_foreach(GTK_CONTAINER(topframe),populate_master,NULL);
 				cfg_free(cfgfile);
 			}
 			else
@@ -87,8 +88,9 @@ gboolean load_gui_tabs()
 
 }
 
-void populate_master(gpointer name, gpointer value,gpointer user_data)
+void populate_master(GtkWidget *widget, gpointer user_data)
 {
+	gchar *name = NULL;
 	/* Populates a big master hashtable of all dynamic widgets so that 
 	 * various functions can do a lookup for the widgets name and get it's
 	 * GtkWidget * for manipulation.  We do NOT insert the topframe
@@ -96,20 +98,24 @@ void populate_master(gpointer name, gpointer value,gpointer user_data)
 	 * be a clash, and there's no need to store the top frame widget 
 	 * anyways...
 	 */
+	if (GTK_IS_CONTAINER(widget))
+		gtk_container_foreach(GTK_CONTAINER(widget),populate_master,user_data);
+	name = (char *)glade_get_widget_name(widget);
+	if (name == NULL)
+		return;
 	if (g_strrstr((gchar *)name,"topframe"))
 		return;
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
-	if (!g_hash_table_lookup(dynamic_widgets,(gchar *)name))
-		g_hash_table_insert(dynamic_widgets,g_strdup(name),value);
+	if (!g_hash_table_lookup(dynamic_widgets,name))
+		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
 	else
-		dbg_func(g_strdup_printf(__FILE__": populate_master(), key %s already exists in master table\n",(gchar *)name),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": populate_master(), key %s already exists in master table\n",name),CRITICAL);
 }
 
-void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
+void bind_data(GtkWidget *widget, gpointer user_data)
 {
 	ConfigFile *cfgfile = (ConfigFile *)user_data;
-	GtkWidget * widget = value;
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** bind_keys = NULL;
@@ -124,7 +130,11 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint tmpi = 0;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
-	section = widget_name;
+	if (GTK_IS_CONTAINER(widget))
+		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
+	section = (char *)glade_get_widget_name(widget);
+	if (section == NULL)
+		return;
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys);

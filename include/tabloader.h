@@ -18,8 +18,8 @@
 
 /* Prototypes */
 gboolean load_gui_tabs(void);
-void bind_data(gpointer,gpointer,gpointer);
-void populate_master(gpointer,gpointer,gpointer);
+void bind_data(GtkWidget *, gpointer );
+void populate_master(GtkWidget *, gpointer );
 gchar ** parse_keys(gchar * , gint * );
 gint * parse_keytypes(gchar * , gint * );
 GList * get_list(gchar * );
