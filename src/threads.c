@@ -170,7 +170,7 @@ void *raw_reader_thread(void *params)
 		gtk_widget_set_sensitive(misc.ww_status[0],
 				connected);
 
-		usleep(serial_params->read_wait * 1000); /* Sleep */
+		usleep(serial_params->read_wait * 900); /* Sleep */
 
 	}
 	/* if we get here, the thread got killed, mark it as "stopped" */
