@@ -74,7 +74,7 @@ gboolean load_gui_tabs()
 		{
 			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
 			update_logbar("interr_view","warning",g_strdup_printf("Glade File: "),FALSE,FALSE);
-			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s\".glade",firmware->tab_list[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
 			i++;
 			continue;
@@ -83,7 +83,7 @@ gboolean load_gui_tabs()
 		{
 			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
 			update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
-			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s\".datamap",firmware->tab_confs[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
 			i++;
 			continue;
