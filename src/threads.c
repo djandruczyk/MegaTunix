@@ -138,24 +138,32 @@ void *raw_reader_thread(void *params)
 {
 	struct pollfd ufds;
 	int res = 0;
+	gint startup = 100;
 
-	ufds.fd = serial_params->fd;
-	ufds.events = POLLIN;
-
-	raw_reader_running = TRUE; /* make sure it starts */
+	/* Startup is a delay added to the poll timeout ONLY ON FIRST run
+	 * i.e. whenever this thread is started. It's to compensate for some
+	 * firmwares which have a delay issue after a burn command,
+	 * specifically noticed in Dualtable 1.01 and 1.02
+	 * After the first successful read it gets reset to zero... :)
+	 */
 
 	//printf("thread staring\n");
+	raw_reader_running = TRUE; /* make sure it starts */
 	while(raw_reader_running == TRUE) 
 	{
 		write(serial_params->fd,"A",1);
-		res = poll (&ufds,1,serial_params->poll_timeout);
+		ufds.fd = serial_params->fd;
+		ufds.events = POLLIN;
+		res = poll (&ufds,1,startup+serial_params->poll_timeout);
 		if (res == 0)
 		{
+			fprintf(stderr,__FILE__": Error polling for RealTime vars\n");
 			serial_params->errcount++;
 			connected = FALSE;
 		}
 		else
 		{
+			startup = 0;	
 			res = handle_ms_data(REALTIME_VARS);
 			if(res)
 			{

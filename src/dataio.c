@@ -90,6 +90,7 @@ int handle_ms_data(InputData which_data)
 			if (bad_read)
 			{
 				fprintf(stderr,__FILE__":  Error reading Real-Time Variables \n");
+				printf("error, bad realtime read\n");
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -154,6 +155,7 @@ int handle_ms_data(InputData which_data)
 			if (bad_read)
 			{
 				fprintf(stderr,__FILE__":  Error reading VE/Constants for page 0\n");
+				printf("error, bad veconst read\n");
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -198,6 +200,7 @@ int handle_ms_data(InputData which_data)
 			if (bad_read)
 			{
 				fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
+				printf("error, bad veconst read\n");
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;

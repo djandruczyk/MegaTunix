@@ -283,6 +283,7 @@ void read_ve_const()
 	res = poll (&ufds,1,serial_params->poll_timeout);
 	if (res == 0)	/* Error */
 	{
+		fprintf(stderr,__FILE__": failure reading VE-Table\n");
 		serial_params->errcount++;
 		connected = FALSE;
 	}
@@ -299,6 +300,7 @@ void read_ve_const()
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)	// Error 
 		{
+			fprintf(stderr,__FILE__": failure reading VE-Table (DT page 1)\n");
 			serial_params->errcount++;
 			connected = FALSE;
 		}
