@@ -121,6 +121,7 @@ int stop_serial_thread()
 		update_logbar(comms_view,NULL,tmpbuf,TRUE);
 		g_free(tmpbuf);
 	}
+	usleep(100000);	/* a bug in here somewhere....  deadlocks without it */
 	locked = FALSE;
 	return 0;
 }

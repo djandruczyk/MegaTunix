@@ -373,7 +373,7 @@ GIOStatus read_number_from_line(gint *dest)
 		return status;
 	}
 
-	/* Make sure hte line contains an "=" sign, otherwise we'll segfault*/
+	/* Make sure the line contains an "=" sign, otherwise we'll segfault*/
 	if (strstr(a_line->str, "=") != NULL)
 	{
 		str_array = g_strsplit(a_line->str, "=", 2);

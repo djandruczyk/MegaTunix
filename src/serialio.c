@@ -198,7 +198,6 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		{
 			restart_reader = TRUE;
 			stop_serial_thread(); /* stops realtime read */
-			usleep(100000);
 		}
 
 		ufds.fd = serial_params->fd;
@@ -261,7 +260,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 
 void read_ve_const()
 {
-	int restart_reader = FALSE;
+	gboolean restart_reader = FALSE;
 	struct pollfd ufds;
 	int res = 0;
 
@@ -332,7 +331,7 @@ void write_ve_const(gint value, gint offset, gint page)
 {
 	gint highbyte = 0;
 	gint lowbyte = 0;
-	gint twopart = 0;
+	gboolean twopart = 0;
 	gint res = 0;
 	gint count = 0;
 	char lbuff[3] = {0, 0, 0};

@@ -20,6 +20,7 @@
 #include <globals.h>
 #include <gui_handlers.h>
 #include <init.h>
+#include <interrogate.h>
 #include <notifications.h>
 #include <req_fuel.h>
 #include <runtime_gui.h>

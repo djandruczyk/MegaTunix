@@ -20,29 +20,44 @@
 #include <interrogate.h>
 #include <notifications.h>
 #include <serialio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <structures.h>
 #include <sys/stat.h>
 #include <sys/poll.h>
+#include <threads.h>
 #include <unistd.h>
 
 extern gboolean connected;
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
-gboolean interrogated = FALSE;
-
 extern struct Serial_Params *serial_params;
+gboolean interrogated = FALSE;
 gfloat ecu_version;
-const gchar *cmd_chars[] = {"A","C","Q","V","S","I","?"};
 gboolean dualtable;
-struct Cmd_Results
+
+static struct 
 {
 	gchar *cmd_string;
+	gchar *cmd_desc;
+	gint cmd_len;
 	gint count;
-} ;
+	unsigned char *buffer;
+} commands[] = {
+	{ "A", "Runtime Vars", 1, 0,NULL },
+	{ "C", "MS Clock", 1, 0,NULL },
+	{ "Q", "MS Revision", 1, 0,NULL },
+	{ "V", "Ve/Constants", 1, 0,NULL },
+	{ "P1V", "Ve/Constants (page1)", 3, 0,NULL },
+	{ "S", "Signature Echo", 1, 0,NULL },
+	{ "I", "Ignition Vars", 1, 0,NULL },
+	{ "?", "Extended Version", 1, 0,NULL }
+};
 
-/* The Various MegaSquirt variants that MegaTunix attempts to support
+/*
+ * The Various MegaSquirt variants that MegaTunix attempts to support
  * have one major problem.  Inconsistent version numbering.  Several
  * variants use the same number, We attempt to instead query the various
  * readback commands to determine how much data they return,  With this
@@ -55,6 +70,7 @@ struct Cmd_Results
  * "C" = Echo back Secl (MS 1sec resolution clock)
  * "Q" = Echo back embedded version number
  * "V" = Return VEtable and Constants
+ * "S" = Return something else???
  * "I" = Return Ignition table (Spark variants only)
  * "?" = Return textual identification (new as of MSnEDIS 3.0.5)
  *
@@ -84,20 +100,27 @@ void interrogate_ecu()
 	 * try and get as close as possible.
 	 */
 	struct pollfd ufds;
-	gint size = 1024;
-	char buf[size];
+	gint size = 255;
+	unsigned char buf[size];
+	unsigned char *ptr;
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
 	gint len = 0;
-	gint v_bytes = 0;
+	gint total = 0;
+	gint table0_index = 0;
+	gint table1_index = 0;
+	gint v0_bytes = 0;
+	gint v1_bytes = 0;
 	gint s_bytes = 0;
 	gint i_bytes = 0;
 	gint quest_bytes = 0;
 	gchar *tmpbuf;
+	extern gboolean raw_reader_running;
+	gboolean restart_reader = FALSE;
+	gchar *string;
 	gboolean con_status = FALSE;
-	gint tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
-	struct Cmd_Results cmd_res[tests_to_run]; 
+	gint tests_to_run = sizeof(commands)/sizeof(commands[0]);
 
 	if (!connected)
 	{
@@ -105,9 +128,16 @@ void interrogate_ecu()
 		if (con_status == FALSE)
 		{
 			interrogated = FALSE;
+			no_ms_connection();
 			return;
 		}
 	}
+	if (raw_reader_running)
+	{
+		restart_reader = TRUE;
+		stop_serial_thread();
+	}
+
 
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
@@ -117,34 +147,75 @@ void interrogate_ecu()
 	for (i=0;i<tests_to_run;i++)
 	{
 		count = 0;
-		cmd_res[i].cmd_string = g_strdup(cmd_chars[i]);
-		len = strlen(cmd_res[i].cmd_string);
-		res = write(serial_params->fd,cmd_chars[i],len);
-		res = poll (&ufds,1,serial_params->poll_timeout);
+		total = 0;
+		/* flush buffer to known state.. */
+		memset (&buf,0,size);
+		/* assign pointer to start of buffer */
+		ptr = buf;
+
+		string = g_strdup(commands[i].cmd_string);
+		len = commands[i].cmd_len;
+		res = write(serial_params->fd,string,len);
+		//printf("Command %s\n",string);
+		g_free(string);
+
+		res = poll (&ufds,1,10);
 		if (res)
 		{	
-			while (poll(&ufds,1,serial_params->poll_timeout))
-				count += read(serial_params->fd,&buf,64);
+			while (poll(&ufds,1,10))
+			{
+				total += count = read(serial_params->fd,ptr+total,64);
+				//printf("count %i, total %i\n",count,total);
+			}
+			if (commands[i].buffer == NULL)
+				commands[i].buffer = g_malloc(total);
+			else
+				commands[i].buffer = g_realloc(
+						commands[i].buffer,total);
+			
+
+			memset(commands[i].buffer,0,total);
+			memcpy(commands[i].buffer,&buf,total);
 		}
-		else
-		{
-			/* Poll timout, ECU not connected???  */
-		}
-		cmd_res[i].count = count;
+		commands[i].count = total;
 	}
+	tcflush(serial_params->fd, TCIFLUSH);
+	tcflush(serial_params->fd, TCIFLUSH);
+
 	for (i=0;i<tests_to_run;i++)
 	{
-		if (cmd_res[i].count > 0)
+		/* Per command section */
+		if (strstr(commands[i].cmd_string,"P1V"))
+		{
+			serial_params->table1_size = commands[i].count;
+			v1_bytes = commands[i].count;
+			table1_index = i;
+		}
+		else if (strstr(commands[i].cmd_string,"V"))
+		{
+			serial_params->table0_size = commands[i].count;
+			v0_bytes = commands[i].count;
+			table0_index = i;
+		}
+		else if (strstr(commands[i].cmd_string,"A"))
+			serial_params->rtvars_size = commands[i].count;
+		else if (strstr(commands[i].cmd_string,"S"))
+			s_bytes = commands[i].count;
+		else if (strstr(commands[i].cmd_string,"I"))
+			i_bytes = commands[i].count;
+		else if (strstr(commands[i].cmd_string,"?"))
+			quest_bytes = commands[i].count;
+
+		if ((v1_bytes == v0_bytes ) && (v0_bytes == 125))
+			commands[table1_index].count = 0;
+
+		if (commands[i].count > 0)
 		{
 			tmpbuf = g_strdup_printf(
 					"Command %s, returned %i bytes\n",
-					cmd_res[i].cmd_string, 
-					cmd_res[i].count);
+					commands[i].cmd_string, 
+					commands[i].count);
 			/* Store counts for VE/realtime readback... */
-			if (strstr(cmd_res[i].cmd_string,"V"))
-				serial_params->table0_size = cmd_res[i].count;
-			if (strstr(cmd_res[i].cmd_string,"A"))
-				serial_params->rtvars_size = cmd_res[i].count;
 				
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
@@ -153,26 +224,13 @@ void interrogate_ecu()
 		{
 			tmpbuf = g_strdup_printf(
 					"Command %s isn't supported...\n",
-					cmd_res[i].cmd_string);
+					commands[i].cmd_string);
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
-	}
 
-	tcflush(serial_params->fd, TCIFLUSH);
-
-	for(i=0;i<tests_to_run;i++)
-	{
-		if (strcmp(cmd_res[i].cmd_string,"V")== 0)
-			v_bytes = cmd_res[i].count;
-		if (strcmp(cmd_res[i].cmd_string,"S")== 0)
-			s_bytes = cmd_res[i].count;
-		if (strcmp(cmd_res[i].cmd_string,"I")== 0)
-			i_bytes = cmd_res[i].count;
-		if (strcmp(cmd_res[i].cmd_string,"?")== 0)
-			quest_bytes = cmd_res[i].count;
 	}
-	if (v_bytes > 125)
+	if (v0_bytes > 125)
 	{
 		update_logbar(interr_view,"warning","Code is DualTable version: ",FALSE);
 		if (s_bytes == 0)
@@ -208,6 +266,17 @@ void interrogate_ecu()
 		}
 	}
 
+	for (i=0;i<tests_to_run;i++)
+	{
+		if (commands[i].buffer != NULL)
+		{
+			g_free(commands[i].buffer);
+			commands[i].buffer = NULL;
+		}
+	}
+
 	interrogated = TRUE;
+	if (restart_reader)
+		start_serial_thread();
 	return;
 }

@@ -121,9 +121,13 @@ int build_general(GtkWidget *parent_frame)
 			G_CALLBACK (interrogate_ecu), \
 			NULL);
 
+	ebox = gtk_event_box_new();
+	gtk_tooltips_set_tip(tip,ebox,
+			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100%% foolproof. as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on version 1 MS's)\n \"Q\" Which should return the version number of the firmware x10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" only used in the dualtable code.  Similar to the \"?\" command\n \"I\" which returns the igntion table and some constants (ignition variants ONLY)\n and \"?\" which is an extended version number query only supported by only a few firmware revisions",NULL);
 	frame = gtk_frame_new ("ECU Output");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-	gtk_table_attach (GTK_TABLE (table), frame, 0, 2, 0, 2,
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
+	gtk_table_attach (GTK_TABLE (table), ebox, 0, 2, 0, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -131,7 +135,7 @@ int build_general(GtkWidget *parent_frame)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
-	gtk_widget_set_size_request(sw,275,100);
+	gtk_widget_set_size_request(sw,325,100);
 	gtk_container_add(GTK_CONTAINER(frame),sw);
 
 	view = gtk_text_view_new ();
