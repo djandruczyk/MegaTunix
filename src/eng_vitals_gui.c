@@ -458,7 +458,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The basic Bowling/Grippo MegaSquirt units, (version 1.1 or versiosn 2.2 hardware, and software versions up through version 3.01 all use a very simple idle control,  it's either on high-idle or it's not, and it's temperature controlled, once the engine temp gets above the Fast Idle temp, the high idle solenoid is disengaged and the engine goes down to its normal idle.  The DualTable code variants added in a PWM idle control (for driving a ford style 2 wire PWM actuated idle air valve (or similar).  This code supports 5 variables, the high idle rpm, high idle temp, the low idle rpm, and low idle temp and an idle threshold.  The way it works is simple; At temps below the Fast Idle Temp, the engien is kept at the Fast idle speed,  as the engine tep rises, the ECU drops the idle speed until the engine reaches the Slow idle temp, above this temp the engine temp is maintained at the slow idle speed.  Sensible numbers would be to set the high idle temp to be a low temperature, like 60 deg F, and a high idle RPM of 1800 RPM, and a slow idle RPM of 900 RPM, and slow idle temp of 145 deg F, and an idle threshold of 100RPM. ",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   The basic Bowling/Grippo MegaSquirt units, (version 1.1 or versiosn 2.2 hardware, and software versions up through version 3.01 all use a very simple idle control,  it's either on high-idle or it's not, and it's temperature controlled, once the engine temp gets above the Fast Idle temp, the high idle solenoid is disengaged and the engine goes down to its normal idle.  The DualTable code variants added in a PWM idle control (for driving a ford style 2 wire PWM actuated idle air valve (or similar).  This code supports 5 variables, the high idle rpm, high idle temp, the low idle rpm, and low idle temp and an idle threshold.  The way it works is simple; At temps below the Fast Idle Temp, the engien is kept at the Fast idle speed,  as the engine tep rises, the ECU drops the idle speed until the engine reaches the Slow idle temp, above this temp the engine temp is maintained at the slow idle speed.  Sensible numbers would be to set the high idle temp to be a low temperature, like 60 deg F, and a high idle RPM of 1800 RPM, and a slow idle RPM of 900 RPM, and slow idle temp of 145 deg F, and an idle threshold of 100RPM.  The Idle Threshold is the point at which when the throttle (TPS) input is BELOW this value idle control is enabled. Thus if when your throttle is closed and your TPS gauge reads 10%% in the runtime screen, setting this to 12 would enable idle control when you are idling, if you set it too low, idle control will never turn on and the engine may idle too low or not at all. ",NULL);
 	table = gtk_table_new(4,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
@@ -504,7 +504,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
         /* Slow Idle Temp */
-        adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
+        adj =  (GtkAdjustment *) gtk_adjustment_new(145.0,-40.0,215.0,1.0,10.0,0);
         adjustments.slow_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
@@ -577,6 +577,36 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 3, 4, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	/* Idle Threshold  (compared to TPS, if TPS is below this
+	 * use idle control
+	 */
+	label = gtk_label_new("Idle Threshold (TPS%)");
+	dt_controls = g_list_append(dt_controls, (gpointer)label);
+        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+        /* Idle Threshold (% of TPS )*/
+        adj =  (GtkAdjustment *) gtk_adjustment_new(10.0,0.0,100.0,1.0,10.0,0);
+        spinner = gtk_spin_button_new(adj,0,0);
+	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
+        ve_widgets->widget[127] = spinner;
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(127));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER(1*100));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
