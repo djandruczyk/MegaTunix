@@ -60,6 +60,7 @@ typedef enum
 	STOP_DATALOGGING,
 	SELECT_VEXFILE,
 	EXPORT_VETABLE,
+	REVERT_TO_BACKUP,
 	IMPORT_VETABLE,
 	TRUNCATE_VEXFILE
 }StdButton;
@@ -138,5 +139,25 @@ typedef enum
 	RED,
 	BLACK
 }GuiState;
+
+typedef enum
+{
+	HEADER,
+	PAGE,
+	RANGE,
+	TABLE
+}ImportParserFunc;
+
+typedef enum
+{
+	EVEME,
+	USER_REV,
+	USER_COMMENT,
+	DATE,
+	TIME,
+	RPM_RANGE,
+	LOAD_RANGE,
+	NONE
+}ImportParserArg;
 
 #endif

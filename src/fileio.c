@@ -289,8 +289,6 @@ void truncate_file(FileIoType filetype)
 				tmpbuf = g_strdup_printf("VEX File Truncated\n");
 				update_logbar(tools_view,NULL,tmpbuf,TRUE);
 				g_free(tmpbuf);
-				g_free(tmpbuf);
-
 			}
 			break;
 

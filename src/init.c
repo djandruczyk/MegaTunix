@@ -52,6 +52,8 @@ extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
 extern struct Serial_Params *serial_params;
+struct Ve_Const_Std *backup_ve_const_p0;
+struct Ve_Const_Std *backup_ve_const_p1;
 struct Ve_Const_Std *ve_const_p0;
 struct Ve_Const_Std *ve_const_p1;
 struct Ve_Const_Std *ve_const_p0_tmp;
@@ -192,6 +194,8 @@ void mem_alloc()
 {
 	/* Allocate memory blocks */
 	serial_params = g_malloc(sizeof(struct Serial_Params));
+	backup_ve_const_p0 = g_malloc(MS_PAGE_SIZE);
+	backup_ve_const_p1 = g_malloc(MS_PAGE_SIZE);
 	ve_const_p0 = g_malloc(MS_PAGE_SIZE);
 	ve_const_p1 = g_malloc(MS_PAGE_SIZE);
 	ve_const_p0_tmp = g_malloc(MS_PAGE_SIZE);
@@ -206,6 +210,8 @@ void mem_alloc()
 
 	/* Set memory blocks to known states... */
 	memset((void *)serial_params, 0, sizeof(struct Serial_Params));
+	memset((void *)backup_ve_const_p0, 0, MS_PAGE_SIZE);
+	memset((void *)backup_ve_const_p1, 0, MS_PAGE_SIZE);
 	memset((void *)ve_const_p0, 0, MS_PAGE_SIZE);
 	memset((void *)ve_const_p1, 0, MS_PAGE_SIZE);
 	memset((void *)ve_const_p0_tmp, 0, MS_PAGE_SIZE);
@@ -223,6 +229,8 @@ void mem_dealloc()
 {
 
 	g_free(serial_params);
+	g_free(backup_ve_const_p0);
+	g_free(backup_ve_const_p1);
 	g_free(ve_const_p0);
 	g_free(ve_const_p1);
 	g_free(ve_const_p0_tmp);

@@ -20,12 +20,17 @@
 /* Prototypes */
 gboolean vetable_export(void);
 gboolean vetable_import(void);
-gint process_vex_line(void);
-gint process_vex_rpm_range(void);
-gint process_vex_map_range(void);
-gint process_vex_table(void);
-gint read_number_from_line(void);
+GIOStatus process_vex_line();
+GIOStatus process_vex_range(ImportParserArg, gchar * );
+GIOStatus process_vex_table(gchar * );
+GIOStatus read_number_from_line(gint *);
+GIOStatus process_header(ImportParserArg , gchar *);
+GIOStatus process_page(gchar * );
+GIOStatus handler_dispatch(ImportParserFunc , ImportParserArg , gchar * );
+void reset_import_flags(void);
+void feed_import_data_to_ms(void);
 void clear_vexfile(void);
+void revert_to_previous_data();
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */
 

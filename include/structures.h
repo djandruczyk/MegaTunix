@@ -182,6 +182,7 @@ struct DynamicButtons
 	GtkWidget *ve_import_but;
 	GtkWidget *ve_export_but;
 	GtkWidget *ve_clear_vex_but;
+	GtkWidget *ve_revert_but;		/* revert to old data */
 	GtkWidget *stop_dlog_but;		/* Stop DataLogging */
 	GtkWidget *start_dlog_but;		/* Start DataLogging */
 };

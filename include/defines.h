@@ -34,4 +34,8 @@
 #define IMMEDIATE		0x10
 #define DEFERRED		0x11
 
+/* Number of axis bins */
+#define RPM_BINS_MAX		8
+#define LOAD_BINS_MAX		8
+#define TABLE_BINS_MAX		RPM_BINS_MAX*LOAD_BINS_MAX
 #endif

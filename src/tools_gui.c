@@ -58,11 +58,11 @@ int build_tools(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 
 	sw = gtk_scrolled_window_new(NULL,NULL);
-	gtk_container_add(GTK_CONTAINER(ebox),sw);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
 	gtk_widget_set_size_request(sw,0,55);
+	gtk_container_add(GTK_CONTAINER(ebox),sw);
 
 	view = gtk_text_view_new();
 	tools_view = view;
@@ -112,6 +112,14 @@ int build_tools(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(EXPORT_VETABLE));
+
+	button = gtk_button_new_with_label("Revert to Last");
+	buttons.ve_revert_but = button;
+	gtk_widget_set_sensitive(button,FALSE);
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler), \
+			GINT_TO_POINTER(REVERT_TO_BACKUP));
 
 	hbox = gtk_hbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);

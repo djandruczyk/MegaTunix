@@ -412,6 +412,9 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			vetable_import();
 			close_file(VE_IMPORT);
 			break;
+		case REVERT_TO_BACKUP:
+			revert_to_previous_data();
+			break;
 		case TRUNCATE_VEXFILE:
 			truncate_file(VE_EXPORT);
 			break;
