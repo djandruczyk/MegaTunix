@@ -91,7 +91,8 @@ void post_process(void *input, void *output)
 	out->egocorr = in->egocorr;
 	out->aircorr = in->aircorr;
 	out->warmcorr = in->warmcorr;
-	out->rpm = in->rpm * 100;
+	if (!ign_variant)
+		out->rpm = in->rpm * 100;
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
@@ -101,6 +102,7 @@ void post_process(void *input, void *output)
 		out->ctimecommH = ign_in->ctimecommH;
 		out->ctimecommL = ign_in->ctimecommL;
 		out->sparkangle = ign_in->sparkangle;
+		out->rpm = in->rpm*100;
 	}
 	else
 	{
