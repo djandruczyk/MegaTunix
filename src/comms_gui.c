@@ -28,8 +28,9 @@ extern int raw_reader_running;
 int build_comms(GtkWidget *parent_frame)
 {
 	GtkWidget *frame;
-	GtkWidget *vbox;
 	GtkWidget *hbox;
+	GtkWidget *hbox2;
+	GtkWidget *vbox;
 	GtkWidget *vbox2;
 	GtkWidget *button;
 	GtkWidget *entry;
@@ -53,9 +54,12 @@ int build_comms(GtkWidget *parent_frame)
 			GTK_STATUSBAR(ser_statbar),
 			"Serial Status");
 
+	hbox = gtk_hbox_new(TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+
 	frame = gtk_frame_new("Select Communications Port");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
@@ -97,11 +101,11 @@ int build_comms(GtkWidget *parent_frame)
 
 	frame = gtk_frame_new("Verify ECU Communication");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
+	hbox2 = gtk_hbox_new(TRUE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox2);
 	button = gtk_button_new_with_label("Test ECU Communication");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,TRUE,0);
 	gtk_signal_connect(GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (check_ecu_comms), \
 			NULL);

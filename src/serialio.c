@@ -51,7 +51,7 @@ int open_serial(int port_num)
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
 		serial_params.open = 1;
-		g_snprintf(buff,60,"COM%i Opened Successfully",port_num);
+		g_snprintf(buff,60,"COM%i Opened Successfully, Suggest Testing ECU Comms",port_num);
 		update_statusbar(ser_statbar,ser_context_id,buff);
 
 	}
@@ -185,7 +185,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         }
         else
         {
-                g_snprintf(buff,60,"Serial port not opened, Can NOT test ECU Communications");
+                g_snprintf(buff,60,"Serial Port NOT Opened, Can NOT Test ECU Communications");
                 /* Serial port not opened, can't test */
 		update_statusbar(ser_statbar,ser_context_id,buff);
         }
