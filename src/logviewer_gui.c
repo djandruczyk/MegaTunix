@@ -105,7 +105,7 @@ void build_logviewer(GtkWidget *parent_frame)
                         G_CALLBACK(lv_expose_event),
                         NULL);
 
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.00,0.0,1.0,0.001,0.1,0);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,1.0,0.001,0.001,0);
 	sbar = gtk_hscrollbar_new(adj);
 	gtk_box_pack_start(GTK_BOX(vbox2),sbar,FALSE,TRUE,0);
 
