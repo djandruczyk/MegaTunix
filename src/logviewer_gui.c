@@ -748,7 +748,6 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 		gdk_window_clear(widget->window);
 	}
 
-	printf("configure event leaving\n");
 	return FALSE;
 }
 
