@@ -421,10 +421,7 @@ void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 
 	if (ms_data[page][offset] == value)
-	{
-		printf("value unchanged, returning\n");
 		return;
-	}
 	else
 		ms_data[page][offset] = value;
 
