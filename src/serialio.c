@@ -125,7 +125,7 @@ int setup_serial_params()
 	serial_params->newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
 	/* Disable software flow control */
-	serial_params->newtio.c_iflag &= ~(IXON | IXOFF | IXANY);
+	serial_params->newtio.c_iflag &= ~(IXON | IXOFF );
 	
 	/* Set raw output */
 	serial_params->newtio.c_oflag &= ~OPOST;
@@ -143,7 +143,7 @@ int setup_serial_params()
 	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
-	serial_params->newtio.c_cc[VEOL2]    = 0;     /* '\0' */
+//	serial_params->newtio.c_cc[VEOL2]    = 0;     /* '\0' */
 	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
 	serial_params->newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
 
