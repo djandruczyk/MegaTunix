@@ -69,7 +69,7 @@ struct v1_2_Constants
 	GtkWidget *even_fire_but;		/* Toggle button */
 	GtkWidget *odd_fire_but;		/* Toggle button */
 	GtkWidget *nbo2_but;			/* Toggle button */
-	GtkWidget *wb02_but;			/* Toggle button */
+	GtkWidget *wbo2_but;			/* Toggle button */
 	GtkWidget *simul_but;			/* Toggle button */
 	GtkWidget *alternate_but;		/* Toggle button */
 	GtkWidget *baro_ena_but;		/* Toggle button */

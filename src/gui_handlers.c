@@ -44,7 +44,13 @@ void leave(GtkWidget *widget, gpointer *data)
 
 int toggle_button_handler(GtkWidget *widget, gpointer *data)
 {
-	gint config_num,bit_pos,bit_val;
+	gint config_num;
+	gint bit_pos;
+	gint bit_val;
+
+        if (paused_handlers)
+                return TRUE;
+
 	config_num = (gint)g_object_get_data(G_OBJECT(widget),"config_num");
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
@@ -444,17 +450,87 @@ void update_const_ve()
 				ve_constants->rpm_bins[i]*100);
 	}
 	/* CONFIG11-13 related buttons */
+	/* Speed Density or Alpha-N */
 	if (ve_constants->config13.bit.inj_strat)
-	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.alpha_n_but),
                                 TRUE);
-	}
 	else
-	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.speed_den_but),
                                 TRUE);
-	}
+	/* Even Fire of Odd Fire */
+	if (ve_constants->config13.bit.firing)
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.odd_fire_but),
+                                TRUE);
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.even_fire_but),
+                                TRUE);
+	/* NarrowBand O2 or WideBand O2 */
+	if (ve_constants->config13.bit.ego_type)
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.wbo2_but),
+                                TRUE);
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.nbo2_but),
+                                TRUE);
+	/* Baro Correction, enabled or disabled */
+	if (ve_constants->config13.bit.baro_corr)
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.baro_ena_but),
+                                TRUE);
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.baro_disa_but),
+                                TRUE);
+	/* CONFIG11 related buttons */
+	/* Map sensor 115kPA or 250 kPA */
+	if (ve_constants->config11.bit.map_type)
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.map_250_but),
+                                TRUE);
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.map_115_but),
+                                TRUE);
+	/* 2 stroke or 4 Stroke */
+	if (ve_constants->config11.bit.eng_type)
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.two_stroke_but),
+                                TRUE);
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.four_stroke_but),
+                                TRUE);
+	/* Multi-Port or TBI */
+	if (ve_constants->config11.bit.inj_type)
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.tbi_but),
+                                TRUE);
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.multi_port_but),
+                                TRUE);
 
+	/* Cylinders */
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.cylinders_spin),
+			ve_constants->config11.bit.cylinders+1);
+
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.injectors_spin),
+			ve_constants->config12.bit.injectors+1);
+
+	if (ve_constants->alternate > 0)
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.alternate_but),
+                                TRUE);
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(constants.simul_but),
+                                TRUE);
+	
 }

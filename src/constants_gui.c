@@ -30,7 +30,6 @@ int build_constants(GtkWidget *parent_frame)
 	GtkWidget *vbox2;
 	GtkWidget *vbox3;
 	GtkWidget *hbox;
-	GtkWidget *hbox2;
 	GtkWidget *label;
 	GtkWidget *frame;
 	GtkWidget *table;
@@ -304,6 +303,8 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.multi_port_but = button;
+
 	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
@@ -314,6 +315,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.tbi_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -341,6 +343,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.four_stroke_but = button;
 	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
@@ -351,6 +354,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.two_stroke_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -378,6 +382,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.even_fire_but = button;
 	button = gtk_radio_button_new_with_label(group,"Odd Fire");
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
@@ -388,6 +393,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.odd_fire_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -415,6 +421,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.map_115_but = button;
 	button = gtk_radio_button_new_with_label(group,"250 kPa");
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
@@ -425,6 +432,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.map_250_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -452,6 +460,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.nbo2_but = button;
 	button = gtk_radio_button_new_with_label(group,"Wide-Band");
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
@@ -462,6 +471,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.wbo2_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -473,7 +483,7 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
 
-	label = gtk_label_new("Baro Correction");
+	label = gtk_label_new("Barometer Correction");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -489,6 +499,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.baro_ena_but = button;
 	button = gtk_radio_button_new_with_label(group,"Disabled");
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
@@ -499,6 +510,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.baro_disa_but = button;
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
@@ -523,6 +535,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.simul_but = button;
 	button = gtk_radio_button_new_with_label(group,"Alternate");
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -530,6 +543,7 @@ int build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			NULL);
+	constants.alternate_but = button;
 
 	/* Injection Control cyls/injectors, etc.. */
 	frame = gtk_frame_new("Cylinder/Injection Configuration");
@@ -537,6 +551,7 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
