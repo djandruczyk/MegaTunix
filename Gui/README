@@ -92,6 +92,13 @@ keys themselves are not, as the string compare functions are case insensitive.
 			to be enabled or disabled depending on button state.
 			Swap from TRUE to FALSE when on-screen behavior is
 			backwards to what you want...
+	dl_type		(enum) Normal values are IMMEDIATE (means send the 
+			value right away) and DEFERRED, meaning that the
+			control is usually dependant on some calculation or
+			interdependancy with other variables.  Not having
+			a dl_type is OK, but is usually only used for controls
+			that display something but don't directly map to an
+			ECU location.
 
 HOW Bitfields are used:
 	Controls that associate to a bitfield can either be a button, 
