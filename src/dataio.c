@@ -37,6 +37,7 @@ int handle_ms_data(InputData which_data)
 {
 	gint res = 0;
 	gint total = 0;
+	gint count = 0;
 	unsigned char buf[255];
 	unsigned char *ptr = buf;
 	struct pollfd ufds;
@@ -48,6 +49,7 @@ int handle_ms_data(InputData which_data)
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
 
+	printf("handle_ms_data\n");
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
@@ -62,7 +64,7 @@ int handle_ms_data(InputData which_data)
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->rtvars_size); 
 				//printf("Realtime read %i, total %i\n",res,total);
-				if (total == serial_params->rtvars_size)
+				if (total >= serial_params->rtvars_size)
 					break;
 			}
 			/* the number of bytes expected for raw data read */
@@ -138,13 +140,16 @@ int handle_ms_data(InputData which_data)
 			break;
 
 		case VE_AND_CONSTANTS_1:
-			
-			while (poll(&ufds,1,serial_params->poll_timeout) )
+			while (poll(&ufds,1,serial_params->poll_timeout))
 			{
+				count++;
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->table0_size); 
-				//printf("polling VE/Const read %i, total %i\n",res,total);
+//				printf("polling VE/Const read %i, total %i\n",res,total);
+				if (count > 30)
+					break;
 			}
+			count = 0;
 			/* the number of bytes expected for raw data read */
 			if (total != serial_params->table0_size) 
 			{
@@ -205,5 +210,6 @@ int handle_ms_data(InputData which_data)
 			break;
 	}
 
+	printf("leaving\n");
 	return TRUE;
 }

@@ -18,6 +18,8 @@
 
 /* Prototypes */
 void interrogate_ecu(void);
+void determine_ecu(void *);
+void extract_data(gpointer,gpointer,gpointer);
 /* Prototypes */
 
 #endif

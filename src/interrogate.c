@@ -37,58 +37,75 @@ extern GtkWidget *interr_view;
 extern struct Serial_Params *serial_params;
 extern struct DynamicEntries entries;
 gboolean interrogated = FALSE;
-gfloat ecu_version;
+static struct Result
+{
+	gchar *cmd_desc;	/* Command Description */
+	gchar *recvd;		/* What came back... */
+	gint recvd_len;		/* how many bytes came back */
+	gint cmd_num;		/* command number maps to the command string */
+};
+
+static struct Canidate
+{
+	gint a_bytes;		/* how many bytes for "A" command */
+	gint c_bytes;		/* how many bytes for "C" command */
+	gint q_bytes;		/* how many bytes for "Q" command */
+	gint v0_bytes;		/* how many bytes for "P0V" command */
+	gint v1_bytes;		/* how many bytes for "P1V" command */
+	unsigned char *v0_data;	/* V0 data */
+	unsigned char *v1_data;	/* V1 data */
+	gint s_bytes;		/* how many bytes for "S" command */
+	gint quest_bytes;	/* how many bytes for "?" command */
+	gint i_bytes;		/* how many bytes for "I" command */
+	gint f0_bytes;		/* how many bytes for "F0" command */
+	gint f1_bytes;		/* how many bytes for "F1" command */
+	gchar *sig_str;		/* Signature string to search for */
+	gchar *quest_str;	/* Ext Version string to search for */
+	gint ver_num;		/* Version number to search for */
+	gchar *firmware_name;	/* Name of this firmware */
+	gboolean dt;		/* Dualtable capable firmware */
+	gboolean ignition;	/* Ignition variant */
+	gboolean iac;		/* Extended IAC ability... */
+} canidates[] = 
+{
+	{22,1,1,125,125,"","",0,0,0,0,0,"","",20,
+			"Standard B&G (2.0-3.01)",FALSE,FALSE,FALSE},
+	{22,1,1,128,128,"","",0,0,0,255,255,"","",1,
+			"Dualtable 0.90-1.0",TRUE,FALSE,FALSE},
+	{22,1,1,128,128,"","",18,0,0,255,255,"v.1.01","",1,
+			"Dualtable 1.01",TRUE,FALSE,FALSE},
+	{22,1,1,128,128,"","",19,0,0,255,255,"v.1.02","",1,
+			"Dualtable 1.02",TRUE,FALSE,TRUE},
+	{22,1,1,125,125,"","",31,0,0,0,0,"GM-IAC","",29,
+			"MS-2.9 GM-IAC",FALSE,FALSE,TRUE},
+	{22,1,1,125,125,"","",0,0,81,0,0,"","",20,
+			"SquirtnSpark 2.02 or SquirtnEdis 0.108",
+			FALSE,TRUE,FALSE},
+	{22,1,1,125,125,"","",0,0,95,0,0,"","",30,
+			"SquirtnSpark 3.0",FALSE,TRUE,FALSE},
+	{22,1,1,125,125,"","",0,32,95,0,0,"","EDIS v3.005",30,
+			"MegaSquirtnEDIS 3.05",FALSE,TRUE,FALSE}
+};
+
 static struct 
 {
 	gint page;		/* ms page in memory where it resides */
 	gchar *cmd_string;	/* command to get the data */
 	gchar *cmd_desc;	/* command description */
 	gint cmd_len;		/* Command length in chars to send */
-	gint count;		/* number of bytes returned */
-	char *buffer;		/* buffer to store returned data... */
+	gboolean combine;	/* combine page with cmd as cmd_name */
 } commands[] = {
-	{ 0,"A", "Runtime Vars", 1, 0,NULL },
-	{ 0,"C", "MS Clock", 1, 0,NULL },
-	{ 0,"Q", "MS Revision", 1, 0,NULL },
-	{ 0,"V", "Ve/Constants page0", 1, 0,NULL },
-	{ 1,"V", "Ve/Constants page1", 1, 0,NULL },
-	{ 0,"S", "Signature Echo", 1, 0,NULL },
-	{ 0,"I", "Ignition Vars", 1, 0,NULL },
-	{ 0,"?", "Extended Version", 1, 0,NULL },
-	{ 0,"F0", "Memory readback 1st 256 bytes", 2, 0,NULL },
-	{ 0,"F1", "Memory readback 2nd 256 bytes", 2, 0,NULL }
+	{ 0,"A", "Runtime Vars", 1, FALSE },
+	{ 0,"C", "MS Clock", 1, FALSE },
+	{ 0,"Q", "MS Revision", 1, FALSE },
+	{ 0,"V", "Ve/Constants page0", 1, TRUE },
+	{ 1,"V", "Ve/Constants page1", 1, TRUE },
+	{ 0,"S", "Signature Echo", 1, FALSE },
+	{ 0,"?", "Extended Version", 1, FALSE },
+	{ 0,"I", "Ignition Vars", 1, FALSE },
+	{ 0,"F0", "Memory readback 1st 256 bytes", 2, FALSE },
+	{ 0,"F1", "Memory readback 2nd 256 bytes", 2, FALSE }
 };
-/*
- * The Various MegaSquirt variants that MegaTunix attempts to support
- * have one major problem.  Inconsistent version numbering.  Several
- * variants use the same number, We attempt to instead query the various
- * readback commands to determine how much data they return,  With this
- * we can make an educated guess and help guide the user to make the final
- * selection on the General Tab.
- * Actual results of querying the variosu MS codes are below.  The list will
- * be updated as the versions out there progress.
- *
- * "A" = Realtime Variables return command
- * "C" = Echo back Secl (MS 1sec resolution clock)
- * "Q" = Echo back embedded version number
- * "V" = Return VEtable and Constants
- * "S" = Return something else???
- * "I" = Return Ignition table (Spark variants only)
- * "?" = Return textual identification (new as of MSnEDIS 3.0.5)
- *
- *                 Readback initiator commands	
- *                "A" "C" "Q" "S" "V" "I" "?"
- * B&G 2.x         22   1   1   0 125   0   0
- * DualTable 090   22   1   1   0 128   0   0
- * DualTable 099b  22   1   1   0 128   0   0
- * DualTable 100   22   1   1   0 128   0   0
- * DualTable 101   22   1   1  18 128   0   0
- * DualTable 102   22   1   1  19 128   0   0
- * Sqrtnspark 2.02 22   1   1   0 125  83   0
- * SqrtnSpark 3.0  22   1   1   0 125  95   0
- * SqrtnEDIS 0.108 22   1   1   0 125  83   0
- * SqrtnEDIS 3.0.5 22   1   1   0 125  83  32
- */
 
 void interrogate_ecu()
 {
@@ -123,15 +140,17 @@ void interrogate_ecu()
 	gint q_bytes = 0;
 	gint quest_bytes = 0;
 	gchar *tmpbuf;
+	gchar * key;
 	extern gboolean raw_reader_running;
 	gboolean restart_reader = FALSE;
 	gchar *string;
 	gboolean con_status = FALSE;
+	GHashTable *command_results = NULL;
 	gint tests_to_run = sizeof(commands)/sizeof(commands[0]);
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
-
+	
 	if (!connected)
 	{
 		con_status = check_ecu_comms(NULL,NULL);
@@ -149,53 +168,180 @@ void interrogate_ecu()
 		stop_serial_thread();
 	}
 
+	/* Allocate hash table to store the results for each test... */
+	command_results = g_hash_table_new(NULL,NULL);	
 
+	/* Configure port for polled IO and flush I/O buffer */
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
-
 	tcflush(serial_params->fd, TCIOFLUSH);
 
 	for (i=0;i<tests_to_run;i++)
 	{
 		count = 0;
 		total = 0;
+		struct Result *result;
 		/* flush buffer to known state.. */
 		memset (buf,0,size);
+		result = g_malloc0(sizeof(struct Result));
+		result->cmd_desc = g_strdup(commands[i].cmd_desc);
+		result->cmd_num = i;	/* command number */
 
 		ptr = buf;
 		len = commands[i].cmd_len;
 		/* set page */
 		set_ms_page(commands[i].page);
 		string = g_strdup(commands[i].cmd_string);
+		if (commands[i].combine)
+			key = g_strdup_printf("%s%i",string,commands[i].page);
+		else
+			key = g_strdup(string);
 		res = write(serial_params->fd,string,len);
 		if (res != len)
 			fprintf(stderr,__FILE__": Error writing data to the ECU\n");
 		res = poll (&ufds,1,25);
 		if (res)
 		{	
-			//printf("command %s returned ",string);
 			while (poll(&ufds,1,25))
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
 				//printf("count %i, total %i\n",count,total);
 			}
-			//printf("%i bytes\n",total);
 
 			ptr = buf;
 			/* copy data from tmp buffer to struct pointer */
-			commands[i].buffer = g_memdup(buf,total);
+			result->recvd = g_memdup(buf,total);
+	
 		}
 		g_free(string);
-		commands[i].count = total;
+		result->recvd_len = total;
+		g_hash_table_insert(command_results,g_strdup(key),
+				(gpointer)result);
+		g_free(key);
 	}
 	/* Reset page to 0 just to be 100% sure... */
 	set_ms_page(0);
 	/* flush serial port */
 	tcflush(serial_params->fd, TCIOFLUSH);
 
+	printf("all tests complete, calling determinator\n");
+	interrogated = TRUE;
+
+	g_static_mutex_unlock(&mutex);
+
+	printf("mutex unlocked\n");
+	if (restart_reader)
+		start_serial_thread();
+	determine_ecu(command_results);	
+	return;
+}
+void determine_ecu(void *ptr)
+{
+	struct Canidate *canidate = NULL;
+	canidate = g_malloc(sizeof(struct Canidate));
+	gint i = 0;
+	gint num_choices = sizeof(canidates)/sizeof(canidates[0]);
+	gint matching_index = -1;
+
+	GHashTable *command_results = (GHashTable *)ptr;
+	/* Extracts all the data into a "Canidate" structure" for comparison
+	* against the choices[] array
+	*/
+	g_hash_table_foreach(command_results,extract_data,canidate);
+
+	for (i=0;i<num_choices;i++)
+	{
+		printf("checking canidate %i\n",i);
+		if (canidate->a_bytes != canidates[i].a_bytes)
+			continue;
+		if (canidate->c_bytes != canidates[i].c_bytes)
+			continue;
+		if (canidate->q_bytes != canidates[i].q_bytes)
+			continue;
+		if (canidate->s_bytes != canidates[i].s_bytes)
+			continue;
+/*		if (strstr(canidate->sig_str,canidates[i].sig_str)==NULL)
+			continue;
+		if (strstr(canidate->quest_str,canidates[i].quest_str)==NULL)
+			continue;
+*/
+		if (canidate->quest_bytes != canidates[i].quest_bytes)
+			continue;
+		if (canidate->v0_bytes != canidates[i].v0_bytes)
+			continue;
+		if (canidate->v1_bytes != canidates[i].v1_bytes)
+			continue;
+		if (canidate->i_bytes != canidates[i].i_bytes)
+			continue;
+		if (canidate->f0_bytes != canidates[i].f0_bytes)
+			continue;
+		if (canidate->f1_bytes != canidates[i].f1_bytes)
+			continue;
+		else
+			matching_index = i;
+		break;
+	}
+	
+}
+
+void extract_data (gpointer key_ptr, gpointer value, gpointer data)
+{
+	struct Result *result = (struct Result *)value;
+	struct Canidate *canidate = (struct Canidate *)data;
+
+	switch (result->cmd_num)
+	{
+		case 0:
+			canidate->a_bytes = result->recvd_len;
+			break;
+		case 1:
+			canidate->c_bytes = result->recvd_len;
+			break;
+		case 2:
+			canidate->q_bytes = result->recvd_len;
+			break;
+		case 3:
+			canidate->v0_bytes = result->recvd_len;
+			canidate->v0_data = g_memdup(result->recvd,
+					result->recvd_len);
+			break;
+		case 4:
+			canidate->v1_bytes = result->recvd_len;
+			canidate->v1_data = g_memdup(result->recvd,
+					result->recvd_len);
+			break;
+		case 5:
+			canidate->s_bytes = result->recvd_len;
+			canidate->sig_str = g_memdup(result->recvd,
+					result->recvd_len);
+			break;
+		case 6:
+			canidate->quest_bytes = result->recvd_len;
+			canidate->quest_str = g_memdup(result->recvd,
+					result->recvd_len);
+			break;
+		case 7:
+			canidate->i_bytes = result->recvd_len;
+			break;
+		case 8:
+			canidate->f0_bytes = result->recvd_len;
+			break;
+		case 9:
+			canidate->f1_bytes = result->recvd_len;
+			break;
+
+	}
+			
+}
+
+
+
+/*
+{
+
 	for (i=0;i<tests_to_run;i++)
 	{
-		/* Per command section */
+		// Per command section 
 		if ((strstr(commands[i].cmd_string,"V") && (commands[i].page == 0)))
 		{
 			serial_params->table0_size = commands[i].count;
@@ -226,16 +372,16 @@ void interrogate_ecu()
 		else if (strstr(commands[i].cmd_string,"A"))
 		{
 			serial_params->rtvars_size = commands[i].count;
-			/* if A command doesn't come back with 22 something
-			 * went wrong...  re-interrogate..
-			 */
+			// if A command doesn't come back with 22 something
+			// went wrong...  re-interrogate..
+			//
 			if (commands[i].count != 22)
 				fprintf(stderr,__FILE__": Interrogate returned an invalid response to the \"A\" Command (runtime variables), which should always return 22 bytes.  We got %i bytes instead.  Seems like the MS is in an undefined state, powercycle the ECU and re-interrogate.\n\n",commands[i].count);
 		}	
 		else if (strstr(commands[i].cmd_string,"I"))
 			i_bytes = commands[i].count;
 	}
-	if (v0_bytes == 128) /* dualtable potential */
+	if (v0_bytes == 128) // dualtable potential 
 	{
 		res = memcmp(	commands[table0_index].buffer, 
 				commands[table1_index].buffer,128);
@@ -259,7 +405,7 @@ void interrogate_ecu()
 					commands[i].cmd_string, 
 					commands[i].cmd_desc, 
 					commands[i].count);
-			/* Store counts for VE/realtime readback... */
+			// Store counts for VE/realtime readback... 
 
 			update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
 			g_free(tmpbuf);
@@ -274,7 +420,7 @@ void interrogate_ecu()
 		}
 	}
 	
-	if (q_bytes > 0) /* ECU reponded to basic version query */
+	if (q_bytes > 0) // ECU reponded to basic version query 
 	{
 		memcpy(&tmp,commands[q_index].buffer,commands[q_index].count);
 		tmpbuf = g_strdup_printf("%.1f",((float)tmp/10.0));
@@ -288,7 +434,7 @@ void interrogate_ecu()
 		g_free(tmpbuf);
 	}
 
-	if (s_bytes > 0) /* ECU reponded to basic version query */
+	if (s_bytes > 0) // ECU reponded to basic version query 
 	{
 		tmpbuf = g_strdup(commands[s_index].buffer);
 		gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
@@ -300,7 +446,7 @@ void interrogate_ecu()
 		gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
 		g_free(tmpbuf);
 	}
-	if (quest_bytes > 0) /* ECU reponded to basic version query */
+	if (quest_bytes > 0) // ECU reponded to basic version query 
 	{
 		tmpbuf = g_strdup(commands[quest_index].buffer);
 		gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
@@ -365,3 +511,4 @@ void interrogate_ecu()
 	g_static_mutex_unlock(&mutex);
 	return;
 }
+*/

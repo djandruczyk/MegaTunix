@@ -159,7 +159,7 @@ static const gint logging_offset_map[] =
  * that struct has been deigned (And is necessary) to have all the 
  * largest varibles first (floats before shorts before chars), so that
  * the structure can be referenced in array notation, this way all data
- * is accessible byu the appropriate index.
+ * is accessible by the appropriate index.
  * The values in this array correspond to the size of the referenced
  * variable in that Runtime_Common struct.
  */

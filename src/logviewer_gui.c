@@ -35,7 +35,7 @@ static gint blue = 65535;
  */
 static const gboolean valid_logables[]=
 {
-	FALSE,FALSE,TRUE,FALSE,TRUE,
+	FALSE,TRUE,TRUE,FALSE,TRUE,
 	TRUE,TRUE,TRUE,TRUE,TRUE,
 	TRUE,TRUE,TRUE,TRUE,TRUE,
 	TRUE,TRUE,TRUE,TRUE,TRUE,
