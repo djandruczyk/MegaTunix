@@ -33,7 +33,6 @@ pthread_t raw_input_thread;			/* thread handle */
 gboolean raw_reader_running;			/* flag for thread */
 gboolean raw_reader_stopped;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
-extern gint ser_context_id;			/* Statusbar related */
 extern GtkWidget * comms_view;
 extern struct Runtime_Widgets runtime_data;
 extern struct Serial_Params *serial_params;

@@ -47,7 +47,6 @@ gboolean log_opened = FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;
 gint ms_type = 0;
-gint dlog_context_id;
 gint logging_mode = CUSTOM_LOG;
 static gint total_logables = 0;
 static gint delimiter = SPACE;

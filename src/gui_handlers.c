@@ -350,8 +350,6 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 				reqd_fuel_popup();
 			break;
 		case READ_VE_CONST:
-			if (!raw_reader_running)
-				check_ecu_comms(NULL,NULL);
 			if (!connected)
 				no_ms_connection();
 			else

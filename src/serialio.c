@@ -30,7 +30,6 @@
 
 
 extern gboolean raw_reader_running;
-extern gint ser_context_id;
 extern GtkWidget *comms_view;
 extern struct Runtime_Widgets runtime_data;
 extern struct Ve_Const_Std *ve_const_p0;
