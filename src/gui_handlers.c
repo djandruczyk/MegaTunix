@@ -319,7 +319,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
 			tmp = tmp | (bitval << bitshift);
-			//ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			break;
 		case DEBUG_LEVEL:
@@ -334,10 +333,12 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			/* Alternate or simultaneous */
 			if (ecu_caps & DUALTABLE)
 			{
+				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
 				tmp = ms_data[page][offset];
 				tmp = tmp & ~bitmask;// clears bits 
 				tmp = tmp | (bitval << bitshift);
-				//ms_data[page][offset] = tmp;
 				dload_val = tmp;
 			}
 			else
@@ -345,7 +346,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
-				//ms_data[page][offset] = bitval;
 				dload_val = bitval;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
@@ -760,15 +760,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case REQ_FUEL_1:
 		case REQ_FUEL_2:
-			printf("req_fuel_changed!!!\n");
 			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
-	//		if (firmware->rf_params[table_num]->last_req_fuel_total == value)
-	//		{
-	//			printf("last %f, current %f\n",firmware->rf_params[table_num]->last_req_fuel_total,value);
-	//			printf("reqfuel_hasn't changed, returning\n");
-	//			break;
-	//		}
-			printf("value changed to %f\n",value);
 			firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
 			firmware->rf_params[table_num]->req_fuel_total = value;
 			check_req_fuel_limits(table_num);

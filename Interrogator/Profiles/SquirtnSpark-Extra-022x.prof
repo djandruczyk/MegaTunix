@@ -276,8 +276,8 @@ CMD_UPPER_S=32
 [gui]
 RealtimeMapFile=MSnS-Extra
 SliderMapFile=msns-extra-firmware
-LoadTabs=runtime,datalogging,logviewer,tools,msns-e-fuelconstants,vetable_12x12e,vetable_12x12e,vetable_12x12e,sparktable_12x12e,sparktable_12x12e,afrtable_8x8e,afrtable_8x8e,boost_6x6e,boost_6x6e,boost_6x6e,raweditor
-TabConfs=runtime,datalogging,logviewer,tools,msns-e-fuelconstants,vetable_12x12e-022E_1,vetable_12x12e-022E_2,vetable_12x12e-E_3,sparktable_12x12e-E_1,sparktable_12x12e-E_2,afrtable_8x8e-E_1,afrtable_8x8e-E_2,boost_6x6e-E_1,boost_6x6e-E_2,boost_6x6e-E_3,raweditor
+LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,vetable_12x12e,vetable_12x12e,vetable_12x12e,sparktable_12x12e,sparktable_12x12e,afrtable_8x8e,afrtable_8x8e,boost_6x6e,boost_6x6e,boost_6x6e,raweditor
+TabConfs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,vetable_12x12e-022E_1,vetable_12x12e-022E_2,vetable_12x12e-E_3,sparktable_12x12e-E_1,sparktable_12x12e-E_2,afrtable_8x8e-E_1,afrtable_8x8e-E_2,boost_6x6e-E_1,boost_6x6e-E_2,boost_6x6e-E_3,raweditor
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map
