@@ -64,8 +64,6 @@ static GHashTable *classic_ord_hash;
 static GHashTable *full_ord_hash;
 static struct timeval now;
 static struct timeval last;
-/* basty hack to prevent a compiler warning... */
-//gint max_limits = sizeof(limits)/sizeof(struct Limits);
 
 void build_datalogging(GtkWidget *parent_frame)
 {

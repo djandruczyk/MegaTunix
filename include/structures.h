@@ -287,10 +287,10 @@ struct Default_Control
 
 struct Default_Limits
 {
-	gchar * field_name;
-	gfloat lower;
-	gfloat upper;
-	LogType logtype;
+	gchar *field;		/* Field name */
+	gfloat lower;		/* Lower Limit */
+	gfloat upper;		/* Upper Limit */
+	LogType logtype;	/* Datalog type it's found in... */
 };
 
 /* The Log_Info datastructure is populated when a datalog file is opened
@@ -302,6 +302,8 @@ struct Log_Info
 	gchar *delimiter;	/* delimiter between fields for this logfile */
 	gchar **fields;		/* NULL term'd vector of string field names */
 	GArray *fields_data;	/* Array of arrays for stored data */
+	GArray *lowers;		/* Array of lower limits for each field */
+	GArray *uppers;		/* Array of upper limits for each field */
 };
 
 #endif

@@ -228,7 +228,7 @@ void present_viewer_choices(void *ptr)
 	max_viewables = sizeof(logable_names)/sizeof(gchar *);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size(GTK_WINDOW(window),575,300);
+	gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
 	if (logviewer_mode)
 	{
 		log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(hand_me_down),"log_info");
@@ -306,14 +306,19 @@ void present_viewer_choices(void *ptr)
 	}
 
 	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),sep,FALSE,TRUE,20);
 
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
-	button = gtk_button_new_with_label("Uncheck All Selections");
-	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,FALSE,0);
+	hbox = gtk_hbox_new(FALSE,20);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+	button = gtk_button_new_with_label("Select All");
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
-			G_CALLBACK(uncheck_active_controls),
+			G_CALLBACK(select_all_controls),
+			NULL);
+	button = gtk_button_new_with_label("De-select All");
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
+	g_signal_connect_swapped(G_OBJECT(button),"clicked",
+			G_CALLBACK(deselect_all_controls),
 			NULL);
 
 	button = gtk_button_new_with_label("Close");
@@ -439,8 +444,10 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 	/* Set limits of this variable. (it's ranges, used for scaling */
 	if (logviewer_mode)
 	{
-		v_value->lower = 0.0;
-		v_value->upper = 255.0;
+//		v_value->lower = 0.0;
+//		v_value->upper = 255.0;
+		v_value->lower = g_array_index(log_info->lowers,gfloat,offset);
+		v_value->upper = g_array_index(log_info->uppers,gfloat,offset);
 		v_value->runtime_offset = -1; // INVALID for playback
 		v_value->size = -1; // ??? INVALID for playback (maybe)
 		/* textual name of the variable we're viewing.. */
@@ -872,13 +879,24 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	return TRUE;
 }
 
-gboolean uncheck_active_controls(GtkWidget *widget, gpointer data)
+gboolean deselect_all_controls(GtkWidget *widget, gpointer data)
 {
 	gint i = 0;
 	for (i=0;i<max_viewables;i++)
 	{
 		if (viewables.index[i] == TRUE)
         		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (viewables.widgets[i]),FALSE);
+	}
+	return TRUE;
+}
+
+gboolean select_all_controls(GtkWidget *widget, gpointer data)
+{
+	gint i = 0;
+	for (i=0;i<max_viewables;i++)
+	{
+		if (viewables.index[i] == FALSE)
+        		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (viewables.widgets[i]),TRUE);
 	}
 	return TRUE;
 }
