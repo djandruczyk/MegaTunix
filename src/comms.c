@@ -174,10 +174,8 @@ void writeto_ecu(void *ptr)
 		return;
 	}
 
-	/* Handles variants and dualtable... */
-	if (firmware->multi_page)
-		if (ign_parm == FALSE)
-			set_ms_page(page);
+	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change)) 
+		set_ms_page(page);
 
 	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
 
@@ -213,9 +211,8 @@ void writeto_ecu(void *ptr)
 		dbg_func(__FILE__": writeto_ecu()\n\tSending of value to ECU succeeded\n",SERIAL_WR);
 	g_usleep(5000);
 
-	if (firmware->multi_page)
-		if ((!ign_parm) && (page > 0 ))
-			set_ms_page(0);
+	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change) && (page > 0)) 
+		set_ms_page(0);
 
 	g_free(write_cmd);
 

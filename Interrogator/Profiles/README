@@ -1,0 +1,190 @@
+This README describes the contents of this dir and their file structure.
+
+Last Edited, Sept 19th 16:04 PM
+
+	Inside this dir "Profiles", contains several files with a ".prof" 
+and a extension.  The .prof files are MegaTunix's interrogation profiles
+used to match against and load up a whole slew of parameters specific to the
+Firmware being used by megatunix
+The profile is laid out in .ini file format using the common "section",
+"key","value" layout as shown below.
+
+
+[section]
+key=value
+
+What MegaTunix does, is that after it starts it checks to make sure an ECU
+is present by issuing a comms test. (sends a "C" and checks for a response)
+If that succeeds, Mtx then procedes to interrogate the ECU.  It does this
+by reading a list of tests from a config file. This configuration file is
+stored by default in /usr/local/share/MegaTunix/Interrogator/tests. After
+reading and validating the file MegaTunix will send the commands
+to the ECU in turn and record the responses.  Once all the responses are 
+gathered, MegaTunix will load each interrogation profile in sequence, and 
+attempt to match what it recorded with the profile,  once an exact match is 
+found it will load up the detailed firmware information (load_firmware_details)
+allocate memory for datastructures and exit from the interrogation routines
+and kick off several routines to read a current block of data from the ECU for 
+all pages and populate the GUI
+
+NOTES regarding the profile files:
+
+The value names are CaSe SeNsItIvE, so be warned.  Ironically the
+keys themselves are not, as the string compare functions are case insensitive.
+
+Sections:
+[interrogation_profile]
+ - Contains only 1 key which is "name". The name is an arbritrarily long string
+ and it used to match against in the RealTimeMap files and for backup and
+restoration of ECU settings. (see the Tools Tab)
+
+[parameters]
+SignatureQueryString
+  - This is a substring to match against for the ECU if it responds to the
+  "S" (signature) command, if your firmware doesn't support the S command just
+  leave this one's value empty
+
+ExtVerQueryString
+  - This is a substring to match against for the ECU if it responds to the
+  "?" (Ext version) command, if your firmware doesn't support the ? command just
+  leave this one's value empty
+
+VerNumber
+  - This is an integer number to match against what the ECU returns to the "Q"
+  (query version) Command
+
+Capabilities
+  - This is an enumeration not used by most firmwares.  It's best to leave this
+  one's value blank
+
+Rt_Cmd_Key
+  - This maps to a code regarding the command sent to the ECU to retrieve the
+  RealTime Variables.  the Codes follow the following formula:
+    CMD_ (prefix), UPPER/LOWER (means upper or lower case), "_A" means the
+    letter sent to the ECU, so "CMD_UPPER_A" means send an "A" to get the data.
+    Wherease a "CMD_LOWER_X" would send an "x" instead.
+
+VE_Cmd_Key
+  - This maps to a code to retreive the VE/Constants block of data.  See above
+  for code specifications.
+
+Ign_Cmd_Key
+  - This maps to a code to retrieve the Ignition/Constants block of data.  
+  THIS COMMAND is specific to the MSnEDIS and MSnSPARK (not extra) series
+  firmwares and should NOT be used for newer firmwares as the paging method
+  is preferred.
+
+Write_CMD
+  - This is a single char sent to the ECU to Write data. The write algorithm 
+  uses a Write+offset+data syntax internally.
+
+Burn_CMD 
+  - This is a single char sent to the ECU to Burn RAM contents to flash.
+
+MultiPage
+  - This is a boolean, and means the firmware suports multiple pages of data.
+  NOTE: for MSnS/MSnEDIS which don't use the normal paging algorithm, they
+  are still considered MultiPage, see the RequirePageChange for more info.
+
+RequirePageChange
+  - Boolean, If set to True, Page changing is done. (ecu responds to the 
+  Page_CMD).  MSnS/MSnEDIS have this set to FALSE as they use alternate 
+  commands to modify data in the higher pages, see "is_spark".
+
+Page_CMD
+  - A string sent to the ECU followed by an argument to change the current
+  page in the ECU. Used prior to sending data to the ECU or retrieveing the
+  VE/Constants block from the ECU when MultiPAge is TRUE and RequirePageChange
+  is TRUE.
+
+TotalTables
+  - An Integer stating the number of TABLES in the VE/Constants blocks.  A 
+  Table is a grouped block of datat consisting of 3 parts, an RPM group, a
+  Load group (TPS/MAP) and a Table itself.   for example the GH DT-1.02 
+  firmware has two independant VEtables,  thus it has TotalTables set to 2.
+
+TotalPages
+  - An integer stating how many pages of data this firmware is capable of
+  handling.  This is firmware dependant.
+
+
+
+[table_x] sections, 1 per table as defined by TotalTables
+is_spark
+  - Boolean,  if this table is a spark table and uses the unusualy 2.84 
+  conversion factor then this flag is set to TRUE, otherwise FALSE.
+
+page
+  - Integer, lists the page number that this table resides within
+
+tbl_base_offset
+  - Integer, The offset from the base of page (above) that this table starts
+  at.  The total length of the table is rpm_bincount*load_bincount, and is 
+  sequentially addressed.
+
+rpm_base_offset
+  - Integer, The offset from the pase of page (Above) that the RPM array 
+  starts at.  Length of this array is rpm_bincount
+
+load_base_offset
+  - Integer, The offset from the pase of page (Above) that the LOAD array 
+  starts at.  Length of this array is load_bincount
+
+rpm_bincount
+  - Integer, the size of the RPM array
+
+load_bincount
+  - Integer, the size of the LOAD array
+
+
+[page_x] sections, 1 per page as defined by TotalPages
+length 
+  - Integer, length of the page in variables. (not bytes, data is stored 
+  internally in megatunix as a 32 bit signed integer)
+
+is_spark
+  - Boolean, a Flag that when FALSE requires the following fields to be
+  present: reqfuel_offset, divider_offset, alternate_offset, rpmk_offset,
+  cfg11_offset, cfg12_offset, cfg13_offset.
+
+NOTES regarding reqfuel_offset, divider_offset, alternate_offset, 
+  rpmk_offset,cfg11_offset, cfg12_offset, cfg13_offset, spconfg_offset.
+
+  These above parameters are the offset locations from the beginning of the 
+  page. They are MegaSquirt firmware specific.  If you have added support for
+  a NON MS ecu (VEMS) that does NOT make use of the internal functions that
+  use these variables, then they should all be set to ZERO.
+  
+
+[gui] section
+RealTimeMapFile
+  - String, The name of the realtime map file (sans extension)
+
+SliderMapFile
+  - String, The name of the rtsliders map file (sans extension)
+
+LoadTabs
+  - Comma Separated list.  A list of GLADE files to load in sequence for this 
+  firmware. See TabConfs for hte matching list of config files that go with 
+  this list of glade files.
+
+TabConfs
+  - Comma Separated List. A list of DATAMAP files to load for each of the above
+  glade files in the LoadTabs key.  The number of args in this list MUST match
+  the LoadTabs line otherwise an error will be reported...
+
+
+[lookuptables] section
+tables
+  - Comma Separated List. A list of KEYS to be loaded to get the lookuptables
+  used inside megatunix (and most specifically, by the RealTimeMaps)
+
+The lookuptables are loaded as a key/value pair
+for example.  wbo2_table=NBafr100.inc
+Internally a table will be created that is referred by name as wb02_table, and
+it will be populated with the contents of NBafr100.inc.  Any number of 
+lookuptables can be loaded. Adjsut the "tables=" line as needed to load 
+additional tables..
+
+
+Revised 1/17/2005, DJA
