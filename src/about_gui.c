@@ -30,7 +30,7 @@ int build_about(GtkWidget *frame)
 	GtkWidget *vbox;
 	GtkWidget *alignment;
 	GdkPixbuf *pixbuf;
-	GtkWidget *drawing_area;
+	GtkWidget *image;
 	gint w,h;
 
 	vbox = gtk_vbox_new(FALSE,10);
@@ -45,21 +45,9 @@ int build_about(GtkWidget *frame)
 
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
 
-	drawing_area = gtk_drawing_area_new();
-	w = gdk_pixbuf_get_width (pixbuf);
-        h = gdk_pixbuf_get_height (pixbuf);
-	gtk_widget_set_size_request (GTK_WIDGET (drawing_area), w, h);
+	image = gtk_image_new_from_pixbuf(pixbuf);
 
-	gtk_container_add (GTK_CONTAINER (alignment), drawing_area);
-
-	g_signal_connect (drawing_area, "expose_event",
-                          G_CALLBACK (expose_event), NULL);
-        g_signal_connect (drawing_area, "configure_event",
-                          G_CALLBACK (config_event), NULL);
-
-	g_object_set_data (G_OBJECT (drawing_area), "pixbuf", pixbuf);
-	g_object_set_data (G_OBJECT (drawing_area), "parent", vbox);
-
+	gtk_container_add (GTK_CONTAINER (alignment), image);
 
 	return(0);
 }
