@@ -188,13 +188,13 @@ void make_megasquirt_dirs(void)
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Gui", NULL);
+	mkdir(filename, S_IRWXU);
+	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator/Profiles", NULL);
-	mkdir(filename, S_IRWXU);
-	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Gui", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/LookupTables", NULL);
@@ -203,8 +203,11 @@ void make_megasquirt_dirs(void)
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RealtimeMaps", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RuntimeSliders", NULL);
+	mkdir(filename, S_IRWXU);
+	g_free(filename);
 
-
+	return;
 }
 
 void mem_alloc()
