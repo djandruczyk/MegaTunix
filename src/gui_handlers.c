@@ -32,6 +32,7 @@
 #include <serialio.h>
 #include <stdio.h>
 #include <structures.h>
+#include <sys/time.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <vetable_gui.h>
@@ -1189,10 +1190,24 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 {
 	static gboolean marked[MS_PAGE_SIZE];
 	gint index = 0;
+	static struct timeval now;
+	static struct timeval last = {0,0};
 	extern GdkColor red;
 	extern GdkColor black;
 
-	if (event->button != 2) // Middle button click 
+	if (event->button != 1) // Left button click 
+		return FALSE;
+
+	last = now;
+	gettimeofday(&now,NULL);
+//	g_printf("time at click %i.%i\n",now.tv_sec,now.tv_usec);
+//	g_printf("time at last click %i.%i\n",last.tv_sec,last.tv_usec);
+//	g_printf("time diff between clicks: %f\n",(float)(now.tv_sec-last.tv_sec)+((now.tv_usec-last.tv_usec)/1000000.0));
+
+	/* If nota doubleclick,  just return...
+	 * Otherwise toggle the flag and highlite/unhighlite the entry...
+	 */
+	if (((now.tv_sec-last.tv_sec)+((now.tv_usec-last.tv_usec)/1000000.0)) > 0.030)
 		return FALSE;
 
 	index = (gint)g_object_get_data(G_OBJECT(widget),"offset");
