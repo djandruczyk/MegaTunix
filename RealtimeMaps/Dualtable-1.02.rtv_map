@@ -482,7 +482,7 @@ offset=14
 lower_limit=0
 upper_limit=26
 conv_expr=x/10.0
-is_float=FALSE
+is_float=TRUE
 tooltip="PW 1" is the pulsewidth in milliseconds for the injectors tied to injector channel 1.
 
 [derived_34]
@@ -510,7 +510,7 @@ cyls_bitmask=240
 cyls_bitshift=4
 divider_page=0
 divider_offset=91
-is_float=FALSE
+is_float=TRUE
 tooltip="Dutycycle 1\" is the injector Duty cycle for injectors connected to injector channel 1.
 
 [derived_35]
@@ -538,7 +538,7 @@ cyls_bitmask=240
 cyls_bitshift=4
 divider_page=1
 divider_offset=91
-is_float=FALSE
+is_float=TRUE
 tooltip="Dutycycle 2\" is the injector Duty cycle for injectors connected to injector channel 2.
 
 [derived_36]
@@ -551,7 +551,7 @@ offset=19
 lower_limit=0
 upper_limit=26
 conv_expr=x/10.0
-is_float=FALSE
+is_float=TRUE
 tooltip="PW 2" is the pulsewidth in milliseconds for the injectors tied to injector channel 2.
 
 [derived_37]
