@@ -21,6 +21,7 @@
 
 #include <configfile.h>
 #include <glib/gprintf.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 

@@ -12,5 +12,5 @@ DEPDIR = ${subdirs}/.deps
 
 CLEANFILES = *~ core -rf autom4te.cache
 
-EXTRA_DIST = configure CREDITS VERSION AUTHORS TODO README INSTALL scripts/cross-link
+EXTRA_DIST = configure CREDITS VERSION AUTHORS TODO README INSTALL contrib/cross-link
 
