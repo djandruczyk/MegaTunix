@@ -261,7 +261,6 @@ void present_viewer_choices(void *ptr)
 gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	gint index = 0;
-        gint i = 0;
 
         index = (gint)g_object_get_data(G_OBJECT(widget),"index");
 
@@ -270,13 +269,6 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
         else
                 viewables.index[index] = FALSE;
 
-        total_viewables = 0;
-	/* Reget to total Viewables count */
-        for (i=0;i<max_viewables;i++)
-        {
-                if (viewables.index[i])
-                        total_viewables++;
-        }
 
 	return TRUE;
 }
@@ -285,6 +277,14 @@ gboolean populate_viewer(GtkWidget * widget)
 {
 	struct Viewable_Value *v_value = NULL;
 	gint i = 0;
+
+        total_viewables = 0;
+	/* Reget to total Viewables count */
+        for (i=0;i<max_viewables;i++)
+        {
+                if (viewables.index[i])
+                        total_viewables++;
+        }
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -374,7 +374,9 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 
 		if (active_traces)
 		{
+			tcount = 0;
 			g_hash_table_foreach(active_traces, trace_update, (gpointer)TRUE);
+			tcount = 0;
 		}
 		gdk_window_clear(widget->window);
 	}
@@ -705,6 +707,7 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 				v_value->trace_gc,
 				pts,
 				total);
+
 		draw_infotext(v_value);
 		return;
 	}
