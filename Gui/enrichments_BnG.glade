@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="window1">
   <property name="visible">True</property>
@@ -1255,7 +1254,6 @@ Add-on (ms)</property>
 
 				  <child>
 				    <widget class="GtkLabel" id="accelbins_label_4">
-				      <property name="width_request">45</property>
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">15V/sec</property>
 				      <property name="use_underline">False</property>
