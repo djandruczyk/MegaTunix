@@ -24,9 +24,13 @@ void start_datalogging(void);
 void stop_datalogging(void);
 void clear_logables(void);
 gboolean log_value_set(GtkWidget *, gpointer);
-void write_log_header(struct Io_File *);
+void write_log_header(struct Io_File *, gboolean);
 void run_datalog(void);
 gboolean set_logging_mode(GtkWidget * , gpointer);
+void dlog_select_defaults(void);
+void dlog_select_all(void);
+void dlog_deselect_all(void);
+void dump_log_to_disk(struct Io_File *);
 /* Prototypes */
 
 #endif

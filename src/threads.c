@@ -109,6 +109,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_REENABLE_INTERROGATE_BUTTON;
 				g_array_append_val(message->funcs,tmp);
+				tmp = UPD_START_REALTIME;
+				g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;
 			g_array_append_val(message->funcs,tmp);
@@ -153,7 +155,9 @@ void io_cmd(Io_Command cmd, gpointer data)
 				{
 					tmp = UPD_VE_CONST;
 					g_array_append_val(message->funcs,tmp);
-					tmp = UPD_STORE_BLACK;
+					tmp = UPD_ENABLE_THREE_D_BUTTONS;
+					g_array_append_val(message->funcs,tmp);
+					tmp = UPD_SET_STORE_BLACK;
 					g_array_append_val(message->funcs,tmp);
 				}
 				g_async_queue_push(io_queue,(gpointer)message);
@@ -179,7 +183,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message->need_page_change = FALSE;
 			message->command = BURN_CMD;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
-			tmp = UPD_STORE_BLACK;
+			tmp = UPD_SET_STORE_BLACK;
 			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;

@@ -118,9 +118,7 @@ gboolean load_realtime_map(void )
 	rtv_map->rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);
 	rtv_map->raw_total = raw_total;
 	rtv_map->derived_total = derived_total;
-	rtv_map->ts_array = (GTimeVal *)g_malloc0(50*sizeof(GTimeVal));
-	rtv_map->ts_position = 0;
-	rtv_map->ts_max=50;
+	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE, sizeof(GTimeVal),4096);
 
 	/* Populate the arrays with NULL pointers (GList's are assumed
 	 * to be NULL when they don't exist.  This ensures that there

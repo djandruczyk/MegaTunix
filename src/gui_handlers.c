@@ -590,6 +590,20 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case BURN_MS_FLASH:
 			io_cmd(IO_BURN_MS_FLASH,NULL);
 			break;
+		case DLOG_DUMP_INTERNAL:
+			if (offline)
+				break;
+			present_filesavebox(DATALOG_INT_DUMP,(gpointer)widget);
+			break;
+		case DLOG_SELECT_ALL:
+			dlog_select_all();
+			break;
+		case DLOG_DESELECT_ALL:
+			dlog_deselect_all();
+			break;
+		case DLOG_SELECT_DEFAULTS:
+			dlog_select_defaults();
+			break;
 		case SELECT_DLOG_EXP:
 			if (offline)
 				break;

@@ -25,6 +25,7 @@
 #include <notifications.h>
 #include <structures.h>
 #include <sys/types.h>
+#include <timeout_handlers.h>
 #include <unistd.h>
 
 
@@ -156,24 +157,26 @@ void populate_dlog_choices()
  */
 void start_datalogging(void)
 {
-	GtkWidget * widget = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern gboolean offline;
+	extern gboolean forced_update;
 
 	if (logging_active)
 		return;   /* Logging already running ... */
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),FALSE);
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),FALSE);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),FALSE);
 	header_needed = TRUE;
 	logging_active = TRUE;
 	update_logbar("dlog_view",NULL,g_strdup("DataLogging Started...\n"),TRUE,FALSE);
 
-	widget = gtk_button_new();
-	g_object_set_data(G_OBJECT(widget),"handler",
-			GINT_TO_POINTER(START_REALTIME));
-	std_button_handler(widget,NULL);
-	gtk_widget_destroy(widget);
+	if (!offline)
+		start_realtime_tickler();
+	forced_update=TRUE;
 	return;
 }
 
@@ -191,33 +194,13 @@ void stop_datalogging()
 	if (g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"))
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),TRUE);
 	if (g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),TRUE);
 	if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
 	update_logbar("dlog_view",NULL,g_strdup("DataLogging Stopped...\n"),TRUE,FALSE);
 	return;
 }
 
-
-/*!
- \brief clear_logables() resets the logged choices to having NONE selected
- */
-void clear_logables(void)
-{
-	gint i = 0;
-	GtkWidget * button = NULL;
-	GObject * object = NULL;
-
-	/* Uncheck all logable choices */
-	for (i=0;i<rtv_map->derived_total;i++)
-	{
-		object = NULL;
-		button = NULL;
-		object = g_array_index(rtv_map->rtv_list,GObject *, i);
-		button = (GtkWidget *)g_object_get_data(object,"dlog_button");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
-	}
-}
 
 
 /*! 
@@ -242,8 +225,10 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
 /*!
  \brief write_log_header() writes the top line of the datalog with field names
  \param iofile (struct Io_File *) pointer to the datalog output file 
+ \param override (gboolean),  if true ALL variabels are logged, if FALSE
+ only selected variabels are logged
  */
-void write_log_header(struct Io_File *iofile)
+void write_log_header(struct Io_File *iofile, gboolean override)
 {
 	gint i = 0;
 	gint j = 0;
@@ -261,7 +246,7 @@ void write_log_header(struct Io_File *iofile)
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
-		if((gboolean)g_object_get_data(object,"being_logged"))
+		if((override) || ((gboolean)g_object_get_data(object,"being_logged")))
 			total_logables++;
 	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
@@ -269,7 +254,7 @@ void write_log_header(struct Io_File *iofile)
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
-		if((gboolean)g_object_get_data(object,"being_logged"))
+		if((override) || ((gboolean)g_object_get_data(object,"being_logged")))
 		{
 			string = (gchar *)g_object_get_data(object,"dlog_field_name");
 			output = g_string_append(output,string); 
@@ -327,7 +312,7 @@ void run_datalog(void)
 
 	if (header_needed)
 	{
-		write_log_header((void *)iofile);
+		write_log_header((void *)iofile, FALSE);
 		header_needed = FALSE;
 		begin = TRUE;
 	}
@@ -361,34 +346,118 @@ void run_datalog(void)
 
 
 /*!
- \brief set_logging_mode() is currently deprecated and does nothing 
- \param widget (GtkWidget *)
- \param data (gpointer ) unused
- \returns TRUE
+ \brief dlog_select_all() selects all variables for logging
  */
-EXPORT gboolean set_logging_mode(GtkWidget * widget, gpointer data)
+void dlog_select_all()
 {
-	gint handler = 0;
+	gint i = 0;
+	GObject * object = NULL;
+	GtkWidget *button = NULL;
 
-	if (GTK_IS_OBJECT(widget))
-                handler = (ToggleButton)g_object_get_data(G_OBJECT(widget),"handler");
-	if (!ready)
-		return FALSE;
-
-	if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
+	/* Check all logable choices */
+	for (i=0;i<rtv_map->derived_total;i++)
 	{
-		clear_logables();
-		switch((ToggleButton)handler)
-		{
-			case MT_CLASSIC_LOG:
-				break;
-			case MT_FULL_LOG:
-				break;
-			case CUSTOM_LOG:
-				break;
-			default:
-				break;
-		}
+		object = NULL;
+		button = NULL;
+		object = g_array_index(rtv_map->rtv_list,GObject *, i);
+		button = (GtkWidget *)g_object_get_data(object,"dlog_button");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 	}
-	return TRUE;
+}
+
+
+/*!
+ \brief dlog_deselect_all() resets the logged choices to having NONE selected
+ */
+void dlog_deselect_all(void)
+{
+	gint i = 0;
+	GtkWidget * button = NULL;
+	GObject * object = NULL;
+
+	/* Uncheck all logable choices */
+	for (i=0;i<rtv_map->derived_total;i++)
+	{
+		object = NULL;
+		button = NULL;
+		object = g_array_index(rtv_map->rtv_list,GObject *, i);
+		button = (GtkWidget *)g_object_get_data(object,"dlog_button");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
+	}
+}
+
+/*!
+ \brief dlog_select_defaults() resets the logged choices to the ones defined 
+ in the RealtimeMap file
+ */
+void dlog_select_defaults(void)
+{
+	gint i = 0;
+	GtkWidget * button = NULL;
+	GObject * object = NULL;
+	gboolean state=FALSE;
+
+	/* Uncheck all logable choices */
+	for (i=0;i<rtv_map->derived_total;i++)
+	{
+		object = NULL;
+		button = NULL;
+		state = FALSE;
+		object = g_array_index(rtv_map->rtv_list,GObject *, i);
+		button = (GtkWidget *)g_object_get_data(object,"dlog_button");
+		state = (gboolean)g_object_get_data(object,"log_by_default");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),state);
+	}
+}
+
+
+/*!
+ \brief dump_log_to_disk() dumps the contents of the RTV arrays to disk as a
+ datalog file
+ */
+void dump_log_to_disk(struct Io_File *iofile)
+{
+	gint i = 0;
+	gint x = 0;
+	gint j = 0;
+	gsize count = 0;
+	GString *output;
+	GObject * object = NULL;
+	GArray *history;
+	gfloat value = 0.0;
+
+	stop_realtime_tickler();
+
+	output = g_string_sized_new(1024); 
+
+	write_log_header((void *)iofile, TRUE);
+
+	j = 0;
+	for (x=0;x<rtv_map->ts_array->len;x++)
+	{
+		for(i=0;i<rtv_map->derived_total;i++)
+		{
+			object = g_array_index(rtv_map->rtv_list,GObject *,i);
+
+			history = (GArray *)g_object_get_data(object,"history");
+			value = g_array_index(history, gfloat, x);
+			if ((gboolean)g_object_get_data(object,"is_float"))
+				g_string_append_printf(output,"%.3f",value);
+			else
+				g_string_append_printf(output,"%i",(gint)value);
+			j++;
+
+			/* Print delimiter to log here so there isnt an extra
+			 * char at the end fo the line 
+			 */
+			if (j < rtv_map->derived_total)
+				output = g_string_append(output,delimiter);
+		}
+		output = g_string_append(output,"\r\n");
+	}
+	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_string_free(output,TRUE);
+	start_realtime_tickler();
+	close_file(iofile);
+
 }

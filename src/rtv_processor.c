@@ -22,10 +22,13 @@
 #include <enums.h>
 #include <glade/glade.h>
 #include <lookuptables.h>
+#include <math.h>
 #include "../mtxmatheval/mtxmatheval.h"
+#include <notifications.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
 #include <structures.h>
+#include <threads.h>
 
 
 /*!
@@ -52,10 +55,14 @@ void process_rt_vars(void *incoming)
 	gboolean temp_dep = FALSE;
 	void *evaluator = NULL;
 	GTimeVal timeval;
-	gint ts_position;
 	gint current_index;
 	GArray *history = NULL;
 	gchar *special = NULL;
+	GTimeVal curr;
+	GTimeVal begin;
+	gint hours = 0;
+	gint minutes = 0;
+	gint seconds = 0;
 
 	num_raw = firmware->rtvars_size;
 	if (num_raw != rtv_map->raw_total)
@@ -64,16 +71,22 @@ void process_rt_vars(void *incoming)
 		return;
 	}
 	/* Store timestamps in ringbuffer */
-	ts_position = rtv_map->ts_position;
-	timeval = rtv_map->ts_array[ts_position];
+
 	g_get_current_time(&timeval);
-	rtv_map->ts_array[ts_position] = timeval;
-	ts_position++;
-	/* wrap around.. */
-	if (ts_position >= rtv_map->ts_max)
-		ts_position = 0;
-	rtv_map->ts_position = ts_position;
-	
+	g_array_append_val(rtv_map->ts_array,timeval);
+	if (rtv_map->ts_array->len%250 == 0)
+	{
+		curr = g_array_index(rtv_map->ts_array,GTimeVal, rtv_map->ts_array->len-1);
+		begin = g_array_index(rtv_map->ts_array,GTimeVal,0);
+		tmpf = curr.tv_sec-begin.tv_sec-((curr.tv_usec-begin.tv_usec)/1000000);
+		hours = tmpf > 3600.0 ? floor(tmpf/3600.0) : 0;
+		tmpf -= hours*3600.0;
+		minutes = tmpf > 60.0 ? floor(tmpf/60.0) : 0;
+		tmpf -= minutes*60.0;
+		seconds = (gint)tmpf;
+
+		thread_update_logbar("dlog_view",NULL,g_strdup_printf("Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n",rtv_map->ts_array->len,hours,minutes,seconds),FALSE,FALSE);
+	}
 	
 	for (i=0;i<num_raw;i++)
 	{
@@ -369,4 +382,48 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 		index -= 1;  /* get PREVIOUS one */
 	*value = g_array_index(history,gfloat,index);
 	return TRUE;
+}
+
+
+/*!
+ \brief fluish_rt_arrays() flushed the history buffers for all the realtime
+ variables
+ */
+void flush_rt_arrays()
+{
+	extern struct Firmware_Details *firmware;
+	extern struct Rtv_Map *rtv_map;
+	GArray *history = NULL;
+	gint i = 0;
+	gint j = 0;
+	GObject * object = NULL;
+	gint current_index = 0;
+	GList *list = NULL;
+
+	/* Flush and recreate the timestamp array */
+	g_array_free(rtv_map->ts_array,TRUE);
+	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE,sizeof(GTimeVal),4096);
+
+	for(i=0;i<firmware->rtvars_size;i++)
+	{
+		/* Get list of derived vars for raw offset "i" */
+		list = g_array_index(rtv_map->rtv_array,GList *,i);
+		if (list == NULL) /* no derived vars for this variable */
+			continue;
+		list = g_list_first(list);
+		for (j=0;j<g_list_length(list);j++)
+		{
+			object=(GObject *)g_list_nth_data(list,j);
+			history = (GArray *)g_object_get_data(object,"history");
+			current_index = (gint)g_object_get_data(object,"current_index");
+			g_array_free(history,TRUE);
+			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+	                g_object_set_data(object,"history",(gpointer)history);
+			g_object_set_data(object,"current_index",GINT_TO_POINTER(-1));
+	                /* bind history array to object for future retrieval */
+		}
+
+	}
+	update_logbar("dlog_view","warning",g_strdup("Realtime Variables History buffers flushed...\n"),FALSE,FALSE);
+
 }

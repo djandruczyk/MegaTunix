@@ -241,7 +241,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 
 		if (group->num_keytypes != group->num_keys)
 		{
-			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename),CRITICAL);
 			g_strfreev(group->keys);
 			g_free(group->keytypes);
 			return NULL;

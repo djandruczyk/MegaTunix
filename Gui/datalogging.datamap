@@ -18,22 +18,22 @@ key_types=_ENUM_,_INT_
 handler=_CLOSE_LOGFILE_
 page=0
 
-[dlog_mt_classic_radio_button]
+[dlog_select_all_but]
 keys=handler,page
 key_types=_ENUM_,_INT_
-handler=_MT_CLASSIC_LOG_
+handler=_DLOG_SELECT_ALL_
 page=0
 
-[dlog_mt_full_radio_button]
+[dlog_deselect_all_but]
 keys=handler,page
 key_types=_ENUM_,_INT_
-handler=_MT_FULL_LOG_
+handler=_DLOG_DESELECT_ALL_
 page=0
 
-[dlog_custom_radio_button]
+[dlog_select_defaults_but]
 keys=handler,page
 key_types=_ENUM_,_INT_
-handler=_CUSTOM_LOG_
+handler=_DLOG_SELECT_DEFAULTS_
 page=0
 
 [dlog_comma_delimit_radio_button]
@@ -66,3 +66,18 @@ key_types=_ENUM_,_INT_
 handler=_STOP_DATALOGGING_
 page=0
 
+[dlog_dump_internal_but]
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
+handler=_DLOG_DUMP_INTERNAL_
+page=0
+tooltip="Write internal log to disk" is a new feature.  By default megatunix will record ALL variables read while hte Realtime reader is running, even if you do NOT have datalogging enabled.  This button dumps thatto disk as a std logfile of ALL variables.  It can be loaded in megatunix's logviewer for playback if desired... 
+
+#----- Textview ----------------------------------------------------
+
+[dlog_view]
+keys=page,create_tags
+key_types=_INT_,_STRING_
+page=0
+create_tags=warning
+warning=foreground,red

@@ -24,6 +24,7 @@ gboolean lookup_current_value(gchar *, gfloat *);
 gboolean lookup_previous_value(gchar *, gfloat *);
 gfloat handle_complex_expr(GObject *, void *,ConvType);
 gfloat handle_special(GObject *,gchar *);
+void flush_rt_arrays(void);
 /* Prototypes */
 
 #endif

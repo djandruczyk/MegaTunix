@@ -133,7 +133,6 @@ void reset_runtime_status()
 	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 	// Warmup Wizard screen
 	g_list_foreach(get_list("ww_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-
 }
 
 

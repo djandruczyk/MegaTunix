@@ -81,6 +81,7 @@ void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 			title = g_strdup("Select a file to import VE-Table(s) from...");
 			break;
 		case DATALOG_EXPORT:
+		case DATALOG_INT_DUMP:
 			title = g_strdup("Select a file to save your MS Datalog to...");
 			break;
 		case DATALOG_IMPORT:
@@ -181,6 +182,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 
 	if (((iotype == DATALOG_EXPORT) 
+			|| (iotype == DATALOG_INT_DUMP) 
 			|| (iotype == VE_EXPORT) 
 			|| (iotype == FULL_BACKUP)) 
 			&& (preexisting == TRUE))
@@ -190,7 +192,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			/* DO NOT overwrite, prompt user first... */
 			if (!warn_file_not_empty(iotype,selected_filename))
 			{
-				if (iotype == DATALOG_EXPORT)
+				if ((iotype == DATALOG_EXPORT) || (iotype == DATALOG_INT_DUMP))
 					update_logbar("dlog_view","warning",g_strdup("File chosen for datalogging already contained data, user has chosen not to over-write it...\n"),TRUE,FALSE);
 				else
 					update_logbar("tools_view","warning",g_strdup("File chosen already had data, user has chosen not to over-write it...\n"),TRUE,FALSE);
@@ -205,6 +207,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 
 	/* Open file in append mode, create if non-existant */
 	if ((iotype == DATALOG_EXPORT) 
+			|| (iotype == DATALOG_INT_DUMP) 
 			|| (iotype == VE_EXPORT) 
 			|| (iotype == FULL_BACKUP)) 
 		iofile->iochannel = g_io_channel_new_file(selected_filename, "a+", NULL);
@@ -214,7 +217,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	if(iofile->iochannel == NULL)
 	{
 		dbg_func(g_strdup(__FILE__": check_filename()\n\t iochannel could NOT be opened...\n"),CRITICAL);
-		if (iotype == DATALOG_EXPORT)
+		if ((iotype == DATALOG_EXPORT) || (iotype == DATALOG_INT_DUMP))
 			update_logbar("dlog_view",NULL,g_strdup("File Open Failure\n"),TRUE,FALSE);
 		else
 			update_logbar("tools_view",NULL,g_strdup("File Open Failure\n"),TRUE,FALSE);
@@ -252,6 +255,9 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			logview_open = TRUE;
 			update_logbar("dlog_view",NULL,g_strdup("DataLog ViewFile Opened\n"),TRUE,FALSE);
 			load_logviewer_file(iofile);
+			break;
+		case DATALOG_INT_DUMP:
+			dump_log_to_disk(iofile);
 			break;
 		case FULL_BACKUP:
 			if (backup_open)
@@ -372,6 +378,8 @@ void close_file(struct Io_File *iofile)
 			vex_open = FALSE;
 			g_free(vexfile);
 			break;
+		default:
+			break;
 	}
 
 	g_free(iofile->filename);
@@ -395,6 +403,7 @@ void truncate_file(FileIoType filetype, gchar *filename)
 	switch (filetype)
 	{
 		case DATALOG_EXPORT:
+		case DATALOG_INT_DUMP:
 			base = g_strdup("DataLog ");
 			break;
 		case VE_EXPORT:

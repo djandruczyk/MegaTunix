@@ -384,9 +384,7 @@ struct Rtv_Map
 	gint derived_total;	/*! Number of derived variables */
 	gchar **raw_list;	/*! Char List of raw variables by name */
 	GArray *rtv_array;	/*! Realtime Values array of lists.. */
-	GTimeVal *ts_array;	/*! Timestamp array */
-	gint ts_position;	/*! Latest timestamp marker position.. */
-	gint ts_max;		/*! # elements in the timestamp array */
+	GArray *ts_array;	/*! Timestamp array */
 	GArray *rtv_list;	/*! List of derived vars IN ORDER */
 	GHashTable *rtv_hash;	/*! Hashtable of rtv derived values indexed by
 				 * it's internal name */

@@ -113,6 +113,14 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(START_REALTIME));
 	g_hash_table_insert(str_2_enum,"_STOP_REALTIME_",
 			GINT_TO_POINTER(STOP_REALTIME));
+	g_hash_table_insert(str_2_enum,"_DLOG_SELECT_ALL_",
+			GINT_TO_POINTER(DLOG_SELECT_ALL));
+	g_hash_table_insert(str_2_enum,"_DLOG_DESELECT_ALL_",
+			GINT_TO_POINTER(DLOG_DESELECT_ALL));
+	g_hash_table_insert(str_2_enum,"_DLOG_SELECT_DEFAULTS_",
+			GINT_TO_POINTER(DLOG_SELECT_DEFAULTS));
+	g_hash_table_insert(str_2_enum,"_DLOG_DUMP_INTERNAL_",
+			GINT_TO_POINTER(DLOG_DUMP_INTERNAL));
 	g_hash_table_insert(str_2_enum,"_SELECT_PARAMS_",
 			GINT_TO_POINTER(SELECT_PARAMS));
 	g_hash_table_insert(str_2_enum,"_SELECT_DLOG_IMP_",

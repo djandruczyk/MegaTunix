@@ -73,7 +73,7 @@ cyls_bitmask=240
 cyls_bitshift=4
 ctimeH_offset=22
 ctimeL_offset=23
-tooltip="RPM" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of about 1-5 RPM with the this firmware but NOT below 500 RPM. 
+tooltip="RPM" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of about 1-5 RPM with this firmware but NOT below 500 RPM. 
 log_by_default=FALSE
 
 [derived_4]
@@ -292,7 +292,7 @@ map_sensor_bitmask=3
 map_sensor_bitshift=0
 map_sensor_bitval=1
 is_float=FALSE
-tooltip="MAP KPA" is the Manifold Absolute Pressure in KPA (Kilopascals), 100KPA is atmospheric pressure at seal level.
+tooltip="MAP KPA" is the Manifold Absolute Pressure in KPA (Kilopascals), 100KPA is atmospheric pressure at sea level.
 log_by_default=TRUE
 
 [derived_18]
@@ -316,7 +316,7 @@ map_sensor_bitmask=3
 map_sensor_bitshift=0
 map_sensor_bitval=1
 is_float=FALSE
-tooltip="BARO KPA" is the Barometer Pressure in KPA (Kilopascals) This is read by the MAP sensor at ecu powerup and us used for Barometer correction, 100KPA is atmospheric pressure at seal level.
+tooltip="BARO KPA" is the Barometer Pressure in KPA (Kilopascals) This is read by the MAP sensor at ecu powerup and us used for Barometer correction, 100KPA is atmospheric pressure at sea level.
 log_by_default=FALSE
 
 [derived_19]
@@ -567,8 +567,8 @@ tooltip="PW-1" is the pulsewidth in milliseconds for the injectors tied to injec
 log_by_default=TRUE
 
 [derived_34]
-keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
 internal_name=dcycle1
 dlog_gui_name=Dutycycle 1 
 dlog_field_name=DCYCLE1
@@ -600,8 +600,8 @@ tooltip="Dcycle1" is the injector Duty cycle for injector channel 1.
 log_by_default=TRUE
 
 [derived_35]
-keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
-key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
 internal_name=dcycle2
 dlog_gui_name=Dutycycle 2
 dlog_field_name=DCYCLE2

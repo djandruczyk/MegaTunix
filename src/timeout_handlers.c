@@ -18,6 +18,7 @@
 #include <runtime_gui.h>
 #include <logviewer_gui.h>
 #include <notifications.h>
+#include <rtv_processor.h>
 #include <structures.h>
 #include <timeout_handlers.h>
 #include <threads.h>
@@ -37,6 +38,7 @@ void start_realtime_tickler()
 
 	if (realtime_id == 0)
 	{
+		flush_rt_arrays();
 		realtime_id = g_timeout_add(serial_params->read_wait,
 				(GtkFunction)signal_read_rtvars,NULL);
 		update_logbar("comms_view",NULL,g_strdup("Realtime Reader started\n"),TRUE,FALSE);

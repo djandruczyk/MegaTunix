@@ -23,7 +23,9 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <interrogate.h>
+#include <listmgmt.h>
 #include <logviewer_gui.h>
+#include <mode_select.h>
 #include <notifications.h>
 #include <post_process.h>
 #include <runtime_sliders.h>
@@ -34,6 +36,7 @@
 #include <string.h>
 #include <structures.h>
 #include <tabloader.h>
+#include <timeout_handlers.h>
 #include <threads.h>
 #include <unistd.h>
 
@@ -154,6 +157,10 @@ trypop:
 				case UPD_REENABLE_INTERROGATE_BUTTON:
 					gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
 					break;
+				case UPD_START_REALTIME:
+					if (connected)
+						start_realtime_tickler();
+					break;
 				case UPD_REALTIME:
 					if (connected)
 						update_runtime_vars();
@@ -164,13 +171,16 @@ trypop:
 						update_ve_const();
 					paused_handlers = FALSE;
 					break;
-				case UPD_STORE_RED:
+				case UPD_SET_STORE_RED:
 					set_group_color(RED,"burners");
 					break;
-				case UPD_STORE_BLACK:
+				case UPD_SET_STORE_BLACK:
 					set_group_color(BLACK,"burners");
 					for (i=0;i<firmware->total_pages;i++)
 						set_reqfuel_color(BLACK,i);
+					break;
+				case UPD_ENABLE_THREE_D_BUTTONS:
+					g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
 					break;
 				case UPD_LOGVIEWER:
 					if (connected)
