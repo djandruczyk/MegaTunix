@@ -59,7 +59,7 @@ megatunix_SOURCES = \
 megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl 
 
 
-megatunix_LDFLAGS =
+megatunix_LDFLAGS = -Wl,--export-dynamic 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

@@ -98,7 +98,7 @@ void interrogate_ecu()
 	tests_to_run = cmd_array->len;
 
 	/* Flush the toilet.... */
-	tcflush(serial_params->fd, TCIOFLUSH);
+//	tcflush(serial_params->fd, TCIOFLUSH);
 
 	for (i=0;i<tests_to_run;i++)
 	{
@@ -178,7 +178,7 @@ void interrogate_ecu()
 	/* Reset page to 0 just to be 100% sure... */
 	set_ms_page(0);
 	/* Flush the toilet.... */
-	tcflush(serial_params->fd, TCIOFLUSH);
+//	tcflush(serial_params->fd, TCIOFLUSH);
 
 	interrogated = TRUE;
 

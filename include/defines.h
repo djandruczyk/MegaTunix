@@ -17,9 +17,16 @@
 /* Definitions */
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
-
 #define MS_PAGE_SIZE 256
 #define MAX_SUPPORTED_PAGES 8
+
+/* Windows speciifc for exporting symbols forglade... */
+#ifdef __WIN32__
+#define EXPORT __declspec (dllexport)
+#else
+#define EXPORT 
+#endif
+
 
 /* Download modes */
 #define IMMEDIATE		0x10

@@ -40,6 +40,8 @@
 #include <vetable_gui.h>
 #include <vex_support.h>
 
+
+
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
 extern gboolean connected;
@@ -133,7 +135,7 @@ gint comm_port_change(GtkEditable *editable)
 	return TRUE;
 }
 
-gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
+EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	void *obj_data = NULL;
 	gint handler = 0; 
@@ -192,7 +194,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), TRUE);
 				reset_logviewer_state();
 				playback_mode = FALSE;
-				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
+//				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
 					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
 				break;
 			case PLAYBACK_VIEW:
@@ -202,7 +204,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), FALSE);
 				reset_logviewer_state();
 				playback_mode = TRUE;
-				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
+//				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
 					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
 				break;
 			case HEX_VIEW:
@@ -227,7 +229,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
+EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint bitshift = -1;
 	gint bitval = -1;
@@ -334,7 +336,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gboolean std_button_handler(GtkWidget *widget, gpointer data)
+EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
 	void *obj_data = NULL;
@@ -437,7 +439,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gboolean spin_button_handler(GtkWidget *widget, gpointer data)
+EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 
@@ -985,7 +987,7 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 }
 
-gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+EXPORT gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if(event->keyval == GDK_Shift_L)
 	{
@@ -997,7 +999,7 @@ gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	return TRUE;
 }
 
-gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
+EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	static gboolean marked[MS_PAGE_SIZE];
 	gint index = 0;

@@ -93,15 +93,11 @@ gboolean load_gui_tabs()
 				
 				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
 				g_free(tab_name);
-				//printf ("tab name freed\n");
 				cfg_free(cfgfile);
-				//printf("cfg file freed\n");
 			}
 
 			g_free(map_file);
-			//printf("map file freed\n");
 			g_free(glade_file);
-			//printf("glade file freed\n");
 			frame = glade_xml_get_widget(xml,"topframe");
 			if (frame == NULL)
 			{
@@ -110,14 +106,9 @@ gboolean load_gui_tabs()
 			}
 			else
 			{
-				//printf("before append\n");
 				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
-				//printf("after append\n");
 				glade_xml_signal_autoconnect(xml);
-				//printf("after signal autoconnect\n");
-				//gtk_widget_show_all(frame);
 				gtk_widget_show_all(notebook);
-				//printf("after show all(frame)\n");
 			}
 			g_free(xml);
 
