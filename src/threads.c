@@ -172,7 +172,7 @@ void *raw_reader_thread(void *params)
 		{
 			startup = 0;	
 			dbg_func(__FILE__": Successfull read of RealTime vars\n",SERIAL_RD);
-			res = handle_ms_data(REALTIME_VARS);
+			res = handle_ms_data(REALTIME_VARS,-1);
 			if(res)
 			{
 				connected = TRUE;

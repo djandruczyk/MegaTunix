@@ -18,7 +18,8 @@
 #include <ms_structures.h>
 
 /* Prototypes */
-void post_process(void *, void * );
+void post_process_realtime_vars(void *, void * );
+void post_process_raw_memory(void *, int);
 /* Prototypes */
 
 #endif

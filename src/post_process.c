@@ -25,7 +25,7 @@ extern unsigned char *kpa_conversion;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
 
-void post_process(void *input, void *output)
+void post_process_realtime_vars(void *input, void *output)
 {
 	/* We can use the dualtable struct ptr only because
 	 * all the ata is the same places in the structure.  We
@@ -204,4 +204,22 @@ void post_process(void *input, void *output)
 		out->dcycle2 =  100.0 * (float) out->pw2 / possible_inj_time;
 
 	}
+}
+
+
+void post_process_raw_memory(void *input, gint offset)
+{
+	extern GArray * raw_memory;
+	gint i = 0;
+	GtkWidget *label = NULL;
+	unsigned char *ptr = input;
+
+//	dbg_func(g_strdup_printf(__FILE__": post_process_raw_memory(), not written yet, offset fed was %i\n",offset),CRITICAL);
+	for (i=0;i<256;i++)
+	{
+		label = g_array_index(raw_memory, GtkWidget *, i+(256*offset));
+		//gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.3i",ptr[i]));
+		gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.2x",ptr[i]));
+	}
+				
 }

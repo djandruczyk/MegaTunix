@@ -15,9 +15,10 @@
 #define __DATAIO_H__
 
 #include <enums.h>
+#include <gtk/gtk.h>
 
 /* Prototypes */
-int handle_ms_data(InputData);
+int handle_ms_data(InputData, gint );
 /* Prototypes */
 
 #endif

@@ -26,7 +26,6 @@ void build_memory(GtkWidget *parent_frame)
 	GtkWidget *hbox;
 	GtkWidget *label;
 	GtkWidget *button;
-	GtkWidget *sep;
 	GtkWidget *table;
 	GtkWidget *table2;
 	GtkWidget *ebox;
@@ -40,7 +39,7 @@ void build_memory(GtkWidget *parent_frame)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-	
+
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
@@ -67,33 +66,23 @@ void build_memory(GtkWidget *parent_frame)
 		gtk_container_add(GTK_CONTAINER(frame),ebox);
 
 		gtk_table_attach(GTK_TABLE(table),frame,0,1,y,y+1,
-				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+				(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL),
+				(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL), 0, 0);
 
-		table2 = gtk_table_new(1,(cols*2)-1,FALSE);
+		table2 = gtk_table_new(1,cols,TRUE);
 		gtk_container_add(GTK_CONTAINER(ebox),table2);
+		gtk_table_set_col_spacings(GTK_TABLE(table2),1);
 
-		for (x=0;x<(cols*2)-1;x++)
+		for (x=0;x<cols;x++)
 		{
 
-			if (x%2)
-			{
-				sep = gtk_vseparator_new();
-				gtk_table_attach(GTK_TABLE(table2),sep,x,x+1,0,1,
-						(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
-						(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
-			}
-			else
-			{
-				ebox = gtk_event_box_new();
-				gtk_table_attach(GTK_TABLE(table2),ebox,x,x+1,0,1,
-						(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-						(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
-				//label = gtk_label_new(g_strdup_printf("%i,%i",x/2,y));
-				label = gtk_label_new(NULL);
-				raw_memory = g_array_insert_val(raw_memory,(y*8)+(x/2),label);
-				gtk_container_add(GTK_CONTAINER(ebox),label);
-			}
+			ebox = gtk_event_box_new();
+			gtk_table_attach(GTK_TABLE(table2),ebox,x,x+1,0,1,
+					(GtkAttachOptions) (GTK_FILL|GTK_SHRINK|GTK_EXPAND),
+					(GtkAttachOptions) (GTK_FILL|GTK_SHRINK|GTK_EXPAND), 0, 0);
+			label = gtk_label_new(NULL);
+			raw_memory = g_array_insert_val(raw_memory,(y*8)+(x),label);
+			gtk_container_add(GTK_CONTAINER(ebox),label);
 			if (y%2)
 				gtk_widget_modify_bg(ebox,GTK_STATE_NORMAL,&purple);
 			else
@@ -106,15 +95,15 @@ void build_memory(GtkWidget *parent_frame)
 
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
-	
+
 	button = gtk_button_new_with_label("Read RAW Memory\n");
+	/* Memory offset to retrieve... */
+	g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(0));
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(READ_RAW_MEMORY));
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
-	
 
 
-	/* Not written yet */
 	return;
 }

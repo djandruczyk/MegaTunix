@@ -34,14 +34,14 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
        
-int handle_ms_data(InputData which_data)
+int handle_ms_data(InputData which_data, gint offset)
 {
 	gint res = 0;
 	gint total_read = 0;
 	gint total_wanted = 0;
 	gint zerocount = 0;
 	gboolean bad_read = FALSE;
-	unsigned char buf[255];
+	unsigned char buf[2048];
 	unsigned char *ptr = buf;
 	struct pollfd ufds;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
@@ -84,7 +84,7 @@ int handle_ms_data(InputData which_data)
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
-					goto jumpout;
+					break;
 				}
 			}
 			if (bad_read)
@@ -118,7 +118,7 @@ int handle_ms_data(InputData which_data)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			post_process((void *)buf,(void *)runtime);
+			post_process_realtime_vars((void *)buf,(void *)runtime);
 
 			break;
 
@@ -143,7 +143,7 @@ int handle_ms_data(InputData which_data)
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
-					goto jumpout;
+					break;
 				}
 			}
 			/* the number of bytes expected for raw data read */
@@ -187,7 +187,7 @@ int handle_ms_data(InputData which_data)
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
-					goto jumpout;
+					break;
 				}
 			}
 			/* the number of bytes expected for raw data read */
@@ -230,7 +230,7 @@ int handle_ms_data(InputData which_data)
 				if (zerocount >= 5)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
-					goto jumpout;
+					break;
 				}
 			}
 			/* the number of bytes expected for raw data read */
@@ -257,7 +257,37 @@ int handle_ms_data(InputData which_data)
 			ms_ve_goodread_count++;
 			break;
 		case RAW_MEMORY_DUMP:
-			dbg_func("RAW_MEMORY_DUMP read not designed yet...\n",CRITICAL);
+			total_read = 0;
+			total_wanted = serial_params->memblock_size;
+			zerocount = 0;
+
+			while (total_read < total_wanted )
+			{
+				dbg_func(g_strdup_printf(__FILE__": RAW_MEMORY_DUMP requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				// Increment bad read counter....
+				if (res == 0)
+					zerocount++;
+
+				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
+				if (zerocount >= 5)  // 3 bad reads, abort
+				{
+					bad_read = TRUE;
+					break;
+				}
+			}
+			/* the number of bytes expected for raw data read */
+			if (bad_read)
+			{
+				dbg_func(__FILE__": Error reading Raw Memory Block\n",CRITICAL);
+				tcflush(serial_params->fd, TCIOFLUSH);
+				serial_params->errcount++;
+				goto jumpout;
+			}
+			post_process_raw_memory((void *)buf, offset);
 			break;
 		default:
 			dbg_func("handle_ms_data, improper case, contact author\n",CRITICAL);

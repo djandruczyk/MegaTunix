@@ -35,6 +35,7 @@ struct Serial_Params
         gint table1_size;	/* Size of VEtable/page_1 datablock */
         gint rtvars_size;	/* Size of Realtime vars datablock */
         gint ignvars_size;	/* Size of Realtime vars datablock */
+        gint memblock_size;	/* Size of Raw_Memory datablock */
         struct termios oldtio;  /* serial port settings before we touch it */
         struct termios newtio;  /* serial port settings we use when running */
         gint errcount;           /* Serial I/O errors read error count */

@@ -374,6 +374,7 @@ void determine_ecu(void *ptr)
 	serial_params->table1_size = canidates[match].bytes[CMD_V1];
 	serial_params->rtvars_size = canidates[match].bytes[CMD_A];
 	serial_params->ignvars_size = canidates[match].bytes[CMD_I];
+	serial_params->memblock_size = canidates[match].bytes[CMD_F0];
 
 	/* Display firmware version in the window... */
 	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",canidates[match].firmware_name);

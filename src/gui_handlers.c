@@ -439,7 +439,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			else
 			{
 				paused_handlers = TRUE;
-				read_raw_memory();
+				read_raw_memory((gint)object_data);
 				//update_raw_memory();
 				paused_handlers = FALSE;
 			}

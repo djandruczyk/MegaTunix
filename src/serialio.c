@@ -13,6 +13,7 @@
 
 #include <comms_gui.h>
 #include <config.h>
+#include <dataio.h>
 #include <defines.h>
 #include <debugging.h>
 #include <errno.h>
@@ -255,7 +256,7 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 
 }
 
-void read_raw_memory()
+void read_raw_memory(gint offset)
 {
 	gboolean restart_reader = FALSE;
 	struct pollfd ufds;
@@ -289,7 +290,12 @@ void read_raw_memory()
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
-	res = write(serial_params->fd,"F0",2);
+	res = write(serial_params->fd,"F",1);
+	if (res != 1)	/* Error */
+		dbg_func(__FILE__": failure sending \"F\" Cmd \n",CRITICAL);
+	res = write(serial_params->fd,&offset,1);
+	if (res != 1)	/* Error */
+		dbg_func(__FILE__": failure sending \"F\" Cmd Argument \n",CRITICAL);
 	res = poll (&ufds,1,serial_params->poll_timeout);
 	if (res == 0)	/* Error */
 	{
@@ -300,8 +306,8 @@ void read_raw_memory()
 	else		/* Data arrived */
 	{
 		connected = TRUE;
-		dbg_func(__FILE__": reading RAW_Memory-(0)\n",SERIAL_RD);
-		res = handle_ms_data(RAW_MEMORY_DUMP);
+		dbg_func(g_strdup_printf(__FILE__": reading RAW_Memory-(%i)\n",offset),SERIAL_RD);
+		res = handle_ms_data(RAW_MEMORY_DUMP,offset);
 
 	}
 	tcflush(serial_params->fd, TCIOFLUSH);
@@ -355,7 +361,7 @@ void read_ve_const()
 	{
 		connected = TRUE;
 		dbg_func(__FILE__": reading VE-Table(0)\n",SERIAL_RD);
-		res = handle_ms_data(VE_AND_CONSTANTS_1);
+		res = handle_ms_data(VE_AND_CONSTANTS_1,-1);
 
 	}
 	if (ecu_caps & DUALTABLE)
@@ -373,7 +379,7 @@ void read_ve_const()
 		{
 			connected = TRUE;
 			dbg_func(__FILE__": reading VE-Table(1)\n",SERIAL_RD);
-			res = handle_ms_data(VE_AND_CONSTANTS_2);
+			res = handle_ms_data(VE_AND_CONSTANTS_2,-1);
 
 		}
 		set_ms_page(0);
@@ -392,7 +398,7 @@ void read_ve_const()
 		{
 			connected = TRUE;
 			dbg_func(__FILE__": reading Spark-Table(1)\n",SERIAL_RD);
-			res = handle_ms_data(IGNITION_VARS);
+			res = handle_ms_data(IGNITION_VARS,-1);
 		}
 	}
 
