@@ -43,6 +43,10 @@ conv_factor=10
 conv_type=ADD
 conv_factor=40
 
+[Offset 90]
+conv_type=MULT
+conv_factor=10
+
 [Offset 93]
 conv_type=MULT
 conv_factor=10

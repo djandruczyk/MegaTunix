@@ -47,6 +47,7 @@
  */
 
 #define VEBLOCK_SIZE 128
+extern char * ve_const_arr;
 struct Conversion_Chart std_conversions;
 
 gboolean read_conversions(char *filename)
@@ -82,7 +83,55 @@ gboolean read_conversions(char *filename)
 		return TRUE;
 	}
 	else
-		printf("file NOT found,  now leaving\n");
+	{
+		no_conversions_warning();
+		printf("Conversions file NOT found, CRITICAL ERROR!!!\n");
 		return FALSE; /* FAILURE opening file */
+	}
+	return FALSE;	/* Assume a problem if we get here... */
 }
 
+gint convert_before_download(gint offset, gfloat value)
+{
+	gint return_value = 0;
+	gint tmp_val = (gint)(value+0.001);
+	gint factor = std_conversions.conv_factor[offset];
+
+//	printf("offset provided, %i\n",offset);
+	if(std_conversions.conv_type[offset] == NULL)
+	{	/* return the Integer version of value */
+		ve_const_arr[offset]=tmp_val;
+		return tmp_val;
+	}
+	else
+	{
+		if ((strcmp(std_conversions.conv_type[offset],"ADD")) == 0 )
+		{	/* Addition of conv_factor to valueR*/
+			return_value = tmp_val+factor;
+		}
+		else if((strcmp(std_conversions.conv_type[offset],"SUB")) == 0)
+		{	/* Subtraction of conv_factor from value */
+			return_value = tmp_val-factor;
+		}
+		else if((strcmp(std_conversions.conv_type[offset],"MULT")) == 0)
+		{	/* Multiplication of value by conv_factor */
+			return_value = (gint)((value*factor)+0.001);
+		}
+		else if((strcmp(std_conversions.conv_type[offset],"DIV")) == 0)
+		{	/* Division of value by conv_factor */
+			return_value = (gint)((value/(gfloat)factor)+0.001);
+		}
+		else
+		{
+			printf("ERROR\n");
+		}
+		ve_const_arr[offset] = return_value; 
+		return (return_value);
+	}
+	return -1;	/* will get caught by burn routine as error */
+}
+
+gfloat convert_after_upload(gint offset, gfloat value)
+{
+	return 0.0;
+}

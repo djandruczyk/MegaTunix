@@ -50,6 +50,7 @@ extern gint interval_max;
 extern GtkWidget *main_window;
 struct ve_const_std *ve_constants;
 struct ve_const_std *ve_const_tmp;
+char * ve_const_arr;
 struct raw_runtime_std *raw_runtime;
 struct runtime_std *runtime;
 struct runtime_std *runtime_last;
@@ -176,6 +177,7 @@ void mem_alloc()
 
 	ve_const_tmp = malloc(sizeof(struct ve_const_std));
 	ve_constants = malloc(sizeof(struct ve_const_std));
+	ve_const_arr = malloc(sizeof(struct ve_const_std));
 	raw_runtime = malloc(sizeof(struct raw_runtime_std));
 	runtime = malloc(sizeof(struct runtime_std));
 	runtime_last = malloc(sizeof(struct runtime_std));

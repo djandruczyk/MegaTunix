@@ -20,15 +20,15 @@
 
 /* Definitions */
 
-/* Memroy offsets */
-#define VE1_TABLE_OFFSET	0
-#define VE2_TABLE_OFFSET	200	/* Intentianally WRONG  for now.. */
-#define WARMUP_BINS_OFFSET	68
-#define ACCEL_BINS_OFFSET	78
-#define VE1_RPM_BINS_OFFSET	100
-#define VE2_RPM_BINS_OFFSET	200	/* Intentianally WRONG  for now.. */
-#define VE1_KPA_BINS_OFFSET	108
-#define VE2_KPA_BINS_OFFSET	208	/* Intentianally WRONG  for now.. */
+/* Memory offsets */
+#define VE1_TABLE_OFFSET	0	/* From page 0 boundary */
+#define VE2_TABLE_OFFSET	0	/* From Page 1 boundary */
+#define WARMUP_BINS_OFFSET	68	/* From page 0 boundary */
+#define ACCEL_BINS_OFFSET	78	/* From page 0 boundary */
+#define VE1_RPM_BINS_OFFSET	100	/* From page 0 boundary */
+#define VE2_RPM_BINS_OFFSET	100	/* From Page 1 boundary */
+#define VE1_KPA_BINS_OFFSET	108	/* From page 0 boundary */
+#define VE2_KPA_BINS_OFFSET	108	/* From Page 1 boundary */
 
 /* Gui frames */
 #define ABOUT_PAGE		0x01
@@ -72,33 +72,13 @@
 #define REQ_FUEL_AFR		0x43
 #define REQ_FUEL		0x44
 //#define REQ_FUEL_2		0x45
-#define	INJ_OPEN_TIME		0x46
-#define	BATT_CORR		0x47
-#define	PWM_CUR_LIM		0x48
-#define	PWM_TIME_THRES		0x49
-#define	FAST_IDLE_THRES		0x4a
-#define CRANK_PULSE_NEG_40	0x4b
-#define CRANK_PULSE_170		0x4c
-#define CRANK_PRIMING_PULSE	0x4d
-#define AFTERSTART_ENRICH	0x4e
-#define AFTERSTART_NUM_CYCLES	0x4f
-#define	SER_POLL_TIMEO		0x50
-#define	SER_INTERVAL_DELAY	0x51
-#define SET_SER_PORT		0x52
-#define TPS_TRIG_THRESH		0x53
-#define ACCEL_ENRICH_DUR	0x54
-#define COLD_ACCEL_ENRICH	0x55
-#define COLD_ACCEL_MULT		0x56
-#define DECEL_CUT		0x57
-#define EGO_TEMP_ACTIVE		0x58
-#define EGO_RPM_ACTIVE		0x59
-#define EGO_SW_VOLTAGE		0x5a
-#define EGO_STEP		0x5b
-#define EGO_EVENTS		0x5c
-#define EGO_LIMIT		0x5d
-#define NUM_SQUIRTS		0x5e
-#define NUM_CYLINDERS		0x5f
-#define NUM_INJECTORS		0x60
+#define	SER_POLL_TIMEO		0x46
+#define	SER_INTERVAL_DELAY	0x47
+#define SET_SER_PORT		0x48
+#define NUM_SQUIRTS		0x49
+#define NUM_CYLINDERS		0x50
+#define NUM_INJECTORS		0x51
+#define GENERIC			0x52
 
 /* text entries */
 #define MS_RESET_COUNT		0x7a
@@ -106,14 +86,6 @@
 
 /* Group classes */
 /* Classes are used for widget groups, i.e. the VEtable, RPM bins, etc... */
-#define	ACCEL			0x80
-#define VE1_RPM			0x81
-#define VE1_KPA			0x82
-#define VE1			0x83
-#define VE2_RPM			0x84
-#define VE2_KPA			0x85
-#define VE2			0x86
-#define WARMUP			0x87
 
 /* Download modes */
 #define IMMEDIATE		0x90

@@ -35,6 +35,7 @@ extern gboolean raw_reader_running;
 extern gboolean raw_reader_stopped;
 extern gint read_wait_time;
 extern struct ve_const_std *ve_constants;
+extern char *ve_const_arr;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
@@ -254,49 +255,6 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-int classed_spinner_changed(GtkWidget *widget, gpointer data)
-{
-        gfloat value = 0.0;
-        gint offset = 0;
-	gint class = 0;
-        if (paused_handlers)
-                return TRUE;
-        value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-	/* Class is set to determine the course of action */
-	class = (gint) g_object_get_data(G_OBJECT(widget),"class");
-	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
-	switch (class)
-	{
-		case WARMUP:
-			ve_constants->warmup_bins[offset-WARMUP_BINS_OFFSET] 
-				= (gint)value;
-			write_ve_const((gint)value, offset);
-			break;
-		case VE1_RPM:
-			ve_constants->rpm_bins[offset-VE1_RPM_BINS_OFFSET] 
-				= (gint)value/100.0;
-			write_ve_const((gint)value/100.0, offset);
-			break;
-		case VE1_KPA:
-			ve_constants->kpa_bins[offset-VE1_KPA_BINS_OFFSET] 
-				= (gint)value;
-			write_ve_const((gint)value, offset);
-			break;
-		case VE1:
-			ve_constants->ve_bins[offset-VE1_TABLE_OFFSET] 
-				= (gint)value;
-			write_ve_const((gint)value, offset);
-			break;
-		case ACCEL:
-			ve_constants->accel_bins[offset-ACCEL_BINS_OFFSET] 
-				= (gint)((value*10.0)+.001);
-			write_ve_const((gint)((value*10.0)+.001), offset);
-			break;
-	}
-
-	return TRUE;
-}
-
 int spinner_changed(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
@@ -306,7 +264,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 	 */
 	gfloat value = 0.0;
 	gint offset;
-	gint tmpi_x10 = 0; /* value*10 converted to an INT */
+	gint page;
 	gint tmpi = 0;
 	gint tmp = 0;
 	gint dload_val = 0;
@@ -314,9 +272,9 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 	if (paused_handlers)
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
-	tmpi_x10 = (int)((value*10.0)+.001);
 	tmpi = (int)(value+.001);
 
 	switch ((gint)data)
@@ -351,99 +309,8 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			reqd_fuel.afr = value;
 			break;
 		case REQ_FUEL:
-			req_fuel_sav = tmpi_x10;
+			req_fuel_sav = convert_before_download(offset,value);
 			check_req_fuel_limits();
-			break;
-		case INJ_OPEN_TIME:
-			/* This funny conversion is needed cause of 
-			 * some weird quirk when multiplying the float
-			 * by ten and then converting to int (is off by
-			 * one in SOME cases only..
-			 */
-			ve_constants->inj_open_time = tmpi_x10;
-			dload_val = tmpi_x10;
-			break;
-		case BATT_CORR:
-			ve_constants->batt_corr = (gint)((value*60.0)+0.001);
-			dload_val = (gint)((value*60.0)+0.001);
-			break;
-		case PWM_CUR_LIM:
-			ve_constants->pwm_curr_lim = tmpi;
-			dload_val = tmpi;
-			break;
-		case PWM_TIME_THRES:
-			ve_constants->pwm_time_max = tmpi_x10;
-			dload_val = tmpi_x10;
-			break;
-		case FAST_IDLE_THRES:
-			ve_constants->fast_idle_thresh = tmpi+40;
-			dload_val = tmpi+40;
-			break;
-		case CRANK_PULSE_NEG_40:
-			ve_constants->cr_pulse_neg40 = tmpi_x10;
-			dload_val = tmpi_x10;
-			break;
-		case CRANK_PULSE_170:
-			ve_constants->cr_pulse_pos170 = tmpi_x10;
-			dload_val = tmpi_x10;
-			break;
-		case CRANK_PRIMING_PULSE:
-			ve_constants->cr_priming_pulse = tmpi_x10;
-			dload_val = tmpi_x10;
-			break;
-		case AFTERSTART_ENRICH:
-			ve_constants->as_enrich = tmpi;
-			dload_val = tmpi;
-			break;
-		case AFTERSTART_NUM_CYCLES:
-			ve_constants->as_num_cycles = tmpi;
-			dload_val = tmpi;
-			break;
-		case TPS_TRIG_THRESH:
-			tmpi = (int)((value*5.0)+.001);
-			ve_constants->tps_trig_thresh = tmpi;
-			dload_val = tmpi;
-			break;
-		case ACCEL_ENRICH_DUR:
-			ve_constants->accel_duration = tmpi_x10;
-			dload_val = tmpi_x10;
-			break;
-		case COLD_ACCEL_ENRICH:
-			ve_constants->cold_accel_addon = tmpi_x10;
-			dload_val = tmpi_x10;
-			break;
-		case COLD_ACCEL_MULT:
-			ve_constants->cold_accel_mult = tmpi;
-			dload_val = tmpi;
-			break;
-		case DECEL_CUT:
-			ve_constants->decel_cut = tmpi;
-			dload_val = tmpi;
-			break;
-		case EGO_TEMP_ACTIVE:
-			ve_constants->ego_temp_active = tmpi+40;
-			dload_val = tmpi+40;
-			break;
-		case EGO_RPM_ACTIVE:
-			ve_constants->ego_rpm_active = tmpi/100;
-			dload_val = tmpi/100;
-			break;
-		case EGO_SW_VOLTAGE:	
-			tmpi = (int)((value*51.0)+.001);
-			ve_constants->ego_sw_voltage = tmpi;
-			dload_val = tmpi;
-			break;
-		case EGO_STEP:	
-			ve_constants->ego_step = tmpi;
-			dload_val = tmpi;
-			break;
-		case EGO_EVENTS:	
-			ve_constants->ego_events = tmpi;
-			dload_val = tmpi;
-			break;
-		case EGO_LIMIT:	
-			ve_constants->ego_limit = tmpi;
-			dload_val = tmpi;
 			break;
 		case NUM_SQUIRTS:
 			/* This actuall effects another variable */
@@ -538,6 +405,9 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 						= dload_val;	
 			}
 			check_req_fuel_limits();
+			break;
+		case GENERIC:
+			dload_val = convert_before_download(offset,value);
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */

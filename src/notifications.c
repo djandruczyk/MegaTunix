@@ -86,6 +86,16 @@ void no_ms_connection(void)
 	g_free(buff);
 }
 
+void no_conversions_warning(void)
+{
+	gchar *buff;
+	buff = g_strdup("The MegaSquirt conversions file could not be opened,  DO NOT attempt to communicate with the MegaSquirt ECU until this problem is resolved.  The conversions file is typically named \"std-conversions\" and came with the MegaTunix sourcecode,  it should have been installed into your ~/.MegaTunix directory.  Please close MegaTunix and place the file in the proper location.  Without this file you can corrupt your MegaSquirts\' internal user configurable variables due to improper conversion (this file contains the proper conversion factors to convert the values you see on screen to formats compatible with the MS ECU)\n");
+	
+	if (!warning_present)
+		warn_user(buff);
+	g_free(buff);
+}
+
 void warn_user(gchar *message)
 {
 	GtkWidget *dialog;
