@@ -187,7 +187,7 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
                 * ((double)(reqd_fuel.inj_rate));
 
         ve_constants->req_fuel = 10.0*(tmp1/tmp2);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_spin),
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_total_spin),
                         ve_constants->req_fuel/10.0);
 
 	/* No need to set cyls value, or the bitfield as the two spinbuttons

@@ -49,7 +49,7 @@ extern GtkWidget *custom_logables;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
-static gfloat req_fuel_sav = 0.0;
+static gfloat req_fuel_total_copy = 0.0;
 static gboolean err_flag = FALSE;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
@@ -317,7 +317,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			reqd_fuel.afr = value;
 			break;
 		case REQ_FUEL:
-			req_fuel_sav = convert_before_download(offset,value);
+			req_fuel_total_copy = value;
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS:
@@ -440,8 +440,8 @@ void update_ve_const()
 	check_config11(ve_constants->config11.value);
 	check_config13(ve_constants->config13.value);
 
-	/* req-fuel  */
-	/*				/     num_injectors     \
+	/* req-fuel 
+	 *				/     num_injectors     \
 	 *          req_fuel_from_MS * |-------------------------|
 	 * Result =                     \ divider*(alternate+1) /
 	 *	    -----------------------------------------------
@@ -453,14 +453,14 @@ void update_ve_const()
 	tmp =	(float)(ve_constants->config12.bit.injectors+1) /
 		(float)(ve_constants->divider*(ve_constants->alternate+1));
 	tmp *= (float)ve_constants->req_fuel;
-	req_fuel_sav = tmp;
 	tmp /= 10.0;
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_spin),
+	req_fuel_total_copy = tmp;
+	
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_total_spin),
 			tmp);
-
 	
 	/* req-fuel info box  */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_base_spin),
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_per_squirt_spin),
 			ve_constants->req_fuel/10.0);
 
 	/* CONFIG11-13 related buttons */
@@ -580,33 +580,45 @@ void update_ve_const()
 					value);
 		}
 	}
-	check_req_fuel_limits();
 			
 }
 void check_req_fuel_limits()
 {
 	gfloat tmp = 0.0;
-	gfloat req_fuel_dl = 0.0;
+	gfloat req_fuel_per_squirt = 0.0;
 	gint lim_flag = 0;
 	gint index = 0;
 	gint dload_val = 0;
 	gint offset = 0;
 
+	/* req-fuel 
+	 *				/     num_injectors     \
+	 *          req_fuel_from_MS * |-------------------------|
+	 * Result =                     \ divider*(alternate+1) /
+	 *	    -----------------------------------------------
+	 *				10
+	 *
+	 * where divider = num_cylinders/num_squirts;
+	 *
+	 */
 	tmp =	(float)(ve_constants->divider*(float)(ve_constants->alternate+1))/(float)(num_injectors);
+	
+	/* This is 1 tenth the value as the one screen stuff is 1/10th 
+	 * for the ms variable,  it gets converted farther down, just 
+	 * before download to the MS
+	 */
+	req_fuel_per_squirt = tmp * req_fuel_total_copy;
 
-
-	req_fuel_dl = tmp * req_fuel_sav;
-
-	if ((int)req_fuel_dl != ve_constants->req_fuel)
+	if ((int)req_fuel_per_squirt != ve_constants->req_fuel)
 	{
-		if (req_fuel_dl > 255.0)
+		if (req_fuel_per_squirt > 255.0)
 			lim_flag = 1;
-		if (req_fuel_dl < 0.0)
+		if (req_fuel_per_squirt < 0.0)
 			lim_flag = 1;
 	}
 		/* req-fuel info box  */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_base_spin),
-			req_fuel_dl/10.0);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_per_squirt_spin),
+			req_fuel_per_squirt);
 	if (lim_flag)
 	{	/*
 		 * ERROR, something is out of bounds 
@@ -619,7 +631,7 @@ void check_req_fuel_limits()
 				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_fg(labels.cylinders_lab,
 				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_text(constants.req_fuel_spin,
+		gtk_widget_modify_text(constants.req_fuel_total_spin,
 				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(constants.inj_per_cycle_spin,
 				GTK_STATE_NORMAL,&red);
@@ -627,7 +639,7 @@ void check_req_fuel_limits()
 				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(constants.injectors_spin,
 				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_text(constants.req_fuel_base_spin,
+		gtk_widget_modify_text(constants.req_fuel_per_squirt_spin,
 				GTK_STATE_INSENSITIVE,&red);
 
 	}
@@ -643,7 +655,7 @@ void check_req_fuel_limits()
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_fg(labels.cylinders_lab,
 				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(constants.req_fuel_spin,
+		gtk_widget_modify_text(constants.req_fuel_total_spin,
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(constants.inj_per_cycle_spin,
 				GTK_STATE_NORMAL,&black);
@@ -651,7 +663,7 @@ void check_req_fuel_limits()
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(constants.injectors_spin,
 				GTK_STATE_NORMAL,&black);
-		gtk_widget_modify_text(constants.req_fuel_base_spin,
+		gtk_widget_modify_text(constants.req_fuel_per_squirt_spin,
 				GTK_STATE_INSENSITIVE,&black);
 
 		/* All Tested succeeded, download Required fuel, 
@@ -666,7 +678,7 @@ void check_req_fuel_limits()
 		  */
 		if (paused_handlers)
 			return;
-		dload_val = (gint)(req_fuel_dl);
+		dload_val = (gint)(req_fuel_per_squirt*10.0);
 		offset = 90;
 		write_ve_const(dload_val, offset);
 		for (index=0;index<g_list_length(offsets);index++)

@@ -32,8 +32,8 @@ struct v1_2_Constants
 	GtkWidget *pwm_curr_lim_spin;		/* Spinner */
 	GtkWidget *pwm_time_max_spin;		/* Spinner */
 	GtkWidget *fast_idle_thresh_spin;	/* Spinner */
-	GtkWidget *req_fuel_spin;		/* Spinner */
-	GtkWidget *req_fuel_base_spin;		/* Spinner */
+	GtkWidget *req_fuel_total_spin;		/* Spinner */
+	GtkWidget *req_fuel_per_squirt_spin;	/* Spinner */
 	GtkWidget *cr_pulse_neg40_spin;		/* Spinner */
 	GtkWidget *cr_pulse_pos170_spin;	/* Spinner */
 	GtkWidget *cr_priming_pulse_spin;	/* Spinner */

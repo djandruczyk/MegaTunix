@@ -97,7 +97,7 @@ int build_vetable(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE1_KPA_BINS_OFFSET+index));
-		g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 				GINT_TO_POINTER(1*100));
 		g_object_set_data(G_OBJECT(spinner),"conv_type",
 				GINT_TO_POINTER(0));
@@ -148,7 +148,7 @@ int build_vetable(GtkWidget *parent_frame)
 					GINT_TO_POINTER(0));
 			g_object_set_data(G_OBJECT(spinner),"offset", 
 					GINT_TO_POINTER(VE1_TABLE_OFFSET+index));
-			g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 					GINT_TO_POINTER(1*100));
 			g_object_set_data(G_OBJECT(spinner),"conv_type",
 					GINT_TO_POINTER(0));
@@ -188,7 +188,7 @@ int build_vetable(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE1_RPM_BINS_OFFSET+x));
-		g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 				GINT_TO_POINTER(100*100));
 		g_object_set_data(G_OBJECT(spinner),"conv_type",
 				GINT_TO_POINTER(DIV));
@@ -251,7 +251,7 @@ int build_vetable(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(1));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE2_KPA_BINS_OFFSET+index));
-		g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 				GINT_TO_POINTER(1*100));
 		g_object_set_data(G_OBJECT(spinner),"conv_type",
 				GINT_TO_POINTER(0));
@@ -302,7 +302,7 @@ int build_vetable(GtkWidget *parent_frame)
 					GINT_TO_POINTER(1));
 			g_object_set_data(G_OBJECT(spinner),"offset", 
 					GINT_TO_POINTER(VE2_TABLE_OFFSET+index));
-			g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+			g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 					GINT_TO_POINTER(1*100));
 			g_object_set_data(G_OBJECT(spinner),"conv_type",
 					GINT_TO_POINTER(0));
@@ -342,7 +342,7 @@ int build_vetable(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(1));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(VE2_RPM_BINS_OFFSET+x));
-		g_object_set_data(G_OBJECT(spinner),"conv_factor*100",
+		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 				GINT_TO_POINTER(100*100));
 		g_object_set_data(G_OBJECT(spinner),"conv_type",
 				GINT_TO_POINTER(DIV));

@@ -40,7 +40,7 @@ struct Conversion_Chart std_conversions;
 extern GtkWidget * veconst_widgets_1[];
 extern GtkWidget * veconst_widgets_2[];
 
-void  read_conversions(void)
+void read_conversions(void)
 {
 	gint i = 0;
 	gint dl_type;
@@ -61,7 +61,7 @@ void  read_conversions(void)
 						(gfloat)((gint)
 						g_object_get_data(
 						G_OBJECT(veconst_widgets_1[i]),
-						"conv_factor*100"))
+						"conv_factor_x100"))
 						/100.0;
 			}
                                 
