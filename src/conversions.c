@@ -100,8 +100,11 @@ gint convert_before_download(gint offset, gfloat value)
 		case (DIV):
 			return_value = (gint)((value/factor) + 0.001);
 			break;
-		default:
+		case (NOTHING):
 			return_value = tmp_val;
+			break;
+		default:
+			printf("Convert_before_download() NO CONVERSION defined, BUG!!!\b\b\n");
 			break;
 	}
 	/* Store value in veconst_struct (accessing it via array syntax as 
@@ -135,8 +138,11 @@ gfloat convert_after_upload(gint offset)
 		case (DIV):
 			return_value = (gfloat)ve_const_arr[offset] * factor;
 			break;
-		default:
+		case (NOTHING):
 			return_value = ve_const_arr[offset];
+			break;
+		default:
+			printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
 			break;
 
 	}

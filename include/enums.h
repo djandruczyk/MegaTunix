@@ -103,7 +103,8 @@ typedef enum
 	ADD,
 	SUB,
 	MULT,
-	DIV
+	DIV,
+	NOTHING
 }Conversions;
 
 /* Runtime Status flags */

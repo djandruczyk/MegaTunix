@@ -173,7 +173,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(66));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -199,7 +200,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(67));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -246,7 +248,7 @@ int build_enrichments(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 				GINT_TO_POINTER(1*100));
 		g_object_set_data(G_OBJECT(spinner),"conv_type",
-				GINT_TO_POINTER(0));
+				GINT_TO_POINTER(NOTHING));
 		g_object_set_data(G_OBJECT(spinner), "dl_type", 
 				GINT_TO_POINTER(IMMEDIATE));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
@@ -277,7 +279,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"    Your VE table should be pretty well dialed in before changing these, otherwise tuning becomes harder. See the MS FAQ for more information.  The Acceleration enrichments determine when and how much extra fuel is added when the throttle is moved, or mashed to the floor...  The decel fuel cut means \"What percentage of fuel do you want the engine to get on deceleration\". Thus 100% means to not cut anything off, and 1% means to cut out 99% of the fuel during decel.  The Accel enrichment bins determine how much of an accel \"Pump Shot\" is give based on how fast the throttle position is changing. Of course the MS interpolates between points.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"    Your VE table should be pretty well dialed in before changing these, otherwise tuning becomes harder. See the MS FAQ for more information.  The Acceleration enrichments determine when and how much extra fuel is added when the throttle is moved, or mashed to the floor...  The decel fuel cut means \"What percentage of fuel do you want the engine to get on deceleration\". Thus 100% means to not cut anything off, anything above 100% means give more fuel during decel (some turbo apps like this mode), and 1% means to cut out 99% of the fuel during decel.  The Accel enrichment bins determine how much of an accel \"Pump Shot\" is give based on how fast the throttle position is changing. Of course the MS interpolates between points.",NULL);
 	frame = gtk_frame_new("Acceleration Enrichments");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -384,7 +386,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(123));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -455,7 +458,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 
 	/* Decel Cut % */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,100.0,1.0,10.0,0);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	constants.decel_cut_spin = spinner;
 	veconst_widgets_1[85] = spinner;
@@ -465,7 +468,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(85));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -649,7 +653,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(88));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -676,7 +681,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(87));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
@@ -703,7 +709,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(89));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(spinner),"value_changed",
