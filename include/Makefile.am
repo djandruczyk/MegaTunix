@@ -40,6 +40,7 @@ headers = \
         runtime_gui.h \
         serialio.h \
         sparktable_gui.h \
+	stringmatch.h \
         structures.h \
         threads.h \
         timeout_handlers.h \
