@@ -45,8 +45,6 @@ megatunix_SOURCES = \
 
 megatunix_LDADD = @PACKAGE_LIBS@
 
-LIBS= -lpthread
-
 COMMON_FLAGS = @PFLAGS@ @DFLAGS@ 
 
 CFLAGS += $(COMMON_FLAGS) -Wall 
