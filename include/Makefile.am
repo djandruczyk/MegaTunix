@@ -35,6 +35,7 @@ headers = \
         notifications.h \
 	offline.h \
         post_process.h \
+        raweditor.h \
         req_fuel.h \
 	rtv_map_loader.h \
 	rtv_processor.h \

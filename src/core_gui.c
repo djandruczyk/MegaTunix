@@ -44,7 +44,6 @@ static struct
 { "About MegaTunix", build_about, "_About",ABOUT_PAGE},
 { "General MegaTunix Settings", build_general, "_General",GENERAL_PAGE},
 { "MegaSquirt Communications Parameters", build_comms, "_Communications",COMMS_PAGE},
-//{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);

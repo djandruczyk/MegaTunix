@@ -42,6 +42,7 @@ GHashTable *dynamic_widgets = NULL;
 void populate_master(GtkWidget *widget, gpointer user_data)
 {
 	gchar *name = NULL;
+	gchar *fullname = NULL;
 	gchar *prefix = NULL;
 	ConfigFile *cfg = (ConfigFile *) user_data;
 	/* Populates a big master hashtable of all dynamic widgets so that 
@@ -64,11 +65,13 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 		return;
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
-	if (!g_hash_table_lookup(dynamic_widgets,name))
-		g_hash_table_insert(dynamic_widgets,g_strdup_printf("%s%s",prefix,name),(gpointer)widget);
+	fullname = g_strdup_printf("%s%s",prefix,name);
+	if (!g_hash_table_lookup(dynamic_widgets,fullname))
+		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
 		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  from file %s already exists in master table\n",name,cfg->filename),CRITICAL);
 	g_free(prefix);
+	g_free(fullname);
 }
 
 

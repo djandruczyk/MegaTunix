@@ -365,7 +365,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		firmware->page_params[i] = g_new0(struct Page_Params, 1);
+		firmware->page_params[i] = initialize_page_params();
 		memcpy(firmware->page_params[i],potential->page_params[i],sizeof(struct Page_Params));
 	}
 
@@ -547,6 +547,26 @@ void close_profile(void *ptr)
 	dbg_func(__FILE__": close_profile(),\n\tDeallocation of memory for potential canidate complete\n",INTERROGATOR);
 
 }
+
+
+struct Page_Params * initialize_page_params(void)
+{
+	struct Page_Params *page_params = NULL;
+	page_params = g_malloc0(sizeof(struct Page_Params));
+	page_params->length = 0;
+	page_params->is_spark = FALSE;
+	page_params->cfg11_offset = -1;
+	page_params->cfg12_offset = -1;
+	page_params->cfg13_offset = -1;
+	page_params->alternate_offset = -1;
+	page_params->divider_offset = -1;
+	page_params->rpmk_offset = -1;
+	page_params->reqfuel_offset = -1;
+	page_params->spconfig_offset = -1;
+	return page_params;
+}
+
+
 struct Canidate * initialize_canidate(void)
 {
 	struct Canidate *canidate = NULL;
@@ -729,7 +749,7 @@ void load_profile_details(void *ptr)
 		canidate->page_params = g_new0(struct Page_Params *,canidate->total_pages);
 		for (i=0;i<canidate->total_pages;i++)
 		{
-			canidate->page_params[i] = g_new0(struct Page_Params,1);
+			canidate->page_params[i] = initialize_page_params();
 			section = g_strdup_printf("page_%i",i);
 			if(!cfg_read_int(cfgfile,section,"length",&canidate->page_params[i]->length))
 				dbg_func(__FILE__": load_profile_details()\n\t\"length\" flag not found in interrogation profile, ERROR\n",CRITICAL);

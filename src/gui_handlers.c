@@ -267,26 +267,24 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern gint ecu_caps;
 	extern gint **ms_data;
 
-	if (paused_handlers)
+	if ((paused_handlers) || (!ready))
 		return TRUE;
 
-	if (GTK_IS_OBJECT(widget))
-	{
-		ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-		page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-		offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-		dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
-		bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
-		bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
-		bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
-		handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
-		toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
-				"toggle_group");
-		invert_state = (gboolean )g_object_get_data(G_OBJECT(widget),
-				"invert_state");
-		swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
-				"swap_label");
-	}
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
+
+	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+	dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
+	bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
+	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
+	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
+	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),"toggle_group");
+	invert_state = (gboolean )g_object_get_data(G_OBJECT(widget),"invert_state");
+	swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_label");
+
 
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
@@ -354,6 +352,38 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	}
 	return TRUE;
 }
+
+EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
+{
+	gint handler = -1;
+	gchar *text = NULL;
+	gint value = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint dload_val = 0;
+	gboolean ign_parm = 0;
+
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
+
+	if ((paused_handlers) || (!ready))
+		return TRUE;
+
+	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
+
+	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
+	value = (gint)strtol(text,NULL,16);
+	g_free(text);
+	dload_val = convert_before_download(widget,value);
+
+	write_ve_const(page, offset, dload_val, ign_parm);
+
+	return TRUE;
+}
+
 
 EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
@@ -1028,6 +1058,8 @@ void update_widget(gpointer object, gpointer user_data)
 		// update widget whether spin,radio or checkbutton  (check encompases radio)
 		if (GTK_IS_SPIN_BUTTON(widget))
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+		else if (GTK_IS_ENTRY(widget))
+			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.2X",(gint)value));
 		else if (GTK_IS_CHECK_BUTTON(widget))
 		{
 			/* If value masked by bitmask, shifted right by bitshift = bitval
