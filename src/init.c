@@ -309,7 +309,8 @@ void mem_dealloc()
 			g_free(ms_data[i]);
 			g_free(ms_data_last[i]);
 			g_free(ms_data_backup[i]);
-			g_hash_table_destroy(interdep_vars[i]);
+			if (interdep_vars[i])
+				g_hash_table_destroy(interdep_vars[i]);
 		}
 		if (firmware->name)
 			g_free(firmware->name);
@@ -326,7 +327,8 @@ void mem_dealloc()
 		g_free(ms_data_last);
 		g_free(ms_data_backup);
 	}
-	g_hash_table_destroy(widget_group_states);
+	if(widget_group_states)
+		g_hash_table_destroy(widget_group_states);
 
 }
 
