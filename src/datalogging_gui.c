@@ -213,18 +213,29 @@ int build_datalogging(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(toggle_button_handler),
-                        GINT_TO_POINTER(CLASSIC_LOG));
-	if (logging_mode == CLASSIC_LOG)
+                        G_CALLBACK(set_logging_mode),
+                        GINT_TO_POINTER(MT_CLASSIC_LOG));
+	if (logging_mode == MT_CLASSIC_LOG)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
-	button = gtk_radio_button_new_with_label(group,"Custom Format");
+	button = gtk_radio_button_new_with_label(group,"MegaTune \"Full\" Format");
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(toggle_button_handler),
+                        G_CALLBACK(set_logging_mode),
+                        GINT_TO_POINTER(MT_FULL_LOG));
+	if (logging_mode == MT_FULL_LOG)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+
+	button = gtk_radio_button_new_with_label(group,"Custom Format");
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+        gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 10, 0);
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(set_logging_mode),
                         GINT_TO_POINTER(CUSTOM_LOG));
 	if (logging_mode == CUSTOM_LOG)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);

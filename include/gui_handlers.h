@@ -18,11 +18,12 @@
 
 /* Prototypes */
 void leave(GtkWidget *, gpointer);
-int std_button_handler(GtkWidget *, gpointer);
-int toggle_button_handler(GtkWidget *, gpointer);
-int bitmask_button_handler(GtkWidget *, gpointer);
-int spinner_changed(GtkWidget *, gpointer);
-int classed_spinner_changed(GtkWidget *, gpointer);
+gint std_button_handler(GtkWidget *, gpointer);
+gint toggle_button_handler(GtkWidget *, gpointer);
+gint bitmask_button_handler(GtkWidget *, gpointer);
+gint spinner_changed(GtkWidget *, gpointer);
+gint classed_spinner_changed(GtkWidget *, gpointer);
+gint set_logging_mode(GtkWidget * widget, gpointer *data);
 void check_req_fuel_limits(void);
 void check_config11(gint);
 void check_config13(gint);

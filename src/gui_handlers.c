@@ -68,16 +68,18 @@ GdkColor black = { 0, 0, 0, 0};
 GtkWidget *veconst_widgets_1[VEBLOCK_SIZE];
 GtkWidget *veconst_widgets_2[VEBLOCK_SIZE];
 
-/* classic[] is an array of the bit POSITIONS that correspond with the names
- * in the logable_names[] list. When applying the "classic" array to the 
+/* mt_classic[] is an array of the bit POSITIONS that correspond with the names
+ * in the logable_names[] list. When applying the "mt_classic" array to the 
  * bitfield of logable variables, we end up selecting all the stuff that 
- * MegaTune uses for its "Classic" style datalog...  The is NOT the way 
- * I wanted to do this, but it works as it is.  Someday I'll do this 
- * "The Right Way"...
+ * MegaTune uses for its "Classic" style datalog...  The "mt_full" array is 
+ * of the same except it's for MegaTune "Full" Style datalogs...
  */
 
-const gint classic[] = 
+const gint mt_classic[] = 
 { 1,2,5,7,9,10,11,12,13,14,16,17 }; /* from datalogging_gui.c */
+
+const gint mt_full[] = 
+{ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 };
 
 static gboolean paused_handlers = FALSE;
 static gboolean constants_loaded = FALSE;
@@ -101,10 +103,8 @@ void leave(GtkWidget *widget, gpointer data)
 	return;
 }
 
-int toggle_button_handler(GtkWidget *widget, gpointer data)
+gint toggle_button_handler(GtkWidget *widget, gpointer data)
 {
-	gint max = sizeof(classic)/sizeof(gint);
-	gint i = 0;
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
 		switch ((ToggleButton)data)
@@ -122,38 +122,6 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				fahrenheit = FALSE;
 				reset_temps(GINT_TO_POINTER(CELSIUS));
 				forced_update = TRUE;
-				break;
-			case CLASSIC_LOG:
-				if (!ready)
-					return FALSE;
-				logging_mode = CLASSIC_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,FALSE);
-				gtk_toggle_button_set_active(
-						GTK_TOGGLE_BUTTON
-						(tab_delim_button),
-						TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,FALSE);
-
-				for (i=0;i<max;i++)
-				{
-					gtk_toggle_button_set_active(
-							GTK_TOGGLE_BUTTON
-							(logables.widgets[classic[i]]),
-							TRUE);
-				}
-				break;
-			case CUSTOM_LOG:
-				if (!ready)
-					return FALSE;
-				logging_mode = CUSTOM_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,TRUE);
 				break;
 			case COMMA:
                                 delim = g_strdup(",");
@@ -180,7 +148,71 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 	}
 	return TRUE;
 }
-int bitmask_button_handler(GtkWidget *widget, gpointer data)
+
+gint set_logging_mode(GtkWidget * widget, gpointer *data)
+{
+	gint classic_max = sizeof(mt_classic)/sizeof(gint);
+	gint full_max = sizeof(mt_full)/sizeof(gint);
+	gint i = 0;
+	if (!ready)
+		return FALSE;
+        if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
+        {
+                switch((LoggingMode)data)
+                {
+			case MT_CLASSIC_LOG:
+				logging_mode = MT_CLASSIC_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,FALSE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+						(tab_delim_button),
+						TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,FALSE);
+
+				for (i=0;i<classic_max;i++)
+				{
+					gtk_toggle_button_set_active(
+							GTK_TOGGLE_BUTTON
+							(logables.widgets[mt_classic[i]]),
+							TRUE);
+				}
+				break;
+			case MT_FULL_LOG:
+				logging_mode = MT_FULL_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,FALSE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+						(tab_delim_button),
+						TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,FALSE);
+
+				for (i=0;i<full_max;i++)
+				{
+					gtk_toggle_button_set_active(
+							GTK_TOGGLE_BUTTON
+							(logables.widgets[mt_full[i]]),
+							TRUE);
+				}
+				break;
+			case CUSTOM_LOG:
+				logging_mode = CUSTOM_LOG;
+				clear_logables();
+				gtk_widget_set_sensitive(
+						logables_table,TRUE);
+				gtk_widget_set_sensitive(
+						delim_table,TRUE);
+				break;
+		}
+	}
+	return TRUE;
+}
+gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint config_num = 0;
 	gint bit_pos = 0;
@@ -285,7 +317,7 @@ int bitmask_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-int std_button_handler(GtkWidget *widget, gpointer data)
+gint std_button_handler(GtkWidget *widget, gpointer data)
 {
 	switch ((StdButton)data)
 	{
@@ -357,7 +389,7 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-int spinner_changed(GtkWidget *widget, gpointer data)
+gint spinner_changed(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 

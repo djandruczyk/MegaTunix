@@ -68,13 +68,18 @@ typedef enum
 	TOOLTIPS_STATE,
         FAHRENHEIT,
         CELSIUS,
-	CLASSIC_LOG,
-	CUSTOM_LOG,
 	COMMA,
 	TAB,
 	SPACE
 }ToggleButton;
 
+typedef enum
+{
+	MT_CLASSIC_LOG,
+	MT_FULL_LOG,
+	CUSTOM_LOG
+}LoggingMode;
+	
 /* spinbuttons... */
 typedef enum
 {
