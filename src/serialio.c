@@ -401,10 +401,10 @@ void write_ve_const(gint value, gint offset)
 	}
 	else
 	{
-		write_cmd = g_strdup("W");
 		if (dualtable)
 			set_ms_page(0);
 	}
+	write_cmd = g_strdup("W");
 
 	lbuff[0]=offset;
 	if(twopart)
