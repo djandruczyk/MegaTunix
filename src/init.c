@@ -183,22 +183,22 @@ void make_megasquirt_dirs(void)
 	gchar *filename = NULL;
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix", NULL);
-	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator", NULL);
-	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator/Profiles", NULL);
-	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Gui", NULL);
-	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/LookupTables", NULL);
-	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RealtimeMaps", NULL);
-	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
 
 
