@@ -9,6 +9,8 @@ Capabilities=
 Rt_Cmd_Key=CMD_UPPER_A
 VE_Cmd_Key=CMD_UPPER_V
 Ign_Cmd_Key=CMD_UPPER_I
+Write_Cmd=W
+Burn_Cmd=B
 MultiPage=TRUE
 TotalPages=2
 

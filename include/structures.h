@@ -59,6 +59,8 @@ struct Firmware_Details
         gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gboolean multi_page;	/*! Multi-page firmware? */
 	gint total_pages;	/*! How many pages do we handle? */
+	gchar *write_cmd;	/*! Command to send to write data... */
+	gchar *burn_cmd;	/*! Command to send to burn data... */
 	struct Page_Params **page_params;	/*! details on data per page.. */
 };
 
@@ -217,10 +219,12 @@ struct Canidate
 	gchar *rtv_map_file;	/*! name of realtime vars map file */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
 	Capability capabilities;/*! Bitmask of capabilities.... */
-	gchar * rt_cmd_key;	/*! string key to hashtable for RT command */
-	gchar * ve_cmd_key;	/*! string key to hashtable for VE command */
-	gchar * ign_cmd_key;	/*! string key to hashtable for Ign command */
-	gchar * raw_mem_cmd_key;/*! string key to hashtable for RAW command */
+	gchar *rt_cmd_key;	/*! string key to hashtable for RT command */
+	gchar *ve_cmd_key;	/*! string key to hashtable for VE command */
+	gchar *ign_cmd_key;	/*! string key to hashtable for Ign command */
+	gchar *raw_mem_cmd_key;	/*! string key to hashtable for RAW command */
+	gchar *write_cmd;	/*! Command to send to write data... */
+	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gboolean multi_page;	/*! Multi-page firmware ??? */
 	gint total_pages;	/*! how many pages do we handle? */
 	GHashTable *lookuptables;/*! Lookuptables hashtable... */

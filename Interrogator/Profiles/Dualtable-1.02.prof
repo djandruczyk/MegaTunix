@@ -9,6 +9,8 @@ Capabilities=_DUALTABLE_
 Rt_Cmd_Key=CMD_UPPER_A
 VE_Cmd_Key=CMD_UPPER_V
 Raw_Mem_Cmd_Key=CMD_UPPER_F
+Write_Cmd=W
+Burn_Cmd=B
 MultiPage=TRUE
 TotalPages=2
 

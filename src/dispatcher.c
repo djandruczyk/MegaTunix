@@ -42,7 +42,7 @@ extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
 extern gboolean interrogated;			/* valid connection with MS */
 
-gboolean dispatcher()
+gboolean dispatcher(gpointer data)
 {
 	extern struct Firmware_Details * firmware;
 	gint len=0;

@@ -150,13 +150,22 @@ void interrogate_ecu()
 		switch (cmd->store_type)
 		{
 			case SIG:
-				canidate->sig_str = g_strndup(buf,total_read);
+				if (total_read > 0)
+					canidate->sig_str = g_strndup(buf,total_read);
+				else
+					canidate->sig_str = NULL;
 				break;
 			case EXTVER:
-				canidate->quest_str = g_strndup(buf,total_read);
+				if (total_read > 0)
+					canidate->quest_str = g_strndup(buf,total_read);
+				else
+					canidate->quest_str = NULL;
 				break;
 			case VNUM:
-				memcpy(&(canidate->ver_num),buf,total_read);
+				if (total_read > 0)
+					memcpy(&(canidate->ver_num),buf,total_read);
+				else 
+					canidate->ver_num = 0;
 				break;
 			default:
 				break;
@@ -311,6 +320,8 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
 	firmware->multi_page = potential->multi_page;
 	firmware->total_pages = potential->total_pages;
+	firmware->write_cmd = g_strdup(potential->write_cmd);
+	firmware->burn_cmd = g_strdup(potential->burn_cmd);
 	/* Allocate ram for the necessary structures... */
 
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
@@ -446,7 +457,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			g_free(section);
 			if (g_ascii_islower(*(cmd->string)))
 			{
-				cmd->key = g_strdup_printf("CMD_LOWER_%s",cmd->string);
+				cmd->key = g_strdup_printf("CMD_LOWER_%s",g_ascii_strup(cmd->string,cmd->len));
 				g_hash_table_insert(cmd_details,g_strdup(cmd->key),cmd);
 			}
 			else
@@ -524,6 +535,8 @@ struct Canidate * initialize_canidate(void)
 	canidate->ve_cmd_key = NULL;
 	canidate->ign_cmd_key = NULL;
 	canidate->raw_mem_cmd_key = NULL;
+	canidate->write_cmd = NULL;
+	canidate->burn_cmd = NULL;
 	canidate->lookuptables = NULL;
 	canidate->total_pages = -1;
 	canidate->capabilities = 0;
@@ -589,6 +602,12 @@ void load_profile_details(void *ptr)
 					&canidate->ign_cmd_key);
 		cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
 					&canidate->raw_mem_cmd_key);
+		if(!cfg_read_string(cfgfile,"parameters","Write_Cmd",
+					&canidate->write_cmd))
+			dbg_func(__FILE__": load_profile_details()\n\t\"Write_Cmd\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"parameters","Burn_Cmd",
+					&canidate->burn_cmd))
+			dbg_func(__FILE__": load_profile_details()\n\t\"Burn_Cmd\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
 					&canidate->multi_page))
 			dbg_func(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in interrogation profile, ERROR\n",CRITICAL);
@@ -756,7 +775,7 @@ gboolean check_for_match(GArray *cmd_array, void *pot_ptr, void *can_ptr)
 		pbytes = (gint)g_hash_table_lookup(
 				potential->bytecounts,
 				cmd->key);
-		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTest %s, canidate bytes %i, potential %i\n",cmd->string,cbytes,pbytes),INTERROGATOR);
+		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTest(%s) %s, canidate bytes %i, potential %i\n",cmd->key,cmd->string,cbytes,pbytes),INTERROGATOR);
 		if (cbytes != pbytes)
 		{
 			// Mismatch, abort test and move on to the 
@@ -770,28 +789,43 @@ gboolean check_for_match(GArray *cmd_array, void *pot_ptr, void *can_ptr)
 	/* If all test pass, now check the Extended version
 	 * If it matches,  jump out...
 	 */
+	if (potential->ver_num != canidate->ver_num)
+	{
+		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tCanidate version number \"%i\" does NOT match potential \"%i\", loading next profile\n",canidate->ver_num,potential->ver_num),INTERROGATOR);
+		return FALSE;
+	}
+	else
+		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tCanidate version number \"%i\" Matches potential \"%i\", continuing tests...\n",canidate->ver_num,potential->ver_num),INTERROGATOR);
+
+	
 	if ((potential->quest_str != NULL) && (canidate->quest_str != NULL))
 	{
-		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTesting ext version, canidate %s, potential %s\n",canidate->quest_str,potential->quest_str),INTERROGATOR);
-		if (strstr(canidate->quest_str,potential->quest_str) != NULL)
+		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTesting ext version, canidate \"%s\", potential \"%s\"\n",canidate->quest_str,potential->quest_str),INTERROGATOR);
+		if (strstr(canidate->quest_str,potential->quest_str) == NULL)
 		{
-			dbg_func(__FILE__": check_for_match()\n\tFound match on ext version\n",INTERROGATOR);
-			return TRUE;
+			dbg_func(__FILE__": check_for_match()\n\tDID NOT find match on extended version\n",INTERROGATOR);
+			return FALSE;
 		}
+		else
+			dbg_func(__FILE__": check_for_match()\n\tFound match on extended version\n",INTERROGATOR);
 	}
 	else if ((potential->sig_str != NULL) && (canidate->sig_str != NULL))
 	{
-		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTesting signature, canidate %s, potential %s\n",canidate->sig_str,potential->sig_str),INTERROGATOR);
-		if (strstr(canidate->sig_str,potential->sig_str) != NULL)
+		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTesting signature, canidate \"%s\", potential \"%s\"\n",canidate->sig_str,potential->sig_str),INTERROGATOR);
+		if (strstr(canidate->sig_str,potential->sig_str) == NULL)
 		{
-			dbg_func(__FILE__": check_for_match()\n\tFound match on signature\n",INTERROGATOR);
-			return TRUE;
+			dbg_func(__FILE__": check_for_match()\n\tDID NOT find match on signature\n",INTERROGATOR);
+			return FALSE;
 		}
+		else
+			dbg_func(__FILE__": check_for_match()\n\tFound match on signature\n",INTERROGATOR);
 	}
 	else
 	{
-		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tFound match on bytecounts alone...\n"),INTERROGATOR);
+		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tFound match on bytecounts and version number alone...\n\n"),INTERROGATOR);
 		return TRUE;
 	}
+
+	dbg_func(g_strdup_printf("\n"__FILE__": check_for_match()\n\tFound match on bytecounts,version number and signature/extended version (Best match) ...\n\n"),INTERROGATOR);
 	return TRUE;
 }

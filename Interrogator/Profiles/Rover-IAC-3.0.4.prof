@@ -8,6 +8,8 @@ VerNumber=30
 Capabilities=
 Rt_Cmd_Key=CMD_UPPER_A
 VE_Cmd_Key=CMD_UPPER_V
+Write_Cmd=W
+Burn_Cmd=B
 MultiPage=FALSE
 TotalPages=1
 

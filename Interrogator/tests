@@ -30,66 +30,72 @@
 #	
 
 [interrogation_tests]
-total_tests=10
+total_tests=11
 
 [test_00]
-raw_cmd=A
-cmd_length=1
-cmd_desc=Runtime Vars
-store_data=FALSE
-
-[test_01]
 raw_cmd=a
 cmd_length=1
 cmd_desc=Runtime Vars (MS-II)
 store_data=FALSE
 
+[test_01]
+raw_cmd=c
+cmd_length=1
+cmd_desc=MS-II Clock
+store_data=FALSE
+
 [test_02]
+raw_cmd=v
+cmd_length=1
+cmd_desc=MS-II VE/Constants
+store_data=FALSE
+
+[test_03]
+raw_cmd=A
+cmd_length=1
+cmd_desc=Runtime Vars
+store_data=FALSE
+
+[test_04]
 raw_cmd=C
 cmd_length=1
 cmd_desc=MS Clock
 store_data=FALSE
 
-[test_03]
+[test_05]
 raw_cmd=Q
 cmd_length=1
 cmd_desc=MS Revision
 store_type=_VNUM_
 store_data=TRUE
 
-[test_04]
+[test_06]
 raw_cmd=V
 cmd_length=1
 cmd_desc=VE/Constants 
 store_data=FALSE
 
-[test_05]
-raw_cmd=v
-cmd_length=1
-cmd_desc=VE/Constants  (MS-II)
-store_data=FALSE
-
-[test_06]
+[test_07]
 raw_cmd=S
 cmd_length=1
 cmd_desc=ECU Signature
 store_type=_SIG_
 store_data=TRUE
 
-[test_07]
+[test_08]
 raw_cmd=?
 cmd_length=1
 cmd_desc=Extended Revision
 store_type=_EXTVER_
 store_data=TRUE
 
-[test_08]
+[test_09]
 raw_cmd=I
 cmd_length=1
 cmd_desc=Ignition Variables
 store_data=FALSE
 
-[test_09]
+[test_10]
 raw_cmd=F
 cmd_length=1
 multipart=TRUE

@@ -184,7 +184,7 @@ void writeto_ecu(void *ptr)
 	if (ign_parm)
 		write_cmd = g_strdup("J");
 	else
-		write_cmd = g_strdup("W");
+		write_cmd = g_strdup(firmware->write_cmd);
 
 	lbuff[0]=offset;
 	if (twopart)
@@ -253,7 +253,7 @@ void burn_ms_flash()
 		g_usleep(5000);
 	}
 
-	res = write (serial_params->fd,"B",1);  /* Send Burn command */
+	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
 	if (res != 1)
 	{
 		dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);

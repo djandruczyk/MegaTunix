@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean dispatcher(void);
+gboolean dispatcher(gpointer);
 void dealloc_message(void * );
 /* Prototypes */
 
