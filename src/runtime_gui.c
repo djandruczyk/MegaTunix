@@ -51,6 +51,7 @@ void build_runtime(GtkWidget *parent_frame)
 	GtkWidget *entry;
 	GtkWidget *ebox;
 	extern GtkTooltips *tip;
+	extern GList * dt_widgets;
 	gint i=0;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -166,8 +167,8 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	progress.tps_pbar = pbar;
 
-	/* IdleDC */
-	label = gtk_label_new("Idle DC (%)");
+	/* RPM */
+	label = gtk_label_new("RPM");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
@@ -179,7 +180,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.idledc_lab = label;
+	labels.rpm_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -187,7 +188,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.idledc_pbar = pbar;
+	progress.rpm_pbar = pbar;
 
 	/* PW 1 */
 	label = gtk_label_new("Ch. 1 PW (ms)");
@@ -338,8 +339,9 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	progress.mat_pbar = pbar;
 
-	/* RPM */
-	label = gtk_label_new("RPM");
+	/* IdleDC */
+	label = gtk_label_new("Idle DC (%)");
+	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
@@ -347,22 +349,25 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
+	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	gtk_widget_set_size_request(label,55,-1);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.rpm_lab = label;
+	labels.idledc_lab = label;
 
 	pbar = gtk_progress_bar_new();
+	dt_widgets = g_list_append(dt_widgets, (gpointer)pbar);
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.rpm_pbar = pbar;
+	progress.idledc_pbar = pbar;
 
 	/* PW 2 */
 	label = gtk_label_new("Ch. 2 PW (ms)");
+	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
@@ -370,6 +375,7 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
+	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	gtk_widget_set_size_request(label,55,-1);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
 			(GtkAttachOptions) (GTK_SHRINK),
@@ -377,6 +383,7 @@ void build_runtime(GtkWidget *parent_frame)
 	labels.pw2_lab = label;
 
 	pbar = gtk_progress_bar_new();
+	dt_widgets = g_list_append(dt_widgets, (gpointer)pbar);
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
@@ -386,6 +393,7 @@ void build_runtime(GtkWidget *parent_frame)
 
 	/* Duty Cycle 2 */
 	label = gtk_label_new("Ch. 2 DC (%)");
+	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 6, 7,
@@ -393,6 +401,7 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
+	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	gtk_widget_set_size_request(label,55,-1);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 6, 7,
 			(GtkAttachOptions) (GTK_SHRINK),
@@ -400,6 +409,7 @@ void build_runtime(GtkWidget *parent_frame)
 	labels.dcycle2_lab = label;
 
 	pbar = gtk_progress_bar_new();
+	dt_widgets = g_list_append(dt_widgets, (gpointer)pbar);
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 6, 7,
