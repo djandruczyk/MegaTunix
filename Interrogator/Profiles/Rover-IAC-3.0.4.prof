@@ -49,7 +49,7 @@ CMD_UPPER_S=17
 [gui]
 RealtimeMapFile=BnG-std
 SliderMapFile=std-firmware
-LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8,tools,warmupwizard,raweditor
+LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8s,tools,warmupwizard,raweditor
 TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8-BnG,tools,warmupwizard,raweditor
 
 [lookuptables]

@@ -68,7 +68,7 @@ CMD_UPPER_I=95
 [gui]
 RealtimeMapFile=MSnEDIS-3.x
 SliderMapFile=spark-firmware
-LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,msnedis-3.0.x_ignition,vetable_8x8,sparktable_8x8,tools,warmupwizard,raweditor
+LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,msnedis-3.0.x_ignition,vetable_8x8s,sparktable_8x8s,tools,warmupwizard,raweditor
 TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,msnedis-3.0.x_ignition,vetable_8x8-BnG,sparktable_8x8-EDIS,tools,warmupwizard,raweditor
 
 [lookuptables]

@@ -73,7 +73,7 @@ CMD_UPPER_F=255
 [gui]
 RealtimeMapFile=DT-std
 SliderMapFile=dt-firmware
-LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8,vetable_8x8,tools,memviewer,raweditor,warmupwizard
+LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8s,vetable_8x8s,tools,memviewer,raweditor,warmupwizard
 TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8-BnG,vetable_8x8-DT_2,tools,memviewer,raweditor,warmupwizard
 
 [lookuptables]
