@@ -140,6 +140,7 @@ int build_runtime(GtkWidget *parent_frame)
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
+
         gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
                         (GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
                         (GtkAttachOptions) (0), 0, 0);

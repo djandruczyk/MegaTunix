@@ -37,6 +37,7 @@ gint poll_max;
 gint interval_min;
 gint interval_step;
 gint interval_max;
+GdkColor white = { 0, 65535, 65535, 65535 };
 
 int build_comms(GtkWidget *parent_frame)
 {

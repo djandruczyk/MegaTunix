@@ -73,7 +73,7 @@ int build_constants(GtkWidget *);
 /* constants_gui.c */
 
 /* conversions.c */
-gboolean read_conversions(char *);
+void read_conversions(void);
 gint convert_before_download(gint, gfloat);
 gfloat convert_after_upload(gint);
 /* conversions.c */
@@ -145,7 +145,6 @@ void set_store_red(void);
 void set_store_black(void);
 void update_statusbar(GtkWidget *, int, gchar *);
 void no_ms_connection(void);
-void no_conversions_warning(void);
 void warn_user(gchar *);
 void squirt_cyl_inj_red(void);
 void squirt_cyl_inj_black(void);

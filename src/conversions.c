@@ -22,28 +22,17 @@
 
 /* Conversions.c
  * 
- * Handles locading of conversion tables to convert from MS Stored
- * data formats and on-screen user-friendly formats.
- * Ceonversion data is stored ina flat text file and accessed with 
- * cfg_read_???() functions. 
- * conversiond file format is extremely simple. 
- * a section is defined for EACH variable that needs conversion.
- * the section is defined as [ Offset x] wih x being an integer offset
- * from the beginning of hte VEconstants datablock. All ops are being 
- * converted to reference variables by their offset instead of  by a structure
- * name. ( by offset makes the code cleaner, albeit slightly harder to follow).
- * Inside each section are two definitions, one being "conv_type" and 
- * "conv_Factor".
  * conv_Type has one of 4 possibles, ADD,SUB,MULT and DIV, for addition
  * subtraction, multiplication and division respectivlely.  These mathematical
  * operaands use the conv_factor and perform the requested Op on the value from
  * the gui BEFORE downloading to the MS.  On upload, the converse operation
  * is performed (if ADD used on downlaod, SUB will be used on upload), likewise
  * for multiplication and division.
-`* 
- * this API is subject to change...  Not fixed in stone yet, but from what I
- * can tell, it'll allow me to simplify the signal handlers extensively and 
- * allow MegaTunix to be extended in an easier manner in the future.
+ * 
+ * As of 09/02/2003 (sept 2nd 2003), The external file has been dropped in 
+ * favor of coding the conversions internally.  This makes it easier for the
+ * user to install as they don't have to worry about a conversions table to 
+ * put in the right place to be loaded...
  */
 
 extern unsigned char * ve_const_arr;
@@ -51,7 +40,7 @@ struct Conversion_Chart std_conversions;
 extern GtkWidget * veconst_widgets_1[];
 extern GtkWidget * veconst_widgets_2[];
 
-gboolean read_conversions(char *filename)
+void  read_conversions(void)
 {
 	gint i = 0;
 	gint dl_type;
