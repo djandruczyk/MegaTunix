@@ -26,6 +26,7 @@ gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
+extern gboolean raw_reader_running;
 extern struct raw_runtime_std *raw_runtime;
 extern struct runtime_std *runtime;
 extern struct runtime_std *runtime_last;
@@ -38,7 +39,7 @@ int handle_ms_data(int which_data)
 {
 	int res = 0;
 	unsigned char buf[255];
-	char *ptr = buf;
+	unsigned char *ptr = buf;
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
@@ -58,7 +59,7 @@ int handle_ms_data(int which_data)
 				 * The problem is part of the data is lost, 
 				 * and since we read in serial_params.raw_bytes
 				 * blocks, the data is now offset, the damn 
-				 * problem is that there is no formatting to 
+				 * problem is that there is no formatting so 
 				 * the datastream which is now out of sync by
 				 * an unknown amount which tends to hose 
 				 * things all to hell.  The solution is to 
@@ -67,11 +68,21 @@ int handle_ms_data(int which_data)
 				 * because the serial I/O thread depends on 
 				 * this function and blocks until we return.
 				 */
-				printf("warning serial data read error\n");
+				//printf("warning serial data read error (%i bytes)\n",res);
 				close_serial();
-				usleep(100000);
 				open_serial(serial_params.comm_port);
+
+				/* The raw_reader_running flag  MUST be reset 
+				 * to prevent a deadlock in check_ecu_comms 
+				 * which will attempt to kill the thread that 
+				 * we are executing under. By flipping this 
+				 * flag we prevent the thread kill 
+				 * (and deadlock) and just make sure to 
+				 * set it back to normal afterwards....
+				 */
+				raw_reader_running = FALSE;
 				setup_serial_params();
+				raw_reader_running = TRUE;
 				return FALSE;
 			}
 

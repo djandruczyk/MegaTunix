@@ -250,12 +250,16 @@ void read_ve_const()
 	if (res == 0)	/* Error */
 	{
 		serial_params.errcount++;
+		connected = FALSE;
 	}
 	else		/* Data arrived */
 	{
+		connected = TRUE;
 		res = handle_ms_data(VE_AND_CONSTANTS);
 		
 	}
+	gtk_widget_set_sensitive(runtime_data.status[0],
+			connected);
 
 	update_errcounts();
 

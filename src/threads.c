@@ -20,6 +20,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
+#include <runtime_gui.h>
 
 
 pthread_t raw_input_thread;			/* thread handle */
@@ -28,6 +29,7 @@ gboolean raw_reader_running;			/* flag for thread */
 gboolean raw_reader_stopped;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern gint ser_context_id;			/* Statusbar related */
+extern struct v1_2_Runtime_Gui runtime_data;
 extern GtkWidget *ser_statbar;			/* Statusbar */
 char buff[60];
 
@@ -144,12 +146,18 @@ void *raw_reader_thread(void *params)
                 res = write(serial_params.fd,"A",1);
                 res = poll (&ufds,1,serial_params.poll_timeout);
                 if (res == 0)
+		{
 			serial_params.errcount++;
+			connected = FALSE;
+		        gtk_widget_set_sensitive(runtime_data.status[0],
+                        connected);
+		}
                 else
 		{
                         res = handle_ms_data(REALTIME_VARS);
 			if(res)
 			{
+				connected = TRUE;
 				update_runtime_vars();
 				run_datalog();
 			}
@@ -163,6 +171,7 @@ void *raw_reader_thread(void *params)
 
 		pthread_testcancel();
                 usleep(serial_params.read_wait * 1000); /* Sleep */
+		pthread_testcancel();
 	}
 	/* if we get here, the thread got killed, mark it as "stopped" */
 	raw_reader_stopped = TRUE;
