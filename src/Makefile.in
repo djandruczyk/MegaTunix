@@ -117,7 +117,7 @@ megatunix_SOURCES = \
 	fileio.c \
 	general_gui.c \
 	gui_handlers.c \
-	ignition.c \
+	ignition_gui.c \
 	init.c \
 	interrogate.c \
 	lowlevel_gui.c \
@@ -131,7 +131,8 @@ megatunix_SOURCES = \
 	tools_gui.c \
 	tuning_gui.c \
 	vetable_gui.c \
-	vex_support.c
+	vex_support.c \
+	warmwizard_gui.c
 
 
 megatunix_LDADD = @PACKAGE_LIBS@
@@ -155,12 +156,13 @@ am_megatunix_OBJECTS = about_gui.$(OBJEXT) c_gauge.$(OBJEXT) \
 	constants_gui.$(OBJEXT) conversions.$(OBJEXT) \
 	core_gui.$(OBJEXT) dataio.$(OBJEXT) datalogging_gui.$(OBJEXT) \
 	enrichments_gui.$(OBJEXT) fileio.$(OBJEXT) \
-	general_gui.$(OBJEXT) gui_handlers.$(OBJEXT) ignition.$(OBJEXT) \
-	init.$(OBJEXT) interrogate.$(OBJEXT) lowlevel_gui.$(OBJEXT) \
-	main.$(OBJEXT) notifications.$(OBJEXT) post_process.$(OBJEXT) \
-	req_fuel.$(OBJEXT) runtime_gui.$(OBJEXT) serialio.$(OBJEXT) \
-	threads.$(OBJEXT) tools_gui.$(OBJEXT) tuning_gui.$(OBJEXT) \
-	vetable_gui.$(OBJEXT) vex_support.$(OBJEXT)
+	general_gui.$(OBJEXT) gui_handlers.$(OBJEXT) \
+	ignition_gui.$(OBJEXT) init.$(OBJEXT) interrogate.$(OBJEXT) \
+	lowlevel_gui.$(OBJEXT) main.$(OBJEXT) notifications.$(OBJEXT) \
+	post_process.$(OBJEXT) req_fuel.$(OBJEXT) runtime_gui.$(OBJEXT) \
+	serialio.$(OBJEXT) threads.$(OBJEXT) tools_gui.$(OBJEXT) \
+	tuning_gui.$(OBJEXT) vetable_gui.$(OBJEXT) \
+	vex_support.$(OBJEXT) warmwizard_gui.$(OBJEXT)
 megatunix_OBJECTS = $(am_megatunix_OBJECTS)
 megatunix_DEPENDENCIES =
 megatunix_LDFLAGS =
@@ -179,8 +181,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/datalogging_gui.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/enrichments_gui.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/fileio.Po ./$(DEPDIR)/general_gui.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gui_handlers.Po ./$(DEPDIR)/ignition.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/init.Po ./$(DEPDIR)/interrogate.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gui_handlers.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/ignition_gui.Po ./$(DEPDIR)/init.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/interrogate.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/lowlevel_gui.Po ./$(DEPDIR)/main.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/notifications.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/post_process.Po ./$(DEPDIR)/req_fuel.Po \
@@ -188,7 +191,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/threads.Po ./$(DEPDIR)/tools_gui.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/tuning_gui.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/vetable_gui.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/vex_support.Po
+@AMDEP_TRUE@	./$(DEPDIR)/vex_support.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/warmwizard_gui.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -253,7 +257,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileio.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/general_gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui_handlers.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ignition.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ignition_gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/init.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/interrogate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lowlevel_gui.Po@am__quote@
@@ -268,6 +272,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tuning_gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vetable_gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vex_support.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/warmwizard_gui.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

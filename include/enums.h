@@ -30,7 +30,8 @@ typedef enum
 	TOOLS_PAGE,
 	DATALOGGING_PAGE,
 	LOWLEVEL_PAGE,
-	IGNITION_PAGE
+	IGNITION_PAGE,
+	WARMWIZARD_PAGE
 }GuiFramePage;
 
 /* Serial data comes in and handled by the following possibilities.

@@ -234,9 +234,14 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.runtime_mat_lab),
 					"MAT (F)");
 			for (i=0;i<10;i++)
+			{
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmup_bins_lab[i]),
 						F_warmup_labels[i]);
+				gtk_label_set_text(
+						GTK_LABEL(labels.warmwizard_lab[i]),
+						F_warmup_labels[i]);
+			}
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper < 215) /* if so it was celsius, if not skip*/
 			{	
@@ -288,9 +293,14 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.runtime_mat_lab),
 					"MAT (C)");
 			for (i=0;i<10;i++)
+			{
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmup_bins_lab[i]),
 						C_warmup_labels[i]);
+				gtk_label_set_text(
+						GTK_LABEL(labels.warmwizard_lab[i]),
+						C_warmup_labels[i]);
+			}
 
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper > 102) /* if so it was fahren, if not skip*/

@@ -446,7 +446,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	gint dload_val = -1;
 	gint dl_type = 0;
 	gboolean temp_dep = FALSE;
-	if (paused_handlers)
+	if ((paused_handlers) || (!ready))
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");

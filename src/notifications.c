@@ -35,6 +35,12 @@ void set_store_buttons_state(GuiState state)
 		case RED:
 			/* Let user know to burn vars byt turnign button text red */
 			gtk_widget_modify_fg(GTK_BIN(
+						buttons.ww_store_but)->child,
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(GTK_BIN(
+						buttons.ww_store_but)->child,
+					GTK_STATE_PRELIGHT,&red);
+			gtk_widget_modify_fg(GTK_BIN(
 						buttons.const_store_but)->child,
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(GTK_BIN(
@@ -60,6 +66,12 @@ void set_store_buttons_state(GuiState state)
 					GTK_STATE_PRELIGHT,&red);
 			break;
 		case BLACK:
+			gtk_widget_modify_fg(GTK_BIN(
+						buttons.ww_store_but)->child,
+					GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_fg(GTK_BIN(
+						buttons.ww_store_but)->child,
+					GTK_STATE_PRELIGHT,&black);
 			gtk_widget_modify_fg(GTK_BIN(
 						buttons.const_store_but)->child,
 					GTK_STATE_NORMAL,&black);

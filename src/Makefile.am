@@ -26,7 +26,7 @@ megatunix_SOURCES = \
 	fileio.c \
 	general_gui.c \
 	gui_handlers.c \
-	ignition.c \
+	ignition_gui.c \
 	init.c \
 	interrogate.c \
 	lowlevel_gui.c \
@@ -40,7 +40,8 @@ megatunix_SOURCES = \
 	tools_gui.c \
 	tuning_gui.c \
 	vetable_gui.c \
-	vex_support.c
+	vex_support.c \
+	warmwizard_gui.c
 
 megatunix_LDADD = @PACKAGE_LIBS@
 

@@ -31,7 +31,7 @@
 
 extern gboolean raw_reader_running;
 extern GtkWidget *comms_view;
-extern struct Runtime_Widgets runtime_data;
+extern struct DynamicMisc misc;
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p0_tmp;
 extern struct Ve_Const_Std *ve_const_p1;
@@ -167,7 +167,9 @@ void close_serial()
 	close(serial_params->fd);
 	serial_params->open = FALSE;
 	connected = FALSE;
-	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+	gtk_widget_set_sensitive(misc.status[CONNECTED],
+			connected);
+	gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
 			connected);
 
 	tmpbuf = g_strdup_printf("COM Port Closed\n");
@@ -224,7 +226,9 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			update_logbar(comms_view,NULL,tmpbuf,TRUE);
 			g_free(tmpbuf);
 			connected = TRUE;
-			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+			gtk_widget_set_sensitive(misc.status[CONNECTED],
+					connected);
+			gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
 					connected);
 		}
 		else
@@ -234,7 +238,9 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			update_logbar(comms_view,"warning",tmpbuf,TRUE);
 			g_free(tmpbuf);
 			connected = FALSE;
-			gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+			gtk_widget_set_sensitive(misc.status[CONNECTED],
+					connected);
+			gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
 					connected);
 
 		}
@@ -312,7 +318,9 @@ void read_ve_const()
 		 }
 		 }
 	 */
-	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+	gtk_widget_set_sensitive(misc.status[CONNECTED],
+			connected);
+	gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
 			connected);
 
 	update_errcounts(NULL,FALSE);

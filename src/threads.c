@@ -34,7 +34,7 @@ gboolean raw_reader_running;			/* flag for thread */
 gboolean raw_reader_stopped;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern GtkWidget * comms_view;
-extern struct Runtime_Widgets runtime_data;
+extern struct DynamicMisc misc;
 extern struct Serial_Params *serial_params;
 
 void start_serial_thread()
@@ -161,8 +161,6 @@ void *raw_reader_thread(void *params)
 		{
 			serial_params->errcount++;
 			connected = FALSE;
-			gtk_widget_set_sensitive(runtime_data.status[0],
-					connected);
 		}
 		else
 		{
@@ -176,6 +174,10 @@ void *raw_reader_thread(void *params)
 			else
 				printf("handle_ms_data reported a fault\n");
 		}
+		gtk_widget_set_sensitive(misc.status[0],
+				connected);
+		gtk_widget_set_sensitive(misc.ww_status[0],
+				connected);
 
 		gdk_threads_enter();
 		update_errcounts(NULL,FALSE);

@@ -60,7 +60,8 @@ static struct
 { "MegaSquirt Tuning", TUNING_PAGE, "Tuning",TRUE},
 { "MegaSquirt Tools", TOOLS_PAGE, "Tools",TRUE},
 { "MegaSquirt Advanced Diagnostics", LOWLEVEL_PAGE, "Low-Level",TRUE},
-{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "DataLogging",TRUE}
+{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "DataLogging",TRUE},
+{ "MegaSquirt Warmup Wizard", WARMWIZARD_PAGE, "Warmup Wizard",TRUE}
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -166,6 +167,9 @@ int framebuild_dispatch(GtkWidget *frame, GuiFramePage data, gboolean frame_enab
 			break;
 		case IGNITION_PAGE:
 			build_ignition(frame);
+			break;
+		case WARMWIZARD_PAGE:
+			build_warmwizard(frame);
 			break;
 	}
 	if (frame_enabled == FALSE)

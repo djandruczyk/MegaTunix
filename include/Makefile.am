@@ -34,7 +34,8 @@ headers = \
         tools_gui.h \
         tuning_gui.h \
         vetable_gui.h \
-	vex_support.h
+	vex_support.h \
+	warmwizard_gui.h
 
 
 EXTRA_DIST=$(headers)

@@ -19,10 +19,13 @@
 #include <gui_handlers.h>
 #include <runtime_gui.h>
 #include <structures.h>
+#include <warmwizard_gui.h>
 
 
-struct Runtime_Widgets runtime_data;
 extern struct DynamicEntries entries;
+extern struct DynamicLabels labels;
+struct DynamicProgress progress;
+extern struct DynamicMisc misc;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
 gboolean force_status_update = TRUE;
@@ -79,7 +82,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.secl_lab = label;
+	labels.secl_lab = label;
 
 	/* O2 Voltage Label*/
 	label = gtk_label_new(NULL);
@@ -96,7 +99,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.ego_lab = label;
+	labels.ego_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -104,7 +107,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.ego_pbar = pbar;
+	progress.ego_pbar = pbar;
 
 	/* Coolant */
 	label = gtk_label_new("Coolant (F)");
@@ -120,7 +123,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.clt_lab = label;
+	labels.clt_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -128,7 +131,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.clt_pbar = pbar;
+	progress.clt_pbar = pbar;
 
 
 	/* Battery Voltage */
@@ -144,7 +147,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.batt_lab = label;
+	labels.batt_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -153,7 +156,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.batt_pbar = pbar;
+	progress.batt_pbar = pbar;
 
 
 	/* TPS */
@@ -169,7 +172,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.tps_lab = label;
+	labels.tps_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -177,7 +180,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.tps_pbar = pbar;
+	progress.tps_pbar = pbar;
 
 
 	/* GammaE (sum of enrichments) */
@@ -193,7 +196,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.gammae_lab = label;
+	labels.gammae_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -201,7 +204,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.gammae_pbar = pbar;
+	progress.gammae_pbar = pbar;
 
 	table = gtk_table_new(6,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -230,7 +233,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.map_lab = label;
+	labels.map_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -238,7 +241,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.map_pbar = pbar;
+	progress.map_pbar = pbar;
 
 	/* Manifold Air Temp */
 	label = gtk_label_new("MAT (F)");
@@ -254,7 +257,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.mat_lab = label;
+	labels.mat_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -262,7 +265,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.mat_pbar = pbar;
+	progress.mat_pbar = pbar;
 
 	/* RPM */
 	label = gtk_label_new("RPM");
@@ -277,7 +280,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.rpm_lab = label;
+	labels.rpm_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -285,7 +288,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.rpm_pbar = pbar;
+	progress.rpm_pbar = pbar;
 
 	/* PW */
 	label = gtk_label_new("PW (ms)");
@@ -300,7 +303,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.pw1_lab = label;
+	labels.pw1_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -308,7 +311,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.pw1_pbar = pbar;
+	progress.pw1_pbar = pbar;
 
 	/* Duty Cycle */
 	label = gtk_label_new("Duty Cycle (%)");
@@ -323,7 +326,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.dcycle1_lab = label;
+	labels.dcycle1_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -331,7 +334,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.dcycle1_pbar = pbar;
+	progress.dcycle1_pbar = pbar;
 
 	/* Corrections/Enrichments frame */
 
@@ -361,7 +364,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.egocorr_lab = label;
+	labels.egocorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -369,7 +372,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.egocorr_pbar = pbar;
+	progress.egocorr_pbar = pbar;
 
 
 	/* Baro Correction  */
@@ -385,7 +388,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.barocorr_lab = label;
+	labels.barocorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -393,7 +396,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.barocorr_pbar = pbar;
+	progress.barocorr_pbar = pbar;
 
 
 	/* Warmup Correction  */
@@ -409,7 +412,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.warmcorr_lab = label;
+	labels.warmcorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -417,7 +420,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.warmcorr_pbar = pbar;
+	progress.warmcorr_pbar = pbar;
 
 	table = gtk_table_new(3,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -438,7 +441,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.aircorr_lab = label;
+	labels.aircorr_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -446,7 +449,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.aircorr_pbar = pbar;
+	progress.aircorr_pbar = pbar;
 
 	/* Ve  */
 	label = gtk_label_new("VE (%)");
@@ -461,7 +464,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.vecurr1_lab = label;
+	labels.vecurr1_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -469,7 +472,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.vecurr1_pbar = pbar;
+	progress.vecurr1_pbar = pbar;
 
 	/* Accel Boost  */
 	label = gtk_label_new("Accel (ms)");
@@ -484,7 +487,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.tpsaccel_lab = label;
+	labels.tpsaccel_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -492,7 +495,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.tpsaccel_pbar = pbar;
+	progress.tpsaccel_pbar = pbar;
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
@@ -617,9 +620,9 @@ int build_runtime(GtkWidget *parent_frame)
 	{
 		frame = gtk_frame_new(NULL);
 		gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-		runtime_data.status[i] = gtk_label_new(status_msgs[i]);
-		gtk_widget_set_sensitive(runtime_data.status[i],FALSE);
-		gtk_container_add(GTK_CONTAINER(frame),runtime_data.status[i]);
+		misc.status[i] = gtk_label_new(status_msgs[i]);
+		gtk_widget_set_sensitive(misc.status[i],FALSE);
+		gtk_container_add(GTK_CONTAINER(frame),misc.status[i]);
 		gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 	}
 
@@ -643,159 +646,176 @@ void update_runtime_vars()
 	if (runtime->secl != runtime_last->secl)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->secl);
-		gtk_label_set_text(GTK_LABEL(runtime_data.secl_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.secl_lab),tmpbuf);
 		g_free(tmpbuf);
 	}
 	if ((runtime->ego_volts != runtime_last->ego_volts)|| (force_status_update))
 	{
 		tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
-		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.ego_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.ww_ego_lab),tmpbuf);
 		tmpf = runtime->ego_volts/ego_pbar_divisor <= 1.0 
 			? runtime->ego_volts/ego_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.ego_pbar),
+				(progress.ego_pbar),
+				tmpf);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+				(progress.ww_ego_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->map != runtime_last->map)
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->map);
-		gtk_label_set_text(GTK_LABEL(runtime_data.map_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.map_lab),tmpbuf);
 		tmpf = runtime->map/map_pbar_divisor <= 1.0 
 			? runtime->map/map_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.map_pbar),
+				(progress.ww_map_pbar),
+				tmpf);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+				(progress.map_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if ((runtime->clt != runtime_last->clt) || (forced_update))
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
-		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.clt_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
 		tmpf = runtime->clt/255.0 <= 1.0 ? runtime->clt/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.clt_pbar),
+				(progress.clt_pbar),
+				tmpf);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+				(progress.ww_clt_pbar),
 				tmpf);
 		g_free(tmpbuf);
+		warmwizard_update_status(runtime->clt);
 	}
 	if (runtime->batt_volts != runtime_last->batt_volts)
 	{
 		tmpbuf = g_strdup_printf("%.2f",runtime->batt_volts);
-		gtk_label_set_text(GTK_LABEL(runtime_data.batt_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.batt_lab),tmpbuf);
 		tmpf = runtime->batt_volts/18.0 <= 1.0 ? runtime->batt_volts/18.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.batt_pbar),
+				(progress.batt_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->gammae != runtime_last->gammae)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->gammae);
-		gtk_label_set_text(GTK_LABEL(runtime_data.gammae_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.gammae_lab),tmpbuf);
 		tmpf = runtime->gammae/200.0 <= 1.0 ? runtime->gammae/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.gammae_pbar),
+				(progress.gammae_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if ((runtime->mat != runtime_last->mat) || (forced_update))
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->mat);
-		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.mat_lab),tmpbuf);
 		tmpf = runtime->mat/255.0 <= 1.0 ? runtime->mat/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.mat_pbar),
+				(progress.mat_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->tps != runtime_last->tps)
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->tps);
-		gtk_label_set_text(GTK_LABEL(runtime_data.tps_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.tps_lab),tmpbuf);
 		tmpf = runtime->tps/100.0 <= 1.0 ? runtime->tps/100.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.tps_pbar),
+				(progress.tps_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->rpm != runtime_last->rpm)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->rpm);
-		gtk_label_set_text(GTK_LABEL(runtime_data.rpm_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.rpm_lab),tmpbuf);
 		tmpf = runtime->rpm/8000.0 <= 1.0 ? runtime->rpm/8000.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.rpm_pbar),
+				(progress.rpm_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->pw1 != runtime_last->pw1)
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->pw1);
-		gtk_label_set_text(GTK_LABEL(runtime_data.pw1_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.pw1_lab),tmpbuf);
 		tmpf = runtime->pw1/25.5 <= 1.0 ? runtime->pw1/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.pw1_pbar),
+				(progress.pw1_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->egocorr != runtime_last->egocorr)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->egocorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.egocorr_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.egocorr_lab),tmpbuf);
 		tmpf = runtime->egocorr/200.0 <= 1.0 ? runtime->egocorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.egocorr_pbar),
+				(progress.egocorr_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->barocorr != runtime_last->barocorr)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->barocorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.barocorr_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.barocorr_lab),tmpbuf);
 		tmpf = runtime->barocorr/200.0 <= 1.0 ? runtime->barocorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.barocorr_pbar),
+				(progress.barocorr_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->warmcorr != runtime_last->warmcorr)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->warmcorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.warmcorr_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.warmcorr_lab),tmpbuf);
 		tmpf = runtime->warmcorr/200.0 <= 1.0 ? runtime->warmcorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.warmcorr_pbar),
+				(progress.warmcorr_pbar),
+				tmpf);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+				(progress.ww_warmcorr_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->aircorr != runtime_last->aircorr)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->aircorr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.aircorr_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.aircorr_lab),tmpbuf);
 		tmpf = runtime->aircorr/200.0 <= 1.0 ? runtime->aircorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.aircorr_pbar),
+				(progress.aircorr_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->vecurr1 != runtime_last->vecurr1)
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->vecurr1);
-		gtk_label_set_text(GTK_LABEL(runtime_data.vecurr1_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.vecurr1_lab),tmpbuf);
 		tmpf = runtime->vecurr1/200.0 <= 1.0 ? runtime->vecurr1/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.vecurr1_pbar),
+				(progress.vecurr1_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 	if (runtime->tpsaccel != runtime_last->tpsaccel)
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->tpsaccel/10.0);
-		gtk_label_set_text(GTK_LABEL(runtime_data.tpsaccel_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.tpsaccel_lab),tmpbuf);
 		tmpf = (runtime->tpsaccel/10.0)/25.5 <= 1.0 
 			? (runtime->tpsaccel/10.0)/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.tpsaccel_pbar),
+				(progress.tpsaccel_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
@@ -803,37 +823,49 @@ void update_runtime_vars()
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->dcycle1);
 		tmpf = runtime->dcycle1/100.0 <= 1.0 ? runtime->dcycle1/100.0: 1.0;
-		gtk_label_set_text(GTK_LABEL(runtime_data.dcycle1_lab),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(labels.dcycle1_lab),tmpbuf);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.dcycle1_pbar),
+				(progress.dcycle1_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
 
 	/* Connected */
-	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
+	gtk_widget_set_sensitive(misc.status[CONNECTED],
 			connected);
 
 	if ((force_status_update) || (runtime->engine.value != runtime_last->engine.value))
 	{
 		force_status_update = FALSE;
 		/* Cranking */
-		gtk_widget_set_sensitive(runtime_data.status[CRANKING],
+		gtk_widget_set_sensitive(misc.status[CRANKING],
+				runtime->engine.bit.crank);
+		gtk_widget_set_sensitive(misc.ww_status[CRANKING],
 				runtime->engine.bit.crank);
 		/* Running */
-		gtk_widget_set_sensitive(runtime_data.status[RUNNING],
+		gtk_widget_set_sensitive(misc.status[RUNNING],
+				runtime->engine.bit.running);
+		gtk_widget_set_sensitive(misc.ww_status[RUNNING],
 				runtime->engine.bit.running);
 		/* Warmup */
-		gtk_widget_set_sensitive(runtime_data.status[WARMUP],
+		gtk_widget_set_sensitive(misc.status[WARMUP],
+				runtime->engine.bit.warmup);
+		gtk_widget_set_sensitive(misc.ww_status[WARMUP],
 				runtime->engine.bit.warmup);
 		/* Afterstart Enrichment */
-		gtk_widget_set_sensitive(runtime_data.status[AS_ENRICH],
+		gtk_widget_set_sensitive(misc.status[AS_ENRICH],
+				runtime->engine.bit.startw);
+		gtk_widget_set_sensitive(misc.ww_status[AS_ENRICH],
 				runtime->engine.bit.startw);
 		/* Accel Enrichment */
-		gtk_widget_set_sensitive(runtime_data.status[ACCEL],
+		gtk_widget_set_sensitive(misc.status[ACCEL],
+				runtime->engine.bit.tpsaen);
+		gtk_widget_set_sensitive(misc.ww_status[ACCEL],
 				runtime->engine.bit.tpsaen);
 		/* Decel Enleanment */
-		gtk_widget_set_sensitive(runtime_data.status[DECEL],
+		gtk_widget_set_sensitive(misc.status[DECEL],
+				runtime->engine.bit.tpsden);
+		gtk_widget_set_sensitive(misc.ww_status[DECEL],
 				runtime->engine.bit.tpsden);
 
 	}
@@ -847,7 +879,9 @@ void reset_runtime_status()
 	gint i;
 	for(i=1;i<7;i++)
 	{
-		gtk_widget_set_sensitive(runtime_data.status[i],
+		gtk_widget_set_sensitive(misc.status[i],
+				FALSE);
+		gtk_widget_set_sensitive(misc.ww_status[i],
 				FALSE);
 	}
 }

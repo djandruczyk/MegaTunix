@@ -38,57 +38,38 @@ struct Serial_Params
 };
 
 
-/* This structure contains all the gui pointers to the 
- * objects used on the runtime_gui.  These are needed  
- * so the handlers have something to reference when updating
- * the widget in question when data arrives....
- * A Struct was just more convienent and kept things together.
- */
-
-struct Runtime_Widgets
+struct DynamicProgress
 {
-        GtkWidget *secl_lab;            /* Counter label */
-        GtkWidget *ego_lab;             /* O2 Voltage */
         GtkWidget *ego_pbar;            /* O2 Voltage bar */
-        GtkWidget *baro_lab;            /* baro label from MS */
         GtkWidget *baro_pbar;           /* O2 Voltage bar */
-        GtkWidget *map_lab;             /* map label from MS */
         GtkWidget *map_pbar;            /* map value for bar */
-        GtkWidget *mat_lab;             /* mat label from MS */
         GtkWidget *mat_pbar;            /* map value for bar */
-        GtkWidget *clt_lab;             /* clt label from MS */
         GtkWidget *clt_pbar;            /* map value for bar */
-        GtkWidget *tps_lab;             /* tps label from MS */
         GtkWidget *tps_pbar;            /* map value for bar */
-        GtkWidget *batt_lab;            /* batt label from MS */
         GtkWidget *batt_pbar;           /* map value for bar */
-        GtkWidget *egocorr_lab;         /* egocorr label from MS */
         GtkWidget *egocorr_pbar;        /* egocorr label from MS */
-        GtkWidget *aircorr_lab;         /* aircorr label from MS */
         GtkWidget *aircorr_pbar;        /* aircorr label from MS */
-        GtkWidget *warmcorr_lab;        /* warmcorr label from MS */
         GtkWidget *warmcorr_pbar;       /* warmcorr label from MS */
-        GtkWidget *rpm_lab;             /* rpm label from MS */
         GtkWidget *rpm_pbar;            /* rpm label from MS */
-        GtkWidget *pw1_lab;              /* pw label from MS */
         GtkWidget *pw1_pbar;             /* pw label from MS */
-        GtkWidget *tpsaccel_lab;        /* tpsaccel label from MS */
         GtkWidget *tpsaccel_pbar;       /* tpsaccel label from MS */
-        GtkWidget *barocorr_lab;        /* barocorr label from MS */
         GtkWidget *barocorr_pbar;       /* barocorr label from MS */
-        GtkWidget *gammae_lab;          /* gammae label from MS */
         GtkWidget *gammae_pbar;         /* gammae label from MS */
-        GtkWidget *vecurr1_lab;          /* vecurr label from MS */
         GtkWidget *vecurr1_pbar;         /* vecurr label from MS */
-        GtkWidget *dcycle1_lab;          /* vecurr label from MS */
         GtkWidget *dcycle1_pbar;         /* vecurr label from MS */
-        GtkWidget *status[7];           /* Status boxes */
+	GtkWidget *ww_clt_pbar;
+	GtkWidget *ww_warmcorr_pbar;
+	GtkWidget *ww_ego_pbar;
+	GtkWidget *ww_map_pbar;
 };
 
 struct DynamicMisc
 {
 	GtkWidget *p0_map_tps_frame;
 	GtkWidget *p1_map_tps_frame;
+	GtkWidget *warmwizard_table;
+        GtkWidget *status[7];           /* Status boxes */
+        GtkWidget *ww_status[7];           /* Status boxes */
 };
 
 /* this is required so we keep track of the gui controls so we
@@ -103,6 +84,7 @@ struct DynamicSpinners
 	GtkWidget *inj_per_cycle_spin;		/* Spinner */
 	GtkWidget *injectors_spin;		/* Spinner */
 	GtkWidget *cylinders_spin;		/* Spinner */
+	GtkWidget *warmwizard[10];		/* Spinner */
 };
 
 /* Controls for the Required Fuel Calculator... */
@@ -128,6 +110,24 @@ struct Reqd_Fuel
  */
 struct DynamicLabels
 {
+        GtkWidget *secl_lab;            /* Counter label */
+        GtkWidget *ego_lab;             /* O2 Voltage */
+        GtkWidget *baro_lab;            /* baro label from MS */
+        GtkWidget *map_lab;             /* map label from MS */
+        GtkWidget *mat_lab;             /* mat label from MS */
+        GtkWidget *clt_lab;             /* clt label from MS */
+        GtkWidget *tps_lab;             /* tps label from MS */
+        GtkWidget *batt_lab;            /* batt label from MS */
+        GtkWidget *egocorr_lab;         /* egocorr label from MS */
+        GtkWidget *aircorr_lab;         /* aircorr label from MS */
+        GtkWidget *warmcorr_lab;        /* warmcorr label from MS */
+        GtkWidget *rpm_lab;             /* rpm label from MS */
+        GtkWidget *pw1_lab;              /* pw label from MS */
+        GtkWidget *tpsaccel_lab;        /* tpsaccel label from MS */
+        GtkWidget *barocorr_lab;        /* barocorr label from MS */
+        GtkWidget *gammae_lab;          /* gammae label from MS */
+        GtkWidget *vecurr1_lab;          /* vecurr label from MS */
+        GtkWidget *dcycle1_lab;          /* vecurr label from MS */
 	GtkWidget *req_fuel_lab;
 	GtkWidget *squirts_lab;
 	GtkWidget *injectors_lab;
@@ -136,6 +136,7 @@ struct DynamicLabels
 	GtkWidget *cr_pulse_lowtemp_lab;
 	GtkWidget *cr_pulse_hightemp_lab;
 	GtkWidget *warmup_bins_lab[10];
+	GtkWidget *warmwizard_lab[10];
 	GtkWidget *warmup_lab;
 	GtkWidget *ego_temp_lab;
 	GtkWidget *runtime_clt_lab;
@@ -144,6 +145,11 @@ struct DynamicLabels
 	GtkWidget *p1_map_tps_lab;
 	GtkWidget *vex_file_lab;
 	GtkWidget *dlog_file_lab;
+	GtkWidget *warmwiz_clt_lab;
+	GtkWidget *ww_clt_lab;
+	GtkWidget *ww_warmcorr_lab;
+	GtkWidget *ww_ego_lab;
+	GtkWidget *ww_map_lab;
 };
 
 /* These are defined as they are semi-dynamic and are modified
@@ -165,6 +171,7 @@ struct DynamicButtons
 	GtkWidget *enrich_store_but;		/* Button */
 	GtkWidget *vetable_store_but;		/* Button */
 	GtkWidget *tuning_store_but;		/* Button */
+	GtkWidget *ww_store_but;		/* Button */
 	GtkWidget *speed_den_but;		/* Toggle button */
 	GtkWidget *alpha_n_but;			/* Toggle button */
 	GtkWidget *two_stroke_but;		/* Toggle button */
@@ -187,7 +194,7 @@ struct DynamicButtons
 	GtkWidget *start_dlog_but;		/* Start DataLogging */
 };
 
-/* Simple struct to store hte pointers to the entry and button
+/* Simple struct to store the pointers to the entry and button
  * for the tools_gui and vex_support files.  
  */
 struct Tools
