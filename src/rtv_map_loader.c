@@ -42,8 +42,10 @@ void realtime_map_load(void *ptr, gchar *basename)
 			cfg_free(cfgfile);
 			g_free(cfgfile);
 			g_free(filename);
+			return;
 			
 		}
+		
 		
 	}
 	
