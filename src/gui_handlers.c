@@ -34,13 +34,14 @@ extern struct Labels labels;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
+static gfloat req_fuel_sav = 0.0;
 static gint err_flag = 0;
 static GdkColor red = { 0, 65535, 0, 0};
 static GdkColor black = { 0, 0, 0, 0};
 static GList *offsets = NULL;
 static gint offset_data[4]; /* Only 4 interdependant vars... */
 
-void leave(GtkWidget *widget, gpointer *data)
+void leave(GtkWidget *widget, gpointer data)
 {
 	save_config();
 	stop_serial_thread();
@@ -51,7 +52,7 @@ void leave(GtkWidget *widget, gpointer *data)
 	gtk_main_quit();
 }
 
-int toggle_button_handler(GtkWidget *widget, gpointer *data)
+int toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint config_num = 0;
 	gint bit_pos = 0;
@@ -74,7 +75,6 @@ int toggle_button_handler(GtkWidget *widget, gpointer *data)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{
 		/* If control reaches here, the toggle button is down */
-//		printf("config_num %i, bit_pos %i, bit_val %i,bitmask %i\n",config_num,bit_pos,bit_val,bitmask);		
 		switch (config_num)
 		{
 			case 11:
@@ -139,7 +139,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer *data)
 	return TRUE;
 }
 
-int std_button_handler(GtkWidget *widget, gpointer *data)
+int std_button_handler(GtkWidget *widget, gpointer data)
 {
 	switch ((gint)data)
 	{
@@ -183,7 +183,7 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 			message);
 }
 	
-int classed_spinner_changed(GtkWidget *widget, gpointer *data)
+int classed_spinner_changed(GtkWidget *widget, gpointer data)
 {
         gfloat value = 0.0;
         gint offset = 0;
@@ -226,7 +226,7 @@ int classed_spinner_changed(GtkWidget *widget, gpointer *data)
 	return TRUE;
 }
 
-int spinner_changed(GtkWidget *widget, gpointer *data)
+int spinner_changed(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 
@@ -280,7 +280,8 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			reqd_fuel.afr = value;
 			break;
 		case REQ_FUEL:
-			//			ve_constants->req_fuel = tmpi_x10;
+			req_fuel_sav = tmpi_x10;
+			check_req_fuel_limits();
 			break;
 		case INJ_OPEN_TIME:
 			/* This funny conversion is needed cause of 
@@ -513,10 +514,12 @@ void update_const_ve()
 	tmp =	(float)(ve_constants->config12.bit.injectors+1) /
 		(float)(ve_constants->divider*(ve_constants->alternate+1));
 	tmp *= (float)ve_constants->req_fuel;
+	req_fuel_sav = tmp;
 	tmp /= 10.0;
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_spin),
 			tmp);
 
+	
 //	/* req-fuel info box  */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_base_spin),
 			ve_constants->req_fuel/10.0);
@@ -759,15 +762,11 @@ void check_req_fuel_limits()
 	gint lim_flag = 0;
 	gint index = 0;
 
-//	printf("divider = %i\n",ve_constants->divider);
-//	printf("alternate = %i\n",ve_constants->alternate);
+	tmp =	(float)(ve_constants->divider*(float)(ve_constants->alternate+1))/(float)(num_injectors);
 
-	tmp =	(float)(ve_constants->divider*(ve_constants->alternate+1))/
-		(float)(ve_constants->config12.bit.injectors+1);
 
-	req_fuel_dl = tmp * ve_constants->req_fuel;
+	req_fuel_dl = tmp * req_fuel_sav;
 
-//	printf("req_fuel_dl %.2f, req_fuel %.2f\n",req_fuel_dl,ve_constants->req_fuel/10.0);
 	if ((int)req_fuel_dl != ve_constants->req_fuel)
 	{
 		if (req_fuel_dl > 255.0)

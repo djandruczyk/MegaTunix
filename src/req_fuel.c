@@ -170,17 +170,16 @@ int reqd_fuel_popup()
         return TRUE;
 }
 
-int close_popup(GtkWidget *widget, gpointer *data)
+int close_popup(GtkWidget *widget, gpointer data)
 {
         gtk_widget_destroy(popup);
         req_fuel_popup=FALSE;
         return TRUE;
 }
-int update_reqd_fuel(GtkWidget *widget, gpointer *data)
+int update_reqd_fuel(GtkWidget *widget, gpointer data)
 {
         gfloat tmp1,tmp2;
 
-	printf("disp %i, cyls %i, afr %f, inj_rate %i\n",reqd_fuel.disp,reqd_fuel.cyls,reqd_fuel.afr, reqd_fuel.inj_rate);
         tmp1 = 36.0*((double)reqd_fuel.disp)*4.27793;
         tmp2 = ((double) reqd_fuel.cyls) \
                 * ((double)(reqd_fuel.afr)) \
@@ -190,10 +189,12 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_spin),
                         ve_constants->req_fuel/10.0);
 
-	ve_constants->config11.bit.cylinders = ((reqd_fuel.cyls - 1 ) << 4);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cylinders_spin),
-                        reqd_fuel.cyls);
-
+	/* No need to set cyls value, or the bitfield as the two spinbuttons
+	 * share the same adjustment and signal handlers so altering the cyls
+	 * spinbutton on the main gui or in req_fuel_popup will both get 
+	 * handled properly...
+	 */
+	
 	/* Top is two stroke, botton is four stroke.. */
 	if (ve_constants->config11.bit.eng_type)
         	ve_constants->rpmk = (int)(6000.0/((double)reqd_fuel.cyls));

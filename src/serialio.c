@@ -138,7 +138,7 @@ void close_serial()
 	update_statusbar(ser_statbar,ser_context_id,buff);
 }
 
-int check_ecu_comms(GtkWidget *widget, gpointer *data)
+int check_ecu_comms(GtkWidget *widget, gpointer data)
 {
         gint tmp;
         gint res;
