@@ -419,9 +419,6 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case TRUNCATE_VEXFILE:
 			truncate_file(VE_EXPORT);
 			break;
-		case RESET_3D_VIEW:
-			reset_3d_view();
-			break;
 		case BACKUP_ALL:
 			present_filesavebox(FULL_BACKUP);
 			break;

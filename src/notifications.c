@@ -58,12 +58,13 @@ void set_store_buttons_state(GuiState state)
 			gtk_widget_modify_fg(GTK_BIN(
 						buttons.vetable_store_but)->child,
 					GTK_STATE_PRELIGHT,&red);
-			gtk_widget_modify_fg(GTK_BIN(
+/*			gtk_widget_modify_fg(GTK_BIN(
 						buttons.tuning_store_but)->child,
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(GTK_BIN(
 						buttons.tuning_store_but)->child,
 					GTK_STATE_PRELIGHT,&red);
+*/
 			break;
 		case BLACK:
 			gtk_widget_modify_fg(GTK_BIN(
@@ -90,12 +91,13 @@ void set_store_buttons_state(GuiState state)
 			gtk_widget_modify_fg(GTK_BIN(
 						buttons.vetable_store_but)->child,
 					GTK_STATE_PRELIGHT,&black);
-			gtk_widget_modify_fg(GTK_BIN(
+/*			gtk_widget_modify_fg(GTK_BIN(
 						buttons.tuning_store_but)->child,
 					GTK_STATE_NORMAL,&black);
 			gtk_widget_modify_fg(GTK_BIN(
 						buttons.tuning_store_but)->child,
 					GTK_STATE_PRELIGHT,&black);
+*/
 			break;
 	}
 }

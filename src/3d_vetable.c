@@ -41,7 +41,6 @@ static float zFar = 23;
 static float aspect = 1.0;
 static float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
 static int rpm_max=0, kpa_max=0, ve_max=0;
-static GtkWidget *drawing_area;
 static gchar font_string[] = "sans 10";
 static GLuint font_list_base;
 static gint font_height;
@@ -65,7 +64,6 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *vbox2;
 	GtkWidget *hbox;
 	GtkWidget *drawing_area;
-	GtkWidget *table;
         GdkGLConfig *gl_config;
 	extern GtkTooltips *tip;
 	gchar *tmpbuf;
@@ -76,7 +74,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	else
 		winstat[tbl] = TRUE;
 	
-	tmpbuf = g_strdup_printf("3D VE-Table for table %i\n",(gint)data);
+	tmpbuf = g_strdup_printf("3D VE-Table for table %i\n",tbl);
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), tmpbuf);
 	g_free(tmpbuf);
@@ -121,19 +119,19 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 
         /* Connect signal handlers to the drawing area */
         g_signal_connect_after(G_OBJECT (drawing_area), "realize",
-                        G_CALLBACK (ve_realize), NULL);
+                        G_CALLBACK (ve_realize), GINT_TO_POINTER(tbl));
         g_signal_connect(G_OBJECT (drawing_area), "configure_event",
-                        G_CALLBACK (ve_configure_event), NULL);
+                        G_CALLBACK (ve_configure_event), GINT_TO_POINTER(tbl));
         g_signal_connect(G_OBJECT (drawing_area), "expose_event",
-                        G_CALLBACK (ve_expose_event), NULL);
+                        G_CALLBACK (ve_expose_event), GINT_TO_POINTER(tbl));
         g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
-                        G_CALLBACK (ve_motion_notify_event), NULL);
+                        G_CALLBACK (ve_motion_notify_event), GINT_TO_POINTER(tbl));
         g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
-                        G_CALLBACK (ve_button_press_event), NULL);
+                        G_CALLBACK (ve_button_press_event), GINT_TO_POINTER(tbl));
         g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
-                        G_CALLBACK (ve_key_press_event), NULL);
+                        G_CALLBACK (ve_key_press_event), GINT_TO_POINTER(tbl));
         g_signal_connect(G_OBJECT (drawing_area), "focus_in_event",
-                        G_CALLBACK (ve_focus_in_event), NULL);
+                        G_CALLBACK (ve_focus_in_event), GINT_TO_POINTER(tbl));
 
         /* End of GL window, Now controls for it.... */
         frame = gtk_frame_new("3D Display Controls");
@@ -141,42 +139,31 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 
         vbox2 = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(frame),vbox2);
+
         button = gtk_button_new_with_label("Reset Display");
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+	g_object_set_data(G_OBJECT(button),"table",GINT_TO_POINTER(tbl));
         g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler), \
-                        GINT_TO_POINTER(RESET_3D_VIEW));
-
-        frame = gtk_frame_new("Commands");
-        gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
-
-        table = gtk_table_new(1,2,FALSE);
-        gtk_table_set_col_spacings(GTK_TABLE(table),5);
-        gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-        gtk_container_add(GTK_CONTAINER(frame),table);
+                        G_CALLBACK (reset_3d_view), \
+                        (gpointer)drawing_area);
 
         button = gtk_button_new_with_label("Get Data from ECU");
+        g_signal_connect(G_OBJECT(button), "clicked",
+        		G_CALLBACK(std_button_handler),
+			GINT_TO_POINTER(READ_VE_CONST));
         gtk_tooltips_set_tip(tip,button,
                         "Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
+        gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
-        gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
-        g_signal_connect(G_OBJECT(button), "clicked",
-                       G_CALLBACK(std_button_handler),
-                        GINT_TO_POINTER(READ_VE_CONST));
 
-        button = gtk_button_new_with_label("Permanently Store Data in ECU");
-        //buttons.tuning_store_but = button;
-        gtk_tooltips_set_tip(tip,button,
-                        "Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
-        gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+        button = gtk_button_new_with_label("Burn to ECU");
         g_signal_connect(G_OBJECT(button), "clicked",
                         G_CALLBACK(std_button_handler),
                         GINT_TO_POINTER(BURN_MS_FLASH));
+        //buttons.tuning_store_but = button;
+        gtk_tooltips_set_tip(tip,button,
+                        "Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
+        gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 
 	gtk_widget_show_all(window);
@@ -192,8 +179,9 @@ gint reset_3d_status(GtkWidget * widget)
 			*/
 }
 	
-void reset_3d_view()
+void reset_3d_view(GtkWidget * widget, gpointer data)
 {
+	gint table = -1;
 	grid = 8;
 	active_map = 0;
 	active_rpm = 0;
@@ -204,8 +192,9 @@ void reset_3d_view()
 	zNear = 0.8;
 	zFar = 23;
 	aspect = 1.333;
-	ve_configure_event(drawing_area, NULL,NULL);
-	ve_expose_event(drawing_area, NULL,NULL);
+	table = (gint)g_object_get_data(G_OBJECT(widget),"table");
+	ve_configure_event((GtkWidget *)(data), NULL,NULL);
+	ve_expose_event((GtkWidget *)data, NULL,GINT_TO_POINTER(table));
 }
 
 GdkGLConfig* get_gl_config(void)
@@ -261,6 +250,7 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 
 gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
+	gint tbl = (gint)data;
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){
 		gtk_widget_grab_focus(widget);
 	}
@@ -289,10 +279,10 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	glRotatef(sphi, 0.0, 0.0, 1.0);
 	glTranslatef(-(float)((grid)/2-0.3), -(float)((grid)/2-1), -2.0);
 
-	ve_calculate_scaling();
-	ve_draw_ve_grid();
-	ve_draw_active_indicator();
-	ve_draw_axis();
+	ve_calculate_scaling(tbl);
+	ve_draw_ve_grid(tbl);
+	ve_draw_active_indicator(tbl);
+	ve_draw_axis(tbl);
 
 	/* Swap buffers */
 	if (gdk_gl_drawable_is_double_buffered (gldrawable))
@@ -391,26 +381,31 @@ void ve_realize (GtkWidget *widget, gpointer data)
 	/*** OpenGL END ***/
 }
 
-void ve_calculate_scaling(void)
+void ve_calculate_scaling(gint table)
 {
 	int i=0;
 	rpm_max = 0;
 	kpa_max = 0;
 	ve_max = 0;
+	struct Ve_Const_Std *ve_ptr = NULL;
+	if (table == 1) /* all std code derivatives..*/
+		ve_ptr = ve_const_p0;
+	else if (table == 2)
+		ve_ptr = ve_const_p1;
 	
 	/* calculate scaling */
 	for (i=0;i<grid;i++) {
-		if (ve_const_p0->rpm_bins[i] > rpm_max) {
-			rpm_max=ve_const_p0->rpm_bins[i];
+		if (ve_ptr->rpm_bins[i] > rpm_max) {
+			rpm_max=ve_ptr->rpm_bins[i];
 		}
-		if (ve_const_p0->kpa_bins[i] > kpa_max) {
-			kpa_max=ve_const_p0->kpa_bins[i];
+		if (ve_ptr->kpa_bins[i] > kpa_max) {
+			kpa_max=ve_ptr->kpa_bins[i];
 		}
 	}
 
 	for (i=0;i<grid*8;i++) {
-		if (ve_const_p0->ve_bins[i] > ve_max) {
-			ve_max=ve_const_p0->ve_bins[i];
+		if (ve_ptr->ve_bins[i] > ve_max) {
+			ve_max=ve_ptr->ve_bins[i];
 		}
 	}	
 
@@ -419,9 +414,15 @@ void ve_calculate_scaling(void)
 	ve_div  = ((float)ve_max/4.0);	
 }
 
-void ve_draw_ve_grid(void)
+void ve_draw_ve_grid(gint table)
 {
 	int rpm=0, map=0;
+	struct Ve_Const_Std *ve_ptr = NULL;
+	if (table == 1) /* all std code derivatives..*/
+		ve_ptr = ve_const_p0;
+	else if (table == 2)
+		ve_ptr = ve_const_p1;
+	
 
 	glColor3f(1.0, 1.0, 1.0);
 	glLineWidth(1.5);
@@ -432,9 +433,9 @@ void ve_draw_ve_grid(void)
 		glBegin(GL_LINE_STRIP);
 		for(map=0;map<grid;map++) {
 			glVertex3f(
-					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div,			
-					(float)(ve_const_p0->kpa_bins[map])/kpa_div, 	 	
-					(float)(ve_const_p0->ve_bins[(map*8)+rpm])/ve_div);
+					(float)(ve_ptr->rpm_bins[rpm])/rpm_div,			
+					(float)(ve_ptr->kpa_bins[map])/kpa_div, 	 	
+					(float)(ve_ptr->ve_bins[(map*8)+rpm])/ve_div);
 		}
 		glEnd();
 	}
@@ -445,33 +446,43 @@ void ve_draw_ve_grid(void)
 		glBegin(GL_LINE_STRIP);
 		for(rpm=0;rpm<grid;rpm++){
 			glVertex3f(	
-					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div,
-					(float)(ve_const_p0->kpa_bins[map])/kpa_div,			
-					(float)(ve_const_p0->ve_bins[(map*8)+rpm])/ve_div);	
+					(float)(ve_ptr->rpm_bins[rpm])/rpm_div,
+					(float)(ve_ptr->kpa_bins[map])/kpa_div,			
+					(float)(ve_ptr->ve_bins[(map*8)+rpm])/ve_div);	
 		}
 		glEnd();
 	}
 }
 
-void ve_draw_active_indicator(void)
+void ve_draw_active_indicator(gint table)
 {
+	struct Ve_Const_Std *ve_ptr = NULL;
+	if (table == 1) /* all std code derivatives..*/
+		ve_ptr = ve_const_p0;
+	else if (table == 2)
+		ve_ptr = ve_const_p1;
 	/* Render a red dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
-			(float)(ve_const_p0->rpm_bins[active_rpm])/rpm_div,
-			(float)(ve_const_p0->kpa_bins[active_map])/kpa_div,	
-			(float)(ve_const_p0->ve_bins[(active_map*8)+active_rpm])/ve_div);
+			(float)(ve_ptr->rpm_bins[active_rpm])/rpm_div,
+			(float)(ve_ptr->kpa_bins[active_map])/kpa_div,	
+			(float)(ve_ptr->ve_bins[(active_map*8)+active_rpm])/ve_div);
 	glEnd();	
 }
 
 
-void ve_draw_axis(void)
+void ve_draw_axis(gint table)
 {
 	/* Set vars and an asthetically pleasing maximum value */
 	int i=0, rpm=0, map=0;
 	float top = ((float)(ve_max+20))/ve_div;
+	struct Ve_Const_Std *ve_ptr = NULL;
+	if (table == 1) /* all std code derivatives..*/
+		ve_ptr = ve_const_p0;
+	else if (table == 2)
+		ve_ptr = ve_const_p1;
 	
 	/* Set line thickness and color */
 	glLineWidth(1.0);
@@ -482,16 +493,16 @@ void ve_draw_axis(void)
 	for (i=0;i<(ve_max+20);i = i + 10){
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(
-			((ve_const_p0->rpm_bins[0])/rpm_div),
-			((ve_const_p0->kpa_bins[7])/kpa_div),		
+			((ve_ptr->rpm_bins[0])/rpm_div),
+			((ve_ptr->kpa_bins[7])/kpa_div),		
 			((float)i)/ve_div);
 		glVertex3f(
-			((ve_const_p0->rpm_bins[7])/rpm_div),
-			((ve_const_p0->kpa_bins[7])/kpa_div),		
+			((ve_ptr->rpm_bins[7])/rpm_div),
+			((ve_ptr->kpa_bins[7])/kpa_div),		
 			((float)i)/ve_div);
 		glVertex3f(
-			((ve_const_p0->rpm_bins[7])/rpm_div),
-			((ve_const_p0->kpa_bins[0])/kpa_div),		
+			((ve_ptr->rpm_bins[7])/rpm_div),
+			((ve_ptr->kpa_bins[0])/kpa_div),		
 			((float)i)/ve_div);
 		glEnd();	
 	}
@@ -500,12 +511,12 @@ void ve_draw_axis(void)
 	for (i=0;i<8;i++){
 		glBegin(GL_LINES);
 		glVertex3f(
-			((ve_const_p0->rpm_bins[7])/rpm_div),
-			((ve_const_p0->kpa_bins[i])/kpa_div),		
+			((ve_ptr->rpm_bins[7])/rpm_div),
+			((ve_ptr->kpa_bins[i])/kpa_div),		
 			0.0);
 		glVertex3f(
-			((ve_const_p0->rpm_bins[7])/rpm_div),
-			((ve_const_p0->kpa_bins[i])/kpa_div),		
+			((ve_ptr->rpm_bins[7])/rpm_div),
+			((ve_ptr->kpa_bins[i])/kpa_div),		
 			top);
 		glEnd();
 	}
@@ -514,12 +525,12 @@ void ve_draw_axis(void)
 	for (i=0;i<8;i++){
 		glBegin(GL_LINES);
 		glVertex3f(
-			((ve_const_p0->rpm_bins[i])/rpm_div),		
-			((ve_const_p0->kpa_bins[7])/kpa_div),
+			((ve_ptr->rpm_bins[i])/rpm_div),		
+			((ve_ptr->kpa_bins[7])/kpa_div),
 			0.0);
 		glVertex3f(
-			((ve_const_p0->rpm_bins[i])/rpm_div),
-			((ve_const_p0->kpa_bins[7])/kpa_div),		
+			((ve_ptr->rpm_bins[i])/rpm_div),
+			((ve_ptr->kpa_bins[7])/kpa_div),		
 			top);
 		glEnd();
 	}
@@ -527,49 +538,49 @@ void ve_draw_axis(void)
 	/* Add the back corner top lines */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(
-		((ve_const_p0->rpm_bins[0])/rpm_div),	
-		((ve_const_p0->kpa_bins[7])/kpa_div),
+		((ve_ptr->rpm_bins[0])/rpm_div),	
+		((ve_ptr->kpa_bins[7])/kpa_div),
 		top);
 	glVertex3f(
-		((ve_const_p0->rpm_bins[7])/rpm_div),	
-		((ve_const_p0->kpa_bins[7])/kpa_div),
+		((ve_ptr->rpm_bins[7])/rpm_div),	
+		((ve_ptr->kpa_bins[7])/kpa_div),
 		top);
 	glVertex3f(
-		((ve_const_p0->rpm_bins[7])/rpm_div),
-		((ve_const_p0->kpa_bins[0])/kpa_div),	
+		((ve_ptr->rpm_bins[7])/rpm_div),
+		((ve_ptr->kpa_bins[0])/kpa_div),	
 		top);
 	glEnd();
 	
 	/* Add front corner base lines */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(
-		((ve_const_p0->rpm_bins[0])/rpm_div),	
-		((ve_const_p0->kpa_bins[7])/kpa_div),
+		((ve_ptr->rpm_bins[0])/rpm_div),	
+		((ve_ptr->kpa_bins[7])/kpa_div),
 		0.0);
 	glVertex3f(
-		((ve_const_p0->rpm_bins[0])/rpm_div),	
-		((ve_const_p0->kpa_bins[0])/kpa_div),
+		((ve_ptr->rpm_bins[0])/rpm_div),	
+		((ve_ptr->kpa_bins[0])/kpa_div),
 		0.0);
 	glVertex3f(
-		((ve_const_p0->rpm_bins[7])/rpm_div),
-		((ve_const_p0->kpa_bins[0])/kpa_div),
+		((ve_ptr->rpm_bins[7])/rpm_div),
+		((ve_ptr->kpa_bins[0])/kpa_div),
 		0.0);
 	glEnd();
 	
 	/* Draw RPM and KPA labels */
 	for (i=0;i<8;i++){
-		rpm = (ve_const_p0->rpm_bins[i])*100;
-		map = (ve_const_p0->kpa_bins[i]);
+		rpm = (ve_ptr->rpm_bins[i])*100;
+		map = (ve_ptr->kpa_bins[i]);
 		sprintf(label,"%i",map);
 		ve_drawtext(label,
-			((ve_const_p0->rpm_bins[0])/rpm_div),
-			((ve_const_p0->kpa_bins[i])/kpa_div),
+			((ve_ptr->rpm_bins[0])/rpm_div),
+			((ve_ptr->kpa_bins[i])/kpa_div),
 			0.0);
 		
 		sprintf(label,"%i",rpm);
 		ve_drawtext(label,
-			((ve_const_p0->rpm_bins[i])/rpm_div),
-			((ve_const_p0->kpa_bins[0])/kpa_div),
+			((ve_ptr->rpm_bins[i])/rpm_div),
+			((ve_ptr->kpa_bins[0])/kpa_div),
 			0.0);
 	}
 	
@@ -577,8 +588,8 @@ void ve_draw_axis(void)
 	for (i=0;i<(ve_max+20);i=i+10){
 		sprintf(label,"%i",i);
 		ve_drawtext(label,
-			((ve_const_p0->rpm_bins[0])/rpm_div),
-			((ve_const_p0->kpa_bins[7])/kpa_div),
+			((ve_ptr->rpm_bins[0])/rpm_div),
+			((ve_ptr->kpa_bins[7])/kpa_div),
 			(float)i/ve_div);
 	}
 	
@@ -624,8 +635,23 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	gint value = 0;
 	gint offset = 0;
 	gint dload_val = 0;
+	gint table = (gint)data;
 	extern struct Ve_Widgets *page0_widgets;
-//	extern struct Ve_Widgets *page1_widgets;
+	extern struct Ve_Widgets *page1_widgets;
+	struct Ve_Const_Std *ve_ptr = NULL;
+	struct Ve_Widgets *widget_ptr = NULL;
+
+	if (table == 1) /* all std code derivatives..*/
+	{
+		ve_ptr = ve_const_p0;
+		widget_ptr = page0_widgets;
+	}
+	else if (table == 2)
+	{
+		ve_ptr = ve_const_p1;
+		widget_ptr = page1_widgets;
+	}
+	
 	#ifdef GLDEBUG	
 	printf("Key press event\n");
 	#endif
@@ -668,15 +694,15 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			#ifdef GLDEBUG
 			printf("PLUS\n");
 			#endif
-			if (ve_const_p0->ve_bins[(active_map*8)+active_rpm] < 255)
+			if (ve_ptr->ve_bins[(active_map*8)+active_rpm] < 255)
 			{
 				page = 0;  // < Change this when dualtable works
 				offset = (active_map*8)+active_rpm;
-				value = ve_const_p0->ve_bins[offset] + 1;
+				value = ve_ptr->ve_bins[offset] + 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						page0_widgets->widget[offset]),
+						widget_ptr->widget[offset]),
 						value);
 
 			}
@@ -687,15 +713,15 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			#ifdef GLDEBUG
 			printf("MINUS\n");
 			#endif
-			if (ve_const_p0->ve_bins[(active_map*8)+active_rpm] > 0)
+			if (ve_ptr->ve_bins[(active_map*8)+active_rpm] > 0)
 			{
 				page = 0;  // < Change this when dualtable works
 				offset = (active_map*8)+active_rpm;
-				value = ve_const_p0->ve_bins[offset] - 1;
+				value = ve_ptr->ve_bins[offset] - 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						page0_widgets->widget[offset]),
+						widget_ptr->widget[offset]),
 						value);
 			}
 			break;							
