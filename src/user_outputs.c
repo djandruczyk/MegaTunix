@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <keyparser.h>
+#include <stdlib.h>
 #include <structures.h>
 #include <user_outputs.h>
 
@@ -28,6 +29,7 @@ enum
 	COL_LOWER,
 	COL_UPPER,
 	COL_ENTRY,
+	COL_EDITABLE,
 	NUM_COLS
 } ;
 
@@ -37,8 +39,9 @@ void populate_user_output_choices(void)
 	extern GHashTable *dynamic_widgets;
 	GtkWidget *table = NULL;
 	GtkWidget *parent = NULL;
-	GtkWidget *view = NULL;
 	GtkWidget *sw = NULL;
+	GtkWidget *view = NULL;
+	GtkTreeModel *model = NULL;
 
 	if (!rtvars_loaded)
 	{
@@ -57,33 +60,21 @@ void populate_user_output_choices(void)
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(parent),table);
 
-	view = create_view(1);
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
-	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
-			      				       
 	sw = gtk_scrolled_window_new(NULL,NULL);
-
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
+
+	model = create_model ();
+	view = gtk_tree_view_new_with_model (model);
+	g_object_unref(model);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
+	add_columns(GTK_TREE_VIEW(view), 1);
+			      				       
 	gtk_container_add(GTK_CONTAINER(sw),view);
 	gtk_table_attach(GTK_TABLE(table),sw,
 			0,1,0,1,
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-			0,0);
-
-	view = create_view(2);
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
-	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
-			      				       
-	sw = gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-			GTK_POLICY_AUTOMATIC,
-			GTK_POLICY_AUTOMATIC);
-	gtk_container_add(GTK_CONTAINER(sw),view);
-	gtk_table_attach(GTK_TABLE(table),sw,
-			1,2,0,1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			0,0);
@@ -95,7 +86,7 @@ void populate_user_output_choices(void)
 
 GtkTreeModel * create_model(void)
 {
-	GtkListStore  *store;
+	GtkListStore  *model;
 	GtkTreeIter    iter;
 	gint i = 0;
 	gchar * data = NULL;
@@ -105,7 +96,7 @@ GtkTreeModel * create_model(void)
 	GObject * object = NULL;
 	extern struct Rtv_Map *rtv_map;
 
-	store = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
+	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_BOOLEAN);
 
 	/* Append a row and fill in some data */
 	while ((data = rtv_map->raw_list[i])!= NULL)
@@ -122,41 +113,42 @@ GtkTreeModel * create_model(void)
 		lower = (gint) g_object_get_data(object,"lower_limit"); 
 		upper = (gint) g_object_get_data(object,"upper_limit"); 
 
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
+		gtk_list_store_append (model, &iter);
+		gtk_list_store_set (model, &iter,
 				COL_OBJECT, object,
 				COL_NAME, name,
 				COL_LOWER, lower,
 				COL_UPPER, upper,
 				COL_ENTRY, -1,
+				COL_EDITABLE,TRUE,
 				-1);
 	}
-	return GTK_TREE_MODEL(store);
+	return GTK_TREE_MODEL(model);
 }
 
 
-GtkWidget * create_view(gint output)
+void add_columns(GtkTreeView *view, gint output)
 {
-	GtkTreeViewColumn   *col;
 	GtkCellRenderer     *renderer;
-	GtkTreeModel        *model;
-	GtkTreeView           *view;
+	GtkTreeViewColumn *col;
+	GtkTreeModel        *model = gtk_tree_view_get_model (view);
 
-	view = (GtkTreeView *)gtk_tree_view_new ();
-
-	/* --- Column #1 --- */
+	/* --- Column #1, name --- */
 	renderer = gtk_cell_renderer_text_new ();
+	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_NAME);
 	col = gtk_tree_view_column_new_with_attributes (
 			g_strdup_printf("Out %i Variable",output),  
 			renderer,
 			"markup", COL_NAME,
 			NULL);
+
 	gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
 	gtk_tree_view_append_column (view, col);
 
-	/* --- Column #2 --- */
+	/* --- Column #2, lower limit --- */
 
 	renderer = gtk_cell_renderer_text_new ();
+	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_LOWER);
 	col = gtk_tree_view_column_new_with_attributes (
 			"Lower",  
 			renderer,
@@ -164,9 +156,10 @@ GtkWidget * create_view(gint output)
 			NULL);
 	gtk_tree_view_append_column (view, col);
 
-	/* --- Column #3 --- */
+	/* --- Column #3, upper limit --- */
 
 	renderer = gtk_cell_renderer_text_new ();
+	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_UPPER);
 	col = gtk_tree_view_column_new_with_attributes (
 			"Upper",  
 			renderer,
@@ -174,21 +167,47 @@ GtkWidget * create_view(gint output)
 			NULL);
 	gtk_tree_view_append_column (view, col);
 
-	/* --- Column #4 --- */
+	/* --- Column #4, user choice --- */
 
 	renderer = gtk_cell_renderer_text_new ();
+	g_signal_connect(renderer, "edited",
+			G_CALLBACK(cell_edited),model);
+	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_ENTRY);
 	col = gtk_tree_view_column_new_with_attributes (
 			"Value",  
 			renderer,
 			"text", COL_ENTRY,
+			"editable",COL_EDITABLE,
 			NULL);
 	gtk_tree_view_append_column (view, col);
 
-	model = create_model ();
+}
 
-	gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+void cell_edited(GtkCellRendererText *cell, 
+		const gchar * path_string,
+		const gchar * new_text,
+		gpointer data)
+{
+	GtkTreeModel *model = (GtkTreeModel *)data;
+	GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
+	GtkTreeIter iter;
+	gint lower = 0;
+	gint upper = 0;
+	gint new = 0;
+	gint column = 0;
 
-	g_object_unref (model); /* destroy model automatically with view */
+	column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
 
-	return (GtkWidget *)view;
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get (model, &iter, COL_LOWER, &lower, -1);
+	gtk_tree_model_get (model, &iter, COL_UPPER, &upper, -1);
+
+	new = (gint)g_ascii_strtoull(new_text,NULL,10);
+	if (new < lower)
+		new = lower;
+	if (new > upper)
+		new = upper;
+
+	gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
+			new, -1);
 }

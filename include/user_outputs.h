@@ -20,7 +20,11 @@
 void populate_user_output_choices(void);
 gboolean show_user_output_choices(GtkWidget *, gpointer );
 GtkTreeModel * create_model(void);
-GtkWidget * create_view(gint );
+void add_columns (GtkTreeView *, gint);
+void cell_edited(GtkCellRendererText *, const gchar * ,const gchar * ,gpointer );
+
+
+		
 
 /* Prototypes */
 
