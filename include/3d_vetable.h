@@ -80,6 +80,7 @@ struct Ve_View_3D
 	gint y_min;
 	gint z_max;
 	gint z_min;
+	gfloat z_offset;
 	gchar *x_source;
 	gchar *y_source;
 	gchar *z_source;

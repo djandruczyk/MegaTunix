@@ -620,6 +620,7 @@ void ve3d_calculate_scaling(void *ptr)
 	ve_view->x_div = ((gfloat)ve_view->x_max/(gfloat)ve_view->x_bincount);
 	ve_view->y_div = ((gfloat)ve_view->y_max/(gfloat)ve_view->y_bincount);
 	ve_view->z_div = ((gfloat)ve_view->z_max-(gfloat)ve_view->z_min)/ve_view->z_scale;	
+	ve_view->z_offset = ((gfloat)ve_view->z_min/ve_view->z_div);
 }
 
 /*!
@@ -677,7 +678,7 @@ void ve3d_draw_ve_grid(void *ptr)
 					(gfloat)(ms_data[x_page][x_base+rpm])/ve_view->x_div,
 					
 					(gfloat)(ms_data[y_page][y_base+load])/ve_view->y_div, 	 	
-					(((gfloat)(ms_data[tbl_page][tbl_base+(load*ve_view->y_bincount)+rpm])/divider)-subtractor)/ve_view->z_div);
+					((((gfloat)(ms_data[tbl_page][tbl_base+(load*ve_view->y_bincount)+rpm])/divider)-subtractor)/ve_view->z_div)-ve_view->z_offset);
 					
 		}
 		glEnd();
@@ -692,7 +693,7 @@ void ve3d_draw_ve_grid(void *ptr)
 			glVertex3f(	
 					(gfloat)(ms_data[x_page][x_base+rpm])/ve_view->x_div,
 					(gfloat)(ms_data[y_page][y_base+load])/ve_view->y_div,
-					(((gfloat)(ms_data[tbl_page][tbl_base+(load*ve_view->y_bincount)+rpm])/divider)-subtractor)/ve_view->z_div);	
+					((((gfloat)(ms_data[tbl_page][tbl_base+(load*ve_view->y_bincount)+rpm])/divider)-subtractor)/ve_view->z_div)-ve_view->z_offset);
 					
 		}
 		glEnd();
@@ -709,6 +710,7 @@ void ve3d_draw_active_indicator(void *ptr)
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
 	extern gint **ms_data;
+	extern gint **ms_data_last;
 	gint x_page = 0;
 	gint y_page = 0;
 	gint tbl_page = 0;
@@ -741,18 +743,20 @@ void ve3d_draw_active_indicator(void *ptr)
 		divider = 1.0;
 	}
 
-			/* Render a red dot at the active VE map position */
-			glPointSize(8.0);
+	/* Render a red dot at the active VE map position */
+	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
 			(gfloat)(ms_data[x_page][x_base+ve_view->active_x])/ve_view->x_div,
 			(gfloat)(ms_data[y_page][y_base+ve_view->active_y])/ve_view->y_div,	
-			(((gfloat)ms_data[tbl_page][tbl_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]/divider)-subtractor)/ve_view->z_div);
+			((((gfloat)ms_data[tbl_page][tbl_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]/divider)-subtractor)/ve_view->z_div)-ve_view->z_offset);
 	glEnd();	
 	/* Update labels to notify user... */
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("rpmcoord_label_%i",ve_view->table_num))),g_strdup_printf("%i RPM",100*ms_data[x_page][x_base+ve_view->active_x]));
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("loadcoord_label_%i",ve_view->table_num))),g_strdup_printf("%i KPA",ms_data[y_page][y_base+ve_view->active_y]));
+	if (ms_data[x_page][x_base+ve_view->active_x] != ms_data_last[x_page][x_base+ve_view->active_x])
+		gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("rpmcoord_label_%i",ve_view->table_num))),g_strdup_printf("%i RPM",100*ms_data[x_page][x_base+ve_view->active_x]));
+	if (ms_data[y_page][y_base+ve_view->active_y] != ms_data_last[y_page][y_base+ve_view->active_y])
+		gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("loadcoord_label_%i",ve_view->table_num))),g_strdup_printf("%i KPA",ms_data[y_page][y_base+ve_view->active_y]));
 }
 
 /*!
@@ -786,7 +790,7 @@ void ve3d_draw_runtime_indicator(void *ptr)
 	glVertex3f(	
 			x_val/ve_view->x_div,
 			y_val/ve_view->y_div,	
-			z_val/ve_view->z_div);
+			(z_val/ve_view->z_div)-ve_view->z_offset);
 	glEnd();
 }
 
@@ -840,15 +844,15 @@ void ve3d_draw_axis(void *ptr)
 		glVertex3f(
 				((ms_data[x_page][x_base])/ve_view->x_div),
 				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),		
-				((gfloat)i)/ve_view->z_div);
+				(((gfloat)i)/ve_view->z_div)-ve_view->z_offset);
 		glVertex3f(
 				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
 				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),		
-				((gfloat)i)/ve_view->z_div);
+				(((gfloat)i)/ve_view->z_div)-ve_view->z_offset);
 		glVertex3f(
 				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
 				((ms_data[y_page][y_base])/ve_view->y_div),		
-				((gfloat)i)/ve_view->z_div);
+				(((gfloat)i)/ve_view->z_div)-ve_view->z_offset);
 		glEnd();	
 	}
 
@@ -859,11 +863,11 @@ void ve3d_draw_axis(void *ptr)
 		glVertex3f(
 				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
 				((ms_data[y_page][y_base+i])/ve_view->y_div),		
-				bottom);
+				bottom - ve_view->z_offset);
 		glVertex3f(
 				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
 				((ms_data[y_page][y_base+i])/ve_view->y_div),		
-				top);
+				top - ve_view->z_offset);
 		glEnd();
 	}
 
@@ -874,11 +878,11 @@ void ve3d_draw_axis(void *ptr)
 		glVertex3f(
 				((ms_data[x_page][x_base+i])/ve_view->x_div),		
 				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-				bottom);
+				bottom - ve_view->z_offset);
 		glVertex3f(
 				((ms_data[x_page][x_base+i])/ve_view->x_div),
 				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),		
-				top);
+				top - ve_view->z_offset);
 		glEnd();
 	}
 
@@ -887,15 +891,15 @@ void ve3d_draw_axis(void *ptr)
 	glVertex3f(
 			((ms_data[x_page][x_base])/ve_view->x_div),	
 			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			top);
+			top - ve_view->z_offset);
 	glVertex3f(
 			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),	
 			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			top);
+			top - ve_view->z_offset);
 	glVertex3f(
 			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
 			((ms_data[y_page][y_base])/ve_view->y_div),	
-			top);
+			top - ve_view->z_offset);
 	glEnd();
 
 	/* Add front corner base lines */
@@ -903,15 +907,15 @@ void ve3d_draw_axis(void *ptr)
 	glVertex3f(
 			((ms_data[x_page][x_base])/ve_view->x_div),	
 			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			bottom);
+			bottom - ve_view->z_offset);
 	glVertex3f(
 			((ms_data[x_page][x_base])/ve_view->x_div),	
 			((ms_data[y_page][y_base])/ve_view->y_div),
-			bottom);
+			bottom - ve_view->z_offset);
 	glVertex3f(
 			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
 			((ms_data[y_page][y_base])/ve_view->y_div),
-			bottom);
+			bottom - ve_view->z_offset);
 	glEnd();
 
 	/* Draw RPM and KPA labels */
@@ -922,7 +926,7 @@ void ve3d_draw_axis(void *ptr)
 		ve3d_draw_text(label,
 				((ms_data[x_page][x_base])/ve_view->x_div),
 				((ms_data[y_page][y_base+i])/ve_view->y_div),
-				bottom);
+				bottom - ve_view->z_offset);
 		g_free(label);
 	}
 
@@ -933,7 +937,7 @@ void ve3d_draw_axis(void *ptr)
 		ve3d_draw_text(label,
 				((ms_data[x_page][x_base+i])/ve_view->x_div),
 				((ms_data[y_page][y_base])/ve_view->y_div),
-				bottom);
+				bottom - ve_view->z_offset);
 		g_free(label);
 	}
 
@@ -944,7 +948,7 @@ void ve3d_draw_axis(void *ptr)
 		ve3d_draw_text(label,
 				((ms_data[x_page][x_base])/ve_view->x_div),
 				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-				(gfloat)i/ve_view->z_div);
+				(gfloat)i/ve_view->z_div - ve_view->z_offset);
 		g_free(label);
 	}
 
@@ -1163,6 +1167,7 @@ void initialize_ve3d_view(void *ptr)
 	ve_view->active_y = 0;
 	ve_view->z_div = 0;
 	ve_view->z_min = 255;
+	ve_view->z_offset = 0;
 	ve_view->z_max = 0;
 	ve_view->x_page = 0;
 	ve_view->y_page = 0;
