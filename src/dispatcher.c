@@ -104,6 +104,8 @@ trypop:
 				case UPD_READ_VE_CONST:
 					if (connected)
 						io_cmd(IO_READ_VE_CONST,NULL);
+					break;
+				case UPD_REENABLE_INTERROGATE_BUTTON:
 					gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
 					break;
 				case UPD_REALTIME:

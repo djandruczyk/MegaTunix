@@ -98,6 +98,7 @@ void interrogate_ecu()
 	if (!cmd_array)
 	{
 		dbg_func(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n",CRITICAL);
+		g_static_mutex_unlock(&mutex);
 		return;
 	}
 	/* how many tests.... */
@@ -450,10 +451,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 
 	filename = get_file(g_strconcat(INTERROGATOR_DIR,"/","tests",NULL));
 	if (!filename)
-	{
-		dbg_func(g_strdup_printf(__FILE__":validate_and_load_tests()\n\tfailure opening \"%s\"\n\tMegaTunix was NOT installed!!!! \n\tPlease run \"make install\" from the top level MegaTunix dir\n",filename),CRITICAL);
 		return NULL;
-	}
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)

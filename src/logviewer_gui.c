@@ -31,6 +31,7 @@ static gint active_viewables = 0;
 static GtkWidget *lv_darea = NULL; //for scroller  :( 
 static gboolean adj_scale = TRUE;
 static gboolean blocked = FALSE;
+static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
 
 static GHashTable *active_traces = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
@@ -227,6 +228,8 @@ void populate_viewer()
         extern GHashTable *dynamic_widgets;
 	GObject *object = NULL;
 
+	g_static_mutex_lock(&update_mutex);
+
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
 	 * and adds them to the list, also checks if entires are removed and
@@ -303,6 +306,7 @@ void populate_viewer()
 	/* If traces selected, emit a configure_Event to clear the window
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
+	g_static_mutex_unlock(&update_mutex);
 	if ((active_traces) && (g_hash_table_size(active_traces) >= 0))
 		lv_configure_event(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"),NULL,NULL);
 
@@ -580,8 +584,10 @@ gboolean update_logview_traces(gboolean force_redraw)
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 	{
 		adj_scale = TRUE;
+		g_static_mutex_lock(&update_mutex);
 		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(force_redraw));
 		scroll_logviewer_traces();
+		g_static_mutex_unlock(&update_mutex);
 	}
 
 	return TRUE;
