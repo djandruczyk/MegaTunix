@@ -41,7 +41,7 @@ void load_dependancy(GObject *object, ConfigFile *cfgfile,gchar * section)
 	}
 	else
 	{
-		deps = parse_keys(tmpbuf,&num_deps);
+		deps = parse_keys(tmpbuf,&num_deps,",");
 		g_free(tmpbuf);
 	}
 	/* Store list of deps.... */

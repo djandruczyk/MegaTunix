@@ -478,7 +478,7 @@ void restore_all_ms_settings(gchar *filename)
 					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tSpark table data mismatch for page %i, restore file \"%i\", firmware specification \"%i\"\n",i,tmpi,firmware->page_params[i]->size),CRITICAL);
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
-				keys = parse_keys(tmpbuf,&num_keys);
+				keys = parse_keys(tmpbuf,&num_keys,",");
 				if (num_keys != firmware->page_params[i]->size)
 					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the size of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->size),CRITICAL);
 				for (x=0;x<num_keys;x++)

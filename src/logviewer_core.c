@@ -23,6 +23,7 @@
 #include <ms_structures.h>
 #include <string.h>
 #include <structures.h>
+#include <tabloader.h>
 
 
 void load_logviewer_file(void *ptr)
@@ -41,7 +42,6 @@ void load_logviewer_file(void *ptr)
 	log_info = g_malloc0(sizeof(struct Log_Info));
 	initialize_log_info(log_info);
 	read_log_header(iofile->iochannel, log_info);
-	allocate_buffers(log_info);
 	populate_limits(log_info);
 	read_log_data(iofile->iochannel, log_info);
 	close_file(iofile);
@@ -56,10 +56,7 @@ void initialize_log_info(void *ptr)
 	log_info = ptr;
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
-	log_info->fields = NULL;
-	log_info->fields_data = g_array_new(FALSE,FALSE,sizeof(GArray *));
-	log_info->lowers = g_array_new(FALSE,FALSE,sizeof(gfloat));
-	log_info->uppers = g_array_new(FALSE,FALSE,sizeof(gfloat));
+	log_info->log_list = g_array_new(FALSE,FALSE,sizeof(GObject *));
 	return;
 }
 
@@ -75,6 +72,11 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 	GString *a_line = g_string_new("\0");
 	GIOStatus  status = G_IO_STATUS_ERROR;
 	gchar *delimiter = NULL;
+	gchar **fields = NULL;
+	gint num_fields = 0;
+	GArray *array = NULL;
+	GObject *object = NULL;
+	gint i = 0;
 	struct Log_Info *log_info = ptr;
 	extern GHashTable *dynamic_widgets;
 
@@ -95,14 +97,19 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 		 * log_info->fields is a string vector (char **)
 		 * that is NULL terminated thanks to g_strsplit()
 		 */
-		log_info->fields = g_strsplit(a_line->str,delimiter,0);
+		fields = parse_keys(a_line->str,&num_fields,delimiter);
 
-		log_info->field_count = 0;
-		/* Get total count of fields in there too... */
-		while (log_info->fields[log_info->field_count])
+		log_info->field_count = num_fields;
+		/* Create objects, arrays and storage points... */
+		for (i=0;i<num_fields;i++)
 		{
-			g_strstrip(log_info->fields[log_info->field_count]);
-			log_info->field_count++;
+			array = NULL;
+			object = NULL;
+			object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+			array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+			g_object_set_data(G_OBJECT(object),"data_array",(gpointer)array);
+			g_object_set_data(G_OBJECT(object),"lview_name",g_strdup(g_strstrip(fields[i])));
+			g_array_append_val(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
@@ -113,50 +120,32 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 
 }
 
-void allocate_buffers(void *ptr)
-{
-	gint i = 0;
-	struct Log_Info *log_info = ptr;
-	GArray *data_array = NULL;
-	
-	/* This looks weird but it should work pretty well.
-	 * On Log_Info initialization we create a GArray. This 
-	 * array contains pointers to the arrays of data for EACH variable
-	 * in the logfile.  This makes it pretty easy to insert things
-	 * and should be pretty fast. (well I hope so..)
-	 */
-	for (i=0;i<log_info->field_count;i++)
-	{
-		data_array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-		g_array_insert_val(log_info->fields_data,i,data_array);
-	}
-}
-
 
 void populate_limits(void *ptr)
 {
-	struct Log_Info *log_info;
+	struct Log_Info *log_info = NULL;
 	gint i = 0;
 	log_info = ptr;
+	gchar * name = NULL;
+	GObject * object = NULL;
 
-	while (log_info->fields[i])
+	for (i=0;i<log_info->field_count;i++)
 	{
-		get_limits(log_info->fields[i],log_info, i);
-		i++;
+		object = g_array_index(log_info->log_list,GObject *, i);
+		name = g_strdup(g_object_get_data(object,"lview_name"));
+		get_limits(name,object, i);
+		g_free(name);
 	}
-
 }
 
 
-void get_limits(gchar *target_field, void *ptr, gint position)
+void get_limits(gchar *target_field, GObject *object, gint position)
 {
-	struct Log_Info *log_info;
 	gint i = 0;
 	gfloat lower = 0.0;
 	gfloat upper = 255.0;
 	gint index = -1;
 	gint max_chances = sizeof(def_limits)/sizeof(def_limits[0]);
-	log_info = ptr;
 	while (i <max_chances)
 	{
 		index = -1;
@@ -179,10 +168,8 @@ void get_limits(gchar *target_field, void *ptr, gint position)
 		upper = 255.0;
 		dbg_func(g_strdup_printf(__FILE__": get_limits()\n\tField \"%s\" NOT found in internal list,\n\tassuming limits bound of 0.0<-%s->255.0,\n\tsend the datalog you're trying to open\n\tto the Author for analysis\n",target_field,target_field),CRITICAL);
 	}
-	g_array_insert_val(log_info->lowers,
-			position,lower);
-	g_array_insert_val(log_info->uppers,
-			position,upper);
+	g_object_set_data(object,"lower_limit", g_memdup(&lower,sizeof(gfloat)));
+	g_object_set_data(object,"upper_limit", g_memdup(&upper,sizeof(gfloat)));
 }
 
 
@@ -195,13 +182,15 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 	gint i = 0;
 	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
+	GObject *object = NULL;
 
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) == G_IO_STATUS_NORMAL) 
 	{
 		data = g_strsplit(a_line->str,log_info->delimiter,0);
 		for (i=0;i<(log_info->field_count);i++)
 		{
-			tmp_array = g_array_index(log_info->fields_data,GArray *,i);
+			object = g_array_index(log_info->log_list,GObject *, i);
+			tmp_array = (GArray *)g_object_get_data(object,"data_array");
 			val = (gfloat)g_ascii_strtod(g_strdup(data[i]),NULL);
 			g_array_append_val(tmp_array,val);
 

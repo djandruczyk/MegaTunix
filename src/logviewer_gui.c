@@ -12,9 +12,7 @@
  */
 
 #include <config.h>
-#include <datalogging_const.h>
 #include <defines.h>
-#include <default_limits.h>
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
@@ -27,10 +25,7 @@
 static gint tcount = 0;	/* used to draw_infotext to know where to put the text*/
 static gint info_width = 120;
 static gint max_viewables = 0;
-static gint total_viewables = 0;
-static struct Logables viewables;
 static GHashTable *active_traces = NULL;
-GtkWidget * lv_darea;
 gint lv_scroll = 0;		/* logviewer scroll amount */
 gboolean logviewer_mode = FALSE;
 
@@ -85,11 +80,11 @@ void present_viewer_choices(void)
 		gtk_window_set_title(GTK_WINDOW(window),
 				"Realtime Mode: Logviewer Choices");
 		frame = gtk_frame_new("Select Realtime Variables to view from the list below...");
-		max_viewables = (gint)rtv_map->derived_total;
+		max_viewables = rtv_map->derived_total;
 		
 	}
 	g_signal_connect_swapped(G_OBJECT(window),"delete_event",
-			G_CALLBACK(deregister_lv_choices),
+			G_CALLBACK(deregister_lv_buttons),
 			NULL);
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
@@ -120,7 +115,10 @@ void present_viewer_choices(void)
 		name = NULL;
 		tooltip = NULL;
 		if (logviewer_mode)
-			name = g_strdup(log_info->fields[i]);
+		{
+			object =  g_array_index(log_info->log_list,GObject *,i);
+			name = g_strdup(g_object_get_data(object,"lview_name"));
+		}
 		else
 		{
 			object =  g_array_index(rtv_map->rtv_list,GObject *,i);
@@ -143,8 +141,9 @@ void present_viewer_choices(void)
 			// so we can set the state from elsewhere... 
 			g_object_set_data(G_OBJECT(object),"lview_button",
 					(gpointer)button);
+			if ((gboolean)g_object_get_data(object,"being_viewed"))
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		}
-
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(view_value_set),
 				NULL);
@@ -170,6 +169,8 @@ void present_viewer_choices(void)
 	register_widget("lview_select_all_button",button);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
 	g_object_set_data(G_OBJECT(button),"state",GINT_TO_POINTER(TRUE));
+	if (logviewer_mode)
+		g_object_set_data(G_OBJECT(button),"log_info",log_info);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(set_lview_choices_state),
 			NULL);
@@ -177,6 +178,8 @@ void present_viewer_choices(void)
 	register_widget("lview_deselect_all_button",button);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
 	g_object_set_data(G_OBJECT(button),"state",GINT_TO_POINTER(FALSE));
+	if (logviewer_mode)
+		g_object_set_data(G_OBJECT(button),"log_info",log_info);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(set_lview_choices_state),
 			NULL);
@@ -187,7 +190,7 @@ void present_viewer_choices(void)
 			G_CALLBACK(populate_viewer),
 			(gpointer)darea);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
-			G_CALLBACK(deregister_lv_choices),
+			G_CALLBACK(deregister_lv_buttons),
 			NULL);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
@@ -197,7 +200,7 @@ void present_viewer_choices(void)
 	gtk_widget_show_all(window);
 	return;
 }
-gboolean deregister_lv_choices(gpointer data)
+gboolean deregister_lv_buttons(gpointer data)
 {
 	deregister_widget("lview_select_all_button");
 	deregister_widget("lview_deselect_all_button");
@@ -213,7 +216,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 
         /* get object from widget */
         object = (GObject *)g_object_get_data(G_OBJECT(widget),"object");
-        g_object_set_data(object,"being_viewer",GINT_TO_POINTER(state));
+        g_object_set_data(object,"being_viewed",GINT_TO_POINTER(state));
 
         return TRUE;
 }
@@ -222,13 +225,12 @@ gboolean populate_viewer(GtkWidget * d_area)
 {
 	struct Viewable_Value *v_value = NULL;
 	gint i = 0;
-	total_viewables = 0;
-	/* Reget to total Viewables count */
-	for (i=0;i<max_viewables;i++)
-	{
-		if (viewables.index[i])
-			total_viewables++;
-	}
+	struct Log_Info *log_info = NULL;
+	GObject * object = NULL;
+	gchar * name = NULL;
+	gboolean being_viewed = FALSE;
+
+	log_info = (struct Log_Info *) g_object_get_data(G_OBJECT(d_area),"log_info");
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -236,63 +238,65 @@ gboolean populate_viewer(GtkWidget * d_area)
 	 * pulls them from the hashtable and de-allocates them...
 	 */
 	if (active_traces == NULL)
-	{
-		active_traces = g_hash_table_new(NULL,NULL);
-	}
+		active_traces = g_hash_table_new(g_str_hash,g_str_equal);
 
 	/* check to see if it's already in the table, if so ignore, if not
 	 * malloc datastructure, populate it's values and insert a pointer
 	 * into the table for it..
 	 */
-	for (i=0;i<max_viewables;i++)
+	for (i=0;i<log_info->field_count;i++)
 	{
+		object = g_array_index(log_info->log_list,GObject *, i);	
+		name = g_strdup(g_object_get_data(object,"lview_name"));
+		being_viewed = (gboolean)g_object_get_data(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/
-		if (g_hash_table_lookup(active_traces,GINT_TO_POINTER(i))==NULL)
+		if (g_hash_table_lookup(active_traces,name)==NULL)
 		{
-			if (viewables.index[i])	/* Marked viewable widget */
+			if (being_viewed)	/* Marked viewable widget */
 			{
 				/* Call the build routine, feed it the drawing_area*/
-				v_value = build_v_value(d_area,i);
-
+				v_value = build_v_value(d_area,object);
+				// store location of master
+				log_info->active_viewables = g_hash_table_size(active_traces);
+				v_value->log_info = log_info;
 				g_hash_table_insert(active_traces,
-						GINT_TO_POINTER(i),
+						g_strdup(name),
 						(gpointer)v_value);
 			}
 		}
 		else
 		{	/* If in table but now de-selected, remove it */
-			if (!viewables.index[i])
+			if (!being_viewed)
 			{
-				v_value = (struct Viewable_Value *)
-					g_hash_table_lookup(
-							active_traces,
-							GINT_TO_POINTER(i));
+				v_value = (struct Viewable_Value *)g_hash_table_lookup(active_traces,name);
 				/* Remove entry in from hash table */
-				g_hash_table_remove(active_traces,
-						GINT_TO_POINTER(i));
+				g_hash_table_remove(active_traces,name);
 
 				/* Free all resources of the datastructure 
 				 * before de-allocating it... 
 				 */
-				g_array_free(v_value->data_array,TRUE);
+				if (!logviewer_mode)
+					g_array_free(v_value->data_array,TRUE);
+				
 				g_object_unref(v_value->trace_gc);
 				g_object_unref(v_value->font_gc);
 				g_free(v_value->vname);
 				g_free(v_value);
 				v_value = NULL;
+				log_info->active_viewables = g_hash_table_size(active_traces);
 			}
 		}
 	}
 	/* If traces selected, emit a configure_Event to clear the window
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
-	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
-		g_signal_emit_by_name(G_OBJECT(d_area),"configure_event",NULL);
+//	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
+//		g_signal_emit_by_name(G_OBJECT(d_area),"configure_event",NULL);
 
 	return FALSE; /* want other handlers to run... */
 }
 
-struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
+struct Viewable_Value * build_v_value(GtkWidget * d_area, GObject *object)
 {
 	struct Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
@@ -304,37 +308,26 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 
 	v_value = g_malloc(sizeof(struct Viewable_Value));		
 
-	/* Store pointer to d_area, but DO NOT FREE THIS on v_value destruction
-	 * as its the SAME one used for all Viewable_Values */
-	v_value->d_area = d_area;
 
 	/* Set limits of this variable. (it's ranges, used for scaling */
+
 	if (logviewer_mode)
 	{
-		//		v_value->lower = 0.0;
-		//		v_value->upper = 255.0;
-		v_value->lower = g_array_index(log_info->lowers,gfloat,offset);
-		v_value->upper = g_array_index(log_info->uppers,gfloat,offset);
-		v_value->runtime_offset = -1; // INVALID for playback
-		v_value->size = -1; // ??? INVALID for playback (maybe)
+		/* IS it a floating point value? */
+		v_value->is_float = TRUE;
 		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(log_info->fields[offset]);
+		v_value->vname = g_strdup(g_object_get_data(object,"lview_name"));
 		/* data was already read from file and stored, copy pointer
 		 * over to v_value so it can be drawn...
 		 */
-		tmp_array = g_array_index(log_info->fields_data,GArray *, offset);
+		tmp_array = (GArray *)g_object_get_data(object,"data_array");
 		v_value->data_array = tmp_array;
 	}
 	else
 	{
-		v_value->lower = def_limits[offset].lower;
-		v_value->upper = def_limits[offset].upper;
-		/* Tell where we get the data from */
-		v_value->runtime_offset = logging_offset_map[offset];
-		/* How big the data is (needed when indexing into the data */
-		v_value->size = logging_datasizes_map[offset];
-		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(logable_names[offset]);
+		v_value->is_float = (gboolean)g_object_get_data(object,"is_float");;
+		// textual name of the variable we're viewing.. 
+		v_value->vname = g_strdup(g_object_get_data(object,"dlog_field_name"));
 		/* Array to keep history for resize/redraw and export 
 		 * to datalog we use the _sized_ version to give a big 
 		 * enough size to prevent reallocating memory too often. 
@@ -342,6 +335,12 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 		 */
 		v_value->data_array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 	}
+	/* Store pointer to d_area, but DO NOT FREE THIS on v_value destruction
+	 * as its the SAME one used for all Viewable_Values */
+	v_value->d_area = d_area;
+	v_value->object = object;
+	v_value->lower = *((gfloat *)g_object_get_data(object,"lower_limit"));
+	v_value->upper = *((gfloat *)g_object_get_data(object,"upper_limit"));
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 
@@ -479,6 +478,7 @@ void draw_infotext(void *data)
 	gint h = 0;
 	gint val_x_offset = 10;
 	gint val_y_offset = 20;
+	gint total_viewables = 0;
 	PangoFontDescription *font_desc;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),"pixmap");
@@ -491,7 +491,8 @@ void draw_infotext(void *data)
 				TRUE, 0,0,
 				info_width,h);
 	}
-
+	
+	total_viewables = v_value->log_info->active_viewables;
 	name_y = (gint) (((float)h/(float)(total_viewables+1))*(tcount+1));
 	name_y -= 15;
 	len = v_value->data_array->len;
@@ -503,11 +504,11 @@ void draw_infotext(void *data)
 	gdk_draw_layout(pixmap,v_value->trace_gc,name_x,name_y,layout);
 
 	gdk_draw_rectangle(pixmap,
-			lv_darea->style->black_gc,
+			v_value->d_area->style->black_gc,
 			TRUE,
 			name_x+val_x_offset,name_y+val_y_offset,
 			info_width-(name_x+val_x_offset),15);
-	if (v_value->size == 4)
+	if (v_value->is_float)
 		layout = gtk_widget_create_pango_layout(v_value->d_area,g_strdup_printf("%.2f",val));
 	else
 		layout = gtk_widget_create_pango_layout(v_value->d_area,g_strdup_printf("%i",(gint)val));
@@ -529,21 +530,22 @@ gboolean update_logview_traces()
 
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 	{
-		g_hash_table_foreach(active_traces, trace_update,NULL);
+		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(FALSE));
 		scroll_logviewer_traces();
 	}
 
 	return TRUE;
 }
 
-void trace_update(gpointer key, gpointer value, gpointer data)
+void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 {
 	GdkPixmap * pixmap = NULL;
 	gint w = 0;
 	gint h = 0;
 	gfloat val = 0.0;
 	gfloat percent = 0.0;
-	gint size = 0;
+	gfloat *history = NULL;
+	gint last_entry = 0;
 	gint len = 0;
 	gint lo_width;
 	gint total = 0;
@@ -551,9 +553,6 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	GdkPoint pts[2048]; // Bad idea as static...
 	struct Viewable_Value * v_value = NULL;
 	extern struct Runtime_Common *runtime;
-	guchar * uc_ptr = NULL;
-	short * s_ptr = NULL;
-	float * f_ptr = NULL;
 
 	v_value = (struct Viewable_Value *) value;
 	if (v_value == NULL)
@@ -567,7 +566,7 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	w = v_value->d_area->allocation.width;
 	h = v_value->d_area->allocation.height;
 
-	if ((gboolean)data == TRUE)
+	if ((gboolean)redraw_all)
 	{
 		draw_infotext(v_value);
 		lo_width = v_value->d_area->allocation.width-info_width;
@@ -607,28 +606,14 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 				total);
 		return;
 	}
+	/* we don't get data from the new infrastructure in payback mode... */
+	if (logviewer_mode)
+		return;
 
-	size = v_value->size;
-	/* this weird way is needed cause we are accessing various sized
-	 * objects from a datastructure in array notation.  This works as 
-	 * long as the structure is arranged in largest order first. 
-	 * i.e. floats before shorts before chars, etc...
-	 */
-	uc_ptr = (guchar *)runtime;
-	s_ptr = (short *)runtime;
-	f_ptr = (float *)runtime;
-	switch (size)
-	{	
-		case FLOAT:
-			val = (gfloat)f_ptr[v_value->runtime_offset/FLOAT];
-			break;
-		case SHORT:
-			val = (gshort)s_ptr[v_value->runtime_offset/SHORT];
-			break;
-		case UCHAR:
-			val = (guchar)uc_ptr[v_value->runtime_offset/UCHAR];
-			break;
-	}
+	history = (gfloat *)g_object_get_data(v_value->object,"history");
+	last_entry = (gint)g_object_get_data(v_value->object,"last_entry");
+	val = history[last_entry];
+	
 	if (val > (v_value->max))
 		v_value->max = val;
 	if (val < (v_value->min))
@@ -659,9 +644,11 @@ void scroll_logviewer_traces()
 {
 	gint start = info_width;
 	gint end = info_width;
-	gint w = lv_darea->allocation.width;
-	gint h = lv_darea->allocation.height;
+	gint w = 0;//lv_darea->allocation.width;
+	gint h = 0;//lv_darea->allocation.height;
 
+	return;
+/*
 	start = end + lv_scroll;
 	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(lv_darea),
 			"pixmap");
@@ -674,6 +661,7 @@ void scroll_logviewer_traces()
 			info_width,0,
 			w-info_width-lv_scroll,h);
 
+*/
 	/*	Debugging code..
 		printf("\nscreen dimensions: (%i,%i), info_width %i\n",w,h,info_width);
 		printf("copying rect starting at (%i,%i), to (%i,%i), w,h of (%i,%i)\n",
@@ -682,6 +670,7 @@ void scroll_logviewer_traces()
 		w-info_width-lv_scroll,h);
 	 */
 	// Init new "blank space" as black 
+/*
 	gdk_draw_rectangle(pixmap,
 			lv_darea->style->black_gc,
 			TRUE,
@@ -690,6 +679,7 @@ void scroll_logviewer_traces()
 
 	tcount = 0;
 	gdk_window_clear(lv_darea->window);
+*/
 }
 
 gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
@@ -723,7 +713,7 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 		if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 		{
 			tcount = 0;
-			g_hash_table_foreach(active_traces, trace_update, (gpointer)TRUE);
+			g_hash_table_foreach(active_traces, trace_update, GINT_TO_POINTER(TRUE));
 			tcount = 0;
 		}
 		gdk_window_clear(widget->window);
@@ -755,13 +745,23 @@ gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
         GObject * object = NULL;
 	gboolean state = FALSE;
 	extern struct RtvMap *rtv_map;
+	gint total = 0;
+	struct Log_Info *log_info = g_object_get_data(G_OBJECT(widget),"log_info");
 
         /* Uncheck all logable choices */
-        for (i=0;i<rtv_map->derived_total;i++)
+	if (logviewer_mode)
+		total = log_info->field_count;
+	else
+		total = rtv_map->derived_total;
+	
+        for (i=0;i<total;i++)
         {
                 object = NULL;
                 button = NULL;
-                object = g_array_index(rtv_map->rtv_list,GObject *, i);
+		if (logviewer_mode)
+                	object = g_array_index(log_info->log_list,GObject *, i);
+		else
+                	object = g_array_index(rtv_map->rtv_list,GObject *, i);
                 button = (GtkWidget *)g_object_get_data(object,"lview_button");
                 state = (gboolean)g_object_get_data(G_OBJECT(widget),"state");
                 gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),state);

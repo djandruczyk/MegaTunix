@@ -35,7 +35,7 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 	GtkTextBuffer *textbuffer = NULL;
 	
 	cfg_read_string(cfgfile,section,"create_tags",&tmpbuf);
-	tagnames = parse_keys(tmpbuf,&num_tags);
+	tagnames = parse_keys(tmpbuf,&num_tags,",");
 	g_free(tmpbuf);
 
 	textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(object));
@@ -50,7 +50,7 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 		}
 		else
 		{
-			attrs = parse_keys(tmpbuf,&num_attrs);
+			attrs = parse_keys(tmpbuf,&num_attrs,",");
 			g_free(tmpbuf);
 			if (num_attrs%2)
 			{

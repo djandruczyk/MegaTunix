@@ -22,8 +22,8 @@ void register_widget(gchar *, GtkWidget *);
 gboolean deregister_widget(gchar *);
 void bind_data(GtkWidget *, gpointer );
 void populate_master(GtkWidget *, gpointer );
-gchar ** parse_keys(gchar * , gint * );
-gint * parse_keytypes(gchar * , gint * );
+gchar ** parse_keys(gchar *, gint *, gchar * );
+gint * parse_keytypes(gchar *, gint *, gchar * );
 GList * get_list(gchar * );
 void store_list(gchar * , GList * );
 

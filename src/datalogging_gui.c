@@ -12,7 +12,6 @@
  */
 
 #include <config.h>
-#include <datalogging_const.h>
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <debugging.h>

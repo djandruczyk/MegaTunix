@@ -19,13 +19,13 @@
 /* Prototypes */
 void present_viewer_choices(void);
 void scroll_logviewer_traces(void);
-gboolean deregister_lv_choices(gpointer);
+gboolean deregister_lv_buttons(gpointer);
 gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean view_value_set(GtkWidget *, gpointer );
 gboolean set_lview_choices_state(GtkWidget *, gpointer);
 gboolean populate_viewer(GtkWidget * );
-struct Viewable_Value * build_v_value(GtkWidget *, gint );
+struct Viewable_Value * build_v_value(GtkWidget *, GObject * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 GdkColor get_colors_from_hue(gfloat);
 void draw_graticule(void * );

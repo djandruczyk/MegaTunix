@@ -114,7 +114,7 @@ gboolean load_realtime_map(void )
 		}
 		else
 		{
-			keys = parse_keys(tmpbuf,&num_keys);
+			keys = parse_keys(tmpbuf,&num_keys,",");
 			g_free(tmpbuf);
 		}
 		/* Get key TYPE list and parse */
@@ -125,7 +125,7 @@ gboolean load_realtime_map(void )
 		}
 		else
 		{
-			keytypes = parse_keytypes(tmpbuf, &num_keytypes);
+			keytypes = parse_keytypes(tmpbuf, &num_keytypes,",");
 			g_free(tmpbuf);
 		}
 		if (num_keytypes != num_keys)
@@ -241,7 +241,7 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 	}
 	else
 	{
-		expr_symbols = parse_keys(tmpbuf, &total_symbols);	
+		expr_symbols = parse_keys(tmpbuf, &total_symbols,",");	
 		g_free(tmpbuf);
 	}
 	if (!cfg_read_string(cfgfile,section,"expr_types",&tmpbuf))
@@ -252,7 +252,7 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 	}
 	else
 	{
-		expr_types = parse_keytypes(tmpbuf, &total_symtypes);	
+		expr_types = parse_keytypes(tmpbuf, &total_symtypes,",");	
 		g_free(tmpbuf);
 	}
 	if (total_symbols!=total_symtypes)

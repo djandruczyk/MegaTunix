@@ -138,13 +138,6 @@ struct DynamicEntries
 	GtkWidget *ecu_signature_entry;
 };
 
-/* Logable data sorted by offset into runtime_data memory block */
-struct Logables
-{
-	GtkWidget *widgets[64];
-	gboolean index[64];
-};
-
 struct Io_File
 {
 	GIOChannel *iochannel;
@@ -160,9 +153,10 @@ struct Viewable_Value
 	GdkGC *font_gc;			/* GC used for the fonts */
 	GdkGC *trace_gc;		/* GC used for the trace */
 	GtkWidget *d_area;		/* Drawing Area */
+	GObject *object;		/* object */
 	gchar *vname;			/* Name of widget being logged */
 	gint runtime_offset;		/* Offset into runtime struct */
-	gint size;			/* 1=byte, 2=short, 4=float */
+	gboolean is_float;		/* TRUE or FALSE */
 	gint last_y;			/* Last point on screen of trace */
 	gfloat min;			/* for auto-scaling */
 	gfloat max;			/* for auto-scaling */
@@ -171,6 +165,7 @@ struct Viewable_Value
 	gfloat cur_low;			/* User limits to use for scaling */
 	gfloat cur_high;		/* User limits to use for scaling */
 	GArray *data_array;		/* History of all values recorded */
+	struct Log_Info *log_info;	/* important */
 };
 	
 /* The Rt_Control struct contains info on the runtime display tab controls
@@ -234,10 +229,8 @@ struct Log_Info
 {
 	gint field_count;	/* How many fields in the logfile */
 	gchar *delimiter;	/* delimiter between fields for this logfile */
-	gchar **fields;		/* NULL term'd vector of string field names */
-	GArray *fields_data;	/* Array of arrays for stored data */
-	GArray *lowers;		/* Array of lower limits for each field */
-	GArray *uppers;		/* Array of upper limits for each field */
+	GArray *log_list;	/* List of objects */
+	gint active_viewables;	/* Number of active traces.. */
 };
 
 struct Page_Params

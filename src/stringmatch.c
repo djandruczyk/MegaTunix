@@ -167,6 +167,7 @@ void dump_hash(gpointer key, gpointer value, gpointer user_data)
 	dbg_func(g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %i\n",(gchar *)key, (gint)value),CRITICAL);
 }
 
+
 gint translate_string(gchar *string)
 {
 	gpointer value = 0;

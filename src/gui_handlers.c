@@ -180,7 +180,8 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), TRUE);
 				logviewer_mode = FALSE;
 				//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
-				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
+				if (g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button"))
+					g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
 				break;
 			case PLAYBACK_VIEW:
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), FALSE);
@@ -189,7 +190,8 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), FALSE);
 				logviewer_mode = TRUE;
 				//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
-				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
+				if (g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button"))
+					g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
 				break;
 			case HEX_VIEW:
 			case DECIMAL_VIEW:

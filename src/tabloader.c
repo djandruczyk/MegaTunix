@@ -170,7 +170,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		return;
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
-		keys = parse_keys(tmpbuf,&num_keys);
+		keys = parse_keys(tmpbuf,&num_keys,",");
 		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber_keys for %s is %i\n",section,num_keys),TABLOADER);
 		g_free(tmpbuf);
 	}
@@ -179,7 +179,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 	{
-		keytypes = parse_keytypes(tmpbuf, &num_keytypes);
+		keytypes = parse_keytypes(tmpbuf, &num_keytypes,",");
 		g_free(tmpbuf);
 	}
 
@@ -198,7 +198,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
 	{
-		bind_keys = parse_keys(tmpbuf,&bind_num_keys);
+		bind_keys = parse_keys(tmpbuf,&bind_num_keys,",");
 		g_free(tmpbuf);
 		/* This looks convoluted,  but it allows for an arbritrary 
 		 * number of lists, that are indexed by a keyword.
@@ -311,24 +311,24 @@ void store_list(gchar * key, GList * list)
 	return;
 }
 
-gchar ** parse_keys(gchar * string, gint * count)
+gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 {
 	gchar **result = NULL;	
 	gint i = 0;
-	result = g_strsplit(string,",",0);
+	result = g_strsplit(string,delimiter,0);
 	while (result[i])
 		i++;
 	*count = i;	
 	return result;
 }
 
-gint * parse_keytypes(gchar * string, gint * count)
+gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 {
 	gchar **vector = NULL;	
 	gint *keytypes = NULL;
 	gint i = 0;
 	gint ct = 0;
-	vector = g_strsplit(string,",",0);
+	vector = g_strsplit(string,delimiter,0);
 	while (vector[ct])
 		ct++;
 
