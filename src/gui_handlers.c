@@ -49,7 +49,7 @@ extern gfloat ego_pbar_divisor;
 extern gfloat map_pbar_divisor;
 extern GtkTooltips *tip;
 extern GtkWidget *logables_table;
-extern GtkWidget *tab_delim_button;
+extern GtkWidget *tab_delimiter_button;
 extern GtkWidget *delim_button;
 extern GtkWidget *delim_table;
 extern GtkWidget *custom_logables;
@@ -250,7 +250,7 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 						logables_table,FALSE);
 				gtk_toggle_button_set_active(
 						GTK_TOGGLE_BUTTON
-						(tab_delim_button),
+						(tab_delimiter_button),
 						TRUE);
 				gtk_widget_set_sensitive(
 						delim_table,FALSE);
@@ -273,7 +273,7 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 						logables_table,FALSE);
 				gtk_toggle_button_set_active(
 						GTK_TOGGLE_BUTTON
-						(tab_delim_button),
+						(tab_delimiter_button),
 						TRUE);
 				gtk_widget_set_sensitive(
 						delim_table,FALSE);

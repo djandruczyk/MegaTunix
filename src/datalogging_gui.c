@@ -38,7 +38,7 @@ gint max_logables = 0;
 GtkWidget *dlog_view;
 GtkWidget *logables_table;
 GtkWidget *delim_table;
-GtkWidget *tab_delim_button;
+GtkWidget *tab_delimiter_button;
 struct Logables logables;
 
 /* External global vars */
@@ -57,8 +57,8 @@ static gboolean logging = FALSE;
 static gboolean header_needed = FALSE;
 static GtkWidget *file_selection;
 static GtkWidget *format_table;
-static GtkWidget *comma_delim_button;
-static GtkWidget *space_delim_button;
+static GtkWidget *comma_delimiter_button;
+static GtkWidget *space_delimiter_button;
 static GHashTable *custom_ord_hash;
 static GHashTable *classic_ord_hash;
 static GHashTable *full_ord_hash;
@@ -260,7 +260,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Comma");
-	comma_delim_button = button;
+	comma_delimiter_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -278,7 +278,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	}
 
 	button = gtk_radio_button_new_with_label(group,"Tab");
-	tab_delim_button = button;
+	tab_delimiter_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -296,7 +296,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	}
 
 	button = gtk_radio_button_new_with_label(group,"Space");
-	space_delim_button = button;
+	space_delimiter_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -543,7 +543,7 @@ void write_log_header(void *ptr)
 	else
 		g_fprintf(stderr,__FILE__": iofile pointer was undefined...\n");
 		
-	output = g_string_sized_new(64); /*pre-allccate for 4 chars */
+	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
 	// Get total number of logables....
 	for (i=0;i<max_logables;i++)
