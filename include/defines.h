@@ -18,7 +18,7 @@
 /* Definitions */
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
-#define VEBLOCK_SIZE 128
+#define PAGE_SIZE 128
 
 /* Memory offsets */
 #define VE1_TABLE_OFFSET	0	/* From page 0 boundary */

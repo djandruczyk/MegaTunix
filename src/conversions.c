@@ -49,7 +49,7 @@ void read_conversions(void)
 	gint i = 0;
 	gint dl_type;
 
-	for (i=0;i<VEBLOCK_SIZE;i++)
+	for (i=0;i<PAGE_SIZE;i++)
         {
                 if (GTK_IS_OBJECT(veconst_widgets_1[i]))
                 {
@@ -57,11 +57,11 @@ void read_conversions(void)
                                 G_OBJECT(veconst_widgets_1[i]),"dl_type");
                         if (dl_type == IMMEDIATE)
 			{
-				std_conversions.conv_type[i] = 
+				std_conversions.page0_conv_type[i] = 
 						(gint)g_object_get_data(
 						G_OBJECT(veconst_widgets_1[i]),
 						"conv_type");
-				std_conversions.conv_factor[i] = 
+				std_conversions.page0_conv_factor[i] = 
 						(gfloat)((gint)
 						g_object_get_data(
 						G_OBJECT(veconst_widgets_1[i]),
@@ -72,23 +72,54 @@ void read_conversions(void)
                 }
 		if (i == 90)	/* Required fuel special case */
 		{
-			std_conversions.conv_type[i] = MULT;
-			std_conversions.conv_factor[i] = 10.0;
+			std_conversions.page0_conv_type[i] = MULT;
+			std_conversions.page0_conv_factor[i] = 10.0;
 		}
+		/* Table 2*/
+		if (GTK_IS_OBJECT(veconst_widgets_2[i]))
+                {
+                        dl_type = (gint)g_object_get_data(
+                                G_OBJECT(veconst_widgets_2[i]),"dl_type");
+                        if (dl_type == IMMEDIATE)
+                        {
+                                std_conversions.page1_conv_type[i] =
+                                                (gint)g_object_get_data(
+                                                G_OBJECT(veconst_widgets_2[i]),
+                                                "conv_type");
+                                std_conversions.page1_conv_factor[i] =
+                                                (gfloat)((gint)
+                                                g_object_get_data(
+                                                G_OBJECT(veconst_widgets_2[i]),
+                                                "conv_factor_x100"))
+                                                /100.0;
+                        }
+
+                }
+                if (i == 90)    /* Required fuel special case */
+                {
+                        std_conversions.page1_conv_type[i] = MULT;
+                        std_conversions.page1_conv_factor[i] = 10.0;
+                }
+
 #ifdef DEBUG
-		printf("Offset, %i, conv_type %i, conv_factor %f\n",i,std_conversions.conv_type[i],std_conversions.conv_factor[i]);
+		printf("Page 0 Offset, %i, conv_type %i, conv_factor %f\n",i,std_conversions.page0_conv_type[i],std_conversions.page0_conv_factor[i]);
+		printf("Page 1 Offset, %i, conv_type %i, conv_factor %f\n",i,std_conversions.page1_conv_type[i],std_conversions.page1_conv_factor[i]);
 #endif
         }
 	return;
 }
 
-gint convert_before_download(gint offset, gfloat value)
+	/* Using two convert b4 downloadfuncs,  one for page 0, one for
+	 * page 1. Thsi is NOT the way I want it, but the code is cleaner
+	 * ironically... 
+	 */
+gint convert_before_download_p0(gint offset, gfloat value)
 {
 	gint return_value = 0;
 	gint tmp_val = (gint)(value+0.001);
-	gfloat factor = std_conversions.conv_factor[offset];
+	gfloat factor = std_conversions.page0_conv_factor[offset];
 
-	switch ((Conversions)std_conversions.conv_type[offset])
+	switch ((Conversions)std_conversions.page0_conv_type[offset])
 	{
 		case (ADD):
 			return_value = tmp_val + factor;
@@ -116,17 +147,53 @@ gint convert_before_download(gint offset, gfloat value)
 	return (return_value);
 }
 
-gfloat convert_after_upload(gint offset)
+/* Page 1 conversion function */
+gint convert_before_download_p1(gint offset, gfloat value)
+{
+        gint return_value = 0;
+        gint tmp_val = (gint)(value+0.001);
+        gfloat factor = std_conversions.page1_conv_factor[offset];
+
+        switch ((Conversions)std_conversions.page1_conv_type[offset])
+        {
+                case (ADD):
+                        return_value = tmp_val + factor;
+                        break;
+                case (SUB):
+                        return_value = tmp_val - factor;
+                        break;
+                case (MULT):
+                        return_value = (gint)((value*factor) + 0.001);
+                        break;
+                case (DIV):
+                        return_value = (gint)((value/factor) + 0.001);
+                        break;
+                case (NOTHING):
+                        return_value = tmp_val;
+                        break;
+                default:
+                        printf("Convert_before_download() NO CONVERSION defined, BUG!!!\b\b\n");
+                        break;
+        }
+        /* Store value in veconst_struct (accessing it via array syntax as 
+         * it's friggin easier).... 
+         */
+        ve_const_page1[offset] = return_value;
+        return (return_value);
+}
+
+
+gfloat convert_after_upload_p0(gint offset)
 {
 	gfloat return_value = 0.0;
-	gfloat factor = std_conversions.conv_factor[offset];
+	gfloat factor = std_conversions.page0_conv_factor[offset];
 
 	/* Since this is the upload we actually do the CONVERSE mathematical 
 	 * operation since the algorithm was designed for the download side, 
 	 * On upload we need to "un-convert" from MS values to Gui friendly
 	 * versions....
 	 */
-	switch ((Conversions)std_conversions.conv_type[offset])
+	switch ((Conversions)std_conversions.page0_conv_type[offset])
 	{
 		case (ADD):
 			return_value = ve_const_page0[offset] - factor;
@@ -150,6 +217,41 @@ gfloat convert_after_upload(gint offset)
 	}
 	return (return_value);
 }
+gfloat convert_after_upload_p1(gint offset)
+{
+        gfloat return_value = 0.0;
+        gfloat factor = std_conversions.page1_conv_factor[offset];
+
+        /* Since this is the upload we actually do the CONVERSE mathematical 
+         * operation since the algorithm was designed for the download side, 
+         * On upload we need to "un-convert" from MS values to Gui friendly
+         * versions....
+         */
+        switch ((Conversions)std_conversions.page1_conv_type[offset])
+        {
+                case (ADD):
+                        return_value = ve_const_page1[offset] - factor;
+                        break;
+                case (SUB):
+                        return_value = ve_const_page1[offset] + factor;
+                        break;
+                case (MULT):
+                        return_value = (gfloat)ve_const_page1[offset] / factor;
+                        break;
+                case (DIV):
+                        return_value = (gfloat)ve_const_page1[offset] * factor;
+                        break;
+                case (NOTHING):
+                        return_value = ve_const_page1[offset];
+                        break;
+                default:
+                        printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
+                        break;
+
+        }
+        return (return_value);
+}
+
 
 void reset_temps(gpointer type)
 {

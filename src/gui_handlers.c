@@ -66,8 +66,8 @@ gboolean fahrenheit;
 gint num_cylinders = 1;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
-GtkWidget *veconst_widgets_1[VEBLOCK_SIZE];
-GtkWidget *veconst_widgets_2[VEBLOCK_SIZE];
+GtkWidget *veconst_widgets_1[PAGE_SIZE];
+GtkWidget *veconst_widgets_2[PAGE_SIZE];
 
 /* mt_classic[] is an array of the bit POSITIONS that correspond with the names
  * in the logable_names[] list. When applying the "mt_classic" array to the 
@@ -565,15 +565,26 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case GENERIC:	/* Handles almost ALL other variables */
-			temp_dep = (gboolean)g_object_get_data(
+			if (page == 0)
+				temp_dep = (gboolean)g_object_get_data(
 					G_OBJECT(veconst_widgets_1[offset]),
 					"temp_dep");
+			else 
+				temp_dep = (gboolean)g_object_get_data(
+					G_OBJECT(veconst_widgets_2[offset]),
+					"temp_dep");
+
 			if (temp_dep)
 			{
 				if (!fahrenheit) /* using celsius, convert it */
 					value = (value*(9.0/5.0))+32;
 			}
-			dload_val = convert_before_download(offset,value);
+			if (page == 0)
+				dload_val = convert_before_download_p0(
+						offset,value);
+			else
+				dload_val = convert_before_download_p1(
+						offset,value);
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
@@ -729,9 +740,10 @@ void update_ve_const()
 
 
 	/* Table 1 for dualtable, and all std megasquirt units */
-	for (i=0;i<VEBLOCK_SIZE;i++)
+	for (i=0;i<PAGE_SIZE;i++)
 	{
 		temp_dep = FALSE;
+		dl_type = -1;
 		if (GTK_IS_OBJECT(veconst_widgets_1[i]))
 		{
 			dl_type = (gint)g_object_get_data(
@@ -741,7 +753,7 @@ void update_ve_const()
 					G_OBJECT(veconst_widgets_1[i]),
 					"temp_dep");
 			if (dl_type == IMMEDIATE)
-				value = convert_after_upload(i);  
+				value = convert_after_upload_p0(i);  
 			if (temp_dep)
 			{
 				if (!fahrenheit)
@@ -750,8 +762,30 @@ void update_ve_const()
 
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(
 						veconst_widgets_1[i]),value);
-					
 		}
+		/* Table 2 */
+		temp_dep = FALSE;
+		dl_type = -1;
+		if (GTK_IS_OBJECT(veconst_widgets_2[i]))
+                {
+                        dl_type = (gint)g_object_get_data(
+                                        G_OBJECT(veconst_widgets_2[i]),
+                                        "dl_type");
+                        temp_dep = (gboolean)g_object_get_data(
+                                        G_OBJECT(veconst_widgets_2[i]),
+                                        "temp_dep");
+                        if (dl_type == IMMEDIATE)
+                                value = convert_after_upload_p1(i);
+                        if (temp_dep)
+                        {
+                                if (!fahrenheit)
+                                        value = (value-32)*(5.0/9.0);
+                        }
+
+                        gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+                                                veconst_widgets_2[i]),value);
+                }
+
 	}
 }
 void check_req_fuel_limits()
@@ -859,7 +893,7 @@ void check_req_fuel_limits()
 		if (paused_handlers)
 			return;
 		offset = 90;
-		dload_val = convert_before_download(offset,req_fuel_per_squirt);
+		dload_val = convert_before_download_p0(offset,req_fuel_per_squirt);
 		page = 0;
 		write_ve_const(dload_val, offset, page);
 		for (index=0;index<g_list_length(offsets);index++)
