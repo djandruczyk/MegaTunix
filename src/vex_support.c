@@ -332,7 +332,7 @@ GIOStatus process_header(ImportParserArg arg, gchar * string)
 			break;
 		case USER_COMMENT:	
 			vex_import.comment = g_strdup(result);
-			tmpbuf = g_strdup_printf("VEX Header: File Comment %s",result);
+			tmpbuf = g_strdup_printf("VEX Header: UserComment: %s",result);
 			update_logbar(tools_view, NULL, tmpbuf,TRUE,FALSE);
 			break;
 		case DATE:	

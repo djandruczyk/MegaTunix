@@ -174,8 +174,12 @@ void build_general(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
-			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100%% foolproof. as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on version 1 MS's)\n \"Q\" Which should return the version number of the firmware x10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" only used in the dualtable code.  Similar to the \"?\" command\n \"I\" which returns the igntion table and some constants (ignition variants ONLY)\n and \"?\" which is an extended version number query only supported by only a few firmware revisions",NULL);
+			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100\% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"?\" command (Extend version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU, This is only supported on some firmware and is used for debugging and manipulating features that do NOT have gui controls yet.  As of April 2004 MegaTunix does NOT yet support raw memory viewing/editing.",NULL);
+
 	frame = gtk_frame_new ("ECU Output");
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
+
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 3, 4,
@@ -187,7 +191,7 @@ void build_general(GtkWidget *parent_frame)
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
 	gtk_widget_set_size_request(sw,-1,260);
-	gtk_container_add(GTK_CONTAINER(frame),sw);
+	gtk_box_pack_start(GTK_BOX(hbox),sw,TRUE,TRUE,5);
 
 	view = gtk_text_view_new ();
 	interr_view = view;

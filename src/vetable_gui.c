@@ -53,7 +53,7 @@ void build_vetable_1(GtkWidget *parent_frame)
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(vbox),vbox2,TRUE,TRUE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox2),0);
 
 	label = gtk_label_new("VE Table 1 (All MS Variants)");
 	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
@@ -263,10 +263,9 @@ void build_vetable_2(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
-
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(vbox),vbox2,TRUE,TRUE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox2),0);
 
 	label = gtk_label_new("VE Table 2 (DualTable Code Variantss)");
 	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);

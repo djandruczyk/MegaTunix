@@ -74,12 +74,12 @@ void build_logviewer(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Playback/Viewer Parameters");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
-	hbox = gtk_hbox_new(FALSE,15);
+	hbox = gtk_hbox_new(FALSE,7);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	/* Hold the realtime/[playback buttons */
 	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 
 	button = gtk_radio_button_new_with_label(NULL,"Realtime Mode");
 	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
@@ -96,7 +96,7 @@ void build_logviewer(GtkWidget *parent_frame)
 
 	/* Holds the Select Button */
 	vbox4 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,5);
 
 	button = gtk_button_new_with_label("Select Logfile to Playback");
 	buttons.logplay_sel_log_but = button;
@@ -115,7 +115,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
 	
 	vbox4 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,5);
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	buttons.logplay_start_rt_but = button;
         g_signal_connect(G_OBJECT (button), "clicked",

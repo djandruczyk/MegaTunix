@@ -73,7 +73,6 @@ void build_datalogging(GtkWidget *parent_frame)
 	GtkWidget *table;
 	GtkWidget *frame;
 	GtkWidget *button;
-	GtkWidget *ebox;
 	GtkWidget *label;
 	GtkWidget *sw;
 	GtkWidget *view;
@@ -94,19 +93,15 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox2),0);
-
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	sw = gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
 	gtk_widget_set_size_request(sw,0,40);
-	gtk_container_add(GTK_CONTAINER(ebox),sw);
+	gtk_box_pack_start(GTK_BOX(hbox),sw,TRUE,TRUE,5);
 
 	view = gtk_text_view_new();
 	dlog_view = view;

@@ -66,10 +66,10 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	table = gtk_table_new(7,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),1);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 0);
+	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,5);
 
 	/* Seconds Counter Label */
 	label = gtk_label_new("Seconds");
@@ -240,7 +240,7 @@ void build_runtime(GtkWidget *parent_frame)
 
 	/* Second column */
 	table = gtk_table_new(7,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),1);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
@@ -428,10 +428,10 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	table = gtk_table_new(3,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),1);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 0);
+	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,5);
 
 	/* EGOcorr  */
 	label = gtk_label_new("EGO (%)");
@@ -482,7 +482,7 @@ void build_runtime(GtkWidget *parent_frame)
 
 
 	/* Warmup Correction  */
-	label = gtk_label_new("Warmup (%)");
+	label = gtk_label_new("Warmup (%)   ");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
@@ -505,7 +505,7 @@ void build_runtime(GtkWidget *parent_frame)
 	progress.warmcorr_pbar = pbar;
 
 	table = gtk_table_new(3,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),1);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
@@ -593,8 +593,8 @@ void build_runtime(GtkWidget *parent_frame)
 	table = gtk_table_new(3,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,5);
 
 	label = gtk_label_new("Good VE/Constants Reads");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);

@@ -47,7 +47,9 @@ megatunix_SOURCES = \
 	vex_support.c \
 	warmwizard_gui.c
 
-megatunix_LDADD = @PACKAGE_LIBS@ 
+megatunix_LDADD = @PACKAGE_LIBS@  
+
+megatunix_LDFLAGS =
 
 COMMON_FLAGS = @PFLAGS@ @DFLAGS@ 
 
