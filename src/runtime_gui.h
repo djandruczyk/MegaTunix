@@ -19,7 +19,23 @@
 
 struct v1_2_Runtime_Gui
 {
-	GtkWidget *secl_val;		/* Counter from MS */
+	GtkWidget *secl_val;		/* Counter entry */
+	GtkWidget *baro_val;		/* baro entry from MS */
+	GtkWidget *map_val;		/* map entry from MS */
+	GtkWidget *mat_val;		/* mat entry from MS */
+	GtkWidget *clt_val;		/* clt entry from MS */
+	GtkWidget *tps_val;		/* tps entry from MS */
+	GtkWidget *batt_val;		/* batt entry from MS */
+	GtkWidget *ego_val;		/* ego entry from MS */
+	GtkWidget *egocorr_val;		/* ego entry from MS */
+	GtkWidget *aircorr_val;		/* ego entry from MS */
+	GtkWidget *warmcorr_val;	/* ego entry from MS */
+	GtkWidget *rpm_val;		/* ego entry from MS */
+	GtkWidget *pw_val;		/* ego entry from MS */
+	GtkWidget *tpsaccel_val;	/* ego entry from MS */
+	GtkWidget *barocorr_val;	/* ego entry from MS */
+	GtkWidget *gammae_val;		/* ego entry from MS */
+	GtkWidget *vecurr_val;		/* ego entry from MS */
 };
 
 
