@@ -60,7 +60,7 @@ int build_comms(GtkWidget *parent_frame)
 			GTK_STATUSBAR(ser_statbar),
 			"Serial Status");
 
-	hbox = gtk_hbox_new(TRUE,0);
+	hbox = gtk_hbox_new(TRUE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
 
 	frame = gtk_frame_new("Select Communications Port");

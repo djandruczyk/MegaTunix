@@ -14,7 +14,7 @@
 
 style "defaultfont"
 {
-  font_name = "fixed 13"
+  font_name = "fixed 11"
 }
 
 style 'main_buttons'

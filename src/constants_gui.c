@@ -43,6 +43,7 @@ int build_constants(GtkWidget *parent_frame)
 {
 	gint i;
 	gint total;
+	GtkWidget *sep;
 	GtkWidget *button;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
@@ -262,15 +263,15 @@ int build_constants(GtkWidget *parent_frame)
 
 	/* Injection Control Section */
 
-	table = gtk_table_new(10,2,FALSE);
+	table = gtk_table_new(14,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),15);
 	gtk_container_set_border_width(GTK_CONTAINER(table),10);
 	gtk_container_add(GTK_CONTAINER(frame),table);
-	gtk_table_set_row_spacing(GTK_TABLE(table),1,35);
-	gtk_table_set_row_spacing(GTK_TABLE(table),3,35);
-	gtk_table_set_row_spacing(GTK_TABLE(table),5,35);
-	gtk_table_set_row_spacing(GTK_TABLE(table),7,36);
+//	gtk_table_set_row_spacing(GTK_TABLE(table),1,0);
+//	gtk_table_set_row_spacing(GTK_TABLE(table),3,0);
+//	gtk_table_set_row_spacing(GTK_TABLE(table),5,0);
+//	gtk_table_set_row_spacing(GTK_TABLE(table),7,0);
 	
 	items = NULL;
 	total = sizeof(inj_per_cycle)/sizeof(gpointer);
@@ -290,7 +291,7 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (0), 0, 0);
 
 	items = NULL;
 	total = sizeof(inj_staging)/sizeof(gpointer);
@@ -310,8 +311,12 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (0), 0, 0);
 
+	sep = gtk_hseparator_new();
+	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 2, 3,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
 	items = NULL;
 	total = sizeof(engine_stroke)/sizeof(gpointer);
 	for (i=0;i<total;i++)
@@ -322,13 +327,13 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 3, 4,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Engine Stroke");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -342,16 +347,20 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 3, 4,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("# of Cylinders");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
+	sep = gtk_hseparator_new();
+	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 5, 6,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
 	items = NULL;
 	total = sizeof(inject_type)/sizeof(gpointer);
 	for (i=0;i<total;i++)
@@ -362,13 +371,13 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 4, 5,
+	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 6, 7,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Injection Type");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 7, 8,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -382,16 +391,20 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 4, 5,
+	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 6, 7,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("# of Injectors");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 7, 8,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
+	sep = gtk_hseparator_new();
+	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 8, 9,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
 	items = NULL;
 	total = sizeof(map_type)/sizeof(gpointer);
 	for (i=0;i<total;i++)
@@ -402,13 +415,13 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 6, 7,
+	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 9, 10,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("MAP Type");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 7, 8,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 10, 11,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -422,16 +435,20 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 6, 7,
+	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 9, 10,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Engine Type");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 7, 8,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 10, 11,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
+	sep = gtk_hseparator_new();
+	gtk_table_attach (GTK_TABLE (table), sep, 0, 2, 11, 12,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND), 0, 0);
 	items = NULL;
 	total = sizeof(o2_sensor_type)/sizeof(gpointer);
 	for (i=0;i<total;i++)
@@ -442,13 +459,13 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 8, 9,
+	gtk_table_attach (GTK_TABLE (table), combo, 0, 1, 12, 13,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("O2 Sensor Type");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 9, 10,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 13, 14,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -462,13 +479,13 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
 	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
         gtk_widget_set_size_request(combo,105,-1);
-	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 8, 9,
+	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 12, 13,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Baro Correction");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 9, 10,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 13, 14,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
