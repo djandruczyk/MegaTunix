@@ -28,12 +28,13 @@ should be readable by mstweek3K (mstweek3k only runs under windows
 unfortunately). It can also log any of the runtime variables along with the 
 addition of a high resolution clock which can be used to track things 
 precisely in time...
-	As of 11/14/2003 The VE Export tool is functional.  VE Import might be
-a bit as the format of the file sucks (IMHO), and is whitespace delimited..
-(XML would have been a much better choice..)
 
-The only things not done yet are the Tuning gui (guages, VEtable graphical
-editor..) and the low-level pages.
+NOTE: a new folder "Interrogation_profiles" exists in the src/ dir do not
+fiddle with those files,  they are currently a work in progress. (7-26-2004)
+
+The only things not done yet are the Tuning gui (graphical gauges, planned
+implementation will use phot-realistic gauges that are graphically efficient
+on resources with minimal cpu usage (without looking like crap..)
 
 Suggestions are welcomed for improving the functionality of MegaTunix...
 Send suggestion (SPAM not welcome) at djandruczyk <at> yahoo <dot> com
