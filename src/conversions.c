@@ -69,7 +69,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 
 	ul_complex = (gboolean)g_object_get_data(G_OBJECT(widget),"ul_complex");
 	if (ul_complex)
-		return handle_complex_expr(G_OBJECT(widget),NULL);
+		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");

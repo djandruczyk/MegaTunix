@@ -71,8 +71,8 @@ void process_rt_vars(void *incoming)
 			offset = (gint)g_object_get_data(object,"offset");
 			if (g_object_get_data(object,"complex_expr"))
 			{
-				result = handle_complex_expr(object,incoming);
-				//printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
+				result = handle_complex_expr(object,incoming,UPLOAD);
+				printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 				continue;
 			}
 
@@ -87,7 +87,7 @@ void process_rt_vars(void *incoming)
 				result = (tmpf-32)*(5.0/9.0);
 			else
 				result = tmpf;
-			//printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
+			printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 
 		}
 	}
@@ -108,7 +108,7 @@ gfloat lookup_data(GObject *object, gint offset)
 	return lookuptable[offset];
 }
 
-gdouble handle_complex_expr(GObject *object, void * incoming)
+gdouble handle_complex_expr(GObject *object, void * incoming,ConvType type)
 {
 	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	gchar **symbols = NULL;
@@ -183,10 +183,15 @@ gdouble handle_complex_expr(GObject *object, void * incoming)
 	evaluator = g_object_get_data(object,"evaluator");
 	if (!evaluator)
 	{
-		evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
+		if (type == UPLOAD)
+			evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
+		else if (type == DOWNLOAD)
+			evaluator = evaluator_create(g_object_get_data(object,"dl_conv_expr"));
+		else
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t evaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
 		if (!evaluator)
 		{
-			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t evaluator missing for %s,\n\texpression is %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object)),(gchar *)g_object_get_data(object,"conv_expr")),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t evaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
 			exit (-1);
 		}
 		else

@@ -272,5 +272,11 @@ typedef enum
 	RAW_VAR,
 }ComplexExprType;
 
+typedef enum
+{
+	UPLOAD=0x180,
+	DOWNLOAD,
+}ConvType;
+
 
 #endif
