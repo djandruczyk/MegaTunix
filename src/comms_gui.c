@@ -193,7 +193,7 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Delay Between Reads(ms)");
+	label = gtk_label_new("Delay Between Reads (ms)");
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -304,7 +304,7 @@ void build_comms(GtkWidget *parent_frame)
 			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (0), 0, 0);
 
 	gtk_widget_show_all(vbox);
 

@@ -50,7 +50,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 
 	frame = gtk_frame_new("Injection Control");
-	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
