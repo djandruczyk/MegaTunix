@@ -311,7 +311,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	firmware->name = g_strdup(potential->name);
 	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
 	firmware->rtv_map_file = g_strdup(potential->rtv_map_file);
-	firmware->controls_map_file = g_strdup(potential->controls_map_file);
+	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
 	firmware->multi_page = potential->multi_page;
 	firmware->total_pages = potential->total_pages;
 	/* Allocate ram for the necessary structures... */
@@ -553,7 +553,7 @@ struct Canidate * initialize_canidate(void)
 	canidate->ver_num = -1;
 	canidate->load_tabs = NULL;
 	canidate->rtv_map_file = NULL;
-	canidate->controls_map_file = NULL;
+	canidate->sliders_map_file = NULL;
 	canidate->rt_cmd_key = NULL;
 	canidate->ve_cmd_key = NULL;
 	canidate->ign_cmd_key = NULL;
@@ -647,9 +647,9 @@ void load_profile_details(void *ptr)
 		if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
 					&canidate->rtv_map_file))
 			dbg_func(__FILE__": load_profile_details()\n\t\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-		if(!cfg_read_string(cfgfile,"gui","ControlMapFile",
-					&canidate->controls_map_file))
-			dbg_func(__FILE__": load_profile_details()\n\t\"ControlMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"gui","SliderMapFile",
+					&canidate->sliders_map_file))
+			dbg_func(__FILE__": load_profile_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if (!cfg_read_string(cfgfile,"lookuptables","tables",
 					&tmpbuf))
 			dbg_func(__FILE__": load_profile_details()\n\t\"tables\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);

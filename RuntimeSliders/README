@@ -32,7 +32,7 @@ the xx is a number starting at 0 and going up to rt/ww_total_sliders-1
 (since we start from 0 not 1)
 
 Inside each section are 4 keys;
-control_name	[string] name used to refer to this control
+slider_name	[string] name used to refer to this control
 table		[integer] a table number in the runtime tab (or zero for warmup
 		wizard), tables are arranged as follows (runtime tab):
 		[table 0][table 1]

@@ -1,5 +1,5 @@
 [realtime_map]
-firmware_name=MegaSquirtnEDIS v3.008
+firmware_name=MegaSquirtnSpark v3.0/3.0.1
 raw_total=22
 derived_total=38
 
@@ -53,7 +53,7 @@ lower_limit=0
 upper_limit=25500
 is_float=FALSE
 complex_expr=TRUE
-conv_expr=((12000/(eng_type+1))/(cyls+1))/(((ctimeH*256)+ctimeL)/1.0/10000)
+conv_expr=((12000/(eng_type+1))/(cyls+1))/(((ctimeH*256)+ctimeL)/0.92/10000)
 expr_symbols=eng_type,cyls,ctimeH,ctimeL
 expr_types=_VE_EMB_BIT_,_VE_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
 eng_type_page=0

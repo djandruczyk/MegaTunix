@@ -21,7 +21,6 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <main.h>
-#include <runtime_controls.h>
 #include <serialio.h>
 #include <structures.h>
 #include <threads.h>

@@ -45,15 +45,15 @@ struct Serial_Params
  \brief Firmware_Details stores all attributes about the firmware being used
  after detection (\see interrogate_ecu ) including lists of tabs to be loaded
  by the glade loader (\see load_gui_tabs ), the configuration for the realtime
- variables map (\see rtv_map_loader) and the controls_map_file (\see 
- load_runtime_controls )
+ variables map (\see rtv_map_loader) and the sliderss_map_file (\see 
+ load_runtime_sliders )
  */
 struct Firmware_Details
 {
 	gchar *name;		/*! textual name */
 	gchar **tab_list;	/*! vector string of tabs to load */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
-	gchar *controls_map_file;/*! runtime controls map filename */
+	gchar *sliders_map_file;/*! runtime sliders map filename */
         gint rtvars_size;       /*! Size of Realtime vars datablock */
         gint ignvars_size;      /*! Size of Realtime vars datablock */
         gint memblock_size;     /*! Size of Raw_Memory datablock */
@@ -124,11 +124,11 @@ struct Viewable_Value
 };
 	
 /*! 
- \brief The Rt_Control struct contains info on the runtime display tab controls
+ \brief The Rt_Slider struct contains info on the runtime display tab sliders
  as they are now stored in the config file and adjustable in position
  and placement and such..
  */
-struct Rt_Control
+struct Rt_Slider
 {
 	gchar *ctrl_name; /*! Control name in config file (key in hashtable) */
 	GtkWidget *parent;/*! Parent of the table below  */
@@ -215,7 +215,7 @@ struct Canidate
 	gint ver_num;		/*! Version number to search for */
 	gchar *load_tabs;	/*! list of tabs to load into the gui */
 	gchar *rtv_map_file;	/*! name of realtime vars map file */
-	gchar *controls_map_file;/*! runtime controls map filename */
+	gchar *sliders_map_file;/*! runtime sliders map filename */
 	Capability capabilities;/*! Bitmask of capabilities.... */
 	gchar * rt_cmd_key;	/*! string key to hashtable for RT command */
 	gchar * ve_cmd_key;	/*! string key to hashtable for VE command */

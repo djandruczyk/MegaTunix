@@ -39,7 +39,8 @@ CMD_I_0=0
 CMD_F_0=0
 
 [gui]
-ControlMapFile=std-firmware
+RealtimeMapFile=Rover_IAC-3.0.4
+SliderMapFile=std-firmware
 LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,tools,warmupwizard
 
 [lookuptables]

@@ -41,7 +41,7 @@ CMD_F_0=0
 
 [gui]
 RealtimeMapFile=B_and_G_2.0-3.01
-ControlMapFile=std-firmware
+SliderMapFile=std-firmware
 LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,tools,warmupwizard
 
 [lookuptables]

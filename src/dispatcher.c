@@ -25,7 +25,7 @@
 #include <logviewer_gui.h>
 #include <notifications.h>
 #include <post_process.h>
-#include <runtime_controls.h>
+#include <runtime_sliders.h>
 #include <runtime_gui.h>
 #include <rtv_map_loader.h>
 #include <serialio.h>
@@ -81,7 +81,7 @@ gboolean dispatcher()
 				case UPD_LOAD_RT_SLIDERS:
 					if (connected)
 					{
-						load_controls();
+						load_sliders();
 						reset_temps(GINT_TO_POINTER(temp_units));
 					}
 					break;

@@ -39,8 +39,8 @@ gboolean update_runtime_vars()
 	gint i = 0;
 	struct Ve_View_3D * ve_view = NULL;
 	extern GList ***ve_widgets;
-	extern GHashTable *rt_controls;
-	extern GHashTable *ww_controls;
+	extern GHashTable *rt_sliders;
+	extern GHashTable *ww_sliders;
 	GtkWidget * tmpwidget=NULL;
 	extern struct Firmware_Details *firmware;
 	extern GHashTable * dynamic_widgets;
@@ -78,10 +78,10 @@ gboolean update_runtime_vars()
 
 	engine_val = (union engine)(guchar)history[last_engine_entry];
 
-	/* Update all the dynamic RT controls */
+	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
 	{
-		g_hash_table_foreach(rt_controls,rt_update_values,NULL);
+		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
 
 		/* Status boxes.... */
 		/* "Connected" */
@@ -114,7 +114,7 @@ gboolean update_runtime_vars()
 
 	if (active_page == WARMUP_WIZ_PAGE)	/* Warmup wizard is visible */
 	{
-		g_hash_table_foreach(ww_controls,rt_update_values,NULL);
+		g_hash_table_foreach(ww_sliders,rt_update_values,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
 			dbg_func(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n",CRITICAL);
@@ -180,10 +180,10 @@ void reset_runtime_status()
 
 void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
-	struct Rt_Control *control = (struct Rt_Control *)value;
-	gint count = control->count;
-	gint rate = control->rate;
-	gint last_upd = control->last_upd;
+	struct Rt_Slider *slider = (struct Rt_Slider *)value;
+	gint count = slider->count;
+	gint rate = slider->rate;
+	gint last_upd = slider->last_upd;
 	gfloat tmpf = 0.0;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
@@ -195,17 +195,17 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat percentage = 0.0;
 	gboolean is_float = FALSE;
 
-	last_entry = (gint)g_object_get_data(control->object,"last_entry");
-	hist_size = (gint)g_object_get_data(control->object,"hist_max");
-	is_float = (gboolean)g_object_get_data(control->object,"is_float");
-	now = control->history[last_entry];
+	last_entry = (gint)g_object_get_data(slider->object,"last_entry");
+	hist_size = (gint)g_object_get_data(slider->object,"hist_max");
+	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
+	now = slider->history[last_entry];
 	if (last_entry == 0)
-		last = control->history[hist_size-1];
+		last = slider->history[hist_size-1];
 	else
-		last = control->history[(last_entry-1)];
+		last = slider->history[(last_entry-1)];
 
-	upper = (gfloat)control->upper;
-	lower = (gfloat)control->lower;
+	upper = (gfloat)slider->upper;
+	lower = (gfloat)slider->lower;
 	
 	if ((now != last) || (forced_update))
 	{
@@ -213,7 +213,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
 		tmpf = tmpf >= 0.0 ? tmpf : 0.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(control->pbar),
+				(slider->pbar),
 				tmpf);
 
 		if ((abs(count-last_upd) > 5) || (forced_update))
@@ -223,7 +223,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 			else
 				tmpbuf = g_strdup_printf("%i",(gint)now);
 			
-			gtk_label_set_text(GTK_LABEL(control->textval),tmpbuf);
+			gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 			g_free(tmpbuf);
 			last_upd = count;
 		}
@@ -234,7 +234,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 			tmpbuf = g_strdup_printf("%.2f",now);
 		else
 			tmpbuf = g_strdup_printf("%i",(gint)now);
-		gtk_label_set_text(GTK_LABEL(control->textval),tmpbuf);
+		gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;
 	}
@@ -247,8 +247,8 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	count++;
 	if (count > 5000)
 		count = 0;
-	control->rate = rate;
-	control->count = count;
-	control->last_upd = last_upd;
+	slider->rate = rate;
+	slider->count = count;
+	slider->last_upd = last_upd;
 	return;
 }

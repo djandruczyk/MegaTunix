@@ -38,8 +38,8 @@ headers = \
         req_fuel.h \
 	rtv_map_loader.h \
 	rtv_processor.h \
-        runtime_controls.h \
         runtime_gui.h \
+        runtime_sliders.h \
         serialio.h \
 	stringmatch.h \
         structures.h \
