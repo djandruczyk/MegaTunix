@@ -89,7 +89,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			if (bad_read)
 			{
 				dbg_func(__FILE__": handle_ms_data()\n\tError reading ECU Clock (C_TEST)\n",CRITICAL);
-				tcflush(serial_params->fd, TCIOFLUSH);
+				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
 				goto jumpout;
@@ -127,7 +127,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			if (bad_read)
 			{
 				dbg_func(__FILE__": handle_ms_data()\n\tError reading Real-Time Variables \n",CRITICAL);
-				tcflush(serial_params->fd, TCIOFLUSH);
+				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
 				goto jumpout;
@@ -187,7 +187,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			if (bad_read)
 			{
 				dbg_func(g_strdup_printf(__FILE__"handle_ms_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
-				tcflush(serial_params->fd, TCIOFLUSH);
+				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
 				goto jumpout;
@@ -229,7 +229,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			if (bad_read)
 			{
 				dbg_func(__FILE__"handle_ms_data()\n\tError reading Raw Memory Block\n",CRITICAL);
-				tcflush(serial_params->fd, TCIOFLUSH);
+				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
 				goto jumpout;

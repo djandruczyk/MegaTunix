@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name);
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value);
@@ -43,63 +45,48 @@ ConfigFile *cfg_open_file(gchar * filename)
 {
 	ConfigFile *cfg;
 
-	FILE *file;
-	gchar *buffer=NULL;
-	gchar **lines = NULL;
 	gchar *tmp = NULL;
+	gchar *line = NULL;
 	gchar *decomp = NULL;
 	gint i = 0;
-	struct stat stats;
+	GIOChannel * iochannel = NULL;
+	GError *error = NULL;
 	ConfigSection *section = NULL;
 
-	if (lstat(filename, &stats) == -1)
+	iochannel = g_io_channel_new_file(filename,"r",&error);
+	if(error)
 		return NULL;
-	if (!(file = fopen(filename, "rb")))
-		return NULL;
-
-	buffer = g_malloc0(stats.st_size + 1);
-	if (fread(buffer, 1, stats.st_size, file) != stats.st_size)
-	{
-		g_free(buffer);
-		fclose(file);
-		return NULL;
-	}
-	fclose(file);
-	buffer[stats.st_size] = '\0';
 
 	cfg = g_malloc0(sizeof (ConfigFile));
 
-	lines = g_strsplit(buffer, "\n", 0);
-	g_free(buffer);
 	i = 0;
-	while (lines[i])
+	while (g_io_channel_read_line(iochannel,&line,NULL,NULL,&error) == G_IO_STATUS_NORMAL)
 	{
-		if (g_str_has_prefix(lines[i],"["))
+		if (g_str_has_prefix(line,"["))
 		{
-			if ((tmp = g_strrstr(lines[i], "]")))
+			if ((tmp = g_strrstr(line, "]")))
 			{
 				*tmp = '\0';
-				section = cfg_create_section(cfg, &lines[i][1]);
+				section = cfg_create_section(cfg, &line[1]);
 			}
 		}
-		else if ((!g_str_has_prefix(lines[i],"#") && section))
+		else if ((!g_str_has_prefix(line,"#") && section))
 		{
-			if ((tmp = g_strrstr(lines[i], "=")))
+			if ((tmp = g_strrstr(line, "=")))
 			{
 				*tmp = '\0';
 				tmp++;
 				/* Allow extended chars */
 				decomp = g_strcompress(tmp);
-				cfg_create_string(section, lines[i], 
+				cfg_create_string(section, line, 
 						decomp);
 				g_free(decomp);
 			}
 		}
 		i++;
+		g_free(line);
 	}
-	g_strfreev(lines);
-	if (tmp)
-		g_free(tmp);
+	g_io_channel_unref(iochannel);
 	cfg->filename = g_strdup(filename);
 	return cfg;
 }

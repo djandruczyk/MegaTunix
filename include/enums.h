@@ -142,14 +142,14 @@ typedef enum
 
 typedef enum
 {
-	EVEME=0xd0,
-	USER_REV,
-	USER_COMMENT,
-	DATE,
-	TIME,
-	RPM_RANGE,
-	LOAD_RANGE,
-	NONE
+	VEX_EVEME=0xd0,
+	VEX_USER_REV,
+	VEX_USER_COMMENT,
+	VEX_DATE,
+	VEX_TIME,
+	VEX_RPM_RANGE,
+	VEX_LOAD_RANGE,
+	VEX_NONE,
 }ImportParserArg;
 
 typedef enum

@@ -61,6 +61,7 @@ void interrogate_ecu()
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
+	gint j = 0;
 	gint tests_to_run = 0;
 	gint total_read = 0;
 	gint total_wanted = 0;
@@ -69,7 +70,8 @@ void interrogate_ecu()
 	gchar *string = NULL;
 	GArray *cmd_array = NULL;
 	guchar buf[size];
-	guchar *ptr = buf;
+	guchar *ptr = NULL;
+	guchar *p = NULL;
 	GHashTable *cmd_details = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -98,6 +100,7 @@ void interrogate_ecu()
 
 	for (i=0;i<tests_to_run;i++)
 	{
+		flush_serial(serial_params->fd,TCIOFLUSH);
 		count = 0;
 		cmd = g_array_index(cmd_array,struct Command *, i);
 
@@ -128,9 +131,10 @@ void interrogate_ecu()
 		while (total_read < total_wanted )
 		{
 			dbg_func(g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",cmd->string,total_wanted-total_read),INTERROGATOR);
-			//read_amount = (total_wanted-total_read) > 8? 8:total_wanted-total_read;
+//			read_amount = (total_wanted-total_read) > 8? 8:total_wanted-total_read;
 			total_read += res = read(serial_params->fd,
 					ptr+total_read,
+				//	read_amount);
 					total_wanted-total_read);
 
 			dbg_func(g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",cmd->string,res,total_read),INTERROGATOR);
@@ -143,6 +147,22 @@ void interrogate_ecu()
 				break;
 
 		}
+		
+		/*
+		if (total_read > 0)
+		{
+			printf ("read the following from the %s command\n\"",cmd->string);
+			p = buf;
+			for (j=0;j<total_read;j++)
+			{
+				printf("0x%.2x ", p[j]);
+				if (!((j+1)%8))
+					printf("\n");
+			}
+			printf("\"\ndone\n");
+		}
+		*/
+	
 		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);
 		ptr = buf;
 

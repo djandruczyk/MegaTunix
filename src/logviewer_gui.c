@@ -866,7 +866,7 @@ gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
+EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 {
 	gfloat val = 0.0;
 	GtkWidget *darea = NULL;

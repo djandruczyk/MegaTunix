@@ -53,7 +53,8 @@ headers = \
         vetable_gui.h \
 	vex_support.h \
 	warmwizard_gui.h \
-	widgetmgmt.h 
+	widgetmgmt.h \
+	winserialio.h 
 
 
 EXTRA_DIST=$(headers)

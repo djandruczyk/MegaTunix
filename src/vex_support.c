@@ -67,15 +67,15 @@ static struct
 
 } import_handlers[] = 
 {
-	{ "EVEME", HEADER, EVEME},
-	{ "UserRev:", HEADER, USER_REV}, 
-	{ "UserComment:", HEADER, USER_COMMENT},
-	{ "Date:", HEADER, DATE},
-	{ "Time:", HEADER, TIME},
-	{ "Page", PAGE, NONE},
-	{ "VE Table RPM Range\0", RANGE, RPM_RANGE},
-	{ "VE Table Load Range\0", RANGE, LOAD_RANGE},
-	{ "VE Table\0", TABLE, NONE}
+	{ "EVEME", HEADER, VEX_EVEME},
+	{ "UserRev:", HEADER, VEX_USER_REV}, 
+	{ "UserComment:", HEADER, VEX_USER_COMMENT},
+	{ "Date:", HEADER, VEX_DATE},
+	{ "Time:", HEADER, VEX_TIME},
+	{ "Page", PAGE, VEX_NONE},
+	{ "VE Table RPM Range\0", RANGE, VEX_RPM_RANGE},
+	{ "VE Table Load Range\0", RANGE, VEX_LOAD_RANGE},
+	{ "VE Table\0", TABLE, VEX_NONE}
 };
 
 gboolean vetable_export(void *ptr)
@@ -298,23 +298,23 @@ GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
 	g_strfreev(str_array);
 	switch (arg)
 	{
-		case EVEME:
+		case VEX_EVEME:
 			vex_import->version = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: EVEME %s",result),TRUE,FALSE);
 			break;
-		case USER_REV:	
+		case VEX_USER_REV:	
 			vex_import->revision = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Revision %s",result),TRUE,FALSE);
 			break;
-		case USER_COMMENT:	
+		case VEX_USER_COMMENT:	
 			vex_import->comment = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: UserComment: %s",result),TRUE,FALSE);
 			break;
-		case DATE:	
+		case VEX_DATE:	
 			vex_import->date = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Date %s",result),TRUE,FALSE);
 			break;
-		case TIME:	
+		case VEX_TIME:	
 			vex_import->time = g_strdup(result);
 			update_logbar("tools_view", NULL, g_strdup_printf("VEX Header: Time %s",result),TRUE,FALSE);
 			break;
@@ -421,12 +421,12 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 	/* Allocate memory for array of values... :) */
 	switch(arg)
 	{
-		case RPM_RANGE:
+		case VEX_RPM_RANGE:
 			vex_import->total_rpm_bins = num_bins;
 			vex_import->rpm_bins = g_new0(gint, num_bins);
 			vex_import->got_rpm = TRUE;
 			break;
-		case LOAD_RANGE:
+		case VEX_LOAD_RANGE:
 			vex_import->total_load_bins = num_bins;
 			vex_import->load_bins = g_new0(gint, num_bins);
 			vex_import->got_load = TRUE;
@@ -454,11 +454,11 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 		else
 			switch (arg)
 			{
-				case RPM_RANGE:
+				case VEX_RPM_RANGE:
 					vex_import->rpm_bins[i] = value;
 					tmpbuf = g_strdup_printf("VEX Import: RPM bins loaded successfully \n");
 					break;
-				case LOAD_RANGE:
+				case VEX_LOAD_RANGE:
 					vex_import->load_bins[i] = value;
 					tmpbuf = g_strdup_printf("VEX Import: LOAD bins loaded successfully \n");
 					break;

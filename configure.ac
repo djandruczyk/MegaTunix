@@ -4,12 +4,12 @@ AC_INIT(src/main.c)
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=6
-MTX_MICRO_VERSION=3
+MTX_MICRO_VERSION=4
 
 MTX_VERSION=$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION
 
 AC_CONFIG_SUBDIRS(src/main.c)
-AM_INIT_AUTOMAKE(megatunix, 0.6.3)
+AM_INIT_AUTOMAKE(megatunix, 0.6.4)
 #AC_CONFIG_HEADERS(config.h)
 AM_CONFIG_HEADER(config.h)
 
@@ -42,8 +42,15 @@ dnl optimizations
 CFLAGS="-O2"
 AC_SUBST(CFLAGS)
 
-EXTRA_LIBS=""
+AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
+if test $cross_compiling = yes; then
+	EXTRA_LIBS=" -lgw32c -luuid -lole32"
+else
+	EXTRA_LIBS=""
+fi
+
 AC_SUBST(EXTRA_LIBS)
+
 
 dnl =================
 dnl big/little endian

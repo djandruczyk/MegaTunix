@@ -26,6 +26,9 @@
 #include <termios.h>
 #include <threads.h>
 #include <unistd.h>
+#ifdef __WIN32__
+ #include <winserialio.h>
+#endif
 
 
 extern gboolean raw_reader_running;
@@ -48,15 +51,17 @@ void open_serial(gchar * port_name)
 	/* Open Read/Write and NOT as the controlling TTY in nonblock mode */
 	//fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 	/* Blocking mode... */
-	fd = open(device, O_RDWR | O_NOCTTY );
+#ifdef __WIN32__
+	fd = open(device, O_RDWR | O_NOCTTY |O_BINARY );
+#else
+	fd = open(device, O_RDWR | O_NOCTTY);
+#endif
 	if (fd > 0)
 	{
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
 		serial_params->open = TRUE;
 		serial_params->fd = fd;
-		/* Save serial port status */
-		tcgetattr(serial_params->fd,&serial_params->oldtio);
 		dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
 		update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 	}
@@ -66,9 +71,9 @@ void open_serial(gchar * port_name)
 		/* An Error occurred opening the port */
 		serial_params->open = FALSE;
 		err_text = (gchar *)g_strerror(errno);
-		//dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
 
-		//update_logbar("comms_view","warning",g_strdup_printf("Error Opening %s Error Code: %s \n",device,err_text),TRUE,FALSE);
+		update_logbar("comms_view","warning",g_strdup_printf("Error Opening %s Error Code: %s \n",device,err_text),TRUE,FALSE);
 		g_free(err_text);
 	}
 
@@ -76,10 +81,27 @@ void open_serial(gchar * port_name)
 	return;
 }
 	
+void flush_serial(gint fd, gint type)
+{
+#ifdef __WIN32__
+	win32_flush_serial(fd, type);
+#else
+	tcflush(serial_params->fd, type);
+#endif	
+}
 void setup_serial_params()
 {
+#ifdef __WIN32__
+	win32_setup_serial_params();
+#else
+	extern gint baudrate;
 	if (serial_params->open == FALSE)
 		return;
+	/* Save serial port status */
+	tcgetattr(serial_params->fd,&serial_params->oldtio);
+
+	flush_serial(serial_params->fd, TCIOFLUSH);
+
 	/* Sets up serial port for the modes we want to use. 
 	 * NOTE: Original serial tio params are stored and restored 
 	 * in the open_serial() and close_serial() functions.
@@ -98,8 +120,8 @@ void setup_serial_params()
 	 */
 
 	/* Set baud (posix way) */
-	cfsetispeed(&serial_params->newtio, BAUDRATE);
-	cfsetospeed(&serial_params->newtio, BAUDRATE);
+	cfsetispeed(&serial_params->newtio, baudrate);
+	cfsetospeed(&serial_params->newtio, baudrate);
 
 	/* Set additional flags, note |= syntax.. */
 	serial_params->newtio.c_cflag |= CLOCAL | CREAD;
@@ -132,6 +154,7 @@ void setup_serial_params()
 
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 
+#endif
 	return;
 }
 
@@ -142,7 +165,9 @@ void close_serial()
 
 	if (serial_params->open == FALSE)
 		return;
+#ifndef __WIN32__
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
+#endif
 	close(serial_params->fd);
 	serial_params->fd = -1;
 	serial_params->open = FALSE;

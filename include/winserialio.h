@@ -11,18 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __SERIALIO_H__
-#define __SERIALIO_H__
-
-#include <gtk/gtk.h>
-#include <enums.h>
+#ifndef __WINSERIALIO_H__
+#define __WINSERIALIO_H__
 
 /* Prototypes */
-void open_serial(gchar *);
-void close_serial(void);
-void setup_serial_params(void);
-void set_ms_page(gint);
-void flush_serial(gint,gint);
+void win32_setup_serial_params(void);
+void win32_flush_serial(int, int);
 /* Prototypes */
 
 #endif

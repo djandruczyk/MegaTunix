@@ -28,6 +28,7 @@ gint major_ver;
 gint minor_ver;
 gint micro_ver;
 gint preferred_delimiter;
+gint baudrate = BAUDRATE;
 extern guint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
 extern gint mem_view_style[];

@@ -73,7 +73,7 @@ void comms_test()
 	}
 
 	/* Flush the toilet.... */
-	tcflush(serial_params->fd, TCIOFLUSH);	
+	flush_serial(serial_params->fd, TCIOFLUSH);	
 	while (write(serial_params->fd,"C",1) != 1)
 	{
 		g_usleep(10000);
@@ -94,7 +94,7 @@ void comms_test()
 		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
 	}
 	/* Flush the toilet again.... */
-	tcflush(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 	return;
 }
 
@@ -244,7 +244,7 @@ void burn_ms_flash()
 		dbg_func(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n",CRITICAL);
 		return;
 	}
-	tcflush(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 
 	/* doing this may NOT be necessary,  but who knows... */
 	if (ecu_caps & DUALTABLE)
@@ -262,7 +262,7 @@ void burn_ms_flash()
 
 	dbg_func(__FILE__": burn_ms_flash()\n\tBurn to Flash\n",SERIAL_WR);
 
-	tcflush(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 copyover:
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
@@ -291,7 +291,7 @@ void readfrom_ecu(void *ptr)
 		return;
 
 	/* Flush serial port... */
-	tcflush(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 
 	if (firmware->multi_page)
 		set_ms_page(message->page);

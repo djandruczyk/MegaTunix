@@ -55,10 +55,11 @@ megatunix_SOURCES = \
 	vetable_gui.c \
 	vex_support.c \
 	warmwizard_gui.c \
-	widgetmgmt.c
+	widgetmgmt.c \
+	winserialio.c
 
 #megatunix_LDADD = @PACKAGE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl 
+megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@
 
 
 megatunix_LDFLAGS =
