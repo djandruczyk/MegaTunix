@@ -1,0 +1,52 @@
+# Visual Logviewer/playback tab
+
+[global]
+description=Object data map for MegaSquirt visual logviewer/playback tool
+tab_name=_Logviewer
+
+#----- Buttons ---------------------------------------------------------------
+[logviewer_start_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_START_REALTIME_
+page=0
+
+[logviewer_stop_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_STOP_REALTIME_
+page=0
+
+[logviewer_select_logfile_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_SELECT_DLOG_IMP_
+page=0
+
+[logviewer_select_params_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_SELECT_PARAMS_
+page=0
+
+#----- Radio/Checkbuttons ----------------------------------------------------
+
+[logviewer_realtime_radio_button]
+keys=page,handler
+key_types=_INT_,_ENUM_
+page=0
+handler=_REALTIME_VIEW_
+
+[logviewer_playback_radio_button]
+keys=page,handler
+key_types=_INT_,_ENUM_
+page=0
+handler=_PLAYBACK_VIEW_
+
+#----- SpinButtons -----------------------------------------------------------
+
+[logviewer_zoom_spinner]
+keys=page,handler
+key_types=_INT_,_ENUM_
+page=0
+handler=_LOGVIEW_ZOOM_
