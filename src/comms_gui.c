@@ -142,9 +142,10 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
 	button = gtk_button_new_with_label("   Test ECU Communication...   ");
 	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(CHECK_ECU_COMMS));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(CHECK_ECU_COMMS));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);
@@ -173,9 +174,10 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,spinner,
 			"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds.  This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
 
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(SER_POLL_TIMEO));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(SER_POLL_TIMEO));
+			NULL);
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->poll_timeout);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -185,9 +187,10 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,button,
 			"Starts reading the RealTime variables from the MS.  This will cause the Runtime Disp. page to begin updating continuously.",NULL);
 
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(START_REALTIME));
+			G_CALLBACK (std_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -205,9 +208,10 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_tooltips_set_tip(tip,spinner,
 			"Sets the time delay between read attempts for getting the RealTime variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS.  This will control the rate at which the Runtime Display page updates.",NULL);
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(SER_INTERVAL_DELAY));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(SER_INTERVAL_DELAY));
+			NULL);
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->read_wait);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -216,9 +220,10 @@ void build_comms(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("Stop Reading RT vars ");
 	gtk_tooltips_set_tip(tip,button,
 			"Stops reading the RT variables from the MS.  NOTE: you don't have to stop reading the RT vars to read the VEtable and Constants.  It is handled automatically for you.",NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(STOP_REALTIME));
+			G_CALLBACK (std_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);

@@ -62,9 +62,10 @@ void build_general(GtkWidget *parent_frame)
 	button = gtk_check_button_new_with_label("Use ToolTips");
 	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,2);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),tips_in_use);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(TOOLTIPS_STATE));
 	g_signal_connect (G_OBJECT(button), "toggled",
 			G_CALLBACK (toggle_button_handler),
-			GINT_TO_POINTER(TOOLTIPS_STATE));
+			NULL);
 
 	frame = gtk_frame_new("Fahrenheit or Celsius Temp scales.");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
@@ -80,9 +81,10 @@ void build_general(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	if (temp_units == FAHRENHEIT)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(FAHRENHEIT));
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
-			GINT_TO_POINTER(FAHRENHEIT));
+			NULL);
 
 
 	button = gtk_radio_button_new_with_label(group,"Celsius");
@@ -92,9 +94,10 @@ void build_general(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	if (temp_units == CELSIUS)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(CELSIUS));
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
-			GINT_TO_POINTER(CELSIUS));
+			NULL);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
@@ -106,7 +109,7 @@ void build_general(GtkWidget *parent_frame)
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	table = gtk_table_new(3,5,FALSE);
+	table = gtk_table_new(3,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
@@ -168,7 +171,7 @@ void build_general(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -180,7 +183,7 @@ void build_general(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -192,7 +195,7 @@ void build_general(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -204,7 +207,7 @@ void build_general(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -216,7 +219,7 @@ void build_general(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -228,11 +231,11 @@ void build_general(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	button = gtk_check_button_new_with_label("Critical Errors");
+	button = gtk_check_button_new_with_label("Tab-Loader");
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(10));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<10));
@@ -240,8 +243,20 @@ void build_general(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Critical Errors");
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(666));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(11));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<11));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -269,9 +284,10 @@ void build_general(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	button = gtk_button_new_with_label("Interrogate ECU capabilities");
 	gtk_container_add(GTK_CONTAINER(ebox),button);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(INTERROGATE_ECU));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(INTERROGATE_ECU));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	hbox = gtk_hbox_new(FALSE,18);
 	gtk_table_attach (GTK_TABLE (table), hbox, 3, 5, 0, 1,

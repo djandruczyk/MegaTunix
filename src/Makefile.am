@@ -41,6 +41,7 @@ megatunix_SOURCES = \
 	serialio.c \
 	sparktable_gui.c \
 	stringmatch.c \
+	tabloader.c \
 	threads.c \
 	timeout_handlers.c \
 	tools_gui.c \

@@ -79,23 +79,26 @@ void build_tools(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Import VE Table(s)");
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(IMPORT_VETABLE));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(IMPORT_VETABLE));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	button = gtk_button_new_with_label("Export VE Table(s)");
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(EXPORT_VETABLE));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(EXPORT_VETABLE));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	button = gtk_button_new_with_label("Revert to Last");
 	buttons.tools_revert_but = button;
 	gtk_widget_set_sensitive(button,FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REVERT_TO_BACKUP));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(REVERT_TO_BACKUP));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	hbox = gtk_hbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
@@ -124,15 +127,17 @@ void build_tools(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Backup All MS Parameters");
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BACKUP_ALL));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(BACKUP_ALL));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	button = gtk_button_new_with_label("Restore All MS Parameters");
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(RESTORE_ALL));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(RESTORE_ALL));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 
 	return;

@@ -188,9 +188,10 @@ gboolean reqd_fuel_popup(void * data)
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_DISP));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(REQ_FUEL_DISP));
+			NULL);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -203,9 +204,10 @@ gboolean reqd_fuel_popup(void * data)
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_CYLS));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(REQ_FUEL_CYLS));
+			NULL);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -218,9 +220,10 @@ gboolean reqd_fuel_popup(void * data)
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_AFR));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(REQ_FUEL_AFR));
+			NULL);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -233,9 +236,11 @@ gboolean reqd_fuel_popup(void * data)
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"handler",
+			GINT_TO_POINTER(REQ_FUEL_RATED_INJ_FLOW));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(REQ_FUEL_RATED_INJ_FLOW));
+			NULL);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -247,9 +252,11 @@ gboolean reqd_fuel_popup(void * data)
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"handler",	
+			GINT_TO_POINTER(REQ_FUEL_RATED_PRESSURE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(REQ_FUEL_RATED_PRESSURE));
+			NULL);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -262,9 +269,11 @@ gboolean reqd_fuel_popup(void * data)
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
+	g_object_set_data(G_OBJECT(spinner),"handler",	
+			GINT_TO_POINTER(REQ_FUEL_ACTUAL_PRESSURE));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(REQ_FUEL_ACTUAL_PRESSURE));
+			NULL);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND),

@@ -26,21 +26,28 @@
 /* Serial parameters, */
 struct Serial_Params
 {
-        gint fd;                 /* File descriptor */
-        gchar *port_name;          /* textual name of comm port */
+        gint fd;		/* File descriptor */
+        gchar *port_name;	/* textual name of comm port */
         gboolean open;		/* flag, TRUE for open FALSE for closed */
-        gint poll_timeout;       /* Pollng interval in MILLISECONDS */
-        gint read_wait;          /* time delay between each read */
-        gint table0_size;	/* Size of VEtable/page_0 datablock */
-        gint table1_size;	/* Size of VEtable/page_1 datablock */
-        gint rtvars_size;	/* Size of Realtime vars datablock */
-        gint ignvars_size;	/* Size of Realtime vars datablock */
-        gint memblock_size;	/* Size of Raw_Memory datablock */
-        struct termios oldtio;  /* serial port settings before we touch it */
-        struct termios newtio;  /* serial port settings we use when running */
-        gint errcount;           /* Serial I/O errors read error count */
+        gint poll_timeout;	/* Pollng interval in MILLISECONDS */
+        gint read_wait;		/* time delay between each read */
+        gint errcount;		/* Serial I/O errors read error count */
+        struct termios oldtio;	/* serial port settings before we touch it */
+        struct termios newtio;	/* serial port settings we use when running */
 };
 
+struct Firmware_Details
+{
+	gchar *firmware_name;	/* textual name*/
+	gchar **tab_list;	/* vector string of tabs to load */
+        gint table0_size;       /* Size of VEtable/page_0 datablock */
+        gint table1_size;       /* Size of VEtable/page_1 datablock */
+        gint table2_size;       /* Size of VEtable/page_1 datablock */
+        gint table3_size;       /* Size of VEtable/page_1 datablock */
+        gint rtvars_size;       /* Size of Realtime vars datablock */
+        gint ignvars_size;      /* Size of Realtime vars datablock */
+        gint memblock_size;     /* Size of Raw_Memory datablock */
+};
 
 /* Progress bars that are updated from various functions... */
 struct DynamicProgress
@@ -317,6 +324,7 @@ struct Canidate
 	gchar *quest_str;	/* Ext Version string to search for */
 	gint ver_num;		/* Version number to search for */
 	gchar *firmware_name;	/* Name of this firmware */
+	gchar *load_tabs;	/* list of tabs to load into the gui */
 	Capabilities capabilities;	/* Bitmask of capabilities.... */
 	gchar * rt_cmd_key;	/* string key to hashtable for RT command */
 	gchar * ve_cmd_key;	/* string key to hashtable for VE command */

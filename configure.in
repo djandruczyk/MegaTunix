@@ -25,7 +25,7 @@ AC_PROG_MAKE_SET
 
 dnl check paths for necessary files
 dnl pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
-pkg_modules="gtk+-2.0 gthread-2.0 gtkglext-1.0"
+pkg_modules="gtk+-2.0 gthread-2.0 gtkglext-1.0 libglade-2.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
@@ -77,12 +77,12 @@ dnl ==============
 dnl Output files for build
 dnl ==============
 
-mtxdatasubs="\\\"Interrogator\\\""
 INTERROGATOR_DATA_DIR=Interrogator
+GUI_DATA_DIR=Gui
 AC_SUBST(INTERROGATOR_DATA_DIR)
-AC_SUBST(datadirsubs)
+AC_SUBST(GUI_DATA_DIR)
 
-MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$datadir/MegaTunix\\\" -DINTERROGATOR_DIR=\\\"$INTERROGATOR_DATA_DIR\\\" -DGTK_DISABLE_COMPAT_H -DGDK_DISABLE_DEPRECATED -D_MAJOR_=$MTX_MAJOR_VERSION -D_MINOR_=$MTX_MINOR_VERSION -D_MICRO_=$MTX_MICRO_VERSION "
+MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$datadir/MegaTunix\\\" -DINTERROGATOR_DIR=\\\"$INTERROGATOR_DATA_DIR\\\"  -DGUI_DIR=\\\"$GUI_DATA_DIR\\\" -DGTK_DISABLE_COMPAT_H -DGDK_DISABLE_DEPRECATED -D_MAJOR_=$MTX_MAJOR_VERSION -D_MINOR_=$MTX_MINOR_VERSION -D_MICRO_=$MTX_MICRO_VERSION "
 
 AC_SUBST(MEGATUNIX_DEFINES)
 
@@ -92,6 +92,7 @@ src/Makefile
 include/Makefile
 Interrogator/Makefile
 Interrogator/Profiles/Makefile
+Gui/Makefile
 VERSION])
 
 echo "

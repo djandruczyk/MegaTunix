@@ -30,7 +30,7 @@ typedef enum
 /* Regular Buttons */
 typedef enum
 {
-	START_REALTIME,
+	START_REALTIME = 0x2a,
 	STOP_REALTIME,
 	READ_VE_CONST,
 	READ_RAW_MEMORY,
@@ -232,7 +232,8 @@ typedef enum
 	IO_PROCESS	= 1<<7,
 	THREADS		= 1<<8,
 	REQD_FUEL	= 1<<9,
-	CRITICAL	= 1<<10
+	TABLOADER	= 1<<10,
+	CRITICAL	= 1<<11
 }Dbg_Class;
 
 typedef enum
@@ -272,6 +273,12 @@ typedef enum
 	UPD_READ_VE_CONST,
 	UPD_RAW_MEMORY,
 	UPD_STORE_BLACK,
+	UPD_LOAD_GUI_TABS,
 }UpdateFunctions;
 
+typedef enum
+{
+	INT = 0x50,
+	STRING,
+}DataTypes;
 #endif

@@ -39,6 +39,7 @@ extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern struct Serial_Params *serial_params;
 extern struct DynamicEntries entries;
+struct Firmware_Details *firmware = NULL;
 gboolean interrogated = FALSE;
 
 void interrogate_ecu()
@@ -336,16 +337,20 @@ end_of_loop:
 	parse_ecu_capabilities(ecu_caps);
 
 	/* Set expected sizes for commands */
-	serial_params->table0_size = (gint)g_hash_table_lookup(
+	if (!firmware)
+		firmware = g_malloc0(sizeof(struct Firmware_Details));
+	firmware->table0_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_V_0");
-	serial_params->table1_size = (gint)g_hash_table_lookup(
+	firmware->table1_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_V_1");
-	serial_params->rtvars_size = (gint)g_hash_table_lookup(
+	firmware->rtvars_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_A_0");
-	serial_params->ignvars_size = (gint)g_hash_table_lookup(
+	firmware->ignvars_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_I_0");
-	serial_params->memblock_size = (gint)g_hash_table_lookup(
+	firmware->memblock_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_F_0");
+	firmware->firmware_name = g_strdup(potential->firmware_name);
+	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
 
 	/* use commands defined in hte interogation profile to map the proper
 	 * command to the I/O routines...  Looks ugly but should (hopefully)
@@ -424,9 +429,9 @@ cleanup:
 	/* Enable/Disable Controls */
 	parse_ecu_capabilities(ecu_caps);
 
-	serial_params->table0_size = 125;	/* assumptions!!!! */
-	serial_params->table1_size = 0;		/* assumptions!!!! */
-	serial_params->rtvars_size = 22;	/* assumptions!!!! */
+	firmware->table0_size = 125;	/* assumptions!!!! */
+	firmware->table1_size = 0;	/* assumptions!!!! */
+	firmware->rtvars_size = 22;	/* assumptions!!!! */
 
 freeup:
 	if (canidate->sig_str)
@@ -571,6 +576,8 @@ void * load_profile(GArray * cmd_array, gchar * file)
 				&tmpbuf);
 		canidate->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
+		cfg_read_string(cfgfile,"gui","LoadTabs",
+				&canidate->load_tabs);
 
 		cfg_free(cfgfile);
 		g_free(filename);

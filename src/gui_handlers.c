@@ -38,6 +38,7 @@
 #include <vetable_gui.h>
 #include <vex_support.h>
 
+static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
 extern gboolean connected;
 extern gboolean raw_reader_running;
@@ -170,9 +171,10 @@ gint comm_port_change(GtkEditable *editable)
 gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *object_data = g_object_get_data(G_OBJECT(widget),"data");
+	gint handler = (ToggleButton)g_object_get_data(G_OBJECT(widget),"handler");
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
-		switch ((ToggleButton)data)
+		switch ((ToggleButton)handler)
 		{
 			case TOOLTIPS_STATE:
 				gtk_tooltips_enable(tip);
@@ -216,17 +218,19 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case HEX_VIEW:
 			case DECIMAL_VIEW:
 			case BINARY_VIEW:
-				update_raw_memory_view((ToggleButton)data,(gint)object_data);
+				update_raw_memory_view((ToggleButton)handler,(gint)object_data);
 				break;	
 		}
 	}
 	else
 	{	/* not pressed */
-		switch ((gint)data)
+		switch ((ToggleButton)handler)
 		{
 			case TOOLTIPS_STATE:
 				gtk_tooltips_disable(tip);
 				tips_in_use = FALSE;
+				break;
+			default:
 				break;
 		}
 	}
@@ -377,19 +381,23 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
 	void *object_data = NULL;
+	gint handler = -1;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	static gboolean queue_referenced =  FALSE;
 	extern GAsyncQueue *io_queue;
 	if (GTK_IS_OBJECT(widget))
 	{
 		object_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
+		handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
 		reqd_fuel = (struct Reqd_Fuel *) 
 			g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	}
 	if (queue_referenced == FALSE)
 		g_async_queue_ref(io_queue);
+	if (handler == 0)
+		dbg_func(__FILE__": std_button_handler(), handler not bound to object, CRITICAL ERROR\n",CRITICAL);
 
-	switch ((StdButton)data)
+	switch ((StdButton)handler)
 	{
 		case INTERROGATE_ECU:
 			io_cmd(IO_INTERROGATE_ECU, NULL);
@@ -497,6 +505,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gboolean temp_dep = FALSE;
 	gint tmpi = 0;
 	gint tmp = 0;
+	gint handler = -1;
 	gfloat value = 0.0;
 	GtkWidget * info = NULL;
 	extern unsigned char * ms_data;
@@ -522,6 +531,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	if (ecu_caps & (S_N_EDIS|S_N_SPARK))
 		ign_parms = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 
+	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
 	info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
@@ -530,7 +540,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	tmpi = (int)(value+.001);
 
-	switch ((SpinButton)data)
+	switch ((SpinButton)handler)
 	{
 		case SER_POLL_TIMEO:
 			serial_params->poll_timeout = (gint)value;
@@ -1185,6 +1195,23 @@ void update_ve_const()
 		}
 	}
 }
+gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	if(event->keyval == GDK_Shift_L)
+	{
+		if (event->type == GDK_KEY_PRESS)
+		{
+			grab_allowed = TRUE;
+			printf("shift_pressed\n");
+		}
+		else
+		{
+			printf("shift_released\n");
+			grab_allowed = FALSE;
+		}
+	}
+	return TRUE;
+}
 
 gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -1198,6 +1225,8 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 	static GtkStyle *style;
 
 	if (event->button != 1) // Left button click 
+		return FALSE;
+	if (!grab_allowed)
 		return FALSE;
 
 	last = now;

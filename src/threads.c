@@ -29,6 +29,7 @@
 #include <string.h>
 #include <structures.h>
 #include <sys/poll.h>
+#include <tabloader.h>
 #include <threads.h>
 #include <unistd.h>
 
@@ -79,9 +80,12 @@ void io_cmd(IoCommands cmd, gpointer data)
 			message = g_new0(struct Io_Message,1);
 			message->command = INTERROGATION;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-			tmp = UPD_READ_VE_CONST;
+			tmp = UPD_LOAD_GUI_TABS;
 			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
+			//tmp = UPD_READ_VE_CONST;
+			//g_array_append_val(message->funcs,tmp);
+			//g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_COMMS_TEST:
 			message = g_new0(struct Io_Message,1);
@@ -221,6 +225,11 @@ void *serial_io_handler(gpointer data)
 						UpdateFunctions, i);
 				switch ((UpdateFunctions)val)
 				{
+					case UPD_LOAD_GUI_TABS:
+						gdk_threads_enter();
+						load_gui_tabs();
+						gdk_threads_leave();
+						break;
 					case UPD_READ_VE_CONST:
 						io_cmd(IO_READ_VE_CONST,NULL);
 						break;

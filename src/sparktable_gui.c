@@ -91,9 +91,11 @@ void build_sparktable(GtkWidget *parent_frame)
 				GINT_TO_POINTER(CONV_NOTHING));
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
+		g_object_set_data(G_OBJECT(spinner),"handler",
+				GINT_TO_POINTER(GENERIC));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (spin_button_handler),
-				GINT_TO_POINTER(GENERIC));
+				NULL);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner,
 				0, 1, (7 - y) + 1, (7 - y) + 2,
@@ -139,9 +141,11 @@ void build_sparktable(GtkWidget *parent_frame)
 					GINT_TO_POINTER(CONV_MULT));
 			g_object_set_data(G_OBJECT(spinner),"dl_type",
 					GINT_TO_POINTER(IMMEDIATE));
+			g_object_set_data(G_OBJECT(spinner),"handler",
+					GINT_TO_POINTER(GENERIC));
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
 					G_CALLBACK (spin_button_handler),
-					GINT_TO_POINTER(GENERIC));
+					NULL);
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner),
 					FALSE);
 			gtk_table_attach (GTK_TABLE (table), spinner,
@@ -182,9 +186,11 @@ void build_sparktable(GtkWidget *parent_frame)
 				GINT_TO_POINTER(CONV_DIV));
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
+		g_object_set_data(G_OBJECT(spinner),"handler",
+				GINT_TO_POINTER(GENERIC));
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (spin_button_handler),
-				GINT_TO_POINTER(GENERIC));
+				NULL);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
@@ -193,9 +199,10 @@ void build_sparktable(GtkWidget *parent_frame)
 	}
 
 	button = gtk_button_new_with_label("3D View");
+	g_object_set_data(G_OBJECT(button),"table",GINT_TO_POINTER(3));
 	g_signal_connect (G_OBJECT(button), "clicked",
 			G_CALLBACK (create_3d_view),
-			GINT_TO_POINTER(3));
+			NULL);
 	gtk_table_attach (GTK_TABLE (basetable), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -233,9 +240,11 @@ void build_sparktable(GtkWidget *parent_frame)
 			GINT_TO_POINTER(TRUE));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",
+			GINT_TO_POINTER(GENERIC));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
-                        GINT_TO_POINTER(GENERIC));
+                        NULL);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
@@ -262,9 +271,11 @@ void build_sparktable(GtkWidget *parent_frame)
 			GINT_TO_POINTER(TRUE));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",
+			GINT_TO_POINTER(GENERIC));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
-                        GINT_TO_POINTER(GENERIC));
+                        NULL);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
@@ -283,9 +294,10 @@ void build_sparktable(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_VE_CONST));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(READ_VE_CONST));
+			NULL);
 	button = gtk_button_new_with_label("Permanently Store Data in ECU");
 	store_controls = g_list_append(store_controls,(gpointer)button);
 	gtk_tooltips_set_tip(tip,button,
@@ -293,9 +305,10 @@ void build_sparktable(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BURN_MS_FLASH));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(BURN_MS_FLASH));
+			NULL);
 
 	/* Not written yet */
 	return;

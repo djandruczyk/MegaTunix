@@ -158,9 +158,10 @@ void build_datalogging(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Select Log File");
 	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(SELECT_DLOG_EXP));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(SELECT_DLOG_EXP));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	label = gtk_label_new("No Log Selected Yet");
 	labels.dlog_file_lab = label;
@@ -169,9 +170,10 @@ void build_datalogging(GtkWidget *parent_frame)
 	button = gtk_button_new_with_label("Close Log File");
 	buttons.close_dlog_but = button;
 	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(CLOSE_LOGFILE));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(CLOSE_LOGFILE));
+			G_CALLBACK (std_button_handler),
+			NULL);
 
 	frame = gtk_frame_new("Logable Variables");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
@@ -306,9 +308,10 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(COMMA));
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
-			GINT_TO_POINTER(COMMA));
+			NULL);
 	if (delim_char == COMMA)
 	{
 		gtk_toggle_button_set_active(
@@ -324,9 +327,10 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(TAB));
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
-			GINT_TO_POINTER(TAB));
+			NULL);
 	if (delim_char == TAB)
 	{
 		gtk_toggle_button_set_active(
@@ -342,9 +346,10 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(SPACE));
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
-			GINT_TO_POINTER(SPACE));
+			NULL);
 	if (delim_char == SPACE)
 	{
 		gtk_toggle_button_set_active(
@@ -365,17 +370,18 @@ void build_datalogging(GtkWidget *parent_frame)
 	buttons.start_dlog_but = button;
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
 	gtk_widget_set_sensitive(button,FALSE);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_DATALOGGING));	
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(START_DATALOGGING));
-
+			G_CALLBACK (std_button_handler),
+			NULL);
 	button = gtk_button_new_with_label("Stop Datalogging");
 	buttons.stop_dlog_but = button;
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
 	gtk_widget_set_sensitive(button,FALSE);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_DATALOGGING));	
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(STOP_DATALOGGING));
+			G_CALLBACK (std_button_handler),
+			NULL);
 	return;
 }
 

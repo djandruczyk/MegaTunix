@@ -141,9 +141,10 @@ void build_memory(GtkWidget *parent_frame)
 		button = gtk_button_new_with_label(g_strdup_printf("Read Memory from 0x%.4X to 0x%.4X",base,base+range-1));
 		/* Memory offset to retrieve... */
 		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
+		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_RAW_MEMORY));
 		g_signal_connect(G_OBJECT(button),"clicked",
 				G_CALLBACK(std_button_handler),
-				GINT_TO_POINTER(READ_RAW_MEMORY));
+				NULL);
 		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
 	
 		button = gtk_radio_button_new_with_label(NULL,"Hex");
@@ -151,29 +152,32 @@ void build_memory(GtkWidget *parent_frame)
 		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
 		if (mem_view_style[z] == HEX_VIEW)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(HEX_VIEW));
 		g_signal_connect(G_OBJECT(button),"clicked",
 				G_CALLBACK(toggle_button_handler),
-				GINT_TO_POINTER(HEX_VIEW));
+				NULL);
 		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
 
 		button = gtk_radio_button_new_with_label(group,"Binary");
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
-		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
 		if (mem_view_style[z] == BINARY_VIEW)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
+		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BINARY_VIEW));
 		g_signal_connect(G_OBJECT(button),"clicked",
 				G_CALLBACK(toggle_button_handler),
-				GINT_TO_POINTER(BINARY_VIEW));
+				NULL);
 		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
 
 		button = gtk_radio_button_new_with_label(group,"Decimal");
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
-		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
 		if (mem_view_style[z] == DECIMAL_VIEW)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
+		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DECIMAL_VIEW));
 		g_signal_connect(G_OBJECT(button),"clicked",
 				G_CALLBACK(toggle_button_handler),
-				GINT_TO_POINTER(DECIMAL_VIEW));
+				NULL);
 
 		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
 

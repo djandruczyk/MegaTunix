@@ -56,6 +56,22 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_VNUM_",GINT_TO_POINTER(VNUM));
 	g_hash_table_insert(str_2_enum,"_EXTVER_",GINT_TO_POINTER(EXTVER));
 
+	/* Data Types for glade data binder.... */
+	g_hash_table_insert(str_2_enum,"_INT_",GINT_TO_POINTER(INT));
+	g_hash_table_insert(str_2_enum,"_STRING_",GINT_TO_POINTER(STRING));
+	g_hash_table_insert(str_2_enum,"_NOTHING_",GINT_TO_POINTER(CONV_NOTHING));
+	g_hash_table_insert(str_2_enum,"_MULTIPLY_",GINT_TO_POINTER(CONV_MULT));
+	g_hash_table_insert(str_2_enum,"_DIVIDE_",GINT_TO_POINTER(CONV_DIV));
+	g_hash_table_insert(str_2_enum,"_ADD_",GINT_TO_POINTER(CONV_ADD));
+	g_hash_table_insert(str_2_enum,"_SUBTRACT_",GINT_TO_POINTER(CONV_SUB));
+	g_hash_table_insert(str_2_enum,"_IMMEDIATE_",GINT_TO_POINTER(IMMEDIATE));
+	g_hash_table_insert(str_2_enum,"_DEFERRED_",GINT_TO_POINTER(DEFERRED));
+	/* Signal handler mapping */
+	g_hash_table_insert(str_2_enum,"_GENERIC_",GINT_TO_POINTER(GENERIC));
+	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",GINT_TO_POINTER(READ_VE_CONST));
+	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",GINT_TO_POINTER(BURN_MS_FLASH));
+
+
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 
 }

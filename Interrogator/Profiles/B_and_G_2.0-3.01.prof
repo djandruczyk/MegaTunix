@@ -21,3 +21,6 @@ CMD_S_0=0
 CMD_?_0=0
 CMD_I_0=0
 CMD_F_0=0
+
+[gui]
+LoadTabs=vetable_8x8_1

@@ -58,7 +58,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	extern GtkWidget *ign_widgets[];
 	extern GList *store_controls;
 	gchar *tmpbuf;
-	gint tbl = (gint)data;
+	gint tbl = (gint)g_object_get_data(G_OBJECT(widget),"table");
 
 	if (winstat[tbl-1] == TRUE)
 		return TRUE;
@@ -161,18 +161,20 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
                         G_CALLBACK (reset_3d_view), (gpointer)button);
 
         button = gtk_button_new_with_label("Get Data from ECU");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_VE_CONST));
         g_signal_connect(G_OBJECT(button), "clicked",
         		G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(READ_VE_CONST));
+			NULL);
         gtk_tooltips_set_tip(tip,button,
                         "Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 
         button = gtk_button_new_with_label("Burn to ECU");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BURN_MS_FLASH));
         g_signal_connect(G_OBJECT(button), "clicked",
                         G_CALLBACK(std_button_handler),
-                        GINT_TO_POINTER(BURN_MS_FLASH));
+			NULL);
         ve_view->burn_but = button;
         store_controls = g_list_append(store_controls,(gpointer)button);
         gtk_tooltips_set_tip(tip,button,
@@ -180,15 +182,17 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
         g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler), \
-                        GINT_TO_POINTER(START_REALTIME));
+                        G_CALLBACK (std_button_handler), 
+			NULL);
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
         g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler), \
-                        GINT_TO_POINTER(STOP_REALTIME));
+                        G_CALLBACK (std_button_handler), 
+			NULL);
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 

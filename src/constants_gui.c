@@ -109,9 +109,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(NUM_CYLINDERS_1));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(NUM_CYLINDERS_1));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -139,9 +140,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(NUM_INJECTORS_1));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(NUM_INJECTORS_1));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -171,9 +173,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(NUM_SQUIRTS_1));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(NUM_SQUIRTS_1));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -244,12 +247,13 @@ void build_constants_1(GtkWidget *parent_frame)
 	
 	button = gtk_button_new_with_label("Calculate Required Fuel");
 	g_object_set_data(G_OBJECT(button),"reqd_fuel",(gpointer)reqd_fuel_1);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REQD_FUEL_POPUP));
+        g_signal_connect(G_OBJECT(button),"clicked",
+                        G_CALLBACK(std_button_handler),
+			NULL);
         gtk_table_attach (GTK_TABLE (table), button, 0, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
-        g_signal_connect(G_OBJECT(button),"clicked",
-                        G_CALLBACK(std_button_handler),
-                        GINT_TO_POINTER(REQD_FUEL_POPUP));
 
 	label = gtk_label_new("Required Fuel (per cyl/cycle)");
 	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)label);
@@ -274,9 +278,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_1));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(REQ_FUEL_1));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -342,9 +347,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -370,9 +376,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -409,9 +416,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -436,9 +444,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -494,9 +503,10 @@ void build_constants_1(GtkWidget *parent_frame)
                         GINT_TO_POINTER(CONV_NOTHING));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(NUM_CYLINDERS_2));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
-                        GINT_TO_POINTER(NUM_CYLINDERS_2));
+			NULL);
         gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -524,9 +534,10 @@ void build_constants_1(GtkWidget *parent_frame)
                         GINT_TO_POINTER(CONV_NOTHING));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(NUM_INJECTORS_2));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
-                        GINT_TO_POINTER(NUM_INJECTORS_2));
+			NULL);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -556,9 +567,10 @@ void build_constants_1(GtkWidget *parent_frame)
                         GINT_TO_POINTER(CONV_NOTHING));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(NUM_SQUIRTS_2));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
-                        GINT_TO_POINTER(NUM_SQUIRTS_2));
+			NULL);
         gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -613,12 +625,13 @@ void build_constants_1(GtkWidget *parent_frame)
 
         button = gtk_button_new_with_label("Calculate Required Fuel");
         g_object_set_data(G_OBJECT(button),"reqd_fuel",(gpointer)reqd_fuel_2);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REQD_FUEL_POPUP));
+        g_signal_connect(G_OBJECT(button),"clicked",
+                        G_CALLBACK(std_button_handler),
+			NULL);
         gtk_table_attach (GTK_TABLE (table), button, 0, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
-        g_signal_connect(G_OBJECT(button),"clicked",
-                        G_CALLBACK(std_button_handler),
-                        GINT_TO_POINTER(REQD_FUEL_POPUP));
 
         label = gtk_label_new("Required Fuel (per cyl/cycle)");
         interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)label);
@@ -643,9 +656,10 @@ void build_constants_1(GtkWidget *parent_frame)
                         GINT_TO_POINTER(CONV_NOTHING));
         g_object_set_data(G_OBJECT(spinner),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(REQ_FUEL_2));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
-                        GINT_TO_POINTER(REQ_FUEL_2));
+                        NULL);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -714,9 +728,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -742,9 +757,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -781,9 +797,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_NOTHING));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -808,9 +825,10 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CONV_MULT));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(GENERIC));
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spin_button_handler),
-			GINT_TO_POINTER(GENERIC));
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -832,9 +850,10 @@ void build_constants_1(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_VE_CONST));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(READ_VE_CONST));
+			NULL);
 
 	button = gtk_button_new_with_label("Permanently Store Data in ECU");
         store_controls = g_list_append(store_controls,(gpointer)button);
@@ -843,9 +862,10 @@ void build_constants_1(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BURN_MS_FLASH));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(BURN_MS_FLASH));
+			NULL);
 	return;
 }
 

@@ -46,6 +46,7 @@ int main_y_origin;
 extern gint tips_in_use;
 GtkWidget *main_window;
 GtkTooltips *tip;
+GtkWidget *notebook;
 static struct 
 {
 	gchar *frame_name;	/* Textual name at the top of the frame */
@@ -61,7 +62,7 @@ static struct
 { "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE},
 { "MegaSquirt Enrichments", build_enrichments, "_Enrichments",STANDARD},
 { "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",STANDARD},
-{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",DUALTABLE},
+//{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",DUALTABLE},
 { "MegaSquirtnSpark/EDIS Spark Table", build_sparktable, "_Spark Advance",S_N_SPARK | S_N_EDIS},
 { "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD},
@@ -78,7 +79,6 @@ static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
 int setup_gui()
 {
 	GtkWidget *frame;
-	GtkWidget *notebook;
 	GtkWidget *label;
 	GtkWidget *hbox;
 	GtkWidget *vbox;

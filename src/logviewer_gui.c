@@ -123,24 +123,26 @@ void build_logviewer(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(NULL,"Realtime Mode");
 	g_object_set_data(G_OBJECT(button),"data",(gpointer)d_area);
-	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(REALTIME_VIEW));
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(toggle_button_handler),
-			GINT_TO_POINTER(REALTIME_VIEW));
+			NULL);
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(reset_viewables),
 			NULL);
+	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
 
 	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	button = gtk_radio_button_new_with_label(group,"Playback Mode");
 	g_object_set_data(G_OBJECT(button),"data",(gpointer)d_area);
-	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(PLAYBACK_VIEW));
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(PLAYBACK_VIEW));
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(reset_viewables),
 			NULL);
+	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
 
 	/* Holds the Select Button */
 	vbox3 = gtk_vbox_new(FALSE,0);
@@ -148,33 +150,37 @@ void build_logviewer(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Select Logfile to Playback");
 	buttons.logplay_sel_log_but = button;
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(SELECT_DLOG_IMP));
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(SELECT_DLOG_IMP));
+			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	gtk_widget_set_sensitive(button,FALSE);
 	
 	button = gtk_button_new_with_label("Select Parameters to view");
 	buttons.logplay_sel_parm_but = button;
 	g_object_set_data(G_OBJECT(button),"data",(gpointer)d_area);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(SELECT_PARAMS));
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(SELECT_PARAMS));
+			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	
 	vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	buttons.logplay_start_rt_but = button;
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
         g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler), \
-                        GINT_TO_POINTER(START_REALTIME));
+                        G_CALLBACK (std_button_handler),
+                        NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	button = gtk_button_new_with_label("Stop Reading RT vars");
 	buttons.logplay_stop_rt_but = button;
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
         g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler), \
-                        GINT_TO_POINTER(STOP_REALTIME));
+                        G_CALLBACK (std_button_handler),
+			NULL);
 
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 
@@ -189,9 +195,10 @@ void build_logviewer(GtkWidget *parent_frame)
         gtk_widget_set_size_request(spinner,45,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"info",(gpointer)d_area);
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(LOGVIEW_SCROLL));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
-                        GINT_TO_POINTER(LOGVIEW_SCROLL));
+			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),spinner,TRUE,FALSE,0);
 
 	return;

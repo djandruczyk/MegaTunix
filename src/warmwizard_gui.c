@@ -361,17 +361,19 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(START_REALTIME));
+			G_CALLBACK (std_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
 	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), \
-			GINT_TO_POINTER(STOP_REALTIME));
+			G_CALLBACK (std_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -383,9 +385,10 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_VE_CONST));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(READ_VE_CONST));
+			NULL);
 
 	button = gtk_button_new_with_label("Burn to ECU");
 	store_controls = g_list_append(store_controls,(gpointer)button);
@@ -394,9 +397,10 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BURN_MS_FLASH));
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
-			GINT_TO_POINTER(BURN_MS_FLASH));
+			NULL);
 
 
 	return;

@@ -24,6 +24,7 @@ gboolean toggle_button_handler(GtkWidget *, gpointer);
 gboolean bitmask_button_handler(GtkWidget *, gpointer);
 gboolean spin_button_handler(GtkWidget *, gpointer);
 gboolean spin_button_grab(GtkWidget *, GdkEventButton *, gpointer );
+gboolean key_press_event(GtkWidget *, GdkEventKey *, gpointer );
 void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 void update_ve_const(void);
 /* Prototypes */

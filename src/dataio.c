@@ -45,6 +45,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
 	extern struct Serial_Params *serial_params;
+	extern struct Firmware_Details *firmware;
 	extern struct Runtime_Common *runtime;
 
 	dbg_func(__FILE__": handle_ms_data()\n",IO_PROCESS);
@@ -98,7 +99,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 			 * exceeded... 
 			 */
 			total_read = 0;
-			total_wanted = serial_params->rtvars_size;
+			total_wanted = firmware->rtvars_size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )
@@ -157,7 +158,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 
 		case VE_AND_CONSTANTS_1:
 			total_read = 0;
-			total_wanted = serial_params->table0_size;
+			total_wanted = firmware->table0_size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )
@@ -201,7 +202,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 
 		case VE_AND_CONSTANTS_2:
 			total_read = 0;
-			total_wanted = serial_params->table1_size;
+			total_wanted = firmware->table1_size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )
@@ -245,7 +246,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 
 		case IGNITION_VARS:
 			total_read = 0;
-			total_wanted = serial_params->ignvars_size;
+			total_wanted = firmware->ignvars_size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )
@@ -291,7 +292,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 			break;
 		case RAW_MEMORY_DUMP:
 			total_read = 0;
-			total_wanted = serial_params->memblock_size;
+			total_wanted = firmware->memblock_size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )

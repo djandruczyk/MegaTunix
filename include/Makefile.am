@@ -42,6 +42,7 @@ headers = \
         sparktable_gui.h \
 	stringmatch.h \
         structures.h \
+        tabloader.h \
         threads.h \
         timeout_handlers.h \
         tools_gui.h \
