@@ -258,6 +258,8 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = 0;
 	gchar * toggle_group = NULL;
 	gchar * swap_label = NULL;
+	gboolean invert_state = FALSE;
+	gboolean state = FALSE;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
@@ -277,19 +279,22 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 		toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
 				"toggle_group");
+		invert_state = (gboolean )g_object_get_data(G_OBJECT(widget),
+				"invert_state");
 		swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
 				"swap_label");
 	}
 
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
-	{
 		bit_val = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	
-	}
-	/* Toggles a group ON/OFF based ona widgets state.... */
+
+	/* Toggles a group ON/OFF based on a widgets state.... */
 	if (toggle_group)
-		g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	{
+		state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)state);
+	}
 	/* Swaps the label of another control based on widget state... */
 	if (swap_label)
 		switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
@@ -711,11 +716,9 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				dbg_func(__FILE__": ERROR Triggler Angle spinbuttoncall, but spconfig variable is unset, BAD THINGS!!!\n",CRITICAL);
 			if (value > 112.15)	/* Extra long trigger needed */	
 			{
-				//tmp = ign_parms->spark_config1.value;
 				tmp = ms_data[page][spconfig];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 1);	/* Set xlong_trig */
-				//ign_parms->spark_config1.value = tmp;
 				ms_data[page][spconfig] = tmp;
 				write_ve_const(page, spconfig, tmp, ign_parm);
 				value -= 45.0;
@@ -723,11 +726,9 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else if (value > 89.65) /* Long trigger needed */
 			{
-				//tmp = ign_parms->spark_config1.value;
 				tmp = ms_data[page][spconfig];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 0);	/* Set long_trig */
-				//ign_parms->spark_config1.value = tmp;
 				ms_data[page][spconfig] = tmp;
 				write_ve_const(page, spconfig, tmp, ign_parm);
 				value -= 22.5;
@@ -735,10 +736,8 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else	// value <= 89.65 degrees, no long trigger
 			{
-				//tmp = ign_parms->spark_config1.value;
 				tmp = ms_data[page][spconfig];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
-				//ign_parms->spark_config1.value = tmp;
 				ms_data[page][spconfig] = tmp;
 				write_ve_const(page, spconfig, tmp, ign_parm);
 				dload_val = convert_before_download(widget,value);
@@ -1007,6 +1006,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gint bit_pos = -1;
 	gint bitmask = -1;
 	gchar * toggle_group = NULL;
+	gboolean invert_state = FALSE;
+	gboolean state = FALSE;
 	gchar * swap_label = NULL;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 
@@ -1032,6 +1033,8 @@ void update_widget(gpointer object, gpointer user_data)
 				"temp_dep");
 		toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
 				"toggle_group");
+		invert_state = (gboolean)g_object_get_data(G_OBJECT(widget),
+				"invert_state");
 		swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
 				"swap_label");
 
@@ -1061,7 +1064,10 @@ void update_widget(gpointer object, gpointer user_data)
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);
 		}
 		if (toggle_group)
-			g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+		{
+			state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)state);
+		}
 		/* Swaps the label of another control based on widget state... */
 		if (swap_label)
 			switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));

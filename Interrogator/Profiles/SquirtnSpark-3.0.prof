@@ -42,6 +42,7 @@ CMD_F_0=0
 
 [gui]
 LoadTabs=B_n_G_constants,enrichments_BnG,vetable_8x8_1,msns-3.0_ignition,sparktable_8x8_1
+RealtimeMapFile=SquirtnSpark-3.x_rtv_map
 
 [lookuptables]
 tables=mat_table,clt_table,afr_table,kpa_table

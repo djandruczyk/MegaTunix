@@ -132,8 +132,8 @@ handler=_GENERIC_
 swap_label=fast_idle_temp_label
 
 [pwm_idle_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler,toggle_group
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler,toggle_group,invert_state
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_
 page=0
 offset=118
 bit_pos=4
@@ -142,6 +142,7 @@ bitmask=16
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 toggle_group=enh_idle
+invert_state=FALSE
 
 
 #----- SpinButtons -----------------------------------------------------------
