@@ -84,12 +84,17 @@ struct DynamicSpinners
 {
 	GtkWidget *fast_idle_temp_spin;		/* Spinner */
 	GtkWidget *slow_idle_temp_spin;		/* Spinner */
-	GtkWidget *req_fuel_total_spin;		/* Spinner */
-	GtkWidget *req_fuel_per_squirt_spin;	/* Spinner */
 	GtkWidget *ego_temp_active_spin;	/* Spinner */
-	GtkWidget *inj_per_cycle_spin;		/* Spinner */
-	GtkWidget *injectors_spin;		/* Spinner */
-	GtkWidget *cylinders_spin;		/* Spinner */
+	GtkWidget *req_fuel_total_1_spin;	/* Spinner */
+	GtkWidget *req_fuel_per_squirt_1_spin;	/* Spinner */
+	GtkWidget *inj_per_cycle_1_spin;	/* Spinner */
+	GtkWidget *injectors_1_spin;		/* Spinner */
+	GtkWidget *cylinders_1_spin;		/* Spinner */
+	GtkWidget *req_fuel_total_2_spin;	/* Spinner */
+	GtkWidget *req_fuel_per_squirt_2_spin;	/* Spinner */
+	GtkWidget *inj_per_cycle_2_spin;	/* Spinner */
+	GtkWidget *injectors_2_spin;		/* Spinner */
+	GtkWidget *cylinders_2_spin;		/* Spinner */
 	GtkWidget *warmwizard[10];		/* Spinner */
 };
 

@@ -11,6 +11,7 @@ headers = \
         datalogging_const.h \
         datalogging_gui.h \
         defines.h \
+	dt_params_gui.h \
 	eng_vitals_gui.h \
         enrichments_gui.h \
 	enums.h \

@@ -51,7 +51,7 @@ void build_tools(GtkWidget *parent_frame)
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox2),0);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);

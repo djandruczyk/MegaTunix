@@ -27,8 +27,10 @@ static gboolean warning_present = FALSE;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;
 GList *store_widgets;	/* list of widgets that have color change attributes*/
-GList *interdep_widgets;/* list of widgets that have color change attributes*/
-GList *reqfuel_widgets;	/* list of widgets that have color change attributes*/
+GList *interdep_1_widgets;/* list of widgets that have color change attributes*/
+GList *interdep_2_widgets;/* list of widgets that have color change attributes*/
+GList *reqfuel_1_widgets;	/* list of widgets that have color change attributes*/
+GList *reqfuel_2_widgets;	/* list of widgets that have color change attributes*/
 
 
 void set_store_buttons_state(GuiState state)
@@ -36,14 +38,24 @@ void set_store_buttons_state(GuiState state)
 	g_list_foreach(store_widgets, set_widget_color,(gpointer)state);
 }
 
-void set_interdep_state(GuiState state)
+void set_interdep_state(GuiState state, gint table)
 {
-	g_list_foreach(interdep_widgets, set_widget_color,(gpointer)state);
+	if (table == 1)
+		g_list_foreach(interdep_1_widgets, set_widget_color,(gpointer)state);
+	else if (table == 2)
+		g_list_foreach(interdep_2_widgets, set_widget_color,(gpointer)state);
+	else
+		fprintf(stderr,__FILE__": set_interdep_state(), invalid table number %i\n",table);
 }
 
-void set_reqfuel_state(GuiState state)
+void set_reqfuel_state(GuiState state, gint table)
 {
-	g_list_foreach(reqfuel_widgets, set_widget_color,(gpointer)state);
+	if (table == 1)
+		g_list_foreach(reqfuel_1_widgets, set_widget_color,(gpointer)state);
+	else if (table == 2)
+		g_list_foreach(reqfuel_2_widgets, set_widget_color,(gpointer)state);
+	else
+		fprintf(stderr,__FILE__": set_reqfuel_state(), invalid table number %i\n",table);
 }
 
 void set_widget_color(gpointer widget, gpointer state)
@@ -125,16 +137,24 @@ void
 		counter = (gint)result;
 
 	counter++;
-	tmpbuf = g_strdup_printf("%i. ",counter);
+	tmpbuf = g_strdup_printf(" %i. ",counter);
 	g_object_set_data(G_OBJECT(view),"counter",GINT_TO_POINTER(counter));	
 
-	if (count) /* if TRUE, display counter, else don't */
-		gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 	if (tagname == NULL)
+	{
+		if (count) /* if TRUE, display counter, else don't */
+			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
+	}
 	else
+	{
+		if (count) /* if TRUE, display counter, else don't */
+			gtk_text_buffer_insert_with_tags_by_name(textbuffer,
+					&iter,tmpbuf,-1,tagname,NULL);
+	
 		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,
 				message,-1,tagname,NULL);
+	}
 
 	/* Get it's parent (the scrolled window) and slide it to the
 	 * bottom so the new message is visible... 

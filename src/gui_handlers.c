@@ -41,7 +41,6 @@ extern gchar *delim;
 extern gint statuscounts_id;
 extern gint max_logables;
 extern gint ready;
-static gint num_squirts = 1;
 extern gint req_fuel_popup;
 extern gint logging_mode;
 extern gint read_wait_time;
@@ -70,7 +69,6 @@ static gint logviewer_id = -1;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean fahrenheit;
-gint num_cylinders = 1;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
@@ -104,14 +102,20 @@ const gint mt_full[] =
 	0,0,0,0 
 }; 
 
-
 static gboolean paused_handlers = FALSE;
 static gboolean constants_loaded = FALSE;
-static gint num_injectors = 1;
+static gint num_squirts_1 = 1;
+static gint num_squirts_2 = 1;
+gint num_cylinders_1 = 1;
+gint num_cylinders_2 = 1;
+static gint num_injectors_1 = 1;
+static gint num_injectors_2 = 1;
 static gfloat req_fuel_total = 0.0;
 static gboolean err_flag = FALSE;
-static GList *offsets = NULL;
-static gint offset_data[5]; /* Only 4 interdependant vars... */
+static GList *offsets_1 = NULL;
+static gint offset_data_1[5]; /* Only 4 interdependant vars... */
+static GList *offsets_2 = NULL;
+static gint offset_data_2[5]; /* Only 4 interdependant vars... */
 
 void leave(GtkWidget *widget, gpointer data)
 {
@@ -359,18 +363,18 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 					ve_const->alternate=0;
 					dload_val = 0;
 				}
-				if (g_list_find(offsets,
+				if (g_list_find(offsets_1,
 							GINT_TO_POINTER(offset))==NULL)
 				{
-					offsets = g_list_append(offsets,
+					offsets_1 = g_list_append(offsets_1,
 							GINT_TO_POINTER(offset));
-					offset_data[g_list_index(offsets,
+					offset_data_1[g_list_index(offsets_1,
 							GINT_TO_POINTER(offset))] 
 						= dload_val;	
 				}
 				else
 				{
-					offset_data[g_list_index(offsets,
+					offset_data_1[g_list_index(offsets_1,
 							GINT_TO_POINTER(offset))] 
 						= dload_val;	
 				}
@@ -534,95 +538,95 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			req_fuel_total = value;
 			check_req_fuel_limits();
 			break;
-		case NUM_SQUIRTS:
+		case NUM_SQUIRTS_1:
 			/* This actuall effects another variable */
-			num_squirts = tmpi;
+			num_squirts_1 = tmpi;
 			ve_const->divider = 
-				(gint)(((float)num_cylinders/
-					(float)num_squirts)+0.001);
+				(gint)(((float)num_cylinders_1/
+					(float)num_squirts_1)+0.001);
 			dload_val = ve_const->divider;
-			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
+			if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
 			{
-				offsets = g_list_append(offsets,
+				offsets_1 = g_list_append(offsets_1,
 						GINT_TO_POINTER(offset));
-				offset_data[g_list_index(offsets,
+				offset_data_1[g_list_index(offsets_1,
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
 			else
 			{
-				offset_data[g_list_index(offsets,
+				offset_data_1[g_list_index(offsets_1,
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
-			if (num_cylinders % num_squirts)
+			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED);
+				set_reqfuel_state(RED,1);
 			}
 			else
 			{
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK);
+				set_reqfuel_state(BLACK,1);
 				check_req_fuel_limits();
 			}
 			break;
-		case NUM_CYLINDERS:
+		case NUM_CYLINDERS_1:
 			/* Updates a shared bitfield */
-			num_cylinders = tmpi;
+			num_cylinders_1 = tmpi;
 			tmp = ve_const->config11.value;
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_const->config11.value = tmp;
 			ve_const->divider = 
-				(gint)(((float)num_cylinders/
-					(float)num_squirts)+0.001);
+				(gint)(((float)num_cylinders_1/
+					(float)num_squirts_1)+0.001);
 			dload_val = tmp;
-			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
+			if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
 			{
-				offsets = g_list_append(offsets,
+				offsets_1 = g_list_append(offsets_1,
 						GINT_TO_POINTER(offset));
-				offset_data[g_list_index(offsets,
+				offset_data_1[g_list_index(offsets_1,
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
 			else
 			{
-				offset_data[g_list_index(offsets,
+				offset_data_1[g_list_index(offsets_1,
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
-			if (num_cylinders % num_squirts)
+			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED);	
+				set_reqfuel_state(RED,1);	
 			}
 			else
 			{
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK);	
+				set_reqfuel_state(BLACK,1);	
 				check_req_fuel_limits();
 			}
 			break;
-		case NUM_INJECTORS:
+		case NUM_INJECTORS_1:
 			/* Updates a shared bitfield */
-			num_injectors = tmpi;
+			num_injectors_1 = tmpi;
 			tmp = ve_const->config12.value;
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_const->config12.value = tmp;
 			dload_val = tmp;
-			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
+			if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
 			{
-				offsets = g_list_append(offsets,
+				offsets_1 = g_list_append(offsets_1,
 						GINT_TO_POINTER(offset));
-				offset_data[g_list_index(offsets,
+				offset_data_1[g_list_index(offsets_1,
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
 			else
 			{
-				offset_data[g_list_index(offsets,
+				offset_data_1[g_list_index(offsets_1,
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
@@ -676,13 +680,13 @@ void update_ve_const()
 	 */
 
 	/* req-fuel 
-	 *                                        /     num_injectors     \
+	 *                                        /     num_injectors_1   \
 	 *         	   req_fuel_per_squirt * (-------------------------)
 	 *                                        \ divider*(alternate+1) /
 	 * req_fuel_total = --------------------------------------------------
 	 *				10
 	 *
-	 * where divider = num_cylinders/num_squirts;
+	 * where divider = num_cylinders_1/num_squirts_1;
 	 *
 	 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
 	 * the req_fuel variable.  Take note when doing conversions.  On screen
@@ -695,33 +699,33 @@ void update_ve_const()
 	tmp /= 10.0;
 	req_fuel_total = tmp;
 
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_total_spin),
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_total_1_spin),
 			tmp);
 
 	/* req-fuel info box  */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_per_squirt_spin),
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_per_squirt_1_spin),
 			ve_const->req_fuel/10.0);
 
 	/* CONFIG11-13 related buttons */
 	/* Cylinders */
 	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(spinners.cylinders_spin),
+			GTK_SPIN_BUTTON(spinners.cylinders_1_spin),
 			ve_const->config11.bit.cylinders+1);
-	num_cylinders = ve_const->config11.bit.cylinders+1;
+	num_cylinders_1 = ve_const->config11.bit.cylinders+1;
 
 	/* Number of injectors */
 	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(spinners.injectors_spin),
+			GTK_SPIN_BUTTON(spinners.injectors_1_spin),
 			ve_const->config12.bit.injectors+1);
-	num_injectors = ve_const->config12.bit.injectors+1;
+	num_injectors_1 = ve_const->config12.bit.injectors+1;
 
 	/* Injections per cycle */
 	tmp =	(float)(ve_const->config11.bit.cylinders+1) /
 		(float)(ve_const->divider);
 	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(spinners.inj_per_cycle_spin),
+			GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
 			tmp);
-	num_squirts = (gint)tmp;
+	num_squirts_1 = (gint)tmp;
 
 	/* Speed Density or Alpha-N */
 	if (ve_const->config13.bit.inj_strat)
@@ -852,13 +856,13 @@ void check_req_fuel_limits()
 	ve_const = (struct Ve_Const_Std *)ms_data;
 
 	/* req-fuel 
-	 *                                        /     num_injectors     \
+	 *                                        /     num_injectors_1     \
 	 *         	   req_fuel_per_squirt * (-------------------------)
 	 *                                        \ divider*(alternate+1) /
 	 * req_fuel_total = --------------------------------------------------
 	 *				10
 	 *
-	 * where divider = num_cylinders/num_squirts;
+	 * where divider = num_cylinders_1/num_squirts_1;
 	 *
 	 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
 	 * the req_fuel variable.  Take note when doing conversions.  On screen
@@ -866,7 +870,7 @@ void check_req_fuel_limits()
 	 * 
 	 */
 
-	tmp =	(float)(ve_const->divider*(float)(ve_const->alternate+1))/(float)(num_injectors);
+	tmp =	(float)(ve_const->divider*(float)(ve_const->alternate+1))/(float)(num_injectors_1);
 
 	/* This is 1 tenth the value as the one screen stuff is 1/10th 
 	 * for the ms variable,  it gets converted farther down, just 
@@ -886,7 +890,7 @@ void check_req_fuel_limits()
 	}
 	/* req-fuel info box  */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-				spinners.req_fuel_per_squirt_spin),
+				spinners.req_fuel_per_squirt_1_spin),
 			req_fuel_per_squirt);
 	page = 0;
 	if (tuning_zone_flag)
@@ -903,14 +907,14 @@ void check_req_fuel_limits()
 		 * change the color of the potential offenders onscreen to
 		 * let the user know something is wrong..
 		 */
-		set_interdep_state(RED);
+		set_interdep_state(RED,1);
 	}
 	else
 	{	/*
 		 * Everything is OK with all inter-dependant variables.
 		 * settings all previous gui enties to normal state...
 		 */
-		set_interdep_state(BLACK);
+		set_interdep_state(BLACK,1);
 
 		/* All Tested succeeded, download Required fuel, 
 		 * then iterate through the list of offsets of changed
@@ -927,19 +931,19 @@ void check_req_fuel_limits()
 		offset = 90;
 		dload_val = convert_before_download(offset,req_fuel_per_squirt);
 		write_ve_const(dload_val, offset);
-		for (index=0;index<g_list_length(offsets);index++)
+		for (index=0;index<g_list_length(offsets_1);index++)
 		{
 			gint offset;
 			gint data;
-			offset = GPOINTER_TO_INT(g_list_nth_data(offsets,index));
-			data = offset_data[g_list_index(offsets,
-					g_list_nth_data(offsets,index))];
+			offset = GPOINTER_TO_INT(g_list_nth_data(offsets_1,index));
+			data = offset_data_1[g_list_index(offsets_1,
+					g_list_nth_data(offsets_1,index))];
 			write_ve_const(data, offset);
 		}
-		g_list_free(offsets);
-		offsets = NULL;
+		g_list_free(offsets_1);
+		offsets_1 = NULL;
 		for (index=0;index<5;index++)
-			offset_data[index]=0;
+			offset_data_1[index]=0;
 	}
 	return ;
 

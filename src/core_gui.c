@@ -18,6 +18,7 @@
 #include <core_gui.h>
 #include <datalogging_gui.h>
 #include <defines.h>
+#include <dt_params_gui.h>
 #include <eng_vitals_gui.h>
 #include <enrichments_gui.h>
 #include <enums.h>
@@ -54,10 +55,11 @@ static struct
 } notebook_tabs[] = { 
 { "About MegaTunix", build_about, "_About",TRUE, FALSE},
 { "General MegaTunix Settings", build_general, "_General",TRUE, FALSE},
-{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE, FALSE},
+{ "MegaSquirt Communications Parameters", build_comms, "_Communications",TRUE, FALSE},
 { "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",TRUE, FALSE},
-{ "MegaSquirt Constants", build_constants_1, "Table1 _Constants",TRUE, FALSE},
-{ "MegaSquirt Constants", build_constants_2, "Table2 _Constants",TRUE, TRUE},
+{ "MegaSquirt Constants", build_constants_1, "Table_1 Constants",TRUE, FALSE},
+{ "MegaSquirt Constants", build_constants_2, "Table_2 Constants",TRUE, TRUE},
+{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",TRUE, TRUE},
 { "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE, FALSE},
 { "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",TRUE, FALSE},
 { "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",TRUE, TRUE},

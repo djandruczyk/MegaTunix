@@ -19,8 +19,8 @@
 
 /* Prototypes */
 void set_store_buttons_state(GuiState);
-void set_interdep_state(GuiState );
-void set_reqfuel_state(GuiState );
+void set_interdep_state(GuiState, gint );
+void set_reqfuel_state(GuiState, gint );
 void set_widget_color(gpointer, gpointer );
 void update_logbar(GtkWidget *, gchar *, gchar *, gboolean, gboolean);
 void no_ms_connection(void);

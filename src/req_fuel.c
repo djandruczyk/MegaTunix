@@ -25,12 +25,9 @@
 #include <structures.h>
 
 gboolean req_fuel_popup = FALSE;
-static gint rpmk_offset = 98;
-static GtkWidget *popup;
-//struct Reqd_Fuel reqd_fuel = {NULL,NULL,NULL,NULL,NULL,NULL,300,8,19,2.7,3.5,0.0,14.7};
+//static gint rpmk_offset = 98;
 extern struct DynamicSpinners spinners;
 extern struct DynamicAdjustments adjustments;
-extern gint num_cylinders;
 
 
 int reqd_fuel_popup()
@@ -214,14 +211,6 @@ int reqd_fuel_popup()
 */
 	return TRUE;
 }
-
-int close_popup(GtkWidget *widget, gpointer data)
-{
-	gtk_widget_destroy(popup);
-	req_fuel_popup = FALSE;
-	return TRUE;
-}
-
 int update_reqd_fuel(GtkWidget *widget, gpointer data)
 {
 	/*
