@@ -46,7 +46,6 @@ void handle_ms_data(int which_data)
 			res = read(serial_params.fd,ptr,serial_params.raw_bytes); 
 			/* the number of bytes expected for raw data read */
 			if (res != serial_params.raw_bytes) 
-
 			{
 				/* Serial I/O problem, resetting port 
 				 * This problem can occur if the MS is 
@@ -62,6 +61,7 @@ void handle_ms_data(int which_data)
 				 * because the serial I/O thread depends on 
 				 * this function and blocks until we return.
 				 */
+				printf("warning  serial data read over bounds\n");
 				close_serial();
 				open_serial(serial_params.comm_port);
 				setup_serial_params();
@@ -143,29 +143,30 @@ void handle_ms_data(int which_data)
  *	printf("bspot1 RAW:%i,\t\tActual %i\n", raw->bspot1,out.bspot1);
  *	printf("bspot2 RAW:%i,\t\tActual %i\n", raw->bspot2,out.bspot2);
  *	printf("bspot3 RAW:%i,\t\tActual %i\n", raw->bspot3,out.bspot3);
- *	printf(" ENGINE BITS %i %i %i %i %i %i %i %i\n",\
- *			out.engine.bit.running,\
- *			out.engine.bit.crank,\
- *			out.engine.bit.startw,\
- *			out.engine.bit.warmup,\
- *			out.engine.bit.tpsaen,\
- *			out.engine.bit.tpsden,\
- *			out.engine.bit.mapaen,\
- *			out.engine.bit.reserved);
- *	if (out.engine.bit.running == 1)
- *		printf("Engine is running\n");
- *	if (out.engine.bit.crank == 1)
- *		printf("Engine is cranking\n");
- *	if (out.engine.bit.startw == 1)
- *		printf("ECU is in Startup warmup enrich (after-start)\n");
- *	if (out.engine.bit.warmup == 1)
- *		printf("ECU is in normal warmup enrich (cold temps)\n");
- *	if (out.engine.bit.tpsaen == 1)
- *		printf("Engine is getting an Accel Shot (TPSAEN)\n");
- *	if (out.engine.bit.tpsden == 1)
- *		printf("Engine is deceleration (Coasting, TPSDEN)\n");
- *	if (out.engine.bit.mapaen == 1)
- *		printf("ECU is MAP accel mode\n");
+ *
+ * 	printf(" ENGINE BITS %i %i %i %i %i %i %i %i\n",\
+ * 			runtime->engine.bit.running,\
+ * 			runtime->engine.bit.crank,\
+ * 			runtime->engine.bit.startw,\
+ * 			runtime->engine.bit.warmup,\
+ * 			runtime->engine.bit.tpsaen,\
+ * 			runtime->engine.bit.tpsden,\
+ * 			runtime->engine.bit.mapaen,\
+ * 			runtime->engine.bit.reserved);
+ * 	if (runtime->engine.bit.running == 1)
+ * 		printf("Engine is running\n");
+ * 	if (runtime->engine.bit.crank == 1)
+ * 		printf("Engine is cranking\n");
+ * 	if (runtime->engine.bit.startw == 1)
+ * 		printf("ECU is in Startup warmup enrich (after-start)\n");
+ * 	if (runtime->engine.bit.warmup == 1)
+ * 		printf("ECU is in normal warmup enrich (cold temps)\n");
+ * 	if (runtime->engine.bit.tpsaen == 1)
+ * 		printf("Engine is getting an Accel Shot (TPSAEN)\n");
+ * 	if (runtime->engine.bit.tpsden == 1)
+ * 		printf("Engine is deceleration (Coasting, TPSDEN)\n");
+ * 	if (runtime->engine.bit.mapaen == 1)
+ * 		printf("ECU is MAP accel mode\n");
  *
  *	printf("iteration: %i\n",count);
  *	printf("Error Count: %i\n",serial_params.errcount);

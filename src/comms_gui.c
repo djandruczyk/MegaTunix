@@ -215,25 +215,25 @@ int build_comms(GtkWidget *parent_frame)
 
 	label = gtk_label_new("Hard Reset Count");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	ms_reset_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 5);
-	gtk_table_attach (GTK_TABLE (table), ms_reset_entry, 3, 4, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), ms_reset_entry, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Serial I/O Error Count");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	ms_sioerr_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 5);
-	gtk_table_attach (GTK_TABLE (table), ms_sioerr_entry, 3, 4, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), ms_sioerr_entry, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 

@@ -34,6 +34,7 @@ int build_runtime(GtkWidget *parent_frame)
 	GtkWidget *label;
 	GtkWidget *table;
 	GtkWidget *pbar;
+	GtkWidget *button;
 
 	vbox = gtk_vbox_new(FALSE,0);
         gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -481,6 +482,31 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 	runtime_data.tpsaccel_pbar = pbar;
 	
+	frame = gtk_frame_new("Commands");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+
+	table = gtk_table_new(1,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+        gtk_table_set_col_spacings(GTK_TABLE(table),5);
+        gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	button = gtk_button_new_with_label("Start Reading RT Vars");
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(START_REALTIME));
+        gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_button_new_with_label("Stop Reading RT vars");
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(STOP_REALTIME));
+        gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	return TRUE;
 }
 
@@ -488,6 +514,7 @@ void update_runtime_vars()
 {
 	char buff[120];
 	gint pos = 0;
+	gfloat tmpf;
 	extern struct ms_data_v1_and_v2 *runtime;
 	extern struct ms_data_v1_and_v2 *runtime_last;
 	/* test to see if data changed 
@@ -507,132 +534,146 @@ void update_runtime_vars()
 	{
 		g_snprintf(buff,10,"%.2f",runtime->ego);
 		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),buff);
+		tmpf = runtime->ego/5.0 <= 1.0 ? runtime->ego/5.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.ego_pbar),
-				runtime->ego/5.0);
+				tmpf);
 	}
 	if (runtime->map != runtime_last->map)
 	{
 		g_snprintf(buff,10,"%i",runtime->map);
 		gtk_label_set_text(GTK_LABEL(runtime_data.map_lab),buff);
+		tmpf = runtime->map/255.0 <= 1.0 ? runtime->map/255.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.map_pbar),
-				runtime->map/255.0);
+				tmpf);
 	}
 	if (runtime->clt != runtime_last->clt)
 	{
 		g_snprintf(buff,10,"%i",runtime->clt-40);
 		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),buff);
+		tmpf = (runtime->clt-40)/255.0 <= 1.0 ? (runtime->clt-40)/255.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.clt_pbar),
-				(runtime->clt-40)/255.0);
+				tmpf);
 	}
 	if (runtime->batt != runtime_last->batt)
 	{
 		g_snprintf(buff,10,"%.2f",runtime->batt);
 		gtk_label_set_text(GTK_LABEL(runtime_data.batt_lab),buff);
+		tmpf = runtime->batt/18.0 <= 1.0 ? runtime->batt/18.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.batt_pbar),
-				runtime->batt/18.0);
+				tmpf);
 	}
 	if (runtime->gammae != runtime_last->gammae)
 	{
 		g_snprintf(buff,10,"%i",runtime->gammae);
 		gtk_label_set_text(GTK_LABEL(runtime_data.gammae_lab),buff);
+		tmpf = runtime->gammae/200.0 <= 1.0 ? runtime->gammae/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.gammae_pbar),
-				runtime->gammae/200.0);
+				tmpf);
 	}
 	if (runtime->mat != runtime_last->mat)
 	{
 		g_snprintf(buff,10,"%i",runtime->mat-40);
 		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),buff);
+		tmpf = (runtime->mat-40)/255.0 <= 1.0 ? (runtime->mat-40)/255.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.mat_pbar),
-				(runtime->mat-40)/255.0);
+				tmpf);
 	}
 	if (runtime->tps != runtime_last->tps)
 	{
 		g_snprintf(buff,10,"%i",runtime->tps);
 		gtk_label_set_text(GTK_LABEL(runtime_data.tps_lab),buff);
+		tmpf = runtime->tps/100.0 <= 1.0 ? runtime->tps/100.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.tps_pbar),
-				runtime->tps/100.0);
+				tmpf);
 	}
 	if (runtime->rpm != runtime_last->rpm)
 	{
 		g_snprintf(buff,10,"%i",runtime->rpm);
 		gtk_label_set_text(GTK_LABEL(runtime_data.rpm_lab),buff);
+		tmpf = runtime->rpm/8000.0 <= 1.0 ? runtime->rpm/8000.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.rpm_pbar),
-				runtime->rpm/20000.0);
+				tmpf);
 	}
 	if (runtime->pw != runtime_last->pw)
 	{
 		g_snprintf(buff,10,"%.1f",runtime->pw);
 		gtk_label_set_text(GTK_LABEL(runtime_data.pw_lab),buff);
+		tmpf = runtime->pw/25.5 <= 1.0 ? runtime->pw/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.pw_pbar),
-				runtime->pw/25.5);
+				tmpf);
 	}
 	if (runtime->egocorr != runtime_last->egocorr)
 	{
 		g_snprintf(buff,10,"%i",runtime->egocorr);
 		gtk_label_set_text(GTK_LABEL(runtime_data.egocorr_lab),buff);
+		tmpf = runtime->egocorr/200.0 <= 1.0 ? runtime->egocorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.egocorr_pbar),
-				runtime->egocorr/200.0);
+				tmpf);
 	}
 	if (runtime->barocorr != runtime_last->barocorr)
 	{
 		g_snprintf(buff,10,"%i",runtime->barocorr);
 		gtk_label_set_text(GTK_LABEL(runtime_data.barocorr_lab),buff);
+		tmpf = runtime->barocorr/200.0 <= 1.0 ? runtime->barocorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.barocorr_pbar),
-				runtime->barocorr/200.0);
+				tmpf);
 	}
 	if (runtime->warmcorr != runtime_last->warmcorr)
 	{
 		g_snprintf(buff,10,"%i",runtime->warmcorr);
 		gtk_label_set_text(GTK_LABEL(runtime_data.warmcorr_lab),buff);
+		tmpf = runtime->warmcorr/200.0 <= 1.0 ? runtime->warmcorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.warmcorr_pbar),
-				runtime->warmcorr/200.0);
+				tmpf);
 	}
 	if (runtime->aircorr != runtime_last->aircorr)
 	{
 		g_snprintf(buff,10,"%i",runtime->aircorr);
 		gtk_label_set_text(GTK_LABEL(runtime_data.aircorr_lab),buff);
+		tmpf = runtime->aircorr/200.0 <= 1.0 ? runtime->aircorr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.aircorr_pbar),
-				runtime->aircorr/200.0);
+				tmpf);
 	}
 	if (runtime->vecurr != runtime_last->vecurr)
 	{
 		g_snprintf(buff,10,"%i",runtime->vecurr);
 		gtk_label_set_text(GTK_LABEL(runtime_data.vecurr_lab),buff);
+		tmpf = runtime->vecurr/200.0 <= 1.0 ? runtime->vecurr/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.vecurr_pbar),
-				runtime->vecurr/200.0);
+				tmpf);
 	}
 	if (runtime->tpsaccel != runtime_last->tpsaccel)
 	{
 		g_snprintf(buff,10,"%.1f",runtime->tpsaccel/10.0);
 		gtk_label_set_text(GTK_LABEL(runtime_data.tpsaccel_lab),buff);
+		tmpf = (runtime->tpsaccel/10.0)/25.5 <= 1.0 
+				? (runtime->tpsaccel/10.0)/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.tpsaccel_pbar),
-				(runtime->tpsaccel/10.0)/25.5);
+				tmpf);
 	}
 	if (runtime->dcycle != runtime_last->dcycle)
 	{
-		if (runtime->dcycle >100)
-			runtime->dcycle = 100;
 		g_snprintf(buff,10,"%.1f",runtime->dcycle);
-
+		tmpf = runtime->dcycle/100.0 <= 1.0 ? runtime->dcycle/100.0: 1.0;
 		gtk_label_set_text(GTK_LABEL(runtime_data.dcycle_lab),buff);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.dcycle_pbar),
-				runtime->dcycle/100.0);
+				tmpf);
 	}
 	if (runtime->engine.value != runtime_last->engine.value)
 	{
@@ -642,15 +683,15 @@ void update_runtime_vars()
 		if (runtime->engine.bit.crank)
 			pos = g_snprintf(buff,120,"Engine is Cranking, ");
 		if (runtime->engine.bit.startw)
-			pos = g_snprintf(buff+pos,120,"AfterStart Enrich, ");
+			pos += g_snprintf(buff+pos,120,"AfterStart Enrich, ");
 		if (runtime->engine.bit.warmup)
-			pos = g_snprintf(buff+pos,120,"Normal Warmup Enrich ");
+			pos += g_snprintf(buff+pos,120,"Normal Warmup Enrich ");
 		if (runtime->engine.bit.tpsaen)
-			pos = g_snprintf(buff+pos,120,"Accel Shot (TPSAEN) ");
+			pos += g_snprintf(buff+pos,120,"Accel Shot (TPSAEN) ");
 		if (runtime->engine.bit.tpsden)
-			pos = g_snprintf(buff+pos,120,"Engine is Decelerating (TPSDEN) ");
+			pos += g_snprintf(buff+pos,120,"Engine is Decelerating (TPSDEN) ");
 		if (runtime->engine.bit.mapaen)
-			pos = g_snprintf(buff+pos,120,"MAP accel mode (MAPAEN) ");
+			pos += g_snprintf(buff+pos,120,"MAP accel mode (MAPAEN) ");
 		update_statusbar(run_statbar,run_context_id,buff);
 
 		
