@@ -3,7 +3,7 @@ name=MegaSquirtnEDIS v3.007
 
 [parameters]
 SignatureQueryString=EDIS v3.007
-ExtVerQueryString=
+ExtVerQueryString=v3.007
 VerNumber=30
 Capabilities=
 Rt_Cmd_Key=CMD_UPPER_A
@@ -72,7 +72,7 @@ CMD_UPPER_A=22
 CMD_UPPER_C=1
 CMD_UPPER_Q=1
 CMD_UPPER_V=125
-CMD_UPPER_S=32
+CMD_UPPER_?=32
 CMD_UPPER_I=95
 
 [gui]
