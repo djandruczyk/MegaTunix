@@ -2371,7 +2371,7 @@
 			  <property name="label" translatable="yes">3D View</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <signal name="clicked" handler="create_3d_view" last_modification_time="Mon, 30 Aug 2004 18:44:05 GMT"/>
+			  <signal name="clicked" handler="create_ve3d_view" last_modification_time="Mon, 30 Aug 2004 18:44:05 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>

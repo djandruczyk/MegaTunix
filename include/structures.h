@@ -202,7 +202,7 @@ struct Page_Params
  \brief The Canidate structure is used for interrogation, each potential
  firmware is interrogated and as it is the data is fed into this structure
  for comparison against know values (interrogation profiles), upon a match
- the needed data is copied into a struct Firmware_Details structure
+ the needed data is copied into a Firmware_Details structure
  \see Firmware_Details
  */
 struct Canidate

@@ -26,31 +26,24 @@
 #include <gdk/gdkkeysyms.h>
 
 /* Prototypes */
-gint create_3d_view(GtkWidget *, gpointer );
-gint reset_3d_winstat(GtkWidget *);
+gint create_ve3d_view(GtkWidget *, gpointer );
+gint free_ve3d_view(GtkWidget *);
 GdkGLConfig* get_gl_config(void);
-void ve_realize (GtkWidget *, gpointer );
-gboolean ve_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);
-gboolean ve_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
-gboolean ve_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
-gboolean ve_motion_notify_event(GtkWidget *, GdkEventMotion *,gpointer);
-gboolean ve_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
-gboolean ve_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
-gboolean ve_key_press_event (GtkWidget *, GdkEventKey *, gpointer );
-gboolean ve_focus_in_event (GtkWidget *, GdkEventFocus *, gpointer );
-void ve_draw_ve_grid(void *);
-void ve_reset_ve_grid(void);
-void ve_normalize(gfloat );
-void ve_draw_grid_point(gfloat , gfloat , gfloat , gint );
-void ve_draw_labels(void);
-void ve_draw_active_indicator(void *);
-void ve_calculate_scaling(void *);
-void ve_draw_axis(void *);
-void ve_drawtext(gchar * text, gfloat x, gfloat y, gfloat z);
-void ve_load_font_metrics(void);
+void ve3d_realize (GtkWidget *, gpointer );
+gboolean ve3d_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);
+gboolean ve3d_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+gboolean ve3d_motion_notify_event(GtkWidget *, GdkEventMotion *,gpointer);
+gboolean ve3d_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
+gboolean ve3d_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
+void ve3d_calculate_scaling(void *);
+void ve3d_draw_ve_grid(void *);
+void ve3d_draw_active_indicator(void *);
+void ve3d_draw_runtime_indicator(void *);
+void ve3d_draw_axis(void *);
+void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);
+void ve3d_load_font_metrics(void);
 void reset_3d_view(GtkWidget *);
-void initialize_ve_view(void *);
-void ve_draw_runtime_indicator(void *);
+void initialize_ve3d_view(void *);
 
 /* Prototypes */
 

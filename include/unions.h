@@ -83,7 +83,7 @@ union engine
 /* Big endian systems (MSB) */
 /*!
  \brief the config11 unions embedds the map_sensor type(115/250 kpa), 
- engine_type (2/4 stroke), injection type (tbi/multiport), and he number of
+ engine_type (2/4 stroke), injection type (tbi/multiport), and the number of
  cylinders
  */
 union config11
@@ -297,7 +297,7 @@ union engine
 /* Little Endian systems (LSB), intel x86) */
 /*!
  \brief the config11 unions embedds the map_sensor type(115/250 kpa), 
- engine_type (2/4 stroke), injection type (tbi/multiport), and he number of
+ engine_type (2/4 stroke), injection type (tbi/multiport), and the number of
  cylinders
  */
 union config11

@@ -42,7 +42,12 @@ static GLuint font_list_base;
 #define DEFAULT_HEIGHT 320                                                                                  
 static gboolean winstat[3] = {FALSE,FALSE,FALSE};
 
-gint create_3d_view(GtkWidget *widget, gpointer data)
+/*!
+ \brief create_ve3d_view does the initial work of creating the 3D vetable
+ widget, it creates the datastructures, creates the window, initializes OpenGL
+ and binds al lthe handlers to the window that are needed
+ */
+gint create_ve3d_view(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *window;
 	GtkWidget *frame;
@@ -66,7 +71,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 		winstat[page] = TRUE;
 
 	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
-	initialize_ve_view((void *)ve_view);
+	initialize_ve3d_view((void *)ve_view);
 	ve_view->page = page;
 	ve_view->rpm_bincount = firmware->page_params[page]->rpm_bincount;
 	ve_view->load_bincount = firmware->page_params[page]->load_bincount; 
@@ -93,7 +98,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 			"ve_view",(gpointer)ve_view);
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(reset_3d_winstat),
+			G_CALLBACK(free_ve3d_view),
 			(gpointer) window);
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(gtk_widget_destroy),
@@ -132,19 +137,17 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 
 	/* Connect signal handlers to the drawing area */
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
-			G_CALLBACK (ve_realize), NULL);
+			G_CALLBACK (ve3d_realize), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
-			G_CALLBACK (ve_configure_event), NULL);
+			G_CALLBACK (ve3d_configure_event), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
-			G_CALLBACK (ve_expose_event), NULL);
+			G_CALLBACK (ve3d_expose_event), NULL);
 	g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
-			G_CALLBACK (ve_motion_notify_event), NULL);
+			G_CALLBACK (ve3d_motion_notify_event), NULL);
 	g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
-			G_CALLBACK (ve_button_press_event), NULL);
+			G_CALLBACK (ve3d_button_press_event), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
-			G_CALLBACK (ve_key_press_event), NULL);
-	g_signal_connect(G_OBJECT (drawing_area), "focus_in_event",
-			G_CALLBACK (ve_focus_in_event), NULL);
+			G_CALLBACK (ve3d_key_press_event), NULL);
 
 	/* End of GL window, Now controls for it.... */
 	frame = gtk_frame_new("3D Display Controls");
@@ -200,7 +203,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	button = gtk_button_new_with_label("Close Window");
 	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(reset_3d_winstat),
+			G_CALLBACK(free_ve3d_view),
 			(gpointer) window);
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
 			G_CALLBACK(gtk_widget_destroy),
@@ -211,7 +214,12 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-gint reset_3d_winstat(GtkWidget *widget)
+/*!
+ \brief free_ve3d_view is caleld on close of the 3D vetable viewer/editor, it
+ deallocates memory disconencts handlers and then the widget is deleted with
+ gtk_widget_destroy
+ */
+gint free_ve3d_view(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
 	GtkWidget *tmpwidget = NULL;
@@ -230,6 +238,11 @@ gint reset_3d_winstat(GtkWidget *widget)
 			* other handlers WILL NOT run. */
 }
 	
+/*!
+ \brief reset_3d_view resets the OpenGL widget to default position in
+ case the user moves it or places it off the edge of the window and can't
+ find it...
+ */
 void reset_3d_view(GtkWidget * widget)
 {
 	struct Ve_View_3D *ve_view;
@@ -245,10 +258,13 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->h_strafe = 0;
 	ve_view->v_strafe = 0;
 	ve_view->aspect = 1.333;
-	ve_configure_event(ve_view->drawing_area, NULL,NULL);
-	ve_expose_event(ve_view->drawing_area, NULL,NULL);
+	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
+	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 }
 
+/*!
+ \brief ge_gl_config gets the OpenGL mode creates a GL config and returns it
+ */
 GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;                                                                                                                        
@@ -275,7 +291,11 @@ GdkGLConfig* get_gl_config(void)
 	return gl_config;	
 }
 
-gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+/*!
+ \brief ve3d_configure_event is called when the window needs to be drawn
+ after a resize. 
+ */
+gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
@@ -285,7 +305,7 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
 
-	dbg_func(__FILE__": ve_configure_event() 3D View Configure Event\n",OPENGL);
+	dbg_func(__FILE__": ve3d_configure_event() 3D View Configure Event\n",OPENGL);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -299,12 +319,20 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	return TRUE;
 }
 
-gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+/*!
+ \brief ve3d_expose_event is called when the part or all of the GL area
+ needs to be redrawn due to being "exposed" (uncovered), this kicks off all
+ the other renderers for updating the axis and status indicators. This 
+ method is NOT like I'd like it and is a CPU pig as 99.5% of hte time we don't
+ even need to redraw at all..  :(
+ /bug this code is slow, and needs to be optimized or redesigned
+ */
+gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
-	dbg_func(__FILE__": ve_expose_event() 3D View Expose Event\n",OPENGL);
+	dbg_func(__FILE__": ve3d_expose_event() 3D View Expose Event\n",OPENGL);
 
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){
 		gtk_widget_grab_focus(widget);
@@ -330,11 +358,11 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	glRotatef(ve_view->sphi, 0.0, 0.0, 1.0);
 	glTranslatef(-(gfloat)((ve_view->rpm_bincount/2)-0.3)-ve_view->h_strafe, -(gfloat)((ve_view->load_bincount)/2-1)-ve_view->v_strafe, -2.0);
 
-	ve_calculate_scaling(ve_view);
-	ve_draw_ve_grid(ve_view);
-	ve_draw_active_indicator(ve_view);
-	ve_draw_runtime_indicator(ve_view);
-	ve_draw_axis(ve_view);
+	ve3d_calculate_scaling(ve_view);
+	ve3d_draw_ve_grid(ve_view);
+	ve3d_draw_active_indicator(ve_view);
+	ve3d_draw_runtime_indicator(ve_view);
+	ve3d_draw_axis(ve_view);
 
 	/* Swap buffers */
 	if (gdk_gl_drawable_is_double_buffered (gldrawable))
@@ -350,13 +378,19 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	return TRUE; 
 }
 
-gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+/*!
+ \brief ve3d_motion_notify_event is called when the user clicks and drags the 
+ mouse inside the GL window, it causes the display to be rotated/scaled/strafed
+ depending on which button the user had held down.
+ \see ve3d_button_press_event
+ */
+gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	gboolean redraw = FALSE;
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
-	dbg_func(__FILE__": ve_motion_notify() 3D View Motion Notify\n",OPENGL);
+	dbg_func(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n",OPENGL);
 
 	// Left Button
 	if (event->state & GDK_BUTTON1_MASK)
@@ -387,11 +421,17 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	return TRUE;
 }
 
-gboolean ve_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+/*!
+ \brief ve3d_button_press_event is called when the user clicks a mouse button
+ The function grabs the location at which the button was clicked in order to
+ calculate what to change when rerendering
+ \see ve3d_motion_notify_event
+ */
+gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
-	dbg_func(__FILE__": ve_button_press_event()\n",OPENGL);
+	dbg_func(__FILE__": ve3d_button_press_event()\n",OPENGL);
 
 	gtk_widget_grab_focus (widget);
 
@@ -405,13 +445,17 @@ gboolean ve_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointe
 	return FALSE;
 }
 
-void ve_realize (GtkWidget *widget, gpointer data)
+/*!
+ \brief ve3d_realize is called when hte window is created and sets the main
+ OpenGL parameters of the window (this only needs to be done once I think)
+ */
+void ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 	GdkGLProc proc = NULL;
 
-	dbg_func(__FILE__": ve_realize() 3D View Realization\n",OPENGL);
+	dbg_func(__FILE__": ve3d_realize() 3D View Realization\n",OPENGL);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -424,7 +468,7 @@ void ve_realize (GtkWidget *widget, gpointer data)
 		/* glPolygonOffset */
 		proc = gdk_gl_get_proc_address ("glPolygonOffset");
 		if (proc == NULL) {
-			dbg_func(__FILE__": ve_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n",CRITICAL);
+			dbg_func(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n",CRITICAL);
 			exit (-11);
 		}
 	}
@@ -438,13 +482,17 @@ void ve_realize (GtkWidget *widget, gpointer data)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
 
-	ve_load_font_metrics();
+	ve3d_load_font_metrics();
 
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 }
 
-void ve_calculate_scaling(void *ptr)
+/*!
+ \brief ve3d_calculate_scaling is called during a redraw to recalculate the
+ dimensions for the scales to make thing look pretty
+ */
+void ve3d_calculate_scaling(void *ptr)
 {
 	gint i=0;
 	extern gint **ms_data;
@@ -455,7 +503,7 @@ void ve_calculate_scaling(void *ptr)
 	gint ve_base = 0;
 	gfloat divider = 0.0;
 
-	dbg_func(__FILE__": ve_calculate_scaling()\n",OPENGL);
+	dbg_func(__FILE__": ve3d_calculate_scaling()\n",OPENGL);
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
@@ -496,7 +544,11 @@ void ve_calculate_scaling(void *ptr)
 	ve_view->ve_div = ((gfloat)ve_view->ve_max/4.0);	
 }
 
-void ve_draw_ve_grid(void *ptr)
+/*!
+ \brief ve3d_draw_ve_grid is called during rerender and draws trhe VEtable grid 
+ in 3D space
+ */
+void ve3d_draw_ve_grid(void *ptr)
 {
 	gint rpm=0, load=0;
 	extern gint **ms_data;
@@ -509,7 +561,7 @@ void ve_draw_ve_grid(void *ptr)
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	dbg_func(__FILE__": ve_draw_ve_grid() \n",OPENGL);
+	dbg_func(__FILE__": ve3d_draw_ve_grid() \n",OPENGL);
 
 	ve_ptr = (gint *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
@@ -560,7 +612,12 @@ void ve_draw_ve_grid(void *ptr)
 	}
 }
 
-void ve_draw_active_indicator(void *ptr)
+/*!
+ \brief ve3d_draw_active_indicator is called during rerender and draws the
+ red dot which tells where changes will be made to the table by the user.  
+ The user moves this with the arrow keys..
+ */
+void ve3d_draw_active_indicator(void *ptr)
 {
 	gint *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
@@ -571,7 +628,7 @@ void ve_draw_active_indicator(void *ptr)
 	gint ve_base = 0;
 	gfloat divider = 0.0;
 
-	dbg_func(__FILE__": ve_draw_active_indicator()\n",OPENGL);
+	dbg_func(__FILE__": ve3d_draw_active_indicator()\n",OPENGL);
 
 	ve_ptr = (gint *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
@@ -595,7 +652,11 @@ void ve_draw_active_indicator(void *ptr)
 	glEnd();	
 }
 
-void ve_draw_runtime_indicator(void *ptr)
+/*!
+ \brief ve3d_draw_runtiem_indicator is called during rerender and draws the
+ green dot which tells where the engien is running at this instant.
+ */
+void ve3d_draw_runtime_indicator(void *ptr)
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)ptr;
@@ -603,7 +664,7 @@ void ve_draw_runtime_indicator(void *ptr)
 	gfloat rpm = 0.0;
 	gfloat map = 0.0;
 
-	dbg_func(__FILE__": ve_draw_runtime_indicator()\n",OPENGL);
+	dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n",OPENGL);
 
 	if (ve_view->page == 0) /* all std code derivatives..*/
 		lookup_current_value("vecurr",&actual_ve);
@@ -612,13 +673,13 @@ void ve_draw_runtime_indicator(void *ptr)
 	else if (ve_view->is_spark)
 		lookup_current_value("sparkangle",&actual_ve);
 	else
-		dbg_func("\tProblem, ve_draw_runtime_indicator(), page out of range..\n",CRITICAL);
+		dbg_func(__FILE__"\tve3d_draw_runtime_indicator()\n\tProblem, page out of range..\n",CRITICAL);
 
 	if (!lookup_current_value("raw_rpm",&rpm))
-		dbg_func(__FILE__": ve_draw_runtime_indicator()\n\t Failed finding \"raw_rpm\" datasource...\n",CRITICAL);
+		dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n\t Failed finding \"raw_rpm\" datasource...\n",CRITICAL);
 
 	if (!lookup_current_value("mapkpa",&map))
-		dbg_func(__FILE__": ve_draw_runtime_indicator()\n\t Failed finding \"mapkpa\" datasource...\n",CRITICAL);
+		dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n\t Failed finding \"mapkpa\" datasource...\n",CRITICAL);
 
 	/* Render a green dot at the active VE map position */
 	glPointSize(8.0);
@@ -631,7 +692,11 @@ void ve_draw_runtime_indicator(void *ptr)
 	glEnd();
 }
 
-void ve_draw_axis(void *ptr)
+/*!
+ \brief ve3d_draw_axis is called during rerender and draws the
+ border axis scales around the VEgrid.
+ */
+void ve3d_draw_axis(void *ptr)
 {
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0, rpm=0, load=0;
@@ -647,7 +712,7 @@ void ve_draw_axis(void *ptr)
 	gint load_bincount = 0;
 	gint ve_base = 0;
 
-	dbg_func(__FILE__": ve_draw_axis()\n",OPENGL);
+	dbg_func(__FILE__": ve3d_draw_axis()\n",OPENGL);
 
 	ve_ptr = (gint *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
@@ -748,7 +813,7 @@ void ve_draw_axis(void *ptr)
 	{
 		load = (ve_ptr[load_base+i]);
 		label = g_strdup_printf("%i",load);
-		ve_drawtext(label,
+		ve3d_draw_text(label,
 				((ve_ptr[rpm_base])/ve_view->rpm_div),
 				((ve_ptr[load_base+i])/ve_view->load_div),
 				0.0);
@@ -759,7 +824,7 @@ void ve_draw_axis(void *ptr)
 	{
 		rpm = (ve_ptr[rpm_base+i])*100;
 		label = g_strdup_printf("%i",rpm);
-		ve_drawtext(label,
+		ve3d_draw_text(label,
 				((ve_ptr[rpm_base+i])/ve_view->rpm_div),
 				((ve_ptr[load_base])/ve_view->load_div),
 				0.0);
@@ -770,7 +835,7 @@ void ve_draw_axis(void *ptr)
 	for (i=0;i<(ve_view->ve_max+20);i=i+10)
 	{
 		label = g_strdup_printf("%i",i);
-		ve_drawtext(label,
+		ve3d_draw_text(label,
 				((ve_ptr[rpm_base])/ve_view->rpm_div),
 				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),
 				(gfloat)i/ve_view->ve_div);
@@ -779,7 +844,11 @@ void ve_draw_axis(void *ptr)
 
 }
 
-void ve_drawtext(char* text, gfloat x, gfloat y, gfloat z)
+/*!
+ \brief ve3d_draw_text is called during rerender and draws the
+ axis marker text
+ */
+void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
 	glColor3f(0.1,0.8,0.8);
 	/* Set rendering postition */
@@ -793,7 +862,11 @@ void ve_drawtext(char* text, gfloat x, gfloat y, gfloat z)
 	};
 }
 
-void ve_load_font_metrics(void)
+/*!
+ \brief ve3d_load_font_metrics is called during ve3d_realize and loads the 
+ fonts needed by OpenGL for rendering the text
+ */
+void ve3d_load_font_metrics(void)
 {
 	PangoFontDescription *font_desc;
 	PangoFont *font;
@@ -801,14 +874,14 @@ void ve_load_font_metrics(void)
 	gchar font_string[] = "sans 10";
 	gint font_height;
 
-	dbg_func(__FILE__": ve_load_font_metrics()\n",OPENGL);
+	dbg_func(__FILE__": ve3d_load_font_metrics()\n",OPENGL);
 
 	font_list_base = (GLuint) glGenLists (128);
 	font_desc = pango_font_description_from_string (font_string);
 	font = gdk_gl_font_use_pango_font (font_desc, 0, 128, (int)font_list_base);
 	if (font == NULL)
 	{
-		dbg_func(g_strdup_printf("\tCan't load font '%s' CRITICAL FAILURE\n",font_string),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": ve3d_load_font_metrics()\n\tCan't load font '%s' CRITICAL FAILURE\n",font_string),CRITICAL);
 		exit (-1);
 	}
 	font_metrics = pango_font_get_metrics (font, NULL);
@@ -819,7 +892,13 @@ void ve_load_font_metrics(void)
 	pango_font_metrics_unref (font_metrics);
 }
 
-gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
+/*!
+ \brief ve3d_key_press_event is called whenever the user hits a key on the 3D
+ view. It looks for arrow keys, Plus/Minus and Pgup/PgDown.  Arrows move the
+ red marker, +/- shift the value by 1 unit, Pgup/Pgdn shift the value by 10
+ units
+ */
+gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	gint value = 0;
 	gint offset = 0;
@@ -837,7 +916,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
-	dbg_func(__FILE__": ve_key_press_event()\n",OPENGL);
+	dbg_func(__FILE__": ve3d_key_press_event()\n",OPENGL);
 
 	ve_ptr = (gint *) ms_data[ve_view->page];
 	load_bincount = ve_view->load_bincount;
@@ -933,7 +1012,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			break;							
 
 		default:
-			dbg_func(g_strdup_printf("\tKeypress not handled, code: %#.4X\"\n",event->keyval),OPENGL);
+			dbg_func(g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval),OPENGL);
 			return FALSE;
 	}
 
@@ -942,15 +1021,13 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	return TRUE;
 }
 
-gboolean ve_focus_in_event (GtkWidget *widget, GdkEventFocus *event, gpointer data)
-{	
-	return TRUE;
 
-	gtk_widget_grab_focus (widget);
-	gtk_widget_map(widget);
-	//	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
-}
-void initialize_ve_view(void *ptr)
+/*!
+ \brief initialize_ve3d_view is called from create_ve3d_view to intialize it's
+ datastructure for use.  
+ \see Ve_View
+ */
+void initialize_ve3d_view(void *ptr)
 {
 	struct Ve_View_3D *ve_view; 
 	ve_view = ptr;

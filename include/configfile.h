@@ -44,7 +44,8 @@ typedef struct
 ConfigSection;
 
 /*!
- \brief The ConfigFile struct stores a GList of Sections
+ \brief The ConfigFile struct stores a GList of Sections and the filename
+ \see ConfigSection
  */
 typedef struct
 {
