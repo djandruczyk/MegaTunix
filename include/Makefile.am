@@ -33,6 +33,7 @@ headers = \
         threads.h \
         tools_gui.h \
         tuning_gui.h \
+        unions.h \
         vetable_gui.h \
 	vex_support.h \
 	warmwizard_gui.h

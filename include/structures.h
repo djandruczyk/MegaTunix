@@ -219,19 +219,6 @@ struct DynamicEntries
 	GtkWidget *vex_comment_entry;
 };
 
-/* Datastructure the holds the expected responses for the data
- * returning commands issued to the MegaSquirt.
- */
-
-struct Command_Limits
-{
-	gint	A_count;
-	gint	C_count;
-	gint	Q_count;
-	gint	V_count;
-	gint	S_count;
-	gint	I_count;
-};
 
 struct Ve_Widgets
 {

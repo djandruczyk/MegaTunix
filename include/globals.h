@@ -18,96 +18,11 @@
 
 #include <config.h>
 #include <sys/types.h>
-#include <termios.h>
 #include <gtk/gtk.h>
 #include <math.h>
 #include <stdio.h>
+#include <unions.h>
 
-/* Megasquirt constants defined in C provided by Perry Harrington */
- 
-/* If you are using GCC, the bitfield order is MSB first.  
- * Other compilers may be LSB first 
- */
-
-#ifdef MSB_BITFIELD /* PDA's possibly? */
-union squirt 
-{
-	unsigned char   value;
-	struct 
-	{
-		unsigned char reserved  :2;
-		unsigned char firing2   :1;     /* 0 = not squirting 1 = squirti
-						   ng */
-		unsigned char sched2    :1;     /* 0 = nothing scheduled 1 = sch
-						   eduled to squirt */
-		unsigned char firing1   :1;     /* 0 = not squirting 1 = squirti
-						   ng */
-		unsigned char sched1    :1;     /* 0 = nothing scheduled 1 = sch
-						   eduled to squirt */
-		unsigned char inj2      :1;     /* 0 = no squirt 1 = squirt */
-		unsigned char inj1      :1;     /* 0 = no squirt 1 = squirt */
-	} bit;
-};
-union engine 
-{
-	unsigned char      value;
-	struct 
-	{
-		unsigned char reserved  :1;
-		unsigned char mapaen    :1;     /* 0 = not in MAP acceleration m
-						   ode 1 = MAP deaceeleration mode */
-		unsigned char tpsden    :1;     /* 0 = not in deacceleration mod
-						   e 1 = in deacceleration mode */
-		unsigned char tpsaen    :1;     /* 0 = not in TPS acceleration m
-						   ode 1 = TPS acceleration mode */
-		unsigned char warmup    :1;     /* 0 = not in warmup 1 = in warm
-						   up */
-		unsigned char startw    :1;     /* 0 = not in startup warmup 1 =
-						   in warmup enrichment */
-		unsigned char crank     :1;     /* 0 = engine not cranking 1 = e
-						   ngine cranking */
-		unsigned char running   :1;     /* 0 = engine not running 1 = ru
-						   nning */
-	} bit;
-};
-#else           /* LSB first architectures, x86 */
-union squirt 
-{
-	unsigned char      value;
-	struct 
-	{
-		unsigned char inj1      :1;     /* 0 = no squirt 1 = squirt */
-		unsigned char inj2      :1;     /* 0 = no squirt 1 = squirt */
-		unsigned char sched1    :1;     /* 0 = nothing scheduled 1 = sch
-						   eduled to squirt */
-		unsigned char firing1   :1;     /* 0 = not squirting 1 = squirti
-						   ng */
-		unsigned char sched2    :1;     /* 0 = nothing scheduled 1 = sch
-						   eduled to squirt */
-		unsigned char firing2   :1;     /* 0 = not squirting 1 = squirti
-						   ng */
-		unsigned char reserved  :2;
-	} bit;
-};
- 
-union engine 
-{
-	unsigned char      value;
-	struct 
-	{
-		unsigned char running   :1;     /* 0 = engine not running 1 = running */
-		unsigned char crank     :1;     /* 0 = engine not cranking 1 = engine cranking */
-		unsigned char startw    :1;     /* 0 = not in startup warmup 1 = in warmup enrichment */
-		unsigned char warmup    :1;     /* 0 = not in warmup 1 = in warmup */
-		unsigned char tpsaen    :1;     /* 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
-		unsigned char tpsden    :1;     /* 0 = not in deacceleration mode 1 = in deacceleration mode */
-		unsigned char mapaen    :1;     /* 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
-						   
-		unsigned char reserved  :1;
-	} bit;
-};
-#endif
- 
 struct Raw_Runtime_Std
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
@@ -221,70 +136,6 @@ struct Runtime_Common
 	unsigned char	bspot1;		/* 75 blank spot 1 (for Std Runtime) */
 	unsigned char	bspot2;		/* 76 blank spot 2 (for Std Runtime) */
 	unsigned char	bspot3;		/* 77 blank spot 3 (for Std Runtime) */
-};
-
-union config11 
-{
-        unsigned char      value;
-        struct 
-        {
-                unsigned char map_type  :2;     /* 00 115KPA, 01-250kpa, 10,11
-                                                 * user-defined */
-                unsigned char eng_type  :1;     /* 0 = 4-stroke, 1 = 2-stroke */
-                unsigned char inj_type  :1;     /* 0 = multi-port, 1 = TBI */
-                unsigned char cylinders :4;     /* 0000 = 1 cyl 
-                                                 * 0001 = 2 cyl
-                                                 * 0010 = 3 cyl
-                                                 * 0011 = 4 cyl
-                                                 * 0100 = 5 cyl
-                                                 * 0101 = 6 cyl
-                                                 * 0110 = 7 cyl
-                                                 * 0111 = 8 cyl
-                                                 * 1000 = 9 cyl
-                                                 * 1001 = 10 cyl
-                                                 * 1010 = 11 cyl
-                                                 * 1011 = 12 cyl
-                                                 */
-        } bit;
-};
-
-union config12
-{
-        unsigned char      value;
-        struct 
-        {
-                unsigned char clt_type  :2;     /* 00 = GM, 
-                                                 * 01,10,11 = user defined */
-                unsigned char mat_type  :2;     /* 00 = GM,
-                                                 * 01,10,11 = user defined */
-                unsigned char injectors :4;     /* 0000 = 1 injector 
-                                                 * 0001 = 2 injectors
-                                                 * 0010 = 3 injectors
-                                                 * 0011 = 4 injectors
-                                                 * 0100 = 5 injectors
-                                                 * 0101 = 6 injectors
-                                                 * 0110 = 7 injectors
-                                                 * 0111 = 8 injectors
-                                                 * 1000 = 9 injectors
-                                                 * 1001 = 10 injectors
-                                                 * 1010 = 11 injectors
-                                                 * 1011 = 12 injectors
-                                                 */
-        } bit;
-};
-
-union config13
-{
-        unsigned char      value;
-        struct 
-        {
-                unsigned char firing    :1;     /* 0 = normal, 1=odd fire */
-                unsigned char ego_type  :1;     /* 0 = narrow, 1=wide */
-                unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
-                unsigned char baro_corr :1;     /* 0 = Enrichment off (100%)
-                                                 * 1 = Enrichment on 
-                                                 */
-        } bit;
 };
 
 struct Ve_Const_Std
