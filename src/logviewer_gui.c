@@ -519,7 +519,7 @@ void draw_infotext(void *data)
         PangoFontDescription *font_desc;
 	PangoLayout *layout;
 
-	font_desc = pango_font_description_from_string("sans 12");
+	font_desc = pango_font_description_from_string("sans 10");
 	layout = gtk_widget_create_pango_layout(v_value->d_area,v_value->vname);
 	pango_layout_set_font_description(layout,font_desc);
 	gdk_draw_layout(v_value->trace_pmap,v_value->font_gc,0,0,layout);

@@ -71,10 +71,11 @@ int main(int argc, char ** argv)
 		reset_temps(GINT_TO_POINTER(CELSIUS));
 
 
+	/* Populate the gui in 100milliseconds after entering gtk_main */
 	gtk_timeout_add(100,(GtkFunction)populate_gui,NULL);
 	/* Startup status counters timeout handler... */
-	/* Run it about 30 times/second.. proc use seems negligable... */
-	statuscounts_id = gtk_timeout_add(33,(GtkFunction)update_errcounts,NULL);
+	/* Run it about 20 times/second.. proc use seems negligable... */
+	statuscounts_id = gtk_timeout_add(50,(GtkFunction)update_errcounts,NULL);
 	ready = TRUE;
 	gdk_threads_enter();
 	gtk_main();

@@ -65,7 +65,7 @@ extern struct DynamicMisc misc;
 extern struct Logables logables;
 extern struct Serial_Params *serial_params;
 
-static gint update_rate = 33;
+static gint update_rate = 24;
 static gint runtime_id = -1;
 static gint logviewer_id = -1;
 gboolean tips_in_use;
