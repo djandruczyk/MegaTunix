@@ -272,11 +272,7 @@ void *serial_io_handler(gpointer data)
 						break;
 					case UPD_LOAD_REALTIME_MAP:
 						gdk_threads_enter();
-						if (!load_realtime_map())
-						{
-							gdk_threads_leave();
-							goto breakout;
-						}
+						load_realtime_map();
 						gdk_threads_leave();
 						break;
 					case UPD_LOAD_GUI_TABS:

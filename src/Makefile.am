@@ -4,7 +4,7 @@ INCLUDES = \
 	@PACKAGE_CFLAGS@ \
 	@MEGATUNIX_DEFINES@
 
-bin_PROGRAMS = megatunix$(EXEEXT)
+bin_PROGRAMS = megatunix
 
 megatunix_SOURCES = \
 	Makefile \
