@@ -25,11 +25,11 @@ gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
 
 EXPORT void finish_memviewer(void)
 {
-	GtkWidget *label;
-	GtkWidget *button;
-	GtkWidget *table;
-	GtkWidget *table2;
-	GtkWidget *ebox;
+	GtkWidget *label = NULL;
+	GtkWidget *button = NULL;
+	GtkWidget *table = NULL;
+	GtkWidget *table2 = NULL;
+	GtkWidget *ebox = NULL;
 	gchar *tblname = NULL;
 	gchar *name = NULL;
 	gint rows = 32;
@@ -59,11 +59,14 @@ EXPORT void finish_memviewer(void)
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 		}
+		gtk_widget_show_all(table);
 
 		tblname = g_strdup_printf("memviewer_tab%i_data_table",z);
 		table = g_hash_table_lookup(dynamic_widgets,tblname);
 		g_free(tblname);
 
+		y = 0;
+		x = 0;
 		for (y=0;y<rows;y++)
 		{
 			//	frame = gtk_frame_new(NULL);
