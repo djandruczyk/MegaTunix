@@ -673,7 +673,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 	gfloat percent = 0.0;
 	gfloat last_percent = 0.0;
 	gfloat *history = NULL;
-	gint last_entry = 0;
+	gint current_entry = 0;
 	gint len = 0;
 	gint lo_width;
 	gint total = 0;
@@ -782,8 +782,8 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 	}
 
 	history = (gfloat *)g_object_get_data(v_value->object,"history");
-	last_entry = (gint)g_object_get_data(v_value->object,"last_entry");
-	val = history[last_entry];
+	current_entry = (gint)g_object_get_data(v_value->object,"current_entry");
+	val = history[current_entry];
 
 	if (val > (v_value->max))
 		v_value->max = val;

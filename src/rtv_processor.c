@@ -153,7 +153,11 @@ store_it:
 			hist_max = (gint)g_object_get_data(object,"hist_max");
 			/* Store data in ringbuffer */
 			history[hist_position] = result;
-			g_object_set_data(object,"last_entry",GINT_TO_POINTER(hist_position));
+			g_object_set_data(object,"current_entry",GINT_TO_POINTER(hist_position));
+			if (hist_position != 0)
+				g_object_set_data(object,"previous_entry",GINT_TO_POINTER(hist_position-1));
+			else
+				g_object_set_data(object,"previous_entry",GINT_TO_POINTER(hist_max-1));
 			hist_position++;
 			/* wrap around.. */
 			if (hist_position >= hist_max)
@@ -340,13 +344,37 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	extern struct Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	gfloat * history = NULL;
-	gint last_entry = 0;
+	gint current_entry = 0;
 	
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
 	history = (gfloat *)g_object_get_data(object,"history");
-	last_entry = (gint)g_object_get_data(object,"last_entry");
-	*value = history[last_entry];
+	current_entry = (gint)g_object_get_data(object,"current_entry");
+	*value = history[current_entry];
+	return TRUE;
+}
+
+
+/*!
+ \brief lookup_previous_value() gets the current value of the derived
+ variable requested by name.
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gflaot *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
+gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
+{
+	extern struct Rtv_Map *rtv_map;
+	GObject * object = NULL;
+	gfloat * history = NULL;
+	gint previous_entry = 0;
+	
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+	history = (gfloat *)g_object_get_data(object,"history");
+	previous_entry = (gint)g_object_get_data(object,"previous_entry");
+	*value = history[previous_entry];
 	return TRUE;
 }

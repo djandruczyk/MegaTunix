@@ -53,6 +53,8 @@ gboolean update_runtime_vars()
 	extern GHashTable * dynamic_widgets;
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
+	gfloat x,y,z = 0.0;
+	gfloat xl,yl,zl = 0.0;
 
 	if(no_update)
 		return FALSE;
@@ -64,8 +66,26 @@ gboolean update_runtime_vars()
 		{
 			ve_view = (struct Ve_View_3D *)g_object_get_data(
 					G_OBJECT(tmpwidget),"ve_view");
-			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
+			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+			{
+				lookup_current_value(ve_view->x_source,&x);
+				lookup_previous_value(ve_view->x_source,&xl);
+				if (x != xl)
+					goto redraw;
+				lookup_current_value(ve_view->y_source,&y);
+				lookup_previous_value(ve_view->y_source,&yl);
+				if (y != yl)
+					goto redraw;
+				lookup_current_value(ve_view->z_source,&z);
+				lookup_previous_value(ve_view->z_source,&zl);
+				if (z != zl)
+					goto redraw;
+				goto breakout;
+redraw:
 				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+				printf("gl change updating\n");
+			}
+breakout:
 			g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}
 	}
@@ -128,7 +148,7 @@ void rt_update_status(gpointer key, gpointer data)
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gint value = 0;
-	gint last_entry = 0;
+	gint current_entry = 0;
 	static GObject *object = NULL;
 	static gfloat * history = NULL;
 	static gchar * source = NULL;
@@ -146,13 +166,13 @@ void rt_update_status(gpointer key, gpointer data)
 			return;
 		history = (gfloat *)g_object_get_data(object,"history");
 	}
-	last_entry = (gint)g_object_get_data(object,"last_entry");
+	current_entry = (gint)g_object_get_data(object,"current_entry");
 
 	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
 	
-	value = (gint)history[last_entry];
+	value = (gint)history[current_entry];
 	if (((value &bitmask) >> bitshift) == bitval) // enable it
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 	else	// disable it..
@@ -180,26 +200,26 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gchar * tmpbuf = NULL;
-	gint last_entry = 0;
+	gint current_entry = 0;
 	gint hist_size = 0;
 	gfloat now = 0.0;
-	gfloat last = 0.0;
+	gfloat current = 0.0;
 	gfloat percentage = 0.0;
 	gboolean is_float = FALSE;
 
-	last_entry = (gint)g_object_get_data(slider->object,"last_entry");
+	current_entry = (gint)g_object_get_data(slider->object,"current_entry");
 	hist_size = (gint)g_object_get_data(slider->object,"hist_max");
 	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
-	now = slider->history[last_entry];
-	if (last_entry == 0)
-		last = slider->history[hist_size-1];
+	now = slider->history[current_entry];
+	if (current_entry == 0)
+		current = slider->history[hist_size-1];
 	else
-		last = slider->history[(last_entry-1)];
+		current = slider->history[(current_entry-1)];
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
 	
-	if ((now != last) || (forced_update))
+	if ((now != current) || (forced_update))
 	{
 		percentage = (now-lower)/(upper-lower);
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
@@ -208,7 +228,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 				(slider->pbar),
 				tmpf);
 
-		if ((abs(count-last_upd) > 5) || (forced_update))
+		if ((abs(count-current) > 5) || (forced_update))
 		{
 			if (is_float)
 				tmpbuf = g_strdup_printf("%.2f",now);

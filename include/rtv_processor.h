@@ -21,6 +21,7 @@
 /* Prototypes */
 void process_rt_vars(void * );
 gboolean lookup_current_value(gchar *, gfloat *);
+gboolean lookup_previous_value(gchar *, gfloat *);
 gfloat handle_complex_expr(GObject *, void *,ConvType);
 gfloat handle_special(GObject *,gchar *);
 /* Prototypes */
