@@ -72,7 +72,7 @@ void process_rt_vars(void *incoming)
 			if (g_object_get_data(object,"complex_expr"))
 			{
 				result = handle_complex_expr(object,incoming,UPLOAD);
-				printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
+				//printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 				continue;
 			}
 
@@ -87,7 +87,7 @@ void process_rt_vars(void *incoming)
 				result = (tmpf-32)*(5.0/9.0);
 			else
 				result = tmpf;
-			printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
+		//	printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 
 		}
 	}
