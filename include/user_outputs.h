@@ -19,6 +19,8 @@
 /* Prototypes */
 void populate_user_output_choices(void);
 gboolean show_user_output_choices(GtkWidget *, gpointer );
+GtkTreeModel * create_model(void);
+GtkWidget * create_view(void);
 
 /* Prototypes */
 

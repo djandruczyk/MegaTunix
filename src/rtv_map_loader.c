@@ -98,8 +98,6 @@ gboolean load_realtime_map(void )
 	{
 		rtv_map->raw_list = parse_keys(tmpbuf,&num_keys,",");
 		g_free(tmpbuf);
-		if (num_keys != raw_total)
-			dbg_func(g_strdup_printf(__FILE__": load_realtim_map()\n\t Number of raw variables (%i), and number of keys in raw_list %i don\t match\n"),CRITICAL);
 	}
 	rtv_map->rtv_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
 	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GObject *));

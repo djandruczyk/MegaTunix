@@ -21,13 +21,23 @@
 #include <structures.h>
 #include <user_outputs.h>
 
+enum
+{
+	COL_NAME = 0,
+	COL_LOWER,
+	COL_UPPER,
+	COL_OBJECT,
+	NUM_COLS
+} ;
+
 void populate_user_output_choices(void)
 {
 	extern gboolean rtvars_loaded;
 	extern GHashTable *dynamic_widgets;
 	GtkWidget *table = NULL;
-	GtkWidget *button = NULL;
 	GtkWidget *parent = NULL;
+	GtkWidget *view = NULL;
+	GtkWidget *sw = NULL;
 
 	if (!rtvars_loaded)
 	{
@@ -40,78 +50,118 @@ void populate_user_output_choices(void)
 		dbg_func(__FILE__": populate_user_output_choices()\n\t\"user_outputs_frame\" could NOT be located, critical error\n\n",CRITICAL);
 		return;
 	}
-	/*
+
 	table = gtk_table_new(2,2,FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(table),10);
 	gtk_container_add(GTK_CONTAINER(parent),table);
 
-	button = gtk_button_new_with_label("User Output 1");
-	g_signal_connect(button,"clicked",
-			G_CALLBACK(show_user_output_choices),
-			GINT_TO_POINTER(1));
-	gtk_table_attach(GTK_TABLE(table),button,
+	view = create_view();
+	sw = gtk_scrolled_window_new(NULL,NULL);
+	gtk_widget_set_size_request(sw,100,50);
+
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+			GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC);
+	gtk_container_add(GTK_CONTAINER(sw),view);
+	gtk_table_attach(GTK_TABLE(table),sw,
 			0,1,0,1,
-			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
-			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			0,0);
-	
+
 	gtk_widget_show_all(parent);
-	*/
 
 
 }
 
-
-gboolean show_user_output_choices(GtkWidget *widget, gpointer data)
+GtkTreeModel * create_model(void)
 {
-	extern struct Rtv_Map *rtv_map;
-	gchar ** keys = NULL;
-	gchar * key = NULL;
-	gchar * dlog_name = NULL;
-	gint num_keys = 0;
+	GtkListStore  *store;
+	GtkTreeIter    iter;
 	gint i = 0;
-	GtkWidget *menu = NULL;
-	GtkWidget *item = NULL;
-	GtkWidget *label = NULL;
+	gchar * data = NULL;
+	gchar * name = NULL;
+	gint lower = 0;
+	gint upper = 0;
 	GObject * object = NULL;
+	extern struct Rtv_Map *rtv_map;
 
-	menu = gtk_menu_new();
-	while ((key = rtv_map->raw_list[i]) != NULL)
+	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, G_TYPE_POINTER);
+
+	/* Append a row and fill in some data */
+	while ((data = rtv_map->raw_list[i])!= NULL)
 	{
-		keys = parse_keys((rtv_map->raw_list[i]),&num_keys,";");
-		if (num_keys > 1)
-		{
-			printf ("found multi-key list for offset %i\n",i);
-			i++;
-			g_strfreev(keys);
-			continue;
-		}
-
-		printf("looking for \"%s\"\n",key);
-		object = NULL;
-		object = g_hash_table_lookup(rtv_map->rtv_hash,g_strdup(key));
-		if (!object)
-		{
-			printf("object not found\n");
-			i++;
-			g_strfreev(keys);
-			continue;
-		}
-		dlog_name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
-		item = gtk_menu_item_new();
-		label = gtk_label_new(NULL);
-		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
-		gtk_container_add(GTK_CONTAINER(item),label);
-		g_object_set_data(G_OBJECT(item),"object",object);
-		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-
-		g_strfreev(keys);
 		i++;
-	}
-	printf("showing menu\n");
-	gtk_menu_popup (GTK_MENU(menu), NULL, NULL, NULL, NULL,0,gtk_get_current_event_time());
+		object = NULL;
+		name = NULL;
+		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,data);
+		if (!object)
+			continue;
+		name = (gchar *) g_object_get_data(object,"dlog_gui_name");
+		if (!name)
+			continue;
+		lower = (gint) g_object_get_data(object,"lower_limit"); 
+		upper = (gint) g_object_get_data(object,"upper_limit"); 
 
-	return TRUE;
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				COL_NAME, name,
+				COL_LOWER, lower,
+				COL_UPPER, upper,
+				COL_OBJECT, object,
+				-1);
+	}
+	return GTK_TREE_MODEL(store);
 }
 
 
+GtkWidget * create_view(void)
+{
+	GtkTreeViewColumn   *col;
+	GtkCellRenderer     *renderer;
+	GtkTreeModel        *model;
+	GtkWidget           *view;
+
+	view = gtk_tree_view_new ();
+
+	/* --- Column #1 --- */
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+			-1,      
+			"Variable",  
+			renderer,
+			"markup", 0,
+			NULL);
+
+	/* --- Column #2 --- */
+
+	col = gtk_tree_view_column_new();
+
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+			-1,      
+			"Lower",  
+			renderer,
+			"text", COL_LOWER,
+			NULL);
+
+	/* --- Column #3 --- */
+
+	col = gtk_tree_view_column_new();
+
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
+			-1,      
+			"Upper",  
+			renderer,
+			"text", COL_UPPER,
+			NULL);
+
+	model = create_model ();
+
+	gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
+
+	g_object_unref (model); /* destroy model automatically with view */
+
+	return view;
+}

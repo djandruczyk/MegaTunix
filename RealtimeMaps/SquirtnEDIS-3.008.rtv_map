@@ -2,7 +2,7 @@
 firmware_name=MegaSquirtnEDIS v3.008
 raw_total=22
 derived_total=38
-raw_list=raw_secl,squirt,enginebit,barocount;barovolt;barokpa,mapcount;mapvolt;mapkpa,matcount;matvolt;matdeg,cltcount;cltvolt;cltdeg,tpscount;tpsvolt;tpspercent,battcount;battvolt,o2count;o2volt;afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,ctimeh,ctimel,sparkangle
+raw_list=raw_secl,barocount,barovolt,barokpa,mapcount,mapvolt,mapkpa,matcount,matvolt,matdeg,cltcount,cltvolt,cltdeg,tpscount,tpsvolt,tpspercent,battcount,battvolt,o2count,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,ctimeh,ctimel,sparkangle
 
 [derived_0]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,special,is_float,tooltip,lower_limit,upper_limit
@@ -392,7 +392,7 @@ dlog_field_name=BATTVOLT
 offset=8
 lower_limit=6
 upper_limit=18
-conv_expr=x*(5.0/255.0)*6.0;
+conv_expr=x*(5.0/255.0)*6.0
 is_float=TRUE
 tooltip="BATT Volts" is the Battery voltage in DC volts.
 

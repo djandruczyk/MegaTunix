@@ -377,7 +377,7 @@ dlog_field_name=BATTVOLT
 offset=8
 lower_limit=4
 upper_limit=20
-conv_expr=x*(5.0/255.0)*6.0;
+conv_expr=x*(5.0/255.0)*6.0
 is_float=TRUE
 tooltip="BATT Volts" is the Battery voltage in DC volts.
 
