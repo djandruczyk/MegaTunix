@@ -239,13 +239,13 @@ union engine
                 guchar reserved  :1;
         } bit;
 };
-#define MAPACCEL_BIT	1 << 6
-#define DECEL_BIT	1 << 5
-#define ACCEL_BIT	1 << 4
-#define WARMUP_BIT	1 << 3
-#define ASE_BIT		1 << 2
-#define CRANK_BIT	1 << 1
 #define RUNNING_BIT	1 << 0
+#define CRANK_BIT	1 << 1
+#define ASE_BIT		1 << 2
+#define WARMUP_BIT	1 << 3
+#define ACCEL_BIT	1 << 4
+#define DECEL_BIT	1 << 5
+#define MAPACCEL_BIT	1 << 6
 
 /* Little Endian systems (LSB), intel x86) */
 union config11
