@@ -14,7 +14,6 @@
 #ifndef __UNIONS_H__
 #define __UNIONS_H__
 
-#include <endian.h>
 
 /* Megasquirt unions defined in C provided by Perry Harrington */
 
