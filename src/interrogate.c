@@ -411,6 +411,7 @@ GArray * validate_and_load_tests()
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{	
+		printf("file %s, openend successfully\n",filename);
 		cmd_array = g_array_new(FALSE,FALSE,sizeof(struct Command));
 		cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 		for (i=0;i<total_tests;i++)
@@ -444,6 +445,8 @@ GArray * validate_and_load_tests()
 			g_free(section);
 			g_array_insert_val(cmd_array,i,cmd);
 		}
+		cfg_free(cfgfile);
+		g_free(filename);
 		
 		
 	}
