@@ -42,7 +42,7 @@ CMD_F_0=255
 
 [gui]
 LoadTabs=Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8_1,vetable_8x8_2
-RealtimeMapFile=Dualtable-090-102.rtv_map
+RealtimeMapFile=Dualtable-0.90
 
 [lookuptables]
 mat=matfactor.inc

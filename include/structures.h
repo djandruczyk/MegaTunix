@@ -358,6 +358,8 @@ struct OutputData
 
 struct RtvMap
 {
+	gint raw_total;		/* Number of raw variables */
+	gint derived_total;	/* Number of derived variables */
 	GArray *ts_array;	/* Timestamp array */
 	GArray *rtv_array;	/* Realtime Values array of lists.. */
 	GHashTable *rtv_hash;	/* Hashtable of rtv derived values indexed by

@@ -18,7 +18,7 @@
 #include <configfile.h>
 
 /* Prototypes */
-void process_rt_vars(void );
+void process_rt_vars(void * buf );
 /* Prototypes */
 
 #endif

@@ -19,6 +19,7 @@
 #include <ms_structures.h>
 #include <post_process.h>
 #include <pthread.h>
+#include <rtv_processor.h>
 #include <serialio.h>
 #include <string.h>
 #include <structures.h>
@@ -153,6 +154,7 @@ void handle_ms_data(InputHandler handler, gint page)
 			 * area for the parsed data...
 			 */
 			post_process_realtime_vars((void *)buf,(void *)runtime);
+			process_rt_vars((void *)buf);
 
 			break;
 
