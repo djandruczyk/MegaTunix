@@ -309,14 +309,14 @@ offset=14
 conv_expr=x/10.0
 
 [derived_33]
-keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr
+keys=internal_name,dlog_gui_name,offset,complex_expr,conv_expr
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 internal_name=dcycle1
 dlog_gui_name=Dutycycle 1
 dlog_field_name=DCYCLE1
 offset=14
 complex_expr=TRUE
-ul_conv_expr=100*(raw_pw1/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
+conv_expr=100*(raw_pw1/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
 expr_symbols=raw_pw1,eng_type,raw_rpm,cyls,divider
 expr_types=_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_VE_VAR_
 raw_pw1_offset=14
@@ -333,14 +333,14 @@ divider_page=0
 divider_offset=91
 
 [derived_34]
-keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr
+keys=internal_name,dlog_gui_name,offset,complex_expr,conv_expr
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 internal_name=dcycle2
 dlog_gui_name=Dutycycle 2
 dlog_field_name=DCYCLE2
 offset=19
 complex_expr=TRUE
-ul_conv_expr=100*(raw_pw2/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
+conv_expr=100*(raw_pw2/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
 expr_symbols=raw_pw2,eng_type,raw_rpm,cyls,divider
 expr_types=_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_VE_VAR_
 raw_pw2_offset=19

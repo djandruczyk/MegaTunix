@@ -311,14 +311,14 @@ offset=14
 conv_expr=x/10.0
 
 [derived_33]
-keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr
+keys=internal_name,dlog_gui_name,offset,complex_expr,conv_expr
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 internal_name=dcycle1
 dlog_gui_name=Dutycycle 1
 dlog_field_name=DCYCLE1
 offset=19
 complex_expr=TRUE
-ul_conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw1/10)/((1200/(eng_type+1))/raw_rpm))
+conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw1/10)/((1200/(eng_type+1))/raw_rpm))
 expr_symbols=cyls,divider,alternate,raw_pw1,eng_type,raw_rpm
 expr_types=_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_
 cyls_page=0
