@@ -8,6 +8,7 @@ megatunix_SOURCES = \
 	c_gauge.h \
 	configfile.h \
 	constants.h \
+	datalogging.h \
 	defines.h \
 	globals.h \
 	lookuptables.h \

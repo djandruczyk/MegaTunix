@@ -20,6 +20,7 @@
 #include <defines.h>
 #include <globals.h>
 #include <constants.h>
+#include <datalogging.h>
 
 
 extern gint req_fuel_popup;
@@ -32,6 +33,7 @@ extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
+extern struct Logables logables;
 extern gint connected;
 extern gint force_status_update;
 extern gfloat ego_pbar_divisor;
@@ -144,21 +146,6 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				
 				if (err_flag == 0)
 					check_req_fuel_limits();
-				break;
-			case 99:	/* Special case for toggles not 
-					 * related to the ms bitmasks...
-					 */
-				switch ((gint)data)
-				{
-					case CLASSIC_LOG:
-						gtk_widget_set_sensitive(
-							custom_logables,FALSE);
-						break;
-					case CUSTOM_LOG:
-						gtk_widget_set_sensitive(
-							custom_logables,TRUE);
-						break;
-				}
 				break;
 			default:
 				printf(" Toggle button NOT handled ERROR!!, contact author\n");

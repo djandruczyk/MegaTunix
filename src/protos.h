@@ -159,6 +159,8 @@ void truncate_log(void);
 void start_datalogging(void);
 void stop_datalogging(void);
 void close_logfile(void);
+void clear_logables(void);
+int set_logging_mode(GtkWidget *, gpointer);
 /* datalogging_gui.c */
 
 /* general_gui.c */

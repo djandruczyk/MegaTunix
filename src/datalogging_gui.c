@@ -22,6 +22,7 @@
 #include <protos.h>
 #include <globals.h>
 #include <errno.h>
+#include <datalogging.h>
 
 gint dlog_context_id;
 gint log_opened=FALSE;
@@ -31,6 +32,7 @@ static GtkWidget *file_label;
 static int logfile;	/* DataLog File Handle*/
 static gchar * log_file_name;
 static gchar buff[100];
+struct Logables logables;
 
 int build_datalogging(GtkWidget *parent_frame)
 {
@@ -104,96 +106,115 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,FALSE,0);
 
 	button = gtk_check_button_new_with_label("Hi-Res Clock");
+	logables.hr_clock = button;
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("MS Clock");
+	logables.ms_clock = button;
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Engine RPM");
+	logables.rpm = button;
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("TPS");
+	logables.tps = button;
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("BATT");
+	logables.batt = button;
 	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("MAP");
+	logables.map = button;
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("BARO");
+	logables.baro = button;
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("O2");
+	logables.o2 = button;
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("MAT");
+	logables.mat = button;
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("CLT");
+	logables.clt = button;
 	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("VE");
+	logables.ve = button;
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Baro Corr");
+	logables.barocorr = button;
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("EGO Corr");
+	logables.egocorr = button;
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("MAT Corr");
+	logables.matcorr = button;
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
-	button = gtk_check_button_new_with_label("CLT Gamma");
+	button = gtk_check_button_new_with_label("CLT Corr");
+	logables.cltcorr = button;
 	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Pulse-Width");
+	logables.pw = button;
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Inj DutyCycle");
+	logables.dcycle = button;
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("EngineBits");
+	logables.engbits = button;
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Total Gamma");
+	logables.gammae = button;
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
@@ -205,25 +226,21 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,FALSE,0);
 
 	button = gtk_radio_button_new_with_label(NULL,"MegaTune \"Classic\" Format");
-	g_object_set_data(G_OBJECT(button),"config_num", 
-			GINT_TO_POINTER(99));
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(toggle_button_handler),
+                        G_CALLBACK(set_logging_mode),
                         GINT_TO_POINTER(CLASSIC_LOG));
 
 	button = gtk_radio_button_new_with_label(group,"Custom Format");
-	g_object_set_data(G_OBJECT(button),"config_num", 
-			GINT_TO_POINTER(99));
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(toggle_button_handler),
+                        G_CALLBACK(set_logging_mode),
                         GINT_TO_POINTER(CUSTOM_LOG));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
@@ -379,3 +396,114 @@ void stop_datalogging()
 {
 	/* Not written yet */
 }
+
+gint set_logging_mode(GtkWidget *widget, gpointer data)
+{
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	{
+
+		switch ((gint)data)
+		{
+			case CLASSIC_LOG:
+				clear_logables();
+				gtk_widget_set_sensitive(
+						custom_logables,FALSE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.ms_clock),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.rpm),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.map),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.o2),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.engbits),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.egocorr),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.matcorr),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.cltcorr),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.barocorr),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.ve),
+						TRUE);
+				gtk_toggle_button_set_active(
+						GTK_TOGGLE_BUTTON
+							(logables.gammae),
+						TRUE);
+				break;
+			case CUSTOM_LOG:
+				clear_logables();
+				gtk_widget_set_sensitive(
+						custom_logables,TRUE);
+				break;
+		}
+	}
+
+	return TRUE;
+}
+
+void clear_logables(void)
+{
+	/* Uncheck all logable choices */
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.hr_clock),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.ms_clock),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.rpm),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.tps),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.batt),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.map),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.baro),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.o2),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.mat),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.clt),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.ve),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.barocorr),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.egocorr),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.matcorr),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.cltcorr),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.pw),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.dcycle),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.engbits),
+			FALSE);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(logables.gammae),
+			FALSE);
+}
+
