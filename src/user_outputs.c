@@ -217,7 +217,6 @@ void cell_edited(GtkCellRendererText *cell,
 	gboolean state = FALSE;
 	gboolean is_float = FALSE;
 	extern GHashTable *lookuptables;
-	extern gint ** ms_data;
 
 	column = (gint) g_object_get_data (G_OBJECT (cell), "column");
 	page = (gint) g_object_get_data(G_OBJECT(model),"page");
@@ -286,8 +285,6 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 		result = (gint)tmpf;
 
-	//ms_data[page][src_offset] = rt_offset;
-	//ms_data[page][lim_offset] = result;
 	write_ve_const(NULL,page,src_offset,rt_offset,ign_parm);
 	write_ve_const(NULL,page,lim_offset,result,ign_parm);
 	update_model_from_view((GtkWidget *)view);
