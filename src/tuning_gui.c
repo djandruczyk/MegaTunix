@@ -637,10 +637,10 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			#ifdef GLDEBUG
 			printf("PLUS\n");
 			#endif
-			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] < 255)
+			if (ve_const_p0->ve_bins[(active_map*8)+active_rpm] < 255)
 			{
 				page = 0;  // < Change this when dualtable works
-				offset = (active_rpm*8)+active_map;
+				offset = (active_map*8)+active_rpm;
 				value = ve_const_p0->ve_bins[offset] + 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
@@ -656,10 +656,10 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			#ifdef GLDEBUG
 			printf("MINUS\n");
 			#endif
-			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] > 0)
+			if (ve_const_p0->ve_bins[(active_map*8)+active_rpm] > 0)
 			{
 				page = 0;  // < Change this when dualtable works
-				offset = (active_rpm*8)+active_map;
+				offset = (active_map*8)+active_rpm;
 				value = ve_const_p0->ve_bins[offset] - 1;
 				dload_val = convert_before_download(offset,value,page);
 				write_ve_const(dload_val,offset,page);
