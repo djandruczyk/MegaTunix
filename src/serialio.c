@@ -152,6 +152,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer *data)
                 {
                         restart_reader = 1;
 			stop_serial_thread(); /* stops realtime read */
+			usleep(100000);	/* sleep 100 ms to be sure thread ends */
                 }
 
                 ufds.fd = serial_params.fd;
@@ -225,7 +226,8 @@ void read_ve_const()
 	}
 	else		/* Data arrived */
 	{
-		handle_ms_data(VE_AND_CONSTANTS);
+		res = handle_ms_data(VE_AND_CONSTANTS);
+		
 	}
 
 	update_errcounts();

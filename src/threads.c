@@ -142,8 +142,11 @@ void *raw_reader_thread(void *params)
 		}
                 else
 		{
-                        handle_ms_data(REALTIME_VARS);
-			update_runtime_vars();
+                        res = handle_ms_data(REALTIME_VARS);
+			if(res)
+				update_runtime_vars();
+			else
+				printf("handle_ms_data reported a fault\n");
 		}
 
 		gdk_threads_enter();

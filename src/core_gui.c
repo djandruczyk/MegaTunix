@@ -27,6 +27,7 @@ static int def_height=480;
 int width;
 int height;
 GtkWidget *main_window;
+GtkTooltips *tip;
 
 int setup_gui()
 {
@@ -50,6 +51,8 @@ int setup_gui()
                         G_CALLBACK(leave),NULL);
 
         gtk_widget_realize(main_window);
+
+	tip = gtk_tooltips_new();
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(main_window),vbox);
@@ -165,6 +168,7 @@ int setup_gui()
                         G_CALLBACK(leave),NULL);
 
 
+	gtk_tooltips_enable(tip);
 	gtk_widget_show_all(main_window);
 
 	return TRUE;

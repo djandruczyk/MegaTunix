@@ -40,6 +40,7 @@ int interval_max;
 
 int build_comms(GtkWidget *parent_frame)
 {
+	extern GtkTooltips *tip;
 	GtkWidget *frame;
 	GtkWidget *hbox;
 	GtkWidget *hbox2;
@@ -91,6 +92,7 @@ int build_comms(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
 	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_tooltips_set_tip(tip,spinner,"Sets the comm port to use. MegaTunix use DOS/Win32 style port numbers like 1 for COM1, 2 for COM2 and so on.\n",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SET_SER_PORT));
@@ -108,6 +110,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
 	button = gtk_button_new_with_label("Test ECU Communication...");
+	gtk_tooltips_set_tip(tip,button,"Attempts to communicate with the MegaSquirt Controller.  Check the statusbar at the bottom of the window for the results of this test.\n",NULL);
 	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (check_ecu_comms), \
@@ -134,6 +137,7 @@ int build_comms(GtkWidget *parent_frame)
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			100,poll_min,poll_max,poll_step,poll_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_tooltips_set_tip(tip,spinner,"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds. This partially determines the max rate at which RT variable can be read from the MS box.\n",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_POLL_TIMEO));
@@ -143,6 +147,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
+	gtk_tooltips_set_tip(tip,button,"Starts reading the RT variables from the MS.  This wil cause the Runtime Disp. page to begin updating continuously.",NULL);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(START_REALTIME));
@@ -160,6 +165,7 @@ int build_comms(GtkWidget *parent_frame)
 			100,interval_min,interval_max,
 			interval_step,interval_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_tooltips_set_tip(tip,spinner,"Sets the time delay between read attempts for getting the RT variables from the MS, typically should be set around 50 for about 18 reads per second from the MS. This will control the rate at which the Runtime Display page updates.\n",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_INTERVAL_DELAY));
@@ -169,6 +175,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
+	gtk_tooltips_set_tip(tip,button,"Stops reading the RT variables from the MS.  NOTE: you don't have to stop reading the RT vars to read the VEtable and Constants.  It is handled automatically for you.\n",NULL);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(STOP_REALTIME));

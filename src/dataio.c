@@ -30,7 +30,7 @@ extern struct ms_data_v1_and_v2 *runtime;
 extern struct ms_data_v1_and_v2 *runtime_last;
 extern struct ms_ve_constants *ve_constants;
        
-void handle_ms_data(int which_data)
+int handle_ms_data(int which_data)
 {
 	int res = 0;
 	unsigned char buf[255];
@@ -43,9 +43,9 @@ void handle_ms_data(int which_data)
 	switch (which_data)
 	{
 		case REALTIME_VARS:
-			res = read(serial_params.fd,ptr,serial_params.raw_bytes); 
+			res = read(serial_params.fd,ptr,serial_params.raw_bytes*2); 
 			/* the number of bytes expected for raw data read */
-			if (res != serial_params.raw_bytes) 
+			if (res > serial_params.raw_bytes) 
 			{
 				/* Serial I/O problem, resetting port 
 				 * This problem can occur if the MS is 
@@ -61,11 +61,12 @@ void handle_ms_data(int which_data)
 				 * because the serial I/O thread depends on 
 				 * this function and blocks until we return.
 				 */
-				printf("warning  serial data read over bounds\n");
+				printf("warning serial data read error\n");
 				close_serial();
+				usleep(100000);
 				open_serial(serial_params.comm_port);
 				setup_serial_params();
-				return;
+				return FALSE;
 			}
 
 			raw = (struct ms_raw_data_v1_and_v2 *) buf;
@@ -114,7 +115,7 @@ void handle_ms_data(int which_data)
 //				close_serial();
 //				open_serial(serial_params.comm_port);
 //				setup_serial_params();
-//				return;
+//				return FALSE;
 			}
 			memcpy(ve_constants,buf,sizeof(struct ms_ve_constants));
                         ms_ve_goodread_count++;
@@ -172,4 +173,5 @@ void handle_ms_data(int which_data)
  *	printf("Error Count: %i\n",serial_params.errcount);
  *	printf("Reset Count: %i\n",ms_reset_count);
  */
+	return TRUE;
 }

@@ -30,7 +30,7 @@ void post_process(struct ms_raw_data_v1_and_v2 *, struct ms_data_v1_and_v2 *);
 int open_serial(int); /* arg is COMM (dos/win style) port number */
 int setup_serial_params(void); /* Setups serial i/o settings */
 void close_serial(void); /* arg is filedescriptor that was opened */
-void handle_ms_data(int); /* arg is filedescriptor that was opened */
+int handle_ms_data(int); /* arg is filedescriptor that was opened */
 int check_ecu_comms(GtkWidget *, gpointer *);
 void read_ve_const(void);
 void update_const_ve(void);
