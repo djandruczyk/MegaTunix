@@ -152,10 +152,11 @@ void interrogate_ecu()
 		if (total_read > 0)
 		{
 			dbg_func(g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",cmd->string),SERIAL_RD);
+			dbg_func(g_strdup_printf("Data is in HEX!!\n"),SERIAL_RD);
 			p = buf;
 			for (j=0;j<total_read;j++)
 			{
-				dbg_func(g_strdup_printf("0x%.2x ", p[j]),SERIAL_RD);
+				dbg_func(g_strdup_printf("%.2x ", p[j]),SERIAL_RD);
 				if (!((j+1)%8))
 					dbg_func(g_strdup_printf("\n"),SERIAL_RD);
 			}
