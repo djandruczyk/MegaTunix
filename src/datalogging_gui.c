@@ -423,7 +423,8 @@ void dump_log_to_disk(struct Io_File *iofile)
 	gsize count = 0;
 	GString *output;
 	GObject * object = NULL;
-	GArray *history;
+	GArray **histories;
+	gboolean *is_floats;
 	gfloat value = 0.0;
 
 	stop_realtime_tickler();
@@ -432,16 +433,23 @@ void dump_log_to_disk(struct Io_File *iofile)
 
 	write_log_header((void *)iofile, TRUE);
 
-	j = 0;
+	histories = g_new0(GArray *,rtv_map->derived_total);
+	is_floats = g_new0(gboolean ,rtv_map->derived_total);
+
+	for(i=0;i<rtv_map->derived_total;i++)
+	{
+		object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		histories[i] = (GArray *)g_object_get_data(object,"history");
+		is_floats[i] = (gboolean)g_object_get_data(object,"is_float");
+	}
+
 	for (x=0;x<rtv_map->ts_array->len;x++)
 	{
+		j = 0;
 		for(i=0;i<rtv_map->derived_total;i++)
 		{
-			object = g_array_index(rtv_map->rtv_list,GObject *,i);
-
-			history = (GArray *)g_object_get_data(object,"history");
-			value = g_array_index(history, gfloat, x);
-			if ((gboolean)g_object_get_data(object,"is_float"))
+			value = g_array_index(histories[i], gfloat, x);
+			if (is_floats[i])
 				g_string_append_printf(output,"%.3f",value);
 			else
 				g_string_append_printf(output,"%i",(gint)value);
@@ -456,6 +464,8 @@ void dump_log_to_disk(struct Io_File *iofile)
 		output = g_string_append(output,"\r\n");
 	}
 	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_free(is_floats);
+	g_free(histories);
 	g_string_free(output,TRUE);
 	start_realtime_tickler();
 	close_file(iofile);

@@ -194,7 +194,7 @@ void read_log_data(GIOChannel *iochannel, struct Log_Info *log_info)
 		{
 			object = g_array_index(log_info->log_list,GObject *, i);
 			tmp_array = (GArray *)g_object_get_data(object,"data_array");
-			val = (gfloat)g_ascii_strtod(g_strdup(data[i]),NULL);
+			val = (gfloat)g_ascii_strtod(data[i],NULL);
 			g_array_append_val(tmp_array,val);
 
 			//printf("data[%i]=%s\n",i,data[i]);
