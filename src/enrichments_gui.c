@@ -425,13 +425,14 @@ int build_enrichments(GtkWidget *parent_frame)
 
         vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox3);
-
 	/* O2 Sensor Type selector */
         table = gtk_table_new(2,2,TRUE);
         gtk_table_set_row_spacings(GTK_TABLE(table),0);
         gtk_table_set_col_spacings(GTK_TABLE(table),10);
         gtk_container_set_border_width(GTK_CONTAINER(table),0);
         gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+	gtk_widget_set_size_request(table,-1,30);
+
 
         label = gtk_label_new(NULL);
         gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> Sensor Type");

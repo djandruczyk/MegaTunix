@@ -20,12 +20,13 @@
 #include <protos.h>
 #include <globals.h>
 
-int main_x_origin;
-int main_y_origin;
-static int def_width=640;
-static int def_height=480;
+/* Default window size and MINIMUM size as well... */
+static int def_width=690;
+static int def_height=530;
 int width;
 int height;
+int main_x_origin;
+int main_y_origin;
 GtkWidget *main_window;
 GtkTooltips *tip;
 

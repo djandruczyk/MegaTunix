@@ -118,7 +118,7 @@ int build_vetable(GtkWidget *parent_frame)
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
 					1.0,1.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
-			gtk_widget_set_size_request(spinner,52,-1);
+//			gtk_widget_set_size_request(spinner,52,-1);
 			g_object_set_data(G_OBJECT(spinner),"class", 
 					GINT_TO_POINTER(VE));
 			g_object_set_data(G_OBJECT(spinner),"offset", 
