@@ -135,6 +135,7 @@ gboolean comm_port_change(GtkEditable *editable)
 	gboolean result;
 
 	port = gtk_editable_get_chars(editable,0,-1);
+	gtk_widget_modify_text(GTK_WIDGET(editable),GTK_STATE_NORMAL,&black);
 	if(serial_params->open)
 	{
 		close_serial();

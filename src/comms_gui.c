@@ -125,6 +125,9 @@ void build_comms(GtkWidget *parent_frame)
 		gtk_entry_set_text(GTK_ENTRY(entry),serial_params->port_name);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), TRUE);
 	g_signal_connect (G_OBJECT(entry), "changed",
+			G_CALLBACK (entry_changed_handler),
+			NULL);
+	g_signal_connect (G_OBJECT(entry), "activate",
 			G_CALLBACK (comm_port_change),
 			GINT_TO_POINTER(SET_SER_PORT));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,

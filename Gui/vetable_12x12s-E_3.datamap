@@ -53,13 +53,13 @@ tooltip=The VE Spinners control how much fuel is injected into the engine. They 
 keys=page,set_label
 key_types=_INT_,_STRING_
 page=5
-set_label=MegaSquirtnSpark-Extra VE-Table 1
+set_label=MegaSquirtnSpark-Extra VE-Table 3
 
 [title]
 keys=page,set_label
 key_types=_INT_,_STRING_
 page=5
-set_label=Volumetric Efficiency Table 1 (MSnS-Extra)
+set_label=Volumetric Efficiency Table 3 (MSnS-Extra)
 
 [load_tbl_lab]
 keys=page,label,alt_label,depend_on

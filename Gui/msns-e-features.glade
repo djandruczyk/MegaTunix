@@ -1212,7 +1212,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="water_injection_feature_label">
+			    <widget class="GtkLabel" id="water_inj_feature_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Water Injection</property>
 			      <property name="use_underline">False</property>

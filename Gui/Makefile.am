@@ -38,6 +38,8 @@ gui_files = 	README \
 		msns-e-features.datamap \
 		msns-e-fuelconstants.glade \
 		msns-e-fuelconstants.datamap \
+		msns-e-water_nos.glade \
+		msns-e-water_nos.datamap \
 		raweditor.glade \
 		raweditor.datamap \
 		runtime.glade \
