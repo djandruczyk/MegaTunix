@@ -26,8 +26,7 @@ enum
 {
 	COL_OBJECT = 0,
 	COL_NAME,
-	COL_LOWER,
-	COL_UPPER,
+	COL_RANGE,
 	COL_ENTRY,
 	COL_EDITABLE,
 	NUM_COLS
@@ -93,10 +92,11 @@ GtkTreeModel * create_model(void)
 	gchar * name = NULL;
 	gint lower = 0;
 	gint upper = 0;
+	gchar * range = NULL;
 	GObject * object = NULL;
 	extern struct Rtv_Map *rtv_map;
 
-	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_BOOLEAN);
+	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
 
 	/* Append a row and fill in some data */
 	while ((data = rtv_map->raw_list[i])!= NULL)
@@ -112,16 +112,17 @@ GtkTreeModel * create_model(void)
 			continue;
 		lower = (gint) g_object_get_data(object,"lower_limit"); 
 		upper = (gint) g_object_get_data(object,"upper_limit"); 
+		range = g_strdup_printf("%i-%i",lower,upper);
 
 		gtk_list_store_append (model, &iter);
 		gtk_list_store_set (model, &iter,
 				COL_OBJECT, object,
 				COL_NAME, name,
-				COL_LOWER, lower,
-				COL_UPPER, upper,
+				COL_RANGE, range,
 				COL_ENTRY, -1,
 				COL_EDITABLE,TRUE,
 				-1);
+		g_free(range);
 	}
 	return GTK_TREE_MODEL(model);
 }
@@ -145,29 +146,18 @@ void add_columns(GtkTreeView *view, gint output)
 	gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
 	gtk_tree_view_append_column (view, col);
 
-	/* --- Column #2, lower limit --- */
+	/* --- Column #2, range --- */
 
 	renderer = gtk_cell_renderer_text_new ();
-	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_LOWER);
+	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_RANGE);
 	col = gtk_tree_view_column_new_with_attributes (
-			"Lower",  
+			"Range",  
 			renderer,
-			"text", COL_LOWER,
+			"text", COL_RANGE,
 			NULL);
 	gtk_tree_view_append_column (view, col);
 
-	/* --- Column #3, upper limit --- */
-
-	renderer = gtk_cell_renderer_text_new ();
-	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_UPPER);
-	col = gtk_tree_view_column_new_with_attributes (
-			"Upper",  
-			renderer,
-			"text", COL_UPPER,
-			NULL);
-	gtk_tree_view_append_column (view, col);
-
-	/* --- Column #4, user choice --- */
+	/* --- Column #3, user choice --- */
 
 	renderer = gtk_cell_renderer_text_new ();
 	g_signal_connect(renderer, "edited",
@@ -195,14 +185,16 @@ void cell_edited(GtkCellRendererText *cell,
 	gint upper = 0;
 	gint new = 0;
 	gint column = 0;
+	GObject *object = NULL;
 
 	column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
 
 	gtk_tree_model_get_iter (model, &iter, path);
-	gtk_tree_model_get (model, &iter, COL_LOWER, &lower, -1);
-	gtk_tree_model_get (model, &iter, COL_UPPER, &upper, -1);
+	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
 	new = (gint)g_ascii_strtoull(new_text,NULL,10);
+	lower = (gint) g_object_get_data(G_OBJECT(object),"lower_limit");
+	upper = (gint) g_object_get_data(G_OBJECT(object),"upper_limit");
 	if (new < lower)
 		new = lower;
 	if (new > upper)
