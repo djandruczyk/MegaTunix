@@ -12,22 +12,22 @@
  */
 
 #include <config.h>
+#include <datalogging.h>
+#include <datalogging_gui.h>
+#include <defines.h>
+#include <enums.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <globals.h>
+#include <gui_handlers.h>
+#include <math.h>
+#include <notifications.h>
 #include <stdio.h>
+#include <string.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
-#include <errno.h>
-#include <sys/time.h>
-#include <defines.h>
-#include <globals.h>
-#include <datalogging.h>
-#include <enums.h>
-#include <datalogging_gui.h>
-#include <gui_handlers.h>
-#include <notifications.h>
 
 /* Local #defines */
 #define TABLE_COLS 6

@@ -11,22 +11,22 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <comms_gui.h>
 #include <config.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/poll.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
 #include <defines.h>
-#include <structures.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <globals.h>
+#include <notifications.h>
 #include <runtime_gui.h>
 #include <serialio.h>
-#include <errno.h>
-#include <notifications.h>
+#include <stdio.h>
+#include <string.h>
+#include <structures.h>
+#include <sys/poll.h>
+#include <sys/stat.h>
 #include <threads.h>
-#include <comms_gui.h>
+#include <unistd.h>
 
 
 extern gboolean raw_reader_running;

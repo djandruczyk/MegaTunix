@@ -18,12 +18,13 @@
  *  Hacked slightly by Dave J. Andruczyk <djandruczyk@yahoo.com> to
  *  fit into eXtace a bit better..
  */
+
+#include <configfile.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <configfile.h>
 
 static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name);
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value);

@@ -38,7 +38,8 @@ megatunix_SOURCES = \
 	threads.c \
 	tools_gui.c \
 	tuning_gui.c \
-	vetable_gui.c 
+	vetable_gui.c \
+	vex_support.c
 
 megatunix_LDADD = @PACKAGE_LIBS@
 

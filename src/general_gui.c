@@ -12,15 +12,12 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <defines.h>
-#include <globals.h>
+#include <enums.h>
 #include <general_gui.h>
+#include <globals.h>
 #include <gui_handlers.h>
 #include <interrogate.h>
-#include <enums.h>
 
 extern gboolean tips_in_use;
 extern gboolean fahrenheit;

@@ -11,14 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <gdk-pixbuf/gdk-pixdata.h>
+#include <about_gui.h>
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
+#include <gdk-pixbuf/gdk-pixdata.h>
 #include <globals.h>
 #include <logo.h>
-#include <about_gui.h>
 
 
 int build_about(GtkWidget *frame)

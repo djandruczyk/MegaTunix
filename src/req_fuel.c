@@ -14,14 +14,14 @@
 /* Configfile structs. (derived from an older version of XMMS) */
 
 #include <config.h>
-#include <gtk/gtk.h>
 #include <defines.h>
-#include <structures.h>
-#include <req_fuel.h>
-#include <gui_handlers.h>
 #include <enums.h>
 #include <globals.h>
+#include <gtk/gtk.h>
+#include <gui_handlers.h>
+#include <req_fuel.h>
 #include <serialio.h>
+#include <structures.h>
 
 gboolean req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;

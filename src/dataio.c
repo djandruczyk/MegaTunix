@@ -12,16 +12,16 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <pthread.h>
-#include <defines.h>
-#include <globals.h>
-#include <enums.h>
 #include <dataio.h>
-#include <serialio.h>
+#include <defines.h>
+#include <enums.h>
+#include <globals.h>
 #include <post_process.h>
+#include <pthread.h>
+#include <serialio.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 
 

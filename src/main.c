@@ -12,21 +12,15 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/poll.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <defines.h>
-#include <globals.h>
-#include <main.h>
-#include <enums.h>
-#include <init.h>
-#include <core_gui.h>
-#include <gui_handlers.h>
-#include <serialio.h>
 #include <conversions.h>
+#include <core_gui.h>
+#include <defines.h>
+#include <enums.h>
+#include <globals.h>
+#include <gui_handlers.h>
+#include <init.h>
+#include <main.h>
+#include <serialio.h>
 
 
 gint def_comm_port;

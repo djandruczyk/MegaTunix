@@ -12,15 +12,12 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <defines.h>
-#include <globals.h>
-#include <structures.h>
 #include <enrichments_gui.h>
 #include <enums.h>
+#include <globals.h>
 #include <gui_handlers.h>
+#include <structures.h>
 
 struct v1_2_Constants constants;
 extern struct Buttons buttons;

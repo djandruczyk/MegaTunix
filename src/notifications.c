@@ -12,10 +12,10 @@
  */
 
 #include <defines.h>
-#include <structures.h>
 #include <globals.h>
 #include <gtk/gtk.h>
 #include <notifications.h>
+#include <structures.h>
 
 extern GdkColor red;
 extern GdkColor black;

@@ -14,17 +14,15 @@
  */
 
 #include <config.h>
-#include <sys/stat.h>
+#include <defines.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <globals.h>
+#include <interrogate.h>
+#include <string.h>
+#include <sys/stat.h>
 #include <sys/poll.h>
 #include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include <defines.h>
-#include <structures.h>
-#include <globals.h>
-#include <errno.h>
-#include <interrogate.h>
 
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;

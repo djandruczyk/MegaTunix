@@ -12,24 +12,21 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <defines.h>
-#include <globals.h>
-#include <structures.h>
-#include <datalogging.h>
-#include <enums.h>
-#include <gui_handlers.h>
-#include <serialio.h>
-#include <threads.h>
 #include <conversions.h>
-#include <init.h>
+#include <datalogging.h>
 #include <datalogging_gui.h>
+#include <defines.h>
+#include <enums.h>
+#include <globals.h>
+#include <gui_handlers.h>
+#include <init.h>
 #include <notifications.h>
-#include <runtime_gui.h>
 #include <req_fuel.h>
+#include <runtime_gui.h>
+#include <serialio.h>
+#include <stdio.h>
+#include <structures.h>
+#include <threads.h>
 
 extern gint req_fuel_popup;
 extern unsigned char *kpa_conversion;
@@ -346,6 +343,12 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case STOP_DATALOGGING:
 			stop_datalogging();
+			break;
+		case EXPORT_VETABLE:
+			printf("export VEtable\n");
+			break;
+		case IMPORT_VETABLE:
+			printf("import VEtable\n");
 			break;
 	}
 	return TRUE;

@@ -12,14 +12,11 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
+#include <conversions.h>
 #include <defines.h>
+#include <enums.h>
 #include <globals.h>
 #include <structures.h>
-#include <enums.h>
-#include <conversions.h>
 
 /* Conversions.c
  * 

@@ -12,25 +12,49 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <defines.h>
+#include <enums.h>
 #include <globals.h>
+#include <gui_handlers.h>
 #include <tools_gui.h>
 
 int build_tools(GtkWidget *parent_frame)
 {
         GtkWidget *vbox;
         GtkWidget *label;
+        GtkWidget *frame;
+        GtkWidget *table;
+        GtkWidget *button;
 
         vbox = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-        label = gtk_label_new("Not Implemented yet");
-        gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+
+	frame = gtk_frame_new("VE Table Export/Import (VEX Files)");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+
+	table = gtk_table_new(1,5,TRUE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+	
+
+	button = gtk_button_new_with_label("Export VEtable(s)");
+        g_signal_connect (G_OBJECT(button), "clicked",
+                        G_CALLBACK (std_button_handler),
+                        GINT_TO_POINTER(EXPORT_VETABLE));
+        gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_button_new_with_label("Import VEtable(s)");
+        g_signal_connect (G_OBJECT(button), "clicked",
+                        G_CALLBACK (std_button_handler),
+                        GINT_TO_POINTER(IMPORT_VETABLE));
+        gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
 
-
-	/* Not written yet */
 	return TRUE;
 }

@@ -12,15 +12,12 @@
  */
 
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <structures.h>
-#include <globals.h>
-#include <vetable_gui.h>
 #include <defines.h>
 #include <enums.h>
+#include <globals.h>
 #include <gui_handlers.h>
+#include <structures.h>
+#include <vetable_gui.h>
 
 extern struct v1_2_Constants constants;
 extern struct ms_ve_constants_v1_and_v2 ve_constants;

@@ -11,21 +11,21 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <comms_gui.h>
 #include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <pthread.h>
-#include <sys/poll.h>
-#include <defines.h>
-#include <globals.h>
-#include <runtime_gui.h>
-#include <threads.h>
 #include <dataio.h>
 #include <datalogging_gui.h>
+#include <defines.h>
 #include <enums.h>
+#include <globals.h>
 #include <notifications.h>
-#include <comms_gui.h>
+#include <pthread.h>
+#include <runtime_gui.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/poll.h>
+#include <threads.h>
+#include <unistd.h>
 
 
 pthread_t raw_input_thread;			/* thread handle */

@@ -11,28 +11,24 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/poll.h>
-#include <defines.h>
-#include <globals.h>
-#include <enums.h>
-#include <core_gui.h>
-#include <gui_handlers.h>
 #include <about_gui.h>
 #include <comms_gui.h>
-#include <general_gui.h>
+#include <config.h>
 #include <constants_gui.h>
+#include <core_gui.h>
+#include <datalogging_gui.h>
+#include <defines.h>
 #include <enrichments_gui.h>
-#include <vetable_gui.h>
+#include <enums.h>
+#include <general_gui.h>
+#include <globals.h>
+#include <gui_handlers.h>
 #include <ignition_gui.h>
+#include <lowlevel_gui.h>
 #include <runtime_gui.h>
 #include <tuning_gui.h>
 #include <tools_gui.h>
-#include <lowlevel_gui.h>
-#include <datalogging_gui.h>
+#include <vetable_gui.h>
 
 
 

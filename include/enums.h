@@ -57,6 +57,8 @@ typedef enum
 	CLOSE_LOGFILE,
 	START_DATALOGGING,
 	STOP_DATALOGGING,
+	EXPORT_VETABLE,
+	IMPORT_VETABLE
 }StdButton;
 
 /* Toggle/Radio buttons */

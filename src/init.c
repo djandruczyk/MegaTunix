@@ -12,16 +12,15 @@
  */
 
 #include <config.h>
+#include <configfile.h>
+#include <defines.h>
+#include <globals.h>
+#include <init.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <defines.h>
-#include <globals.h>
-#include <configfile.h>
-#include <init.h>
+#include <unistd.h>
 
 gint major_ver;
 gint minor_ver;
