@@ -88,7 +88,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -103,7 +103,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -136,7 +136,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -151,7 +151,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -184,7 +184,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -199,7 +199,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -232,7 +232,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -247,7 +247,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -284,7 +284,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -299,7 +299,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -333,7 +333,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         GINT_TO_POINTER(IMMEDIATE));
         gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 10, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(bitmask_button_handler),
                         NULL);
@@ -348,7 +348,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         GINT_TO_POINTER(IMMEDIATE));
         gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 10, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
         g_signal_connect(G_OBJECT(button),"toggled",
                       G_CALLBACK(bitmask_button_handler),
                         NULL);
@@ -382,7 +382,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -397,7 +397,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -411,7 +411,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 
-	frame = gtk_frame_new("Idle Control Method");
+	frame = gtk_frame_new("Idle Control");
 	inv_ign_controls = g_list_append(inv_ign_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -424,7 +424,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	label = gtk_label_new("Idle Control Methodology");
         gtk_table_attach (GTK_TABLE (table), label, 0, 3, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"B&G On-Off");
 	buttons.onoff_idle_but = button;
@@ -437,7 +437,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -454,7 +454,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			GINT_TO_POINTER(IMMEDIATE));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
@@ -477,7 +477,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
         /* Cooling Fan Turn-On Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
@@ -498,7 +498,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 
 	ebox = gtk_event_box_new();
@@ -518,7 +518,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	table = gtk_table_new(5,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),25);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,20);
 
 	/* This label is dynamic and will change based on unit preference
@@ -529,7 +529,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	/* SPECIAL CASE!!!!
 	 * If you notice no data is bound to this object NOR any signal 
 	 * handler.  This is NOT A BUG, it is because this spinbutton is 
@@ -551,7 +551,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Fast Idle Speed */
 	label = gtk_label_new("Fast Idle Speed (RPM)");
@@ -561,7 +561,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
         /* Fast Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(1800.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
@@ -582,7 +582,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	// Slow Idle Temp
 	label = gtk_label_new("Slow Idle Temp (\302\260F.)");
@@ -593,7 +593,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
         /* Slow Idle Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(145.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
@@ -616,7 +616,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 
 	/* Slow Idle Speed */
@@ -627,7 +627,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
         /* Slow Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(900.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
@@ -648,7 +648,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 3, 4,
                         (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Idle Threshold  (compared to TPS, if TPS is below this
 	 * use idle control
@@ -660,7 +660,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
         /* Idle Threshold (% of TPS )*/
         adj =  (GtkAdjustment *) gtk_adjustment_new(10.0,0.0,100.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
@@ -682,7 +682,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 4, 5,
                         (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 
 
@@ -701,7 +701,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			"Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(READ_VE_CONST));
@@ -712,7 +712,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(BURN_MS_FLASH));

@@ -88,7 +88,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 		 */
 		gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, i, i+1,
 				(GtkAttachOptions) (GTK_FILL),
-				(GtkAttachOptions) (0), 0, 0);
+				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 		label = gtk_label_new(F_warmup_labels[i]);
 		labels.warmwizard_lab[i] = label;
@@ -96,7 +96,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 		gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, i, i+1,
 				(GtkAttachOptions) (GTK_FILL),
-				(GtkAttachOptions) (0), 0, 0);
+				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	}
 
 	/*  Box to contain the cranking/afterstart frames */
@@ -104,7 +104,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Cranking Pulsewidth (ms)");
-	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,TRUE,0);
 
 	hbox2 = gtk_hbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
@@ -119,14 +119,14 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	label = gtk_label_new("Pulsewidth at -40 \302\260 F.");
 	temp_dep = g_list_append(temp_dep, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	label = gtk_label_new("Pulsewidth at 170 \302\260 F.");
 	labels.ww_cr_pulse_hightemp_lab = label;
@@ -134,7 +134,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Priming pulse copy */
 	tmpspin = ve_widgets[119];
@@ -144,7 +144,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Cranking Pulsewidth at -40 deg F */
 	tmpspin = ve_widgets[64];
@@ -154,7 +154,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Cranking Pulsewidth at 170 deg F */
 	tmpspin = ve_widgets[65];
@@ -164,11 +164,11 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Afterstart Enrichment frame */
 	frame = gtk_frame_new("Afterstart Enrichment");
-	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,TRUE,0);
 
 	hbox2 = gtk_hbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
@@ -183,13 +183,13 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
-	label = gtk_label_new("Num of Ignition Cycles");
+	label = gtk_label_new("# of Ignition Cycles  ");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Enrichment % */
 	tmpspin = ve_widgets[66];
@@ -199,7 +199,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Number of cycles  */
 	tmpspin = ve_widgets[67];
@@ -209,7 +209,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
@@ -225,20 +225,20 @@ void build_warmwizard(GtkWidget *parent_frame)
 	label = gtk_label_new(NULL);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 
 	label = gtk_label_new("Coolant (\302\260 F.)");
 	temp_dep = g_list_append(temp_dep, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_SHRINK),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	labels.ww_clt_lab = label;
 
 	pbar = gtk_progress_bar_new();
@@ -366,7 +366,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			GINT_TO_POINTER(START_REALTIME));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
 	g_signal_connect(G_OBJECT (button), "clicked",
@@ -374,7 +374,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			GINT_TO_POINTER(STOP_REALTIME));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	button = gtk_button_new_with_label("Get Data from ECU");
 	gtk_tooltips_set_tip(tip,button,
@@ -382,7 +382,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(READ_VE_CONST));
@@ -393,7 +393,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(BURN_MS_FLASH));
