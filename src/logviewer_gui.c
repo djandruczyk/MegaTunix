@@ -460,9 +460,9 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 	switch((GcType)type)
 	{
 		case FONT:
-			color.red = 0;
-			color.green = 65535;
-			color.blue = 0;
+			color.red = 60000;
+			color.green = 60000;
+			color.blue = 60000;
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
@@ -477,7 +477,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
 					GDK_GC_FOREGROUND);
-			hue_angle += 65;
+			hue_angle += 80;
 			if (hue_angle >= 360)
 				hue_angle -= 360.0;
 			break;
