@@ -10,7 +10,7 @@ are ASCII text files in .ini file format, using the common "section",
 key=value
 
 The rts_conf files define all of the sliders shown on the Runtime and 
-WarmupWizard tabs.  They get their data from the RealTimeMaps (rtv_map)
+Warmup-Wizard and VE3D pages.  They get their data from the RealTimeMaps (rtv_map)
 
 
 NOTES regarding the files:
@@ -27,16 +27,23 @@ respectively.
 
 Following that are sections for each slider.
 
-The sections are named [rt_slider_xx], rt for runtime or ww for warmup wizard.
+The sections are named [rt_slider_xx], rt for runtime,ww for warmup wizard and
+ve3d for the 3E VEtable viewer/editor.
 the xx is a number starting at 0 and going up to rt/ww_total_sliders-1 
 (since we start from 0 not 1)
 
 Inside each section are 4 keys;
 slider_name	[string] name used to refer to this control
-table		[integer] a table number in the runtime tab (or zero for warmup
+table		[integer] a table number in the window tab (or zero for warmup
 		wizard), tables are arranged as follows (runtime tab):
-		[table 0][table 1]
-		[table 2][table 3]
+		Table number can be 0 or 1 for the ve3d_rt_sliders as there
+		are two tables (left and right column)
+		Runtime tab uses 4 tables
+			[table 0][table 1]
+			[table 2][table 3]
+		Warmup Wizard uses only 1 table
+		VE3D Viewer PAge uses two tables
+			[table 0][table 1]
 row		[integer], row of above table this control appears on.  You
 		should NEVER put two sliders on the same table/row as they
 		will cause a gui error.
@@ -46,9 +53,3 @@ source		[string]  This is the datasource name,  you get these from
 		Everything else is automagic. This is CaSe SenSiTiVe just so
 		you know....
 
-If you want to modify the sliders for your own use, copy this file to
-~/.MegaTunix/RuntimeSliders and edit to taste. I suggest submitting the file
-to the author for inclusion into the official distribution though. After 
-interrogation is completed, the file search routine will look in your 
-homedir FIRST for files so even if the name isn't changed megatunix
-will prefer the file in your homedir over the system wide one...
