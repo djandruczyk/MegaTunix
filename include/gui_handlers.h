@@ -39,6 +39,7 @@ void set_iac_mode(gboolean);
 void start_runtime_display(void);
 void stop_runtime_display(void);
 gboolean populate_gui(void);
+gboolean drain_hashtable(gpointer, gpointer, gpointer);
 /* Prototypes */
 
 #endif

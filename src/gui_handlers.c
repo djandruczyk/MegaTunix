@@ -62,6 +62,8 @@ extern struct DynamicLabels labels;
 extern struct DynamicMisc misc;
 extern struct Logables logables;
 extern struct Serial_Params *serial_params;
+extern GHashTable *interdep_vars_1;
+extern GHashTable *interdep_vars_2;
 
 static gint update_rate = 24;
 static gint runtime_id = -1;
@@ -116,10 +118,6 @@ static gint num_injectors_2 = 1;
 static gfloat req_fuel_total_1 = 0.0;
 static gfloat req_fuel_total_2 = 0.0;
 static gboolean err_flag = FALSE;
-static GList *offsets_1 = NULL;
-static gint offset_data_1[5]; /* Only 4 interdependant vars... */
-static GList *offsets_2 = NULL;
-static gint offset_data_2[5]; /* Only 4 interdependant vars... */
 
 void leave(GtkWidget *widget, gpointer data)
 {
@@ -363,14 +361,9 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 						ve_const->alternate = 0;
 						dload_val = 0;
 					}
-					if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
-					{
-						offsets_1 = g_list_append(offsets_1,GINT_TO_POINTER(offset));
-						offset_data_1[g_list_index(offsets_1,GINT_TO_POINTER(offset))] = dload_val;	
-							
-					}
-					else
-						offset_data_1[g_list_index(offsets_1,GINT_TO_POINTER(offset))] = dload_val;	
+					g_hash_table_insert(interdep_vars_1,
+						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(dload_val));
 					if (!err_flag)
 						check_req_fuel_limits();
 				}
@@ -590,20 +583,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 				(gint)(((float)num_cylinders_1/
 					(float)num_squirts_1)+0.001);
 			dload_val = ve_const->divider;
-			if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
-			{
-				offsets_1 = g_list_append(offsets_1,
-						GINT_TO_POINTER(offset));
-				offset_data_1[g_list_index(offsets_1,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
-			else
-			{
-				offset_data_1[g_list_index(offsets_1,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
+			g_hash_table_insert(interdep_vars_1,
+					GINT_TO_POINTER(offset),
+					GINT_TO_POINTER(dload_val));
+
 			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
@@ -627,20 +610,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 				(gint)(((float)num_cylinders_1/
 					(float)num_squirts_1)+0.001);
 			dload_val = tmp;
-			if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
-			{
-				offsets_1 = g_list_append(offsets_1,
-						GINT_TO_POINTER(offset));
-				offset_data_1[g_list_index(offsets_1,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
-			else
-			{
-				offset_data_1[g_list_index(offsets_1,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
+			g_hash_table_insert(interdep_vars_1,
+					GINT_TO_POINTER(offset),
+					GINT_TO_POINTER(dload_val));
+
 			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
@@ -661,20 +634,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_const->config12.value = tmp;
 			dload_val = tmp;
-			if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
-			{
-				offsets_1 = g_list_append(offsets_1,
-						GINT_TO_POINTER(offset));
-				offset_data_1[g_list_index(offsets_1,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
-			else
-			{
-				offset_data_1[g_list_index(offsets_1,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
+			g_hash_table_insert(interdep_vars_1,
+					GINT_TO_POINTER(offset),
+					GINT_TO_POINTER(dload_val));
+
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS_2:
@@ -684,20 +647,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
 			dload_val = ve_const_dt2->divider;
-			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
-			{
-				offsets_2 = g_list_append(offsets_2,
-						GINT_TO_POINTER(offset));
-				offset_data_2[g_list_index(offsets_2,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
-			else
-			{
-				offset_data_2[g_list_index(offsets_2,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
+			g_hash_table_insert(interdep_vars_2,
+					GINT_TO_POINTER(offset),
+					GINT_TO_POINTER(dload_val));
+
 			if (num_cylinders_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
@@ -721,20 +674,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
 			dload_val = tmp;
-			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
-			{
-				offsets_2 = g_list_append(offsets_2,
-						GINT_TO_POINTER(offset));
-				offset_data_2[g_list_index(offsets_2,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
-			else
-			{
-				offset_data_2[g_list_index(offsets_2,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
+			g_hash_table_insert(interdep_vars_2,
+					GINT_TO_POINTER(offset),
+					GINT_TO_POINTER(dload_val));
+
 			if (num_cylinders_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
@@ -755,20 +698,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_const_dt2->config12.value = tmp;
 			dload_val = tmp;
-			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
-			{
-				offsets_2 = g_list_append(offsets_2,
-						GINT_TO_POINTER(offset));
-				offset_data_2[g_list_index(offsets_2,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
-			else
-			{
-				offset_data_2[g_list_index(offsets_2,
-						GINT_TO_POINTER(offset))] 
-					= dload_val;	
-			}
+			g_hash_table_insert(interdep_vars_2,
+					GINT_TO_POINTER(offset),
+					GINT_TO_POINTER(dload_val));
+
 			check_req_fuel_limits();
 			break;
 		case GENERIC:	/* Handles almost ALL other variables */
@@ -1131,7 +1064,6 @@ void check_req_fuel_limits()
 	gfloat tmp = 0.0;
 	gfloat req_fuel_per_squirt = 0.0;
 	gint lim_flag = 0;
-	gint index = 0;
 	gint dload_val = 0;
 	gint offset = 0;
 	extern unsigned char *ms_data;
@@ -1173,6 +1105,8 @@ void check_req_fuel_limits()
 				lim_flag = 1;
 			if (req_fuel_per_squirt < 0)
 				lim_flag = 1;
+			if (num_cylinders_1 % num_squirts_1)
+				lim_flag = 1;
 		}
 		/* Required Fuel per SQUIRT */
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
@@ -1189,21 +1123,12 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90;
-			dload_val = convert_before_download(offset,req_fuel_per_squirt);
+			dload_val = convert_before_download(offset,
+					req_fuel_per_squirt);
 			write_ve_const(dload_val, offset);
-			for (index=0;index<g_list_length(offsets_1);index++)
-			{
-				gint offset;
-				gint data;
-				offset = GPOINTER_TO_INT(g_list_nth_data(offsets_1,index));
-				data = offset_data_1[g_list_index(offsets_1,
-						g_list_nth_data(offsets_1,index))];
-				write_ve_const(data, offset);
-			}
-			g_list_free(offsets_1);
-			offsets_1 = NULL;
-			for (index=0;index<5;index++)
-				offset_data_1[index]=0;
+			/* Call handler to empty interdependant hash table */
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
+					
 		}
 
 		lim_flag = 0;
@@ -1216,6 +1141,8 @@ void check_req_fuel_limits()
 			if (req_fuel_per_squirt > 255)
 				lim_flag = 1;
 			if (req_fuel_per_squirt < 0)
+				lim_flag = 1;
+			if (num_cylinders_2 % num_squirts_2)
 				lim_flag = 1;
 		}
 
@@ -1236,19 +1163,8 @@ void check_req_fuel_limits()
 			offset = 90 + MS_PAGE_SIZE;
 			dload_val = convert_before_download(offset,req_fuel_per_squirt);
 			write_ve_const(dload_val, offset);
-			for (index=0;index<g_list_length(offsets_2);index++)
-			{
-				gint offset;
-				gint data;
-				offset = GPOINTER_TO_INT(g_list_nth_data(offsets_2,index));
-				data = offset_data_2[g_list_index(offsets_2,
-						g_list_nth_data(offsets_2,index))];
-				write_ve_const(data, offset);
-			}
-			g_list_free(offsets_2);
-			offsets_2 = NULL;
-			for (index=0;index<5;index++)
-				offset_data_2[index]=0;
+			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,NULL);
+					
 		}
 	}// END Dualtable Req fuel checks... */
 	else
@@ -1290,6 +1206,8 @@ void check_req_fuel_limits()
 				lim_flag = 1;
 			if (req_fuel_per_squirt < 0)
 				lim_flag = 1;
+			if (num_cylinders_1 % num_squirts_1)
+				lim_flag = 1;
 		}
 		/* req-fuel info box  */
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
@@ -1317,23 +1235,18 @@ void check_req_fuel_limits()
 			offset = 90;
 			dload_val = convert_before_download(offset,req_fuel_per_squirt);
 			write_ve_const(dload_val, offset);
-			for (index=0;index<g_list_length(offsets_1);index++)
-			{
-				gint offset;
-				gint data;
-				offset = GPOINTER_TO_INT(g_list_nth_data(offsets_1,index));
-				data = offset_data_1[g_list_index(offsets_1,
-						g_list_nth_data(offsets_1,index))];
-				write_ve_const(data, offset);
-			}
-			g_list_free(offsets_1);
-			offsets_1 = NULL;
-			for (index=0;index<5;index++)
-				offset_data_1[index]=0;
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
 		}
 	} // End B&G style Req Fuel check 
 	return ;
 
+}
+
+gboolean drain_hashtable(gpointer offset, gpointer value, gpointer data)
+{
+	/* called per element fromthe hash table to drain and send to ECU */
+	write_ve_const((gint)value,(gint)offset);
+	return TRUE;
 }
 
 void check_bcfreq(unsigned char tmp, gboolean update)

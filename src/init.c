@@ -59,6 +59,8 @@ struct Conversion_Chart *conversions;
 struct Runtime_Common *runtime;
 struct Runtime_Common *runtime_last;
 struct Ve_Widgets *ve_widgets;
+GHashTable *interdep_vars_1 = NULL;
+GHashTable *interdep_vars_2 = NULL;
 
 void init()
 {
@@ -184,6 +186,12 @@ void make_megasquirt_dirs(void)
 
 void mem_alloc()
 {
+	/* Hash tables to store the interdependant deferred variables before
+	 * download...
+	 */
+	interdep_vars_1 = g_hash_table_new(NULL,NULL);
+	interdep_vars_2 = g_hash_table_new(NULL,NULL);
+
 	/* Allocate memory blocks */
 	serial_params = g_malloc(sizeof(struct Serial_Params));
 	ms_data = g_malloc(2*MS_PAGE_SIZE);
@@ -211,6 +219,7 @@ void mem_alloc()
 void mem_dealloc()
 {
 	/* Allocate memory blocks */
+	
 	g_free(serial_params);
 	g_free(ms_data);
 	g_free(ms_data_last);
@@ -219,4 +228,6 @@ void mem_dealloc()
 	g_free(runtime_last);
 	g_free(conversions);
 	g_free(ve_widgets);
+	g_hash_table_destroy(interdep_vars_1);
+	g_hash_table_destroy(interdep_vars_2);
 }
