@@ -75,8 +75,6 @@ keys themselves are not, as the string compare functions are case insensitive.
 			some signal handler
 	handler		(enum)	  A string representation of a signal handler
 			choice, uses translate_string() to convert to an integer
-	spconfig	(integer) Location of the sparkconfig variable.
-			Special case that applies to only 1 widget... :(
 	toggle_group	(string) Name of group of widgets to enable/disable
 			based on the state of this control.
 	invert_state	(boolean) Determines if the group being toggled needs

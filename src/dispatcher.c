@@ -53,6 +53,7 @@ gboolean dispatcher(gpointer data)
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gint mem_view_style[];
+	extern GHashTable *dynamic_widgets;
 
 	if (!dispatch_queue) /*queue not built yet... */
 		return TRUE;
@@ -103,6 +104,7 @@ trypop:
 				case UPD_READ_VE_CONST:
 					if (connected)
 						io_cmd(IO_READ_VE_CONST,NULL);
+					gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
 					break;
 				case UPD_REALTIME:
 					if (connected)

@@ -213,8 +213,10 @@ void writeto_ecu(void *ptr)
 		dbg_func(__FILE__": writeto_ecu()\n\tSending of value to ECU succeeded\n",SERIAL_WR);
 	g_usleep(5000);
 
-	if (page > 0)
-		set_ms_page(0);
+	if (firmware->multi_page)
+		if ((ign_parm == FALSE) && (page > 0 ))
+			set_ms_page(0);
+
 	g_free(write_cmd);
 
 	g_static_mutex_unlock(&mutex);
@@ -227,7 +229,6 @@ void burn_ms_flash()
 	extern gint **ms_data_last;
 	gint res = 0;
 	gint i = 0;
-	extern gint ecu_caps;
 	extern struct Firmware_Details * firmware;
 	extern struct Serial_Params *serial_params;
 	extern gboolean offline;
@@ -247,11 +248,12 @@ void burn_ms_flash()
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
 	/* doing this may NOT be necessary,  but who knows... */
-	if (ecu_caps & DUALTABLE)
+/*	if (firmware->multi_page)
 	{
 		set_ms_page(0);
-		g_usleep(5000);
+		g_usleep(50000);
 	}
+	*/
 
 	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
 	if (res != 1)
@@ -293,10 +295,8 @@ void readfrom_ecu(void *ptr)
 	/* Flush serial port... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	if (firmware->multi_page)
+	if ((firmware->multi_page ) && (message->need_page_change))
 		set_ms_page(message->page);
-	else if (message->page > 0)
-		dbg_func(__FILE__": readfrom_ecu()\n\t CRITICAL ERROR, requesting data for a page above 0 for NON Multi-Page firmware!!!!\n",CRITICAL);
 
 	result = write(serial_params->fd,
 			message->out_str,
@@ -338,5 +338,7 @@ void readfrom_ecu(void *ptr)
 		serial_params->errcount++;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),CRITICAL);
 	}
+	if ((firmware->multi_page ) && (message->need_page_change))
+		set_ms_page(0);
 }
 

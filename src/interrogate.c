@@ -746,6 +746,11 @@ void load_profile_details(void *ptr)
 						dbg_func(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 				}
 			}
+			else
+			{
+				if(!cfg_read_int(cfgfile,section,"spconfig_offset",&canidate->page_params[i]->spconfig_offset))
+					dbg_func(__FILE__": load_profile_details()\n\t\"spconfig_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			}
 		}
 
 		cfg_free(cfgfile);

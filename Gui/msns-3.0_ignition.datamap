@@ -71,8 +71,8 @@ ign_parm=TRUE
 handler=_GENERIC_
 
 [trigger_angle_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,ign_parm,handler,spconfig
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_BOOL_,_ENUM_,_INT_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,ign_parm,handler
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_BOOL_,_ENUM_
 page=1
 offset=80
 dl_conv_expr=x*2.84
@@ -80,7 +80,6 @@ ul_conv_expr=x/2.84
 dl_type=_IMMEDIATE_
 ign_parm=TRUE
 handler=_TRIGGER_ANGLE_
-spconfig=85
 
 [crank_angle_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,ign_parm,handler

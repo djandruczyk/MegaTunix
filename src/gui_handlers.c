@@ -508,7 +508,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint page = -1;
 	gint bitmask = -1;
 	gint bitshift = -1;
-	gint spconfig = 0;
+	gint spconfig_offset = 0;
 	gboolean ign_parm = FALSE;
 	gboolean temp_dep = FALSE;
 	gint tmpi = 0;
@@ -537,7 +537,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			G_OBJECT(widget),"reqd_fuel");
 	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-	spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
@@ -761,39 +760,43 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case TRIGGER_ANGLE:
-			if (spconfig == 0)
+			spconfig_offset = firmware->page_params[page]->spconfig_offset;
+			if (spconfig_offset == 0)
 			{
-				dbg_func(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig variable is unset, Aborting handler!!!\n",CRITICAL);
+				dbg_func(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n",CRITICAL);
 				dl_type = 0;  
 				break;
 			
 			}
 			if (value > 112.15)	/* Extra long trigger needed */	
 			{
-				tmp = ms_data[page][spconfig];
+				printf("extra long\n");
+				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 1);	/* Set xlong_trig */
-				ms_data[page][spconfig] = tmp;
-				write_ve_const(page, spconfig, tmp, ign_parm);
+				ms_data[page][spconfig_offset] = tmp;
+				write_ve_const(page, spconfig_offset, tmp, ign_parm);
 				value -= 45.0;
 				dload_val = convert_before_download(widget,value);
 			}
 			else if (value > 89.65) /* Long trigger needed */
 			{
-				tmp = ms_data[page][spconfig];
+				printf("long\n");
+				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 0);	/* Set long_trig */
-				ms_data[page][spconfig] = tmp;
-				write_ve_const(page, spconfig, tmp, ign_parm);
+				ms_data[page][spconfig_offset] = tmp;
+				write_ve_const(page, spconfig_offset, tmp, ign_parm);
 				value -= 22.5;
 				dload_val = convert_before_download(widget,value);
 			}
 			else	// value <= 89.65 degrees, no long trigger
 			{
-				tmp = ms_data[page][spconfig];
+				printf("std\n");
+				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
-				ms_data[page][spconfig] = tmp;
-				write_ve_const(page, spconfig, tmp, ign_parm);
+				ms_data[page][spconfig_offset] = tmp;
+				write_ve_const(page, spconfig_offset, tmp, ign_parm);
 				dload_val = convert_before_download(widget,value);
 			}
 

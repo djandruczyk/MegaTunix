@@ -45,6 +45,7 @@ load_bincount=8
 
 [page_1]
 is_spark=TRUE
+spconfig_offset=85
 
 [bytecounts]
 CMD_UPPER_A=22

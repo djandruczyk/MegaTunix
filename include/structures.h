@@ -196,6 +196,7 @@ struct Page_Params
 	gint divider_offset;	/*! Where divider value is located */
 	gint rpmk_offset;	/*! Where rpmk value is located */
 	gint reqfuel_offset;	/*! Where reqfuel value is located */
+	gint spconfig_offset;	/*! Where spconfig value is located */
 };
 
 
@@ -287,6 +288,7 @@ struct Io_Message
 	GArray *funcs;		/*! List of functiosn to be dispatched... */
 	InputHandler handler;	/*! Command handler for inbound data */
 	void *payload;		/*! data passed along, arbritrary size.. */
+	gboolean need_page_change; /*! Do we need to change pages for this cmd*/
 };
 
 /*!
