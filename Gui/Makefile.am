@@ -16,6 +16,8 @@ gui_files = 	README \
 		B_n_G_constants.datamap \
 		datalogging.glade \
 		datalogging.datamap \
+		error_status.glade \
+		error_status.datamap \
 		dt-params.glade \
 		dt-params.datamap \
 		enrichments_BnG.glade \

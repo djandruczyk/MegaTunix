@@ -91,6 +91,59 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
+		case IO_CLEAN_REBOOT:
+			message = initialize_io_message();
+			message->command = NULL_CMD;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_GET_BOOT_PROMPT;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_JUST_BOOT;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_REBOOT_GET_ERROR:
+			message = initialize_io_message();
+			message->command = NULL_CMD;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_GET_BOOT_PROMPT;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_REBOOT_GET_ERROR;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_GET_BOOT_PROMPT:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->need_page_change = FALSE;
+			message->command = READ_CMD;
+			message->out_str = g_strdup("!!");
+			message->out_len = 2;
+			message->handler = NULL_HANDLER;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_BOOT_READ_ERROR:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->need_page_change = FALSE;
+			message->command = READ_CMD;
+			message->out_str = g_strdup("X");
+			message->out_len = 1;
+			message->handler = GET_ERROR;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_JUST_BOOT:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->need_page_change = FALSE;
+			message->command = READ_CMD;
+			message->out_str = g_strdup("X");
+			message->out_len = 1;
+			message->handler = NULL_HANDLER;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
 
 		case IO_INTERROGATE_ECU:
 			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),FALSE);

@@ -133,6 +133,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(CLOSE_LOGFILE));
 	g_hash_table_insert(str_2_enum,"_LOGVIEW_ZOOM_",
 			GINT_TO_POINTER(LOGVIEW_ZOOM));
+	g_hash_table_insert(str_2_enum,"_REBOOT_GETERR_",
+			GINT_TO_POINTER(REBOOT_GETERR));
 	g_hash_table_insert(str_2_enum,"_IMPORT_VETABLE_",
 			GINT_TO_POINTER(IMPORT_VETABLE));
 	g_hash_table_insert(str_2_enum,"_EXPORT_VETABLE_",

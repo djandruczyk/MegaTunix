@@ -221,7 +221,18 @@ trypop:
 				case UPD_WRITE_STATUS:
 					update_write_status(message->payload);
 					break;
-
+				case UPD_GET_BOOT_PROMPT:
+					if (connected)
+						io_cmd(IO_GET_BOOT_PROMPT,NULL);
+					break;
+				case UPD_REBOOT_GET_ERROR:
+					if (connected)
+						io_cmd(IO_BOOT_READ_ERROR,NULL);
+					break;
+				case UPD_JUST_BOOT:
+					if (connected)
+						io_cmd(IO_JUST_BOOT,NULL);
+					break;
 			}
 
 		gdk_threads_enter();

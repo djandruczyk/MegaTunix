@@ -534,6 +534,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	/* get any datastructures attached to the widget */
 	void *obj_data = NULL;
 	gint handler = -1;
+	gboolean restart = FALSE;
+	extern gint realtime_id;
 	extern gboolean no_update;
 	extern gboolean offline;
 	extern gboolean forced_update;
@@ -582,6 +584,18 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			stop_realtime_tickler();
 			no_update = TRUE;
+			break;
+		case REBOOT_GETERR:
+			if (offline)
+				break;
+			if (realtime_id > 0)
+			{
+				stop_realtime_tickler();
+				restart = TRUE;
+			}
+			io_cmd(IO_REBOOT_GET_ERROR,NULL);
+			if (restart)
+				start_realtime_tickler();
 			break;
 		case READ_VE_CONST:
 			if (offline)

@@ -22,6 +22,7 @@
 #include <serialio.h>
 #include <string.h>
 #include <structures.h>
+#include <threads.h>
 #include <unistd.h>
 
 
@@ -63,6 +64,35 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	 */
 	switch (handler)
 	{
+		case NULL_HANDLER:
+			/* This is hte case where we don't expect any data
+			 * back, like a reboot command (X)
+			 * so jsut flush IO and return nicely
+			 */
+			total_read = 0;
+			total_wanted = 1024;
+			zerocount = 0;
+			while (total_read < total_wanted )
+			{
+				dbg_func(g_strdup_printf("\tNULL_HANDLER requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				/* Increment bad read counter.... */
+				if (res == 0)
+					zerocount++;
+
+				dbg_func(g_strdup_printf("\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (zerocount >= 5)  /* 3 bad reads, abort */
+				{
+					bad_read = TRUE;
+					break;
+				}
+			}
+			flush_serial(serial_params->fd, TCIOFLUSH);
+			break;
 		case C_TEST:
 			/* Check_ecu_comms equivalent....
 			 * REALLY REALLY overkill just to read 1 byte, but 
@@ -81,12 +111,12 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 						ptr+total_read,
 						total_wanted-total_read);
 
-				// Increment bad read counter....
+				/* Increment bad read counter.... */
 				if (res == 0)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  // 3 bad reads, abort
+				if (zerocount >= 5)  /* 3 bad reads, abort */
 				{
 					bad_read = TRUE;
 					break;
@@ -101,6 +131,39 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				goto jumpout;
 			}
 			dump_output(total_read,buf);
+			break;
+		case GET_ERROR:
+			/* A reboot command is sent and this grabs whatever
+			 * string it happens to send back as long as it's 
+			 * shorter than 1024 chars...
+			 */
+			total_read=0;
+			total_wanted=1024;
+			zerocount=0;
+			while (total_read < total_wanted )
+			{
+				dbg_func(g_strdup_printf("\tGET_ERROR requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				// Increment bad read counter....
+				if (res == 0)
+					zerocount++;
+
+				dbg_func(g_strdup_printf("\tGET_ERROR read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (zerocount >= 5)  // 3 bad reads, abort
+				{
+					break;
+				}
+			}
+			dump_output(total_read,buf);
+			flush_serial(serial_params->fd, TCIOFLUSH);
+			if (g_utf8_validate(buf+1,total_read-1,NULL))
+				thread_update_logbar("error_status_view",NULL,g_strndup(buf+1,total_read-1),FALSE,FALSE);
+			else
+				thread_update_logbar("error_status_view",NULL,g_strdup("The data that came back was jibberish, try rebooting again.\n"),FALSE,FALSE);
 			break;
 
 		case REALTIME_VARS:
@@ -273,6 +336,7 @@ void dump_output(gint total_read, guchar *buf)
 	if (total_read > 0)
 	{
 		dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's were sent\n"),SERIAL_RD);
+//		dbg_func(g_strndup(buf,total_read),SERIAL_RD);
 		dbg_func(g_strdup_printf("Data is in HEX!!\n"),SERIAL_RD);
 		p = buf;
 		for (j=0;j<total_read;j++)
