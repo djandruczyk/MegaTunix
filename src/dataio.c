@@ -18,7 +18,6 @@
 #include <enums.h>
 #include <ms_structures.h>
 #include <post_process.h>
-#include <pthread.h>
 #include <rtv_processor.h>
 #include <serialio.h>
 #include <string.h>

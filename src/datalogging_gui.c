@@ -25,7 +25,6 @@
 #include <ms_structures.h>
 #include <notifications.h>
 #include <structures.h>
-#include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -62,8 +61,8 @@ static GtkWidget *space_delimiter_button;
 static GHashTable *custom_ord_hash;
 static GHashTable *classic_ord_hash;
 static GHashTable *full_ord_hash;
-static struct timeval now;
-static struct timeval last;
+static GTimeVal now;
+static GTimeVal last;
 
 
 /* mt_classic[] and mt_full[] are arrays laid out like the datalogging
@@ -608,7 +607,7 @@ void run_datalog(void)
 				/* Special Hi-Res clock to be logged */
 				if (begin == TRUE)
 				{	
-					gettimeofday(&now,NULL);
+					g_get_current_time(&now);
 					last.tv_sec = now.tv_sec;
 					last.tv_usec = now.tv_usec;
 					begin = FALSE;
@@ -616,7 +615,7 @@ void run_datalog(void)
 				}
 				else
 				{
-					gettimeofday(&now,NULL);
+					g_get_current_time(&now);
 					cumu += (now.tv_sec-last.tv_sec)+
 						((double)(now.tv_usec-last.tv_usec)/1000000.0);
 					last.tv_sec = now.tv_sec;
