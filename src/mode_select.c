@@ -27,7 +27,6 @@ void parse_ecu_capabilities(gint ecu_caps)
 	set_dualtable_mode((ecu_caps & DUALTABLE) == 0 ? FALSE:TRUE);
 	set_enhanced_mode((ecu_caps & ENHANCED) == 0 ? FALSE:TRUE);
 	set_iac_mode((ecu_caps & (IAC_PWM|IAC_STEPPER)) == 0 ? FALSE:TRUE);
-	set_ignition_mode((ecu_caps & (S_N_SPARK|S_N_EDIS)) == 0 ? FALSE:TRUE);
 	set_launch_ctrl_mode((ecu_caps & LAUNCH_CTRL) == 0 ? FALSE:TRUE);
 	set_raw_memory_mode((ecu_caps & RAW_MEMORY) == 0 ? FALSE:TRUE);
 }
@@ -44,40 +43,6 @@ void set_enhanced_mode(gboolean state)
         extern GList *enhanced_controls;
 	dbg_func(g_strdup_printf(__FILE__": set_enhanced_mode()\n\tSetting Enhanced controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(enhanced_controls, set_widget_state,(gpointer)state);
-}
-
-void set_ignition_mode(gboolean state)
-{
-	extern gint ecu_caps;
-	extern GList *ign_controls;
-	extern GList *inv_ign_controls;
-	extern struct DynamicLabels labels;
-	extern struct DynamicButtons buttons;
-
-	dbg_func(g_strdup_printf(__FILE__": set_ignition_mode()\n\tSetting Ignition controls state to %s\n",states[state]),INTERROGATOR);
-	g_list_foreach(ign_controls, set_widget_state,(gpointer)state);
-	g_list_foreach(inv_ign_controls, set_widget_state,(gpointer)(!state));
-	if (ecu_caps & S_N_EDIS)
-	{
-		gtk_label_set_text(GTK_LABEL(labels.timing_multi_lab),"EDIS Multi-Spark:");
-		gtk_label_set_text(GTK_LABEL(labels.output_boost_lab),"Boost Retard:");
-		gtk_button_set_label(GTK_BUTTON(buttons.multi_spark_but),"Enabled");
-		gtk_button_set_label(GTK_BUTTON(buttons.norm_spark_but),"Disabled");
-		gtk_button_set_label(GTK_BUTTON(buttons.boost_retard_but),"Enabled");
-		gtk_button_set_label(GTK_BUTTON(buttons.noboost_retard_but),"Disabled");
-	}
-	else if (ecu_caps & S_N_SPARK)
-	{
-		gtk_label_set_text(GTK_LABEL(labels.timing_multi_lab),"Crank Timing:");
-		gtk_label_set_text(GTK_LABEL(labels.output_boost_lab),"Ignition Output:");
-		gtk_button_set_label(GTK_BUTTON(buttons.time_based_but),"Time Based");
-		gtk_button_set_label(GTK_BUTTON(buttons.trig_return_but),"Trigger Return");
-		gtk_button_set_label(GTK_BUTTON(buttons.normal_out_but),"Normal");
-		gtk_button_set_label(GTK_BUTTON(buttons.invert_out_but),"Inverted");
-	}
-	else
-		;;
-
 }
 
 void set_launch_ctrl_mode(gboolean state)

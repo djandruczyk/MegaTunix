@@ -287,10 +287,10 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	switch ((SpinButton)handler)
 	{
 		case GENERIC:
-			printf("changing generic bitfield at page/offset %i,%i\n",page,offset);
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
 			tmp = tmp | (bit_val << bit_pos);
+			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			break;
 		case DEBUG_LEVEL:
@@ -302,19 +302,6 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 			/*
-			   case 85:
-			   if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
-			   {
-			   dbg_func(__FILE__": bitmask_button_handler() Setting spark_config1 but NOT using spark capable firmware...\n",CRITICAL);	
-			   break;
-			   }
-			   tmp = ign_table->spark_config1.value;
-			   tmp = tmp & ~bitmask;	//clears bits 
-			   tmp = tmp | (bit_val << bit_pos);
-			   ign_table->spark_config1.value = tmp;
-			   dload_val = tmp;
-
-			   break;	
 			   case 92: // alternate OR tblcnf (firmware dependant)
 			   if (ecu_caps & DUALTABLE)
 			   {
@@ -344,41 +331,6 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			   check_req_fuel_limits();
 			   }
 			   break;
-			   case 116: // config11 
-			   tmp = ve_const->config11.value;
-			   tmp = tmp & ~bitmask;	// clears bits 
-			   tmp = tmp | (bit_val << bit_pos);
-			   ve_const->config11.value = tmp;
-			   dload_val = tmp;
-			   check_config11(dload_val);
-			   break;
-			   case 118: // config13
-			   tmp = ve_const->config13.value;
-			   tmp = tmp & ~bitmask;	// clears bits/
-			   tmp = tmp | (bit_val << bit_pos);
-			   ve_const->config13.value = tmp;
-			   dload_val = tmp;
-			   check_config13(dload_val);
-			   break;
-			   case 247: // Boost Controller (DT only)
-			   if (!(ecu_caps & DUALTABLE))
-			   {
-			   dbg_func(__FILE__": Attempted modification of boost controller variable,  but not running Dualtable firmware!!!\n",CRITICAL);
-			   break;
-			   }
-			   tmp = ve_const_dt2->bcfreq.value;
-			   tmp = tmp & ~bitmask;	// clears bits 
-			   tmp = tmp | (bit_val << bit_pos);
-			   ve_const_dt2->bcfreq.value = tmp;
-			   dload_val = tmp;
-			   break;
-			 case 666:
-			// Debugging selection buttons 
-			tmp32 = dbg_lvl;
-			tmp32 = tmp32 & ~bitmask;
-			tmp32 = tmp32 | (bit_val << bit_pos);
-			dbg_lvl = tmp32;
-			break;
 			*/
 		default:
 				dbg_func(__FILE__": bitmask_button_handler() bitmask button NOT handled ERROR!!, contact author\n",CRITICAL);
@@ -532,7 +484,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	extern gint lv_scroll;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data[0];
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
-	struct Ignition_Table * ign_parms = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -547,8 +498,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	if (ecu_caps & DUALTABLE)
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 
-	if (ecu_caps & (S_N_EDIS|S_N_SPARK))
-		ign_parms = (struct Ignition_Table *) (ms_data[1]);
 
 	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
 	info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
@@ -815,15 +764,12 @@ void update_ve_const()
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
-	struct Ignition_Table *ign_table = NULL;
 
 	/* Point to Table0 (stock MS ) data... */
 	ve_const = (struct Ve_Const_Std *) ms_data[0];
 
 	check_config11(ve_const->config11.value);
 	check_config13(ve_const->config13.value);
-	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-		ign_table = (struct Ignition_Table *) (ms_data[1]);
 
 
 	/* DualTable Fuel Calculations
@@ -1100,49 +1046,6 @@ void update_ve_const()
 					TRUE);
 	}
 
-	/* This gets a little confusing thanks to the MSnEDIS firmware that 
-	 * instead of making use of the 4 leftover bits in spark_config1
-	 * decided to rename the 3rd and 4th bits (actually 2&3) for their
-	 * own use instead of doing something smart and using the UNUSED BITS!!!
-	 */
-	if (ecu_caps & (S_N_SPARK))
-	{
-		/* Timebased or Trigger return */
-		if (ign_table->spark_config1.bit.multi_sp)
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.time_based_but),TRUE);
-		else
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.trig_return_but),TRUE);
-
-		/* Inverted or normal output */
-		if (ign_table->spark_config1.bit.boost_ret)
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.invert_out_but),TRUE);
-
-		else
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.normal_out_but),TRUE);
-	}
-	if (ecu_caps & (S_N_EDIS))
-	{
-		/* Multispark mode or normal mode */
-		if (ign_table->spark_config1.bit.multi_sp)
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.multi_spark_but),TRUE);
-		else
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.norm_spark_but),TRUE);
-
-		/* Boost retard enabled, or not? */
-		if (ign_table->spark_config1.bit.boost_ret)
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.noboost_retard_but),TRUE);
-		else
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.boost_retard_but),TRUE);
-
-	}
 	/* Update all on screen controls (except bitfields (done above)*/
 	for (page=0;page<MAX_SUPPORTED_PAGES;page++)
 	{

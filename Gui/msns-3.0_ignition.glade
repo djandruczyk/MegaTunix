@@ -344,7 +344,7 @@
 
 		      <child>
 			<widget class="GtkSpinButton" id="crank_angle_spin">
-			  <property name="width_request">50</property>
+			  <property name="width_request">60</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="climb_rate">1</property>
@@ -368,7 +368,7 @@
 
 		      <child>
 			<widget class="GtkSpinButton" id="hold_ignition_spin">
-			  <property name="width_request">50</property>
+			  <property name="width_request">60</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="climb_rate">1</property>
@@ -392,7 +392,7 @@
 
 		      <child>
 			<widget class="GtkSpinButton" id="trigger_angle_spin">
-			  <property name="width_request">50</property>
+			  <property name="width_request">60</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="climb_rate">1</property>
