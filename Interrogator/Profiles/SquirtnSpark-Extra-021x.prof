@@ -13,7 +13,7 @@ Burn_Cmd=B
 MultiPage=TRUE
 RequirePageChange=TRUE
 Page_Cmd=P
-TotalTables=3
+TotalTables=4
 TotalPages=8
 
 [table_0]

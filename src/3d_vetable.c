@@ -42,7 +42,7 @@ static GLuint font_list_base;
 
 #define DEFAULT_WIDTH  475
 #define DEFAULT_HEIGHT 320                                                                                  
-static gboolean winstat[3] = {FALSE,FALSE,FALSE};
+static gboolean winstat[8] = {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
 
 /*!
  \brief create_ve3d_view does the initial work of creating the 3D vetable
@@ -74,9 +74,13 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+	printf("table num passed to us is %i\n",table_num);
 
 	if (winstat[table_num] == TRUE)
+	{
+		printf("view already up for that table\n");
 		return TRUE;
+	}
 	else
 		winstat[table_num] = TRUE;
 

@@ -214,9 +214,6 @@ void writeto_ecu(void *ptr)
 
 	g_free(write_cmd);
 
-	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change) && (page > 0)) 
-		set_ms_page(0);
-
 	g_static_mutex_unlock(&mutex);
 	return;
 }
@@ -250,9 +247,9 @@ void burn_ms_flash()
 	{
 		dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
 	}
-	g_usleep(5000);
+	g_usleep(500000);
 
-	dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn to Flash page %i\n",i),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn to Flash\n"),SERIAL_WR);
 
 	flush_serial(serial_params->fd, TCIOFLUSH);
 copyover:
@@ -330,7 +327,5 @@ void readfrom_ecu(void *ptr)
 		serial_params->errcount++;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),CRITICAL);
 	}
-	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change) && (message->page > 0))
-		set_ms_page(0);
 }
 
