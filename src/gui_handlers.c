@@ -307,6 +307,62 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	switch ((SpinButton)handler)
+	{
+		case GENERIC:
+			tmp = ms_data[page][offset];
+			tmp = tmp & ~bitmask;	//clears bits 
+			tmp = tmp | (bitval << bitshift);
+			dload_val = tmp;
+			if (dload_val == ms_data[page][offset])
+				return FALSE;
+			break;
+		case DEBUG_LEVEL:
+			// Debugging selection buttons 
+			tmp32 = dbg_lvl;
+			tmp32 = tmp32 & ~bitmask;
+			tmp32 = tmp32 | (bitval << bitshift);
+			dbg_lvl = tmp32;
+			break;
+
+		case ALT_SIMUL:
+			/* Alternate or simultaneous */
+			if (ecu_caps & MSNS_E)
+			{
+				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+				tmp = ms_data[page][offset];
+				tmp = tmp & ~bitmask;// clears bits 
+				tmp = tmp | (bitval << bitshift);
+				dload_val = tmp;
+				if (dload_val == ms_data[page][offset])
+					return FALSE;
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
+				g_hash_table_insert(interdep_vars[page],
+						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(dload_val));
+				check_req_fuel_limits(table_num);
+			}
+			else
+			{
+				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+				dload_val = bitval;
+				if (dload_val == ms_data[page][offset])
+					return FALSE;
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
+				g_hash_table_insert(interdep_vars[page],
+						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(dload_val));
+				check_req_fuel_limits(table_num);
+			}
+			break;
+		default:
+			dbg_func(g_strdup_printf(__FILE__": bitmask_button_handler()\n\tbitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n",page,offset),CRITICAL);
+			return FALSE;
+			break;
+
+	}
 
 	/* Toggles a group ON/OFF based on a widgets state.... */
 	if (toggle_groups)
@@ -325,56 +381,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (swap_labels)
 		switch_labels(swap_labels,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
-	switch ((SpinButton)handler)
-	{
-		case GENERIC:
-			tmp = ms_data[page][offset];
-			tmp = tmp & ~bitmask;	//clears bits 
-			tmp = tmp | (bitval << bitshift);
-			dload_val = tmp;
-			break;
-		case DEBUG_LEVEL:
-			// Debugging selection buttons 
-			tmp32 = dbg_lvl;
-			tmp32 = tmp32 & ~bitmask;
-			tmp32 = tmp32 | (bitval << bitshift);
-			dbg_lvl = tmp32;
-			break;
-
-		case ALT_SIMUL:
-			/* Alternate or simultaneous */
-			if (ecu_caps & MSNS_E)
-			{
-				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
-				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
-				firmware->rf_params[table_num]->alternate = bitval;
-				tmp = ms_data[page][offset];
-				tmp = tmp & ~bitmask;// clears bits 
-				tmp = tmp | (bitval << bitshift);
-				dload_val = tmp;
-				g_hash_table_insert(interdep_vars[page],
-						GINT_TO_POINTER(offset),
-						GINT_TO_POINTER(dload_val));
-				check_req_fuel_limits(table_num);
-			}
-			else
-			{
-				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
-				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
-				firmware->rf_params[table_num]->alternate = bitval;
-				dload_val = bitval;
-				g_hash_table_insert(interdep_vars[page],
-						GINT_TO_POINTER(offset),
-						GINT_TO_POINTER(dload_val));
-				check_req_fuel_limits(table_num);
-			}
-			break;
-		default:
-			dbg_func(g_strdup_printf(__FILE__": bitmask_button_handler()\n\tbitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n",page,offset),CRITICAL);
-			return FALSE;
-			break;
-
-	}
 	if (dl_type == IMMEDIATE)
 	{
 		dload_val = convert_before_download(widget,dload_val);

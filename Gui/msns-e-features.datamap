@@ -21,6 +21,14 @@ handler=_BURN_MS_FLASH_
 page=0
 bind_to_list=burners
 
+#------ Labels --------------------------------------------------------------
+
+[2nd_o2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=dt_features
+
 #------ Radio Buttons --------------------------------------------------------
 
 [ms_persona]
@@ -181,4 +189,179 @@ bind_to_list=dt_features
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is checked these enrichments are added into the pulsewidth sent to the injector. NOTE: This only applies if DT mode is set...
+
+[2nd_o2_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=66
+bitval=1
+bitshift=0
+bitmask=1
+bind_to_list=dt_features
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Enable the use of ADC6 as a secondary EGO input for DT mode ONLY
+
+[n2o_enrich_bank1_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=66
+bitval=0
+bitshift=5
+bitmask=32
+bind_to_list=dt_features
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When nitrous input is active additional fuel PW will be added to Injector channel 1
+
+[n2o_enrich_bank2_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=66
+bitval=1
+bitshift=5
+bitmask=32
+bind_to_list=dt_features
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When nitrous input is active additional fuel PW will be added to Injector channel 2
+
+[2nd_o2_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=66
+bitval=0
+bitshift=0
+bitmask=1
+bind_to_list=dt_features
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Disable the use of ADC6 as a secondary EGO input for DT mode ONLY
+
+
+
+[n2o_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitval=1
+bitshift=7
+bitmask=128
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through hte main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
+
+[n2o_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitval=0
+bitshift=7
+bitmask=128
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through hte main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
+
+[boost_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=1
+bitshift=0
+bitmask=1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
+
+[boost_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=0
+bitshift=0
+bitmask=1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
+
+[shift_light_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=1
+bitshift=1
+bitmask=2
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The shift light feature gives the user a level of feedback useful for drag racing or other performance needs. 
+
+[shift_light_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=0
+bitshift=1
+bitmask=2
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The shift light feature gives the user a level of feedback useful for drag racing or other performance needs. 
+
+[launch_ctrl_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=1
+bitshift=2
+bitmask=4
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
+
+[launch_ctrl_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=0
+bitshift=2
+bitmask=4
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The launch control feature provides features to manipulate the engines timing, fuel and spark dropping to be able to attain boost with no engine load.  This does this by aggressivly retarding timing to spool a turbo for a stronger launch.  This requires extra inputs to be connected to appropriate switches on the vehicle. See http://megaquirt.sf.net/extra for more details.
+
+[pwm_idle_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=1
+bitshift=3
+bitmask=8
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires the addition of a power transistor to the ECU board to handle this actuator.  See http://megasquirt.sf.net/extra for more information.
+
+[bng_idle_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=0
+bitshift=3
+bitmask=8
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The BnG (Bowling and Grippo) idle mode is the simpler On/Off mode, eihter it's on and you have a high idle or it's off and idle is controlled by the throttle stop.  It's a very simple setup, but works for many vehicles.
+
 
