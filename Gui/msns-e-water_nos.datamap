@@ -1,10 +1,10 @@
-# MSnS-E Idle/Boost datamap
+# MSnS-E Water/NOS/Launch datamap
 
 [global]
-description=Object data map for WaterInj/NOS for msns-E
+description=Object data map for WaterInj/NOS/LaunchCtrl for msns-E
 #tab_name=_Idle/Boost\nLaunch
-tab_name=_Water/NOS
-id_prefix=wn_
+tab_name=_Water/NOS/Launch
+id_prefix=wnl_
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -65,6 +65,30 @@ keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
 bind_to_list=nos_controls,antilag_controls,nos_params
+
+[launch_params_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_controls
+
+[variable_launch_feature_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_controls
+
+[launch_feature_ebox]
+keys=page,tooltip
+key_types=_INT_,_STRING_
+page=0
+tooltip=Launch control is used to limit the rpm of the engine for rapid launch (drag racing), By enabling this you can select how to limit the engine's power for a faster takeoff.  NOTE: spark drop is NOT available on EDIS setups, and the soft limiter is NOT available at all when NOT using a spark mode.
+
+[variable_launch_feature_ebox]
+keys=page,tooltip
+key_types=_INT_,_STRING_
+page=0
+tooltip=Variable Launch control uses an external input for the user to set the hard cut limit without needed to run any tuning software.  The Best way to implement it is to hada thumbswitch that is easily accessed, rev the engine to the target hardlimit rpm and hit the button.  The ECU will use this rpm as the hard limit RPM. See http://megasquirt.sf.net/extra/launch.htm
 
 #----- Labels ----------------------------------------------------------------
 
@@ -203,6 +227,92 @@ bind_to_list=nos_controls,nos_params
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
+
+[launch_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=1
+bitshift=2
+bitmask=4
+toggle_groups=launch_controls
+group_states=ENABLED
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The Launch control system is used for drag racing to limit power when taking off to minimize wheelspin.
+
+[launch_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitval=0
+bitshift=2
+bitmask=4
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The Launch control system is used for drag racing to limit power when taking off to minimize wheelspin.
+
+[variable_launch_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=46
+bitval=0
+bitshift=1
+bitmask=2
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The Variable Launch uses an external input triggered by the user to set the hard launch limit. It works by the user revving the engine to the limit point and hitting a button and the ECU will record that RPM and use that as the laucnh limit when laucnh control is active (when the tps is above the setpoint)
+
+[variable_launch_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=46
+bitval=1
+bitshift=1
+bitmask=2
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The Variable Launch uses an external input triggered by the user to set the hard launch limit. It works by the user revving the engine to the limit point and hitting a button and the ECU will record that RPM and use that as the laucnh limit when laucnh control is active (when the tps is above the setpoint)
+
+[launch_mode_fuelcut_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=0
+bitshift=0
+bitmask=3
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Fuel cut is only used to limit engine RPM when laucnh control is active.
+
+[launch_mode_sparkcut_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=1
+bitshift=0
+bitmask=3
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Spark cut is only used to limit engine RPM when launch control is active.  THIS HAS NO EFFECT when using EDIS ignition as the EDIS module can NOT drop sparks.
+
+[launch_mode_fuelsparkcut_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=3
+bitshift=0
+bitmask=3
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Fuel AND Spark cut is used to limit engine RPM when launch control is active.  THIS will NOT drop sparks when using EDIS ignition as the EDIS module can NOT drop sparks.
 
 #----- Spinbuttons ----------------------------------------------------------
 
@@ -344,3 +454,70 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This control and the previous one up determine the range of manifold pressures in which NOS antilag can be used.
 
+[launch_hard_rpm_limit_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=20
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+bind_to_list=launch_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the launch limiter.
+
+[launch_min_tps_spin]
+keys=page,offset,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=41
+bind_to_list=launch_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control sets the threshold where the throttle has to be opened MORE than this amount (in raw ADC counts) for Launch control to be activated...
+
+[launch_soft_angle_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=42
+dl_conv_expr=(x/0.352)+28.4
+ul_conv_expr=(x-28.4)*0.352
+bind_to_list=launch_controls,spark_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the launch limiter.
+
+[launch_soft_rpm_limit_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=43
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+bind_to_list=launch_controls,spark_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control Sets the soft revlimit RPM (where ignition is cut back) for the launch limite
+
+[launch_limiter_base_sparks_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=78
+dl_conv_expr=x-1
+ul_conv_expr=x+1
+bind_to_list=launch_controls,spark_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control and the next one down set the parameters for the launch spark revlimiter when dropping sparks (NON EDIS modes). Typical values for this control are 1 more than the number of cylinders in your car (5 for a 4 cyl, 7 for a 6 cyl, etc..)
+
+[launch_spark_drop_spin]
+keys=page,offset,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=77
+bind_to_list=launch_controls,spark_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control and the previous one up set the parameters for the launch spark revlimiter when dropping sparks (NON EDIS modes). This value is usually set to about 2/3rds of the above, so for a 4 cyl car you'd set the base to 5, and this one to 3 and you'd end up with a round robin style spark drop. Experimentation is recommended.
