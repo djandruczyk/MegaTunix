@@ -19,17 +19,17 @@
 #include <globals.h>
 #include <tuning_gui.h>
 
-#define DEFAULT_WIDTH  400
-#define DEFAULT_HEIGHT 300
+#define DEFAULT_WIDTH  320
+#define DEFAULT_HEIGHT 320
                                                                                                                             
 int grid = 8;
 int beginX, beginY;
 int active_map, active_rpm = 0;
   
 float dt = 0.008;
-float sphi = 30.0; 
-float stheta = 60.0; 
-float sdepth = 8.533;
+float sphi = 25.0; 
+float stheta = 75.0; 
+float sdepth = 7.533;
 float zNear = 0.8;
 float zFar = 23;
 float aspect = 1.333;
@@ -40,15 +40,29 @@ extern struct Ve_Const_Std *ve_const_p1;
 int build_tuning(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
+	GtkWidget *vbox2;
 	GtkWidget *drawing_area;
+	GtkWidget *frame;
+	GtkWidget *hbox;
 	GdkGLConfig *gl_config;
 
 	vbox = gtk_vbox_new(FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+
+	frame = gtk_frame_new("VE Table 3D display");
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
+	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
+
 	drawing_area = gtk_drawing_area_new();
+	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
+
 	gtk_widget_set_size_request (drawing_area, 
-			DEFAULT_HEIGHT, DEFAULT_WIDTH);
+			DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
 	gl_config = get_gl_config();
 	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL, 
 			TRUE, GDK_GL_RGBA_TYPE);
@@ -76,9 +90,11 @@ int build_tuning(GtkWidget *parent_frame)
 	g_signal_connect_swapped (G_OBJECT (drawing_area), "key_press_event",
 			G_CALLBACK (tuning_gui_key_press_event), drawing_area);	
 
-	/* Size the drawing area to fill the available space */
-	gtk_box_pack_start(GTK_BOX(vbox),drawing_area,TRUE,TRUE,5);
+	frame = gtk_frame_new("3D Display Controls");
+	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
+	vbox2 = gtk_vbox_new(TRUE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 	/* Probably want something meaningful here */
 	return TRUE;
 }

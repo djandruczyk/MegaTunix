@@ -45,8 +45,8 @@ int build_general(GtkWidget *parent_frame)
 	GSList *group;
 
 	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
+	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
 	hbox = gtk_hbox_new(TRUE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
