@@ -24,6 +24,7 @@ gboolean populate_viewer(GtkWidget * );
 gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer );
 gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer );
 void * build_v_value(GtkWidget *, gint );
+GdkGC * initialize_gc(GdkDrawable *, GcType );
 /* Prototypes */
 
 #endif

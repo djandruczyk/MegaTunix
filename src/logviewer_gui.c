@@ -345,19 +345,21 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 
 void * build_v_value(GtkWidget * widget, gint offset)
 {
-	struct Viewable_Value *v_value;
+	struct Viewable_Value *v_value = NULL;
 	v_value = g_malloc(sizeof(struct Viewable_Value));		
 	v_value->parent = widget;
 	v_value->d_area = gtk_drawing_area_new();
 
+
 	v_value->pmap = gdk_pixmap_new(
 			v_value->d_area->window, 
 			10,10, 
-			gtk_widget_get_visual(
-				v_value->d_area)->depth);
+			gtk_widget_get_visual(v_value->d_area)->depth);
+
 	gtk_box_pack_start(GTK_BOX(widget),
 			v_value->d_area,
 			TRUE,TRUE,0);
+
 	gtk_widget_add_events(v_value->d_area,
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
@@ -378,9 +380,69 @@ void * build_v_value(GtkWidget * widget, gint offset)
 	g_object_set_data(G_OBJECT(v_value->d_area),
 			"data",(gpointer)v_value);
 
+	v_value->font_gc = initialize_gc(v_value->pmap, FONT);
+	v_value->trace_gc = initialize_gc(v_value->pmap, TRACE);
+	v_value->grat_gc = initialize_gc(v_value->pmap, GRATICULE);
+
 	v_value->runtime_offset = logging_offset_map[offset];
 	v_value->size = logging_datasizes_map[offset];
+
+	
 
 	gtk_widget_show_all(widget);
 	return v_value;
 }
+
+
+GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
+{
+	GdkColor color;
+	GdkGC * gc = NULL;
+	static guint16 red = 0;
+	static guint16 green = 32768;
+	static guint16 blue = 65535;
+	GdkGCValues values;
+
+	switch((GcType)type)
+	{
+		case FONT:
+			color.red = 65535;
+			color.green = 65535;
+			color.blue = 65535;
+			values.foreground = color;
+			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
+					&values,
+					GDK_GC_FOREGROUND);
+			break;
+
+		case TRACE:
+			color.red = red;
+			color.green = green;
+			color.blue = blue;
+			values.foreground = color;
+			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
+					&values,
+					GDK_GC_FOREGROUND);
+			red += 8192;
+			green += 4096;
+			blue += 12288;
+			if (red > 65536)
+				red -= 65536;
+			if (green > 65536)
+				green -= 65536;
+			if (blue > 65536)
+				blue -= 65536;
+			break;
+		case GRATICULE:
+			color.red = 12288;
+			color.green = 2048;
+			color.blue = 2048;
+			values.foreground = color;
+			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
+					&values,
+					GDK_GC_FOREGROUND);
+			break;
+	}	
+	return gc;	
+}
+

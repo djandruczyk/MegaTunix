@@ -142,5 +142,11 @@ typedef enum
 	NONE
 }ImportParserArg;
 
+typedef enum
+{
+	FONT,
+	TRACE,
+	GRATICULE
+}GcType;
 
 #endif

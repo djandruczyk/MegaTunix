@@ -248,6 +248,9 @@ struct Viewable_Value
 	GtkWidget *parent; 		/* Parent Widget */
 	GtkWidget *d_area;		/* Drawing area widget */
 	GdkPixmap *pmap;		/* Drawing area backing pixmap */
+	GdkGC *font_gc;			/* GC used for the fonts */
+	GdkGC *trace_gc;		/* GC used for the trace */
+	GdkGC *grat_gc;			/* GC used for the graticule */
 	gchar *vname;			/* Name of widget being logged */
 	gint runtime_offset;		/* Offset into runtime struct */
 	gint size;			/* 1=byte, 2=float, 4=float */
