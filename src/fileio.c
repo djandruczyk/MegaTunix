@@ -18,6 +18,7 @@
 #include <fileio.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
+#include <logviewer_core.h>
 #include <notifications.h>
 #include <structures.h>
 #include <sys/time.h>
@@ -38,8 +39,10 @@ static gboolean dlog_open = FALSE;
 static gboolean vex_open = FALSE;
 static gboolean backup_open = FALSE;
 static gboolean restore_open = FALSE;
+static gboolean logview_open = FALSE;
 static gchar *vexfile;
 static gchar *dlogfile;
+static gchar *logviewfile;
 
 void present_filesavebox(FileIoType iotype)
 {
@@ -219,6 +222,20 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			break;
+		case DATALOG_IMPORT:
+			if (logview_open)
+			{
+				g_fprintf(stderr,__FILE__": Datalog viewfile already open,  should not open it twice...BUG!!!\n");
+				g_free(iofile);
+				return;
+			}
+			logviewfile = g_strdup(selected_filename);
+			logview_open = TRUE;
+			tmpbuf = g_strdup_printf("DataLog ViewFile Opened\n");
+			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
+			g_free(tmpbuf);
+			load_logviewer_file(iofile);
+			break;
 		case FULL_BACKUP:
 			if (backup_open)
 			{
@@ -318,6 +335,12 @@ void close_file(void *ptr)
 			dlog_open = FALSE;
 			g_free(dlogfile);
 			break;
+		case DATALOG_IMPORT:
+			tmpbuf = g_strdup_printf("LogView File Closed\n");
+			update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
+			logview_open = FALSE;
+			g_free(logviewfile);
+			break;
 		case FULL_BACKUP:
 			tmpbuf = g_strdup_printf("Full Backup File Closed\n");
 			update_logbar(tools_view,NULL,tmpbuf,TRUE,FALSE);
@@ -330,8 +353,6 @@ void close_file(void *ptr)
 			restore_open = FALSE;
 			break;
 
-		case DATALOG_IMPORT: /* Not implemented yet */
-			break;
 		case VE_EXPORT: /* Fall Through */
 		case VE_IMPORT: /* VE Export/import.. */
 			tmpbuf = g_strdup_printf("VEX File Closed\n");

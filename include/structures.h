@@ -293,4 +293,15 @@ struct Def_Control
 	Capabilities flags;
 };
 
+/* The Log_Info datastructure is populated when a datalog file is opened
+ * for viewing in the Datalog viewer.
+ */
+struct Log_Info
+{
+	gint field_count;	/* How many fields in the logfile */
+	GHashTable *fields_hash;/* Hash table to store information blocks */
+	gchar *delim;		/* delimiter between fields for this logfile */
+	gchar **fields;		/* NULL term'd vector of string field names */
+};
+
 #endif

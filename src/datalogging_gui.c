@@ -583,7 +583,7 @@ void write_log_header(void *ptr)
 			index -= 1;
 			//g_printf("i %i, index %i\n",i,index);
 			output = g_string_append(output, 
-					logable_names[index]);
+					g_strdelimit(g_strdup(logable_names[index])," ",'_'));
 			offset_list[j] = logging_offset_map[index];
 			size_list[j] = logging_datasizes_map[index];
 			j++;
