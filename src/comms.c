@@ -184,7 +184,7 @@ void writeto_ecu(struct Io_Message *message)
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO!!!\n"),CRITICAL);
 
 
-	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Value %i, Mem Offset %i\n",page,value,offset),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Mem Offset %i, Value %i\n",page,offset,value),SERIAL_WR);
 
 	if (value > 255)
 	{

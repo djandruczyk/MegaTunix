@@ -70,6 +70,14 @@ key_types=_INT_,_STRING_
 page=6
 set_label=AFR Table 1
 
+#----- widgets ---------------------------------------------------------------
+
+[topframe]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=6
+bind_to_list=afrtables
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
