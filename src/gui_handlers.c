@@ -400,6 +400,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((StdButton)handler)
 	{
 		case INTERROGATE_ECU:
+			printf("interrogate_ecu button pushed\n");
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
 			

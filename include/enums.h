@@ -245,7 +245,7 @@ typedef enum
 
 typedef enum
 {
-	BURN_CMD,
+	BURN_CMD = 0x69,
 	READ_CMD,
 	WRITE_CMD,
 	COMMS_TEST,
@@ -265,7 +265,7 @@ typedef enum
 
 typedef enum
 {
-	UPD_REALTIME,
+	UPD_REALTIME = 0x6a,
 	UPD_LOGVIEWER,
 	UPD_DATALOGGER,
 	UPD_VE_CONST,

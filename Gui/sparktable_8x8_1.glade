@@ -278,7 +278,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="load_tbl_1_units">
+				<widget class="GtkLabel" id="SP1_load_tbl_units">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Kpa</property>
 				  <property name="use_underline">False</property>

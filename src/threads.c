@@ -81,16 +81,14 @@ void io_cmd(IoCommands cmd, gpointer data)
 			message = g_new0(struct Io_Message,1);
 			message->command = INTERROGATION;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-			printf("called IO_INTERROGATE_ECU\n");
 			if (!tabs_loaded)
 			{
 				tmp = UPD_LOAD_GUI_TABS;
 				g_array_append_val(message->funcs,tmp);
-				g_async_queue_push(io_queue,(gpointer)message);
 			}
-//			tmp = UPD_READ_VE_CONST;
-//			g_array_append_val(message->funcs,tmp);
-//			g_async_queue_push(io_queue,(gpointer)message);
+			tmp = UPD_READ_VE_CONST;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_COMMS_TEST:
 			message = g_new0(struct Io_Message,1);
@@ -272,9 +270,22 @@ void *serial_io_handler(gpointer data)
 				}
 			}
 		}
+		dealloc_message(message);
 	}
 }
 
+void dealloc_message(void * ptr)
+{
+	struct Io_Message *message = (struct Io_Message *)ptr;
+	if (message->out_str)
+		g_free(message->out_str);
+	if (message->funcs) 
+		g_array_free(message->funcs,TRUE);
+	if (message->payload)
+		g_free(message->payload);
+	g_free(message);
+
+}
 void readfrom_ecu(void *ptr)
 {
 	struct pollfd ufds;
@@ -296,6 +307,9 @@ void readfrom_ecu(void *ptr)
         result = write(serial_params->fd,
 			message->out_str,
 			message->out_len);
+	if (result != message->out_len)	
+		dbg_func(__FILE__": readfrom_ecu() write command to ECU failed\n",CRITICAL);
+
 	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu() Sent %s to the ECU\n",message->out_str),SERIAL_WR);
 	// If reading raw_memory, need a second arg for the offset... 
 	if (message->handler == RAW_MEMORY_DUMP)
@@ -346,7 +360,7 @@ void comms_test()
 	tcflush(serial_params->fd, TCIOFLUSH);	
 	while (write(serial_params->fd,"C",1) != 1)
 	{
-		usleep(1000);
+		usleep(10000);
 		dbg_func(__FILE__": Error writing \"C\" to the ecu in comms_test()\n",CRITICAL);
 	}
 	dbg_func(__FILE__": check_ecu_comms() Requesting MS Clock (\"C\" cmd)\n",SERIAL_RD);

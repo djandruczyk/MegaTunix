@@ -146,7 +146,6 @@ handler=_GENERIC_
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=0
-
 offset=102
 conv_factor_x100=10000
 conv_type=_DIVIDE_

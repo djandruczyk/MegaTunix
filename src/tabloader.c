@@ -23,6 +23,7 @@
 #include <glade-private.h>
 
 gboolean tabs_loaded = FALSE;
+GHashTable *dynamic_widgets = NULL;
 
 void load_gui_tabs()
 {
@@ -55,6 +56,7 @@ void load_gui_tabs()
 				label = gtk_label_new_with_mnemonic(g_strdup(tmpbuf));
 				g_free(tmpbuf);
 				g_hash_table_foreach(xml->priv->name_hash,bind_data,(gpointer)cfgfile);
+				g_hash_table_foreach(xml->priv->name_hash,populate_master,NULL);
 			}
 			cfg_free(cfgfile);
 			g_free(map_file);
@@ -77,6 +79,13 @@ void load_gui_tabs()
 
 }
 
+void populate_master(gpointer name, gpointer value,gpointer user_data)
+{
+	if(!dynamic_widgets)
+		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
+	g_hash_table_insert(dynamic_widgets,g_strdup(name),value);
+}
+
 void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 {
 	ConfigFile *cfgfile = (ConfigFile *)user_data;
@@ -91,7 +100,8 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint num_keytypes = 0;
 	gint i = 0;
 	gint tmpi = 0;
-	gboolean ign_parm = FALSE;
+	gboolean ign_param = FALSE;
+	gint page = 0;
 
 	//	printf("bind_data to key %s\n",(gchar *)key);	
 
@@ -113,13 +123,14 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	}
 	tmpi = -1;
 	cfg_read_int(cfgfile,section,"offset",&tmpi);
-	cfg_read_int(cfgfile,section,"ign_parm",&ign_parm);
+	cfg_read_int(cfgfile,section,"page",&page);
+	cfg_read_boolean(cfgfile,section,"ign_param",&ign_param);
 	if (tmpi >= 0)
 	{
-		if (ign_parm)
+		if (ign_param)
 			ign_widgets[tmpi] = widget;
 		else
-			ve_widgets[tmpi] = widget;
+			ve_widgets[(page*MS_PAGE_SIZE)+tmpi] = widget;
 	}
 	for (i=0;i<num_keys;i++)
 	{

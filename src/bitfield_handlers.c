@@ -79,8 +79,7 @@ void check_config13(unsigned char tmp)
 	GtkWidget *label;
 	extern GList *enh_idle_controls;
 	extern gfloat ego_pbar_divisor;
-	extern struct DynamicMisc misc;
-	extern struct DynamicLabels labels;
+	extern GHashTable * dynamic_widgets;
 	extern gint temp_units;
 	/* checks bits of the confgi13 bitfield and forces
 	 * gui to update/adapt as necessary...
@@ -105,25 +104,22 @@ void check_config13(unsigned char tmp)
 	 */
 	if (((tmp >> 2)&0x1) == 1)
 	{
-		label = gtk_frame_get_label_widget(
-				GTK_FRAME
-				(misc.p0_map_tps_frame));
-		gtk_label_set_text(GTK_LABEL
-				(label),"TPS Bins");
-		gtk_label_set_text(GTK_LABEL
-				(labels.p0_map_tps_lab),
-				"TPS %");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_lab");
+		if (label)
+			gtk_label_set_text(GTK_LABEL(label),"TPS Bins");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_units");
+		if (label)
+			gtk_label_set_text(GTK_LABEL(label),"TPS %");
+				
 	}
 	else
 	{
-		label = gtk_frame_get_label_widget(
-				GTK_FRAME
-				(misc.p0_map_tps_frame));
-		gtk_label_set_text(GTK_LABEL
-				(label),"MAP Bins");
-		gtk_label_set_text(GTK_LABEL
-				(labels.p0_map_tps_lab),
-				"Kpa");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_lab");
+		if (label)
+			gtk_label_set_text(GTK_LABEL(label),"MAP Bins");
+		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_tbl_units");
+		if (label)
+			gtk_label_set_text(GTK_LABEL(label),"Kpa");
 	}
 
 	/* Check Idle method */
