@@ -50,6 +50,7 @@ int build_comms(GtkWidget *parent_frame)
 	GtkWidget *button;
 	GtkWidget *label;
 	GtkWidget *spinner;
+	GtkWidget *ebox;
 	GtkAdjustment *adj;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -73,8 +74,13 @@ int build_comms(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(TRUE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,
+	"Sets the comm port to use.  MegaTunix use DOS/Win32 style port numbers like 1 for COM1, 2 for COM2 and so on.",NULL);
+
 	frame = gtk_frame_new("Select Communications Port");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
@@ -92,9 +98,6 @@ int build_comms(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
 	spinner = gtk_spin_button_new(adj,0,0);
-	gtk_tooltips_set_tip(tip,spinner,
-	"Sets the comm port to use.  MegaTunix use DOS/Win32 style 
-	port numbers like 1 for COM1, 2 for COM2 and so on.\n",NULL);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
@@ -104,17 +107,18 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,
+	"Attempts to communicate with the MegaSquirt Controller.  Check the statusbar at the bottom of the window for the results of this test.",NULL);
+
 	frame = gtk_frame_new("Verify ECU Communication");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
 	button = gtk_button_new_with_label("Test ECU Communication...");
-	gtk_tooltips_set_tip(tip,button,
-	"Attempts to communicate with the MegaSquirt Controller.  
-	Check the statusbar at the bottom of the window for the 
-	results of this test.\n",NULL);
 	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (check_ecu_comms), \
@@ -142,10 +146,8 @@ int build_comms(GtkWidget *parent_frame)
 			100,poll_min,poll_max,poll_step,poll_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_tooltips_set_tip(tip,spinner,
-	"Sets the time delay when waiting from data from the MS, 
-	typically should be set under 100 milliseconds. This 
-	partially determines the max rate at which RT variable 
-	can be read from the MS box.\n",NULL);
+	"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds. This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
+
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_POLL_TIMEO));
@@ -156,8 +158,8 @@ int build_comms(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	gtk_tooltips_set_tip(tip,button,
-	"Starts reading the RT variables from the MS.  This will 
-	cause the Runtime Disp. page to begin updating continuously.",NULL);
+	"Starts reading the RT variables from the MS.  This will cause the Runtime Disp. page to begin updating continuously.",NULL);
+
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(START_REALTIME));
@@ -176,11 +178,7 @@ int build_comms(GtkWidget *parent_frame)
 			interval_step,interval_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_tooltips_set_tip(tip,spinner,
-	"Sets the time delay between read attempts for getting 
-	the RT variables from the MS, typically should be set 
-	around 50 for about 12-18 reads per second from the MS. 
-	This will control the rate at which the Runtime Display 
-	page updates.\n",NULL);
+	"Sets the time delay between read attempts for getting the RT variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS. This will control the rate at which the Runtime Display page updates.",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_INTERVAL_DELAY));
@@ -191,9 +189,7 @@ int build_comms(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
 	gtk_tooltips_set_tip(tip,button,
-	"Stops reading the RT variables from the MS.  NOTE: you 
-	don't have to stop reading the RT vars to read the 
-	VEtable and Constants.  It is handled automatically for you.\n",NULL);
+	"Stops reading the RT variables from the MS.  NOTE: you don't have to stop reading the RT vars to read the VEtable and Constants.  It is handled automatically for you.",NULL);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(STOP_REALTIME));
@@ -201,8 +197,13 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,
+	"This block shows you statistics on the number of Good reads of the VE/Constants datablocks, RealTime DataBlocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard Resets are indiciative of power problems or excessive electrical noise to the MS. Serial I/O errors are indicative of a poor cable connection between this PC and the MS.",NULL);
+
 	frame = gtk_frame_new("MegaSquirt I/O Status");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
