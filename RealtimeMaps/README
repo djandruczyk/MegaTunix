@@ -51,6 +51,8 @@ keys themselves are not, as the string compare functions are case insensitive.
 	internal_name	(string) name used for internal referencing
 	dlog_gui_name	(string) Name shown on datalogging tab
 	dlog_field_name	(string) name in datalog file for this variable
+	log_by_default	(boolean) If TRUE it gets checked by default in the 
+			datalogging tab
 	offset		(integer) offset from the beginning of raw vars 
 			block from ECU that this variable uses for its 
 			conversion
