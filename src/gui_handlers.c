@@ -47,6 +47,7 @@
 
 
 
+static gint upd_count = 0;
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
 extern gboolean playback_mode;
@@ -530,6 +531,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			rescale_table(obj_data);
 			break;
 		case INTERROGATE_ECU:
+			set_title("User initiated interrogation...");
 			update_logbar("interr_view","warning",g_strdup("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
@@ -558,6 +560,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case READ_VE_CONST:
 			if (offline)
 				break;
+			set_title("Reading VE/Constants");
 			io_cmd(IO_READ_VE_CONST, NULL);
 			break;
 		case READ_RAW_MEMORY:
@@ -1052,6 +1055,7 @@ void update_ve_const()
 
 
 	/* Update all on screen controls (except bitfields (done above)*/
+	upd_count = 0;
 	for (page=0;page<firmware->total_pages;page++)
 	{
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
@@ -1096,6 +1100,14 @@ void update_widget(gpointer object, gpointer user_data)
 	GdkColor color;
 	extern gint ** ms_data;
 
+	upd_count++;
+	if ((upd_count%64) == 0)
+	{
+		gdk_threads_enter();
+		while (gtk_events_pending())
+			gtk_main_iteration();
+		gdk_threads_leave();
+	}
 	if (!GTK_IS_OBJECT(widget))
 		return;
 

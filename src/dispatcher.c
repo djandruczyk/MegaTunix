@@ -133,29 +133,40 @@ trypop:
 					break;
 				case UPD_POPULATE_DLOGGER:
 					if (connected)
+					{
+						set_title("Populating Datalogger");
 						populate_dlog_choices();
+					}
 					break;
 				case UPD_LOAD_RT_SLIDERS:
 					if (connected)
 					{
+						set_title("Loading RT Sliders");
 						load_sliders();
 						reset_temps(GINT_TO_POINTER(temp_units));
 					}
 					break;
 				case UPD_LOAD_REALTIME_MAP:
 					if (connected)
+					{
+						set_title("Loading RT Map");
 						load_realtime_map();
+					}
 					break;
 				case UPD_LOAD_GUI_TABS:
 					if (connected)
 					{
+						set_title("Loading Gui Tabs");
 						load_gui_tabs();
 						reset_temps(GINT_TO_POINTER(temp_units));
 					}
 					break;
 				case UPD_READ_VE_CONST:
 					if (connected)
+					{
+						set_title("Reading VE/Constants");
 						io_cmd(IO_READ_VE_CONST,NULL);
+					}
 					break;
 				case UPD_REENABLE_INTERROGATE_BUTTON:
 					gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
@@ -169,10 +180,12 @@ trypop:
 						update_runtime_vars();
 					break;
 				case UPD_VE_CONST:
+					set_title("Updating Gui");
 					paused_handlers = TRUE;
 					if (connected)
 						update_ve_const();
 					paused_handlers = FALSE;
+					set_title("Ready...");
 					break;
 				case UPD_SET_STORE_RED:
 					set_group_color(RED,"burners");

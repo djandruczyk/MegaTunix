@@ -286,7 +286,6 @@ void *thread_dispatcher(gpointer data)
 void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct Output_Data *output = NULL;
-	extern GList ***ve_widgets;
 	extern gboolean offline;
 
 	if (offline)

@@ -25,6 +25,7 @@ void update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
 void no_ms_connection(void);
 void warn_user(gchar *);
 void warn_input_file_not_exist(FileIoType, gchar *);
+void set_title(const gchar *);
 
 gboolean warn_file_not_empty(FileIoType,gchar *);
 gint close_dialog(GtkWidget *, gpointer);

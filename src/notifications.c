@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <defines.h>
 #include <debugging.h>
 #include <fileio.h>
@@ -362,4 +363,16 @@ gboolean warn_file_not_empty(FileIoType iotype,gchar * filename)
 	gtk_widget_destroy(dialog);
 
 	return truncated;
+}
+
+
+/*!
+ \brief set_title() appends text to the titlebar of the application to
+ give user notifications...
+ \param text (gchar *) text to append, (static strings only please)
+ */
+void set_title(const gchar * text)
+{
+	extern GtkWidget *main_window;
+	gtk_window_set_title(GTK_WINDOW(main_window),g_strconcat("MegaTunix ",VERSION,",   ",text,NULL));
 }

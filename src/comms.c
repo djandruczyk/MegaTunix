@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
+#include <gui_handlers.h>
 #include <notifications.h>
 #include <serialio.h>
 #include <stdlib.h>
