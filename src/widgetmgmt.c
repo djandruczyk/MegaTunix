@@ -35,7 +35,7 @@ GHashTable *dynamic_widgets = NULL;
  \brief populate_master() stores a pointer to all of the glade loaded 
  widgets into a master hashtable so that it can be recalled by name 
  anywhere in the program.
- \param widget Widget pointer, name is derived from this pointer by
+ \param widget a (GtkWidget *) pointer, name is derived from this pointer by
  a call to glade_get_widget_name
  \param user_data currently unused.
  */
@@ -78,8 +78,8 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 /*!
  \brief register_widget adds a widget to the master hashtable (dynamic_widgets)
  \see dynamic_widgets
- \param name String of widget name to store (any strings are allowed)
- \param widget Pointer to widget to be stored by name
+ \param name (gchar *) String of widget name to store (any strings are allowed)
+ \param widget (GtkWidget *) Pointer to widget to be stored by name
  \see deregister_widget
  */
 void register_widget(gchar *name, GtkWidget * widget)
@@ -100,7 +100,7 @@ void register_widget(gchar *name, GtkWidget * widget)
 /*!
  \brief deregister_widget removes a widget to the master hashtable (dynamic_widgets)
  \see dynamic_widgets
- \param name String of widget name to remove (any strings are allowed)
+ \param name (gchar *) String of widget name to remove (any strings are allowed)
  \returns TRUE on success removing, FALSE on failure removing 
  \see register_widget
  */
@@ -113,8 +113,9 @@ gboolean deregister_widget(gchar *name)
  \brief get_raw_widget is a concenience function to return a pointer to
  the text entry on the raweditor for the widget at the provided page/offset
  We find this widget by looking for the "raw" flag set on the widget
- \param page, page to search for this widget
- \param offset offset in above page that this widget resides
+ \param page (gint), page to search for this widget
+ \param offset (gint) offset in above page that this widget resides
+ \returns Pointer (GtkWidget *) to the widget requested.
  */
 GtkWidget * get_raw_widget(gint page, gint offset)
 {
