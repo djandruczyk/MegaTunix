@@ -133,7 +133,9 @@ int handle_ms_data(InputData which_data)
 
 			while (total_read < total_wanted )
 			{
-				//g_printf("requesting %i bytes, ",serial_params->rtvars_size-total_read);
+#ifdef DEBUG
+				g_printf("requesting %i bytes, ",total_wanted-total_read);
+#endif
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -143,7 +145,9 @@ int handle_ms_data(InputData which_data)
 				if (res == 0)
 					zerocount++;
 
-				//g_printf("read %i bytes, count %i\n",res,count);
+#ifdef DEBUG
+				g_printf("read %i bytes, count %i\n",res,total_read);
+#endif
 				if (zerocount == 3)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;

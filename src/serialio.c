@@ -348,9 +348,6 @@ void set_ms_page(gint ms_page)
 	gint res = 0;
 	gchar buf;
 
-#ifdef DEBUG
-	g_fprintf(stderr,__FILE__": Changing page on MS to %i\n",ms_page);
-#endif
 	if ((ms_page > 1) || (ms_page < 0))
 		g_fprintf(stderr,__FILE__": page choice %i is out of range(0,1)\n",ms_page);
 	
@@ -371,6 +368,9 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 	gboolean restart_reader = FALSE;
 	gint res = 0;
 	gint count = 0;
+	gchar * tmpbuf;
+	extern gint debug_level;
+	extern GtkWidget *debug_view;
 	char lbuff[3] = {0, 0, 0};
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
@@ -382,9 +382,12 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 		no_ms_connection();
 		return;		/* can't write anything if disconnected */
 	}
-#ifdef DEBUG
-	g_printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
-#endif
+	if (debug_level >= DL_CONV)
+	{
+		tmpbuf = g_strdup_printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
+		update_logbar(debug_view,NULL,tmpbuf,TRUE,FALSE);
+		g_free(tmpbuf);
+	}
 	/* If realtime reader thread is running shut it down... */
 	if (raw_reader_running)
 	{
@@ -471,6 +474,8 @@ void burn_flash()
 	gboolean restart_reader = FALSE;
 	extern unsigned int ecu_caps;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	extern gint debug_level;
+	extern GtkWidget *debug_view;
 
 	g_static_mutex_lock(&mutex);
 
@@ -496,6 +501,8 @@ void burn_flash()
 
 #ifdef DEBUG
 	g_fprintf(stderr,__FILE__": Burn to Flash\n");
+	if (debug_level >= DL_CONV)
+		update_logbar(debug_view,NULL,__FILE__": Burn to Flash\n",TRUE,FALSE);
 #endif
 
 	/* sync temp buffer with current burned settings */
