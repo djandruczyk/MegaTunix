@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <logviewer_core.h>
 #include <logviewer_gui.h>
 #include <offline.h>
 #include <mode_select.h>
@@ -219,6 +220,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), TRUE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), TRUE);
 				reset_logviewer_state();
+				free_log_info();
 				playback_mode = FALSE;
 //				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
 					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
@@ -229,6 +231,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), FALSE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), FALSE);
 				reset_logviewer_state();
+				free_log_info();
 				playback_mode = TRUE;
 //				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
 					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
@@ -437,6 +440,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			present_filesavebox(DATALOG_EXPORT,(gpointer)widget);
 			break;
 		case SELECT_DLOG_IMP:
+			reset_logviewer_state();
+			free_log_info();
 			present_filesavebox(DATALOG_IMPORT,(gpointer)widget);
 			break;
 		case CLOSE_LOGFILE:

@@ -199,3 +199,35 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 		g_strfreev(data);
 	}
 }
+
+/*!
+ * \brief frees data allocated by a datalog import, should be done when
+ * switching logfiles
+ */
+void free_log_info()
+{
+	extern struct Log_Info *log_info;
+	gint i = 0;
+	GObject *object = NULL;
+	GArray *array = NULL;
+	
+	if (!log_info)
+		return;
+
+	for (i=0;i<log_info->field_count;i++)
+	{
+		object = NULL;
+		object = g_array_index(log_info->log_list,GObject *,i);
+		if (!object)
+			continue;
+		array = (GArray *)g_object_get_data(object,"data_array");
+		if (array)
+			g_array_free(array,TRUE);
+	}
+	if (log_info->delimiter)
+		g_free(log_info->delimiter);
+	g_free(log_info);
+	log_info = NULL;
+
+	return;
+}
