@@ -29,14 +29,18 @@ const gchar *accel_labels[] = {"2V/Sec","4V/sec","8V/Sec","15V/Sec"};
 int build_enrichments(GtkWidget *parent_frame)
 {
 	gint i;
+	GtkWidget *sep;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
+	GtkWidget *vbox3;
 	GtkWidget *hbox;
 	GtkWidget *hbox2;
 	GtkWidget *button;
 	GtkWidget *frame;
 	GtkWidget *label;
 	GtkWidget *table;
+	GtkWidget *otable;
+	GSList *group;
 	GtkAdjustment *adj;
 	GtkWidget *spinner;
 	extern GtkTooltips *tip;
@@ -408,11 +412,62 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_frame_set_label_widget(GTK_FRAME(frame),GTK_WIDGET(label));
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
+        vbox3 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox3);
+
+	/* O2 Sensor Type selector */
+        table = gtk_table_new(2,2,TRUE);
+        gtk_table_set_row_spacings(GTK_TABLE(table),0);
+        gtk_table_set_col_spacings(GTK_TABLE(table),10);
+        gtk_container_set_border_width(GTK_CONTAINER(table),0);
+        gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+
+        label = gtk_label_new(NULL);
+        gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> Sensor Type");
+        gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(NULL,"Narrow-Band");
+        constants.nbo2_but = button;
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+        g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 10, 0);
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(toggle_button_handler),
+                        NULL);
+
+        button = gtk_radio_button_new_with_label(group,"Wide-Band");
+        constants.wbo2_but = button;
+        g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 10, 0);
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(toggle_button_handler),
+                        NULL);
+
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
+
+
 	table = gtk_table_new(6,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_container_add(GTK_CONTAINER(frame),table);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,TRUE,0);
 	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
 	gtk_table_set_row_spacing(GTK_TABLE(table),3,10);
 
@@ -548,6 +603,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
+
 
 	frame = gtk_frame_new("Commands");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
