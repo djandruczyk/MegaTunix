@@ -50,9 +50,11 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 
 	frame = gtk_frame_new("Injection Control");
+	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox),1);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	/* Injection Control Section */
@@ -65,7 +67,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   This selects the mode by which the MegaSquirt ECU calculates the fuel the engine gets.  The two choices are \"Alpha-N\" which uses RPM and the throttle position as the main variables (engine temp,air temp and O2 are also utilized as well).  The other more commonly used mode is \"Speed Density\" which uses the MAP sensor as the primary input to the ECU (all off the other inputs are used as well, but the MAP sensor is essential for this mode to function).  Speed Density is the more commonly used of the two systems.  Alpha-N is only typically used when the vacuum signal from the engine is extremeley poor. (as in some race engines).",NULL);
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
@@ -106,7 +107,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			NULL);
 
 	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),sep,TRUE,TRUE,0);
 
 	/* Injection Type selectors */
 	ebox = gtk_event_box_new();
@@ -114,7 +115,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   The two modes for injecting fuel are via a \"Throttle Body\" which looks very similar to a carburetor and can bolt up in place of a former carb on many engines, and \"Multi-Point\" which just has the injectors mounted on the intake manifold (usually pointing at the intake valves).  If you have your injectors mounted to a fuel rail and pointing at the backsides of your intake valves, you have Multi-Point,  if you have your injector(s) in what looks like a simpler carburetor then you have a TBI setup",NULL);
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
@@ -155,7 +155,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			NULL);
 
 	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),sep,TRUE,TRUE,0);
 
 	/* Engine stroke selectors */
 	ebox = gtk_event_box_new();
@@ -163,7 +163,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   Pretty simple here, is your engine 2 stroke or 4 stroke. (4 stroke is the correct answer for 99% of people out there unless you're MS'ing an old motorcycle, or an outboard boat motor)",NULL);
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
@@ -204,7 +203,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			NULL);
 
 	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),sep,TRUE,TRUE,0);
 
 	/* Engine Firing Type selectors */
 	ebox = gtk_event_box_new();
@@ -212,7 +211,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   Most engines are Even-Fire, this means that the firing order is evenly spaced in crank degrees.  For example most V8's fires a cylinder every 90 degrees of crankshaft rotation.  Some engines, like GM's oddfire V6 and some european engines fire at odd measures of crankshaft rotation (not every 60 or 90 degrees), as do Harley Davidson V-twin motorcycle engines.",NULL);
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
@@ -252,8 +250,9 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
+	/* Vertical Seperator between halves of the screen */
 	sep = gtk_vseparator_new();
-	gtk_box_pack_start(GTK_BOX(hbox),sep,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),sep,FALSE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
@@ -264,7 +263,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   The version 1 MS kits were available with either a 1 Bar map sensor (NA) or a 2.5 Bar Sensor (Turbo).  The Version 2's and later were only available with the 2.5 Bar sensor. Select the appropriate sensor that you have",NULL); 
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
@@ -305,7 +303,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			NULL);
 
 	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),sep,TRUE,TRUE,0);
 
 	/* O2 Sensor Type selector */
 	ebox = gtk_event_box_new();
@@ -313,10 +311,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   Do you have a Narrow-Band (1, 3 or 4 wire) O2 Sensor or a Wideband sensor (5 Wire sensor + control module).  You cannot just install a Wideband sensor and connect it DIRECTLY to the MegaSquirt ECU.  The Wideband sensors need a dedicated controller which will output an analog signal that connects to the MegaSquirt ECU. A Narrowband sensor (1,3 or 4 wires) can be connected directly to the ECU (use the signal wire only).  If the sensor has only 1 wire, this wire goes to the ECU O2 input,  if it has 3 wires,  two of them are for the heater,  1 wire goes to ground, the other goes to switched 12 Volts. Typically the heater wires are 1 gauge larger than the signal wire.  If your O2 sensor has 4 wires, 2 are for the heater, connect as above, the other two are signal, and signal ground, when hot the sensor will output a voltage between about 0-1 Volt  depending on the mixture (richer is higher for a narrowband sensor), if you connect a meter across the signal wires and get a negative reading you hooked it up backwards, (reverse the signal and ground wires)",NULL);
         table = gtk_table_new(2,2,TRUE);
         gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_table_set_col_spacings(GTK_TABLE(table),10);
         gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
-
 
         label = gtk_label_new(NULL);
         gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> Sensor Type");
@@ -365,7 +361,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   Do you want to use barometer correction?  If this is enabled, on power up of the MS, it will read the MAP sensor (before the engine hopefully is cranked over) and store this value as the reference barometer and use this to compensate for altitude changes,  Beware that if your MegaSquirt ECU resets when the engine is running due to power problems, this will cause it to record an erroneous value and skew the fuel calculations.",NULL);
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
@@ -405,10 +400,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
-
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
-
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
@@ -419,8 +412,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	label = gtk_label_new("Idle Control Methodology");
@@ -473,8 +465,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,"   The basic Bowling/Grippo MegaSquirt units, (version 1.1 or versiosn 2.2 hardware, and software versions up through version 3.01 all use a very simple idle control,  it's either on high-idle or it's not, and it's temperature controlled, once the engine temp gets above the Fast Idle temp, the high idle solenoid is disengaged and the engine goes down to its normal idle.  The DualTable code variants added in a PWM idle control (for driving a ford style 2 wire PWM actuated idle air valve (or similar).  This code supports 5 variables, the high idle rpm, high idle temp, the low idle rpm, and low idle temp and an idle threshold.  The way it works is simple; At temps below the Fast Idle Temp, the engien is kept at the Fast idle speed,  as the engine tep rises, the ECU drops the idle speed until the engine reaches the Slow idle temp, above this temp the engine temp is maintained at the slow idle speed.  Sensible numbers would be to set the high idle temp to be a low temperature, like 60 deg F, and a high idle RPM of 1800 RPM, and a slow idle RPM of 900 RPM, and slow idle temp of 145 deg F, and an idle threshold of 100RPM.  The Idle Threshold is the point at which when the throttle (TPS) input is BELOW this value idle control is enabled. Thus if when your throttle is closed and your TPS gauge reads 10%% in the runtime screen, setting this to 12 would enable idle control when you are idling, if you set it too low, idle control will never turn on and the engine may idle too low or not at all. ",NULL);
 	table = gtk_table_new(5,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	/* This label is dynamic and will change based on unit preference
@@ -641,8 +632,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table), 7);
+	gtk_container_set_border_width(GTK_CONTAINER(table), 3);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	button = gtk_button_new_with_label("Get Data from ECU");

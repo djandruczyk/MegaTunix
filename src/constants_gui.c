@@ -68,14 +68,14 @@ void build_constants_1(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_row_spacing(GTK_TABLE(table),3,7);
 	gtk_table_set_row_spacing(GTK_TABLE(table),4,7);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	//gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 	
 	label = gtk_label_new("Engine Displacement (CID)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	 /* Engine Displacement */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->disp,1.0,1000,
@@ -98,7 +98,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 
 	/* Number of Cylinders part of config11 */
@@ -132,7 +132,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Number of injectors, part of config12 */
 	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
@@ -157,13 +157,13 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-        label = gtk_label_new("Number of Squirts per Cycle");
+        label = gtk_label_new("Squirts per Cycle");
 	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
 	reqfuel_1_widgets = g_list_append(reqfuel_1_widgets,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Indirectly generates the "divider" variable */
 	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
@@ -191,14 +191,14 @@ void build_constants_1(GtkWidget *parent_frame)
 
 	sep = gtk_vseparator_new();
         gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 4,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
 	
         label = gtk_label_new("Rated Injector Flow (lbs/hr)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Rated fuel injector flow in lbs/hr */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->rated_inj_flow,
@@ -220,7 +220,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Rated fuel pressure in bar */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->rated_pressure,1.0,10.0,
@@ -242,7 +242,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Actual fuel pressure in bar */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->actual_pressure,1.0,10.0,
@@ -264,7 +264,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Target Air Fuel Ratio */
         adj =  (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->target_afr,
@@ -292,7 +292,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_container_set_border_width(GTK_CONTAINER(table2),0);
         gtk_table_attach (GTK_TABLE (table), table2, 0, 2, 5, 7,
                         (GtkAttachOptions) (0),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
         label = gtk_label_new("Injector Staging");
 	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)label);
@@ -331,8 +331,8 @@ void build_constants_1(GtkWidget *parent_frame)
 
 	sep = gtk_vseparator_new();
         gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 5, 7,
-                        (GtkAttachOptions) (0),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
 
 
 	label = gtk_label_new("Required Fuel (per cyl/cycle)");
@@ -340,7 +340,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 5, 6,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Required Fuel Total/cycle Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
@@ -368,7 +368,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 6, 7,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Required Fuel Per Squirt Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
@@ -386,7 +386,7 @@ void build_constants_1(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The \"Injector Open Time\" is the amount of time that it takes your fuel injectors to open.  This is added to the MegaSquirt fuel calculations internally.  Typical values are are 1.1 ms for Hi-Z injectors and 0.9 ms for Lo-Z injectors.\n   The \"Battery Voltage Correction\" is a correction factor that increases injection pulsewidth based on lower battery voltage (which slows down injector opening). The values are in milliseconds per Volt. Thus if your battery is putting out 9 Volts during cranking, and you have this set to 0.2 ms/Volt, then your pulsewidth will be increased by 0.6 milliseconds.\n   The \"PWM Current Limit\" is used if you are using Low impedance (Lo-Z) injectors.  For Hi-Z (i.e. \"Saturated\") injectors, set this to 100% (which disables PWM as it is NOT used with Hi-Z injectors).  Lo-Z injectors are also known as Peak and Hold injectors.  P&H injectors require full battery voltage to snap them open,  but then power is reduced to a \"Hold\" value to keep it open (without burning it out or letting them close prematurely).  This value of \"PWM Current Limit\" determines the \"Hold\" value.  Unmodified V2 ECU's usually need this around 60-75%, ECU's with the flyback board and the the v2.986 or NEWER firmware usually have this in the 18-30% range.  If you are driving large Lo-Z injectors, (like a Holley Pro-jection TBI setup), installing a flyback board and new firmware is recommended as those injectors can damage a Stock V2 ECU in some rare scenarios.\n   The \"PWM Time Threshold\" is the amount of time that the injector is in \"Peak\" mode. (full power), This should be set to about 1 ms for Lo-Z injectors, or 25.5 for Hi-Z injectors. Setting this value too high for Lo-Z injectors can cause them to overheat and fail (freeze open, or burn out), 1-1.5 ms is a pretty safe value to use.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   The \"Injector Open Time\" is the amount of time that it takes your fuel injectors to open.  This is added to the MegaSquirt fuel calculations internally.  Typical values are are 1.1 ms for Hi-Z injectors and 0.9 ms for Lo-Z injectors.\n   The \"Battery Correction\" is a correction factor that increases injection pulsewidth based on lower battery voltage (which slows down injector opening). The values are in milliseconds per Volt. Thus if your battery is putting out 9 Volts during cranking, and you have this set to 0.2 ms/Volt, then your pulsewidth will be increased by 0.6 milliseconds.\n   The \"PWM Current Limit\" is used if you are using Low impedance (Lo-Z) injectors.  For Hi-Z (i.e. \"Saturated\") injectors, set this to 100% (which disables PWM as it is NOT used with Hi-Z injectors).  Lo-Z injectors are also known as Peak and Hold injectors.  P&H injectors require full battery voltage to snap them open,  but then power is reduced to a \"Hold\" value to keep it open (without burning it out or letting them close prematurely).  This value of \"PWM Current Limit\" determines the \"Hold\" value.  Unmodified V2 ECU's usually need this around 60-75%, ECU's with the flyback board and the the v2.986 or NEWER firmware usually have this in the 18-30% range.  If you are driving large Lo-Z injectors, (like a Holley Pro-jection TBI setup), installing a flyback board and new firmware is recommended as those injectors can damage a Stock V2 ECU in some rare scenarios.\n   The \"PWM Time Threshold\" is the amount of time that the injector is in \"Peak\" mode. (full power), This should be set to about 1 ms for Lo-Z injectors, or 25.5 for Hi-Z injectors. Setting this value too high for Lo-Z injectors can cause them to overheat and fail (freeze open, or burn out), 1-1.5 ms is a pretty safe value to use.",NULL);
 
 	frame = gtk_frame_new("Injector Control Parameters");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -394,14 +394,14 @@ void build_constants_1(GtkWidget *parent_frame)
 	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	//gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 	
 	label = gtk_label_new("Injector Open Time (ms)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	// Injector Open Time 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
@@ -422,13 +422,19 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Battery Voltage Correction (ms/Volt)");
+	sep = gtk_vseparator_new();
+        gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 2,
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
+	
+	// Battery Correction Factor 
+	label = gtk_label_new("Battery Correction (ms/Volt)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
-	// Battery Voltage Correction Factor 
+	// Battery Correction Factor 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	ve_widgets->widget[97] = spinner;
@@ -451,7 +457,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	// PWM Current Limit % 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
@@ -477,7 +483,7 @@ void build_constants_1(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	// PWM Time threshold 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
@@ -570,14 +576,14 @@ void build_constants_2(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_row_spacing(GTK_TABLE(table),3,7);
 	gtk_table_set_row_spacing(GTK_TABLE(table),4,7);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	//gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 	
 	label = gtk_label_new("Engine Displacement (CID)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	 /* Engine Displacement */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->disp,1.0,1000,
@@ -600,7 +606,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 
 	/* Number of Cylinders part of config11 */
@@ -634,7 +640,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Number of injectors, part of config12 */
 	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
@@ -659,13 +665,13 @@ void build_constants_2(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-        label = gtk_label_new("Number of Squirts per Cycle");
+        label = gtk_label_new("Squirts per Cycle");
 	interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
 	reqfuel_2_widgets = g_list_append(reqfuel_2_widgets,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Indirectly generates the "divider" variable */
 	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
@@ -693,14 +699,14 @@ void build_constants_2(GtkWidget *parent_frame)
 
 	sep = gtk_vseparator_new();
         gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 4,
-                        (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
 	
         label = gtk_label_new("Rated Injector Flow (lbs/hr)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Rated fuel injector flow in lbs/hr */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->rated_inj_flow,
@@ -722,7 +728,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Rated fuel pressure in bar */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->rated_pressure,1.0,10.0,
@@ -744,7 +750,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Actual fuel pressure in bar */
         adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->actual_pressure,1.0,10.0,
@@ -766,7 +772,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Target Air Fuel Ratio */
         adj =  (GtkAdjustment *) gtk_adjustment_new(reqd_fuel->target_afr,
@@ -794,7 +800,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_container_set_border_width(GTK_CONTAINER(table2),0);
         gtk_table_attach (GTK_TABLE (table), table2, 0, 2, 5, 7,
                         (GtkAttachOptions) (0),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
         label = gtk_label_new("Injector Staging");
 	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)label);
@@ -817,8 +823,8 @@ void build_constants_2(GtkWidget *parent_frame)
 
 	sep = gtk_vseparator_new();
         gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 5, 7,
-                        (GtkAttachOptions) (0),
-                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
 
 
 	label = gtk_label_new("Required Fuel (per cyl/cycle)");
@@ -826,7 +832,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 5, 6,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Required Fuel Total/cycle Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
@@ -855,7 +861,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 6, 7,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	/* Required Fuel Per Squirt Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
@@ -873,7 +879,7 @@ void build_constants_2(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The \"Injector Open Time\" is the amount of time that it takes your fuel injectors to open.  This is added to the MegaSquirt fuel calculations internally.  Typical values are are 1.1 ms for Hi-Z injectors and 0.9 ms for Lo-Z injectors.\n   The \"Battery Voltage Correction\" is a correction factor that increases injection pulsewidth based on lower battery voltage (which slows down injector opening). The values are in milliseconds per Volt. Thus if your battery is putting out 9 Volts during cranking, and you have this set to 0.2 ms/Volt, then your pulsewidth will be increased by 0.6 milliseconds.\n   The \"PWM Current Limit\" is used if you are using Low impedance (Lo-Z) injectors.  For Hi-Z (i.e. \"Saturated\") injectors, set this to 100% (which disables PWM as it is NOT used with Hi-Z injectors).  Lo-Z injectors are also known as Peak and Hold injectors.  P&H injectors require full battery voltage to snap them open,  but then power is reduced to a \"Hold\" value to keep it open (without burning it out or letting them close prematurely).  This value of \"PWM Current Limit\" determines the \"Hold\" value.  Unmodified V2 ECU's usually need this around 60-75%, ECU's with the flyback board and the the v2.986 or NEWER firmware usually have this in the 18-30% range.  If you are driving large Lo-Z injectors, (like a Holley Pro-jection TBI setup), installing a flyback board and new firmware is recommended as those injectors can damage a Stock V2 ECU in some rare scenarios.\n   The \"PWM Time Threshold\" is the amount of time that the injector is in \"Peak\" mode. (full power), This should be set to about 1 ms for Lo-Z injectors, or 25.5 for Hi-Z injectors. Setting this value too high for Lo-Z injectors can cause them to overheat and fail (freeze open, or burn out), 1-1.5 ms is a pretty safe value to use.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   The \"Injector Open Time\" is the amount of time that it takes your fuel injectors to open.  This is added to the MegaSquirt fuel calculations internally.  Typical values are are 1.1 ms for Hi-Z injectors and 0.9 ms for Lo-Z injectors.\n   The \"Battery Correction\" is a correction factor that increases injection pulsewidth based on lower battery voltage (which slows down injector opening). The values are in milliseconds per Volt. Thus if your battery is putting out 9 Volts during cranking, and you have this set to 0.2 ms/Volt, then your pulsewidth will be increased by 0.6 milliseconds.\n   The \"PWM Current Limit\" is used if you are using Low impedance (Lo-Z) injectors.  For Hi-Z (i.e. \"Saturated\") injectors, set this to 100% (which disables PWM as it is NOT used with Hi-Z injectors).  Lo-Z injectors are also known as Peak and Hold injectors.  P&H injectors require full battery voltage to snap them open,  but then power is reduced to a \"Hold\" value to keep it open (without burning it out or letting them close prematurely).  This value of \"PWM Current Limit\" determines the \"Hold\" value.  Unmodified V2 ECU's usually need this around 60-75%, ECU's with the flyback board and the the v2.986 or NEWER firmware usually have this in the 18-30% range.  If you are driving large Lo-Z injectors, (like a Holley Pro-jection TBI setup), installing a flyback board and new firmware is recommended as those injectors can damage a Stock V2 ECU in some rare scenarios.\n   The \"PWM Time Threshold\" is the amount of time that the injector is in \"Peak\" mode. (full power), This should be set to about 1 ms for Lo-Z injectors, or 25.5 for Hi-Z injectors. Setting this value too high for Lo-Z injectors can cause them to overheat and fail (freeze open, or burn out), 1-1.5 ms is a pretty safe value to use.",NULL);
 
 	frame = gtk_frame_new("Injector Control Parameters");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -881,14 +887,14 @@ void build_constants_2(GtkWidget *parent_frame)
 	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	//gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 	
 	label = gtk_label_new("Injector Open Time (ms)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	// Injector Open Time 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
@@ -910,13 +916,18 @@ void build_constants_2(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Battery Voltage Correction (ms/Volt)");
+	sep = gtk_vseparator_new();
+        gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 2,
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL|GTK_EXPAND), 0, 0);
+	
+	label = gtk_label_new("Battery Correction (ms/Volt)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
-	// Battery Voltage Correction Factor 
+	// Battery Correction Factor 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	ve_widgets->widget[MS_PAGE_SIZE+97] = spinner;
@@ -939,7 +950,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	// PWM Current Limit % 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
@@ -965,7 +976,7 @@ void build_constants_2(GtkWidget *parent_frame)
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (0), 5, 0);
 
 	// PWM Time threshold 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
