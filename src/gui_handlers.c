@@ -32,6 +32,7 @@
 #include <vex_support.h>
 
 extern gboolean interrogated;
+extern gboolean dualtable;
 extern gboolean connected;
 extern gboolean force_status_update;
 extern gboolean raw_reader_running;
@@ -1004,3 +1005,18 @@ void check_config13(int tmp)
 				"Kpa");
 	}
 }
+
+void set_dualtable_mode(gboolean state)
+{
+	if (state)
+	{
+		dualtable = TRUE;
+		printf("enabling dualtable mode controls\n");
+	}
+	else
+	{
+		dualtable = FALSE;
+		printf("disabling dualtable mode controls\n");
+	}
+}
+

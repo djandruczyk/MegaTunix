@@ -27,6 +27,7 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data);
 void check_req_fuel_limits(void);
 void check_config11(gint);
 void check_config13(gint);
+void set_dualtable_mode(gboolean);
 /* Prototypes */
 
 #endif

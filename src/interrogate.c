@@ -17,6 +17,7 @@
 #include <defines.h>
 #include <errno.h>
 #include <globals.h>
+#include <gui_handlers.h>
 #include <interrogate.h>
 #include <notifications.h>
 #include <serialio.h>
@@ -37,7 +38,6 @@ extern GtkWidget *interr_view;
 extern struct Serial_Params *serial_params;
 gboolean interrogated = FALSE;
 gfloat ecu_version;
-gboolean dualtable;
 static struct 
 {
 	gint page;		/* ms page in memory where it resides */
@@ -176,7 +176,7 @@ void interrogate_ecu()
 				//printf("count %i, total %i\n",count,total);
 			}
 			//printf("%i bytes\n",total);
-			
+
 			ptr = buf;
 			/* copy data from tmp buffer to struct pointer */
 			commands[i].buffer = g_memdup(buf,total);
@@ -188,13 +188,6 @@ void interrogate_ecu()
 	set_ms_page(0);
 	/* flush serial port */
 	tcflush(serial_params->fd, TCIFLUSH);
-
-//	for (i=0;i<128;i++)
-//		printf("buffer 3[%i]= %i, 4[%i]= %i\n",i,commands[3].buffer[i],i,commands[4].buffer[i]);
-		
-	res = memcmp(commands[3].buffer, commands[4].buffer,128);
-	if (res != 0)
-		dualtable = TRUE;
 
 	for (i=0;i<tests_to_run;i++)
 	{
@@ -219,42 +212,59 @@ void interrogate_ecu()
 			i_bytes = commands[i].count;
 		else if (strstr(commands[i].cmd_string,"?"))
 			quest_bytes = commands[i].count;
+	}
+	if (v0_bytes == 128) /* dualtable potential */
+	{
+		res = memcmp(	commands[table0_index].buffer, 
+				commands[table1_index].buffer,128);
+		if (res != 0)
+			set_dualtable_mode(TRUE);
+	}
+	else
+		commands[table1_index].count = 0;
+		
 
-		if (!dualtable)	/* table 1 not used in std code */
-			commands[table1_index].count = 0;
-
+	for (i=0;i<tests_to_run;i++)
+	{
 		if (commands[i].count > 0)
 		{
 			if (strstr(commands[i].cmd_string,"V"))
 			{
-				tmpbuf = g_strdup_printf(
-					"Command %s (page %i), returned %i bytes\n",
-					commands[i].cmd_string, 
-					commands[i].page,
-					commands[i].count);
+				tmpbuf = g_strdup_printf("Command %s (page %i), returned %i bytes\n",
+						commands[i].cmd_string, 
+						commands[i].page,
+						commands[i].count);
 			}
 			else
 			{
-				tmpbuf = g_strdup_printf(
-					"Command %s, returned %i bytes\n",
-					commands[i].cmd_string, 
-					commands[i].count);
+				tmpbuf = g_strdup_printf("Command %s, returned %i bytes\n",
+						commands[i].cmd_string, 
+						commands[i].count);
 			}
 			/* Store counts for VE/realtime readback... */
-				
+
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
 		else
 		{
-			tmpbuf = g_strdup_printf(
-					"Command %s isn't supported...\n",
-					commands[i].cmd_string);
+			if (strstr(commands[i].cmd_string,"V"))
+			{
+				tmpbuf = g_strdup_printf("Command %s (page %i), isn't supported...\n",
+						commands[i].cmd_string,
+						commands[i].page);
+			}
+			else
+			{
+				tmpbuf = g_strdup_printf("Command %s isn't supported...\n",
+						commands[i].cmd_string);
+
+			}
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
-
 	}
+
 	if (v0_bytes > 125)
 	{
 		update_logbar(interr_view,"warning","Code is DualTable version: ",FALSE);
@@ -270,7 +280,7 @@ void interrogate_ecu()
 		if (quest_bytes > 0)
 			update_logbar(interr_view,"warning","Code is MegaSquirtnEDIS v3.05 code\n",FALSE);
 
-					
+
 		else
 		{
 			switch (i_bytes)

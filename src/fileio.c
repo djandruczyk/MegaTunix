@@ -396,8 +396,8 @@ void truncate_file(FileIoType filetype)
 
 void backup_all_ms_settings(gchar * filename)
 {
-	printf("backup all MS settings to file isn't written yet...\n");
-	printf("should backup to %s\n",filename);
+	fprintf(stderr,__FILE__": backup all MS settings to file isn't written yet...\n");
+	fprintf(stderr,__FILE__": should backup to %s\n",filename);
 
 }
 
@@ -417,8 +417,8 @@ void restore_all_ms_settings(gchar * filename)
         memcpy(backup_ve_const_p0, ve_const_p0, MS_PAGE_SIZE);
         memcpy(backup_ve_const_p1, ve_const_p1, MS_PAGE_SIZE);
 	
-	printf("restore all MS settings from file isn't written yet\n");
-	printf("should restore from %s\n",filename);
+	fprintf(stderr,__FILE__": restore all MS settings from file isn't written yet\n");
+	fprintf(stderr,__FILE__": should restore from %s\n",filename);
 	iochannel = g_io_channel_new_file(filename, "w", NULL);
 
 	/* Do Something here... */

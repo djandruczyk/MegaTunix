@@ -206,36 +206,42 @@ gboolean vetable_export()
 
 gboolean vetable_import()
 {
+	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
 	gio_channel = g_io_channel_new_file(io_file_name, "r", NULL);
 	reset_import_flags();
 	/* process lines while we can */
-	while (status == G_IO_STATUS_NORMAL)
+	while (go)
 	{
 		status = process_vex_line();
+		if (status == G_IO_STATUS_EOF)
+		{
+			go = FALSE;
+			break;
+		}
+		if ((status != G_IO_STATUS_EOF) 
+				& (vex_import.got_page) 
+				& (vex_import.got_load) 
+				& (vex_import.got_rpm) 
+				& (vex_import.got_ve))
+		{
+			feed_import_data_to_ms();
+			reset_tmp_bins();
+		}
 	}
+		
 	/* we're done - good or bad */
 	g_io_channel_close(gio_channel);
-	/* Normal EOF signifies successful completion */
-	if ((status == G_IO_STATUS_EOF) 
-			& (vex_import.got_page) 
-			& (vex_import.got_load) 
-			& (vex_import.got_rpm) 
-			& (vex_import.got_ve))
-	{
-		//printf("Successful VEX import. Updating VE table.\n");
-		feed_import_data_to_ms();
-		gtk_widget_set_sensitive(buttons.tools_revert_but,TRUE);
+
+	gtk_widget_set_sensitive(buttons.tools_revert_but,TRUE);
 		return TRUE;
-	} 
-#ifdef DEBUG
-	else 
+	 
+	if (status == G_IO_STATUS_ERROR)
 	{
 		printf("Read was unsuccessful. %i %i %i %i \n",vex_import.got_page, vex_import.got_load, vex_import.got_rpm, vex_import.got_ve);
 		return FALSE;
 	}
-#endif
-	return FALSE;
+	return TRUE;
 }
 
 GIOStatus process_vex_line()
@@ -595,6 +601,25 @@ void reset_import_flags()
 		vex_import.table_bins[i] = 0;
 	}
 }
+void reset_tmp_bins()
+{
+	gint i = 0;
+	import_page = -1;
+
+	vex_import.got_ve = FALSE;
+	vex_import.got_rpm = FALSE;
+	vex_import.got_load = FALSE;
+	vex_import.got_page = FALSE;
+	for (i=0;i<RPM_BINS_MAX;i++)
+	{	
+		vex_import.rpm_bins[i] = 0;
+		vex_import.load_bins[i] = 0;
+	}
+	for (i=0;i<TABLE_BINS_MAX;i++)
+	{	
+		vex_import.table_bins[i] = 0;
+	}
+}
 
 void feed_import_data_to_ms()
 {
@@ -603,22 +628,20 @@ void feed_import_data_to_ms()
 	extern struct Ve_Const_Std *backup_ve_const_p1;
 	unsigned char * ptr;
 	gchar * tmpbuf;
-	/* Backup the ms data first... */
-	memset((void *)backup_ve_const_p0, 0, MS_PAGE_SIZE);
-	memset((void *)backup_ve_const_p1, 0, MS_PAGE_SIZE);
-	memcpy(backup_ve_const_p0, ve_const_p0,MS_PAGE_SIZE);
-	memcpy(backup_ve_const_p1, ve_const_p1,MS_PAGE_SIZE);
 
 	/* check to make sure we update the right page */
 	if (import_page == 0)
 	{
+		/* Backup the ms data first... */
+		memset((void *)backup_ve_const_p0, 0, MS_PAGE_SIZE);
+		memcpy(backup_ve_const_p0, ve_const_p0,MS_PAGE_SIZE);
 		ptr = (unsigned char *) ve_const_p0;
 		for (i=0;i<RPM_BINS_MAX;i++)
 		{
 			*(ptr+VE1_RPM_BINS_OFFSET+i) = vex_import.rpm_bins[i];
 			*(ptr+VE1_KPA_BINS_OFFSET+i) = vex_import.load_bins[i];
 		}
-		for (i=0;i<TABLE_BINS_MAX;i++);
+		for (i=0;i<TABLE_BINS_MAX;i++)
 			*(ptr+VE1_TABLE_OFFSET+i) = vex_import.table_bins[i];
 
 		update_ve_const();	
@@ -627,13 +650,16 @@ void feed_import_data_to_ms()
 	}
 	else	/* Page 1, dualtable and ignition variants... */
 	{
+		/* Backup the ms data first... */
+		memset((void *)backup_ve_const_p1, 0, MS_PAGE_SIZE);
+		memcpy(backup_ve_const_p1, ve_const_p1,MS_PAGE_SIZE);
 		ptr = (unsigned char *) ve_const_p1;
 		for (i=0;i<RPM_BINS_MAX;i++)
 		{
 			*(ptr+VE2_RPM_BINS_OFFSET+i) = vex_import.rpm_bins[i];
 			*(ptr+VE2_KPA_BINS_OFFSET+i) = vex_import.load_bins[i];
 		}
-		for (i=0;i<TABLE_BINS_MAX;i++);
+		for (i=0;i<TABLE_BINS_MAX;i++)
 			*(ptr+VE2_TABLE_OFFSET+i) = vex_import.table_bins[i];
 
 		update_ve_const();	

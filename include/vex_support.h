@@ -28,6 +28,7 @@ GIOStatus process_header(ImportParserArg , gchar *);
 GIOStatus process_page(gchar * );
 GIOStatus handler_dispatch(ImportParserFunc , ImportParserArg , gchar * );
 void reset_import_flags(void);
+void reset_tmp_bins(void);
 void feed_import_data_to_ms(void);
 void clear_vexfile(void);
 void revert_to_previous_data();

@@ -402,8 +402,9 @@ void write_ve_const(gint value, gint offset, gint page)
 	res = write (serial_params->fd,"W",1);	/* Send write command */
 	res = write (serial_params->fd,lbuff,count);	/* Send write command */
 
-	if (page == 1)
-		printf("DualTable write operation...\n");
+/*	if (page == 1)
+		printf("DualTable write operation offset %i, value %i.\n",offset,value);
+*/
 
 	/* We check to see if the last burn copy of the MS VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.

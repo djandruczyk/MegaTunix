@@ -29,6 +29,7 @@
 #include <tuning_gui.h>
 #include <tools_gui.h>
 #include <vetable_gui.h>
+#include <warmwizard_gui.h>
 
 
 
