@@ -24,7 +24,7 @@
  */
 
 /* unions used in the various structures... */
-#if __BYTE_ORDER == __BIG_ENDIAN /* PDA's possibly? */
+#ifdef WORDS_BIGENDIAN /* PDA's possibly? */
 /* Big endian systems (MSB) */
 union squirt
 {
@@ -196,7 +196,7 @@ union spark_config1
 };
 
 
-#elif __BYTE_ORDER == __LITTLE_ENDIAN
+#else
 /* Little Endian systems (LSB), intel x86) */
 union squirt
 {
@@ -357,8 +357,6 @@ union spark_config1
 		unsigned char unused	:4;
 	} bit;
 };
-#else
-#error  Endian-ness note defined, contact author!!!
-#endif
+#endif // Endian-ness check
 
 #endif
