@@ -22,6 +22,8 @@
 extern unsigned char *kpa_conversion;
 extern gboolean fahrenheit;
 extern gboolean dualtable;
+gboolean invalid_divider_1 = FALSE;
+gboolean invalid_divider_2 = FALSE;
 
 void post_process(void *input, void *output)
 {
@@ -91,10 +93,20 @@ void post_process(void *input, void *output)
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
-	nsquirts = (ve_const->config11.bit.cylinders+1)/ve_const->divider;
 
 	if (!dualtable)
 	{	/* Std B&G Code */
+		if ((ve_const->divider == 0) || ((ve_const->config11.bit.cylinders+1)%ve_const->divider))
+		{
+			fprintf(stderr,__FILE__": Std Code, divider invalid, cyls %i, divider %i\n",ve_const->config11.bit.cylinders+1,ve_const->divider);
+			ve_const->divider = 1;
+			invalid_divider_1 = TRUE;
+		} 
+		else
+			invalid_divider_1 = FALSE;
+
+		nsquirts = (ve_const->config11.bit.cylinders+1)/ve_const->divider;
+
 		out->pw1 = (float)in->pw1 / 10.0;
 		out->vecurr1 = in->vecurr1;
 		if (ve_const->alternate)
@@ -107,8 +119,8 @@ void post_process(void *input, void *output)
 			cycletime = 1200.0 /(float) in->rpm;
 
 		out->dcycle1 = 100.0 
-				* (nsquirts/divider)
-				* ((float) out->pw1 / cycletime);
+			* (nsquirts/divider)
+			* ((float) out->pw1 / cycletime);
 		out->bspot1 = in->bspot1;
 		out->bspot2 = in->bspot2;
 		out->bspot3 = in->bspot3;
@@ -127,6 +139,15 @@ void post_process(void *input, void *output)
 			cycletime = 1200.0 /(float) in->rpm;
 
 		/* Table 1 */
+		if ((ve_const_dt1->divider == 0) || ((ve_const_dt1->config11.bit.cylinders+1)%ve_const_dt1->divider))
+		{
+			fprintf(stderr,__FILE__": Dualtable, Table1, divider invalid, cyls %i, divider %i\n",ve_const_dt1->config11.bit.cylinders+1,ve_const_dt1->divider);
+			ve_const_dt1->divider = 1;
+			invalid_divider_1 = TRUE;
+		} 
+		else
+			invalid_divider_1 = FALSE;
+
 		nsquirts = (int) 0.00001 
 				+ (float)(ve_const_dt1->config11.bit.cylinders+1)
 				/ (float)ve_const_dt1->divider;
@@ -135,6 +156,15 @@ void post_process(void *input, void *output)
 		out->dcycle1 =  10.0 * (float) out->pw1 / possible_inj_time;
 
 		/* Table 2 */
+		if ((ve_const_dt2->divider == 0) || ((ve_const_dt2->config11.bit.cylinders+1)%ve_const_dt2->divider))
+		{
+			fprintf(stderr,__FILE__": Dualtable, Table2,  divider invalid, cyls %i, divider %i\n",ve_const_dt2->config11.bit.cylinders+1,ve_const_dt2->divider);
+			invalid_divider_2 = TRUE;
+			ve_const_dt2->divider = 1;
+		} 
+		else
+			invalid_divider_2 = FALSE;
+
 		nsquirts = (int) 0.00001 
 				+ (float)(ve_const_dt2->config11.bit.cylinders+1)
 				/ (float)ve_const_dt2->divider;
