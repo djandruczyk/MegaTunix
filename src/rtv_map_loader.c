@@ -26,7 +26,8 @@
 #include <structures.h>
 #include <tabloader.h>
 
-GArray *raw_array;
+GArray *raw_array = NULL;
+GHashTable *rtv_hash = NULL;
 
 gboolean load_realtime_map(void )
 {
@@ -47,6 +48,7 @@ gboolean load_realtime_map(void )
 	gchar * section = NULL;
 	GObject * object = NULL;
 	GList * list = NULL;
+	void * evaluator = NULL;
 	
 	filename = g_strconcat(DATA_DIR,"/",REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL);
 	cfgfile = cfg_open_file(filename);
@@ -72,6 +74,8 @@ gboolean load_realtime_map(void )
 			dbg_func(__FILE__": realtime_map_load(), can't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
 		raw_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
+		rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);
+
 		list = NULL;
 		for (i=0;i<raw_total;i++)
 			g_array_insert_val(raw_array,i,list);
@@ -161,6 +165,19 @@ gboolean load_realtime_map(void )
 							g_object_set_data(object,
 									g_strdup(keys[j]),
 									g_strdup(tmpbuf));
+							if (strstr(keys[j],"internal_name") != NULL)
+								g_hash_table_insert(rtv_hash,g_strdup(tmpbuf),(gpointer)object);
+							if (strstr(keys[j],"conv_expr") != NULL)
+							{
+								evaluator = evaluator_create(g_strdup(tmpbuf));
+								if (evaluator)
+									g_object_set_data(object,"evaulator",evaluator);
+								else
+									dbg_func(g_strdup_printf(__FILE__": bind_data() Failure creating evaluator for expression \"%s\"\n",tmpbuf),CRITICAL);
+								evaluator = NULL;
+							}
+									
+									
 							g_free(tmpbuf);
 						}
 						else
