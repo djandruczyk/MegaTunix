@@ -24,6 +24,13 @@ gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 {
 	gchar **result = NULL;	
 	gint i = 0;
+	if (!string)
+	{
+		dbg_func(__FILE__": parse_keys()\n\t String passed was NULL\n",CRITICAL);
+		*count = 0;
+		return NULL;
+	}
+
 	result = g_strsplit(string,delimiter,0);
 	while (result[i])
 		i++;
@@ -37,6 +44,13 @@ gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 	gint *keytypes = NULL;
 	gint i = 0;
 	gint ct = 0;
+
+	if (!string)
+	{
+		dbg_func(__FILE__": parse_keytypes()\n\t String passed was NULL\n",CRITICAL);
+		*count = 0;
+		return 0;
+	}
 	vector = g_strsplit(string,delimiter,0);
 	while (vector[ct])
 		ct++;

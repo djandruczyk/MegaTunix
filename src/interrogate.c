@@ -99,9 +99,6 @@ void interrogate_ecu()
 	/* how many tests.... */
 	tests_to_run = cmd_array->len;
 
-	/* Flush the toilet.... */
-//	tcflush(serial_params->fd, TCIOFLUSH);
-
 	for (i=0;i<tests_to_run;i++)
 	{
 		count = 0;
@@ -180,9 +177,6 @@ void interrogate_ecu()
 	}
 	/* Reset page to 0 just to be 100% sure... */
 	set_ms_page(0);
-	/* Flush the toilet.... */
-//	tcflush(serial_params->fd, TCIOFLUSH);
-
 
 	interrogated = determine_ecu(canidate,cmd_array,cmd_details);	
 
@@ -213,6 +207,11 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	GtkWidget * widget = NULL;
 
 	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL));	
+	if (!filenames)
+	{
+		dbg_func(g_strdup_printf(__FILE__": determine_ecu()\n\t NO Interrogatin profiles found,  was MegaTunix installed properly?\n\n"),CRITICAL);
+		return FALSE;
+	}
 
 	while (filenames[i])
 	{
@@ -759,6 +758,12 @@ gint translate_capabilities(gchar *string)
 	gint i = 0;
 	gint value = 0;
 
+
+	if (!string)
+	{
+		dbg_func(g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is NULLs\n"),CRITICAL);
+		return -1;
+	}
 
 	vector = g_strsplit(string,",",0);
 	dbg_func(g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is %s\n",string),INTERROGATOR);

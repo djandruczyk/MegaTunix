@@ -50,6 +50,8 @@ gboolean load_gui_tabs()
 	void (*function)(void);
 	GModule *module = NULL;
 
+	if (!firmware)
+		return FALSE;
 	if (!firmware->tab_list[i])
 		return FALSE;
 

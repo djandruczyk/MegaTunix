@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <getfiles.h>
@@ -67,6 +68,11 @@ gchar ** get_files(gchar *pathstub)
 	g_dir_close(dir);
 
 	finish:
+	if (!list)
+	{
+		dbg_func(__FILE__": get_files()\n\t File list was NULL\n",CRITICAL);
+		return NULL;
+	}
 	return (g_strsplit(list,",",0));
 }
 

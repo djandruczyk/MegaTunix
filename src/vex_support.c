@@ -284,6 +284,11 @@ GIOStatus process_header(void *ptr, ImportParserArg arg, gchar * string)
 	gchar *result = NULL;
 	struct Vex_Import *vex_import = ptr;
 
+	if (!string)
+	{
+		dbg_func(__FILE__": process_header()\n\t String passed was NULL\n",CRITICAL);
+		return G_IO_STATUS_ERROR;
+	}
 	str_array = g_strsplit(string, " ", 2);
 	result = g_strdup(str_array[1]);	
 	g_strfreev(str_array);
@@ -328,6 +333,11 @@ GIOStatus process_page(void *ptr, gchar *string)
 	struct Vex_Import *vex_import = ptr;
 	extern struct Firmware_Details *firmware;
 
+	if (!string)
+	{
+		dbg_func(__FILE__": process_page()\n\t String passed was NULL\n",CRITICAL);
+		return G_IO_STATUS_ERROR;
+	}
 	str_array = g_strsplit(string, " ", 2);	
 	page = atoi(str_array[1]);
 	g_strfreev(str_array);
@@ -392,6 +402,11 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 	gchar * msg_type = NULL;
 	struct Vex_Import *vex_import = ptr;
 
+	if (!string)
+	{
+		dbg_func(__FILE__": process_vex_range()\n\t String passed was NULL\n",CRITICAL);
+		return G_IO_STATUS_ERROR;
+	}
 	str_array = g_strsplit(string, "[", 2);
 	result = g_strdup(str_array[1]);	
 	g_strfreev(str_array);
@@ -471,6 +486,11 @@ GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 	gchar * msg_type = NULL;
 	struct Vex_Import *vex_import = ptr;
 
+	if (!string)
+	{
+		dbg_func(__FILE__": process_vex_table()\n\t String passed was NULL\n",CRITICAL);
+		return G_IO_STATUS_ERROR;
+	}
 	/* Get first number of [  x][  y] in the string line */
 	str_array = g_strsplit(string, "[", 3);
 	result = g_strdup(str_array[1]);	
