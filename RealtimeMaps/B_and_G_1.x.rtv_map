@@ -241,7 +241,7 @@ lookuptable=mat_table
 conv_expr=x-40
 temp_dep=TRUE
 is_float=FALSE
-tooltip="MAT (Deg)" is the Manifold Air Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
+tooltip="MAT (\302\260)" is the Manifold Air Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
 
 [derived_20]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,conv_expr,is_float,tooltip,temp_dep
@@ -254,7 +254,7 @@ lookuptable=clt_table
 conv_expr=x-40
 temp_dep=TRUE
 is_float=FALSE
-tooltip="CLT (Deg)" is the Engine Coolant Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
+tooltip="CLT (\302\260)" is the Engine Coolant Temperature in conventional thermal units (centigrade or fahrenheit depending on what you've set in the General Tab)
 
 [derived_21]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr,is_float,tooltip
