@@ -18,6 +18,7 @@
 #include <ignition_gui.h>
 #include <structures.h>
 
+GList *launch_controls;
 
 void build_ignition(GtkWidget *parent_frame)
 {
@@ -404,6 +405,7 @@ void build_ignition(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
 	frame = gtk_frame_new("Launch Control Settings");
+        launch_controls = g_list_append(launch_controls,(gpointer)frame);
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 	
 	table = gtk_table_new(5,2,FALSE);
@@ -414,6 +416,7 @@ void build_ignition(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	label = gtk_label_new("Soft Launch Limit RPM: ");
+        launch_controls = g_list_append(launch_controls,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE(table),label,0,1,0,1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -422,6 +425,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Soft Launch Limit RPM */
         adj =  (GtkAdjustment *) gtk_adjustment_new(5000.0,000.0,25500.0,100.0,1000.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
+        launch_controls = g_list_append(launch_controls,(gpointer)spinner);
         ign_widgets[95] = spinner;
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -440,6 +444,7 @@ void build_ignition(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Soft Launch Limit SparkAngle: ");
+        launch_controls = g_list_append(launch_controls,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE(table),label,0,1,1,2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -448,6 +453,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Soft RevLimit Sparkangle */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
+        launch_controls = g_list_append(launch_controls,(gpointer)spinner);
         ign_widgets[96] = spinner;
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -466,6 +472,7 @@ void build_ignition(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Hard Launch Limit RPM: ");
+        launch_controls = g_list_append(launch_controls,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE(table),label,0,1,2,3,
 			(GtkAttachOptions) (GTK_FILL),
@@ -474,6 +481,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Soft Launch Limit RPM */
         adj =  (GtkAdjustment *) gtk_adjustment_new(5500.0,000.0,25500.0,100.0,1000.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
+        launch_controls = g_list_append(launch_controls,(gpointer)spinner);
         ign_widgets[97] = spinner;
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -492,6 +500,7 @@ void build_ignition(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Throttle Pos. to enable Limiter: ");
+        launch_controls = g_list_append(launch_controls,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE(table),label,0,1,3,4,
 			(GtkAttachOptions) (GTK_FILL),
@@ -500,6 +509,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Throttle Position to enable Limiter */
         adj =  (GtkAdjustment *) gtk_adjustment_new(128.0,0.0,255.0,1,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
+        launch_controls = g_list_append(launch_controls,(gpointer)spinner);
         ign_widgets[98] = spinner;
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -516,6 +526,7 @@ void build_ignition(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Max boost before spark drop: ");
+        launch_controls = g_list_append(launch_controls,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE(table),label,0,1,4,5,
 			(GtkAttachOptions) (GTK_FILL),
@@ -524,6 +535,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Max boost before spark drop */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
+        launch_controls = g_list_append(launch_controls,(gpointer)spinner);
         ign_widgets[99] = spinner;
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);

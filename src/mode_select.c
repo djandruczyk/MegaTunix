@@ -26,6 +26,7 @@ void parse_ecu_capabilities(unsigned int ecu_caps)
 	set_ignition_mode(ecu_caps & (S_N_SPARK|S_N_EDIS));
 	set_iac_mode(ecu_caps & (IAC_PWM|IAC_STEPPER));
 	set_dualtable_mode(ecu_caps & DUALTABLE);
+	set_launch_ctrl_mode(ecu_caps & LAUNCH_CTRL);
 	if (ecu_caps & IAC_STEPPER)
 		gtk_button_set_label(GTK_BUTTON(buttons.pwm_idle_but),
 				"Stepper Controlled");
@@ -48,6 +49,12 @@ void set_ignition_mode(gboolean state)
         g_list_foreach(ign_controls, set_widget_state,(gpointer)state);
         g_list_foreach(inv_ign_controls, set_widget_state,(gpointer)(!state));
         reset_temps(GINT_TO_POINTER(temp_units));
+}
+void set_launch_ctrl_mode(gboolean state)
+{
+        extern GList *launch_controls;
+
+        g_list_foreach(launch_controls, set_widget_state,(gpointer)state);
 }
 
 void set_iac_mode(gboolean state)
