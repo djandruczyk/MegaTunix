@@ -127,7 +127,7 @@ int build_comms(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   Allows you to specify the amount of time MegaTunix waits after issuesing the command ot read the runtime data from the ECU. (Polling Timeout)  A sane value here is no more than 100 milliseconds. NOTE: This is the maximum windows of time MegaTunix will wait for data. Setting this too high can cause the display to get laggy in some cases.\n   The Seial interval delay is the amount of time to wait in between reads.  This determines the maximum update rate of the runtiem page and the dataloggin rate.  If you set this too low it's possible to have data problems due to the lack of checksumming on the input datastream. (A safe value is about 25 milliseconds).\n   The buttons on the right are pretty self explanitory, they start and stop reading of Runtime data respectivly.  NOTE: when datalogging is active, runtime data is being received, as this is the source for data for logging to a text file for future analysis.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   Allows you to specify the amount of time MegaTunix waits after issuing the command to read the runtime data from the ECU. (Polling Timeout)  A sane value here is no more than 100 milliseconds.  NOTE: This is the maximum window of time MegaTunix will wait for data.  Setting this too high can cause the display to get laggy in some cases.\n   The Serial interval delay is the amount of time to wait in between reads.  This determines the maximum update rate of the runtime page and the datalogging rate.  If you set this too low it's possible to have data problems due to the lack of checksumming on the input datastream.  A safe value is about 25 milliseconds.\n   The buttons on the right are pretty self explanitory, they start and stop reading of Runtime data respectivly.  NOTE: when datalogging is active, runtime data is being received, as this is the source for data for logging to a text file for future analysis.",NULL);
 	frame = gtk_frame_new("Runtime Parameters Configuration");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -151,7 +151,7 @@ int build_comms(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_tooltips_set_tip(tip,spinner,
-	"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds. This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
+	"Sets the time delay when waiting from data from the MS, typically should be set under 100 milliseconds.  This partially determines the max rate at which RealTime variables can be read from the MS box.",NULL);
 
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
@@ -163,7 +163,7 @@ int build_comms(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	gtk_tooltips_set_tip(tip,button,
-	"Starts reading the RT variables from the MS.  This will cause the Runtime Disp. page to begin updating continuously.",NULL);
+	"Starts reading the RealTime variables from the MS.  This will cause the Runtime Disp. page to begin updating continuously.",NULL);
 
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
@@ -184,7 +184,7 @@ int build_comms(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_tooltips_set_tip(tip,spinner,
-	"Sets the time delay between read attempts for getting the RT variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS. This will control the rate at which the Runtime Display page updates.",NULL);
+	"Sets the time delay between read attempts for getting the RealTime variables from the MS, typically should be set around 50 for about 12-18 reads per second from the MS.  This will control the rate at which the Runtime Display page updates.",NULL);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_INTERVAL_DELAY));
@@ -206,7 +206,7 @@ int build_comms(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-	"This block shows you statistics on the number of Good reads of the VE/Constants datablocks, RealTime DataBlocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard Resets are indicative of power problems or excessive electrical noise to the MS (causing ms process resets). Serial I/O errors are indicative of a poor cable connection between this PC and the MS.",NULL);
+	"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
 
 	frame = gtk_frame_new("MegaSquirt I/O Status");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
