@@ -26,7 +26,7 @@
 struct Raw_Runtime_Std
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
-	 * and fed into ms_data_v1_and_v2 (struct)
+	 * and fed into Runtime_Common (struct)
 	 */
 	unsigned char	secl;		/* Offset 0 */
 	union squirt	squirt;		/* Offset 1 */
@@ -58,7 +58,7 @@ struct Raw_Runtime_Std
 struct Raw_Runtime_Dualtable 
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
-	 * and fed into ms_data_v1_and_v2 (struct)
+	 * and fed into Runtime_Common (struct)
 	 */
 	unsigned char	secl;		/* Offset 0 */
 	union squirt	squirt;		/* Offset 1 */
@@ -82,6 +82,35 @@ struct Raw_Runtime_Dualtable
 	unsigned char	pw2;		/* Offset 19 */
 	unsigned char	vecurr2;	/* Offset 20 */
 	unsigned char	idledc;		/* Offset 21 */
+};
+
+struct Raw_Runtime_EDIS 
+{       /* This is RAW data that comes in via serial from the MegaSquirt
+	 * these values will be modified by post_process():
+	 * and fed into Runtime_Common (struct)
+	 */
+	unsigned char	secl;		/* Offset 0 */
+	union squirt	squirt;		/* Offset 1 */
+	union engine	engine;		/* Offset 2 */
+	unsigned char	baro;		/* Offset 3 */
+	unsigned char	map;		/* Offset 4 */
+	unsigned char	mat;		/* Offset 5 */
+	unsigned char	clt;		/* Offset 6 */
+	unsigned char	tps;		/* Offset 7 */
+	unsigned char	batt;		/* Offset 8 */
+	unsigned char	ego;		/* Offset 9 */
+	unsigned char	egocorr;	/* Offset 10 */
+	unsigned char	aircorr;	/* Offset 11 */
+	unsigned char	warmcorr;	/* Offset 12 */
+	unsigned char	rpm;		/* Offset 13 */
+	unsigned char	pw1;		/* Offset 14 */
+	unsigned char	tpsaccel;	/* Offset 15 */
+	unsigned char	barocorr;	/* Offset 16 */
+	unsigned char	gammae;		/* Offset 17 */
+	unsigned char	vecurr1;	/* Offset 18 */
+	unsigned char	ctimecommH;	/* Offset 19 */
+	unsigned char	ctimecommL;	/* Offset 20 */
+	unsigned char	sparkangle;	/* Offset 21 */
 };
 
 
@@ -133,9 +162,12 @@ struct Runtime_Common
         unsigned char	tpsaccel;	/* 72 Acceleration enrichment % */
         unsigned char	warmcorr;	/* 73 Total Warmup Correction % */
         unsigned char	idledc;		/* 74 IdlePWM dutycycle */
-	unsigned char	bspot1;		/* 75 blank spot 1 (for Std Runtime) */
-	unsigned char	bspot2;		/* 76 blank spot 2 (for Std Runtime) */
-	unsigned char	bspot3;		/* 77 blank spot 3 (for Std Runtime) */
+        unsigned char	ctimecommH;	/* 75 SquirtnEDIS Cycletime H */
+        unsigned char	ctimecommL;	/* 76 SquirtnEDIS Cycletime H */
+        unsigned char	sparkangle;	/* 77 SquirtnEDIS sparkangle */
+	unsigned char	bspot1;		/* 78 blank spot 1 (for Std Runtime) */
+	unsigned char	bspot2;		/* 79 blank spot 2 (for Std Runtime) */
+	unsigned char	bspot3;		/* 80 blank spot 3 (for Std Runtime) */
 };
 
 struct Ve_Const_Std
@@ -271,6 +303,30 @@ struct Ve_Const_DT_2
 	unsigned char	shiftlo;		/* 253, lo shift light thresh */
 	unsigned char	shifthi;		/* 254, hi shift light thresh */
 	unsigned char	crank_rpm;		/* 255, rpm/100 */
+};
+
+	/* MegaSquirtnEDIS Ignition table and Constants */
+struct Ignition_Table_EDIS
+{
+        /* TYPE          Variable              Offset,  Comment */
+        unsigned char	spark_table[64];	/* 0, Spark table, 64 bytes */
+        unsigned char	rpm_bins[8];		/* 64, RPM Bins, 8 bytes */
+        unsigned char	load_bins[8];		/* 72, RPM Bins, 8 bytes */
+	unsigned char	trig_angle;		/* 80, Trigger angle BTDC */
+	unsigned char	fixed_angle;		/* 81, Fixed angle */
+	signed char	trim_angle;		/* 82, Trim Angle +- */
+	unsigned char	crank_angle;		/* 83, Cranking Angle  */
+	unsigned char	spark_hold_cyc;		/* 84, Spark Hold Cycles */
+	union spark_config1 spark_config1;	/* 85, Spark Hold Cycles */
+	unsigned char	soft_rev_rpm;		/* 86, Soft Revlim RPM */
+	unsigned char	soft_rev_angle;		/* 87, Soft Revlim sp. angle */
+	unsigned char	soft_rev_htime;		/* 88, Soft Revlim max time */
+	unsigned char	soft_rev_ctime;		/* 89, Soft Revlim cool time */
+	unsigned char	hard_rev_rpm;		/* 90, Hard Revlim RPM */
+	unsigned char 	out1limit;		/* 91, Output 1 Limit */
+	unsigned char 	out1source;		/* 92, Output 1 source index from secl */
+	unsigned char 	out2limit;		/* 93, Output 2 Limit */
+	unsigned char 	out2source;		/* 94, Output 2 source index from secl */
 };
 
 #endif

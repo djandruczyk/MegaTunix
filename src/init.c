@@ -28,9 +28,9 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-gboolean dualtable = FALSE;	/* Talking to a dualtable MS ?? */
+gboolean dualtable = FALSE;		/* Talking to a dualtable MS ?? */
+gboolean ignition_variant = FALSE;	/* Talking to a EDIS/spark MS ?? */
 gboolean iac_variant = FALSE;	/* Talking to a enhanced IAC capable MS ?? */
-gboolean ign_variant = FALSE;	/* Talking to a ignition variant MS ?? */
 unsigned char *kpa_conversion; 
 extern unsigned char turbo_map[];
 extern unsigned char na_map[];

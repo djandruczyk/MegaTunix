@@ -244,7 +244,7 @@ void determine_ecu(void *ptr)
 	extern struct DynamicButtons buttons;
 	extern gboolean dualtable;
 	extern gboolean iac_variant;
-	extern gboolean ign_variant;
+	extern gboolean ignition_variant;
 
 	/* compare the canidate to all the choices.  As OF now we are ONLY
 	 * comparing byte counts as that is enough to guarantee unique-ness
@@ -255,14 +255,10 @@ void determine_ecu(void *ptr)
 	for (i=0;i<num_choices;i++)
 	{
 		passcount = 0;
-		retest:
 		for (j=0;j<num_tests;j++)
 		{
 			if (canidate->bytes[j] != canidates[i].bytes[j])
-			{
-				i++;
-				goto retest;
-			}
+				goto retest; /*THIS IS UGLY <--- */
 		}
 		/* If all test pass, now check the Extended version
 		 * If it matches,  jump out...
@@ -288,6 +284,9 @@ void determine_ecu(void *ptr)
 			match = i;
 			break;
 		}
+		retest:
+		if (0)	/* THIS IS an UGLY HACK!!!! */
+			;; /* Only here to suppress GCC warning!!!! */
 	}
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
@@ -331,7 +330,7 @@ void determine_ecu(void *ptr)
 		}
 
 	}
-	if (match == -1) // (we found one)
+	if (match == -1) // (we DID NOT find one)
 	{
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, contact author with the contents of this window\n");
 		// Store counts for VE/realtime readback... 
@@ -344,7 +343,7 @@ void determine_ecu(void *ptr)
 	/* Set flags */
 	dualtable =  canidates[match].dt_cap;
 	iac_variant =  canidates[match].iac_cap;
-	ign_variant =  canidates[match].ign_cap;
+	ignition_variant =  canidates[match].ign_cap;
 	/* Enable/Disable Controls */
 	set_dualtable_mode(canidates[match].dt_cap);	
 	set_ignition_mode(canidates[match].ign_cap);	

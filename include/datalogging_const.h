@@ -34,7 +34,7 @@ static const gchar *logable_names[] =
 "O2 Volts",	"O2 Counts",	"GammaE",	"BATT Volts",	"BATT Counts",
 "AIRcorr",	"BAROcorr",	"EGOcorr",	"WARMcorr",	"TPSaccel",
 "VE1",		"VE2",		"PW1",		"PW2",		"INJ-1 Dcycle",
-"INJ-2 Dcycle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+"INJ-2 Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 
 static const gchar *mt_compat_names[] = 
@@ -46,7 +46,7 @@ static const gchar *mt_compat_names[] =
 "O2",		"O2 Counts",	"Gammae",	"BATT Volts",	"BATT Counts",
 "Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSaccel",
 "Gve",		"VE2",		"PW1",		"PW2",		"INJ-1 Dcycle",
-"INJ-2 Dcycle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+"INJ-2 Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 
 static struct Limits limits[]= {
@@ -86,6 +86,9 @@ static struct Limits limits[]= {
 { 0.0,25.5},	/* PW2 */
 { 0.0,100.0},	/* Dcycle1 */
 { 0.0,100.0},	/* Dcycle2 */
+{ 0.0,255.0},	/* CycleTimeH */
+{ 0.0,255.0},	/* CycleTimeL */
+{ 0.0,255.0},	/* SparkAngle */
 { 0.0,255.0},	/* BSPOT1 */
 { 0.0,255.0},	/* BSPOT2 */
 { 0.0,255.0}	/* BSPOT3 */
@@ -130,6 +133,9 @@ static const gchar * logable_names_tips[] =
 "\"PW2\" is the pulsewidth in millisecondws for the injectors tied to channel 2. (Dualtable ONLY, this is undefined for standard MegaSquirt)",
 "\"INJ-1 Dcycle\" is the injector Duty cycle for channel 1 (and channel 2 on standard MegaSquirt ECU's)",
 "\"INJ-2 Dcycle\" is the injectior Duty Cycle for channel 2 (Dualtable code variants ONLY, this is undefiend for Standard MegaSquirts)", 
+"\"CycleTimeH\" is unknown (from MegaSquirtnEDIS  code)", 
+"\"CycleTimeL\" is unknown (from MegaSquirtnEDIS  code)", 
+"\"SparkAngle\" is unknown (from MegaSquirtnEDIS  code)", 
 "\"BSPOT1\" is one of three blank spots returned in the runtime variables for standard MegaSquirt ECUs. Some of the less known MS variants use these to communicate back additional data.  These are loggable just for this reasons.  Units are 0-255, resolution of 1.",
 "\"BSPOT2\" is one of three blank spots returned in the runtime variables for standard MegaSquirt ECUs. Some of the less known MS variants use these to communicate back additional data.  These are loggable just for this reasons.  Units are 0-255, resolution of 1.",
 "\"BSPOT3\" is one of three blank spots returned in the runtime variables for standard MegaSquirt ECUs. Some of the less known MS variants use these to communicate back additional data.  These are loggable just for this reasons.  Units are 0-255, resolution of 1."
@@ -150,7 +156,8 @@ static const gint logging_offset_map[] =
         12,65,61, 4,63,
         69,70,71,73,72,
         57,58,36,40,28,
-        32,75,76,77
+        32,75,76,77,78,
+	79,80
 };
 
 /* Size of each logable variable in BYTES, so 4 = a 32 bit var 
@@ -172,7 +179,8 @@ static const gint logging_datasizes_map[] =
         FLOAT,UCHAR,UCHAR,FLOAT,UCHAR,
         UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
         UCHAR,UCHAR,FLOAT,FLOAT,FLOAT,
-        FLOAT,UCHAR,UCHAR,UCHAR
+        FLOAT,UCHAR,UCHAR,UCHAR,UCHAR,
+	UCHAR,UCHAR
 };
 
 #endif

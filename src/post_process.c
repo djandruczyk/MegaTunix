@@ -22,6 +22,7 @@
 extern unsigned char *kpa_conversion;
 extern gboolean fahrenheit;
 extern gboolean dualtable;
+extern gboolean ignition_variant;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
 
@@ -35,6 +36,7 @@ void post_process(void *input, void *output)
 	struct Raw_Runtime_Std *in = input;
 	struct Raw_Runtime_Dualtable *in_dt = input;
 	struct Runtime_Common *out = output;
+	struct Raw_Runtime_EDIS *edis_in = input;
 	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
@@ -94,6 +96,18 @@ void post_process(void *input, void *output)
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
 
+	if (ignition_variant)
+	{
+		out->ctimecommH = edis_in->ctimecommH;
+		out->ctimecommL = edis_in->ctimecommL;
+		out->sparkangle = edis_in->sparkangle;
+	}
+	else
+	{
+		out->bspot1 = in->bspot1;
+		out->bspot2 = in->bspot2;
+		out->bspot3 = in->bspot3;
+	}
 	if (!dualtable)
 	{	/* Std B&G Code */
 		if ((ve_const->divider == 0) || ((ve_const->config11.bit.cylinders+1)%ve_const->divider))
@@ -121,9 +135,6 @@ void post_process(void *input, void *output)
 		out->dcycle1 = 100.0 
 			* (nsquirts/divider)
 			* ((float) out->pw1 / cycletime);
-		out->bspot1 = in->bspot1;
-		out->bspot2 = in->bspot2;
-		out->bspot3 = in->bspot3;
 	}
 	else
 	{	/* Dualtable code.... */

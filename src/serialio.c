@@ -178,6 +178,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	char buf[1024];
 	gint restart_reader = FALSE;
 	static gboolean locked;
+	gint total = 0;
 	gchar *tmpbuf;
 
 	if (locked)
@@ -211,7 +212,10 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			 * buffer...
 			 */
 			while (poll(&ufds,1,serial_params->poll_timeout))
-				res = read(serial_params->fd,&buf,64);
+				total += res = read(serial_params->fd,&buf,64);
+
+			if (total != 22)
+				goto test_failed;
 
 			tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 			/* COMMS test succeeded */
@@ -222,9 +226,11 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 					connected);
 			gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
 					connected);
+			
 		}
 		else
 		{
+			test_failed:
 			tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 			/* An I/O Error occurred with the MegaSquirt ECU */
 			update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);

@@ -60,15 +60,18 @@ void req_fuel_change(void *ptr)
 		* ((double)(reqd_fuel->actual_inj_flow));
 
 	reqd_fuel->calcd_reqd_fuel = tmp1/tmp2;
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(reqd_fuel->calcd_val_spin),
-			reqd_fuel->calcd_reqd_fuel);
+	if (GTK_IS_WIDGET(reqd_fuel->calcd_val_spin))
+	{
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(reqd_fuel->calcd_val_spin),reqd_fuel->calcd_reqd_fuel);
 
-	if (reqd_fuel->calcd_reqd_fuel > 25.5)
-		gtk_widget_modify_text(GTK_WIDGET(reqd_fuel->calcd_val_spin),
-				GTK_STATE_NORMAL,&red);
-	else
-		gtk_widget_modify_text(GTK_WIDGET(reqd_fuel->calcd_val_spin),
-				GTK_STATE_NORMAL,&black);
+
+		if (reqd_fuel->calcd_reqd_fuel > 25.5)
+			gtk_widget_modify_text(GTK_WIDGET(reqd_fuel->calcd_val_spin),
+					GTK_STATE_NORMAL,&red);
+		else
+			gtk_widget_modify_text(GTK_WIDGET(reqd_fuel->calcd_val_spin),
+					GTK_STATE_NORMAL,&black);
+	}
 }
 
 gboolean reqd_fuel_popup(void * data)

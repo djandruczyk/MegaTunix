@@ -180,6 +180,21 @@ union tblcnf
 	}bit;
 };
 
+/* Big Endian systems (MSB) */
+union spark_config1
+{
+	unsigned char 	value;
+	struct
+	{
+		unsigned char unused	:4;
+		unsigned char boost_ret	:1;	/* Boost Retard ? */
+		unsigned char multi_sp	:1;	/* Multi-Spark mode ? */
+		unsigned char xlong_trig:1;	/* Mask xtra long trigger ? */
+		unsigned char long_trig	:1;	/* Mask long trigger ? */
+	} bit;
+};
+
+
 #else
 /* Little Endian systems (LSB), intel x86) */
 union squirt
@@ -326,6 +341,20 @@ union tblcnf
 						/* 1 Gammae applied to inj 2 */
 		unsigned char unused	:1;	/* not used */
 	}bit;
+};
+
+/* Little Endian systems (LSB), intel x86 */
+union spark_config1
+{
+	unsigned char 	value;
+	struct
+	{
+		unsigned char long_trig	:1;	/* Mask long trigger ? */
+		unsigned char xlong_trig:1;	/* Mask xtra long trigger ? */
+		unsigned char multi_sp	:1;	/* Multi-Spark mode ? */
+		unsigned char boost_ret	:1;	/* Boost Retard ? */
+		unsigned char unused	:4;
+	} bit;
 };
 #endif
 

@@ -34,6 +34,7 @@
 
 extern gboolean interrogated;
 extern gboolean dualtable;
+extern gboolean ignition_variant;
 extern gboolean iac_variant;
 extern gboolean connected;
 extern gboolean raw_reader_running;
@@ -87,7 +88,8 @@ const gint mt_classic[] =
 	1,0,1,0,0,
 	1,1,1,1,0,
 	1,0,0,0,0,
-	0,0,0,0 
+	0,0,0,0,0,
+	0,0 
 };
 
 const gint mt_full[] = 
@@ -99,7 +101,8 @@ const gint mt_full[] =
 	1,0,1,1,0,
 	1,1,1,1,1,
 	1,0,1,1,0,
-	0,0,0,0 
+	0,0,0,0,0,
+	0,0 
 }; 
 
 static gboolean paused_handlers = FALSE;
@@ -638,7 +641,6 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
-			req_fuel_change(reqd_fuel);
 			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
@@ -733,7 +735,6 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
-			req_fuel_change(reqd_fuel);
 			if (num_cylinders_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
@@ -880,7 +881,7 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
 				tmp);
 		num_squirts_1 = (gint)tmp;
-		if (num_squirts_1 <1 )
+		if (num_squirts_1 < 1 )
 			num_squirts_1 = 1;
 
 		/* Config12 bits */
@@ -922,7 +923,7 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.inj_per_cycle_2_spin),
 				tmp);
 		num_squirts_2 = (gint)tmp;
-		if (num_squirts_2 <1 )
+		if (num_squirts_2 < 1 )
 			num_squirts_2 = 1;
 
 		/* Config12 bits */
@@ -1540,6 +1541,7 @@ void set_table_mapping_state(gboolean state)
 
 void set_ignition_mode(gboolean state)
 {
+	ignition_variant = state;
 //	printf("ignition mode controls not implemented yet\n");
 }
 
