@@ -44,9 +44,11 @@ int build_vetable(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(FALSE,0);
         gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
+        vbox2 = gtk_vbox_new(FALSE,0);
+        gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,5);
+
 	frame = gtk_frame_new("MAP Bins");
-        gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,5);
-	
+        gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
 
 	table = gtk_table_new(9,1,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
