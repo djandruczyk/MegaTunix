@@ -24,14 +24,14 @@
  */
 static const gchar *logable_names[] = 
 {
-"HR Clock",	"MS Clock",	"RPM",		"EngineBits",	"Idle DC",
-"TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
-"TPS Counts",	"MAP Counts",	"BARO Counts",	"MAT Counts",	"CLT Counts",
-"TPS %",	"MAP KPA",	"BARO KPA",	"MAT (Deg)",	"CLT (Deg)",
-"O2 Volts",	"O2 Counts",	"GammaE",	"BATT Volts",	"BATT Counts",
+"HR_Clock",	"MS_Clock",	"RPM",		"EngineBits",	"Idle_DC",
+"TPS_Volts",	"MAP_Volts",	"BARO_Volts",	"MAT_Volts",	"CLT_Volts",
+"TPS_Counts",	"MAP_Counts",	"BARO_Counts",	"MAT_Counts",	"CLT_Counts",
+"TPS_%",	"MAP_KPA",	"BARO_KPA",	"MAT_(Deg)",	"CLT_(Deg)",
+"O2_Volts",	"O2_Counts",	"GammaE",	"BATT_Volts",	"BATT_Counts",
 "AIRcorr",	"BAROcorr",	"EGOcorr",	"WARMcorr",	"TPSaccel",
-"VE1",		"VE2",		"PW1",		"PW2",		"INJ-1 Dcycle",
-"INJ-2 Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+"VE1",		"VE2",		"PW1",		"PW2",		"DutyCycle1",
+"DutyCycle2",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 
 static const gchar *mt_classic_names[] = 
@@ -39,11 +39,11 @@ static const gchar *mt_classic_names[] =
 "Time",		"Seconds",	"RPM",		"EngineBit",	"IdleDC",
 "TPS_Volts",	"MAP_Volts",	"BARO_Volts",	"MAT_Volts",	"CLT_Volts",
 "TPS_Counts",	"MAP_Counts",	"BARO_Counts",	"MAT_Counts",	"CLT_Counts",
-"TP",		"MAP",		"BARO", 	"MAT",		"CLT",
+"TP",		"MAP",		"BARO",		"MAT",		"CLT",
 "O2",		"O2_Counts",	"Gammae",	"BATT_Volts",	"BATT_Counts",
 "Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSacc",
-"Gve",		"Gve2",		"PW",		"PW2",		"INJ-1_Dcycle",
-"INJ-2_Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+"Gve",		"Gve2",		"PW",		"PW2",		"DutyCycle1",
+"DutyCycle2",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 
 static const gchar *mt_full_names[] = 
@@ -51,11 +51,11 @@ static const gchar *mt_full_names[] =
 "Time",		"SecL",		"RPM",		"Engine",	"IdleDC",
 "TPS_Volts",	"MAP_Volts",	"BARO_Volts",	"MAT_Volts",	"CLT_Volts",
 "TPS_Counts",	"MAP_Counts",	"BARO_Counts",	"MAT_Counts",	"CLT_Counts",
-"TP",		"MAP",		"BARO", 	"MAT",		"CLT",
+"TP",		"MAP",		"BARO",		"MAT",		"CLT",
 "O2",		"O2_Counts",	"Gammae",	"BATT_Volts",	"BATT_Counts",
 "Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSacc",
-"Gve",		"Gve2",		"PW",		"PW2",		"INJ-1_Dcycle",
-"INJ-2_Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+"Gve",		"Gve2",		"PW",		"PW2",		"DutyCycle1",
+"DutyCycle2",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"UserData1",	"UserData2",	"UserData3"
 };
 
 static const Capabilities dlog_caps[] = 

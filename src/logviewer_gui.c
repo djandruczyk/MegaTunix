@@ -202,6 +202,7 @@ void present_viewer_choices(void *ptr)
 	GtkWidget *table;
 	GtkWidget *frame;
 	GtkWidget *vbox;
+	GtkWidget *hbox;
 	GtkWidget *button;
 	GtkWidget *sep;
 	extern GtkTooltips *tip;
@@ -305,6 +306,15 @@ void present_viewer_choices(void *ptr)
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,TRUE,0);
+
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+	button = gtk_button_new_with_label("Uncheck All Selections");
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,FALSE,0);
+	g_signal_connect_swapped(G_OBJECT(button),"clicked",
+			G_CALLBACK(uncheck_active_controls),
+			NULL);
+
 	button = gtk_button_new_with_label("Close");
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,TRUE,0);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
@@ -329,7 +339,6 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
                 viewables.index[index] = TRUE;
         else
                 viewables.index[index] = FALSE;
-
 
 	return TRUE;
 }
@@ -862,15 +871,26 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	return TRUE;
 }
 
+gboolean uncheck_active_controls(GtkWidget *widget, gpointer data)
+{
+	gint i = 0;
+	for (i=0;i<max_viewables;i++)
+	{
+		if (viewables.index[i] == TRUE)
+        		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (viewables.widgets[i]),FALSE);
+	}
+	return TRUE;
+}
+			
 gboolean reset_viewables(GtkWidget *widget, gpointer data)
 {
 	gint i = 0;
 
 	/* disables all controls and de-allocates memory cleanly */
         for (i=0;i<max_viewables;i++)
-                viewables.index[i] = FALSE;	
+		viewables.index[i] = FALSE;
+
 	populate_viewer(NULL);
-	//g_signal_emit_by_name(lv_darea,"configure_event",NULL);
 
 	return FALSE;
 	

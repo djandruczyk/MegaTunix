@@ -33,6 +33,7 @@ void draw_infotext(void * );
 void draw_old_data(void * );
 gboolean update_logview_traces(void);
 void trace_update(gpointer, gpointer, gpointer );
+gboolean uncheck_active_controls(GtkWidget *, gpointer );
 
 /* Prototypes */
 
