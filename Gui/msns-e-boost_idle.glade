@@ -229,7 +229,7 @@
 			  <child>
 			    <widget class="GtkTable" id="pwm_idle_params_table">
 			      <property name="visible">True</property>
-			      <property name="n_rows">8</property>
+			      <property name="n_rows">6</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">0</property>
@@ -553,10 +553,6 @@
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
-
-			  <child>
-			    <placeholder/>
-			  </child>
 			</widget>
 		      </child>
 
@@ -710,7 +706,7 @@
 			  <child>
 			    <widget class="GtkTable" id="boost_table">
 			      <property name="visible">True</property>
-			      <property name="n_rows">22</property>
+			      <property name="n_rows">23</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">0</property>
@@ -1275,8 +1271,8 @@ to begin boost reduction</property>
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">15</property>
-				  <property name="bottom_attach">16</property>
+				  <property name="top_attach">18</property>
+				  <property name="bottom_attach">19</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
@@ -1301,8 +1297,8 @@ for every X deg over.</property>
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">14</property>
-				  <property name="bottom_attach">15</property>
+				  <property name="top_attach">16</property>
+				  <property name="bottom_attach">17</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
@@ -1327,8 +1323,8 @@ boost at:</property>
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">13</property>
-				  <property name="bottom_attach">14</property>
+				  <property name="top_attach">14</property>
+				  <property name="bottom_attach">15</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
@@ -1354,8 +1350,8 @@ boost at:</property>
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">13</property>
-				  <property name="bottom_attach">14</property>
+				  <property name="top_attach">14</property>
+				  <property name="bottom_attach">15</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">shrink</property>
 				  <property name="y_options">shrink</property>
@@ -1381,8 +1377,8 @@ boost at:</property>
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">14</property>
-				  <property name="bottom_attach">15</property>
+				  <property name="top_attach">16</property>
+				  <property name="bottom_attach">17</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">shrink</property>
 				  <property name="y_options">shrink</property>
@@ -1408,8 +1404,8 @@ boost at:</property>
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">15</property>
-				  <property name="bottom_attach">16</property>
+				  <property name="top_attach">18</property>
+				  <property name="bottom_attach">19</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">shrink</property>
 				  <property name="y_options">shrink</property>
@@ -1434,8 +1430,8 @@ knock detected (Kpa)</property>
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">16</property>
-				  <property name="bottom_attach">17</property>
+				  <property name="top_attach">20</property>
+				  <property name="bottom_attach">21</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
@@ -1461,8 +1457,8 @@ knock detected (Kpa)</property>
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">16</property>
-				  <property name="bottom_attach">17</property>
+				  <property name="top_attach">20</property>
+				  <property name="bottom_attach">21</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">shrink</property>
 				  <property name="y_options">shrink</property>
@@ -1488,8 +1484,8 @@ knock detected (Kpa)</property>
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">17</property>
-				  <property name="bottom_attach">18</property>
+				  <property name="top_attach">22</property>
+				  <property name="bottom_attach">23</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">shrink</property>
 				  <property name="y_options">shrink</property>
@@ -1514,11 +1510,76 @@ when knocking  (Kpa)</property>
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">17</property>
-				  <property name="bottom_attach">18</property>
+				  <property name="top_attach">22</property>
+				  <property name="bottom_attach">23</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHSeparator" id="hseparator14">
+				  <property name="visible">True</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">15</property>
+				  <property name="bottom_attach">16</property>
+				  <property name="x_options">fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHSeparator" id="hseparator15">
+				  <property name="visible">True</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">17</property>
+				  <property name="bottom_attach">18</property>
+				  <property name="x_options">fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHSeparator" id="hseparator16">
+				  <property name="visible">True</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">19</property>
+				  <property name="bottom_attach">20</property>
+				  <property name="x_options">fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHSeparator" id="hseparator17">
+				  <property name="visible">True</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">21</property>
+				  <property name="bottom_attach">22</property>
+				  <property name="x_options">fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHSeparator" id="hseparator18">
+				  <property name="visible">True</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">13</property>
+				  <property name="bottom_attach">14</property>
+				  <property name="x_options">fill</property>
 				</packing>
 			      </child>
 			    </widget>
@@ -1527,10 +1588,6 @@ when knocking  (Kpa)</property>
 			      <property name="expand">True</property>
 			      <property name="fill">True</property>
 			    </packing>
-			  </child>
-
-			  <child>
-			    <placeholder/>
 			  </child>
 			</widget>
 		      </child>

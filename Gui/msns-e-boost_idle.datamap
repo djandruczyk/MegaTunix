@@ -2,6 +2,7 @@
 
 [global]
 description=Object data map for Idle/Boost settings for MSnS-E
+#tab_name=_Idle/Boost\nLaunch
 tab_name=_Idle/Boost
 id_prefix=idle_boost_
 
