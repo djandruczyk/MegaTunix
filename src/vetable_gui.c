@@ -29,10 +29,13 @@ void rescale_table(void * data)
 	extern GHashTable *dynamic_widgets;
 	gchar *widget_name = (gchar *)data;
 	gint table_num = -1;
-	gint page = -1;
-	gint tbl_base = 0;
-	gint rpm_bins = 0;
-	gint load_bins = 0;
+	gint tbl_base = -1;
+	gint tbl_page = -1;
+	gint rpm_bins = -1;
+	gint load_bins = -1;
+	gint page = 0;
+	gint offset = 0;
+	extern gint **ms_data;
 	gboolean is_spark = FALSE;
 	GtkWidget *scaler = NULL;
 	GtkWidget *widget = NULL;
@@ -43,30 +46,32 @@ void rescale_table(void * data)
 	gfloat value = 0.0;
 
 	scaler = g_hash_table_lookup(dynamic_widgets,widget_name);
-	g_return_if_fail(GTK_IS_WIDGET(widget));
-	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
-	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	g_return_if_fail(GTK_IS_WIDGET(scaler));
+	table_num = (gint)g_object_get_data(G_OBJECT(scaler),"table_num");
 	tbl_base = firmware->table_params[table_num]->tbl_base;
 	rpm_bins = firmware->table_params[table_num]->rpm_bincount;
 	load_bins = firmware->table_params[table_num]->load_bincount;
 	is_spark = firmware->table_params[table_num]->is_spark;
+	tbl_page = firmware->table_params[table_num]->tbl_page;
 
-	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-	for (i=0;i<(rpm_bins*load_bins);i++)
+	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(scaler));
+	for (i=tbl_base;i<(rpm_bins*load_bins);i++)
 	{
-		if (NULL != (list = ve_widgets[page][i]))
+		if (NULL != (list = ve_widgets[tbl_page][i]))
 		{
 			list = g_list_first(list);
 			for (j=0;j<g_list_length(list);j++)
 			{
 				widget = (GtkWidget *)g_list_nth_data(list,j);
-				if ((!GTK_IS_ENTRY(widget)) || (!GTK_IS_SPIN_BUTTON(widget)))
-					continue;
 				if ((gboolean)g_object_get_data(G_OBJECT(widget),"marked"))
 				{
-					value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+					page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+					offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+					value = ms_data[page][offset];
 					value = (value*percentage)/100.0;
-					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+					ms_data[page][offset] = value;
+					g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+
 					widget_grab(widget,NULL,GINT_TO_POINTER(TRUE));
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(scaler),100.0);
 

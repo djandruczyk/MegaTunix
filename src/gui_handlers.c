@@ -1298,6 +1298,12 @@ testit:
 
 	parent = gtk_widget_get_parent(GTK_WIDGET(widget));
 	frame_name = (gchar *)g_object_get_data(G_OBJECT(parent),"rescaler_frame");
+	if (!frame_name)
+	{
+		printf("frame_name could NOT be found\n");
+		return FALSE;
+	}
+
 	frame = g_hash_table_lookup(dynamic_widgets, frame_name);
 	if ((total_marked > 0) && (frame != NULL))
 		gtk_widget_set_sensitive(GTK_WIDGET(frame),TRUE);
