@@ -70,7 +70,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	extern struct Firmware_Details *firmware;
 	extern gboolean gl_ability;
 	gint table_num =  -1;
-	
+
 	if (!gl_ability)
 	{
 		dbg_func(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n",CRITICAL);
@@ -90,8 +90,6 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"x_source"));
 	ve_view->y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"y_source"));
 	ve_view->z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"z_source"));
-	ve_view->table_num = table_num;
-
 	ve_view->x_suffix = g_strdup(firmware->table_params[table_num]->x_suffix);
 	ve_view->y_suffix = g_strdup(firmware->table_params[table_num]->y_suffix);
 	ve_view->z_suffix = g_strdup(firmware->table_params[table_num]->z_suffix);
@@ -105,24 +103,26 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	assert(ve_view->x_eval);
 	assert(ve_view->y_eval);
 	assert(ve_view->z_eval);
-
+	
 	ve_view->z_page = firmware->table_params[table_num]->z_page;
 	ve_view->z_base = firmware->table_params[table_num]->z_base;
 	ve_view->z_disp_float = firmware->table_params[table_num]->z_disp_float;
-	ve_view->z_precision = firmware->table_params[table_num]->z_disp_precision;
-	ve_view->table_name = g_strdup(firmware->table_params[table_num]->table_name);
+        ve_view->z_precision = firmware->table_params[table_num]->z_disp_precision;
 
 	ve_view->x_page = firmware->table_params[table_num]->x_page;
 	ve_view->x_base = firmware->table_params[table_num]->x_base;
 	ve_view->x_bincount = firmware->table_params[table_num]->x_bincount;
 	ve_view->x_disp_float = firmware->table_params[table_num]->x_disp_float;
-	ve_view->x_precision = firmware->table_params[table_num]->x_disp_precision;
+        ve_view->x_precision = firmware->table_params[table_num]->x_disp_precision;
 
 	ve_view->y_page = firmware->table_params[table_num]->y_page;
 	ve_view->y_base = firmware->table_params[table_num]->y_base;
 	ve_view->y_bincount = firmware->table_params[table_num]->y_bincount; 
 	ve_view->y_disp_float = firmware->table_params[table_num]->y_disp_float;
-	ve_view->y_precision = firmware->table_params[table_num]->y_disp_precision;
+        ve_view->y_precision = firmware->table_params[table_num]->y_disp_precision;
+
+	ve_view->table_name = g_strdup(firmware->table_params[table_num]->table_name);
+	ve_view->table_num = table_num;
 
 	ve_view->is_spark = firmware->table_params[table_num]->is_spark;
 
@@ -136,7 +136,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	/* Bind pointer to veview to an object for retrieval elsewhere */
 	object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_set_data(G_OBJECT(object),"ve_view",(gpointer)ve_view);
-			
+
 	register_widget(g_strdup_printf("ve_view_%i",table_num),
 			(gpointer)object);
 
@@ -225,7 +225,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			NULL);
 	ve_view->burn_but = button;
 	store_list("burners",g_list_append(
-			get_list("burners"),(gpointer)button));
+				get_list("burners"),(gpointer)button));
 
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
@@ -249,45 +249,46 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
+
 	label = gtk_label_new("Edit\nPosition");
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-	                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
 	register_widget(g_strdup_printf("x_active_label_%i",table_num),label);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-	                        (GtkAttachOptions) (GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
 	register_widget(g_strdup_printf("y_active_label_%i",table_num),label);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-	                        (GtkAttachOptions) (GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
 	register_widget(g_strdup_printf("z_active_label_%i",table_num),label);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-	                        (GtkAttachOptions) (GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Runtime\nPosition");
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-	                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
 	register_widget(g_strdup_printf("x_runtime_label_%i",table_num),label);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-	                        (GtkAttachOptions) (GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
 	register_widget(g_strdup_printf("y_runtime_label_%i",table_num),label);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-	                        (GtkAttachOptions) (GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new(NULL);
 	register_widget(g_strdup_printf("z_runtime_label_%i",table_num),label);
-        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
-	                        (GtkAttachOptions) (GTK_FILL),
-	                        (GtkAttachOptions) (0), 0, 0);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 
 	button = gtk_button_new_with_label("Close Window");
@@ -623,9 +624,6 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
-	gfloat value = 0.0;
-	gfloat divider = 0.0;
-	gint subtractor = 0;
 
 	dbg_func(__FILE__": ve3d_calculate_scaling()\n",OPENGL);
 
@@ -640,53 +638,32 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	ve_view->x_max = 0;
 	ve_view->y_max = 0;
 	ve_view->z_max = 0;
-	ve_view->x_min = 255;
-	ve_view->y_min = 255;
 	ve_view->z_min = 255;
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
-	if (ve_view->is_spark)
-	{
-		divider = 2.84;
-		subtractor = 10;
-	}
-	else
-	{
-		divider = 1.0;
-		subtractor = 0;
-	}
 
 	for (i=0;i<ve_view->x_bincount;i++) 
 	{
 		if (ms_data[x_page][x_base+i] > ve_view->x_max) 
 			ve_view->x_max = ms_data[x_page][x_base+i];
-		if (ms_data[x_page][x_base+i] < ve_view->x_min) 
-			ve_view->x_min = ms_data[x_page][x_base+i];
 	}
 
 	for (i=0;i<ve_view->y_bincount;i++) 
 	{
 		if (ms_data[y_page][y_base+i] > ve_view->y_max) 
 			ve_view->y_max = ms_data[y_page][y_base+i];
-		if (ms_data[y_page][y_base+i] < ve_view->y_min) 
-			ve_view->y_min = ms_data[y_page][y_base+i];
 	}
 	for (i=0;i<(ve_view->x_bincount*ve_view->y_bincount);i++) 
 	{
-		value = evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+i]);
-		if (value > ve_view->z_max) 
-			ve_view->z_max = value;
-		if (value < ve_view->z_min) 
-			ve_view->z_min = value;
+		if (ms_data[z_page][z_base+i] > ve_view->z_max) 
+			ve_view->z_max = ms_data[z_page][z_base+i];
+		if (ms_data[z_page][z_base+i] < ve_view->z_min) 
+			ve_view->z_min = ms_data[z_page][z_base+i];
 	}
 
 	ve_view->x_div = ((gfloat)ve_view->x_max/(gfloat)ve_view->x_bincount);
 	ve_view->y_div = ((gfloat)ve_view->y_max/(gfloat)ve_view->y_bincount);
 	ve_view->z_div = ((gfloat)ve_view->z_max-(gfloat)ve_view->z_min)/ve_view->z_scale;	
 	ve_view->z_offset = ((gfloat)ve_view->z_min/ve_view->z_div);
-	printf("x_div %f, y_div %f, z_div %f\n",ve_view->x_div,ve_view->y_div,ve_view->z_div);
-	printf("x_min %i, y_min %i, z_min %i\n",ve_view->x_min,ve_view->y_min,ve_view->z_min);
-	printf("x_max %i, y_max %i, z_max %i\n",ve_view->x_max,ve_view->y_max,ve_view->z_max);
-	printf("z_scale %f\n",ve_view->z_scale);
 }
 
 /*!
@@ -695,16 +672,15 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
  */
 void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 {
-	gint rpm=0, load=0;
 	extern gint **ms_data;
+	gint x = 0;
+	gint y = 0;
 	gint x_page = 0;
 	gint y_page = 0;
 	gint z_page = 0;
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
-	gfloat divider = 0.0;
-	gint subtractor = 0;
 
 	dbg_func(__FILE__": ve3d_draw_ve_grid() \n",OPENGL);
 
@@ -719,44 +695,33 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	glColor3f(1.0, 1.0, 1.0);
 	glLineWidth(1.5);
 
-	// Spark requires a divide by 2.84 to convert from ms units to degrees
-	if (ve_view->is_spark)
-	{
-		subtractor = 10;
-		divider = 2.84;
-	}
-	else
-	{
-		subtractor = 0;
-		divider = 1.0;
-	}
 
 	/* Draw lines on RPM axis */
-	for(rpm=0;rpm<ve_view->x_bincount;rpm++)
+	for(x=0;x<ve_view->x_bincount;x++)
 	{
 		glBegin(GL_LINE_STRIP);
-		for(load=0;load<ve_view->y_bincount;load++) 
+		for(y=0;y<ve_view->y_bincount;y++) 
 		{
 			glVertex3f(
-					(gfloat)(ms_data[x_page][x_base+rpm])/ve_view->x_div,
+					(gfloat)(ms_data[x_page][x_base+x])/ve_view->x_div,
 					
-					(gfloat)(ms_data[y_page][y_base+load])/ve_view->y_div, 	 	
-					(evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(load*ve_view->y_bincount)+rpm])/ve_view->z_div)-ve_view->z_offset);
+					(gfloat)(ms_data[y_page][y_base+y])/ve_view->y_div, 	 	
+					((gfloat)(ms_data[z_page][z_base+(y*ve_view->y_bincount)+x])/ve_view->z_div)-ve_view->z_offset);
 					
 		}
 		glEnd();
 	}
 
 	/* Draw lines on MAP axis */
-	for(load=0;load<ve_view->y_bincount;load++)
+	for(y=0;y<ve_view->y_bincount;y++)
 	{
 		glBegin(GL_LINE_STRIP);
-		for(rpm=0;rpm<ve_view->x_bincount;rpm++)
+		for(x=0;x<ve_view->x_bincount;x++)
 		{
 			glVertex3f(	
-					(gfloat)(ms_data[x_page][x_base+rpm])/ve_view->x_div,
-					(gfloat)(ms_data[y_page][y_base+load])/ve_view->y_div,
-					(evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(load*ve_view->y_bincount)+rpm])/ve_view->z_div)-ve_view->z_offset);
+					(gfloat)(ms_data[x_page][x_base+x])/ve_view->x_div,
+					(gfloat)(ms_data[y_page][y_base+y])/ve_view->y_div,
+					((gfloat)(ms_data[z_page][z_base+(y*ve_view->y_bincount)+x])/ve_view->z_div)-ve_view->z_offset);
 					
 		}
 		glEnd();
@@ -777,8 +742,6 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
-	gfloat divider = 0.0;
-	gint subtractor = 0;
 	extern GHashTable *dynamic_widgets;
 
 	dbg_func(__FILE__": ve3d_draw_active_indicator()\n",OPENGL);
@@ -791,17 +754,6 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	y_page = ve_view->y_page;
 	z_page = ve_view->z_page;
 
-	// Spark requires a divide by 2.84 to convert from ms units to degrees
-	if (ve_view->is_spark)
-	{
-		subtractor = 10;
-		divider = 2.84;
-	}
-	else
-	{
-		subtractor = 0;
-		divider = 1.0;
-	}
 
 	/* Render a red dot at the active VE map position */
 	glPointSize(8.0);
@@ -810,11 +762,12 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	glVertex3f(	
 			(gfloat)(ms_data[x_page][x_base+ve_view->active_x])/ve_view->x_div,
 			(gfloat)(ms_data[y_page][y_base+ve_view->active_y])/ve_view->y_div,	
-			(evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])/ve_view->z_div)-ve_view->z_offset);
+			((gfloat)ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]/ve_view->z_div)-ve_view->z_offset);
 	glEnd();	
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("x_active_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x]),ve_view->x_suffix));
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("y_active_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_suffix));
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("z_active_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->z_eval,ms_data[y_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]),ve_view->z_suffix));
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("x_active_label_%i",ve_view->table_num))),g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x]),ve_view->x_precision,ve_view->x_suffix));
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("y_active_label_%i",ve_view->table_num))),g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->y_suffix));
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("z_active_label_%i",ve_view->table_num))),g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,ms_data[y_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]),ve_view->z_precision,ve_view->z_suffix));
+
 }
 
 /*!
@@ -849,10 +802,10 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 			y_val/ve_view->y_div,	
 			(z_val/ve_view->z_div)-ve_view->z_offset);
 	glEnd();
-
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("x_runtime_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->x_eval,x_val),ve_view->x_suffix));
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("y_runtime_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_suffix));
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("z_runtime_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->z_eval,(gint)z_val), ve_view->z_suffix));
+
 }
 
 /*!
@@ -862,7 +815,8 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 {
 	/* Set vars and an asthetically pleasing maximum value */
-	gint i=0, rpm=0, load=0;
+	gint i=0;
+	gfloat tmpf = 0.0;
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
 	gchar *label;
@@ -889,15 +843,15 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
 
-	top = ((gfloat)(ve_view->z_max+10))/ve_view->z_div;
-	bottom = ((gfloat)(ve_view->z_min-10))/ve_view->z_div;
+	top = (ve_view->z_max+10)/ve_view->z_div;
+	bottom = (ve_view->z_min-10)/ve_view->z_div;
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.7,0.7,0.7);
 
 	/* Draw horizontal background grid lines  
 	   starting at 0 VE and working up to VE+10% */
-	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+10);i = i + 10)
+	for (i=10*((gint)ve_view->z_min/10);i<(ve_view->z_max+10);i+=10)
 	{
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(
@@ -975,13 +929,21 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
 			((ms_data[y_page][y_base])/ve_view->y_div),
 			bottom - ve_view->z_offset);
+	glVertex3f(
+			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
+			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
+			bottom - ve_view->z_offset);
+	glVertex3f(
+			((ms_data[x_page][x_base])/ve_view->x_div),	
+			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
+			bottom - ve_view->z_offset);
 	glEnd();
 
 	/* Draw RPM and KPA labels */
 	for (i=0;i<y_bincount;i++)
 	{
-		load = (ms_data[y_page][y_base+i]);
-		label = g_strdup_printf("%i",(gint)evaluator_evaluate_x(ve_view->y_eval,load));
+		tmpf = evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i]);
+		label = g_strdup_printf("%i",(gint)tmpf);
 		ve3d_draw_text(label,
 				((ms_data[x_page][x_base])/ve_view->x_div),
 				((ms_data[y_page][y_base+i])/ve_view->y_div),
@@ -991,8 +953,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 
 	for (i=0;i<x_bincount;i++)
 	{
-		rpm = (ms_data[x_page][x_base+i]);
-		label = g_strdup_printf("%i",(gint)evaluator_evaluate_x(ve_view->x_eval,rpm));
+		tmpf = evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i]);
+		label = g_strdup_printf("%i",(gint)tmpf);
 		ve3d_draw_text(label,
 				((ms_data[x_page][x_base+i])/ve_view->x_div),
 				((ms_data[y_page][y_base])/ve_view->y_div),
@@ -1001,9 +963,13 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	}
 
 	/* Draw VE labels */
-	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+10);i=i+10)
+	for (i=10*((gint)ve_view->z_min/10);i<(ve_view->z_max+10);i=i+10)
 	{
-		label = g_strdup_printf("%i",(gint)evaluator_evaluate_x(ve_view->z_eval,i));
+		tmpf = evaluator_evaluate_x(ve_view->z_eval,i);
+		if (ve_view->z_disp_float)
+			label = g_strdup_printf("%1$.*2$f",tmpf,ve_view->z_precision);
+		else
+			label = g_strdup_printf("%i",(gint)tmpf);
 		ve3d_draw_text(label,
 				((ms_data[x_page][x_base])/ve_view->x_div),
 				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
@@ -1232,17 +1198,18 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->zFar = 23.0;
 	ve_view->aspect = 1.0;
 	ve_view->z_scale = 4.0;
-	ve_view->is_spark = FALSE;
 	ve_view->x_div = 0.0;
-	ve_view->x_max = 0;
+	ve_view->x_max = 0.0;
+	ve_view->x_min = 0.0;
 	ve_view->active_x = 0;
 	ve_view->y_div = 0.0;
-	ve_view->y_max = 0;
+	ve_view->y_max = 0.0;
+	ve_view->y_min = 0.0;
 	ve_view->active_y = 0;
-	ve_view->z_div = 0;
-	ve_view->z_min = 255;
+	ve_view->z_div = 0.0;
+	ve_view->z_max = 0.0;
+	ve_view->z_min = 0.0;
 	ve_view->z_offset = 0;
-	ve_view->z_max = 0;
 	ve_view->x_page = 0;
 	ve_view->y_page = 0;
 	ve_view->z_page = 0;

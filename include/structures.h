@@ -466,12 +466,12 @@ struct Ve_View_3D
 	gint x_precision;
 	gint y_precision;
 	gint z_precision;
-	gint x_max;
-	gint x_min;
-	gint y_max;
-	gint y_min;
-	gint z_max;
-	gint z_min;
+	gfloat x_max;
+	gfloat x_min;
+	gfloat y_max;
+	gfloat y_min;
+	gfloat z_max;
+	gfloat z_min;
 	gchar *x_source;
 	gchar *y_source;
 	gchar *z_source;

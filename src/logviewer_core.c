@@ -34,8 +34,6 @@ struct Log_Info *log_info = NULL;
  */
 void load_logviewer_file(struct Io_File *iofile)
 {
-	struct Log_Info *log_info = NULL;
-
 	if (!iofile)
 	{
 		dbg_func(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n",CRITICAL);

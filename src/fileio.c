@@ -89,8 +89,6 @@ void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 		default:
 			title = g_strdup("Title not set BUG!! contact author\n");
 			break;
-
-
 	}
 
 	file_selector = gtk_file_selection_new(title);
@@ -153,6 +151,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	gboolean preexisting = FALSE;
 	gboolean new_file = FALSE;
 
+
 	iotype = (FileIoType )g_object_get_data(G_OBJECT(file_selector),"iotype");
 	selected_filename = (gchar *)gtk_file_selection_get_filename (
 			GTK_FILE_SELECTION (file_selector));
@@ -172,9 +171,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 #else
 		stat(selected_filename, &status);
 		size = status.st_size;
-
 #endif
-
 	}
 	else
 		new_file = TRUE;
@@ -187,8 +184,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 
 	if (((iotype == DATALOG_EXPORT) 
-				|| (iotype == VE_EXPORT) 
-				|| (iotype == FULL_BACKUP)) 
+			|| (iotype == VE_EXPORT) 
+			|| (iotype == FULL_BACKUP)) 
 			&& (preexisting == TRUE))
 	{
 		if (size > 0)
@@ -217,10 +214,16 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	iofile->iotype = iotype;
 
 	/* Open file in append mode, create if non-existant */
-	iofile->iochannel = g_io_channel_new_file(selected_filename, "a+", NULL);
+	if ((iotype == DATALOG_EXPORT) 
+			|| (iotype == VE_EXPORT) 
+			|| (iotype == FULL_BACKUP)) 
+		iofile->iochannel = g_io_channel_new_file(selected_filename, "a+", NULL);
+	else
+		iofile->iochannel = g_io_channel_new_file(selected_filename, "r+", NULL);
 
 	if(iofile->iochannel == NULL)
 	{
+		dbg_func(__FILE__": check_filename()\n\t iochannel could NOT be opened...\n",CRITICAL);
 		tmpbuf = g_strdup_printf("File Open Failure\n");
 		if (iotype == DATALOG_EXPORT)
 			update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
