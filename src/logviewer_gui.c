@@ -24,7 +24,17 @@ static gint max_viewables = 0;
 static gint total_viewables = 0;
 struct Logables viewables;
 GHashTable *active_traces = NULL;
-
+static const gboolean valid_logables[]=
+{
+	FALSE,FALSE,TRUE,FALSE,TRUE,
+	TRUE,TRUE,TRUE,TRUE,TRUE,
+	TRUE,TRUE,TRUE,TRUE,TRUE,
+	TRUE,TRUE,TRUE,TRUE,TRUE,
+	TRUE,TRUE,TRUE,TRUE,TRUE,
+	TRUE,TRUE,TRUE,TRUE,TRUE,
+	TRUE,TRUE,TRUE,TRUE,TRUE,
+	TRUE,TRUE,TRUE,TRUE
+};
 
 void build_logviewer(GtkWidget *parent_frame)
 {
@@ -140,6 +150,8 @@ void present_viewer_choices( void *ptr)
 	for (i=0;i<max_viewables;i++)
 	{
 		button = gtk_check_button_new_with_label(logable_names[i]);
+		if (valid_logables[i] == FALSE)
+			gtk_widget_set_sensitive(button,FALSE);
 		gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
 		if (viewables.index[i] == TRUE)
         		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
