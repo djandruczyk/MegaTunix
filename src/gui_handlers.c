@@ -37,6 +37,7 @@ extern gint force_status_update;
 extern gfloat ego_pbar_divisor;
 extern GtkWidget *map_tps_frame;
 extern GtkWidget *map_tps_label;
+extern GtkWidget *custom_logables;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
@@ -143,6 +144,21 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				
 				if (err_flag == 0)
 					check_req_fuel_limits();
+				break;
+			case 99:	/* Special case for toggles not 
+					 * related to the ms bitmasks...
+					 */
+				switch ((gint)data)
+				{
+					case CLASSIC_LOG:
+						gtk_widget_set_sensitive(
+							custom_logables,FALSE);
+						break;
+					case CUSTOM_LOG:
+						gtk_widget_set_sensitive(
+							custom_logables,TRUE);
+						break;
+				}
 				break;
 			default:
 				printf(" Toggle button NOT handled ERROR!!, contact author\n");

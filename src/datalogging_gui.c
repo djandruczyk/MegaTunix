@@ -26,6 +26,7 @@
 gint dlog_context_id;
 gint log_opened=FALSE;
 GtkWidget *dlog_statbar;
+GtkWidget *custom_logables;
 static GtkWidget *file_label;
 static int logfile;	/* DataLog File Handle*/
 static gchar * log_file_name;
@@ -36,8 +37,11 @@ int build_datalogging(GtkWidget *parent_frame)
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
 	GtkWidget *hbox;
+	GtkWidget *table;
 	GtkWidget *frame;
 	GtkWidget *button;
+        GSList  *group;
+
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -57,7 +61,7 @@ int build_datalogging(GtkWidget *parent_frame)
                         GTK_STATUSBAR(dlog_statbar),
                         "DataLogging Status");
 
-	frame = gtk_frame_new("DataLogging Configuration");
+	frame = gtk_frame_new("Data Log File Selection");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
@@ -74,16 +78,158 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),file_label,FALSE,FALSE,30);
 
 	button = gtk_button_new_with_label("Close Log File");
-	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,0);
+	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
                         G_CALLBACK (std_button_handler), \
                         GINT_TO_POINTER(CLOSE_LOGFILE));
 
 	button = gtk_button_new_with_label("Clear Log File");
-	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,0);
+	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,3);
 	g_signal_connect(G_OBJECT (button), "clicked",
                         G_CALLBACK (std_button_handler), \
                         GINT_TO_POINTER(TRUNCATE_LOGFILE));
+
+	frame = gtk_frame_new("DataLogging Configuration");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	
+	vbox = gtk_vbox_new(FALSE,0);
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+	gtk_container_add(GTK_CONTAINER(frame),vbox);
+
+	table = gtk_table_new(7,5,TRUE);
+	custom_logables = table;
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),15);
+        gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,FALSE,0);
+
+	button = gtk_check_button_new_with_label("Hi-Res Clock");
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("MS Clock");
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Engine RPM");
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("TPS");
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("BATT");
+	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("MAP");
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("BARO");
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("O2");
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("MAT");
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("CLT");
+	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("VE");
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Baro Corr");
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("EGO Corr");
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("MAT Corr");
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("CLT Gamma");
+	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Pulse-Width");
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 3, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Inj DutyCycle");
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 3, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("EngineBits");
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_check_button_new_with_label("Total Gamma");
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 3, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	table = gtk_table_new(1,4,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),15);
+        gtk_container_set_border_width(GTK_CONTAINER(table),0);
+	gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,FALSE,0);
+
+	button = gtk_radio_button_new_with_label(NULL,"MegaTune \"Classic\" Format");
+	g_object_set_data(G_OBJECT(button),"config_num", 
+			GINT_TO_POINTER(99));
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+        gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 10, 0);
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(toggle_button_handler),
+                        GINT_TO_POINTER(CLASSIC_LOG));
+
+	button = gtk_radio_button_new_with_label(group,"Custom Format");
+	g_object_set_data(G_OBJECT(button),"config_num", 
+			GINT_TO_POINTER(99));
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+        gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 10, 0);
+        g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(toggle_button_handler),
+                        GINT_TO_POINTER(CUSTOM_LOG));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+
+
+
+
 
 	return TRUE;
 }

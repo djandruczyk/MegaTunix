@@ -54,6 +54,8 @@
 #define CLOSE_LOGFILE		0x37
 #define START_DATALOGGING	0x38
 #define STOP_DATALOGGING	0x39
+#define CLASSIC_LOG		0x3a
+#define CUSTOM_LOG		0x3b
 
 /* Spinbuttons */
 #define REQ_FUEL_DISP		0x40
