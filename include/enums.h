@@ -19,7 +19,7 @@
  */
 typedef enum
 {
-	REALTIME_VARS,
+	REALTIME_VARS=0x10,
 	VE_AND_CONSTANTS_0,
 	VE_AND_CONSTANTS_1,
 	VE_AND_CONSTANTS_2,
@@ -32,7 +32,7 @@ typedef enum
 /* Regular Buttons */
 typedef enum
 {
-	START_REALTIME = 0x2a,
+	START_REALTIME = 0x20,
 	STOP_REALTIME,
 	READ_VE_CONST,
 	READ_RAW_MEMORY,
@@ -56,7 +56,7 @@ typedef enum
 /* Toggle/Radio buttons */
 typedef enum
 {
-	TOOLTIPS_STATE,
+	TOOLTIPS_STATE=0x40,
         FAHRENHEIT,
         CELSIUS,
 	COMMA,
@@ -71,7 +71,7 @@ typedef enum
 
 typedef enum
 {
-	MT_CLASSIC_LOG,
+	MT_CLASSIC_LOG=0x50,
 	MT_FULL_LOG,
 	CUSTOM_LOG
 }LoggingMode;
@@ -79,7 +79,7 @@ typedef enum
 /* spinbuttons... */
 typedef enum
 {
-	REQ_FUEL_DISP,
+	REQ_FUEL_DISP=0x60,
 	REQ_FUEL_CYLS,
 	REQ_FUEL_RATED_INJ_FLOW,
 	REQ_FUEL_RATED_PRESSURE,
@@ -105,7 +105,7 @@ typedef enum
 /* Conversions for download, converse on upload.. */
 typedef enum
 {
-	CONV_ADD,
+	CONV_ADD=0x80,
 	CONV_SUB,
 	CONV_MULT,
 	CONV_DIV,
@@ -115,7 +115,7 @@ typedef enum
 /* Runtime Status flags */
 typedef enum 
 {       
-	STAT_CONNECTED, 
+	STAT_CONNECTED=0x90, 
         STAT_CRANKING, 
         STAT_RUNNING, 
         STAT_WARMUP, 
@@ -126,7 +126,7 @@ typedef enum
 
 typedef enum
 {
-	VE_EXPORT = 10,
+	VE_EXPORT = 0xa0,
 	VE_IMPORT,
 	DATALOG_EXPORT,
 	DATALOG_IMPORT,
@@ -137,13 +137,13 @@ typedef enum
 
 typedef enum
 {	
-	RED,
+	RED=0xb0,
 	BLACK
 }GuiState;
 
 typedef enum
 {
-	HEADER,
+	HEADER=0xc0,
 	PAGE,
 	RANGE,
 	TABLE
@@ -151,7 +151,7 @@ typedef enum
 
 typedef enum
 {
-	EVEME,
+	EVEME=0xd0,
 	USER_REV,
 	USER_COMMENT,
 	DATE,
@@ -163,14 +163,14 @@ typedef enum
 
 typedef enum
 {
-	FONT,
+	FONT=0xe0,
 	TRACE,
 	GRATICULE
 }GcType;
 
 typedef enum
 {
-	KPA,
+	KPA=0xf0,
 	RPM
 }TableType;
 
@@ -188,12 +188,11 @@ typedef enum
 	BOOST_CTRL	= 1<<8,
 	OVERBOOST_SFTY	= 1<<9,
 	LAUNCH_CTRL	= 1<<10,
-	TEMP_DEP	= 1<<11,/* Temp units dependancy, used by Rt_Controls */
 }Capabilities;
 
 typedef enum
 {
-	MTX,
+	MTX=0x100,
 	MT_CLASSIC,
 	MT_FULL,
 	MT_RAW
@@ -218,14 +217,14 @@ typedef enum
 
 typedef enum
 {
-        VNUM = 1,
+        VNUM = 0x110,
         EXTVER,
         SIG
 }StoreType;
 
 typedef enum
 {
-	BURN_CMD = 0x69,
+	BURN_CMD = 0x120,
 	READ_CMD,
 	WRITE_CMD,
 	COMMS_TEST,
@@ -234,7 +233,7 @@ typedef enum
 
 typedef enum
 {
-	IO_REALTIME_READ,
+	IO_REALTIME_READ=0x130,
 	IO_INTERROGATE_ECU,
 	IO_COMMS_TEST,
 	IO_READ_VE_CONST,
@@ -245,7 +244,7 @@ typedef enum
 
 typedef enum
 {
-	UPD_REALTIME = 0x6a,
+	UPD_REALTIME = 0x140,
 	UPD_LOGVIEWER,
 	UPD_DATALOGGER,
 	UPD_VE_CONST,
@@ -257,7 +256,7 @@ typedef enum
 
 typedef enum
 {
-	INT = 0x50,
+	INT = 0x150,
 	ENUM,
 	BOOL,
 	STRING,
@@ -265,7 +264,7 @@ typedef enum
 
 typedef enum
 {
-	ABOUT_PAGE=0x90,
+	ABOUT_PAGE=0x160,
 	GENERAL_PAGE,
 	COMMS_PAGE,
 	ENG_VITALS_PAGE,
@@ -280,5 +279,13 @@ typedef enum
 	DATALOGGING_PAGE,
 	LOGVIEWER_PAGE,
 }PageIdent;
+
+typedef enum
+{
+	STORE_CTRL=1,
+	TEMP_DEP,
+	INTERDEP_1,
+	INTERDEP_2,
+}ListIndexes;
 
 #endif

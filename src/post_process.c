@@ -264,7 +264,7 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 				gtk_label_set_text(GTK_LABEL(label),(const char *)get_bin(value));
 				break;
 			default:
-				dbg_func(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n",CRITICAL);
+//				dbg_func(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n",CRITICAL);
 				gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.2X",value));
 				break;
 

@@ -66,7 +66,6 @@ int main(int argc, char ** argv)
 	/* Convert the gui based on temp preference.  This MUST BE DONE
 	 * AFTER data has been read once to make sure it's displayed correctly
 	 */
-	reset_temps(GINT_TO_POINTER(temp_units));
 
 	/* Kickoff fast interrogation */
 	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);

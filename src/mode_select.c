@@ -66,14 +66,12 @@ void set_ignition_mode(gboolean state)
 	extern gint ecu_caps;
 	extern GList *ign_controls;
 	extern GList *inv_ign_controls;
-	extern gint temp_units;
 	extern struct DynamicLabels labels;
 	extern struct DynamicButtons buttons;
 
 	dbg_func(g_strdup_printf(__FILE__": set_ignition_mode()\n\tSetting Ignition controls state to %s\n",states[state]),INTERROGATOR);
 	g_list_foreach(ign_controls, set_widget_state,(gpointer)state);
 	g_list_foreach(inv_ign_controls, set_widget_state,(gpointer)(!state));
-	reset_temps(GINT_TO_POINTER(temp_units));
 	if (ecu_caps & S_N_EDIS)
 	{
 		gtk_label_set_text(GTK_LABEL(labels.timing_multi_lab),"EDIS Multi-Spark:");
@@ -118,14 +116,11 @@ void set_dualtable_mode(gboolean state)
 {
         extern GList *dt_controls;
         extern GList *inv_dt_controls;
-	extern gint temp_units;
 
 	dbg_func(g_strdup_printf(__FILE__": set_dualtable_mode()\n\tSetting Dual Table controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
         g_list_foreach(inv_dt_controls, set_widget_state,(gpointer)(!state));
 
-        /* temp_units is a FLAG... */
-        reset_temps(GINT_TO_POINTER(temp_units));
 }
 
 void set_widget_state(gpointer widget, gpointer state)

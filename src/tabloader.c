@@ -119,7 +119,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint tmpi = 0;
 	gint offset = 0;
 	gint page = 0;
-	extern GList *temp_dep;
+	extern GList *lists[];
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
 	if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
@@ -138,16 +138,22 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 		g_strfreev(keys);
 		return;
 	}
-	offset = -1;
 	page = -1;
-	cfg_read_int(cfgfile,section,"offset",&offset);
 	if (!cfg_read_int(cfgfile,section,"page",&page))
 		dbg_func(g_strdup_printf(__FILE__": bind_data(), Object %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
 	
-	/* Add temp dependant widgets to list... */
-	if (cfg_read_boolean(cfgfile,section,"temp_dep",&tmpi))
-		temp_dep = g_list_append(temp_dep,(gpointer)widget);
+	/* Bind widgets to lists if thy have hte bind_to_list flag set...
+	 */
+	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
+	{
+		tmpi=0;
+		tmpi = translate_string(tmpbuf);
+		lists[tmpi] = g_list_append(lists[tmpi],(gpointer)widget);
+		g_free(tmpbuf);
+	}
 
+	offset = -1;
+	cfg_read_int(cfgfile,section,"offset",&offset);
 	if (offset >= 0)
 	{
 		/* The way we do it now is to STORE widgets in LISTS for each

@@ -55,7 +55,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
-	extern GList *store_controls;
+	extern GList *lists[];
 	gchar *tmpbuf;
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 
@@ -174,7 +174,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK(std_button_handler),
 			NULL);
 	ve_view->burn_but = button;
-	store_controls = g_list_append(store_controls,(gpointer)button);
+	lists[STORE_CTRL] = g_list_append(lists[STORE_CTRL],(gpointer)button);
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
@@ -213,9 +213,9 @@ gint reset_3d_winstat(GtkWidget *widget)
 	struct Ve_View_3D *ve_view;
 	GtkWidget *tmpwidget = NULL;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
-	extern GList *store_controls;
+	extern GList *lists[];
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
-	store_controls = g_list_remove(store_controls,(gpointer)ve_view->burn_but);	
+	lists[STORE_CTRL] = g_list_remove(lists[STORE_CTRL],(gpointer)ve_view->burn_but);	
 	winstat[ve_view->page] = FALSE;
 	tmpwidget = g_list_nth_data(ve_widgets[ve_view->page][0],0);
 	g_object_set_data(G_OBJECT(tmpwidget),

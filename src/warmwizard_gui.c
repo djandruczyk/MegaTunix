@@ -46,8 +46,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	GtkWidget *spinner;
 	GtkAdjustment *adj;
 	extern GtkTooltips *tip;
-	extern GList *store_controls;
-	extern GList *temp_dep;
+	extern GList *lists[];
 
 	return;
 	/* MAin box inside parent frame */
@@ -135,7 +134,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	label = gtk_label_new("Pulsewidth at -40 \302\260 F.");
-	temp_dep = g_list_append(temp_dep, (gpointer)label);
+	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP], (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -143,7 +142,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	label = gtk_label_new("Pulsewidth at 170 \302\260 F.");
 	labels.ww_cr_pulse_hightemp_lab = label;
-	temp_dep = g_list_append(temp_dep, (gpointer)label);
+	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP], (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
@@ -298,7 +297,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 10, 0);
 
 	label = gtk_label_new("Coolant (\302\260 F.)");
-	temp_dep = g_list_append(temp_dep, (gpointer)label);
+	lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP], (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -461,7 +460,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_button_new_with_label("Burn to ECU");
-	store_controls = g_list_append(store_controls,(gpointer)button);
+	lists[STORE_CTRL] = g_list_append(lists[STORE_CTRL],(gpointer)button);
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,

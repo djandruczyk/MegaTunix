@@ -38,10 +38,11 @@ handler=_READ_VE_CONST_
 page=1
 
 [VE2_burn_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,bind_to_list
+key_types=_ENUM_,_INT_,_ENUM_
 handler=_BURN_MS_FLASH_
 page=1
+bind_to_list=_STORE_CTRL_
 
 [VE2_3d_view_button]
 keys=page,ve_base_offset,load_base_offset,rpm_base_offset,load_bincount,rpm_bincount,is_spark

@@ -171,7 +171,7 @@ void add_control(gchar *control_name, gchar *parameters)
 	GtkWidget *pbar;
 	extern GList *dt_controls;
 	extern GList *ign_controls;
-	extern GList *temp_dep;
+	extern GList *lists[];
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
@@ -230,7 +230,7 @@ void add_control(gchar *control_name, gchar *parameters)
 	}
 	if (control->flags & TEMP_DEP)	/* name has temp unit in it */
 	{
-		temp_dep = g_list_append(temp_dep,(gpointer)control->label);
+		lists[TEMP_DEP] = g_list_append(lists[TEMP_DEP],(gpointer)control->label);
 	}
 
 	if (g_hash_table_lookup(rt_controls,g_strdup(control_name))==NULL)

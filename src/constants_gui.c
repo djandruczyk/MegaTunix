@@ -44,7 +44,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	struct Reqd_Fuel *reqd_fuel_1 = NULL;
 	struct Reqd_Fuel *reqd_fuel_2 = NULL;
 
-	extern GList *store_controls;
+	extern GList *lists[];
 	extern GList *interdep_1_controls;
 	extern GList *interdep_2_controls;
 	extern GList *reqfuel_1_controls;
@@ -872,7 +872,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_button_new_with_label("Permanently Store Data in ECU");
-        store_controls = g_list_append(store_controls,(gpointer)button);
+        lists[STORE_CTRL] = g_list_append(lists[STORE_CTRL],(gpointer)button);
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,

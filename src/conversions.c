@@ -35,7 +35,7 @@
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
-GList *temp_dep = NULL;
+GList *lists[10];	/* BAD idea to be static... */
 
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {
@@ -192,6 +192,6 @@ void convert_temps(gpointer widget, gpointer units)
 void reset_temps(gpointer type)
 {
 	/* Better way.. :) */
-	g_list_foreach(temp_dep,convert_temps,type);
+	g_list_foreach(lists[TEMP_DEP],convert_temps,type);
 
 }
