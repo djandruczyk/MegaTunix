@@ -66,6 +66,7 @@ key_types=_INT_,_STRING_
 page=0
 rescaler_frame=SP1_rescale_frame
 
+
 #----- Temp Timing Controls --------------------------------------------------
 [trimangle_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
@@ -91,7 +92,7 @@ ign_parm=TRUE
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 
-[load_spin_1]
+[load_spin_0]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -100,7 +101,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[load_spin_2]
+[load_spin_1]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -109,7 +110,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[load_spin_3]
+[load_spin_2]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -118,7 +119,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[load_spin_4]
+[load_spin_3]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -127,7 +128,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[load_spin_5]
+[load_spin_4]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -136,7 +137,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[load_spin_6]
+[load_spin_5]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -145,7 +146,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[load_spin_7]
+[load_spin_6]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -154,7 +155,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[load_spin_8]
+[load_spin_7]
 keys=page,offset,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -165,7 +166,7 @@ ign_parm=TRUE
 
 #----- RPM Spinners ---------------------------------------------------------
 
-[rpm_spin_1]
+[rpm_spin_0]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -176,7 +177,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[rpm_spin_2]
+[rpm_spin_1]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -187,7 +188,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[rpm_spin_3]
+[rpm_spin_2]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -198,7 +199,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[rpm_spin_4]
+[rpm_spin_3]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -209,7 +210,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[rpm_spin_5]
+[rpm_spin_4]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -220,7 +221,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[rpm_spin_6]
+[rpm_spin_5]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -231,7 +232,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[rpm_spin_7]
+[rpm_spin_6]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -242,7 +243,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[rpm_spin_8]
+[rpm_spin_7]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -255,7 +256,7 @@ ign_parm=TRUE
 
 #----- VE-Table Spinners -----------------------------------------------------
 
-[sparkspin_(1,1)]
+[sparkspin_(0,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -266,7 +267,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,1)]
+[sparkspin_(1,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -277,7 +278,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,1)]
+[sparkspin_(2,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -288,7 +289,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,1)]
+[sparkspin_(3,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -299,7 +300,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,1)]
+[sparkspin_(4,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -310,7 +311,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,1)]
+[sparkspin_(5,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -321,7 +322,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,1)]
+[sparkspin_(6,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -332,7 +333,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,1)]
+[sparkspin_(7,0)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -343,7 +344,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(1,2)]
+[sparkspin_(0,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -354,7 +355,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,2)]
+[sparkspin_(1,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -365,7 +366,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,2)]
+[sparkspin_(2,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -376,7 +377,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,2)]
+[sparkspin_(3,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -387,7 +388,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,2)]
+[sparkspin_(4,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -398,7 +399,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,2)]
+[sparkspin_(5,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -409,7 +410,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,2)]
+[sparkspin_(6,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -420,7 +421,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,2)]
+[sparkspin_(7,1)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -431,7 +432,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(1,3)]
+[sparkspin_(0,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -442,7 +443,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,3)]
+[sparkspin_(1,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -453,7 +454,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,3)]
+[sparkspin_(2,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -464,7 +465,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,3)]
+[sparkspin_(3,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -475,7 +476,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,3)]
+[sparkspin_(4,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -486,7 +487,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,3)]
+[sparkspin_(5,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -497,7 +498,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,3)]
+[sparkspin_(6,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -508,7 +509,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,3)]
+[sparkspin_(7,2)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -519,7 +520,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(1,4)]
+[sparkspin_(0,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -530,7 +531,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,4)]
+[sparkspin_(1,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -541,7 +542,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,4)]
+[sparkspin_(2,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -552,7 +553,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,4)]
+[sparkspin_(3,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -563,7 +564,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,4)]
+[sparkspin_(4,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -574,7 +575,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,4)]
+[sparkspin_(5,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -585,7 +586,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,4)]
+[sparkspin_(6,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -596,7 +597,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,4)]
+[sparkspin_(7,3)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -607,7 +608,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(1,5)]
+[sparkspin_(0,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -618,7 +619,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,5)]
+[sparkspin_(1,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -629,7 +630,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,5)]
+[sparkspin_(2,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -640,7 +641,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,5)]
+[sparkspin_(3,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -651,7 +652,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,5)]
+[sparkspin_(4,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -662,7 +663,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,5)]
+[sparkspin_(5,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -673,7 +674,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,5)]
+[sparkspin_(6,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -684,7 +685,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,5)]
+[sparkspin_(7,4)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -695,7 +696,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(1,6)]
+[sparkspin_(0,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -706,7 +707,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,6)]
+[sparkspin_(1,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -717,7 +718,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,6)]
+[sparkspin_(2,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -728,7 +729,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,6)]
+[sparkspin_(3,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -739,7 +740,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,6)]
+[sparkspin_(4,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -750,7 +751,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,6)]
+[sparkspin_(5,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -761,7 +762,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,6)]
+[sparkspin_(6,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -772,7 +773,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,6)]
+[sparkspin_(7,5)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -783,7 +784,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(1,7)]
+[sparkspin_(0,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -794,7 +795,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,7)]
+[sparkspin_(1,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -805,7 +806,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,7)]
+[sparkspin_(2,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -816,7 +817,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,7)]
+[sparkspin_(3,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -827,7 +828,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,7)]
+[sparkspin_(4,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -838,7 +839,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,7)]
+[sparkspin_(5,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -849,7 +850,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,7)]
+[sparkspin_(6,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -860,7 +861,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,7)]
+[sparkspin_(7,6)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -871,7 +872,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(1,8)]
+[sparkspin_(0,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -882,7 +883,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(2,8)]
+[sparkspin_(1,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -893,7 +894,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(3,8)]
+[sparkspin_(2,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -904,7 +905,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(4,8)]
+[sparkspin_(3,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -915,7 +916,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(5,8)]
+[sparkspin_(4,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -926,7 +927,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(6,8)]
+[sparkspin_(5,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -937,7 +938,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(7,8)]
+[sparkspin_(6,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
@@ -948,7 +949,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 ign_parm=TRUE
 
-[sparkspin_(8,8)]
+[sparkspin_(7,7)]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=1
