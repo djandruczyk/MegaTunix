@@ -17,6 +17,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <notifications.h>
+#include "../mtxmatheval/mtxmatheval.h"
 #include <stdio.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -41,42 +42,26 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	gint return_value = 0;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	gint tmp_val = (gint)(value+0.001);
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	gint offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-	gfloat factor = (gfloat)((gint)g_object_get_data(G_OBJECT(widget),"conv_factor_x100"))/100.0;
-	Conversions conv_type = (Conversions)g_object_get_data(G_OBJECT(widget),"conv_type");
+	gchar * conv_expr = NULL;
+	void *evaluator = NULL;
+	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"dl_conv_expr");
+	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"dl_evaluator");
 
-
-	switch (conv_type)
+	if (conv_expr == NULL)
 	{
-		case (CONV_ADD):
-			return_value = tmp_val + factor;
-			break;
-		case (CONV_SUB):
-			return_value = tmp_val - factor;
-			break;
-		case (CONV_MULT):
-			return_value = (gint)((value*factor) + 0.001);
-			break;
-		case (CONV_DIV):
-			return_value = (gint)((value/factor) + 0.001);
-			break;
-		case (CONV_NOTHING):
-			return_value = tmp_val;
-			break;
-		default:
-			dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): NO CONVERSION defined, BUG!!! offset: %i\n",offset),DL_CONV);
-			break;
+		dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): NO CONVERSION defined for page: %i, offset: %i\n",page, offset),DL_CONV);
+		return ((gint)value);		
 	}
-	dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): offset %i, raw %.2f, sent %i, page %i,\n",offset,value,return_value,page),DL_CONV);
+	if (!evaluator) 	/* if no evaluator create one */
+	{
+		evaluator = evaluator_create(conv_expr);
+		g_object_set_data(G_OBJECT(widget),"dl_evaluator",(gpointer)evaluator);
+	}
+	return_value = evaluator_evaluate_x(evaluator,value);
 
-	/* Store value in veconst_arr pointer (to structure) 
-	 * (accessing it via array syntax as it's friggin easier).... 
-	 *
-	 * Ignition variables are stored in the second page,  but referenced
-	 * by an offset from the beginning of their page.
-	 */
+	dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): offset %i, raw %.2f, sent %i, page %i,\n",offset,value,return_value,page),DL_CONV);
 
 	ms_data[page][offset] = return_value; 
 	return (return_value);
@@ -89,38 +74,26 @@ gfloat convert_after_upload(GtkWidget * widget)
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	gint offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-	gfloat factor = (gfloat)((gint)g_object_get_data(G_OBJECT(widget),"conv_factor_x100"))/100.0;
-	Conversions conv_type = (Conversions)g_object_get_data(G_OBJECT(widget),"conv_type");
+	gchar * conv_expr;
+	void *evaluator = NULL;
+	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"ul_conv_expr");
+	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"ul_evaluator");
 
 	ve_const_arr = (unsigned char *)ms_data[page];
-
-	/* Since this is the upload we actually do the CONVERSE mathematical 
-	 * operation since the algorithm was designed for the download side, 
-	 * On upload we need to "un-convert" from MS values to Gui friendly
-	 * versions....
-	 */
-	switch (conv_type)
+	if (conv_expr == NULL)
 	{
-		case (CONV_ADD):
-			return_value = ve_const_arr[offset] - factor;
-			break;
-		case (CONV_SUB):
-			return_value = ve_const_arr[offset] + factor;
-			break;
-		case (CONV_MULT):
-			return_value = (gfloat)ve_const_arr[offset] / factor;
-			break;
-		case (CONV_DIV):
-			return_value = (gfloat)ve_const_arr[offset] * factor;
-			break;
-		case (CONV_NOTHING):
-			return_value = ve_const_arr[offset];
-			break;
-		default:
-			dbg_func(g_strdup_printf(__FILE__": convert_after_ul() NO CONVERSION defined, index %i BUG!!!\n",offset),UL_CONV);
-			break;
+		dbg_func(g_strdup_printf(__FILE__": convert_after_ul(): NO CONVERSION defined for page: %i, offset: %i\n",page, offset),UL_CONV);
 
+		return_value = ve_const_arr[offset];
+		return (return_value);		
 	}
+	if (!evaluator) 	/* if no evaluator create one */
+	{
+		evaluator = evaluator_create(conv_expr);
+		g_object_set_data(G_OBJECT(widget),"ul_evaluator",(gpointer)evaluator);
+	}
+	return_value = evaluator_evaluate_x(evaluator,ve_const_arr[offset]);
+
 	dbg_func(g_strdup_printf(__FILE__": convert_after_ul(),offset %i, raw %i, val %f, page %i\n",offset,ve_const_arr[offset],return_value,page),UL_CONV);
 	return (return_value);
 }

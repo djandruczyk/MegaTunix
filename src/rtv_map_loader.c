@@ -24,6 +24,8 @@
 #include <structures.h>
 #include <tabloader.h>
 
+GArray *raw_array;
+
 void realtime_map_load(void *ptr, gchar *basename)
 {
 	ConfigFile *cfgfile;
@@ -63,6 +65,10 @@ void realtime_map_load(void *ptr, gchar *basename)
 		if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
 			dbg_func(__FILE__": realtime_map_load(), can't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
+		raw_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
+//		for (i=0;i<raw_total;i++)
+//			g_array_insert_val(raw_array,i,NULL);
+			
 		for (i=0;i<derived_total;i++)
 		{
 			section = g_strdup_printf("derived_%i",i);
@@ -82,10 +88,9 @@ void realtime_map_load(void *ptr, gchar *basename)
 				parse_keytypes(tmpbuf,keytypes, &num_keytypes);
 				g_free(tmpbuf);
 			}
+
+			
 			g_free(section);
-			
-			
-		
 		}
 		
 	}
