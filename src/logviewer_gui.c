@@ -55,7 +55,6 @@ void present_viewer_choices(void)
 	gchar * name = NULL;
 	gchar * tooltip = NULL;
 	GtkWidget *darea = NULL;
-	extern gint ecu_caps;
 	extern GHashTable *dynamic_widgets;
 	extern struct Rtv_Map *rtv_map;
 
@@ -196,7 +195,6 @@ void present_viewer_choices(void)
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
 
-	parse_ecu_capabilities(ecu_caps);
 	gtk_widget_show_all(window);
 	return;
 }

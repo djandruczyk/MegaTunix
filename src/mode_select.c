@@ -23,10 +23,6 @@
 gchar *states[] = {"FALSE","TRUE"};
 
 
-void parse_ecu_capabilities(gint ecu_caps)
-{
-}
-
 void set_widget_sensitive(gpointer widget, gpointer state)
 {
         gtk_widget_set_sensitive(GTK_WIDGET(widget),(gboolean)state);

@@ -479,7 +479,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	GtkWidget * tmpwidget = NULL;
 	extern gint realtime_id;
 	extern gint **ms_data;
-	extern gint ecu_caps;
 	extern gint lv_scroll;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
@@ -722,8 +721,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case TRIGGER_ANGLE:
-			if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
-				dbg_func(__FILE__": spin_button_handler()\n\tERROR, Trigger angle set but not using Ignition Firmware\n",CRITICAL);
 			if (spconfig == 0)
 			{
 				dbg_func(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig variable is unset, Aborting handler!!!\n",CRITICAL);

@@ -301,8 +301,6 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	load_lookuptables(potential);
 	/* Set flags */
 	ecu_caps = potential->capabilities;
-	/* Enable/Disable Controls */
-	parse_ecu_capabilities(ecu_caps);
 
 	/* Set expected sizes for commands */
 	if (!firmware)
