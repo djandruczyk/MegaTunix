@@ -56,7 +56,6 @@ unsigned char *ms_data_backup;
 struct Conversion_Chart *std_conversions;
 struct Conversion_Chart *ign_conversions;
 struct Runtime_Common *runtime;
-struct Runtime_Common *runtime_last;
 GtkWidget *ve_widgets[2*MS_PAGE_SIZE];
 GtkWidget *ign_widgets[MS_PAGE_SIZE];
 
@@ -207,7 +206,6 @@ void mem_alloc()
 	ms_data_backup = g_malloc(2*MS_PAGE_SIZE);
 
 	runtime = g_malloc(sizeof(struct Runtime_Common));
-	runtime_last = g_malloc(sizeof(struct Runtime_Common));
 
 	std_conversions =  g_malloc(sizeof(struct Conversion_Chart));
 	ign_conversions =  g_malloc(sizeof(struct Conversion_Chart));
@@ -219,7 +217,6 @@ void mem_alloc()
 	memset((void *)ms_data_backup, 0, 2*MS_PAGE_SIZE);
 
 	memset((void *)runtime, 0, sizeof(struct Runtime_Common));
-	memset((void *)runtime_last, 0, sizeof(struct Runtime_Common));
 	memset((void *)std_conversions, 0, sizeof(struct Conversion_Chart));
 	memset((void *)ign_conversions, 0, sizeof(struct Conversion_Chart));
 }
@@ -233,7 +230,6 @@ void mem_dealloc()
 	g_free(ms_data_last);
 	g_free(ms_data_backup);
 	g_free(runtime);
-	g_free(runtime_last);
 	g_free(std_conversions);
 	g_free(ign_conversions);
 	g_hash_table_destroy(interdep_vars_1);

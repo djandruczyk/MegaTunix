@@ -247,7 +247,6 @@ void build_runtime(GtkWidget *parent_frame)
 gboolean update_runtime_vars()
 {
 	extern struct Runtime_Common *runtime;
-	extern struct Runtime_Common *runtime_last;
 	extern unsigned int ecu_caps;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
@@ -257,7 +256,11 @@ gboolean update_runtime_vars()
 	extern GHashTable *rt_controls;
 	gchar * tmpbuf = NULL;
 	gfloat tmpf = 0.0;
+	static struct Runtime_Common *rt_last = NULL;	
 
+	if (rt_last == NULL)
+		rt_last = g_malloc0(sizeof(struct Runtime_Common));
+	
 
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(ve_widgets[0]),"data");
@@ -297,14 +300,14 @@ gboolean update_runtime_vars()
 	/* Update all the dynamic RT controls */
 	if (active_page == RUNTIME_DISP)	/* Runtime display is visible */
 	{
-		g_hash_table_foreach(rt_controls,rt_update_values,NULL);
+		g_hash_table_foreach(rt_controls,rt_update_values,rt_last);
 
 		/* Status boxes.... */
 		/* "Connected" */
 		gtk_widget_set_sensitive(misc.status[CONNECTED],
 				connected);
 
-		if ((forced_update) || (runtime->engine.value != runtime_last->engine.value))
+		if ((forced_update) || (runtime->engine.value != rt_last->engine.value))
 		{
 			/* Cranking */
 			gtk_widget_set_sensitive(misc.status[CRANKING],
@@ -331,7 +334,7 @@ gboolean update_runtime_vars()
 	if (active_page == WARMUP_WIZARD) /* Warmup wizard visible... */
 	{
 		/* Update all the controls on the warmup wizrd page... */
-		if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update))
+		if ((runtime->ego_volts != rt_last->ego_volts) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
 			gtk_label_set_text(GTK_LABEL(labels.ww_ego_lab),tmpbuf);
@@ -342,7 +345,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if ((runtime->map != runtime_last->map) || (forced_update))
+		if ((runtime->map != rt_last->map) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->map);
 			gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
@@ -353,7 +356,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if ((runtime->clt != runtime_last->clt) || (forced_update))
+		if ((runtime->clt != rt_last->clt) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
 			gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
@@ -364,7 +367,7 @@ gboolean update_runtime_vars()
 			g_free(tmpbuf);
 			warmwizard_update_status(runtime->clt);
 		}
-		if ((runtime->warmcorr != runtime_last->warmcorr) || (forced_update))
+		if ((runtime->warmcorr != rt_last->warmcorr) || (forced_update))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->warmcorr);
 			gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
@@ -374,7 +377,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if ((forced_update) || (runtime->engine.value != runtime_last->engine.value))
+		if ((forced_update) || (runtime->engine.value != rt_last->engine.value))
 		{
 			/* Cranking */
 			gtk_widget_set_sensitive(misc.ww_status[CRANKING],
@@ -405,6 +408,7 @@ gboolean update_runtime_vars()
 	}
 //	if (forced_update)
 //		forced_update = FALSE;
+	memcpy(rt_last, runtime,sizeof(struct Runtime_Common));
 	gdk_threads_leave();
 	return TRUE;
 }
@@ -427,7 +431,6 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	unsigned short *sh_ptr, *l_sh_ptr;
 	unsigned char *uc_ptr, *l_uc_ptr;	
 	extern struct Runtime_Common *runtime;
-	extern struct Runtime_Common *runtime_last;
 	struct Rt_Control *control = (struct Rt_Control *)value;
 	gint offset = control->runtime_offset;
 	//gfloat lower = def_limits[control->limits_index].lower;
@@ -437,11 +440,12 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat fvalue = 0.0;
 	gfloat tmpf;
 	gchar * tmpbuf = NULL;
+	struct Runtime_Common * rt_last = (struct Runtime_Common *)data;
 
 	if (control->size == UCHAR)
 	{
 		uc_ptr = (unsigned char *) runtime;
-		l_uc_ptr = (unsigned char *) runtime_last;
+		l_uc_ptr = (unsigned char *) rt_last;
 		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (forced_update))
 		{
 			ivalue = uc_ptr[offset];
@@ -457,7 +461,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	else if (control->size == SHORT)
 	{
 		sh_ptr = (short *) runtime;
-		l_sh_ptr = (short *) runtime_last;
+		l_sh_ptr = (short *) rt_last;
 		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (forced_update))
 		{
 			svalue = sh_ptr[offset/SHORT];
@@ -473,7 +477,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	else if (control->size == FLOAT)
 	{
 		fl_ptr = (float *) runtime;
-		l_fl_ptr = (float *) runtime_last;
+		l_fl_ptr = (float *) rt_last;
 		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]) || (forced_update))
 		{
 			fvalue = fl_ptr[offset/FLOAT];

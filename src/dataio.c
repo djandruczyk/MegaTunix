@@ -48,7 +48,6 @@ int handle_ms_data(InputData which_data)
 	extern unsigned char *ms_data_last;
 	extern struct Serial_Params *serial_params;
 	extern struct Runtime_Common *runtime;
-	extern struct Runtime_Common *runtime_last;
 
 	//g_printf("handle_ms_data\n");
 	ufds.fd = serial_params->fd;
@@ -113,10 +112,6 @@ int handle_ms_data(InputData which_data)
 				ms_goodread_count++;
 
 			lastcount = raw_runtime->secl;
-
-			/* copy last round to runtime_last */
-			memcpy(runtime_last,runtime,
-					sizeof(struct Runtime_Common));
 
 			/* Feed raw buffer over to post_process()
 			 * as a void * and pass it a pointer to the new
