@@ -138,6 +138,8 @@ EXPORT void finish_raweditor(void)
 				row++;
 			}
 		}
+		while (gtk_events_pending ())
+			gtk_main_iteration ();
 	}
 	gtk_widget_show_all(top);
 	
