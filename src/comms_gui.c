@@ -74,12 +74,19 @@ int build_comms(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Select Communications Port");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
-	hbox2 = gtk_hbox_new(FALSE,10);
+	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox2), 5);
 
-	label = gtk_label_new("COMM Port");
-	gtk_box_pack_start(GTK_BOX(hbox2),label,FALSE,TRUE,0);
+	table = gtk_table_new(2,3,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	gtk_box_pack_start(GTK_BOX(hbox2),table,FALSE,TRUE,20);
+
+
+	label = gtk_label_new("Communications Port");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
 	spinner = gtk_spin_button_new(adj,0,0);
@@ -89,7 +96,9 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.comm_port);
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_box_pack_start (GTK_BOX (hbox2), spinner, FALSE, TRUE, 0);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Verify ECU Communication");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
@@ -97,8 +106,8 @@ int build_comms(GtkWidget *parent_frame)
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
-	button = gtk_button_new_with_label("Test ECU Communication");
-	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,TRUE,0);
+	button = gtk_button_new_with_label("Test ECU Communication...");
+	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (check_ecu_comms), \
 			NULL);
@@ -106,14 +115,20 @@ int build_comms(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Runtime Parameters Configuration");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
-	vbox2 = gtk_vbox_new(TRUE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 	hbox = gtk_hbox_new(TRUE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
+
+	table = gtk_table_new(2,3,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
+
 
 	label = gtk_label_new("Polling Timeout (ms)");
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			100,poll_min,poll_max,poll_step,poll_step,0);
@@ -122,20 +137,23 @@ int build_comms(GtkWidget *parent_frame)
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_POLL_TIMEO));
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.poll_timeout);
-	gtk_box_pack_start(GTK_BOX(hbox),spinner,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Start Reading RT Vars");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(START_REALTIME));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
-
-	label = gtk_label_new("Serial interval delay\n between samples");
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+	label = gtk_label_new("Serial Interval Delay\nBetween Reads(ms)");
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			100,interval_min,interval_max,
@@ -145,27 +163,32 @@ int build_comms(GtkWidget *parent_frame)
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(SER_INTERVAL_DELAY));
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.read_wait);
-	gtk_box_pack_start(GTK_BOX(hbox),spinner,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Stop Reading RT vars");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(STOP_REALTIME));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("MegaSquirt I/O Status");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+	hbox = gtk_hbox_new(TRUE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	table = gtk_table_new(3,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-        gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
 
 	label = gtk_label_new("Good VE/Constants Reads");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
@@ -178,10 +201,10 @@ int build_comms(GtkWidget *parent_frame)
 
      
 	label = gtk_label_new("Good RealTime Reads");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
      
 	ms_readcount_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_readcount_entry), 5);
@@ -189,11 +212,11 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Hard Reset Count\n");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	label = gtk_label_new("Hard Reset Count");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	ms_reset_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 5);
@@ -201,11 +224,11 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Serial I/O Error Count\n");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.0);
+	label = gtk_label_new("Serial I/O Error Count");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
-                        (GtkAttachOptions) (0), 0, 0);
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	ms_sioerr_entry = gtk_entry_new();
 	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 5);
