@@ -31,6 +31,7 @@ gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data);
  */
 EXPORT void finish_raweditor(void)
 {
+	extern gboolean thread_protect;
 	GtkWidget *sw = NULL;
 	GtkWidget *hbox = NULL;
 	GtkWidget *vbox = NULL;
@@ -138,10 +139,12 @@ EXPORT void finish_raweditor(void)
 				row++;
 			}
 		}
-		gdk_threads_enter();
+		if (thread_protect)
+			gdk_threads_enter();
 		while (gtk_events_pending ())
 			gtk_main_iteration ();
-		gdk_threads_leave();
+		if (thread_protect)
+			gdk_threads_leave();
 	}
 	gtk_widget_show_all(top);
 	

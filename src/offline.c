@@ -50,8 +50,8 @@ void set_offline_mode(void)
 	extern gint ecu_caps;
 	extern gint temp_units;
 	extern gboolean interrogated;
+	extern gboolean thread_protect;
 	gint i = 0;
-
 
 	cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
 	cmd_array = validate_and_load_tests(cmd_details);
@@ -107,7 +107,9 @@ void set_offline_mode(void)
 
 	interrogated = TRUE;
 	load_realtime_map();
+	thread_protect = FALSE;
 	load_gui_tabs();
+	thread_protect = TRUE;
 	reset_temps(GINT_TO_POINTER(temp_units));
 
 	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");

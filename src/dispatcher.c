@@ -37,6 +37,7 @@
 #include <unistd.h>
 
 
+gboolean thread_protect = TRUE;
 extern GAsyncQueue *dispatch_queue;
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
@@ -92,6 +93,7 @@ trypop:
 		len = message->funcs->len;
 		for (i=0;i<len;i++)
 		{
+			thread_protect = TRUE;
 			val = g_array_index(message->funcs,UpdateFunction, i);
 
 			switch ((UpdateFunction)val)
@@ -189,6 +191,8 @@ trypop:
 					break;
 
 			}
+			thread_protect = FALSE;
+
 			gdk_threads_enter();
 			while (gtk_events_pending())
 				gtk_main_iteration();
