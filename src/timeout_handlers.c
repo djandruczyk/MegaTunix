@@ -85,6 +85,12 @@ gboolean signal_read_rtvars()
 		io_cmd(IO_REALTIME_READ,NULL);			
 	else
 	{	
+		if (errcount == 1)
+		{
+			io_cmd(IO_COMMS_TEST,NULL);
+			errcount++;
+			return TRUE;
+		}
 		errcount++;
 		dbg_func(__FILE__": signal_read_rtvars()\n\tNOT connected, not queing message to thread handler....\n",CRITICAL);
 

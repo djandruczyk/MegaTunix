@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <comms_gui.h>
+#include <comms.h>
 #include <config.h>
 #include <conversions.h>
 #include <dataio.h>
@@ -63,10 +63,7 @@ gboolean dispatcher()
 	 * depend on a "connected" status.
 	 */
 	if (!connected) // Raise error window.... 
-	{
 		no_ms_connection();
-		goto breakout;
-	}
 
 	if (message->funcs != NULL)
 	{
@@ -78,28 +75,39 @@ gboolean dispatcher()
 			switch ((UpdateFunction)val)
 			{
 				case UPD_POPULATE_DLOGGER:
-					populate_dlog_choices();
+					if (connected)
+						populate_dlog_choices();
 					break;
 				case UPD_LOAD_RT_SLIDERS:
-					load_controls();
-					reset_temps(GINT_TO_POINTER(temp_units));
+					if (connected)
+					{
+						load_controls();
+						reset_temps(GINT_TO_POINTER(temp_units));
+					}
 					break;
 				case UPD_LOAD_REALTIME_MAP:
-					load_realtime_map();
+					if (connected)
+						load_realtime_map();
 					break;
 				case UPD_LOAD_GUI_TABS:
-					load_gui_tabs();
-					reset_temps(GINT_TO_POINTER(temp_units));
+					if (connected)
+					{
+						load_gui_tabs();
+						reset_temps(GINT_TO_POINTER(temp_units));
+					}
 					break;
 				case UPD_READ_VE_CONST:
-					io_cmd(IO_READ_VE_CONST,NULL);
+					if (connected)
+						io_cmd(IO_READ_VE_CONST,NULL);
 					break;
 				case UPD_REALTIME:
-					update_runtime_vars();
+					if (connected)
+						update_runtime_vars();
 					break;
 				case UPD_VE_CONST:
 					paused_handlers = TRUE;
-					update_ve_const();
+					if (connected)
+						update_ve_const();
 					paused_handlers = FALSE;
 					break;
 				case UPD_STORE_BLACK:
@@ -108,19 +116,27 @@ gboolean dispatcher()
 						set_reqfuel_state(BLACK,i);
 					break;
 				case UPD_LOGVIEWER:
-					update_logview_traces();
+					if (connected)
+						update_logview_traces();
 					break;
 				case UPD_RAW_MEMORY:
-					update_raw_memory_view(mem_view_style[message->offset],message->offset);
+					if (connected)
+						update_raw_memory_view(mem_view_style[message->offset],message->offset);
 					break;
 				case UPD_DATALOGGER:
-					run_datalog();
+					if (connected)
+						run_datalog();
+					break;
+				case UPD_COMMS_STATUS:
+					update_comms_status();
+					break;
+				case UPD_WRITE_STATUS:
+					update_write_status();
 					break;
 
 			}
 		}
 	}
-breakout:
 	dealloc_message(message);
 	return TRUE;
 }

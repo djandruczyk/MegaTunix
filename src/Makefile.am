@@ -11,6 +11,7 @@ megatunix_SOURCES = \
 	3d_vetable.c \
 	about_gui.c \
 	bitfield_handlers.c \
+	comms.c \
 	comms_gui.c \
 	configfile.c \
 	conversions.c \
