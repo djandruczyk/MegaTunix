@@ -150,8 +150,8 @@ void close_serial()
 	connected = FALSE;
 	gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 			connected);
-	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-			connected);
+//	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+//			connected);
 
 	/* An Closing the comm port */
 	dbg_func(__FILE__": close_serial(), COM Port Closed\n",SERIAL_GEN);

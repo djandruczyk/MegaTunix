@@ -24,10 +24,4 @@ gint convert_before_download(GtkWidget *, gfloat);
 gfloat convert_after_upload(GtkWidget *);
 /* Prototypes */
 
-struct Conversion_Chart
-{
-	gint conv_type[2*MS_PAGE_SIZE];
-	gfloat conv_factor[2*MS_PAGE_SIZE];
-};
-
 #endif

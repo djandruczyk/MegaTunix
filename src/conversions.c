@@ -32,20 +32,10 @@
  * 
  */
 
-extern struct Conversion_Chart *std_conversions[];
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
 GList *temp_dep = NULL;
-/*static gchar * conv_text[] = 
-{
-	"Add",
-	"Subtract",
-	"Multiply",
-	"Divide",
-	"No Conversion"
-};
-*/
 
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {

@@ -407,8 +407,8 @@ void reset_runtime_status()
 	{
 		gtk_widget_set_sensitive(misc.status[i],
 				FALSE);
-		gtk_widget_set_sensitive(misc.ww_status[i],
-				FALSE);
+//		gtk_widget_set_sensitive(misc.ww_status[i],
+//				FALSE);
 	}
 }
 

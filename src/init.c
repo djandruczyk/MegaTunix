@@ -55,7 +55,6 @@ struct Serial_Params *serial_params;
 unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
 unsigned char *ms_data_backup[MAX_SUPPORTED_PAGES];
-struct Conversion_Chart *std_conversions[MAX_SUPPORTED_PAGES];
 struct Runtime_Common *runtime;
 GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 GHashTable *interdep_vars_1 = NULL;
@@ -217,7 +216,6 @@ void mem_alloc()
 		ms_data[i] = g_malloc0(2*MS_PAGE_SIZE);
 		ms_data_last[i] = g_malloc0(2*MS_PAGE_SIZE);
 		ms_data_backup[i] = g_malloc0(2*MS_PAGE_SIZE);
-		std_conversions[i] = g_malloc0(sizeof(struct Conversion_Chart));
 		for (j=0;j<2*MS_PAGE_SIZE;j++)
 			ve_widgets[i][j] = NULL;
 	}
@@ -240,7 +238,6 @@ void mem_dealloc()
 		g_free(ms_data[i]);
 		g_free(ms_data_last[i]);
 		g_free(ms_data_backup[i]);
-		g_free(std_conversions[i]);
 	}
 	g_free(runtime);
 	g_hash_table_destroy(interdep_vars_1);
