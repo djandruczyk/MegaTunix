@@ -85,7 +85,6 @@ gboolean load_table(gchar *table_name, gchar *filename)
 		g_string_free(a_line,TRUE);
 	}
 
-	printf("lookuptable size %i\n",i);
 	array = g_memdup(&tmparray,i*sizeof(gint));
 	if (!lookuptables)
 		lookuptables = g_hash_table_new(g_str_hash,g_str_equal);

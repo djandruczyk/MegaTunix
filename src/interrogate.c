@@ -19,6 +19,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
+#include <getfiles.h>
 #include <interrogate.h>
 #include <lookuptables.h>
 #include <mode_select.h>
@@ -192,50 +193,21 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	gint num_tests = cmd_array->len;
 	gboolean match = FALSE;
 	gchar * tmpbuf = NULL;
-	GDir *dir = NULL;
-	GError *error = NULL;
-	gchar * path = NULL;
-	gchar * filename = NULL;
-	gchar * full_pathname = NULL;
+	gchar ** filenames = NULL;
 	extern struct IoCmds *cmds;
 
+	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL));	
 
-	/* Search homedire for potential interrogation profiles FIRST... */
-	path = g_strconcat(g_get_home_dir(),"/.MegaTunix/",INTERROGATOR_DIR,"/Profiles/",NULL);
-	dir = g_dir_open(path,0,&error);	
-	filename = (gchar *)g_dir_read_name(dir);
-	while (filename != NULL)
+	while (filenames[i])
 	{
-		full_pathname= g_strconcat(path,filename,NULL);
-		potential = load_potential_match(cmd_array,full_pathname);
+		potential = load_potential_match(cmd_array,filenames[i]);
 		if (check_for_match(cmd_array,potential,canidate))
 		{
 			match = TRUE;
 			break;
 		}
-
-		filename = (gchar *) g_dir_read_name(dir);
+		i++;
 	}
-	/* IF search in homedir failes search system wide ones */
-	if (match == FALSE)
-	{
-		path = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/Profiles/",NULL);
-		dir = g_dir_open(path,0,&error);	
-		filename = (gchar *)g_dir_read_name(dir);
-		while (filename != NULL)
-		{
-			full_pathname= g_strconcat(path,filename,NULL);
-			potential = load_potential_match(cmd_array,full_pathname);
-			if (check_for_match(cmd_array,potential,canidate))
-			{
-				match = TRUE;
-				break;
-			}
-			filename = (gchar *) g_dir_read_name(dir);
-		}
-	}
-	if (dir)
-		g_dir_close(dir);
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
 	{

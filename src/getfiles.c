@@ -18,6 +18,54 @@
 #include <structures.h>
 
 
-gchar ** get_files(gchar *subdir)
+gchar ** get_files(gchar *pathstub)
 {
+	gchar *path = NULL;
+	gchar *list = NULL;
+	gchar * filename = NULL;
+	GDir *dir = NULL;
+
+	path = g_strconcat(g_get_home_dir(),"/.MegaTunix/",pathstub,NULL);
+	dir = g_dir_open(path,0,NULL);
+	if (!dir)
+	{
+		g_free(path);
+		goto syspath;
+	}
+	filename = (gchar *)g_dir_read_name(dir);
+	while (filename != NULL)
+	{
+		if (!list)
+			list = g_strdup_printf("%s%s",path,filename);
+		else
+			list = g_strconcat(list,",",path,filename,NULL);
+
+		filename = (gchar *)g_dir_read_name(dir);
+		
+	}
+	g_free(path);
+	g_dir_close(dir);
+
+	syspath:
+	path = g_strconcat(DATA_DIR,"/",pathstub,NULL);
+	dir = g_dir_open(path,0,NULL);
+	if (!dir)
+	{
+		g_free(path);
+		goto finish;
+	}
+	filename = (gchar *)g_dir_read_name(dir);
+	while (filename != NULL)
+	{
+		if (!list)
+			list = g_strdup_printf("%s%s",path,filename);
+		else
+			list = g_strconcat(list,",",path,filename,NULL);
+		filename = (gchar *)g_dir_read_name(dir);
+	}
+	g_free(path);
+	g_dir_close(dir);
+
+	finish:
+	return (g_strsplit(list,",",0));
 }

@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gchar ** get_files(gchar * );
+gchar ** get_files(gchar *);
 /* Prototypes */
 
 #endif
