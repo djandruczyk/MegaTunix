@@ -192,7 +192,7 @@ struct Log_Info
 struct Page_Params
 {
 	gint length;		/*! How big this page is... */
-	gint is_spark;		/*! What page this is */
+	gint is_spark;		/*! does this require alt write cmd? */
 	gint cfg11_offset;	/*! Where config11 value is located */
 	gint cfg12_offset;	/*! Where config12 value is located */
 	gint cfg13_offset;	/*! Where config13 value is located */
@@ -230,7 +230,6 @@ struct Table_Params
 	gchar *z_conv_expr;	/*! z conversion expression */
 	gboolean z_disp_float;	/*! display as a float */
 	gint z_disp_precision;	/*! how many decimal places */
-	gboolean is_spark;	/*! is this a spark table?? */
 	gchar *table_name;	/*! Name for the 3D Table editor title */
 };
 
@@ -495,7 +494,6 @@ struct Ve_View_3D
 	gint x_bincount;
 	gint z_base;
 	gint z_page;
-	gboolean is_spark;
 	gchar *table_name;
 	gint table_num;
 	gfloat z_scale;

@@ -43,7 +43,6 @@ void rescale_table(gchar * widget_name)
 	gint offset = 0;
 	gboolean ign_parm = FALSE;
 	extern gint **ms_data;
-	gboolean is_spark = FALSE;
 	GtkWidget *scaler = NULL;
 	GtkWidget *widget = NULL;
 	GList *list = NULL;
@@ -58,7 +57,6 @@ void rescale_table(gchar * widget_name)
 	z_base = firmware->table_params[table_num]->z_base;
 	rpm_bins = firmware->table_params[table_num]->x_bincount;
 	load_bins = firmware->table_params[table_num]->y_bincount;
-	is_spark = firmware->table_params[table_num]->is_spark;
 	z_page = firmware->table_params[table_num]->z_page;
 
 	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(scaler));

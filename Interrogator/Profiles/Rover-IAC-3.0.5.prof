@@ -17,16 +17,21 @@ TotalTables=1
 TotalPages=1
 
 [table_0]
-is_spark=FALSE
 Table_name=VE-Table, Rover IAC 3.0.5
 x_page=0
-y_page=0
-tbl_page=0
 x_base_offset=100
-y_base_offset=108
-tbl_base_offset=0
 x_bincount=8
+x_suffix=RPM
+x_conv_expr=x*100
+y_page=0
+y_base_offset=108
 y_bincount=8
+y_suffix=KPA
+y_conv_expr=x*1
+z_page=0
+z_base_offset=0
+z_suffix=VE %
+z_conv_expr=x*1
 
 [page_0]
 length=128

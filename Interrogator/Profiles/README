@@ -112,10 +112,6 @@ TotalPages
 
 
 [table_x] sections, 1 per table as defined by TotalTables
-is_spark
-  - Boolean,  if this table is a spark table and uses the 0.352 -10
-  conversion factor then this flag is set to TRUE, otherwise FALSE.
-
 table_name
   - String, a Textual name used for the Title of the 3D table editor window
   Used to help the user differentiate which tabel they are editing at any one
@@ -127,28 +123,35 @@ x_page
 y_page
   - Integer, lists the page number that the Y Axis (MAP/TPS)load array lives in
 
-tbl_page
-  - Integer, lists the page number that the tbl array lives in
-
-tbl_base_offset
-  - Integer, The offset from the base of page (above) that this table starts
-  at.  The total length of the table is x_bincount*y_bincount, and is 
-  sequentially addressed.
+z_page
+  - Integer, lists the page number that the table array lives in
 
 x_base_offset
   - Integer, The offset from the pase of page (Above) that the X Axis (RPM) 
   array starts at.  Length of this array is x_bincount
- 
 
 y_base_offset
   - Integer, The offset from the pase of page (Above) that the Y Axis (LOAD)
   array starts at.  Length of this array is y_bincount. 
  
+z_base_offset
+  - Integer, The offset from the base of page (above) that this table starts
+  at.  The total length of the table is x_bincount*y_bincount, and is 
+  sequentially addressed.
+
 x_bincount
   - Integer, the size of the X Axis (RPM) array
 
 y_bincount
   - Integer, the size of the Y Axis (LOAD) array
+
+x_suffix,y_suffix,z_suffix
+  - textual suffix used for the 3D view indicators
+
+x_conv_expr,y_conv_expr,z_conv_expr
+  - textual representation of a mathematical expression used for 
+  calculating the Z-axis markers and the runtime/edit value markers
+  on the 3D view.
 
 
 [page_x] sections, 1 per page as defined by TotalPages

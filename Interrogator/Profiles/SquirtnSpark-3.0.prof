@@ -18,28 +18,38 @@ TotalTables=2
 TotalPages=2
 
 [table_0]
-is_spark=FALSE
 table_name=VE-Table 0, SquirtnSpark-3.0/3.0.1
 x_page=0
-y_page=0
-tbl_page=0
 x_base_offset=100
-y_base_offset=108
-tbl_base_offset=0
 x_bincount=8
+x_suffix=RPM
+x_conv_expr=x*100
+y_page=0
+y_base_offset=108
 y_bincount=8
+y_suffix=KPA
+y_conv_expr=x*1
+z_page=0
+z_base_offset=0
+z_suffix=VE %
+z_conv_expr=x*1
 
 [table_1]
-is_spark=TRUE
 table_name=Spark Advance Table, SquirtnSpark-3.0/3.0.1
 x_page=1
-y_page=1
-tbl_page=1
 x_base_offset=64
-y_base_offset=72
-tbl_base_offset=0
 x_bincount=8
+x_suffix=RPM
+x_conv_expr=x*100
+y_page=1
+y_base_offset=72
 y_bincount=8
+y_suffix=KPA
+y_conv_expr=x*1
+z_page=1
+z_base_offset=0
+z_suffix=Deg
+z_conv_expr=(x*0.352)-10
 
 [page_0]
 length=125

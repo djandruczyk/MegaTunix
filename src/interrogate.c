@@ -742,8 +742,6 @@ void load_profile_details(struct Canidate *canidate)
 		{
 			canidate->table_params[i] = g_new0(struct Table_Params,1);
 			section = g_strdup_printf("table_%i",i);
-			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->table_params[i]->is_spark))
-				dbg_func(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))
 				dbg_func(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"y_page",&canidate->table_params[i]->y_page))

@@ -2,8 +2,8 @@
 name=MegaSquirtnEDIS v3.007
 
 [parameters]
-SignatureQueryString=
-ExtVerQueryString=EDIS v3.007
+SignatureQueryString=EDIS v3.007
+ExtVerQueryString=
 VerNumber=30
 Capabilities=
 Rt_Cmd_Key=CMD_UPPER_A
@@ -18,28 +18,38 @@ TotalTables=2
 TotalPages=2
 
 [table_0]
-is_spark=FALSE
 table_name=VE-Table 0, MSnEDIS-3.007
 x_page=0
-y_page=0
-tbl_page=0
 x_base_offset=100
-y_base_offset=108
-tbl_base_offset=0
 x_bincount=8
+x_suffix=RPM
+x_conv_expr=x*100
+y_page=0
+y_base_offset=108
 y_bincount=8
+y_suffix=KPA
+y_conv_expr=x*1
+z_page=0
+z_base_offset=0
+z_suffix=VE %
+z_conv_expr=x*1
 
 [table_1]
-is_spark=TRUE
 table_name=Spark Advance Table, MSnEDIS-3.007
 x_page=1
-y_page=1
-tbl_page=1
 x_base_offset=64
-y_base_offset=72
-tbl_base_offset=0
 x_bincount=8
+x_suffix=RPM
+x_conv_expr=x*100
+y_page=1
+y_base_offset=72
 y_bincount=8
+y_suffix=KPA
+y_conv_expr=x*1
+z_page=1
+z_base_offset=0
+z_suffix=Deg
+z_conv_expr=(x*0.352)-10
 
 [page_0]
 length=125
@@ -62,7 +72,7 @@ CMD_UPPER_A=22
 CMD_UPPER_C=1
 CMD_UPPER_Q=1
 CMD_UPPER_V=125
-CMD_UPPER_?=32
+CMD_UPPER_S=32
 CMD_UPPER_I=95
 
 [gui]

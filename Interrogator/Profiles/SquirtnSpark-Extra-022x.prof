@@ -18,7 +18,6 @@ TotalTables=10
 TotalPages=8
 
 [table_0]
-is_spark=FALSE
 table_name=Fuel VE-Table 1, MSnSpark-Extra
 x_page=1
 x_base_offset=158
@@ -36,7 +35,6 @@ z_suffix=VE %
 z_conv_expr=x*1
 
 [table_1]
-is_spark=FALSE
 table_name=Fuel VE-Table 2, MSnSpark-Extra
 x_page=2
 x_base_offset=157
@@ -54,7 +52,6 @@ z_suffix=VE %
 z_conv_expr=x*1
 
 [table_2]
-is_spark=FALSE
 table_name=Fuel VE Table 3, MSnSpark-Extra
 x_page=5
 x_base_offset=144
@@ -72,7 +69,6 @@ z_suffix=VE %
 z_conv_expr=x*1
 
 [table_3]
-is_spark=TRUE
 table_name=Spark Table 1, MSnSpark-Extra
 x_page=3
 x_base_offset=144
@@ -92,7 +88,6 @@ z_disp_float=TRUE
 z_disp_precision=1
 
 [table_4]
-is_spark=TRUE
 table_name=Spark Table 2, MSnSpark-Extra
 x_page=4
 x_base_offset=144
@@ -112,7 +107,6 @@ z_disp_float=TRUE
 z_disp_precision=1
 
 [table_5]
-is_spark=FALSE
 table_name=AFR Table 1, MSnSpark-Extra
 x_page=6
 x_base_offset=64
@@ -132,7 +126,6 @@ z_disp_float=TRUE
 z_disp_precision=2
 
 [table_6]
-is_spark=FALSE
 table_name=AFR Table 2, MSnSpark-Extra
 x_page=6
 x_base_offset=144
@@ -152,7 +145,6 @@ z_disp_float=TRUE
 z_disp_precision=2
 
 [table_7]
-is_spark=FALSE
 table_name=Boost Table 1, MSnSpark-Extra
 x_page=7
 x_base_offset=36
@@ -170,7 +162,6 @@ z_suffix=KPA
 z_conv_expr=x*1
 
 [table_8]
-is_spark=FALSE
 table_name=Boost Table 2, MSnSpark-Extra
 x_page=7
 x_base_offset=84
@@ -188,7 +179,6 @@ z_suffix=Duty %
 z_conv_expr=x*1
 
 [table_9]
-is_spark=FALSE
 table_name=Boost Table 3, MSnSpark-Extra
 x_page=7
 x_base_offset=132

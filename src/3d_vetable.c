@@ -124,8 +124,6 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->table_name = g_strdup(firmware->table_params[table_num]->table_name);
 	ve_view->table_num = table_num;
 
-	ve_view->is_spark = firmware->table_params[table_num]->is_spark;
-
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), ve_view->table_name);
 	gtk_widget_set_size_request(window,DEFAULT_WIDTH,DEFAULT_HEIGHT);
