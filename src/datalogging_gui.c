@@ -630,30 +630,36 @@ void run_datalog(void)
 		for(i=0;i<total_logables;i++)
 		{
 			offset = offset_list[i];
-			if (offset == 99 )
+			switch (offset)
 			{
-				/* Special Hi-Res clock to be logged */
-				if (begin == TRUE)
-				{	
-					gettimeofday(&now,NULL);
-					last.tv_sec = now.tv_sec;
-					last.tv_usec = now.tv_usec;
-					begin = FALSE;
-					fprintf(logfile,"%f%s",0.0,delim);
-				}
-				else
-				{
-					gettimeofday(&now,NULL);
-					cumulative += (now.tv_sec-last.tv_sec)+
-					((double)(now.tv_usec-last.tv_usec)/
-					1000000.0);
-					last.tv_sec = now.tv_sec;
-					last.tv_usec = now.tv_usec;
-					fprintf(logfile,"%f%s",cumulative,delim);
-				}
+				case 99:
+					/* Special Hi-Res clock to be logged */
+					if (begin == TRUE)
+					{	
+						gettimeofday(&now,NULL);
+						last.tv_sec = now.tv_sec;
+						last.tv_usec = now.tv_usec;
+						begin = FALSE;
+						fprintf(logfile,"%f%s",0.0,delim);
+					}
+					else
+					{
+						gettimeofday(&now,NULL);
+						cumulative += (now.tv_sec-last.tv_sec)+
+							((double)(now.tv_usec-last.tv_usec)/
+							 1000000.0);
+						last.tv_sec = now.tv_sec;
+						last.tv_usec = now.tv_usec;
+						fprintf(logfile,"%f%s",cumulative,delim);
+					}
+					break;
+				case 13: /* RPM */
+					fprintf(logfile,"%i%s",100*log_ptr[offset],delim);
+					break;
+				default:
+					fprintf(logfile,"%i%s",log_ptr[offset],delim);
+					break;
 			}
-			else
-				fprintf(logfile,"%i%s",log_ptr[offset],delim);
 		}
 		fprintf(logfile,"\n");
 	}
