@@ -495,7 +495,7 @@ void build_ignition(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	/* Soft RevLimit Sparkangle */
+	/* Soft LaunchLimit Sparkangle */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
         launch_controls = g_list_append(launch_controls,(gpointer)spinner);
@@ -527,7 +527,7 @@ void build_ignition(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	/* Soft Launch Limit RPM */
+	/* Hard Launch Limit RPM */
         adj =  (GtkAdjustment *) gtk_adjustment_new(5500.0,000.0,25500.0,100.0,1000.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
         launch_controls = g_list_append(launch_controls,(gpointer)spinner);
