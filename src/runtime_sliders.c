@@ -225,7 +225,7 @@ finish_off:
  \param tbl (gint) table number to bind this slider to
  \param table_num (gint) the table_num from the firmware that this slider is
  bound to. (used for the sliders on the 3D view)
- \param row (gint) row ofhte table (tbl) that this slider goes on
+ \param row (gint) row of the table (tbl) that this slider goes on
  \param source (gchar *) data source for this slider 
  \param ident (PageIdent) enumeration of the page this slider goes on
  \returns a Struct Rt_Slider *

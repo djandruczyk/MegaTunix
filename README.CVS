@@ -9,7 +9,7 @@ in case the developer chanegd the configure.ac or Makefile.am files.
 autogen will take care of creating the files that depend on those so that 
 you don't end up with build problems...
 
-As for the automake/autoconf warnings,  in 99.995% of hte cases it's safe
+As for the automake/autoconf warnings,  in 99.995% of the cases it's safe
 to ignore those warnings.  You can thank the autofoo tool maintainers for
 those..
 
