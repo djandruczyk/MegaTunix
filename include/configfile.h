@@ -49,6 +49,7 @@ ConfigSection;
 typedef struct
 {
         GList *sections;
+	gchar * filename;
 }
 ConfigFile;
 

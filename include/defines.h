@@ -23,8 +23,10 @@
 /* Windows specific for exporting symbols for glade... */
 #ifdef __WIN32__
 #define EXPORT __declspec (dllexport)
+#define HOME g_get_current_dir
 #else
 #define EXPORT 
+#define HOME g_get_home_dir
 #endif
 
 

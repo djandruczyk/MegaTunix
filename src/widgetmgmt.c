@@ -41,6 +41,7 @@ GHashTable *dynamic_widgets = NULL;
 void populate_master(GtkWidget *widget, gpointer user_data)
 {
 	gchar *name = NULL;
+	ConfigFile *cfg = (ConfigFile *) user_data;
 	/* Populates a big master hashtable of all dynamic widgets so that 
 	 * various functions can do a lookup for the widgets name and get it's
 	 * GtkWidget * for manipulation.  We do NOT insert the topframe
@@ -60,7 +61,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if (!g_hash_table_lookup(dynamic_widgets,name))
 		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
 	else
-		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s already exists in master table\n",name),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  from file %s already exists in master table\n",name,cfg->filename),CRITICAL);
 }
 
 

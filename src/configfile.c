@@ -99,6 +99,7 @@ ConfigFile *cfg_open_file(gchar * filename)
 	g_strfreev(lines);
 	if (tmp)
 		g_free(tmp);
+	cfg->filename = g_strdup(filename);
 	return cfg;
 }
 
@@ -295,6 +296,7 @@ void cfg_free(ConfigFile * cfg)
 		section_list = g_list_next(section_list);
 	}
 	g_list_free(cfg->sections);
+	g_free(cfg->filename);
 }
 
 static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)

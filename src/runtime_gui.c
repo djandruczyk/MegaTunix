@@ -211,6 +211,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	{
 		percentage = (now-lower)/(upper-lower);
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
+		tmpf = tmpf >= 0.0 ? tmpf : 0.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(control->pbar),
 				tmpf);

@@ -378,7 +378,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	dload_val = ms_data[page][rpmk_offset];
 	write_ve_const(reqd_fuel->page, rpmk_offset, dload_val, FALSE);
 
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",reqd_fuel->page);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)	// If it opened nicely 
@@ -665,7 +665,7 @@ void initialize_reqd_fuel(void * ptr, gint page)
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 
 	reqd_fuel = (struct Reqd_Fuel *)ptr;
 	reqd_fuel->page = page;

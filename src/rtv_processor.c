@@ -102,6 +102,8 @@ void process_rt_vars(void *incoming)
 					exit (-3);
 				}
 				evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
+				if (!evaluator)
+					dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",(gchar *)g_object_get_data(object,"conv_expr")),CRITICAL);
 				assert(evaluator);
 				g_object_set_data(object,"evaluator",evaluator);
 			}

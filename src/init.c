@@ -102,7 +102,7 @@ gboolean read_config(void)
 {
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -156,7 +156,7 @@ void save_config(void)
 	int x,y,tmp_width,tmp_height;
 	ConfigFile *cfgfile;
 	extern gboolean ready;
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		cfgfile = cfg_new();
@@ -207,25 +207,25 @@ void make_megasquirt_dirs(void)
 {
 	gchar *filename = NULL;
 
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Gui", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/Gui", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator/Profiles", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator/Profiles", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/LookupTables", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/LookupTables", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RealtimeMaps", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/RealtimeMaps", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RuntimeSliders", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/RuntimeSliders", NULL);
 	mkdir(filename, S_IRWXU);
 	g_free(filename);
 

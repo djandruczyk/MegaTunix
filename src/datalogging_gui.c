@@ -58,9 +58,15 @@ void populate_dlog_choices()
 	extern GtkTooltips *tip;
 	extern gint preferred_delimiter;
 	extern gboolean tabs_loaded;
+	extern gboolean rtvars_loaded;
 
 	if (!tabs_loaded)
 		return;
+	if (!rtvars_loaded)
+	{
+		dbg_func(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
+		return;
+	}
 
 	vbox = g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1");
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
@@ -164,9 +170,12 @@ void stop_datalogging()
 
 	logging_active = FALSE;
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),TRUE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),TRUE);
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
 	update_logbar("dlog_view",NULL,"DataLogging Stopped...\n",TRUE,FALSE);
 	return;
 }

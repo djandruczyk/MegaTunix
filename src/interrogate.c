@@ -145,12 +145,12 @@ void interrogate_ecu()
 			dbg_func(g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",cmd->string,res,total_read),INTERROGATOR);
 			// If we get nothing back (i.e. timeout, assume done)
 			if (res == 0)
-				break;
-/*				zerocount++;
+				zerocount++;
+//				break;
 
 			if (zerocount > 1)
 				break;
-*/
+
 		}
 		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);
 		ptr = buf;
@@ -314,10 +314,10 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	firmware->multi_page = potential->multi_page;
 	firmware->total_pages = potential->total_pages;
 
+	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		firmware->page_params[i] = g_new0(struct Page_Params, 1);
-
 		memcpy(firmware->page_params[i],potential->page_params[i],sizeof(struct Page_Params));
 		if (potential->page_params[i]->is_spark)
 		{
@@ -419,7 +419,7 @@ cleanup:
 	if (!firmware)
 	{
 		firmware = g_malloc0(sizeof(struct Firmware_Details));
-		firmware->page_params[0] = g_new(struct Page_Params,1);
+		firmware->page_params = (struct Page_Params **)g_new(struct Page_Params,1);
 	}
 
 	firmware->tab_list = g_strsplit("",",",0);
@@ -490,8 +490,6 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			g_hash_table_insert(cmd_details,g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page),cmd);
 		}
 		cfg_free(cfgfile);
-
-
 	}
 	else
 	{
@@ -540,6 +538,29 @@ void close_profile(void *ptr)
 	dbg_func(__FILE__": close_profile(),\n\tDeallocation of memory for potential canidate complete\n",INTERROGATOR);
 
 }
+struct Canidate * initialize_canidate(void)
+{
+	struct Canidate *canidate = NULL;
+	canidate = g_malloc0(sizeof(struct Canidate));
+	canidate->name = NULL;
+	canidate->filename = NULL;
+	canidate->bytecounts = NULL;
+	canidate->sig_str = NULL;
+	canidate->quest_str = NULL;
+	canidate->ver_num = -1;
+	canidate->load_tabs = NULL;
+	canidate->rtv_map_file = NULL;
+	canidate->controls_map_file = NULL;
+	canidate->rt_cmd_key = NULL;
+	canidate->ve_cmd_key = NULL;
+	canidate->ign_cmd_key = NULL;
+	canidate->raw_mem_cmd_key = NULL;
+	canidate->lookuptables = NULL;
+	canidate->total_pages = -1;
+	canidate->capabilities = 0;
+	canidate->page_params = NULL;
+	return canidate;
+}
 		
 void * load_potential_match(GArray * cmd_array, gchar * filename)
 {
@@ -549,7 +570,7 @@ void * load_potential_match(GArray * cmd_array, gchar * filename)
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{	
-		canidate = g_malloc0(sizeof(struct Canidate));
+		canidate = initialize_canidate();
 		canidate->filename = g_strdup(filename);
 		dbg_func(g_strdup_printf(__FILE__": load_potential_match()\n\tfile:%s opened successfully\n",filename),INTERROGATOR);
 		canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -651,6 +672,7 @@ void load_profile_details(void *ptr)
 		}
 
 		/* Allocate space for Table Offsets structures.... */
+		canidate->page_params = g_new0(struct Page_Params *,canidate->total_pages);
 		for (i=0;i<canidate->total_pages;i++)
 		{
 			canidate->page_params[i] = g_new0(struct Page_Params,1);

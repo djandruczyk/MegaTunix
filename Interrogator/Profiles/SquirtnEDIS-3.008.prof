@@ -22,6 +22,7 @@ load_bincount=8
 is_spark=FALSE
 reqfuel_offset=90
 divider_offset=91
+alternate_offset=92
 rpmk_offset=98
 cfg11_offset=116
 cfg12_offset=117
@@ -47,7 +48,8 @@ CMD_I_0=95
 CMD_F_0=0
 
 [gui]
-ControlMapFile=std-firmware
+ControlMapFile=msnedis-firmware
+RealtimeMapFile=SquirtnEDIS-3.008
 LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,msnedis-3.0.x_ignition,vetable_8x8_1,sparktable_8x8_1,tools,warmupwizard
 
 [lookuptables]

@@ -36,9 +36,16 @@ void load_controls()
 	gchar *section = NULL;
 	gint i = 0;
 	extern gboolean tabs_loaded;
+	extern gboolean rtvars_loaded;
 
 	if (!tabs_loaded)
 		return;
+	if (!rtvars_loaded)
+	{
+		dbg_func(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
+		return;
+	}
+
 	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->controls_map_file,".rts_conf",NULL));
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)

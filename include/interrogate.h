@@ -15,6 +15,7 @@
 #define __INTERROGATE_H__
 
 #include <gtk/gtk.h>
+#include <structures.h>
 
 /* Prototypes */
 void interrogate_ecu(void);
@@ -24,6 +25,7 @@ void free_test_commands(GArray *);
 void load_bytecounts(GArray *, GHashTable *, void *);
 void close_profile(void * );
 void * load_potential_match(GArray * , gchar * );
+struct Canidate * initialize_canidate(void);
 gboolean check_for_match(GArray *, void *, void *);
 void load_profile_details(void * );
 gint translate_capabilities(gchar *);

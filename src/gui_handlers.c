@@ -89,15 +89,15 @@ static gboolean err_flag = FALSE;
 void leave(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dynamic_widgets;
+	struct Io_File * iofile = NULL;
 
 	if (statuscounts_id)
 		gtk_timeout_remove(statuscounts_id);
 	statuscounts_id = 0;
 
-	struct Io_File * iofile = NULL;
-	iofile = (struct Io_File *) g_object_get_data(
-			G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
-
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
+		iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
+				
 	stop_datalogging();
 	save_config();
 	close_serial();
@@ -369,6 +369,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			if (!constants_loaded)
 				io_cmd(IO_READ_VE_CONST, NULL);
 			start_realtime_tickler();
+			force_an_update();
 			break;
 		case STOP_REALTIME:
 			stop_realtime_tickler();

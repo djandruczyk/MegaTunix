@@ -25,7 +25,7 @@ gchar ** get_files(gchar *pathstub)
 	gchar * filename = NULL;
 	GDir *dir = NULL;
 
-	path = g_strconcat(g_get_home_dir(),"/.MegaTunix/",pathstub,NULL);
+	path = g_strconcat(HOME(),"/.MegaTunix/",pathstub,NULL);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -74,7 +74,7 @@ gchar * get_file(gchar *pathstub)
 {
 	gchar * filename = NULL;
 
-	filename = g_strconcat(g_get_home_dir(),"/.MegaTunix/",pathstub,NULL);
+	filename = g_strconcat(HOME(),"/.MegaTunix/",pathstub,NULL);
 	if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 		return filename;
 	else 

@@ -59,7 +59,7 @@ struct Firmware_Details
         gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gboolean multi_page;	/*! Multi-page firmware? */
 	gint total_pages;	/*! How many pages do we handle? */
-	struct Page_Params *page_params[8];	/*! details on data per page.. */
+	struct Page_Params **page_params;	/*! details on data per page.. */
 };
 
 /*! 
@@ -224,7 +224,7 @@ struct Canidate
 	gboolean multi_page;	/*! Multi-page firmware ??? */
 	gint total_pages;	/*! how many pages do we handle? */
 	GHashTable *lookuptables;/*! Lookuptables hashtable... */
-	struct Page_Params *page_params[8];/*! details on ve/rpm/load tables*/
+	struct Page_Params **page_params;/*! details on ve/rpm/load tables*/
 };
 
 /*!

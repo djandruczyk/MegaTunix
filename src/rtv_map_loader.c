@@ -29,6 +29,7 @@
 #include <structures.h>
 
 struct RtvMap *rtv_map = NULL;
+gboolean rtvars_loaded = FALSE;
 
 gboolean load_realtime_map(void )
 {
@@ -51,6 +52,8 @@ gboolean load_realtime_map(void )
 	GList * list = NULL;
 	gfloat *history = NULL;
 	extern gboolean interrogated;
+
+	rtvars_loaded = FALSE;
 
 
 	if (!interrogated)
@@ -233,6 +236,7 @@ gboolean load_realtime_map(void )
 		g_strfreev(keys);
 	}
 	dbg_func(__FILE__": load_realtime_map()\n\t All is well, leaving...\n\n",RTMLOADER);
+	rtvars_loaded = TRUE;
 	return TRUE;
 }
 
