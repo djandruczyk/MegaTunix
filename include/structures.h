@@ -163,6 +163,7 @@ struct DynamicButtons
 	GtkWidget *const_store_but;		/* Button */
 	GtkWidget *enrich_store_but;		/* Button */
 	GtkWidget *vetable_store_but;		/* Button */
+	GtkWidget *tuning_store_but;		/* Button */
 	GtkWidget *speed_den_but;		/* Toggle button */
 	GtkWidget *alpha_n_but;			/* Toggle button */
 	GtkWidget *two_stroke_but;		/* Toggle button */
