@@ -43,20 +43,20 @@ void open_serial(gchar * port_name)
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
-	gint result = -1;
+	gint fd = -1;
 	gchar *tmpbuf;
 	gchar *device;	/* temporary unix name of the serial port */
 	serial_params->port_name = g_strdup(port_name); 
 
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY in nonblock mode */
-	result = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
-	if (result >= 0)
+	fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	if (fd >= 0)
 	{
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
 		serial_params->open = TRUE;
-		serial_params->fd = result;
+		serial_params->fd = fd;
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
 		tmpbuf = g_strdup_printf("%s Opened Successfully\n",device);
