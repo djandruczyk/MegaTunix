@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#define  PANGO_ENABLE_BACKEND
 #include <config.h>
 #include <datalogging_const.h>
 #include <defines.h>
@@ -341,6 +342,7 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
                         0, 0,
                         w, h);
 	draw_graticule(v_value);
+	draw_infotext(v_value);
 
 	gdk_window_clear(widget->window);
 //	printf("configure event....\n");
@@ -429,6 +431,7 @@ struct Viewable_Value * build_v_value(GtkWidget * widget, gint offset)
 
 	v_value->runtime_offset = logging_offset_map[offset];
 	v_value->size = logging_datasizes_map[offset];
+	v_value->vname = g_strdup(logable_names[offset]);
 
 	
 
@@ -452,9 +455,9 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 	switch((GcType)type)
 	{
 		case FONT:
-			color.red = 65535;
+			color.red = 10000;
 			color.green = 65535;
-			color.blue = 65535;
+			color.blue = 10000;
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
@@ -482,7 +485,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 				blue -= 65536;
 			break;
 		case GRATICULE:
-			color.red = 32288;
+			color.red = 36288;
 			color.green = 2048;
 			color.blue = 2048;
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
@@ -493,6 +496,20 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			break;
 	}	
 	return gc;	
+}
+
+void draw_infotext(void *data)
+{
+	struct Viewable_Value *v_value = (struct Viewable_Value *)data;
+        PangoFontDescription *font_desc;
+	PangoLayout *layout;
+
+	font_desc = pango_font_description_from_string("sans 12");
+	layout = gtk_widget_create_pango_layout(v_value->d_area,v_value->vname);
+	pango_layout_set_font_description(layout,font_desc);
+	gdk_draw_layout(v_value->info_pmap,v_value->font_gc,0,0,layout);
+	gdk_window_clear(v_value->d_area->window);
+
 }
 
 void draw_graticule(void * data)
@@ -519,7 +536,7 @@ void draw_graticule(void * data)
 		count++;
 	}
 	gdk_draw_segments(v_value->trace_pmap,v_value->grat_gc,segs,count);
-	rem = lo_height%40;
+/*	rem = lo_height%40;
 	count = 0;
 	for (i=0;i<lo_height;i+=40)
 	{
@@ -531,6 +548,7 @@ void draw_graticule(void * data)
 		count++;
 	}
 	gdk_draw_segments(v_value->trace_pmap,v_value->grat_gc,segs,count);
+*/
 		
 	gdk_window_clear(v_value->d_area->window);
 

@@ -24,6 +24,7 @@ gboolean populate_viewer(GtkWidget * );
 struct Viewable_Value * build_v_value(GtkWidget *, gint );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 void draw_graticule(void * );
+void draw_infotext(void * );
 /* Prototypes */
 
 #endif
