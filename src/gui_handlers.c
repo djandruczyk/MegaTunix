@@ -1433,13 +1433,13 @@ void check_config13(unsigned char tmp)
 	{
 		// Brian Fielding PWM method, enable controls
 		using_pwm_idle = TRUE;
-		set_enhanced_idle_state(TRUE);
+		set_iac_mode(TRUE);
 		reset_temps(GINT_TO_POINTER(fahrenheit));
 	}
 	else
 	{
 		using_pwm_idle = FALSE;
-		set_enhanced_idle_state(FALSE);
+		set_iac_mode(FALSE);
 		reset_temps(GINT_TO_POINTER(fahrenheit));
 	}
 		
@@ -1537,10 +1537,21 @@ void set_table_mapping_state(gboolean state)
         g_list_foreach(table_map_widgets, set_widget_state,(gpointer)state);
 }
 
-void set_enhanced_idle_state(gboolean state)
+void set_ignition_mode(gboolean state)
+{
+//	printf("ignition mode controls not implemented yet\n");
+}
+
+void set_iac_mode(gboolean state)
 {
 	extern GList *enh_idle_widgets;
-        g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
+//	GtkWidget *label;
+	g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
+/*	label = gtk_button_get_label_widget(
+			GTK_BUTTON
+			(buttons.pwm_idle_but));
+	gtk_label_set_text(GTK_LABEL(label),"IAC Stepper Mode");
+*/
 }
 
 void set_dualtable_mode(gboolean state)
@@ -1563,12 +1574,12 @@ void set_dualtable_mode(gboolean state)
 	if (state)
 	{
 		gtk_label_set_text(GTK_LABEL(label),"Required Fuel for Table 1");
-		printf("enabling dualtable mode controls\n");
+//		printf("enabling dualtable mode controls\n");
 	}
 	else
 	{
 		gtk_label_set_text(GTK_LABEL(label),"Required Fuel");
-		printf("disabling dualtable mode controls\n");
+//		printf("disabling dualtable mode controls\n");
 	}
 }
 

@@ -34,6 +34,8 @@ void check_config13(unsigned char);
 void check_tblcnf(unsigned char, gboolean);
 void check_bcfreq(unsigned char, gboolean);
 void set_dualtable_mode(gboolean);
+void set_ignition_mode(gboolean);
+void set_iac_mode(gboolean);
 void start_runtime_display(void);
 void stop_runtime_display(void);
 gboolean populate_gui(void);

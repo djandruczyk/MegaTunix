@@ -49,7 +49,7 @@ int handle_ms_data(InputData which_data)
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
 
-	printf("handle_ms_data\n");
+	//printf("handle_ms_data\n");
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
@@ -210,6 +210,6 @@ int handle_ms_data(InputData which_data)
 			break;
 	}
 
-	printf("leaving\n");
+	//printf("leaving\n");
 	return TRUE;
 }

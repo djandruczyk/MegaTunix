@@ -26,17 +26,18 @@
 /* Serial parameters, */
 struct Serial_Params
 {
-        int fd;                 /* File descriptor */
+        gint fd;                 /* File descriptor */
         gchar *port_name;          /* textual name of comm port */
         gboolean open;		/* flag, TRUE for open FALSE for closed */
-        int poll_timeout;       /* Pollng interval in MILLISECONDS */
-        int read_wait;          /* time delay between each read */
-        int table0_size;	/* Size of VEtable/page_0 datablock */
-        int table1_size;	/* Size of VEtable/page_1 datablock */
-        int rtvars_size;	/* Size of Realtime vars datablock */
+        gint poll_timeout;       /* Pollng interval in MILLISECONDS */
+        gint read_wait;          /* time delay between each read */
+        gint table0_size;	/* Size of VEtable/page_0 datablock */
+        gint table1_size;	/* Size of VEtable/page_1 datablock */
+        gint rtvars_size;	/* Size of Realtime vars datablock */
+        gint ignvars_size;	/* Size of Realtime vars datablock */
         struct termios oldtio;  /* serial port settings before we touch it */
         struct termios newtio;  /* serial port settings we use when running */
-        int errcount;           /* Serial I/O errors read error count */
+        gint errcount;           /* Serial I/O errors read error count */
 };
 
 
