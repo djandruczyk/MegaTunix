@@ -165,14 +165,17 @@ void make_megasquirt_dirs(void)
 
 void mem_alloc()
 {
+
 	ve_constants = malloc(sizeof(struct ms_ve_constants));
 	runtime = malloc(sizeof(struct ms_data_v1_and_v2));
 	runtime_last = malloc(sizeof(struct ms_data_v1_and_v2));
+	
 	//	printf("Allocating memory \n");
 }
 
 void mem_dealloc()
 {
+
 	free(ve_constants);
 	free(runtime);
 	free(runtime_last);

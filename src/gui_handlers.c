@@ -34,8 +34,11 @@ extern struct Labels labels;
 static gint num_squirts;
 static gint num_cylinders;
 static gint num_injectors;
+static gint err_flag = 0;
 static GdkColor red = { 0, 65535, 0, 0};
 static GdkColor black = { 0, 0, 0, 0};
+static GList *offsets = NULL;
+static gint offset_data[4]; /* Only 4 interdependant vars... */
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -71,7 +74,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer *data)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{
 		/* If control reaches here, the toggle button is down */
-		printf("config_num %i, bit_pos %i, bit_val %i,bitmask %i\n",config_num,bit_pos,bit_val,bitmask);		
+//		printf("config_num %i, bit_pos %i, bit_val %i,bitmask %i\n",config_num,bit_pos,bit_val,bitmask);		
 		switch (config_num)
 		{
 			case 11:
@@ -109,21 +112,29 @@ int toggle_button_handler(GtkWidget *widget, gpointer *data)
 					ve_constants->alternate=0;
 					dload_val = 0;
 				}
-				check_req_fuel_limits();
+				if (g_list_find(offsets,
+						GINT_TO_POINTER(offset))==NULL)
+				{
+					offsets = g_list_append(offsets,
+						GINT_TO_POINTER(offset));
+					offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+				}
+				else
+				{
+					offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+				}
+				
+				if (err_flag == 0)
+					check_req_fuel_limits();
 				break;
 
 		}
 		if (dl_type == IMMEDIATE)
-		{
-			printf("Immediate download\n");
 			write_ve_const(dload_val, offset);
-		}
-		else if (dl_type == DEFERRED)
-		{
-			printf("Test if in gList, if not add it\n");
-			printf("Deferred download (inter-related variable)\n");
-			printf("tests should be performed and downlaod button\nchanged to RED to inform user to force a download\n");
-		}
 	}
 	return TRUE;
 }
@@ -229,10 +240,8 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	gint tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
-	gint err_flag = 0;
 	if (paused_handlers)
 		return TRUE;
-	printf("spinner changed handler \n");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
@@ -271,7 +280,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			reqd_fuel.afr = value;
 			break;
 		case REQ_FUEL:
-//			ve_constants->req_fuel = tmpi_x10;
+			//			ve_constants->req_fuel = tmpi_x10;
 			break;
 		case INJ_OPEN_TIME:
 			/* This funny conversion is needed cause of 
@@ -368,9 +377,24 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			/* This actuall effects another variable */
 			num_squirts = tmpi;
 			ve_constants->divider = 
-					(gint)(((float)num_cylinders/
+				(gint)(((float)num_cylinders/
 					(float)num_squirts)+0.001);
 			dload_val = ve_constants->divider;
+			offset = 92;
+			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
+			{
+				offsets = g_list_append(offsets,
+						GINT_TO_POINTER(offset));
+				offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+			}
+			else
+			{
+				offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+			}
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = 1;
@@ -381,6 +405,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			}
 			else
 			{
+				err_flag = 0;
 				gtk_widget_modify_fg(labels.squirts_lab,
 						GTK_STATE_NORMAL,&black);
 				gtk_widget_modify_fg(labels.cylinders_lab,
@@ -396,9 +421,24 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_constants->config11.value = tmp;
 			ve_constants->divider = 
-					(gint)(((float)num_cylinders/
+				(gint)(((float)num_cylinders/
 					(float)num_squirts)+0.001);
+			offset = 117;
 			dload_val = tmp;
+			if (g_list_find(offsets,GINT_TO_POINTER(offset))==NULL)
+			{
+				offsets = g_list_append(offsets,
+						GINT_TO_POINTER(offset));
+				offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+			}
+			else
+			{
+				offset_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= dload_val;	
+			}
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = 1;
@@ -409,11 +449,12 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			}
 			else
 			{
+				err_flag = 0;
 				gtk_widget_modify_fg(labels.squirts_lab,
 						GTK_STATE_NORMAL,&black);
 				gtk_widget_modify_fg(labels.cylinders_lab,
 						GTK_STATE_NORMAL,&black);
-				check_req_fuel_limits();
+			check_req_fuel_limits();
 			}
 			break;
 		case NUM_INJECTORS:
@@ -433,17 +474,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			break;
 	}
 	if (dl_type == IMMEDIATE)
-	{
-		printf("Immediate download\n");
 		write_ve_const(dload_val, offset);
-	}
-	else if (dl_type == DEFERRED)
-	{
-		printf("deferred....\n");
-//		printf("Test if in gList, if not add it\n");
-//		printf("Deferred download (inter-related variable)\n");
-//		printf("tests should be performed and downlaod button\nchanegd to RED to inform user to force a download\n");
-	}
 	return TRUE;
 
 }
@@ -708,6 +739,7 @@ void check_req_fuel_limits()
 	gfloat tmp = 0.0;
 	gfloat req_fuel_dl = 0.0;
 	gint lim_flag = 0;
+	gint index = 0;
 
 //	printf("divider = %i\n",ve_constants->divider);
 //	printf("alternate = %i\n",ve_constants->alternate);
@@ -717,7 +749,7 @@ void check_req_fuel_limits()
 
 	req_fuel_dl = tmp * ve_constants->req_fuel;
 
-	printf("req_fuel_dl %.2f, req_fuel %.2f\n",req_fuel_dl,ve_constants->req_fuel/10.0);
+//	printf("req_fuel_dl %.2f, req_fuel %.2f\n",req_fuel_dl,ve_constants->req_fuel/10.0);
 	if ((int)req_fuel_dl != ve_constants->req_fuel)
 	{
 		if (req_fuel_dl > 255.0)
@@ -729,7 +761,11 @@ void check_req_fuel_limits()
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_base_spin),
 			req_fuel_dl/10.0);
 	if (lim_flag)
-	{
+	{	/*
+		 * ERROR, something is out of bounds 
+		 * change the color of the potential offenders onscreen to
+		 * let the user know something is wrong..
+		 */
 		gtk_widget_modify_fg(labels.squirts_lab,
 				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_fg(labels.cylinders_lab,
@@ -741,7 +777,10 @@ void check_req_fuel_limits()
 
 	}
 	else
-	{
+	{	/*
+		 * Everything is OK with all inter-dependant variables.
+		 * settings all previous gui enties to normal state...
+		 */
 		gtk_widget_modify_fg(labels.squirts_lab,
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_fg(labels.cylinders_lab,
@@ -750,9 +789,21 @@ void check_req_fuel_limits()
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(constants.req_fuel_base_spin,
 				GTK_STATE_INSENSITIVE,&black);
+
+		for (index=0;index<g_list_length(offsets);index++)
+		{
+			gint offset;
+			gint data;
+			offset = GPOINTER_TO_INT(g_list_nth_data(offsets,index));
+			data = offset_data[g_list_index(offsets,
+					g_list_nth_data(offsets,index))];
+			write_ve_const(data, offset);
+		}
+		g_list_free(offsets);
+		offsets = NULL;
+		for (index=0;index<4;index++)
+			offset_data[index]=0;
 	}
+	return ;
 	
-
-
-	return;
 }
