@@ -25,6 +25,14 @@ key_types=_INT_
 page=0
 
 
+#----- Rescale Spinner -------------------------------------------------------
+
+[rescale_spinner_page0]
+keys=page,handler
+key_types=_INT_,_ENUM_
+page=0
+handler=_RESCALE_TABLE_
+
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 
 [VE1_load_spin_1]

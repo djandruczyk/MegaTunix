@@ -65,6 +65,8 @@ void build_string_2_enum_table()
 	/* Signal handler mapping */
 	g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
 			GINT_TO_POINTER(ALT_SIMUL));
+	g_hash_table_insert(str_2_enum,"_RESCALE_TABLE_",
+			GINT_TO_POINTER(RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",
 			GINT_TO_POINTER(GENERIC));
 	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",

@@ -516,6 +516,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((SpinButton)handler)
 	{
+		case RESCALE_TABLE:
+			rescale_table(widget);
+			break;
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (gint)value;
 			if (realtime_id > 0)
@@ -1038,26 +1041,37 @@ EXPORT gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer 
 EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
+	gint page = -1;
 	extern GdkColor red;
 	static GdkColor old_bg;
 	static GdkColor text_color;
 	static GtkStyle *style;
+	static gint total_marked = 0;
+	GtkWidget *frame = NULL;
+	extern GHashTable *dynamic_widgets;
+
+	if ((gboolean)data == TRUE)
+		goto testit;
 
 	if (event->button != 1) // Left button click 
 		return FALSE;
 	if (!grab_allowed)
 		return FALSE;
 
+testit:
 	marked = (gboolean)g_object_get_data(G_OBJECT(widget),"marked");
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 
 	if (marked)
 	{
+		total_marked--;
 		g_object_set_data(G_OBJECT(widget),"marked",GINT_TO_POINTER(FALSE));
 		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&old_bg);
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&text_color);
 	}
 	else
 	{
+		total_marked++;
 		g_object_set_data(G_OBJECT(widget),"marked",GINT_TO_POINTER(TRUE));
 		style = gtk_widget_get_style(widget);
 		old_bg = style->bg[GTK_STATE_NORMAL];
@@ -1065,6 +1079,12 @@ EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpoin
 		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	}
+
+	frame = g_hash_table_lookup(dynamic_widgets, g_strdup_printf("rescale_frame_page%i",page));
+	if ((total_marked > 0) && (frame != NULL))
+		gtk_widget_set_sensitive(GTK_WIDGET(frame),TRUE);
+	else
+		gtk_widget_set_sensitive(GTK_WIDGET(frame),FALSE);
 
 	return FALSE;	// Allow other handles to run... 
 

@@ -96,6 +96,7 @@ typedef enum
 	DEBUG_LEVEL,
 	GENERIC,
 	ALT_SIMUL,
+	RESCALE_TABLE,
 }SpinButton;
 
 /* Runtime Status flags */

@@ -20,6 +20,60 @@
 #include <structures.h>
 #include <vetable_gui.h>
 
+
+
+void rescale_table(GtkWidget * widget)
+{
+	extern GHashTable *dynamic_widgets;
+	extern struct Firmware_Details *firmware;
+	extern GList ***ve_widgets;
+	gint page = -1;
+	gint ve_base = 0;
+	gint rpm_bins = 0;
+	gint load_bins = 0;
+	gboolean is_spark = FALSE;
+	GtkWidget * spinner = NULL;
+	GList *list = NULL;
+	gfloat percentage = 0.0;
+	gint i = 0;
+	gint j = 0;
+	gfloat value = 0.0;
+
+	g_return_if_fail(GTK_IS_WIDGET(widget));
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	ve_base = firmware->page_params[page]->ve_base;
+	rpm_bins = firmware->page_params[page]->rpm_bincount;
+	load_bins = firmware->page_params[page]->load_bincount;
+	is_spark = firmware->page_params[page]->is_spark;
+
+	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+	for (i=0;i<(rpm_bins*load_bins);i++)
+	{
+		if (NULL != (list = ve_widgets[page][i]))
+		{
+			list = g_list_first(list);
+			for (j=0;j<g_list_length(list);j++)
+			{
+				spinner = (GtkWidget *)g_list_nth_data(list,j);
+				if (!GTK_IS_SPIN_BUTTON(spinner))
+					continue;
+				if ((gboolean)g_object_get_data(G_OBJECT(spinner),"marked"))
+				{
+					value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(spinner));
+					value = (value*percentage)/100.0;
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value);
+					spin_button_grab(spinner,NULL,GINT_TO_POINTER(TRUE));
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),100.0);
+
+				}
+			}
+		}
+	}
+
+
+
+}
+
 /* Currently unused due to being horribly slow... 
  * highlights the four boxes currounding the current VE point...
 void hilite_ve_entries(gint rpm, gint map, gint page)
