@@ -51,7 +51,8 @@ extern GtkWidget *main_window;
 extern struct Serial_Params serial_params;
 struct Ve_Const_Std *ve_constants;
 struct Ve_Const_Std *ve_const_tmp;
-char * ve_const_arr;
+unsigned char * ve_const_page0;
+unsigned char * ve_const_page1;
 struct Raw_Runtime_Std *raw_runtime;
 struct Runtime_Std *runtime;
 struct Runtime_Std *runtime_last;
@@ -181,12 +182,13 @@ void make_megasquirt_dirs(void)
 void mem_alloc()
 {
 
-	ve_const_tmp = malloc(sizeof(struct Ve_Const_Std));
-	ve_constants = malloc(sizeof(struct Ve_Const_Std));
-	ve_const_arr = malloc(sizeof(struct Ve_Const_Std));
-	raw_runtime = malloc(sizeof(struct Raw_Runtime_Std));
-	runtime = malloc(sizeof(struct Runtime_Std));
-	runtime_last = malloc(sizeof(struct Runtime_Std));
+	ve_const_tmp = g_malloc(sizeof(struct Ve_Const_Std));
+	ve_constants = g_malloc(sizeof(struct Ve_Const_Std));
+	ve_const_page0 = g_malloc(sizeof(struct Ve_Const_Std));
+	ve_const_page1 = g_malloc(sizeof(struct Ve_Const_Std));
+	raw_runtime = g_malloc(sizeof(struct Raw_Runtime_Std));
+	runtime = g_malloc(sizeof(struct Runtime_Std));
+	runtime_last = g_malloc(sizeof(struct Runtime_Std));
 	
 	//	printf("Allocating memory \n");
 }
@@ -194,10 +196,12 @@ void mem_alloc()
 void mem_dealloc()
 {
 
-	free(ve_const_tmp);
-	free(ve_constants);
-	free(raw_runtime);
-	free(runtime);
-	free(runtime_last);
+	g_free(ve_const_tmp);
+	g_free(ve_constants);
+	g_free(ve_const_page0);
+	g_free(ve_const_page1);
+	g_free(raw_runtime);
+	g_free(runtime);
+	g_free(runtime_last);
 	//	printf("Deallocating memory \n");
 }

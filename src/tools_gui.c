@@ -16,17 +16,15 @@
 #include <enums.h>
 #include <globals.h>
 #include <gui_handlers.h>
+#include <structures.h>
 #include <tools_gui.h>
+#include <vex_support.h>
 
 GtkWidget *tools_statbar;
 gint tools_context_id;
 extern GdkColor white;
 
-struct Tools
-{
-	GtkWidget *export_but;
-	GtkWidget *export_comment_entry;
-}tools;
+struct Tools tools;
 
 int build_tools(GtkWidget *parent_frame)
 {
@@ -75,29 +73,33 @@ int build_tools(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
-	"Export VE Table(s) will create a .vex file with the contents of your VEtable(s) (more tables if tyou are using the DualTable mode). NOTE: This button is greyed out until you fill in the comment field to the right",NULL);
+	"Export VE Table(s) will create a .vex file with the contents of your VEtable(s) (more tables if tyou are using the DualTable mode). NOTE: This button is greyed out until you fill in the comment field to the right and HIT ENTER",NULL);
         gtk_table_attach (GTK_TABLE (table), ebox, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
+	button = gtk_button_new_with_label("Export VE Table(s)");
+	tools.export_but = button;
+	gtk_widget_set_sensitive(button,FALSE);
+	gtk_container_add(GTK_CONTAINER(ebox),button);
+        g_signal_connect (G_OBJECT(button), "clicked",
+                        G_CALLBACK (std_button_handler),
+                        GINT_TO_POINTER(EXPORT_VETABLE));
+
 
 	label = gtk_label_new("VEX File Comment");
         gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 	entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 50);
-
 	tools.export_comment_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 50);
+        g_signal_connect (G_OBJECT(entry), "activate",
+                        G_CALLBACK (vex_comment_parse),
+                        GINT_TO_POINTER(0));
+
         gtk_table_attach (GTK_TABLE (table), entry, 2, 3, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_button_new_with_label("Export VE Table(s)");
-	gtk_widget_set_sensitive(button,FALSE);
-	gtk_container_add(GTK_CONTAINER(ebox),button);
-        g_signal_connect (G_OBJECT(button), "clicked",
-                        G_CALLBACK (std_button_handler),
-                        GINT_TO_POINTER(EXPORT_VETABLE));
 
 	button = gtk_button_new_with_label("Import VE Table(s)");
 	gtk_tooltips_set_tip(tip,button,

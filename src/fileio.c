@@ -37,6 +37,7 @@ extern GtkWidget *dlog_statbar;
 extern gint dlog_context_id;
 extern GtkWidget *tools_statbar;
 extern gint tools_context_id;
+gboolean vex_opened;
 
 
 static gchar buff[100];  
@@ -82,12 +83,15 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	const gchar *selected_filename;
 	struct stat status;
 	gint iotype = -1;
-	static gboolean opened;
+	static gboolean opened = FALSE;
 
 	iotype = (FileIoType )g_object_get_data(G_OBJECT(file_selector),"iotype");
 
-	if (log_opened)
-		close_logfile();	
+	if (iotype == DATALOG_EXPORT)
+	{
+		if (log_opened)
+			close_file(DATALOG_EXPORT);	
+	}
 
 	selected_filename = gtk_file_selection_get_filename (
 			GTK_FILE_SELECTION (file_selector));
@@ -105,7 +109,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 	else /* Now see if it DOES exist.. */
 	{
-		if ((iotype == DATALOG_EXPORT) || (iotype == VE_EXPORT))
+		if ((iotype == DATALOG_EXPORT)) //|| (iotype == VE_EXPORT))
 		{
 			printf("filetype is dlog or ve export\n");
 			if (status.st_size > 0)
@@ -149,6 +153,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_EXPORT:
 			if (opened == TRUE)
 			{
+				vex_opened = TRUE;
 				if(vetable_export())
 				{
 					g_snprintf(buff,100,"VE_Export Success!");
@@ -164,6 +169,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			}
 			else
 			{
+				vex_opened = FALSE;
 				g_snprintf(buff,100,"File Couldn't be opened to export to!!!");
 				update_statusbar(tools_statbar,
 						tools_context_id,buff);
@@ -172,6 +178,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_IMPORT:
 			if (opened == TRUE)
 			{
+				vex_opened = TRUE;
 				if (vetable_import())
 				{
 					g_snprintf(buff,100,"VE_Import Success!");
@@ -187,6 +194,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			}
 			else
 			{
+				vex_opened = FALSE;
 				g_snprintf(buff,100,"File Couldn't be opened to import from!!!");
 				update_statusbar(tools_statbar,
 						tools_context_id,buff);
@@ -200,3 +208,61 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 
 	}
 }
+
+void close_file(FileIoType filetype)
+{
+	switch (filetype)
+	{
+		case DATALOG_EXPORT:
+			if (log_opened == TRUE)
+			{
+				fclose(io_file);
+				g_free(io_file_name);
+				gtk_label_set_text(GTK_LABEL(file_label),"No Log Selected Yet");
+				log_opened = FALSE;
+				g_free(io_file);
+				g_snprintf(buff,100,"Logfile Closed");
+				update_statusbar(dlog_statbar,dlog_context_id,buff);
+				gtk_widget_set_sensitive(stop_button,FALSE);
+				gtk_widget_set_sensitive(start_button,FALSE);
+
+
+			}
+			break;
+		default: /* Everything else.. */
+			if (vex_opened == TRUE)
+			{
+				fclose(io_file);
+				g_free(io_file_name);
+				g_free(io_file);
+			}
+			break;
+
+	}
+}
+
+void truncate_file(FileIoType filetype)
+{
+	switch (filetype)
+	{
+		case DATALOG_EXPORT:
+			if (log_opened == TRUE)
+			{
+				truncate(io_file_name,0);
+				if (errno)
+					g_snprintf(buff,100,"DataLog Truncation Error: %s",strerror(errno));
+				else
+					g_snprintf(buff,100,"DataLog Truncation successful");
+				update_statusbar(dlog_statbar,
+						dlog_context_id,buff);
+
+			}
+			break;
+		default:
+			if (vex_opened == TRUE)
+				truncate(io_file_name,0);
+			break;
+
+	}
+}
+

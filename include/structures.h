@@ -192,6 +192,15 @@ struct DynamicButtons
 	GtkWidget *vetable_store_but;
 };
 
+/* Simple struct to store hte pointers to the entry and button
+ * for the tools_gui and vex_support files.  
+ */
+struct Tools
+{
+	GtkWidget *export_but;
+	GtkWidget *export_comment_entry;
+};
+
 /* These are defined here instead of the individual .c files as
  * we manipulate their attributes to give feedback to the user
  */

@@ -21,6 +21,7 @@
 gboolean vetable_export(void);
 gboolean vetable_import(void);
 void clear_vexfile(void);
+gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

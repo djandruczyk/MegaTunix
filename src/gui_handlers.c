@@ -97,7 +97,7 @@ void leave(GtkWidget *widget, gpointer data)
 	save_config();
 	stop_serial_thread();
 	close_serial();
-	close_logfile();
+	close_file(ANY);
 	/* Free all buffers */
 	mem_dealloc();
 	gtk_main_quit();
@@ -368,11 +368,11 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			present_filesavebox(DATALOG_EXPORT);
 			break;
 		case TRUNCATE_LOGFILE:
-			truncate_log();
+			truncate_file(DATALOG_EXPORT);
 			break;
 		case CLOSE_LOGFILE:
 			stop_datalogging();
-			close_logfile();
+			close_file(DATALOG_EXPORT);
 			break;
 		case START_DATALOGGING:
 			start_datalogging();
@@ -381,7 +381,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			stop_datalogging();
 			break;
 		case CLEAR_VEXFILE:
-			clear_vexfile();
+			truncate_file(VE_EXPORT);
 			break;
 		case EXPORT_VETABLE:
 			present_filesavebox(VE_EXPORT);

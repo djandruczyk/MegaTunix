@@ -34,7 +34,8 @@
  * put in the right place to be loaded...
  */
 
-extern unsigned char * ve_const_arr;
+extern unsigned char * ve_const_page0;
+extern unsigned char * ve_const_page1;
 struct Conversion_Chart std_conversions;
 extern GtkWidget * veconst_widgets_1[];
 extern GtkWidget * veconst_widgets_2[];
@@ -111,7 +112,7 @@ gint convert_before_download(gint offset, gfloat value)
 	/* Store value in veconst_struct (accessing it via array syntax as 
 	 * it's friggin easier).... 
 	 */
-	ve_const_arr[offset] = return_value; 
+	ve_const_page0[offset] = return_value; 
 	return (return_value);
 }
 
@@ -128,19 +129,19 @@ gfloat convert_after_upload(gint offset)
 	switch ((Conversions)std_conversions.conv_type[offset])
 	{
 		case (ADD):
-			return_value = ve_const_arr[offset] - factor;
+			return_value = ve_const_page0[offset] - factor;
 			break;
 		case (SUB):
-			return_value = ve_const_arr[offset] + factor;
+			return_value = ve_const_page0[offset] + factor;
 			break;
 		case (MULT):
-			return_value = (gfloat)ve_const_arr[offset] / factor;
+			return_value = (gfloat)ve_const_page0[offset] / factor;
 			break;
 		case (DIV):
-			return_value = (gfloat)ve_const_arr[offset] * factor;
+			return_value = (gfloat)ve_const_page0[offset] * factor;
 			break;
 		case (NOTHING):
-			return_value = ve_const_arr[offset];
+			return_value = ve_const_page0[offset];
 			break;
 		default:
 			printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");

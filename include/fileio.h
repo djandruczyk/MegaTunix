@@ -18,7 +18,9 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void present_filesavebox(FileIoType data);
+void present_filesavebox(FileIoType );
+void truncate_file(FileIoType );
+void close_file(FileIoType );
 void check_filename(GtkWidget *, GtkFileSelection *);
 /* Prototypes */
 

@@ -19,11 +19,8 @@
 
 /* Prototypes */
 int build_datalogging(GtkWidget *);
-void create_dlog_filesel(void);
-void truncate_log(void);
 void start_datalogging(void);
 void stop_datalogging(void);
-void close_logfile(void);
 void clear_logables(void);
 int log_value_set(GtkWidget *, gpointer);
 void write_log_header(void);

@@ -38,7 +38,8 @@ extern struct Runtime_Std *runtime;
 extern struct Runtime_Std *runtime_last;
 extern struct Ve_Const_Std *ve_constants;
 extern struct Ve_Const_Std *ve_const_tmp;
-extern unsigned char * ve_const_arr;
+extern unsigned char * ve_const_page0;
+extern unsigned char * ve_const_page1;
 //char * test_ptr;
        
 int handle_ms_data(InputData which_data)
@@ -152,7 +153,7 @@ int handle_ms_data(InputData which_data)
 			 */
 			memcpy(ve_constants,buf,sizeof(struct Ve_Const_Std));
 			memcpy(ve_const_tmp,buf,sizeof(struct Ve_Const_Std));
-			ve_const_arr = (unsigned char *)ve_constants;
+			ve_const_page0 = (unsigned char *)ve_constants;
 			//test_ptr = (char *)ve_constants;
 			//printf("cr_pulse via array manip at -40 = %i\n",test_ptr[64]);
                         ms_ve_goodread_count++;
