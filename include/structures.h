@@ -253,14 +253,14 @@ struct Limits
  */
 struct Rt_Control
 {
-	gchar *ctrl_name; /* Control name in config file (key) */
+	gchar *ctrl_name; /* Control name in config file (key in hashtable) */
+	GtkWidget *parent;/* Parent of the table below  */
+	GtkWidget *table; /* Table to contain the next 3 widgets */
 	GtkWidget *label; /* Label in runtime display */
 	GtkWidget *data;  /* textual representation of the data */
 	GtkWidget *pbar;  /* progress bar for the data */
-	GtkWidget *parent;/* Parent of these widgets (table) */
-	gint table;	  /* Table number (0-3) */
+	gint tbl;	  /* Table number (0-3) */
 	gint row;	  /* Starting row */
-	gint col;	  /* Starting Column */
 	gchar *friendly_name; /* text for Label above */
 	gint limits_index; /* Offset into limits[] structure array */
 	gint runtime_offset; /* offset into Runtime_Common struct (using []) */
@@ -268,6 +268,22 @@ struct Rt_Control
 	gboolean enabled; /* Pretty obvious */
 	gint count;	  /* used to making sure things update */
 	Capabilities flags;/* DT, Temp_dep, IGN or whatever ... */
+};
+
+/* The Def_Control struct contains info on the default controls that are 
+ * written to the config file on startup.
+ */
+struct Def_Control
+{
+	gchar *ctrl_name;
+	gint tbl;
+	gint row;
+	gchar *friendly_name;
+	gint limits_index;
+	gint runtime_offset;
+	gint size;
+	gboolean enabled;
+	Capabilities flags;
 };
 
 #endif

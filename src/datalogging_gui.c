@@ -174,8 +174,9 @@ void build_datalogging(GtkWidget *parent_frame)
 				G_CALLBACK(log_value_set),
 				NULL);
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
-				(GtkAttachOptions) (GTK_FILL),
-				(GtkAttachOptions) (0), 0, 0);
+				(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+				(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+				0, 0);
 		j++;
 
 		if (j == 5)

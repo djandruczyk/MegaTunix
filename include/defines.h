@@ -43,7 +43,7 @@
 
 
 /* For datalogging and Logviewer */
-#define TABLE_COLS 6
+#define TABLE_COLS 5
 #define MAX_LOGABLES 64
 
 #define UCHAR sizeof(unsigned char)
