@@ -448,7 +448,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	/* get any datastructures attached to the widget */
 	void *obj_data = NULL;
 	gint handler = -1;
-	static gboolean queue_referenced =  FALSE;
 	extern gboolean no_update;
 	extern gboolean offline;
 	if (!GTK_IS_OBJECT(widget))
@@ -1138,6 +1137,7 @@ void update_widget(gpointer object, gpointer user_data)
 		else
 			dbg_func(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n",CRITICAL);
 
+		
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
