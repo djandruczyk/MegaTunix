@@ -26,9 +26,10 @@
  then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
  the list as a vector char array. (free with g_strfreev)
  \param pathstub (gchar *) partial path to search for files
+ \param extension (gchar *) extension to search for 
  \returns vector char array of filenames or NULL if none found
  */
-gchar ** get_files(gchar *pathstub)
+gchar ** get_files(gchar *pathstub, gchar * extension)
 {
 	gchar *path = NULL;
 	gchar *list = NULL;
@@ -45,6 +46,12 @@ gchar ** get_files(gchar *pathstub)
 	filename = (gchar *)g_dir_read_name(dir);
 	while (filename != NULL)
 	{
+		if (!g_str_has_suffix(filename,extension))
+		{
+			filename = (gchar *)g_dir_read_name(dir);
+			continue;
+		}
+
 		if (!list)
 			list = g_strdup_printf("%s%s",path,filename);
 		else
@@ -67,6 +74,11 @@ gchar ** get_files(gchar *pathstub)
 	filename = (gchar *)g_dir_read_name(dir);
 	while (filename != NULL)
 	{
+		if (!g_str_has_suffix(filename,extension))
+		{
+			filename = (gchar *)g_dir_read_name(dir);
+			continue;
+		}
 		if (!list)
 			list = g_strdup_printf("%s%s",path,filename);
 		else
@@ -90,19 +102,30 @@ gchar ** get_files(gchar *pathstub)
  \brief get_file() gets a single file defnied by pathstub, first searching in
  ~/.MegaTunix+pathstub, and then in $PREFIX/share/MegaTunix/+pathstub,
  \param pathstub (gchar *) partial path to filename
+ \param extension (gchar *) extension wanted..
  \returns filename if found or NULL if not found
  */
-gchar * get_file(gchar *pathstub)
+gchar * get_file(gchar *pathstub,gchar *extension)
 {
 	gchar * filename = NULL;
+	gchar *ext = NULL;
+	if (extension)
+		ext = g_strconcat(".",extension,NULL);
+	else
+		ext = g_strdup("");
 
-	filename = g_strconcat(HOME(),"/.MegaTunix/",pathstub,NULL);
+
+	filename = g_strconcat(HOME(),"/.MegaTunix/",pathstub,ext,NULL);
 	if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+	{
+		g_free(ext);
 		return filename;
+	}
 	else 
 	{
 		g_free(filename);
-		filename = g_strconcat(DATA_DIR,"/",pathstub,NULL);
+		filename = g_strconcat(DATA_DIR,"/",pathstub,ext,NULL);
+		g_free(ext);
 		if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 			return filename;
 		else

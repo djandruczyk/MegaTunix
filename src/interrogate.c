@@ -242,7 +242,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	gchar ** filenames = NULL;
 	extern struct Io_Cmds *cmds;
 
-	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL));	
+	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL),"prof");	
 	if (!filenames)
 	{
 		dbg_func(g_strdup(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"),CRITICAL);
@@ -428,7 +428,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 	gboolean tmpi = FALSE;
 	struct Command *cmd = NULL;
 
-	filename = get_file(g_strconcat(INTERROGATOR_DIR,"/","tests",NULL));
+	filename = get_file(g_strconcat(INTERROGATOR_DIR,"/","tests",NULL),NULL);
 	if (!filename)
 		return NULL;
 

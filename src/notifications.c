@@ -374,5 +374,6 @@ gboolean warn_file_not_empty(FileIoType iotype,gchar * filename)
 void set_title(const gchar * text)
 {
 	extern GtkWidget *main_window;
+
 	gtk_window_set_title(GTK_WINDOW(main_window),g_strconcat("MegaTunix ",VERSION,",   ",text,NULL));
 }

@@ -52,8 +52,13 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
 	gboolean status = FALSE;
 	gchar * filename = NULL;
+	gchar ** tmpbuf = NULL;
 	
-	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,"/",(gchar *)fname,NULL));
+	tmpbuf = g_strsplit(fname,".",2);
+
+	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,"/",tmpbuf[0],NULL),tmpbuf[1]);
+	g_strfreev(tmpbuf);
+
 	if (filename)
 		status = load_table(table_name,filename);
 	g_free(filename);

@@ -89,6 +89,15 @@ alpha_n_button_bitshift=2
 alpha_n_button_bitmask=4
 alpha_n_button_bitval=1
 
+
+#----- widgets ---------------------------------------------------------------
+
+[topframe]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=2
+bind_to_list=dt_features
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]

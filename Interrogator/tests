@@ -102,9 +102,7 @@ cmd_desc=Ignition Variables
 store_data=FALSE
 
 [test_11]
-raw_cmd=F
-cmd_length=1
-multipart=TRUE
-cmd_int_arg=0
+raw_cmd=F0
+cmd_length=2
 cmd_desc=Raw Memory Readback
 store_data=FALSE

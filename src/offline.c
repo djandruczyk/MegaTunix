@@ -152,7 +152,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	extern gchar * offline_firmware_choice;
 
 
-	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL));
+	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL),"prof");
 	if (!filenames)
 	{
 		dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"),CRITICAL);
