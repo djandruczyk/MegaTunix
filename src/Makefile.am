@@ -22,6 +22,7 @@ megatunix_SOURCES = \
 	core_gui.c \
 	dataio.c \
 	datalogging_gui.c \
+	eng_vitals_gui.c \
 	enrichments_gui.c \
 	fileio.c \
 	general_gui.c \

@@ -1028,14 +1028,21 @@ void check_config13(int tmp)
 
 void set_dualtable_mode(gboolean state)
 {
-		dualtable = state;
-		gtk_widget_set_sensitive(misc.vetable2,state);
-		gtk_widget_set_sensitive(buttons.alternate_but,!state);
-		gtk_widget_set_sensitive(buttons.simul_but,!state);
+	extern GList *dt_controls;
+	dualtable = state;
+	/* These two can't be in the list as their state needs to be inverted*/
+	gtk_widget_set_sensitive(buttons.alternate_but,!state);
+	gtk_widget_set_sensitive(buttons.simul_but,!state);
+	g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
 	if (state)
 		printf("enabling dualtable mode controls\n");
 	else
 		printf("disabling dualtable mode controls\n");
+}
+
+void set_widget_state(gpointer widget, gpointer state)
+{
+	gtk_widget_set_sensitive(GTK_WIDGET(widget),(gboolean)state);	
 }
 
 void start_runtime_display()

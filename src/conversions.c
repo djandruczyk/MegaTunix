@@ -93,7 +93,6 @@ gint convert_before_download(gint offset, gfloat value)
 	conv_chart = conversions;
 	ve_const_arr = (unsigned char *)ms_data;
 
-	printf("offset %i, value %f\n",offset,value);
 	factor = conv_chart->conv_factor[offset];
 
 	switch ((Conversions)conv_chart->conv_type[offset])
@@ -191,8 +190,11 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.ego_temp_lab),
 					"Coolant Temp\nActivation(\302\260 F.)");
 			gtk_label_set_text(
-					GTK_LABEL(labels.fastidletemp_lab),
-					"Fast Idle Threshold (\302\260 F.)");
+					GTK_LABEL(labels.fast_idle_temp_lab),
+					"Fast Idle Temp (\302\260 F.)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.slow_idle_temp_lab),
+					"Slow Idle Temp (\302\260 F.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmwiz_clt_lab),
 					"Coolant (\302\260 F.)");
@@ -217,6 +219,7 @@ void reset_temps(gpointer type)
 						string);
 				g_free(string);
 			}
+			/* Fast Idle Temp */
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper < 215) /* if so it was celsius, if not skip*/
 			{	
@@ -227,9 +230,24 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.fast_idle_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.fast_idle_thresh_spin),
+							spinners.fast_idle_temp_spin),
 						(value*(9.0/5.0))+32);
 			}
+			/* Slow Idle Temp */
+			upper = adjustments.slow_idle_temp_adj->upper;
+			if (upper < 215) /* if so it was celsius, if not skip*/
+			{	
+				value = adjustments.slow_idle_temp_adj->value;
+				adjustments.slow_idle_temp_adj->upper=215.0;
+				adjustments.slow_idle_temp_adj->value=
+					(value *(9.0/5.0))+32;
+				gtk_adjustment_changed(
+						adjustments.slow_idle_temp_adj);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+							spinners.slow_idle_temp_spin),
+						(value*(9.0/5.0))+32);
+			}
+			/* EGO Activation Temp */
 			upper = adjustments.ego_temp_adj->upper;
 			if (upper < 215) /* if so it was celsius, if not skip*/
 			{	
@@ -259,8 +277,11 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.ego_temp_lab),
 					"Coolant Temp\nActivation(\302\260 C.)");
 			gtk_label_set_text(
-					GTK_LABEL(labels.fastidletemp_lab),
-					"Fast Idle Threshold (\302\260 C.)");
+					GTK_LABEL(labels.fast_idle_temp_lab),
+					"Fast Idle Temp (\302\260 C.)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.slow_idle_temp_lab),
+					"Slow Idle Temp (\302\260 C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_clt_lab),
 					"Coolant (\302\260 C.)");
@@ -286,6 +307,7 @@ void reset_temps(gpointer type)
 				g_free(string);
 			}
 
+			/* Fast Idle Temp */
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper > 102) /* if so it was fahren, if not skip*/
 			{
@@ -296,9 +318,24 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.fast_idle_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-							spinners.fast_idle_thresh_spin),
+							spinners.fast_idle_temp_spin),
 						(value-32)*(5.0/9.0));
 			}
+			/* Slow Idle Temp */
+			upper = adjustments.slow_idle_temp_adj->upper;
+			if (upper > 102) /* if so it was fahren, if not skip*/
+			{
+				value = adjustments.slow_idle_temp_adj->value;
+				adjustments.slow_idle_temp_adj->upper=101.6;
+				adjustments.slow_idle_temp_adj->value=
+					(value-32)*(5.0/9.0);
+				gtk_adjustment_changed(
+						adjustments.slow_idle_temp_adj);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+							spinners.slow_idle_temp_spin),
+						(value-32)*(5.0/9.0));
+			}
+			/* EGO Activation Temp */
 			upper = adjustments.ego_temp_adj->upper;
 			if (upper > 102) /* if so it was fahren, if not skip*/
 			{	

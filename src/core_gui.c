@@ -18,6 +18,7 @@
 #include <core_gui.h>
 #include <datalogging_gui.h>
 #include <defines.h>
+#include <eng_vitals_gui.h>
 #include <enrichments_gui.h>
 #include <enums.h>
 #include <general_gui.h>
@@ -34,8 +35,8 @@
 
 
 /* Default window size and MINIMUM size as well... */
-static int def_width=717;
-static int def_height=575;
+static int def_width=700;
+static int def_height=535;
 int width;
 int height;
 int main_x_origin;
@@ -53,7 +54,9 @@ static struct
 { "About MegaTunix", build_about, "_About",TRUE},
 { "General MegaTunix Settings", build_general, "_General",TRUE},
 { "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE},
-{ "MegaSquirt Constants", build_constants, "_Constants",TRUE},
+{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",TRUE},
+{ "MegaSquirt Constants", build_constants_1, "Table1 _Constants",TRUE},
+{ "MegaSquirt Constants", build_constants_2, "Table2 _Constants",TRUE},
 { "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE},
 { "MegaSquirt VE Table(s)", build_vetable, "_VE Table(s)",TRUE},
 { "MegaSquirt Ignition Settings", build_ignition, "_Ignition Settings",FALSE},

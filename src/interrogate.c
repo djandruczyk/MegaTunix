@@ -242,9 +242,14 @@ void interrogate_ecu()
 				commands[table1_index].buffer,128);
 		if (res != 0)
 			set_dualtable_mode(TRUE);
+		else
+			set_dualtable_mode(FALSE);
 	}
 	else
+	{
 		commands[table1_index].count = 0;
+		set_dualtable_mode(FALSE);
+	}
 		
 
 	for (i=0;i<tests_to_run;i++)

@@ -11,14 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __CONSTANTS_GUI_H__
-#define __CONSTANTS_GUI_H__
+#ifndef __ENG_VITALS_GUI_H__
+#define __ENG_VITALS_GUI_H__
 
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void build_constants_1(GtkWidget *);
-void build_constants_2(GtkWidget *);
+void build_eng_vitals(GtkWidget *);
 /* Prototypes */
 
 #endif

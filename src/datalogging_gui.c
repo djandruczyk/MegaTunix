@@ -67,6 +67,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	gint i,j,k;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
+	GtkWidget *vbox3;
 	GtkWidget *hbox;
 	GtkWidget *table;
 	GtkWidget *frame;
@@ -180,73 +181,80 @@ void build_datalogging(GtkWidget *parent_frame)
 		} 
 	}
 
+	vbox3 = gtk_vbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),vbox3,FALSE,FALSE,0);
+
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
+	gtk_box_pack_start(GTK_BOX(vbox3),hbox,FALSE,FALSE,0);
+
 	frame = gtk_frame_new("Logging Format ");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox2), 5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	table = gtk_table_new(1,4,TRUE);
+	table = gtk_table_new(1,3,FALSE);
 	format_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),15);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 
-	button = gtk_radio_button_new_with_label(NULL,"MegaTune \"Classic\" Format");
+	button = gtk_radio_button_new_with_label(NULL,"MT \"Classic\"");
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(set_logging_mode),
 			GINT_TO_POINTER(MT_CLASSIC_LOG));
 	if (logging_mode == MT_CLASSIC_LOG)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
-	button = gtk_radio_button_new_with_label(group,"MegaTune \"Full\" Format");
+	button = gtk_radio_button_new_with_label(group,"MT \"Full\"");
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(set_logging_mode),
 			GINT_TO_POINTER(MT_FULL_LOG));
 	if (logging_mode == MT_FULL_LOG)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
-	button = gtk_radio_button_new_with_label(group,"Custom Format");
+	button = gtk_radio_button_new_with_label(group,"Custom ");
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(set_logging_mode),
 			GINT_TO_POINTER(CUSTOM_LOG));
 	if (logging_mode == CUSTOM_LOG)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
-	frame = gtk_frame_new("Logging Delimiters ");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	frame = gtk_frame_new("Logging Delimiter");
+	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox2), 5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	table = gtk_table_new(1,4,TRUE);
+	table = gtk_table_new(1,3,FALSE);
 	delim_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),15);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 
-	button = gtk_radio_button_new_with_label(NULL,"Comma Delimited");
+	button = gtk_radio_button_new_with_label(NULL,"Comma");
 	comma_delim_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(COMMA));
@@ -259,12 +267,12 @@ void build_datalogging(GtkWidget *parent_frame)
 		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(COMMA));
 	}
 
-	button = gtk_radio_button_new_with_label(group,"Tab Delimited");
+	button = gtk_radio_button_new_with_label(group,"Tab");
 	tab_delim_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(TAB));
@@ -277,12 +285,12 @@ void build_datalogging(GtkWidget *parent_frame)
 		g_signal_emit_by_name(button,"toggled",GINT_TO_POINTER(TAB));
 	}
 
-	button = gtk_radio_button_new_with_label(group,"Space Delimited");
+	button = gtk_radio_button_new_with_label(group,"Space");
 	space_delim_button = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
+			(GtkAttachOptions) (0), 0, 0);
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(SPACE));

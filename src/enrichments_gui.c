@@ -44,7 +44,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	GtkWidget *table;
 	GtkWidget *ebox;
 	gchar *string;
-	GSList *group;
 	GtkAdjustment *adj;
 	GtkWidget *spinner;
 	extern GtkTooltips *tip;
@@ -58,7 +57,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,5);
 	gtk_tooltips_set_tip(tip,ebox,"   The Cranking Pulsewidth determines how many milliseconds the injectors are pulsed open ONLY during engine crank-over.  Currently the ms is hardcoded to consider cranking to be from 0-300 RPM, above that it considers the engine running and uses the VEtable entries instead.  There are two fields, the enrichment at -40deg Fahreheit (-40\302\260 C as well) and at 170deg F (76.6 deg C).  At temperatures between these extremes the MS code interpolates the value.  The priming pulse is a one time pulse upon bootup of the MS unit.  This is similar in concept to pumping the gas pedel on an old carbureted car to get the accel pump to shoot at little extra in to assist with starting though the MS only does this once at startup.  Some engines need this more than others. (rotary engines especially)  You may not need thie priming pulse...",NULL);
 	frame = gtk_frame_new("Cranking Pulsewidth (ms)");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -76,7 +75,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[64] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(64));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -102,7 +100,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[65] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(65));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -128,7 +125,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[119] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(119));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -148,7 +144,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,5);
 	gtk_tooltips_set_tip(tip,ebox,"   The Afterstart enrichment is a short term enrichment that increases the delivered fuel to the engine by the Enrichment percentage for a certain number of ignition cycles.  The enrichment tapers down for each cycle. (ignition pulse inputted into the MS ecu).  This can be shown on the runtime page after engine startup.  The Warmup enrichment bar tapers down during the afterstart enrichment period. (and the AS_ENRICH box is \"lit\") A max of 255 cycles can be entered for the Afterstart enrichment.",NULL);
 	frame = gtk_frame_new("Afterstart Enrich");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -166,7 +162,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[66] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(66));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
@@ -192,7 +187,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[67] = spinner;
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(67));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
@@ -224,7 +218,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
 	table = gtk_table_new(3,10,FALSE);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 3);
@@ -237,7 +231,6 @@ void build_enrichments(GtkWidget *parent_frame)
 		ve_widgets->widget[WARMUP_BINS_OFFSET+i] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(WARMUP_BINS_OFFSET+i));
 		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -288,7 +281,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
-	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
+	gtk_table_set_row_spacing(GTK_TABLE(table),1,7);
 
 	/* TPS trigger threashold */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
@@ -296,7 +289,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[83] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner), "offset", 
 			GINT_TO_POINTER(83));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -323,7 +315,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[84] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(84));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -349,7 +340,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[82] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(82));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -375,7 +365,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[123] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(123));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
@@ -422,7 +411,6 @@ void build_enrichments(GtkWidget *parent_frame)
 		ve_widgets->widget[ACCEL_BINS_OFFSET+i] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-		g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 		g_object_set_data(G_OBJECT(spinner),"offset", 
 				GINT_TO_POINTER(ACCEL_BINS_OFFSET+i));
 		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -446,11 +434,11 @@ void build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (0), 0, 0);
 	}
 
-	table = gtk_table_new(2,3,FALSE);
+	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 3);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,10);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
 
 	/* Decel Cut % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
@@ -458,7 +446,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[85] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(85));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
@@ -474,16 +461,16 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Decel Fuel Cut(%)");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (0), 15, 0);
 
 
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"    First off select the type of O2 sensors you are using, most vehicles have a standard Narrow Band (1,2,3 or 4 wire sensor). Wide-Band sensors are available but require dedicated controller hardware to output the proper signals that refer to the O<sub>2</sub> content in the exhaust.  The Coolant Temp Activation is the minimum temp that the engine must reach before O2 correction is enabled.  The EGO Active RPM is the minimum RPM that must be exceeded before O2 correction is enabled.  Both this and the minimum temp must be reached before this feature is enabled.  The EGO switching voltage is typically set to your target AFR voltage.  For NarrowBand sensors that is about .45 Volts (for stoich), and about 2.5 Volts for Wideband (but your controller may output a different voltage consult your WB controller documentation). The EGO step is the amount of percentage change the fuel will be altered by the MS to correct a lean/rich condition. The higher the number the faster the MS will adjust, but this may cause oscillation if set too high.  See the FAQ for tips on tuning.  The # of ignition events between steps determines how fast the ECU reacts to mixture changes.  The EGO +- limit is the maximum deviation the MS will allow. (the better your VE table is set the lower this can be set).",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"    The oxygen sensor type is set on the \"Engine Vitals\" Tab.  The Coolant Temp Activation is the minimum temp that the engine must reach before O2 correction is enabled.  The EGO Active RPM is the minimum RPM that must be exceeded before O2 correction is enabled.  Both this and the minimum temp must be reached before this feature is enabled.  The EGO switching voltage is typically set to your target AFR voltage.  For NarrowBand sensors that is about .45 Volts (for stoich), and about 2.5 Volts for Wideband (but your controller may output a different voltage, so consult your WB controller documentation). The EGO step is the amount of percentage change the fuel will be altered by the MS to correct a lean/rich condition. The higher the number the faster the MS will adjust, but this may cause oscillation if set too high.  See the FAQ for tips on tuning.  The # of ignition events between steps determines how fast the ECU reacts to mixture changes (RPM dependant,  high RPM = faster convergence).  The EGO +- limit is the maximum deviation the MS will allow. (the better your VE table is set the lower this can be set).",NULL);
 	frame = gtk_frame_new(NULL);
 	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label),
@@ -493,61 +480,14 @@ void build_enrichments(GtkWidget *parent_frame)
 
 	vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox3);
-	/* O2 Sensor Type selector */
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,10);
-	gtk_widget_set_size_request(table,-1,30);
 
-
-	label = gtk_label_new(NULL);
-	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> Sensor Type");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Narrow-Band");
-	buttons.nbo2_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"Wide-Band");
-	buttons.wbo2_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,TRUE,TRUE,0);
-
+	/* EGO feedback parameters... */
 
 	table = gtk_table_new(6,2,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
 	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
 	gtk_table_set_row_spacing(GTK_TABLE(table),3,10);
 
@@ -559,7 +499,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[86] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(86));
 	g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -588,7 +527,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[120] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(120));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(100*100));
@@ -614,7 +552,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[122] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(122));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(51*100));
@@ -640,7 +577,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[88] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(88));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
@@ -667,7 +603,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[87] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(87));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
@@ -694,7 +629,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	ve_widgets->widget[89] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(89));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));

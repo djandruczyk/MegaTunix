@@ -26,9 +26,11 @@ struct DynamicButtons buttons;
 extern struct Ve_Widgets *ve_widgets;
 extern GdkColor black;
 
-void build_constants(GtkWidget *parent_frame)
+void build_constants_2(GtkWidget *parent_frame)
+{}
+
+void build_constants_1(GtkWidget *parent_frame)
 {
-	GtkWidget *sep;
 	GtkWidget *button;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
@@ -40,7 +42,6 @@ void build_constants(GtkWidget *parent_frame)
 	GtkWidget *spinner;
 	GtkWidget *ebox;
 	GtkAdjustment *adj;
-	GSList	*group;
 	extern GList *store_buttons;
 	extern GtkTooltips *tip;
 
@@ -88,7 +89,6 @@ void build_constants(GtkWidget *parent_frame)
 	spinners.req_fuel_total_spin = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(90));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -136,7 +136,6 @@ void build_constants(GtkWidget *parent_frame)
 	ve_widgets->widget[93] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
 	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
@@ -162,7 +161,6 @@ void build_constants(GtkWidget *parent_frame)
 	ve_widgets->widget[97] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(60*100));
@@ -203,7 +201,6 @@ void build_constants(GtkWidget *parent_frame)
 	ve_widgets->widget[95] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(95));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(1*100));
@@ -230,7 +227,6 @@ void build_constants(GtkWidget *parent_frame)
 	ve_widgets->widget[96] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -253,394 +249,12 @@ void build_constants(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,"   The Fast idle temp is the temperature at which if the engine is BELOW this threshold the fast idle solenoid will be activated.",NULL);
-	frame = gtk_frame_new("Fast Idle Control");
-	gtk_container_add(GTK_CONTAINER(ebox),frame);
-
-	table = gtk_table_new(2,2,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_container_add(GTK_CONTAINER(frame),table);
-
-	/* Fast Idle Temp Threshold */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
-	adjustments.fast_idle_temp_adj = adj;
-	spinner = gtk_spin_button_new(adj,0,0);
-	spinners.fast_idle_thresh_spin = spinner;
-	ve_widgets->widget[121] = spinner;
-	gtk_widget_set_size_request(spinner,60,-1);
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
-	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-			GINT_TO_POINTER(40*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
-	g_object_set_data(G_OBJECT(spinner),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(GENERIC));
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Fast Idle Threshold (\302\260 F.)");
-	labels.fastidletemp_lab = label;
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
-	frame = gtk_frame_new("Injection Control");
-	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
-
-	/* Injection Control Section */
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox3);
-
-	/* Fuel Injection Control Strategy */
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   This selects the mode by which the MegaSquirt ECU calculates the fuel the engine gets.  The two choices are \"Alpha-N\" which uses RPM and the throttle position as the main variables (engine temp,air temp and O2 are also utilized as well).  The other more commonly used mode is \"Speed Density\" which uses the MAP sensor as the primary input to the ECU (all off the other inputs are used as well, but the MAP sensor is essential for this mode to function).  Speed Density is the more commonly used of the two systems.  Alpha-N is only typically used when the vacuum signal from the engine is extremeley poor. (as in some race engines).",NULL);
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
-
-	label = gtk_label_new("Fuel Injection Control Strategy (Table 1)");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Speed Density");
-	buttons.speed_den_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"Alpha-N");
-	buttons.alpha_n_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
-
-	/* Injection Type selectors */
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The two modes for injecting fuel are via a \"Throttle Body\" which looks very similar to a carburetor and can bolt up in place of a former carb on many engines, and \"Multi-Point\" which just has the injectors mounted on the intake manifold (usually pointing at the intake valves).  If you have your injectors mounted to a fuel rail and pointing at the backsides of your intake valves, you have Multi-Point,  if you have your injector(s) in what looks like a simpler carburetor then you have a TBI setup",NULL);
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
-
-	label = gtk_label_new("Injection Type");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Multi-Port");
-	buttons.multi_port_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
-	buttons.tbi_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
-
-	/* Engine stroke selectors */
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   Pretty simple here, is your engine 2 stroke or 4 stroke. (4 stroke is the correct answer for 99% of people out there unless you're MS'ing an old motorcycle, or an outboard boat motor)",NULL);
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
-
-	label = gtk_label_new("Engine Stroke");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Four-Stroke");
-	buttons.four_stroke_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
-	buttons.two_stroke_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
-
-	/* Engine Firing Type selectors */
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   Most engines are Even-Fire, this means that the firing order is evenly spaced in crank degrees.  For example most V8's fires a cylinder every 90 degrees of crankshaft rotation.  Some engines, like GM's oddfire V6 and some european engines fire at odd measures of crankshaft rotation (not every 60 or 90 degrees), as do Harley Davidson V-twin motorcycle engines.",NULL);
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
-
-	label = gtk_label_new("Engine Type");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Even Fire");
-	buttons.even_fire_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"Odd Fire");
-	buttons.odd_fire_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
-
-	/* MAP Sensor Type selectors */
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The version 1 MS kits were available with either a 1 Bar map sensor (NA) or a 2.5 Bar Sensor (Turbo).  The Version 2's and later were only available with the 2.5 Bar sensor. Select the appropriate sensor that you have",NULL); 
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
-
-	label = gtk_label_new("MAP Sensor Type");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"115 kPa");
-	buttons.map_115_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"250 kPa");
-	buttons.map_250_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
-
-	/* Baro Correction Selectors */
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   Do you want to use barometer correction?  If this is enabled, on power up of the MS, it will read the MAP sensor (before the engine hopefully is cranked over) and store this value as the reference barometer and use this to compensate for altitude changes,  Beware that if your MegaSquirt ECU resets when the engine is running due to power problems, this will cause it to record an erroneous value and skew the fuel calculations.",NULL);
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
-
-	label = gtk_label_new("Barometer Correction");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Enabled");
-	buttons.baro_ena_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"Disabled");
-	buttons.baro_disa_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(IMMEDIATE));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),sep,FALSE,TRUE,0);
-
-	/* Injector Staging */
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox3),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The MS has two injector drivers which can drive multiple injectors each,  Do you want to fire both banks at once (Simultaneous), or do you want them to alternate?  Some engines perform better one way over another.  This also works hand in hand with the number of squirts settable below.  This requires a little trial and error,  beware that if you increase the number of squirts below, each squirt is shorter and if you get too small it may become difficult to tune easily..",NULL);
-	table = gtk_table_new(2,2,TRUE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),0);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
-
-	label = gtk_label_new("Injector Staging");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_radio_button_new_with_label(NULL,"Simultaneous");
-	buttons.simul_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(DEFERRED));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	button = gtk_radio_button_new_with_label(group,"Alternate");
-	buttons.alternate_but = button;
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
-	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-	g_object_set_data(G_OBJECT(button),"dl_type",
-			GINT_TO_POINTER(DEFERRED));
-	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 10, 0);
-	g_signal_connect(G_OBJECT(button),"toggled",
-			G_CALLBACK(bitmask_button_handler),
-			NULL);
-
-	/* Injection Control cyls/injectors, etc.. */
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   You can select the number of times to inject fuel per cycle.  A cycle refers to one complete engine cycle (2 revs of a crank on a 4 stroke piston engine). The number of injectors and the number of cylinders.  These choices determine how long each injector pulse is. (don't get too low), and how often they are fired. You will probably find that more or less squirts (depending on the engine and injection type (Multi-point or TBI) can significantly affect your idle quality.  The MS FAQ describes this better and offers suggestions as to the best optiosn to choose.",NULL);
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 	frame = gtk_frame_new("Cylinder/Injection Configuration");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -656,7 +270,6 @@ void build_constants(GtkWidget *parent_frame)
 	spinners.inj_per_cycle_spin = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(91));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -684,7 +297,6 @@ void build_constants(GtkWidget *parent_frame)
 	spinners.injectors_spin = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(117));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -713,7 +325,6 @@ void build_constants(GtkWidget *parent_frame)
 	adjustments.cylinders_adj = adj;
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(116));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",

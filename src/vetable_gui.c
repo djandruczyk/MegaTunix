@@ -26,6 +26,8 @@ extern struct Ve_Widgets *ve_widgets;
 
 void build_vetable(GtkWidget *parent_frame)
 {
+	gint x,y;
+	gint index;
 	GtkWidget *sep;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
@@ -39,8 +41,7 @@ void build_vetable(GtkWidget *parent_frame)
 	GtkWidget *swin;
 	GtkAdjustment *adj;
 	extern GList *store_buttons;
-	gint x,y;
-	gint index;
+	extern GList *dt_controls;
 	extern GtkTooltips *tip;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -224,7 +225,7 @@ void build_vetable(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
-	misc.vetable2 = hbox;
+	dt_controls = g_list_append(dt_controls,(gpointer)hbox);
 	gtk_widget_set_sensitive(hbox,FALSE);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
 

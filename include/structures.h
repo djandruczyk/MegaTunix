@@ -74,7 +74,6 @@ struct DynamicMisc
 	GtkWidget *warmwizard_table;
         GtkWidget *status[7];           /* Status boxes */
         GtkWidget *ww_status[7];           /* Status boxes */
-	GtkWidget *vetable2;
 };
 
 /* this is required so we keep track of the gui controls so we
@@ -82,7 +81,8 @@ struct DynamicMisc
  */
 struct DynamicSpinners
 {
-	GtkWidget *fast_idle_thresh_spin;	/* Spinner */
+	GtkWidget *fast_idle_temp_spin;		/* Spinner */
+	GtkWidget *slow_idle_temp_spin;		/* Spinner */
 	GtkWidget *req_fuel_total_spin;		/* Spinner */
 	GtkWidget *req_fuel_per_squirt_spin;	/* Spinner */
 	GtkWidget *ego_temp_active_spin;	/* Spinner */
@@ -137,7 +137,8 @@ struct DynamicLabels
 	GtkWidget *squirts_lab;
 	GtkWidget *injectors_lab;
 	GtkWidget *cylinders_lab;
-	GtkWidget *fastidletemp_lab;
+	GtkWidget *fast_idle_temp_lab;
+	GtkWidget *slow_idle_temp_lab;
 	GtkWidget *cr_pulse_lowtemp_lab;
 	GtkWidget *cr_pulse_hightemp_lab;
 	GtkWidget *warmup_bins_lab[10];
@@ -162,6 +163,7 @@ struct DynamicLabels
 struct DynamicAdjustments
 {
 	GtkAdjustment *fast_idle_temp_adj;
+	GtkAdjustment *slow_idle_temp_adj;
 	GtkAdjustment *ego_temp_adj;
 	GtkAdjustment *cylinders_adj;		/* Adjustment */
 };

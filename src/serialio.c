@@ -203,8 +203,6 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request one batch of realtime vars */
-//		if (dualtable)
-//			set_ms_page(0);
 		res = write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
