@@ -18,6 +18,12 @@
 #include <globals.h>
 #include <gui_handlers.h>
 #include <logviewer_gui.h>
+#include <structures.h>
+
+static gint max_viewables = 0;
+static gint total_viewables = 0;
+struct Logables viewables;
+
 
 void build_logviewer(GtkWidget *parent_frame)
 {
@@ -85,8 +91,8 @@ void present_lviewer_choices()
 	gint table_rows;
 	gint table_cols = 5;
 	/* basty hack to prevent a compiler warning... */
-	gint max = sizeof(mt_compat_names)/sizeof(gchar *);
-	max = sizeof(logable_names)/sizeof(gchar *);
+	max_viewables = sizeof(mt_compat_names)/sizeof(gchar *);
+	max_viewables = sizeof(logable_names)/sizeof(gchar *);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(window),575,300);
@@ -106,8 +112,8 @@ void present_lviewer_choices()
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox);
 
-	max = sizeof(logable_names)/sizeof(gchar *);
-	table_rows = ceil((float)max/(float)table_cols);
+	max_viewables = sizeof(logable_names)/sizeof(gchar *);
+	table_rows = ceil((float)max_viewables/(float)table_cols);
 	table = gtk_table_new(table_rows,table_cols,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
@@ -116,13 +122,15 @@ void present_lviewer_choices()
 
 	j = 0;
 	k = 0;
-	for (i=0;i<max;i++)
+	for (i=0;i<max_viewables;i++)
 	{
 		button = gtk_check_button_new_with_label(logable_names[i]);
 		gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
-		//logables.widgets[i] = button;
-		//              if ((dualtable) && (i >= STD_LOGABLES))
-		//                      gtk_widget_set_sensitive(button,FALSE);
+		if (viewables.index[i] == TRUE)
+        		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
+			
+		viewables.widgets[i] = button;
+
 		g_object_set_data(G_OBJECT(button),"index",
 				GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -155,5 +163,24 @@ void present_lviewer_choices()
 
 gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
+	gint index = 0;
+        gint i = 0;
+
+        index = (gint)g_object_get_data(G_OBJECT(widget),"index");
+
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+                viewables.index[index] = TRUE;
+        else
+                viewables.index[index] = FALSE;
+
+        total_viewables = 0;
+        for (i=0;i<max_viewables;i++)
+        {
+                if (viewables.index[i])
+                        total_viewables++;
+        }
+
+	printf("total viewables is %i\n",total_viewables);
+
 	return TRUE;
 }
