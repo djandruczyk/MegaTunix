@@ -22,6 +22,12 @@
 #include "globals.h"
 
 
+int read_wait_time;	/* delay between reads in milliseconds */	
+pthread_t raw_input_thread;     /* thread handle */
+int raw_reader_running;         /* flag for thread */
+int raw_reader_stopped;         /* flag for thread */
+
+
 int serial_raw_thread_starter()
 {
 	/* Spawns the thread that reads realtime vars data from the MS box */

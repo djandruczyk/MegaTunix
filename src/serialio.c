@@ -23,6 +23,10 @@
 #include "globals.h"
 
 
+extern int raw_reader_running;
+extern int raw_reader_stopped;
+extern GtkWidget *ser_statbar;
+extern int ser_context_id;
        
 int open_serial(int port_num)
 {

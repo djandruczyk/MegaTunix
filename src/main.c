@@ -20,6 +20,7 @@
 #include "protos.h"
 #include "globals.h"
 
+int def_comm_port;
 
 int main(int argc, char ** argv)
 {
@@ -40,7 +41,6 @@ int main(int argc, char ** argv)
 
 	setup_gui();		/* THIS DOES NOT return until you close
 				 * the program!!! */
-	ready = 1;
 	gtk_main();
 	return (0) ;
 }

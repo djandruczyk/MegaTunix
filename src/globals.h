@@ -18,11 +18,6 @@
 #include <termios.h>
 #include <gtk/gtk.h>
 
-/* I/O related */
-int def_comm_port;		/* default com port (DOS/WIN32 style) */
-int read_wait_time;		/* Time delay between rawreads (milliseconds) */
-int reset_count;		/* number of MS Power resets */
-
 struct Serial_Params
 {
 	int fd;			/* File descriptor */
@@ -35,24 +30,7 @@ struct Serial_Params
 	int errcount;		/* Serial I/O errors read error count */
 } serial_params;
 
-/* Thread related */
-pthread_t raw_input_thread;	/* thread handle */
-int raw_reader_running;		/* flag for thread */
-int raw_reader_stopped;		/* flag for thread */
-int just_starting;		/* to handle errors */
-
 /* Data storage */
 struct ms_data_v1_and_v2 out;		/* processed data structure */
 struct ms_raw_data_v1_and_v2 *raw;	/* RAW data pointer */
 
-/* GUI */
-int width;				/* main window width */
-int height;				/* main window height */
-int def_width;				/* main window default width */
-int def_height;				/* main window default height */
-GtkWidget	*main_window;		/* main window object */
-int main_x_origin;			/* main window position */
-int main_y_origin;			/* main window position */
-int ready;
-GtkWidget *ser_statbar;			/* serial statusbar */ 
-int ser_context_id;			/* for ser_statbar */

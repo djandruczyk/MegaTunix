@@ -22,6 +22,8 @@
 
 
 static int lastcount=0;
+int reset_count;
+int just_starting;
        
 void handle_ms_data(int which_data)
 {

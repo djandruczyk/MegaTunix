@@ -20,6 +20,8 @@
 #include "globals.h"
 
 
+extern int raw_reader_running;
+extern int raw_reader_stopped;
 
 void leave(GtkWidget *widget, gpointer *data)
 {

@@ -25,13 +25,23 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
+extern int def_comm_port;
+extern int read_wait_time;
+extern int reset_count;
+extern int just_starting;
+extern int raw_reader_running;
+extern int raw_reader_stopped;
+extern int main_x_origin;
+extern int main_y_origin;
+extern int width;
+extern int height;
+extern GtkWidget *main_window;
 
 void init()
 {
 	/* initialize all global variables to known states */
-	ready = 0;
 	serial_params.fd = 0; /* serial port file-descriptor */
-	def_comm_port = 2; /* DOS/WIN32 style, COM1 default */
+	def_comm_port = 1; /* DOS/WIN32 style, COM1 default */
 	serial_params.errcount = 0; /* I/O error count */
 	serial_params.poll_timeout = 40; /* poll wait time in milliseconds */
 		/* default for MS V 1.1 and 2.2 */
@@ -41,12 +51,10 @@ void init()
 	read_wait_time = 1000;	/* delay between reads in milliseconds */
 	just_starting = 1; 	/* to handle initial errors */
 	reset_count = 0; 	/* to handle initial errors */
-	def_width = 640;		/* default window width */
-	def_height=480;		/* default window height */
 	width = 640;		/* default window width */
-	height=480;		/* default window height */
-	main_x_origin=160;	/* offset from left edge of screen */
-	main_y_origin=120;	/* offset from top edge of screen */
+	height = 480;		/* default window height */
+	main_x_origin = 160;	/* offset from left edge of screen */
+	main_y_origin = 120;	/* offset from top edge of screen */
 
 	
 }

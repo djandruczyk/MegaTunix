@@ -20,6 +20,8 @@
 #include "protos.h"
 #include "globals.h"
 
+GtkWidget *ser_statbar;                 /* serial statusbar */ 
+int ser_context_id;                     /* for ser_statbar */
 
 int build_comms(GtkWidget *parent_frame)
 {
