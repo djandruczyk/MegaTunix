@@ -21,10 +21,12 @@
 #include <init.h>
 #include <main.h>
 #include <serialio.h>
+#include <structures.h>
 
 
 gint def_comm_port;
 extern gboolean fahrenheit;
+extern struct Serial_Params serial_params;
 gboolean ready = FALSE;
 
 int main(int argc, char ** argv)

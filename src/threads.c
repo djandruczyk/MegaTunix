@@ -23,6 +23,7 @@
 #include <runtime_gui.h>
 #include <stdio.h>
 #include <string.h>
+#include <structures.h>
 #include <sys/poll.h>
 #include <threads.h>
 #include <unistd.h>
@@ -33,7 +34,8 @@ gboolean raw_reader_running;			/* flag for thread */
 gboolean raw_reader_stopped;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern gint ser_context_id;			/* Statusbar related */
-extern struct v1_2_Runtime_Gui runtime_data;
+extern struct Runtime_Widgets runtime_data;
+extern struct Serial_Params serial_params;
 extern GtkWidget *ser_statbar;			/* Statusbar */
 char buff[60];
 

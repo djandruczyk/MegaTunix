@@ -32,12 +32,13 @@
 extern gboolean raw_reader_running;
 extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
+extern struct Runtime_Widgets runtime_data;
+extern struct Ve_Const_Std *ve_constants;
+extern struct Ve_Const_Std *ve_const_tmp;
+struct Serial_Params serial_params;
+gboolean connected;
 char buff[60];
 static gboolean burn_needed = FALSE;
-extern struct v1_2_Runtime_Gui runtime_data;
-extern struct ve_const_std *ve_constants;
-extern struct ve_const_std *ve_const_tmp;
-gboolean connected;
        
 void open_serial(int port_num)
 {
@@ -288,9 +289,27 @@ void read_ve_const()
 	else		/* Data arrived */
 	{
 		connected = TRUE;
-		res = handle_ms_data(VE_AND_CONSTANTS);
+		res = handle_ms_data(VE_AND_CONSTANTS_1);
 		
 	}
+	/*	 Dualtable not ready yet... 
+	if (dualtable)
+	{
+		res = write(serial_params.fd,"P1V",1);
+		res = poll (&ufds,1,serial_params.poll_timeout*20);
+		if (res == 0)	// Error 
+		{
+			serial_params.errcount++;
+			connected = FALSE;
+		}
+		else		// Data arrived 
+		{
+			connected = TRUE;
+			res = handle_ms_data(VE_AND_CONSTANTS_2);
+
+		}
+	}
+	*/
 	gtk_widget_set_sensitive(runtime_data.status[CONNECTED],
 			connected);
 
@@ -370,7 +389,7 @@ void write_ve_const(gint value, gint offset, gint page)
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
-	res = memcmp(ve_const_tmp,ve_constants,sizeof(struct ve_const_std));
+	res = memcmp(ve_const_tmp,ve_constants,sizeof(struct Ve_Const_Std));
 	if (res == 0)
 	{
 		set_store_black();
@@ -394,7 +413,7 @@ void burn_flash()
 	write (serial_params.fd,"B",1);	/* Send Burn command */
 
 	/* sync temp buffer with current VE_constants */
-	memcpy(ve_const_tmp,ve_constants,sizeof(struct ve_const_std));
+	memcpy(ve_const_tmp,ve_constants,sizeof(struct Ve_Const_Std));
 	/* Take away the red on the "Store" button */
 	set_store_black();
 	burn_needed = FALSE;

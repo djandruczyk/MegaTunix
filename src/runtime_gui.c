@@ -21,8 +21,8 @@
 #include <structures.h>
 
 
-struct v1_2_Runtime_Gui runtime_data;
-extern struct Counts counts;
+struct Runtime_Widgets runtime_data;
+extern struct DynamicCounts counts;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
 gboolean force_status_update = TRUE;
@@ -31,7 +31,7 @@ extern gboolean fahrenheit;
 extern gboolean forced_update;
 extern GdkColor white;
 extern GdkColor black;
-extern struct Labels labels;
+extern struct DynamicLabels labels;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 
@@ -632,8 +632,8 @@ void update_runtime_vars()
 	char buff[120];
 	gfloat tmpf;
 	gint tmpi;
-	extern struct runtime_std *runtime;
-	extern struct runtime_std *runtime_last;
+	extern struct Runtime_Std *runtime;
+	extern struct Runtime_Std *runtime_last;
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?

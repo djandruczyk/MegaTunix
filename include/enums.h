@@ -39,7 +39,8 @@ typedef enum
 typedef enum
 {
 	REALTIME_VARS,
-	VE_AND_CONSTANTS,
+	VE_AND_CONSTANTS_1,
+	VE_AND_CONSTANTS_2,
 	IGNITION_VARS,
 	RAW_MEMORY
 }InputData;

@@ -19,9 +19,8 @@
 #include <structures.h>
 #include <vetable_gui.h>
 
-extern struct v1_2_Constants constants;
-extern struct ms_ve_constants_v1_and_v2 ve_constants;
-extern struct Buttons buttons;
+extern struct Table1_Widgets constants;
+extern struct DynamicButtons buttons;
 GtkWidget *map_tps_frame;
 GtkWidget *map_tps_label;
 extern GtkWidget *veconst_widgets_1[];

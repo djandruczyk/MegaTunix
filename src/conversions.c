@@ -37,9 +37,9 @@ extern unsigned char * ve_const_arr;
 struct Conversion_Chart std_conversions;
 extern GtkWidget * veconst_widgets_1[];
 extern GtkWidget * veconst_widgets_2[];
-extern struct Labels labels;
-extern struct Adjustments adjustments;
-extern struct v1_2_Constants constants;
+extern struct DynamicLabels labels;
+extern struct DynamicAdjustments adjustments;
+extern struct Table1_Widgets constants;
 
 
 void read_conversions(void)

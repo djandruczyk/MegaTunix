@@ -21,7 +21,7 @@
 int build_tools(GtkWidget *parent_frame)
 {
         GtkWidget *vbox;
-        GtkWidget *label;
+//        GtkWidget *label;
         GtkWidget *frame;
         GtkWidget *table;
         GtkWidget *button;
@@ -39,7 +39,7 @@ int build_tools(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),table);
 	
 
-	button = gtk_button_new_with_label("Export VEtable(s)");
+	button = gtk_button_new_with_label("Export VE Table(s)");
         g_signal_connect (G_OBJECT(button), "clicked",
                         G_CALLBACK (std_button_handler),
                         GINT_TO_POINTER(EXPORT_VETABLE));
@@ -47,7 +47,7 @@ int build_tools(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
-	button = gtk_button_new_with_label("Import VEtable(s)");
+	button = gtk_button_new_with_label("Import VE Table(s)");
         g_signal_connect (G_OBJECT(button), "clicked",
                         G_CALLBACK (std_button_handler),
                         GINT_TO_POINTER(IMPORT_VETABLE));

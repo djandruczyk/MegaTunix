@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <structures.h>
 #include <threads.h>
+#include <vex_support.h>
 
 extern gint req_fuel_popup;
 extern unsigned char *kpa_conversion;
@@ -42,11 +43,13 @@ extern gchar *delim;
 extern gboolean raw_reader_running;
 extern gboolean raw_reader_stopped;
 extern gint read_wait_time;
-extern struct ve_const_std *ve_constants;
-extern struct v1_2_Constants constants;
+extern struct Ve_Const_Std *ve_constants;
+extern struct Table1_Widgets constants;
+//extern struct Table2_Widgets constants_2;
 extern struct Reqd_Fuel reqd_fuel;
-extern struct Labels labels;
+extern struct DynamicLabels labels;
 extern struct Logables logables;
+extern struct Serial_Params serial_params;
 extern gboolean connected;
 extern gboolean force_status_update;
 extern gfloat ego_pbar_divisor;
@@ -345,10 +348,10 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			stop_datalogging();
 			break;
 		case EXPORT_VETABLE:
-			printf("export VEtable\n");
+			vetable_export();
 			break;
 		case IMPORT_VETABLE:
-			printf("import VEtable\n");
+			vetable_import();
 			break;
 	}
 	return TRUE;

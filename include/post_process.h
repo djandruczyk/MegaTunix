@@ -18,7 +18,7 @@
 #include <globals.h>
 
 /* Prototypes */
-void post_process(struct raw_runtime_std *, struct runtime_std * );
+void post_process(void *, void * );
 /* Prototypes */
 
 #endif

@@ -21,19 +21,6 @@
 #include <termios.h>
 #include <gtk/gtk.h>
 
-struct Serial_Params
-{
-	int fd;			/* File descriptor */
-	int comm_port;		/* DOS/Windows COM port number, 1-8 typically */
-	int open;		/* flag, 1 for open 0 for closed */
-	int poll_timeout;	/* Pollng interval in MILLISECONDS */
-	int read_wait;		/* time delay between each read */
-	int raw_bytes;		/* number of bytes to read for realtime vars */
-	int veconst_size;	/* Size of VEtable/constants datablock */
-	struct termios oldtio;	/* serial port settings before we touch it */
-	struct termios newtio;	/* serial port settings we use when running */
-	int errcount;		/* Serial I/O errors read error count */
-} serial_params;
 /* Megasquirt constants defined in C provided by Perry Harrington */
  
 /* If you are using GCC, the bitfield order is MSB first.  
@@ -119,7 +106,7 @@ union engine
 };
 #endif
  
-struct raw_runtime_std
+struct Raw_Runtime_Std
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
 	 * and fed into ms_data_v1_and_v2 (struct)
@@ -148,7 +135,7 @@ struct raw_runtime_std
 	unsigned char   bspot3;		/* Offset 21 */
 };
 
-struct raw_runtime_dualtable 
+struct Raw_Runtime_Dualtable 
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
 	 * and fed into ms_data_v1_and_v2 (struct)
@@ -177,7 +164,7 @@ struct raw_runtime_dualtable
 	unsigned char   idleDC;		/* Offset 21 */
 };
 
-struct runtime_std 
+struct Runtime_Std 
 {      
         unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
         union squirt    squirt;		/* Event variable bit field for Injector Firing */
@@ -207,7 +194,7 @@ struct runtime_std
         unsigned char   bspot3;		/* Blank Spot 3 */
 };
 
-struct runtime_dualtable 
+struct Runtime_Dualtable 
 {      
         unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
         union squirt    squirt;		/* Event variable bit field for Injector Firing */
@@ -301,7 +288,7 @@ union config13
         } bit;
 };
 
-struct ve_const_std
+struct Ve_Const_Std
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char   ve_bins[64];            /* 0, VE table, 64 bytes */
@@ -348,7 +335,7 @@ struct ve_const_std
         unsigned char   pad3;                   /* 126, Padding to 128 bytes */
         unsigned char   pad4;                   /* 127, Padding to 128 bytes */
 }; 
-struct ve_const_dualtable
+struct Ve_Const_Dualtable
 {
         /* TYPE          Variable              Offset,  Comment */
         unsigned char   ve_bins[64];            /* 0, VE table, 64 bytes */

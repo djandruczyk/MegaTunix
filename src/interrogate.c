@@ -20,15 +20,17 @@
 #include <globals.h>
 #include <interrogate.h>
 #include <string.h>
+#include <structures.h>
 #include <sys/stat.h>
 #include <sys/poll.h>
 #include <unistd.h>
 
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
+extern struct Serial_Params serial_params;
 gfloat ecu_version;
 const gchar *cmd_chars[] = {"A","C","Q","V","S","I"};
-struct Cmd_Results
+static struct Cmd_Results
 {
 	gchar *cmd_string;
 	gint count;

@@ -21,8 +21,15 @@
 extern unsigned char *kpa_conversion;
 extern gboolean fahrenheit;
 
-void post_process(struct raw_runtime_std *in, struct runtime_std *out)
+void post_process(void *input, void *output)
 {
+	/* Std code uses these structures.. 
+	 * We'll use a switch statement here after the dualtable
+	 * and Spark derivatives are added in here.. 
+	 */
+	struct Raw_Runtime_Std *in = input;
+	struct Runtime_Std *out = output;
+
 	out->secl = in->secl;
 	out->squirt.value = in->squirt.value;
 	out->engine.value = in->engine.value;

@@ -19,9 +19,9 @@
 
 extern GdkColor red;
 extern GdkColor black;
-extern struct Buttons buttons;
-extern struct Labels labels;
-extern struct v1_2_Constants constants;
+extern struct DynamicButtons buttons;
+extern struct DynamicLabels labels;
+extern struct Table1_Widgets constants;
 static gboolean warning_present = FALSE;
 
 

@@ -20,10 +20,10 @@
 #include <structures.h>
 
 
-extern struct v1_2_Constants constants;
-struct Adjustments adjustments;
-struct Labels labels;
-struct Buttons buttons;
+extern struct Table1_Widgets constants;
+struct DynamicAdjustments adjustments;
+struct DynamicLabels labels;
+struct DynamicButtons buttons;
 extern GtkWidget *veconst_widgets_1[];
 extern GdkColor black;
 

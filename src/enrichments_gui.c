@@ -19,10 +19,10 @@
 #include <gui_handlers.h>
 #include <structures.h>
 
-struct v1_2_Constants constants;
-extern struct Buttons buttons;
-extern struct Adjustments adjustments;
-extern struct Labels labels;
+struct Table1_Widgets constants;
+extern struct DynamicButtons buttons;
+extern struct DynamicAdjustments adjustments;
+extern struct DynamicLabels labels;
 extern GtkWidget *veconst_widgets_1[];
 const gchar *F_warmup_labels[] = {"-40","-20",  "0", "20", "40",
 			         "60", "80","100","130","160"};

@@ -18,6 +18,7 @@
 #include <init.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <structures.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -47,12 +48,13 @@ extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
-struct ve_const_std *ve_constants;
-struct ve_const_std *ve_const_tmp;
+extern struct Serial_Params serial_params;
+struct Ve_Const_Std *ve_constants;
+struct Ve_Const_Std *ve_const_tmp;
 char * ve_const_arr;
-struct raw_runtime_std *raw_runtime;
-struct runtime_std *runtime;
-struct runtime_std *runtime_last;
+struct Raw_Runtime_Std *raw_runtime;
+struct Runtime_Std *runtime;
+struct Runtime_Std *runtime_last;
 
 void init()
 {
@@ -179,12 +181,12 @@ void make_megasquirt_dirs(void)
 void mem_alloc()
 {
 
-	ve_const_tmp = malloc(sizeof(struct ve_const_std));
-	ve_constants = malloc(sizeof(struct ve_const_std));
-	ve_const_arr = malloc(sizeof(struct ve_const_std));
-	raw_runtime = malloc(sizeof(struct raw_runtime_std));
-	runtime = malloc(sizeof(struct runtime_std));
-	runtime_last = malloc(sizeof(struct runtime_std));
+	ve_const_tmp = malloc(sizeof(struct Ve_Const_Std));
+	ve_constants = malloc(sizeof(struct Ve_Const_Std));
+	ve_const_arr = malloc(sizeof(struct Ve_Const_Std));
+	raw_runtime = malloc(sizeof(struct Raw_Runtime_Std));
+	runtime = malloc(sizeof(struct Runtime_Std));
+	runtime_last = malloc(sizeof(struct Runtime_Std));
 	
 	//	printf("Allocating memory \n");
 }

@@ -21,6 +21,7 @@
 #include <serialio.h>
 #include <stdio.h>
 #include <string.h>
+#include <structures.h>
 #include <unistd.h>
 
 
@@ -31,11 +32,12 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
 extern gboolean raw_reader_running;
-extern struct raw_runtime_std *raw_runtime;
-extern struct runtime_std *runtime;
-extern struct runtime_std *runtime_last;
-extern struct ve_const_std *ve_constants;
-extern struct ve_const_std *ve_const_tmp;
+extern struct Serial_Params serial_params;
+extern struct Raw_Runtime_Std *raw_runtime;
+extern struct Runtime_Std *runtime;
+extern struct Runtime_Std *runtime_last;
+extern struct Ve_Const_Std *ve_constants;
+extern struct Ve_Const_Std *ve_const_tmp;
 extern unsigned char * ve_const_arr;
 //char * test_ptr;
        
@@ -94,7 +96,7 @@ int handle_ms_data(InputData which_data)
 			 * use elsewhere (datalogging)
 			 */
 			memcpy(raw_runtime,buf,
-					sizeof(struct raw_runtime_std));
+					sizeof(struct Raw_Runtime_Std));
 
 			/* Test for MS reset */
 			if (just_starting)
@@ -119,12 +121,13 @@ int handle_ms_data(InputData which_data)
 
 			/* copy last round to runtime_last for checking */
 			memcpy(runtime_last,runtime,
-					sizeof(struct runtime_std));
-			post_process(raw_runtime,runtime);
+					sizeof(struct Runtime_Std));
+
+			post_process((void *)raw_runtime,(void *)runtime);
 
 			break;
 
-		case VE_AND_CONSTANTS:
+		case VE_AND_CONSTANTS_1:
 			res = read(serial_params.fd,ptr,serial_params.veconst_size); 
 			/* the number of bytes expected for raw data read */
 			if (res != serial_params.veconst_size) 
@@ -143,21 +146,20 @@ int handle_ms_data(InputData which_data)
 				 * because the serial I/O thread depends on 
 				 * this function and blocks until we return.
 				 */
-//				printf("data read was not right size (%i)\n",res);
-//				close_serial();
-//				open_serial(serial_params.comm_port);
-//				setup_serial_params();
-//				return FALSE;
 			}
 			/* Two copies, working copy and temp for comparison
 			 * against to know if we have to burn stuff to flash
 			 */
-			memcpy(ve_constants,buf,sizeof(struct ve_const_std));
-			memcpy(ve_const_tmp,buf,sizeof(struct ve_const_std));
+			memcpy(ve_constants,buf,sizeof(struct Ve_Const_Std));
+			memcpy(ve_const_tmp,buf,sizeof(struct Ve_Const_Std));
 			ve_const_arr = (unsigned char *)ve_constants;
 			//test_ptr = (char *)ve_constants;
 			//printf("cr_pulse via array manip at -40 = %i\n",test_ptr[64]);
                         ms_ve_goodread_count++;
+			break;
+
+		case VE_AND_CONSTANTS_2:
+			printf("Dualtable not supported yet.. \n");
 			break;
 
 		case IGNITION_VARS:

@@ -39,7 +39,7 @@
 
 gint ms_type = 0;
 extern gint ready;
-extern struct raw_runtime_std *raw_runtime;
+extern struct Raw_Runtime_Std *raw_runtime;
 gboolean log_opened = FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;

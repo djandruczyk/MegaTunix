@@ -18,11 +18,75 @@
 
 #include <gtk/gtk.h>
 
+
+struct Serial_Params
+{
+        int fd;                 /* File descriptor */
+        int comm_port;          /* DOS/Windows COM port number, 1-8 typically */
+        int open;               /* flag, 1 for open 0 for closed */
+        int poll_timeout;       /* Pollng interval in MILLISECONDS */
+        int read_wait;          /* time delay between each read */
+        int raw_bytes;          /* number of bytes to read for realtime vars */
+        int veconst_size;       /* Size of VEtable/constants datablock */
+        struct termios oldtio;  /* serial port settings before we touch it */
+        struct termios newtio;  /* serial port settings we use when running */
+        int errcount;           /* Serial I/O errors read error count */
+};
+
+
+/* This structure contains all the gui pointers to the 
+ * objects used on the runtime_gui.  These are needed  
+ * so the handlers have something to reference when updating
+ * the widget in question when data arrives....
+ * A Struct was just more convienent and kept things together.
+ */
+
+struct Runtime_Widgets
+{
+        GtkWidget *secl_lab;            /* Counter label */
+        GtkWidget *ego_lab;             /* O2 Voltage */
+        GtkWidget *ego_pbar;            /* O2 Voltage bar */
+        GtkWidget *baro_lab;            /* baro label from MS */
+        GtkWidget *baro_pbar;           /* O2 Voltage bar */
+        GtkWidget *map_lab;             /* map label from MS */
+        GtkWidget *map_pbar;            /* map value for bar */
+        GtkWidget *mat_lab;             /* mat label from MS */
+        GtkWidget *mat_pbar;            /* map value for bar */
+        GtkWidget *clt_lab;             /* clt label from MS */
+        GtkWidget *clt_pbar;            /* map value for bar */
+        GtkWidget *tps_lab;             /* tps label from MS */
+        GtkWidget *tps_pbar;            /* map value for bar */
+        GtkWidget *batt_lab;            /* batt label from MS */
+        GtkWidget *batt_pbar;           /* map value for bar */
+        GtkWidget *egocorr_lab;         /* egocorr label from MS */
+        GtkWidget *egocorr_pbar;        /* egocorr label from MS */
+        GtkWidget *aircorr_lab;         /* aircorr label from MS */
+        GtkWidget *aircorr_pbar;        /* aircorr label from MS */
+        GtkWidget *warmcorr_lab;        /* warmcorr label from MS */
+        GtkWidget *warmcorr_pbar;       /* warmcorr label from MS */
+        GtkWidget *rpm_lab;             /* rpm label from MS */
+        GtkWidget *rpm_pbar;            /* rpm label from MS */
+        GtkWidget *pw_lab;              /* pw label from MS */
+        GtkWidget *pw_pbar;             /* pw label from MS */
+        GtkWidget *tpsaccel_lab;        /* tpsaccel label from MS */
+        GtkWidget *tpsaccel_pbar;       /* tpsaccel label from MS */
+        GtkWidget *barocorr_lab;        /* barocorr label from MS */
+        GtkWidget *barocorr_pbar;       /* barocorr label from MS */
+        GtkWidget *gammae_lab;          /* gammae label from MS */
+        GtkWidget *gammae_pbar;         /* gammae label from MS */
+        GtkWidget *vecurr_lab;          /* vecurr label from MS */
+        GtkWidget *vecurr_pbar;         /* vecurr label from MS */
+        GtkWidget *dcycle_lab;          /* vecurr label from MS */
+        GtkWidget *dcycle_pbar;         /* vecurr label from MS */
+        GtkWidget *status[7];           /* Status boxes */
+};
+
+
 /* this is required so we keep track of the gui controls so we
  * can update them easily with a generic function instead of
  * one function per control.... 
  */
-struct v1_2_Constants
+struct Table1_Widgets
 {
 	GtkWidget *inj_open_time_spin;		/* Spinner */
 	GtkWidget *batt_corr_spin;		/* Spinner */
@@ -93,7 +157,7 @@ struct Reqd_Fuel
 /* These are defined as they are semi-dynamic and are modified
  * during run of MegaTunix for status or units related reasons
  */
-struct Labels
+struct DynamicLabels
 {
 	GtkWidget *req_fuel_lab;
 	GtkWidget *squirts_lab;
@@ -112,7 +176,7 @@ struct Labels
 /* These are defined as they are semi-dynamic and are modified
  * during run of MegaTunix for status or units related reasons
  */
-struct Adjustments
+struct DynamicAdjustments
 {
 	GtkAdjustment *fast_idle_temp_adj;
 	GtkAdjustment *ego_temp_adj;
@@ -121,7 +185,7 @@ struct Adjustments
 /* These are defined here instead of the individual .c files as
  * we manipulate their attributes to give feedback to the user
  */
-struct Buttons
+struct DynamicButtons
 {
 	GtkWidget *const_store_but;
 	GtkWidget *enrich_store_but;
@@ -131,7 +195,7 @@ struct Buttons
 /* These are defined here instead of the individual .c files as
  * we manipulate their attributes to give feedback to the user
  */
-struct Counts
+struct DynamicCounts
 {
 	GtkWidget *comms_reset_entry;
 	GtkWidget *runtime_reset_entry;

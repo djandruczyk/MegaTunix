@@ -24,7 +24,7 @@
 #include <sys/poll.h>
 #include <unistd.h>
 
-struct Counts counts;
+struct DynamicCounts counts;
 gint ser_context_id;			/* for ser_statbar */
 GtkWidget *ser_statbar;			/* serial statusbar */ 
 extern gint read_wait_time;
@@ -33,6 +33,7 @@ extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gint ms_ve_goodread_count;
 extern GdkColor black;
+extern struct Serial_Params serial_params;
 gint poll_min;
 gint poll_step;
 gint poll_max;
