@@ -50,19 +50,19 @@ static struct
 	gchar *tab_name;	/* The Tab textual name for the main gui */
 	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
 } notebook_tabs[] = { 
-{ "About MegaTunix", ABOUT_PAGE, "About",TRUE},
-{ "General MegaTunix Settings", GENERAL_PAGE, "General",TRUE},
-{ "MegaSquirt Communications Parameters", COMMS_PAGE, "Communications",TRUE},
-{ "MegaSquirt Constants", CONSTANTS_PAGE, "Constants",TRUE},
-{ "MegaSquirt Enrichments", ENRICHMENTS_PAGE, "Enrichments",TRUE},
-{ "MegaSquirt VE Table(s)", VETABLES_PAGE, "VE Table(s)",TRUE},
-{ "MegaSquirt Ignition Settings", IGNITION_PAGE, "Ignition Settings",FALSE},
-{ "MegaSquirt Runtime Display", RUNTIME_PAGE, "Runtime Disp.",TRUE},
-{ "MegaSquirt Tuning", TUNING_PAGE, "Tuning",TRUE},
-{ "MegaSquirt Tools", TOOLS_PAGE, "Tools",TRUE},
-{ "MegaSquirt Advanced Diagnostics", LOWLEVEL_PAGE, "Low-Level",TRUE},
-{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "DataLogging",TRUE},
-{ "MegaSquirt Warmup Wizard", WARMWIZARD_PAGE, "Warmup Wizard",TRUE}
+{ "About MegaTunix", ABOUT_PAGE, "_About",TRUE},
+{ "General MegaTunix Settings", GENERAL_PAGE, "_General",TRUE},
+{ "MegaSquirt Communications Parameters", COMMS_PAGE, "Co_mmunications",TRUE},
+{ "MegaSquirt Constants", CONSTANTS_PAGE, "_Constants",TRUE},
+{ "MegaSquirt Enrichments", ENRICHMENTS_PAGE, "_Enrichments",TRUE},
+{ "MegaSquirt VE Table(s)", VETABLES_PAGE, "_VE Table(s)",TRUE},
+{ "MegaSquirt Ignition Settings", IGNITION_PAGE, "_Ignition Settings",FALSE},
+{ "MegaSquirt Runtime Display", RUNTIME_PAGE, "_Runtime Disp.",TRUE},
+{ "MegaSquirt Tuning", TUNING_PAGE, "_Tuning",TRUE},
+{ "MegaSquirt Tools", TOOLS_PAGE, "T_ools",TRUE},
+{ "MegaSquirt Advanced Diagnostics", LOWLEVEL_PAGE, "_Low-Level",TRUE},
+{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "_DataLogging",TRUE},
+{ "MegaSquirt Warmup Wizard", WARMWIZARD_PAGE, "_Warmup Wizard",TRUE}
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -107,7 +107,7 @@ int setup_gui()
 
 		framebuild_dispatch(frame,notebook_tabs[i].page, notebook_tabs[i].enabled);
 
-		label = gtk_label_new (notebook_tabs[i].tab_name);
+		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
 		if (notebook_tabs[i].enabled == FALSE)
 			gtk_widget_set_sensitive(GTK_WIDGET(label),FALSE);
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
