@@ -17,8 +17,8 @@
 #include <string.h>
 #include <sys/poll.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "globals.h"
+#include <protos.h>
+#include <globals.h>
 
 static GtkWidget *ms_reset_entry;	/* MS reset count */
 static GtkWidget *ms_sioerr_entry;	/* MS Serial I/O error count */

@@ -16,8 +16,8 @@
 #include <unistd.h>
 #include <string.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "globals.h"
+#include <protos.h>
+#include <globals.h>
 
 int build_general(GtkWidget *parent_frame)
 {

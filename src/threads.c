@@ -18,8 +18,8 @@
 #include <pthread.h>
 #include <sys/poll.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "globals.h"
+#include <protos.h>
+#include <globals.h>
 
 
 pthread_t raw_input_thread;	/* thread handle */

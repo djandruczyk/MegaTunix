@@ -16,9 +16,9 @@
 #include <unistd.h>
 #include <string.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "globals.h"
-#include "constants.h"
+#include <protos.h>
+#include <globals.h>
+#include <constants.h>
 
 extern struct v1_2_Constants constants;
 

@@ -17,8 +17,8 @@
 #include <string.h>
 #include <pthread.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "globals.h"
+#include <protos.h>
+#include <globals.h>
 
 
 static int lastcount=0;

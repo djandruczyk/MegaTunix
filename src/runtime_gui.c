@@ -16,10 +16,9 @@
 #include <unistd.h>
 #include <string.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "globals.h"
-#include "runtime_gui.h"
-#include "limits.h"
+#include <protos.h>
+#include <globals.h>
+#include <runtime_gui.h>
 
 
 struct v1_2_Runtime_Gui runtime_data;

@@ -16,34 +16,20 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "protos.h"
-#include "defines.h"
-#include "globals.h"
-#include "constants.h"
+#include <protos.h>
+#include <defines.h>
+#include <globals.h>
+#include <constants.h>
 
 
-static int req_fuel_popup = FALSE;
-static GtkWidget *popup;
+extern int req_fuel_popup;
 static int paused_handlers = FALSE;
-static int rpmk_offset = 99;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
 extern int read_wait_time;
 extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
-struct Reqd_Fuel
-{
-	GtkWidget *disp_spin;		/* Engine size  1-1000 Cu-in */
-	GtkWidget *cyls_spin;		/* # of Cylinders  1-12 */
-	GtkWidget *inj_rate_spin;	/* injector flow rate (lbs/hr) */
-	GtkWidget *afr_spin;		/* Air fuel ratio 10-25.5 */
-	gint disp;
-	gint cyls;
-	gint inj_rate;
-	gfloat afr;
-}reqd_fuel = { NULL,NULL,NULL,NULL,350,8,19,14.7};
-
-
+extern struct Reqd_Fuel reqd_fuel;
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -65,47 +51,6 @@ int text_entry_handler(GtkWidget * widget, gpointer *data)
 	offset = (gint)gtk_object_get_data(G_OBJECT(widget),"offset");
 	switch ((gint)data)
 	{
-/*		case WARMUP_NEG_40:
-			ve_constants->warmup_bins[0] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[0], offset);
-			break;
-		case WARMUP_NEG_20:
-			ve_constants->warmup_bins[1] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[1], offset);
-			break;
-		case WARMUP_0:
-			ve_constants->warmup_bins[2] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[2], offset);
-			break;
-		case WARMUP_20:
-			ve_constants->warmup_bins[3] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[3], offset);
-			break;
-		case WARMUP_40:
-			ve_constants->warmup_bins[4] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[4], offset);
-			break;
-		case WARMUP_60:
-			ve_constants->warmup_bins[5] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[5], offset);
-			break;
-		case WARMUP_80:
-			ve_constants->warmup_bins[6] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[6], offset);
-			break;
-		case WARMUP_100:
-			ve_constants->warmup_bins[7] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[7], offset);
-			break;
-		case WARMUP_130:
-			ve_constants->warmup_bins[8] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[8], offset);
-			break;
-		case WARMUP_160:
-			ve_constants->warmup_bins[9] = atoi(entry_text);
-			write_ve_const(ve_constants->warmup_bins[9], offset);
-			break;
-	*/
 		default:
 			break;
 	}
@@ -149,8 +94,7 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 	 * the context_id of the statusbar in arg[0],
 	 * and the string to be sent to that bar
 	 *
-	 * Fairly generic, should work for multiple statusbars
-	 *
+	 * Fairly generic, works for multiple statusbars
 	 */
 
 	gtk_statusbar_pop(GTK_STATUSBAR(status_bar),
@@ -160,172 +104,7 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 			message);
 }
 	
-int reqd_fuel_popup()
-{
-	GtkWidget *button;
-	GtkWidget *spinner;
-	GtkWidget *frame;
-	GtkWidget *vbox;
-	GtkWidget *hbox;
-	GtkWidget *label;
-	GtkWidget *table;
-	GtkAdjustment *adj;
-
-	req_fuel_popup=TRUE;
-	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(popup),"Required Fuel Calc");
-	gtk_container_set_border_width(GTK_CONTAINER(popup),10);
-	gtk_widget_realize(popup);
-	g_signal_connect(G_OBJECT(popup),"delete_event",
-			G_CALLBACK (close_popup),
-			NULL);
-	g_signal_connect(G_OBJECT(popup),"destroy_event",
-			G_CALLBACK (close_popup),
-			NULL);
-
-	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(popup),vbox);
-	frame = gtk_frame_new("Constants for your vehicle");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-
-	table =gtk_table_new(4,3,FALSE);	
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_add(GTK_CONTAINER(frame),table);
-	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-
-	label = gtk_label_new("Engine Displacement (CID)");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Number of Cylinders");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Injector Flow (lbs/hr)");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Air-Fuel Ratio");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	/* Engine Displacement */
-	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.disp,1.0,1000,
-			1.0,10.0,0);
-	spinner = gtk_spin_button_new(adj,0,0);
-	gtk_widget_set_size_request(spinner,65,-1);
-	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(REQ_FUEL_DISP));
-	reqd_fuel.disp_spin = spinner;
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	/* Number of Cylinders */
-	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.cyls,1.0,16,
-			1.0,1.0,0);
-	spinner = gtk_spin_button_new(adj,0,0);
-	gtk_widget_set_size_request(spinner,65,-1);
-	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(REQ_FUEL_CYLS));
-	reqd_fuel.cyls_spin = spinner;
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	/* Fuel injector flow rate in lbs/hr */
-	adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.inj_rate,1.0,100.0,
-			1.0,1.0,0);
-	spinner = gtk_spin_button_new(adj,0,0);
-	gtk_widget_set_size_request(spinner,65,-1);
-	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(REQ_FUEL_INJ_RATE));
-	reqd_fuel.inj_rate_spin = spinner;
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	/* Target Air Fuel Ratio */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.afr,10.0,25.5,
-			0.1,0.1,0);
-	spinner = gtk_spin_button_new(adj,0,1);
-	gtk_widget_set_size_request(spinner,65,-1);
-	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(REQ_FUEL_AFR));
-	reqd_fuel.afr_spin = spinner;
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 3, 4,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	frame = gtk_frame_new("Commands");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
-
-	button = gtk_button_new_with_label("Calculate\nand Close");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
-	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK(update_reqd_fuel),
-			NULL);
-	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK (close_popup),
-			NULL);
-
-	button = gtk_button_new_with_label("Cancel");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
-	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK (close_popup),
-			NULL);
-
-	gtk_widget_show_all(popup);
-
-	return TRUE;
-}
-
-int close_popup(GtkWidget *widget, gpointer *data)
-{
-	gtk_widget_destroy(popup);
-	req_fuel_popup=FALSE;
-	return TRUE;
-}
-
-int update_reqd_fuel(GtkWidget *widget, gpointer *data)
-{
-	gfloat tmp1,tmp2;
-
-	tmp1 = 36.0*((double)reqd_fuel.disp)*4.27793;
-	tmp2 = ((double) reqd_fuel.cyls) \
-		* ((double)(reqd_fuel.afr)) \
-		* ((double)(reqd_fuel.inj_rate));
-
-	ve_constants->req_fuel_1 = 10.0*(tmp1/tmp2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_1_spin),
-			ve_constants->req_fuel_1/10.0);
-
-	ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
-	write_ve_const(ve_constants->rpmk, rpmk_offset);
-
-	return TRUE;
-}
-
-int generic_spinner_changed(GtkWidget *widget, gpointer *data)
+int classed_spinner_changed(GtkWidget *widget, gpointer *data)
 {
         gfloat value = 0.0;
         gint offset = 0;
@@ -333,7 +112,6 @@ int generic_spinner_changed(GtkWidget *widget, gpointer *data)
         if (paused_handlers)
                 return TRUE;
         value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-//        offset = GPOINTER_TO_INT(data);
 	/* Class is set to determine the course of action */
 	class = (gint) gtk_object_get_data(G_OBJECT(widget),"class");
 	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
@@ -378,12 +156,14 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	 */
 	gfloat value = 0.0;
 	gint offset;
-	gint tmp = 0;
+	gint tmpi_x10 = 0; /* value*10 converted to an INT */
+	gint tmpi = 0;
 	if (paused_handlers)
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
-	printf("spinner value: %.1f ,offset %i\n",value,offset);
+	tmpi_x10 = (int)((value*10.0)+.001);
+	tmpi = (int)(value+.001);
 
 	switch ((gint)data)
 	{
@@ -415,22 +195,101 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 		case REQ_FUEL_AFR:
 			reqd_fuel.afr = value;
 			break;
+		case REQ_FUEL_1:
+			ve_constants->req_fuel_1 = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
+			break;
 		case INJ_OPEN_TIME:
 			/* This funny conversion is needed cause of 
 			 * some weird quirk when multiplying the float
 			 * by ten and then converting to int (is off by
 			 * one in SOME cases only..
 			 */
-			tmp = (int)((value*10.0)+.01);
-			ve_constants->inj_open_time = tmp;
-			write_ve_const(ve_constants->inj_open_time, offset);
+			ve_constants->inj_open_time = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
 			break;
 		case BATT_CORR:
-			tmp = (int)((value*10.0)+.01);
-			ve_constants->batt_corr = tmp;
-			write_ve_const(ve_constants->batt_corr, offset);
+			ve_constants->batt_corr = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
 			break;
-
+		case PWM_CUR_LIM:
+			ve_constants->pwm_curr_lim = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case PWM_TIME_THRES:
+			ve_constants->pwm_time_max = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
+			break;
+		case FAST_IDLE_THRES:
+			ve_constants->fast_idle_thresh = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case CRANK_PULSE_NEG_40:
+			ve_constants->cr_pulse_neg40 = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
+			break;
+		case CRANK_PULSE_170:
+			ve_constants->cr_pulse_pos170 = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
+			break;
+		case CRANK_PRIMING_PULSE:
+			ve_constants->cr_priming_pulse = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
+			break;
+		case AFTERSTART_ENRICH:
+			ve_constants->as_enrich = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case AFTERSTART_NUM_CYCLES:
+			ve_constants->as_num_cycles = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case TPS_TRIG_THRESH:
+			tmpi = (int)((value*5.0)+.001);
+			ve_constants->tps_trig_thresh = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case ACCEL_ENRICH_DUR:
+			ve_constants->accel_duration = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
+			break;
+		case COLD_ACCEL_ENRICH:
+			ve_constants->cold_accel_addon = tmpi_x10;
+			write_ve_const(tmpi_x10, offset);
+			break;
+		case COLD_ACCEL_MULT:
+			ve_constants->cold_accel_mult = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case DECEL_CUT:
+			ve_constants->decel_cut = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case EGO_TEMP_ACTIVE:
+			ve_constants->ego_temp_active = tmpi+40;
+			write_ve_const(tmpi+40, offset);
+			break;
+		case EGO_RPM_ACTIVE:
+			ve_constants->ego_rpm_active = tmpi/100;
+			write_ve_const(tmpi/100, offset);
+			break;
+		case EGO_SW_VOLTAGE:	
+			tmpi = (int)((value*51.0)+.001);
+			ve_constants->ego_sw_voltage = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case EGO_STEP:	
+			ve_constants->ego_step = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case EGO_EVENTS:	
+			ve_constants->ego_events = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
+		case EGO_LIMIT:	
+			ve_constants->ego_limit = tmpi;
+			write_ve_const(tmpi, offset);
+			break;
 		default:
 			break;
 	}
@@ -440,7 +299,6 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 
 void update_const_ve()
 {
-	char buff[10];
 	gint i;
 
 	/* req-fuel  */
@@ -498,64 +356,97 @@ void update_const_ve()
 	for (i=0;i<4;i++)
 	{
 		gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.accel_bins_spin[i]),
-			ve_constants->accel_bins[i]/10.0);
+				GTK_SPIN_BUTTON(constants.accel_bins_spin[i]),
+				ve_constants->accel_bins[i]/10.0);
 	}
 
 	/* TPS Trigger Threshold */
-	g_snprintf(buff,10,"%.2f",ve_constants->tps_trig_thresh/5.0);
-	gtk_entry_set_text(GTK_ENTRY(constants.tps_trig_thresh_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.tps_trig_thresh_spin),
+			ve_constants->tps_trig_thresh/5.0);
+//	g_snprintf(buff,10,"%.2f",ve_constants->tps_trig_thresh/5.0);
+//	gtk_entry_set_text(GTK_ENTRY(constants.tps_trig_thresh_ent),
+//			buff);
 
 	/* Accel Enrich Duration */
-	g_snprintf(buff,10,"%.1f",ve_constants->accel_duration/10.0);
-	gtk_entry_set_text(GTK_ENTRY(constants.accel_duration_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.accel_duration_spin),
+			ve_constants->accel_duration/10.0);
+//	g_snprintf(buff,10,"%.1f",ve_constants->accel_duration/10.0);
+//	gtk_entry_set_text(GTK_ENTRY(constants.accel_duration_ent),
+//			buff);
 
 	/* Cold Accel Enrich Add On */
-	g_snprintf(buff,10,"%.1f",ve_constants->cold_accel_addon/10.0);
-	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_addon_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.cold_accel_addon_spin),
+			ve_constants->cold_accel_addon/10.0);
+//	g_snprintf(buff,10,"%.1f",ve_constants->cold_accel_addon/10.0);
+//	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_addon_ent),
+//			buff);
 
 	/* Cold Accel Enrich Multiplier */
-	g_snprintf(buff,10,"%i",ve_constants->cold_accel_mult);
-	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_mult_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.cold_accel_mult_spin),
+			ve_constants->cold_accel_mult);
+//	g_snprintf(buff,10,"%i",ve_constants->cold_accel_mult);
+//	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_mult_ent),
+//			buff);
 
 	/* Decel Fuel Cut*/
-	g_snprintf(buff,10,"%i",ve_constants->decel_cut);
-	gtk_entry_set_text(GTK_ENTRY(constants.decel_cut_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.decel_cut_spin),
+			ve_constants->decel_cut);
+//	g_snprintf(buff,10,"%i",ve_constants->decel_cut);
+//	gtk_entry_set_text(GTK_ENTRY(constants.decel_cut_ent),
+//			buff);
 
 	/* EGO coolant activation temp */
-	g_snprintf(buff,10,"%i",ve_constants->ego_temp_active-40);
-	gtk_entry_set_text(GTK_ENTRY(constants.ego_temp_active_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.ego_temp_active_spin),
+			ve_constants->ego_temp_active-40);
+//	g_snprintf(buff,10,"%i",ve_constants->ego_temp_active-40);
+//	gtk_entry_set_text(GTK_ENTRY(constants.ego_temp_active_ent),
+//			buff);
 
 	/* EGO activation RPM */
-	g_snprintf(buff,10,"%i",ve_constants->ego_rpm_active*100);
-	gtk_entry_set_text(GTK_ENTRY(constants.ego_rpm_active_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.ego_rpm_active_spin),
+			ve_constants->ego_rpm_active*100);
+//	g_snprintf(buff,10,"%i",ve_constants->ego_rpm_active*100);
+//	gtk_entry_set_text(GTK_ENTRY(constants.ego_rpm_active_ent),
+//			buff);
 
 	/* EGO switching voltage */
-	g_snprintf(buff,10,"%.2f",(ve_constants->ego_sw_voltage/255.0)*5);
-	gtk_entry_set_text(GTK_ENTRY(constants.ego_sw_voltage_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.ego_sw_voltage_spin),
+			ve_constants->ego_sw_voltage/51.0);
+//	g_snprintf(buff,10,"%.2f",(ve_constants->ego_sw_voltage/255.0)*5);
+//	gtk_entry_set_text(GTK_ENTRY(constants.ego_sw_voltage_ent),
+//			buff);
 
 	/* EGO step percent */
-	g_snprintf(buff,10,"%i",ve_constants->ego_step);
-	gtk_entry_set_text(GTK_ENTRY(constants.ego_step_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.ego_step_spin),
+			ve_constants->ego_step);
+//	g_snprintf(buff,10,"%i",ve_constants->ego_step);
+//	gtk_entry_set_text(GTK_ENTRY(constants.ego_step_ent),
+//			buff);
 
 	/* EGO events between steps */
-	g_snprintf(buff,10,"%i",ve_constants->ego_events);
-	gtk_entry_set_text(GTK_ENTRY(constants.ego_events_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.ego_events_spin),
+			ve_constants->ego_events);
+//	g_snprintf(buff,10,"%i",ve_constants->ego_events);
+//	gtk_entry_set_text(GTK_ENTRY(constants.ego_events_ent),
+//			buff);
 
 	/* EGO limit % between steps */
-	g_snprintf(buff,10,"%i",ve_constants->ego_limit);
-	gtk_entry_set_text(GTK_ENTRY(constants.ego_limit_ent),
-			buff);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.ego_limit_spin),
+			ve_constants->ego_limit);
+//	g_snprintf(buff,10,"%i",ve_constants->ego_limit);
+//	gtk_entry_set_text(GTK_ENTRY(constants.ego_limit_ent),
+//			buff);
 
 	/* VE table entries */
 	for (i=0;i<64;i++)

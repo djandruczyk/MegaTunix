@@ -22,7 +22,7 @@
 
 /* this is required so we keep track of the gui controls so we
  * can update them easily with a generic function instead of
- * one function per control.... (ugly..)
+ * one function per control.... 
  */
 
 struct v1_2_Constants
@@ -43,18 +43,30 @@ struct v1_2_Constants
 	GtkWidget *rpm_bins_spin[8];		/* Spinners */
 	GtkWidget *ve_bins_spin[64];		/* Spinners */
 	GtkWidget *warmup_bins_spin[10];	/* Spinners */
-	GtkWidget *tps_trig_thresh_ent;		/* Text Entry */
-	GtkWidget *accel_duration_ent;		/* Text Entry */
-	GtkWidget *cold_accel_addon_ent;	/* Text Entry */
-	GtkWidget *cold_accel_mult_ent;		/* Text Entry */
+	GtkWidget *tps_trig_thresh_spin;	/* Spinner */
+	GtkWidget *accel_duration_spin;		/* Spinner */
+	GtkWidget *cold_accel_addon_spin;	/* Spinner */
+	GtkWidget *cold_accel_mult_spin;	/* Spinner */
 	GtkWidget *accel_bins_spin[4];		/* Spinners */
-	GtkWidget *decel_cut_ent;		/* Text Entry */
-	GtkWidget *ego_temp_active_ent;		/* Text Entry */
-	GtkWidget *ego_rpm_active_ent;		/* Text Entry */
-	GtkWidget *ego_sw_voltage_ent;		/* Text Entry */
-	GtkWidget *ego_step_ent;		/* Text Entry */
-	GtkWidget *ego_events_ent;		/* Text Entry */
-	GtkWidget *ego_limit_ent;		/* Text Entry */
+	GtkWidget *decel_cut_spin;		/* Spinner */
+	GtkWidget *ego_temp_active_spin;	/* Spinner */
+	GtkWidget *ego_rpm_active_spin;		/* Spinner */
+	GtkWidget *ego_sw_voltage_spin;		/* Spinner */
+	GtkWidget *ego_step_spin;		/* Spinner */
+	GtkWidget *ego_events_spin;		/* Spinner */
+	GtkWidget *ego_limit_spin;		/* Spinner */
+};
+
+struct Reqd_Fuel
+{
+        GtkWidget *disp_spin;		/* Spinbutton */
+        GtkWidget *cyls_spin;		/* Spinbutton */
+        GtkWidget *inj_rate_spin;	/* Spinbutton */
+        GtkWidget *afr_spin;		/* Spinbutton */
+        gint disp;			/* Engine size  1-1000 Cu-in */
+        gint cyls;			/* # of Cylinders  1-12 */
+        gint inj_rate;			/* injector flow rate (lbs/hr) */
+        gfloat afr;			/* Air fuel ratio 10-25.5 */
 };
 
 #endif

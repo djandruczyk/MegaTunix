@@ -15,8 +15,8 @@
 
 #include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "lookuptables.h"
+#include <protos.h>
+#include <lookuptables.h>
 
 void post_process(struct ms_raw_data_v1_and_v2 *in, struct ms_data_v1_and_v2 *out)
 {

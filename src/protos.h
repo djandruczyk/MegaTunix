@@ -94,13 +94,17 @@ void leave(GtkWidget *, gpointer *);
 int std_button_handler(GtkWidget *, gpointer *);
 int text_entry_handler(GtkWidget *, gpointer *);
 void update_statusbar(GtkWidget *, int, gchar *);
+int spinner_changed(GtkWidget *, gpointer *);
+int classed_spinner_changed(GtkWidget *, gpointer *);
+
+/* gui_handlers.c */
+
+/* req_fuel.c */
 int reqd_fuel_popup();
 int update_reqd_fuel(GtkWidget *widget, gpointer *data);
 int close_popup(GtkWidget *widget, gpointer *data);
-int spinner_changed(GtkWidget *, gpointer *);
-int generic_spinner_changed(GtkWidget *, gpointer *);
+/* req_fuel.c */
 
-/* gui_handlers.c */
 
 /* for each of the *_gui.c files will be  a main core function called 
  * int build_****(Gtkwidget *).  The "****" will be that core function 
@@ -109,6 +113,7 @@ int generic_spinner_changed(GtkWidget *, gpointer *);
  * sub-ojects must be placed into (multi-level embedding is encouraged 
  * to improve the viewability of the data.
  */
+
 /* about_gui.c */
 int build_about(GtkWidget *);
 /* abou_guit.c */

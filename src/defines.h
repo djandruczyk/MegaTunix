@@ -69,6 +69,17 @@
 #define	SER_POLL_TIMEO		0x50
 #define	SER_INTERVAL_DELAY	0x51
 #define SET_SER_PORT		0x52
+#define TPS_TRIG_THRESH		0x53
+#define ACCEL_ENRICH_DUR	0x54
+#define COLD_ACCEL_ENRICH	0x55
+#define COLD_ACCEL_MULT		0x56
+#define DECEL_CUT		0x57
+#define EGO_TEMP_ACTIVE		0x58
+#define EGO_RPM_ACTIVE		0x59
+#define EGO_SW_VOLTAGE		0x5a
+#define EGO_STEP		0x5b
+#define EGO_EVENTS		0x5c
+#define EGO_LIMIT		0x5d
 
 /* text entries */
 #define MS_RESET_COUNT		0x7a

@@ -19,9 +19,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "protos.h"
-#include "globals.h"
-#include "configfile.h"
+#include <protos.h>
+#include <globals.h>
+#include <configfile.h>
 
 
 gint major_ver;

@@ -19,9 +19,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 /* DO NOT include defines.h, as protos.h already does... */
-#include "defines.h"
-#include "protos.h"
-#include "globals.h"
+#include <defines.h>
+#include <protos.h>
+#include <globals.h>
 
 int def_comm_port;
 

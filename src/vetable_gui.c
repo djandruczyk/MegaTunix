@@ -15,9 +15,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include "constants.h"
-#include "protos.h"
-#include "globals.h"
+#include <constants.h>
+#include <protos.h>
+#include <globals.h>
 
 extern struct v1_2_Constants constants;
 extern struct ms_ve_constants ve_constants;
@@ -66,7 +66,7 @@ int build_vetable(GtkWidget *parent_frame)
 		spinner = gtk_spin_button_new(adj,1,0);
 		gtk_widget_set_size_request(spinner,45,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (generic_spinner_changed),
+				G_CALLBACK (classed_spinner_changed),
 				NULL);
 		/* Bind data to object for handlers */
 		gtk_object_set_data(G_OBJECT(spinner),"class", 
@@ -110,7 +110,7 @@ int build_vetable(GtkWidget *parent_frame)
 			spinner = gtk_spin_button_new(adj,1,0);
 			gtk_widget_set_size_request(spinner,52,-1);
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
-					G_CALLBACK (generic_spinner_changed),
+					G_CALLBACK (classed_spinner_changed),
 					NULL);
 			/* Bind data to object for handlers */
 			gtk_object_set_data(G_OBJECT(spinner),"class", 
@@ -144,7 +144,7 @@ int build_vetable(GtkWidget *parent_frame)
 		spinner = gtk_spin_button_new(adj,1,0);
 		gtk_widget_set_size_request(spinner,52,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (generic_spinner_changed),
+				G_CALLBACK (classed_spinner_changed),
 				NULL);
 		/* Bind data to object for handlers */
 		gtk_object_set_data(G_OBJECT(spinner),"class", 

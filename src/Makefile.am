@@ -11,6 +11,7 @@ megatunix_SOURCES = \
 	protos.h \
 	lookuptables.h \
 	core_gui.c \
+	req_fuel.c \
 	gui_handlers.c \
 	about_gui.c \
 	comms_gui.c \
