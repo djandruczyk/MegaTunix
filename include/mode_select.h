@@ -20,7 +20,8 @@
 gboolean drain_hashtable(gpointer, gpointer, gpointer);
 void parse_ecu_capabilities(gint);
 void set_raw_memory_mode(gboolean);
-void set_widget_state(gpointer, gpointer);
+void set_widget_sensitive(gpointer, gpointer);
+void set_widget_active(gpointer, gpointer);
 /* Prototypes */
 
 #endif

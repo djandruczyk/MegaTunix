@@ -25,12 +25,11 @@
 #include <structures.h>
 #include <tabloader.h>
 
+struct LogInfo *log_info = NULL;
 
 void load_logviewer_file(void *ptr)
 {
 	struct Io_File *iofile = NULL;
-	struct Log_Info *log_info = NULL;
-
 
 	if (ptr != NULL)
 		iofile = (struct Io_File*) ptr;
@@ -39,7 +38,7 @@ void load_logviewer_file(void *ptr)
 		dbg_func(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n",CRITICAL);
 		return;
 	}
-	log_info = g_malloc0(sizeof(struct Log_Info));
+	log_info = g_malloc0(sizeof(struct LogInfo));
 	initialize_log_info(log_info);
 	read_log_header(iofile->iochannel, log_info);
 	populate_limits(log_info);
@@ -52,7 +51,7 @@ void load_logviewer_file(void *ptr)
 /* Initializer routine for the log_info datastructure */
 void initialize_log_info(void *ptr)
 {
-	struct Log_Info *log_info;
+	struct LogInfo *log_info;
 	log_info = ptr;
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
@@ -77,7 +76,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 	GArray *array = NULL;
 	GObject *object = NULL;
 	gint i = 0;
-	struct Log_Info *log_info = ptr;
+	struct LogInfo *log_info = ptr;
 	extern GHashTable *dynamic_widgets;
 
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
@@ -123,7 +122,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 
 void populate_limits(void *ptr)
 {
-	struct Log_Info *log_info = NULL;
+	struct LogInfo *log_info = NULL;
 	gint i = 0;
 	log_info = ptr;
 	gchar * name = NULL;
@@ -142,8 +141,8 @@ void populate_limits(void *ptr)
 void get_limits(gchar *target_field, GObject *object, gint position)
 {
 	gint i = 0;
-	gfloat lower = 0.0;
-	gfloat upper = 255.0;
+	gint lower = 0;
+	gint upper = 255;
 	gint index = -1;
 	gint max_chances = sizeof(def_limits)/sizeof(def_limits[0]);
 	while (i <max_chances)
@@ -164,12 +163,12 @@ void get_limits(gchar *target_field, GObject *object, gint position)
 	}
 	else
 	{
-		lower = 0.0;
-		upper = 255.0;
+		lower = 0;
+		upper = 255;
 		dbg_func(g_strdup_printf(__FILE__": get_limits()\n\tField \"%s\" NOT found in internal list,\n\tassuming limits bound of 0.0<-%s->255.0,\n\tsend the datalog you're trying to open\n\tto the Author for analysis\n",target_field,target_field),CRITICAL);
 	}
-	g_object_set_data(object,"lower_limit", g_memdup(&lower,sizeof(gfloat)));
-	g_object_set_data(object,"upper_limit", g_memdup(&upper,sizeof(gfloat)));
+	g_object_set_data(object,"lower_limit", GINT_TO_POINTER(lower));
+	g_object_set_data(object,"upper_limit", GINT_TO_POINTER(upper));
 }
 
 
@@ -177,7 +176,7 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 {
 	GString *a_line = g_string_new("\0");
 	//GIOStatus  status = G_IO_STATUS_ERROR;
-	struct Log_Info *log_info = ptr;
+	struct LogInfo *log_info = ptr;
 	gchar **data = NULL;
 	gint i = 0;
 	GArray *tmp_array = NULL;

@@ -165,7 +165,7 @@ struct Viewable_Value
 	gfloat cur_low;			/* User limits to use for scaling */
 	gfloat cur_high;		/* User limits to use for scaling */
 	GArray *data_array;		/* History of all values recorded */
-	struct Log_Info *log_info;	/* important */
+	struct LogInfo *log_info;	/* important */
 };
 	
 /* The Rt_Control struct contains info on the runtime display tab controls
@@ -222,10 +222,10 @@ struct Default_Limits
 	LogType logtype;	/* Datalog type it's found in... */
 };
 
-/* The Log_Info datastructure is populated when a datalog file is opened
+/* The LogInfo datastructure is populated when a datalog file is opened
  * for viewing in the Datalog viewer.
  */
-struct Log_Info
+struct LogInfo
 {
 	gint field_count;	/* How many fields in the logfile */
 	gchar *delimiter;	/* delimiter between fields for this logfile */

@@ -42,7 +42,7 @@
 static gboolean grab_allowed = FALSE;
 extern gboolean interrogated;
 extern gboolean connected;
-extern gboolean logviewer_mode;
+extern gboolean playback_mode;
 extern gchar *delimiter;
 extern gint statuscounts_id;
 extern gint ready;
@@ -178,20 +178,20 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), TRUE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), TRUE);
-				logviewer_mode = FALSE;
-				//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
-				if (g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button"))
-					g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
+				reset_logviewer_state();
+				playback_mode = FALSE;
+				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
+					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
 				break;
 			case PLAYBACK_VIEW:
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), FALSE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), TRUE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), FALSE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), FALSE);
-				logviewer_mode = TRUE;
-				//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
-				if (g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button"))
-					g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
+				reset_logviewer_state();
+				playback_mode = TRUE;
+				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
+					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
 				break;
 			case HEX_VIEW:
 			case DECIMAL_VIEW:
@@ -265,7 +265,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (toggle_group)
 	{
 		state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)state);
+		g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
 	}
 	/* Swaps the label of another control based on widget state... */
 	if (swap_label)
@@ -920,7 +920,7 @@ void update_widget(gpointer object, gpointer user_data)
 		if (toggle_group)
 		{
 			state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-			g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)state);
+			g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
 		}
 		/* Swaps the label of another control based on widget state... */
 		if (swap_label)

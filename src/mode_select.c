@@ -22,22 +22,32 @@
 
 gchar *states[] = {"FALSE","TRUE"};
 
+
 void parse_ecu_capabilities(gint ecu_caps)
 {
 	set_raw_memory_mode((ecu_caps & RAW_MEMORY) == 0 ? FALSE:TRUE);
 }
 
+
 void set_raw_memory_mode(gboolean state)
 {
         extern GList *raw_mem_controls;
 	dbg_func(g_strdup_printf(__FILE__": set_raw_memory_mode()\n\tSetting RAW Memory controls state to %s\n",states[state]),INTERROGATOR);
-        g_list_foreach(raw_mem_controls, set_widget_state,(gpointer)state);
+        g_list_foreach(raw_mem_controls, set_widget_sensitive,(gpointer)state);
 }
 
-void set_widget_state(gpointer widget, gpointer state)
+
+void set_widget_sensitive(gpointer widget, gpointer state)
 {
         gtk_widget_set_sensitive(GTK_WIDGET(widget),(gboolean)state);
 }
+
+
+void set_widget_active(gpointer widget, gpointer state)
+{
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(gboolean)state);
+}
+
 
 gboolean drain_hashtable(gpointer offset, gpointer value, gpointer page)
 {
