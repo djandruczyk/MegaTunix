@@ -149,5 +149,5 @@ static int input_from_string (char *buffer, int max_size)
 void input_reset()
 {
   /* Forget contents of input buffer.  */
-  YY_FLUSH_BUFFER;
+  yy_flush_buffer(YY_CURRENT_BUFFER);
 }
