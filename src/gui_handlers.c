@@ -683,6 +683,12 @@ void update_ve_const()
 	check_config11(ve_const->config11.value);
 	check_config13(ve_const->config13.value);
 
+	/* This formula is ONLY VALID for NON-Dualtable variants..
+	 * Dualtable no longer has an "Alternate" variable thus all this
+	 * shit breaks...  New version is in progress and is buggy 
+	 * 02-16-2004
+	 */
+
 	/* req-fuel 
 	 *                                        /     num_injectors     \
 	 *         	   req_fuel_per_squirt * (-------------------------)
@@ -802,15 +808,18 @@ void update_ve_const()
 				GTK_TOGGLE_BUTTON(buttons.multi_port_but),
 				TRUE);
 
-	/* THIS is NOT compatible with DualTable code,  must be changed */
-	if (ve_const->alternate > 0)
-		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(buttons.alternate_but),
-				TRUE);
-	else
-		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(buttons.simul_but),
-				TRUE);
+
+	if (!dualtable)
+	{
+		if (ve_const->alternate > 0)
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.alternate_but),
+					TRUE);
+		else
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.simul_but),
+					TRUE);
+	}
 
 
 	/* Table 1 for dualtable, and all std megasquirt units */

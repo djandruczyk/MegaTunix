@@ -93,6 +93,7 @@ gint convert_before_download(gint offset, gfloat value)
 	conv_chart = conversions;
 	ve_const_arr = (unsigned char *)ms_data;
 
+	printf("offset %i, value %f\n",offset,value);
 	factor = conv_chart->conv_factor[offset];
 
 	switch ((Conversions)conv_chart->conv_type[offset])

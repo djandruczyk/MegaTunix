@@ -259,13 +259,13 @@ struct Ve_Const_DT_2
         union	config11 config11;		/* 244, Config for PC Config */
         union	config12 config12;		/* 245, Config for PC Config */
 	unsigned char	unused246;		/* 246, unused */
-	unsigned char	bcFreqDiv;		/* 247, PWM rate for boost */
+	unsigned char	bcfreqdiv;		/* 247, PWM rate for boost */
 						/* 0-ERROR, 1=39hz, 2=19 Hz */
 						/* 3 = 10 Hz */
-	unsigned char	bcUpdate;		/* 248, milliseconds count for 
+	unsigned char	bcupdate;		/* 248, milliseconds count for 
 						 * controller algorithm */
-	unsigned char	bcPgain;		/* 249, proportional Gain % */
-	unsigned char	bcDgain;		/* 250, derivative Gain % */
+	unsigned char	bcpgain;		/* 249, proportional Gain % */
+	unsigned char	bcdgain;		/* 250, derivative Gain % */
 	unsigned char	revlimit;		/* 251, maxrev limit rpm/100 */ 
 	unsigned char	launchlimit;		/* 252, launch control revlim */
 	unsigned char	shiftlo;		/* 253, lo shift light thresh */

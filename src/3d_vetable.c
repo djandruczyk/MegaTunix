@@ -228,7 +228,7 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->zFar = 23;
 	ve_view->aspect = 1.333;
 	ve_configure_event(ve_view->drawing_area, NULL,NULL);
-	ve_expose_event(ve_view->drawing_area, NULL,GINT_TO_POINTER(ve_view->table));
+	ve_expose_event(ve_view->drawing_area, NULL,NULL);
 }
 
 GdkGLConfig* get_gl_config(void)
@@ -286,8 +286,9 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 
 gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	struct Ve_View_3D *ve_view;
+	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
+
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){
 		gtk_widget_grab_focus(widget);
 	}
@@ -430,7 +431,7 @@ void ve_calculate_scaling(void *ptr)
 	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)
-		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
+		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_calculate_scaling(), table out of range..\n");
 	
@@ -441,16 +442,16 @@ void ve_calculate_scaling(void *ptr)
 	/* calculate scaling */
 	for (i=0;i<grid;i++) {
 		if (ve_ptr->rpm_bins[i] > ve_view->rpm_max) {
-			ve_view->rpm_max=ve_ptr->rpm_bins[i];
+			ve_view->rpm_max = ve_ptr->rpm_bins[i];
 		}
 		if (ve_ptr->load_bins[i] > ve_view->load_max) {
-			ve_view->load_max=ve_ptr->load_bins[i];
+			ve_view->load_max = ve_ptr->load_bins[i];
 		}
 	}
 
 	for (i=0;i<grid*8;i++) {
 		if (ve_ptr->ve_bins[i] > ve_view->ve_max) {
-			ve_view->ve_max=ve_ptr->ve_bins[i];
+			ve_view->ve_max = ve_ptr->ve_bins[i];
 		}
 	}	
 
@@ -462,16 +463,16 @@ void ve_calculate_scaling(void *ptr)
 void ve_draw_ve_grid(void *ptr)
 {
 	int rpm=0, load=0;
+	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
-	extern unsigned char *ms_data;
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
 	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)	/* DT code */
-		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
+		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_ve_grid(), table out of range..\n");
 	
@@ -483,11 +484,15 @@ void ve_draw_ve_grid(void *ptr)
 	for(rpm=0;rpm<grid;rpm++)
 	{
 		glBegin(GL_LINE_STRIP);
-		for(load=0;load<grid;load++) {
+		for(load=0;load<grid;load++) 
+		{
 			glVertex3f(
-					(float)(ve_ptr->rpm_bins[rpm])/ve_view->rpm_div,			
-					(float)(ve_ptr->load_bins[load])/ve_view->load_div, 	 	
-					(float)(ve_ptr->ve_bins[(load*8)+rpm])/ve_view->ve_div);
+					(float)(ve_ptr->rpm_bins[rpm])
+						/ve_view->rpm_div,
+					(float)(ve_ptr->load_bins[load])
+						/ve_view->load_div, 	 	
+					(float)(ve_ptr->ve_bins[(load*8)+rpm])
+						/ve_view->ve_div);
 		}
 		glEnd();
 	}
@@ -496,11 +501,15 @@ void ve_draw_ve_grid(void *ptr)
 	for(load=0;load<grid;load++)
 	{
 		glBegin(GL_LINE_STRIP);
-		for(rpm=0;rpm<grid;rpm++){
+		for(rpm=0;rpm<grid;rpm++)
+		{
 			glVertex3f(	
-					(float)(ve_ptr->rpm_bins[rpm])/ve_view->rpm_div,
-					(float)(ve_ptr->load_bins[load])/ve_view->load_div,			
-					(float)(ve_ptr->ve_bins[(load*8)+rpm])/ve_view->ve_div);	
+					(float)(ve_ptr->rpm_bins[rpm])
+						/ve_view->rpm_div,
+					(float)(ve_ptr->load_bins[load])
+						/ve_view->load_div,
+					(float)(ve_ptr->ve_bins[(load*8)+rpm])
+						/ve_view->ve_div);	
 		}
 		glEnd();
 	}
@@ -516,7 +525,7 @@ void ve_draw_active_indicator(void *ptr)
 	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)
-		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
+		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_active_indicator(), table out of range..\n");
 	/* Render a red dot at the active VE map position */
@@ -559,7 +568,7 @@ void ve_draw_axis(void *ptr)
 	/* Set vars and an asthetically pleasing maximum value */
 	int i=0, rpm=0, load=0;
 	float top = 0.0;
-	gchar label[6];
+	gchar *label;
 	struct Ve_Const_Std *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
@@ -568,7 +577,7 @@ void ve_draw_axis(void *ptr)
 	if (ve_view->table == 0) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
 	else if (ve_view->table == 1)
-		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
+		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_draw_axis(), table out of range..\n");
 	
@@ -660,26 +669,29 @@ void ve_draw_axis(void *ptr)
 	for (i=0;i<8;i++){
 		rpm = (ve_ptr->rpm_bins[i])*100;
 		load = (ve_ptr->load_bins[i]);
-		sprintf(label,"%i",load);
+		label = g_strdup_printf("%i",load);
 		ve_drawtext(label,
 			((ve_ptr->rpm_bins[0])/ve_view->rpm_div),
 			((ve_ptr->load_bins[i])/ve_view->load_div),
 			0.0);
+		g_free(label);
 		
-		sprintf(label,"%i",rpm);
+		label = g_strdup_printf("%i",rpm);
 		ve_drawtext(label,
 			((ve_ptr->rpm_bins[i])/ve_view->rpm_div),
 			((ve_ptr->load_bins[0])/ve_view->load_div),
 			0.0);
+		g_free(label);
 	}
 	
 	/* Draw VE labels */
 	for (i=0;i<(ve_view->ve_max+20);i=i+10){
-		sprintf(label,"%i",i);
+		label = g_strdup_printf("%i",i);
 		ve_drawtext(label,
 			((ve_ptr->rpm_bins[0])/ve_view->rpm_div),
 			((ve_ptr->load_bins[7])/ve_view->load_div),
 			(float)i/ve_view->ve_div);
+		g_free(label);
 	}
 	
 }
@@ -732,16 +744,12 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	extern unsigned char *ms_data;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"data");
+
+	widget_ptr = ve_widgets;
 	if (ve_view->table == 0) /* all std code derivatives..*/
-	{
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
-		widget_ptr = ve_widgets;
-	}
 	else if (ve_view->table == 1)
-	{
-		ve_ptr = (struct Ve_Const_Std *) ms_data+MS_PAGE_SIZE;
-		widget_ptr = ve_widgets+MS_PAGE_SIZE;
-	}
+		ve_ptr = (struct Ve_Const_Std *) (ms_data+MS_PAGE_SIZE);
 	else
 		fprintf(stderr,__FILE__": Problem, ve_key_press_event(), table out of range..\n");
 
@@ -790,9 +798,11 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] < 255)
 			{
 				offset = (ve_view->active_load*8)+ve_view->active_rpm;
+				printf("offset is %i\n",offset);
+				value = ve_ptr->ve_bins[offset] + 1;
+				printf("value is %i\n",value);
 				if (ve_view->table == 1)
 					offset+=MS_PAGE_SIZE;
-				value = ve_ptr->ve_bins[offset] + 1;
 				dload_val = convert_before_download(offset,value);
 				write_ve_const(dload_val,offset);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
@@ -810,9 +820,9 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] > 0)
 			{
 				offset = (ve_view->active_load*8)+ve_view->active_rpm;
+				value = ve_ptr->ve_bins[offset] - 1;
 				if (ve_view->table == 1)
 					offset+=MS_PAGE_SIZE;
-				value = ve_ptr->ve_bins[offset] - 1;
 				dload_val = convert_before_download(offset,value);
 				write_ve_const(dload_val,offset);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
