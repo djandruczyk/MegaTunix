@@ -40,19 +40,27 @@ keys=page
 key_types=_INT_
 page=0
 
-[recalculate_scaling_button_page0]
+[recalc_scaling_button]
 keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
 page=0
 handler=_RESCALE_TABLE_
-data=rescale_spinner_page0
+data=VE1_rescale_spinner
 
 #----- Rescale Spinners ------------------------------------------------------
 
-[rescale_spinner_page0]
+[rescale_spinner]
 keys=page
 key_types=_INT_
 page=0
+
+#----- MAIN VETable Container ------------------------------------------------
+
+[main_vetable]
+keys=page,rescaler_frame
+key_types=_INT_,_STRING_
+page=0
+rescaler_frame=VE1_rescale_frame
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 

@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="window1">
   <property name="visible">True</property>
@@ -1494,7 +1495,6 @@ Add-on (ms)</property>
 
 			      <child>
 				<widget class="GtkSpinButton" id="accel_decel_fuel_cut_spin">
-				  <property name="width_request">60</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">1</property>
@@ -1608,7 +1608,7 @@ Add-on (ms)</property>
 				  <property name="width_request">60</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
+				  <property name="climb_rate">100</property>
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>

@@ -41,6 +41,28 @@ keys=page
 key_types=_INT_
 page=1
 
+[recalc_scaling_button]
+keys=page,handler,data
+key_types=_INT_,_ENUM_,_STRING_
+page=1
+handler=_RESCALE_TABLE_
+data=SP1_rescale_spinner
+
+#----- Rescale Spinners ------------------------------------------------------
+
+[rescale_spinner]
+keys=page
+key_types=_INT_
+page=1
+
+#----- MAIN SparkTable Container ---------------------------------------------
+
+[sparktable]
+keys=page,rescaler_frame
+key_types=_INT_,_STRING_
+page=0
+rescaler_frame=SP1_rescale_frame
+
 #----- Temp Timing Controls --------------------------------------------------
 [trimangle_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,ign_parm

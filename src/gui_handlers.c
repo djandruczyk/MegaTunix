@@ -1084,6 +1084,8 @@ EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpoin
 	static GtkStyle *style;
 	static gint total_marked = 0;
 	GtkWidget *frame = NULL;
+	GtkWidget *parent = NULL;
+	gchar * frame_name = NULL;
 	extern GHashTable *dynamic_widgets;
 
 	if ((gboolean)data == TRUE)
@@ -1116,7 +1118,9 @@ testit:
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	}
 
-	frame = g_hash_table_lookup(dynamic_widgets, g_strdup_printf("rescale_frame_page%i",page));
+	parent = gtk_widget_get_parent(GTK_WIDGET(widget));
+	frame_name = (gchar *)g_object_get_data(G_OBJECT(parent),"rescaler_frame");
+	frame = g_hash_table_lookup(dynamic_widgets, frame_name);
 	if ((total_marked > 0) && (frame != NULL))
 		gtk_widget_set_sensitive(GTK_WIDGET(frame),TRUE);
 	else
