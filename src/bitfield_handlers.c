@@ -11,8 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <bitfield_handlers.h>
 #include <config.h>
+#include <bitfield_handlers.h>
 #include <conversions.h>
 #include <enums.h>
 #include <glib/gprintf.h>
