@@ -240,7 +240,6 @@ void mem_dealloc()
 		g_free(std_conversions[i]);
 	}
 	g_free(runtime);
-	g_free(std_conversions);
 	g_hash_table_destroy(interdep_vars_1);
 	g_hash_table_destroy(interdep_vars_2);
 }
