@@ -49,7 +49,7 @@ gboolean load_realtime_map(void )
 	gchar * section = NULL;
 	GObject * object = NULL;
 	GList * list = NULL;
-	GArray * history = NULL;
+	gfloat *history = NULL;
 
 	rtv_map = g_new0(struct RtvMap, 1);
 
@@ -139,7 +139,7 @@ gboolean load_realtime_map(void )
 		/* Create object to hold all the data. (dynamically)*/
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		/* Create history array, last 50 values */
-		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),50);
+		history = (gfloat *)g_malloc0(50*sizeof(gfloat));
 		g_object_set_data(object,"hist_position",GINT_TO_POINTER(0));
 		g_object_set_data(object,"hist_max",GINT_TO_POINTER(50));
 		/* bind hostory array to object for future retrieval */

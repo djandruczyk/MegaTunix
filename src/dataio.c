@@ -157,8 +157,9 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			 * area for the parsed data...
 			 */
 			post_process_realtime_vars((void *)buf,(void *)runtime);
+			// NEW dynamic rt vars processor. Above soon to be
+			// deprecated...
 			process_rt_vars((void *)buf);
-
 			break;
 
 		case VE_BLOCK:
