@@ -717,8 +717,10 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 			return;
 		total = len < lo_width/lv_scroll ? len : lo_width/lv_scroll;
 			
+/* Debugging code
 		printf("\nlo_width %i\n",lo_width);
 		printf("total points %i\n",total);
+*/
 
 		// Draw is reverse order, from right to left, 
 		// easier to think out in my head... :) 

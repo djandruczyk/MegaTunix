@@ -161,7 +161,7 @@ void close_serial()
 	g_free(tmpbuf);
 }
 
-int check_ecu_comms(GtkWidget *widget, gpointer data)
+gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 {
 	gint res;
 	struct pollfd ufds;
@@ -194,7 +194,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 			g_fprintf(stderr,__FILE__": Error writing \"A\" to the ecu in check_ecu_comms()\n");
 		}
 			
-		res = poll (&ufds,1,serial_params->poll_timeout);
+		res = poll (&ufds,1,serial_params->poll_timeout*5);
 		if (res)
 		{
 			/* Command succeeded,  but we still need to drain the

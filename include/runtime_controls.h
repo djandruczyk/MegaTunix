@@ -44,7 +44,7 @@ static struct Def_Control all_controls[] = {
 {"Inj_2_DC",1,6,"Ch. 2 DC (%)",35,32,FLOAT,TRUE,DUALTABLE},
 {"EGOcorr",2,0,"EGO (%)",27,71,UCHAR,TRUE,0},
 {"BAROcorr",2,1,"Baro (%)",26,70,UCHAR,TRUE,0},
-{"WARMcorr",2,2,"Warmup (%)",28,73,UCHAR,TRUE,0},
+{"WARMcorr",2,2,"Warmup (%)   ",28,73,UCHAR,TRUE,0},
 {"AIRcorr",3,0,"Air Density (%)",25,69,UCHAR,TRUE,0},
 {"VE_1",3,1,"VE 1 (%)",30,57,UCHAR,TRUE,0},
 {"TPSaccel",3,2,"Accel (ms)",29,72,UCHAR,TRUE,0},

@@ -265,6 +265,7 @@ void build_ignition(GtkWidget *parent_frame)
 	
 	table = gtk_table_new(5,2,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacing(GTK_TABLE(table),0,15);
 	gtk_table_set_row_spacings(GTK_TABLE(table),3);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);

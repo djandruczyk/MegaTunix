@@ -72,7 +72,7 @@ static struct
 { "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE, FALSE, FALSE},
 { "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE, FALSE, FALSE},
 { "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE, FALSE, FALSE},
-{ "MegaSquirt DataLog Viewer", build_logviewer, "Log _Playback",TRUE, FALSE, FALSE},
+{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",TRUE, FALSE, FALSE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -82,6 +82,7 @@ int setup_gui()
 	GtkWidget *frame;
 	GtkWidget *notebook;
 	GtkWidget *label;
+	GtkWidget *hbox;
 	GtkWidget *vbox;
 	GtkWidget *button;
 	extern GList *dt_controls;
@@ -145,8 +146,11 @@ int setup_gui()
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	}
 
+	hbox = gtk_hbox_new(TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+
 	button = gtk_button_new_with_label("Exit");
-	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,20);
 	g_signal_connect(G_OBJECT(button),"pressed",
 			G_CALLBACK(leave),NULL);
 
