@@ -16,6 +16,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <getfiles.h>
 #include <lookuptables.h>
 #include <stdlib.h>
 #include <structures.h>
@@ -28,22 +29,17 @@ void load_lookuptables(void *ptr)
 	g_hash_table_foreach(canidate->lookuptables,get_table,NULL);
 }
 
-void get_table(gpointer table, gpointer filename, gpointer user_data)
+void get_table(gpointer table, gpointer fname, gpointer user_data)
 {
-	gchar * fullpath = NULL;
 	gboolean status = FALSE;
-
-	fullpath = g_strconcat(DATA_DIR,"/",LOOKUPTABLE_DIR,"/",filename,NULL);
-	if (g_file_test(fullpath,G_FILE_TEST_IS_REGULAR))
-		status = load_table(table,fullpath);
-	if (!status)
-	{
-		fullpath = g_strconcat(g_get_home_dir(),"/.MegaTunix/",LOOKUPTABLE_DIR,"/",filename,NULL);
-		if (g_file_test(fullpath,G_FILE_TEST_IS_REGULAR))
-			status = load_table(table,fullpath);
-	}
+	gchar * filename = NULL;
+	
+	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,"/",(gchar *)fname,NULL));
+	if (filename)
+		status = load_table(table,filename);
 	if (!status)
 		dbg_func(g_strdup_printf(__FILE__": load_lookuptables(), FAILURE loading \"%s\" lookuptable\n",(gchar *)table),CRITICAL);
+	g_free(filename);
 
 }
 
@@ -57,7 +53,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	gchar * end = NULL;
 	GString *a_line; 
 	gint *array = NULL;
-	gint tmparray[2048];
+	gint tmparray[2048]; // bad idea being static!!
 	gint i = 0;
 
 	iochannel = g_io_channel_new_file(filename,"r", NULL);

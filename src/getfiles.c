@@ -69,3 +69,22 @@ gchar ** get_files(gchar *pathstub)
 	finish:
 	return (g_strsplit(list,",",0));
 }
+
+gchar * get_file(gchar *pathstub)
+{
+	gchar * filename = NULL;
+
+	filename = g_strconcat(g_get_home_dir(),"/.MegaTunix/",pathstub,NULL);
+	if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+		return filename;
+	else 
+	{
+		g_free(filename);
+		filename = g_strconcat(DATA_DIR,"/",pathstub,NULL);
+		if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+			return filename;
+		else
+			return NULL;
+	}
+	return NULL;
+}

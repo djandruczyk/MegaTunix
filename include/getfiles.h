@@ -18,6 +18,7 @@
 
 /* Prototypes */
 gchar ** get_files(gchar *);
+gchar * get_file(gchar *);
 /* Prototypes */
 
 #endif

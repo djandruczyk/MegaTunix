@@ -208,6 +208,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		}
 		i++;
 	}
+	g_strfreev(filenames);
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
 	{
