@@ -218,7 +218,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			if (opened == TRUE)
 			{
 				backup_opened = TRUE;		
-				backup_all_ms_settings();
+				backup_all_ms_settings(selected_filename);
 				close_file(FULL_BACKUP);
 			}
 			else
@@ -233,7 +233,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			if (opened == TRUE)
 			{
 				restore_opened = TRUE;		
-				restore_all_ms_settings();
+				restore_all_ms_settings(selected_filename);
 				close_file(FULL_RESTORE);
 			}
 			else
@@ -394,15 +394,34 @@ void truncate_file(FileIoType filetype)
 	}
 }
 
-void backup_all_ms_settings()
+void backup_all_ms_settings(gchar * filename)
 {
-	if (backup_opened)
-		printf("backup all MS settings to file isn't written yet...\n");
-	
+	printf("backup all MS settings to file isn't written yet...\n");
+	printf("should backup to %s\n",filename);
+
 }
 
-void restore_all_ms_settings()
+void restore_all_ms_settings(gchar * filename)
 {
-	if (restore_opened)
-		printf("restore all MS settings from file isn't written yet\n");
+	GIOChannel *iochannel;
+	struct Ve_Const_Std *local_buffer;
+	extern struct Ve_Const_Std *ve_const_p0;
+	extern struct Ve_Const_Std *ve_const_p1;
+	extern struct Ve_Const_Std *ve_const_p0;
+	extern struct Ve_Const_Std *ve_const_p1;
+	extern struct Ve_Const_Std *backup_ve_const_p0;
+	extern struct Ve_Const_Std *backup_ve_const_p1;
+
+	local_buffer = g_malloc(MS_PAGE_SIZE);
+	/* Backup currently active parameters into backup structure */
+        memcpy(backup_ve_const_p0, ve_const_p0, MS_PAGE_SIZE);
+        memcpy(backup_ve_const_p1, ve_const_p1, MS_PAGE_SIZE);
+	
+	printf("restore all MS settings from file isn't written yet\n");
+	printf("should restore from %s\n",filename);
+	iochannel = g_io_channel_new_file(filename, "w", NULL);
+
+	/* Do Something here... */
+	g_io_channel_close(iochannel);
+	
 }
