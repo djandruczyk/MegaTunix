@@ -1,3 +1,12 @@
 
 To generate the necessary files to use from CVS run "./autogen.sh"
 
+To update your tree to current run "cvs update -dP" from the MegaTunix
+directory.
+
+it's STRONGLY recommended to run "./autogen.sh" after every cvs update
+in case the developer chanegd the configure.ac or Makefile.am files.  
+autogen will take care of creating the files that depend on those so that 
+you don't end up with build problems...
+
+
