@@ -9,7 +9,7 @@ SUBDIRS = $(subdirs)
 
 DIST_SUBDIRS = $(subdirs)
 
-DEPDIR = ${subdirs).deps
+DEPDIR = ${subdirs}/.deps
 
 CLEANFILES = *~ core -rf .dep*
 

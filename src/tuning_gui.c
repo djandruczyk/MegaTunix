@@ -36,7 +36,7 @@ static int beginX, beginY;
 static int active_map, active_rpm = 0;
   
 static float dt = 0.008;
-static float sphi = 45.0; 
+static float sphi = 35.0; // 45.0
 static float stheta = 75.0; 
 static float sdepth = 7.533;
 static float zNear = 0.8;
@@ -167,7 +167,7 @@ void reset_3d_view()
 	active_map = 0;
 	active_rpm = 0;
 	dt = 0.008;
-	sphi = 45.0; 
+	sphi = 35.0; 
 	stheta = 75.0; 
 	sdepth = 7.533;
 	zNear = 0.8;
@@ -394,29 +394,29 @@ void tuning_gui_draw_ve_grid(void)
 
 	glColor3f(1.0, 1.0, 1.0);
 	glLineWidth(1.5);
-	/* glDisable(GL_LINE_STIPPLE); */
 	
-	/* Draw RPM lines */
+	/* Draw lines on RPM axis */
 	for(rpm=0;rpm<grid;rpm++)
 	{
 		glBegin(GL_LINE_STRIP);
 		for(map=0;map<grid;map++) {
 			glVertex3f(
-					(float)(ve_const_p0->kpa_bins[map])/kpa_div, 	
-					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div, 	
-					(float)(ve_const_p0->ve_bins[(rpm*8)+map])/ve_div);
+					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div,			
+					(float)(ve_const_p0->kpa_bins[map])/kpa_div, 	 	
+					(float)(ve_const_p0->ve_bins[(map*8)+rpm])/ve_div);
 		}
 		glEnd();
 	}
-	/* Draw MAP lines */
+	
+	/* Draw lines on MAP axis */
 	for(map=0;map<grid;map++)
 	{
 		glBegin(GL_LINE_STRIP);
 		for(rpm=0;rpm<grid;rpm++){
-			glVertex3f(
-					(float)(ve_const_p0->kpa_bins[map])/kpa_div,	
-					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div,		  
-					(float)(ve_const_p0->ve_bins[(rpm*8)+map])/ve_div);	
+			glVertex3f(	
+					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div,
+					(float)(ve_const_p0->kpa_bins[map])/kpa_div,			
+					(float)(ve_const_p0->ve_bins[(map*8)+rpm])/ve_div);	
 		}
 		glEnd();
 	}
@@ -424,107 +424,130 @@ void tuning_gui_draw_ve_grid(void)
 
 void tuning_gui_draw_active_indicator(void)
 {
+	/* Render a red dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
-	glVertex3f(
+	glVertex3f(	
+			(float)(ve_const_p0->rpm_bins[active_rpm])/rpm_div,
 			(float)(ve_const_p0->kpa_bins[active_map])/kpa_div,	
-			(float)(ve_const_p0->rpm_bins[active_rpm])/rpm_div,		  
-			(float)(ve_const_p0->ve_bins[(active_rpm*8)+active_map])/ve_div);
+			(float)(ve_const_p0->ve_bins[(active_map*8)+active_rpm])/ve_div);
 	glEnd();	
 }
 
 
 void tuning_gui_draw_axis(void)
 {
+	/* Set vars and an asthetically pleasing maximum value */
 	int i=0, rpm=0, map=0;
 	float top = ((float)(ve_max+20))/ve_div;
 	
-	glLineWidth(1.0); /* was 0.5, but too jagged on my LCD */
+	/* Set line thickness and color */
+	glLineWidth(1.0);
 	glColor3f(0.7,0.7,0.7);
-	/* glLineStipple(1,0xAAAA);
-	glEnable(GL_LINE_STIPPLE); I decided it looks a big odd... */
 	
-	/* Draw horizontal background grid lines */
+	/* Draw horizontal background grid lines  
+	   starting at 0 VE and working up to VE+20% */
 	for (i=0;i<(ve_max+20);i = i + 10){
 		glBegin(GL_LINE_STRIP);
-		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+		glVertex3f(
 			((ve_const_p0->rpm_bins[0])/rpm_div),
+			((ve_const_p0->kpa_bins[7])/kpa_div),		
 			((float)i)/ve_div);
-		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+		glVertex3f(
 			((ve_const_p0->rpm_bins[7])/rpm_div),
+			((ve_const_p0->kpa_bins[7])/kpa_div),		
 			((float)i)/ve_div);
-		glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
+		glVertex3f(
 			((ve_const_p0->rpm_bins[7])/rpm_div),
+			((ve_const_p0->kpa_bins[0])/kpa_div),		
 			((float)i)/ve_div);
 		glEnd();	
 	}
-	/* Draw vertical background grid lines */
+	
+	/* Draw vertical background grid lines along KPA axis */
 	for (i=0;i<8;i++){
 		glBegin(GL_LINES);
-		glVertex3f(((ve_const_p0->kpa_bins[i])/kpa_div),
+		glVertex3f(
 			((ve_const_p0->rpm_bins[7])/rpm_div),
+			((ve_const_p0->kpa_bins[i])/kpa_div),		
 			0.0);
-		glVertex3f(((ve_const_p0->kpa_bins[i])/kpa_div),
+		glVertex3f(
 			((ve_const_p0->rpm_bins[7])/rpm_div),
+			((ve_const_p0->kpa_bins[i])/kpa_div),		
 			top);
 		glEnd();
 	}
+	
+	/* Draw vertical background lines along RPM axis */
 	for (i=0;i<8;i++){
 		glBegin(GL_LINES);
-		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
-			((ve_const_p0->rpm_bins[i])/rpm_div),
+		glVertex3f(
+			((ve_const_p0->rpm_bins[i])/rpm_div),		
+			((ve_const_p0->kpa_bins[7])/kpa_div),
 			0.0);
-		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+		glVertex3f(
 			((ve_const_p0->rpm_bins[i])/rpm_div),
+			((ve_const_p0->kpa_bins[7])/kpa_div),		
 			top);
 		glEnd();
 	}
-	/* Add the top line */
+	
+	/* Add the back corner top lines */
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
-		((ve_const_p0->rpm_bins[0])/rpm_div),
+	glVertex3f(
+		((ve_const_p0->rpm_bins[0])/rpm_div),	
+		((ve_const_p0->kpa_bins[7])/kpa_div),
 		top);
-	glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
-		((ve_const_p0->rpm_bins[7])/rpm_div),
+	glVertex3f(
+		((ve_const_p0->rpm_bins[7])/rpm_div),	
+		((ve_const_p0->kpa_bins[7])/kpa_div),
 		top);
-	glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
+	glVertex3f(
 		((ve_const_p0->rpm_bins[7])/rpm_div),
+		((ve_const_p0->kpa_bins[0])/kpa_div),	
 		top);
 	glEnd();
-	/* Add base lines */
+	
+	/* Add front corner base lines */
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
-		((ve_const_p0->rpm_bins[0])/rpm_div),
+	glVertex3f(
+		((ve_const_p0->rpm_bins[0])/rpm_div),	
+		((ve_const_p0->kpa_bins[7])/kpa_div),
 		0.0);
-	glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
-		((ve_const_p0->rpm_bins[0])/rpm_div),
+	glVertex3f(
+		((ve_const_p0->rpm_bins[0])/rpm_div),	
+		((ve_const_p0->kpa_bins[0])/kpa_div),
 		0.0);
-	glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
+	glVertex3f(
 		((ve_const_p0->rpm_bins[7])/rpm_div),
+		((ve_const_p0->kpa_bins[0])/kpa_div),
 		0.0);
 	glEnd();
 	
-	/* Draw grid labels */
+	/* Draw RPM and KPA labels */
 	for (i=0;i<8;i++){
 		rpm = (ve_const_p0->rpm_bins[i])*100;
 		map = (ve_const_p0->kpa_bins[i]);
 		sprintf(label,"%i",map);
 		tuning_gui_drawtext(label,
-			((ve_const_p0->kpa_bins[0])/kpa_div),
-			((ve_const_p0->rpm_bins[i])/rpm_div),
+			((ve_const_p0->rpm_bins[0])/rpm_div),
+			((ve_const_p0->kpa_bins[i])/kpa_div),
 			0.0);
+		
 		sprintf(label,"%i",rpm);
 		tuning_gui_drawtext(label,
-			((ve_const_p0->kpa_bins[i])/kpa_div),
-			((ve_const_p0->rpm_bins[0])/rpm_div),
+			((ve_const_p0->rpm_bins[i])/rpm_div),
+			((ve_const_p0->kpa_bins[0])/kpa_div),
 			0.0);
 	}
+	
+	/* Draw VE labels */
 	for (i=0;i<(ve_max+20);i=i+10){
 		sprintf(label,"%i",i);
 		tuning_gui_drawtext(label,
-			((ve_const_p0->kpa_bins[0])/kpa_div),
-			((ve_const_p0->rpm_bins[7])/rpm_div),
+			((ve_const_p0->rpm_bins[0])/rpm_div),
+			((ve_const_p0->kpa_bins[7])/kpa_div),
 			(float)i/ve_div);
 	}
 	
@@ -532,8 +555,10 @@ void tuning_gui_draw_axis(void)
 
 void tuning_gui_drawtext(char* text, float x, float y, float z)
 {
-	glColor3f(0.5,0.5,0.5);
+	glColor3f(0.7,0.7,0.7);
+	/* Set rendering postition */
 	glRasterPos3f (x, y, z);
+	/* Render each letter of text as stored in the display list */
 	while(*text) {
         glCallList(font_list_base+(*text));
         text++;
@@ -595,18 +620,16 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			#ifdef GLDEBUG
 			printf("LEFT\n");
 			#endif
-			/* Reversed to match display orientation */
-			if (active_rpm < 7)
-				active_rpm += 1;
+			if (active_rpm > 0)
+				active_rpm -= 1;
 			break;					
 
 		case GDK_Right:
 			#ifdef GLDEBUG
 			printf("RIGHT\n");
 			#endif
-			/* Reversed to match display orientation */
-			if (active_rpm > 0)
-				active_rpm -= 1;
+			if (active_rpm < 7)
+				active_rpm += 1;
 			break;				
 
 		case GDK_plus:
@@ -660,4 +683,5 @@ gboolean tuning_gui_focus_in_event (GtkWidget *widget, GdkEventFocus *event, gpo
 	gtk_widget_grab_focus (widget);
 	gtk_widget_map(widget);
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
+	return TRUE;
 }
