@@ -73,13 +73,14 @@ struct Logables logables;
  */
 const gchar *logable_names[] = 
 {
-"Hi-Res Clock","MS Clock","RPM","TPS Volts","TPS Counts",\
-"TPS %","BATT Volts","BATT Counts","MAP Volts","MAP Counts",\
-"MAP KPA","BARO Volts","BARO Counts","BARO KPA","O2 Volts",\
-"O2 Counts","MAT Volts","MAT Counts","MAT Degrees","CLT Volts",\
-"CLT Counts","CLT Degrees","BaroCorr","CLTCorr","EGOCorr",\
-"MATCorr","TPSACCEL","PW1","PW2","GammaE",\
-"VE1","VE2","IdleDC","EngineBits"
+"HR Clock",	"MS Clock",	"RPM",		"EngineBits",	"IdleDC",
+"TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
+"TPS Counts",	"MAP Counts",	"BARO Counts",	"MAT Counts",	"CLT Counts",
+"TPS %",	"MAP KPA",	"BARO KPA",	"MAT (Deg)",	"CLT (Deg)",
+"O2 Volts",	"O2 Counts",	"GammaE",	"BATT Volts",	"BATT Counts",
+"AIRcorr",	"BAROcorr",	"EGOcorr",	"WARMcorr",	"TPSaccel",
+"VE1",		"VE2",		"PW1",		"PW2",		"INJ-1 DCYCLE",
+"INJ-2 DCYCLE",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 /* logging_offset_map is a mapping between the logable_names[] list above 
  * and the byte offset into the Runtime_Common datastructure. The index 
@@ -90,25 +91,36 @@ const gchar *logable_names[] =
  */
 const gint logging_offset_map[] = 
 { 
-99,54,52,24,68,
-44, 4,63,16,66,
-60, 0,62,59,12,
-65,20,67,50,8,
-64,48,70,73,71,
-69,72,36,40,61,
-57,58,74,56 
+	99,54,52,56,74,
+	24,16, 0,20, 8,
+	68,66,62,67,64,
+	44,60,59,50,48,
+	12,65,61, 4,63,
+	69,70,71,73,72,
+	57,58,36,40,28,
+	32,75,76,77
 }; 
 
-/* Size of each logable vaiable in BYTES, so 4 = a 32 bit var */
+/* Size of each logable vaiable in BYTES, so 4 = a 32 bit var 
+ * This strange array is needed only forthe fact that the datalogging
+ * functions get all of their data from the Runtime_Common struct.
+ * that struct has been deigned (And is necessary) to have all the 
+ * largest varibles first (floats before shorts before chars), so that
+ * the structure can be referenced in array notation, this way all data
+ * is accessible byu the appropriate index.
+ * The values in this array correspond to the size of the referenced
+ * variable in that Runtime_Common struct.
+ */
 const gint logging_datasizes_map[] = 
 { 
-FLOAT,UCHAR,SHORT,FLOAT,UCHAR,
-FLOAT,FLOAT,UCHAR,FLOAT,UCHAR,
-UCHAR,FLOAT,UCHAR,UCHAR,FLOAT,
-UCHAR,FLOAT,UCHAR,SHORT,FLOAT,
-UCHAR,SHORT,UCHAR,UCHAR,UCHAR,
-UCHAR,UCHAR,FLOAT,FLOAT,UCHAR,
-UCHAR,UCHAR,UCHAR,UCHAR 
+	FLOAT,UCHAR,SHORT,UCHAR,UCHAR,
+	FLOAT,FLOAT,FLOAT,FLOAT,FLOAT,
+	UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
+	FLOAT,UCHAR,UCHAR,SHORT,UCHAR,
+	FLOAT,UCHAR,UCHAR,FLOAT,UCHAR,
+	UCHAR,UCHAR,UCHAR,UCHAR,UCHAR,
+	UCHAR,UCHAR,FLOAT,FLOAT,FLOAT,
+	FLOAT,UCHAR,UCHAR,UCHAR 
 }; 
 
 
@@ -478,7 +490,7 @@ void run_datalog(void)
 						last.tv_sec = now.tv_sec;
 						last.tv_usec = now.tv_usec;
 						begin = FALSE;
-						fprintf(io_file,"%f",0.0);
+						fprintf(io_file,"%.3f",0.0);
 					}
 					else
 					{
@@ -488,7 +500,7 @@ void run_datalog(void)
 							 1000000.0);
 						last.tv_sec = now.tv_sec;
 						last.tv_usec = now.tv_usec;
-						fprintf(io_file,"%f",cumulative);
+						fprintf(io_file,"%.3f",cumulative);
 					}
 					break;
 				default:

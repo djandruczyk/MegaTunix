@@ -76,26 +76,29 @@ GdkColor black = { 0, 0, 0, 0};
  * screen, insert a "1" where you want the button selected for that mode
  * otherwise use a zero...
  */
-const gint mt_classic[] = 
+const gint mt_classic[] =
 {
-0,1,1,0,0,
-0,0,0,0,0,
-1,0,0,0,1,
-1,0,0,0,0,
-0,0,1,1,1,
-1,0,0,0,1,
-1,0,0,1 };
+	0,1,1,1,0,
+	0,0,0,0,0,
+	0,0,0,0,0,
+	0,1,0,0,0,
+	1,0,1,0,0,
+	1,1,1,1,0,
+	1,0,0,0,0,
+	0,0,0,0 
+};
 
 const gint mt_full[] = 
 {
-1,1,1,0,0,
-1,0,0,0,0,
-1,0,0,0,1,
-1,0,0,1,0,
-0,1,1,1,1,
-1,1,1,1,1,
-1,1,0,1 }; 
-
+	1,1,1,1,0,
+	0,0,0,0,0,
+	0,0,0,0,0,
+	1,1,0,1,1,
+	1,0,1,1,0,
+	1,1,1,1,1,
+	1,0,1,1,0,
+	0,0,0,0 
+}; 
 
 
 static gboolean paused_handlers = FALSE;
