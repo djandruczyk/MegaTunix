@@ -65,6 +65,8 @@ void populate_user_output_choices(void)
 			GTK_POLICY_AUTOMATIC);
 
 	model = create_model ();
+	g_object_set_data(G_OBJECT(model),"lim_offset",GINT_TO_POINTER(91));
+	g_object_set_data(G_OBJECT(model),"src_offset",GINT_TO_POINTER(92));
 	view = gtk_tree_view_new_with_model (model);
 	g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
@@ -186,8 +188,13 @@ void cell_edited(GtkCellRendererText *cell,
 	gint new = 0;
 	gint column = 0;
 	GObject *object = NULL;
+	gint src_offset = -1;
+	gint lim_offset = -1;
+	gint rt_offset = -1;
 
-	column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
+	column = (gint) g_object_get_data (G_OBJECT (cell), "column");
+	src_offset = (gint) g_object_get_data(G_OBJECT(model),"src_offset");
+	lim_offset = (gint) g_object_get_data(G_OBJECT(model),"lim_offset");
 
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
@@ -195,6 +202,7 @@ void cell_edited(GtkCellRendererText *cell,
 	new = (gint)g_ascii_strtoull(new_text,NULL,10);
 	lower = (gint) g_object_get_data(G_OBJECT(object),"lower_limit");
 	upper = (gint) g_object_get_data(G_OBJECT(object),"upper_limit");
+	rt_offset = (gint) g_object_get_data(G_OBJECT(object),"offset");
 	if (new < lower)
 		new = lower;
 	if (new > upper)
@@ -202,4 +210,6 @@ void cell_edited(GtkCellRendererText *cell,
 
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
 			new, -1);
+	printf("Out1 src offset  %i, value %i, lim offset %i, lim_value %i\n",src_offset,rt_offset,lim_offset,new);
+	
 }

@@ -43,6 +43,7 @@ void process_rt_vars(void *incoming)
 	gint offset = 0;
 	gfloat result = 0.0;
 	gfloat tmpf = 0.0;
+	gboolean temp_dep = FALSE;
 	void *evaluator = NULL;
 	GTimeVal timeval;
 	gint ts_position;
@@ -86,24 +87,25 @@ void process_rt_vars(void *incoming)
 				dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Object bound to list at offset %i is invalid!!!!\n",i),CRITICAL);
 				continue;
 			}
-			special=(gchar *)g_object_get_data(object,"special");
+			temp_dep = (gboolean)g_object_get_data(object,"temp_dep");
+			special = (gchar *)g_object_get_data(object,"special");
 			if (special)
 			{
-				result = handle_special(object,special);
+				tmpf = handle_special(object,special);
 				goto store_it;
 			}
 			evaluator = (void *)g_object_get_data(object,"evaluator");
 			if (!evaluator)
 			{
-				expr = g_object_get_data(object,"conv_expr");
+				expr = g_object_get_data(object,"ul_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\t \"conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")),CRITICAL);
 					exit (-3);
 				}
-				evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
+				evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
 				if (!evaluator)
-					dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",(gchar *)g_object_get_data(object,"conv_expr")),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",(gchar *)g_object_get_data(object,"ul_conv_expr")),CRITICAL);
 				assert(evaluator);
 				g_object_set_data(object,"evaluator",evaluator);
 			}
@@ -112,8 +114,7 @@ void process_rt_vars(void *incoming)
 			offset = (gint)g_object_get_data(object,"offset");
 			if (g_object_get_data(object,"complex_expr"))
 			{
-				result = handle_complex_expr(object,incoming,RTV);
-				//printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
+				tmpf = handle_complex_expr(object,incoming,UPLOAD);
 				goto store_it;
 			}
 
@@ -131,11 +132,16 @@ void process_rt_vars(void *incoming)
 
 			dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator)),COMPLEX_EXPR);
 			tmpf = evaluator_evaluate_x(evaluator,x);
-			if (temp_units == CELSIUS)
-				result = (tmpf-32)*(5.0/9.0);
+store_it:
+			if (temp_dep)
+			{
+				if (temp_units == CELSIUS)
+					result = (tmpf-32)*(5.0/9.0);
+				else
+					result = tmpf;
+			}
 			else
 				result = tmpf;
-store_it:
 			history = (gfloat *)g_object_get_data(object,"history");
 			hist_position = (gint)g_object_get_data(object,"hist_position");
 			hist_max = (gint)g_object_get_data(object,"hist_max");
@@ -260,8 +266,6 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 			evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
 		else if (type == DOWNLOAD)
 			evaluator = evaluator_create(g_object_get_data(object,"dl_conv_expr"));
-		else if (type == RTV)
-			evaluator = evaluator_create(g_object_get_data(object,"conv_expr"));
 		else
 			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
 		if (!evaluator)
