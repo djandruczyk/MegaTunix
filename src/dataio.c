@@ -35,6 +35,7 @@ gint just_starting;
 gboolean handle_ms_data(InputHandler handler, void * msg)
 {
 	gint res = 0;
+	gint i = 0;
 	gboolean state = TRUE;
 	gint total_read = 0;
 	gint total_wanted = 0;
@@ -44,8 +45,8 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 	guchar *ptr = buf;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
 	struct Io_Message *message = (struct Io_Message *)msg;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
-	extern guchar *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data_last[MAX_SUPPORTED_PAGES];
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 
@@ -195,8 +196,9 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			 * comparison against to know if we have 
 			 * to burn stuff to flash.
 			 */
-			memcpy(ms_data[message->page],buf,total_wanted);
-			memcpy(ms_data_last[message->page],buf,total_wanted);
+			for (i=0;i<total_read;i++)
+				ms_data[message->page][i] = buf[i];
+			memcpy(ms_data_last[message->page],ms_data[message->page],total_read*sizeof(gint));
 			ms_ve_goodread_count++;
 			break;
 

@@ -27,10 +27,9 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 	// Highlights the VEtable entries around the current engine
 	// Operating point to assist with tuning the table.
 	//
-	extern guchar *ms_data;
+	extern gint *ms_data;
 	extern GdkColor red;
 	extern GdkColor white;
-	struct Ve_Const_Std *ve_const = NULL;
 	extern GList *ve_widgets[];
 	static struct Indexes kpa_index[2],rpm_index[2];
 	static struct Indexes l_kpa_index[2],l_rpm_index[2];
@@ -39,7 +38,6 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 	gint i = 0;
 
 
-	ve_const = (struct Ve_Const_Std *) ms_data;
 	if (page == 2)
 		offset = MS_PAGE_SIZE;
 
@@ -86,7 +84,7 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 
 void get_indexes(TableType type, gint value, void *ptr,gint page)
 {
-	extern guchar *ms_data;
+	extern gint *ms_data;
 	struct Indexes *index = (struct Indexes *) ptr;
 	gint start = -1;
 	const gint span = 8;

@@ -48,9 +48,9 @@ extern gint interval_max;
 extern GtkWidget *main_window;
 struct Serial_Params *serial_params;	
 /* Support up to "x" page firmware.... */
-guchar *ms_data[MAX_SUPPORTED_PAGES];
-guchar *ms_data_last[MAX_SUPPORTED_PAGES];
-guchar *ms_data_backup[MAX_SUPPORTED_PAGES];
+gint *ms_data[MAX_SUPPORTED_PAGES];
+gint *ms_data_last[MAX_SUPPORTED_PAGES];
+gint *ms_data_backup[MAX_SUPPORTED_PAGES];
 GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
@@ -253,9 +253,9 @@ void mem_alloc()
 
 	for (i=0;i<MAX_SUPPORTED_PAGES;i++)
 	{
-		ms_data[i] = g_malloc0(2*MS_PAGE_SIZE);
-		ms_data_last[i] = g_malloc0(2*MS_PAGE_SIZE);
-		ms_data_backup[i] = g_malloc0(2*MS_PAGE_SIZE);
+		ms_data[i] = g_malloc0(MS_PAGE_SIZE*sizeof(gint));
+		ms_data_last[i] = g_malloc0(MS_PAGE_SIZE*sizeof(gint));
+		ms_data_backup[i] = g_malloc0(MS_PAGE_SIZE*sizeof(gint));
 		for (j=0;j<2*MS_PAGE_SIZE;j++)
 			ve_widgets[i][j] = NULL;
 	}

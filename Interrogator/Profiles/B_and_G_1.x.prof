@@ -20,6 +20,12 @@ load_base_offset=108
 rpm_bincount=8
 load_bincount=8
 is_spark=FALSE
+reqfuel_offset=90
+divider_offset=91
+rpmk_offset=98
+cfg11_offset=116
+cfg12_offset=117
+cfg13_offset=118
 
 [bytecounts]
 CMD_A_0=22

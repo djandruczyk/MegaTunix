@@ -187,12 +187,19 @@ struct Page_Params
 	gint load_base;		/*! where load table starts */
 	gint rpm_bincount;	/*! how many RPM bins */
 	gint load_bincount;	/*! how many load bins... */
+	gint cfg11_offset;	/*! Where config11 value is located */
+	gint cfg12_offset;	/*! Where config12 value is located */
+	gint cfg13_offset;	/*! Where config13 value is located */
+	gint alternate_offset;	/*! Where alternate value is located */
+	gint divider_offset;	/*! Where divider value is located */
+	gint rpmk_offset;	/*! Where rpmk value is located */
+	gint reqfuel_offset;	/*! Where reqfuel value is located */
 	gboolean is_spark;	/*! is this a spark table?? */
 };
 
 
 /*! 
- \brief The Canidate strucutre is used for interrogation, each potential
+ \brief The Canidate structure is used for interrogation, each potential
  firmware is interrogated and as it is the data is fed into this structure
  for comparison against know values (interrogation profiles), upon a match
  the needed data is copied into a struct Firmware_Details structure

@@ -181,7 +181,7 @@ gfloat lookup_data(GObject *object, gint offset)
 
 gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 {
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
 	gchar **symbols = NULL;
 	gchar **expr_types = NULL;
 	guchar *raw_data = incoming;

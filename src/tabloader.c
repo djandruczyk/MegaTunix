@@ -115,7 +115,8 @@ gboolean load_gui_tabs()
 				printf("after append\n");
 				glade_xml_signal_autoconnect(xml);
 				printf("after signal autoconnect\n");
-				gtk_widget_show_all(frame);
+				//gtk_widget_show_all(frame);
+				gtk_widget_show_all(notebook);
 				printf("after show all(frame)\n");
 			}
 			g_free(xml);

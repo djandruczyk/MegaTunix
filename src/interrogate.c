@@ -320,6 +320,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	{
 		firmware->page_params[i] = g_new0(struct Page_Params, 1);
 
+		memcpy(firmware->page_params[i],potential->page_params[i],sizeof(struct Page_Params));
 		if (potential->page_params[i]->is_spark)
 		{
 			firmware->page_params[i]->size = (gint)g_hash_table_lookup(
@@ -332,12 +333,6 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 					potential->bytecounts,
 					g_strdup_printf("CMD_V_%i",i));
 		}
-		firmware->page_params[i]->ve_base = potential->page_params[i]->ve_base;
-		firmware->page_params[i]->rpm_base = potential->page_params[i]->rpm_base;
-		firmware->page_params[i]->load_base = potential->page_params[i]->load_base;
-		firmware->page_params[i]->rpm_bincount = potential->page_params[i]->rpm_bincount;
-		firmware->page_params[i]->load_bincount = potential->page_params[i]->load_bincount;
-		firmware->page_params[i]->is_spark = potential->page_params[i]->is_spark;
 	}
 
 	/* use commands defined in the interogation profile to map the proper
@@ -659,24 +654,38 @@ void load_profile_details(void *ptr)
 		{
 			canidate->page_params[i] = g_new0(struct Page_Params,1);
 			section = g_strdup_printf("page_%i",i);
-			if(!cfg_read_int(cfgfile,section,"ve_base_offset",
-						&canidate->page_params[i]->ve_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"rpm_base_offset",
-						&canidate->page_params[i]->rpm_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"load_base_offset",
-						&canidate->page_params[i]->load_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"load_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"rpm_bincount",
-						&canidate->page_params[i]->rpm_bincount))
-				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"load_bincount",
-						&canidate->page_params[i]->load_bincount))
-				dbg_func(__FILE__": load_profile_details()\n\t\"load_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_boolean(cfgfile,section,"is_spark",
-						&canidate->page_params[i]->is_spark))
+			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->page_params[i]->is_spark))
 				dbg_func(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			if (!(canidate->page_params[i]->is_spark))
+			{
+				if(!cfg_read_int(cfgfile,section,"divider_offset",&canidate->page_params[i]->divider_offset))
+					dbg_func(__FILE__": load_profile_details()\n\t\"divider_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"reqfuel_offset",&canidate->page_params[i]->reqfuel_offset))
+					dbg_func(__FILE__": load_profile_details()\n\t\"reqfuel_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"cfg11_offset",&canidate->page_params[i]->cfg11_offset))
+					dbg_func(__FILE__": load_profile_details()\n\t\"cfg11_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"cfg12_offset",&canidate->page_params[i]->cfg12_offset))
+					dbg_func(__FILE__": load_profile_details()\n\t\"cfg12_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"cfg13_offset",&canidate->page_params[i]->cfg13_offset))
+					dbg_func(__FILE__": load_profile_details()\n\t\"cfg13_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"rpmk_offset",&canidate->page_params[i]->rpmk_offset))
+					dbg_func(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+				if (!(canidate->capabilities & DUALTABLE))
+				{
+					if(!cfg_read_int(cfgfile,section,"alternate_offset",&canidate->page_params[i]->alternate_offset))
+						dbg_func(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+				}
+			}
+			if(!cfg_read_int(cfgfile,section,"ve_base_offset",&canidate->page_params[i]->ve_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"rpm_base_offset",&canidate->page_params[i]->rpm_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"load_base_offset",&canidate->page_params[i]->load_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"load_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"rpm_bincount",&canidate->page_params[i]->rpm_bincount))
+				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"load_bincount",&canidate->page_params[i]->load_bincount))
+				dbg_func(__FILE__": load_profile_details()\n\t\"load_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			g_free(section);
 		}
 

@@ -87,7 +87,7 @@ gboolean vetable_export(void *ptr)
 	gint rpm_base = 0;
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
-	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
+	extern gint * ms_data[MAX_SUPPORTED_PAGES];
 	extern struct Firmware_Details *firmware;
 	gchar * tmpbuf = NULL;
 	GIOStatus status;
@@ -580,8 +580,8 @@ void dealloc_ve_struct(void *ptr)
 void feed_import_data_to_ms(void *ptr)
 {
 	gint i = 0;
-	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
-	extern guchar * ms_data_backup[MAX_SUPPORTED_PAGES];
+	extern gint * ms_data[MAX_SUPPORTED_PAGES];
+	extern gint * ms_data_backup[MAX_SUPPORTED_PAGES];
 	gchar * tmpbuf = NULL;
 	gint page = -1;
 	struct Vex_Import *vex_import = ptr;
@@ -628,14 +628,14 @@ void revert_to_previous_data()
 {
 	gint i=0;
 	/* Called to back out a load of a VEtable from VEX import */
-	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
-	extern guchar * ms_data_backup[MAX_SUPPORTED_PAGES];
+	extern gint * ms_data[MAX_SUPPORTED_PAGES];
+	extern gint * ms_data_backup[MAX_SUPPORTED_PAGES];
 	extern struct Firmware_Details *firmware;
 	extern GHashTable *dynamic_widgets;
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		memcpy(ms_data[i], ms_data_backup[i], 2*MS_PAGE_SIZE);
+		memcpy(ms_data[i], ms_data_backup[i], MS_PAGE_SIZE*sizeof(gint));
 	}
 	update_ve_const();
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),FALSE);

@@ -64,12 +64,24 @@ gboolean paused_handlers = FALSE;
 static gboolean constants_loaded = FALSE;
 extern gint num_squirts_1;
 extern gint num_squirts_2;
-extern gint num_cylinders_1;
-extern gint num_cylinders_2;
-extern gint num_injectors_1;
-extern gint num_injectors_2;
+extern gint num_cyls_1;
+extern gint num_cyls_2;
+extern gint num_inj_1;
+extern gint num_inj_2;
+extern gint divider_1;
+extern gint divider_2;
+extern gint last_num_squirts_1;
+extern gint last_num_squirts_2;
+extern gint last_num_cyls_1;
+extern gint last_num_cyls_2;
+extern gint last_num_inj_1;
+extern gint last_num_inj_2;
+extern gint last_divider_1;
+extern gint last_divider_2;
 extern gfloat req_fuel_total_1;
 extern gfloat req_fuel_total_2;
+extern gfloat last_req_fuel_total_1;
+extern gfloat last_req_fuel_total_2;
 static gboolean err_flag = FALSE;
 
 void leave(GtkWidget *widget, gpointer data)
@@ -222,7 +234,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint bitmask = -1;
 	gint dload_val = -1;
 	gint page = -1;
-	guchar tmp = 0;
+	gint tmp = 0;
 	gint tmp32 = 0;
 	gint offset = -1;
 	gboolean ign_parm = FALSE;
@@ -234,7 +246,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gboolean state = FALSE;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
 
 	if (paused_handlers)
 		return TRUE;
@@ -444,16 +456,16 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint tmpi = 0;
 	gint tmp = 0;
 	gint handler = -1;
+	gint divider_offset = 0;
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	extern gint realtime_id;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern gint lv_scroll;
-	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data[0];
-	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern struct Firmware_Details *firmware;
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -476,9 +488,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	bitshift = (gint) g_object_get_data(G_OBJECT(widget),"bitshift");
 	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-
-	if (ecu_caps & DUALTABLE)
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
 
 	tmpi = (int)(value+.001);
 
@@ -518,10 +527,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_1:
+			last_req_fuel_total_1 = req_fuel_total_1;
 			req_fuel_total_1 = value;
 			check_req_fuel_limits();
 			break;
 		case REQ_FUEL_2:
+			last_req_fuel_total_2 = req_fuel_total_2;
 			req_fuel_total_2 = value;
 			check_req_fuel_limits();
 			break;
@@ -534,8 +545,12 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 		case NUM_SQUIRTS_1:
 			/* This actuall effects another variable */
+			divider_offset = firmware->page_params[page]->divider_offset;
+			last_num_squirts_1 = num_squirts_1;
+			last_divider_1 = ms_data[page][divider_offset];
+
 			num_squirts_1 = tmpi;
-			if (num_cylinders_1 % num_squirts_1)
+			if (num_cyls_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
 				set_reqfuel_state(RED,page);
@@ -543,9 +558,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			else
 			{
 				dload_val = 
-					(gint)(((float)num_cylinders_1/
+					(gint)(((float)num_cyls_1/
 						(float)num_squirts_1)+0.001);
-				ve_const->divider = dload_val;
+				ms_data[page][divider_offset] = dload_val;
+				divider_1 = dload_val;
 				g_hash_table_insert(interdep_vars_1,
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
@@ -556,31 +572,36 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case NUM_CYLINDERS_1:
 			/* Updates a shared bitfield */
-			num_cylinders_1 = tmpi;
-			tmp = ms_data[page][offset];
-			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bitshift);
-			ms_data[page][offset] = tmp;
-			dload_val = tmp;
-			g_hash_table_insert(interdep_vars_1,
-					GINT_TO_POINTER(offset),
-					GINT_TO_POINTER(dload_val));
+			divider_offset = firmware->page_params[page]->divider_offset;
+			last_divider_1 = ms_data[page][divider_offset];
+			last_num_cyls_1 = num_cyls_1;
 
-			dload_val = 
-				(gint)(((float)num_cylinders_1/
-					(float)num_squirts_1)+0.001);
-			ve_const->divider = dload_val;
-			g_hash_table_insert(interdep_vars_1,
-					GINT_TO_POINTER(DIV_OFFSET_1),
-					GINT_TO_POINTER(dload_val));
-
-			if (num_cylinders_1 % num_squirts_1)
+			num_cyls_1 = tmpi;
+			if (num_cyls_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
 				set_reqfuel_state(RED,page);	
 			}
 			else
 			{
+				tmp = ms_data[page][offset];
+				tmp = tmp & ~bitmask;	/*clears top 4 bits */
+				tmp = tmp | ((tmpi-1) << bitshift);
+				ms_data[page][offset] = tmp;
+				dload_val = tmp;
+				g_hash_table_insert(interdep_vars_1,
+						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(dload_val));
+
+				dload_val = 
+					(gint)(((float)num_cyls_1/
+						(float)num_squirts_1)+0.001);
+				ms_data[page][divider_offset] = dload_val;
+				divider_1 = dload_val;
+				g_hash_table_insert(interdep_vars_1,
+						GINT_TO_POINTER(divider_offset),
+						GINT_TO_POINTER(dload_val));
+
 				err_flag = FALSE;
 				set_reqfuel_state(BLACK,page);	
 				check_req_fuel_limits();
@@ -588,7 +609,9 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case NUM_INJECTORS_1:
 			/* Updates a shared bitfield */
-			num_injectors_1 = tmpi;
+			last_num_inj_1 = num_inj_1;
+			num_inj_1 = tmpi;
+
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << bitshift);
@@ -601,9 +624,13 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS_2:
+			divider_offset = firmware->page_params[page]->divider_offset;
 			/* This actuall effects another variable */
+			last_num_squirts_2 = num_squirts_2;
+			last_divider_2 = ms_data[page][divider_offset];
+
 			num_squirts_2 = tmpi;
-			if (num_cylinders_2 % num_squirts_2)
+			if (num_cyls_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
 				set_reqfuel_state(RED,page);
@@ -611,9 +638,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			else
 			{
 				dload_val = 
-					(gint)(((float)num_cylinders_2/
+					(gint)(((float)num_cyls_2/
 						(float)num_squirts_2)+0.001);
-				ve_const_dt2->divider = dload_val;
+				ms_data[page][divider_offset] = dload_val;
+				divider_2 = dload_val;
 				g_hash_table_insert(interdep_vars_2,
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
@@ -623,32 +651,37 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		case NUM_CYLINDERS_2:
+			divider_offset = firmware->page_params[page]->divider_offset;
 			/* Updates a shared bitfield */
-			num_cylinders_2 = tmpi;
-			tmp = ms_data[page][offset];
-			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bitshift);
-			ms_data[page][offset] = tmp;
-			dload_val = tmp;
-			g_hash_table_insert(interdep_vars_2,
-					GINT_TO_POINTER(offset),
-					GINT_TO_POINTER(dload_val));
+			last_divider_2 = ms_data[page][divider_offset];
+			last_num_cyls_2 = num_cyls_2;
 
-			dload_val = 
-				(gint)(((float)num_cylinders_2/
-					(float)num_squirts_2)+0.001);
-			ve_const_dt2->divider = dload_val;
-			g_hash_table_insert(interdep_vars_2,
-					GINT_TO_POINTER(DIV_OFFSET_2),
-					GINT_TO_POINTER(dload_val));
-
-			if (num_cylinders_2 % num_squirts_2)
+			num_cyls_2 = tmpi;
+			if (num_cyls_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
 				set_reqfuel_state(RED,page);	
 			}
 			else
 			{
+				tmp = ms_data[page][offset];
+				tmp = tmp & ~bitmask;	/*clears top 4 bits */
+				tmp = tmp | ((tmpi-1) << bitshift);
+				ms_data[page][offset] = tmp;
+				dload_val = tmp;
+				g_hash_table_insert(interdep_vars_2,
+						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(dload_val));
+
+				dload_val = 
+					(gint)(((float)num_cyls_2/
+						(float)num_squirts_2)+0.001);
+				ms_data[page][divider_offset] = dload_val;
+				divider_2 = dload_val;
+				g_hash_table_insert(interdep_vars_2,
+						GINT_TO_POINTER(divider_offset),
+						GINT_TO_POINTER(dload_val));
+
 				err_flag = FALSE;
 				set_reqfuel_state(BLACK,page);	
 				check_req_fuel_limits();
@@ -656,7 +689,9 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case NUM_INJECTORS_2:
 			/* Updates a shared bitfield */
-			num_injectors_2 = tmpi;
+
+			last_num_inj_2 = num_inj_2;
+			num_inj_2 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << bitshift);
@@ -735,71 +770,84 @@ void update_ve_const()
 	gint page = 0;
 	gint offset = 0;
 	gfloat tmp = 0.0;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	gint divider = 0;
+	gint reqfuel = 0;
+	union config11 cfg11;
+	union config12 cfg12;
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
-	struct Ve_Const_Std *ve_const = NULL;
-	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
-	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
+	extern struct Firmware_Details *firmware;
 
 	/* Point to Table0 (stock MS ) data... */
-	ve_const = (struct Ve_Const_Std *) ms_data[0];
 
-	check_config13(ve_const->config13.value);
-
+	check_config13(ms_data[page][firmware->page_params[page]->cfg13_offset]);
 
 	/* DualTable Fuel Calculations
 	 * DT code no longer uses the "alternate" firing mode as each table
 	 * is pretty much independant from the other,  so the calcs are a 
 	 * little simpler...
 	 *
-	 *                                        /     num_injectors_1   \
+	 *                                        /        num_inj_1      \
 	 *         	   req_fuel_per_squirt * (-------------------------)
 	 *                                        \ 	    divider       /
 	 * req_fuel_total = --------------------------------------------------
 	 *				10
 	 *
-	 * where divider = num_cylinders/num_squirts;
+	 * where divider = num_cyls/num_squirts;
 	 *
 
 	 */
 	if (ecu_caps & DUALTABLE)
 	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data[0];
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
-
 		/* Table 1 */
-                tmp =   (float)(ve_const_dt1->config12.bit.injectors+1) /
-                        (float)(ve_const_dt1->divider);
-                tmp *= (float)ve_const_dt1->req_fuel;
+		page = 0;
+		cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
+		cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
+		num_cyls_1 = cfg11.bit.cylinders+1;
+		last_num_cyls_1 = cfg11.bit.cylinders+1;
+                num_inj_1 = cfg12.bit.injectors+1;
+                last_num_inj_1 = cfg12.bit.injectors+1;
+
+		divider = ms_data[page][firmware->page_params[page]->divider_offset];
+		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
+
+		/* ReqFuel Total */
+                tmp = (float)(num_inj_1)/(float)(divider);
+                tmp *= (float)reqfuel;
                 tmp /= 10.0;
                 req_fuel_total_1 = tmp;
-
-		/* Table 2 */
-                tmp =   (float)(ve_const_dt2->config12.bit.injectors+1) /
-                        (float)(ve_const_dt2->divider);
-                tmp *= (float)ve_const_dt2->req_fuel;
-                tmp /= 10.0;
-                req_fuel_total_2 = tmp;
-
-		/* Config11 bits */
-		num_cylinders_1 = ve_const_dt1->config11.bit.cylinders+1;
-		num_cylinders_2 = ve_const_dt2->config11.bit.cylinders+1;
-		/* Config12 bits */
-                num_injectors_1 = ve_const_dt1->config12.bit.injectors+1;
-                num_injectors_2 = ve_const_dt2->config12.bit.injectors+1;
+                last_req_fuel_total_1 = tmp;
 
 		/* Injections per cycle */
-		tmp =	(float)(ve_const_dt1->config11.bit.cylinders+1) /
-			(float)(ve_const_dt1->divider);
-		num_squirts_1 = (gint)tmp;
+		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider);
 		if (num_squirts_1 < 1 )
 			num_squirts_1 = 1;
+		last_num_squirts_1 = num_squirts_1;
 
-		tmp =	(float)(ve_const_dt2->config11.bit.cylinders+1) /
-			(float)(ve_const_dt2->divider);
-		num_squirts_2 = (gint)tmp;
+
+		/* Table 2 */
+		page = 1;
+		cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
+		cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
+		num_cyls_2 = cfg11.bit.cylinders+1;
+		last_num_cyls_2 = cfg11.bit.cylinders+1;
+                num_inj_2 = cfg12.bit.injectors+1;
+                last_num_inj_2 = cfg12.bit.injectors+1;
+		divider = ms_data[page][firmware->page_params[page]->divider_offset];
+		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
+
+		/* ReqFuel Total */
+                tmp = (float)(num_inj_2)/(float)(divider);
+                tmp *= (float)reqfuel;
+                tmp /= 10.0;
+                req_fuel_total_2 = tmp;
+                last_req_fuel_total_2 = tmp;
+
+		/* Injections per cycle */
+		num_squirts_2 =	(float)(num_cyls_2)/(float)(divider);
 		if (num_squirts_2 < 1 )
 			num_squirts_2 = 1;
+		last_num_squirts_2 = num_squirts_2;
 
 		set_reqfuel_state(BLACK,page);
 	}
@@ -807,13 +855,13 @@ void update_ve_const()
 	{
 		/*  B&G, MSnS, MSnEDIS req Fuel calc *
 		 * req-fuel 
-		 *                                   /     num_injectors     \
+		 *                                /        num_inj        \
 		 *    	   req_fuel_per_squirt * (-------------------------)
-		 *                                   \ divider*(alternate+1) /
+		 *                                \ divider*(alternate+1) /
 		 * req_fuel_total = ------------------------------------------
 		 *				10
 		 *
-		 * where divider = num_cylinders/num_squirts;
+		 * where divider = num_cyls/num_squirts;
 		 *
 		 * The req_fuel_per_squirt is the part stored in the MS ECU as 
 		 * the req_fuel variable.  Take note when doing conversions.  
@@ -821,19 +869,28 @@ void update_ve_const()
 		 * in the MS.  
 		 * 
 		 */
-		tmp =	(float)(ve_const->config12.bit.injectors+1.0) /
-			(float)(ve_const->divider*(ve_const->alternate+1.0));
-		tmp *= (float)ve_const->req_fuel;
-		tmp /= 10.0;
-		req_fuel_total_1 = tmp;
-
-		num_cylinders_1 = ve_const->config11.bit.cylinders+1;
-		num_injectors_1 = ve_const->config12.bit.injectors+1;
+		/* Table 1 */
+		page = 0;
+		cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
+		cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
+		num_cyls_1 = cfg11.bit.cylinders+1;
+		last_num_cyls_1 = cfg11.bit.cylinders+1;
+                num_inj_1 = cfg12.bit.injectors+1;
+                last_num_inj_1 = cfg12.bit.injectors+1;
+		divider = ms_data[page][firmware->page_params[page]->divider_offset];
+		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
+		/* ReqFuel Total */
+                tmp = (float)(num_inj_1)/(float)(divider);
+                tmp *= (float)reqfuel;
+                tmp /= 10.0;
+                req_fuel_total_1 = tmp;
+                last_req_fuel_total_1 = tmp;
 
 		/* Injections per cycle */
-		tmp =	(float)(ve_const->config11.bit.cylinders+1) /
-			(float)(ve_const->divider);
-		num_squirts_1 = (gint)tmp;
+		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider);
+		if (num_squirts_1 < 1 )
+			num_squirts_1 = 1;
+		last_num_squirts_1 = num_squirts_1;
 
 		set_reqfuel_state(BLACK,page);
 	}	// End of B&G specific code...

@@ -28,17 +28,28 @@
 #include <structures.h>
 #include <threads.h>
 
-static gint rpmk_offset = 98;
 extern GdkColor red;
 extern GdkColor black;
 gint num_squirts_1 = 1;
 gint num_squirts_2 = 1;
-gint num_cylinders_1 = 1;
-gint num_cylinders_2 = 1;
-gint num_injectors_1 = 1;
-gint num_injectors_2 = 1;
+gint num_cyls_1 = 1;
+gint num_cyls_2 = 1;
+gint num_inj_1 = 1;
+gint num_inj_2 = 1;
+gint divider_1 = 0;
+gint divider_2 = 0;
+gint last_num_squirts_1 = 1;
+gint last_num_squirts_2 = 1;
+gint last_num_cyls_1 = 1;
+gint last_num_cyls_2 = 1;
+gint last_num_inj_1 = 1;
+gint last_num_inj_2 = 1;
+gint last_divider_1= 1;
+gint last_divider_2 = 1;
 gfloat req_fuel_total_1 = 0.0;
 gfloat req_fuel_total_2 = 0.0;
+gfloat last_req_fuel_total_1 = 0.0;
+gfloat last_req_fuel_total_2 = 0.0;
 
 
 void req_fuel_change(GtkWidget *widget)
@@ -336,30 +347,35 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 {
 	struct Reqd_Fuel * reqd_fuel = NULL;
-	struct Ve_Const_Std *ve_const;
 	gint dload_val = 0;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	gint rpmk_offset = 0;
+	gint page = 0;
+	union config11 cfg11;
+	extern struct Firmware_Details *firmware;
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
 	extern GHashTable *dynamic_widgets;
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 
 	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
-	ve_const = (struct Ve_Const_Std *)ms_data[reqd_fuel->page];
 
-	//(reqd_fuel->reqd_fuel_spin),
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON
 			(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("req_fuel_per_cycle_%i_spin",1+reqd_fuel->page))),
 			reqd_fuel->calcd_reqd_fuel);
 
 	/* Top is two stroke, botton is four stroke.. */
-	if (ve_const->config11.bit.eng_type)
-		ve_const->rpmk = (int)(6000.0/((double)reqd_fuel->cyls));
+	page = reqd_fuel->page;
+	printf("saving reqfuel for page %i\n",page);
+	cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
+	rpmk_offset = firmware->page_params[page]->rpmk_offset;
+	if (cfg11.bit.eng_type)
+		ms_data[page][rpmk_offset] = (int)(6000.0/((double)reqd_fuel->cyls));
 	else
-		ve_const->rpmk = (int)(12000.0/((double)reqd_fuel->cyls));
+		ms_data[page][rpmk_offset] = (int)(12000.0/((double)reqd_fuel->cyls));
 
 	check_req_fuel_limits();
-	dload_val = ve_const->rpmk;
+	dload_val = ms_data[page][rpmk_offset];
 	write_ve_const(reqd_fuel->page, rpmk_offset, dload_val, FALSE);
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
@@ -404,100 +420,120 @@ void check_req_fuel_limits()
 {
 	gfloat tmp = 0.0;
 	gfloat req_fuel_per_squirt = 0.0;
-	gint lim_flag = 0;
+	gboolean lim_flag = FALSE;
 	gint dload_val = 0;
 	gint offset = 0;
 	gint page = -1;
+	gint rpmk_offset = 0;
+	gint divider = 0;
+	gint alternate = 0;
+	gfloat req_fuel = 0;
+	union config11 cfg11;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
 	extern GHashTable * interdep_vars_1;
 	extern GHashTable * interdep_vars_2;
 	extern GHashTable *dynamic_widgets;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
-	struct Ve_Const_Std *ve_const = NULL;
-	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
-	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern struct Firmware_Details *firmware;
 
 	if (ecu_caps & DUALTABLE)
 	{
-		ve_const_dt1 = (struct Ve_Const_DT_1 *)ms_data[0];
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) ms_data[1];
 		/* F&H Dualtable required Fuel calc
 		 *
-		 *                                        / num_injectors \
+		 *                                        /    num_inj_x  \
 		 *         	   req_fuel_per_squirt * (-----------------)
 		 *                                        \    divider    /
 		 * req_fuel_total = -------------------------------------------
 		 *				10
 		 *
-		 * where divider = num_cylinders/num_squirts;
+		 * where divider = num_cyls/num_squirts;
 		 *
 		 * rearranging to solve for req_fuel_per_squirt...
 		 *
 		 *                        (req_fuel_total * 10)
 		 * req_fuel_per_squirt =  ---------------------
-		 *			    / num_injectors \
+		 *			    /   num_inj_x   \
 		 *                         (-----------------)
 		 *                          \    divider    /
 		 */
 
 		/* TABLE 1 */
 		page = 0;
-		tmp = (float)(num_injectors_1)/(float)(ve_const_dt1->divider);
+
+//		printf("Current cyls %i, inj %i, squirts %i req_fuel %f\n",num_cyls_1,num_inj_1,num_squirts_1,req_fuel_total_1);
+//		printf("Last    cyls %i, inj %i, squirts %i req_fuel %f\n",last_num_cyls_1,last_num_inj_1,last_num_squirts_1,last_req_fuel_total_1);
+		tmp = (float)(num_inj_1)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
 		req_fuel_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
 
-		if (req_fuel_per_squirt != ve_const_dt1->req_fuel)
-		{
-			if (req_fuel_per_squirt > 255)
-				lim_flag = 1;
-			if (req_fuel_per_squirt < 0)
-				lim_flag = 1;
-			if (num_cylinders_1 % num_squirts_1)
-				lim_flag = 1;
-		}
-				
+		/* If nothing changed , jsut break to next check */
+		if ((req_fuel_total_1 == last_req_fuel_total_1) &&
+			(num_cyls_1 == last_num_cyls_1) &&
+			(num_inj_1 == last_num_inj_1) &&
+			(num_squirts_1 == last_num_squirts_1))
+			goto table2;
+
+		if (req_fuel_per_squirt > 255)
+			lim_flag = TRUE;
+		if (req_fuel_per_squirt < 0)
+			lim_flag = TRUE;
+		if (num_cyls_1 % num_squirts_1)
+			lim_flag = TRUE;
 
 		/* Throw warning if an issue */
 		if (lim_flag)
 			set_interdep_state(RED,"interdep_1_ctrl");
 		else
 		{
+			set_interdep_state(BLACK,"interdep_1_ctrl");
 			/* Required Fuel per SQUIRT */
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
 					(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
 
-			set_interdep_state(BLACK,"interdep_1_ctrl");
 
 			if (paused_handlers)
 				return;
-			offset = 90;
+
+			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
+			rpmk_offset = firmware->page_params[page]->rpmk_offset;
+			if (cfg11.bit.eng_type)
+				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls_1));
+			else
+				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_1));
+
+			dload_val = ms_data[page][rpmk_offset];
+			write_ve_const(page, rpmk_offset, dload_val, FALSE);
+
+			offset = firmware->page_params[page]->reqfuel_offset;
 			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
-			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
 
 		}
 
-		lim_flag = 0;
+		lim_flag = FALSE;
 		/* TABLE 2 */
-		page=1;
-		tmp = (float)(num_injectors_2)/(float)(ve_const_dt2->divider);
+		table2:
+		page = 1;
+
+//		printf("Current cyls %i, inj %i, squirts %i req_fuel %f\n",num_cyls_2,num_inj_2,num_squirts_2,req_fuel_total_2);
+//		printf("Last    cyls %i, inj %i, squirts %i req_fuel %f\n",last_num_cyls_2,last_num_inj_2,last_num_squirts_2,last_req_fuel_total_2);
+		tmp = (float)(num_inj_2)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
 		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
 
-		if (req_fuel_per_squirt != ve_const_dt2->req_fuel)
-		{
-			if (req_fuel_per_squirt > 255)
-				lim_flag = 1;
-			if (req_fuel_per_squirt < 0)
-				lim_flag = 1;
-			if (num_cylinders_2 % num_squirts_2)
-				lim_flag = 1;
-		}
+		/* If nothing changed , jsut break to next check */
+		if ((req_fuel_total_2 == last_req_fuel_total_2) &&
+			(num_cyls_2 == last_num_cyls_2) &&
+			(num_inj_2 == last_num_inj_2) &&
+			(num_squirts_2 == last_num_squirts_2))
+			return;
 
-		/* Required Fuel per SQUIRT */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,
-						     "req_fuel_per_squirt_2_spin")),
-				req_fuel_per_squirt/10);
+		if (req_fuel_per_squirt > 255)
+			lim_flag = TRUE;
+		if (req_fuel_per_squirt < 0)
+			lim_flag = TRUE;
+		if (num_cyls_2 % num_squirts_2)
+			lim_flag = TRUE;
 
 		/* Throw warning if an issue */
 		if (lim_flag)
@@ -506,52 +542,49 @@ void check_req_fuel_limits()
 		{
 			set_interdep_state(BLACK,"interdep_2_ctrl");
 
+			/* Required Fuel per SQUIRT */
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON
+					(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_2_spin")),req_fuel_per_squirt/10.0);
+
 			if (paused_handlers)
 				return;
 
-			/* Send rpmk value as it's needed for rpm calc on 
-			 * spark firmwares... */
-			if (ve_const_dt1->config11.bit.eng_type)
-				ve_const_dt1->rpmk = (int)(6000.0/((double)num_cylinders_1));
+			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
+			rpmk_offset = firmware->page_params[page]->rpmk_offset;
+			if (cfg11.bit.eng_type)
+				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls_2));
 			else
-				ve_const_dt1->rpmk = (int)(12000.0/((double)num_cylinders_1));
+				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_2));
 
-			dload_val = ve_const_dt1->rpmk;
-			write_ve_const(0, rpmk_offset, dload_val, FALSE);
-			if (ve_const_dt2->config11.bit.eng_type)
-				ve_const_dt2->rpmk = (int)(6000.0/((double)num_cylinders_2));
-			else
-				ve_const_dt2->rpmk = (int)(12000.0/((double)num_cylinders_2));
+			dload_val = ms_data[page][rpmk_offset];
+			write_ve_const(page, rpmk_offset, dload_val, FALSE);
 
-			dload_val = ve_const_dt1->rpmk;
-			write_ve_const(1, rpmk_offset, dload_val, FALSE);
-
-			offset = 90;
-
-			write_ve_const(page, offset,req_fuel_per_squirt, FALSE);
-			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(1));
+			offset = firmware->page_params[page]->reqfuel_offset;
+			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
+			/* Call handler to empty interdependant hash table */
+			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(page));
 
 		}
+
+
 	}// END Dualtable Req fuel checks... */
 	else
 	{
-		ve_const = (struct Ve_Const_Std *)ms_data[0];
-
 		/* B&G, MSnS, MSnEDIS Required Fuel Calc
 		 *
-		 *                                        /     num_injectors_1     \
+		 *                                        /     num_inj_1     \
 		 *         	   req_fuel_per_squirt * (-------------------------)
 		 *                                        \ divider*(alternate+1) /
 		 * req_fuel_total = --------------------------------------------------
 		 *				10
 		 *
-		 * where divider = num_cylinders_1/num_squirts_1;
+		 * where divider = num_cyls_1/num_squirts_1;
 		 *
 		 * rearranging to solve for req_fuel_per_squirt...
 		 *
 		 *                        (req_fuel_total * 10)
 		 * req_fuel_per_squirt =  ----------------------
-		 *			    /  num_injectors  \
+		 *			    /  num_inj_1  \
 		 *                         (-------------------)
 		 *                          \ divider*(alt+1) /
 		 *
@@ -559,33 +592,39 @@ void check_req_fuel_limits()
 		 */
 
 		page = 0;
-		tmp =	((float)(num_injectors_1))/((float)ve_const->divider*(float)(ve_const->alternate+1));
+
+		if ((req_fuel_total_1 == last_req_fuel_total_1) &&
+			(num_cyls_1 == last_num_cyls_1) &&
+			(num_inj_1 == last_num_inj_1) &&
+			(num_squirts_1 == last_num_squirts_1))
+			return;
+
+		divider = ms_data[page][firmware->page_params[page]->divider_offset];
+		alternate = (float)ms_data[page][firmware->page_params[page]->alternate_offset];
+		tmp =	((float)(num_inj_1))/((float)divider*(float)(alternate+1));
 
 		/* This is 1/10 the value as the on screen stuff is 1/10th 
 		 * for the ms variable,  it gets converted farther down, just 
 		 * before download to the MS
 		 */
 		req_fuel_per_squirt = ((float)req_fuel_total_1*10.0)/tmp;
+		req_fuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
 
-		if (req_fuel_per_squirt != ve_const->req_fuel)
-		{
-			if (req_fuel_per_squirt > 255)
-				lim_flag = 1;
-			if (req_fuel_per_squirt < 0)
-				lim_flag = 1;
-			if (num_cylinders_1 % num_squirts_1)
-				lim_flag = 1;
-		}
+		if (req_fuel_per_squirt > 255)
+			lim_flag = TRUE;
+		if (req_fuel_per_squirt < 0)
+			lim_flag = TRUE;
+		if (num_cyls_1 % num_squirts_1)
+			lim_flag = TRUE;
 
 		if (lim_flag)
 			set_interdep_state(RED,"interdep_1_ctrl");
 		else
 		{
-			/* req-fuel info box  */
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),
-							     
-					req_fuel_per_squirt/10.0);
 			set_interdep_state(BLACK,"interdep_1_ctrl");
+			/* req-fuel info box  */
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
+							     
 
 			/* All Tested succeeded, download Required fuel, 
 			 * then iterate through the list of offsets of changed
@@ -594,26 +633,25 @@ void check_req_fuel_limits()
 			 * the offset GList, and clear the array...
 			 */
 
-			/* Handlers get paused during a read of MS VE/Constants. We
-			 * don't need to write anything back during this window. 
-			 */
 			if (paused_handlers)
 				return;
 			/* Send rpmk value as it's needed for rpm calc on 
 			 * spark firmwares... */
 			/* Top is two stroke, botton is four stroke.. */
-			if (ve_const->config11.bit.eng_type)
-				ve_const->rpmk = (int)(6000.0/((double)num_cylinders_1));
+			page = 0;
+			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
+			rpmk_offset = firmware->page_params[page]->rpmk_offset;
+			if (cfg11.bit.eng_type)
+				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls_1));
 			else
-				ve_const->rpmk = (int)(12000.0/((double)num_cylinders_1));
-
-			dload_val = ve_const->rpmk;
+				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_1));
+			dload_val = ms_data[page][rpmk_offset];
 			write_ve_const(page, rpmk_offset, dload_val, FALSE);
 
 			/* Send reqd_fuel_per_squirt */
-			offset = 90;
+			offset = firmware->page_params[page]->reqfuel_offset;
 			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
-			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));
+			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
 		}
 	} // End B&G style Req Fuel check 
 	return ;

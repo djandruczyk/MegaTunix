@@ -450,13 +450,16 @@ void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 	struct OutputData *output = NULL;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern gboolean paused_handlers;
+	extern struct Firmware_Details *firmware;
 
-	if (g_list_length(ve_widgets[page][offset]) > 1)
+	if ((g_list_length(ve_widgets[page][offset]) > 1) &&
+	   (offset != firmware->page_params[page]->reqfuel_offset))
 	{
 		paused_handlers = TRUE;
 		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
 		paused_handlers = FALSE;
 	}
+
 
 	dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm),SERIAL_WR);
 	output = g_new0(struct OutputData,1);
@@ -483,8 +486,8 @@ void writeto_ecu(void *ptr)
 	gint res = 0;
 	gint count = 0;
 	char lbuff[3] = {0, 0, 0};
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
-	extern guchar *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data_last[MAX_SUPPORTED_PAGES];
 	gchar * write_cmd = NULL;
 	extern struct Firmware_Details *firmware;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -544,13 +547,16 @@ void writeto_ecu(void *ptr)
 		dbg_func(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n",SERIAL_WR);
 	}
 
-
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	if (res != 1 )
 		dbg_func(__FILE__": writeto_ecu()\n\tSending write command FAILED!!!\n",CRITICAL);
+	else
+		dbg_func(__FILE__": writeto_ecu()\n\tSending of write command to ECU succeeded\n",SERIAL_WR);
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 	if (res != count )
 		dbg_func(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n",CRITICAL);
+	else
+		dbg_func(__FILE__": writeto_ecu()\n\tSending of value to ECU succeeded\n",SERIAL_WR);
 	g_usleep(5000);
 	if (page > 0)
 		set_ms_page(0);
@@ -560,7 +566,7 @@ void writeto_ecu(void *ptr)
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
-	res = memcmp(ms_data_last[page],ms_data[page],2*MS_PAGE_SIZE);
+	res = memcmp(ms_data_last[page],ms_data[page],MS_PAGE_SIZE*sizeof(gint));
 	gdk_threads_enter();
 	if (res == 0)
 		set_store_buttons_state(BLACK);
@@ -574,8 +580,8 @@ void writeto_ecu(void *ptr)
 
 void burn_ms_flash()
 {
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
-	extern guchar *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint *ms_data_last[MAX_SUPPORTED_PAGES];
 	gint res = 0;
 	gint i = 0;
 	extern gint ecu_caps;
@@ -604,7 +610,7 @@ void burn_ms_flash()
 
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
-		memcpy(ms_data_last[i],ms_data[i],2*MS_PAGE_SIZE);
+		memcpy(ms_data_last[i],ms_data[i],MS_PAGE_SIZE*sizeof(gint));
 
 	tcflush(serial_params->fd, TCIOFLUSH);
 
