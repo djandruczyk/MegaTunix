@@ -21,16 +21,15 @@
 
 int build_general(GtkWidget *parent_frame)
 {
+        extern GtkTooltips *tip;
         GtkWidget *vbox;
+        GtkWidget *vbox2;
         GtkWidget *label;
+        GtkWidget *frame;
+        GtkWidget *hbox;
 
         vbox = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-        label = gtk_label_new("Not Implemented yet");
-        gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
-        label = gtk_label_new("General setting, megasquirt type selection");
-        gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
-
 
 
 	/* Not written yet */

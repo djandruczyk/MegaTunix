@@ -125,8 +125,11 @@ int build_comms(GtkWidget *parent_frame)
 			G_CALLBACK (check_ecu_comms), \
 			NULL);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);
+	gtk_tooltips_set_tip(tip,ebox,"   Allows you to specify the amount of time MegaTunix waits after issuesing the command ot read the runtime data from the ECU. (Polling Timeout)  A sane value here is no more than 100 milliseconds. NOTE: This is the maximum windows of time MegaTunix will wait for data. Setting this too high can cause the display to get laggy in some cases.\n   The Seial interval delay is the amount of time to wait in between reads.  This determines the maximum update rate of the runtiem page and the dataloggin rate.  If you set this too low it's possible to have data problems due to the lack of checksumming on the input datastream. (A safe value is about 25 milliseconds).\n   The buttons on the right are pretty self explanitory, they start and stop reading of Runtime data respectivly.  NOTE: when datalogging is active, runtime data is being received, as this is the source for data for logging to a text file for future analysis.",NULL);
 	frame = gtk_frame_new("Runtime Parameters Configuration");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
@@ -203,7 +206,7 @@ int build_comms(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-	"This block shows you statistics on the number of Good reads of the VE/Constants datablocks, RealTime DataBlocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard Resets are indiciative of power problems or excessive electrical noise to the MS. Serial I/O errors are indicative of a poor cable connection between this PC and the MS.",NULL);
+	"This block shows you statistics on the number of Good reads of the VE/Constants datablocks, RealTime DataBlocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard Resets are indicative of power problems or excessive electrical noise to the MS (causing ms process resets). Serial I/O errors are indicative of a poor cable connection between this PC and the MS.",NULL);
 
 	frame = gtk_frame_new("MegaSquirt I/O Status");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
