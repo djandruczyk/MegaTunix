@@ -79,7 +79,8 @@ int build_runtime(GtkWidget *parent_frame)
 	runtime_data.secl_lab = label;
 
 	/* O2 Voltage Label*/
-	label = gtk_label_new("O2 (V)");
+	label = gtk_label_new(NULL);
+	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> (V)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,

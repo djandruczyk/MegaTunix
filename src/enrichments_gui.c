@@ -394,7 +394,12 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 
-	frame = gtk_frame_new("Exhaust O2 Feedback Settings");
+	label = gtk_label_new(NULL);
+	gtk_label_set_markup(GTK_LABEL(label),
+			"Exhaust O<sub>2</sub> Feedback Settings");
+			
+	frame = gtk_frame_new(NULL);
+	gtk_frame_set_label_widget(GTK_FRAME(frame),GTK_WIDGET(label));
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	table = gtk_table_new(6,2,FALSE);

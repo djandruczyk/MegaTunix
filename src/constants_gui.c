@@ -21,6 +21,7 @@
 #include <constants.h>
 
 extern struct v1_2_Constants constants;
+struct Labels labels;
 
 int build_constants(GtkWidget *parent_frame)
 {
@@ -487,7 +488,8 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
 
-	label = gtk_label_new("O2 Sensor Type");
+	label = gtk_label_new(NULL);
+	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> Sensor Type");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -637,6 +639,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("# of Injections per Cycle");
+	labels.squirts_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -656,7 +659,9 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("# of Fuel Injectors");
+	labels.injectors_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -676,7 +681,9 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("# of Cylinders");
+	labels.cylinders_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);

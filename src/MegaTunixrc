@@ -19,9 +19,13 @@ style 'main_buttons'
 {
   bg[PRELIGHT] = { 1.0, 0.80, 0.80 }
 }
+style 'warning_condition'
+{
+  fg[NORMAL] = "red"
+}
 
 	# Sets default font....
 class "GtkWidget" style "defaultfont"
 	# Sets the onmouseover backgrond for buttons to light red 
 widget_class "*GtkButton*" style "main_buttons"
-
+widget "*.cyl_inj.*GtkLabel*" style "warning_condition"

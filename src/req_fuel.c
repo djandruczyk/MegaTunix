@@ -197,6 +197,7 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 	else
         	ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
 
+	check_req_fuel_limits();
         write_ve_const(ve_constants->rpmk, rpmk_offset);
 
         return TRUE;

@@ -30,9 +30,12 @@ extern gint read_wait_time;
 extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
+extern struct Labels labels;
 static gint num_squirts;
 static gint num_cylinders;
 static gint num_injectors;
+static GdkColor red = { 0, 65535, 0, 0};
+static GdkColor black = { 0, 0, 0, 0};
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -106,6 +109,7 @@ int toggle_button_handler(GtkWidget *widget, gpointer *data)
 					ve_constants->alternate=0;
 					dload_val = 0;
 				}
+				check_req_fuel_limits();
 				break;
 
 		}
@@ -364,13 +368,24 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			/* This actuall effects another variable */
 			num_squirts = tmpi;
 			ve_constants->divider = 
-				(ve_constants->config11.bit.cylinders+1)/tmpi;
+					(gint)(((float)num_cylinders/
+					(float)num_squirts)+0.001);
 			dload_val = ve_constants->divider;
-			printf("num_squirts %i, divider %i\n",num_squirts,dload_val);
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = 1;
-//				printf("ERROR!!! Number of injectios NOT an integer divisor of number of cylinders\n");
+				gtk_widget_modify_fg(labels.squirts_lab,
+						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_fg(labels.cylinders_lab,
+						GTK_STATE_NORMAL,&red);
+			}
+			else
+			{
+				gtk_widget_modify_fg(labels.squirts_lab,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_fg(labels.cylinders_lab,
+						GTK_STATE_NORMAL,&black);
+				check_req_fuel_limits();
 			}
 			break;
 		case NUM_CYLINDERS:
@@ -380,11 +395,25 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_constants->config11.value = tmp;
+			ve_constants->divider = 
+					(gint)(((float)num_cylinders/
+					(float)num_squirts)+0.001);
 			dload_val = tmp;
 			if (num_cylinders % num_squirts)
 			{
 				err_flag = 1;
-//				printf("ERROR!!! Number of injectios NOT an integer divisor of number of cylinders\n");
+				gtk_widget_modify_fg(labels.squirts_lab,
+						GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_fg(labels.cylinders_lab,
+						GTK_STATE_NORMAL,&red);
+			}
+			else
+			{
+				gtk_widget_modify_fg(labels.squirts_lab,
+						GTK_STATE_NORMAL,&black);
+				gtk_widget_modify_fg(labels.cylinders_lab,
+						GTK_STATE_NORMAL,&black);
+				check_req_fuel_limits();
 			}
 			break;
 		case NUM_INJECTORS:
@@ -395,6 +424,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_constants->config12.value = tmp;
 			dload_val = tmp;
+			check_req_fuel_limits();
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
@@ -409,9 +439,10 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	}
 	else if (dl_type == DEFERRED)
 	{
-		printf("Test if in gList, if not add it\n");
-		printf("Deferred download (inter-related variable)\n");
-		printf("tests should be performed and downlaod button\nchanegd to RED to inform user to force a download\n");
+		printf("deferred....\n");
+//		printf("Test if in gList, if not add it\n");
+//		printf("Deferred download (inter-related variable)\n");
+//		printf("tests should be performed and downlaod button\nchanegd to RED to inform user to force a download\n");
 	}
 	return TRUE;
 
@@ -422,7 +453,6 @@ void update_const_ve()
 	gint i;
 	gfloat tmp;
 
-	printf("config11: %i, config12: %i. config13: %i\n",ve_constants->config11.value,ve_constants->config12.value,ve_constants->config13.value);
 	/* req-fuel  */
 	/*				/     num_injectors     \
 	 *          req_fuel_from_MS * |-------------------------|
@@ -462,7 +492,7 @@ void update_const_ve()
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.inj_per_cycle_spin),
 			tmp);
-	num_squirts = tmp;
+	num_squirts = (gint)tmp;
 
 	/* inj_open_time */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.inj_open_time_spin),
@@ -672,4 +702,57 @@ void update_const_ve()
 				GTK_TOGGLE_BUTTON(constants.simul_but),
                                 TRUE);
 	
+}
+void check_req_fuel_limits()
+{
+	gfloat tmp = 0.0;
+	gfloat req_fuel_dl = 0.0;
+	gint lim_flag = 0;
+
+//	printf("divider = %i\n",ve_constants->divider);
+//	printf("alternate = %i\n",ve_constants->alternate);
+
+	tmp =	(float)(ve_constants->divider*(ve_constants->alternate+1))/
+		(float)(ve_constants->config12.bit.injectors+1);
+
+	req_fuel_dl = tmp * ve_constants->req_fuel;
+
+	printf("req_fuel_dl %.2f, req_fuel %.2f\n",req_fuel_dl,ve_constants->req_fuel/10.0);
+	if ((int)req_fuel_dl != ve_constants->req_fuel)
+	{
+		if (req_fuel_dl > 255.0)
+			lim_flag = 1;
+		if (req_fuel_dl < 0.0)
+			lim_flag = 1;
+	}
+		/* req-fuel info box  */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_base_spin),
+			req_fuel_dl/10.0);
+	if (lim_flag)
+	{
+		gtk_widget_modify_fg(labels.squirts_lab,
+				GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_fg(labels.cylinders_lab,
+				GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(constants.req_fuel_spin,
+				GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(constants.req_fuel_base_spin,
+				GTK_STATE_INSENSITIVE,&red);
+
+	}
+	else
+	{
+		gtk_widget_modify_fg(labels.squirts_lab,
+				GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_fg(labels.cylinders_lab,
+				GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(constants.req_fuel_spin,
+				GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(constants.req_fuel_base_spin,
+				GTK_STATE_INSENSITIVE,&black);
+	}
+	
+
+
+	return;
 }

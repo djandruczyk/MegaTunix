@@ -88,4 +88,12 @@ struct Reqd_Fuel
         gfloat afr;			/* Air fuel ratio 10-25.5 */
 };
 
+struct Labels
+{
+	GtkWidget *req_fuel_lab;
+	GtkWidget *squirts_lab;
+	GtkWidget *injectors_lab;
+	GtkWidget *cylinders_lab;
+};
+	
 #endif

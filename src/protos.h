@@ -96,7 +96,7 @@ int toggle_button_handler(GtkWidget *, gpointer *);
 void update_statusbar(GtkWidget *, int, gchar *);
 int spinner_changed(GtkWidget *, gpointer *);
 int classed_spinner_changed(GtkWidget *, gpointer *);
-
+void check_req_fuel_limits(void);
 /* gui_handlers.c */
 
 /* req_fuel.c */
