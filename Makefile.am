@@ -2,7 +2,7 @@
 # directories and type `make'.
 AUTOMAKE_OPTIONS = foreign
 
-subdirs = src include Interrogator Gui LookupTables
+subdirs = mtxmatheval src include Interrogator Gui LookupTables
 
 SUBDIRS = $(subdirs) 
 

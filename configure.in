@@ -4,7 +4,7 @@ AC_INIT(src/main.c)
 AC_PREREQ(2.54)
 
 MTX_MAJOR_VERSION=0
-MTX_MINOR_VERSION=5
+MTX_MINOR_VERSION=6
 MTX_MICRO_VERSION=0
 
 MTX_VERSION=$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION
@@ -21,6 +21,10 @@ AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_CC
+AM_PROG_LEX
+AC_PROG_LN_S
+AC_PROG_LIBTOOL
+AC_PROG_YACC
 AC_PROG_MAKE_SET
 
 dnl check paths for necessary files
@@ -33,7 +37,7 @@ AC_SUBST(PACKAGE_LIBS)
 dnl Checks for header files.
 AC_HEADER_TIME
 AC_HEADER_STDC
-AC_CHECK_HEADERS(errno.h fcntl.h stdio.h string.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
+AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
 
 dnl optimizations
 CFLAGS="-O2"
@@ -90,6 +94,7 @@ AC_SUBST(MEGATUNIX_DEFINES)
 
 AC_OUTPUT([
 Makefile 
+mtxmatheval/Makefile
 src/Makefile
 include/Makefile
 LookupTables/Makefile
