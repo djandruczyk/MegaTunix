@@ -38,4 +38,10 @@
 #define RPM_BINS_MAX		8
 #define LOAD_BINS_MAX		8
 #define TABLE_BINS_MAX		RPM_BINS_MAX*LOAD_BINS_MAX
+
+
+/* For datalogging and Logviewer */
+#define TABLE_COLS 6
+#define MAX_LOGABLES 64
+
 #endif

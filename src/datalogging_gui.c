@@ -31,11 +31,6 @@
 #include <unistd.h>
 
 
-/* Local #defines */
-#define TABLE_COLS 6
-#define MAX_LOGABLES 64
-/* Local #defines */
-
 extern gint ready;
 extern struct Runtime_Common *runtime;
 extern struct DynamicButtons buttons;
