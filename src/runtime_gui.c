@@ -14,7 +14,6 @@
 #include <3d_vetable.h>
 #include <comms_gui.h>
 #include <config.h>
-#include <datalogging_const.h>
 #include <defines.h>
 #include <default_limits.h>
 #include <debugging.h>
@@ -58,15 +57,6 @@ void build_runtime(GtkWidget *parent_frame)
 	extern GtkTooltips *tip;
 
 	gint i=0;
-
-	/* ugly hack to prevent a compiler warning,  find a better way to
-	 * suppress the warning than this shit and tell me how to do it :)
-	 */
-	gint junk = sizeof(mt_classic_names)/sizeof(gchar *);
-	junk = sizeof(mt_full_names)/sizeof(gchar *);
-	junk = sizeof(logable_names)/sizeof(gchar *);
-	junk = sizeof(logable_names_tips)/sizeof(gchar *);
-	/* End of ugly hack, beginning of spaghetti code.. :) */
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);

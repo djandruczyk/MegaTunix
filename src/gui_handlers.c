@@ -60,36 +60,6 @@ GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
 
-/* mt_classic[] and mt_full[] are arrays laid out like the datalogging
- * screen, insert a "1" where you want the button selected for that mode
- * otherwise use a zero...
- */
-const gint mt_classic[] =
-{
-	0,1,1,1,0,
-	0,0,0,0,0,
-	0,0,0,0,0,
-	0,1,0,0,0,
-	1,0,1,0,0,
-	1,1,1,1,0,
-	1,0,0,0,0,
-	0,0,0,0,0,
-	0,0 
-};
-
-const gint mt_full[] = 
-{
-	1,1,1,1,0,
-	0,0,0,0,0,
-	0,0,0,0,0,
-	1,1,0,1,1,
-	1,0,1,0,0,
-	1,1,1,1,1,
-	1,1,1,1,0,
-	0,0,0,0,0,
-	0,0 
-}; 
-
 gboolean paused_handlers = FALSE;
 static gboolean constants_loaded = FALSE;
 extern gint num_squirts_1;
@@ -209,7 +179,8 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), TRUE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), TRUE);
 				logviewer_mode = FALSE;
-				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
+				//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
+				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
 				break;
 			case PLAYBACK_VIEW:
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), FALSE);
@@ -217,7 +188,8 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), FALSE);
 				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), FALSE);
 				logviewer_mode = TRUE;
-				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
+				//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
+				g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"lview_deselect_all_button")),"clicked",NULL);
 				break;
 			case HEX_VIEW:
 			case DECIMAL_VIEW:

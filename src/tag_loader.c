@@ -31,7 +31,6 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 	gchar ** attrs = NULL;
 	gint num_attrs = 0;
 	gint num_tags = 0;
-	gint num_pairs = 0;
 	gint i = 0;
 	GtkTextBuffer *textbuffer = NULL;
 	

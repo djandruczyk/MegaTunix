@@ -61,7 +61,7 @@
 		      <property name="metric">GTK_PIXELS</property>
 		      <property name="lower">10</property>
 		      <property name="upper">0</property>
-		      <property name="position">8.9391</property>
+		      <property name="position">7.83186</property>
 		      <property name="max_size">10</property>
 		    </widget>
 		    <packing>
@@ -129,7 +129,6 @@
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Sat, 27 Nov 2004 17:44:57 GMT"/>
-			  <signal name="toggled" handler="reset_viewables" last_modification_time="Sat, 27 Nov 2004 17:45:17 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -150,7 +149,6 @@
 			  <property name="draw_indicator">True</property>
 			  <property name="group">logviewer_realtime_radio_button</property>
 			  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Sat, 27 Nov 2004 17:44:47 GMT"/>
-			  <signal name="toggled" handler="reset_viewables" last_modification_time="Sat, 27 Nov 2004 17:45:27 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>

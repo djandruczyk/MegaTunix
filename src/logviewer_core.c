@@ -48,56 +48,6 @@ void load_logviewer_file(void *ptr)
 	return;
 }
 
-void populate_limits(void *ptr)
-{
-	struct Log_Info *log_info;
-	gint i = 0;
-	log_info = ptr;
-
-	while (log_info->fields[i] != NULL)
-	{
-		get_limits(log_info->fields[i],log_info, i);
-		i++;
-	}
-
-}
-
-void get_limits(gchar *target_field, void *ptr, gint position)
-{
-	struct Log_Info *log_info;
-	gint i = 0;
-	gfloat lower = 0.0;
-	gfloat upper = 255.0;
-	gint index = -1;
-	gint max_chances = sizeof(def_limits)/sizeof(def_limits[0]);
-	log_info = ptr;
-	while (i <max_chances)
-	{
-		index = -1;
-		if (strcmp(def_limits[i].field,target_field) == 0) 
-		{
-			//	printf("found value %s at index %i, for field # %i\n",target_field,i,position);
-			index = i;
-			break;
-		}
-		i++;
-	}
-	if (index != -1)
-	{
-		lower = def_limits[index].lower;
-		upper = def_limits[index].upper;
-	}
-	else
-	{
-		lower = 0.0;
-		upper = 255.0;
-		dbg_func(g_strdup_printf(__FILE__": get_limits()\n\tField \"%s\" NOT found in internal list,\n\tassuming limits bound of 0.0<-%s->255.0,\n\tsend the datalog you're trying to open\n\tto the Author for analysis\n",target_field,target_field),CRITICAL);
-	}
-	g_array_insert_val(log_info->lowers,
-			position,def_limits[i].lower);
-	g_array_insert_val(log_info->uppers,
-			position,def_limits[i].upper);
-}
 
 /* Initializer routine for the log_info datastructure */
 void initialize_log_info(void *ptr)
@@ -149,7 +99,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 
 		log_info->field_count = 0;
 		/* Get total count of fields in there too... */
-		while (log_info->fields[log_info->field_count] != NULL)
+		while (log_info->fields[log_info->field_count])
 		{
 			g_strstrip(log_info->fields[log_info->field_count]);
 			log_info->field_count++;
@@ -181,6 +131,60 @@ void allocate_buffers(void *ptr)
 		g_array_insert_val(log_info->fields_data,i,data_array);
 	}
 }
+
+
+void populate_limits(void *ptr)
+{
+	struct Log_Info *log_info;
+	gint i = 0;
+	log_info = ptr;
+
+	while (log_info->fields[i])
+	{
+		get_limits(log_info->fields[i],log_info, i);
+		i++;
+	}
+
+}
+
+
+void get_limits(gchar *target_field, void *ptr, gint position)
+{
+	struct Log_Info *log_info;
+	gint i = 0;
+	gfloat lower = 0.0;
+	gfloat upper = 255.0;
+	gint index = -1;
+	gint max_chances = sizeof(def_limits)/sizeof(def_limits[0]);
+	log_info = ptr;
+	while (i <max_chances)
+	{
+		index = -1;
+		if (strcmp(def_limits[i].field,target_field) == 0) 
+		{
+			//	printf("found value %s at index %i, for field # %i\n",target_field,i,position);
+			index = i;
+			break;
+		}
+		i++;
+	}
+	if (index != -1)
+	{
+		lower = def_limits[index].lower;
+		upper = def_limits[index].upper;
+	}
+	else
+	{
+		lower = 0.0;
+		upper = 255.0;
+		dbg_func(g_strdup_printf(__FILE__": get_limits()\n\tField \"%s\" NOT found in internal list,\n\tassuming limits bound of 0.0<-%s->255.0,\n\tsend the datalog you're trying to open\n\tto the Author for analysis\n",target_field,target_field),CRITICAL);
+	}
+	g_array_insert_val(log_info->lowers,
+			position,lower);
+	g_array_insert_val(log_info->uppers,
+			position,upper);
+}
+
 
 void read_log_data(GIOChannel *iochannel, void *ptr)
 {

@@ -22,6 +22,7 @@
 #include <mode_select.h>
 #include <ms_structures.h>
 #include <structures.h>
+#include <tabloader.h>
 
 static gint tcount = 0;	/* used to draw_infotext to know where to put the text*/
 static gint info_width = 120;
@@ -34,24 +35,6 @@ gint lv_scroll = 0;		/* logviewer scroll amount */
 gboolean logviewer_mode = FALSE;
 
 
-/* This table is the same dimensions as the table used for datalogging.
- * FALSE means it's greyed out as a choice for the logviewer, TRUE means
- * it's visible.  Some logable variables (like the clock) don't make a lot
- * of sense on a stripchart view...
- */
-static const gboolean valid_logables[]=
-{
-	FALSE,TRUE,TRUE,FALSE,TRUE,
-	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE,TRUE,TRUE,TRUE,
-	TRUE,TRUE
-};
-
 void present_viewer_choices(void)
 {
 	GtkWidget *window;
@@ -60,7 +43,9 @@ void present_viewer_choices(void)
 	GtkWidget *vbox;
 	GtkWidget *hbox;
 	GtkWidget *button;
+	GtkWidget *label;
 	GtkWidget *sep;
+	GObject * object;
 	extern GtkTooltips *tip;
 	gint i = 0;
 	gint j = 0;
@@ -68,10 +53,12 @@ void present_viewer_choices(void)
 	gint table_rows = 0;
 	gint table_cols = 5;
 	gchar * name = NULL;
+	gchar * tooltip = NULL;
 	GtkWidget *darea = NULL;
 	extern gint ecu_caps;
 	struct Log_Info *log_info = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern struct RtvMap *rtv_map;
 
 	darea = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
 
@@ -81,13 +68,9 @@ void present_viewer_choices(void)
 		return;
 	}
 
-	/* basty hack to prevent a compiler warning... */
-	max_viewables = sizeof(mt_classic_names)/sizeof(gchar *);
-	max_viewables = sizeof(mt_full_names)/sizeof(gchar *);
-	max_viewables = sizeof(logable_names)/sizeof(gchar *);
-
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
+	/* Playback mode..... */
 	if (logviewer_mode)
 	{
 		log_info = (struct Log_Info *)g_object_get_data(G_OBJECT(darea),"log_info");
@@ -98,11 +81,16 @@ void present_viewer_choices(void)
 	}
 	else
 	{
+		/* Realtime Viewing mode... */
 		gtk_window_set_title(GTK_WINDOW(window),
 				"Realtime Mode: Logviewer Choices");
 		frame = gtk_frame_new("Select Realtime Variables to view from the list below...");
-		max_viewables = sizeof(logable_names)/sizeof(gchar *);
+		max_viewables = (gint)rtv_map->derived_total;
+		
 	}
+	g_signal_connect_swapped(G_OBJECT(window),"delete_event",
+			G_CALLBACK(deregister_lv_choices),
+			NULL);
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -128,26 +116,35 @@ void present_viewer_choices(void)
 	k = 0;
 	for (i=0;i<max_viewables;i++)
 	{
+		object = NULL;
+		name = NULL;
+		tooltip = NULL;
 		if (logviewer_mode)
 			name = g_strdup(log_info->fields[i]);
 		else
-			name = g_strdup(logable_names[i]);
-
-
-		button = gtk_check_button_new_with_label(name);
-		if (!logviewer_mode)
 		{
-			if (valid_logables[i] == FALSE)
-				gtk_widget_set_sensitive(button,FALSE);
-			gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
+			object =  g_array_index(rtv_map->rtv_list,GObject *,i);
+			name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
+                	tooltip = g_strdup(g_object_get_data(object,"tooltip"));
 		}
-		if (viewables.index[i] == TRUE)
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
 
-		viewables.widgets[i] = button;
+		button = gtk_check_button_new();
+		label = gtk_label_new(NULL);
+                gtk_label_set_markup(GTK_LABEL(label),name);
+                gtk_container_add(GTK_CONTAINER(button),label);
 
-		g_object_set_data(G_OBJECT(button),"index",
-				GINT_TO_POINTER(i));
+                if (tooltip)
+                        gtk_tooltips_set_tip(tip,button,tooltip,NULL);
+
+		if (object)
+		{
+			g_object_set_data(G_OBJECT(button),"object",
+					(gpointer)object);
+			// so we can set the state from elsewhere... 
+			g_object_set_data(G_OBJECT(object),"lview_button",
+					(gpointer)button);
+		}
+
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(view_value_set),
 				NULL);
@@ -170,14 +167,18 @@ void present_viewer_choices(void)
 	hbox = gtk_hbox_new(FALSE,20);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 	button = gtk_button_new_with_label("Select All");
+	register_widget("lview_select_all_button",button);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
-	g_signal_connect_swapped(G_OBJECT(button),"clicked",
-			G_CALLBACK(select_all_controls),
+	g_object_set_data(G_OBJECT(button),"state",GINT_TO_POINTER(TRUE));
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(set_lview_choices_state),
 			NULL);
 	button = gtk_button_new_with_label("De-select All");
+	register_widget("lview_deselect_all_button",button);
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,15);
-	g_signal_connect_swapped(G_OBJECT(button),"clicked",
-			G_CALLBACK(deselect_all_controls),
+	g_object_set_data(G_OBJECT(button),"state",GINT_TO_POINTER(FALSE));
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(set_lview_choices_state),
 			NULL);
 
 	button = gtk_button_new_with_label("Close");
@@ -186,6 +187,9 @@ void present_viewer_choices(void)
 			G_CALLBACK(populate_viewer),
 			(gpointer)darea);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
+			G_CALLBACK(deregister_lv_choices),
+			NULL);
+	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
 
@@ -193,19 +197,25 @@ void present_viewer_choices(void)
 	gtk_widget_show_all(window);
 	return;
 }
+gboolean deregister_lv_choices(gpointer data)
+{
+	deregister_widget("lview_select_all_button");
+	deregister_widget("lview_deselect_all_button");
+	return FALSE;
+}
 
 gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
-	gint index = 0;
+	GObject *object = NULL;
+        gboolean state = FALSE;
 
-	index = (gint)g_object_get_data(G_OBJECT(widget),"index");
+        state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
 
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-		viewables.index[index] = TRUE;
-	else
-		viewables.index[index] = FALSE;
+        /* get object from widget */
+        object = (GObject *)g_object_get_data(G_OBJECT(widget),"object");
+        g_object_set_data(object,"being_viewer",GINT_TO_POINTER(state));
 
-	return TRUE;
+        return TRUE;
 }
 
 gboolean populate_viewer(GtkWidget * d_area)
@@ -688,6 +698,8 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	gint w = 0;
 	gint h = 0;
 
+	printf("configure_event\n");
+
 	/* Get pointer to backing pixmap ... */
 	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
 			
@@ -736,38 +748,25 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	return TRUE;
 }
 
-gboolean deselect_all_controls(GtkWidget *widget, gpointer data)
+gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
 {
 	gint i = 0;
-	for (i=0;i<max_viewables;i++)
-	{
-		if (viewables.index[i] == TRUE)
-        		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (viewables.widgets[i]),FALSE);
-	}
+        GtkWidget * button = NULL;
+        GObject * object = NULL;
+	gboolean state = FALSE;
+	extern struct RtvMap *rtv_map;
+
+        /* Uncheck all logable choices */
+        for (i=0;i<rtv_map->derived_total;i++)
+        {
+                object = NULL;
+                button = NULL;
+                object = g_array_index(rtv_map->rtv_list,GObject *, i);
+                button = (GtkWidget *)g_object_get_data(object,"lview_button");
+                state = (gboolean)g_object_get_data(G_OBJECT(widget),"state");
+                gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),state);
+        }
+
 	return TRUE;
 }
 
-gboolean select_all_controls(GtkWidget *widget, gpointer data)
-{
-	gint i = 0;
-	for (i=0;i<max_viewables;i++)
-	{
-		if (viewables.index[i] == FALSE)
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (viewables.widgets[i]),TRUE);
-	}
-	return TRUE;
-}
-			
-gboolean reset_viewables(GtkWidget *widget, gpointer data)
-{
-	gint i = 0;
-
-	/* disables all controls and de-allocates memory cleanly */
-        for (i=0;i<max_viewables;i++)
-		viewables.index[i] = FALSE;
-
-	populate_viewer(NULL);
-
-	return FALSE;
-	
-}

@@ -97,13 +97,14 @@ void populate_dlog_choices()
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		tooltip = NULL;
+		dlog_name = NULL;
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
-		dlog_name = (gchar *)g_object_get_data(object,"dlog_gui_name");
+		dlog_name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
 		gtk_container_add(GTK_CONTAINER(button),label);
-		tooltip = (gchar *)g_object_get_data(object,"tooltip");
+		tooltip = g_strdup(g_object_get_data(object,"tooltip"));
 		if (tooltip)
 			gtk_tooltips_set_tip(tip,button,tooltip,NULL);
 
