@@ -167,6 +167,18 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
                         "Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
         gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
+	button = gtk_button_new_with_label("Start Reading RT Vars");
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(START_REALTIME));
+        gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+
+	button = gtk_button_new_with_label("Stop Reading RT vars");
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(STOP_REALTIME));
+        gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+
 
         button = gtk_button_new_with_label("Close Window");
         gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
