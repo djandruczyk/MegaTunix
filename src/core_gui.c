@@ -109,16 +109,6 @@ int setup_gui()
         gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	/* Enrichments Page */
 
-	/* Runtime Page */
-	frame = gtk_frame_new ("MegaSquirt Runtime Display");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,RUNTIME_PAGE);
-
-        label = gtk_label_new ("Runtime Disp.");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* Runtime Page */
-
 	/* VE Table Page */
 	frame = gtk_frame_new ("MegaSquirt VE Table");
         gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
@@ -128,6 +118,16 @@ int setup_gui()
         label = gtk_label_new ("VE Table");
         gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	/* VE Table Page */
+
+	/* Runtime Page */
+	frame = gtk_frame_new ("MegaSquirt Runtime Display");
+        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
+
+	framebuild_dispatch(frame,RUNTIME_PAGE);
+
+        label = gtk_label_new ("Runtime Disp.");
+        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
+	/* Runtime Page */
 
 	/* Tuning Page */
 	frame = gtk_frame_new ("MegaSquirt Tuning");

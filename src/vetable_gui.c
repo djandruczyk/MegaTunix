@@ -39,13 +39,14 @@ int build_vetable(GtkWidget *parent_frame)
 	gint index;
 
         vbox = gtk_vbox_new(FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
-	hbox = gtk_hbox_new(FALSE,0);
+	hbox = gtk_hbox_new(FALSE,5);
         gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
         vbox2 = gtk_vbox_new(FALSE,0);
-        gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,5);
+        gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
 
 	frame = gtk_frame_new("MAP Bins");
         gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);

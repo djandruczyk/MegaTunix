@@ -11,8 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef _DEFINES_H_
-#define _DEFINES_H_
+#ifndef __DEFINES_H__
+#define __DEFINES_H__
 
 #include <glib.h>
 

@@ -13,8 +13,8 @@
 
 /* Global Variables */
 
-#ifndef _GLOBALS_H_
-#define _GLOBALS_H_
+#ifndef __GLOBALS_H__
+#define __GLOBALS_H__
 
 #include <config.h>
 #include <sys/types.h>

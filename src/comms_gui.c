@@ -160,7 +160,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 
-	table = gtk_table_new(3,4,TRUE);
+	table = gtk_table_new(3,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
         gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,FALSE,5);
 
@@ -171,7 +171,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	ms_ve_readcount_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_ve_readcount_entry), 7);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_ve_readcount_entry), 5);
 	gtk_table_attach (GTK_TABLE (table), ms_ve_readcount_entry, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -184,7 +184,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
      
 	ms_readcount_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_readcount_entry), 7);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_readcount_entry), 5);
 	gtk_table_attach (GTK_TABLE (table), ms_readcount_entry, 3, 4, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -196,7 +196,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	ms_reset_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 7);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_reset_entry), 5);
 	gtk_table_attach (GTK_TABLE (table), ms_reset_entry, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -208,7 +208,7 @@ int build_comms(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	ms_sioerr_entry = gtk_entry_new();
-	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 7);
+	gtk_entry_set_width_chars (GTK_ENTRY (ms_sioerr_entry), 5);
 	gtk_table_attach (GTK_TABLE (table), ms_sioerr_entry, 3, 4, 2, 3,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);

@@ -13,8 +13,8 @@
 
 /* Constants/Enrichments Gui Adjustment Structures */
 
-#ifndef _CONSTANTS_H_
-#define _CONSTANTS_H_
+#ifndef __CONSTANTS_H__
+#define __CONSTANTS_H__
 
 #include <config.h>
 #include <sys/types.h>

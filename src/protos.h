@@ -12,8 +12,8 @@
  */
 
 
-#ifndef _PROTOS_H_
-#define _PROTOS_H
+#ifndef __PROTOS_H__
+#define __PROTOS_H__
 
 #include <config.h>
 #include "defines.h"

@@ -33,11 +33,11 @@ int build_runtime(GtkWidget *parent_frame)
 	GtkWidget *sep;
 
 	vbox = gtk_vbox_new(FALSE,0);
+        gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
 	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 
 	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -195,7 +195,7 @@ int build_runtime(GtkWidget *parent_frame)
 
 	frame = gtk_frame_new("Corrections/Enrichments (Percent)");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 
 	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);

@@ -15,8 +15,8 @@
  * to real world numbers. From Bruce Bowlings PCC tuning wsoftware.
  */
 
-#ifndef _LOOKUPTABLES_H_
-#define _LOOKUPTABLES_H_
+#ifndef __LOOKUPTABLES_H__
+#define __LOOKUPTABLES_H__
 
 /* Coolant sensor lookup table 
  * Raw value from ADC is used as an index into this table

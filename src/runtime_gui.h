@@ -13,8 +13,8 @@
 
 /* Runtime Gui Structures */
 
-#ifndef _RUNTIME_GUI_H_
-#define _RUNTIME_GUI_H_
+#ifndef __RUNTIME_GUI_H__
+#define __RUNTIME_GUI_H__
 
 #include <config.h>
 #include <sys/types.h>
