@@ -104,7 +104,7 @@ gboolean vetable_export(void *ptr)
 
 	/* For Page 0.... */
 	output = g_string_sized_new(64); /*pre-allocate 64 chars */
-	printf("total tables %i\n",firmware->total_tables);
+	//printf("total tables %i\n",firmware->total_tables);
 	for (z=0;z<firmware->total_tables;z++)
 	{
 		table = z;
@@ -114,7 +114,7 @@ gboolean vetable_export(void *ptr)
 		rpm_base = firmware->table_params[table]->rpm_base;
 		load_bincount = firmware->table_params[table]->load_bincount;
 		rpm_bincount = firmware->table_params[table]->rpm_bincount;
-		printf("table %i, page %i, base %i, load %i, rpm %i\n",table,page,tbl_base,load_base,rpm_base);
+		//printf("table %i, page %i, base %i, load %i, rpm %i\n",table,page,tbl_base,load_base,rpm_base);
 
 		t = g_malloc(sizeof(time_t));
 		time(t);
