@@ -5,13 +5,13 @@ description=Object data map for Dualtable specific(0.90-1.02) Parameters
 tab_name=_DT Parameters
 
 #----- Buttons ---------------------------------------------------------------
-[get_data_button]
+[dtp_get_data_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_READ_VE_CONST_
 page=0
 
-[burn_data_button]
+[dtp_burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_

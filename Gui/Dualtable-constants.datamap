@@ -1,39 +1,36 @@
 # Dual Table Parameters data map, DT 0.9-1.02
 
 [global]
-description=Object data map for B&G Constants (most firmwares except DT... )
-tab_name=_Engine Vitals
+description=Object data map for Dualtable (0.9-1.02)
+tab_name=_Dualtable Constants
 
 #----- Buttons ---------------------------------------------------------------
-[bng_get_data_button]
+[dt_get_data_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_READ_VE_CONST_
 page=0
 
-[bng_burn_data_button]
+[dt_burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_
 page=0
 bind_to_list=burners
 
-[calc_req_fuel_button]
+[calc_req_fuel_1_button]
 keys=page,handler
 key_types=_INT_,_ENUM_
 page=0
 handler=_REQ_FUEL_POPUP_
 
-#----- Labels ----------------------------------------------------------------
-[fast_idle_thresh_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
-page=0
-c_label=Fast Idle Threshold (\302\260C.)
-f_label=Fast Idle Threshold (\302\260F.)
-temp_dep=TRUE
-bind_to_list=temperature
+[calc_req_fuel_2_button]
+keys=page,handler
+key_types=_INT_,_ENUM_
+page=1
+handler=_REQ_FUEL_POPUP_
 
+#----- Labels ----------------------------------------------------------------
 [num_injectors_1_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -51,6 +48,24 @@ keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
+
+[num_injectors_2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=interdep_2_ctrl
+
+[num_squirts_per_cycle_2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
+
+[num_cylinders_2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 [speed_density_radio_button]
@@ -221,31 +236,6 @@ conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[simul_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
-page=0
-offset=92
-bit_pos=0
-bit_val=0
-bitmask=1
-conv_type=_NOTHING_
-dl_type=_DEFERRED_
-handler=_ALT_SIMUL_
-
-[alternate_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
-page=0
-offset=92
-bit_pos=0
-bit_val=1
-bitmask=1
-conv_type=_NOTHING_
-dl_type=_DEFERRED_
-handler=_ALT_SIMUL_
-
-
 #----- SpinButtons -----------------------------------------------------------
 
 [req_fuel_per_cycle_1_spin]
@@ -258,6 +248,16 @@ handler=_REQ_FUEL_1_
 dont_update=TRUE
 bind_to_list=interdep_1_ctrl
 
+[req_fuel_per_cycle_2_spin]
+keys=page,offset,dl_type,handler,dont_update,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+page=1
+offset=90
+dl_type=_DEFERRED_
+handler=_REQ_FUEL_2_
+dont_update=TRUE
+bind_to_list=interdep_2_ctrl
+
 [req_fuel_per_squirt_1_spin]
 keys=page,dont_update,bind_to_list
 key_types=_INT_,_BOOL_,_STRING_
@@ -265,7 +265,14 @@ page=0
 dont_update=TRUE
 bind_to_list=interdep_1_ctrl
 
-[inj_open_time_spin]
+[req_fuel_per_squirt_2_spin]
+keys=page,dont_update,bind_to_list
+key_types=_INT_,_BOOL_,_STRING_
+page=1
+dont_update=TRUE
+bind_to_list=interdep_2_ctrl
+
+[inj_open_time_1_spin]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
@@ -275,7 +282,17 @@ conv_type=_MULTIPLY_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[batt_correction_spin]
+[inj_open_time_2_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=1
+offset=93
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[batt_correction_1_spin]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
@@ -285,7 +302,17 @@ conv_type=_MULTIPLY_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[pwm_limit_spin]
+[batt_correction_2_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=1
+offset=97
+conv_factor_x100=6000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[pwm_limit_1_spin]
 keys=page,offset,conv_type,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
@@ -294,7 +321,16 @@ conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[pwm_time_thresh_spin]
+[pwm_limit_2_spin]
+keys=page,offset,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=1
+offset=95
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[pwm_time_thresh_1_spin]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
@@ -304,17 +340,15 @@ conv_type=_MULTIPLY_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[fast_idle_thresh_temp_spin]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,temp_dep,bind_to_list
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_,_STRING_
-page=0
-offset=121
-conv_factor_x100=4000
-conv_type=_ADD_
+[pwm_time_thresh_2_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=1
+offset=96
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-temp_dep=TRUE
-bind_to_list=temperature
 
 [inj_per_cycle_1_spin]
 keys=page,offset,conv_type,dl_type,handler,dont_update,bind_to_list
@@ -327,6 +361,17 @@ handler=_NUM_SQUIRTS_1_
 dont_update=TRUE
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 
+[inj_per_cycle_2_spin]
+keys=page,offset,conv_type,dl_type,handler,dont_update,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+page=1
+offset=91
+conv_type=_NOTHING_
+dl_type=_DEFERRED_
+handler=_NUM_SQUIRTS_2_
+dont_update=TRUE
+bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
+
 [num_injectors_1_spin]
 keys=page,offset,conv_type,dl_type,handler,dont_update,bind_to_list
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_,_STRING_
@@ -338,6 +383,17 @@ dont_update=TRUE
 handler=_NUM_INJECTORS_1_
 bind_to_list=interdep_1_ctrl
 
+[num_injectors_2_spin]
+keys=page,offset,conv_type,dl_type,handler,dont_update,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+page=1
+offset=117
+conv_type=_NOTHING_
+dl_type=_DEFERRED_
+dont_update=TRUE
+handler=_NUM_INJECTORS_2_
+bind_to_list=interdep_2_ctrl
+
 [num_cylinders_1_spin]
 keys=page,offset,conv_type,dl_type,handler,dont_update,bind_to_list
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_,_STRING_
@@ -348,3 +404,14 @@ dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
 dont_update=TRUE
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
+
+[num_cylinders_2_spin]
+keys=page,offset,conv_type,dl_type,handler,dont_update,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+page=1
+offset=116
+conv_type=_NOTHING_
+dl_type=_DEFERRED_
+handler=_NUM_CYLINDERS_2_
+dont_update=TRUE
+bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl

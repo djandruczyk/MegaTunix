@@ -3,6 +3,8 @@ guidir = $(datadir)/MegaTunix/$(GUI_DATA_DIR)
 gui_files = 	template.glade \
 		B_n_G_constants.glade \
 		B_n_G_constants.datamap \
+		Dualtable-constants.glade \
+		Dualtable-constants.datamap \
 		vetable_8x8_1.glade \
 		vetable_8x8_1.datamap \
 		vetable_8x8_2.glade \
