@@ -21,6 +21,7 @@
 #include <defines.h>
 #include <protos.h>
 #include <globals.h>
+#include <errno.h>
 
 gint dlog_context_id;
 gint log_opened=FALSE;
@@ -129,7 +130,6 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	const gchar *selected_filename;
 	struct stat status;
 	gchar buff[100];
-	extern int errno;
 
 	selected_filename = gtk_file_selection_get_filename (
 			GTK_FILE_SELECTION (file_selector));
