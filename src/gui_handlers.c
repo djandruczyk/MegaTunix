@@ -348,7 +348,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (dl_type == IMMEDIATE)
 	{
 		dload_val = convert_before_download(widget,dload_val);
-		write_ve_const(page, offset, dload_val, ign_parm);
+		write_ve_const(widget, page, offset, dload_val, ign_parm);
 	}
 	return TRUE;
 }
@@ -374,14 +374,15 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint dload_val = 0;
 	gboolean ign_parm = 0;
 
-	if (!GTK_IS_OBJECT(widget))
-		return FALSE;
 
 	if ((paused_handlers) || (!ready))
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
 	}
+
+	if (!GTK_IS_OBJECT(widget))
+		return FALSE;
 
 	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
@@ -394,7 +395,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	g_free(text);
 	dload_val = convert_before_download(widget,value);
 
-	write_ve_const(page, offset, dload_val, ign_parm);
+	write_ve_const(widget, page, offset, dload_val, ign_parm);
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 
 	return TRUE;
@@ -821,33 +822,30 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			if (value > 112.15)	/* Extra long trigger needed */	
 			{
-				printf("extra long\n");
 				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 1);	/* Set xlong_trig */
 				ms_data[page][spconfig_offset] = tmp;
-				write_ve_const(page, spconfig_offset, tmp, ign_parm);
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
 				value -= 45.0;
 				dload_val = convert_before_download(widget,value);
 			}
 			else if (value > 89.65) /* Long trigger needed */
 			{
-				printf("long\n");
 				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 0);	/* Set long_trig */
 				ms_data[page][spconfig_offset] = tmp;
-				write_ve_const(page, spconfig_offset, tmp, ign_parm);
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
 				value -= 22.5;
 				dload_val = convert_before_download(widget,value);
 			}
 			else	// value <= 89.65 degrees, no long trigger
 			{
-				printf("std\n");
 				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				ms_data[page][spconfig_offset] = tmp;
-				write_ve_const(page, spconfig_offset, tmp, ign_parm);
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
 				dload_val = convert_before_download(widget,value);
 			}
 
@@ -868,9 +866,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			dl_type = 0;  
 			break;
 	}
-	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	if (dl_type == IMMEDIATE) 
-		write_ve_const(page, offset, dload_val, ign_parm);
+		write_ve_const(widget, page, offset, dload_val, ign_parm);
+	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	return TRUE;
 
 }
@@ -1019,11 +1017,8 @@ void update_ve_const()
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
 		{
 			if (ve_widgets[page][offset] != NULL)
-			{
-				//				printf("there is a list at %i,%i with %i elements\n",page,offset,g_list_length(ve_widgets[page][offset]));
 				g_list_foreach(ve_widgets[page][offset],
 						update_widget,NULL);
-			}
 		}
 	}
 }
@@ -1040,79 +1035,95 @@ void update_widget(gpointer object, gpointer user_data)
 	gint bitval = -1;
 	gint bitshift = -1;
 	gint bitmask = -1;
+	gint base = -1;
 	gchar * toggle_group = NULL;
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_label = NULL;
 
-	if (GTK_IS_OBJECT(widget))
+	if (!GTK_IS_OBJECT(widget))
+		return;
+
+	if ((GTK_IS_OBJECT(user_data)) && (widget == user_data))
+		return;
+
+
+	dl_type = (gint)g_object_get_data(G_OBJECT(widget),
+			"dl_type");
+	page = (gint)g_object_get_data(G_OBJECT(widget),
+			"page");
+	offset = (gint)g_object_get_data(G_OBJECT(widget),
+			"offset");
+	bitval = (gint)g_object_get_data(G_OBJECT(widget),
+			"bitval");
+	bitshift = (gint)g_object_get_data(G_OBJECT(widget),
+			"bitshift");
+	bitmask = (gint)g_object_get_data(G_OBJECT(widget),
+			"bitmask");
+	base = (gint)g_object_get_data(G_OBJECT(widget),
+			"base");
+	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
+			"temp_dep");
+	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
+			"toggle_group");
+	invert_state = (gboolean)g_object_get_data(G_OBJECT(widget),
+			"invert_state");
+	swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
+			"swap_label");
+
+	value = convert_after_upload(widget);  
+
+	if (temp_dep)
 	{
-		dl_type = (gint)g_object_get_data(G_OBJECT(widget),
-				"dl_type");
-		page = (gint)g_object_get_data(G_OBJECT(widget),
-				"page");
-		offset = (gint)g_object_get_data(G_OBJECT(widget),
-				"offset");
-		bitval = (gint)g_object_get_data(G_OBJECT(widget),
-				"bitval");
-		bitshift = (gint)g_object_get_data(G_OBJECT(widget),
-				"bitshift");
-		bitmask = (gint)g_object_get_data(G_OBJECT(widget),
-				"bitmask");
-		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
-				"temp_dep");
-		toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
-				"toggle_group");
-		invert_state = (gboolean)g_object_get_data(G_OBJECT(widget),
-				"invert_state");
-		swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
-				"swap_label");
+		if (temp_units == CELSIUS)
+			value = (value-32)*(5.0/9.0);
+	}
 
-		value = convert_after_upload(widget);  
-
-		if (temp_dep)
-		{
-			if (temp_units == CELSIUS)
-				value = (value-32)*(5.0/9.0);
-		}
-
-		// update widget whether spin,radio or checkbutton  (check encompases radio)
-		if (GTK_IS_SPIN_BUTTON(widget))
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
-		else if (GTK_IS_ENTRY(widget))
+	// update widget whether spin,radio or checkbutton  (check encompases radio)
+	if ((GTK_IS_ENTRY(widget)) && (!GTK_IS_SPIN_BUTTON(widget)))
+	{
+		if (base == 10)
+			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)value));
+		else if (base == 16)
 			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.2X",(gint)value));
-		else if (GTK_IS_CHECK_BUTTON(widget))
-		{
-			/* If value masked by bitmask, shifted right by bitshift = bitval
-			 * then set button state to on...
-			 */
-			tmpi = (gint)value;
-			if (((tmpi & bitmask) >> bitshift) == bitval)
-				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
-			else
-				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);
-		}
-		else if (GTK_IS_SCROLLED_WINDOW(widget))
-		{
-			/* This will looks really weird, but is used in the 
-			 * special case of a treeview widget which is always
-			 * packed into ascrolled window. Since the treeview
-			 * depends on ECU variables, we call a handler here
-			 * passing in a pointer to the treeview(the scrolled
-			 * window's child widget)
-			 */
-			update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
-		}
-		if (toggle_group)
-		{
-			state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-			g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
-		}
-		/* Swaps the label of another control based on widget state... */
-		if (swap_label)
-			switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+		else
+			dbg_func(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n",CRITICAL);
 
 	}
+	else if (GTK_IS_SPIN_BUTTON(widget))
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+	else if (GTK_IS_CHECK_BUTTON(widget))
+	{
+		/* If value masked by bitmask, shifted right by bitshift = bitval
+		 * then set button state to on...
+		 */
+		tmpi = (gint)value;
+		if (((tmpi & bitmask) >> bitshift) == bitval)
+			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
+		else
+			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);
+	}
+	else if (GTK_IS_SCROLLED_WINDOW(widget))
+	{
+		/* This will looks really weird, but is used in the 
+		 * special case of a treeview widget which is always
+		 * packed into ascrolled window. Since the treeview
+		 * depends on ECU variables, we call a handler here
+		 * passing in a pointer to the treeview(the scrolled
+		 * window's child widget)
+		 */
+		update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
+	}
+	if (toggle_group)
+	{
+		state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
+	}
+	/* Swaps the label of another control based on widget state... */
+	if (swap_label)
+		switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+
+
 }
 
 EXPORT gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)

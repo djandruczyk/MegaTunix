@@ -260,8 +260,8 @@ void cell_edited(GtkCellRendererText *cell,
 
 	ms_data[page][src_offset] = rt_offset;
 	ms_data[page][lim_offset] = result;
-	write_ve_const(page,src_offset,rt_offset,ign_parm);
-	write_ve_const(page,lim_offset,result,ign_parm);
+	write_ve_const(NULL,page,src_offset,rt_offset,ign_parm);
+	write_ve_const(NULL,page,lim_offset,result,ign_parm);
 	update_model_from_view((GtkWidget *)view);
 	
 }

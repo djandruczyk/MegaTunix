@@ -249,7 +249,7 @@ void *serial_io_handler(gpointer data)
 }
 
 
-void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
+void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct OutputData *output = NULL;
 	extern GList ***ve_widgets;
@@ -260,7 +260,7 @@ void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 	   (offset != firmware->page_params[page]->reqfuel_offset))
 	{
 		paused_handlers = TRUE;
-		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+		g_list_foreach(ve_widgets[page][offset],update_widget,widget);
 		paused_handlers = FALSE;
 	}
 

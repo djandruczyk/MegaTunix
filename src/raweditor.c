@@ -54,6 +54,7 @@ EXPORT void finish_raweditor(void)
 	        gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_TOP);
 		        gtk_box_pack_start(GTK_BOX(top),notebook,TRUE,TRUE,0);
 
+
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		label = gtk_label_new(g_strdup_printf("Page %i",i));
@@ -87,10 +88,11 @@ EXPORT void finish_raweditor(void)
 		for (j=0;j<firmware->page_params[i]->length;j++)
 		{
 			entry = gtk_entry_new();
-//			gtk_entry_set_alignment(GTK_ENTRY(entry),0.5);
+			gtk_entry_set_activates_default(GTK_ENTRY(entry),TRUE);
 			g_object_set_data(G_OBJECT(entry),"page",GINT_TO_POINTER(i));
 			g_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(j));
 			g_object_set_data(G_OBJECT(entry),"base",GINT_TO_POINTER(16));
+			g_object_set_data(G_OBJECT(entry),"raw",GINT_TO_POINTER(TRUE));
 			if (firmware->page_params[i]->is_spark)
 				g_object_set_data(G_OBJECT(entry),"ign_parm",GINT_TO_POINTER(TRUE));
 
@@ -126,9 +128,6 @@ EXPORT void finish_raweditor(void)
 				row++;
 			}
 		}
-		
-
-
 	}
 	gtk_widget_show_all(top);
 	

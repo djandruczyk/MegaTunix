@@ -994,11 +994,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	gint load_base = 0;
 	gint rpm_base = 0;
 	gint tbl_base = 0;
-	gfloat divider = 0.0;
-	extern GList ***ve_widgets;
+	GtkWidget *entry;
 	struct Ve_View_3D *ve_view = NULL;
 	extern gint **ms_data;
-	GtkWidget *spinner = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
@@ -1016,10 +1014,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	tbl_page = ve_view->tbl_page;
 
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
-	if (ve_view->is_spark)
-		divider = 2.84;
-	else
-		divider = 1.0;
 
 	switch (event->keyval)
 	{
@@ -1054,36 +1048,39 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_Page_Up:
 			dbg_func("\t\"Page Up\"\n",OPENGL);
 
-			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] <= 245)
+			offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+			if (ms_data[tbl_page][offset] <= 245)
 			{
-				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ms_data[tbl_page][offset] + 10;
-				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
+				entry = get_raw_widget(tbl_page,offset);
+				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
+				 g_signal_emit_by_name(entry,"activate",NULL);
 			}
 			break;				
 		case GDK_plus:
 		case GDK_KP_Add:
 			dbg_func("\t\"PLUS\"\n",OPENGL);
 
-			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] < 255)
+			offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+			if (ms_data[tbl_page][offset] < 255)
 			{
-				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ms_data[tbl_page][offset] + 1;
-				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
+				entry = get_raw_widget(tbl_page,offset);
+				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
+				 g_signal_emit_by_name(entry,"activate",NULL);
 
 			}
 			break;				
 		case GDK_Page_Down:
 			dbg_func("\t\"Page Down\"\n",OPENGL);
 
-			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] >= 10)
+			offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+			if (ms_data[tbl_page][offset] >= 10)
 			{
-				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ms_data[tbl_page][offset] - 10;
-				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
+				entry = get_raw_widget(tbl_page,offset);
+				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
+				 g_signal_emit_by_name(entry,"activate",NULL);
 			}
 			break;							
 
@@ -1092,12 +1089,13 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_KP_Subtract:
 			dbg_func("\t\"MINUS\"\n",OPENGL);
 
-			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] > 0)
+			offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
+			if (ms_data[tbl_page][offset] > 0)
 			{
-				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ms_data[tbl_page][offset] - 1;
-				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
+				entry = get_raw_widget(tbl_page,offset);
+				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
+				 g_signal_emit_by_name(entry,"activate",NULL);
 			}
 			break;							
 

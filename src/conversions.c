@@ -35,6 +35,9 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	gint page = -1;
 	gint offset = -1;
 	extern gint **ms_data;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
@@ -43,8 +46,9 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	if (conv_expr == NULL)
 	{
-		dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tNO CONVERSION defined for page: %i, offset: %i\n",page, offset),CONVERSIONS);
+		dbg_func(g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value),CONVERSIONS);
 		ms_data[page][offset] = (gint)value;
+		g_static_mutex_unlock(&mutex);
 		return ((gint)value);		
 	}
 	if (!evaluator) 	/* if no evaluator create one */
@@ -58,23 +62,31 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value),CONVERSIONS);
 
 	ms_data[page][offset] = return_value;
+
+	g_static_mutex_unlock(&mutex);
 	return (return_value);
 }
 
 gfloat convert_after_upload(GtkWidget * widget)
 {
 	gfloat return_value = 0.0;
-	gint *ve_const_arr;
-	extern gint **ms_data;
-	gchar * conv_expr;
+	gint *ve_const_arr = NULL;
+	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
+	extern gint **ms_data;
 	gint page = -1;
 	gint offset = -1;
 	gboolean ul_complex = FALSE;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
 
 	ul_complex = (gboolean)g_object_get_data(G_OBJECT(widget),"ul_complex");
 	if (ul_complex)
+	{
+		g_static_mutex_unlock(&mutex);
 		return handle_complex_expr(G_OBJECT(widget),NULL,UPLOAD);
+	}
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
@@ -84,9 +96,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 	ve_const_arr = (gint *)ms_data[page];
 	if (conv_expr == NULL)
 	{
-		dbg_func(g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i\n",page, offset),CONVERSIONS);
-
 		return_value = ve_const_arr[offset];
+		dbg_func(g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i, value %f\n",page, offset, return_value),CONVERSIONS);
+		g_static_mutex_unlock(&mutex);
 		return (return_value);		
 	}
 	if (!evaluator) 	/* if no evaluator create one */
@@ -98,6 +110,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	return_value = evaluator_evaluate_x(evaluator,ve_const_arr[offset])+0.001;
 
 	dbg_func(g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,ve_const_arr[offset],return_value),CONVERSIONS);
+	g_static_mutex_unlock(&mutex);
 	return (return_value);
 }
 

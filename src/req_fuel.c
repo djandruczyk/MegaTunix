@@ -377,7 +377,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	check_req_fuel_limits();
 	dload_val = ms_data[page][rpmk_offset];
-	write_ve_const(reqd_fuel->page, rpmk_offset, dload_val, FALSE);
+	write_ve_const(widget, reqd_fuel->page, rpmk_offset, dload_val, FALSE);
 
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",reqd_fuel->page);
@@ -500,11 +500,11 @@ void check_req_fuel_limits()
 				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_1));
 
 			dload_val = ms_data[page][rpmk_offset];
-			write_ve_const(page, rpmk_offset, dload_val, FALSE);
+			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			offset = firmware->page_params[page]->reqfuel_offset;
 			ms_data[page][offset] = req_fuel_per_squirt;
-			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
+			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
 
@@ -555,11 +555,11 @@ void check_req_fuel_limits()
 				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_2));
 
 			dload_val = ms_data[page][rpmk_offset];
-			write_ve_const(page, rpmk_offset, dload_val, FALSE);
+			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			offset = firmware->page_params[page]->reqfuel_offset;
 			ms_data[page][offset] = req_fuel_per_squirt;
-			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
+			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(page));
 
@@ -646,12 +646,12 @@ void check_req_fuel_limits()
 			else
 				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_1));
 			dload_val = ms_data[page][rpmk_offset];
-			write_ve_const(page, rpmk_offset, dload_val, FALSE);
+			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			/* Send reqd_fuel_per_squirt */
 			offset = firmware->page_params[page]->reqfuel_offset;
 			ms_data[page][offset] = req_fuel_per_squirt;
-			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
+			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
 		}
 	} // End B&G style Req Fuel check 

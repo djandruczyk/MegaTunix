@@ -108,3 +108,33 @@ gboolean deregister_widget(gchar *name)
 {
 	return (g_hash_table_remove(dynamic_widgets,name));
 }
+
+/*!
+ \brief get_raw_widget is a concenience function to return a pointer to
+ the text entry on the raweditor for the widget at the provided page/offset
+ We find this widget by looking for the "raw" flag set on the widget
+ \param page, page to search for this widget
+ \param offset offset in above page that this widget resides
+ */
+GtkWidget * get_raw_widget(gint page, gint offset)
+{
+	extern GList ***ve_widgets;
+	gint len = 0;
+	gint i = 0;
+	GList *list = NULL;
+	GtkWidget *widget = NULL;
+	gboolean raw = FALSE;
+
+	len = g_list_length(ve_widgets[page][offset]);
+	list = g_list_first(ve_widgets[page][offset]);
+	while (i < len)
+	{
+		raw = FALSE;
+		widget = g_list_nth_data(list,i);
+		raw = g_object_get_data(G_OBJECT(widget),"raw");
+		if (raw)
+			return widget;
+		i++;
+	}
+	return NULL;
+}
