@@ -11,8 +11,8 @@ groups=load,rpm,sparktable
 #----- Group config ----------------------------------------------------------
 
 [load]
-keys=page,dl_type,handler,base,type,raw_lower,raw_upper
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_
+keys=page,dl_type,handler,base,type,raw_lower,raw_upper,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_STRING_
 page=3
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -20,10 +20,11 @@ base=10
 type=_INT_
 raw_lower=0
 raw_upper=255
+tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,tooltip
+key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_STRING_
 page=3
 dl_conv_expr=x/100
 ul_conv_expr=x*100
@@ -33,10 +34,11 @@ base=10
 type=_INT_
 raw_lower=0
 raw_upper=255
+tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [sparktable]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,is_float,precision,use_color
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,is_float,precision,use_color,tooltip
+key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_,_STRING_
 page=3
 dl_conv_expr=(x+10)/0.352
 ul_conv_expr=(x*0.352)-10
@@ -49,6 +51,7 @@ raw_upper=255
 is_float=TRUE
 precision=1
 use_color=TRUE
+tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- Labels ----------------------------------------------------------------
 
@@ -67,27 +70,30 @@ set_label=Spark Advance Table (MSnS-Extra)
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,page,bind_to_list,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
 page=3
 bind_to_list=get_data_buttons
+tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
 [burn_button]
-keys=handler,page,bind_to_list
-key_types=_ENUM_,_INT_,_STRING_
+keys=handler,page,bind_to_list,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
 page=3
 bind_to_list=burners
+tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [3d_view_button]
-keys=page,table_num,x_source,y_source,z_source
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+keys=page,table_num,x_source,y_source,z_source,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=3
 table_num=3
 x_source=raw_rpm
 y_source=mapcount
 z_source=raw_sparkangle
+tooltip=This pops up a 3 dimensional view of the current Spark-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate.  A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [recalc_scaling_button]
 keys=page,handler,data

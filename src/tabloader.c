@@ -330,6 +330,7 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 	gint i = 0;
 	gint tmpi = 0;
 	struct Group *group = NULL;
+	extern GtkTooltips *tip;
 
 	group = g_hash_table_lookup(groups,groupname);
 	if (!group)
@@ -350,6 +351,8 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 				break;
 			case MTX_STRING:
 				g_object_set_data(G_OBJECT(widget),g_strdup(group->keys[i]),g_strdup(g_object_get_data(group->object,group->keys[i])));
+				if (g_object_get_data(G_OBJECT(widget),"tooltip") != NULL)
+					gtk_tooltips_set_tip(tip,widget,g_strdup((gchar *)g_object_get_data(G_OBJECT(widget),"tooltip")),NULL);
 				break;
 		}
 	}
@@ -383,6 +386,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint offset = 0;
 	gint page = 0;
 	gint tmpi = 0;
+	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
 
 
@@ -451,11 +455,18 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 
 	/* If this widget (a textview) has "create_tags" we call a special
-	 * handler jsut for that..
+	 * handler just for that..
 	 */
 	if (cfg_read_string(cfgfile,section,"create_tags",&tmpbuf))
 	{
 		load_tags(G_OBJECT(widget),cfgfile,section);
+		g_free(tmpbuf);
+	}
+
+	/* If this widget  has "tooltip" set the tip on the widget */
+	if (cfg_read_string(cfgfile,section,"tooltip",&tmpbuf))
+	{
+		gtk_tooltips_set_tip(tip,widget,tmpbuf,NULL);
 		g_free(tmpbuf);
 	}
 
