@@ -768,6 +768,8 @@ void check_req_fuel_limits()
 		 */
 		gtk_widget_modify_fg(labels.squirts_lab,
 				GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_fg(labels.injectors_lab,
+				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_fg(labels.cylinders_lab,
 				GTK_STATE_NORMAL,&red);
 		gtk_widget_modify_text(constants.req_fuel_spin,
@@ -782,6 +784,8 @@ void check_req_fuel_limits()
 		 * settings all previous gui enties to normal state...
 		 */
 		gtk_widget_modify_fg(labels.squirts_lab,
+				GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_fg(labels.injectors_lab,
 				GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_fg(labels.cylinders_lab,
 				GTK_STATE_NORMAL,&black);
