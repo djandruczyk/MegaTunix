@@ -33,14 +33,14 @@ tooltip="MS Clock" is the MegaSquirt clock returned by the ECU, this runs from 0
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_
 internal_name=raw_rpm
-dlog_gui_name=RAW_RPM
+dlog_gui_name=RAW RPM
 dlog_field_name=RPM
 offset=13
 lower_limit=0
 upper_limit=255
 conv_expr=x*1
 is_float=FALSE
-tooltip="RAW_RPM" Is the engine RPM, as sent from the ECU in units of rpmx100
+tooltip="RAW RPM" Is the engine RPM, as sent from the ECU in units of rpmx100
 
 [derived_3]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr,is_float,tooltip,lower_limit,upper_limit

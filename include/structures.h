@@ -40,6 +40,7 @@ struct Firmware_Details
 	gchar *name;		/* textual name */
 	gchar **tab_list;	/* vector string of tabs to load */
 	gchar *rtv_map_file;	/* realtime vars map filename */
+	gchar *controls_map_file;/* runtime controls map filename */
         gint rtvars_size;       /* Size of Realtime vars datablock */
         gint ignvars_size;      /* Size of Realtime vars datablock */
         gint memblock_size;     /* Size of Raw_Memory datablock */
@@ -178,19 +179,19 @@ struct Rt_Control
 	GtkWidget *parent;/* Parent of the table below  */
 	GtkWidget *table; /* Table to contain the next 3 widgets */
 	GtkWidget *label; /* Label in runtime display */
-	GtkWidget *data;  /* textual representation of the data */
+	GtkWidget *textval; /* Label in runtime display */
 	GtkWidget *pbar;  /* progress bar for the data */
 	gint tbl;	  /* Table number (0-3) */
 	gint row;	  /* Starting row */
 	gchar *friendly_name; /* text for Label above */
-	gint limits_index; /* Offset into limits[] structure array */
-	gint runtime_offset; /* offset into Runtime_Common struct (using []) */
-	gint size;	  /* UCHAR,SHORT or FLOAT (1,2, or 4) */
+	gint lower;	 /* Offset into limits[] structure array */
+	gint upper;	 /* offset into Runtime_Common struct (using []) */
+	gfloat * history;/* where the data is from the runtime section */
+	GObject *object;  /* object of obsession.... */
 	gboolean enabled; /* Pretty obvious */
 	gint count;	  /* used to making sure things update */
 	gint rate;	  /* used to making sure things update */
 	gint last_upd;	  /* used to making sure things update */
-	Capability flags;/* DT, Temp_dep, IGN or whatever ... */
 };
 
 /* The Def_Control struct contains info on the default controls that are 
@@ -219,7 +220,6 @@ struct Default_Limits
 	gchar *field;		/* Field name */
 	gfloat lower;		/* Lower Limit */
 	gfloat upper;		/* Upper Limit */
-	LogType logtype;	/* Datalog type it's found in... */
 };
 
 /* The LogInfo datastructure is populated when a datalog file is opened
@@ -254,6 +254,7 @@ struct Canidate
 	gint ver_num;		/* Version number to search for */
 	gchar *load_tabs;	/* list of tabs to load into the gui */
 	gchar *rtv_map_file;	/* name of realtime vars map file */
+	gchar *controls_map_file;/* runtime controls map filename */
 	Capability capabilities;/* Bitmask of capabilities.... */
 	gchar * rt_cmd_key;	/* string key to hashtable for RT command */
 	gchar * ve_cmd_key;	/* string key to hashtable for VE command */

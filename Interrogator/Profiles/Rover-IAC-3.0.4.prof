@@ -33,6 +33,7 @@ CMD_I_0=0
 CMD_F_0=0
 
 [gui]
+ControlMapFile=std-firmware
 LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,tools
 
 [lookuptables]

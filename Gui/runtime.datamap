@@ -14,7 +14,7 @@ page=0
 
 [runtime_stop_realtime_button]
 keys=handler,page
-key_types=_ENUM_,_INT_,_STRING_
+key_types=_ENUM_,_INT_
 handler=_STOP_REALTIME_
 page=0
 

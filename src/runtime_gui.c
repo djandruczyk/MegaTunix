@@ -15,7 +15,6 @@
 #include <comms_gui.h>
 #include <config.h>
 #include <defines.h>
-#include <default_limits.h>
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
@@ -207,112 +206,63 @@ void reset_runtime_status()
 
 void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
-	gfloat *fl_ptr, *l_fl_ptr;
-	gushort *sh_ptr, *l_sh_ptr;
-	guchar *uc_ptr, *l_uc_ptr;	
-	extern struct Runtime_Common *runtime;
 	struct Rt_Control *control = (struct Rt_Control *)value;
-	gint offset = control->runtime_offset;
-	//gfloat lower = def_limits[control->limits_index].lower;
-	gfloat upper = def_limits[control->limits_index].upper;
 	gint count = control->count;
 	gint rate = control->rate;
 	gint last_upd = control->last_upd;
-	gint ivalue = 0;
-	gshort svalue = 0;
-	gfloat fvalue = 0.0;
-	gfloat tmpf;
+	gfloat tmpf = 0.0;
+	gfloat upper = 0.0;
+	gfloat lower = 0.0;
 	gchar * tmpbuf = NULL;
-	struct Runtime_Common * rt_last = (struct Runtime_Common *)data;
+	gint last_entry = 0;
+	gint hist_size = 0;
+	gfloat now = 0.0;
+	gfloat last = 0.0;
+	gfloat percentage = 0.0;
+	gboolean is_float = FALSE;
 
-	if (control->size == UCHAR)
-	{
-		uc_ptr = (guchar *) runtime;
-		l_uc_ptr = (guchar *) rt_last;
-		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (forced_update))
-		{
-			ivalue = uc_ptr[offset/UCHAR];
-			tmpf = (gfloat)ivalue/upper <= 1.0 ? (gfloat)ivalue/upper : 1.0;
-			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-					(control->pbar),
-					tmpf);
-
-			if ((abs(count-last_upd) > 5) || (forced_update))
-			{
-				tmpbuf = g_strdup_printf("%i",uc_ptr[offset/UCHAR]);
-				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-				g_free(tmpbuf);
-				last_upd = count;
-			}
-		}
-		else if ((count % 30 == 0))
-		{
-			tmpbuf = g_strdup_printf("%i",uc_ptr[offset/UCHAR]);
-			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-			g_free(tmpbuf);
-			last_upd = count;
-		}
-
-	}
-	else if (control->size == SHORT)
-	{
-		sh_ptr = (gushort *) runtime;
-		l_sh_ptr = (gushort *) rt_last;
-		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (forced_update))
-		{
-			svalue = sh_ptr[offset/SHORT];
-			tmpf = (gfloat)svalue/upper <= 1.0 ? (gfloat)svalue/upper : 1.0;
-			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-					(control->pbar),
-					tmpf);
-
-			if ((abs(count-last_upd) > 5) || (forced_update))
-			{
-				tmpbuf = g_strdup_printf("%i",sh_ptr[offset/SHORT]);
-				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-				g_free(tmpbuf);
-				last_upd = count;
-			}
-		}
-		else if ((count % 30 == 0))
-		{
-			tmpbuf = g_strdup_printf("%i",sh_ptr[offset/SHORT]);
-			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-			g_free(tmpbuf);
-			last_upd = count;
-		}
-
-	}
-	else if (control->size == FLOAT)
-	{
-		fl_ptr = (gfloat *) runtime;
-		l_fl_ptr = (gfloat *) rt_last;
-		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]) || (forced_update))
-		{
-			fvalue = fl_ptr[offset/FLOAT];
-			tmpf = fvalue/upper <= 1.0 ? fvalue/upper : 1.0;
-			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-					(control->pbar),
-					tmpf);
-
-			if ((abs(count-last_upd) > 5) || (forced_update))
-			{
-				tmpbuf = g_strdup_printf("%.2f",fl_ptr[offset/FLOAT]);
-				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-				g_free(tmpbuf);
-				last_upd = count;
-			}
-		}
-		else if ((count % 30 == 0))
-		{
-			tmpbuf = g_strdup_printf("%.2f",fl_ptr[offset/FLOAT]);
-			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-			g_free(tmpbuf);
-			last_upd = count;
-		}
-	}
+	last_entry = (gint)g_object_get_data(control->object,"last_entry");
+	hist_size = (gint)g_object_get_data(control->object,"hist_max");
+	is_float = (gboolean)g_object_get_data(control->object,"is_float");
+	now = control->history[last_entry];
+	if (last_entry == 0)
+		last = control->history[hist_size-1];
 	else
-		dbg_func(g_strdup_printf(__FILE__": rt_update_values()\n\tMAJOR error, size invalid: %i\n",control->size),CRITICAL);
+		last = control->history[(last_entry-1)];
+
+	upper = (gfloat)control->upper;
+	lower = (gfloat)control->lower;
+	
+	if ((now != last) || (forced_update))
+	{
+		percentage = (now-lower)/(upper-lower);
+		tmpf = percentage <= 1.0 ? percentage : 1.0;
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+				(control->pbar),
+				tmpf);
+
+		if ((abs(count-last_upd) > 5) || (forced_update))
+		{
+			if (is_float)
+				tmpbuf = g_strdup_printf("%.2f",now);
+			else
+				tmpbuf = g_strdup_printf("%i",(gint)now);
+			
+			gtk_label_set_text(GTK_LABEL(control->textval),tmpbuf);
+			g_free(tmpbuf);
+			last_upd = count;
+		}
+	}
+	else if ((count % 30 == 0))
+	{
+		if (is_float)
+			tmpbuf = g_strdup_printf("%.2f",now);
+		else
+			tmpbuf = g_strdup_printf("%i",(gint)now);
+		gtk_label_set_text(GTK_LABEL(control->textval),tmpbuf);
+		g_free(tmpbuf);
+		last_upd = count;
+	}
 
 	rate++;
 	if (rate >25)

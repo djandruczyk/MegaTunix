@@ -13,7 +13,8 @@
 
 
 #include <configfile.h>
-#include <default_controls.h>
+#include <debugging.h>
+#include <getfiles.h>
 #include <runtime_controls.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,171 +22,80 @@
 #include <tabloader.h>
 
 GHashTable *rt_controls = NULL;
-extern GtkWidget *rt_table[];
-
-void create_default_controls()
-{
-	/* Creates the info in ~/.MegaTunix/config for all possible 
-	 * controls in the Runtime_gui (ONLY). 
-	 */
-
-	ConfigFile *cfgfile = NULL;
-	gchar *filename = NULL;
-	gchar *heading = NULL;
-	gchar *choices = NULL;
-	gchar *defaults = NULL;
-	gchar *ctrl_info = NULL;
-	gint total = 0;
-	gint i = 0;
-	gboolean setup = FALSE;
-
-	total = sizeof(all_controls) / sizeof(all_controls[0]);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
-	heading = g_strdup("Runtime_Controls");
-	while (i < total)
-	{
-		choices = g_strjoin(",",
-				all_controls[i].ctrl_name,
-				choices,
-				NULL);
-		if (all_controls[i].enabled)
-		{
-			defaults = g_strjoin(",",
-					all_controls[i].ctrl_name,
-					defaults,
-					NULL);
-		}
-		i++;
-	}
-
-	cfgfile = cfg_open_file(filename);
-	if (cfgfile)
-	{
-		cfg_read_boolean(cfgfile,heading,"Setup",&setup);
-		cfg_write_int(cfgfile,heading,"Total_Controls",total);
-		cfg_write_string(cfgfile,heading,"Choices",choices);
-		if (setup)
-			goto exitpoint;
-		cfg_write_string(cfgfile,heading,"Defaults",defaults);
-		for (i=0;i<total;i++)
-		{
-			if (all_controls[i].enabled)
-			{
-				ctrl_info = g_strdup_printf(
-						"%i,%i,%s,%i,%i,%i,%i",
-						all_controls[i].tbl,
-						all_controls[i].row,
-						all_controls[i].friendly_name,
-						all_controls[i].limits_index,
-						all_controls[i].runtime_offset,
-						all_controls[i].size,
-						all_controls[i].flags);
-				cfg_write_string(cfgfile,
-						heading,
-						all_controls[i].ctrl_name,
-						ctrl_info);
-				g_free(ctrl_info);
-			}
-			cfg_write_boolean(cfgfile,heading,"Setup",TRUE);
-		}
-exitpoint:
-		cfg_write_file(cfgfile,filename);
-		cfg_free(cfgfile);
-		g_free(cfgfile);
-
-	}
-	g_free(choices);
-	g_free(defaults);
-	g_free(filename);
-	g_free(heading);
-
-
-	return;
-
-}
 
 void load_controls()
 {
 	ConfigFile *cfgfile = NULL;
+	extern struct Firmware_Details *firmware;
 	gchar *filename = NULL;
-	gchar *heading = NULL;
-	gchar *ctrl_list = NULL;
-	gchar *ctrl_info = NULL;
-	gchar *defaults = NULL;
-	gchar **control_names = NULL;
+	gint count = 0;
+	gint table = 0;
+	gint row = 0;
+	gchar *ctrl_name = NULL;
+	gchar *source = NULL;
+	gchar *section = NULL;
 	gint i = 0;
 
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
-	heading = g_strdup("Runtime_Controls");
-
+	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->controls_map_file,".rts_conf",NULL));
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		cfg_read_string(cfgfile,heading,"Defaults",&defaults);
-		cfg_read_string(cfgfile,heading,"Control_List",&ctrl_list);
-	}
-	if ((ctrl_list == NULL) && (defaults))
-	{
-		control_names = g_strsplit(defaults, ",", 0);
-		i = 0;
-		while (control_names[i] != NULL)
+		cfg_read_int(cfgfile,"global","total_sliders",&count);
+		for (i=0;i<count;i++)
 		{
-			cfg_read_string(cfgfile,
-					heading,
-					control_names[i],
-					&ctrl_info);
-			add_control(control_names[i],ctrl_info);
-			g_free(ctrl_info);
-			i++;
-		}
-		g_strfreev(control_names);
-	}
-	else
-	{
-		control_names = g_strsplit(ctrl_list, ",", 0);
-		i = 0;
-		while (control_names[i] != NULL)
-		{
-			cfg_read_string(cfgfile,
-					heading,
-					control_names[i],
-					&ctrl_info);
-			add_control(control_names[i],ctrl_info);
-			g_free(ctrl_info);
-			i++;
-		}
-		g_strfreev(control_names);
-	}
+			row = -1;
+			table = -1;
+			section = g_strdup_printf("slider_%i",i);
+			if(!cfg_read_string(cfgfile,section,"control_name",&ctrl_name))
+				dbg_func(g_strdup_printf(__FILE__": load_controls()\n\t Failed reading \"control_name\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"table",&table))
+				dbg_func(g_strdup_printf(__FILE__": load_controls()\n\t Failed reading \"table\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if (!cfg_read_int(cfgfile,section,"row",&row))
+				dbg_func(g_strdup_printf(__FILE__": load_controls()\n\t Failed reading \"row\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			if (!cfg_read_string(cfgfile,section,"source",&source))
+				dbg_func(g_strdup_printf(__FILE__": load_controls()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 
+			add_control(ctrl_name,table,row,source);
+			g_free(section);
+			g_free(ctrl_name);
+			g_free(source);
+		}
+	}
 	cfg_free(cfgfile);
 	g_free(filename);
 }
 
-void add_control(gchar *control_name, gchar *parameters)
+void add_control(gchar *ctrl_name, gint tbl, gint row, gchar *source)
 {
-	gchar **parm_array = NULL;
-	gchar *name = NULL;
 	struct Rt_Control *control = NULL;
-	control = g_malloc0(sizeof(struct Rt_Control));
 	GtkWidget *label = NULL;
 	GtkWidget *pbar = NULL;
 	GtkWidget *table = NULL;
+	gchar * name = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern struct RtvMap *rtv_map;
+	GObject *object = NULL;
+
+	control = g_malloc0(sizeof(struct Rt_Control));
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
+	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	if (!G_IS_OBJECT(object))
+	{
+		printf("Bad things man, object doesn't exist for %s\n",source);
+		return;
+	}
 
-	parm_array = g_strsplit(parameters, ",", 0);
-	control->ctrl_name = g_strdup(control_name);
-	control->tbl = atoi(parm_array[0]);
-	control->row = atoi(parm_array[1]);
-	control->friendly_name = g_strdup(parm_array[2]);
-	control->limits_index = atoi(parm_array[3]);
-	control->runtime_offset = atoi(parm_array[4]);
-	control->size = atoi(parm_array[5]);
-	control->flags = atoi(parm_array[6]);
+	control->ctrl_name = g_strdup(ctrl_name);
+	control->tbl = tbl;
+	control->row = row;
+	control->friendly_name = (gchar *) g_object_get_data(object,"dlog_gui_name");
+	control->lower = (gint)g_object_get_data(object,"lower_limit");
 
-	g_strfreev(parm_array);
+	control->upper = (gint)g_object_get_data(object,"upper_limit");
+	control->history = (gfloat *) g_object_get_data(object,"history");
+	control->object = object;
 
 	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label),g_strdup(control->friendly_name));
@@ -205,7 +115,7 @@ void add_control(gchar *control_name, gchar *parameters)
 			1,2,control->row,(control->row)+1,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
-	control->data = label;
+	control->textval = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -219,14 +129,8 @@ void add_control(gchar *control_name, gchar *parameters)
 	control->parent = table;
 	gtk_widget_show_all(control->parent);
 
-	if (control->flags & TEMP_DEP)	/* name has temp unit in it */
-	{
-		store_list("temperature",g_list_append(
-					get_list("temperature"),(gpointer)control->label));
-	}
-
-	if (g_hash_table_lookup(rt_controls,g_strdup(control_name))==NULL)
-		g_hash_table_insert(rt_controls,g_strdup(control_name),
+	if (g_hash_table_lookup(rt_controls,g_strdup(ctrl_name))==NULL)
+		g_hash_table_insert(rt_controls,g_strdup(ctrl_name),
 				(gpointer)control);
 	return;
 }

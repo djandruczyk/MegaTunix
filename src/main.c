@@ -49,7 +49,6 @@ gint main(gint argc, gchar ** argv)
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 
 	read_config();
-	create_default_controls();
 	setup_gui();		
 
 	open_serial(serial_params->port_name);
