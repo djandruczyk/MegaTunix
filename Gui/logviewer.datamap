@@ -58,7 +58,7 @@ handler=_PLAYBACK_VIEW_
 
 #----- SpinButtons -----------------------------------------------------------
 
-[logviewer_scroll_spinner]
+[logviewer_zoom_spinner]
 keys=page,handler
 key_types=_INT_,_ENUM_
 page=0

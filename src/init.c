@@ -39,7 +39,7 @@ extern gboolean tips_in_use;
 extern gint temp_units;
 extern gint main_x_origin;
 extern gint main_y_origin;
-extern gint lv_scroll;
+extern gint lv_zoom;
 extern gint width;
 extern gint height;
 extern gint interval_min;
@@ -85,7 +85,7 @@ void init(void)
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
 	tips_in_use = TRUE;	/* Use tooltips by default */
 	temp_units = FAHRENHEIT;/* Use SAE units by default */
-	lv_scroll = 1;		/* Logviewer scroll speed */
+	lv_zoom = 1;		/* Logviewer scroll speed */
 	preferred_delimiter = TAB;
 }
 
@@ -122,7 +122,7 @@ gboolean read_config(void)
 				&serial_params->port_name);
 		cfg_read_int(cfgfile, "Serial", "read_delay", 
 				&serial_params->read_wait);
-		cfg_read_int(cfgfile, "Logviewer", "scroll_speed", &lv_scroll);
+		cfg_read_int(cfgfile, "Logviewer", "zoom", &lv_zoom);
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
@@ -183,7 +183,7 @@ void save_config(void)
 				serial_params->port_name);
 	cfg_write_int(cfgfile, "Serial", "read_delay", 
 			serial_params->read_wait);
-	cfg_write_int(cfgfile, "Logviewer", "scroll_speed", lv_scroll);
+	cfg_write_int(cfgfile, "Logviewer", "zoom", lv_zoom);
 	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
 	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);
 	cfg_write_int(cfgfile, "MemViewer", "page2_style", mem_view_style[2]);

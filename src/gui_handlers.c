@@ -519,7 +519,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	GtkWidget * tmpwidget = NULL;
 	extern gint realtime_id;
 	extern gint **ms_data;
-	extern gint lv_scroll;
+	extern gint lv_zoom;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern struct Firmware_Details *firmware;
@@ -594,7 +594,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case LOGVIEW_ZOOM:
-			lv_scroll = tmpi;
+			lv_zoom = tmpi;
 			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");	
 			if (tmpwidget)
 				g_signal_emit_by_name(tmpwidget,"configure_event",NULL);
