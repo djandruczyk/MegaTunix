@@ -167,6 +167,7 @@ struct ms_data_v1_and_v2
         unsigned char   warmcorr;	/* Total Warmup Correction - percent */
         unsigned short  rpm;		/* Computed engine RPM - rpm */
         float           pw;		/* injector squirt time in millesec (0 to 25.5 millisec) - applied */
+	float		dcycle;		/* Injector duty cycle */
         unsigned char   tpsaccel;	/* Acceleration enrichment - percent */
         unsigned char   barocorr;	/* Barometer Lookup Correction - percent */
         unsigned char   gammae;		/* Total Gamma Enrichments - percent */

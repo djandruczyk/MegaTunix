@@ -39,7 +39,7 @@ void post_process(struct ms_raw_data_v1_and_v2 *in, struct ms_data_v1_and_v2 *ou
 	out->warmcorr = in->warmcorr;
 	out->rpm = in->rpm * 100;
 	out->pw = in->pw / 10.0;
-
+	out->dcycle = ((float)out->pw*2.0)/(6.0/(float)in->rpm);
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;

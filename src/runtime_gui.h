@@ -22,23 +22,41 @@
 
 struct v1_2_Runtime_Gui
 {
-	GtkWidget *secl_ent;		/* Counter entry */
-	GtkWidget *baro_ent;		/* baro entry from MS */
-	GtkWidget *map_ent;		/* map entry from MS */
-	GtkWidget *mat_ent;		/* mat entry from MS */
-	GtkWidget *clt_ent;		/* clt entry from MS */
-	GtkWidget *tps_ent;		/* tps entry from MS */
-	GtkWidget *batt_ent;		/* batt entry from MS */
-	GtkWidget *ego_ent;		/* ego entry from MS */
-	GtkWidget *egocorr_ent;		/* egocorr entry from MS */
-	GtkWidget *aircorr_ent;		/* aircorr entry from MS */
-	GtkWidget *warmcorr_ent;	/* warmcorr entry from MS */
-	GtkWidget *rpm_ent;		/* rpm entry from MS */
-	GtkWidget *pw_ent;		/* pw entry from MS */
-	GtkWidget *tpsaccel_ent;	/* tpsaccel entry from MS */
-	GtkWidget *barocorr_ent;	/* barocorr entry from MS */
-	GtkWidget *gammae_ent;		/* gammae entry from MS */
-	GtkWidget *vecurr_ent;		/* vecurr entry from MS */
+	GtkWidget *secl_lab;		/* Counter label */
+	GtkWidget *ego_lab;		/* O2 Voltage */
+	GtkWidget *ego_pbar;		/* O2 Voltage bar */
+	GtkWidget *baro_lab;		/* baro label from MS */
+	GtkWidget *baro_pbar;		/* O2 Voltage bar */
+	GtkWidget *map_lab;		/* map label from MS */
+	GtkWidget *map_pbar;		/* map value for bar */
+	GtkWidget *mat_lab;		/* mat label from MS */
+	GtkWidget *mat_pbar;		/* map value for bar */
+	GtkWidget *clt_lab;		/* clt label from MS */
+	GtkWidget *clt_pbar;		/* map value for bar */
+	GtkWidget *tps_lab;		/* tps label from MS */
+	GtkWidget *tps_pbar;		/* map value for bar */
+	GtkWidget *batt_lab;		/* batt label from MS */
+	GtkWidget *batt_pbar;		/* map value for bar */
+	GtkWidget *egocorr_lab;		/* egocorr label from MS */
+	GtkWidget *egocorr_pbar;	/* egocorr label from MS */
+	GtkWidget *aircorr_lab;		/* aircorr label from MS */
+	GtkWidget *aircorr_pbar;	/* aircorr label from MS */
+	GtkWidget *warmcorr_lab;	/* warmcorr label from MS */
+	GtkWidget *warmcorr_pbar;	/* warmcorr label from MS */
+	GtkWidget *rpm_lab;		/* rpm label from MS */
+	GtkWidget *rpm_pbar;		/* rpm label from MS */
+	GtkWidget *pw_lab;		/* pw label from MS */
+	GtkWidget *pw_pbar;		/* pw label from MS */
+	GtkWidget *tpsaccel_lab;	/* tpsaccel label from MS */
+	GtkWidget *tpsaccel_pbar;	/* tpsaccel label from MS */
+	GtkWidget *barocorr_lab;	/* barocorr label from MS */
+	GtkWidget *barocorr_pbar;	/* barocorr label from MS */
+	GtkWidget *gammae_lab;		/* gammae label from MS */
+	GtkWidget *gammae_pbar;		/* gammae label from MS */
+	GtkWidget *vecurr_lab;		/* vecurr label from MS */
+	GtkWidget *vecurr_pbar;		/* vecurr label from MS */
+	GtkWidget *dcycle_lab;		/* vecurr label from MS */
+	GtkWidget *dcycle_pbar;		/* vecurr label from MS */
 };
 
 
