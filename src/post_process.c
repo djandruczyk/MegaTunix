@@ -119,7 +119,7 @@ void post_process(void *input, void *output)
 		out->pw2 = (float)in_dt->pw2 / 10.0;
 		out->vecurr1 = in_dt->vecurr1;
 		out->vecurr2 = in_dt->vecurr2;
-		out->idleDC = in_dt->idleDC;
+		out->idledc = in_dt->idledc;
 
 		if (ve_const_dt1->config11.bit.eng_type == 1)
 			cycletime = 600.0 /(float) in->rpm;
@@ -132,14 +132,14 @@ void post_process(void *input, void *output)
 				/ (float)ve_const_dt1->divider;
 
 		possible_inj_time = (float)cycletime/(float)nsquirts;
-		out->dcycle1 =  (float) out->pw1 / possible_inj_time;
+		out->dcycle1 =  10.0 * (float) out->pw1 / possible_inj_time;
 
 		/* Table 2 */
 		nsquirts = (int) 0.00001 
 				+ (float)(ve_const_dt2->config11.bit.cylinders+1)
 				/ (float)ve_const_dt2->divider;
 		possible_inj_time = (float)cycletime/(float)nsquirts;
-		out->dcycle2 =  (float) out->pw2 / possible_inj_time;
+		out->dcycle2 =  10.0 * (float) out->pw2 / possible_inj_time;
 
 	}
 }

@@ -36,7 +36,6 @@ extern gboolean interrogated;
 extern gboolean dualtable;
 extern gboolean iac_variant;
 extern gboolean connected;
-extern gboolean force_status_update;
 extern gboolean raw_reader_running;
 extern gchar *delim;
 extern gint statuscounts_id;
@@ -148,7 +147,6 @@ gint comm_port_change(GtkEditable *editable)
 	gboolean result;
 
 	port = gtk_editable_get_chars(editable,0,-1);
-//	printf("comm_port_change, port %s\n",port);
 	if(serial_params->open)
 	{
 		if (raw_reader_running)
@@ -158,7 +156,6 @@ gint comm_port_change(GtkEditable *editable)
 	result = g_file_test(port,G_FILE_TEST_EXISTS);
 	if (result)
 	{
-//		printf("port exists...\n");
 		open_serial(port);
 		if (serial_params->port_name != NULL)
 			g_free(serial_params->port_name);
@@ -301,7 +298,6 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 
 gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
-	gint config_num = -1;
 	gint bit_pos = -1;
 	gint bit_val = -1;
 	gint bitmask = -1;
@@ -313,21 +309,24 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
+	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
 
 	if (dualtable)
+	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+	}
 
 	if (paused_handlers)
 		return TRUE;
 
-	config_num = (gint)g_object_get_data(G_OBJECT(widget),"config_num");
+	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	single = (gint)g_object_get_data(G_OBJECT(widget),"single");
-	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	
 	/* to handle check buttons */
 	if (single == 1)
@@ -336,40 +335,11 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				GTK_TOGGLE_BUTTON (widget));
 	}
 
-	if ((config_num == 14)||(gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
+	if ((offset == 92) || (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
 	{
-		/* If control reaches here, the toggle button is down */
-		switch (config_num)
+		switch (offset)
 		{
-			case 11:
-				tmp = ve_const->config11.value;
-				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << bit_pos);
-				ve_const->config11.value = tmp;
-				dload_val = tmp;
-				//offset = 116;
-				check_config11(dload_val);
-				break;
-			/*
-			case 12:
-				tmp = ve_const->config12.value;
-				tmp = tmp & ~bitmask;	// clears bits 
-				tmp = tmp | (bit_val << bit_pos);
-				ve_const->config12.value = tmp;
-				dload_val = tmp;
-				offset = 117;
-				break;
-			*/
-			case 13:
-				tmp = ve_const->config13.value;
-				tmp = tmp & ~bitmask;	/*clears bits */
-				tmp = tmp | (bit_val << bit_pos);
-				ve_const->config13.value = tmp;
-				dload_val = tmp;
-				//offset = 118;
-				check_config13(dload_val);
-				break;
-			case 14: /* either alt/simul or tblcnf */
+			case 92: /* alternate OR tblcnf (firmware dependant) */
 				if (dualtable)
 				{
 					tmp = ve_const_dt1->tblcnf.value;
@@ -402,6 +372,41 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 					if (!err_flag)
 						check_req_fuel_limits();
 				}
+				break;
+			case 116: // config11 
+				tmp = ve_const->config11.value;
+				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp | (bit_val << bit_pos);
+				ve_const->config11.value = tmp;
+				dload_val = tmp;
+				check_config11(dload_val);
+				break;
+			/*
+			case 117: // config12 
+				tmp = ve_const->config12.value;
+				tmp = tmp & ~bitmask;	// clears bits 
+				tmp = tmp | (bit_val << bit_pos);
+				ve_const->config12.value = tmp;
+				dload_val = tmp;
+				break;
+			*/
+			case 118: // config13
+				tmp = ve_const->config13.value;
+				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp | (bit_val << bit_pos);
+				ve_const->config13.value = tmp;
+				dload_val = tmp;
+				check_config13(dload_val);
+				break;
+			case 247: // Boost Controller (DT only)
+				if (!dualtable)
+					break;
+				tmp = ve_const_dt2->bcfreq.value;
+				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp | (bit_val << bit_pos);
+				ve_const_dt2->bcfreq.value = tmp;
+				dload_val = tmp;
+				check_bcfreq(dload_val,FALSE);
 				break;
 			default:
 				printf(" Toggle button NOT handled ERROR!!, contact author\n");
@@ -443,7 +448,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case STOP_REALTIME:
 			stop_serial_thread();
 			reset_runtime_status();
-			force_status_update = TRUE;
+			forced_update = TRUE;
 			stop_runtime_display();
 			stop_datalogging();
 			break;
@@ -713,7 +718,6 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
 			dload_val = tmp;
-			printf("offset %i\n",offset);
 			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
 			{
 				offsets_2 = g_list_append(offsets_2,
@@ -806,9 +810,10 @@ void update_ve_const()
 	ve_const = (struct Ve_Const_Std *) ms_data;
 	if (dualtable)
 	{
-		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 		check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
+		check_bcfreq(ve_const_dt2->bcfreq.value,TRUE);
 	}
 
 	check_config11(ve_const->config11.value);
@@ -1073,6 +1078,10 @@ void update_ve_const()
 					GTK_TOGGLE_BUTTON(buttons.onoff_idle_but),
 					TRUE);
 	}
+	else
+		gtk_toggle_button_set_active(
+				GTK_TOGGLE_BUTTON(buttons.onoff_idle_but),
+				TRUE);
 
 
 	if (!dualtable)
@@ -1325,6 +1334,34 @@ void check_req_fuel_limits()
 
 }
 
+void check_bcfreq(unsigned char tmp, gboolean update)
+{
+	gint val;	
+	val = (tmp &0x3);
+	if (update)
+	{
+		switch (val)
+		{
+			case 1:
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+						(buttons.boost_39hz),
+						TRUE);
+				break;
+			case 2:
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+						(buttons.boost_19hz),
+						TRUE);
+				break;
+			case 3:
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+						(buttons.boost_10hz),
+						TRUE);
+				break;
+		}
+	}
+
+}
+
 void check_config11(unsigned char tmp)
 {
 	/* checks some of the bits in the config11 variable and 
@@ -1357,12 +1394,12 @@ void check_config13(unsigned char tmp)
 	if (((tmp >> 1)&0x1) == 1)
 	{
 		ego_pbar_divisor = 5.0;
-		force_status_update = TRUE;
+		forced_update = TRUE;
 	}
 	else
 	{
 		ego_pbar_divisor = 1.2;
-		force_status_update = TRUE;
+		forced_update = TRUE;
 	}
 
 	/* Check SD/Alpha-N button and adjust VEtable labels

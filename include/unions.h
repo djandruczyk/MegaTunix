@@ -139,6 +139,19 @@ union config13
 };
 
 /* Big Endian systems (MSB) */
+union bcfreq
+{
+	unsigned char 	value;
+	struct
+	{
+		unsigned char unused	:6;
+		unsigned char freq	:2;	/* 00 ERROR, 01 = 39 Hz, 
+						 * 10 = 19Hz, 11 = 10 Hz
+						 */
+	} bit;
+};
+
+/* Big Endian systems (MSB) */
 union tblcnf
 {
 	unsigned char 	value;
@@ -271,6 +284,19 @@ union config13
 
                 unsigned char unused:3;         /* Last 3 bits... */
         } bit;
+};
+
+/* Little Endian systems (LSB), intel x86) */
+union bcfreq
+{
+	unsigned char 	value;
+	struct
+	{
+		unsigned char freq	:2;	/* 00 ERROR, 01 = 39 Hz, 
+						 * 10 = 19Hz, 11 = 10 Hz
+						 */
+		unsigned char unused	:6;
+	} bit;
 };
 
 /* Little Endian systems (LSB), intel x86) */

@@ -102,7 +102,7 @@ void build_constants_1(GtkWidget *parent_frame)
 
 
 	/* Number of Cylinders part of config11 */
-	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
 	spinners.cylinders_1_spin = spinner;
@@ -111,7 +111,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
 	gtk_widget_set_size_request(spinner,60,-1);
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(116));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -135,7 +135,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	/* Number of injectors, part of config12 */
-	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.injectors_1_spin = spinner;
 	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
@@ -166,7 +166,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	/* Indirectly generates the "divider" variable */
-	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.inj_per_cycle_1_spin = spinner;
 	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
@@ -305,7 +305,6 @@ void build_constants_1(GtkWidget *parent_frame)
 	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
-        g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
@@ -320,7 +319,6 @@ void build_constants_1(GtkWidget *parent_frame)
         buttons.alternate_but = button;
 	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
-        g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"dl_type",
                         GINT_TO_POINTER(DEFERRED));
@@ -606,7 +604,7 @@ void build_constants_2(GtkWidget *parent_frame)
 
 
 	/* Number of Cylinders part of config11 */
-	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
 	spinners.cylinders_2_spin = spinner;
@@ -615,7 +613,7 @@ void build_constants_2(GtkWidget *parent_frame)
 	reqfuel_2_widgets = g_list_append(reqfuel_2_widgets,(gpointer)spinner);
 	interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
 	gtk_widget_set_size_request(spinner,60,-1);
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(MS_PAGE_SIZE+116));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -639,7 +637,7 @@ void build_constants_2(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	/* Number of injectors, part of config12 */
-	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.injectors_2_spin = spinner;
 	interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
@@ -670,7 +668,7 @@ void build_constants_2(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	/* Indirectly generates the "divider" variable */
-	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
+	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.inj_per_cycle_2_spin = spinner;
 	interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
@@ -974,7 +972,7 @@ void build_constants_2(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,0,1);
 	ve_widgets->widget[MS_PAGE_SIZE+96] = spinner;
 	gtk_widget_set_size_request(spinner,60,-1);
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(MS_PAGE_SIZE+96));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));

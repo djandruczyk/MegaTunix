@@ -78,7 +78,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	buttons.speed_den_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -94,7 +93,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Alpha-N");
 	buttons.alpha_n_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -129,7 +127,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	buttons.multi_port_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -145,7 +142,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
 	buttons.tbi_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -180,7 +176,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	buttons.four_stroke_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -196,7 +191,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
 	buttons.two_stroke_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(4));
@@ -231,7 +225,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	buttons.even_fire_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
@@ -247,7 +240,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Odd Fire");
 	buttons.odd_fire_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
@@ -285,7 +277,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	buttons.map_115_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
@@ -301,7 +292,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"250 kPa");
 	buttons.map_250_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(116));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(3));
@@ -338,7 +328,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
         buttons.nbo2_but = button;
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-        g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
@@ -354,7 +343,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
         button = gtk_radio_button_new_with_label(group,"Wide-Band");
         buttons.wbo2_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-        g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(2));
@@ -390,7 +378,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	buttons.baro_ena_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -406,7 +393,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	button = gtk_radio_button_new_with_label(group,"Disabled");
 	buttons.baro_disa_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(8));
@@ -446,7 +432,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	buttons.onoff_idle_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(16));
@@ -459,12 +444,11 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
+
 	button = gtk_radio_button_new_with_label(group,"PWM Controlled");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)button);
 	buttons.pwm_idle_but = button;
-	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
-	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(16));
@@ -476,7 +460,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
-
 
 
 	ebox = gtk_event_box_new();
@@ -499,9 +482,9 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	 */
 	label = gtk_label_new("Fast Idle Temp (\302\260 F.)");
         labels.fast_idle_temp_lab = label;
-        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
         /* Fast Idle Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
@@ -529,9 +512,9 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	label = gtk_label_new("Fast Idle Speed (RPM)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
-        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
         /* Fast Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(1800.0,0.0,2550.0,10.0,100.0,0);
@@ -559,9 +542,9 @@ void build_eng_vitals(GtkWidget *parent_frame)
         labels.slow_idle_temp_lab = label;
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
-        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
         /* Slow Idle Temp */
         adj =  (GtkAdjustment *) gtk_adjustment_new(145.0,-40.0,215.0,1.0,10.0,0);
@@ -592,9 +575,9 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	label = gtk_label_new("Slow Idle Speed (RPM)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
-        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
         /* Slow Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(900.0,0.0,2550.0,10.0,100.0,0);
@@ -623,9 +606,9 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	label = gtk_label_new("Idle Threshold (TPS%)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
-        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
-                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
         /* Idle Threshold (% of TPS )*/
         adj =  (GtkAdjustment *) gtk_adjustment_new(10.0,0.0,100.0,1.0,10.0,0);

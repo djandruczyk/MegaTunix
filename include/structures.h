@@ -43,6 +43,7 @@ struct Serial_Params
 /* Progress bars that are updated from various functions... */
 struct DynamicProgress
 {
+        GtkWidget *secl_pbar;            /* O2 Voltage bar */
         GtkWidget *ego_pbar;            /* O2 Voltage bar */
         GtkWidget *baro_pbar;           /* O2 Voltage bar */
         GtkWidget *map_pbar;            /* map value for bar */
@@ -55,11 +56,15 @@ struct DynamicProgress
         GtkWidget *warmcorr_pbar;       /* warmcorr label from MS */
         GtkWidget *rpm_pbar;            /* rpm label from MS */
         GtkWidget *pw1_pbar;             /* pw label from MS */
+        GtkWidget *pw2_pbar;             /* pw label from MS */
         GtkWidget *tpsaccel_pbar;       /* tpsaccel label from MS */
         GtkWidget *barocorr_pbar;       /* barocorr label from MS */
         GtkWidget *gammae_pbar;         /* gammae label from MS */
-        GtkWidget *vecurr1_pbar;         /* vecurr label from MS */
-        GtkWidget *dcycle1_pbar;         /* vecurr label from MS */
+        GtkWidget *vecurr1_pbar;         /* vecurr1 label from MS */
+        GtkWidget *vecurr2_pbar;         /* vecurr2 label from MS */
+        GtkWidget *dcycle1_pbar;         /* vecurr1 label from MS */
+        GtkWidget *dcycle2_pbar;         /* vecurr2 label from MS */
+	GtkWidget *idledc_pbar;
 	GtkWidget *ww_clt_pbar;
 	GtkWidget *ww_warmcorr_pbar;
 	GtkWidget *ww_ego_pbar;
@@ -122,24 +127,27 @@ struct Reqd_Fuel
  */
 struct DynamicLabels
 {
-        GtkWidget *secl_lab;            /* Counter label */
-        GtkWidget *ego_lab;             /* O2 Voltage */
-        GtkWidget *baro_lab;            /* baro label from MS */
-        GtkWidget *map_lab;             /* map label from MS */
-        GtkWidget *mat_lab;             /* mat label from MS */
-        GtkWidget *clt_lab;             /* clt label from MS */
-        GtkWidget *tps_lab;             /* tps label from MS */
-        GtkWidget *batt_lab;            /* batt label from MS */
-        GtkWidget *egocorr_lab;         /* egocorr label from MS */
-        GtkWidget *aircorr_lab;         /* aircorr label from MS */
-        GtkWidget *warmcorr_lab;        /* warmcorr label from MS */
-        GtkWidget *rpm_lab;             /* rpm label from MS */
-        GtkWidget *pw1_lab;              /* pw label from MS */
-        GtkWidget *tpsaccel_lab;        /* tpsaccel label from MS */
-        GtkWidget *barocorr_lab;        /* barocorr label from MS */
-        GtkWidget *gammae_lab;          /* gammae label from MS */
-        GtkWidget *vecurr1_lab;          /* vecurr label from MS */
-        GtkWidget *dcycle1_lab;          /* vecurr label from MS */
+        GtkWidget *secl_lab;		/* Counter label */
+        GtkWidget *ego_lab;		/* O2 Voltage */
+        GtkWidget *baro_lab;		/* baro label from MS */
+        GtkWidget *map_lab;		/* map label from MS */
+        GtkWidget *mat_lab;		/* mat label from MS */
+        GtkWidget *clt_lab;		/* clt label from MS */
+        GtkWidget *tps_lab;		/* tps label from MS */
+        GtkWidget *batt_lab;		/* batt label from MS */
+        GtkWidget *egocorr_lab;		/* egocorr label from MS */
+        GtkWidget *aircorr_lab;		/* aircorr label from MS */
+        GtkWidget *warmcorr_lab;	/* warmcorr label from MS */
+        GtkWidget *rpm_lab;		/* rpm label from MS */
+        GtkWidget *pw1_lab;		/* pw label from MS */
+        GtkWidget *pw2_lab;		/* pw label from MS */
+        GtkWidget *tpsaccel_lab;	/* tpsaccel label from MS */
+        GtkWidget *barocorr_lab;	/* barocorr label from MS */
+        GtkWidget *gammae_lab;		/* gammae label from MS */
+        GtkWidget *vecurr1_lab;		/* vecurr label from MS */
+        GtkWidget *dcycle1_lab;		/* vecurr label from MS */
+        GtkWidget *dcycle2_lab;		/* vecurr label from MS */
+        GtkWidget *idledc_lab;		/* idledc label from MS */
 	GtkWidget *req_fuel_lab;
 	GtkWidget *fast_idle_temp_lab;
 	GtkWidget *slow_idle_temp_lab;
@@ -212,6 +220,9 @@ struct DynamicButtons
 	GtkWidget *inj2_table2;			/* Inj2 driven from table 2 */
 	GtkWidget *inj1_gammae;			/* Inj1 gammae */
 	GtkWidget *inj2_gammae;			/* Inj2 gammae */
+	GtkWidget *boost_39hz;
+	GtkWidget *boost_19hz;
+	GtkWidget *boost_10hz;
 };
 
 /* Simple struct to store the pointers to the entry and button

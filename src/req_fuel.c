@@ -31,7 +31,7 @@ extern struct DynamicAdjustments adjustments;
 
 void req_fuel_change(void *ptr)
 {
-	printf("req_fuel_change() not written yet\n");
+//	printf("req_fuel_change() not written yet\n");
 }
 
 int reqd_fuel_popup()

@@ -81,7 +81,7 @@ struct Raw_Runtime_Dualtable
 	unsigned char	vecurr1;	/* Offset 18 */
 	unsigned char	pw2;		/* Offset 19 */
 	unsigned char	vecurr2;	/* Offset 20 */
-	unsigned char	idleDC;		/* Offset 21 */
+	unsigned char	idledc;		/* Offset 21 */
 };
 
 
@@ -132,7 +132,7 @@ struct Runtime_Common
 	unsigned char	egocorr;	/* 71 Oxygen Sensor Correction  %*/
         unsigned char	tpsaccel;	/* 72 Acceleration enrichment % */
         unsigned char	warmcorr;	/* 73 Total Warmup Correction % */
-        unsigned char	idleDC;		/* 74 IdlePWM dutycycle */
+        unsigned char	idledc;		/* 74 IdlePWM dutycycle */
 	unsigned char	bspot1;		/* 75 blank spot 1 (for Std Runtime) */
 	unsigned char	bspot2;		/* 76 blank spot 2 (for Std Runtime) */
 	unsigned char	bspot3;		/* 77 blank spot 3 (for Std Runtime) */
@@ -262,7 +262,7 @@ struct Ve_Const_DT_2
 	unsigned char	bcfreqdiv;		/* 247, PWM rate for boost */
 						/* 0-ERROR, 1=39hz, 2=19 Hz */
 						/* 3 = 10 Hz */
-	unsigned char	bcupdate;		/* 248, milliseconds count for 
+	union bcfreq	bcfreq;			/* 248, milliseconds count for 
 						 * controller algorithm */
 	unsigned char	bcpgain;		/* 249, proportional Gain % */
 	unsigned char	bcdgain;		/* 250, derivative Gain % */

@@ -63,8 +63,8 @@ void build_runtime(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-	table = gtk_table_new(6,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	table = gtk_table_new(7,3,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
@@ -84,6 +84,14 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	labels.secl_lab = label;
+
+	pbar = gtk_progress_bar_new();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
+			GTK_PROGRESS_LEFT_TO_RIGHT);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	progress.secl_pbar = pbar;
 
 	/* O2 Voltage Label*/
 	label = gtk_label_new(NULL);
@@ -110,9 +118,8 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	progress.ego_pbar = pbar;
 
-	/* Coolant */
-	label = gtk_label_new("Coolant (F)");
-	labels.runtime_clt_lab = label;
+	/* Battery Voltage */
+	label = gtk_label_new("Batt (Volts)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
@@ -124,19 +131,20 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.clt_lab = label;
+	labels.batt_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
+
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.clt_pbar = pbar;
+	progress.batt_pbar = pbar;
 
 
-	/* Battery Voltage */
-	label = gtk_label_new("Batt (Volts)");
+	/* TPS */
+	label = gtk_label_new("TPS (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
@@ -148,20 +156,18 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.batt_lab = label;
+	labels.tps_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.batt_pbar = pbar;
+	progress.tps_pbar = pbar;
 
-
-	/* TPS */
-	label = gtk_label_new("TPS (%)");
+	/* IdleDC */
+	label = gtk_label_new("Idle DC (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
@@ -173,7 +179,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.tps_lab = label;
+	labels.idledc_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -181,11 +187,10 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.tps_pbar = pbar;
+	progress.idledc_pbar = pbar;
 
-
-	/* GammaE (sum of enrichments) */
-	label = gtk_label_new("GammaE (%)");
+	/* PW 1 */
+	label = gtk_label_new("Ch. 1 PW (ms)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
@@ -197,7 +202,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.gammae_lab = label;
+	labels.pw1_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -205,21 +210,61 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.gammae_pbar = pbar;
+	progress.pw1_pbar = pbar;
 
-	table = gtk_table_new(6,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	/* Duty Cycle 2 */
+	label = gtk_label_new("Ch. 1 DC (%)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 6, 7,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new(NULL);
+	gtk_widget_set_size_request(label,55,-1);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 6, 7,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	labels.dcycle1_lab = label;
+
+	pbar = gtk_progress_bar_new();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
+			GTK_PROGRESS_LEFT_TO_RIGHT);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 6, 7,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	progress.dcycle1_pbar = pbar;
+
+
+	/* Second column */
+	table = gtk_table_new(7,3,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
-	/* NULL label to make spacing line up... */
-	label = gtk_label_new(NULL);
+	/* GammaE (sum of enrichments) */
+	label = gtk_label_new("GammaE (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new(NULL);
+	gtk_widget_set_size_request(label,55,-1);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	labels.gammae_lab = label;
+
+	pbar = gtk_progress_bar_new();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
+			GTK_PROGRESS_LEFT_TO_RIGHT);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	progress.gammae_pbar = pbar;
 
 	/* MAP Sensor */	
 	label = gtk_label_new("MAP (kPa)");
@@ -244,9 +289,9 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	progress.map_pbar = pbar;
 
-	/* Manifold Air Temp */
-	label = gtk_label_new("MAT (F)");
-	labels.runtime_mat_lab = label;
+	/* Coolant Temp */
+	label = gtk_label_new("Coolant (F)");
+	labels.runtime_clt_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
@@ -258,7 +303,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.mat_lab = label;
+	labels.clt_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -266,10 +311,12 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.mat_pbar = pbar;
+	progress.clt_pbar = pbar;
 
-	/* RPM */
-	label = gtk_label_new("RPM");
+
+	/* Manifold Air Temp */
+	label = gtk_label_new("MAT (F)");
+	labels.runtime_mat_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
@@ -281,7 +328,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.rpm_lab = label;
+	labels.mat_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -289,10 +336,10 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.rpm_pbar = pbar;
+	progress.mat_pbar = pbar;
 
-	/* PW */
-	label = gtk_label_new("PW (ms)");
+	/* RPM */
+	label = gtk_label_new("RPM");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
@@ -304,7 +351,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.pw1_lab = label;
+	labels.rpm_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -312,10 +359,10 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.pw1_pbar = pbar;
+	progress.rpm_pbar = pbar;
 
-	/* Duty Cycle */
-	label = gtk_label_new("Duty Cycle (%)");
+	/* PW 2 */
+	label = gtk_label_new("Ch. 2 PW (ms)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 5, 6,
@@ -327,7 +374,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	labels.dcycle1_lab = label;
+	labels.pw2_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -335,7 +382,30 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	progress.dcycle1_pbar = pbar;
+	progress.pw2_pbar = pbar;
+
+	/* Duty Cycle 2 */
+	label = gtk_label_new("Ch. 2 DC (%)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 6, 7,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new(NULL);
+	gtk_widget_set_size_request(label,55,-1);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 6, 7,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	labels.dcycle2_lab = label;
+
+	pbar = gtk_progress_bar_new();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
+			GTK_PROGRESS_LEFT_TO_RIGHT);
+	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 6, 7,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	progress.dcycle2_pbar = pbar;
 
 	/* Corrections/Enrichments frame */
 
@@ -347,7 +417,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	table = gtk_table_new(3,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
@@ -424,7 +494,7 @@ void build_runtime(GtkWidget *parent_frame)
 	progress.warmcorr_pbar = pbar;
 
 	table = gtk_table_new(3,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
@@ -510,7 +580,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	table = gtk_table_new(3,4,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),7);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
@@ -630,11 +700,13 @@ gboolean update_runtime_vars()
 {
 	gchar *tmpbuf;
 	gfloat tmpf;
+	static gint count = 0;
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
 	extern struct Ve_Widgets *ve_widgets;
+	extern gboolean dualtable;
 
 	gdk_threads_enter();
 
@@ -642,7 +714,11 @@ gboolean update_runtime_vars()
 				G_OBJECT(ve_widgets->widget[0]),"data");
 	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(ve_widgets->widget[0+MS_PAGE_SIZE]),"data");
-
+	/* Count is used  to force an update after 5 runs EVEN IF the 
+	 * value hasn't changed.  seems to fix a "stuck bar" I've seen
+	 */
+	count++;
+	
 	/* The additional NULL test is to avoid a timing-based problem
 	 * where ve_view can exist, but the window doesn't yet.
 	 * It's a small window, but I hit it several times.
@@ -666,13 +742,17 @@ gboolean update_runtime_vars()
 	 * flicker the text widgets at high update rates
 	 */
 
-	if (runtime->secl != runtime_last->secl)
+	if ((runtime->secl != runtime_last->secl) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->secl);
 		gtk_label_set_text(GTK_LABEL(labels.secl_lab),tmpbuf);
+		tmpf = runtime->secl/255.0 <= 1.0 ? runtime->secl/255.0 : 1.0;
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+				(progress.secl_pbar),
+				tmpf);
 		g_free(tmpbuf);
 	}
-	if ((runtime->ego_volts != runtime_last->ego_volts)|| (force_status_update))
+	if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
 		gtk_label_set_text(GTK_LABEL(labels.ego_lab),tmpbuf);
@@ -687,7 +767,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->map != runtime_last->map)
+	if ((runtime->map != runtime_last->map) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->map);
 		gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
@@ -702,7 +782,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if ((runtime->clt != runtime_last->clt) || (forced_update))
+	if ((runtime->clt != runtime_last->clt) || (forced_update) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
 		gtk_label_set_text(GTK_LABEL(labels.clt_lab),tmpbuf);
@@ -717,7 +797,7 @@ gboolean update_runtime_vars()
 		g_free(tmpbuf);
 		warmwizard_update_status(runtime->clt);
 	}
-	if (runtime->batt_volts != runtime_last->batt_volts)
+	if ((runtime->batt_volts != runtime_last->batt_volts) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%.2f",runtime->batt_volts);
 		gtk_label_set_text(GTK_LABEL(labels.batt_lab),tmpbuf);
@@ -727,7 +807,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->gammae != runtime_last->gammae)
+	if ((runtime->gammae != runtime_last->gammae) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->gammae);
 		gtk_label_set_text(GTK_LABEL(labels.gammae_lab),tmpbuf);
@@ -737,7 +817,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if ((runtime->mat != runtime_last->mat) || (forced_update))
+	if ((runtime->mat != runtime_last->mat) || (forced_update) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->mat);
 		gtk_label_set_text(GTK_LABEL(labels.mat_lab),tmpbuf);
@@ -747,7 +827,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->tps != runtime_last->tps)
+	if ((runtime->tps != runtime_last->tps) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->tps);
 		gtk_label_set_text(GTK_LABEL(labels.tps_lab),tmpbuf);
@@ -757,7 +837,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->rpm != runtime_last->rpm)
+	if ((runtime->rpm != runtime_last->rpm) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->rpm);
 		gtk_label_set_text(GTK_LABEL(labels.rpm_lab),tmpbuf);
@@ -767,7 +847,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->pw1 != runtime_last->pw1)
+	if ((runtime->pw1 != runtime_last->pw1) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->pw1);
 		gtk_label_set_text(GTK_LABEL(labels.pw1_lab),tmpbuf);
@@ -777,7 +857,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->egocorr != runtime_last->egocorr)
+	if ((runtime->egocorr != runtime_last->egocorr) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->egocorr);
 		gtk_label_set_text(GTK_LABEL(labels.egocorr_lab),tmpbuf);
@@ -787,7 +867,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->barocorr != runtime_last->barocorr)
+	if ((runtime->barocorr != runtime_last->barocorr) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->barocorr);
 		gtk_label_set_text(GTK_LABEL(labels.barocorr_lab),tmpbuf);
@@ -797,7 +877,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->warmcorr != runtime_last->warmcorr)
+	if ((runtime->warmcorr != runtime_last->warmcorr) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->warmcorr);
 		gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
@@ -811,7 +891,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->aircorr != runtime_last->aircorr)
+	if ((runtime->aircorr != runtime_last->aircorr) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->aircorr);
 		gtk_label_set_text(GTK_LABEL(labels.aircorr_lab),tmpbuf);
@@ -821,7 +901,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->vecurr1 != runtime_last->vecurr1)
+	if ((runtime->vecurr1 != runtime_last->vecurr1) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%i",runtime->vecurr1);
 		gtk_label_set_text(GTK_LABEL(labels.vecurr1_lab),tmpbuf);
@@ -831,7 +911,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->tpsaccel != runtime_last->tpsaccel)
+	if ((runtime->tpsaccel != runtime_last->tpsaccel) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->tpsaccel/10.0);
 		gtk_label_set_text(GTK_LABEL(labels.tpsaccel_lab),tmpbuf);
@@ -842,7 +922,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->dcycle1 != runtime_last->dcycle1)
+	if ((runtime->dcycle1 != runtime_last->dcycle1) || (count > 5))
 	{
 		tmpbuf = g_strdup_printf("%.1f",runtime->dcycle1);
 		tmpf = runtime->dcycle1/100.0 <= 1.0 ? runtime->dcycle1/100.0: 1.0;
@@ -853,13 +933,46 @@ gboolean update_runtime_vars()
 		g_free(tmpbuf);
 	}
 
+	if (dualtable)
+	{
+		if ((runtime->dcycle2 != runtime_last->dcycle2) || (count > 5))
+		{
+			tmpbuf = g_strdup_printf("%.1f",runtime->dcycle2);
+			tmpf = runtime->dcycle2/100.0 <= 1.0 ? runtime->dcycle2/100.0: 1.0;
+			gtk_label_set_text(GTK_LABEL(labels.dcycle2_lab),tmpbuf);
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+					(progress.dcycle2_pbar),
+					tmpf);
+			g_free(tmpbuf);
+		}
+		if ((runtime->pw2 != runtime_last->pw2) || (count > 5))
+		{
+			tmpbuf = g_strdup_printf("%.1f",runtime->pw2);
+			tmpf = runtime->pw2/100.0 <= 1.0 ? runtime->pw2/100.0: 1.0;
+			gtk_label_set_text(GTK_LABEL(labels.pw2_lab),tmpbuf);
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+					(progress.pw2_pbar),
+					tmpf);
+			g_free(tmpbuf);
+		}
+		if ((runtime->idledc != runtime_last->idledc) || (count > 5))
+		{
+			tmpbuf = g_strdup_printf("%i",runtime->idledc);
+			tmpf = (float)runtime->idledc/100.0 <= 1.0 ? (float)runtime->idledc/100.0: 1.0;
+			gtk_label_set_text(GTK_LABEL(labels.idledc_lab),tmpbuf);
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+					(progress.idledc_pbar),
+					tmpf);
+			g_free(tmpbuf);
+		}
+	}
+
 	/* Connected */
 	gtk_widget_set_sensitive(misc.status[CONNECTED],
 			connected);
 
-	if ((force_status_update) || (runtime->engine.value != runtime_last->engine.value))
+	if ((forced_update) || (runtime->engine.value != runtime_last->engine.value) || (count > 5))
 	{
-		force_status_update = FALSE;
 		/* Cranking */
 		gtk_widget_set_sensitive(misc.status[CRANKING],
 				runtime->engine.bit.crank);
@@ -894,6 +1007,8 @@ gboolean update_runtime_vars()
 	}
 	if (forced_update)
 		forced_update = FALSE;
+	if (count > 5)
+		count = 0;
 	gdk_threads_leave();
 	return TRUE;
 }

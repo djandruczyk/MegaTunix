@@ -115,19 +115,19 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox2),table,TRUE,TRUE,20);
 
 	label = gtk_label_new("Priming Pulse");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Pulsewidth at -40 \302\260 F.");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Pulsewidth at 170 \302\260 F.");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -176,13 +176,13 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox2),table,TRUE,TRUE,20);
 
 	label = gtk_label_new("Enrichment (%)");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Num of Ignition Cycles");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -220,7 +220,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 	label = gtk_label_new("Coolant (F)");
 	labels.warmwiz_clt_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -243,7 +242,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 	/* Warmup Correction  */
 	label = gtk_label_new("Warmup (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -267,7 +265,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> (Volts)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -291,7 +288,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 	/* MAP Sensor */       
 	label = gtk_label_new("MAP (kPa)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -366,7 +362,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(READ_VE_CONST));
 
-	button = gtk_button_new_with_label("Permanently Store Data in ECU");
+	button = gtk_button_new_with_label("Burn to ECU");
 	store_widgets = g_list_append(store_widgets,(gpointer)button);
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
