@@ -24,7 +24,7 @@
 #include <stringmatch.h>
 
 
-void load_dependancy(GObject *object, ConfigFile *cfgfile,gchar * section)
+void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar * key = NULL;

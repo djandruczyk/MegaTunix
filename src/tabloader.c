@@ -388,7 +388,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancy(G_OBJECT(widget),cfgfile,section);
+		load_dependancies(G_OBJECT(widget),cfgfile,section);
 		g_free(tmpbuf);
 	}
 

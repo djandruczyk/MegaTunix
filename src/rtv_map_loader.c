@@ -179,7 +179,7 @@ gboolean load_realtime_map(void )
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-	                load_dependancy(G_OBJECT(object),cfgfile,section);
+	                load_dependancies(G_OBJECT(object),cfgfile,section);
 			g_free(tmpbuf);
 		}
 		for (j=0;j<num_keys;j++)

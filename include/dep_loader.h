@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void load_dependancy(GObject * ,ConfigFile * ,gchar * );
+void load_dependancies(GObject * ,ConfigFile * ,gchar * );
 /* Prototypes */
 
 #endif

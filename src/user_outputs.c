@@ -247,7 +247,7 @@ void cell_edited(GtkCellRendererText *cell,
 		table = (gchar *)g_object_get_data(G_OBJECT(object),"lookuptable");
 		alt_table = (gchar *)g_object_get_data(G_OBJECT(object),"alt_lookuptable");
 		if (g_object_get_data(object,"depend_on"))
-			state = check_dependancy(object);
+			state = check_dependancies(object);
 		if (state)
 			lookup = (gint *)g_hash_table_lookup(lookuptables,alt_table);
 		else

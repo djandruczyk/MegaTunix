@@ -161,7 +161,7 @@ void convert_temps(gpointer widget, gpointer units)
 	 */
 	depend_on = (gchar *)g_object_get_data(G_OBJECT(widget),"depend_on");
 	if (depend_on)
-		state = check_dependancy(G_OBJECT(widget));
+		state = check_dependancies(G_OBJECT(widget));
 
 	if ((int)units == FAHRENHEIT)
 	{

@@ -19,7 +19,7 @@
 #include <debugging.h>
 #include <enums.h>
 
-gboolean check_dependancy(GObject *object )
+gboolean check_dependancies(GObject *object )
 {
 	gint i = 0;
 	gint page = 0;
