@@ -123,6 +123,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,60,-1);
+	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(94));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(INJ_OPEN_TIME));
@@ -135,6 +136,7 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,60,-1);
+	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(98));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(BATT_CORR));

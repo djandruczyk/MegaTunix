@@ -39,12 +39,12 @@ struct v1_2_Constants
 	GtkAdjustment *cr_priming_pulse_adj;	/* Adjustment */
 	GtkAdjustment *as_enrich_adj;		/* Adjustment */
 	GtkAdjustment *as_num_cycles_adj;	/* Adjustment */
-	GtkWidget *warmup_entries[8];		/* Text Entries */
+	GtkWidget *warmup_bins_ent[8];		/* Text Entries */
 	GtkWidget *tps_trig_thresh_ent;		/* Text Entry */
 	GtkWidget *accel_duration_ent;		/* Text Entry */
 	GtkWidget *cold_accel_addon_ent;	/* Text Entry */
 	GtkWidget *cold_accel_mult_ent;		/* Text Entry */
-	GtkWidget *accel_bins[4];		/* Text Entries */
+	GtkWidget *accel_bins_ent[4];		/* Text Entries */
 	GtkWidget *decel_cut_ent;		/* Text Entry */
 	GtkWidget *ego_temp_active_ent;		/* Text Entry */
 	GtkWidget *ego_rpm_active_ent;		/* Text Entry */

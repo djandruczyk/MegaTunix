@@ -302,6 +302,8 @@ int build_runtime(GtkWidget *parent_frame)
 void update_runtime_vars()
 {
 	char buff[10];
+	extern struct ms_data_v1_and_v2 runtime;
+	extern struct ms_data_v1_and_v2 runtime_last;
 	struct ms_data_v1_and_v2 *current = &runtime;
 	struct ms_data_v1_and_v2 *last = &runtime_last;
 	/* test to see if data changed 

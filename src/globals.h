@@ -36,8 +36,8 @@ struct Serial_Params
 } serial_params;
 
 /* Data storage */
-struct ms_data_v1_and_v2 runtime;	/* processed data structure */
-struct ms_data_v1_and_v2 runtime_last;	/* processed data structure */
+//struct ms_data_v1_and_v2 runtime;	/* processed data structure */
+//struct ms_data_v1_and_v2 runtime_last;	/* processed data structure */
 
 /* constants */
 int poll_min;			/* 5 millisecond minimum poll delay */

@@ -201,10 +201,8 @@ void read_ve_const()
 	int res = 0;
 	int tmp = 0;
 
-	printf("entered read_ve_const()\n");
 	if (raw_reader_running)
 	{
-		printf("stopping reading thread\n");
 		restart_reader = 1;
 		stop_serial_thread(); /* stops realtime read */
 		usleep(100000);	/* sleep 100 ms to be sure thread ends */
@@ -223,27 +221,22 @@ void read_ve_const()
 	res = poll (&ufds,1,serial_params.poll_timeout*20);
 	if (res == 0)	/* Error */
 	{
-		printf("poll error\n");
 		serial_params.errcount++;
 	}
 	else		/* Data arrived */
 	{
-		printf("poll success\n");
 		handle_ms_data(VE_AND_CONSTANTS);
 	}
 
-//	update_errcounts();
+	update_errcounts();
 
-	printf("About to reset serial to previous settins\n");
 	/* restore previous serial port settings */
 	serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
 	tcflush(serial_params.fd, TCIFLUSH);
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
-	printf("Serial reset done \n");
 	if (restart_reader)
 	{
-		printf("Restarting serial reader \n");
 		start_serial_thread();
 	}
 
@@ -251,8 +244,9 @@ void read_ve_const()
 }
 
 
-void write_ve_const()
+void write_ve_const(gint value, gint offset)
 {
-	printf("WriteVE table stub function\n");
+	printf("Should write %i to location %i\n",value,offset);
+	
 	// Stub function, does nothing yet... 
 }

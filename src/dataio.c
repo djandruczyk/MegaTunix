@@ -26,6 +26,9 @@ int ms_reset_count;
 int ms_goodread_count;
 int ms_ve_goodread_count;
 int just_starting;
+struct ms_data_v1_and_v2 runtime;
+struct ms_data_v1_and_v2 runtime_last;
+struct ms_ve_constants *ve_constants;
        
 void handle_ms_data(int which_data)
 {
@@ -40,7 +43,7 @@ void handle_ms_data(int which_data)
 	switch (which_data)
 	{
 		case REALTIME_VARS:
-			res = read(serial_params.fd,ptr,255); 
+			res = read(serial_params.fd,ptr,serial_params.raw_bytes); 
 			/* the number of bytes expected for raw data read */
 			if (res != serial_params.raw_bytes) 
 
@@ -90,7 +93,7 @@ void handle_ms_data(int which_data)
 
 		case VE_AND_CONSTANTS:
 			/* Not written yet */
-			res = read(serial_params.fd,ptr,255); 
+			res = read(serial_params.fd,ptr,serial_params.veconst_size); 
 			/* the number of bytes expected for raw data read */
 			if (res != serial_params.veconst_size) 
 			{
@@ -108,16 +111,15 @@ void handle_ms_data(int which_data)
 				 * because the serial I/O thread depends on 
 				 * this function and blocks until we return.
 				 */
-				printf("data read was not right size (%i)\n",res);
-				close_serial();
-				open_serial(serial_params.comm_port);
-				setup_serial_params();
-				return;
+//				printf("data read was not right size (%i)\n",res);
+//				close_serial();
+//				open_serial(serial_params.comm_port);
+//				setup_serial_params();
+//				return;
 			}
-			else
-			{
-                        	ms_ve_goodread_count++;
-			}
+			ve_constants = (struct ms_ve_constants *) buf;
+			printf("VEtable decel cut %i\n",ve_constants->decel_cut);
+                        ms_ve_goodread_count++;
 			break;
 	}
 

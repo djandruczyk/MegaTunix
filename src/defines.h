@@ -94,7 +94,7 @@ union engine
 struct ms_raw_data_v1_and_v2 
 {	/* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
-	 * and fed into ms_data_v1 (struct)
+	 * and fed into ms_data_v1_and_v2 (struct)
 	 */
         unsigned char	secl;
         union squirt	squirt;
@@ -209,15 +209,15 @@ union config13
 	} bit;
 };
 
-struct ms_Ve_Constants
+struct ms_ve_constants
 {
 	unsigned char	vetable[64];		/* VE table, 64 bytes */
-	unsigned char	crank_pulse_neg40;	/* crank pulse at -40 deg F */
-	unsigned char	crank_pulse_pos170;	/* crank pulse at 170 deg F */
-	unsigned char	afterstart_enrich;	/* Enrich over base (%) */
-	unsigned char	afterstart_num_cycles;	/* enrich for X cycles */
-	unsigned char	warmupbins[10];		/* Warmup bins (10 bytes) */
-	unsigned char	tpsaccel[4];		/* TPS Accel bins, 4 bytes */
+	unsigned char	cr_pulse_neg40;		/* crank pulse at -40 deg F */
+	unsigned char	cr_pulse_pos170;	/* crank pulse at 170 deg F */
+	unsigned char	as_enrich;		/* Enrich over base (%) */
+	unsigned char	as_num_cycles;		/* enrich for X cycles */
+	unsigned char	warmup_bins[10];	/* Warmup bins (10 bytes) */
+	unsigned char	accel_bins[4];		/* TPS Accel bins, 4 bytes */
 	unsigned char	cold_accel_addon;	/* Accel addon at -40 deg F */
 	unsigned char	tps_trig_thresh;	/* TPS trig thresh in V/sec */
 	unsigned char	accel_duration;		/* Accel for how many seconds */
@@ -226,27 +226,27 @@ struct ms_Ve_Constants
 	unsigned char	ego_events;		/* ign events between steps */
 	unsigned char	ego_step;		/* correction % */
 	unsigned char	ego_limit;		/* +/- limit */
-	unsigned char	req_fuel;		/* require fuel */
+	unsigned char	req_fuel_1;		/* require fuel */
 	unsigned char	divider;		/* IRQ divide factor for pulse*/
 	unsigned char	alternate;		/* alternate inj drivers */
-	unsigned char	inj_open;		/* inj open time */
+	unsigned char	inj_open_time;		/* inj open time */
 	unsigned char	inj_ocfuel;		/* PW-correlated amount of fuel
 						 * injected during open 
 						 */
-	unsigned char	injpwm;			/* curr limit PWM duty cycle */
-	unsigned char	injpwmt;		/* Peak hold time */
-	unsigned char	battfactor;		/* Battry Voltage Correction */
+	unsigned char	pwm_curr_lim;		/* curr limit PWM duty cycle */
+	unsigned char	pwm_time_max;		/* Peak hold time */
+	unsigned char	batt_corr;		/* Battry Voltage Correction */
 	unsigned short	rpmk;			/* Constant for RPM 12K/ncyl */
 	unsigned char	ve_rpm_range[8];	/* VEtable RPM bins (8 bytes) */
 	unsigned char	ve_kpa_range[8];	/* VEtable KPA bins (8 bytes) */
 	union	config11 config11;		/* Config for PC Config */
 	union	config12 config12;		/* Config for PC Config */
 	union	config13 config13;		/* Config for PC Config */
-	unsigned char	priming_pulse;		/* priming pulse b4 startup */
-	unsigned char	ego_rpm;		/* EGO RPM trigger voltage */
-	unsigned char	fastidle_temp;		/* fast idle temp thresh */
-	unsigned char	ego_voltage;		/* EGO flip point voltage */
-	unsigned char	accel_mult;		/* Cold Accel mult factor */
+	unsigned char	cr_priming_pulse;		/* priming pulse b4 startup */
+	unsigned char	ego_rpm_active;		/* EGO RPM trigger voltage */
+	unsigned char	fast_idle_thresh;	/* fast idle temp thresh */
+	unsigned char	ego_sw_voltage;		/* EGO flip point voltage */
+	unsigned char	cold_accel_mult;		/* Cold Accel mult factor */
 	unsigned char	pad1;			/* Padding to 128 bytes */
 	unsigned char	pad2;			/* Padding to 128 bytes */
 	unsigned char	pad3;			/* Padding to 128 bytes */

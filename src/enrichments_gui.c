@@ -61,12 +61,12 @@ int build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
-//	gtk_widget_set_size_request(spinner,55,-1);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_NEG_40));
 	constants.cr_pulse_neg40_adj = adj;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(65));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -84,6 +84,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CRANK_PULSE_170));
 	constants.cr_pulse_pos170_adj = adj;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(66));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -180,7 +181,7 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 		gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
-		constants.warmup_entries[i] = entry;
+		constants.warmup_bins_ent[i] = entry;
 
 		label = gtk_label_new (warmup_labels[i]);
 		gtk_table_attach (GTK_TABLE (table), label, i, i+1, 1, 2,
@@ -288,7 +289,7 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 		gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-		constants.accel_bins[i] = entry;
+		constants.accel_bins_ent[i] = entry;
 
 		label = gtk_label_new(accel_labels[i]);
 		gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);

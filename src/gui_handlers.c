@@ -34,6 +34,7 @@ struct {
 	GtkAdjustment *inj_rate;	/* injector slow rate (lbs/hr) */
 	GtkAdjustment *afr;		/* Air fuel ratio 10-25.5 */
 } reqd_fuel;
+extern struct ms_ve_constants ve_constants;
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -76,13 +77,11 @@ int std_button_handler(GtkWidget *widget, gpointer *data)
 				reqd_fuel_popup();
 			break;
 		case READ_FROM_MS:
-			printf("Going to begin read VE/constants \n");
 			read_ve_const();
-			printf("read VE/constants complete\n");
-		//	update_const_ve();
+			update_const_ve();
 			break;
 		case WRITE_TO_MS:
-			write_ve_const();
+			//write_ve_const();
 			break;
 	}
 	return TRUE;
@@ -262,8 +261,11 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	 * if necessary.  works well,  one generic function with a 
 	 * select/case branch to handle the choices..
 	 */
-	gdouble value;
-	value = gtk_spin_button_get_value((GtkSpinButton *)widget);
+	gfloat value = 0.0;
+	gint offset;
+	gint tmp = 0;
+	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
 	
 	switch ((gint)data)
 	{
@@ -283,6 +285,22 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 		case SER_INTERVAL_DELAY:
 			serial_params.read_wait = (gint)value;
 			break;
+		case INJ_OPEN_TIME:
+			/* This funny conversion is needed cause of 
+			 * some weird quirk when multiplying the float
+			 * by ten and then converting to int (is off by
+			 * one in SOME cases only..
+			 */
+			tmp = (int)((value*10.0)+.01);
+			ve_constants.inj_open_time = tmp;
+			write_ve_const(ve_constants.inj_open_time, offset);
+			break;
+		case BATT_CORR:
+			tmp = (int)((value*10.0)+.01);
+			ve_constants.batt_corr = tmp;
+			write_ve_const(ve_constants.batt_corr, offset);
+			break;
+
 		default:
 			break;
 	}
@@ -292,5 +310,6 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 
 void update_const_ve()
 {
+	printf("Updating constants/VEtable\n");
 	// Stub function, does nothing yet... 
 }

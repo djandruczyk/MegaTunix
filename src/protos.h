@@ -33,7 +33,7 @@ void handle_ms_data(int); /* arg is filedescriptor that was opened */
 int check_ecu_comms(GtkWidget *, gpointer *);
 void read_ve_const(void);
 void update_const_ve(void);
-void write_ve_const(void);
+void write_ve_const(gint, gint);
 
 /* serialio.c */
 
