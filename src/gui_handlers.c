@@ -24,6 +24,7 @@
 
 extern gint req_fuel_popup;
 static gint paused_handlers = FALSE;
+static gint constants_loaded = FALSE;
 extern gint raw_reader_running;
 extern gint raw_reader_stopped;
 extern gint read_wait_time;
@@ -33,6 +34,7 @@ extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
 extern gint connected;
 extern gint force_status_update;
+extern gfloat ego_pbar_divisor;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
@@ -102,6 +104,12 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				ve_constants->config13.value = tmp;
 				dload_val = tmp;
 				offset = 118;
+				/* check O2 sensor bit and adjust factor
+				   so runtime display has a sane scale... */
+				if (((tmp >> 1)&0x1) == 1)
+					ego_pbar_divisor=5.0;
+				else
+					ego_pbar_divisor=1.2;
 				break;
 			case 14:
 				/*SPECIAL*/
@@ -152,6 +160,15 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((gint)data)
 	{
 		case START_REALTIME:
+			if (constants_loaded == FALSE)
+			{	/*Read constants first at least once */
+				paused_handlers = TRUE;
+				read_ve_const();
+				update_ve_const();
+				set_store_black();
+				paused_handlers = FALSE;
+				constants_loaded = TRUE;
+			}
 			start_serial_thread();
 			break;
 		case STOP_REALTIME:
@@ -171,9 +188,10 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			}
 			paused_handlers = TRUE;
 			read_ve_const();
-			update_const_ve();
+			update_ve_const();
 			set_store_black();
 			paused_handlers = FALSE;
+			constants_loaded = TRUE;
 			break;
 		case WRITE_TO_MS:
 			burn_flash();
@@ -479,7 +497,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 
 }
 
-void update_const_ve()
+void update_ve_const()
 {
 	gint i;
 	gfloat tmp;
@@ -574,7 +592,7 @@ void update_const_ve()
 			GTK_SPIN_BUTTON(constants.warmup_bins_spin[i]),
 			ve_constants->warmup_bins[i]);
 	}
-	/* accel enrichments */
+	/* Accel Enrichments */
 	for (i=0;i<4;i++)
 	{
 		gtk_spin_button_set_value(
@@ -620,7 +638,7 @@ void update_const_ve()
 	/* EGO switching voltage */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.ego_sw_voltage_spin),
-			ve_constants->ego_sw_voltage/51.0);
+			ve_constants->ego_sw_voltage/51.2);
 
 	/* EGO step percent */
 	gtk_spin_button_set_value(
@@ -681,13 +699,19 @@ void update_const_ve()
                                 TRUE);
 	/* NarrowBand O2 or WideBand O2 */
 	if (ve_constants->config13.bit.ego_type)
+	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.wbo2_but),
                                 TRUE);
+		ego_pbar_divisor = 5.0;
+	}
 	else
+	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.nbo2_but),
                                 TRUE);
+		ego_pbar_divisor = 1.2;
+	}
 	/* Baro Correction, enabled or disabled */
 	if (ve_constants->config13.bit.baro_corr)
 		gtk_toggle_button_set_active(
