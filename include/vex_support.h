@@ -21,16 +21,14 @@
 gboolean vetable_export(void *);
 gboolean vetable_import(void *);
 GIOStatus process_vex_line();
-GIOStatus process_vex_range(ImportParserArg, gchar *, GIOChannel * );
-GIOStatus process_vex_table(gchar *, GIOChannel * );
+GIOStatus process_vex_range(void *, ImportParserArg, gchar *, GIOChannel * );
+GIOStatus process_vex_table(void *, gchar *, GIOChannel * );
 GIOStatus read_number_from_line(gint *, GIOChannel *);
-GIOStatus process_header(ImportParserArg , gchar *);
-GIOStatus process_page(gchar * );
-GIOStatus handler_dispatch(ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
-void reset_import_flags(void);
-void reset_tmp_bins(void);
-void feed_import_data_to_ms(void);
-void clear_vexfile(void);
+GIOStatus process_header(void *, ImportParserArg , gchar *);
+GIOStatus process_page(void *, gchar * );
+GIOStatus handler_dispatch(void *, ImportParserFunc , ImportParserArg , gchar *, GIOChannel * );
+void dealloc_ve_struct(void *);
+void feed_import_data_to_ms(void *);
 void revert_to_previous_data();
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */
