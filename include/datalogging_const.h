@@ -27,7 +27,7 @@
  */
 static const gchar *logable_names[] = 
 {
-"HR Clock",	"MS Clock",	"RPM",		"EngineBits",	"IdleDC",
+"HR Clock",	"MS Clock",	"RPM",		"EngineBits",	"Idle DC",
 "TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
 "TPS Counts",	"MAP Counts",	"BARO Counts",	"MAT Counts",	"CLT Counts",
 "TPS %",	"MAP KPA",	"BARO KPA",	"MAT (Deg)",	"CLT (Deg)",
@@ -39,15 +39,16 @@ static const gchar *logable_names[] =
 
 static const gchar *mt_compat_names[] = 
 {
-"HR Clock",	"Seconds",	"RPM",		"EngineBit",	"IdleDC",
-"TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
-"TPS Counts",	"MAP Counts",	"BARO Counts",	"MAT Counts",	"CLT Counts",
-"TPS %",	"MAP",		"BARO KPA",	"MAT (Deg)",	"CLT (Deg)",
-"O2",		"O2 Counts",	"Gammae",	"BATT Volts",	"BATT Counts",
+"HR_Clock",	"Seconds",	"RPM",		"EngineBit",	"IdleDC",
+"TPS_Volts",	"MAP_Volts",	"BARO_Volts",	"MAT_Volts",	"CLT_Volts",
+"TPS_Counts",	"MAP_Counts",	"BARO_Counts",	"MAT_Counts",	"CLT_Counts",
+"TPS_%",	"MAP_KPA",	"BARO_KPA",	"MAT_(Deg)",	"CLT_(Deg)",
+"O2",		"O2_Counts",	"Gammae",	"BATT_Volts",	"BATT_Counts",
 "Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSaccel",
-"Gve",		"VE2",		"PW1",		"PW2",		"INJ-1 Dcycle",
-"INJ-2 Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+"Gve",		"VE2",		"PW1",		"PW2",		"INJ-1_Dcycle",
+"INJ-2_Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
+
 
 static struct Limits limits[]= {
 { 0.0,4294967269.0},/* HR clock */
