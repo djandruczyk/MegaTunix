@@ -25,6 +25,7 @@ gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean view_value_set(GtkWidget *, gpointer );
 gboolean set_lview_choices_state(GtkWidget *, gpointer);
+gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
 struct Viewable_Value * build_v_value(GtkWidget *, GObject * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
 GdkColor get_colors_from_hue(gfloat);

@@ -940,3 +940,9 @@ EXPORT void finish_logviewer(void)
 
 	return;
 }
+
+
+EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+	return FALSE;
+}
