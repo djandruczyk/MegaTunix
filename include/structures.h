@@ -81,6 +81,11 @@ struct Runtime_Widgets
         GtkWidget *status[7];           /* Status boxes */
 };
 
+struct DynamicMisc
+{
+	GtkWidget *p0_map_tps_frame;
+	GtkWidget *p1_map_tps_frame;
+};
 
 /* this is required so we keep track of the gui controls so we
  * can update them as needed (color changes, sensitivity, etc...
@@ -126,6 +131,8 @@ struct DynamicLabels
 	GtkWidget *ego_temp_lab;
 	GtkWidget *runtime_clt_lab;
 	GtkWidget *runtime_mat_lab;
+	GtkWidget *p0_map_tps_lab;
+	GtkWidget *p1_map_tps_lab;
 };
 
 /* These are defined as they are semi-dynamic and are modified

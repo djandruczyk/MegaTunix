@@ -311,7 +311,7 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 	
-	label = gtk_label_new("Fuel Injection Control Strategy");
+	label = gtk_label_new("Fuel Injection Control Strategy (Table 1)");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -741,7 +741,9 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	
 	table = gtk_table_new(1,2,FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table),50);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	button = gtk_button_new_with_label("Get Data from ECU");

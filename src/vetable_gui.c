@@ -19,9 +19,9 @@
 #include <structures.h>
 #include <vetable_gui.h>
 
+struct DynamicMisc misc;
 extern struct DynamicButtons buttons;
-GtkWidget *map_tps_frame;
-GtkWidget *map_tps_label;
+extern struct DynamicLabels labels;
 extern struct Ve_Widgets *page0_widgets;
 extern struct Ve_Widgets *page1_widgets;
 
@@ -58,7 +58,7 @@ int build_vetable(GtkWidget *parent_frame)
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin),
 			vbox2);
 
-	label = gtk_label_new("Vetable 1 (All MS Variants)");
+	label = gtk_label_new("VE Table 1 (All MS Variants)");
 	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,5);
@@ -69,11 +69,11 @@ int build_vetable(GtkWidget *parent_frame)
 
 
 	frame = gtk_frame_new(NULL);
+	misc.p0_map_tps_frame = frame;
 	label = gtk_label_new("MAP Bins");
 	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
-	map_tps_frame = frame;
 
 	table = gtk_table_new(9,1,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -81,9 +81,10 @@ int build_vetable(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	/* KPA spinbuttons */
-	map_tps_label = gtk_label_new("Kpa");
-	gtk_table_attach (GTK_TABLE (table), map_tps_label, 0, 1, 0, 1,
+	/* KPA/TPS spinbuttons */
+	label = gtk_label_new("Kpa");
+	labels.p0_map_tps_lab = label;
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	index = 0;
@@ -207,7 +208,7 @@ int build_vetable(GtkWidget *parent_frame)
 
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
-	label = gtk_label_new("Vetable 2 (Dualtable ONLY)");
+	label = gtk_label_new("VE Table 2 (Dualtable ONLY)");
 	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,TRUE,0);
 	sep = gtk_hseparator_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
@@ -220,11 +221,11 @@ int build_vetable(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
 
 	frame = gtk_frame_new(NULL);
+	misc.p1_map_tps_frame = frame;
 	label = gtk_label_new("MAP Bins");
 	gtk_frame_set_label_widget(GTK_FRAME(frame),label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_box_pack_start(GTK_BOX(vbox3),frame,FALSE,FALSE,0);
-	map_tps_frame = frame;
 
 	table = gtk_table_new(9,1,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),2);
@@ -232,9 +233,10 @@ int build_vetable(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	/* KPA spinbuttons */
-	map_tps_label = gtk_label_new("Kpa");
-	gtk_table_attach (GTK_TABLE (table), map_tps_label, 0, 1, 0, 1,
+	/* KPA/TPS spinbuttons */
+	label = gtk_label_new("Kpa");
+	labels.p1_map_tps_lab = label;
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	index = 0;
@@ -357,7 +359,9 @@ int build_vetable(GtkWidget *parent_frame)
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
 	table = gtk_table_new(1,2,FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table),50);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	button = gtk_button_new_with_label("Get Data from ECU");

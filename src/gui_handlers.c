@@ -30,20 +30,27 @@
 #include <threads.h>
 #include <vex_support.h>
 
+extern gboolean connected;
+extern gboolean force_status_update;
+extern gboolean raw_reader_running;
+extern gboolean raw_reader_stopped;
+extern gchar *delim;
+extern gint ready;
+static gint num_squirts = 1;
 extern gint req_fuel_popup;
-extern unsigned char *kpa_conversion;
-extern unsigned char na_map[];
-extern unsigned char turbo_map[];
+extern gint logging_mode;
+extern gint read_wait_time;
+extern gfloat ego_pbar_divisor;
+extern gfloat map_pbar_divisor;
 extern GtkTooltips *tip;
 extern GtkWidget *logables_table;
 extern GtkWidget *tab_delim_button;
 extern GtkWidget *delim_button;
 extern GtkWidget *delim_table;
-extern gint logging_mode;
-extern gchar *delim;
-extern gboolean raw_reader_running;
-extern gboolean raw_reader_stopped;
-extern gint read_wait_time;
+extern GtkWidget *custom_logables;
+extern unsigned char *kpa_conversion;
+extern unsigned char na_map[];
+extern unsigned char turbo_map[];
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
 extern struct Ve_Widgets *page0_widgets;
@@ -52,17 +59,10 @@ extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct DynamicLabels labels;
+extern struct DynamicMisc misc;
 extern struct Logables logables;
 extern struct Serial_Params serial_params;
-extern gboolean connected;
-extern gboolean force_status_update;
-extern gfloat ego_pbar_divisor;
-extern gfloat map_pbar_divisor;
-extern GtkWidget *map_tps_frame;
-extern GtkWidget *map_tps_label;
-extern GtkWidget *custom_logables;
-extern gint ready;
-static gint num_squirts = 1;
+
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean fahrenheit;
@@ -954,22 +954,22 @@ void check_config13(int tmp)
 	{
 		label = gtk_frame_get_label_widget(
 				GTK_FRAME
-				(map_tps_frame));
+				(misc.p0_map_tps_frame));
 		gtk_label_set_text(GTK_LABEL
 				(label),"TPS Bins");
 		gtk_label_set_text(GTK_LABEL
-				(map_tps_label),
+				(labels.p0_map_tps_lab),
 				"TPS %");
 	}
 	else
 	{
 		label = gtk_frame_get_label_widget(
 				GTK_FRAME
-				(map_tps_frame));
+				(misc.p0_map_tps_frame));
 		gtk_label_set_text(GTK_LABEL
 				(label),"MAP Bins");
 		gtk_label_set_text(GTK_LABEL
-				(map_tps_label),
+				(labels.p0_map_tps_lab),
 				"Kpa");
 	}
 }
