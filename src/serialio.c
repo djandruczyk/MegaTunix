@@ -350,7 +350,6 @@ void set_ms_page(gint ms_page)
 		fprintf(stderr,__FILE__": page choice %i is out of range(0,1)\n",ms_page);
 	
 	buf = ms_page & 0x01;
-	printf("sending P followed by %i\n",buf);
 	res = write(serial_params->fd,"P",1);
 	if (res != 1)
 		fprintf(stderr,__FILE__": FAILURE sending \"P\" command to ECU \n");
