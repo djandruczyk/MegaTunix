@@ -198,6 +198,8 @@ struct Rt_Control
 	gint size;	  /* UCHAR,SHORT or FLOAT (1,2, or 4) */
 	gboolean enabled; /* Pretty obvious */
 	gint count;	  /* used to making sure things update */
+	gint rate;	  /* used to making sure things update */
+	gint last_upd;	  /* used to making sure things update */
 	Capability flags;/* DT, Temp_dep, IGN or whatever ... */
 };
 

@@ -415,6 +415,9 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gint offset = control->runtime_offset;
 	//gfloat lower = def_limits[control->limits_index].lower;
 	gfloat upper = def_limits[control->limits_index].upper;
+	gint count = control->count;
+	gint rate = control->rate;
+	gint last_upd = control->last_upd;
 	gint ivalue = 0;
 	gshort svalue = 0;
 	gfloat fvalue = 0.0;
@@ -428,15 +431,28 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		l_uc_ptr = (guchar *) rt_last;
 		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (forced_update))
 		{
-			ivalue = uc_ptr[offset];
-			tmpbuf = g_strdup_printf("%i",ivalue);
-			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
+			ivalue = uc_ptr[offset/UCHAR];
 			tmpf = (gfloat)ivalue/upper <= 1.0 ? (gfloat)ivalue/upper : 1.0;
 			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 					(control->pbar),
 					tmpf);
-			g_free(tmpbuf);
+
+			if (abs(count-last_upd) > 5)
+			{
+				tmpbuf = g_strdup_printf("%i",uc_ptr[offset/UCHAR]);
+				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
+				g_free(tmpbuf);
+				last_upd = count;
+			}
 		}
+		else if ((count % 30 == 0))
+		{
+			tmpbuf = g_strdup_printf("%i",uc_ptr[offset/UCHAR]);
+			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
+			g_free(tmpbuf);
+			last_upd = count;
+		}
+		
 	}
 	else if (control->size == SHORT)
 	{
@@ -445,14 +461,27 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (forced_update))
 		{
 			svalue = sh_ptr[offset/SHORT];
-			tmpbuf = g_strdup_printf("%i",svalue);
-			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
 			tmpf = (gfloat)svalue/upper <= 1.0 ? (gfloat)svalue/upper : 1.0;
 			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 					(control->pbar),
 					tmpf);
-			g_free(tmpbuf);
+
+			if (abs(count-last_upd) > 5)
+			{
+				tmpbuf = g_strdup_printf("%i",sh_ptr[offset/SHORT]);
+				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
+				g_free(tmpbuf);
+				last_upd = count;
+			}
 		}
+		else if ((count % 30 == 0))
+		{
+			tmpbuf = g_strdup_printf("%i",sh_ptr[offset/SHORT]);
+			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
+			g_free(tmpbuf);
+			last_upd = count;
+		}
+		
 	}
 	else if (control->size == FLOAT)
 	{
@@ -461,17 +490,40 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]) || (forced_update))
 		{
 			fvalue = fl_ptr[offset/FLOAT];
-			tmpbuf = g_strdup_printf("%.2f",fvalue);
-			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
 			tmpf = fvalue/upper <= 1.0 ? fvalue/upper : 1.0;
 			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 					(control->pbar),
 					tmpf);
+
+			if (abs(count-last_upd) > 5)
+			{
+				tmpbuf = g_strdup_printf("%.2f",fl_ptr[offset/FLOAT]);
+				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
+				g_free(tmpbuf);
+				last_upd = count;
+			}
+		}
+		else if ((count % 30 == 0))
+		{
+			tmpbuf = g_strdup_printf("%.2f",fl_ptr[offset/FLOAT]);
+			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
 			g_free(tmpbuf);
+			last_upd = count;
 		}
 	}
 	else
 		dbg_func(g_strdup_printf(__FILE__": MAJOR error, rt_update_values(), size invalid: %i\n",control->size),CRITICAL);
 
+	rate++;
+	if (rate >25)
+		rate = 25;
+	if (last_upd > 5000)
+		last_upd = 0;
+	count++;
+	if (count > 5000)
+		count = 0;
+	control->rate = rate;
+	control->count = count;
+	control->last_upd = last_upd;
 	return;
 }
