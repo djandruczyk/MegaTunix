@@ -41,7 +41,7 @@ void update_comms_status(void)
 	if (connected)
 		update_logbar("comms_view",NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
 	else
-		update_logbar("comms_view","warning","I/O with MegaSquirt Timeout\n",TRUE,FALSE);
+		update_logbar("comms_view","warning","I/O with ECU Timeout\n",TRUE,FALSE);
 
 	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_connected_label")))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
@@ -79,7 +79,7 @@ void comms_test()
 		g_usleep(10000);
 		dbg_func(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n",CRITICAL);
 	}
-	dbg_func(__FILE__": commes_test()\n\tRequesting MS Clock (\"C\" cmd)\n",SERIAL_RD);
+	dbg_func(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n",SERIAL_RD);
 	result = handle_ms_data(C_TEST,NULL);
 	if (result)	// Success
 	{
@@ -105,7 +105,7 @@ void update_write_status(void)
 	gint i = 0;
 	extern struct Firmware_Details *firmware;
 
-	/* We check to see if the last burn copy of the MS VE/constants matches 
+	/* We check to see if the last burn copy of the VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
@@ -156,7 +156,7 @@ void writeto_ecu(void *ptr)
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO!!!\n"),CRITICAL);
 
 
-	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tMS Serial Write, Page, %i, Value %i, Mem Offset %i\n",page,value,offset),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Value %i, Mem Offset %i\n",page,value,offset),SERIAL_WR);
 
 	if (value > 255)
 	{

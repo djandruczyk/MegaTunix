@@ -18,28 +18,23 @@ AM_MAINTAINER_MODE
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_LN_S
-AC_PROG_RANLIB
 AC_PROG_AWK
-AC_PROG_YACC
 AM_PROG_LEX
+AC_PROG_YACC
 AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 
 dnl Checks for header files.
-AC_HEADER_TIME
-AC_HEADER_STDC
+dnl AC_HEADER_STDC
 AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
-
 
 dnl check paths for necessary files
 dnl pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
-pkg_modules="libglade-2.0 gdkglext-1.0 freetype2 gtk+-2.0 gthread-2.0 gtkglext-1.0 libglade-2.0"
+pkg_modules="libxml-2.0 libglade-2.0 gtkglext-1.0 gdkglext-1.0 freetype2 gtk+-2.0 gthread-2.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
-
-AC_CHECK_HEADERS(glade/glade.h,[],['echo libglade-devel is NOT installed; exit -1'],[pkg-config --cflags libglade-2.0])
 
 dnl optimizations
 CFLAGS="-O2"
@@ -117,7 +112,7 @@ RuntimeSliders/Makefile
 Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Gui/Makefile
-VERSION])
+])
 
 echo "
 Configuration:

@@ -1,8 +1,8 @@
 [interrogation_profile]
-name=MegaSquirtnSpark-Extra 021x1
+name=MegaSquirtnSpark-Extra 021x7
 
 [parameters]
-SignatureQueryString=extra format 021x1
+SignatureQueryString=extra format 021x7
 ExtVerQueryString=
 VerNumber=
 Capabilities=
@@ -18,6 +18,7 @@ TotalPages=8
 
 [table_0]
 is_spark=FALSE
+table_name=VE-Table 0, MSnSpark-Extra
 rpm_page=0
 load_page=0
 tbl_page=0
@@ -29,6 +30,7 @@ load_bincount=8
 
 [table_1]
 is_spark=FALSE
+table_name=VE-Table 1, MSnSpark-Extra
 rpm_page=1
 tbl_page=1
 load_page=1
@@ -137,8 +139,8 @@ CMD_UPPER_S=32
 [gui]
 RealtimeMapFile=MSnS-Extra
 SliderMapFile=spark-firmware
-LoadTabs=runtime,datalogging,logviewer,raweditor
-TabConfs=runtime,datalogging,logviewer,raweditor
+LoadTabs=runtime,datalogging,logviewer,tools,raweditor
+TabConfs=runtime,datalogging,logviewer,tools,raweditor
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map
