@@ -50,6 +50,11 @@ void set_offline_mode(void)
 	cmd_array = validate_and_load_tests(cmd_details);
 
 	filename = present_firmware_choices(cmd_array,cmd_details);
+	if (!filename)
+	{
+		dbg_func(g_strdup_printf(__FILE__": set_offline_mode()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"),CRITICAL);
+		return ;
+	}
 	canidate = load_potential_match(cmd_array,filename);
 	load_profile_details(canidate);
 	load_lookuptables(canidate);
