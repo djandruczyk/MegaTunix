@@ -26,6 +26,12 @@ AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 
+dnl Checks for header files.
+AC_HEADER_TIME
+AC_HEADER_STDC
+AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
+
+
 dnl check paths for necessary files
 dnl pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
 pkg_modules="libglade-2.0 gdkglext-1.0 freetype2 gtk+-2.0 gthread-2.0 gtkglext-1.0 libglade-2.0"
@@ -33,10 +39,7 @@ PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 
-dnl Checks for header files.
-AC_HEADER_TIME
-AC_HEADER_STDC
-AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
+AC_CHECK_HEADERS(glade/glade.h,[],['echo libglade-devel is NOT installed; exit -1'],[pkg-config --cflags libglade-2.0])
 
 dnl optimizations
 CFLAGS="-O2"
