@@ -188,11 +188,11 @@ void set_ms_page(gint ms_page)
 	extern struct Firmware_Details *firmware;
 	gint res = 0;
 
-	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\"\n",ms_page),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
 	
 	res = write(serial_params->fd,firmware->page_cmd,1);
 	if (res != 1)
-		dbg_func(__FILE__": set_ms_page()\n\tFAILURE sending \"P\" (change page) command to ECU \n",CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU \n",firmware->page_cmd),CRITICAL);
 	res = write(serial_params->fd,&ms_page,1);
 	if (res != 1)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i\n",ms_page),CRITICAL);

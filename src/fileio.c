@@ -26,9 +26,13 @@
 #include <stdlib.h>
 #include <structures.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <vex_support.h>
+#ifdef __WIN32__
+ #include <windows.h>
+#else
+ #include <sys/stat.h>
+#endif
 
 
 extern gchar * vex_comment;
@@ -123,7 +127,10 @@ void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 void check_filename (GtkWidget *widget, GtkFileSelection *file_selector) 
 {
 	gchar *selected_filename;
+#ifndef __WIN32__
 	struct stat status;
+#endif
+	gint size = 0;
 	struct Io_File *iofile;
 	gint iotype = -1;
 	gchar * tmpbuf = NULL;
@@ -144,7 +151,15 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	else if (g_file_test(selected_filename,G_FILE_TEST_IS_REGULAR))
 	{
 		preexisting = TRUE;
+#ifdef __WIN32__
+		size = GetCompressedFileSize((LPCTSTR) selected_filename,NULL);
+		printf("size from \"GetCompressedFileSize\" is %i\n",size);
+#else
 		stat(selected_filename, &status);
+		size = status.st_size;
+
+#endif
+
 	}
 	else
 		new_file = TRUE;
@@ -161,7 +176,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				|| (iotype == FULL_BACKUP)) 
 			&& (preexisting == TRUE))
 	{
-		if (status.st_size > 0)
+		if (size > 0)
 		{
 			/* DO NOT overwrite, prompt user first... */
 			if (!warn_file_not_empty(iotype,selected_filename))

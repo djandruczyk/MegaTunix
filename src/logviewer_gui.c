@@ -30,6 +30,7 @@ static gint max_viewables = 0;
 static gint active_viewables = 0;
 static GtkWidget *lv_darea = NULL; //for scroller  :( 
 static gboolean adj_scale = TRUE;
+static gboolean blocked = FALSE;
 
 static GHashTable *active_traces = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
@@ -693,9 +694,9 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		if (adj_scale)
 		{
 			newpos = 100.0*((gfloat)(v_value->last_index)/(gfloat)v_value->data_array->len);
-			g_signal_handler_block(scale,sig_id);
+			blocked=TRUE;
 			gtk_range_set_value(GTK_RANGE(scale),newpos);
-			g_signal_handler_unblock(scale,sig_id);
+			blocked=FALSE;
 			g_object_set_data(G_OBJECT(v_value->d_area),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
 			adj_scale = FALSE;
 		//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
@@ -745,9 +746,9 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		if (adj_scale)
 		{
 			newpos = 100.0*((gfloat)v_value->last_index/(gfloat)v_value->data_array->len);
-			g_signal_handler_block(scale,sig_id);
+			blocked = TRUE;
 			gtk_range_set_value(GTK_RANGE(scale),newpos);
-			g_signal_handler_unblock(scale,sig_id);
+			blocked = FALSE;
 			g_object_set_data(G_OBJECT(v_value->d_area),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
 			adj_scale = FALSE;
 		}
@@ -805,7 +806,6 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 	GdkPixmap *pixmap = NULL;
 	gint w = 0;
 	gint h = 0;
-
 
 	/* Get pointer to backing pixmap ... */
 	pixmap = (GdkPixmap *)g_object_get_data(G_OBJECT(widget),"pixmap");
@@ -878,6 +878,9 @@ EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 	 */
 	if ((gboolean)data)
 		return TRUE;
+	if (blocked)
+		return TRUE;
+
 	val = gtk_range_get_value(GTK_RANGE(widget));
 	darea = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
 	if (GTK_IS_WIDGET(darea))

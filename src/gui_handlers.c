@@ -596,7 +596,8 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			lv_zoom = tmpi;
 			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");	
 			if (tmpwidget)
-				g_signal_emit_by_name(tmpwidget,"configure_event",NULL);
+				lv_configure_event(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"),NULL,NULL);
+			//	g_signal_emit_by_name(tmpwidget,"configure_event",NULL);
 			break;
 
 		case NUM_SQUIRTS_1:

@@ -18,10 +18,12 @@
 
 /* GL includes */
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkgl.h>
+#ifdef __WIN32__
+ #include <gdk/gdkglglext.h>
+#endif
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <gtk/gtkgl.h>
-//#include <gdk/gdkglglext.h>
 #include <pango/pangoft2.h>
 #include <gdk/gdkkeysyms.h>
 
