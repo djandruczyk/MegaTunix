@@ -21,7 +21,7 @@ extern GdkColor red;
 extern GdkColor black;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
-extern struct Table1_Widgets constants;
+extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
 
 
@@ -122,9 +122,9 @@ void squirt_cyl_inj_red(void)
 			GTK_STATE_NORMAL,&red);
 	gtk_widget_modify_fg(labels.cylinders_lab,
 			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_text(constants.cylinders_spin,
+	gtk_widget_modify_text(spinners.cylinders_spin,
 			GTK_STATE_NORMAL,&red);
-	gtk_widget_modify_text(constants.inj_per_cycle_spin,
+	gtk_widget_modify_text(spinners.inj_per_cycle_spin,
 			GTK_STATE_NORMAL,&red);
 }
 
@@ -134,9 +134,9 @@ void squirt_cyl_inj_black(void)
 			GTK_STATE_NORMAL,&black);
 	gtk_widget_modify_fg(labels.cylinders_lab,
 			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_text(constants.cylinders_spin,
+	gtk_widget_modify_text(spinners.cylinders_spin,
 			GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_text(constants.inj_per_cycle_spin,
+	gtk_widget_modify_text(spinners.inj_per_cycle_spin,
 			GTK_STATE_NORMAL,&black);
 }
 

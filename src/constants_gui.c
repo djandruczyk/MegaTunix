@@ -20,11 +20,11 @@
 #include <structures.h>
 
 
-extern struct Table1_Widgets constants;
+extern struct DynamicSpinners spinners;
 struct DynamicAdjustments adjustments;
 struct DynamicLabels labels;
 struct DynamicButtons buttons;
-extern GtkWidget *veconst_widgets_1[];
+extern struct Ve_Widgets *page0_widgets;
 extern GdkColor black;
 
 int build_constants(GtkWidget *parent_frame)
@@ -85,7 +85,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Required Fuel Total/cycle Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
-        constants.req_fuel_total_spin = spinner;
+        spinners.req_fuel_total_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -105,7 +105,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Required Fuel Per Squirt Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
-        constants.req_fuel_per_squirt_spin = spinner;
+        spinners.req_fuel_per_squirt_spin = spinner;
 	gtk_widget_set_sensitive(spinner,FALSE);
 	gtk_widget_modify_text(spinner,GTK_STATE_INSENSITIVE,&black);
         gtk_widget_set_size_request(spinner,60,-1);
@@ -133,8 +133,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Injector Open Time */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
-        constants.inj_open_time_spin = spinner;
-        veconst_widgets_1[93] = spinner;
+        page0_widgets->widget[93] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -160,8 +159,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Battery Voltage Correction Factor */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
-        constants.batt_corr_spin = spinner;
-        veconst_widgets_1[97] = spinner;
+        page0_widgets->widget[97] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -202,8 +200,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* PWM Current Limit % */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
-        constants.pwm_curr_lim_spin = spinner;
-        veconst_widgets_1[95] = spinner;
+        page0_widgets->widget[95] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -230,8 +227,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* PWM Time threshold */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
-        constants.pwm_time_max_spin = spinner;
-        veconst_widgets_1[96] = spinner;
+        page0_widgets->widget[96] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -269,8 +265,8 @@ int build_constants(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
 	adjustments.fast_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
-        constants.fast_idle_thresh_spin = spinner;
-        veconst_widgets_1[121] = spinner;
+        spinners.fast_idle_thresh_spin = spinner;
+        page0_widgets->widget[121] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -321,7 +317,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Speed Density");
-	constants.speed_den_but = button;
+	buttons.speed_den_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
@@ -337,7 +333,7 @@ int build_constants(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Alpha-N");
-	constants.alpha_n_but = button;
+	buttons.alpha_n_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
@@ -370,7 +366,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Multi-Port");
-	constants.multi_port_but = button;
+	buttons.multi_port_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
@@ -386,7 +382,7 @@ int build_constants(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Throttle-Body");
-	constants.tbi_but = button;
+	buttons.tbi_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
@@ -419,7 +415,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Four-Stroke");
-	constants.four_stroke_but = button;
+	buttons.four_stroke_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
@@ -435,7 +431,7 @@ int build_constants(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Two-Stroke");
-	constants.two_stroke_but = button;
+	buttons.two_stroke_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
@@ -468,7 +464,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Even Fire");
-	constants.even_fire_but = button;
+	buttons.even_fire_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
@@ -484,7 +480,7 @@ int build_constants(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Odd Fire");
-	constants.odd_fire_but = button;
+	buttons.odd_fire_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
@@ -517,7 +513,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"115 kPa");
-	constants.map_115_but = button;
+	buttons.map_115_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
@@ -533,7 +529,7 @@ int build_constants(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"250 kPa");
-	constants.map_250_but = button;
+	buttons.map_250_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(11));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
@@ -566,7 +562,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Enabled");
-	constants.baro_ena_but = button;
+	buttons.baro_ena_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
@@ -582,7 +578,7 @@ int build_constants(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Disabled");
-	constants.baro_disa_but = button;
+	buttons.baro_disa_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
@@ -615,7 +611,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_radio_button_new_with_label(NULL,"Simultaneous");
-	constants.simul_but = button;
+	buttons.simul_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
@@ -629,7 +625,7 @@ int build_constants(GtkWidget *parent_frame)
 			NULL);
 
 	button = gtk_radio_button_new_with_label(group,"Alternate");
-	constants.alternate_but = button;
+	buttons.alternate_but = button;
 	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"dl_type",
@@ -657,7 +653,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Indirectly generates the "divider" variable */
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
-        constants.inj_per_cycle_spin = spinner;
+        spinners.inj_per_cycle_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -685,7 +681,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Number of injectors, part of config12 */
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
-        constants.injectors_spin = spinner;
+        spinners.injectors_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
@@ -713,8 +709,8 @@ int build_constants(GtkWidget *parent_frame)
 	/* Number of Cylinders part of config11 */
 	adj = (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
-        constants.cylinders_spin = spinner;
-        constants.cylinders_adj = adj;
+        spinners.cylinders_spin = spinner;
+        adjustments.cylinders_adj = adj;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));

@@ -33,8 +33,10 @@ extern gboolean raw_reader_running;
 extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
 extern struct Runtime_Widgets runtime_data;
-extern struct Ve_Const_Std *ve_constants;
-extern struct Ve_Const_Std *ve_const_tmp;
+extern struct Ve_Const_Std *ve_const_p0;
+extern struct Ve_Const_Std *ve_const_p0_tmp;
+extern struct Ve_Const_Std *ve_const_p1;
+extern struct Ve_Const_Std *ve_const_p1_tmp;
 struct Serial_Params serial_params;
 gboolean connected;
 char buff[60];
@@ -389,7 +391,8 @@ void write_ve_const(gint value, gint offset, gint page)
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
-	res = memcmp(ve_const_tmp,ve_constants,sizeof(struct Ve_Const_Std));
+	res = memcmp(ve_const_p0_tmp,ve_const_p0,sizeof(struct Ve_Const_Std)) +
+	memcmp(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
 	if (res == 0)
 	{
 		set_store_black();
@@ -413,7 +416,8 @@ void burn_flash()
 	write (serial_params.fd,"B",1);	/* Send Burn command */
 
 	/* sync temp buffer with current VE_constants */
-	memcpy(ve_const_tmp,ve_constants,sizeof(struct Ve_Const_Std));
+	memcpy(ve_const_p0_tmp,ve_const_p0,sizeof(struct Ve_Const_Std));
+	memcpy(ve_const_p1_tmp,ve_const_p1,sizeof(struct Ve_Const_Std));
 	/* Take away the red on the "Store" button */
 	set_store_black();
 	burn_needed = FALSE;

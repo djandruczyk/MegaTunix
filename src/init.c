@@ -13,12 +13,14 @@
 
 #include <config.h>
 #include <configfile.h>
+#include <conversions.h>
 #include <defines.h>
 #include <globals.h>
 #include <init.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <structures.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -49,13 +51,17 @@ extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
 extern struct Serial_Params serial_params;
-struct Ve_Const_Std *ve_constants;
-struct Ve_Const_Std *ve_const_tmp;
-unsigned char * ve_const_page0;
-unsigned char * ve_const_page1;
+struct Ve_Const_Std *ve_const_p0;
+struct Ve_Const_Std *ve_const_p1;
+struct Ve_Const_Std *ve_const_p0_tmp;
+struct Ve_Const_Std *ve_const_p1_tmp;
+struct Conversion_Chart *page0_conversions;
+struct Conversion_Chart *page1_conversions;
 struct Raw_Runtime_Std *raw_runtime;
 struct Runtime_Std *runtime;
 struct Runtime_Std *runtime_last;
+struct Ve_Widgets *page0_widgets;
+struct Ve_Widgets *page1_widgets;
 
 void init()
 {
@@ -181,27 +187,46 @@ void make_megasquirt_dirs(void)
 
 void mem_alloc()
 {
-
-	ve_const_tmp = g_malloc(sizeof(struct Ve_Const_Std));
-	ve_constants = g_malloc(sizeof(struct Ve_Const_Std));
-	ve_const_page0 = g_malloc(sizeof(struct Ve_Const_Std));
-	ve_const_page1 = g_malloc(sizeof(struct Ve_Const_Std));
+	/* Allocate memory blocks */
+	ve_const_p0 = g_malloc(MS_PAGE_SIZE);
+	ve_const_p1 = g_malloc(MS_PAGE_SIZE);
+	ve_const_p0_tmp = g_malloc(MS_PAGE_SIZE);
+	ve_const_p1_tmp = g_malloc(MS_PAGE_SIZE);
 	raw_runtime = g_malloc(sizeof(struct Raw_Runtime_Std));
 	runtime = g_malloc(sizeof(struct Runtime_Std));
 	runtime_last = g_malloc(sizeof(struct Runtime_Std));
+	page0_conversions =  g_malloc(sizeof(struct Conversion_Chart));
+	page1_conversions =  g_malloc(sizeof(struct Conversion_Chart));
+	page0_widgets = g_malloc(sizeof(struct Ve_Widgets));
+	page1_widgets = g_malloc(sizeof(struct Ve_Widgets));
 	
-	//	printf("Allocating memory \n");
+	/* Set memory blocks to known states... */
+	memset((void *)ve_const_p0, 0, MS_PAGE_SIZE);
+	memset((void *)ve_const_p1, 0, MS_PAGE_SIZE);
+	memset((void *)ve_const_p0_tmp, 0, MS_PAGE_SIZE);
+	memset((void *)ve_const_p1_tmp, 0, MS_PAGE_SIZE);
+	memset((void *)raw_runtime, 0, sizeof(struct Raw_Runtime_Std));
+	memset((void *)runtime, 0, sizeof(struct Runtime_Std));
+	memset((void *)runtime_last, 0, sizeof(struct Runtime_Std));
+	memset((void *)page0_conversions, 0, sizeof(struct Conversion_Chart));
+	memset((void *)page1_conversions, 0, sizeof(struct Conversion_Chart));
+	memset((void *)page0_widgets, 0, sizeof(struct Ve_Widgets));
+	memset((void *)page1_widgets, 0, sizeof(struct Ve_Widgets));
 }
 
 void mem_dealloc()
 {
 
-	g_free(ve_const_tmp);
-	g_free(ve_constants);
-	g_free(ve_const_page0);
-	g_free(ve_const_page1);
+	g_free(ve_const_p0);
+	g_free(ve_const_p1);
+	g_free(ve_const_p0_tmp);
+	g_free(ve_const_p1_tmp);
 	g_free(raw_runtime);
 	g_free(runtime);
 	g_free(runtime_last);
+	g_free(page0_conversions);
+	g_free(page1_conversions);
+	g_free(page0_widgets);
+	g_free(page1_widgets);
 	//	printf("Deallocating memory \n");
 }

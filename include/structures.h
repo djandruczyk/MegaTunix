@@ -83,62 +83,17 @@ struct Runtime_Widgets
 
 
 /* this is required so we keep track of the gui controls so we
- * can update them easily with a generic function instead of
- * one function per control.... 
+ * can update them as needed (color changes, sensitivity, etc...
  */
-struct Table1_Widgets
+struct DynamicSpinners
 {
-	GtkWidget *inj_open_time_spin;		/* Spinner */
-	GtkWidget *batt_corr_spin;		/* Spinner */
-	GtkWidget *pwm_curr_lim_spin;		/* Spinner */
-	GtkWidget *pwm_time_max_spin;		/* Spinner */
 	GtkWidget *fast_idle_thresh_spin;	/* Spinner */
 	GtkWidget *req_fuel_total_spin;		/* Spinner */
 	GtkWidget *req_fuel_per_squirt_spin;	/* Spinner */
-	GtkWidget *cr_pulse_neg40_spin;		/* Spinner */
-	GtkWidget *cr_pulse_pos170_spin;	/* Spinner */
-	GtkWidget *cr_priming_pulse_spin;	/* Spinner */
-	GtkWidget *as_enrich_spin;		/* Spinner */
-	GtkWidget *as_num_cycles_spin;		/* Spinner */
-	GtkWidget *ve1_kpa_bins_spin[8];	/* Spinners */
-	GtkWidget *ve1_rpm_bins_spin[8];	/* Spinners */
-	GtkWidget *ve1_bins_spin[64];		/* Spinners */
-	GtkWidget *ve2_kpa_bins_spin[8];	/* Spinners */
-	GtkWidget *ve2_rpm_bins_spin[8];	/* Spinners */
-	GtkWidget *ve2_bins_spin[64];		/* Spinners */
-	GtkWidget *warmup_bins_spin[10];	/* Spinners */
-	GtkWidget *tps_trig_thresh_spin;	/* Spinner */
-	GtkWidget *accel_duration_spin;		/* Spinner */
-	GtkWidget *cold_accel_addon_spin;	/* Spinner */
-	GtkWidget *cold_accel_mult_spin;	/* Spinner */
-	GtkWidget *accel_bins_spin[4];		/* Spinners */
-	GtkWidget *decel_cut_spin;		/* Spinner */
 	GtkWidget *ego_temp_active_spin;	/* Spinner */
-	GtkWidget *ego_rpm_active_spin;		/* Spinner */
-	GtkWidget *ego_sw_voltage_spin;		/* Spinner */
-	GtkWidget *ego_step_spin;		/* Spinner */
-	GtkWidget *ego_events_spin;		/* Spinner */
-	GtkWidget *ego_limit_spin;		/* Spinner */
 	GtkWidget *inj_per_cycle_spin;		/* Spinner */
 	GtkWidget *injectors_spin;		/* Spinner */
 	GtkWidget *cylinders_spin;		/* Spinner */
-	GtkAdjustment *cylinders_adj;		/* Adjustment */
-	GtkWidget *speed_den_but;		/* Toggle button */
-	GtkWidget *alpha_n_but;			/* Toggle button */
-	GtkWidget *two_stroke_but;		/* Toggle button */
-	GtkWidget *four_stroke_but;		/* Toggle button */
-	GtkWidget *multi_port_but;		/* Toggle button */
-	GtkWidget *tbi_but;			/* Toggle button */
-	GtkWidget *map_115_but;			/* Toggle button */
-	GtkWidget *map_250_but;			/* Toggle button */
-	GtkWidget *even_fire_but;		/* Toggle button */
-	GtkWidget *odd_fire_but;		/* Toggle button */
-	GtkWidget *nbo2_but;			/* Toggle button */
-	GtkWidget *wbo2_but;			/* Toggle button */
-	GtkWidget *simul_but;			/* Toggle button */
-	GtkWidget *alternate_but;		/* Toggle button */
-	GtkWidget *baro_ena_but;		/* Toggle button */
-	GtkWidget *baro_disa_but;		/* Toggle button */
 };
 
 /* Controls for the Required Fuel Calculator... */
@@ -167,7 +122,7 @@ struct DynamicLabels
 	GtkWidget *cr_pulse_lowtemp_lab;
 	GtkWidget *cr_pulse_hightemp_lab;
 	GtkWidget *warmup_bins_lab[10];
-	GtkWidget *warmup_title;
+	GtkWidget *warmup_lab;
 	GtkWidget *ego_temp_lab;
 	GtkWidget *runtime_clt_lab;
 	GtkWidget *runtime_mat_lab;
@@ -180,6 +135,7 @@ struct DynamicAdjustments
 {
 	GtkAdjustment *fast_idle_temp_adj;
 	GtkAdjustment *ego_temp_adj;
+	GtkAdjustment *cylinders_adj;		/* Adjustment */
 };
 
 /* These are defined here instead of the individual .c files as
@@ -187,9 +143,25 @@ struct DynamicAdjustments
  */
 struct DynamicButtons
 {
-	GtkWidget *const_store_but;
-	GtkWidget *enrich_store_but;
-	GtkWidget *vetable_store_but;
+	GtkWidget *const_store_but;		/* Button */
+	GtkWidget *enrich_store_but;		/* Button */
+	GtkWidget *vetable_store_but;		/* Button */
+	GtkWidget *speed_den_but;		/* Toggle button */
+	GtkWidget *alpha_n_but;			/* Toggle button */
+	GtkWidget *two_stroke_but;		/* Toggle button */
+	GtkWidget *four_stroke_but;		/* Toggle button */
+	GtkWidget *multi_port_but;		/* Toggle button */
+	GtkWidget *tbi_but;			/* Toggle button */
+	GtkWidget *map_115_but;			/* Toggle button */
+	GtkWidget *map_250_but;			/* Toggle button */
+	GtkWidget *even_fire_but;		/* Toggle button */
+	GtkWidget *odd_fire_but;		/* Toggle button */
+	GtkWidget *simul_but;			/* Toggle button */
+	GtkWidget *alternate_but;		/* Toggle button */
+	GtkWidget *baro_ena_but;		/* Toggle button */
+	GtkWidget *baro_disa_but;		/* Toggle button */
+	GtkWidget *nbo2_but;			/* Toggle button */
+	GtkWidget *wbo2_but;			/* Toggle button */
 };
 
 /* Simple struct to store hte pointers to the entry and button
@@ -228,6 +200,11 @@ struct Command_Limits
 	gint	V_count;
 	gint	S_count;
 	gint	I_count;
+};
+
+struct Ve_Widgets
+{
+	GtkWidget *widget[MS_PAGE_SIZE];
 };
 
 	

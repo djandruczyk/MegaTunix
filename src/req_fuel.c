@@ -27,8 +27,9 @@ gboolean req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;
 static GtkWidget *popup;
 struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,0,19,14.7};
-extern struct Ve_Const_Std *ve_constants;
-extern struct Table1_Widgets constants;
+extern struct Ve_Const_Std *ve_const_p0;
+extern struct DynamicSpinners spinners;
+extern struct DynamicAdjustments adjustments;
 extern gint num_cylinders;
 
 
@@ -107,9 +108,7 @@ int reqd_fuel_popup()
 
         /* Number of Cylinders */
 	reqd_fuel.cyls = num_cylinders;
-//        adj = (GtkAdjustment *) gtk_adjustment_new(reqd_fuel.cyls,1.0,16,
-//                        1.0,1.0,0);
-        spinner = gtk_spin_button_new(constants.cylinders_adj,0,0);
+        spinner = gtk_spin_button_new(adjustments.cylinders_adj,0,0);
         gtk_widget_set_size_request(spinner,65,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
@@ -191,9 +190,9 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
                 * ((double)(reqd_fuel.afr)) \
                 * ((double)(reqd_fuel.inj_rate));
 
-        ve_constants->req_fuel = 10.0*(tmp1/tmp2);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_total_spin),
-                        ve_constants->req_fuel/10.0);
+        ve_const_p0->req_fuel = 10.0*(tmp1/tmp2);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_total_spin),
+                        ve_const_p0->req_fuel/10.0);
 
 	/* No need to set cyls value, or the bitfield as the two spinbuttons
 	 * share the same adjustment and signal handlers so altering the cyls
@@ -202,13 +201,13 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
 	 */
 	
 	/* Top is two stroke, botton is four stroke.. */
-	if (ve_constants->config11.bit.eng_type)
-        	ve_constants->rpmk = (int)(6000.0/((double)reqd_fuel.cyls));
+	if (ve_const_p0->config11.bit.eng_type)
+        	ve_const_p0->rpmk = (int)(6000.0/((double)reqd_fuel.cyls));
 	else
-        	ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
+        	ve_const_p0->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
 
 	check_req_fuel_limits();
-	dload_val = ve_constants->rpmk;
+	dload_val = ve_const_p0->rpmk;
 	page = 0;
         write_ve_const(dload_val, rpmk_offset, page);
 

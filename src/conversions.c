@@ -34,92 +34,97 @@
  * put in the right place to be loaded...
  */
 
-extern unsigned char * ve_const_page0;
-extern unsigned char * ve_const_page1;
-struct Conversion_Chart std_conversions;
-extern GtkWidget * veconst_widgets_1[];
-extern GtkWidget * veconst_widgets_2[];
+extern struct Conversion_Chart * page0_conversions;
+extern struct Conversion_Chart * page1_conversions;
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
-extern struct Table1_Widgets constants;
+extern struct DynamicSpinners spinners;
+extern struct Ve_Const_Std *ve_const_p0;
+extern struct Ve_Const_Std *ve_const_p1;
+extern struct Ve_Widgets *page0_widgets;
+extern struct Ve_Widgets *page1_widgets;
 
 
 void read_conversions(void)
 {
 	gint i = 0;
+	gint j = 0;
 	gint dl_type;
+	struct Conversion_Chart *conv_chart=NULL;
+	struct Ve_Widgets *widget_list = NULL;
 
-	for (i=0;i<PAGE_SIZE;i++)
-        {
-                if (GTK_IS_OBJECT(veconst_widgets_1[i]))
-                {
-			dl_type = (gint)g_object_get_data(
-                                G_OBJECT(veconst_widgets_1[i]),"dl_type");
-                        if (dl_type == IMMEDIATE)
-			{
-				std_conversions.page0_conv_type[i] = 
-						(gint)g_object_get_data(
-						G_OBJECT(veconst_widgets_1[i]),
-						"conv_type");
-				std_conversions.page0_conv_factor[i] = 
-						(gfloat)((gint)
-						g_object_get_data(
-						G_OBJECT(veconst_widgets_1[i]),
-						"conv_factor_x100"))
-						/100.0;
-			}
-                                
-                }
-		if (i == 90)	/* Required fuel special case */
+	for (j=0;j<2;j++)
+	{
+		if (j == 0)
 		{
-			std_conversions.page0_conv_type[i] = MULT;
-			std_conversions.page0_conv_factor[i] = 10.0;
+			conv_chart = page0_conversions;
+			widget_list = page0_widgets;
 		}
-		/* Table 2*/
-		if (GTK_IS_OBJECT(veconst_widgets_2[i]))
-                {
-                        dl_type = (gint)g_object_get_data(
-                                G_OBJECT(veconst_widgets_2[i]),"dl_type");
-                        if (dl_type == IMMEDIATE)
-                        {
-                                std_conversions.page1_conv_type[i] =
-                                                (gint)g_object_get_data(
-                                                G_OBJECT(veconst_widgets_2[i]),
-                                                "conv_type");
-                                std_conversions.page1_conv_factor[i] =
-                                                (gfloat)((gint)
-                                                g_object_get_data(
-                                                G_OBJECT(veconst_widgets_2[i]),
-                                                "conv_factor_x100"))
-                                                /100.0;
-                        }
+		else
+		{
+			conv_chart = page1_conversions;
+			widget_list = page1_widgets;
+		}
 
-                }
-                if (i == 90)    /* Required fuel special case */
-                {
-                        std_conversions.page1_conv_type[i] = MULT;
-                        std_conversions.page1_conv_factor[i] = 10.0;
-                }
+		for (i=0;i<MS_PAGE_SIZE;i++)
+		{
+			if (GTK_IS_OBJECT(widget_list->widget[i]))
+			{
+				dl_type = (gint)g_object_get_data(
+						G_OBJECT(widget_list->widget[i]),
+						"dl_type");
+				if (dl_type == IMMEDIATE)
+				{
+					conv_chart->conv_type[i] = 
+							(gint)g_object_get_data(
+							G_OBJECT(
+							widget_list->widget[i]),
+							"conv_type");
+					conv_chart->conv_factor[i] = 
+							(gfloat)((gint)
+							g_object_get_data(
+							G_OBJECT(
+							widget_list->widget[i]),
+							"conv_factor_x100"))
+							/100.0;
+				}
 
+			}
+			if (i == 90)	/* Required fuel special case */
+			{
+				conv_chart->conv_type[i] = MULT;
+				conv_chart->conv_factor[i] = 10.0;
+			}
 #ifdef DEBUG
-		printf("Page 0 Offset, %i, conv_type %i, conv_factor %f\n",i,std_conversions.page0_conv_type[i],std_conversions.page0_conv_factor[i]);
-		printf("Page 1 Offset, %i, conv_type %i, conv_factor %f\n",i,std_conversions.page1_conv_type[i],std_conversions.page1_conv_factor[i]);
+			printf("Page %i Offset, %i, conv_type %i, conv_factor %f\n",j,i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
 #endif
-        }
+		}
+	}
 	return;
 }
 
-	/* Using two convert b4 downloadfuncs,  one for page 0, one for
-	 * page 1. Thsi is NOT the way I want it, but the code is cleaner
-	 * ironically... 
-	 */
-gint convert_before_download_p0(gint offset, gfloat value)
+gint convert_before_download(gint offset, gfloat value, gint page)
 {
 	gint return_value = 0;
 	gint tmp_val = (gint)(value+0.001);
-	gfloat factor = std_conversions.page0_conv_factor[offset];
+	gfloat factor;
+	unsigned char *ve_const_arr; 
+	struct Conversion_Chart *conv_chart;
 
-	switch ((Conversions)std_conversions.page0_conv_type[offset])
+	if (page == 0)
+	{	/* Assign pointers to point at Page 0 conversions */
+		conv_chart = page0_conversions;
+		ve_const_arr = (unsigned char *)ve_const_p0;
+	}
+	else
+	{	/* Assign pointers to point at Page 1 conversions */
+		conv_chart = page1_conversions;
+		ve_const_arr = (unsigned char *)ve_const_p1;
+	}
+
+	factor = conv_chart->conv_factor[offset];
+
+	switch ((Conversions)conv_chart->conv_type[offset])
 	{
 		case (ADD):
 			return_value = tmp_val + factor;
@@ -140,75 +145,54 @@ gint convert_before_download_p0(gint offset, gfloat value)
 			printf("Convert_before_download() NO CONVERSION defined, BUG!!!\b\b\n");
 			break;
 	}
-	/* Store value in veconst_struct (accessing it via array syntax as 
-	 * it's friggin easier).... 
+	/* Store value in veconst_arr pointer (to structure) 
+	 * (accessing it via array syntax as it's friggin easier).... 
 	 */
-	ve_const_page0[offset] = return_value; 
+	ve_const_arr[offset] = return_value; 
 	return (return_value);
 }
 
-/* Page 1 conversion function */
-gint convert_before_download_p1(gint offset, gfloat value)
-{
-        gint return_value = 0;
-        gint tmp_val = (gint)(value+0.001);
-        gfloat factor = std_conversions.page1_conv_factor[offset];
-
-        switch ((Conversions)std_conversions.page1_conv_type[offset])
-        {
-                case (ADD):
-                        return_value = tmp_val + factor;
-                        break;
-                case (SUB):
-                        return_value = tmp_val - factor;
-                        break;
-                case (MULT):
-                        return_value = (gint)((value*factor) + 0.001);
-                        break;
-                case (DIV):
-                        return_value = (gint)((value/factor) + 0.001);
-                        break;
-                case (NOTHING):
-                        return_value = tmp_val;
-                        break;
-                default:
-                        printf("Convert_before_download() NO CONVERSION defined, BUG!!!\b\b\n");
-                        break;
-        }
-        /* Store value in veconst_struct (accessing it via array syntax as 
-         * it's friggin easier).... 
-         */
-        ve_const_page1[offset] = return_value;
-        return (return_value);
-}
-
-
-gfloat convert_after_upload_p0(gint offset)
+gfloat convert_after_upload(gint offset, gint page)
 {
 	gfloat return_value = 0.0;
-	gfloat factor = std_conversions.page0_conv_factor[offset];
+	gfloat factor = 0.0;
+	unsigned char *ve_const_arr;
+	struct Conversion_Chart *conv_chart;
+
+	if (page == 0)
+	{	/* Assign pointers to point at Page 0 conversions */
+		conv_chart = page0_conversions;
+		ve_const_arr = (unsigned char *)ve_const_p0;
+	}
+	else
+	{	/* Assign pointers to point at Page 1 conversions */
+		conv_chart = page1_conversions;
+		ve_const_arr = (unsigned char *)ve_const_p1;
+	}
+
+	factor = conv_chart->conv_factor[offset];
 
 	/* Since this is the upload we actually do the CONVERSE mathematical 
 	 * operation since the algorithm was designed for the download side, 
 	 * On upload we need to "un-convert" from MS values to Gui friendly
 	 * versions....
 	 */
-	switch ((Conversions)std_conversions.page0_conv_type[offset])
+	switch ((Conversions)conv_chart->conv_type[offset])
 	{
 		case (ADD):
-			return_value = ve_const_page0[offset] - factor;
+			return_value = ve_const_arr[offset] - factor;
 			break;
 		case (SUB):
-			return_value = ve_const_page0[offset] + factor;
+			return_value = ve_const_arr[offset] + factor;
 			break;
 		case (MULT):
-			return_value = (gfloat)ve_const_page0[offset] / factor;
+			return_value = (gfloat)ve_const_arr[offset] / factor;
 			break;
 		case (DIV):
-			return_value = (gfloat)ve_const_page0[offset] * factor;
+			return_value = (gfloat)ve_const_arr[offset] * factor;
 			break;
 		case (NOTHING):
-			return_value = ve_const_page0[offset];
+			return_value = ve_const_arr[offset];
 			break;
 		default:
 			printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
@@ -217,41 +201,6 @@ gfloat convert_after_upload_p0(gint offset)
 	}
 	return (return_value);
 }
-gfloat convert_after_upload_p1(gint offset)
-{
-        gfloat return_value = 0.0;
-        gfloat factor = std_conversions.page1_conv_factor[offset];
-
-        /* Since this is the upload we actually do the CONVERSE mathematical 
-         * operation since the algorithm was designed for the download side, 
-         * On upload we need to "un-convert" from MS values to Gui friendly
-         * versions....
-         */
-        switch ((Conversions)std_conversions.page1_conv_type[offset])
-        {
-                case (ADD):
-                        return_value = ve_const_page1[offset] - factor;
-                        break;
-                case (SUB):
-                        return_value = ve_const_page1[offset] + factor;
-                        break;
-                case (MULT):
-                        return_value = (gfloat)ve_const_page1[offset] / factor;
-                        break;
-                case (DIV):
-                        return_value = (gfloat)ve_const_page1[offset] * factor;
-                        break;
-                case (NOTHING):
-                        return_value = ve_const_page1[offset];
-                        break;
-                default:
-                        printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
-                        break;
-
-        }
-        return (return_value);
-}
-
 
 void reset_temps(gpointer type)
 {
@@ -270,7 +219,7 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
 					"170 Deg. F");
 			gtk_label_set_text(
-					GTK_LABEL(labels.warmup_title),
+					GTK_LABEL(labels.warmup_lab),
 					"Engine Temp in Degrees Fahrenheit");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
@@ -298,7 +247,7 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.fast_idle_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						constants.fast_idle_thresh_spin),
+						spinners.fast_idle_thresh_spin),
 						(value*(9.0/5.0))+32);
 			}
 			upper = adjustments.ego_temp_adj->upper;
@@ -311,7 +260,7 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.ego_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						constants.ego_temp_active_spin),
+						spinners.ego_temp_active_spin),
 						(value*(9.0/5.0))+32);
 			}
 			break;
@@ -324,7 +273,7 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
 					"77 Deg. C");
 			gtk_label_set_text(
-					GTK_LABEL(labels.warmup_title),
+					GTK_LABEL(labels.warmup_lab),
 					"Engine Temp in Degrees Celsius");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
@@ -353,7 +302,7 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.fast_idle_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						constants.fast_idle_thresh_spin),
+						spinners.fast_idle_thresh_spin),
 						(value-32)*(5.0/9.0));
 			}
 			upper = adjustments.ego_temp_adj->upper;
@@ -366,7 +315,7 @@ void reset_temps(gpointer type)
 				gtk_adjustment_changed(
 						adjustments.ego_temp_adj);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-						constants.ego_temp_active_spin),
+						spinners.ego_temp_active_spin),
 						(value-32)*(5.0/9.0));
 			}
 			break;

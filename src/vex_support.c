@@ -25,8 +25,6 @@
 extern struct Tools tools;
 extern FILE * io_file;
 extern gchar * io_file_name;
-extern unsigned char * ve_const_page0;
-extern unsigned char * ve_const_page1;
 gchar *vex_comment;
 
 gboolean vetable_export()
@@ -35,6 +33,9 @@ gboolean vetable_export()
 	time_t *t;
 	gint i = 0;
 	gint j = 0;
+	unsigned char * ve_const_arr;
+	extern struct Ve_Const_Std *ve_const_p0;
+	//extern struct Ve_Const_Std *ve_const_p1;
 
 	tm = g_malloc(sizeof(struct tm));
 	t = g_malloc(sizeof(time_t));
@@ -49,16 +50,17 @@ gboolean vetable_export()
 	fprintf(io_file, "Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min);
 	fprintf(io_file, "Page 0\n");
 	fprintf(io_file, "VE Table RPM Range              [ 8]\n");
+	ve_const_arr = (unsigned char *)ve_const_p0;
 	for (i=0;i<8;i++)
 	{
 		fprintf(io_file,"   [%3d] = %3d\n",
-				i,ve_const_page0[i+VE1_RPM_BINS_OFFSET]);
+				i,ve_const_arr[i+VE1_RPM_BINS_OFFSET]);
 	}
 	fprintf(io_file, "VE Table Load Range (MAP)       [ 8]\n");
 	for (i=0;i<8;i++)
 	{
 		fprintf(io_file,"   [%3d] = %3d\n",
-				i,ve_const_page0[i+VE1_KPA_BINS_OFFSET]);
+				i,ve_const_arr[i+VE1_KPA_BINS_OFFSET]);
 	}
 	fprintf(io_file, "VE Table                        [  8][  8]\n");
 	fprintf(io_file, "           [  0] [  1] [  2] [  3] [  4] [  5] [  6] [  7]\n");
@@ -70,13 +72,13 @@ gboolean vetable_export()
 			if (j == 1)
 			{
 				fprintf (io_file, "  %3d",
-						ve_const_page0[((i*j)-1)
+						ve_const_arr[((i*j)-1)
 						+VE1_TABLE_OFFSET]);
 			}
 			else
 			{
 				fprintf (io_file, "   %3d",
-						ve_const_page0[((i*j)-1)
+						ve_const_arr[((i*j)-1)
 						+VE1_TABLE_OFFSET]);
 			}
 		}
