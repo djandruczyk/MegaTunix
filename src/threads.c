@@ -39,6 +39,7 @@
 
 GThread *raw_input_thread;			/* thread handle */
 GAsyncQueue *io_queue = NULL;
+GAsyncQueue *dispatch_queue = NULL;
 gboolean raw_reader_running;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean interrogated;			/* valid connection with MS */
@@ -178,15 +179,9 @@ void io_cmd(IoCommand cmd, gpointer data)
 void *serial_io_handler(gpointer data)
 {
 	struct Io_Message *message = NULL;	
-	extern struct Firmware_Details * firmware;
-	gint len=0;
-	gint i=0;
-	gint val=-1;
-	extern gint temp_units;
-	extern gboolean paused_handlers;
-	extern gint mem_view_style[];
 	/* Create Queue to listen for commands */
 	io_queue = g_async_queue_new();
+	dispatch_queue = g_async_queue_new();
 
 	/* Endless Loop, wiat for message, processs and repeat... */
 	while (1)
@@ -233,106 +228,11 @@ void *serial_io_handler(gpointer data)
 				break;
 
 		}
-		if (!connected) // Raise error window.... 
-		{
-			gdk_threads_enter();
-			no_ms_connection();
-			gdk_threads_leave();
-			goto breakout;
-			
-		}
-		/* NOTE if !connected we ABORT All dispatchers as they all
-		 * depend on a "connected" status.
-		 *
-		 * If dispatch funcs are defined, run them from the thread
-		 * context. NOTE wrapping with gdk_threads_enter/leave, as 
-		 * that is NECESSARY to to do when making gtk calls inside
-		 * the thread....
+		/* Send rest of message back up to main context for gui
+		 * updates via asyncqueue
 		 */
-		if (message->funcs != NULL)
-		{
-			len = message->funcs->len;
-			for (i=0;i<len;i++)
-			{
-				val = g_array_index(message->funcs,
-						UpdateFunction, i);
-				switch ((UpdateFunction)val)
-				{
-					case UPD_POPULATE_DLOGGER:
-						gdk_threads_enter();
-						populate_dlog_choices();
-						gdk_threads_leave();
-						break;
-					case UPD_LOAD_RT_SLIDERS:
-						gdk_threads_enter();
-						load_controls();
-						reset_temps(GINT_TO_POINTER(temp_units));
-						gdk_threads_leave();
-						break;
-					case UPD_LOAD_REALTIME_MAP:
-						gdk_threads_enter();
-						load_realtime_map();
-						gdk_threads_leave();
-						break;
-					case UPD_LOAD_GUI_TABS:
-						gdk_threads_enter();
-						load_gui_tabs();
-						reset_temps(GINT_TO_POINTER(temp_units));
-						gdk_threads_leave();
-						break;
-					case UPD_READ_VE_CONST:
-						io_cmd(IO_READ_VE_CONST,NULL);
-						break;
-					case UPD_REALTIME:
-						update_runtime_vars();
-						break;
-					case UPD_VE_CONST:
-						gdk_threads_enter();
-						paused_handlers = TRUE;
-						update_ve_const();
-						paused_handlers = FALSE;
-						gdk_threads_leave();
-						break;
-					case UPD_STORE_BLACK:
-						gdk_threads_enter();
-						set_store_buttons_state(BLACK);
-						for (i=0;i<firmware->total_pages;i++)
-							set_reqfuel_state(BLACK,i);
-						gdk_threads_leave();
-						break;
-					case UPD_LOGVIEWER:
-						gdk_threads_enter();
-						update_logview_traces();
-						gdk_threads_leave();
-						break;
-					case UPD_RAW_MEMORY:
-						gdk_threads_enter();
-						update_raw_memory_view(mem_view_style[message->offset],message->offset);
-						gdk_threads_leave();
-						break;
-					case UPD_DATALOGGER:
-						run_datalog();
-						break;
-						
-				}
-			}
-		}
-breakout:
-		dealloc_message(message);
+		g_async_queue_push(dispatch_queue,(gpointer)message);
 	}
-}
-
-void dealloc_message(void * ptr)
-{
-	struct Io_Message *message = (struct Io_Message *)ptr;
-	if (message->out_str)
-		g_free(message->out_str);
-	if (message->funcs) 
-		g_array_free(message->funcs,TRUE);
-	if (message->payload)
-		g_free(message->payload);
-	g_free(message);
-
 }
 
 void readfrom_ecu(void *ptr)

@@ -14,6 +14,7 @@ headers = \
         default_limits.h \
 	dep_loader.h \
 	dep_processor.h \
+	dispatcher.h \
 	enums.h \
 	fileio.h \
 	general_gui.h \

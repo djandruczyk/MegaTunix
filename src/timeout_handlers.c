@@ -22,7 +22,6 @@
 #include <timeout_handlers.h>
 #include <threads.h>
 
-GAsyncQueue *dispatcher = NULL;
 gint realtime_id = 0;
 static gint forced_id = 0;
 static gint update_rate = 24;

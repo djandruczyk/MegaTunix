@@ -20,6 +20,7 @@ megatunix_SOURCES = \
 	debugging.c \
 	dep_loader.c \
 	dep_processor.c \
+	dispatcher.c \
 	fileio.c \
 	general_gui.c \
 	getfiles.c \

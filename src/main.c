@@ -16,6 +16,7 @@
 #include <conversions.h>
 #include <core_gui.h>
 #include <defines.h>
+#include <dispatcher.h>
 #include <enums.h>
 #include <gui_handlers.h>
 #include <init.h>
@@ -58,6 +59,8 @@ gint main(gint argc, gchar ** argv)
 			NULL, // Thread args
 			TRUE, // Joinable
 			NULL); //GError Pointer
+
+	gtk_timeout_add(10,(GtkFunction)dispatcher,NULL);
 
 	/* Kickoff fast interrogation */
 	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
