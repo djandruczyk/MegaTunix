@@ -1,0 +1,71 @@
+
+6/6/2003 - Initial thoughts on implementing profiles so MegaTunix can
+adapt to the various MS Variants.
+
+This design is only in the developmental stages and WILL change, how much
+depends on if this is even implementable and workable in a clean fashion... :)
+
+Config file would contain some fields for the MS Type being used
+Firmware edition, comment Field.
+
+
+
+Each Field would have the following fields, comma delimited,
+
+Group: 		Either "Runtime" or "VE_Constants" (STRING)
+		Runtime variables are ONE-WAY, output from MS only, 
+		thus several of the following fields can be blank/unused.
+Offset:		Memory offset in the respective block, (UNSIGNED INT)
+Type:		"Bitfield" or "Value".  If Bitfield a further section 
+		will be defined below to describe how the bitfield is 
+		split up. (STRING) 
+Value:		The value of this variable (UNSIGNED INT)
+Name; 		Variable name (like "secl" for the clock) (STRING)
+Gui_label:	Name placed on the gui below or next to the widget (STRING)
+Control_type;	Either "Spin", "Entry", "Toggle", or "Pbar" (STRING)
+Min;		Minimum allowed value on the gui, (0 for Toggle) (FLOAT)
+Max;		Maximum allowed value on the gui  (1 for Toggle) (FLOAT)
+Step;		Step amount between min/max  (1 for toggle) (FLOAT)
+Group:		Name of frame on the GUI this control is placed under (STRING)
+Page:		Page on the gui where this group/widget is placed (STRING)
+conv_func:	Conversion function (only "mult","divide","add","subtract") 
+		are allowed. used to convert data FROM the MS for the GUI.
+		Its converse is used when converting gui values to be sent 
+		back to the MS.  (STRING)
+conv_factor:	Factor used in above conv_function, applied to the value 
+		returned from the MS ECU (FLOAT)
+
+For bitfields, the Gui_label, control_Type,min,max,step,group,page,
+conv_func,conv_factor fields will be blank as they don't apply cleanly.
+bitfields will be defined later with the same name as the "Name" field above.
+
+
+
+Bitfields will be defined by a section header, called  "[BitField XXXXXX]"
+where "XXXXX" is the EXACT same name as the "Name" field above.
+The section ends with the next Section Header
+
+Example BitField Header:
+[BitField CONFIG11]
+
+Subname:	The variable associated with the following bit(s) (STRING)
+bitstart:	The first bit of this subvariable (INT)
+bitend:		The last bit of this subvariable (same as start is OK) (INT)
+Gui_label:      Name placed on the gui below or next to the widget (STRING)
+Control_type;   Either "Spin", or "Toggle", Spins are used for more than
+		1 bit subvariables, Toggles are used for 1 bit and some
+		2 bit fields (MAP type) (STRING)
+conv_func:	Conversion function (only "mult","divide","add","subtract") 
+		are allowed. used to convert data FROM the MS for the GUI.
+		Its converse is used when converting gui values to be sent 
+		back to the MS.  (STRING)
+conv_factor:	Factor used in above conv_function, applied to the value 
+		returned from the MS ECU (FLOAT)
+Group:  	name of frame on the GUI this control is placed under (STRING)
+Page:   	Page on the gui where this group/widget is placed (STRING)
+
+	
+The conversions are necessary due to the way the B&G code encodes the num_cyls
+and num_injectors into the bitfields (off by one value wise, who the hell
+knows why they did it this way....)
+
