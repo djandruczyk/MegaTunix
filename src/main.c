@@ -33,6 +33,8 @@ extern struct Serial_Params *serial_params;
 GThread * serio_thread = NULL;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;
+struct Serial_Params *serial_params;
+struct Io_Cmds *cmds;
 
 gint main(gint argc, gchar ** argv)
 {
@@ -45,7 +47,10 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_set_locale();
 
-	mem_alloc();		/* Allocate memory for DataStructures */
+	/* Allocate memory  */
+	serial_params = g_malloc0(sizeof(struct Serial_Params));
+	cmds = g_malloc0(sizeof(struct Io_Cmds));
+
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 

@@ -50,7 +50,7 @@ extern gchar *delimiter;
 extern gint statuscounts_id;
 extern gint ready;
 extern GtkTooltips *tip;
-extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+extern GList ***ve_widgets;
 extern struct Serial_Params *serial_params;
 extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;
@@ -89,6 +89,7 @@ static gboolean err_flag = FALSE;
 void leave(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dynamic_widgets;
+	extern gint realtime_id;
 	struct Io_File * iofile = NULL;
 
 	if (statuscounts_id)
@@ -99,7 +100,10 @@ void leave(GtkWidget *widget, gpointer data)
 		iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
 				
 	stop_datalogging();
+	if(realtime_id)
+		stop_realtime_tickler();
 	save_config();
+	usleep(100000);
 	close_serial();
 	if (iofile)	
 		close_file(iofile);
@@ -248,7 +252,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gboolean state = FALSE;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 
 	if (paused_handlers)
 		return TRUE;
@@ -463,7 +467,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	extern gint realtime_id;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	extern gint ecu_caps;
 	extern gint lv_scroll;
 	struct Reqd_Fuel *reqd_fuel = NULL;
@@ -777,7 +781,7 @@ void update_ve_const()
 	gint reqfuel = 0;
 	union config11 cfg11;
 	union config12 cfg12;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	extern gint ecu_caps;
 	extern struct Firmware_Details *firmware;
 
@@ -900,9 +904,9 @@ void update_ve_const()
 
 
 	/* Update all on screen controls (except bitfields (done above)*/
-	for (page=0;page<MAX_SUPPORTED_PAGES;page++)
+	for (page=0;page<firmware->total_pages;page++)
 	{
-		for (offset=0;offset<2*MS_PAGE_SIZE;offset++)
+		for (offset=0;offset<MS_PAGE_SIZE;offset++)
 		{
 			if (ve_widgets[page][offset] != NULL)
 			{

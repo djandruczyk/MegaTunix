@@ -237,7 +237,7 @@ typedef enum
 	IO_READ_RAW_MEMORY,
 	IO_BURN_MS_FLASH,
 	IO_WRITE_DATA,
-}IoCommand;
+}Io_Command;
 
 typedef enum
 {

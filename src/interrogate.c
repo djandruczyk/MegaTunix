@@ -20,6 +20,7 @@
 #include <enums.h>
 #include <errno.h>
 #include <getfiles.h>
+#include <init.h>
 #include <interrogate.h>
 #include <lookuptables.h>
 #include <mode_select.h>
@@ -207,7 +208,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	gboolean match = FALSE;
 	gchar * tmpbuf = NULL;
 	gchar ** filenames = NULL;
-	extern struct IoCmds *cmds;
+	extern struct Io_Cmds *cmds;
 	extern GHashTable *dynamic_widgets;
 	GtkWidget * widget = NULL;
 
@@ -307,12 +308,15 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	/* Set expected sizes for commands */
 	if (!firmware)
 		firmware = g_new0(struct Firmware_Details,1);
+
 	firmware->name = g_strdup(potential->name);
 	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
 	firmware->rtv_map_file = g_strdup(potential->rtv_map_file);
 	firmware->controls_map_file = g_strdup(potential->controls_map_file);
 	firmware->multi_page = potential->multi_page;
 	firmware->total_pages = potential->total_pages;
+	/* Allocate ram for the necessary structures... */
+	mem_alloc();
 
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)

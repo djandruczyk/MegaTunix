@@ -145,7 +145,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint offset = 0;
 	gint page = 0;
 	gint tmpi = 0;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList ***ve_widgets;
 
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);

@@ -18,7 +18,7 @@
 #include <enums.h>
 
 /* Prototypes */
-void io_cmd(IoCommand, gpointer);	/* Send message down the queue */
+void io_cmd(Io_Command, gpointer);	/* Send message down the queue */
 void *serial_io_handler(gpointer);	/* thread that processes messages */
 void write_ve_const(gint, gint, gint, gboolean);
 /* Prototypes */

@@ -45,8 +45,8 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 	guchar *ptr = buf;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
 	struct Io_Message *message = (struct Io_Message *)msg;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
-	extern gint *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
+	extern gint **ms_data_last;
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 

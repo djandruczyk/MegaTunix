@@ -30,7 +30,7 @@ gboolean check_dependancy(GObject *object )
 	gchar ** deps = NULL;
 	gint type = 0;
 	gint num_deps = 0;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 
 	num_deps = (gint)g_object_get_data(object,"num_deps");
 	deps = g_object_get_data(object,"deps");

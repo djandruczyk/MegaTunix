@@ -34,7 +34,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	void *evaluator = NULL;
 	gint page = -1;
 	gint offset = -1;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
@@ -65,7 +65,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 {
 	gfloat return_value = 0.0;
 	gint *ve_const_arr;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	gchar * conv_expr;
 	void *evaluator = NULL;
 	gint page = -1;

@@ -55,7 +55,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	GdkGLConfig *gl_config;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList ***ve_widgets;
 	extern struct Firmware_Details *firmware;
 	gchar *tmpbuf = NULL;
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
@@ -215,7 +215,7 @@ gint reset_3d_winstat(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
 	GtkWidget *tmpwidget = NULL;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList ***ve_widgets;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	store_list("burners",g_list_remove(
 			get_list("burners"),(gpointer)ve_view->burn_but));
@@ -447,7 +447,7 @@ void ve_realize (GtkWidget *widget, gpointer data)
 void ve_calculate_scaling(void *ptr)
 {
 	gint i=0;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	struct Ve_View_3D *ve_view = NULL;
 	gint * ve_ptr = NULL;
 	gint rpm_base = 0;
@@ -499,7 +499,7 @@ void ve_calculate_scaling(void *ptr)
 void ve_draw_ve_grid(void *ptr)
 {
 	gint rpm=0, load=0;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	gint *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	gint rpm_base = 0;
@@ -565,7 +565,7 @@ void ve_draw_active_indicator(void *ptr)
 	gint *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
-	extern gint * ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint ve_base = 0;
@@ -640,7 +640,7 @@ void ve_draw_axis(void *ptr)
 	gint *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint rpm_bincount = 0;
@@ -829,9 +829,9 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	gint rpm_base = 0;
 	gint ve_base = 0;
 	gfloat divider = 0.0;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList ***ve_widgets;
 	struct Ve_View_3D *ve_view = NULL;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	gint * ve_ptr = NULL;
 	GtkWidget *spinner = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(

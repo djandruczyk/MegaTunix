@@ -100,8 +100,8 @@ void comms_test()
 
 void update_write_status(void)
 {
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
-	extern gint *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
+	extern gint **ms_data_last;
 	gint i = 0;
 	extern struct Firmware_Details *firmware;
 
@@ -217,8 +217,8 @@ void writeto_ecu(void *ptr)
 
 void burn_ms_flash()
 {
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
-	extern gint *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
+	extern gint **ms_data_last;
 	gint res = 0;
 	gint i = 0;
 	extern gint ecu_caps;

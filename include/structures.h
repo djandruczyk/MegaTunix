@@ -252,11 +252,11 @@ struct Command
  kicking off commands to send data to/from the ECU or run specified handlers.
  messages and postfunctiosn can be bound into this strucutre to do some complex
  things with a simple subcommand.
- \see IoCmds
+ \see Io_Cmds
  */
 struct Io_Message
 {
-	IoCommand cmd;		/*! Source command (initiator)*/
+	Io_Command cmd;		/*! Source command (initiator)*/
 	CmdType command;	/*! Command type */
 	gchar *out_str;		/*! Data sent to the ECU  for READ_CMD's */
 	gint page;		/*! multipage firmware specific */
@@ -273,7 +273,7 @@ struct Io_Message
  commands.  
  \warning This really should be done a better way...
  */
-struct IoCmds
+struct Io_Cmds
 {
 	gchar *realtime_cmd;	/*! Command sent to get RT vars.... */
 	gint rt_cmd_len;	/*! length in bytes of rt_cmd_len */

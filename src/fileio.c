@@ -411,7 +411,7 @@ void backup_all_ms_settings(gchar *filename)
 	gchar * section = NULL;
 	gint i = 0;
 	gint x = 0;
-	extern gint * ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	GString *string = NULL;
 
 	cfgfile = cfg_open_file(filename);
@@ -452,7 +452,7 @@ void restore_all_ms_settings(gchar *filename)
 	gchar *tmpbuf = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)

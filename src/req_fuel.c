@@ -352,7 +352,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	gint page = 0;
 	union config11 cfg11;
 	extern struct Firmware_Details *firmware;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	extern GHashTable *dynamic_widgets;
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
@@ -434,7 +434,7 @@ void check_req_fuel_limits()
 	extern GHashTable * interdep_vars_1;
 	extern GHashTable * interdep_vars_2;
 	extern GHashTable *dynamic_widgets;
-	extern gint *ms_data[MAX_SUPPORTED_PAGES];
+	extern gint **ms_data;
 	extern struct Firmware_Details *firmware;
 
 	if (ecu_caps & DUALTABLE)

@@ -49,10 +49,10 @@ extern struct Serial_Params *serial_params;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test"};
 
 
-void io_cmd(IoCommand cmd, gpointer data)
+void io_cmd(Io_Command cmd, gpointer data)
 {
 	struct Io_Message *message = NULL;
-	extern struct IoCmds *cmds;
+	extern struct Io_Cmds *cmds;
 	extern gboolean tabs_loaded;
 	extern struct Firmware_Details * firmware;
 	gint tmp = -1;
@@ -246,7 +246,7 @@ void *serial_io_handler(gpointer data)
 void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct OutputData *output = NULL;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 	extern struct Firmware_Details *firmware;
 

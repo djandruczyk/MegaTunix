@@ -38,7 +38,7 @@ gboolean update_runtime_vars()
 {
 	gint i = 0;
 	struct Ve_View_3D * ve_view = NULL;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList ***ve_widgets;
 	extern GHashTable *rt_controls;
 	extern GHashTable *ww_controls;
 	GtkWidget * tmpwidget=NULL;

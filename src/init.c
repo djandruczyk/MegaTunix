@@ -46,15 +46,14 @@ extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
-struct Serial_Params *serial_params;	
+extern struct Serial_Params *serial_params;
 /* Support up to "x" page firmware.... */
-gint *ms_data[MAX_SUPPORTED_PAGES];
-gint *ms_data_last[MAX_SUPPORTED_PAGES];
-gint *ms_data_backup[MAX_SUPPORTED_PAGES];
-GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+gint **ms_data = NULL;
+gint **ms_data_last = NULL;
+gint **ms_data_backup = NULL;
+GList ***ve_widgets = NULL;
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
-struct IoCmds *cmds; 
 
 
 /*!
@@ -242,25 +241,29 @@ void mem_alloc()
 {
 	gint i=0;
 	gint j=0;
+	extern struct Firmware_Details *firmware;
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
 	 */
 	interdep_vars_1 = g_hash_table_new(NULL,NULL);
 	interdep_vars_2 = g_hash_table_new(NULL,NULL);
 
-	/* Allocate memory blocks */
-	serial_params = g_malloc0(sizeof(struct Serial_Params));
 
-	for (i=0;i<MAX_SUPPORTED_PAGES;i++)
+	ms_data = g_new0(gint *, firmware->total_pages);
+	ms_data_last = g_new0(gint *, firmware->total_pages);
+	ms_data_backup = g_new0(gint *, firmware->total_pages);
+	ve_widgets = g_new0(GList **, firmware->total_pages);
+	for (i=0;i<firmware->total_pages;i++)
 	{
-		ms_data[i] = g_malloc0(MS_PAGE_SIZE*sizeof(gint));
-		ms_data_last[i] = g_malloc0(MS_PAGE_SIZE*sizeof(gint));
-		ms_data_backup[i] = g_malloc0(MS_PAGE_SIZE*sizeof(gint));
-		for (j=0;j<2*MS_PAGE_SIZE;j++)
+		ms_data[i] = g_new0(gint, MS_PAGE_SIZE);
+		ms_data_last[i] = g_new0(gint, MS_PAGE_SIZE);
+		ms_data_backup[i] = g_new0(gint, MS_PAGE_SIZE);
+		ve_widgets[i] = g_new0(GList *, MS_PAGE_SIZE);
+		for (j=0;j<MS_PAGE_SIZE;j++)
+		{
 			ve_widgets[i][j] = NULL;
+		}
 	}
-
-	cmds = g_malloc0(sizeof(struct IoCmds));
 
 }
 
@@ -283,6 +286,12 @@ void mem_dealloc()
 	/* Firmware datastructure.... */
 	if (firmware)
 	{
+		for (i=0;i<firmware->total_pages;i++)
+		{
+			g_free(ms_data[i]);
+			g_free(ms_data_last[i]);
+			g_free(ms_data_backup[i]);
+		}
 		if (firmware->name)
 			g_free(firmware->name);
 		if (firmware->tab_list)
@@ -290,14 +299,11 @@ void mem_dealloc()
 		for (i=0;i<firmware->total_pages;i++)
 			g_free(firmware->page_params[i]);
 		g_free(firmware);
+		g_free(ms_data);
+		g_free(ms_data_last);
+		g_free(ms_data_backup);
 	}
 
-	for (i=0;i<MAX_SUPPORTED_PAGES;i++)
-	{
-		g_free(ms_data[i]);
-		g_free(ms_data_last[i]);
-		g_free(ms_data_backup[i]);
-	}
 	g_hash_table_destroy(interdep_vars_1);
 	g_hash_table_destroy(interdep_vars_2);
 }
