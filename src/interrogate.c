@@ -48,7 +48,7 @@ struct Cmd_Results
  * Actual results of querying the variosu MS codes are below.  The list will
  * be updated as the versions out there progress.
  *
- * "A" = Relatime Variables return command
+ * "A" = Realtime Variables return command
  * "C" = Echo back Secl (MS 1sec resolution clock)
  * "Q" = Echo back embedded version number
  * "V" = Return VEtable and Constants
@@ -94,7 +94,7 @@ void interrogate_ecu()
 	gint quest_bytes = 0;
 	gchar *tmpbuf;
 	gint tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
-	struct Cmd_Results cmd_results[tests_to_run]; 
+	struct Cmd_Results cmd_res[tests_to_run]; 
 
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
@@ -107,8 +107,8 @@ void interrogate_ecu()
 	for (i=0;i<tests_to_run;i++)
 	{
 		count = 0;
-		cmd_results[i].cmd_string = g_strdup(cmd_chars[i]);
-		len = strlen(cmd_results[i].cmd_string);
+		cmd_res[i].cmd_string = g_strdup(cmd_chars[i]);
+		len = strlen(cmd_res[i].cmd_string);
 		res = write(serial_params->fd,cmd_chars[i],len);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
@@ -116,16 +116,22 @@ void interrogate_ecu()
 			while (poll(&ufds,1,serial_params->poll_timeout))
 				count += read(serial_params->fd,&buf,64);
 		}
-		cmd_results[i].count = count;
+		cmd_res[i].count = count;
 	}
 	for (i=0;i<tests_to_run;i++)
 	{
-		if (cmd_results[i].count > 0)
+		if (cmd_res[i].count > 0)
 		{
 			tmpbuf = g_strdup_printf(
 					"Command %s, returned %i bytes\n",
-					cmd_results[i].cmd_string, 
-					cmd_results[i].count);
+					cmd_res[i].cmd_string, 
+					cmd_res[i].count);
+			/* Store counts for VE/realtime readback... */
+			if (strstr(cmd_res[i].cmd_string,"V"))
+				serial_params->table0_size = cmd_res[i].count;
+			if (strstr(cmd_res[i].cmd_string,"A"))
+				serial_params->rtvars_size = cmd_res[i].count;
+				
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
@@ -133,7 +139,7 @@ void interrogate_ecu()
 		{
 			tmpbuf = g_strdup_printf(
 					"Command %s isn't supported...\n",
-					cmd_results[i].cmd_string);
+					cmd_res[i].cmd_string);
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
@@ -146,14 +152,14 @@ void interrogate_ecu()
 
 	for(i=0;i<tests_to_run;i++)
 	{
-		if (strcmp(cmd_results[i].cmd_string,"V")== 0)
-			v_bytes = cmd_results[i].count;
-		if (strcmp(cmd_results[i].cmd_string,"S")== 0)
-			s_bytes = cmd_results[i].count;
-		if (strcmp(cmd_results[i].cmd_string,"I")== 0)
-			i_bytes = cmd_results[i].count;
-		if (strcmp(cmd_results[i].cmd_string,"?")== 0)
-			quest_bytes = cmd_results[i].count;
+		if (strcmp(cmd_res[i].cmd_string,"V")== 0)
+			v_bytes = cmd_res[i].count;
+		if (strcmp(cmd_res[i].cmd_string,"S")== 0)
+			s_bytes = cmd_res[i].count;
+		if (strcmp(cmd_res[i].cmd_string,"I")== 0)
+			i_bytes = cmd_res[i].count;
+		if (strcmp(cmd_res[i].cmd_string,"?")== 0)
+			quest_bytes = cmd_res[i].count;
 	}
 	if (v_bytes > 125)
 	{

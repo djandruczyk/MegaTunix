@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <structures.h>
+#include <sys/poll.h>
 #include <unistd.h>
 
 
@@ -43,9 +44,14 @@ extern struct Ve_Const_Std *ve_const_p1_tmp;
        
 int handle_ms_data(InputData which_data)
 {
-	int res = 0;
+	gint res = 0;
+	gint total = 0;
 	unsigned char buf[255];
 	unsigned char *ptr = buf;
+	struct pollfd ufds;
+
+	ufds.fd = serial_params->fd;
+	ufds.events = POLLIN;
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
@@ -53,9 +59,14 @@ int handle_ms_data(InputData which_data)
 	switch (which_data)
 	{
 		case REALTIME_VARS:
-			res = read(serial_params->fd,ptr,serial_params->raw_bytes*2); 
+			while (poll(&ufds,1,serial_params->poll_timeout) )
+			{
+				total += res = read(serial_params->fd,ptr+total,
+						serial_params->rtvars_size); 
+				//printf("Realtime read %i, total %i\n",res,total);
+			}
 			/* the number of bytes expected for raw data read */
-			if (res > serial_params->raw_bytes) 
+			if (total > serial_params->rtvars_size) 
 			{
 				/* Serial I/O problem, resetting port 
 				 * This problem can occur if the MS is 
@@ -63,7 +74,7 @@ int handle_ms_data(InputData which_data)
 				 * problems with the serial interface, 
 				 * perhaps even a very slow machine
 				 * The problem is part of the data is lost, 
-				 * and since we read in serial_params->raw_bytes
+				 * and since we read in rtvars_size
 				 * blocks, the data is now offset, the damn 
 				 * problem is that there is no formatting so 
 				 * the datastream which is now out of sync by
@@ -78,7 +89,7 @@ int handle_ms_data(InputData which_data)
 				close_serial();
 				open_serial(serial_params->comm_port);
 
-				/* The raw_reader_running flag  MUST be reset 
+				/* The raw_reader_running flag MUST be reset 
 				 * to prevent a deadlock in check_ecu_comms 
 				 * which will attempt to kill the thread that 
 				 * we are executing under. By flipping this 
@@ -91,73 +102,100 @@ int handle_ms_data(InputData which_data)
 				raw_reader_running = TRUE;
 				return FALSE;
 			}
-
-			/* copy data out of temp buffer into struct for 
-			 * use elsewhere (datalogging)
-			 */
-			memcpy(raw_runtime,buf,
-					sizeof(struct Raw_Runtime_Std));
-
-			/* Test for MS reset */
-			if (just_starting)
-			{
-				lastcount = raw_runtime->secl;
-				just_starting  = FALSE;
-			}
-			/* Check for clock jump from the MS, a jump in time
-			 * from the MS clock indicates a reset due to power
-			 * and/or noise.
-			 */
-			if ((lastcount - raw_runtime->secl > 1) \
-					&& (lastcount - raw_runtime->secl != 255))
-			{
-				ms_reset_count++;
-			}
 			else
 			{
-				ms_goodread_count++;
+				/* copy data out of temp buffer into struct for 
+				 * use elsewhere (datalogging)
+				 */
+				memcpy(raw_runtime,buf,
+						sizeof(struct Raw_Runtime_Std));
+
+				/* Test for MS reset */
+				if (just_starting)
+				{
+					lastcount = raw_runtime->secl;
+					just_starting = FALSE;
+				}
+				/* Check for clock jump from the MS, a 
+				 * jump in time from the MS clock indicates 
+				 * a reset due to power and/or noise.
+				 */
+				if ((lastcount - raw_runtime->secl > 1) && \
+					(lastcount - raw_runtime->secl != 255))
+					ms_reset_count++;
+				else
+					ms_goodread_count++;
+
+				lastcount = raw_runtime->secl;
+
+				/* copy last round to runtime_last */
+				memcpy(runtime_last,runtime,
+						sizeof(struct Runtime_Common));
+
+				/* Feed raw buffer over to post_process()
+				 * as a void * and pass it a pointer to the new
+				 * area for the parsed data...
+				 */
+				post_process((void *)raw_runtime,(void *)runtime);
 			}
-			lastcount = raw_runtime->secl;
-
-			/* copy last round to runtime_last for checking */
-			memcpy(runtime_last,runtime,
-					sizeof(struct Runtime_Common));
-
-			post_process((void *)raw_runtime,(void *)runtime);
 
 			break;
 
 		case VE_AND_CONSTANTS_1:
-			res = read(serial_params->fd,ptr,serial_params->veconst_size); 
-			/* the number of bytes expected for raw data read */
-			if (res != serial_params->veconst_size) 
+			
+			while (poll(&ufds,1,serial_params->poll_timeout) )
 			{
-				/* Serial I/O problem, resetting port 
-				 * This problem can occur if the MS is 
-				 * resetting due to power spikes, or other 
-				 * problems with the serial interface, 
-				 * perhaps even a very slow machine
-				 * The problem is part of the data is lost, 
-				 * and since we read in serial_params->raw_bytes
-				 * blocks, the data is now offset can hoses 
-				 * things all to hell.  The solution is to 
-				 * close the port, re-open it and reinitialize 
-				 * it, then continue.  We CAN do this here 
-				 * because the serial I/O thread depends on 
-				 * this function and blocks until we return.
-				 */
+				total += res = read(serial_params->fd,ptr+total,
+						serial_params->table0_size); 
+				//printf("VE/Const read %i, total %i\n",res,total);
 			}
-			/* Two copies, working copy and temp for comparison
-			 * against to know if we have to burn stuff to flash
-			 */
-			memcpy(ve_const_p0,buf,sizeof(struct Ve_Const_Std));
-			memcpy(ve_const_p0_tmp,buf,sizeof(struct Ve_Const_Std));
+			/* the number of bytes expected for raw data read */
+			if (total != serial_params->table0_size) 
+			{
+				fprintf(stderr,__FILE__":  Error reading VE/Constants for page 0\n");
+				serial_params->errcount++;
+			}
+			else
+			{
+				/* Two copies, working copy and temp for 
+				 * comparison against to know if we have 
+				 * to burn stuff to flash.
+				 */
+				memcpy(ve_const_p0,buf,
+						sizeof(struct Ve_Const_Std));
+				memcpy(ve_const_p0_tmp,buf,
+						sizeof(struct Ve_Const_Std));
 
-			ms_ve_goodread_count++;
+				ms_ve_goodread_count++;
+			}
 			break;
 
 		case VE_AND_CONSTANTS_2:
-			printf("Dualtable not supported yet.. \n");
+			while (poll(&ufds,1,serial_params->poll_timeout) )
+			{
+				total += res = read(serial_params->fd,ptr+total,
+						serial_params->table1_size); 
+			}
+			/* the number of bytes expected for raw data read */
+			if (total != serial_params->table1_size) 
+			{
+				fprintf(stderr,__FILE__":  Error reading VE/Constants for page 1\n");
+				serial_params->errcount++;
+			}
+			else
+			{
+				/* Two copies, working copy and temp for 
+				 * comparison against to know if we have 
+				 * to burn stuff to flash.
+				 */
+				memcpy(ve_const_p1,buf,
+						sizeof(struct Ve_Const_Std));
+				memcpy(ve_const_p1_tmp,buf,
+						sizeof(struct Ve_Const_Std));
+
+				ms_ve_goodread_count++;
+			}
+			//printf("Dualtable not supported yet.. \n");
 			break;
 
 		case IGNITION_VARS:

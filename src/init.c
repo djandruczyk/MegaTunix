@@ -86,8 +86,6 @@ void init()
 	serial_params->errcount = 0; /* I/O error count */
 	serial_params->poll_timeout = 40; /* poll wait time in milliseconds */
 	/* default for MS V 1.x and 2.x */
-	serial_params->raw_bytes = 22; /* number of bytes for realtime vars */
-	serial_params->veconst_size = 128; /* VE/Constants datablock size */
 	serial_params->read_wait = 100;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */

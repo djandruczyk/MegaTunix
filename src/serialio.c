@@ -145,8 +145,6 @@ int setup_serial_params()
 	serial_params->newtio.c_cc[VLNEXT]   = 0;     /* Ctrl-v */
 	serial_params->newtio.c_cc[VEOL2]    = 0;     /* '\0' */
 
-	serial_params->newtio.c_cc[VMIN]     = serial_params->raw_bytes; 
-
 	/* blocking read until proper number of chars arrive */
 
 	tcflush(serial_params->fd, TCIFLUSH);
@@ -266,7 +264,6 @@ void read_ve_const()
 	int restart_reader = FALSE;
 	struct pollfd ufds;
 	int res = 0;
-	int tmp = 0;
 
 	if (!connected)
 	{
@@ -282,14 +279,11 @@ void read_ve_const()
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
-	/* save state */
-	tmp = serial_params->newtio.c_cc[VMIN]; /* wait for VE table */
-	serial_params->newtio.c_cc[VMIN]     = 125;
+	/* Flush serial port... */
 	tcflush(serial_params->fd, TCIFLUSH);
-	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	res = write(serial_params->fd,"V",1);
-	res = poll (&ufds,1,serial_params->poll_timeout*20);
+	res = poll (&ufds,1,serial_params->poll_timeout);
 	if (res == 0)	/* Error */
 	{
 		serial_params->errcount++;
@@ -304,8 +298,8 @@ void read_ve_const()
 	/*	 Dualtable not ready yet... 
 		 if (dualtable)
 		 {
-		 res = write(serial_params->fd,"P1V",1);
-		 res = poll (&ufds,1,serial_params->poll_timeout*20);
+		 res = write(serial_params->fd,"P1V",3);
+		 res = poll (&ufds,1,serial_params->poll_timeout);
 		 if (res == 0)	// Error 
 		 {
 		 serial_params->errcount++;
@@ -324,10 +318,7 @@ void read_ve_const()
 
 	update_errcounts(NULL,FALSE);
 
-	/* restore previous serial port settings */
-	serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
 	tcflush(serial_params->fd, TCIFLUSH);
-	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	if (restart_reader)
 	{

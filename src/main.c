@@ -19,6 +19,7 @@
 #include <globals.h>
 #include <gui_handlers.h>
 #include <init.h>
+#include <interrogate.h>
 #include <main.h>
 #include <serialio.h>
 #include <structures.h>
@@ -56,6 +57,9 @@ int main(int argc, char ** argv)
 
 	read_conversions();
 
+	/* determine the MS type roughly so we know how much data to expect
+	 from the ECU */	
+	interrogate_ecu();
 	/* Force a read of constants to populate the gui */
 	std_button_handler(NULL,GINT_TO_POINTER(READ_VE_CONST));
 
