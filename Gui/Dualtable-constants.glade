@@ -835,7 +835,7 @@
 
 			  <child>
 			    <widget class="GtkButton" id="calc_req_fuel_1_button">
-			      <property name="border_width">2</property>
+			      <property name="border_width">0</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Calculate Required Fuel</property>
@@ -952,7 +952,7 @@
 		      <child>
 			<widget class="GtkLabel" id="table1_inj_sq_cyls_frame_title">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Table 1 Cylinders,Injectors and Squirts Config.</property>
+			  <property name="label" translatable="yes">Table 1 Cylinders,Injectors and Squirts.</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1418,7 +1418,7 @@ Threshold (ms.)</property>
 
 			  <child>
 			    <widget class="GtkButton" id="calc_req_fuel_2_button">
-			      <property name="border_width">2</property>
+			      <property name="border_width">0</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Calculate Required Fuel</property>
@@ -1535,7 +1535,7 @@ Threshold (ms.)</property>
 		      <child>
 			<widget class="GtkLabel" id="table2_inj_sq_cyls_frame_title">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Table 2 Cylinders,Injectors and Squirts Config.</property>
+			  <property name="label" translatable="yes">Table 2 Cylinders,Injectors and Squirts.</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>

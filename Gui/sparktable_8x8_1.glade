@@ -21,13 +21,13 @@
       <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
       <child>
-	<widget class="GtkVBox" id="vbox1">
+	<widget class="GtkVBox" id="SP1_vbox1">
 	  <property name="border_width">5</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox2">
+	    <widget class="GtkVBox" id="SP1_vbox2">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">0</property>
@@ -54,7 +54,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox1">
+		<widget class="GtkHBox" id="SP1_hbox1">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>
@@ -94,7 +94,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -118,7 +118,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -142,7 +142,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -166,7 +166,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -190,7 +190,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -214,7 +214,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -238,7 +238,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -262,7 +262,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">1 1 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -358,7 +358,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -382,7 +382,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -405,7 +405,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -428,7 +428,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -451,7 +451,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -474,7 +474,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -497,7 +497,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -520,7 +520,7 @@
 				  <property name="digits">0</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">100 100 25500 100 1000 1000</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -573,14 +573,14 @@
 			  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			  <child>
-			    <widget class="GtkTable" id="table6">
+			    <widget class="GtkTable" id="SP1_sparktable">
 			      <property name="border_width">5</property>
 			      <property name="visible">True</property>
 			      <property name="n_rows">9</property>
 			      <property name="n_columns">8</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">2</property>
-			      <property name="column_spacing">2</property>
+			      <property name="column_spacing">1</property>
 
 			      <child>
 				<widget class="GtkLabel" id="SP1_sparktable_filler_label">
@@ -608,16 +608,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -635,16 +636,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -662,16 +664,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -689,16 +692,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -716,16 +720,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -743,16 +748,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -770,16 +776,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -797,16 +804,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,1)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -824,16 +832,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -851,16 +860,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -878,16 +888,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -905,16 +916,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -932,16 +944,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -959,16 +972,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -986,16 +1000,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1013,16 +1028,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,2)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1040,16 +1056,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1067,16 +1084,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1094,16 +1112,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1121,16 +1140,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1148,16 +1168,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1175,16 +1196,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1202,16 +1224,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1229,16 +1252,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,3)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1256,16 +1280,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1283,16 +1308,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1310,16 +1336,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1337,16 +1364,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1364,16 +1392,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1391,16 +1420,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1418,16 +1448,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1445,16 +1476,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,4)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1472,16 +1504,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1499,16 +1532,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1526,16 +1560,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1553,16 +1588,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1580,16 +1616,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1607,16 +1644,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1634,16 +1672,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1661,16 +1700,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,5)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1688,16 +1728,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1715,16 +1756,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1742,16 +1784,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1769,16 +1812,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1796,16 +1840,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1823,16 +1868,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1850,16 +1896,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1877,16 +1924,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,6)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1904,16 +1952,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1931,16 +1980,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1958,16 +2008,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1985,16 +2036,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2012,16 +2064,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2039,16 +2092,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2066,16 +2120,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2093,16 +2148,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,7)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2120,16 +2176,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(1,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">54.9276 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2147,16 +2204,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(2,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2174,16 +2232,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(3,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2201,16 +2260,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(4,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2228,16 +2288,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(5,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2255,16 +2316,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(6,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2282,16 +2344,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(7,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2309,16 +2372,17 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="SP1_sparkspin_(8,8)">
+				  <property name="width_request">54</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
+				  <property name="digits">2</property>
 				  <property name="numeric">False</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
+				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">1 0 255 1 10 10</property>
+				  <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
 				  <signal name="button_press_event" handler="spin_button_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 				  <signal name="key_press_event" handler="key_press_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2452,12 +2516,12 @@
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
-			      <property name="digits">0</property>
+			      <property name="digits">2</property>
 			      <property name="numeric">False</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 100 1 10 10</property>
+			      <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -2499,12 +2563,12 @@
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
-			      <property name="digits">0</property>
+			      <property name="digits">2</property>
 			      <property name="numeric">False</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1 0 100 1 10 10</property>
+			      <property name="adjustment">1 0 89.97 0.3521 3.521 3.521</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>

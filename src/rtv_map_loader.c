@@ -44,10 +44,5 @@ void realtime_map_load(void *ptr, gchar *basename)
 			return;
 			
 		}
-		
-		
 	}
-	
-	
-	
 }

@@ -753,7 +753,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			dl_type = 0;  
 			break;
 	}
-	printf("spin_handler, ign_parm == %i\n",ign_parm);
 	if (dl_type == IMMEDIATE) 
 		write_ve_const(page, offset, dload_val, ign_parm);
 	return TRUE;
