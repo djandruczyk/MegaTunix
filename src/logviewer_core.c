@@ -54,7 +54,7 @@ void initialize_log_info(void *ptr)
 	struct Log_Info *log_info;
 	log_info = ptr;
 	log_info->field_count = 0;
-	log_info->delim = NULL;
+	log_info->delimiter = NULL;
 	log_info->fields = NULL;
 	log_info->fields_data = g_array_new(FALSE,FALSE,sizeof(GArray *));
 	return;
@@ -71,7 +71,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus  status = G_IO_STATUS_ERROR;
-	gchar *delim = NULL;
+	gchar *delimiter = NULL;
 	struct Log_Info *log_info = ptr;
 	extern struct DynamicButtons buttons;
 	extern GtkWidget *lv_darea;	
@@ -81,19 +81,19 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 	if (status == G_IO_STATUS_NORMAL) /* good read */
 	{
 		if (g_strrstr(a_line->str,",") != NULL)
-			delim = g_strdup(",");
+			delimiter = g_strdup(",");
 		else if (g_strrstr(a_line->str,"\t") != NULL)
-			delim = g_strdup("\t");
+			delimiter = g_strdup("\t");
 		else	
-			delim = g_strdup(" ");
+			delimiter = g_strdup(" ");
 
 		/* Store delimiter in structure */
-		log_info->delim = g_strdup(delim);
+		log_info->delimiter = g_strdup(delimiter);
 		/* Store field names as well... 
 		 * log_info->fields is a string vector (char **)
 		 * that is NULL terminated thanks to g_strsplit()
 		 */
-		log_info->fields = g_strsplit(a_line->str,delim,0);
+		log_info->fields = g_strsplit(a_line->str,delimiter,0);
 
 		log_info->field_count = 0;
 		/* Get total count of fields in there too... */
@@ -104,7 +104,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 		g_object_set_data(G_OBJECT(lv_darea),"log_info",(gpointer)log_info);
 		
 	}
-	g_free(delim);
+	g_free(delimiter);
 	
 }
 
@@ -140,7 +140,7 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) 
 			== G_IO_STATUS_NORMAL) 
 	{
-		data = g_strsplit(a_line->str,log_info->delim,0);
+		data = g_strsplit(a_line->str,log_info->delimiter,0);
 		for (i=0;i<(log_info->field_count);i++)
 		{
 			tmp_array = g_array_index(log_info->fields_data,GArray *,i);
