@@ -1545,13 +1545,9 @@ void set_ignition_mode(gboolean state)
 void set_iac_mode(gboolean state)
 {
 	extern GList *enh_idle_widgets;
-//	GtkWidget *label;
+	using_pwm_idle = state;
 	g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
-/*	label = gtk_button_get_label_widget(
-			GTK_BUTTON
-			(buttons.pwm_idle_but));
-	gtk_label_set_text(GTK_LABEL(label),"IAC Stepper Mode");
-*/
+
 }
 
 void set_dualtable_mode(gboolean state)

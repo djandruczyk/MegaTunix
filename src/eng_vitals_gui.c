@@ -437,8 +437,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 
 	button = gtk_radio_button_new_with_label(group,"PWM Controlled");
-	dt_widgets = g_list_append(dt_widgets, (gpointer)button);
-	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)button);
 	buttons.pwm_idle_but = button;
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(118));
 	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));

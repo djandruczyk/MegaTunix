@@ -49,25 +49,25 @@ static struct Canidate
 	gchar *firmware_name;	/* Name of this firmware */
 	gboolean dt_cap;	/* Dualtable capable firmware */
 	gboolean ign_cap;	/* Ignition variant */
-	gboolean iac_cap;		/* Extended IAC ability... */
+	gboolean iac_cap;	/* Extended IAC ability... */
 } canidates[] = 
 {
 	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,20,
 			"Standard B&G (2.0-3.01)\0",FALSE,FALSE,FALSE},
 	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,NULL,NULL,1,
 			"Dualtable 0.90-1.0\0",TRUE,FALSE,FALSE},
-	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,"v.1.01",NULL,1,
+	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,"v.1.01\0",NULL,1,
 			"Dualtable 1.01\0",TRUE,FALSE,FALSE},
-	{ {22,1,1,128,128,19,0,0,255,255},NULL,NULL,"v.1.02",NULL,1,
+	{ {22,1,1,128,128,19,0,0,255,255},NULL,NULL,"v.1.02\0",NULL,1,
 			"Dualtable 1.02\0",TRUE,FALSE,TRUE},
-	{ {22,1,1,125,125,31,0,0,0,0},NULL,NULL,"GM-IAC",NULL,29,
+	{ {22,1,1,125,125,31,0,0,0,0},NULL,NULL,"GM-IAC\0",NULL,29,
 			"MS-2.9 GM-IAC\0",FALSE,FALSE,TRUE},
-	{ {22,1,1,125,125,0,0,81,0,0},NULL,NULL,NULL,NULL,20,
-			"SquirtnSpark 2.02 or SquirtnEdis 0.108\0",
+	{ {22,1,1,125,125,0,0,83,0,0},NULL,NULL,NULL,NULL,20,
+			"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0",
 			FALSE,TRUE,FALSE},
 	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,NULL,NULL,30,
 			"SquirtnSpark 3.0\0",FALSE,TRUE,FALSE},
-	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.005",30,
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.005\0",30,
 			"MegaSquirtnEDIS 3.05\0",FALSE,TRUE,FALSE}
 };
 
@@ -233,11 +233,16 @@ void determine_ecu(void *ptr)
 	struct Canidate *canidate = (struct Canidate *)ptr;
 	gint i = 0;
 	gint j = 0;
+	gint len = 0;
 	gint num_tests =  sizeof(cmds)/sizeof(cmds[0]);
 	gint num_choices = sizeof(canidates)/sizeof(canidates[0]);
 	gint passcount = 0;
 	gint match = -1;
 	gchar * tmpbuf = NULL;
+	extern struct DynamicButtons buttons;
+	extern gboolean dualtable;
+	extern gboolean iac_variant;
+	extern gboolean ign_variant;
 
 	/* compare the canidate to all the choices.  As OF now we are ONLY
 	 * comparing byte counts as that is enough to guarantee unique-ness
@@ -259,24 +264,14 @@ void determine_ecu(void *ptr)
 			}
 			else
 				passcount++;
-				//printf("pass\n");
+			//printf("pass\n");
 		}
 		if (passcount == num_tests) /* All tests pass */
 		{
 			match = i;
-		//	printf("found match to canidate %i\n",i);
+			//	printf("found match to canidate %i\n",i);
 			break;
 		}
-	}
-	if (match != -1) // (we found one)
-	{
-		set_dualtable_mode(canidates[match].dt_cap);	
-		set_ignition_mode(canidates[match].ign_cap);	
-		set_iac_mode(canidates[match].iac_cap);	
-		serial_params->table0_size = canidates[match].bytes[CMD_V0];
-		serial_params->table1_size = canidates[match].bytes[CMD_V1];
-		serial_params->rtvars_size = canidates[match].bytes[CMD_A];
-		serial_params->ignvars_size = canidates[match].bytes[CMD_I];
 	}
 	/* Update the screen with the data... */
 	for (i=0;i<num_tests;i++)
@@ -320,15 +315,49 @@ void determine_ecu(void *ptr)
 		}
 
 	}
-	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",
-			canidates[match].firmware_name);
+	if (match == -1) // (we found one)
+	{
+		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, contact author with the contents of this window\n");
+		// Store counts for VE/realtime readback... 
+
+		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
+		g_free(tmpbuf);
+		goto cleanup;
+	}
+
+	/* Set flags */
+	dualtable =  canidates[match].dt_cap;
+	iac_variant =  canidates[match].iac_cap;
+	ign_variant =  canidates[match].ign_cap;
+	/* Enable/Disable Controls */
+	set_dualtable_mode(canidates[match].dt_cap);	
+	set_ignition_mode(canidates[match].ign_cap);	
+	set_iac_mode(canidates[match].iac_cap);	
+
+	/* Set expected sizes for commands */
+	serial_params->table0_size = canidates[match].bytes[CMD_V0];
+	serial_params->table1_size = canidates[match].bytes[CMD_V1];
+	serial_params->rtvars_size = canidates[match].bytes[CMD_A];
+	serial_params->ignvars_size = canidates[match].bytes[CMD_I];
+	/* Enable Access to enhanced idle controls */
+	if ((iac_variant) || (dualtable))
+		gtk_widget_set_sensitive(GTK_WIDGET(buttons.pwm_idle_but),TRUE);
+	else
+
+		gtk_widget_set_sensitive(GTK_WIDGET(buttons.pwm_idle_but),FALSE);
+	/* Display firmware version in the window... */
+	len = strlen(canidates[match].firmware_name);
+	tmpbuf = g_strconcat("Detected Firmware: ",g_strndup(canidates[match].firmware_name,len),"\n");
+
 	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 	g_free(tmpbuf);
 
+cleanup:
 	g_free(canidate->sig_str);
 	g_free(canidate->quest_str);
 	g_free(canidate->v0_data);
 	g_free(canidate->v1_data);
 	g_free(canidate);
-	
+	return;
+
 }
