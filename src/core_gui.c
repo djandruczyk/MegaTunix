@@ -28,6 +28,7 @@
 #include <ignition_gui.h>
 #include <logviewer_gui.h>
 #include <lowlevel_gui.h>
+#include <memory_gui.h>
 #include <runtime_gui.h>
 #include <sparktable_gui.h>
 #include <tuning_gui.h>
@@ -70,6 +71,7 @@ static struct
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE, FALSE, FALSE},
 { "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE, FALSE, FALSE},
 { "MegaSquirt Tools", build_tools, "T_ools",TRUE, FALSE, FALSE},
+{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory",TRUE, FALSE, FALSE},
 { "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE, FALSE, FALSE},
 { "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE, FALSE, FALSE},
 { "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE, FALSE, FALSE},

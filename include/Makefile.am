@@ -30,6 +30,7 @@ headers = \
         lookuptables.h \
         lowlevel_gui.h \
         main.h \
+        memory_gui.h \
         mode_select.h \
         ms_structures.h \
         notifications.h \
