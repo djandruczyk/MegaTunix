@@ -38,9 +38,6 @@ int main(int argc, char ** argv)
 
 	gtk_set_locale();
 
-//	if (file_exists("MegaTunixrc"))
-//		gtk_rc_add_default_file ("MegaTunixrc");
-
 	init();			/* initialize global vars */
 	mem_alloc();
 	make_megasquirt_dirs();	/*Create config file dirs if missing */
@@ -57,6 +54,8 @@ int main(int argc, char ** argv)
 
 	read_conversions();
 	
+	/* Force a read of constants to populate the gui */
+	std_button_handler(NULL,GINT_TO_POINTER(READ_FROM_MS));
 
 	ready = TRUE;
 	gdk_threads_enter();
@@ -64,11 +63,3 @@ int main(int argc, char ** argv)
 	gdk_threads_leave();
 	return (0) ;
 }
-
-gboolean file_exists (const char *filename)
-{
-  struct stat statbuf;
-
-  return stat (filename, &statbuf) == 0;
-}
-

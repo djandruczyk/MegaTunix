@@ -38,6 +38,7 @@ extern struct raw_runtime_std *raw_runtime;
 gboolean log_opened = FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;
+extern GdkColor white;
 struct timeval now;
 struct timeval last;
 static gint dlog_context_id;
@@ -96,6 +97,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	GtkWidget *table;
 	GtkWidget *frame;
 	GtkWidget *button;
+	GtkWidget *ebox;
         GSList  *group;
 	gint table_rows = 0;
 
@@ -111,12 +113,17 @@ int build_datalogging(GtkWidget *parent_frame)
         gtk_container_add(GTK_CONTAINER(frame),vbox2);
         gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 
+	ebox = gtk_event_box_new();
+        gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
         dlog_statbar = gtk_statusbar_new();
         gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(dlog_statbar),FALSE);
-        gtk_box_pack_start(GTK_BOX(vbox2),dlog_statbar,TRUE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),dlog_statbar);
         dlog_context_id = gtk_statusbar_get_context_id(
                         GTK_STATUSBAR(dlog_statbar),
                         "DataLogging Status");
+        gtk_widget_modify_bg(GTK_WIDGET(ebox),
+                        GTK_STATE_NORMAL,&white);
+
 
 	frame = gtk_frame_new("Data Log File Selection");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);

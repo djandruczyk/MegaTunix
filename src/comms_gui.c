@@ -65,12 +65,17 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 	ser_statbar = gtk_statusbar_new();
 	gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(ser_statbar),FALSE);
-	gtk_box_pack_start(GTK_BOX(vbox2),ser_statbar,TRUE,TRUE,0);
+	gtk_container_add(GTK_CONTAINER(ebox),ser_statbar);
 	ser_context_id = gtk_statusbar_get_context_id(
 			GTK_STATUSBAR(ser_statbar),
 			"Serial Status");
+	gtk_widget_modify_bg(GTK_WIDGET(ebox),
+                        GTK_STATE_NORMAL,&white);
+
 
 	hbox = gtk_hbox_new(TRUE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
