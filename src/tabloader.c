@@ -75,32 +75,32 @@ gboolean load_gui_tabs()
 				 */
 				bind_data(topframe,(gpointer)cfgfile);
 				populate_master(topframe,(gpointer)cfgfile);
+
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
+				g_free(tab_name);
+
+				frame = glade_xml_get_widget(xml,"topframe");
+				if (frame == NULL)
+				{
+					dbg_func(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n",CRITICAL);
+					return FALSE;
+				}
+				else
+				{
+					gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
+					glade_xml_signal_autoconnect(xml);
+					gtk_widget_show_all(frame);
+				}
 				if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
 				{
 					run_post_function(tmpbuf);
 					g_free(tmpbuf);
 				}
-				
-				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
-				g_free(tab_name);
 				cfg_free(cfgfile);
 			}
-
+			g_free(xml);
 			g_free(map_file);
 			g_free(glade_file);
-			frame = glade_xml_get_widget(xml,"topframe");
-			if (frame == NULL)
-			{
-				dbg_func(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n",CRITICAL);
-				return FALSE;
-			}
-			else
-			{
-				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
-				glade_xml_signal_autoconnect(xml);
-				gtk_widget_show_all(notebook);
-			}
-			g_free(xml);
 
 		}
 		else

@@ -48,15 +48,20 @@ keys themselves are not, as the string compare functions are case insensitive.
 			specialized handlers.
 	key_types	(string) List of keytypes for the respective keys
 			above. 
-	internal_name	(string) name use for internal referencing
+	internal_name	(string) name used for internal referencing
 	dlog_gui_name	(string) Name shown on datalogging tab
 	dlog_field_name	(string) name in datalog file for this variable
 	offset		(integer) offset from the beginning of raw vars 
 			block from ECU that this variable uses for its 
 			conversion
-	conv_expr	(string)  A string representation of a mathematical
+	dl_conv_expr
+	ul_conv_expr	(string)  A string representation of a mathematical
 			expression. (something like x*60)  X is the value in
 			the raw data from the ECU at the offset above.
+			the "ul_" means "upload (on read from ECU) the "dl_"
+			means download (before sending TOO the ECU) the dl_
+			lines are used for sending data to the ECU regarding
+			the user controllable outputs in the spark firmwares
 	complex_expr	(bool) If complex, call a handler that looks for the 
 			following:
 	expr_symbols	(string) comma seperated list of variable names used
@@ -103,11 +108,11 @@ be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
 	*_bitval	(integer) value to match against for above 4 params
 
 NOTE on "depend_on":
-	depend_on is used for derived valeus that use a lookuptable that can
+	depend_on is used for derived values that use a lookuptable that can
 be switched in the ECU based on some user setting,  This functionality is 
 here so that what the user sees is what the ECU is using,  You can bind one
-or multiple controls so that when they all evaluator to tree (i.e. the bitval
+or multiple controls so that when they all evaluate to true (i.e. the bitval
 you set in the map matches the state of that bitfield in the copy of ECU ram
-then the alternate lookuptable will be used.) Common controsl that use this
-are NBo2/WBo2 choices, and 115kpa/25kpa map sensors...
+then the alternate lookuptable will be used.) Common controls that use this
+are NBo2/WBo2 choices, and 115kpa/250kpa map sensors...
 

@@ -161,7 +161,6 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = 0; 
 	extern gint preferred_delimiter;
-	extern GHashTable *dynamic_widgets;
 	extern gchar *offline_firmware_choice;
 
 	if (GTK_IS_OBJECT(widget))
@@ -215,26 +214,10 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				delimiter = g_strdup(" ");
 				break;
 			case REALTIME_VIEW:
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), FALSE);
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), TRUE);
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), TRUE);
-				reset_logviewer_state();
-				free_log_info();
-				playback_mode = FALSE;
-//				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
-					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
+				set_realtime_mode();
 				break;
 			case PLAYBACK_VIEW:
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), FALSE);
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), TRUE);
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_start_button"), FALSE);
-				gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_stop_button"), FALSE);
-				reset_logviewer_state();
-				free_log_info();
-				playback_mode = TRUE;
-//				if(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"))
-					//g_signal_emit_by_name(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea")),"configure_event",NULL);
+				set_playback_mode();
 				break;
 			case HEX_VIEW:
 			case DECIMAL_VIEW:

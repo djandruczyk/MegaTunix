@@ -99,6 +99,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(START_DATALOGGING));
 	g_hash_table_insert(str_2_enum,"_STOP_DATALOGGING_",
 			GINT_TO_POINTER(STOP_DATALOGGING));
+	g_hash_table_insert(str_2_enum,"_START_PLAYBACK_",
+			GINT_TO_POINTER(START_PLAYBACK));
+	g_hash_table_insert(str_2_enum,"_STOP_PLAYBACK_",
+			GINT_TO_POINTER(STOP_PLAYBACK));
 	g_hash_table_insert(str_2_enum,"_START_REALTIME_",
 			GINT_TO_POINTER(START_REALTIME));
 	g_hash_table_insert(str_2_enum,"_STOP_REALTIME_",

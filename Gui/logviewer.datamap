@@ -3,6 +3,7 @@
 [global]
 description=Object data map for MegaSquirt visual logviewer/playback tool
 tab_name=_Logviewer
+post_function=finish_logviewer
 
 #----- Buttons ---------------------------------------------------------------
 [logviewer_start_button]
@@ -15,6 +16,18 @@ page=0
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_STOP_REALTIME_
+page=0
+
+[logviewer_start_playback]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_START_PLAYBACK_
+page=0
+
+[logviewer_stop_playback]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_STOP_PLAYBACK_
 page=0
 
 [logviewer_select_logfile_button]
@@ -45,7 +58,7 @@ handler=_PLAYBACK_VIEW_
 
 #----- SpinButtons -----------------------------------------------------------
 
-[logviewer_zoom_spinner]
+[logviewer_scroll_spinner]
 keys=page,handler
 key_types=_INT_,_ENUM_
 page=0

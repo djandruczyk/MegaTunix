@@ -17,6 +17,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
+#include <logviewer_core.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
 #include <ms_structures.h>
@@ -765,3 +766,44 @@ gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
+void set_playback_mode(void)
+{
+	extern GHashTable *dynamic_widgets;
+
+	reset_logviewer_state();
+	free_log_info();
+	playback_mode = TRUE;
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), TRUE);
+	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
+	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+}
+
+void set_realtime_mode(void)
+{
+	extern GHashTable *dynamic_widgets;
+
+	reset_logviewer_state();
+	free_log_info();
+	playback_mode = FALSE;
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
+	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
+	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+}
+
+EXPORT void finish_logviewer(void)
+{
+	GtkWidget * widget = NULL;
+	extern GHashTable *dynamic_widgets;
+
+	if (playback_mode)
+		set_playback_mode();
+	else
+		set_realtime_mode();
+
+	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_scroll_spinner");
+	if (GTK_IS_SPIN_BUTTON(widget))
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),lv_scroll);
+	return;
+}

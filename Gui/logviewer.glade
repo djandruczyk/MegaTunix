@@ -112,7 +112,7 @@
 		<widget class="GtkHBox" id="logviewer_params_hbox_1">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
-		  <property name="spacing">7</property>
+		  <property name="spacing">0</property>
 
 		  <child>
 		    <widget class="GtkVBox" id="logviewre_rt_playback_vbox1">
@@ -160,7 +160,7 @@
 		      </child>
 		    </widget>
 		    <packing>
-		      <property name="padding">0</property>
+		      <property name="padding">3</property>
 		      <property name="expand">False</property>
 		      <property name="fill">False</property>
 		    </packing>
@@ -206,9 +206,9 @@
 		      </child>
 		    </widget>
 		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
+		      <property name="padding">3</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
@@ -251,22 +251,22 @@
 		      </child>
 		    </widget>
 		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
+		      <property name="padding">3</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
 		  <child>
 		    <widget class="GtkVBox" id="logviewer_zoom_vbox1">
 		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
+		      <property name="homogeneous">True</property>
 		      <property name="spacing">0</property>
 
 		      <child>
-			<widget class="GtkLabel" id="logviewer_zoom_label">
+			<widget class="GtkLabel" id="logviewer_scroll_speed_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Zoom Level</property>
+			  <property name="label" translatable="yes">Scroll Speed</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -274,8 +274,71 @@
 			  <property name="selectable">False</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
+			  <property name="xpad">4</property>
 			  <property name="ypad">0</property>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkHBox" id="logviewer_scroll_spin_hbox1">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">0</property>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="logviewer_scroll_spinner">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">1 1 20 1 10 10</property>
+			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sat, 27 Nov 2004 17:58:37 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="padding">3</property>
+		      <property name="expand">False</property>
+		      <property name="fill">True</property>
+		      <property name="pack_type">GTK_PACK_END</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkVBox" id="logviewer_playback_control_vbox1">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">0</property>
+
+		      <child>
+			<widget class="GtkButton" id="logviewer_start_playback">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">Start Playback</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <signal name="clicked" handler="std_button_handler" last_modification_time="Sun, 09 Jan 2005 16:27:24 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -285,18 +348,13 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkSpinButton" id="logviewer_zoom_spinner">
-			  <property name="width_request">45</property>
+			<widget class="GtkButton" id="logviewer_stop_playback">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="climb_rate">1</property>
-			  <property name="digits">0</property>
-			  <property name="numeric">True</property>
-			  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			  <property name="snap_to_ticks">False</property>
-			  <property name="wrap">False</property>
-			  <property name="adjustment">1 1 20 1 10 10</property>
-			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sat, 27 Nov 2004 17:58:37 GMT"/>
+			  <property name="label" translatable="yes">Stop Playback</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <signal name="clicked" handler="std_button_handler" last_modification_time="Sun, 09 Jan 2005 16:14:07 GMT"/>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -306,9 +364,9 @@
 		      </child>
 		    </widget>
 		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
+		      <property name="padding">3</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 		</widget>
