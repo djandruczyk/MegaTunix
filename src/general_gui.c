@@ -135,8 +135,7 @@ int build_general(GtkWidget *parent_frame)
 	entry = gtk_entry_new();
 	entries.ecu_revision_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
 
 	label = gtk_label_new("Extended Revision");
@@ -153,8 +152,7 @@ int build_general(GtkWidget *parent_frame)
 	entry = gtk_entry_new();
 	entries.extended_revision_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 70);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);
 
 
@@ -172,8 +170,7 @@ int build_general(GtkWidget *parent_frame)
 	entry = gtk_entry_new();
 	entries.ecu_signature_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 70);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
 
 	ebox = gtk_event_box_new();

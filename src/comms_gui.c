@@ -251,8 +251,7 @@ int build_comms(GtkWidget *parent_frame)
 	entry = gtk_entry_new();
 	entries.comms_ve_readcount_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -267,8 +266,7 @@ int build_comms(GtkWidget *parent_frame)
 	entry = gtk_entry_new();
 	entries.comms_readcount_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -282,8 +280,7 @@ int build_comms(GtkWidget *parent_frame)
 	entry = gtk_entry_new();
 	entries.comms_reset_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -297,8 +294,7 @@ int build_comms(GtkWidget *parent_frame)
 	entry = gtk_entry_new();
 	entries.comms_sioerr_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
