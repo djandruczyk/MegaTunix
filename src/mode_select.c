@@ -24,8 +24,6 @@ gchar *states[] = {"FALSE","TRUE"};
 
 void parse_ecu_capabilities(gint ecu_caps)
 {
-	set_dualtable_mode((ecu_caps & DUALTABLE) == 0 ? FALSE:TRUE);
-	set_iac_mode((ecu_caps & (IAC_PWM|IAC_STEPPER)) == 0 ? FALSE:TRUE);
 	set_raw_memory_mode((ecu_caps & RAW_MEMORY) == 0 ? FALSE:TRUE);
 }
 
@@ -34,27 +32,6 @@ void set_raw_memory_mode(gboolean state)
         extern GList *raw_mem_controls;
 	dbg_func(g_strdup_printf(__FILE__": set_raw_memory_mode()\n\tSetting RAW Memory controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(raw_mem_controls, set_widget_state,(gpointer)state);
-}
-
-void set_iac_mode(gboolean state)
-{
-        extern GList *iac_idle_controls;
-        extern GList *enh_idle_controls;
-
-	dbg_func(g_strdup_printf(__FILE__": set_iac_mode()\n\tSetting Idle-Ctrl controls state to %s\n",states[state]),INTERROGATOR);
-        g_list_foreach(enh_idle_controls, set_widget_state,(gpointer)state);
-        g_list_foreach(iac_idle_controls, set_widget_state,(gpointer)state);
-}
-
-void set_dualtable_mode(gboolean state)
-{
-        extern GList *dt_controls;
-        extern GList *inv_dt_controls;
-
-	dbg_func(g_strdup_printf(__FILE__": set_dualtable_mode()\n\tSetting Dual Table controls state to %s\n",states[state]),INTERROGATOR);
-        g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
-        g_list_foreach(inv_dt_controls, set_widget_state,(gpointer)(!state));
-
 }
 
 void set_widget_state(gpointer widget, gpointer state)

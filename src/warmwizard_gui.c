@@ -25,7 +25,6 @@ extern const gchar *status_msgs[];
 extern struct DynamicLabels labels;
 extern struct DynamicProgress progress;
 extern struct DynamicButtons buttons;
-extern struct DynamicSpinners spinners;
 extern struct DynamicMisc misc;
 extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern GdkColor red;
@@ -88,7 +87,6 @@ void build_warmwizard(GtkWidget *parent_frame)
 				GINT_TO_POINTER(CONV_NOTHING));
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
-		spinners.warmwizard[i] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 
@@ -503,10 +501,11 @@ void warmwizard_update_status(gfloat temp)
 		{
 			gtk_widget_modify_fg(labels.warmwizard_lab[i],
 					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_text(spinners.warmwizard[i],
+/*			gtk_widget_modify_text(spinners.warmwizard[i],
 					GTK_STATE_NORMAL,&black);
 			gtk_widget_modify_fg(spinners.warmwizard[i],
 					GTK_STATE_NORMAL,&black);
+*/
 		}
 		else
 			skipnext = FALSE;
@@ -515,16 +514,17 @@ void warmwizard_update_status(gfloat temp)
 			skipnext = TRUE;
 			gtk_widget_modify_fg(labels.warmwizard_lab[i],
 					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.warmwizard[i],
+			gtk_widget_modify_fg(labels.warmwizard_lab[i+1],
+					GTK_STATE_NORMAL,&red);
+/*			gtk_widget_modify_text(spinners.warmwizard[i],
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(spinners.warmwizard[i],
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(labels.warmwizard_lab[i+1],
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_text(spinners.warmwizard[i+1],
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(spinners.warmwizard[i+1],
 					GTK_STATE_NORMAL,&red);
+*/
 		}
 	}
 

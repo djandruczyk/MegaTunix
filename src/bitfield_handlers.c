@@ -48,10 +48,8 @@ void check_config11(unsigned char tmp)
 void check_config13(unsigned char tmp)
 {
 	GtkWidget *label;
-	extern GList *enh_idle_controls;
 	extern gfloat ego_pbar_divisor;
 	extern GHashTable * dynamic_widgets;
-	extern gint temp_units;
 	/* checks bits of the confgi13 bitfield and forces
 	 * gui to update/adapt as necessary...
 	 */
@@ -97,20 +95,6 @@ void check_config13(unsigned char tmp)
 			if (label)
 				gtk_label_set_text(GTK_LABEL(label),"Kpa");
 		}
-	}
-
-	/* Check Idle method */
-	if (((tmp >> 4)&0x1) == 1) /* If Set turn idle controls, else turn off */
-	{
-		g_list_foreach(enh_idle_controls, 
-				set_widget_state,(gpointer)TRUE);
-		reset_temps(GINT_TO_POINTER(temp_units));
-	}
-	else
-	{
-		g_list_foreach(enh_idle_controls, 
-				set_widget_state,(gpointer)FALSE);
-		reset_temps(GINT_TO_POINTER(temp_units));
 	}
 
 

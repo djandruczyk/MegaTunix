@@ -11,8 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/* Configfile structs. (derived from an older version of XMMS) */
-
 #include <config.h>
 #include <configfile.h>
 #include <conversions.h>
@@ -43,15 +41,15 @@ gfloat req_fuel_total_1 = 0.0;
 gfloat req_fuel_total_2 = 0.0;
 
 
-void req_fuel_change(void *ptr)
+void req_fuel_change(GtkWidget *widget)
 {
 	gfloat tmp1,tmp2;
 	struct Reqd_Fuel *reqd_fuel = NULL;
-	if (ptr)
-		reqd_fuel = (struct Reqd_Fuel *) ptr;
+	if (g_object_get_data(G_OBJECT(widget),"reqd_fuel"))
+		reqd_fuel = (struct Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	else
 	{
-		dbg_func(__FILE__": req_fuel_change(), invalid pointer passed\n",CRITICAL);
+		dbg_func(__FILE__": req_fuel_change(), reqd_fuel NOT bound to the widget pointer passed\n",CRITICAL);
 		return;
 	}
 
@@ -84,7 +82,7 @@ void req_fuel_change(void *ptr)
 	}
 }
 
-gboolean reqd_fuel_popup(void * data)
+gboolean reqd_fuel_popup(GtkWidget * widget)
 {
 
 	GtkWidget *button;
@@ -98,14 +96,18 @@ gboolean reqd_fuel_popup(void * data)
 	GtkWidget *popup;
 	GtkAdjustment *adj;
 	gchar * tmpbuf;
+	gint page = -1;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 
-	if (data)
-		reqd_fuel = (struct Reqd_Fuel *) data;
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+
+	if (g_object_get_data(G_OBJECT(widget),"reqd_fuel"))
+		reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	else
 	{
-		dbg_func(__FILE__": reqd_fuel_popup(), pointer passed is invalid, contact author\n",CRITICAL);
-		return FALSE;
+		reqd_fuel = g_new0(struct Reqd_Fuel, 1);
+		initialize_reqd_fuel((void *)reqd_fuel, page);
+		g_object_set_data(G_OBJECT(widget),"reqd_fuel",reqd_fuel);
 	}
 
 	if (reqd_fuel->visible)
@@ -115,7 +117,7 @@ gboolean reqd_fuel_popup(void * data)
 
 	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	reqd_fuel->popup = popup;	
-	tmpbuf = g_strdup_printf("Required Fuel Calculator for Table %i\n",reqd_fuel->table);
+	tmpbuf = g_strdup_printf("Required Fuel Calculator for Page %i\n",reqd_fuel->page);
 	gtk_window_set_title(GTK_WINDOW(popup),tmpbuf);
 	g_free(tmpbuf);
 	gtk_container_set_border_width(GTK_CONTAINER(popup),10);
@@ -130,7 +132,7 @@ gboolean reqd_fuel_popup(void * data)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(popup),vbox);
-	tmpbuf = g_strdup_printf("Required Fuel parameters for table %i\n",reqd_fuel->table);
+	tmpbuf = g_strdup_printf("Required Fuel parameters for page %i\n",reqd_fuel->page);
 	frame = gtk_frame_new(tmpbuf);
 	g_free(tmpbuf);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
@@ -337,22 +339,17 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	struct Ve_Const_Std *ve_const;
 	gint dload_val;
         extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern GHashTable *dynamic_widgets;
 	ConfigFile *cfgfile;
 	gchar *filename;
 	gchar *tmpbuf;
 
 	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
-	if (reqd_fuel->table == 1)
-		ve_const = (struct Ve_Const_Std *)ms_data[0];
-	else if (reqd_fuel->table == 2)
-		ve_const = (struct Ve_Const_Std *) ms_data[1];
-	else
-	{
-		dbg_func(g_strdup_printf(__FILE__": save_reqd_fuel(), reqd_fuel->table is invalid (%i)\n",reqd_fuel->table),REQ_FUEL);
-		return FALSE;
-	}	
+	ve_const = (struct Ve_Const_Std *)ms_data[reqd_fuel->page];
 
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(reqd_fuel->reqd_fuel_spin),
+			//(reqd_fuel->reqd_fuel_spin),
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON
+			(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("req_fuel_per_cycle_%i_spin",1+reqd_fuel->page))),
 			reqd_fuel->calcd_reqd_fuel);
 	
 	/* Top is two stroke, botton is four stroke.. */
@@ -363,13 +360,10 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	check_req_fuel_limits();
 	dload_val = ve_const->rpmk;
-	if (reqd_fuel->table == 1)
-		write_ve_const(0, rpmk_offset, dload_val, FALSE);
-	else
-		write_ve_const(1, rpmk_offset, dload_val, FALSE);
+	write_ve_const(reqd_fuel->page, rpmk_offset, dload_val, FALSE);
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
-	tmpbuf = g_strdup_printf("Req_Fuel_Table_%i",reqd_fuel->table);
+	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",reqd_fuel->page);
         cfgfile = cfg_open_file(filename);
 	if (cfgfile)	// If it opened nicely 
 	{
@@ -628,3 +622,50 @@ void check_req_fuel_limits()
 
 }
 
+
+
+void initialize_reqd_fuel(void * ptr, gint page)
+{
+	struct Reqd_Fuel *reqd_fuel = NULL;
+	ConfigFile * cfgfile;
+	gchar * filename;
+	gchar * tmpbuf;
+
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+
+	reqd_fuel = (struct Reqd_Fuel *)ptr;
+	reqd_fuel->page = page;
+	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",page);
+	cfgfile = cfg_open_file(filename);
+	// Set defaults 
+	reqd_fuel->visible = FALSE;
+	reqd_fuel->disp = 350;
+	reqd_fuel->cyls = 8;
+	reqd_fuel->rated_inj_flow = 19.0;
+	reqd_fuel->actual_inj_flow = 0.0;
+	reqd_fuel->rated_pressure = 3.0;
+	reqd_fuel->actual_pressure = 3.0;
+	reqd_fuel->target_afr = 14.7;
+
+	if (cfgfile)
+	{
+		cfg_read_int(cfgfile,tmpbuf,"Displacement",&reqd_fuel->disp);
+		cfg_read_int(cfgfile,tmpbuf,"Cylinders",&reqd_fuel->cyls);
+		cfg_read_float(cfgfile,tmpbuf,"Rated_Inj_Flow",
+				&reqd_fuel->rated_inj_flow);
+		cfg_read_float(cfgfile,tmpbuf,"Actual_Pressure",
+				&reqd_fuel->actual_pressure);
+		cfg_read_float(cfgfile,tmpbuf,"Rated_Pressure",
+				&reqd_fuel->rated_pressure);
+		cfg_read_float(cfgfile,tmpbuf,"Actual_Inj_Flow",
+				&reqd_fuel->actual_inj_flow);
+		cfg_read_float(cfgfile,tmpbuf,"Target_AFR",
+				&reqd_fuel->target_afr);
+		cfg_free(cfgfile);
+		g_free(cfgfile);
+	}
+	g_free(tmpbuf);
+	g_free(filename);
+
+	return;
+}

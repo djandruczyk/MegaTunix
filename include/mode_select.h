@@ -19,9 +19,7 @@
 /* Prototypes */
 gboolean drain_hashtable(gpointer, gpointer, gpointer);
 void parse_ecu_capabilities(gint);
-void set_dualtable_mode(gboolean);
 void set_raw_memory_mode(gboolean);
-void set_iac_mode(gboolean);
 void set_widget_state(gpointer, gpointer);
 /* Prototypes */
 

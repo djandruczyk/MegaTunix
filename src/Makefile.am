@@ -13,7 +13,6 @@ megatunix_SOURCES = \
 	bitfield_handlers.c \
 	comms_gui.c \
 	configfile.c \
-	constants_gui.c \
 	conversions.c \
 	core_gui.c \
 	dataio.c \

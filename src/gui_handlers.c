@@ -334,15 +334,12 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	/* get any datastructures attached to the widget */
 	void *object_data = NULL;
 	gint handler = -1;
-	struct Reqd_Fuel *reqd_fuel = NULL;
 	static gboolean queue_referenced =  FALSE;
 	extern GAsyncQueue *io_queue;
 	if (GTK_IS_OBJECT(widget))
 	{
 		object_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 		handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
-		reqd_fuel = (struct Reqd_Fuel *) 
-			g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	}
 	if (queue_referenced == FALSE)
 		g_async_queue_ref(io_queue);
@@ -436,8 +433,8 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			present_viewer_choices(object_data);
 			break;
 		case REQ_FUEL_POPUP:
-			reqd_fuel_popup(reqd_fuel);
-			req_fuel_change(reqd_fuel);
+			reqd_fuel_popup(widget);
+			req_fuel_change(widget);
 			break;
 	}		
 	return TRUE;
@@ -468,12 +465,9 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data[0];
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
-	if (GTK_IS_OBJECT(widget))
-	{
-		reqd_fuel = (struct Reqd_Fuel *) 
-			g_object_get_data(G_OBJECT(widget),"reqd_fuel");
-
-	}
+	if (GTK_IS_WIDGET(widget))
+		reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(
+				G_OBJECT(widget),"reqd_fuel");
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -506,27 +500,27 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;
-			req_fuel_change(reqd_fuel);
+			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_CYLS:
 			reqd_fuel->cyls = (gint)value;
-			req_fuel_change(reqd_fuel);
+			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_RATED_INJ_FLOW:
 			reqd_fuel->rated_inj_flow = (gfloat)value;
-			req_fuel_change(reqd_fuel);
+			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_RATED_PRESSURE:
 			reqd_fuel->rated_pressure = (gfloat)value;
-			req_fuel_change(reqd_fuel);
+			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_ACTUAL_PRESSURE:
 			reqd_fuel->actual_pressure = (gfloat)value;
-			req_fuel_change(reqd_fuel);
+			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_AFR:
 			reqd_fuel->target_afr = value;
-			req_fuel_change(reqd_fuel);
+			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_1:
 			req_fuel_total_1 = value;

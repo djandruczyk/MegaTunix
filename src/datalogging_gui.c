@@ -112,9 +112,6 @@ void build_datalogging(GtkWidget *parent_frame)
 	extern GtkTooltips *tip;
 	GSList  *group;
 	gint table_rows = 0;
-	extern GList *dt_controls;
-	extern GList *iac_idle_controls;
-	extern GList *ign_controls;
 
 	custom_ord_hash = g_hash_table_new(NULL,NULL);
 	classic_ord_hash = g_hash_table_new(NULL,NULL);
@@ -200,6 +197,7 @@ void build_datalogging(GtkWidget *parent_frame)
 		logables.widgets[i] = button;
 		//		if ((dualtable) && (i >= STD_LOGABLES))
 		//			gtk_widget_set_sensitive(button,FALSE);
+		/*
 		if (dlog_caps[i] == DUALTABLE)
 			dt_controls = g_list_append(dt_controls,
 					(gpointer)button);
@@ -209,6 +207,7 @@ void build_datalogging(GtkWidget *parent_frame)
 		if (dlog_caps[i] == (S_N_SPARK|S_N_EDIS))
 			ign_controls = g_list_append(ign_controls,
 					(gpointer)button);
+		*/
 
 		g_object_set_data(G_OBJECT(button),"index",
 				GINT_TO_POINTER(i));

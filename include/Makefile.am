@@ -5,7 +5,6 @@ headers = \
 	bitfield_handlers.h \
         comms_gui.h \
         configfile.h \
-        constants_gui.h \
         conversions.h \
         core_gui.h \
         dataio.h \

@@ -12,7 +12,6 @@
  */
 
 #include <config.h>
-#include <constants_gui.h>
 #include <defines.h>
 #include <enums.h>
 #include <gui_handlers.h>
@@ -24,10 +23,6 @@ struct DynamicLabels labels;
 struct DynamicButtons buttons;
 extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern GdkColor black;
-GList *enh_idle_controls = NULL;
-GList *iac_idle_controls = NULL;
-GList *inv_ign_controls = NULL;
-GList *ign_controls = NULL;
 
 void build_eng_vitals(GtkWidget *parent_frame)
 {
@@ -46,7 +41,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	GtkAdjustment *adj;
 	GSList	*group;
 	extern GtkTooltips *tip;
-	extern GList *dt_controls;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -470,7 +464,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Idle Control");
-	inv_ign_controls = g_list_append(inv_ign_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -507,7 +500,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	button = gtk_radio_button_new_with_label(group,"PWM Controlled");
 	buttons.pwm_idle_but = button;
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)button);
 	g_object_set_data(G_OBJECT(button),"offset",
 			GINT_TO_POINTER(118));
         g_object_set_data(G_OBJECT(button),"page",
@@ -529,7 +521,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Radiator Fan Control");
-	ign_controls = g_list_append(ign_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -579,7 +570,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Idle Control Parameters");
-	inv_ign_controls = g_list_append(inv_ign_controls,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -635,9 +625,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	/* Fast Idle Speed */
 	label = gtk_label_new("Fast Idle Speed (RPM)");
-	dt_controls = g_list_append(dt_controls, (gpointer)label);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)label);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
@@ -646,9 +633,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(1800.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
 	ve_widgets[0][125] = g_list_append(ve_widgets[0][125],(gpointer)spinner);
-	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -677,9 +661,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			g_strdup("Slow Idle Temp (\302\260C.)"));
 	store_list("temperature",g_list_append(
 			get_list("temperature"),(gpointer)label));
-	dt_controls = g_list_append(dt_controls, (gpointer)label);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)label);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
@@ -689,9 +670,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
         spinner = gtk_spin_button_new(adj,0,0);
 	store_list("temperature",g_list_append(
 			get_list("temperature"),(gpointer)spinner));
-	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
 	ve_widgets[0][124] = g_list_append(ve_widgets[0][124],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -717,9 +695,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	/* Slow Idle Speed */
 	label = gtk_label_new("Slow Idle Speed (RPM)");
-	dt_controls = g_list_append(dt_controls, (gpointer)label);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)label);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
                         (GtkAttachOptions) (GTK_FILL),
@@ -727,9 +702,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Slow Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(900.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
 	ve_widgets[0][126] = g_list_append(ve_widgets[0][126],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -755,9 +727,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	 * use idle control
 	 */
 	label = gtk_label_new("Idle Threshold (TPS%)");
-	dt_controls = g_list_append(dt_controls, (gpointer)label);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)label);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
                         (GtkAttachOptions) (GTK_FILL),
@@ -765,9 +734,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
         /* Idle Threshold (% of TPS )*/
         adj =  (GtkAdjustment *) gtk_adjustment_new(10.0,0.0,100.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
-	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)spinner);
-	enh_idle_controls = g_list_append(enh_idle_controls, (gpointer)spinner);
 	ve_widgets[0][127] = g_list_append(ve_widgets[0][127],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);

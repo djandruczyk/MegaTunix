@@ -71,16 +71,6 @@ struct DynamicMisc
  */
 struct DynamicSpinners
 {
-	GtkWidget *req_fuel_total_1_spin;	/* Spinner */
-	GtkWidget *req_fuel_per_squirt_1_spin;	/* Spinner */
-	GtkWidget *inj_per_cycle_1_spin;	/* Spinner */
-	GtkWidget *injectors_1_spin;		/* Spinner */
-	GtkWidget *cylinders_1_spin;		/* Spinner */
-	GtkWidget *req_fuel_total_2_spin;	/* Spinner */
-	GtkWidget *req_fuel_per_squirt_2_spin;	/* Spinner */
-	GtkWidget *inj_per_cycle_2_spin;	/* Spinner */
-	GtkWidget *injectors_2_spin;		/* Spinner */
-	GtkWidget *cylinders_2_spin;		/* Spinner */
 	GtkWidget *warmwizard[10];		/* Spinner */
 };
 
@@ -98,7 +88,7 @@ struct Reqd_Fuel
         gfloat actual_pressure;		/* Actual fuel pressure */
         gfloat actual_inj_flow;		/* injector flow rate (lbs/hr) */
         gfloat target_afr;		/* Air fuel ratio 10-25.5 */
-        gint table;			/* Which table is this for */
+        gint page;			/* Which page is this for */
 	gboolean visible;		/* Is it visible? */
 };
 

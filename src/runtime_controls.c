@@ -170,8 +170,6 @@ void add_control(gchar *control_name, gchar *parameters)
 	control = g_malloc0(sizeof(struct Rt_Control));
 	GtkWidget *label;
 	GtkWidget *pbar;
-	extern GList *dt_controls;
-	extern GList *ign_controls;
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
@@ -216,18 +214,7 @@ void add_control(gchar *control_name, gchar *parameters)
 
 	control->parent = rt_table[control->tbl];
 	gtk_widget_show_all(control->parent);
-	if (control->flags & DUALTABLE)
-	{
-		dt_controls = g_list_append(dt_controls,(gpointer)control->label);
-		dt_controls = g_list_append(dt_controls,(gpointer)control->data);
-		dt_controls = g_list_append(dt_controls,(gpointer)control->pbar);
-	}
-	if (control->flags & (S_N_SPARK|S_N_EDIS))
-	{
-		ign_controls = g_list_append(ign_controls,(gpointer)control->label);
-		ign_controls = g_list_append(ign_controls,(gpointer)control->data);
-		ign_controls = g_list_append(ign_controls,(gpointer)control->pbar);
-	}
+
 	if (control->flags & TEMP_DEP)	/* name has temp unit in it */
 	{
 		store_list("temperature",g_list_append(

@@ -14,7 +14,6 @@
 #include <about_gui.h>
 #include <comms_gui.h>
 #include <config.h>
-#include <constants_gui.h>
 #include <core_gui.h>
 #include <datalogging_gui.h>
 #include <defines.h>
@@ -75,7 +74,6 @@ int setup_gui()
 	GtkWidget *vbox;
 	GtkWidget *button;
 	extern GList *raw_mem_controls;
-	extern GList *ign_controls;
 	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -116,13 +114,6 @@ int setup_gui()
 			raw_mem_controls = g_list_append(raw_mem_controls, 
 					(gpointer)frame);
 			raw_mem_controls = g_list_append(raw_mem_controls, 
-					(gpointer)label);
-		}
-		if (notebook_tabs[i].capabilities & (S_N_SPARK|S_N_EDIS))
-		{
-			ign_controls = g_list_append(ign_controls, 
-					(gpointer)frame);
-			ign_controls = g_list_append(ign_controls, 
 					(gpointer)label);
 		}
 		g_object_set_data(G_OBJECT(frame),"page_ident",GINT_TO_POINTER(notebook_tabs[i].page_ident));

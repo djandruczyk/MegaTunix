@@ -17,11 +17,12 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-int reqd_fuel_popup();
+int reqd_fuel_popup(GtkWidget *);
 gboolean save_reqd_fuel(GtkWidget *, gpointer);
 gboolean close_popup(GtkWidget *);
-void req_fuel_change(void *);
+void req_fuel_change(GtkWidget *);
 void check_req_fuel_limits(void);
+void initialize_reqd_fuel(void *, gint );
 /* Prototypes */
 
 #endif
