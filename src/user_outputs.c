@@ -63,6 +63,7 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
 	add_columns(GTK_TREE_VIEW(view), (gint)g_object_get_data(G_OBJECT(widget),"output_num"));
+	update_model_from_view((GtkWidget *)view);
 
 }
 
@@ -217,7 +218,7 @@ void cell_edited(GtkCellRendererText *cell,
 				g_strdup_printf("%.2f",new), -1);
 	else
 		gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-				g_strdup_printf("%.i",(gint)new), -1);
+				g_strdup_printf("%i",(gint)new), -1);
 	
 	if (!evaluator)
 	{
@@ -294,7 +295,6 @@ void update_model_from_view(GtkWidget * widget)
 	page = (gint)g_object_get_data(G_OBJECT(model),"page");
 	offset = ms_data[page][src_offset];
 	cur_val = ms_data[page][lim_offset];
-	//printf("offset from secl we're looking for is %i\n",offset);
 
 	looptest = TRUE;
 	while (looptest)
@@ -341,7 +341,7 @@ void update_model_from_view(GtkWidget * widget)
 			if (is_float)
 				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%.2f",result), -1);
 			else
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%.i",(gint)result), -1);
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%i",(gint)result), -1);
 
 //			printf("offset matched for object %s\n",(gchar *)g_object_get_data(object,"dlog_gui_name"));
 
