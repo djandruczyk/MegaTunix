@@ -1290,7 +1290,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint value = 0;
 	gint lower = 0;
 	gint upper = 0;
-	gchar * signal = NULL;
+	gboolean ign_parm = 0;
 	gboolean retval = FALSE;
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
@@ -1299,11 +1299,8 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	upper = (gint) g_object_get_data(G_OBJECT(widget),"raw_upper");
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
+	ign_parm = (gboolean) g_object_get_data(G_OBJECT(widget),"ign_parm");
 
-	if (GTK_IS_SPIN_BUTTON(widget))
-		signal = g_strdup("value_changed");
-	else if (GTK_IS_ENTRY(widget))
-		signal = g_strdup("activate");
 	value = ms_data[page][offset];
 	if (event->keyval == GDK_Shift_L)
 	{
@@ -1349,13 +1346,12 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	}
 	if (retval)
 	{
+		write_ve_const(widget,page,offset,ms_data[page][offset],ign_parm);
 		paused_handlers = TRUE;
 		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-		paused_handlers=FALSE;
-		g_signal_emit_by_name(widget,signal,NULL);
+		paused_handlers = FALSE;
 	}
-	g_free(signal);
-	return retval;;
+	return retval;
 }
 
 

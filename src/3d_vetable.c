@@ -449,6 +449,7 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
  */
 gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
+	extern gboolean forced_update;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
@@ -495,6 +496,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 
+	forced_update = TRUE;
 	return TRUE; 
 }
 
