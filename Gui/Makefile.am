@@ -10,6 +10,7 @@ gui_files = 	template.glade \
 		boost_6x6e.glade \
 		boost_6x6e-E_1.datamap \
 		boost_6x6e-E_2.datamap \
+		boost_6x6e-E_3.datamap \
 		B_n_G_constants.glade \
 		B_n_G_constants.datamap \
 		datalogging.glade \
