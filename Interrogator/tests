@@ -1,72 +1,128 @@
+# How this works:
+# Note, as of 8/1/2004 this is highly experimental and likely to change
+# over the coming weeks
+#
+# the [interrogation_test] block defines the number of tests,  tests start
+# as test 00 and progress upwards to testcount-1.
+#
+# NOTE!!! The tests are sequenced in such a way as to MATCH the sequence 
+# listed inside each interrogation profile (see Profiles subdir) IF 
+# you change the order AND/OR add more tests, then EACH interrogation 
+# profile needs to be updated or BAD THINGS will happen. 
+# You have been WARNED!!!
+#
+#
+# Each seperate interrogation test is labeled [test_XX} where XX is any number
+# between zero and testcount-1 inclusive.
+# Fields allowed inside [test_XX} blocks:
+#
+#	raw_cmd		<-- (String) This is the ascii value sent to the ECU
+#	cmd_handle	<-- (String) This is a CODE that MegaTunix uses to map 
+#			this command to an internal routine. (It's 
+#			used for more than interrogation)
+#	cmd_desc	<-- (String) This is displayed in the interrogator 
+#			window and is a brief description of the command sent.
+#	cmd_length	<-- (Int) Length of command sent to the ECU in bytes
+#	page_required	<-- (Bool) If the command requires the page to be
+#			changed to get proper data, set this to true and
+#			set the page value to the proper value
+#	page		<-- (Int) Used to change page. (DT specific hack)
+#	store_data	<-- (Bool) Flag used to store the returned data 
+#			so that it can be matched with data in the 
+#			interrogation profile to help determine a proper match.
+#	store_type	<-- (Strnig) Only _SIG_ , _VNUM_ , or _EXTVER_ are
+#			allowed here... This field is ONLY required if 
+#			store_data is TRUE, otherwise it is ignored.
+#	
+
 [interrogation_tests]
 testcount=10
 
 [test_00]
 raw_cmd="A"
-cmd_description="Runtime Vars"
 cmd_length=1
+cmd_handle="_REALTIME_READ_"
+cmd_description="Runtime Vars"
 page_required=FALSE
 page=0
+store_data=FALSE
 
 [test_01]
 raw_cmd="C"
-cmd_description="MS Clock"
 cmd_length=1
+cmd_description="MS Clock"
 page_required=FALSE
 page=0
+store_data=FALSE
 
 [test_02]
 raw_cmd="Q"
-cmd_description="MS Revision"
 cmd_length=1
+cmd_description="MS Revision"
 page_required=FALSE
 page=0
+store_data=TRUE
+store_type="_VNUM_"
 
 [test_03]
 raw_cmd="V"
-cmd_description="VE/Constants page0"
 cmd_length=1
+cmd_handle="_VE_PAGE0_READ_"
+cmd_description="VE/Constants page0"
 page_required=TRUE
 page=0
+store_data=FALSE
 
 [test_04]
 raw_cmd="V"
-cmd_description="VE/Constants page1"
 cmd_length=1
+cmd_handle="_VE_PAGE1_READ_"
+cmd_description="VE/Constants page1"
 page_required=TRUE
 page=1
+store_data=FALSE
 
 [test_05]
 raw_cmd="S"
-cmd_description="Signature Echo"
 cmd_length=1
+cmd_description="Signature Echo"
 page_required=FALSE
 page=0
+store_data=TRUE
+store_type="_SIG_"
 
 [test_06]
 raw_cmd="?"
-cmd_description="Extended Revision"
 cmd_length=1
+cmd_description="Extended Revision"
 page_required=FALSE
 page=0
+store_data=TRUE
+store_type="_EXTVER_"
 
 [test_07]
 raw_cmd="I"
-cmd_description="Ignition Variables"
 cmd_length=1
+cmd_handle="_IGNITION_READ_"
+cmd_description="Ignition Variables"
 page_required=FALSE
 page=0
+store_data=FALSE
 
 [test_08]
 raw_cmd="F0"
-cmd_description="Memory Readback 1st 256 bytes"
 cmd_length=2
+cmd_handle="_RAW_MEMORY_READ_0_"
+cmd_description="Memory Readback 1st 256 bytes"
 page_required=FALSE
 page=0
+store_data=FALSE
 
 [test_09]
 raw_cmd="F1"
-cmd_description="Memory Readback 2nd 256 bytes"
 cmd_length=2
+cmd_handle="_RAW_MEMORY_READ_1_"
+cmd_description="Memory Readback 2nd 256 bytes"
 page_required=FALSE
 page=0
+store_data=FALSE
