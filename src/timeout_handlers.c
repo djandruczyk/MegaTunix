@@ -45,6 +45,7 @@ void start_realtime_tickler()
 		update_logbar(comms_view,"warning","Realtime Reader ALREADY started\n",TRUE,FALSE);
 	}
 }
+
 void stop_realtime_tickler()
 {
 	extern GtkWidget * comms_view;

@@ -21,12 +21,12 @@
 #include <timeout_handlers.h>
 
 
-void check_config11(unsigned char tmp)
+void check_config11(guchar tmp)
 {
 	extern gfloat map_pbar_divisor;
-	extern unsigned char *kpa_conversion;
-	extern unsigned char na_map[];
-	extern unsigned char turbo_map[];
+	extern guchar *kpa_conversion;
+	extern guchar na_map[];
+	extern guchar turbo_map[];
 
 	/* checks some of the bits in the config11 variable and 
 	 * adjusts some important things as necessary....
@@ -45,7 +45,7 @@ void check_config11(unsigned char tmp)
 	}
 }
 
-void check_config13(unsigned char tmp)
+void check_config13(guchar tmp)
 {
 	GtkWidget *label;
 	extern gfloat ego_pbar_divisor;

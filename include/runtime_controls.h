@@ -19,10 +19,10 @@
 #include <structures.h>
 
 /* Prototypes */
-void create_default_controls();
-void load_controls();
+void create_default_controls(void );
+void load_controls(void );
 void add_control(gchar *,gchar *);
-void save_controls();
+void save_controls(void );
 /* Prototypes */
 
 

@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-int setup_gui(void);
+gint setup_gui(void);
 /* Prototypes */
 
 #endif

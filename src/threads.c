@@ -277,7 +277,7 @@ void *serial_io_handler(gpointer data)
 				}
 			}
 		}
-		breakout:
+breakout:
 		dealloc_message(message);
 	}
 }
@@ -294,25 +294,26 @@ void dealloc_message(void * ptr)
 	g_free(message);
 
 }
+
 void readfrom_ecu(void *ptr)
 {
 	struct pollfd ufds;
 	struct Io_Message *message = (struct Io_Message *)ptr;
-	gint result;
+	gint result = 0;
 	extern gint ecu_caps;
 
 	if(serial_params->open == FALSE)
 		return;
 
 	ufds.fd = serial_params->fd;
-        ufds.events = POLLIN;
+	ufds.events = POLLIN;
 
-        /* Flush serial port... */
-        tcflush(serial_params->fd, TCIOFLUSH);
+	/* Flush serial port... */
+	tcflush(serial_params->fd, TCIOFLUSH);
 
-        if (ecu_caps & DUALTABLE)
-                set_ms_page(message->page);
-        result = write(serial_params->fd,
+	if (ecu_caps & DUALTABLE)
+		set_ms_page(message->page);
+	result = write(serial_params->fd,
 			message->out_str,
 			message->out_len);
 	if (result != message->out_len)	
@@ -320,26 +321,26 @@ void readfrom_ecu(void *ptr)
 
 	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu() Sent %s to the ECU\n",message->out_str),SERIAL_WR);
 	if (message->handler == RAW_MEMORY_DUMP)
-               result = write(serial_params->fd,&message->offset,1);
+		result = write(serial_params->fd,&message->offset,1);
 
 
 	/* check for data,,,, */
-        result = poll (&ufds,1,5*serial_params->poll_timeout);
-        if (result == 0)   /* Error */
-        {
-                dbg_func(__FILE__": readfrom_ecu(), failure reading Data from ECU\n",CRITICAL);
-                serial_params->errcount++;
-                connected = FALSE;
-        }
-        else            /* Data arrived */
-        {
-                connected = TRUE;
-                dbg_func(g_strdup_printf(__FILE__": reading %s\n",
-				handler_types[message->handler]),SERIAL_RD);
+	result = poll (&ufds,1,5*serial_params->poll_timeout);
+	if (result == 0)   /* Error */
+	{
+		dbg_func(__FILE__": readfrom_ecu(), failure reading Data from ECU\n",CRITICAL);
+		serial_params->errcount++;
+		connected = FALSE;
+	}
+	else            /* Data arrived */
+	{
+		connected = TRUE;
+		dbg_func(g_strdup_printf(__FILE__": reading %s\n",
+					handler_types[message->handler]),SERIAL_RD);
 		if (message->handler != -1)
-                	handle_ms_data(message->handler,message);
+			handle_ms_data(message->handler,message);
 
-        }	
+	}	
 }
 
 /* Called from a THREAD ONLY so gdk_threads_enter/leave are REQUIRED on any
@@ -354,7 +355,7 @@ void comms_test()
 
 	if (serial_params->open == FALSE)
 	{
-                connected = FALSE;
+		connected = FALSE;
 		dbg_func(__FILE__": comms_test(), Serial Port is NOT opened can NOT check ecu comms...\n",CRITICAL);
 		gdk_threads_enter();
 		no_ms_connection();
@@ -386,8 +387,8 @@ void comms_test()
 		g_free(tmpbuf);
 		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
-//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-//				connected);
+		//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+		//				connected);
 		gdk_threads_leave();
 
 	}
@@ -402,8 +403,8 @@ void comms_test()
 		g_free(tmpbuf);
 		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
-////		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-//				connected);
+		////		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+		//				connected);
 		gdk_threads_leave();
 	}
 	/* Flush the toilet again.... */
@@ -413,13 +414,13 @@ void comms_test()
 
 void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 {
-        struct OutputData *output = NULL;
-        output = g_new0(struct OutputData,1);
-        output->page = page;
-        output->offset = offset;
-        output->value = value;
-        output->ign_parm = ign_parm;
-        io_cmd(IO_WRITE_DATA,output);
+	struct OutputData *output = NULL;
+	output = g_new0(struct OutputData,1);
+	output->page = page;
+	output->offset = offset;
+	output->value = value;
+	output->ign_parm = ign_parm;
+	io_cmd(IO_WRITE_DATA,output);
 	return;
 }
 
@@ -438,8 +439,8 @@ void writeto_ecu(void *ptr)
 	gint res = 0;
 	gint count = 0;
 	char lbuff[3] = {0, 0, 0};
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data_last[MAX_SUPPORTED_PAGES];
 	gchar * write_cmd = NULL;
 	extern struct Firmware_Details *firmware;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -527,41 +528,40 @@ void writeto_ecu(void *ptr)
 
 void burn_ms_flash()
 {
-        extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-        extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
-        gint res = 0;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data_last[MAX_SUPPORTED_PAGES];
+	gint res = 0;
 	gint i = 0;
-        extern gint ecu_caps;
+	extern gint ecu_caps;
 	extern struct Firmware_Details * firmware;
-        static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-        g_static_mutex_lock(&mutex);
+	g_static_mutex_lock(&mutex);
 
-        tcflush(serial_params->fd, TCIOFLUSH);
+	tcflush(serial_params->fd, TCIOFLUSH);
 
-        /* doing this may NOT be necessary,  but who knows... */
-        if (ecu_caps & DUALTABLE)
+	/* doing this may NOT be necessary,  but who knows... */
+	if (ecu_caps & DUALTABLE)
 	{
-                set_ms_page(0);
+		set_ms_page(0);
 		usleep(5000);
 	}
 
-        res = write (serial_params->fd,"B",1);  /* Send Burn command */
-        if (res != 1)
-        {
-                dbg_func(g_strdup_printf(__FILE__": Burn Failure, write command failed %i\n",res),CRITICAL);
-        }
+	res = write (serial_params->fd,"B",1);  /* Send Burn command */
+	if (res != 1)
+	{
+		dbg_func(g_strdup_printf(__FILE__": Burn Failure, write command failed %i\n",res),CRITICAL);
+	}
 	usleep(5000);
 
-        dbg_func(__FILE__": Burn to Flash\n",SERIAL_WR);
+	dbg_func(__FILE__": Burn to Flash\n",SERIAL_WR);
 
-        /* sync temp buffer with current burned settings */
+	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
-	        memcpy(ms_data_last[i],ms_data[i],2*MS_PAGE_SIZE);
+		memcpy(ms_data_last[i],ms_data[i],2*MS_PAGE_SIZE);
 
-        tcflush(serial_params->fd, TCIOFLUSH);
+	tcflush(serial_params->fd, TCIOFLUSH);
 
-        g_static_mutex_unlock(&mutex);
-        return;
+	g_static_mutex_unlock(&mutex);
+	return;
 }
-

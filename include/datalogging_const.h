@@ -15,6 +15,7 @@
 #define __DATALOGGING_CONST_H__
 
 #include <gtk/gtk.h>
+#include <defines.h>
 #include <enums.h>
 #include <structures.h>
 

@@ -57,7 +57,7 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	extern GtkTooltips *tip;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern struct Firmware_Details *firmware;
-	gchar *tmpbuf;
+	gchar *tmpbuf = NULL;
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 
 	if (winstat[page] == TRUE)
@@ -292,7 +292,7 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
 
-	ve_view->aspect = (float)w/(float)h;
+	ve_view->aspect = (gfloat)w/(gfloat)h;
 	glViewport (0, 0, w, h);
 
 	gdk_gl_drawable_gl_end (gldrawable);
@@ -329,7 +329,7 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	glTranslatef(0.0,0.0,-ve_view->sdepth);
 	glRotatef(-ve_view->stheta, 1.0, 0.0, 0.0);
 	glRotatef(ve_view->sphi, 0.0, 0.0, 1.0);
-	glTranslatef(-(float)((ve_view->rpm_bincount/2)-0.3)-ve_view->h_strafe, -(float)((ve_view->load_bincount)/2-1)-ve_view->v_strafe, -2.0);
+	glTranslatef(-(gfloat)((ve_view->rpm_bincount/2)-0.3)-ve_view->h_strafe, -(gfloat)((ve_view->load_bincount)/2-1)-ve_view->v_strafe, -2.0);
 
 	ve_calculate_scaling(ve_view);
 	ve_draw_ve_grid(ve_view);
@@ -362,15 +362,15 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	// Left Button
 	if (event->state & GDK_BUTTON1_MASK)
 	{
-		ve_view->sphi += (float)(event->x - ve_view->beginX) / 4.0;
-		ve_view->stheta += (float)(ve_view->beginY - event->y) / 4.0;
+		ve_view->sphi += (gfloat)(event->x - ve_view->beginX) / 4.0;
+		ve_view->stheta += (gfloat)(ve_view->beginY - event->y) / 4.0;
 		redraw = TRUE;
 	}
 	// Middle button (or both buttons for two button mice)
 	if (event->state & GDK_BUTTON2_MASK)
 	{
-		ve_view->h_strafe -= (float)(event->x -ve_view->beginX) / 40.0;
-		ve_view->v_strafe += (float)(event->y -ve_view->beginY) / 40.0;
+		ve_view->h_strafe -= (gfloat)(event->x -ve_view->beginX) / 40.0;
+		ve_view->v_strafe += (gfloat)(event->y -ve_view->beginY) / 40.0;
 		//		g_printf("h_strafe %f, v_strafe %f\n",ve_view->h_strafe,ve_view->v_strafe);
 		redraw = TRUE;
 	}
@@ -448,10 +448,10 @@ void ve_realize (GtkWidget *widget, gpointer data)
 
 void ve_calculate_scaling(void *ptr)
 {
-	int i=0;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	gint i=0;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	struct Ve_View_3D *ve_view = NULL;
-	unsigned char * ve_ptr = NULL;
+	guchar * ve_ptr = NULL;
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint ve_base = 0;
@@ -461,7 +461,7 @@ void ve_calculate_scaling(void *ptr)
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	ve_ptr = (unsigned char *)ms_data[ve_view->page];
+	ve_ptr = (guchar *)ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	ve_base = ve_view->ve_base;
@@ -492,17 +492,17 @@ void ve_calculate_scaling(void *ptr)
 			ve_view->ve_max = ve_ptr[ve_base+i]/divider;
 	}
 
-	ve_view->rpm_div = ((float)ve_view->rpm_max/(float)ve_view->rpm_bincount);
-	ve_view->load_div = ((float)ve_view->load_max/(float)ve_view->load_bincount);
+	ve_view->rpm_div = ((gfloat)ve_view->rpm_max/(gfloat)ve_view->rpm_bincount);
+	ve_view->load_div = ((gfloat)ve_view->load_max/(gfloat)ve_view->load_bincount);
 	/* NOT sure about this one... */
-	ve_view->ve_div = ((float)ve_view->ve_max/4.0);	
+	ve_view->ve_div = ((gfloat)ve_view->ve_max/4.0);	
 }
 
 void ve_draw_ve_grid(void *ptr)
 {
-	int rpm=0, load=0;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	unsigned char *ve_ptr = NULL;
+	gint rpm=0, load=0;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	guchar *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	gint rpm_base = 0;
 	gint load_base = 0;
@@ -513,7 +513,7 @@ void ve_draw_ve_grid(void *ptr)
 
 	dbg_func(__FILE__": 3D View Draw VE Grid \n",OPENGL);
 
-	ve_ptr = (unsigned char *) ms_data[ve_view->page];
+	ve_ptr = (guchar *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	ve_base = ve_view->ve_base;
@@ -534,11 +534,11 @@ void ve_draw_ve_grid(void *ptr)
 		for(load=0;load<ve_view->load_bincount;load++) 
 		{
 			glVertex3f(
-					(float)(ve_ptr[rpm_base+rpm])
+					(gfloat)(ve_ptr[rpm_base+rpm])
 					/ve_view->rpm_div,
-					(float)(ve_ptr[load_base+load])
+					(gfloat)(ve_ptr[load_base+load])
 					/ve_view->load_div, 	 	
-					(float)(ve_ptr[ve_base+(load*ve_view->load_bincount)+rpm])/divider
+					(gfloat)(ve_ptr[ve_base+(load*ve_view->load_bincount)+rpm])/divider
 					/ve_view->ve_div);
 		}
 		glEnd();
@@ -551,11 +551,11 @@ void ve_draw_ve_grid(void *ptr)
 		for(rpm=0;rpm<ve_view->rpm_bincount;rpm++)
 		{
 			glVertex3f(	
-					(float)(ve_ptr[rpm_base+rpm])
+					(gfloat)(ve_ptr[rpm_base+rpm])
 					/ve_view->rpm_div,
-					(float)(ve_ptr[load_base+load])
+					(gfloat)(ve_ptr[load_base+load])
 					/ve_view->load_div,
-					(float)(ve_ptr[ve_base+(load*ve_view->load_bincount)+rpm])/divider
+					(gfloat)(ve_ptr[ve_base+(load*ve_view->load_bincount)+rpm])/divider
 					/ve_view->ve_div);	
 		}
 		glEnd();
@@ -564,10 +564,10 @@ void ve_draw_ve_grid(void *ptr)
 
 void ve_draw_active_indicator(void *ptr)
 {
-	unsigned char *ve_ptr = NULL;
+	guchar *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
-	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint ve_base = 0;
@@ -575,7 +575,7 @@ void ve_draw_active_indicator(void *ptr)
 
 	dbg_func(__FILE__": 3D View Draw Active Inicator\n",OPENGL);
 
-	ve_ptr = (unsigned char *) ms_data[ve_view->page];
+	ve_ptr = (guchar *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	ve_base = ve_view->ve_base;
@@ -591,9 +591,9 @@ void ve_draw_active_indicator(void *ptr)
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
-			(float)(ve_ptr[rpm_base+ve_view->active_rpm])/ve_view->rpm_div,
-			(float)(ve_ptr[load_base+ve_view->active_load])/ve_view->load_div,	
-			((float)ve_ptr[ve_base+(ve_view->active_load*ve_view->load_bincount)+ve_view->active_rpm]/divider)/ve_view->ve_div);
+			(gfloat)(ve_ptr[rpm_base+ve_view->active_rpm])/ve_view->rpm_div,
+			(gfloat)(ve_ptr[load_base+ve_view->active_load])/ve_view->load_div,	
+			((gfloat)ve_ptr[ve_base+(ve_view->active_load*ve_view->load_bincount)+ve_view->active_rpm]/divider)/ve_view->ve_div);
 	glEnd();	
 }
 
@@ -601,7 +601,7 @@ void ve_draw_runtime_indicator(void *ptr)
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)ptr;
-	unsigned char actual_ve = 0;
+	guchar actual_ve = 0;
 
 	dbg_func(__FILE__": 3D View Draw Runtime Inicator\n",OPENGL);
 
@@ -619,22 +619,22 @@ void ve_draw_runtime_indicator(void *ptr)
 	glColor3f(0.0,1.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
-			(float)(runtime->rpm)/100/ve_view->rpm_div,
-			(float)(runtime->map)/ve_view->load_div,	
-			(float)(actual_ve)/ve_view->ve_div);
+			(gfloat)(runtime->rpm)/100/ve_view->rpm_div,
+			(gfloat)(runtime->map)/ve_view->load_div,	
+			(gfloat)(actual_ve)/ve_view->ve_div);
 	glEnd();
 }
 
 void ve_draw_axis(void *ptr)
 {
 	/* Set vars and an asthetically pleasing maximum value */
-	int i=0, rpm=0, load=0;
-	float top = 0.0;
+	gint i=0, rpm=0, load=0;
+	gfloat top = 0.0;
 	gchar *label;
-	unsigned char *ve_ptr = NULL;
+	guchar *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint rpm_bincount = 0;
@@ -643,14 +643,14 @@ void ve_draw_axis(void *ptr)
 
 	dbg_func(__FILE__": 3D View Draw Axis\n",OPENGL);
 
-	ve_ptr = (unsigned char *) ms_data[ve_view->page];
+	ve_ptr = (guchar *) ms_data[ve_view->page];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	ve_base = ve_view->ve_base;
 	rpm_bincount = ve_view->rpm_bincount;
 	load_bincount = ve_view->load_bincount;
 
-	top = ((float)(ve_view->ve_max+20))/ve_view->ve_div;
+	top = ((gfloat)(ve_view->ve_max+20))/ve_view->ve_div;
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.7,0.7,0.7);
@@ -663,15 +663,15 @@ void ve_draw_axis(void *ptr)
 		glVertex3f(
 				((ve_ptr[rpm_base])/ve_view->rpm_div),
 				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),		
-				((float)i)/ve_view->ve_div);
+				((gfloat)i)/ve_view->ve_div);
 		glVertex3f(
 				((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
 				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),		
-				((float)i)/ve_view->ve_div);
+				((gfloat)i)/ve_view->ve_div);
 		glVertex3f(
 				((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
 				((ve_ptr[load_base])/ve_view->load_div),		
-				((float)i)/ve_view->ve_div);
+				((gfloat)i)/ve_view->ve_div);
 		glEnd();	
 	}
 
@@ -767,13 +767,13 @@ void ve_draw_axis(void *ptr)
 		ve_drawtext(label,
 				((ve_ptr[rpm_base])/ve_view->rpm_div),
 				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),
-				(float)i/ve_view->ve_div);
+				(gfloat)i/ve_view->ve_div);
 		g_free(label);
 	}
 
 }
 
-void ve_drawtext(char* text, float x, float y, float z)
+void ve_drawtext(char* text, gfloat x, gfloat y, gfloat z)
 {
 	glColor3f(0.1,0.8,0.8);
 	/* Set rendering postition */
@@ -825,15 +825,15 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	gfloat divider = 0.0;
 	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	struct Ve_View_3D *ve_view = NULL;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	unsigned char * ve_ptr = NULL;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	guchar * ve_ptr = NULL;
 	GtkWidget *spinner = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
 	dbg_func(__FILE__": Key Press Event: ",OPENGL);
 
-	ve_ptr = (unsigned char *) ms_data[ve_view->page];
+	ve_ptr = (guchar *) ms_data[ve_view->page];
 	load_bincount = ve_view->load_bincount;
 	rpm_bincount = ve_view->rpm_bincount;
 	rpm_base = ve_view->rpm_base;

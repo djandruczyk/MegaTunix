@@ -27,7 +27,7 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 	// Highlights the VEtable entries around the current engine
 	// Operating point to assist with tuning the table.
 	//
-	extern unsigned char *ms_data;
+	extern guchar *ms_data;
 	extern GdkColor red;
 	extern GdkColor white;
 	struct Ve_Const_Std *ve_const = NULL;
@@ -86,7 +86,7 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 
 void get_indexes(TableType type, gint value, void *ptr,gint page)
 {
-	extern unsigned char *ms_data;
+	extern guchar *ms_data;
 	struct Indexes *index = (struct Indexes *) ptr;
 	gint start = -1;
 	const gint span = 8;

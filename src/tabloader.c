@@ -161,7 +161,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	page = -1;
 	if (!cfg_read_int(cfgfile,section,"page",&page))
 		dbg_func(g_strdup_printf(__FILE__": bind_data(), Object %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
-	
+
 	/* Bind widgets to lists if thy have the bind_to_list flag set...
 	 */
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
@@ -267,7 +267,7 @@ void store_list(gchar * key, GList * list)
 
 gchar ** parse_keys(gchar * string, gint * count)
 {
-	gchar **result;	
+	gchar **result = NULL;	
 	gint i = 0;
 	result = g_strsplit(string,",",0);
 	while (result[i])
@@ -285,7 +285,7 @@ gint * parse_keytypes(gchar * string, gint * count)
 	vector = g_strsplit(string,",",0);
 	while (vector[ct])
 		ct++;
-	
+
 	keytypes = (gint *)g_malloc0(ct*sizeof(gint));	
 	while (vector[i])
 	{
@@ -297,5 +297,5 @@ gint * parse_keytypes(gchar * string, gint * count)
 	g_strfreev(vector);
 	*count = i;	
 	return keytypes;
-		
+
 }

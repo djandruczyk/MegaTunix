@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-int main(int, char ** );
+gint main(gint, gchar ** );
 /* Prototypes */
 
 #endif

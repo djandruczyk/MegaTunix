@@ -115,7 +115,7 @@ void setup_serial_params()
 
 	/* Disable software flow control */
 	serial_params->newtio.c_iflag &= ~(IXON | IXOFF );
-	
+
 	/* Set raw output */
 	serial_params->newtio.c_oflag &= ~OPOST;
 
@@ -150,8 +150,8 @@ void close_serial()
 	connected = FALSE;
 	gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 			connected);
-//	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-//			connected);
+	//	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+	//			connected);
 
 	/* An Closing the comm port */
 	dbg_func(__FILE__": close_serial(), COM Port Closed\n",SERIAL_GEN);
@@ -162,7 +162,7 @@ void set_ms_page(gint ms_page)
 {
 	gint res = 0;
 	gchar buf;
-	gchar *tmpbuf;
+	gchar *tmpbuf = NULL;
 
 	if ((ms_page > 1) || (ms_page < 0))
 	{
@@ -170,7 +170,7 @@ void set_ms_page(gint ms_page)
 		dbg_func(tmpbuf,CRITICAL);
 		g_free(tmpbuf);
 	}
-	
+
 	buf = ms_page & 0x01;
 	res = write(serial_params->fd,"P",1);
 	if (res != 1)
@@ -183,4 +183,3 @@ void set_ms_page(gint ms_page)
 		g_free(tmpbuf);
 	}
 }
-

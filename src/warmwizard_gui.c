@@ -129,7 +129,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	label = gtk_label_new("Pulsewidth at -40 \302\260 F.");
 	store_list("temperature",g_list_append(
-			get_list("temperature"),(gpointer)label));
+				get_list("temperature"),(gpointer)label));
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -138,7 +138,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	label = gtk_label_new("Pulsewidth at 170 \302\260 F.");
 	labels.ww_cr_pulse_hightemp_lab = label;
 	store_list("temperature",g_list_append(
-			get_list("temperature"),(gpointer)label));
+				get_list("temperature"),(gpointer)label));
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
@@ -286,7 +286,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	label = gtk_label_new("Coolant (\302\260 F.)");
 	store_list("temperature",g_list_append(
-			get_list("temperature"),(gpointer)label));
+				get_list("temperature"),(gpointer)label));
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -450,7 +450,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	button = gtk_button_new_with_label("Burn to ECU");
 	store_list("burners",g_list_append(
-			get_list("burners"),(gpointer)button));
+				get_list("burners"),(gpointer)button));
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
@@ -489,11 +489,11 @@ void warmwizard_update_status(gfloat temp)
 		{
 			gtk_widget_modify_fg(labels.warmwizard_lab[i],
 					GTK_STATE_NORMAL,&black);
-/*			gtk_widget_modify_text(spinners.warmwizard[i],
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(spinners.warmwizard[i],
-					GTK_STATE_NORMAL,&black);
-*/
+			/*			gtk_widget_modify_text(spinners.warmwizard[i],
+						GTK_STATE_NORMAL,&black);
+						gtk_widget_modify_fg(spinners.warmwizard[i],
+						GTK_STATE_NORMAL,&black);
+			 */
 		}
 		else
 			skipnext = FALSE;
@@ -504,17 +504,16 @@ void warmwizard_update_status(gfloat temp)
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(labels.warmwizard_lab[i+1],
 					GTK_STATE_NORMAL,&red);
-/*			gtk_widget_modify_text(spinners.warmwizard[i],
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(spinners.warmwizard[i],
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_text(spinners.warmwizard[i+1],
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(spinners.warmwizard[i+1],
-					GTK_STATE_NORMAL,&red);
-*/
+			/*			gtk_widget_modify_text(spinners.warmwizard[i],
+						GTK_STATE_NORMAL,&red);
+						gtk_widget_modify_fg(spinners.warmwizard[i],
+						GTK_STATE_NORMAL,&red);
+						gtk_widget_modify_text(spinners.warmwizard[i+1],
+						GTK_STATE_NORMAL,&red);
+						gtk_widget_modify_fg(spinners.warmwizard[i+1],
+						GTK_STATE_NORMAL,&red);
+			 */
 		}
 	}
 
 }
-

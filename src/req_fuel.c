@@ -64,8 +64,8 @@ void req_fuel_change(GtkWidget *widget)
 
 	tmp1 = 36.0*((double)reqd_fuel->disp)*4.27793;
 	tmp2 = ((double) reqd_fuel->cyls) \
-		* ((double)(reqd_fuel->target_afr)) \
-		* ((double)(reqd_fuel->actual_inj_flow));
+	       * ((double)(reqd_fuel->target_afr)) \
+	       * ((double)(reqd_fuel->actual_inj_flow));
 
 	reqd_fuel->calcd_reqd_fuel = tmp1/tmp2;
 	if (GTK_IS_WIDGET(reqd_fuel->calcd_val_spin))
@@ -95,7 +95,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	GtkWidget *table2;
 	GtkWidget *popup;
 	GtkAdjustment *adj;
-	gchar * tmpbuf;
+	gchar * tmpbuf = NULL;
 	gint page = -1;
 	struct Reqd_Fuel *reqd_fuel = NULL;
 
@@ -184,7 +184,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	// Engine Displacement 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->disp,1.0,1000,1.0,10.0,0);
-			
+
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
@@ -200,7 +200,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	// Number of Cylinders 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->cyls,1,12,1.0,4.0,0);
-			
+
 	spinner = gtk_spin_button_new(adj,0,0);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
@@ -216,7 +216,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	// Target AFR
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->target_afr,1.0,100.0,1.0,1.0,0);
-			
+
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
@@ -232,7 +232,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	// Rated Injector Flow
 	adj =  (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->rated_inj_flow,10.0,255,0.1,1,0);
-			
+
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
@@ -265,7 +265,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	// Actual fuel pressure in bar 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->actual_pressure,0.1,10.0,0.1,1.0,0);
-			
+
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,65,-1);
 	g_object_set_data(G_OBJECT(spinner),"reqd_fuel",reqd_fuel);
@@ -294,7 +294,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	// Preliminary Required Fuel Value
 	adj = (GtkAdjustment *) gtk_adjustment_new(
 			reqd_fuel->calcd_reqd_fuel,0.1,25.5,0.1,1.0,0);
-			
+
 	spinner = gtk_spin_button_new(adj,0,1);
 	reqd_fuel->calcd_val_spin = spinner;
 	gtk_widget_set_size_request(spinner,65,-1);
@@ -337,21 +337,21 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 {
 	struct Reqd_Fuel * reqd_fuel = NULL;
 	struct Ve_Const_Std *ve_const;
-	gint dload_val;
-        extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	gint dload_val = 0;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	extern GHashTable *dynamic_widgets;
 	ConfigFile *cfgfile;
-	gchar *filename;
-	gchar *tmpbuf;
+	gchar *filename = NULL;
+	gchar *tmpbuf = NULL;
 
 	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	ve_const = (struct Ve_Const_Std *)ms_data[reqd_fuel->page];
 
-			//(reqd_fuel->reqd_fuel_spin),
+	//(reqd_fuel->reqd_fuel_spin),
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON
 			(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("req_fuel_per_cycle_%i_spin",1+reqd_fuel->page))),
 			reqd_fuel->calcd_reqd_fuel);
-	
+
 	/* Top is two stroke, botton is four stroke.. */
 	if (ve_const->config11.bit.eng_type)
 		ve_const->rpmk = (int)(6000.0/((double)reqd_fuel->cyls));
@@ -364,21 +364,21 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",reqd_fuel->page);
-        cfgfile = cfg_open_file(filename);
+	cfgfile = cfg_open_file(filename);
 	if (cfgfile)	// If it opened nicely 
 	{
-                cfg_write_int(cfgfile,tmpbuf,"Displacement",reqd_fuel->disp);
-                cfg_write_int(cfgfile,tmpbuf,"Cylinders",reqd_fuel->cyls);
-                cfg_write_float(cfgfile,tmpbuf,"Rated_Inj_Flow",
-                                reqd_fuel->rated_inj_flow);
-                cfg_write_float(cfgfile,tmpbuf,"Rated_Pressure",
-                                reqd_fuel->rated_pressure);
-                cfg_write_float(cfgfile,tmpbuf,"Actual_Inj_Flow",
-                                reqd_fuel->actual_inj_flow);
-                cfg_write_float(cfgfile,tmpbuf,"Actual_Pressure",
-                                reqd_fuel->actual_pressure);
-                cfg_write_float(cfgfile,tmpbuf,"Target_AFR",
-                                reqd_fuel->target_afr);
+		cfg_write_int(cfgfile,tmpbuf,"Displacement",reqd_fuel->disp);
+		cfg_write_int(cfgfile,tmpbuf,"Cylinders",reqd_fuel->cyls);
+		cfg_write_float(cfgfile,tmpbuf,"Rated_Inj_Flow",
+				reqd_fuel->rated_inj_flow);
+		cfg_write_float(cfgfile,tmpbuf,"Rated_Pressure",
+				reqd_fuel->rated_pressure);
+		cfg_write_float(cfgfile,tmpbuf,"Actual_Inj_Flow",
+				reqd_fuel->actual_inj_flow);
+		cfg_write_float(cfgfile,tmpbuf,"Actual_Pressure",
+				reqd_fuel->actual_pressure);
+		cfg_write_float(cfgfile,tmpbuf,"Target_AFR",
+				reqd_fuel->target_afr);
 
 		cfg_write_file(cfgfile,filename);
 		cfg_free(cfgfile);
@@ -386,7 +386,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	}
 	g_free(filename);
 	g_free(tmpbuf);
-	
+
 	return TRUE;
 }
 
@@ -413,11 +413,10 @@ void check_req_fuel_limits()
 	extern GHashTable * interdep_vars_1;
 	extern GHashTable * interdep_vars_2;
 	extern GHashTable *dynamic_widgets;
-        extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
-
 
 	if (ecu_caps & DUALTABLE)
 	{
@@ -458,8 +457,8 @@ void check_req_fuel_limits()
 		}
 		/* Required Fuel per SQUIRT */
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,
-					"req_fuel_per_squirt_1_spin")),
+				(g_hash_table_lookup(dynamic_widgets,
+						     "req_fuel_per_squirt_1_spin")),
 				req_fuel_per_squirt/10.0);
 
 		/* Throw warning if an issue */
@@ -475,7 +474,7 @@ void check_req_fuel_limits()
 			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));
-					
+
 		}
 
 		lim_flag = 0;
@@ -496,8 +495,8 @@ void check_req_fuel_limits()
 
 		/* Required Fuel per SQUIRT */
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,
-					"req_fuel_per_squirt_2_spin")),
+				(g_hash_table_lookup(dynamic_widgets,
+						     "req_fuel_per_squirt_2_spin")),
 				req_fuel_per_squirt/10);
 
 		/* Throw warning if an issue */
@@ -528,10 +527,10 @@ void check_req_fuel_limits()
 			write_ve_const(1, rpmk_offset, dload_val, FALSE);
 
 			offset = 90;
-					
+
 			write_ve_const(page, offset,req_fuel_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(1));
-					
+
 		}
 	}// END Dualtable Req fuel checks... */
 	else
@@ -579,8 +578,8 @@ void check_req_fuel_limits()
 		}
 		/* req-fuel info box  */
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,
-					"req_fuel_per_squirt_1_spin")),
+				(g_hash_table_lookup(dynamic_widgets,
+						     "req_fuel_per_squirt_1_spin")),
 				req_fuel_per_squirt/10.0);
 
 		if (lim_flag)
@@ -622,14 +621,12 @@ void check_req_fuel_limits()
 
 }
 
-
-
 void initialize_reqd_fuel(void * ptr, gint page)
 {
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	ConfigFile * cfgfile;
-	gchar * filename;
-	gchar * tmpbuf;
+	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
 

@@ -21,7 +21,7 @@
 #include <ms_structures.h>
 #include <post_process.h>
 
-extern unsigned char *kpa_conversion;
+extern guchar *kpa_conversion;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
 static GArray * raw_memory_data;
@@ -35,7 +35,7 @@ void post_process_realtime_vars(void *input, void *output)
 	 * choose below which ones to take based on whether
 	 * dualtable is set or not..
 	 */
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern gint temp_units;
 	gint *matfactor = (gint *)g_hash_table_lookup(lookuptables,"mat_table");
@@ -119,10 +119,10 @@ void post_process_realtime_vars(void *input, void *output)
 		out->ctimeL = ign_in->ctimeL;
 
 		cyls = ve_const->config11.bit.cylinders+1;
-                if (ve_const->config11.bit.eng_type)
-                        rpmconstant = (int)(6000.0/((float)cyls));
-                else
-                        rpmconstant = (int)(12000.0/((float)cyls));
+		if (ve_const->config11.bit.eng_type)
+			rpmconstant = (int)(6000.0/((float)cyls));
+		else
+			rpmconstant = (int)(12000.0/((float)cyls));
 		/* 0.92 is there cause of clock of 7.3728 mhz....
 		 * if clock goes to 8 mhz, get rid of 0.92 factor...
 		 */
@@ -192,8 +192,8 @@ void post_process_realtime_vars(void *input, void *output)
 			invalid_divider_1 = FALSE;
 
 		nsquirts = (int) 0.00001 
-				+ (float)(ve_const_dt1->config11.bit.cylinders+1)
-				/ (float)ve_const_dt1->divider;
+			+ (float)(ve_const_dt1->config11.bit.cylinders+1)
+			/ (float)ve_const_dt1->divider;
 
 		possible_inj_time = (float)cycletime/(float)nsquirts;
 		out->dcycle1 =  100.0 * (float) out->pw1 / possible_inj_time;
@@ -209,25 +209,24 @@ void post_process_realtime_vars(void *input, void *output)
 			invalid_divider_2 = FALSE;
 
 		nsquirts = (int) 0.00001 
-				+ (float)(ve_const_dt2->config11.bit.cylinders+1)
-				/ (float)ve_const_dt2->divider;
+			+ (float)(ve_const_dt2->config11.bit.cylinders+1)
+			/ (float)ve_const_dt2->divider;
 		possible_inj_time = (float)cycletime/(float)nsquirts;
 		out->dcycle2 =  100.0 * (float) out->pw2 / possible_inj_time;
 
 	}
 }
 
-
 void post_process_raw_memory(void *input, gint offset)
 {
 	gint i = 0;
-	unsigned char *ptr = input;
+	guchar *ptr = input;
 	gint init_val = 0;
 	extern gint num_mem_pages;
 
 	if (raw_memory_data == NULL)
 	{
-		raw_memory_data = g_array_sized_new(FALSE,TRUE,sizeof(unsigned char),(256*num_mem_pages));
+		raw_memory_data = g_array_sized_new(FALSE,TRUE,sizeof(guchar),(256*num_mem_pages));
 		/* Array initialization..... */
 		for (i=0;i<(256*num_mem_pages);i++)
 			raw_memory_data = g_array_insert_val(raw_memory_data,i,init_val);
@@ -235,7 +234,7 @@ void post_process_raw_memory(void *input, gint offset)
 
 	for (i=0;i<256;i++)
 		raw_memory_data = g_array_insert_val(raw_memory_data,i+(256*offset),ptr[i]);
-				
+
 }
 
 void update_raw_memory_view(ToggleButton type, gint page_offset)
@@ -243,10 +242,10 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 	extern GArray * raw_memory_widgets;
 	extern GArray * raw_memory_data;
 	GtkWidget *label = NULL;
-	unsigned char value = 0;
+	guchar value = 0;
 	extern gint mem_view_style[];
 	gint i = 0;
-	
+
 	mem_view_style[page_offset] = (gint)type;
 
 	for (i=0;i<256;i++)
@@ -258,21 +257,21 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 		if (raw_memory_data == NULL)
 			return;
 		/* if data array doesn't exist, just break out... */
-		value = g_array_index(raw_memory_data, unsigned char, i+(256*page_offset));
+		value = g_array_index(raw_memory_data, guchar, i+(256*page_offset));
 		switch ((ToggleButton)type)
 		{
 			case DECIMAL_VIEW:
-				gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.3i",value));
+				gtk_label_set_text(GTK_LABEL(label),(const gchar *)g_strdup_printf("%.3i",value));
 				break;
 			case HEX_VIEW:
-				gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.2X",value));
+				gtk_label_set_text(GTK_LABEL(label),(const gchar *)g_strdup_printf("%.2X",value));
 				break;
 			case BINARY_VIEW:
-				gtk_label_set_text(GTK_LABEL(label),(const char *)get_bin(value));
+				gtk_label_set_text(GTK_LABEL(label),(const gchar *)get_bin(value));
 				break;
 			default:
-//				dbg_func(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n",CRITICAL);
-				gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.2X",value));
+				//				dbg_func(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n",CRITICAL);
+				gtk_label_set_text(GTK_LABEL(label),(const gchar *)g_strdup_printf("%.2X",value));
 				break;
 
 		}
@@ -285,7 +284,7 @@ gchar * get_bin(gint x)
 {
 	GString *string = g_string_new(NULL);
 	gint n = 0;
-	gchar * tmpbuf;
+	gchar * tmpbuf = NULL;
 
 	for (n=0;n<8;n++)
 	{
@@ -301,5 +300,3 @@ gchar * get_bin(gint x)
 	g_string_free(string,TRUE);
 	return tmpbuf;
 }
-	
-	

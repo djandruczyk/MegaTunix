@@ -18,7 +18,7 @@
 
 /* Prototypes */
 void init(void);
-int read_config(void);
+gboolean read_config(void);
 void save_config(void);
 void make_megasquirt_dirs(void);
 void mem_alloc(void);

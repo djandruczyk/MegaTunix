@@ -126,7 +126,7 @@ void load_controls()
 	}
 	if ((ctrl_list == NULL) && (defaults))
 	{
-//		g_printf("Using defaults\n");
+		//		g_printf("Using defaults\n");
 		control_names = g_strsplit(defaults, ",", 0);
 		i = 0;
 		while (control_names[i] != NULL)
@@ -143,7 +143,7 @@ void load_controls()
 	}
 	else
 	{
-//		g_printf("using user specified controls\n");
+		//		g_printf("using user specified controls\n");
 		control_names = g_strsplit(ctrl_list, ",", 0);
 		i = 0;
 		while (control_names[i] != NULL)
@@ -173,7 +173,7 @@ void add_control(gchar *control_name, gchar *parameters)
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
-	
+
 	parm_array = g_strsplit(parameters, ",", 0);
 	control->ctrl_name = g_strdup(control_name);
 	control->tbl = atoi(parm_array[0]);
@@ -202,7 +202,7 @@ void add_control(gchar *control_name, gchar *parameters)
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
 	control->data = label;
-	
+
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
@@ -218,7 +218,7 @@ void add_control(gchar *control_name, gchar *parameters)
 	if (control->flags & TEMP_DEP)	/* name has temp unit in it */
 	{
 		store_list("temperature",g_list_append(
-				get_list("temperature"),(gpointer)control->label));
+					get_list("temperature"),(gpointer)control->label));
 	}
 
 	if (g_hash_table_lookup(rt_controls,g_strdup(control_name))==NULL)

@@ -24,24 +24,20 @@
 #include <string.h>
 #include <structures.h>
 
-void get_limits(gchar *, void *, gint );
-
 
 void load_logviewer_file(void *ptr)
 {
 	struct Io_File *iofile = NULL;
-	//gchar *tmpbuf = NULL;
-	//GIOStatus status = 0;
 	struct Log_Info *log_info = NULL;
-	
+
 
 	if (ptr != NULL)
 		iofile = (struct Io_File*) ptr;
 	else
-        {
-                dbg_func(__FILE__": load_logviewer_file() pointer null\n",CRITICAL);
-                return;
-        }
+	{
+		dbg_func(__FILE__": load_logviewer_file() pointer null\n",CRITICAL);
+		return;
+	}
 	log_info = g_malloc0(sizeof(struct Log_Info));
 	initialize_log_info(log_info);
 	read_log_header(iofile->iochannel, log_info);
@@ -80,7 +76,7 @@ void get_limits(gchar *target_field, void *ptr, gint position)
 		index = -1;
 		if (strcmp(def_limits[i].field,target_field) == 0) 
 		{
-		//	printf("found value %s at index %i, for field # %i\n",target_field,i,position);
+			//	printf("found value %s at index %i, for field # %i\n",target_field,i,position);
 			index = i;
 			break;
 		}
@@ -162,17 +158,17 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 		/* Enable parameter selection button */
 		gtk_widget_set_sensitive(buttons.logplay_sel_parm_but, TRUE);
 		g_object_set_data(G_OBJECT(lv_darea),"log_info",(gpointer)log_info);
-		
+
 	}
 	g_free(delimiter);
-	
+
 }
 
 void allocate_buffers(void *ptr)
 {
 	gint i = 0;
 	struct Log_Info *log_info = ptr;
-	GArray *data_array;
+	GArray *data_array = NULL;
 	
 	/* This looks weird but it should work pretty well.
 	 * On Log_Info initialization we create a GArray. This 
@@ -192,9 +188,9 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 	GString *a_line = g_string_new("\0");
 	//GIOStatus  status = G_IO_STATUS_ERROR;
 	struct Log_Info *log_info = ptr;
-	gchar **data;
+	gchar **data = NULL;
 	gint i = 0;
-	GArray *tmp_array;
+	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
 
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) 
@@ -212,4 +208,3 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 		g_strfreev(data);
 	}
 }
-	

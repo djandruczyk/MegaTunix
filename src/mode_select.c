@@ -41,8 +41,7 @@ void set_widget_state(gpointer widget, gpointer state)
 
 gboolean drain_hashtable(gpointer offset, gpointer value, gpointer data)
 {
-        /* called per element from the hash table to drain and send to ECU */
-        write_ve_const((gint)data, (gint)offset,(gint)value, FALSE);
-        return TRUE;
+	/* called per element from the hash table to drain and send to ECU */
+	write_ve_const((gint)data, (gint)offset,(gint)value, FALSE);
+	return TRUE;
 }
-

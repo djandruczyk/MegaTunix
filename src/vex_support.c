@@ -76,7 +76,7 @@ static struct
 
 gboolean vetable_export(void *ptr)
 {
-	struct tm *tm;
+	struct tm *tm = NULL;
 	time_t *t = NULL;
 	gint i = 0;
 	gint j = 0;
@@ -89,7 +89,7 @@ gboolean vetable_export(void *ptr)
 	gint rpm_base = 0;
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
-	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
 	extern struct Firmware_Details *firmware;
 	gchar * tmpbuf = NULL;
 	GIOStatus status;
@@ -187,7 +187,7 @@ gboolean vetable_import(void *ptr)
 		return FALSE;
 	}
 	vex_import = g_new0(struct Vex_Import, 1);
-	
+
 	//reset_import_flags();
 	status = g_io_channel_seek_position(iofile->iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
@@ -251,7 +251,6 @@ breakout:
 	g_string_free(a_line, TRUE);
 	return status;
 }
-
 
 GIOStatus handler_dispatch(void *ptr, ImportParserFunc function, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
@@ -352,8 +351,8 @@ GIOStatus process_page(void *ptr, gchar *string)
 GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
 {
 	GIOStatus status;
-	gchar ** str_array;
-	gchar * result;
+	gchar ** str_array = NULL;
+	gchar * result = NULL;
 	GString *a_line = g_string_new("\0");
 	status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
 	if (status != G_IO_STATUS_NORMAL) 
@@ -379,11 +378,11 @@ GIOStatus read_number_from_line(gint *dest, GIOChannel *iochannel)
 GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOChannel *iochannel)
 {
 	GIOStatus status = G_IO_STATUS_ERROR;
-	gint i;
-	gint value;
-	gchar ** str_array;
-	gchar * result;
-	gint num_bins;
+	gint i = 0;
+	gint value = 0;
+	gint num_bins = 0;
+	gchar ** str_array = NULL;
+	gchar * result = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * msg_type = NULL;
 	struct Vex_Import *vex_import = ptr;
@@ -429,19 +428,19 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 			break;
 		}
 		else
-		switch (arg)
-		{
-			case RPM_RANGE:
-				vex_import->rpm_bins[i] = value;
-				tmpbuf = g_strdup_printf("VEX Import: RPM bins loaded successfully \n");
-				break;
-			case LOAD_RANGE:
-				vex_import->load_bins[i] = value;
-				tmpbuf = g_strdup_printf("VEX Import: LOAD bins loaded successfully \n");
-				break;
-			default:
-				break;
-		}
+			switch (arg)
+			{
+				case RPM_RANGE:
+					vex_import->rpm_bins[i] = value;
+					tmpbuf = g_strdup_printf("VEX Import: RPM bins loaded successfully \n");
+					break;
+				case LOAD_RANGE:
+					vex_import->load_bins[i] = value;
+					tmpbuf = g_strdup_printf("VEX Import: LOAD bins loaded successfully \n");
+					break;
+				default:
+					break;
+			}
 	}
 	update_logbar(tools_view,msg_type,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
@@ -452,17 +451,17 @@ GIOStatus process_vex_range(void *ptr, ImportParserArg arg, gchar * string, GIOC
 
 GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 {
-	gint i, j;
+	gint i = 0, j = 0;
 	GString *a_line;
 	GIOStatus status = G_IO_STATUS_ERROR;
-	gchar ** str_array;
-	gchar ** str_array2;
-	gchar * result;
-	gchar *pos;
-	gchar *numbers;
-	gint value;
-	gint x_bins;
-	gint y_bins;
+	gchar ** str_array = NULL;
+	gchar ** str_array2 = NULL;
+	gchar * result = NULL;
+	gchar *pos = NULL;
+	gchar *numbers = NULL;
+	gint value = 0;
+	gint x_bins = 0;
+	gint y_bins = 0;
 	gchar * tmpbuf = NULL;
 	gchar * msg_type = NULL;
 	struct Vex_Import *vex_import = ptr;
@@ -517,7 +516,7 @@ GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 		for (j=0; j<x_bins; j++) 
 		{
 			value = (int)strtol(numbers,&numbers,10);
-//			dbg_func(g_strdup_printf("(%i,%i) %i ",i,j,value),VETABLE);
+			//			dbg_func(g_strdup_printf("(%i,%i) %i ",i,j,value),VETABLE);
 			if ((value < 0) || (value > 255))
 			{
 				status = G_IO_STATUS_ERROR;
@@ -543,10 +542,9 @@ breakout:
 	return status;
 }
 
-
 gint vex_comment_parse(GtkWidget *widget, gpointer data)
 {
-	gchar *tmpbuf;
+	gchar *tmpbuf = NULL;;
 	/* Gets data from VEX comment field in tools gui and stores it 
 	 * so that it gets written to the vex file 
 	 */
@@ -584,9 +582,9 @@ void dealloc_ve_struct(void *ptr)
 void feed_import_data_to_ms(void *ptr)
 {
 	gint i = 0;
-	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
-	extern unsigned char * ms_data_backup[MAX_SUPPORTED_PAGES];
-	gchar * tmpbuf;
+	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar * ms_data_backup[MAX_SUPPORTED_PAGES];
+	gchar * tmpbuf = NULL;
 	gint page = -1;
 	struct Vex_Import *vex_import = ptr;
 	extern struct Firmware_Details *firmware;
@@ -607,18 +605,18 @@ void feed_import_data_to_ms(void *ptr)
 	/* Backup the ms data first... */
 	memset((void *)ms_data_backup[page], 0, 2*MS_PAGE_SIZE);
 	memcpy(ms_data_backup[page], 
-				ms_data[page],2*MS_PAGE_SIZE);
+			ms_data[page],2*MS_PAGE_SIZE);
 
 	for (i=0;i<vex_import->total_rpm_bins;i++)
 		ms_data[page][firmware->page_params[page]->rpm_base + i] =
-				vex_import->rpm_bins[i];
+			vex_import->rpm_bins[i];
 	for (i=0;i<vex_import->total_load_bins;i++)
 		ms_data[page][firmware->page_params[page]->load_base + i] =
-				vex_import->load_bins[i];
+			vex_import->load_bins[i];
 
 	for (i=0;i<((vex_import->total_load_bins)*(vex_import->total_rpm_bins));i++)
 		ms_data[page][firmware->page_params[page]->ve_base + i] =
-				vex_import->ve_bins[i];
+			vex_import->ve_bins[i];
 
 	update_ve_const();	
 	tmpbuf = g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex_import->page);
@@ -632,8 +630,8 @@ void revert_to_previous_data()
 {
 	gint i=0;
 	/* Called to back out a load of a VEtable from VEX import */
-	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
-	extern unsigned char * ms_data_backup[MAX_SUPPORTED_PAGES];
+	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar * ms_data_backup[MAX_SUPPORTED_PAGES];
 	extern struct Firmware_Details *firmware;
 
 	for (i=0;i<firmware->total_pages;i++)
@@ -644,4 +642,3 @@ void revert_to_previous_data()
 	gtk_widget_set_sensitive(buttons.tools_revert_but,FALSE);
 	update_logbar(tools_view,"warning","Reverting to previous settings....\n",TRUE,FALSE);
 }
-

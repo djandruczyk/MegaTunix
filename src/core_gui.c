@@ -31,12 +31,12 @@
 
 
 /* Default window size and MINIMUM size as well... */
-static int def_width=650;
-static int def_height=525;
-int width;
-int height;
-int main_x_origin;
-int main_y_origin;
+static gint def_width=650;
+static gint def_height=525;
+gint width;
+gint height;
+gint main_x_origin;
+gint main_y_origin;
 extern gint tips_in_use;
 GtkWidget *main_window;
 GtkTooltips *tip;

@@ -326,7 +326,7 @@ gboolean reset_errcounts(GtkWidget *widget)
 
 gboolean update_errcounts()
 {
-	gchar *tmpbuf;
+	gchar *tmpbuf = NULL;
 
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
 	gtk_entry_set_text(GTK_ENTRY(entries.comms_ve_readcount_entry),tmpbuf);

@@ -20,8 +20,8 @@
 
 /* Prototypes */
 void post_process_realtime_vars(void *, void * );
-void post_process_raw_memory(void *, int);
-void update_raw_memory_view(ToggleButton, int);
+void post_process_raw_memory(void *, gint);
+void update_raw_memory_view(ToggleButton, gint);
 gchar * get_bin(gint );
 /* Prototypes */
 

@@ -67,7 +67,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	GdkPixmap *pixmap;
 	GtkAdjustment *adj;
 	extern struct DynamicButtons buttons;
-	GSList *group;
+	GSList *group = NULL;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
@@ -90,21 +90,21 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),d_area,TRUE,TRUE,0);
 
 	/* Add events to capture mouse button presses (for popup menus...) */
-        gtk_widget_add_events(d_area,
-                        GDK_BUTTON_PRESS_MASK |
-                        GDK_BUTTON_RELEASE_MASK |
-                        GDK_FOCUS_CHANGE_MASK);
+	gtk_widget_add_events(d_area,
+			GDK_BUTTON_PRESS_MASK |
+			GDK_BUTTON_RELEASE_MASK |
+			GDK_FOCUS_CHANGE_MASK);
 
-        g_signal_connect(G_OBJECT
-                        (d_area),
-                        "configure_event",
-                        G_CALLBACK(lv_configure_event),
-                        NULL);
-        g_signal_connect(G_OBJECT
-                        (d_area),
-                        "expose_event",
-                        G_CALLBACK(lv_expose_event),
-                        NULL);
+	g_signal_connect(G_OBJECT
+			(d_area),
+			"configure_event",
+			G_CALLBACK(lv_configure_event),
+			NULL);
+	g_signal_connect(G_OBJECT
+			(d_area),
+			"expose_event",
+			G_CALLBACK(lv_expose_event),
+			NULL);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,1.0,0.001,0.001,0);
 	sbar = gtk_hscrollbar_new(adj);
@@ -156,7 +156,7 @@ void build_logviewer(GtkWidget *parent_frame)
 			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	gtk_widget_set_sensitive(button,FALSE);
-	
+
 	button = gtk_button_new_with_label("Select Parameters to view");
 	buttons.logplay_sel_parm_but = button;
 	g_object_set_data(G_OBJECT(button),"data",(gpointer)d_area);
@@ -165,21 +165,21 @@ void build_logviewer(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
-	
+
 	vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,5);
 	button = gtk_button_new_with_label("Start Reading RT Vars");
 	buttons.logplay_start_rt_but = button;
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
-        g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler),
-                        NULL);
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler),
+			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
 	button = gtk_button_new_with_label("Stop Reading RT vars");
 	buttons.logplay_stop_rt_but = button;
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
-        g_signal_connect(G_OBJECT (button), "clicked",
-                        G_CALLBACK (std_button_handler),
+	g_signal_connect(G_OBJECT (button), "clicked",
+			G_CALLBACK (std_button_handler),
 			NULL);
 
 	gtk_box_pack_start(GTK_BOX(vbox3),button,TRUE,FALSE,0);
@@ -191,13 +191,13 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox3),label,TRUE,FALSE,5);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new((gfloat)lv_scroll,1.0,15.0,1.0,1.0,0);
-        spinner = gtk_spin_button_new(adj,1,0);
-        gtk_widget_set_size_request(spinner,45,-1);
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	spinner = gtk_spin_button_new(adj,1,0);
+	gtk_widget_set_size_request(spinner,45,-1);
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"info",(gpointer)d_area);
 	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(LOGVIEW_ZOOM));
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spin_button_handler),
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
+			G_CALLBACK (spin_button_handler),
 			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox3),spinner,TRUE,FALSE,0);
 
@@ -217,7 +217,7 @@ void present_viewer_choices(void *ptr)
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;
-	gint table_rows;
+	gint table_rows = 0;
 	gint table_cols = 5;
 	gchar * name = NULL;
 	GtkWidget *hand_me_down = NULL;
@@ -280,8 +280,8 @@ void present_viewer_choices(void *ptr)
 			name = g_strdup(log_info->fields[i]);
 		else
 			name = g_strdup(logable_names[i]);
-			
-		
+
+
 		button = gtk_check_button_new_with_label(name);
 		if (!logviewer_mode)
 		{
@@ -290,8 +290,8 @@ void present_viewer_choices(void *ptr)
 			gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
 		}
 		if (viewables.index[i] == TRUE)
-        		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
-			
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
+
 		viewables.widgets[i] = button;
 
 		g_object_set_data(G_OBJECT(button),"index",
@@ -346,12 +346,12 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	gint index = 0;
 
-        index = (gint)g_object_get_data(G_OBJECT(widget),"index");
+	index = (gint)g_object_get_data(G_OBJECT(widget),"index");
 
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-                viewables.index[index] = TRUE;
-        else
-                viewables.index[index] = FALSE;
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		viewables.index[index] = TRUE;
+	else
+		viewables.index[index] = FALSE;
 
 	return TRUE;
 }
@@ -360,13 +360,13 @@ gboolean populate_viewer(GtkWidget * d_area)
 {
 	struct Viewable_Value *v_value = NULL;
 	gint i = 0;
-        total_viewables = 0;
+	total_viewables = 0;
 	/* Reget to total Viewables count */
-        for (i=0;i<max_viewables;i++)
-        {
-                if (viewables.index[i])
-                        total_viewables++;
-        }
+	for (i=0;i<max_viewables;i++)
+	{
+		if (viewables.index[i])
+			total_viewables++;
+	}
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -377,7 +377,7 @@ gboolean populate_viewer(GtkWidget * d_area)
 	{
 		active_traces = g_hash_table_new(NULL,NULL);
 	}
-	
+
 	/* check to see if it's already in the table, if so ignore, if not
 	 * malloc datastructure, populate it's values and insert a pointer
 	 * into the table for it..
@@ -391,7 +391,7 @@ gboolean populate_viewer(GtkWidget * d_area)
 			{
 				/* Call the build routine, feed it the drawing_area*/
 				v_value = build_v_value(d_area,i);
-					
+
 				g_hash_table_insert(active_traces,
 						GINT_TO_POINTER(i),
 						(gpointer)v_value);
@@ -426,7 +426,7 @@ gboolean populate_viewer(GtkWidget * d_area)
 	 */
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 		g_signal_emit_by_name(G_OBJECT(d_area),"configure_event",NULL);
-	
+
 	return FALSE; /* want other handlers to run... */
 }
 
@@ -449,8 +449,8 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 	/* Set limits of this variable. (it's ranges, used for scaling */
 	if (logviewer_mode)
 	{
-//		v_value->lower = 0.0;
-//		v_value->upper = 255.0;
+		//		v_value->lower = 0.0;
+		//		v_value->upper = 255.0;
 		v_value->lower = g_array_index(log_info->lowers,gfloat,offset);
 		v_value->upper = g_array_index(log_info->uppers,gfloat,offset);
 		v_value->runtime_offset = -1; // INVALID for playback
@@ -482,7 +482,7 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 	}
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
-	
+
 	/* User adjustable scales... */
 	v_value->cur_low = v_value->lower;
 	v_value->cur_high = v_value->upper;
@@ -493,7 +493,6 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 
 	return v_value;
 }
-
 
 GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 {
@@ -547,7 +546,7 @@ GdkColor get_colors_from_hue(gfloat hue_angle)
 {
 	GdkColor color;
 	gfloat tmp = 0.0;	
-	gint i;
+	gint i = 0;
 	gfloat fract = 0.0;
 	gfloat S = 1.0;	// using saturation of 1.0
 	gfloat V = 1.0;	// using Value of 1.0
@@ -611,14 +610,14 @@ void draw_infotext(void *data)
 	// Draws the textual (static) info on the left side of the window..
 
 	struct Viewable_Value *v_value = (struct Viewable_Value *) data;
-	gint len;
-	gfloat val;
+	gint len = 0;
+	gfloat val = 0.0;
 	gint name_x = 10;
-	gint name_y ;
+	gint name_y = 0;
 	gint h = 0;
 	gint val_x_offset = 10;
 	gint val_y_offset = 20;
-        PangoFontDescription *font_desc;
+	PangoFontDescription *font_desc;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),"pixmap");
 
@@ -657,7 +656,6 @@ void draw_infotext(void *data)
 
 }
 
-
 gboolean update_logview_traces()
 {
 	/* Called from one of two possible places:
@@ -666,7 +664,7 @@ gboolean update_logview_traces()
 	 *
 	 * If table does NOT exist or table is empty do NOTHING
 	 */
-	
+
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 	{
 		g_hash_table_foreach(active_traces, trace_update,NULL);
@@ -691,18 +689,18 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	GdkPoint pts[2048]; // Bad idea as static...
 	struct Viewable_Value * v_value = NULL;
 	extern struct Runtime_Common *runtime;
-	unsigned char * uc_ptr = NULL;
+	guchar * uc_ptr = NULL;
 	short * s_ptr = NULL;
 	float * f_ptr = NULL;
-	
+
 	v_value = (struct Viewable_Value *) value;
 	if (v_value == NULL)
 	{
 		printf("no traces, exiting...\n");
 		return;
-		}
+	}
 	pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),
-				"pixmap");
+			"pixmap");
 
 	w = v_value->d_area->allocation.width;
 	h = v_value->d_area->allocation.height;
@@ -715,11 +713,11 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 		if (len == 0)	/* If empty */
 			return;
 		total = len < lo_width/lv_scroll ? len : lo_width/lv_scroll;
-			
-/* Debugging code
-		printf("\nlo_width %i\n",lo_width);
-		printf("total points %i\n",total);
-*/
+
+		/* Debugging code
+		   printf("\nlo_width %i\n",lo_width);
+		   printf("total points %i\n",total);
+		 */
 
 		// Draw is reverse order, from right to left, 
 		// easier to think out in my head... :) 
@@ -732,15 +730,15 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 			pts[i].y = (gint) (percent*(h-2))+1;
 		}
 		/* Debugging code
-		i = total - 1;
-		printf("i %i; total %i, last coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
-		i--;
-		printf("i %i; total %i, second last coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
-		i = 0;
-		printf("i %i; total %i, first coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
-		i = 1;
-		printf("i %i; total %i, second coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
-		*/
+		   i = total - 1;
+		   printf("i %i; total %i, last coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		   i--;
+		   printf("i %i; total %i, second last coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		   i = 0;
+		   printf("i %i; total %i, first coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		   i = 1;
+		   printf("i %i; total %i, second coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		 */
 		gdk_draw_lines(pixmap,
 				v_value->trace_gc,
 				pts,
@@ -754,19 +752,19 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	 * long as the structure is arranged in largest order first. 
 	 * i.e. floats before shorts before chars, etc...
 	 */
-	uc_ptr = (unsigned char *)runtime;
+	uc_ptr = (guchar *)runtime;
 	s_ptr = (short *)runtime;
 	f_ptr = (float *)runtime;
 	switch (size)
 	{	
 		case FLOAT:
-			val = (float)f_ptr[v_value->runtime_offset/FLOAT];
-			break;
-		case UCHAR:
-			val = (unsigned char)uc_ptr[v_value->runtime_offset];
+			val = (gfloat)f_ptr[v_value->runtime_offset/FLOAT];
 			break;
 		case SHORT:
-			val = (short)s_ptr[v_value->runtime_offset/SHORT];
+			val = (gshort)s_ptr[v_value->runtime_offset/SHORT];
+			break;
+		case UCHAR:
+			val = (guchar)uc_ptr[v_value->runtime_offset/UCHAR];
 			break;
 	}
 	if (val > (v_value->max))
@@ -780,21 +778,20 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	percent = 1.0-(val/(v_value->upper-v_value->lower));
 	if (v_value->last_y == -1)
 		v_value->last_y = (gint)(percent*(h-2))+1;
-	
+
 	gdk_draw_line(pixmap,
 			v_value->trace_gc,
 			w-lv_scroll-1,v_value->last_y,
 			w-1,(gint)(percent*(h-2))+1);
 
-//	printf("drawing line from (%i,%i) to (%i,%i)\n",w-lv_scroll,v_value->last_y,w,(gint)(percent*(h-2))+1);
-                        
+	//	printf("drawing line from (%i,%i) to (%i,%i)\n",w-lv_scroll,v_value->last_y,w,(gint)(percent*(h-2))+1);
+
 	v_value->last_y = (gint)((percent*(h-2))+1);
-			
+
 	/* Update textual data */
 	draw_infotext(v_value);
-	
-}
 
+}
 
 void scroll_logviewer_traces()
 {
@@ -805,8 +802,8 @@ void scroll_logviewer_traces()
 
 	start = end + lv_scroll;
 	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(lv_darea),
-				"pixmap");
-	
+			"pixmap");
+
 	// Scroll the screen to the left... 
 	gdk_draw_drawable(pixmap,
 			lv_darea->style->black_gc,
@@ -815,13 +812,13 @@ void scroll_logviewer_traces()
 			info_width,0,
 			w-info_width-lv_scroll,h);
 
-/*	Debugging code..
-	printf("\nscreen dimensions: (%i,%i), info_width %i\n",w,h,info_width);
-	printf("copying rect starting at (%i,%i), to (%i,%i), w,h of (%i,%i)\n",
-			info_width+lv_scroll,0,
-                        info_width,0,
-                        w-info_width-lv_scroll,h);
-*/
+	/*	Debugging code..
+		printf("\nscreen dimensions: (%i,%i), info_width %i\n",w,h,info_width);
+		printf("copying rect starting at (%i,%i), to (%i,%i), w,h of (%i,%i)\n",
+		info_width+lv_scroll,0,
+		info_width,0,
+		w-info_width-lv_scroll,h);
+	 */
 	// Init new "blank space" as black 
 	gdk_draw_rectangle(pixmap,
 			lv_darea->style->black_gc,
@@ -904,7 +901,7 @@ gboolean select_all_controls(GtkWidget *widget, gpointer data)
 	for (i=0;i<max_viewables;i++)
 	{
 		if (viewables.index[i] == FALSE)
-        		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (viewables.widgets[i]),TRUE);
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (viewables.widgets[i]),TRUE);
 	}
 	return TRUE;
 }

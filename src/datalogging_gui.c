@@ -198,16 +198,16 @@ void build_datalogging(GtkWidget *parent_frame)
 		//		if ((dualtable) && (i >= STD_LOGABLES))
 		//			gtk_widget_set_sensitive(button,FALSE);
 		/*
-		if (dlog_caps[i] == DUALTABLE)
-			dt_controls = g_list_append(dt_controls,
-					(gpointer)button);
-		if (dlog_caps[i] == IAC_PWM)
-			iac_idle_controls = g_list_append(iac_idle_controls,
-					(gpointer)button);
-		if (dlog_caps[i] == (S_N_SPARK|S_N_EDIS))
-			ign_controls = g_list_append(ign_controls,
-					(gpointer)button);
-		*/
+		   if (dlog_caps[i] == DUALTABLE)
+		   dt_controls = g_list_append(dt_controls,
+		   (gpointer)button);
+		   if (dlog_caps[i] == IAC_PWM)
+		   iac_idle_controls = g_list_append(iac_idle_controls,
+		   (gpointer)button);
+		   if (dlog_caps[i] == (S_N_SPARK|S_N_EDIS))
+		   ign_controls = g_list_append(ign_controls,
+		   (gpointer)button);
+		 */
 
 		g_object_set_data(G_OBJECT(button),"index",
 				GINT_TO_POINTER(i));
@@ -410,7 +410,7 @@ void start_datalogging(void)
 
 void stop_datalogging()
 {
-	gchar *tmpbuf;
+	gchar *tmpbuf = NULL;
 	logging_active = FALSE;
 	if (logging_mode == CUSTOM_LOG)
 	{
@@ -447,13 +447,13 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
 	index = (gint)g_object_get_data(G_OBJECT(widget),"index");
 	size = (gint)g_object_get_data(G_OBJECT(widget),"size");
 	classic_ord = (gint)g_object_get_data(G_OBJECT(widget),
-				"mt_classic_order");
+			"mt_classic_order");
 	full_ord = (gint)g_object_get_data(G_OBJECT(widget),
-				"mt_full_order");
+			"mt_full_order");
 
 	/* Set state in array so total count can be determined... */
 	logables.index[index] = gtk_toggle_button_get_active 
-					(GTK_TOGGLE_BUTTON (widget));
+		(GTK_TOGGLE_BUTTON (widget));
 
 	/* insert into hash table for ordered printout (megatune compat) */
 	if (logables.index[index])
@@ -499,7 +499,7 @@ void write_log_header(void *ptr)
 		iofile = (struct Io_File *)ptr;
 	else
 		dbg_func(__FILE__": write_log_header() iofile pointer was undefined...\n",CRITICAL);
-		
+
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
 	// Get total number of logables....
@@ -570,9 +570,9 @@ void run_datalog(void)
 	void *data;
 	GString *output;
 	struct Io_File *iofile = NULL;
-	unsigned char * uchar_ptr = (unsigned char *)runtime;
-	short * short_ptr = (short *)runtime;
-	float * float_ptr = (float *)runtime;
+	guchar * uchar_ptr = (guchar *)runtime;
+	gshort * short_ptr = (gshort *)runtime;
+	gfloat * float_ptr = (gfloat *)runtime;
 
 	if (!logging_active) /* Logging isn't enabled.... */
 		return;
@@ -617,7 +617,7 @@ void run_datalog(void)
 					last.tv_usec = now.tv_usec;
 					g_string_append_printf(
 							output,"%.3f",cumu);
-							
+
 				}
 				break;
 			default:
@@ -625,15 +625,15 @@ void run_datalog(void)
 				{
 					case FLOAT:
 						g_string_append_printf(
-							output,"%.3f",(float)float_ptr[offset/FLOAT]);
+								output,"%.3f",(float)float_ptr[offset/FLOAT]);
 						break;
 					case SHORT:
 						g_string_append_printf(
-							output,"%i",short_ptr[offset/SHORT]);
+								output,"%i",short_ptr[offset/SHORT]);
 						break;
 					case UCHAR:
 						g_string_append_printf(
-							output,"%i",(unsigned char)uchar_ptr[offset]);
+								output,"%i",(guchar)uchar_ptr[offset]);
 						break;
 					default:
 						dbg_func(g_strdup_printf(__FILE__": run_datalog(), SIZE not defined (%i)\n",i),CRITICAL);
@@ -680,9 +680,9 @@ gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 					if (mt_classic[i] == 1)
 					{
 						gtk_toggle_button_set_active(
-							GTK_TOGGLE_BUTTON
-							(logables.widgets[i]),
-							TRUE);
+								GTK_TOGGLE_BUTTON
+								(logables.widgets[i]),
+								TRUE);
 					}
 				}
 				break;
@@ -702,10 +702,10 @@ gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 				{
 					if (mt_full[i] == 1)
 					{
-					gtk_toggle_button_set_active(
-							GTK_TOGGLE_BUTTON
-							(logables.widgets[i]),
-							TRUE);
+						gtk_toggle_button_set_active(
+								GTK_TOGGLE_BUTTON
+								(logables.widgets[i]),
+								TRUE);
 					}
 				}
 				break;
@@ -721,4 +721,3 @@ gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 	}
 	return TRUE;
 }
-

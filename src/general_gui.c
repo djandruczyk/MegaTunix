@@ -116,145 +116,145 @@ void build_general(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,5);
 
 	button = gtk_check_button_new_with_label("Interrogation");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<0));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<0));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("OpenGL");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<1));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<1));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Download Conversions");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<2));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<2));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Upload Conversions");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<3));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<3));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Serial Writes");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<4));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<4));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Serial Reads");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(5));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<5));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(5));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<5));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("General Serial");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(6));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<6));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(6));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<6));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("I/O Processing");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(7));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<7));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(7));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<7));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Threads");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(8));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<8));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(8));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<8));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Reqd_Fuel Info");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(9));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<9));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(9));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<9));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Tab-Loader");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(10));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<10));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(10));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<10));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_check_button_new_with_label("Critical Errors");
-        g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(31));
-        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<31));
-        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
-        g_signal_connect(G_OBJECT(button),"toggled",
-                        G_CALLBACK(bitmask_button_handler),
-                        NULL);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(31));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<31));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
@@ -357,7 +357,7 @@ void build_general(GtkWidget *parent_frame)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
-//	gtk_widget_set_size_request(sw,-1,200);
+	//	gtk_widget_set_size_request(sw,-1,200);
 	gtk_box_pack_start(GTK_BOX(vbox2),sw,TRUE,TRUE,5);
 
 	view = gtk_text_view_new ();

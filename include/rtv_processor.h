@@ -18,7 +18,7 @@
 #include <configfile.h>
 
 /* Prototypes */
-void process_rt_vars(void * buf );
+void process_rt_vars(void * );
 gfloat lookup_data(GObject *, gint );
 gdouble handle_complex_expr(GObject *, void *);
 /* Prototypes */

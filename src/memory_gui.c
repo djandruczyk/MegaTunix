@@ -54,7 +54,7 @@ void build_memory(GtkWidget *parent_frame)
 	notebook = gtk_notebook_new();
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK (notebook), GTK_POS_TOP);
 	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
-	
+
 	raw_memory_widgets = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
 	base = 0;
 	range = 256;
@@ -146,7 +146,7 @@ void build_memory(GtkWidget *parent_frame)
 				G_CALLBACK(std_button_handler),
 				NULL);
 		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
-	
+
 		button = gtk_radio_button_new_with_label(NULL,"Hex");
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));

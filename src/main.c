@@ -33,7 +33,7 @@ GThread * serio_thread = NULL;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;
 
-int main(int argc, char ** argv)
+gint main(gint argc, gchar ** argv)
 {
 	if(!g_thread_supported())
 		g_thread_init(NULL);

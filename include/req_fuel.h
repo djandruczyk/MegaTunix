@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-int reqd_fuel_popup(GtkWidget *);
+gint reqd_fuel_popup(GtkWidget *);
 gboolean save_reqd_fuel(GtkWidget *, gpointer);
 gboolean close_popup(GtkWidget *);
 void req_fuel_change(GtkWidget *);

@@ -27,11 +27,14 @@
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	gint return_value = 0;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-	gint offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	gint page = -1;
+	gint offset = -1;
+
+	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"dl_conv_expr");
 	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"dl_evaluator");
 
@@ -57,8 +60,8 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 gfloat convert_after_upload(GtkWidget * widget)
 {
 	gfloat return_value = 0.0;
-	unsigned char *ve_const_arr;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	guchar *ve_const_arr;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	gint offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	gchar * conv_expr;
@@ -66,7 +69,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"ul_conv_expr");
 	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"ul_evaluator");
 
-	ve_const_arr = (unsigned char *)ms_data[page];
+	ve_const_arr = (guchar *)ms_data[page];
 	if (conv_expr == NULL)
 	{
 		dbg_func(g_strdup_printf(__FILE__": convert_after_ul(): NO CONVERSION defined for page: %i, offset: %i\n",page, offset),UL_CONV);

@@ -29,7 +29,7 @@ void process_rt_vars(void *incoming)
 	extern struct RtvMap *rtv_map;
 	extern struct Firmware_Details *firmware;
 	extern gint temp_units;
-	unsigned char *raw_realtime = incoming;
+	guchar *raw_realtime = incoming;
 	GObject * object = NULL;
 	gint len =  0;
 	GList * list= NULL;
@@ -40,7 +40,7 @@ void process_rt_vars(void *incoming)
 	gfloat result = 0.0;
 	gfloat tmpf = 0.0;
 	void *evaluator = NULL;
-	
+
 	len = firmware->rtvars_size;
 	if (len != rtv_map->raw_total)
 	{
@@ -100,10 +100,10 @@ gfloat lookup_data(GObject *object, gint offset)
 
 gdouble handle_complex_expr(GObject *object, void * incoming)
 {
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	gchar **symbols = NULL;
 	gchar **expr_types = NULL;
-	unsigned char *raw_data = incoming;
+	guchar *raw_data = incoming;
 	gint total_symbols = 0;
 	gint i = 0;
 	gint page = 0;
@@ -115,12 +115,12 @@ gdouble handle_complex_expr(GObject *object, void * incoming)
 	gdouble * values = NULL;
 	gchar * tmpbuf = NULL;
 	gdouble result = 0.0;
-	
+
 
 	symbols = (gchar **)g_object_get_data(object,"expr_symbols");
 	expr_types = (gchar **)g_object_get_data(object,"expr_types");
 	total_symbols = (gint)g_object_get_data(object,"total_symbols");
-	
+
 	names = g_malloc0(total_symbols*sizeof(gchar *));
 	values = g_malloc0(total_symbols*sizeof(gdouble));
 
@@ -165,7 +165,7 @@ gdouble handle_complex_expr(GObject *object, void * incoming)
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)raw_data[offset];
 		}
-		
+
 	}
 	evaluator = g_object_get_data(object,"evaluator");
 	assert(evaluator);
@@ -180,4 +180,3 @@ gdouble handle_complex_expr(GObject *object, void * incoming)
 	g_free(values);
 	return result;
 }
-

@@ -57,7 +57,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	gchar * end = NULL;
 	GString *a_line; 
 	gint *array = NULL;
-	gint tmparray[256];
+	gint tmparray[2048];
 	gint i = 0;
 
 	iochannel = g_io_channel_new_file(filename,"r", NULL);
@@ -84,8 +84,9 @@ gboolean load_table(gchar *table_name, gchar *filename)
 		}
 		g_string_free(a_line,TRUE);
 	}
-		
-	array = g_memdup(&tmparray,256*sizeof(gint));
+
+	printf("lookuptable size %i\n",i);
+	array = g_memdup(&tmparray,i*sizeof(gint));
 	if (!lookuptables)
 		lookuptables = g_hash_table_new(g_str_hash,g_str_equal);
 	g_hash_table_insert(lookuptables,table_name,array);

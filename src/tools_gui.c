@@ -23,7 +23,6 @@ extern GdkColor white;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern struct DynamicEntries entries;
-struct Tools tools;
 GtkWidget *tools_view;
 
 void build_tools(GtkWidget *parent_frame)
@@ -109,7 +108,6 @@ void build_tools(GtkWidget *parent_frame)
 
 	entry = gtk_entry_new();
 	entries.vex_comment_entry = entry;
-	tools.export_comment_entry = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 50);
 	g_signal_connect (G_OBJECT(entry), "activate",
 			G_CALLBACK (vex_comment_parse),

@@ -78,8 +78,8 @@ void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 		default:
 			title = g_strdup("Title not set BUG!! contact author\n");
 			break;
-		
-			
+
+
 	}
 
 	file_selector = gtk_file_selection_new(title);
@@ -157,11 +157,11 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		warn_input_file_not_exist(iotype, selected_filename);
 		return;
 	}
-	
+
 	if (((iotype == DATALOG_EXPORT) 
-		|| (iotype == VE_EXPORT) 
-		|| (iotype == FULL_BACKUP)) 
-		&& (preexisting == TRUE))
+				|| (iotype == VE_EXPORT) 
+				|| (iotype == FULL_BACKUP)) 
+			&& (preexisting == TRUE))
 	{
 		if (status.st_size > 0)
 		{
@@ -187,7 +187,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	iofile = g_malloc0(sizeof(struct Io_File));
 	iofile->filename = g_strdup(selected_filename);
 	iofile->iotype = iotype;
-				
+
 	/* Open file in append mode, create if non-existant */
 	iofile->iochannel = g_io_channel_new_file(selected_filename, "a+", NULL);
 
@@ -310,7 +310,7 @@ void close_file(void *ptr)
 	struct Io_File *iofile = NULL;
 	gchar *tmpbuf = NULL;
 	GIOStatus status;
-	
+
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
 	else
@@ -325,7 +325,7 @@ void close_file(void *ptr)
 		if (status != G_IO_STATUS_NORMAL)
 			dbg_func(__FILE__": close_file(), Error closing iochannel\n",CRITICAL);
 	}
-	
+
 	switch (iofile->iotype)
 	{
 		case DATALOG_EXPORT:
@@ -416,7 +416,7 @@ void backup_all_ms_settings(gchar *filename)
 	gchar * section = NULL;
 	gint i = 0;
 	gint x = 0;
-	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
 	GString *string = NULL;
 
 	cfgfile = cfg_open_file(filename);
@@ -457,8 +457,8 @@ void restore_all_ms_settings(gchar *filename)
 	gchar *tmpbuf = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{

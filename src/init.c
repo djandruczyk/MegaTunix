@@ -29,10 +29,10 @@ gint major_ver;
 gint minor_ver;
 gint micro_ver;
 gint ecu_caps = 0;	/* Assume stock B&G code */
-unsigned char *kpa_conversion; 
+guchar *kpa_conversion; 
 extern gint mem_view_style[];
-extern unsigned char turbo_map[];
-extern unsigned char na_map[];
+extern guchar turbo_map[];
+extern guchar na_map[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
@@ -53,9 +53,9 @@ extern gint interval_max;
 extern GtkWidget *main_window;
 struct Serial_Params *serial_params;	
 /* Support up to "x" page firmware.... */
-unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
-unsigned char *ms_data_backup[MAX_SUPPORTED_PAGES];
+guchar *ms_data[MAX_SUPPORTED_PAGES];
+guchar *ms_data_last[MAX_SUPPORTED_PAGES];
+guchar *ms_data_backup[MAX_SUPPORTED_PAGES];
 struct Runtime_Common *runtime;
 GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 GHashTable *interdep_vars_1 = NULL;
@@ -94,10 +94,10 @@ void init()
 	lv_scroll = 1;		/* Logviewer scroll speed */
 }
 
-int read_config(void)
+gboolean read_config(void)
 {
 	ConfigFile *cfgfile;
-	gchar *filename;
+	gchar *filename = NULL;
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -126,7 +126,7 @@ int read_config(void)
 		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
 		g_free(filename);
-		return(0);
+		return TRUE;
 	}
 	else
 	{
@@ -134,13 +134,14 @@ int read_config(void)
 		dbg_func(__FILE__": read_config(), Config file not found, using defaults\n",CRITICAL);
 		g_free(filename);
 		save_config();
-		return (-1);	/* No file found */
+		return FALSE;	/* No file found */
 	}
+	return TRUE;
 }
 
 void save_config(void)
 {
-	gchar *filename;
+	gchar *filename = NULL;
 	int x,y,tmp_width,tmp_height;
 	ConfigFile *cfgfile;
 	extern gboolean ready;
@@ -187,7 +188,7 @@ void save_config(void)
 
 void make_megasquirt_dirs(void)
 {
-	gchar *filename;
+	gchar *filename = NULL;
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix", NULL);
 	mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
@@ -242,7 +243,7 @@ void mem_dealloc()
 	gint i = 0;
 	extern struct Firmware_Details *firmware;
 	/* Allocate memory blocks */
-	
+
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
 	g_free(serial_params);

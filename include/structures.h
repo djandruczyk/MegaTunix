@@ -99,7 +99,6 @@ struct Reqd_Fuel
  */
 struct DynamicLabels
 {
-	GtkWidget *req_fuel_lab;
 	GtkWidget *ww_cr_pulse_hightemp_lab;
 	GtkWidget *warmwizard_lab[10];
 	GtkWidget *dlog_file_lab;
@@ -107,8 +106,6 @@ struct DynamicLabels
 	GtkWidget *ww_warmcorr_lab;
 	GtkWidget *ww_ego_lab;
 	GtkWidget *ww_map_lab;
-	GtkWidget *timing_multi_lab;
-	GtkWidget *output_boost_lab;
 
 };
 
@@ -117,22 +114,6 @@ struct DynamicLabels
  */
 struct DynamicButtons
 {
-	GtkWidget *speed_den_but;		/* Toggle button */
-	GtkWidget *alpha_n_but;			/* Toggle button */
-	GtkWidget *two_stroke_but;		/* Toggle button */
-	GtkWidget *four_stroke_but;		/* Toggle button */
-	GtkWidget *multi_port_but;		/* Toggle button */
-	GtkWidget *tbi_but;			/* Toggle button */
-	GtkWidget *map_115_but;			/* Toggle button */
-	GtkWidget *map_250_but;			/* Toggle button */
-	GtkWidget *even_fire_but;		/* Toggle button */
-	GtkWidget *odd_fire_but;		/* Toggle button */
-	GtkWidget *simul_but;			/* Toggle button */
-	GtkWidget *alternate_but;		/* Toggle button */
-	GtkWidget *baro_ena_but;		/* Toggle button */
-	GtkWidget *baro_disa_but;		/* Toggle button */
-	GtkWidget *nbo2_but;			/* Toggle button */
-	GtkWidget *wbo2_but;			/* Toggle button */
 	GtkWidget *tools_revert_but;		/* revert to old data */
 	GtkWidget *stop_dlog_but;		/* Stop DataLogging */
 	GtkWidget *start_dlog_but;		/* Start DataLogging */
@@ -141,23 +122,6 @@ struct DynamicButtons
 	GtkWidget *logplay_sel_parm_but;	/* Select rt parms for play */
 	GtkWidget *logplay_start_rt_but;	/* Logplay star realtime */
 	GtkWidget *logplay_stop_rt_but;		/* Logplay stop realtime */
-	GtkWidget *time_based_but;
-	GtkWidget *trig_return_but;
-	GtkWidget *invert_out_but;
-	GtkWidget *normal_out_but;
-	GtkWidget *multi_spark_but;
-	GtkWidget *norm_spark_but;
-	GtkWidget *boost_retard_but;
-	GtkWidget *noboost_retard_but;
-};
-
-/* Simple struct to store the pointers to the entry and button
- * for the tools_gui and vex_support files.  
- */
-struct Tools
-{
-	GtkWidget *export_but;
-	GtkWidget *export_comment_entry;
 };
 
 /* These are defined here instead of the individual .c files as

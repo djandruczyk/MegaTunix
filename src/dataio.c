@@ -26,7 +26,6 @@
 #include <unistd.h>
 
 
-
 static gint lastcount=0;
 gint ms_reset_count;
 gint ms_goodread_count;
@@ -40,12 +39,12 @@ void handle_ms_data(InputHandler handler, void * msg)
 	gint total_wanted = 0;
 	gint zerocount = 0;
 	gboolean bad_read = FALSE;
-	unsigned char buf[2048];
-	unsigned char *ptr = buf;
+	guchar buf[2048];
+	guchar *ptr = buf;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
 	struct Io_Message *message = (struct Io_Message *)msg;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
-	extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data_last[MAX_SUPPORTED_PAGES];
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 	extern struct Runtime_Common *runtime;
@@ -94,7 +93,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 				goto jumpout;
 			}
 			break;
-			
+
 		case REALTIME_VARS:
 			/* Data arrived,  drain buffer until we receive
 			 * serial->params->rtvars_size, or readcount
@@ -237,7 +236,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 			dbg_func("handle_ms_data, improper case, contact author\n",CRITICAL);
 			break;
 	}
-	jumpout:
+jumpout:
 
 	return;
 }

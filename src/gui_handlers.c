@@ -55,9 +55,9 @@ extern GtkTooltips *tip;
 extern GtkWidget *tab_delimiter_button;
 extern GtkWidget *delim_button;
 extern GtkWidget *delim_table;
-extern unsigned char *kpa_conversion;
-extern unsigned char na_map[];
-extern unsigned char turbo_map[];
+extern guchar *kpa_conversion;
+extern guchar na_map[];
+extern guchar turbo_map[];
 extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern struct DynamicButtons buttons;
 extern struct Serial_Params *serial_params;
@@ -250,7 +250,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint bitmask = -1;
 	gint dload_val = -1;
 	gint page = -1;
-	unsigned char tmp = 0;
+	guchar tmp = 0;
 	gint tmp32 = 0;
 	gint offset = -1;
 	gboolean ign_parm = FALSE;
@@ -262,7 +262,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gboolean state = FALSE;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 
 	if (paused_handlers)
 		return TRUE;
@@ -298,7 +298,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	/* Swaps the label of another control based on widget state... */
 	if (swap_label)
 		switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-		
+
 	switch ((SpinButton)handler)
 	{
 		case GENERIC:
@@ -372,7 +372,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case INTERROGATE_ECU:
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
-			
+
 		case START_REALTIME:
 			if (!connected)
 				io_cmd(IO_COMMS_TEST, NULL);
@@ -489,7 +489,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GtkWidget * info = NULL;
 	extern gint realtime_id;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern gint lv_scroll;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data[0];
@@ -751,7 +751,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				if (temp_units == CELSIUS)
 					value = (value*(9.0/5.0))+32;
 			}
-				
+
 			dload_val = convert_before_download(widget,value);
 			break;
 		default:
@@ -771,7 +771,7 @@ void update_ve_const()
 	gint page = 0;
 	gint offset = 0;
 	gfloat tmp = 0.0;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	extern gint ecu_caps;
 	extern GHashTable *dynamic_widgets;
 	struct Ve_Const_Std *ve_const = NULL;
@@ -931,14 +931,14 @@ void update_ve_const()
 		tmp /= 10.0;
 		req_fuel_total_1 = tmp;
 
-/*		 g_printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i, alt %i\n",
-		   ve_const->req_fuel,
-		   ve_const->config12.bit.injectors+1,
-		   ve_const->config11.bit.cylinders+1,
-		   ve_const->divider, 
-		   ve_const->alternate);
-*/
-		 
+		/*		 g_printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i, alt %i\n",
+				 ve_const->req_fuel,
+				 ve_const->config12.bit.injectors+1,
+				 ve_const->config11.bit.cylinders+1,
+				 ve_const->divider, 
+				 ve_const->alternate);
+		 */
+
 		/* Total Req Fuel per CYCLE */
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON
 				(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_cycle_1_spin")),
@@ -976,7 +976,7 @@ void update_ve_const()
 		//		check_req_fuel_limits();
 	}	// End of B&G specific code...
 
-	
+
 	/* Update all on screen controls (except bitfields (done above)*/
 	for (page=0;page<MAX_SUPPORTED_PAGES;page++)
 	{
@@ -984,7 +984,7 @@ void update_ve_const()
 		{
 			if (ve_widgets[page][offset] != NULL)
 			{
-//				printf("there is a list at %i,%i with %i elements\n",page,offset,g_list_length(ve_widgets[page][offset]));
+				//				printf("there is a list at %i,%i with %i elements\n",page,offset,g_list_length(ve_widgets[page][offset]));
 				g_list_foreach(ve_widgets[page][offset],
 						update_widget,NULL);
 			}
@@ -1009,7 +1009,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_label = NULL;
-	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -1075,7 +1075,6 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 }
 
-
 gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if(event->keyval == GDK_Shift_L)
@@ -1106,9 +1105,9 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 
 	last = now;
 	gettimeofday(&now,NULL);
-//	g_printf("time at click %i.%i\n",now.tv_sec,now.tv_usec);
-//	g_printf("time at last click %i.%i\n",last.tv_sec,last.tv_usec);
-//	g_printf("time diff between clicks: %f\n",(float)(now.tv_sec-last.tv_sec)+((now.tv_usec-last.tv_usec)/1000000.0));
+	//	g_printf("time at click %i.%i\n",now.tv_sec,now.tv_usec);
+	//	g_printf("time at last click %i.%i\n",last.tv_sec,last.tv_usec);
+	//	g_printf("time diff between clicks: %f\n",(float)(now.tv_sec-last.tv_sec)+((now.tv_usec-last.tv_usec)/1000000.0));
 
 	/* If nota doubleclick,  just return...
 	 * Otherwise toggle the flag and highlite/unhighlite the entry...
@@ -1142,16 +1141,17 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 
 void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
-//	printf("page changed to %i\n",page_no);
+	//	printf("page changed to %i\n",page_no);
 	gint page_ident = 0;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
-	
+
 	page_ident = (PageIdent)g_object_get_data(G_OBJECT(widget),"page_ident");
 	active_page = page_ident;
 	force_an_update();
 
 	return;
 }
+
 void switch_labels(gchar * widget_name,gboolean state)
 {
 	extern GHashTable *dynamic_widgets;

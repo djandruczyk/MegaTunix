@@ -262,7 +262,7 @@ gboolean update_runtime_vars()
 
 	if (rt_last == NULL)
 		rt_last = g_malloc0(sizeof(struct Runtime_Common));
-	
+
 	gdk_threads_enter();
 
 
@@ -273,9 +273,9 @@ gboolean update_runtime_vars()
 		ve_view = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(tmpwidget),"ve_view");
 		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
-		        gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 	}
-	
+
 
 	/* Update all the dynamic RT controls */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
@@ -386,8 +386,8 @@ gboolean update_runtime_vars()
 		/* Color the boxes on the VEtable closest to the operating point */
 
 	}
-//	if (forced_update)
-//		forced_update = FALSE;
+	//	if (forced_update)
+	//		forced_update = FALSE;
 	memcpy(rt_last, runtime,sizeof(struct Runtime_Common));
 	gdk_threads_leave();
 	return TRUE;
@@ -400,16 +400,16 @@ void reset_runtime_status()
 	{
 		gtk_widget_set_sensitive(misc.status[i],
 				FALSE);
-//		gtk_widget_set_sensitive(misc.ww_status[i],
-//				FALSE);
+		//		gtk_widget_set_sensitive(misc.ww_status[i],
+		//				FALSE);
 	}
 }
 
 void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
- 	gfloat *fl_ptr, *l_fl_ptr;
-	unsigned short *sh_ptr, *l_sh_ptr;
-	unsigned char *uc_ptr, *l_uc_ptr;	
+	gfloat *fl_ptr, *l_fl_ptr;
+	gushort *sh_ptr, *l_sh_ptr;
+	guchar *uc_ptr, *l_uc_ptr;	
 	extern struct Runtime_Common *runtime;
 	struct Rt_Control *control = (struct Rt_Control *)value;
 	gint offset = control->runtime_offset;
@@ -424,14 +424,14 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 
 	if (control->size == UCHAR)
 	{
-		uc_ptr = (unsigned char *) runtime;
-		l_uc_ptr = (unsigned char *) rt_last;
+		uc_ptr = (guchar *) runtime;
+		l_uc_ptr = (guchar *) rt_last;
 		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (forced_update))
 		{
 			ivalue = uc_ptr[offset];
 			tmpbuf = g_strdup_printf("%i",ivalue);
 			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-			tmpf = (float)ivalue/upper <= 1.0 ? (float)ivalue/upper : 1.0;
+			tmpf = (gfloat)ivalue/upper <= 1.0 ? (gfloat)ivalue/upper : 1.0;
 			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 					(control->pbar),
 					tmpf);
@@ -440,14 +440,14 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	}
 	else if (control->size == SHORT)
 	{
-		sh_ptr = (short *) runtime;
-		l_sh_ptr = (short *) rt_last;
+		sh_ptr = (gushort *) runtime;
+		l_sh_ptr = (gushort *) rt_last;
 		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (forced_update))
 		{
 			svalue = sh_ptr[offset/SHORT];
 			tmpbuf = g_strdup_printf("%i",svalue);
 			gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
-			tmpf = (float)svalue/upper <= 1.0 ? (float)svalue/upper : 1.0;
+			tmpf = (gfloat)svalue/upper <= 1.0 ? (gfloat)svalue/upper : 1.0;
 			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 					(control->pbar),
 					tmpf);
@@ -456,8 +456,8 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	}
 	else if (control->size == FLOAT)
 	{
-		fl_ptr = (float *) runtime;
-		l_fl_ptr = (float *) rt_last;
+		fl_ptr = (gfloat *) runtime;
+		l_fl_ptr = (gfloat *) rt_last;
 		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]) || (forced_update))
 		{
 			fvalue = fl_ptr[offset/FLOAT];

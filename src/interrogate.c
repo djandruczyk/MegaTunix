@@ -67,8 +67,8 @@ void interrogate_ecu()
 	gchar *string = NULL;
 	gchar * tmpbuf = NULL;
 	GArray *cmd_array = NULL;
-	unsigned char buf[size];
-	unsigned char *ptr = buf;
+	guchar buf[size];
+	guchar *ptr = buf;
 	GHashTable *cmd_details = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -83,7 +83,7 @@ void interrogate_ecu()
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
-	
+
 	/* Allocate memory to store interrogation results */
 	canidate = g_malloc0(sizeof(struct Canidate));
 	canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
@@ -199,7 +199,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	gchar * full_pathname = NULL;
 	extern struct IoCmds *cmds;
 
-	
+
 	/* Search homedire for potential interrogation profiles FIRST... */
 	path = g_strconcat(g_get_home_dir(),"/.MegaTunix/",INTERROGATOR_DIR,"/Profiles/",NULL);
 	dir = g_dir_open(path,0,&error);	
@@ -323,7 +323,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		firmware->page_params[i] = g_new0(struct Page_Params, 1);
-				
+
 		if (potential->page_params[i]->is_spark)
 		{
 			firmware->page_params[i]->size = (gint)g_hash_table_lookup(
@@ -432,7 +432,7 @@ cleanup:
 		firmware = g_malloc0(sizeof(struct Firmware_Details));
 		firmware->page_params[0] = g_new(struct Page_Params,1);
 	}
-	
+
 	firmware->tab_list = g_strsplit("",",",0);
 	firmware->page_params[0]->size = 125;	/* assumptions!!!! */
 	firmware->rtvars_size = 22;	/* assumptions!!!! */
@@ -480,7 +480,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			if (cmd->multipart)
 				cfg_read_int(cfgfile,section,"cmd_int_arg",
 						&cmd->cmd_int_arg);
-					
+
 			cfg_read_int(cfgfile,section,"page",
 					&cmd->page);
 			cfg_read_boolean(cfgfile,section,"store_data",
@@ -498,8 +498,8 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			g_hash_table_insert(cmd_details,g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page),cmd);
 		}
 		cfg_free(cfgfile);
-		
-		
+
+
 	}
 	else
 	{
@@ -531,7 +531,7 @@ void close_profile(void *ptr)
 {
 	struct Canidate *canidate = (struct Canidate *) ptr;
 	gint i = 0;
-	
+
 	dbg_func(__FILE__": close_profile(),\n\tdeallocating memory for potential canidate match\n",INTERROGATOR);
 	for (i=0;i<(canidate->total_pages);i++)
 		if (canidate->page_params[i])
@@ -546,9 +546,8 @@ void close_profile(void *ptr)
 		g_hash_table_destroy(canidate->bytecounts);
 	g_free(canidate);
 	dbg_func(__FILE__": close_profile(),\n\tdeallocation of memory for potential canidate complete\n",INTERROGATOR);
-	
-}
 
+}
 		
 void * load_potential_match(GArray * cmd_array, gchar * filename)
 {
@@ -600,26 +599,26 @@ void load_profile_details(void *ptr)
 	{	
 		dbg_func(g_strdup_printf(__FILE__": load_profile_details() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
 		if(!cfg_read_string(cfgfile,"parameters","Rt_Cmd_Key",
-				&canidate->rt_cmd_key))
+					&canidate->rt_cmd_key))
 			dbg_func(__FILE__": load_profile_details(), \"Rt_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"parameters","VE_Cmd_Key",
-				&canidate->ve_cmd_key))
+					&canidate->ve_cmd_key))
 			dbg_func(__FILE__": load_profile_details(), \"VE_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"parameters","Ign_Cmd_Key",
-				&canidate->ign_cmd_key))
+					&canidate->ign_cmd_key))
 			dbg_func(__FILE__": load_profile_details(), \"Ign_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
-				&canidate->raw_mem_cmd_key))
+					&canidate->raw_mem_cmd_key))
 			dbg_func(__FILE__": load_profile_details(), \"Raw_Mem_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 
 		if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
-				&canidate->multi_page))
+					&canidate->multi_page))
 			dbg_func(__FILE__": load_profile_details(), \"MultiPage\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_int(cfgfile,"parameters","TotalPages",
-				&canidate->total_pages))
+					&canidate->total_pages))
 			dbg_func(__FILE__": load_profile_details(), \"TotalPages\" value not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"parameters","Capabilities",
-				&tmpbuf))
+					&tmpbuf))
 			dbg_func(__FILE__": load_profile_details(), \"Capabilities\" enumeration list not found in interrogation profile, ERROR\n",CRITICAL);
 		else
 		{
@@ -627,13 +626,13 @@ void load_profile_details(void *ptr)
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,"gui","LoadTabs",
-				&canidate->load_tabs))
+					&canidate->load_tabs))
 			dbg_func(__FILE__": load_profile_details(), \"LoadTabs\" list not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
-				&canidate->rtv_map_file))
+					&canidate->rtv_map_file))
 			dbg_func(__FILE__": load_profile_details(), \"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if (!cfg_read_string(cfgfile,"lookuptables","tables",
-				&tmpbuf))
+					&tmpbuf))
 			dbg_func(__FILE__": load_profile_details(), \"tables\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);
 		else
 		{
@@ -644,7 +643,7 @@ void load_profile_details(void *ptr)
 			i = 0;
 			while (list[i] != NULL)
 			{	
-				
+
 				if (!cfg_read_string(cfgfile,"lookuptables",list[i],&tmpbuf))
 					dbg_func(__FILE__": load_profile_details(), \"lookuptables entry\" key name not found in interrogation profile, ERROR\n",CRITICAL);
 				else
@@ -662,22 +661,22 @@ void load_profile_details(void *ptr)
 			canidate->page_params[i] = g_new0(struct Page_Params,1);
 			section = g_strdup_printf("page_%i",i);
 			if(!cfg_read_int(cfgfile,section,"ve_base_offset",
-					&canidate->page_params[i]->ve_base))
+						&canidate->page_params[i]->ve_base))
 				dbg_func(__FILE__": load_profile_details(), \"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"rpm_base_offset",
-					&canidate->page_params[i]->rpm_base))
+						&canidate->page_params[i]->rpm_base))
 				dbg_func(__FILE__": load_profile_details(), \"ve_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"load_base_offset",
-					&canidate->page_params[i]->load_base))
+						&canidate->page_params[i]->load_base))
 				dbg_func(__FILE__": load_profile_details(), \"load_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"rpm_bincount",
-					&canidate->page_params[i]->rpm_bincount))
+						&canidate->page_params[i]->rpm_bincount))
 				dbg_func(__FILE__": load_profile_details(), \"rpm_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"load_bincount",
-					&canidate->page_params[i]->load_bincount))
+						&canidate->page_params[i]->load_bincount))
 				dbg_func(__FILE__": load_profile_details(), \"load_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_boolean(cfgfile,section,"is_spark",
-					&canidate->page_params[i]->is_spark))
+						&canidate->page_params[i]->is_spark))
 				dbg_func(__FILE__": load_profile_details(), \"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			g_free(section);
 		}
@@ -707,7 +706,7 @@ void load_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 		cmd = g_array_index(cmd_array,struct Command *, i);
 		tmpbuf = g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page);
 		if(!cfg_read_int(cfgfile,"bytecounts",tmpbuf,
-				&bytecount))
+					&bytecount))
 			dbg_func(g_strdup_printf(__FILE__": load_bytecounts(), \"%s\" key not found in interrogation profile, ERROR\n",tmpbuf),CRITICAL);
 		else
 		{
@@ -721,10 +720,10 @@ void load_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 
 gint translate_capabilities(gchar *string)
 {
-	gchar **vector;
+	gchar **vector = NULL;
 	gint i = 0;
 	gint value = 0;
-	
+
 
 	vector = g_strsplit(string,",",0);
 	dbg_func(g_strdup_printf(__FILE__": translate_capabilities() string fed is %s\n",string),INTERROGATOR);
@@ -748,7 +747,7 @@ gboolean check_for_match(GArray *cmd_array, void *pot_ptr, void *can_ptr)
 	gint cbytes = 0;
 	gint pbytes = 0;
 	struct Command *cmd = NULL;
-	
+
 	gint j = 0;
 
 	for (j=0;j<num_tests;j++)
