@@ -207,26 +207,32 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	frame = gtk_frame_new("Runtime Status");
+	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
-	table = gtk_table_new(3,5,FALSE);
+	table = gtk_table_new(5,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacing(GTK_TABLE(table),0,0);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	/* Coolant */
+	label = gtk_label_new(NULL);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+
 	label = gtk_label_new("Coolant (F)");
 	labels.warmwiz_clt_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	labels.ww_clt_lab = label;
@@ -234,21 +240,26 @@ void build_warmwizard(GtkWidget *parent_frame)
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), pbar, 3, 4, 0, 1,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	progress.ww_clt_pbar = pbar;
 
 	/* Warmup Correction  */
+	label = gtk_label_new(NULL);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+
 	label = gtk_label_new("Warmup (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	labels.ww_warmcorr_lab = label;
@@ -256,23 +267,28 @@ void build_warmwizard(GtkWidget *parent_frame)
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), pbar, 3, 4, 1, 2,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	progress.ww_warmcorr_pbar = pbar;
 
 	/* O2 Voltage Label*/
 	label = gtk_label_new(NULL);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+
+	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label),"O<sub>2</sub> (Volts)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* O2 Voltage value*/
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	labels.ww_ego_lab = label;
@@ -280,21 +296,26 @@ void build_warmwizard(GtkWidget *parent_frame)
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), pbar, 3, 4, 2, 3,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	progress.ww_ego_pbar = pbar;
 
 	/* MAP Sensor */       
+	label = gtk_label_new(NULL);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+
 	label = gtk_label_new("MAP (kPa)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 3, 4,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	labels.ww_map_lab = label;
@@ -302,7 +323,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 3, 4,
+	gtk_table_attach (GTK_TABLE (table), pbar, 3, 4, 3, 4,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
 	progress.ww_map_pbar = pbar;

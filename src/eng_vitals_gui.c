@@ -311,7 +311,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	/* O2 Sensor Type selector */
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   Do you have a Narrow-Band (1, 3 or 4 wire) O2 Sensor or a Wideband sensor (5 Wire sensor + control module).  You cannot just install a Wideband sensor and connect it DIRECTLY to the MegaSquirt ECU.  The Wideband sensors need a dedicated controller which will output an analog signal that connects to the MegaSquirt ECU. A Narrowband sensor (1,3 or 4 wires) can be connected directly to the ECU (use the signal wire only).  If the sensor has only 1 wire, this wire goes to the ECU O2 input,  if it has 3 wires,  two of them are for the heater,  1 wire goes to ground, the other goes to switched 12 Volts. Typically the heater wires are 1 gauge larger than the signal wire.  If your O2 sensor has 4 wires, 2 are for the heater, connect as above, the other two are signal, and signal ground, when hot the sensor will output a voltage between about 0-1 Volt  depending on the mixture (richer is higher for a narrowband sensor), if you connect a meter across the signal wires and get a negative reading you hooked it up backwards, (reverse the signal and ground wires)",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   Do you have a Narrow-Band (1, 3 or 4 wire) O2 Sensor or a Wideband sensor (5 Wire sensor + control module)?  You cannot just install a Wideband sensor and connect it DIRECTLY to the MegaSquirt ECU.  The Wideband sensors require a dedicated controller which will output an analog signal that connects to the MegaSquirt ECU.  A Narrowband sensor (1,3 or 4 wires) can be connected directly to the ECU (use the signal wire only).  If the sensor has only 1 wire, this wire goes to the ECU O2 input,  if it has 3 wires,  two of them are for the sensor heater element,  1 wire goes to ground, the other goes to switched 12 Volts.  Typically the heater wires are of a heavier gauge than the signal wire.  If your O2 sensor has 4 wires, 2 are for the heater, connect as above, the other two are signal, and signal ground. When hot the sensor will output a voltage between about 0-1 Volts, depending on the mixture (richer is higher for a narrowband sensor), if you connect a meter across the signal wires and get a negative reading you hooked it up backwards, (reverse the signal and ground wires)",NULL);
         table = gtk_table_new(2,2,TRUE);
         gtk_table_set_row_spacings(GTK_TABLE(table),5);
         gtk_container_set_border_width(GTK_CONTAINER(table),3);
@@ -517,6 +517,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	table = gtk_table_new(5,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),25);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,20);
 
