@@ -11,6 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  *
  * Just about all of this was written by Richard Barrington....
+ * 
+ * Large portions of this code are based on the examples provided with 
+ * the GtkGlExt libraries.
  *
  */
 
@@ -22,21 +25,26 @@
 #include <tuning_gui.h>
 
 #define DEFAULT_WIDTH  320
-#define DEFAULT_HEIGHT 320
-                                                                                                                            
+#define DEFAULT_HEIGHT 320                                                                                                                         
 
 int grid = 8;
 int beginX, beginY;
 int active_map, active_rpm = 0;
   
 float dt = 0.008;
-float sphi = 25.0; 
+float sphi = 45.0; 
 float stheta = 75.0; 
 float sdepth = 7.533;
 float zNear = 0.8;
 float zFar = 23;
-float aspect = 1.333;
-static GtkWidget *drawing_area;
+float aspect = 1.0;
+float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
+int rpm_max=0, kpa_max=0, ve_max=0;
+GtkWidget *drawing_area;
+gchar font_string[] = "nimbus sans 10";
+GLuint font_list_base;
+gint font_height;
+gchar label[6];
 
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
@@ -63,7 +71,6 @@ int build_tuning(GtkWidget *parent_frame)
 
 	drawing_area = gtk_drawing_area_new();
 	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
-
 	gtk_widget_set_size_request (drawing_area, 
 			DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
@@ -81,7 +88,6 @@ int build_tuning(GtkWidget *parent_frame)
 			GDK_KEY_RELEASE_MASK	|
 			GDK_FOCUS_CHANGE_MASK	|
 			GDK_VISIBILITY_NOTIFY_MASK);	
-
 
 	/* Connect signal handlers to the drawing area */
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
@@ -121,7 +127,7 @@ void reset_3d_view()
 	active_map = 0;
 	active_rpm = 0;
 	dt = 0.008;
-	sphi = 25.0; 
+	sphi = 45.0; 
 	stheta = 75.0; 
 	sdepth = 7.533;
 	zNear = 0.8;
@@ -148,6 +154,9 @@ GdkGLConfig* get_gl_config(void)
 				GDK_GL_MODE_DEPTH);
 		if (gl_config == NULL)
 		{
+			/* Should make a non-GL basic drawing area version 
+			   instead of dumping the user out of here, or at least 
+			   render a non-GL found text on the drawing area */
 			g_print ("*** No appropriate OpenGL-capable visual found.\n");
 			exit (1);
 		}
@@ -163,6 +172,10 @@ gboolean tuning_gui_configure_event(GtkWidget *widget, GdkEventConfigure *event,
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
 
+	#ifdef DEBUG
+	printf("%i Got Configure\n", clock());
+	#endif
+	
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
@@ -174,12 +187,20 @@ gboolean tuning_gui_configure_event(GtkWidget *widget, GdkEventConfigure *event,
 	/*** OpenGL END ***/                                                                                                                  
 	return TRUE;
 }
+
 gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	gtk_widget_grab_focus(widget);
+	if (!GTK_WIDGET_HAS_FOCUS(widget)){
+		gtk_widget_grab_focus(widget);
+	}
+	
 	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
-
+	
+	#ifdef DEBUG
+	printf("%i Got Expose\n", clock());
+	#endif
+	
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
 		return FALSE;
@@ -197,7 +218,10 @@ gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoin
 	glRotatef(sphi, 0.0, 0.0, 1.0);
 	glTranslatef(-(float)((grid+1)/2-1), -(float)((grid+1)/2-1), -2.0);
 
+	tuning_gui_calculate_scaling();
 	tuning_gui_draw_ve_grid();
+	tuning_gui_draw_active_indicator();
+	tuning_gui_draw_axis();
 
 	/* Swap buffers */
 	if (gdk_gl_drawable_is_double_buffered (gldrawable))
@@ -209,7 +233,7 @@ gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoin
 
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
-
+	
 	return TRUE; 
 }
 
@@ -237,7 +261,6 @@ gboolean tuning_gui_motion_notify_event(GtkWidget *widget, GdkEventMotion *event
 
 	return TRUE;
 }
-
 
 gboolean tuning_gui_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -285,23 +308,22 @@ void tuning_gui_realize (GtkWidget *widget, gpointer data)
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	//gdk_gl_glPolygonOffsetEXT (proc, 1.0, 1.0);
 	glShadeModel(GL_FLAT);
-	glLineWidth(1.5);
 	glEnable (GL_LINE_SMOOTH);
 	glEnable (GL_BLEND);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
 
+	tuning_gui_load_font_metrics();
+	
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 }
 
-void tuning_gui_draw_ve_grid(void)
+void tuning_gui_calculate_scaling(void)
 {
-	int i=0,  rpm_max=0, kpa_max=0, ve_max=0;
-	int rpm=0, map=0;
-	float rpm_div=0.0, kpa_div=0.0,ve_div=0.0;
-
+	int i=0;
+	
 	/* calculate scaling */
 	for (i=0;i<grid;i++) {
 		if (ve_const_p0->rpm_bins[i] > rpm_max) {
@@ -320,43 +342,181 @@ void tuning_gui_draw_ve_grid(void)
 
 	rpm_div = ((float)rpm_max/8.0);
 	kpa_div = ((float)kpa_max/8.0);
-	ve_div  = ((float)ve_max/4.0);
+	ve_div  = ((float)ve_max/4.0);	
+}
+
+void tuning_gui_draw_ve_grid(void)
+{
+	int rpm=0, map=0;
 
 	glColor3f(1.0, 1.0, 1.0);
-
-	/* Render lines */
+	glLineWidth(1.5);
+	/* glDisable(GL_LINE_STIPPLE); */
+	
+	/* Draw RPM lines */
 	for(rpm=0;rpm<grid;rpm++)
 	{
 		glBegin(GL_LINE_STRIP);
 		for(map=0;map<grid;map++) {
 			glVertex3f(
-					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div, 	
 					(float)(ve_const_p0->kpa_bins[map])/kpa_div, 	
+					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div, 	
 					(float)(ve_const_p0->ve_bins[(rpm*8)+map])/ve_div);
 		}
 		glEnd();
 	}
-
+	/* Draw MAP lines */
 	for(map=0;map<grid;map++)
 	{
 		glBegin(GL_LINE_STRIP);
 		for(rpm=0;rpm<grid;rpm++){
 			glVertex3f(
-					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div,	
-					(float)(ve_const_p0->kpa_bins[map])/kpa_div,		  
+					(float)(ve_const_p0->kpa_bins[map])/kpa_div,	
+					(float)(ve_const_p0->rpm_bins[rpm])/rpm_div,		  
 					(float)(ve_const_p0->ve_bins[(rpm*8)+map])/ve_div);	
 		}
 		glEnd();
 	}
+}
 
+void tuning_gui_draw_active_indicator(void)
+{
 	glPointSize(10.0);
+	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(
-			(float)(ve_const_p0->rpm_bins[active_rpm])/rpm_div,	
-			(float)(ve_const_p0->kpa_bins[active_map])/kpa_div,		  
+			(float)(ve_const_p0->kpa_bins[active_map])/kpa_div,	
+			(float)(ve_const_p0->rpm_bins[active_rpm])/rpm_div,		  
 			(float)(ve_const_p0->ve_bins[(active_rpm*8)+active_map])/ve_div);
-	glEnd();
+	glEnd();	
+}
 
+
+void tuning_gui_draw_axis(void)
+{
+	int i=0, rpm=0, map=0;
+	float top = ((float)(ve_max+20))/ve_div;
+	
+	glLineWidth(1.0); /* was 0.5, but too jagged on my LCD */
+	glColor3f(0.7,0.7,0.7);
+	/* glLineStipple(1,0xAAAA);
+	glEnable(GL_LINE_STIPPLE); I decided it looks a big odd... */
+	
+	/* Draw horizontal background grid lines */
+	for (i=0;i<(ve_max+20);i = i + 10){
+		glBegin(GL_LINE_STRIP);
+		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+			((ve_const_p0->rpm_bins[0])/rpm_div),
+			((float)i)/ve_div);
+		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+			((ve_const_p0->rpm_bins[7])/rpm_div),
+			((float)i)/ve_div);
+		glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
+			((ve_const_p0->rpm_bins[7])/rpm_div),
+			((float)i)/ve_div);
+		glEnd();	
+	}
+	/* Draw vertical background grid lines */
+	for (i=0;i<8;i++){
+		glBegin(GL_LINES);
+		glVertex3f(((ve_const_p0->kpa_bins[i])/kpa_div),
+			((ve_const_p0->rpm_bins[7])/rpm_div),
+			0.0);
+		glVertex3f(((ve_const_p0->kpa_bins[i])/kpa_div),
+			((ve_const_p0->rpm_bins[7])/rpm_div),
+			top);
+		glEnd();
+	}
+	for (i=0;i<8;i++){
+		glBegin(GL_LINES);
+		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+			((ve_const_p0->rpm_bins[i])/rpm_div),
+			0.0);
+		glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+			((ve_const_p0->rpm_bins[i])/rpm_div),
+			top);
+		glEnd();
+	}
+	/* Add the top line */
+	glBegin(GL_LINE_STRIP);
+	glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+		((ve_const_p0->rpm_bins[0])/rpm_div),
+		top);
+	glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+		((ve_const_p0->rpm_bins[7])/rpm_div),
+		top);
+	glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
+		((ve_const_p0->rpm_bins[7])/rpm_div),
+		top);
+	glEnd();
+	/* Add base lines */
+	glBegin(GL_LINE_STRIP);
+	glVertex3f(((ve_const_p0->kpa_bins[7])/kpa_div),
+		((ve_const_p0->rpm_bins[0])/rpm_div),
+		0.0);
+	glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
+		((ve_const_p0->rpm_bins[0])/rpm_div),
+		0.0);
+	glVertex3f(((ve_const_p0->kpa_bins[0])/kpa_div),
+		((ve_const_p0->rpm_bins[7])/rpm_div),
+		0.0);
+	glEnd();
+	
+	/* Draw grid labels */
+	for (i=0;i<8;i++){
+		rpm = (ve_const_p0->rpm_bins[i])*100;
+		map = (ve_const_p0->kpa_bins[i]);
+		sprintf(label,"%i",map);
+		tuning_gui_drawtext(label,
+			((ve_const_p0->kpa_bins[0])/kpa_div),
+			((ve_const_p0->rpm_bins[i])/rpm_div),
+			0.0);
+		sprintf(label,"%i",rpm);
+		tuning_gui_drawtext(label,
+			((ve_const_p0->kpa_bins[i])/kpa_div),
+			((ve_const_p0->rpm_bins[0])/rpm_div),
+			0.0);
+	}
+	for (i=0;i<(ve_max+20);i=i+10){
+		sprintf(label,"%i",i);
+		tuning_gui_drawtext(label,
+			((ve_const_p0->kpa_bins[0])/kpa_div),
+			((ve_const_p0->rpm_bins[7])/rpm_div),
+			(float)i/ve_div);
+	}
+	
+}
+
+void tuning_gui_drawtext(char* text, float x, float y, float z)
+{
+	glColor3f(0.5,0.5,0.5);
+	glRasterPos3f (x, y, z);
+	while(*text) {
+        glCallList(font_list_base+(*text));
+        text++;
+    };
+}
+
+void tuning_gui_load_font_metrics(void)
+{
+	PangoFontDescription *font_desc;
+	PangoFont *font;
+	PangoFontMetrics *font_metrics;
+
+	font_list_base = glGenLists (128);
+	font_desc = pango_font_description_from_string (font_string);
+  	font = gdk_gl_font_use_pango_font (font_desc, 0, 128, font_list_base);
+  	if (font == NULL)
+    {
+      g_print ("*** Can't load font '%s'\n", font_string);
+      exit (1);
+    }
+  	font_metrics = pango_font_get_metrics (font, NULL);
+  	font_height = pango_font_metrics_get_ascent (font_metrics) +
+                  pango_font_metrics_get_descent (font_metrics);
+  	font_height = PANGO_PIXELS (font_height);
+  	pango_font_description_free (font_desc);
+  	pango_font_metrics_unref (font_metrics);
 }
 
 gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -370,7 +530,7 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			#ifdef DEBUG
 			printf("UP\n");
 			#endif
-			if (active_map < 8)
+			if (active_map < 7)
 				active_map += 1;
 			break;
 
@@ -386,16 +546,18 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			#ifdef DEBUG
 			printf("LEFT\n");
 			#endif
-			if (active_rpm > 0)
-				active_rpm -= 1;
+			/* Reversed to match display orientation */
+			if (active_rpm < 7)
+				active_rpm += 1;
 			break;					
 
 		case GDK_Right:
 			#ifdef DEBUG
 			printf("RIGHT\n");
 			#endif
-			if (active_rpm < 8)
-				active_rpm += 1;
+			/* Reversed to match display orientation */
+			if (active_rpm > 0)
+				active_rpm -= 1;
 			break;				
 
 		case GDK_plus:
@@ -426,6 +588,8 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 }
 
 gboolean tuning_gui_focus_in_event (GtkWidget *widget, GdkEventFocus *event, gpointer data)
-{
-	gtk_widget_grab_focus (widget);		
+{	
+	gtk_widget_grab_focus (widget);
+	gtk_widget_map(widget);
+	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
 }

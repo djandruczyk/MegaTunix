@@ -44,6 +44,11 @@ void tuning_gui_reset_ve_grid(void);
 void tuning_gui_normalize(float );
 void tuning_gui_draw_grid_point(float , float , float , int );
 void tuning_gui_draw_labels(void);
+void tuning_gui_draw_active_indicator(void);
+void tuning_gui_calculate_scaling(void);
+void tuning_gui_draw_axis(void);
+void tuning_gui_drawtext(char* text, float x, float y, float z);
+void tuning_gui_load_font_metrics(void);
 void reset_3d_view(void);
 /* Prototypes */
 
