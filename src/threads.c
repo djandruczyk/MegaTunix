@@ -150,7 +150,10 @@ void *raw_reader_thread(void *params)
 		{
                         res = handle_ms_data(REALTIME_VARS);
 			if(res)
+			{
 				update_runtime_vars();
+				run_datalog();
+			}
 			else
 				printf("handle_ms_data reported a fault\n");
 		}

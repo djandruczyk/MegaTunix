@@ -163,6 +163,9 @@ void clear_logables(void);
 int set_logging_mode(GtkWidget *, gpointer);
 int set_logging_delimiter(GtkWidget *, gpointer);
 int log_value_set(GtkWidget *, gpointer);
+void write_log_header(void);
+void run_datalog(void);
+
 /* datalogging_gui.c */
 
 /* general_gui.c */

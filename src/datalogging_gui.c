@@ -31,11 +31,18 @@ extern gint ready;
 gint log_opened=FALSE;
 gchar *delim;
 static gint dlog_context_id;
+static gint mode = CUSTOM_LOG;
+static gint logging=FALSE;
+static gint header_needed=FALSE;
 static GtkWidget *logables_table;
+static GtkWidget *file_selection;
 static GtkWidget *delim_table;
+static GtkWidget *format_table;
 static GtkWidget *tab_delim_button;
 static GtkWidget *dlog_statbar;
 static GtkWidget *file_label;
+static GtkWidget *stop_button;
+static GtkWidget *start_button;
 static int logfile;	/* DataLog File Handle*/
 static gchar * log_file_name;
 static gchar buff[100];
@@ -90,6 +97,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
+	file_selection = hbox;
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
@@ -163,6 +171,7 @@ int build_datalogging(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
 	table = gtk_table_new(1,4,TRUE);
+	format_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),15);
         gtk_container_set_border_width(GTK_CONTAINER(table),0);
@@ -176,6 +185,8 @@ int build_datalogging(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(set_logging_mode),
                         GINT_TO_POINTER(CLASSIC_LOG));
+	if (mode == CLASSIC_LOG)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	button = gtk_radio_button_new_with_label(group,"Custom Format");
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
@@ -185,7 +196,8 @@ int build_datalogging(GtkWidget *parent_frame)
         g_signal_connect(G_OBJECT(button),"toggled",
                         G_CALLBACK(set_logging_mode),
                         GINT_TO_POINTER(CUSTOM_LOG));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+	if (mode == CUSTOM_LOG)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	frame = gtk_frame_new("Logging Delimiters ");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
@@ -231,7 +243,28 @@ int build_datalogging(GtkWidget *parent_frame)
                         GINT_TO_POINTER(SPACE));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
+	frame = gtk_frame_new("DataLogging Operations");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
+
+	button = gtk_button_new_with_label("Start Datalogging");
+	start_button = button;
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
+	gtk_widget_set_sensitive(button,log_opened);
+	g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(START_DATALOGGING));
+
+	button = gtk_button_new_with_label("Stop Datalogging");
+	stop_button = button;
+	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,20);
+	gtk_widget_set_sensitive(button,log_opened);
+	g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(STOP_DATALOGGING));
 	return TRUE;
 }
 
@@ -292,6 +325,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		if(!logfile)
 		{
 			log_opened=FALSE;
+			gtk_widget_set_sensitive(stop_button,FALSE);
+			gtk_widget_set_sensitive(start_button,FALSE);
 			g_snprintf(buff,100,"Failure creating datalogfile, Error Code: %s",strerror(errno));
 			update_statusbar(dlog_statbar,dlog_context_id,buff);
 
@@ -299,6 +334,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		else
 		{
 			log_opened=TRUE;
+			gtk_widget_set_sensitive(stop_button,TRUE);
+			gtk_widget_set_sensitive(start_button,TRUE);
 			log_file_name = g_strdup(selected_filename);
 			gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
 			g_snprintf(buff,100,"DataLog File Opened");
@@ -318,6 +355,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		if(!logfile)
 		{
 			log_opened=FALSE;
+			gtk_widget_set_sensitive(stop_button,FALSE);
+			gtk_widget_set_sensitive(start_button,FALSE);
 			g_snprintf(buff,100,"Failure opening datalogfile, Error Code: %s",strerror(errno));
 			update_statusbar(dlog_statbar,
 					dlog_context_id,buff);
@@ -325,6 +364,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		else
 		{	
 			log_opened=TRUE;
+			gtk_widget_set_sensitive(stop_button,TRUE);
+			gtk_widget_set_sensitive(start_button,TRUE);
 			log_file_name = g_strdup(selected_filename);
 			gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
 			g_snprintf(buff,100,"DataLog File Opened");
@@ -348,6 +389,8 @@ void close_logfile(void)
 		logfile = 0;
 		g_snprintf(buff,100,"Logfile Closed");
 		update_statusbar(dlog_statbar,dlog_context_id,buff);
+		gtk_widget_set_sensitive(stop_button,FALSE);
+		gtk_widget_set_sensitive(start_button,FALSE);
 				
 	
 	}
@@ -373,12 +416,31 @@ void truncate_log()
 
 void start_datalogging()
 {
-	/* Not written yet */
+	if (logging)
+		return;   /* Logging already running ... */
+	else
+	{
+		gtk_widget_set_sensitive(logables_table,FALSE);
+		gtk_widget_set_sensitive(delim_table,FALSE);
+		gtk_widget_set_sensitive(format_table,FALSE);
+		gtk_widget_set_sensitive(file_selection,FALSE);
+		header_needed = TRUE;
+		logging = TRUE;
+	}
+	return;
 }
 
 void stop_datalogging()
 {
-	/* Not written yet */
+	logging = FALSE;
+	if (mode == CUSTOM_LOG)
+	{
+		gtk_widget_set_sensitive(logables_table,TRUE);
+		gtk_widget_set_sensitive(delim_table,TRUE);
+	}
+	gtk_widget_set_sensitive(format_table,TRUE);
+	gtk_widget_set_sensitive(file_selection,TRUE);
+	return;
 }
 
 gint set_logging_mode(GtkWidget *widget, gpointer data)
@@ -392,6 +454,7 @@ gint set_logging_mode(GtkWidget *widget, gpointer data)
 		switch ((gint)data)
 		{
 			case CLASSIC_LOG:
+				mode = CLASSIC_LOG;
 				clear_logables();
 				gtk_widget_set_sensitive(
 						logables_table,FALSE);
@@ -411,6 +474,7 @@ gint set_logging_mode(GtkWidget *widget, gpointer data)
 				}
 				break;
 			case CUSTOM_LOG:
+				mode = CUSTOM_LOG;
 				clear_logables();
 				gtk_widget_set_sensitive(
 						logables_table,TRUE);
@@ -500,4 +564,25 @@ gint log_value_set(GtkWidget * widget, gpointer data)
 	printf("logables.logbits.bit.gammae = %i\n",logables.logbits.bit.gammae);
 */
 	return TRUE;
+}
+
+void run_datalog(void)
+{
+	if (logging == FALSE) /* Logging isn't enabled.... */
+		return;
+	else
+	{
+		if (header_needed)
+		{
+			write_log_header();
+			header_needed = FALSE;
+		}
+		
+	}
+
+}
+
+void write_log_header(void)
+{
+	
 }
