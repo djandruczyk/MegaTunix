@@ -75,23 +75,22 @@ void interrogate_ecu()
 	 * try and get as close as possible.
 	 */
 	struct pollfd ufds;
+	struct Command *cmd = NULL;
+	struct Canidate *canidate = NULL;
 	gint size = 1024;
-	unsigned char buf[size];
-	unsigned char *ptr = buf;
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
 	gint total = 0;
 	gint last_page = 0;
-	extern gboolean raw_reader_running;
-	gboolean restart_reader = FALSE;
-	gchar *string;
-	gchar *tmpbuf;
-	GArray *cmd_array;
-	gboolean con_status = FALSE;
-	struct Command *cmd = NULL;
 	gint tests_to_run = 0;
-	struct Canidate *canidate;
+	gboolean restart_reader = FALSE;
+	gboolean con_status = FALSE;
+	gchar *string = NULL;
+	GArray *cmd_array = NULL;
+	unsigned char buf[size];
+	unsigned char *ptr = buf;
+	extern gboolean raw_reader_running;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -150,9 +149,7 @@ void interrogate_ecu()
 
 		string = g_strdup(cmd->string);
 		res = write(serial_params->fd,string,cmd->len);
-		tmpbuf = g_strdup_printf("sent command \"%s\"\n",string);
-		dbg_func(tmpbuf,INTERROGATOR);
-		g_free(tmpbuf);
+		dbg_func(g_strdup_printf(__FILE__": interrogate_ecu() sent command \"%s\"\n",string),INTERROGATOR);
 		g_free(string);
 		if (res != cmd->len)
 			dbg_func(__FILE__": Error writing data to the ECU\n",CRITICAL);
@@ -163,7 +160,7 @@ void interrogate_ecu()
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
 			}
-			dbg_func(g_strdup_printf("total %i\n",total),INTERROGATOR);
+			dbg_func(g_strdup_printf(__FILE__": interrogate_ecu() received %i bytes\n",total),INTERROGATOR);
 			ptr = buf;
 		
 			switch (cmd->store_type)
@@ -246,8 +243,8 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 			{
 				// Mismatch, abort test and move on to the 
 				// next one...
-				//close_profile(potential,filename);
-				dbg_func(g_strdup_printf(__FILE__": determine_ecu(), mismatch, loading next profile\n"),INTERROGATOR);
+				dbg_func(g_strdup_printf(__FILE__": determine_ecu(), counts don't match, loading next profile\n"),INTERROGATOR);
+				close_profile(potential);
 				goto end_of_loop; 
 			}
 		}
@@ -340,7 +337,7 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, contact author with the contents of this window\n");
 		// Store counts for VE/realtime readback... 
 
-		dbg_func(tmpbuf,INTERROGATOR);
+		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu() Firmware NOT detected, send contents of interrogation window\nand the firmware details to the MegaTunix author\n"),CRITICAL);
 		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 		g_free(tmpbuf);
 		goto cleanup;
@@ -366,7 +363,7 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 	/* Display firmware version in the window... */
 	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",potential->firmware_name);
 
-	dbg_func(tmpbuf,INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": determine_ecu() Detected Firmware: %s\n",potential->firmware_name),INTERROGATOR);
 	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 	g_free(tmpbuf);
 	goto freeup;
@@ -401,7 +398,7 @@ GArray * validate_and_load_tests()
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{	
-		dbg_func(g_strdup_printf(__FILE__": file %s, openend successfully\n",filename),INTERROGATOR);
+		dbg_func(g_strdup_printf(__FILE__":\n\tfile %s,\n\topened successfully\n",filename),INTERROGATOR);
 		cmd_array = g_array_new(FALSE,FALSE,sizeof(struct Command *));
 		cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 		for (i=0;i<total_tests;i++)
@@ -467,6 +464,25 @@ void free_test_commands(GArray * cmd_array)
 	}
 	g_array_free(cmd_array,TRUE);
 }
+
+void close_profile(void *ptr)
+{
+	struct Canidate *canidate = (struct Canidate *) ptr;
+	
+	dbg_func(__FILE__": close_profile(),\n\tdeallocating memory for potential canidate match\n",INTERROGATOR);
+	if (canidate->sig_str)
+		g_free(canidate->sig_str);
+	if (canidate->quest_str)
+		g_free(canidate->quest_str);
+	if (canidate->firmware_name)
+		g_free(canidate->firmware_name);
+	if (canidate->bytecounts)
+		g_hash_table_destroy(canidate->bytecounts);
+	g_free(canidate);
+	dbg_func(__FILE__": close_profile(),\n\tdeallocation of memory for potential canidate complete\n",INTERROGATOR);
+	
+}
+
 		
 void * load_profile(GArray * cmd_array, gchar * file)
 {
@@ -480,7 +496,7 @@ void * load_profile(GArray * cmd_array, gchar * file)
 	if (cfgfile)
 	{	
 		canidate = g_malloc0(sizeof(struct Canidate));
-		dbg_func(g_strdup_printf(__FILE__": load_profile() file %s, openend successfully\n",filename),INTERROGATOR);
+		dbg_func(g_strdup_printf(__FILE__": load_profile() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
 		canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
 		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->firmware_name);
 		cfg_read_string(cfgfile,"parameters","bytecounts",
@@ -503,7 +519,7 @@ void * load_profile(GArray * cmd_array, gchar * file)
 		
 	}
 	else
-		dbg_func(g_strdup_printf(__FILE__": load_profile() failure opening %s\n",filename),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_profile() failure opening file:\n\t%s\n",filename),CRITICAL);
 	return canidate;
 }
 
@@ -542,7 +558,7 @@ gint translate_capabilities(gchar *string)
 	dbg_func(g_strdup_printf(__FILE__": translate_capabilities() string fed is %s\n",string),INTERROGATOR);
 	while (vector[i] != NULL)
 	{
-		dbg_func(g_strdup_printf("trying to translate %s\n",vector[i]),INTERROGATOR);
+		dbg_func(g_strdup_printf(__FILE__": translate_capabilities() trying to translate %s\n",vector[i]),INTERROGATOR);
 		value += translate_string(vector[i]);
 		i++;
 	}

@@ -23,6 +23,7 @@ GArray * validate_and_load_tests(void);
 void * new_cmd_struct(void);
 void free_test_commands(GArray *);
 void parse_bytecounts(GArray *, GHashTable *, gchar *);
+void close_profile(void * );
 void * load_profile(GArray * , gchar * );
 gint translate_capabilities(gchar *);
 /* Prototypes */

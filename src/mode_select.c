@@ -42,21 +42,21 @@ void set_dt_table_mapping_state(gboolean state)
 {
         extern GList *table_map_controls;
 
-	dbg_func(g_strdup_printf("Setting DT map controls state to %s\n",states[state]),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": set_dt_table_mapping_state()\n\tSetting DT map controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(table_map_controls, set_widget_state,(gpointer)state);
 }
 
 void set_raw_memory_mode(gboolean state)
 {
         extern GList *raw_mem_controls;
-	dbg_func(g_strdup_printf("Setting RAW Memory controls state to %s\n",states[state]),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": set_raw_memory_mode()\n\tSetting RAW Memory controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(raw_mem_controls, set_widget_state,(gpointer)state);
 }
 
 void set_enhanced_mode(gboolean state)
 {
         extern GList *enhanced_controls;
-	dbg_func(g_strdup_printf("Setting Enhanced controls state to %s\n",states[state]),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": set_enhanced_mode()\n\tSetting Enhanced controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(enhanced_controls, set_widget_state,(gpointer)state);
 }
 
@@ -66,7 +66,7 @@ void set_ignition_mode(gboolean state)
         extern GList *inv_ign_controls;
 	extern gint temp_units;
 
-	dbg_func(g_strdup_printf("Setting Ignition controls state to %s\n",states[state]),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": set_ignition_mode()\n\tSetting Ignition controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(ign_controls, set_widget_state,(gpointer)state);
         g_list_foreach(inv_ign_controls, set_widget_state,(gpointer)(!state));
         reset_temps(GINT_TO_POINTER(temp_units));
@@ -74,7 +74,7 @@ void set_ignition_mode(gboolean state)
 void set_launch_ctrl_mode(gboolean state)
 {
         extern GList *launch_controls;
-	dbg_func(g_strdup_printf("Setting Launch-Ctrl controls state to %s\n",states[state]),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": set_launch_ctrl_mode()\n\tSetting Launch-Ctrl controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(launch_controls, set_widget_state,(gpointer)state);
 }
 
@@ -83,7 +83,7 @@ void set_iac_mode(gboolean state)
         extern GList *iac_idle_controls;
         extern GList *enh_idle_controls;
 
-	dbg_func(g_strdup_printf("Setting Idle-Ctrl controls state to %s\n",states[state]),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": set_iac_mode()\n\tSetting Idle-Ctrl controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(enh_idle_controls, set_widget_state,(gpointer)state);
         g_list_foreach(iac_idle_controls, set_widget_state,(gpointer)state);
 }
@@ -94,7 +94,7 @@ void set_dualtable_mode(gboolean state)
         extern GList *inv_dt_controls;
 	extern gint temp_units;
 
-	dbg_func(g_strdup_printf("Setting Dual Table controls state to %s\n",states[state]),INTERROGATOR);
+	dbg_func(g_strdup_printf(__FILE__": set_dualtable_mode()\n\tSetting Dual Table controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
         g_list_foreach(inv_dt_controls, set_widget_state,(gpointer)(!state));
 
