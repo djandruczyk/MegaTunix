@@ -174,6 +174,7 @@ void reset_temps(gpointer type)
 	gchar * string;
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
+	extern gboolean dualtable;
 	switch ((gint)type)
 	{
 		case FAHRENHEIT:
@@ -189,9 +190,14 @@ void reset_temps(gpointer type)
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
 					"Coolant Temp\nActivation(\302\260 F.)");
-			gtk_label_set_text(
-					GTK_LABEL(labels.fast_idle_temp_lab),
-					"Fast Idle Temp (\302\260 F.)");
+			if (dualtable)
+				gtk_label_set_text(
+						GTK_LABEL(labels.fast_idle_temp_lab),
+						"Fast Idle Temp (\302\260 F.)");
+			else
+				gtk_label_set_text(
+						GTK_LABEL(labels.fast_idle_temp_lab),
+						"Fast Idle Cutoff Temp (\302\260 F.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.slow_idle_temp_lab),
 					"Slow Idle Temp (\302\260 F.)");
@@ -276,9 +282,14 @@ void reset_temps(gpointer type)
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
 					"Coolant Temp\nActivation(\302\260 C.)");
-			gtk_label_set_text(
-					GTK_LABEL(labels.fast_idle_temp_lab),
-					"Fast Idle Temp (\302\260 C.)");
+			if (dualtable)
+				gtk_label_set_text(
+						GTK_LABEL(labels.fast_idle_temp_lab),
+						"Fast Idle Temp (\302\260 C.)");
+			else
+				gtk_label_set_text(
+						GTK_LABEL(labels.fast_idle_temp_lab),
+						"Fast Idle Cutoff Temp (\302\260 C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.slow_idle_temp_lab),
 					"Slow Idle Temp (\302\260 C.)");

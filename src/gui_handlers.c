@@ -1064,16 +1064,16 @@ void stop_runtime_display()
 
 gboolean populate_gui()
 {
-	/* A trick used in main() to startup MEgaTunix faster..
+	/* A trick used in main() to startup MegaTunix faster..
 	 * the problem is that calling the READ_VE_CONST stuff before 
-	 *gtk_main is that it makes the gui have to go through interrogation
+	 * gtk_main is that it makes the gui have to go through interrogation
 	 * of the ecu before the gui appears, giving the appearance that
 	 * MegaTunix is slow.  By creating this simple wrapper and kicking
 	 * it off as a timeout, it'll run just after the gui is ready, and
 	 * since it returns FALSE, the timeout will be canceled and deleted
 	 * i.e. it acts like a one-shot behind a time delay. (the delay lets
 	 * the gui get "ready" and then this kicks off the interrogator and
-	 * populated the gui controls (if hte ECU is detected... 
+	 * populates the gui controls if the ECU is detected... 
 	 */
 
 	std_button_handler(NULL,GINT_TO_POINTER(READ_VE_CONST));

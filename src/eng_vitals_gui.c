@@ -526,6 +526,60 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
+	/* Fast Idle Speed */
+	label = gtk_label_new("Fast Idle Speed (RPM)");
+	dt_controls = g_list_append(dt_controls, (gpointer)label);
+        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+        /* Fast Idle Speed */
+        adj =  (GtkAdjustment *) gtk_adjustment_new(1800.0,0.0,2550.0,10.0,100.0,0);
+        spinner = gtk_spin_button_new(adj,0,0);
+        ve_widgets->widget[125] = spinner;
+	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(125));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER(10*100));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(DIV));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	/* Slow Idle Speed */
+	label = gtk_label_new("Slow Idle Speed (RPM)");
+	dt_controls = g_list_append(dt_controls, (gpointer)label);
+        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+        /* Slow Idle Speed */
+        adj =  (GtkAdjustment *) gtk_adjustment_new(900.0,0.0,2550.0,10.0,100.0,0);
+        spinner = gtk_spin_button_new(adj,0,0);
+	dt_controls = g_list_append(dt_controls, (gpointer)spinner);
+        ve_widgets->widget[126] = spinner;
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(126));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER(10*100));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(DIV));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 3, 4, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
 
 
 
