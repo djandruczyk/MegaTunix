@@ -142,7 +142,7 @@ int build_vetable(GtkWidget *parent_frame)
 	}
 
 	frame = gtk_frame_new("Commands");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
+	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
 	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),50);

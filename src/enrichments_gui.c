@@ -224,7 +224,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,0);
-	gtk_table_set_row_spacing(GTK_TABLE(table),1,20);
+	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
 
 	/* TPS trigger threashold */
 	entry = gtk_entry_new ();
@@ -355,8 +355,8 @@ int build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
-	gtk_table_set_row_spacing(GTK_TABLE(table),1,20);
-	gtk_table_set_row_spacing(GTK_TABLE(table),3,20);
+	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
+	gtk_table_set_row_spacing(GTK_TABLE(table),3,10);
 
 	entry = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
