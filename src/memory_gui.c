@@ -56,8 +56,8 @@ void build_memory(GtkWidget *parent_frame)
 	range = 256;
 	for (z=0;z<4;z++)
 	{
-		frame = gtk_frame_new(g_strdup_printf("256 bytes from address 0x%.4x",base));
-		label = gtk_label_new(g_strdup_printf("0x%.4x-0x%.4x",base,base+range-1));
+		frame = gtk_frame_new(g_strdup_printf("256 bytes from address 0x%.4X",base));
+		label = gtk_label_new(g_strdup_printf("0x%.4X-0x%.4X",base,base+range-1));
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
 
 		vbox2 = gtk_vbox_new(FALSE,0);
@@ -77,7 +77,7 @@ void build_memory(GtkWidget *parent_frame)
 
 		for (y=0;y<rows;y++)
 		{
-			label = gtk_label_new(g_strdup_printf("0x%.4x",(z*256)+(y*cols)));
+			label = gtk_label_new(g_strdup_printf("0x%.4X",(z*256)+(y*cols)));
 			gtk_table_attach(GTK_TABLE(table),label,0,1,y,y+1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
@@ -133,7 +133,7 @@ void build_memory(GtkWidget *parent_frame)
 		hbox = gtk_hbox_new(FALSE,5);
 		gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-		button = gtk_button_new_with_label(g_strdup_printf("Read Memory from 0x%.4x to 0x%.4x",base,base+range-1));
+		button = gtk_button_new_with_label(g_strdup_printf("Read Memory from 0x%.4X to 0x%.4X",base,base+range-1));
 		/* Memory offset to retrieve... */
 		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
 		g_signal_connect(G_OBJECT(button),"clicked",

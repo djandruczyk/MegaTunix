@@ -219,7 +219,7 @@ void post_process_raw_memory(void *input, gint offset)
 	{
 		label = g_array_index(raw_memory, GtkWidget *, i+(256*offset));
 		//gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.3i",ptr[i]));
-		gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.2x",ptr[i]));
+		gtk_label_set_text(GTK_LABEL(label),(const char *)g_strdup_printf("%.2X",ptr[i]));
 	}
 				
 }
