@@ -71,11 +71,13 @@ int build_tuning(GtkWidget *parent_frame)
 	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL, 
 			TRUE, GDK_GL_RGBA_TYPE);
 
+	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
+
 	gtk_widget_add_events (drawing_area,
 			GDK_BUTTON1_MOTION_MASK	|
 			GDK_BUTTON2_MOTION_MASK	|
 			GDK_BUTTON_PRESS_MASK	|
-			GDK_KEY_PRESS_MASK	|
+			GDK_KEY_PRESS_MASK		|
 			GDK_KEY_RELEASE_MASK	|
 			GDK_FOCUS_CHANGE_MASK	|
 			GDK_VISIBILITY_NOTIFY_MASK);	
@@ -94,6 +96,8 @@ int build_tuning(GtkWidget *parent_frame)
 			G_CALLBACK (tuning_gui_button_press_event), NULL);	
 	g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
 			G_CALLBACK (tuning_gui_key_press_event), NULL);	
+	g_signal_connect(G_OBJECT (drawing_area), "focus_in_event",
+			G_CALLBACK (tuning_gui_focus_in_event), NULL);	
 
 	/* End of GL window, Now controls for it.... */
 	frame = gtk_frame_new("3D Display Controls");
@@ -172,6 +176,7 @@ gboolean tuning_gui_configure_event(GtkWidget *widget, GdkEventConfigure *event,
 }
 gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
+	gtk_widget_grab_focus(widget);
 	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
 
@@ -236,6 +241,8 @@ gboolean tuning_gui_motion_notify_event(GtkWidget *widget, GdkEventMotion *event
 
 gboolean tuning_gui_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
+	gtk_widget_grab_focus (widget);
+	
 	if (event->button == 1)
 	{
 		beginX = event->x;
@@ -288,6 +295,7 @@ void tuning_gui_realize (GtkWidget *widget, gpointer data)
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 }
+
 void tuning_gui_draw_ve_grid(void)
 {
 	int i=0,  rpm_max=0, kpa_max=0, ve_max=0;
@@ -351,44 +359,59 @@ void tuning_gui_draw_ve_grid(void)
 
 }
 
-
 gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
+	#ifdef DEBUG	
 	printf("Key press event\n");
+	#endif
 	switch (event->keyval)
 	{
 		case GDK_Up:
+			#ifdef DEBUG
 			printf("UP\n");
+			#endif
 			if (active_map < 8)
 				active_map += 1;
 			break;
 
 		case GDK_Down:
+			#ifdef DEBUG
 			printf("DOWN\n");
+			#endif
 			if (active_map > 0)
 				active_map -= 1;
 			break;				
 
 		case GDK_Left:
+			#ifdef DEBUG
 			printf("LEFT\n");
+			#endif
 			if (active_rpm > 0)
 				active_rpm -= 1;
 			break;					
 
 		case GDK_Right:
+			#ifdef DEBUG
 			printf("RIGHT\n");
+			#endif
 			if (active_rpm < 8)
 				active_rpm += 1;
 			break;				
 
 		case GDK_plus:
+		case GDK_KP_Add:
+			#ifdef DEBUG
 			printf("PLUS\n");
+			#endif
 			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] < 255)
 				ve_const_p0->ve_bins[(active_rpm*8)+active_map] += 1;
 			break;				
 
 		case GDK_minus:
+		case GDK_KP_Subtract:
+			#ifdef DEBUG
 			printf("MINUS\n");
+			#endif
 			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] > 0)
 				ve_const_p0->ve_bins[(active_rpm*8)+active_map] -= 1;
 			break;							
@@ -400,4 +423,9 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
 
 	return TRUE;
+}
+
+gboolean tuning_gui_focus_in_event (GtkWidget *widget, GdkEventFocus *event, gpointer data)
+{
+	gtk_widget_grab_focus (widget);		
 }

@@ -38,6 +38,7 @@ gboolean tuning_gui_motion_notify_event(GtkWidget *, GdkEventMotion *,gpointer);
 gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
 gboolean tuning_gui_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
 gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer );
+gboolean tuning_gui_focus_in_event (GtkWidget *, GdkEventFocus *, gpointer );
 void tuning_gui_draw_ve_grid(void);
 void tuning_gui_reset_ve_grid(void);
 void tuning_gui_normalize(float );
