@@ -19,6 +19,7 @@
 #include <lookuptables.h>
 
 extern unsigned char *kpa_conversion;
+extern gboolean fahrenheit;
 
 void post_process(struct raw_runtime_std *in, struct runtime_std *out)
 {

@@ -152,31 +152,59 @@ void reset_temps(gpointer type)
 	switch ((gint)type)
 	{
 		case FAHRENHEIT:
-			printf("reset_temps F\n");
-			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_lowtemp_lab),"-40 Deg. F");
-			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_hightemp_lab),"170 Deg. F");
-			gtk_label_set_text(GTK_LABEL(labels.warmup_title),"Engine Temp in Degrees Fahrenheit");
-			gtk_label_set_text(GTK_LABEL(labels.ego_temp_lab),"Coolant Temp\nActivation(Deg F.)");
-			gtk_label_set_text(GTK_LABEL(labels.fastidletemp_lab),"Fast Idle Threshold\n(Degrees F.)");
-			gtk_label_set_text(GTK_LABEL(labels.runtime_clt_lab),"Coolant (F)");
-			gtk_label_set_text(GTK_LABEL(labels.runtime_mat_lab),"MAT (F)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.cr_pulse_lowtemp_lab),
+					"-40 Deg. F");
+			gtk_label_set_text(
+					GTK_LABEL(labels.cr_pulse_hightemp_lab),
+					"170 Deg. F");
+			gtk_label_set_text(
+					GTK_LABEL(labels.warmup_title),
+					"Engine Temp in Degrees Fahrenheit");
+			gtk_label_set_text(
+					GTK_LABEL(labels.ego_temp_lab),
+					"Coolant Temp\nActivation(Deg F.)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.fastidletemp_lab),
+					"Fast Idle Threshold\n(Degrees F.)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.runtime_clt_lab),
+					"Coolant (F)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.runtime_mat_lab),
+					"MAT (F)");
 			for (i=0;i<10;i++)
-				gtk_label_set_text(GTK_LABEL(labels.warmup_bins_lab[i]),F_warmup_labels[i]);
-			
-			
+				gtk_label_set_text(
+					GTK_LABEL(labels.warmup_bins_lab[i]),
+					F_warmup_labels[i]);
 			break;
 
 		case CELSIUS:
-			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_lowtemp_lab),"-40 Deg. C");
-			gtk_label_set_text(GTK_LABEL(labels.cr_pulse_hightemp_lab),"77 Deg. C");
-			gtk_label_set_text(GTK_LABEL(labels.warmup_title),"Engine Temp in Degrees Celsius");
-			gtk_label_set_text(GTK_LABEL(labels.ego_temp_lab),"Coolant Temp\nActivation(Deg C.)");
-			gtk_label_set_text(GTK_LABEL(labels.fastidletemp_lab),"Fast Idle Threshold\n(Degrees C.)");
-			gtk_label_set_text(GTK_LABEL(labels.runtime_clt_lab),"Coolant (C)");
-			gtk_label_set_text(GTK_LABEL(labels.runtime_mat_lab),"MAT (C)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.cr_pulse_lowtemp_lab),
+					"-40 Deg. C");
+			gtk_label_set_text(
+					GTK_LABEL(labels.cr_pulse_hightemp_lab),
+					"77 Deg. C");
+			gtk_label_set_text(
+					GTK_LABEL(labels.warmup_title),
+					"Engine Temp in Degrees Celsius");
+			gtk_label_set_text(
+					GTK_LABEL(labels.ego_temp_lab),
+					"Coolant Temp\nActivation(Deg C.)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.fastidletemp_lab),
+					"Fast Idle Threshold\n(Degrees C.)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.runtime_clt_lab),
+					"Coolant (C)");
+			gtk_label_set_text(
+					GTK_LABEL(labels.runtime_mat_lab),
+					"MAT (C)");
 			for (i=0;i<10;i++)
-				gtk_label_set_text(GTK_LABEL(labels.warmup_bins_lab[i]),C_warmup_labels[i]);
-			printf("reset_temps C\n");
+				gtk_label_set_text(
+					GTK_LABEL(labels.warmup_bins_lab[i]),
+					C_warmup_labels[i]);
 			break;
 	}
 	return;	

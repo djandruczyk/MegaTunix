@@ -29,6 +29,7 @@ extern unsigned char na_map[];
 extern unsigned char turbo_map[];
 extern GtkTooltips *tip;
 gboolean tips_in_use;
+gboolean forced_update;
 gboolean fahrenheit;
 static gboolean paused_handlers = FALSE;
 static gboolean constants_loaded = FALSE;
@@ -86,10 +87,12 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 			case FAHRENHEIT:
 				fahrenheit = TRUE;
 				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
+				forced_update = TRUE;
 				break;
 			case CELSIUS:
 				fahrenheit = FALSE;
 				reset_temps(GINT_TO_POINTER(CELSIUS));
+				forced_update = TRUE;
 				break;
 		}
 	}

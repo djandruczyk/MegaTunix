@@ -27,6 +27,8 @@ const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
 gboolean force_status_update = TRUE;
 extern gboolean connected;
+extern gboolean fahrenheit;
+extern gboolean forced_update;
 extern GdkColor white;
 extern struct Labels labels;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
@@ -539,6 +541,7 @@ void update_runtime_vars()
 {
 	char buff[120];
 	gfloat tmpf;
+	gint tmpi;
 	extern struct runtime_std *runtime;
 	extern struct runtime_std *runtime_last;
 	/* test to see if data changed 
@@ -574,11 +577,16 @@ void update_runtime_vars()
 				(runtime_data.map_pbar),
 				tmpf);
 	}
-	if (runtime->clt != runtime_last->clt)
+	if ((runtime->clt != runtime_last->clt) || (forced_update))
 	{
-		g_snprintf(buff,10,"%i",runtime->clt-40);
+		if (fahrenheit)/* subtract 40 from MS value */
+			tmpi = runtime->clt-40;
+		else	/* subtract 40 and then to F->C conversion */
+			tmpi = (runtime->clt-40-32)*(5.0/9.0);
+	
+		g_snprintf(buff,10,"%i",tmpi);
 		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),buff);
-		tmpf = (runtime->clt)/255.0 <= 1.0 ? (runtime->clt)/255.0: 1.0;
+		tmpf = runtime->clt/255.0 <= 1.0 ? runtime->clt/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.clt_pbar),
 				tmpf);
@@ -601,11 +609,16 @@ void update_runtime_vars()
 				(runtime_data.gammae_pbar),
 				tmpf);
 	}
-	if (runtime->mat != runtime_last->mat)
+	if ((runtime->mat != runtime_last->mat) || (forced_update))
 	{
-		g_snprintf(buff,10,"%i",runtime->mat-40);
+		if (fahrenheit)	/* subtract 40 from MS value */
+			tmpi = runtime->mat-40;
+		else	/* subtract 40 and then to F->C conversion */
+			tmpi = (runtime->mat-40-32)*(5.0/9.0);
+			
+		g_snprintf(buff,10,"%i",tmpi);
 		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),buff);
-		tmpf = (runtime->mat)/255.0 <= 1.0 ? (runtime->mat)/255.0: 1.0;
+		tmpf = runtime->mat/255.0 <= 1.0 ? runtime->mat/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.mat_pbar),
 				tmpf);
@@ -729,6 +742,8 @@ void update_runtime_vars()
 				runtime->engine.bit.tpsden);
 		
 	}
+	if (forced_update)
+		forced_update = FALSE;
 	gdk_threads_leave();
 }
 
