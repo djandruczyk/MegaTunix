@@ -36,8 +36,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(S_N_EDIS));
 	g_hash_table_insert(str_2_enum,"_ENHANCED_",
 			GINT_TO_POINTER(ENHANCED));
-	g_hash_table_insert(str_2_enum,"_RAW_MEMORY_",
-			GINT_TO_POINTER(RAW_MEMORY));
 	g_hash_table_insert(str_2_enum,"_IAC_PWM_",
 			GINT_TO_POINTER(IAC_PWM));
 	g_hash_table_insert(str_2_enum,"_IAC_STEPPER_",
@@ -141,6 +139,14 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(BACKUP_ALL));
 	g_hash_table_insert(str_2_enum,"_RESTORE_ALL_",
 			GINT_TO_POINTER(RESTORE_ALL));
+	g_hash_table_insert(str_2_enum,"_READ_RAW_MEMORY_",
+			GINT_TO_POINTER(READ_RAW_MEMORY));
+	g_hash_table_insert(str_2_enum,"_HEX_VIEW_",
+			GINT_TO_POINTER(HEX_VIEW));
+	g_hash_table_insert(str_2_enum,"_BINARY_VIEW_",
+			GINT_TO_POINTER(BINARY_VIEW));
+	g_hash_table_insert(str_2_enum,"_DECIMAL_VIEW_",
+			GINT_TO_POINTER(DECIMAL_VIEW));
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
 			GINT_TO_POINTER(COMMA));

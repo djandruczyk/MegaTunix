@@ -51,7 +51,6 @@ static struct
 { "MegaSquirt Communications Parameters", build_comms, "_Communications",STANDARD,COMMS_PAGE},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
 //{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
-{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",RAW_MEMORY,RAW_MEM_PAGE},
 //{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD,WARMUP_WIZ_PAGE},
 };
 
@@ -64,7 +63,6 @@ int setup_gui()
 	GtkWidget *hbox;
 	GtkWidget *vbox;
 	GtkWidget *button;
-	extern GList *raw_mem_controls;
 	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -100,13 +98,6 @@ int setup_gui()
 
 		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
 
-		if (notebook_tabs[i].capabilities & RAW_MEMORY)
-		{
-			raw_mem_controls = g_list_append(raw_mem_controls, 
-					(gpointer)frame);
-			raw_mem_controls = g_list_append(raw_mem_controls, 
-					(gpointer)label);
-		}
 		g_object_set_data(G_OBJECT(frame),"page_ident",GINT_TO_POINTER(notebook_tabs[i].page_ident));
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	}

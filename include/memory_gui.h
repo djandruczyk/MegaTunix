@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+void finish_memviewer(void);
 void build_memory(GtkWidget *);
 /* Prototypes */
 

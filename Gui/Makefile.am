@@ -13,6 +13,8 @@ gui_files = 	template.glade \
 		Dualtable-constants.datamap \
 		logviewer.glade \
 		logviewer.datamap \
+		memviewer.glade \
+		memviewer.datamap \
 		msnedis-3.0.x_ignition.glade \
 		msnedis-3.0.x_ignition.datamap \
 		msns-3.0_ignition.glade \

@@ -25,17 +25,7 @@ gchar *states[] = {"FALSE","TRUE"};
 
 void parse_ecu_capabilities(gint ecu_caps)
 {
-	set_raw_memory_mode((ecu_caps & RAW_MEMORY) == 0 ? FALSE:TRUE);
 }
-
-
-void set_raw_memory_mode(gboolean state)
-{
-        extern GList *raw_mem_controls;
-	dbg_func(g_strdup_printf(__FILE__": set_raw_memory_mode()\n\tSetting RAW Memory controls state to %s\n",states[state]),INTERROGATOR);
-        g_list_foreach(raw_mem_controls, set_widget_sensitive,(gpointer)state);
-}
-
 
 void set_widget_sensitive(gpointer widget, gpointer state)
 {

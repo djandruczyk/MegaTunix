@@ -13,32 +13,25 @@
 
 #include <config.h>
 #include <defines.h>
+#include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
 #include <memory_gui.h>
 
-GList *raw_mem_controls = NULL;
 GArray *raw_memory_widgets = NULL;
 gint num_mem_pages = 4;
 gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
 
 
-void build_memory(GtkWidget *parent_frame)
+void finish_memviewer(void)
 {
-	GtkWidget *vbox;
-	GtkWidget *vbox2;
-	GtkWidget *notebook;
-	GtkWidget *hbox;
 	GtkWidget *label;
 	GtkWidget *button;
 	GtkWidget *table;
 	GtkWidget *table2;
 	GtkWidget *ebox;
-	GtkWidget *frame;
-	GtkWidget *sw;
-	GSList * group = NULL;
-	extern GdkColor white;
-	GdkColor purple = { 0, 61000, 57000, 65535};
+	gchar *tblname = NULL;
+	gchar *name = NULL;
 	gint rows = 32;
 	gint cols = 8;
 	gint x = 0;
@@ -46,38 +39,18 @@ void build_memory(GtkWidget *parent_frame)
 	gint z = 0;
 	gint base = 0;
 	gint range = 0;
-
-	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
-
-	notebook = gtk_notebook_new();
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK (notebook), GTK_POS_TOP);
-	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
+	GdkColor purple = { 0, 61000, 57000, 65535};
+	extern GdkColor white;
+	extern GHashTable *dynamic_widgets;
 
 	raw_memory_widgets = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
 	base = 0;
 	range = 256;
 	for (z=0;z<num_mem_pages;z++)
 	{
-		frame = gtk_frame_new(g_strdup_printf("256 bytes from address 0x%.4X to 0x%.4x",base,base+range-1));
-		label = gtk_label_new(g_strdup_printf("0x%.4X-0x%.4X",base,base+range-1));
-		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
-
-		vbox2 = gtk_vbox_new(FALSE,0);
-		gtk_container_add(GTK_CONTAINER(frame),vbox2);
-
-		sw = gtk_scrolled_window_new(NULL,NULL);
-		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-				GTK_POLICY_AUTOMATIC,
-				GTK_POLICY_AUTOMATIC);
-		gtk_box_pack_start(GTK_BOX(vbox2),sw,TRUE,TRUE,0);
-
-		hbox = gtk_hbox_new(FALSE,5);
-		gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw),hbox);	
-
-		table = gtk_table_new(rows,1,TRUE);
-		gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,10);
+		tblname = g_strdup_printf("memviewer_tab%i_row_lbl_table",z);
+		table = g_hash_table_lookup(dynamic_widgets,tblname);
+		g_free(tblname);
 
 		for (y=0;y<rows;y++)
 		{
@@ -87,10 +60,9 @@ void build_memory(GtkWidget *parent_frame)
 					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 		}
 
-		table = gtk_table_new(rows,1,TRUE);
-		gtk_table_set_row_spacings(GTK_TABLE(table),1);
-		gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
-
+		tblname = g_strdup_printf("memviewer_tab%i_data_table",z);
+		table = g_hash_table_lookup(dynamic_widgets,tblname);
+		g_free(tblname);
 
 		for (y=0;y<rows;y++)
 		{
@@ -131,55 +103,37 @@ void build_memory(GtkWidget *parent_frame)
 
 			}
 		}
-		frame = gtk_frame_new("Raw Memory Settings");
-		gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,TRUE,5);
 
-		hbox = gtk_hbox_new(FALSE,5);
-		gtk_container_add(GTK_CONTAINER(frame),hbox);
-		gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
-
-		button = gtk_button_new_with_label(g_strdup_printf("Read Memory from 0x%.4X to 0x%.4X",base,base+range-1));
-		/* Memory offset to retrieve... */
-		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
-		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_RAW_MEMORY));
-		g_signal_connect(G_OBJECT(button),"clicked",
-				G_CALLBACK(std_button_handler),
-				NULL);
-		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
-
-		button = gtk_radio_button_new_with_label(NULL,"Hex");
-		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
-		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
 		if (mem_view_style[z] == HEX_VIEW)
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(HEX_VIEW));
-		g_signal_connect(G_OBJECT(button),"clicked",
-				G_CALLBACK(toggle_button_handler),
-				NULL);
-		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
-
-		button = gtk_radio_button_new_with_label(group,"Binary");
-		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		{
+			name = g_strdup_printf("memviewer_tab%i_hex_radio_button",z);
+			button = g_hash_table_lookup(dynamic_widgets,name);
+			if (!button)
+				dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name),CRITICAL);
+			else
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+			g_free(name);
+		}
 		if (mem_view_style[z] == BINARY_VIEW)
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
-		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BINARY_VIEW));
-		g_signal_connect(G_OBJECT(button),"clicked",
-				G_CALLBACK(toggle_button_handler),
-				NULL);
-		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
-
-		button = gtk_radio_button_new_with_label(group,"Decimal");
-		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+		{
+			name = g_strdup_printf("memviewer_tab%i_binary_radio_button",z);
+			button = g_hash_table_lookup(dynamic_widgets,name);
+			if (!button)
+				dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name),CRITICAL);
+			else
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+			g_free(name);
+		}
 		if (mem_view_style[z] == DECIMAL_VIEW)
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-		g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(z));
-		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DECIMAL_VIEW));
-		g_signal_connect(G_OBJECT(button),"clicked",
-				G_CALLBACK(toggle_button_handler),
-				NULL);
-
-		gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
+		{
+			name = g_strdup_printf("memviewer_tab%i_decimal_radio_button",z);
+			button = g_hash_table_lookup(dynamic_widgets,name);
+			if (!button)
+				dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name),CRITICAL);
+			else
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+			g_free(name);
+		}
 
 		base += range;
 	}

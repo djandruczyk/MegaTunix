@@ -16,9 +16,12 @@
 #include <defines.h>
 #include <debugging.h>
 #include <dep_loader.h>
+//#include <dlfcn.h>
 #include <enums.h>
 #include <getfiles.h>
 #include <glade/glade.h>
+#include <gmodule.h>
+#include <memory_gui.h>
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
@@ -43,6 +46,9 @@ gboolean load_gui_tabs()
 	GtkWidget * label = NULL;
 	GtkWidget *topframe = NULL;
 	extern GtkWidget * notebook;
+	gchar *post_function = NULL;
+	void (*function)(void);
+	GModule *module = NULL;
 
 	if (!firmware->tab_list[i])
 		return FALSE;
@@ -64,6 +70,25 @@ gboolean load_gui_tabs()
 				topframe = glade_xml_get_widget(xml,"topframe");
 				gtk_container_foreach(GTK_CONTAINER(topframe),bind_data,(gpointer)cfgfile);
 				gtk_container_foreach(GTK_CONTAINER(topframe),populate_master,NULL);
+				if (cfg_read_string(cfgfile,"global","post_function",&post_function))
+				{
+					module = g_module_open(NULL,G_MODULE_BIND_LAZY);
+					if (!module)
+						dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
+					if (!g_module_symbol(module,post_function,(void *)&function))
+					{
+						dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tError finding symbol \"%s\", error:\n\t%s\n\tCheck the \"%s.datamap\" file in the Gui dir for a syntax error\n",post_function,g_module_error(),firmware->tab_list[i]),CRITICAL);
+						if (!g_module_close(module))
+							dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+					}
+					else
+					{
+						function();
+						if (!g_module_close(module))
+							dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+					}
+				}
+				
 				cfg_free(cfgfile);
 			}
 
@@ -79,8 +104,8 @@ gboolean load_gui_tabs()
 			{
 
 				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
-				gtk_widget_show_all(frame);
 				glade_xml_signal_autoconnect(xml);
+				gtk_widget_show_all(frame);
 			}
 			g_free(xml);
 
