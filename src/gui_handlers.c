@@ -1229,7 +1229,7 @@ void update_widget(gpointer object, gpointer user_data)
 
 	 	if (use_color)
 		{
-			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0);
+			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33);
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 		}
 	}
@@ -1238,7 +1238,7 @@ void update_widget(gpointer object, gpointer user_data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 		if (use_color)
 		{
-			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0);
+			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33);
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 		}
 	}

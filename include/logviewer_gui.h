@@ -28,7 +28,7 @@ gboolean set_lview_choices_state(GtkWidget *, gpointer);
 gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
 struct Viewable_Value * build_v_value(GtkWidget *, GObject * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
-GdkColor get_colors_from_hue(gfloat);
+GdkColor get_colors_from_hue(gfloat, gfloat);
 void draw_infotext(struct Viewable_Value * );
 gboolean update_logview_traces(gboolean);
 void trace_update(gpointer, gpointer, gpointer );

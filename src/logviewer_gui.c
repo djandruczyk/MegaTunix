@@ -474,7 +474,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			break;
 
 		case TRACE:
-			color = (GdkColor)  get_colors_from_hue(hue_angle);
+			color = (GdkColor)  get_colors_from_hue(hue_angle,1.0);
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
@@ -503,15 +503,16 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
  \brief get_colors_from_hue(gets a color back from an angle passed in degrees.
  The degrees represent the arc aroudn a color circle.
  \param hue_Angle (gfloat) degrees around the color circle
+ \param sat (gfloat) saturation from 0-1.0
  \returns a GdkColor at the hue angle requested
  */
-GdkColor get_colors_from_hue(gfloat hue_angle)
+GdkColor get_colors_from_hue(gfloat hue_angle, gfloat sat)
 {
 	GdkColor color;
 	gfloat tmp = 0.0;	
 	gint i = 0;
 	gfloat fract = 0.0;
-	gfloat S = 1.0;	// using saturation of 1.0
+	gfloat S = sat;	// using saturation of 1.0
 	gfloat V = 1.0;	// using Value of 1.0
 	gfloat p = 0.0;
 	gfloat q = 0.0;
