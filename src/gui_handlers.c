@@ -20,6 +20,7 @@
 #include <defines.h>
 #include <globals.h>
 #include <constants.h>
+#include <datalogging.h>
 
 
 extern gint req_fuel_popup;
