@@ -128,7 +128,7 @@ int setup_serial_params()
 	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
-	serial_params->newtio.c_cc[VMIN]     = 0;     /* blocking read until 1 character arrives */
+	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
 	serial_params->newtio.c_cc[VTIME]    = 1;     /* inter-character timer unused */
 
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
