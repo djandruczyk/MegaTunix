@@ -943,7 +943,7 @@ void update_ve_const()
 {
 	gint page = 0;
 	gint offset = 0;
-	gfloat tmp = 0.0;
+	gfloat tmpf = 0.0;
 	gint reqfuel = 0;
 	gint i = 0;
 	union config11 cfg11;
@@ -966,96 +966,83 @@ void update_ve_const()
 	 *
 	 * where divider = num_cyls/num_squirts;
 	 *
+	 *
+	 *  B&G, MSnS, MSnEDIS req Fuel calc *
+	 * req-fuel 
+	 *                                /        num_inj        \
+	 *    	   req_fuel_per_squirt * (-------------------------)
+	 *                                \ divider*(alternate+1) /
+	 * req_fuel_total = ------------------------------------------
+	 *				10
+	 *
+	 * where divider = num_cyls/num_squirts;
+	 *
+	 * The req_fuel_per_squirt is the part stored in the MS ECU as 
+	 * the req_fuel variable.  Take note when doing conversions.  
+	 * On screen the value is divided by ten from what is 
+	 * in the MS.  
+	 * 
+	 */
 
-*/
-	if (ecu_caps & DUALTABLE)
+	/* All Tables */
+	for (i=0;i<firmware->total_tables;i++)
 	{
-		/* All Tables */
-		for (i=0;i<firmware->total_tables;i++)
-		{
-			page = firmware->table_params[i]->z_page;
-			if (firmware->table_params[i]->reqfuel_offset < 0)
-				continue;
+		//printf("\n");
+		page = firmware->table_params[i]->z_page;
+		if (firmware->table_params[i]->reqfuel_offset < 0)
+			continue;
 
-			cfg11.value = ms_data[page][firmware->table_params[i]->cfg11_offset];	
-			cfg12.value = ms_data[page][firmware->table_params[i]->cfg12_offset];	
-			firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
-			firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
-			firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
-			firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
+		cfg11.value = ms_data[page][firmware->table_params[i]->cfg11_offset];	
+		cfg12.value = ms_data[page][firmware->table_params[i]->cfg12_offset];	
+		firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
+		firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
+		firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
+		firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
 
-			firmware->rf_params[i]->divider = ms_data[page][firmware->table_params[i]->divider_offset];
-			firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
-			reqfuel = ms_data[page][firmware->table_params[i]->reqfuel_offset];
+		firmware->rf_params[i]->divider = ms_data[page][firmware->table_params[i]->divider_offset];
+		firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
+		firmware->rf_params[i]->alternate = ms_data[page][firmware->table_params[i]->alternate_offset];
+		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
+		reqfuel = ms_data[page][firmware->table_params[i]->reqfuel_offset];
 
-			/* ReqFuel Total */
-			tmp = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
-			tmp *= (float)reqfuel;
-			tmp /= 10.0;
-			firmware->rf_params[i]->req_fuel_total = tmp;
-			firmware->rf_params[i]->last_req_fuel_total = tmp;
-
-			/* Injections per cycle */
-			firmware->rf_params[i]->num_squirts = (float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
-			if (firmware->rf_params[i]->num_squirts < 1 )
-				firmware->rf_params[i]->num_squirts = 1;
-			firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
-
-			set_reqfuel_color(BLACK,i);
-		}
-	}
-	else
-	{
-		/*  B&G, MSnS, MSnEDIS req Fuel calc *
-		 * req-fuel 
-		 *                                /        num_inj        \
-		 *    	   req_fuel_per_squirt * (-------------------------)
-		 *                                \ divider*(alternate+1) /
-		 * req_fuel_total = ------------------------------------------
-		 *				10
-		 *
-		 * where divider = num_cyls/num_squirts;
-		 *
-		 * The req_fuel_per_squirt is the part stored in the MS ECU as 
-		 * the req_fuel variable.  Take note when doing conversions.  
-		 * On screen the value is divided by ten from what is 
-		 * in the MS.  
-		 * 
+		//printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
+		//printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
+		//printf("req_fuel_per_squirt is %i\n",reqfuel);
+		/* Calcs vary based on firmware. 
+		 * DT uses nim_inj/divider
+		 * MSnS-E use the SAME in DT mode only
+		 * MSnS-E uses B&G form in single table mode
 		 */
-		for (i=0;i<firmware->total_tables;i++)
+		if (ecu_caps & DUALTABLE)
 		{
-			page = firmware->table_params[i]->z_page;
-			if (firmware->table_params[i]->reqfuel_offset < 0)
-				continue;
+		//	printf("DT\n");
+			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
+		}
+		else if ((ecu_caps & MSNS_E) && (((ms_data[firmware->table_params[i]->dtmode_page][firmware->table_params[i]->dtmode_offset] & 0x10) >> 4) == 1))
+		{
+		//	printf("MSnS-E DT\n");
+			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
+		}
+		else
+		{
+		//	printf("B&G\n");
+			tmpf = (float)(firmware->rf_params[i]->num_inj)/((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
+		}
 
-			cfg11.value = ms_data[page][firmware->table_params[i]->cfg11_offset];	
-			cfg12.value = ms_data[page][firmware->table_params[i]->cfg12_offset];	
-			firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
-			firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
-			firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
-			firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
-			firmware->rf_params[i]->divider = ms_data[page][firmware->table_params[i]->divider_offset];
-			firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
-			reqfuel = ms_data[page][firmware->table_params[i]->reqfuel_offset];
-			firmware->rf_params[i]->alternate = ms_data[page][firmware->table_params[i]->alternate_offset];
-			firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
+		/* ReqFuel Total */
+		tmpf *= (float)reqfuel;
+		tmpf /= 10.0;
+		firmware->rf_params[i]->req_fuel_total = tmpf;
+		firmware->rf_params[i]->last_req_fuel_total = tmpf;
+		//printf("req_fuel_total is %f\n",tmpf);
 
-			/* ReqFuel Total */
-			tmp = (float)(firmware->rf_params[i]->num_inj)/
-				((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
-			tmp *= (float)reqfuel;
-			tmp /= 10.0;
-			firmware->rf_params[i]->req_fuel_total = tmp;
-			firmware->rf_params[i]->last_req_fuel_total = tmp;
+		/* Injections per cycle */
+		firmware->rf_params[i]->num_squirts = (float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
+		if (firmware->rf_params[i]->num_squirts < 1 )
+			firmware->rf_params[i]->num_squirts = 1;
+		firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
 
-			/* Injections per cycle */
-			firmware->rf_params[i]->num_squirts =	(float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
-			if (firmware->rf_params[i]->num_squirts < 1 )
-				firmware->rf_params[i]->num_squirts = 1;
-			firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
-
-			set_reqfuel_color(BLACK,i);
-		}	// End of B&G specific code...
+		set_reqfuel_color(BLACK,i);
 	}
 
 
