@@ -1032,7 +1032,7 @@ EXPORT gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer 
 		else
 			grab_allowed = FALSE;
 	}
-	return TRUE;
+	return FALSE;
 }
 
 EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
