@@ -19,6 +19,7 @@
 #include <dispatcher.h>
 #include <enums.h>
 #include <gdk/gdkgl.h>
+#include <glade/glade.h>
 #include <gui_handlers.h>
 #include <init.h>
 #include <main.h>
@@ -57,6 +58,7 @@ gint main(gint argc, gchar ** argv)
 	gdk_threads_init();
 
 	gtk_init(&argc, &argv);
+	glade_init();
 
 	gl_ability = gdk_gl_init_check(&argc, &argv);
 

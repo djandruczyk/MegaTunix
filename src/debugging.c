@@ -33,5 +33,6 @@ void dbg_func(gchar *str, Dbg_Class class)
 	{
 		g_fprintf(stderr,str);
 	}
+	g_free(str);
 
 }

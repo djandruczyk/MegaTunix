@@ -36,7 +36,7 @@ void load_logviewer_file(struct Io_File *iofile)
 {
 	if (!iofile)
 	{
-		dbg_func(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"),CRITICAL);
 		return;
 	}
 	log_info = initialize_log_info();

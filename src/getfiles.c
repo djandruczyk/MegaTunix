@@ -79,7 +79,7 @@ gchar ** get_files(gchar *pathstub)
 	finish:
 	if (!list)
 	{
-		dbg_func(__FILE__": get_files()\n\t File list was NULL\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);
 		return NULL;
 	}
 	return (g_strsplit(list,",",0));

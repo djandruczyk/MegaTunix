@@ -73,7 +73,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	if (!gl_ability)
 	{
-		dbg_func(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"),CRITICAL);
 		return FALSE;
 	}
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
@@ -335,12 +335,15 @@ gint free_ve3d_view(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
 	extern GHashTable *dynamic_widgets;
+	gchar * tmpbuf = NULL;
 
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	store_list("burners",g_list_remove(
 			get_list("burners"),(gpointer)ve_view->burn_but));
 	g_hash_table_remove(winstat,(gpointer)ve_view->table_num);
-	g_object_set_data(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("ve_view_%i",ve_view->table_num)),"ve_view",NULL);
+	tmpbuf = g_strdup_printf("ve_view_%i",ve_view->table_num);
+	g_object_set_data(g_hash_table_lookup(dynamic_widgets,tmpbuf),"ve_view",NULL);
+	g_free(tmpbuf);
 	deregister_widget(g_strdup_printf("ve_view_%i",ve_view->table_num));
 	deregister_widget(g_strdup_printf("x_active_label_%i",ve_view->table_num));
 	deregister_widget(g_strdup_printf("y_active_label_%i",ve_view->table_num));
@@ -394,7 +397,7 @@ GdkGLConfig* get_gl_config(void)
 			GDK_GL_MODE_DOUBLE);
 	if (gl_config == NULL)
 	{
-		dbg_func(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"),CRITICAL);
 
 		/* Try single-buffered visual */
 		gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
@@ -404,7 +407,7 @@ GdkGLConfig* get_gl_config(void)
 			/* Should make a non-GL basic drawing area version 
 			   instead of dumping the user out of here, or at least 
 			   render a non-GL found text on the drawing area */
-			dbg_func(__FILE__": get_gl_config()\n\t*** No appropriate OpenGL-capable visual found. EXITING!!\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** No appropriate OpenGL-capable visual found. EXITING!!\n"),CRITICAL);
 			exit (-1);
 		}
 	}
@@ -425,7 +428,7 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
 
-	dbg_func(__FILE__": ve3d_configure_event() 3D View Configure Event\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"),OPENGL);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -453,7 +456,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
-	dbg_func(__FILE__": ve3d_expose_event() 3D View Expose Event\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"),OPENGL);
 
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){
 		gtk_widget_grab_focus(widget);
@@ -512,7 +515,7 @@ gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoi
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
-	dbg_func(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"),OPENGL);
 
 	// Left Button
 	if (event->state & GDK_BUTTON1_MASK)
@@ -553,7 +556,7 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
-	dbg_func(__FILE__": ve3d_button_press_event()\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_button_press_event()\n"),OPENGL);
 
 	gtk_widget_grab_focus (widget);
 
@@ -577,7 +580,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 	GdkGLProc proc = NULL;
 
-	dbg_func(__FILE__": ve3d_realize() 3D View Realization\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"),OPENGL);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -590,7 +593,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 		/* glPolygonOffset */
 		proc = gdk_gl_get_proc_address ("glPolygonOffset");
 		if (proc == NULL) {
-			dbg_func(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n"),CRITICAL);
 			exit (-11);
 		}
 	}
@@ -625,7 +628,7 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	gint y_base = 0;
 	gint z_base = 0;
 
-	dbg_func(__FILE__": ve3d_calculate_scaling()\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_calculate_scaling()\n"),OPENGL);
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -682,7 +685,7 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	gint y_base = 0;
 	gint z_base = 0;
 
-	dbg_func(__FILE__": ve3d_draw_ve_grid() \n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_draw_ve_grid() \n"),OPENGL);
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -742,9 +745,11 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
+	gchar * tmpbuf = NULL;
+	gchar * value = NULL;
 	extern GHashTable *dynamic_widgets;
 
-	dbg_func(__FILE__": ve3d_draw_active_indicator()\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_draw_active_indicator()\n"),OPENGL);
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -764,9 +769,24 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 			(gfloat)(ms_data[y_page][y_base+ve_view->active_y])/ve_view->y_div,	
 			((gfloat)ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]/ve_view->z_div)-ve_view->z_offset);
 	glEnd();	
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("x_active_label_%i",ve_view->table_num))),g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x]),ve_view->x_precision,ve_view->x_suffix));
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("y_active_label_%i",ve_view->table_num))),g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->y_suffix));
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("z_active_label_%i",ve_view->table_num))),g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,ms_data[y_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]),ve_view->z_precision,ve_view->z_suffix));
+
+	tmpbuf = g_strdup_printf("x_active_label_%i",ve_view->table_num);
+	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x]),ve_view->x_precision,ve_view->x_suffix);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	g_free(tmpbuf);
+	g_free(value);
+
+	tmpbuf = g_strdup_printf("y_active_label_%i",ve_view->table_num);
+	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->y_suffix);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	g_free(tmpbuf);
+	g_free(value);
+
+	tmpbuf = g_strdup_printf("z_active_label_%i",ve_view->table_num);
+	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]),ve_view->z_precision,ve_view->z_suffix);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	g_free(tmpbuf);
+	g_free(value);
 
 }
 
@@ -779,13 +799,15 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gfloat x_val = 0.0;
 	gfloat y_val = 0.0;
 	gfloat z_val = 0.0;
+	gchar * tmpbuf = NULL;
+	gchar * value = NULL;
 	extern GHashTable *dynamic_widgets;
 
-	dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"),OPENGL);
 
 	if (!ve_view->z_source)
 	{
-		dbg_func(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"),CRITICAL);
 		return;
 	}
 
@@ -802,9 +824,24 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 			y_val/ve_view->y_div,	
 			(z_val/ve_view->z_div)-ve_view->z_offset);
 	glEnd();
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("x_runtime_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->x_eval,x_val),ve_view->x_suffix));
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("y_runtime_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_suffix));
-	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("z_runtime_label_%i",ve_view->table_num))),g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->z_eval,(gint)z_val), ve_view->z_suffix));
+
+	tmpbuf = g_strdup_printf("x_runtime_label_%i",ve_view->table_num);
+	value = g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->x_eval,x_val),ve_view->x_suffix);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	g_free(tmpbuf);
+	g_free(value);
+
+	tmpbuf = g_strdup_printf("y_runtime_label_%i",ve_view->table_num);
+	value = g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_suffix);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	g_free(tmpbuf);
+	g_free(value);
+
+	tmpbuf = g_strdup_printf("z_runtime_label_%i",ve_view->table_num);
+	value = g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->z_eval,z_val),ve_view->z_suffix);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
+	g_free(tmpbuf);
+	g_free(value);
 
 }
 
@@ -830,7 +867,7 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	gint y_bincount = 0;
 	gint z_base = 0;
 
-	dbg_func(__FILE__": ve3d_draw_axis()\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_draw_axis()\n"),OPENGL);
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -1009,7 +1046,7 @@ void ve3d_load_font_metrics(void)
 	gchar font_string[] = "sans 10";
 	gint font_height;
 
-	dbg_func(__FILE__": ve3d_load_font_metrics()\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_load_font_metrics()\n"),OPENGL);
 
 	font_list_base = (GLuint) glGenLists (128);
 	font_desc = pango_font_description_from_string (font_string);
@@ -1035,7 +1072,6 @@ void ve3d_load_font_metrics(void)
  */
 EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	gint value = 0;
 	gint offset = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
@@ -1045,13 +1081,16 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	gint y_base = 0;
 	gint x_base = 0;
 	gint z_base = 0;
-	GtkWidget *entry;
+	gboolean update_widgets = FALSE;
 	struct Ve_View_3D *ve_view = NULL;
 	extern gint **ms_data;
+	extern struct Firmware_Details *firmware;
+	extern gboolean paused_handlers;
+	extern GList ***ve_widgets;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
-	dbg_func(__FILE__": ve3d_key_press_event()\n",OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n"),OPENGL);
 
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
@@ -1069,90 +1108,88 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	switch (event->keyval)
 	{
 		case GDK_Up:
-			dbg_func("\t\"UP\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"UP\"\n"),OPENGL);
 
 			if (ve_view->active_y < (y_bincount-1))
 				ve_view->active_y += 1;
 			break;
 
 		case GDK_Down:
-			dbg_func("\t\"DOWN\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"DOWN\"\n"),OPENGL);
 
 			if (ve_view->active_y > 0)
 				ve_view->active_y -= 1;
 			break;				
 
 		case GDK_Left:
-			dbg_func("\t\"LEFT\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"LEFT\"\n"),OPENGL);
 
 			if (ve_view->active_x > 0)
 				ve_view->active_x -= 1;
 			break;					
 
 		case GDK_Right:
-			dbg_func("\t\"RIGHT\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"RIGHT\"\n"),OPENGL);
 
 			if (ve_view->active_x < (x_bincount-1))
 				ve_view->active_x += 1;
 			break;				
 
 		case GDK_Page_Up:
-			dbg_func("\t\"Page Up\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"Page Up\"\n"),OPENGL);
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] <= 245)
 			{
-				value = ms_data[z_page][offset] + 10;
-				entry = get_raw_widget(z_page,offset);
-				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
-				 g_signal_emit_by_name(entry,"activate",NULL);
+				ms_data[z_page][offset] += 10;
+				update_widgets = TRUE;
 			}
 			break;				
 		case GDK_plus:
 		case GDK_KP_Add:
-			dbg_func("\t\"PLUS\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"PLUS\"\n"),OPENGL);
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] < 255)
 			{
-				value = ms_data[z_page][offset] + 1;
-				entry = get_raw_widget(z_page,offset);
-				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
-				 g_signal_emit_by_name(entry,"activate",NULL);
-
+				ms_data[z_page][offset] += 1;
+				update_widgets = TRUE;
 			}
 			break;				
 		case GDK_Page_Down:
-			dbg_func("\t\"Page Down\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"Page Down\"\n"),OPENGL);
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] >= 10)
 			{
-				value = ms_data[z_page][offset] - 10;
-				entry = get_raw_widget(z_page,offset);
-				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
-				 g_signal_emit_by_name(entry,"activate",NULL);
+				ms_data[z_page][offset] -= 10;
+				update_widgets = TRUE;
 			}
 			break;							
 
 
 		case GDK_minus:
 		case GDK_KP_Subtract:
-			dbg_func("\t\"MINUS\"\n",OPENGL);
+			dbg_func(g_strdup("\t\"MINUS\"\n"),OPENGL);
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] > 0)
 			{
-				value = ms_data[z_page][offset] - 1;
-				entry = get_raw_widget(z_page,offset);
-				gtk_entry_set_text(GTK_ENTRY(entry),g_strdup_printf("%X",value));
-				 g_signal_emit_by_name(entry,"activate",NULL);
+				ms_data[z_page][offset] -= 1;
+				update_widgets = TRUE;
 			}
 			break;							
 
 		default:
 			dbg_func(g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval),OPENGL);
 			return FALSE;
+	}
+	if (update_widgets)
+	{
+		write_ve_const(widget,z_page,offset,ms_data[z_page][offset],firmware->page_params[z_page]->is_spark);
+		paused_handlers = TRUE;
+		g_list_foreach(ve_widgets[z_page][offset],update_widget,NULL);
+		paused_handlers = FALSE;
 	}
 
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);

@@ -54,7 +54,7 @@ void load_sliders()
 		return;
 	if (!rtvars_loaded)
 	{
-		dbg_func(__FILE__": load_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": load_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"),CRITICAL);
 		return;
 	}
 	if (!rt_sliders)
@@ -91,7 +91,7 @@ void load_sliders()
 			slider = add_slider(ctrl_name,table,0,row,source,RUNTIME_PAGE);
 			if (slider)
 			{
-				if (g_hash_table_lookup(rt_sliders,g_strdup(ctrl_name))==NULL)
+				if (g_hash_table_lookup(rt_sliders,ctrl_name)==NULL)
 					g_hash_table_insert(rt_sliders,g_strdup(ctrl_name),(gpointer)slider);
 			}
 			g_free(section);
@@ -123,7 +123,7 @@ do_ww_sliders:
 			slider = add_slider(ctrl_name,table,0,row,source,WARMUP_WIZ_PAGE);
 			if (slider)
 			{
-				if (g_hash_table_lookup(ww_sliders,g_strdup(ctrl_name))==NULL)
+				if (g_hash_table_lookup(ww_sliders,ctrl_name)==NULL)
 					g_hash_table_insert(ww_sliders,g_strdup(ctrl_name),(gpointer)slider);
 			}
 			g_free(section);
@@ -160,11 +160,11 @@ void load_ve3d_sliders(gint table_num)
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
 
-	if (!tabs_loaded)
-		return;
-	if (!rtvars_loaded)
+	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
-		dbg_func(__FILE__": load_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
+		if (ve3d_sliders)
+			ve3d_sliders[table_num]=NULL;
+		dbg_func(g_strdup(__FILE__": load_sliders()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"),CRITICAL);
 		return;
 	}
 
@@ -259,7 +259,7 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	slider->lower = (gint)g_object_get_data(object,"lower_limit");
 
 	slider->upper = (gint)g_object_get_data(object,"upper_limit");
-	slider->history = (gfloat *) g_object_get_data(object,"history");
+	slider->history = (GArray *) g_object_get_data(object,"history");
 	slider->object = object;
 
 	if (ident == RUNTIME_PAGE)
@@ -285,7 +285,7 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 
 	label = gtk_label_new(NULL);
 	slider->label = label;
-	gtk_label_set_markup(GTK_LABEL(label),g_strdup(slider->friendly_name));
+	gtk_label_set_markup(GTK_LABEL(label),slider->friendly_name);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 
@@ -333,9 +333,22 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 gboolean free_ve3d_sliders(gint table_num)
 {
 	extern GHashTable **ve3d_sliders;
-	g_hash_table_destroy(ve3d_sliders[table_num]);
-	deregister_widget(g_strdup_printf("ve3d_rt_table0_%i",table_num));
-	deregister_widget(g_strdup_printf("ve3d_rt_table1_%i",table_num));
-	ve3d_sliders[table_num] = NULL;
+	gchar * widget = NULL;
+	if (ve3d_sliders)
+	{
+		if (ve3d_sliders[table_num])
+		{
+			g_hash_table_destroy(ve3d_sliders[table_num]);
+			ve3d_sliders[table_num] = NULL;
+		}
+	}
+
+	widget = g_strdup_printf("ve3d_rt_table0_%i",table_num);
+	deregister_widget(widget);
+	g_free(widget);
+
+	widget = g_strdup_printf("ve3d_rt_table1_%i",table_num);
+	deregister_widget(widget);
+	g_free(widget);
 	return FALSE;
 }

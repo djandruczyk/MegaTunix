@@ -205,7 +205,7 @@ void close_serial()
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
 
 	/* An Closing the comm port */
-	dbg_func(__FILE__": close_serial()\n\tCOM Port Closed\n",SERIAL_RD|SERIAL_WR);
+	dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"),SERIAL_RD|SERIAL_WR);
 	update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
 	return;
 }

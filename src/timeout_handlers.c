@@ -39,12 +39,12 @@ void start_realtime_tickler()
 	{
 		realtime_id = g_timeout_add(serial_params->read_wait,
 				(GtkFunction)signal_read_rtvars,NULL);
-		update_logbar("comms_view",NULL,"Realtime Reader started\n",TRUE,FALSE);
+		update_logbar("comms_view",NULL,g_strdup("Realtime Reader started\n"),TRUE,FALSE);
 	}
 	else
 	{
-		dbg_func(__FILE__": start_realtime_tickler()\n\tTickler already running\n",CRITICAL);
-		update_logbar("comms_view","warning","Realtime Reader ALREADY started\n",TRUE,FALSE);
+		dbg_func(g_strdup(__FILE__": start_realtime_tickler()\n\tTickler already running\n"),CRITICAL);
+		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY started\n"),TRUE,FALSE);
 	}
 }
 
@@ -61,7 +61,7 @@ void start_logviewer_playback()
 	if (playback_id == 0)
 		playback_id = g_timeout_add(33,(GtkFunction)update_logview_traces,GINT_TO_POINTER(FALSE));
 	else
-		dbg_func(__FILE__": start_logviewer_playback()\n\tPlayback already running \n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": start_logviewer_playback()\n\tPlayback already running \n"),CRITICAL);
 }
 
 
@@ -79,7 +79,7 @@ void stop_logviewer_playback()
 		playback_id = 0;
 	}
 	else
-		dbg_func(__FILE__": stop_logviewer_playback()\n\tPlayback already stopped...\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": stop_logviewer_playback()\n\tPlayback already stopped...\n"),CRITICAL);
 }
 
 
@@ -97,7 +97,7 @@ void stop_realtime_tickler()
 	if (realtime_id)
 	{
 		g_source_remove(realtime_id);
-		update_logbar("comms_view",NULL,"Realtime Reader stopped\n",TRUE,FALSE);
+		update_logbar("comms_view",NULL,g_strdup("Realtime Reader stopped\n"),TRUE,FALSE);
 		realtime_id = 0;
 		while (leaving && ((g_async_queue_length(io_queue) > 0) || (dispatcher_id != 0)))
 		{
@@ -107,8 +107,8 @@ void stop_realtime_tickler()
 	}
 	else
 	{
-		dbg_func(__FILE__": stop_realtime_tickler()\n\tTickler already stopped...\n",CRITICAL);
-		update_logbar("comms_view","warning","Realtime Reader ALREADY stopped\n",TRUE,FALSE);
+		dbg_func(g_strdup(__FILE__": stop_realtime_tickler()\n\tTickler already stopped...\n"),CRITICAL);
+		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY stopped\n"),TRUE,FALSE);
 	}
 	reset_runtime_status();
 }
@@ -137,7 +137,7 @@ gboolean signal_read_rtvars()
 	if (length > 2)
 		return TRUE;
 
-	dbg_func(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n",SERIAL_RD|SERIAL_WR);
+	dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"),SERIAL_RD|SERIAL_WR);
 
 	if (errcount >10)
 	{
@@ -155,7 +155,7 @@ gboolean signal_read_rtvars()
 			return TRUE;
 		}
 		errcount++;
-		dbg_func(__FILE__": signal_read_rtvars()\n\tNOT connected, not queing message to thread handler....\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tNOT connected, not queing message to thread handler....\n"),CRITICAL);
 
 	}
 	return TRUE;	/* Keep going.... */
@@ -169,7 +169,7 @@ gboolean signal_read_rtvars()
  */
 gboolean early_interrogation()
 {
-	update_logbar("interr_view","warning","Initiating background ECU interrogation...\n",FALSE,FALSE);
+	update_logbar("interr_view","warning",g_strdup("Initiating background ECU interrogation...\n"),FALSE,FALSE);
 	io_cmd(IO_INTERROGATE_ECU,NULL);
 	return FALSE;
 }

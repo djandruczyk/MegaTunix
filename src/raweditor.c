@@ -101,7 +101,6 @@ EXPORT void finish_raweditor(void)
 			g_object_set_data(G_OBJECT(entry),"base",GINT_TO_POINTER(16));
 			g_object_set_data(G_OBJECT(entry),"raw_lower",GINT_TO_POINTER(0));
 			g_object_set_data(G_OBJECT(entry),"raw_upper",GINT_TO_POINTER(255));
-			g_object_set_data(G_OBJECT(entry),"raw",GINT_TO_POINTER(TRUE));
 			if (firmware->page_params[i]->is_spark)
 				g_object_set_data(G_OBJECT(entry),"ign_parm",GINT_TO_POINTER(TRUE));
 
@@ -163,6 +162,7 @@ gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data)
 	gint format = 0;
 	gint i = 0;
 	GtkTable *table = NULL;
+	gchar * tmpbuf = NULL;
 	GtkTableChild *child = NULL;
 
 	table = (GtkTable *)gtk_bin_get_child(GTK_BIN(widget));
@@ -177,7 +177,11 @@ gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data)
 		{
 			child = g_list_nth_data(table->children,i);
 			if (GTK_IS_LABEL(child->widget))
-				gtk_label_set_text(GTK_LABEL(child->widget),g_strdup_printf("%i",child->top_attach*8));
+			{
+				tmpbuf = g_strdup_printf("%i",child->top_attach*8);
+				gtk_label_set_text(GTK_LABEL(child->widget),tmpbuf);
+				g_free(tmpbuf);
+			}
 		}
 		g_object_set_data(G_OBJECT(table),"format",GINT_TO_POINTER(MTX_DECIMAL));
 	}
@@ -187,7 +191,11 @@ gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data)
 		{
 			child = g_list_nth_data(table->children,i);
 			if (GTK_IS_LABEL(child->widget))
-				gtk_label_set_text(GTK_LABEL(child->widget),g_strdup_printf("0x%.4X",child->top_attach*8));
+			{
+				tmpbuf = g_strdup_printf("0x%.4X",child->top_attach*8);
+				gtk_label_set_text(GTK_LABEL(child->widget),tmpbuf);
+				g_free(tmpbuf);
+			}
 		}
 		g_object_set_data(G_OBJECT(table),"format",GINT_TO_POINTER(MTX_HEX));
 	}

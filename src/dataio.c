@@ -56,7 +56,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 
-	dbg_func("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n",IO_PROCESS);
+	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n"),IO_PROCESS);
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
@@ -94,7 +94,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			}
 			if (bad_read)
 			{
-				dbg_func(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -133,7 +133,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			}
 			if (bad_read)
 			{
-				dbg_func(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"),CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -237,7 +237,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n"),CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -247,13 +247,13 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			dump_output(total_read,buf);
 			break;
 		default:
-			dbg_func(__FILE__": handle_ecu_data()\n\timproper case, contact author!\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\timproper case, contact author!\n"),CRITICAL);
 			state = FALSE;
 			break;
 	}
 jumpout:
 
-	dbg_func("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n",IO_PROCESS);
+	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n"),IO_PROCESS);
 	return state;
 }
 
@@ -279,9 +279,9 @@ void dump_output(gint total_read, guchar *buf)
 		{
 			dbg_func(g_strdup_printf("%.2x ", p[j]),SERIAL_RD);
 			if (!((j+1)%8))
-				dbg_func(g_strdup_printf("\n"),SERIAL_RD);
+				dbg_func(g_strdup("\n"),SERIAL_RD);
 		}
-		dbg_func("\n\n",SERIAL_RD);
+		dbg_func(g_strdup("\n\n"),SERIAL_RD);
 	}
 
 }

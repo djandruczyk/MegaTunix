@@ -149,7 +149,7 @@ struct Rt_Slider
 	gchar *friendly_name;	/*! text for Label above */
 	gint lower;		/*! Lower limit */
 	gint upper;		/*! Upper limit */
-	gfloat * history;	/*! where the data is from */
+	GArray *history;	/*! where the data is from */
 	gfloat last_percentage;	/*! last percentage of on screen slider */
 	GObject *object;	/*! object of obsession.... */
 	gboolean enabled;	/*! Pretty obvious */

@@ -53,9 +53,8 @@ void process_rt_vars(void *incoming)
 	void *evaluator = NULL;
 	GTimeVal timeval;
 	gint ts_position;
-	gint hist_position;
-	gint hist_max;
-	gfloat *history = NULL;
+	gint current_index;
+	GArray *history = NULL;
 	gchar *special = NULL;
 
 	num_raw = firmware->rtvars_size;
@@ -127,7 +126,7 @@ void process_rt_vars(void *incoming)
 			if (g_object_get_data(object,"lookuptable"))
 			{
 				dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset),COMPLEX_EXPR);
-				x = lookup_data(object,raw_realtime[offset]);
+			x = lookup_data(object,raw_realtime[offset]);
 			}
 			else
 			{
@@ -148,22 +147,13 @@ store_it:
 			}
 			else
 				result = tmpf;
-			history = (gfloat *)g_object_get_data(object,"history");
-			hist_position = (gint)g_object_get_data(object,"hist_position");
-			hist_max = (gint)g_object_get_data(object,"hist_max");
-			/* Store data in ringbuffer */
-			history[hist_position] = result;
-			g_object_set_data(object,"current_entry",GINT_TO_POINTER(hist_position));
-			if (hist_position != 0)
-				g_object_set_data(object,"previous_entry",GINT_TO_POINTER(hist_position-1));
-			else
-				g_object_set_data(object,"previous_entry",GINT_TO_POINTER(hist_max-1));
-			hist_position++;
-			/* wrap around.. */
-			if (hist_position >= hist_max)
-				hist_position = 0;
-			g_object_set_data(object,"hist_position",GINT_TO_POINTER(hist_position));
-
+			/* Get history array and current index point */
+			history = (GArray *)g_object_get_data(object,"history");
+			current_index = (gint)g_object_get_data(object,"current_index");
+			/* Store data in history buffer */
+			g_array_append_val(history,result);
+			current_index++;
+			g_object_set_data(object,"current_index",GINT_TO_POINTER(current_index));
 
 			//printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 
@@ -343,15 +333,15 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 {
 	extern struct Rtv_Map *rtv_map;
 	GObject * object = NULL;
-	gfloat * history = NULL;
-	gint current_entry = 0;
+	GArray * history = NULL;
+	gint index = 0;
 	
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
-	history = (gfloat *)g_object_get_data(object,"history");
-	current_entry = (gint)g_object_get_data(object,"current_entry");
-	*value = history[current_entry];
+	history = (GArray *)g_object_get_data(object,"history");
+	index = (gint)g_object_get_data(object,"current_index");
+	*value = g_array_index(history,gfloat,index);
 	return TRUE;
 }
 
@@ -367,14 +357,16 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 {
 	extern struct Rtv_Map *rtv_map;
 	GObject * object = NULL;
-	gfloat * history = NULL;
-	gint previous_entry = 0;
+	GArray * history = NULL;
+	gint index = 0;
 	
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
-	history = (gfloat *)g_object_get_data(object,"history");
-	previous_entry = (gint)g_object_get_data(object,"previous_entry");
-	*value = history[previous_entry];
+	history = (GArray *)g_object_get_data(object,"history");
+	index = (gint)g_object_get_data(object,"current_index");
+	if (index > 0)
+		index -= 1;  /* get PREVIOUS one */
+	*value = g_array_index(history,gfloat,index);
 	return TRUE;
 }

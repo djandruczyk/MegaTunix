@@ -147,7 +147,6 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	gint size = 0;
 	struct Io_File *iofile;
 	gint iotype = -1;
-	gchar * tmpbuf = NULL;
 	gboolean preexisting = FALSE;
 	gboolean new_file = FALSE;
 
@@ -158,9 +157,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 
 	if (g_file_test(selected_filename,G_FILE_TEST_IS_DIR))
 	{
-		tmpbuf=g_strdup_printf("You Selected a Directory, you need to select a file!!!\n");
-		update_logbar("tools_view","warning",tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
+		update_logbar("tools_view","warning",g_strdup("You Selected a Directory, you need to select a file!!!\n"),TRUE,FALSE);
 		return;
 	}
 	else if (g_file_test(selected_filename,G_FILE_TEST_IS_REGULAR))
@@ -194,16 +191,9 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			if (!warn_file_not_empty(iotype,selected_filename))
 			{
 				if (iotype == DATALOG_EXPORT)
-				{
-					tmpbuf = g_strdup("File chosen for datalogging already contained data, user has chosen not to over-write it...\n");
-					update_logbar("dlog_view","warning",tmpbuf,TRUE,FALSE);
-				}
+					update_logbar("dlog_view","warning",g_strdup("File chosen for datalogging already contained data, user has chosen not to over-write it...\n"),TRUE,FALSE);
 				else
-				{
-					tmpbuf = g_strdup("File chosen already had data, user has chosen not to over-write it...\n");
-					update_logbar("tools_view","warning",tmpbuf,TRUE,FALSE);
-				}
-				g_free(tmpbuf);
+					update_logbar("tools_view","warning",g_strdup("File chosen already had data, user has chosen not to over-write it...\n"),TRUE,FALSE);
 				return;
 			}
 		}
@@ -223,13 +213,11 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 
 	if(iofile->iochannel == NULL)
 	{
-		dbg_func(__FILE__": check_filename()\n\t iochannel could NOT be opened...\n",CRITICAL);
-		tmpbuf = g_strdup_printf("File Open Failure\n");
+		dbg_func(g_strdup(__FILE__": check_filename()\n\t iochannel could NOT be opened...\n"),CRITICAL);
 		if (iotype == DATALOG_EXPORT)
-			update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
+			update_logbar("dlog_view",NULL,g_strdup("File Open Failure\n"),TRUE,FALSE);
 		else
-			update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
+			update_logbar("tools_view",NULL,g_strdup("File Open Failure\n"),TRUE,FALSE);
 		g_free(iofile->filename);
 		g_free(iofile);
 		return;
@@ -240,7 +228,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case DATALOG_EXPORT:
 			if (dlog_open)
 			{
-				dbg_func(__FILE__": check_filename()\n\tDatalog already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": check_filename()\n\tDatalog already open, should not open it twice...BUG!!!\n"),CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -251,28 +239,24 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			g_object_set_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data",(gpointer)iofile);
 			gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,"dlog_file_label")),selected_filename);
 					
-			tmpbuf = g_strdup_printf("DataLog File Opened\n");
-			update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
-			g_free(tmpbuf);
+			update_logbar("dlog_view",NULL,g_strdup("DataLog File Opened\n"),TRUE,FALSE);
 			break;
 		case DATALOG_IMPORT:
 			if (logview_open)
 			{
-				dbg_func(__FILE__": check_filename()\n\tDatalog viewfile already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": check_filename()\n\tDatalog viewfile already open, should not open it twice...BUG!!!\n"),CRITICAL);
 				g_free(iofile);
 				return;
 			}
 			logviewfile = g_strdup(selected_filename);
 			logview_open = TRUE;
-			tmpbuf = g_strdup_printf("DataLog ViewFile Opened\n");
-			update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
-			g_free(tmpbuf);
+			update_logbar("dlog_view",NULL,g_strdup("DataLog ViewFile Opened\n"),TRUE,FALSE);
 			load_logviewer_file(iofile);
 			break;
 		case FULL_BACKUP:
 			if (backup_open)
 			{
-				dbg_func(__FILE__": check_filename()\n\tSettings Backup file already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": check_filename()\n\tSettings Backup file already open, should not open it twice...BUG!!!\n"),CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -284,7 +268,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case FULL_RESTORE:
 			if (restore_open)
 			{
-				dbg_func(__FILE__": check_filename()\n\tSettings Restore file already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": check_filename()\n\tSettings Restore file already open, should not open it twice...BUG!!!\n"),CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -297,39 +281,35 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_EXPORT:
 			if (vex_open)
 			{
-				dbg_func(__FILE__": check_filename()\n\tVEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": check_filename()\n\tVEX File already open, should not open it twice...BUG!!!\n"),CRITICAL);
 				g_free(iofile);
 				return;
 			}
 			vexfile = g_strdup(selected_filename);
 			vex_open = TRUE;
 			if (vex_comment == NULL)
-				tmpbuf = g_strdup_printf("VEX File Opened. VEX Comment undefined, exporting without one.\n");
+				update_logbar("tools_view",NULL,g_strdup("VEX File Opened. VEX Comment undefined, exporting without one.\n"),TRUE,FALSE);
 			else
-				tmpbuf = g_strdup_printf("VEX File Opened, VEX Comment already stored\n");
+				update_logbar("tools_view",NULL,g_strdup("VEX File Opened. VEX Comment already stored.\n"),TRUE,FALSE);
 
-			update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
-			g_free(tmpbuf);
 			vetable_export(iofile);
 			close_file (iofile);
 			break;
 		case VE_IMPORT:
 			if (vex_open)
 			{
-				dbg_func(__FILE__": check_filename()\n\tVEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": check_filename()\n\tVEX File already open, should not open it twice...BUG!!!\n"),CRITICAL);
 				g_free(iofile);
 				return;
 			}
 			vexfile = g_strdup(selected_filename);
 			vex_open = TRUE;
-			tmpbuf = g_strdup_printf("VEX File Opened.\n");
-			update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
-			g_free(tmpbuf);
+			update_logbar("tools_view",NULL,g_strdup("VEX File Opened.\n"),TRUE,FALSE);
 			vetable_import(iofile);
 			close_file (iofile);
 			break;
 		default:
-			dbg_func(__FILE__": ERROR in check_filename()\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": ERROR in check_filename()\n"),CRITICAL);
 			break;
 	}
 }
@@ -341,13 +321,12 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
  */
 void close_file(struct Io_File *iofile)
 {
-	gchar *tmpbuf = NULL;
 	GIOStatus status;
 	GError *error = NULL;
 
 	if (!iofile)
 	{
-//		dbg_func(__FILE__": close_file()\n\tIo_File pointer is NULL, REturning NOW!!\n",CRITICAL);
+//		dbg_func(g_strdup(__FILE__": close_file()\n\tIo_File pointer is NULL, REturning NOW!!\n"),CRITICAL);
 		return;
 	}
 
@@ -363,8 +342,7 @@ void close_file(struct Io_File *iofile)
 		case DATALOG_EXPORT:
 			gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,"dlog_file_label")),"No Log Selected Yet");
 					
-			tmpbuf = g_strdup_printf("Logfile Closed\n");
-			update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
+			update_logbar("dlog_view",NULL,g_strdup("Logfile Closed\n"),TRUE,FALSE);
 			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_stop_logging_button"),FALSE);
 			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_start_logging_button"),FALSE);
 			g_object_set_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data",NULL);
@@ -372,27 +350,23 @@ void close_file(struct Io_File *iofile)
 			g_free(dlogfile);
 			break;
 		case DATALOG_IMPORT:
-			tmpbuf = g_strdup_printf("LogView File Closed\n");
-			update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
+			update_logbar("dlog_view",NULL,g_strdup("LogView File Closed\n"),TRUE,FALSE);
 			logview_open = FALSE;
 			g_free(logviewfile);
 			break;
 		case FULL_BACKUP:
-			tmpbuf = g_strdup_printf("Full Backup File Closed\n");
-			update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
+			update_logbar("tools_view",NULL,g_strdup("Full Backup File Closed\n"),TRUE,FALSE);
 			backup_open = FALSE;
 			break;
 
 		case FULL_RESTORE:
-			tmpbuf = g_strdup_printf("Full Restore File Closed\n");
-			update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
+			update_logbar("tools_view",NULL,g_strdup("Full Restore File Closed\n"),TRUE,FALSE);
 			restore_open = FALSE;
 			break;
 
 		case VE_EXPORT: /* Fall Through */
 		case VE_IMPORT: /* VE Export/import.. */
-			tmpbuf = g_strdup_printf("VEX File Closed\n");
-			update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
+			update_logbar("tools_view",NULL,g_strdup("VEX File Closed\n"),TRUE,FALSE);
 			gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
 
 			vex_open = FALSE;
@@ -406,8 +380,6 @@ void close_file(struct Io_File *iofile)
 	iofile->iochannel = NULL;
 	g_free(iofile);
 	iofile = NULL;
-	if(tmpbuf)
-		g_free(tmpbuf);
 }
 
 
@@ -418,7 +390,6 @@ void close_file(struct Io_File *iofile)
  */
 void truncate_file(FileIoType filetype, gchar *filename)
 {
-	gchar *tmpbuf = NULL;
 	gchar *base=NULL;
 
 	switch (filetype)
@@ -437,11 +408,9 @@ void truncate_file(FileIoType filetype, gchar *filename)
 			break;
 	}
 	if (truncate(filename,0) == 0)
-		tmpbuf = g_strdup_printf("%sFile Truncation successful\n",base);
+		update_logbar("dlog_view",NULL,g_strdup_printf("%sFile Truncation successful\n",base),TRUE,FALSE);
 	else
-		tmpbuf = g_strdup_printf("%sFile Truncation FAILED\n",base);
-	update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
-	g_free(tmpbuf);
+		update_logbar("dlog_view",NULL,g_strdup_printf("%sFile Truncation FAILED\n",base),TRUE,FALSE);
 	g_free(base);
 }
 

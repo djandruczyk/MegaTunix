@@ -15,6 +15,7 @@
 #define __INIT_H__
 
 #include <gtk/gtk.h>
+#include <structures.h>
 
 /* Prototypes */
 void init(void);
@@ -23,6 +24,11 @@ void save_config(void);
 void make_megasquirt_dirs(void);
 void mem_alloc(void);
 void mem_dealloc(void);
+void dealloc_textmessage(struct Text_Message * );
+void dealloc_message(struct Io_Message * );
+void dealloc_w_update(struct Widget_Update * );
+struct Io_Message * initialize_io_message(void);
+struct Text_Message * initialize_text_message(void);
 /* Prototypes */
 
 #endif

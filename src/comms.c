@@ -39,9 +39,9 @@ void update_comms_status(void)
 	GtkWidget *widget = NULL;
 
 	if (connected)
-		update_logbar("comms_view",NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
+		update_logbar("comms_view",NULL,g_strdup("ECU Comms Test Successfull\n"),TRUE,FALSE);
 	else
-		update_logbar("comms_view","warning","I/O with ECU Timeout\n",TRUE,FALSE);
+		update_logbar("comms_view","warning",g_strdup("I/O with ECU Timeout\n"),TRUE,FALSE);
 
 	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_connected_label")))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
@@ -68,7 +68,7 @@ void comms_test()
 	if (serial_params->open == FALSE)
 	{
 		connected = FALSE;
-		dbg_func(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		return;
 	}
 
@@ -77,21 +77,21 @@ void comms_test()
 	while (write(serial_params->fd,"C",1) != 1)
 	{
 		g_usleep(10000);
-		dbg_func(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n"),CRITICAL);
 	}
-	dbg_func(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n",SERIAL_RD);
+	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
 	result = handle_ecu_data(C_TEST,NULL);
 	if (result)	// Success
 	{
 		// COMMS test succeeded 
 		connected = TRUE;
-		dbg_func(__FILE__": comms_test()\n\tECU Comms Test Successfull\n",SERIAL_RD);
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"),SERIAL_RD);
 	}
 	else
 	{
 		// An I/O Error occurred with the MegaSquirt ECU 
 		connected = FALSE;
-		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"),CRITICAL);
 	}
 	/* Flush the toilet again.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
@@ -179,7 +179,7 @@ void writeto_ecu(struct Io_Message *message)
 	}
 	if (value < 0)
 	{
-		dbg_func(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n"),CRITICAL);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
@@ -200,13 +200,13 @@ void writeto_ecu(struct Io_Message *message)
 		lbuff[1]=highbyte;
 		lbuff[2]=lowbyte;
 		count = 3;
-		dbg_func(__FILE__": writeto_ecu()\n\tSending 16 bit value to ECU\n",SERIAL_WR);
+		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 16 bit value to ECU\n"),SERIAL_WR);
 	}
 	else
 	{
 		lbuff[1]=value;
 		count = 2;
-		dbg_func(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n",SERIAL_WR);
+		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n"),SERIAL_WR);
 	}
 
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
@@ -252,7 +252,7 @@ void burn_ecu_flash()
 
 	if (!connected)
 	{
-		dbg_func(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n"),CRITICAL);
 		return;
 	}
 	flush_serial(serial_params->fd, TCIOFLUSH);
@@ -310,7 +310,7 @@ void readfrom_ecu(struct Io_Message *message)
 			message->out_str,
 			message->out_len);
 	if (result != message->out_len)	
-		dbg_func(__FILE__": readfrom_ecu()\n\twrite command to ECU failed\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite command to ECU failed\n"),CRITICAL);
 
 	else
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str),SERIAL_WR);
@@ -319,9 +319,9 @@ void readfrom_ecu(struct Io_Message *message)
 	{
 		result = write(serial_params->fd,&message->offset,1);
 		if (result == -1)
-			dbg_func(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n"),CRITICAL);
 		else if (result != 1)	
-			dbg_func(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n"),CRITICAL);
 		else
 			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset of \"%i\" for raw mem cmd succeeded\n",message->offset),SERIAL_WR);
 	}
@@ -330,7 +330,7 @@ void readfrom_ecu(struct Io_Message *message)
 		result = handle_ecu_data(message->handler,message);
 	else
 	{
-		dbg_func(__FILE__": readfrom_ecu()\n\t message->handler is -1, bad things, EXITING!\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is -1, bad things, EXITING!\n"),CRITICAL);
 		exit (-1);
 	}
 	if (result)

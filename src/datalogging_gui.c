@@ -70,7 +70,7 @@ void populate_dlog_choices()
 		return;
 	if (!rtvars_loaded)
 	{
-		dbg_func(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"),CRITICAL);
 		return;
 	}
 
@@ -131,6 +131,8 @@ void populate_dlog_choices()
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
 				NULL);
+		if ((gboolean)g_object_get_data(object,"log_by_default")==TRUE)
+			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
 				(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 				(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
@@ -165,7 +167,7 @@ void start_datalogging(void)
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),FALSE);
 	header_needed = TRUE;
 	logging_active = TRUE;
-	update_logbar("dlog_view",NULL,"DataLogging Started...\n",TRUE,FALSE);
+	update_logbar("dlog_view",NULL,g_strdup("DataLogging Started...\n"),TRUE,FALSE);
 
 	widget = gtk_button_new();
 	g_object_set_data(G_OBJECT(widget),"handler",
@@ -192,7 +194,7 @@ void stop_datalogging()
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
 	if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
-	update_logbar("dlog_view",NULL,"DataLogging Stopped...\n",TRUE,FALSE);
+	update_logbar("dlog_view",NULL,g_strdup("DataLogging Stopped...\n"),TRUE,FALSE);
 	return;
 }
 
@@ -252,7 +254,7 @@ void write_log_header(struct Io_File *iofile)
 	gchar * string = NULL;
 	if (!iofile)
 	{
-		dbg_func(__FILE__": write_log_header()\n\tIo_File pointer was undefined, returning NOW...\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": write_log_header()\n\tIo_File pointer was undefined, returning NOW...\n"),CRITICAL);
 		return;
 	}
 	/* Count total logable variables */
@@ -298,8 +300,8 @@ void run_datalog(void)
 	struct Io_File *iofile = NULL;
 	GObject *object = NULL;
 	gfloat value = 0.0;
-	gfloat *history = NULL;
-	gint current_entry = 0;
+	GArray *history = NULL;
+	gint current_index = 0;
 	extern GHashTable *dynamic_widgets;
 
 	if (!logging_active) /* Logging isn't enabled.... */
@@ -310,7 +312,7 @@ void run_datalog(void)
 		iofile = (struct Io_File *)data;
 	else
 	{
-		dbg_func(__FILE__": run_datalog()\n\tIo_File undefined, returning NOW!!!\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": run_datalog()\n\tIo_File undefined, returning NOW!!!\n"),CRITICAL);
 		return;
 	}
 
@@ -336,9 +338,9 @@ void run_datalog(void)
 		if (!((gboolean)g_object_get_data(object,"being_logged")))
 			continue;
 
-		history = (gfloat *)g_object_get_data(object,"history");
-		current_entry = (gint)g_object_get_data(object,"current_entry");
-		value = history[current_entry];
+		history = (GArray *)g_object_get_data(object,"history");
+		current_index = (gint)g_object_get_data(object,"current_index");
+		value = g_array_index(history, gfloat, current_index);
 		if ((gboolean)g_object_get_data(object,"is_float"))
 			g_string_append_printf(output,"%.3f",value);
 		else

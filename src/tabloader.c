@@ -118,7 +118,7 @@ gboolean load_gui_tabs(void)
 				frame = glade_xml_get_widget(xml,"topframe");
 				if (frame == NULL)
 				{
-					dbg_func(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n",CRITICAL);
+					dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n"),CRITICAL);
 					return FALSE;
 				}
 				else
@@ -157,7 +157,7 @@ gboolean load_gui_tabs(void)
 
 	}
 	tabs_loaded = TRUE;
-	dbg_func(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n",TABLOADER);
+	dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n"),TABLOADER);
 	g_free(bindgroup);
 	return TRUE;
 }
@@ -563,7 +563,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	g_free(keytypes);
 	g_strfreev(keys);
-	dbg_func(__FILE__": bind_data()\n\t All is well, leaving...\n\n",TABLOADER);
+	dbg_func(g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"),TABLOADER);
 }
 
 

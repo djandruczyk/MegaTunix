@@ -19,9 +19,6 @@
 
 /* Prototypes */
 gboolean dispatcher(gpointer);
-void dealloc_textmessage(struct Text_Message * );
-void dealloc_message(struct Io_Message * );
-void dealloc_w_update(struct Widget_Update * );
 /* Prototypes */
 
 #endif

@@ -72,7 +72,7 @@ void present_viewer_choices(void)
 
 	if (!darea)
 	{
-		dbg_func(__FILE__": present_viewer_choices()\n\tpointer to drawing area was NULL, returning!!!\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": present_viewer_choices()\n\tpointer to drawing area was NULL, returning!!!\n"),CRITICAL);
 		return;
 	}
 
@@ -684,8 +684,8 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 	gfloat last_val = 0.0;
 	gfloat percent = 0.0;
 	gfloat last_percent = 0.0;
-	gfloat *history = NULL;
-	gint current_entry = 0;
+	GArray *history = NULL;
+	gint current_index = 0;
 	gint len = 0;
 	gint lo_width;
 	gint total = 0;
@@ -793,9 +793,9 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		return;
 	}
 
-	history = (gfloat *)g_object_get_data(v_value->object,"history");
-	current_entry = (gint)g_object_get_data(v_value->object,"current_entry");
-	val = history[current_entry];
+	history = (GArray *)g_object_get_data(v_value->object,"history");
+	current_index = (gint)g_object_get_data(v_value->object,"current_index");
+	val = g_array_index(history,gfloat, current_index);
 
 	if (val > (v_value->max))
 		v_value->max = val;

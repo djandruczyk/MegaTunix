@@ -37,6 +37,7 @@ gboolean check_dependancies(GObject *object )
 	gint bitshift = 0;
 	gint bitval = 0;
 	gchar ** deps = NULL;
+	gchar * tmpbuf = NULL;
 	gint type = 0;
 	gint num_deps = 0;
 	extern gint **ms_data;
@@ -45,22 +46,43 @@ gboolean check_dependancies(GObject *object )
 	deps = g_object_get_data(object,"deps");
 	for (i=0;i<num_deps;i++)
 	{
-		type = (gint)g_object_get_data(object,g_strdup_printf("%s_type",deps[i]));
+		tmpbuf = g_strdup_printf("%s_type",deps[i]);
+		type = (gint)g_object_get_data(object,tmpbuf);
+		g_free(tmpbuf);
 		if (type == VE_EMB_BIT)
 		{
-			page = (gint)g_object_get_data(object,g_strdup_printf("%s_page",deps[i]));
-			offset = (gint)g_object_get_data(object,g_strdup_printf("%s_offset",deps[i]));
-			bitshift = (gint)g_object_get_data(object,g_strdup_printf("%s_bitshift",deps[i]));
-			bitmask = (gint)g_object_get_data(object,g_strdup_printf("%s_bitmask",deps[i]));
-			bitval = (gint)g_object_get_data(object,g_strdup_printf("%s_bitval",deps[i]));
+			tmpbuf = g_strdup_printf("%s_page",deps[i]);
+			page = (gint)g_object_get_data(object,tmpbuf);
+			g_free(tmpbuf);
+
+			tmpbuf = g_strdup_printf("%s_offset",deps[i]);
+			offset = (gint)g_object_get_data(object,tmpbuf);
+			g_free(tmpbuf);
+
+			tmpbuf = g_strdup_printf("%s_bitshift",deps[i]);
+			bitshift = (gint)g_object_get_data(object,tmpbuf);
+			g_free(tmpbuf);
+
+			tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
+			bitmask = (gint)g_object_get_data(object,tmpbuf);
+			g_free(tmpbuf);
+
+			tmpbuf = g_strdup_printf("%s_bitval",deps[i]);
+			bitval = (gint)g_object_get_data(object,tmpbuf);
+			g_free(tmpbuf);
+
 			if (!(((ms_data[page][offset]) & bitmask) >> bitshift) == bitval)	
 				return FALSE;
 		}
 /*		else if (type == VE_VAR)
 		{
+			tmpbuf = g_strdup_printf("%s_page",deps[i]);
 			page = (gint)g_object_get_data(object,g_strdup_printf("%s_page",deps[i]));
+			g_free(tmpbuf);
+
+			tmpbuf = g_strdup_printf("%s_offset",deps[i]);
 			offset = (gint)g_object_get_data(object,g_strdup_printf("%s_offset",deps[i]));
-			value = (gint)g_object_get_data(object,g_strdup_printf("%s_offset",deps[i]));
+			g_free(tmpbuf);
 		}
 */
 	}

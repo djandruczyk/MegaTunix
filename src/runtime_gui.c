@@ -55,13 +55,16 @@ gboolean update_runtime_vars()
 	static gfloat last_coolant = 0.0;
 	gfloat x,y,z = 0.0;
 	gfloat xl,yl,zl = 0.0;
+	gchar * string = NULL;
 
 	if(no_update)
 		return FALSE;
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		tmpwidget = g_hash_table_lookup(dynamic_widgets,g_strdup_printf("ve_view_%i",i));
+		string = g_strdup_printf("ve_view_%i",i);
+		tmpwidget = g_hash_table_lookup(dynamic_widgets,string);
+		g_free(string);
 		if (GTK_IS_WIDGET(tmpwidget))
 		{
 			ve_view = (struct Ve_View_3D *)g_object_get_data(
@@ -104,7 +107,7 @@ breakout:
 		g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
-			dbg_func(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n"),CRITICAL);
 		if ((coolant != last_coolant) || (forced_update))
 			warmwizard_update_status(coolant);
 		last_coolant = coolant;
@@ -147,11 +150,10 @@ void rt_update_status(gpointer key, gpointer data)
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gint value = 0;
+	gfloat tmpf = 0.0;
 	gint previous_value = 0;
-	gint current_entry = 0;
-	gint previous_entry = 0;
 	static GObject *object = NULL;
-	static gfloat * history = NULL;
+	static GArray * history = NULL;
 	static gchar * source = NULL;
 	static gchar * last_source = "";
 	extern struct Rtv_Map *rtv_map;
@@ -165,17 +167,22 @@ void rt_update_status(gpointer key, gpointer data)
 		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!object)
 			return;
-		history = (gfloat *)g_object_get_data(object,"history");
+		history = (GArray *)g_object_get_data(object,"history");
 	}
-	current_entry = (gint)g_object_get_data(object,"current_entry");
-	previous_entry = (gint)g_object_get_data(object,"previous_entry");
+
+	if (lookup_current_value(source,&tmpf))
+		value = (gint) tmpf;
+	else
+		dbg_func(g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source),CRITICAL);
+	if (lookup_previous_value(source,&tmpf))
+		previous_value = (gint) tmpf;
+	else
+		dbg_func(g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get previous value for %s\n",source),CRITICAL);
 
 	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
 	
-	value = (gint)history[current_entry];
-	previous_value = (gint)history[previous_entry];
 
 	/// if the value hasn't changed, don't bother continuing 
 	if (value == previous_value)
@@ -205,19 +212,19 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat tmpf = 0.0;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
-	gchar * tmpbuf = NULL;
-	gint current_entry = 0;
-	gint previous_entry = 0;
+	gint current_index = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
 	gfloat percentage = 0.0;
+	gchar * tmpbuf = NULL;
 	gboolean is_float = FALSE;
 
-	current_entry = (gint)g_object_get_data(slider->object,"current_entry");
-	previous_entry = (gint)g_object_get_data(slider->object,"previous_entry");
+	current_index = (gint)g_object_get_data(slider->object,"current_index");
 	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
-	current = slider->history[current_entry];
-	previous = slider->history[previous_entry];
+	current = g_array_index(slider->history, gfloat, current_index);
+	if (current_index > 0)
+		current_index-=1;
+	previous = g_array_index(slider->history, gfloat, current_index);
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
@@ -241,7 +248,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 				tmpbuf = g_strdup_printf("%.2f",current);
 			else
 				tmpbuf = g_strdup_printf("%i",(gint)current);
-			
+
 			gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 			g_free(tmpbuf);
 			last_upd = count;
@@ -254,6 +261,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 			tmpbuf = g_strdup_printf("%.2f",current);
 		else
 			tmpbuf = g_strdup_printf("%i",(gint)current);
+
 		gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;

@@ -68,7 +68,7 @@ void req_fuel_change(GtkWidget *widget)
 		reqd_fuel = (struct Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	else
 	{
-		dbg_func(__FILE__": req_fuel_change()\n\treqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": req_fuel_change()\n\treqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"),CRITICAL);
 		return;
 	}
 
@@ -383,9 +383,11 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 
+	tmpbuf = g_strdup_printf("req_fuel_per_cycle_%i_spin",1+reqd_fuel->page);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON
-			(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("req_fuel_per_cycle_%i_spin",1+reqd_fuel->page))),
+			(g_hash_table_lookup(dynamic_widgets,tmpbuf)),
 			reqd_fuel->calcd_reqd_fuel);
+	g_free(tmpbuf);
 
 	/* Top is two stroke, botton is four stroke.. */
 	page = reqd_fuel->page;
@@ -521,7 +523,6 @@ void check_req_fuel_limits()
 			/* Required Fuel per SQUIRT */
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
 					(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
-
 
 			if (paused_handlers)
 				return;

@@ -82,7 +82,7 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 					gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);
 					break;
 				default:
-					dbg_func(__FILE__": load_tags()\n\t numer of attributes is too many, 3 pairs of attribute pairs per tag is the maximum supported\n",CRITICAL);
+					dbg_func(g_strdup(__FILE__": load_tags()\n\t numer of attributes is too many, 3 pairs of attribute pairs per tag is the maximum supported\n"),CRITICAL);
 
 			}
 			

@@ -54,6 +54,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		lower = 0; // BAD assumption
 	else
 		lower = (gint)g_object_get_data(G_OBJECT(widget),"raw_lower");
+
 	if (NULL == g_object_get_data(G_OBJECT(widget),"raw_upper"))
 		upper = 255; // BAD assumption
 	else
@@ -69,12 +70,12 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		dbg_func(g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value),CONVERSIONS);
 		if(value > upper)
 		{
-			dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (no eval)!!\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (no eval)!!\n"),CRITICAL);
 			value = upper;
 		}
 		if (value < lower)
 		{
-			dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (no eval)!!\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (no eval)!!\n"),CRITICAL);
 			value = lower;
 		}
 		ms_data[page][offset] = (gint)value;
@@ -93,12 +94,12 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	if (return_value > upper)
 	{
-		dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (evaluated)!!\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (evaluated)!!\n"),CRITICAL);
 		return_value = upper;
 	}
 	if (return_value < lower)
 	{
-		dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (evaluated)!!\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (evaluated)!!\n"),CRITICAL);
 		return_value = lower;
 	}
 
@@ -196,7 +197,7 @@ void convert_temps(gpointer widget, gpointer units)
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_f_label");
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
-			gtk_label_set_text(GTK_LABEL(widget),g_strdup(text));
+			gtk_label_set_text(GTK_LABEL(widget),text);
 		}
 
 		if (GTK_IS_SPIN_BUTTON(widget))
@@ -226,7 +227,7 @@ void convert_temps(gpointer widget, gpointer units)
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_c_label");
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");
-			gtk_label_set_text(GTK_LABEL(widget),g_strdup(text));
+			gtk_label_set_text(GTK_LABEL(widget),text);
 		}
 
 		if (GTK_IS_SPIN_BUTTON(widget))

@@ -169,7 +169,7 @@ void  update_logbar(
 	{
 		if (count) /* if TRUE, display counter, else don't */
 			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
-		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
+		gtk_text_buffer_insert(textbuffer,&iter,g_strdup(message),-1);
 	}
 	else
 	{
@@ -178,9 +178,10 @@ void  update_logbar(
 					&iter,tmpbuf,-1,tagname,NULL);
 
 		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,
-				message,-1,tagname,NULL);
+				g_strdup(message),-1,tagname,NULL);
 	}
 
+	g_free(message);
 	/* Get it's parent (the scrolled window) and slide it to the
 	 * bottom so the new message is visible... 
 	 */
@@ -267,26 +268,22 @@ void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
 	gchar *buff = NULL;
 	gchar *function = NULL;
 	gchar *choice = NULL;
-	gchar *lbar_msg = NULL;
 	switch (iotype)
 	{
 		case VE_IMPORT:
 			function = g_strdup("VE Table Load");
 			choice = g_strdup("\"Import VE Table (s)\"");
-			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nImporting a VE Table requires a valid VEX file\n",filename);
-			update_logbar("tools_view","warning",lbar_msg,TRUE,FALSE);
+			update_logbar("tools_view","warning",g_strdup_printf("The selected file %s does NOT exist\nImporting a VE Table requires a valid VEX file\n",filename),TRUE,FALSE);
 			break;
 		case DATALOG_IMPORT:
 			function = g_strdup("DataLog Load");
 			choice = g_strdup("\"Select Log File\"");
-			lbar_msg = g_strdup_printf("The selected file %s does NOPT exist\nImporting a DataLog for viewing requires a valid datalog file\n",filename);
-			update_logbar("dlog_view","warning",lbar_msg,TRUE,FALSE);
+			update_logbar("dlog_view","warning",g_strdup_printf("The selected file %s does NOPT exist\nImporting a DataLog for viewing requires a valid datalog file\n",filename),TRUE,FALSE);
 			break;
 		case FULL_RESTORE:
 			function = g_strdup("MegaSquirt Restore");
 			choice = g_strdup("\"Restore All MS Parameters\"");
-			lbar_msg = g_strdup_printf("The selected file %s does NOT exist\nA Full restore of MegaSquirt parameters requires a valid backup file\n",filename);
-			update_logbar("tools_view","warning",lbar_msg,TRUE,FALSE);
+			update_logbar("tools_view","warning",g_strdup_printf("The selected file %s does NOT exist\nA Full restore of MegaSquirt parameters requires a valid backup file\n",filename),TRUE,FALSE);
 			break;
 		default:
 			break;
@@ -295,8 +292,6 @@ void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
 	buff = g_strdup_printf("The file you selected does NOT exist. The %s function requires a valid input file to work, please close this dialog by clicking on \"Close\" to dismiss this warning, and select the %s button and select a valid file.",function,choice);
 	warn_user(buff);
 	g_free(buff);
-	if (lbar_msg)
-		g_free(lbar_msg);
 	if (function)
 		g_free(function);
 	if (choice)

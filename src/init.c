@@ -132,7 +132,7 @@ gboolean read_config(void)
 	else
 	{
 		serial_params->port_name = g_strdup(DEFAULT_PORT);
-		dbg_func(__FILE__": read_config()\n\tConfig file not found, using defaults\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"),CRITICAL);
 		g_free(filename);
 		save_config();
 		return FALSE;	/* No file found */
@@ -155,6 +155,10 @@ void save_config(void)
 	extern gboolean ready;
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
+
 	if (!cfgfile)
 		cfgfile = cfg_new();
 
@@ -192,7 +196,7 @@ void save_config(void)
 
 	g_free(cfgfile);
 	g_free(filename);
-
+	g_static_mutex_unlock(&mutex);
 }
 
 
@@ -320,3 +324,72 @@ void mem_dealloc()
 	}
 
 }
+
+
+/*!
+ \brief initialize_io_message() allocates and initializes a pointer
+ to a struct Io_Message datastructure,  used for passing messages 
+ across the GAsyncQueue's between the threads and the main context
+ \returns a allocated and initialized pointer to a single structure
+ */
+struct Io_Message * initialize_io_message()
+{
+	struct Io_Message *message = NULL;
+
+	message = g_new0(struct Io_Message, 1);
+	message->out_str = NULL;
+	message->funcs = NULL;
+	message->payload = NULL;
+
+	return message;
+}
+
+
+/*!
+ \brief dealloc_message() deallocates the structure used to pass an I/O
+ message from a thread to here..
+ \param message (struct Io_Message *) pointer to message data
+ */
+void dealloc_message(struct Io_Message * message)
+{
+        if (message->out_str)
+                g_free(message->out_str);
+        if (message->funcs)
+                g_array_free(message->funcs,TRUE);
+        if (message->payload)
+                g_free(message->payload);
+        g_free(message);
+
+}
+
+
+/*!
+ \brief dealloc_w_update() deallocates the structure used to pass an I/O
+ widget update message from a thread to here..
+ \param w_update (struct Widget_Update *) pointer to message data
+ */
+void dealloc_w_update(struct Widget_Update * w_update)
+{
+        if (w_update->widget_name)
+                g_free(w_update->widget_name);
+        if (w_update->msg)
+                g_free(w_update->msg);
+        g_free(w_update);
+	w_update = NULL;
+
+}
+
+
+/*!
+ \brief dealloc_textmessage() deallocates the structure used to pass a text
+ message from the thread to here..
+ \param message (struct Text_Message *) pointer to message data
+ */
+void dealloc_textmessage(struct Text_Message * message)
+{
+	g_free(message);
+	message = NULL;
+}
+
+
+

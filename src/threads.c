@@ -22,6 +22,7 @@
 #include <enums.h>
 #include <errno.h>
 #include <gui_handlers.h>
+#include <init.h>
 #include <interrogate.h>
 #include <logviewer_gui.h>
 #include <notifications.h>
@@ -71,7 +72,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 	switch (cmd)
 	{
 		case IO_REALTIME_READ:
-			message = g_new0(struct Io_Message,1);
+			message = initialize_io_message();
 			message->cmd = cmd;
 			message->need_page_change = FALSE;
 			message->command = READ_CMD;
@@ -90,7 +91,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 
 		case IO_INTERROGATE_ECU:
 			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),FALSE);
-			message = g_new0(struct Io_Message,1);
+			message = initialize_io_message();
 			message->cmd = cmd;
 			message->command = INTERROGATION;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
@@ -114,7 +115,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_COMMS_TEST:
-			message = g_new0(struct Io_Message,1);
+			message = initialize_io_message();
 			message->cmd = cmd;
 			message->command = COMMS_TEST;
 			message->page = 0;
@@ -132,7 +133,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 				break;
 			for (i=0;i<firmware->total_pages;i++)
 			{
-				message = g_new0(struct Io_Message,1);
+				message = initialize_io_message();
 				message->command = READ_CMD;
 				message->page = i;
 				message->need_page_change = TRUE;
@@ -159,7 +160,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			}
 			break;
 		case IO_READ_RAW_MEMORY:
-			message = g_new0(struct Io_Message,1);
+			message = initialize_io_message();
 			message->cmd = cmd;
 			message->command = READ_CMD;
 			message->need_page_change = FALSE;
@@ -173,7 +174,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_BURN_MS_FLASH:
-			message = g_new0(struct Io_Message,1);
+			message = initialize_io_message();
 			message->cmd = cmd;
 			message->need_page_change = FALSE;
 			message->command = BURN_CMD;
@@ -183,7 +184,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_WRITE_DATA:
-			message = g_new0(struct Io_Message,1);
+			message = initialize_io_message();
 			message->cmd = cmd;
 			message->command = WRITE_CMD;
 			message->payload = data;
@@ -217,19 +218,19 @@ void *thread_dispatcher(gpointer data)
 		switch ((CmdType)message->command)
 		{
 			case INTERROGATION:
-				dbg_func(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n",SERIAL_RD|SERIAL_WR|THREADS);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n"),SERIAL_RD|SERIAL_WR|THREADS);
 				if (!connected)
 					comms_test();
 				if (connected)
 					interrogate_ecu();
 				else
-					dbg_func(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n",CRITICAL);
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n"),CRITICAL);
 				break;
 			case COMMS_TEST:
-				dbg_func(__FILE__": thread_dispatcher()\n\tcomms_test requested \n",SERIAL_RD|SERIAL_WR|THREADS);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tcomms_test requested \n"),SERIAL_RD|SERIAL_WR|THREADS);
 				comms_test();
 				if (!connected)
-					dbg_func(__FILE__": thread_dispatcher()\n\tComms Test failed, NOT Connected!!\n",CRITICAL);
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tComms Test failed, NOT Connected!!\n"),CRITICAL);
 				break;
 			case READ_CMD:
 				dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD|THREADS);
@@ -239,18 +240,18 @@ void *thread_dispatcher(gpointer data)
 					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\treadfrom_ecu skipped, NOT Connected initiator %i!!\n",message->cmd),CRITICAL);
 				break;
 			case WRITE_CMD:
-				dbg_func(__FILE__": thread_dispatcher()\n\twrite_command requested\n",SERIAL_WR|THREADS);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_command requested\n"),SERIAL_WR|THREADS);
 				if ((connected) || (offline))
 					writeto_ecu(message);
 				else
-					dbg_func(__FILE__": thread_dispatcher()\n\twriteto_ecu skipped, NOT Connected!!\n",CRITICAL);
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twriteto_ecu skipped, NOT Connected!!\n"),CRITICAL);
 				break;
 			case BURN_CMD:
-				dbg_func(__FILE__": thread_dispatcher()\n\tburn_command requested\n",SERIAL_WR|THREADS);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_command requested\n"),SERIAL_WR|THREADS);
 				if ((connected) || (offline))
 					burn_ecu_flash();
 				else
-					dbg_func(__FILE__": thread_dispatcher()\n\tburn_ecu_flash skipped, NOT Connected!!\n",CRITICAL);
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_ecu_flash skipped, NOT Connected!!\n"),CRITICAL);
 
 				break;
 
@@ -297,7 +298,7 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 		return;
 
 	dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm),SERIAL_WR);
-	output = g_new0(struct OutputData,1);
+	output = g_new0(struct OutputData, 1);
 	output->page = page;
 	output->offset = offset;
 	output->value = value;
@@ -312,7 +313,8 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
  to update a logbar (textview). It's not safe to update a widget from a 
  threaded context in win32, hence this fucntion is created to pass the 
  information to the main thread via an GAsyncQueue to a dispatcher that will
- take care of the message.
+ take care of the message. Since the functions that call this ALWAYS send
+ dynamically allocated test in the msg field we DEALLOCATE it HERE...
  \param view_name (gchar *) textual name fothe textview to update (required)
  \param tagname (gchar *) textual name ofthe tag to be applied to the text 
  sent.  This can be NULL is no tag is desired
@@ -332,12 +334,12 @@ void  thread_update_logbar(
 	extern GAsyncQueue *dispatch_queue;
 	gint tmp = 0;
 
-	message = g_new0(struct Io_Message,1);
+	message = initialize_io_message();
 
 	t_message = g_new0(struct Text_Message, 1);
-	t_message->view_name = g_strdup(view_name);
-	t_message->tagname = g_strdup(tagname);
-	t_message->msg = g_strdup(msg);
+	t_message->view_name = view_name;
+	t_message->tagname = tagname;
+	t_message->msg = msg;
 	t_message->count = count;
 	t_message->clear = clear;
 
@@ -374,12 +376,12 @@ void  thread_update_widget(
 	extern GAsyncQueue *dispatch_queue;
 	gint tmp = 0;
 
-	message = g_new0(struct Io_Message,1);
+	message = initialize_io_message();
 
 	w_update = g_new0(struct Widget_Update, 1);
-	w_update->widget_name = g_strdup(widget_name);
+	w_update->widget_name = widget_name;
 	w_update->type = type;
-	w_update->msg = g_strdup(msg);
+	w_update->msg = msg;
 
 	message->payload = w_update;
 	message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));

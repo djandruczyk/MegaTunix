@@ -63,6 +63,7 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 	guchar value = 0;
 	extern gint mem_view_style[];
 	gint i = 0;
+	gchar * tmpbuf = NULL;
 
 	mem_view_style[page_offset] = (gint)type;
 
@@ -79,20 +80,23 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 		switch ((ToggleButton)type)
 		{
 			case DECIMAL_VIEW:
-				gtk_label_set_text(GTK_LABEL(label),(const gchar *)g_strdup_printf("%.3i",value));
+				
+				tmpbuf = g_strdup_printf("%.3i",value);
 				break;
 			case HEX_VIEW:
-				gtk_label_set_text(GTK_LABEL(label),(const gchar *)g_strdup_printf("%.2X",value));
+				tmpbuf = g_strdup_printf("%.2X",value);
 				break;
 			case BINARY_VIEW:
-				gtk_label_set_text(GTK_LABEL(label),(const gchar *)get_bin(value));
+				tmpbuf = get_bin(value);
 				break;
 			default:
-				//				dbg_func(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n",CRITICAL);
-				gtk_label_set_text(GTK_LABEL(label),(const gchar *)g_strdup_printf("%.2X",value));
+				//				dbg_func(g_strdup(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n"),CRITICAL);
+				tmpbuf = g_strdup_printf("%.2X",value);
 				break;
 
 		}
+		gtk_label_set_text(GTK_LABEL(label),tmpbuf);
+		g_free(tmpbuf);
 	}
 }
 

@@ -221,21 +221,21 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case COMMA:
 				preferred_delimiter = COMMA;
-				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Comma\"\n",TRUE,FALSE);
+				update_logbar("dlog_view", NULL,g_strdup("Setting Log delimiter to a \"Comma\"\n"),TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup(",");
 				break;
 			case TAB:
 				preferred_delimiter = TAB;
-				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Tab\"\n",TRUE,FALSE);
+				update_logbar("dlog_view", NULL,g_strdup("Setting Log delimiter to a \"Tab\"\n"),TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup("\t");
 				break;
 			case SPACE:
 				preferred_delimiter = SPACE;
-				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Space\"\n",TRUE,FALSE);
+				update_logbar("dlog_view", NULL,g_strdup("Setting Log delimiter to a \"Space\"\n"),TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup(" ");
@@ -419,6 +419,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
 	gchar *text = NULL;
+	gchar *tmpbuf = NULL;
 	gfloat tmpf = 0;
 	gint tmpi = 0;
 	gint page = 0;
@@ -458,7 +459,11 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	 */
 
 	if ((tmpf != (gfloat)tmpi) && (!is_float))
-		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",tmpi));
+	{
+		tmpbuf = g_strdup_printf("%i",tmpi);
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+		g_free(tmpbuf);
+	}
 	if (base == 10)
 	{
 		if (is_float)
@@ -479,13 +484,25 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	 */
 	real_value = convert_after_upload(widget);
 	if (is_float)
-		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%1$.*2$f",real_value,precision));
+	{
+		tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+		g_free(tmpbuf);
+	}
 	else
 	{
 		if (base == 10)
-			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)real_value));
+		{
+			tmpbuf = g_strdup_printf("%i",(gint)real_value);
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
+		}
 		else
-			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.2X",(gint)real_value));
+		{
+			tmpbuf = g_strdup_printf("%.2X",(gint)real_value);
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
+		}
 	}
 
 	write_ve_const(widget, page, offset, dload_val, ign_parm);
@@ -520,7 +537,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	if (handler == 0)
 	{
-		dbg_func(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n"),CRITICAL);
 		return FALSE;
 	}
 
@@ -530,7 +547,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			rescale_table(obj_data);
 			break;
 		case INTERROGATE_ECU:
-			update_logbar("interr_view","warning","USER Initiated ECU interrogation...\n",FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
 		case START_PLAYBACK:
@@ -636,7 +653,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			set_offline_mode();
 			break;
 		default:
-			dbg_func(__FILE__": std_button_handler()\n\t Standard button not handled properly, BUG detected\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": std_button_handler()\n\t Standard button not handled properly, BUG detected\n"),CRITICAL);
 	}		
 	return TRUE;
 }
@@ -687,7 +704,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	if (!GTK_IS_WIDGET(widget))
 	{
-		dbg_func(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"),CRITICAL);
 		return FALSE;
 	}
 
@@ -922,7 +939,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			spconfig_offset = firmware->page_params[page]->spconfig_offset;
 			if (spconfig_offset == 0)
 			{
-				dbg_func(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n",CRITICAL);
+				dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
 				dl_type = 0;  
 				break;
 			
@@ -1164,6 +1181,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_label = NULL;
+	gchar * tmpbuf = NULL;
 	GdkColor color;
 	extern gint ** ms_data;
 
@@ -1217,14 +1235,26 @@ void update_widget(gpointer object, gpointer user_data)
 		if (base == 10)
 		{
 			if (is_float)
-				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%1$.*2$f",value,precision));
+			{
+				tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+				g_free(tmpbuf);
+			}
 			else
-				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)value));
+			{
+				tmpbuf = g_strdup_printf("%i",(gint)value);
+				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+				g_free(tmpbuf);
+			}
 		}
 		else if (base == 16)
-			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.2X",(gint)value));
+		{
+			tmpbuf = g_strdup_printf("%.2X",(gint)value);
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
+		}
 		else
-			dbg_func(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n",CRITICAL);
+			dbg_func(g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"),CRITICAL);
 
 	 	if (use_color)
 		{
@@ -1412,7 +1442,7 @@ testit:
 	frame_name = (gchar *)g_object_get_data(G_OBJECT(parent),"rescaler_frame");
 	if (!frame_name)
 	{
-		dbg_func(__FILE__": widget_grab()\n\t\"rescale_frame\" key could NOT be found\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": widget_grab()\n\t\"rescale_frame\" key could NOT be found\n"),CRITICAL);
 		return FALSE;
 	}
 

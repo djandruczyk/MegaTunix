@@ -34,7 +34,7 @@ gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 	gint i = 0;
 	if (!string)
 	{
-		dbg_func(__FILE__": parse_keys()\n\t String passed was NULL\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": parse_keys()\n\t String passed was NULL\n"),CRITICAL);
 		*count = 0;
 		return NULL;
 	}
@@ -63,7 +63,7 @@ gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 
 	if (!string)
 	{
-		dbg_func(__FILE__": parse_keytypes()\n\t String passed was NULL\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": parse_keytypes()\n\t String passed was NULL\n"),CRITICAL);
 		*count = 0;
 		return 0;
 	}

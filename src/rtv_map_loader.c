@@ -56,7 +56,7 @@ gboolean load_realtime_map(void )
 	gchar * section = NULL;
 	GObject * object = NULL;
 	GList * list = NULL;
-	gfloat *history = NULL;
+	GArray *history = NULL;
 	extern gboolean interrogated;
 
 	rtvars_loaded = FALSE;
@@ -85,7 +85,7 @@ gboolean load_realtime_map(void )
 	rtv_map = g_new0(struct Rtv_Map, 1);
 	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
 	{
-		dbg_func(__FILE__": load_realtime_map()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": load_realtime_map()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"),CRITICAL);
 		return FALSE;
 	}
 	if (strstr(tmpbuf,firmware->name) == NULL)	
@@ -102,9 +102,9 @@ gboolean load_realtime_map(void )
 	 * the main mapping structures...
 	 */
 	if(!cfg_read_int(cfgfile,"realtime_map","raw_total",&raw_total))
-		dbg_func(__FILE__": load_realtime_map()\n\tcan't find \"raw_total\" in the \"[realtime_map]\" section\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": load_realtime_map()\n\tcan't find \"raw_total\" in the \"[realtime_map]\" section\n"),CRITICAL);
 	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
-		dbg_func(__FILE__": load_realtime_map()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": load_realtime_map()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n"),CRITICAL);
 
 	tmpbuf = NULL;
 	cfg_read_string(cfgfile,"realtime_map","raw_list",&tmpbuf);
@@ -177,9 +177,9 @@ gboolean load_realtime_map(void )
 		/* Create object to hold all the data. (dynamically)*/
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		/* Create history array, last 50 values */
-		history = (gfloat *)g_malloc0(50*sizeof(gfloat));
-		g_object_set_data(object,"hist_position",GINT_TO_POINTER(0));
-		g_object_set_data(object,"hist_max",GINT_TO_POINTER(50));
+		//history = (gfloat *)g_malloc0(50*sizeof(gfloat));
+		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+		g_object_set_data(object,"current_index",GINT_TO_POINTER(-1));
 		/* bind hostory array to object for future retrieval */
 		g_object_set_data(object,"history",(gpointer)history);
 
@@ -256,7 +256,7 @@ gboolean load_realtime_map(void )
 		g_free(keytypes);
 		g_strfreev(keys);
 	}
-	dbg_func(__FILE__": load_realtime_map()\n\t All is well, leaving...\n\n",RTMLOADER);
+	dbg_func(g_strdup(__FILE__": load_realtime_map()\n\t All is well, leaving...\n\n"),RTMLOADER);
 	rtvars_loaded = TRUE;
 	return TRUE;
 }

@@ -21,6 +21,7 @@
 #include <dispatcher.h>
 #include <enums.h>
 #include <gui_handlers.h>
+#include <init.h>
 #include <interrogate.h>
 #include <logviewer_gui.h>
 #include <notifications.h>
@@ -214,58 +215,3 @@ trypop:
 	//printf("returning\n");
 	return TRUE;
 }
-
-
-/*!
- \brief dealloc_textmessage() deallocates the structure used to pass a text
- message from the thread to here..
- \param message (struct Text_Message *) pointer to message data
- */
-void dealloc_textmessage(struct Text_Message * message)
-{
-        if (message->view_name)
-                g_free(message->view_name);
-        if (message->tagname)
-                g_free(message->tagname);
-        if (message->msg)
-                g_free(message->msg);
-	g_free(message);
-	message = NULL;
-
-}
-
-
-/*!
- \brief dealloc_message() deallocates the structure used to pass an I/O
- message from a thread to here..
- \param message (struct Io_Message *) pointer to message data
- */
-void dealloc_message(struct Io_Message * message)
-{
-        if (message->out_str)
-                g_free(message->out_str);
-        if (message->funcs)
-                g_array_free(message->funcs,TRUE);
-        if (message->payload)
-                g_free(message->payload);
-        g_free(message);
-
-}
-
-
-/*!
- \brief dealloc_w_update() deallocates the structure used to pass an I/O
- widget update message from a thread to here..
- \param w_update (struct Widget_Update *) pointer to message data
- */
-void dealloc_w_update(struct Widget_Update * w_update)
-{
-        if (w_update->widget_name)
-                g_free(w_update->widget_name);
-        if (w_update->msg)
-                g_free(w_update->msg);
-        g_free(w_update);
-	w_update = NULL;
-
-}
-

@@ -90,7 +90,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	iochannel = g_io_channel_new_file(filename,"r", NULL);
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n",CRITICAL);
+		dbg_func(g_strdup(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n"),CRITICAL);
 	while (go)	
 	{
 		a_line = g_string_new("\0");
