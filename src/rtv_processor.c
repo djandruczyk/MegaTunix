@@ -28,6 +28,11 @@
 #include <structures.h>
 
 
+/*!
+ \brief process_rt_vars() processes incoming realtime variables. It's a pretty
+ complex function so read the sourcecode.. ;)
+ \param incoming (void *) pointer to the raw incoming data
+ */
 void process_rt_vars(void *incoming)
 {
 	extern struct Rtv_Map *rtv_map;
@@ -162,6 +167,18 @@ store_it:
 	}
 	return;
 }
+
+
+/*!
+ \brief handle_complex_expr() handles a complex mathematcial expression for
+ an variable represented by a GObject.
+ \param object (GObject *) pointer to the object containing the conversion 
+ expression and other relevant data
+ \param incoming (void *) pointer to the raw data
+ \param type (ConvType) enumeration stating if this is an upload or 
+ download conversion
+ \returns a float of hte result of the mathematical expression
+ */
 gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 {
 	extern gint **ms_data;
@@ -269,6 +286,14 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	return result;
 }
 
+
+/*!
+ \brief handle_special() is used to handle special derived variables that
+ DO NOT use any data fromthe realtime variables.  In this case it's only to
+ create the high resoluation clock variable.
+ \param object (GObject *) object representing this derived variable
+ \param handler_name (gchar *) string name of special handler case to be done
+ */
 gfloat handle_special(GObject *object,gchar *handler_name)
 {
 	static GTimeVal now;
@@ -302,6 +327,14 @@ gfloat handle_special(GObject *object,gchar *handler_name)
 	return 0.0;
 }
 
+
+/*!
+ \breif lookup_current_value() gets the current value of the derived
+ variable requested by name.
+ \param internal_name (gchar *) name of the variable to get the data for.
+ \param value (gflaot *) where to put the value
+ \returns TRUE on successful lookup, FALSE on failure
+ */
 gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 {
 	extern struct Rtv_Map *rtv_map;

@@ -31,6 +31,12 @@
 struct Rtv_Map *rtv_map = NULL;
 gboolean rtvars_loaded = FALSE;
 
+
+/*!
+ \brief load_realtime_map() loads the realtime map specified in the detected
+ firmware's interrogation profile, and sets up the necessary arrays for storage
+ of data coming fro mthe ECU (temporary arrays for the last 50 or so entries)
+ */
 gboolean load_realtime_map(void )
 {
 	ConfigFile *cfgfile;
@@ -255,6 +261,14 @@ gboolean load_realtime_map(void )
 	return TRUE;
 }
 
+
+/*!
+ \brief load_complex_params() loads the necessary parameters from the config
+ file for a complex conversion
+ \param object (GObject *) the place where the data loaded is bound to
+ \param cfgfile (ConfigFile *) configfile pointer to read from
+ \param section (gchar *) section to read from in the config file
+ */
 void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;

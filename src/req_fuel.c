@@ -54,6 +54,12 @@ gfloat last_req_fuel_total_1 = 0.0;
 gfloat last_req_fuel_total_2 = 0.0;
 
 
+/*!
+ \brief req_fuel_change() is called whenever the req_fuel variable from 
+ the reqfuel_popup is changed and this recalcualtes things and updated 
+ the necesary spinbuttons
+ \param widget (GtkWidget *) the spinbutton that changed
+ */
 void req_fuel_change(GtkWidget *widget)
 {
 	gfloat tmp1,tmp2;
@@ -95,6 +101,13 @@ void req_fuel_change(GtkWidget *widget)
 	}
 }
 
+
+/*!
+ \brief reqd_fuel_popup() is called when the user requests it.  IT provides
+ spinbuttons for cylinders, injectors, flow rates, fuel pressure and so on
+ to calculate the amount of fuel needed for 1 cylinder for 1 complete cycle
+ \param widget (GtkWidget *) pointer to widget that called this function
+ */
 gboolean reqd_fuel_popup(GtkWidget * widget)
 {
 
@@ -118,8 +131,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 		reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 	else
 	{
-		reqd_fuel = g_new0(struct Reqd_Fuel, 1);
-		initialize_reqd_fuel((void *)reqd_fuel, page);
+		reqd_fuel = initialize_reqd_fuel(page);
 		g_object_set_data(G_OBJECT(widget),"reqd_fuel",reqd_fuel);
 	}
 
@@ -346,6 +358,15 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 	return TRUE;
 }
 
+
+/*!
+ \brief save_reqd_fuel() called when the reqfuel popup closes, to save the
+ values to a config file
+ \param widget (GtkWidget *) widget that contains a pointer to the Reqd_Fuel 
+ datastructure to save
+ \param data (gpointer) unused
+ \returns TRUE
+ */
 gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 {
 	struct Reqd_Fuel * reqd_fuel = NULL;
@@ -407,6 +428,13 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief close_popup() does exactly that.
+ \param widget (GtkWidget *) is the widget that contains the pointer to the 
+ Reqd_Fuel struct.
+ \returns TRUE
+ */
 gboolean close_popup(GtkWidget * widget)
 {
 	struct Reqd_Fuel *reqd_fuel = NULL;
@@ -417,6 +445,13 @@ gboolean close_popup(GtkWidget * widget)
 	return TRUE;
 }
 
+
+/*!
+ \brief check_req_fuel_limits() gets called any time reqf_fuel OR ANY of it's
+ interdependant variable changes.  This function recalculates values and shows
+ error status on the gui if needed and send the new values to the ECU when 
+ appropropriate
+ */
 void check_req_fuel_limits()
 {
 	gfloat tmp = 0.0;
@@ -659,7 +694,14 @@ void check_req_fuel_limits()
 
 }
 
-void initialize_reqd_fuel(void * ptr, gint page)
+
+/*!
+ \brief initialize_reqd_fuel() initializes the reqd_fuel datastructure for 
+ use This will load any previously saved defaults from the global config file.
+ \param page (gint) page to create this structure for.
+ \returns a pointer to a struct Reqd_Fuel
+ */
+struct Reqd_Fuel * initialize_reqd_fuel(gint page)
 {
 	struct Reqd_Fuel *reqd_fuel = NULL;
 	ConfigFile * cfgfile;
@@ -668,7 +710,7 @@ void initialize_reqd_fuel(void * ptr, gint page)
 
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 
-	reqd_fuel = (struct Reqd_Fuel *)ptr;
+	reqd_fuel = g_new0(struct Reqd_Fuel, 1);
 	reqd_fuel->page = page;
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",page);
 	cfgfile = cfg_open_file(filename);
@@ -702,5 +744,5 @@ void initialize_reqd_fuel(void * ptr, gint page)
 	g_free(tmpbuf);
 	g_free(filename);
 
-	return;
+	return reqd_fuel;
 }

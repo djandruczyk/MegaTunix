@@ -28,6 +28,12 @@ GHashTable **ve3d_sliders = NULL;
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
 
+
+/*!
+ \brief load_sliders() is called to load up the runtime slider configurations
+ from the file specified in the firmware's interrogation profile, and populate
+ the gui wiht the newly created sliders.
+ */
 void load_sliders()
 {
 	ConfigFile *cfgfile = NULL;
@@ -52,9 +58,9 @@ void load_sliders()
 		return;
 	}
 	if (!rt_sliders)
-		rt_sliders = g_hash_table_new_full(NULL,NULL,slider_key_destroy,slider_value_destroy);
+		rt_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
 	if (!ww_sliders)
-		ww_sliders = g_hash_table_new_full(NULL,NULL,slider_key_destroy,slider_value_destroy);
+		ww_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
 
 	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,".rts_conf",NULL));
 	cfgfile = cfg_open_file(filename);
@@ -132,6 +138,12 @@ finish_off:
 	g_free(filename);
 }
 
+
+/*!
+ \brief load_ve3d_sliders() is called from 3d_vetable.c to load up the sliders
+ specific to the 3D Table views. 
+ \param table_num (gint) the table number passed to load sliders for
+ */
 void load_ve3d_sliders(gint table_num)
 {
 	ConfigFile *cfgfile = NULL;
@@ -160,10 +172,7 @@ void load_ve3d_sliders(gint table_num)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
 
 	if (!ve3d_sliders[table_num])
-	{
-		ve3d_sliders[table_num] = g_hash_table_new_full(NULL,NULL,slider_key_destroy,slider_value_destroy);
-	}
-
+		ve3d_sliders[table_num] = g_hash_table_new_full(NULL,NULL,g_free,g_free);
 
 	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,".rts_conf",NULL));
 	cfgfile = cfg_open_file(filename);
@@ -208,6 +217,19 @@ finish_off:
 	}
 }
 
+
+/*!
+ \brief add_slider() creates the slider from the passed data, and attaches
+ it the the gui.
+ \param ctrl_name (gchar *) name of the slider as defined in the config file
+ \param tbl (gint) table number to bind this slider to
+ \param table_num (gint) the table_num from the firmware that this slider is
+ bound to. (used for the sliders on the 3D view)
+ \param row (gint) row ofhte table (tbl) that this slider goes on
+ \param source (gchar *) data source for this slider 
+ \param ident (PageIdent) enumeration of the page this slider goes on
+ \returns a Struct Rt_Slider *
+ */
 struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, PageIdent ident)
 {
 	struct Rt_Slider *slider = NULL;
@@ -302,6 +324,12 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 }
 
 
+/*!
+ \brief free_ve3d_sliders() frees the sliders associated with the table_num
+ passed to it.
+ \param table_num (gint) the table_number to free the sliders for
+ \returns FALSE
+ */
 gboolean free_ve3d_sliders(gint table_num)
 {
 	extern GHashTable **ve3d_sliders;
@@ -311,22 +339,3 @@ gboolean free_ve3d_sliders(gint table_num)
 	ve3d_sliders[table_num] = NULL;
 	return FALSE;
 }
-
-void slider_key_destroy(gpointer key)
-{
-	g_free(key);
-}
-
-void slider_value_destroy(gpointer value)
-{
-	struct Rt_Slider *slider = value;
-	if (slider->ctrl_name)
-		g_free(slider->ctrl_name);
-	/* We do NOT free the object,history and friendly_name as they
-	 * are just pointers to data in another structure 
-	 * and if we delete them, we hose the other struct.
-	 */
-	g_free(slider);
-}
-
-

@@ -38,6 +38,12 @@ extern GtkWidget *comms_view;
 struct Serial_Params *serial_params;
 gboolean connected;
        
+
+/*!
+ \brief open_serial() called to open the serial port, updates textviews on the
+ comms page on success/failure
+ \param port_name (gchar *) name of the port to open
+ */
 void open_serial(gchar * port_name)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
@@ -54,7 +60,7 @@ void open_serial(gchar * port_name)
 	//fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 	/* Blocking mode... */
 #ifdef __WIN32__
-	fd = open(device, O_RDWR | O_NOCTTY |O_BINARY );
+	fd = open(device, O_RDWR | O_NOCTTY | O_BINARY );
 #else
 	fd = open(device, O_RDWR | O_NOCTTY);
 #endif
@@ -83,6 +89,15 @@ void open_serial(gchar * port_name)
 	return;
 }
 	
+
+/*!
+ \brief flush_serial() is called whenever we want to flush the I/O port of any
+ pending data. It's a wrapper to the tcflush command on unix and the 
+ win32_serial_flush command in winserialio.c that does the equivalent 
+ operation on windows.
+ \param fd (gint) filedescriptor to flush
+ \param type (gint) how to flush it (enumeration)
+ */
 void flush_serial(gint fd, gint type)
 {
 #ifdef __WIN32__
@@ -91,6 +106,13 @@ void flush_serial(gint fd, gint type)
 	tcflush(serial_params->fd, type);
 #endif	
 }
+
+
+/*!
+ \brief setup_serial_params() is another wrapper that calls the appropriate
+ calls to initialize the serial port to the proper speed, bits, flow, parity
+ etc..
+ */
 void setup_serial_params()
 {
 #ifdef __WIN32__
@@ -160,6 +182,11 @@ void setup_serial_params()
 	return;
 }
 
+
+/*!
+ \brief close_serial() closes the serial port, and sets several gui widgets
+ to reflect the port closing (textview/connected indicator)
+ */
 void close_serial()
 {
 	extern GHashTable *dynamic_widgets;
@@ -185,6 +212,14 @@ void close_serial()
 	return;
 }
 
+
+/*!
+ \brief set_ms_page() is called to change the current page being accessed in
+ the firmware. set_ms_page will check to see if any outstanding data has 
+ been sent to the current page, but NOT burned to flash befpre changing pages
+ in that case it will burn the flash before changing the page. 
+ \param ms_page (gint) the page to set to
+ */
 void set_ms_page(gint ms_page)
 {
 	extern struct Firmware_Details *firmware;

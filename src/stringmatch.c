@@ -21,6 +21,12 @@
 static GHashTable *str_2_enum = NULL;
 void dump_hash(gpointer,gpointer,gpointer);
 
+
+/*!
+ \brief build_string_2_enum_table() constructs a hashtable that maps a textual
+ name to it's matching enumeration.  It's used for mapping things from all the 
+ configuration files so that things just plain look better
+ */
 void build_string_2_enum_table()
 {
 	str_2_enum = g_hash_table_new(g_str_hash,g_str_equal);
@@ -135,6 +141,7 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(BINARY_VIEW));
 	g_hash_table_insert(str_2_enum,"_DECIMAL_VIEW_",
 			GINT_TO_POINTER(DECIMAL_VIEW));
+
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
 			GINT_TO_POINTER(COMMA));
@@ -152,6 +159,7 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(REALTIME_VIEW));
 	g_hash_table_insert(str_2_enum,"_PLAYBACK_VIEW_",
 			GINT_TO_POINTER(PLAYBACK_VIEW));
+
 	/* Page Identifiers */
 	g_hash_table_insert(str_2_enum,"_RUNTIME_PAGE_",
 			GINT_TO_POINTER(RUNTIME_PAGE));
@@ -162,12 +170,27 @@ void build_string_2_enum_table()
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 
 }
+
+
+/*!
+ \brief dump_hash() is a debug function to dump the contents of the str_2_enum
+ hashtable to check for errors or problems
+ \param key (gpointer) key name in the hashtable
+ \param value (gpointer) value (enumeration value) in the hashtable
+ \param user_data (gpointer) unused...
+ */
 void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
 	dbg_func(g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %i\n",(gchar *)key, (gint)value),CRITICAL);
 }
 
 
+/*!
+ \brief translate_string() is called passing in a string name to be translated
+ into an enumeration
+ \param string (gchar *) string to be translated
+ \returns enumeration equivalent
+ */
 gint translate_string(gchar *string)
 {
 	gpointer value = 0;
