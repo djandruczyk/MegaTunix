@@ -83,7 +83,10 @@ int stop_serial_thread()
 {
 	static gboolean locked;
 	if (locked == TRUE)
+	{
+		printf("stop_serial_thread() locked, returning\n");
 		return 0;
+	}
 	else
 		locked = TRUE;
 	if (raw_reader_stopped)

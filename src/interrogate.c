@@ -19,6 +19,7 @@
 
 void interrogate_ecu()
 {
+	return;
 }
 
 

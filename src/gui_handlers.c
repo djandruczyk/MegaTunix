@@ -65,12 +65,13 @@ void leave(GtkWidget *widget, gpointer data)
 {
 	save_config();
 	stop_serial_thread();
-	/* Free all buffers */
 	close_serial();
 	stop_datalogging();
 	close_logfile();
+	/* Free all buffers */
 	mem_dealloc();
 	gtk_main_quit();
+	return;
 }
 
 int toggle_button_handler(GtkWidget *widget, gpointer data)
