@@ -96,7 +96,7 @@ alpha_n_button_bitval=1
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=2
-bind_to_list=dt_features
+bind_to_list=dt_controls
 
 #----- Buttons ---------------------------------------------------------------
 
