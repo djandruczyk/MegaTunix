@@ -90,8 +90,7 @@ RequirePageChange
   - Boolean, If set to True, Page changing is done. (ecu responds to the 
   Page_CMD).  MSnS/MSnEDIS have this set to FALSE as they use alternate 
   commands to modify data in the higher pages, see "is_spark" as it applies
-  to the page_x sections ONLY (is_spark in table_x sections has a different
-  meaning).
+  to the page_x sections ONLY...
 
 Page_CMD
   - A string sent to the ECU followed by an argument to change the current
@@ -116,6 +115,20 @@ table_name
   - String, a Textual name used for the Title of the 3D table editor window
   Used to help the user differentiate which tabel they are editing at any one
   time...
+
+is_fuel
+  - Boolean.  If exising AND TRUE the following fields need to be present
+  and properly setup (otherwise megatunix is almost sure to crash and or
+  corrupt your firmware settings)
+
+NOTES regarding reqfuel_offset, divider_offset, alternate_offset, 
+  rpmk_offset,cfg11_offset, cfg12_offset, cfg13_offset, spconfg_offset.
+
+  These above parameters are the offset locations from the beginning of the 
+  page. The page in this case of being in the table_x section is defaulted 
+  the the "z_page" key, which is hte page where the table is. In all firmwares
+  thusfar the fuel specific parameteres were ALWAYS in the same page as the
+  table itself.  If this changes I'll have to brakthe damn API again...
 
 x_page
   - Integer, lists the page number that the X axis (RPM) array lives in
@@ -153,6 +166,13 @@ x_conv_expr,y_conv_expr,z_conv_expr
   calculating the Z-axis markers and the runtime/edit value markers
   on the 3D view.
 
+x_disp_float,y_disp_float,z_disp_float
+  - Boolean, if true the runtime status o the 3D views will be displayed
+  in floating point notation.  See x/y/z_disp_precision
+
+x_disp_precision,y_disp_precision,z_disp_precision,
+  - Integer, the number of decimal places to show.
+
 
 [page_x] sections, 1 per page as defined by TotalPages
 length 
@@ -160,21 +180,10 @@ length
   internally in megatunix as a 32 bit signed integer)
 
 is_spark
-  - Boolean, a Flag that when FALSE requires the following fields to be
-  present: reqfuel_offset, divider_offset, alternate_offset, rpmk_offset,
-  cfg11_offset, cfg12_offset, cfg13_offset. This ALSO means that the page
-  uses alternate commands for writing/reading, (I/J) This meaning is NOT
-  the same as "is_spark" in the table_x sections
+  - Boolean, a Flag that when TRUE means that the page uses alternate 
+  commands for writing/reading, (I/J) This currently applies to MSnS-3.x and 
+  MSnEDIS (all versions)
 
-NOTES regarding reqfuel_offset, divider_offset, alternate_offset, 
-  rpmk_offset,cfg11_offset, cfg12_offset, cfg13_offset, spconfg_offset.
-
-  These above parameters are the offset locations from the beginning of the 
-  page. They are MegaSquirt firmware specific.  If you have added support for
-  a NON MS ecu (VEMS) that does NOT make use of the internal functions that
-  use these variables, then they should all be set to -1 (NOT zero as that
-  will cause problems wiht the widget associated with offset zero).
-  
 
 [gui] section
 RealTimeMapFile

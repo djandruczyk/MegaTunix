@@ -683,6 +683,26 @@ void load_profile_details(struct Canidate *canidate)
 			canidate->table_params[i] = initialize_table_params();
 
 			section = g_strdup_printf("table_%i",i);
+			if(cfg_read_boolean(cfgfile,section,"is_fuel",&canidate->table_params[i]->is_fuel))
+			{
+				if(!cfg_read_int(cfgfile,section,"divider_offset",&canidate->table_params[i]->divider_offset))
+					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"divider_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"reqfuel_offset",&canidate->table_params[i]->reqfuel_offset))
+					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"reqfuel_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"cfg11_offset",&canidate->table_params[i]->cfg11_offset))
+					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"cfg11_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"cfg12_offset",&canidate->table_params[i]->cfg12_offset))
+					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"cfg12_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"cfg13_offset",&canidate->table_params[i]->cfg13_offset))
+					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"cfg13_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				if(!cfg_read_int(cfgfile,section,"rpmk_offset",&canidate->table_params[i]->rpmk_offset))
+					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				if (!(canidate->capabilities & DUALTABLE))
+				{
+					if(!cfg_read_int(cfgfile,section,"alternate_offset",&canidate->table_params[i]->alternate_offset))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				}
+			}
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"y_page",&canidate->table_params[i]->y_page))
@@ -739,35 +759,10 @@ void load_profile_details(struct Canidate *canidate)
 		{
 			canidate->page_params[i] = initialize_page_params();
 			section = g_strdup_printf("page_%i",i);
+
 			if(!cfg_read_int(cfgfile,section,"length",&canidate->page_params[i]->length))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"length\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->page_params[i]->is_spark))
-				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-			if (!(canidate->page_params[i]->is_spark))
-			{
-				if(!cfg_read_int(cfgfile,section,"divider_offset",&canidate->page_params[i]->divider_offset))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"divider_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-				if(!cfg_read_int(cfgfile,section,"reqfuel_offset",&canidate->page_params[i]->reqfuel_offset))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"reqfuel_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-				if(!cfg_read_int(cfgfile,section,"cfg11_offset",&canidate->page_params[i]->cfg11_offset))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"cfg11_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-				if(!cfg_read_int(cfgfile,section,"cfg12_offset",&canidate->page_params[i]->cfg12_offset))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"cfg12_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-				if(!cfg_read_int(cfgfile,section,"cfg13_offset",&canidate->page_params[i]->cfg13_offset))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"cfg13_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-				if(!cfg_read_int(cfgfile,section,"rpmk_offset",&canidate->page_params[i]->rpmk_offset))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"rpmk_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-				if (!(canidate->capabilities & DUALTABLE))
-				{
-					if(!cfg_read_int(cfgfile,section,"alternate_offset",&canidate->page_params[i]->alternate_offset))
-						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-				}
-			}
-			else
-			{
-				if(!cfg_read_int(cfgfile,section,"spconfig_offset",&canidate->page_params[i]->spconfig_offset))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"spconfig_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-			}
+			cfg_read_boolean(cfgfile,section,"is_spark",&canidate->page_params[i]->is_spark);
 		}
 
 		cfg_free(cfgfile);

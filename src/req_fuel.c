@@ -352,6 +352,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	gint dload_val = 0;
 	gint rpmk_offset = 0;
 	gint page = 0;
+	gint table_num = 0;
 	union config11 cfg11;
 	extern struct Firmware_Details *firmware;
 	extern gint **ms_data;
@@ -369,9 +370,10 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	g_free(tmpbuf);
 
 	/* Top is two stroke, botton is four stroke.. */
+	table_num = reqd_fuel->table_num;
 	page = reqd_fuel->page;
-	cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
-	rpmk_offset = firmware->page_params[page]->rpmk_offset;
+	cfg11.value = ms_data[page][firmware->table_params[table_num]->cfg11_offset];
+	rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
 	if (cfg11.bit.eng_type)
 		ms_data[page][rpmk_offset] = (int)(6000.0/((double)reqd_fuel->cyls));
 	else
@@ -456,6 +458,7 @@ void check_req_fuel_limits(gint table_num)
 	gfloat last_rf_total = 0.0;
 	gchar * g_name = NULL;
 	gchar * name = NULL;
+	GtkWidget *widget = NULL;
 	union config11 cfg11;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
@@ -506,7 +509,7 @@ void check_req_fuel_limits(gint table_num)
 				(divider == last_divider))
 			return;
 
-		tmp = (float)(num_inj)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
+		tmp = (float)(num_inj)/(float)(ms_data[page][firmware->table_params[table_num]->divider_offset]);
 		rf_per_squirt = ((float)rf_total * 10.0)/tmp;
 
 		if (rf_per_squirt > 255)
@@ -525,15 +528,16 @@ void check_req_fuel_limits(gint table_num)
 			set_group_color(BLACK,g_name);
 			/* Required Fuel per SQUIRT */
 			name = g_strdup_printf("req_fuel_per_squirt_%i_spin",table_num);
+			widget = g_hash_table_lookup(dynamic_widgets,name);
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,name)),rf_per_squirt/10.0);
+					(widget),rf_per_squirt/10.0);
 			g_free(name);
 
 			if (paused_handlers)
 				return;
 
-			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
-			rpmk_offset = firmware->page_params[page]->rpmk_offset;
+			cfg11.value = ms_data[page][firmware->table_params[table_num]->cfg11_offset];
+			rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
 			if (cfg11.bit.eng_type)
 				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls));
 			else
@@ -542,9 +546,9 @@ void check_req_fuel_limits(gint table_num)
 			dload_val = ms_data[page][rpmk_offset];
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
-			offset = firmware->page_params[page]->reqfuel_offset;
+			offset = firmware->table_params[table_num]->reqfuel_offset;
 			ms_data[page][offset] = rf_per_squirt;
-			write_ve_const(NULL, page, offset, rf_per_squirt, FALSE);
+			write_ve_const(widget, page, offset, rf_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 
@@ -598,8 +602,8 @@ void check_req_fuel_limits(gint table_num)
 				(divider == last_divider))
 			return;
 
-		divider = ms_data[page][firmware->page_params[page]->divider_offset];
-		alternate = ms_data[page][firmware->page_params[page]->alternate_offset];
+		divider = ms_data[page][firmware->table_params[table_num]->divider_offset];
+		alternate = ms_data[page][firmware->table_params[table_num]->alternate_offset];
 		tmp =	((float)(num_inj))/((float)divider*(float)(alternate+1));
 
 		/* This is 1/10 the value as the on screen stuff is 1/10th 
@@ -623,7 +627,9 @@ void check_req_fuel_limits(gint table_num)
 			set_group_color(BLACK,g_name);
 			/* req-fuel info box  */
 			name = g_strdup_printf("req_fuel_per_squirt_%i_spin",table_num);
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,name)),rf_per_squirt/10.0);
+			widget = g_hash_table_lookup(dynamic_widgets,name);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),
+						rf_per_squirt/10.0);
 			g_free(name);
 
 
@@ -640,8 +646,8 @@ void check_req_fuel_limits(gint table_num)
 			 * spark firmwares... */
 			/* Top is two stroke, botton is four stroke.. */
 			page = 0;
-			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
-			rpmk_offset = firmware->page_params[page]->rpmk_offset;
+			cfg11.value = ms_data[page][firmware->table_params[table_num]->cfg11_offset];
+			rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
 			if (cfg11.bit.eng_type)
 				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls));
 			else
@@ -650,9 +656,9 @@ void check_req_fuel_limits(gint table_num)
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			/* Send reqd_fuel_per_squirt */
-			offset = firmware->page_params[page]->reqfuel_offset;
+			offset = firmware->table_params[table_num]->reqfuel_offset;
 			ms_data[page][offset] = rf_per_squirt;
-			write_ve_const(NULL, page, offset, rf_per_squirt, FALSE);
+			write_ve_const(widget, page, offset, rf_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 		}
 		g_free(g_name);

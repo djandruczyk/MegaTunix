@@ -66,6 +66,11 @@ keys themselves are not, as the string compare functions are case insensitive.
 	page		(integer) page in ecu that this control refers to
 	offset		(integer) offset from the beginning of said page that
 			this control refers to. 
+	table_num	(integer) Table number that this control applies to.
+			The table number comes from the interrogation profile
+			This is ONLY used for interdependant controls that
+			have special handlers (required_fuel and all the things
+			that depend onf it, like cyls, injs, squirts, etc..)
 	bitval		(integer) the value of part of a bitfield (see below)
 	bitshift	(integer) the starting point in a bitfield for bitval
 	bitmask		(integer) the bitmask of bitval..

@@ -19,6 +19,14 @@ TotalPages=2
 
 [table_0]
 table_name=VE-Table 0, MSnEDIS-3.008
+is_fuel=TRUE
+reqfuel_offset=90
+divider_offset=91
+alternate_offset=92
+rpmk_offset=98
+cfg11_offset=116
+cfg12_offset=117
+cfg13_offset=118
 x_page=0
 x_base_offset=100
 x_bincount=8
@@ -53,19 +61,10 @@ z_conv_expr=(x*0.352)-10
 
 [page_0]
 length=125
-is_spark=FALSE
-reqfuel_offset=90
-divider_offset=91
-alternate_offset=92
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 
 [page_1]
 length=95
 is_spark=TRUE
-spconfig_offset=85
 
 [bytecounts]
 CMD_UPPER_A=22

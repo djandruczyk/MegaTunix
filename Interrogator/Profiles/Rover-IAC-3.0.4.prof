@@ -18,6 +18,14 @@ TotalPages=1
 
 [table_0]
 Table_name=VE-Table, Rover IAC 3.0.4
+is_fuel=TRUE
+reqfuel_offset=90
+divider_offset=91
+alternate_offset=92
+rpmk_offset=98
+cfg11_offset=116
+cfg12_offset=117
+cfg13_offset=118
 x_page=0
 x_base_offset=100
 x_bincount=8
@@ -35,14 +43,6 @@ z_conv_expr=x*1
 
 [page_0]
 length=128
-is_spark=FALSE
-reqfuel_offset=90
-divider_offset=91
-alternate_offset=92
-rpmk_offset=98
-cfg11_offset=116
-cfg12_offset=117
-cfg13_offset=118
 
 [bytecounts]
 CMD_UPPER_A=22

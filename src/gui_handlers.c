@@ -771,8 +771,8 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_SQUIRTS_1:
 		case NUM_SQUIRTS_2:
 			/* This actuall effects another variable */
-			divider_offset = firmware->page_params[page]->divider_offset;
 			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_num_squirts = firmware->rf_params[table_num]->num_squirts;
 			firmware->rf_params[table_num]->last_divider = ms_data[page][divider_offset];
 
@@ -799,8 +799,8 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_CYLINDERS_1:
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
-			divider_offset = firmware->page_params[page]->divider_offset;
 			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_divider = ms_data[page][divider_offset];
 			firmware->rf_params[table_num]->last_num_cyls = firmware->rf_params[table_num]->num_cyls;
 
@@ -854,7 +854,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits(table_num);
 			break;
 		case TRIGGER_ANGLE:
-			spconfig_offset = firmware->page_params[page]->spconfig_offset;
+			spconfig_offset = (gint)g_object_get_data(G_OBJECT(widget),"spconfig_offset");
 			if (spconfig_offset == 0)
 			{
 				dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
@@ -928,16 +928,12 @@ void update_ve_const()
 	gfloat tmp = 0.0;
 	gint reqfuel = 0;
 	gint i = 0;
-	gint z_page = 0;
 	union config11 cfg11;
 	union config12 cfg12;
 	extern gint **ms_data;
 	extern gint ecu_caps;
 	extern struct Firmware_Details *firmware;
 
-	/* Point to Table0 (stock MS ) data... */
-
-	check_config13(ms_data[page][firmware->page_params[page]->cfg13_offset]);
 
 	/* DualTable Fuel Calculations
 	 * DT code no longer uses the "alternate" firing mode as each table
@@ -959,21 +955,23 @@ void update_ve_const()
 		/* All Tables */
 		for (i=0;i<firmware->total_tables;i++)
 		{
-			z_page = firmware->table_params[i]->z_page;
-			if (firmware->page_params[z_page]->reqfuel_offset < 0)
-				continue;
-			page = z_page;
+			if (firmware->table_params[i]->cfg13_offset > 0)
+				check_config13(ms_data[firmware->table_params[i]->z_page][firmware->table_params[i]->cfg13_offset]);
 
-			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
-			cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
+			page = firmware->table_params[i]->z_page;
+			if (firmware->table_params[i]->reqfuel_offset < 0)
+				continue;
+
+			cfg11.value = ms_data[page][firmware->table_params[i]->cfg11_offset];	
+			cfg12.value = ms_data[page][firmware->table_params[i]->cfg12_offset];	
 			firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
 			firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
 			firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
 			firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
 
-			firmware->rf_params[i]->divider = ms_data[page][firmware->page_params[page]->divider_offset];
+			firmware->rf_params[i]->divider = ms_data[page][firmware->table_params[i]->divider_offset];
 			firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
-			reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
+			reqfuel = ms_data[page][firmware->table_params[i]->reqfuel_offset];
 
 			/* ReqFuel Total */
 			tmp = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
@@ -1011,21 +1009,23 @@ void update_ve_const()
 		 */
 		for (i=0;i<firmware->total_tables;i++)
 		{
-			z_page = firmware->table_params[i]->z_page;
-			if (firmware->page_params[z_page]->reqfuel_offset < 0)
-				continue;
-			page = z_page;
+			if (firmware->table_params[i]->cfg13_offset > 0)
+				check_config13(ms_data[firmware->table_params[i]->z_page][firmware->table_params[i]->cfg13_offset]);
 
-			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
-			cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
+			page = firmware->table_params[i]->z_page;
+			if (firmware->table_params[i]->reqfuel_offset < 0)
+				continue;
+
+			cfg11.value = ms_data[page][firmware->table_params[i]->cfg11_offset];	
+			cfg12.value = ms_data[page][firmware->table_params[i]->cfg12_offset];	
 			firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
 			firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
 			firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
 			firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
-			firmware->rf_params[i]->divider = ms_data[page][firmware->page_params[page]->divider_offset];
+			firmware->rf_params[i]->divider = ms_data[page][firmware->table_params[i]->divider_offset];
 			firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
-			reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
-			firmware->rf_params[i]->alternate = ms_data[page][firmware->page_params[page]->alternate_offset];
+			reqfuel = ms_data[page][firmware->table_params[i]->reqfuel_offset];
+			firmware->rf_params[i]->alternate = ms_data[page][firmware->table_params[i]->alternate_offset];
 			firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
 
 			/* ReqFuel Total */

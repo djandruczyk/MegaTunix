@@ -357,13 +357,6 @@ struct Page_Params * initialize_page_params(void)
 	page_params = g_malloc0(sizeof(struct Page_Params));
 	page_params->length = 0;
 	page_params->is_spark = FALSE;
-	page_params->cfg11_offset = -1;
-	page_params->cfg12_offset = -1;
-	page_params->cfg13_offset = -1;
-	page_params->alternate_offset = -1;
-	page_params->divider_offset = -1;
-	page_params->rpmk_offset = -1;
-	page_params->reqfuel_offset = -1;
 	page_params->spconfig_offset = -1;
 	return page_params;
 }
@@ -377,6 +370,14 @@ struct Table_Params * initialize_table_params(void)
 {
 	struct Table_Params *table_params = NULL;
 	table_params = g_malloc0(sizeof(struct Table_Params));
+	table_params->is_fuel = FALSE;
+	table_params->cfg11_offset = -1;
+	table_params->cfg12_offset = -1;
+	table_params->cfg13_offset = -1;
+	table_params->alternate_offset = -1;
+	table_params->divider_offset = -1;
+	table_params->rpmk_offset = -1;
+	table_params->reqfuel_offset = -1;
 	table_params->x_page = -1;
 	table_params->y_page = -1;
 	table_params->z_page = -1;

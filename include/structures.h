@@ -195,13 +195,6 @@ struct Page_Params
 {
 	gint length;		/*! How big this page is... */
 	gint is_spark;		/*! does this require alt write cmd? */
-	gint cfg11_offset;	/*! Where config11 value is located */
-	gint cfg12_offset;	/*! Where config12 value is located */
-	gint cfg13_offset;	/*! Where config13 value is located */
-	gint alternate_offset;	/*! Where alternate value is located */
-	gint divider_offset;	/*! Where divider value is located */
-	gint rpmk_offset;	/*! Where rpmk value is located */
-	gint reqfuel_offset;	/*! Where reqfuel value is located */
 	gint spconfig_offset;	/*! Where spconfig value is located */
 };
 
@@ -212,6 +205,14 @@ struct Page_Params
  */
 struct Table_Params
 {
+	gboolean is_fuel;	/*! If true next 7 params must exist */
+	gint cfg11_offset;	/*! Where config11 value is located */
+	gint cfg12_offset;	/*! Where config12 value is located */
+	gint cfg13_offset;	/*! Where config13 value is located */
+	gint alternate_offset;	/*! Where alternate value is located */
+	gint divider_offset;	/*! Where divider value is located */
+	gint rpmk_offset;	/*! Where rpmk value is located */
+	gint reqfuel_offset;	/*! Where reqfuel value is located */
 	gint x_page;		/*! what page the rpm (X axis) resides in */
 	gint x_base;		/*! where rpm table starts (X axis) */
 	gint x_bincount;	/*! how many RPM bins (X axis) */

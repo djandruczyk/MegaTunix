@@ -19,6 +19,14 @@ TotalPages=8
 
 [table_0]
 table_name=Fuel VE-Table 1, MSnSpark-Extra
+is_fuel=TRUE
+reqfuel_offset=148
+divider_offset=149
+alternate_offset=150
+rpmk_offset=156
+cfg11_offset=182
+cfg12_offset=183
+cfg13_offset=184
 x_page=1
 x_base_offset=158
 x_bincount=12
@@ -39,6 +47,14 @@ z_disp_float=FALSE
 
 [table_1]
 table_name=Fuel VE-Table 2, MSnSpark-Extra
+is_fuel=TRUE
+reqfuel_offset=147
+divider_offset=148
+alternate_offset=149
+rpmk_offset=155
+cfg11_offset=181
+cfg12_offset=182
+cfg13_offset=183
 x_page=2
 x_base_offset=157
 x_bincount=12
@@ -227,91 +243,27 @@ z_disp_float=FALSE
 
 [page_0]
 length=200
-is_spark=FALSE
-reqfuel_offset=-1
-divider_offset=-1
-alternate_offset=-1
-rpmk_offset=-1
-cfg11_offset=-1
-cfg12_offset=-1
-cfg13_offset=-1
 
 [page_1]
 length=200
-is_spark=FALSE
-reqfuel_offset=148
-divider_offset=149
-alternate_offset=150
-rpmk_offset=156
-cfg11_offset=182
-cfg12_offset=183
-cfg13_offset=184
 
 [page_2]
 length=200
-is_spark=FALSE
-reqfuel_offset=147
-divider_offset=148
-alternate_offset=149
-rpmk_offset=155
-cfg11_offset=181
-cfg12_offset=182
-cfg13_offset=183
 
 [page_3]
 length=200
-is_spark=FALSE
-reqfuel_offset=-1
-divider_offset=-1
-alternate_offset=-1
-rpmk_offset=-1
-cfg11_offset=-1
-cfg12_offset=-1
-cfg13_offset=-1
 
 [page_4]
 length=200
-is_spark=FALSE
-reqfuel_offset=-1
-divider_offset=-1
-alternate_offset=-1
-rpmk_offset=-1
-cfg11_offset=-1
-cfg12_offset=-1
-cfg13_offset=-1
 
 [page_5]
 length=200
-is_spark=FALSE
-reqfuel_offset=-1
-divider_offset=-1
-alternate_offset=-1
-rpmk_offset=-1
-cfg11_offset=-1
-cfg12_offset=-1
-cfg13_offset=-1
 
 [page_6]
 length=200
-is_spark=FALSE
-reqfuel_offset=-1
-divider_offset=-1
-alternate_offset=-1
-rpmk_offset=-1
-cfg11_offset=-1
-cfg12_offset=-1
-cfg13_offset=-1
 
 [page_7]
 length=200
-is_spark=FALSE
-reqfuel_offset=-1
-divider_offset=-1
-alternate_offset=-1
-rpmk_offset=-1
-cfg11_offset=-1
-cfg12_offset=-1
-cfg13_offset=-1
 
 [bytecounts]
 CMD_UPPER_R=37

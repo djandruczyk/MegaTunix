@@ -288,11 +288,9 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 	struct OutputData *output = NULL;
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
-	extern struct Firmware_Details *firmware;
 	extern gboolean offline;
 
-	if ((g_list_length(ve_widgets[page][offset]) > 1) &&
-	   (offset != firmware->page_params[page]->reqfuel_offset))
+	if ((g_list_length(ve_widgets[page][offset]) > 1))
 	{
 		paused_handlers = TRUE;
 		g_list_foreach(ve_widgets[page][offset],update_widget,widget);
