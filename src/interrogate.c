@@ -43,37 +43,37 @@ static struct Canidate
 	gint bytes[10];		/* byte count for each of the 9 test cmds */
 	unsigned char *v0_data;	/* V0 data */
 	unsigned char *v1_data;	/* V1 data */
-	gchar *sig_str;		/* Signature string to search for */
-	gchar *quest_str;	/* Ext Version string to search for */
+	gchar sig_str[64];	/* Signature string to search for */
+	gchar quest_str[64];	/* Ext Version string to search for */
 	gint ver_num;		/* Version number to search for */
-	gchar *firmware_name;	/* Name of this firmware */
+	gchar firmware_name[64];/* Name of this firmware */
 	gboolean dt_cap;	/* Dualtable capable firmware */
 	gboolean ign_cap;	/* Ignition variant */
 	gboolean iac_cap;	/* Extended IAC ability... */
 } canidates[] = 
 {
-	{ {22,0,0,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,0,
-			"Old Bowling & Grippo 1.0\0",FALSE,FALSE,FALSE},
-	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,20,
-			"Standard Bowling & Grippo (2.0-3.01)\0",
+	{ {22,0,0,125,125,0,0,0,0,0},NULL,NULL,{},{},0,
+			{"Old Bowling & Grippo 1.0\0"},FALSE,FALSE,FALSE},
+	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,{},{},20,
+			{"Standard Bowling & Grippo (2.0-3.01)\0"},
 			FALSE,FALSE,FALSE},
-	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,NULL,NULL,1,
-			"Dualtable 0.90-1.0\0",TRUE,FALSE,FALSE},
-	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,"v.1.01\0",NULL,1,
-			"Dualtable 1.01\0",TRUE,FALSE,FALSE},
-	{ {22,1,1,128,128,19,0,0,255,255},NULL,NULL,"v.1.02\0",NULL,1,
-			"Dualtable 1.02\0",TRUE,FALSE,TRUE},
-	{ {22,1,1,125,125,31,0,0,0,0},NULL,NULL,"GM-IAC\0",NULL,29,
-			"MS-2.9 GM-IAC\0",FALSE,FALSE,TRUE},
-	{ {22,1,1,125,125,0,0,83,0,0},NULL,NULL,NULL,NULL,20,
-			"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0",
+	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,{},{},1,
+			{"Dualtable 0.90-1.0\0"},TRUE,FALSE,FALSE},
+	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,{"v.1.01\0"},{},1,
+			{"Dualtable 1.01\0"},TRUE,FALSE,FALSE},
+	{ {22,1,1,128,128,19,0,0,255,255},NULL,NULL,{"v.1.02\0"},{},1,
+			{"Dualtable 1.02\0"},TRUE,FALSE,TRUE},
+	{ {22,1,1,125,125,31,0,0,0,0},NULL,NULL,"GM-IAC\0",{},29,
+			{"MS-2.9 GM-IAC\0"},FALSE,FALSE,TRUE},
+	{ {22,1,1,125,125,0,0,83,0,0},NULL,NULL,{},{},20,
+			{"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0"},
 			FALSE,TRUE,FALSE},
-	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,NULL,NULL,30,
-			"SquirtnSpark 3.0\0",FALSE,TRUE,FALSE},
-	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.005\0",30,
-			"MegaSquirtnEDIS 3.005\0",FALSE,TRUE,FALSE},
-	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.007\0",30,
-			"MegaSquirtnEDIS 3.007\0",FALSE,TRUE,FALSE}
+	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,{},{},30,
+			{"SquirtnSpark 3.0\0"},FALSE,TRUE,FALSE},
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,{},{"EDIS v3.005\0"},30,
+			{"MegaSquirtnEDIS 3.005\0"},FALSE,TRUE,FALSE},
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,{},{"EDIS v3.007\0"},30,
+			{"MegaSquirtnEDIS 3.007\0"},FALSE,TRUE,FALSE}
 };
 
 static struct 
@@ -201,10 +201,10 @@ void interrogate_ecu()
 					canidate->v1_data = g_memdup(buf,total);
 					break;
 				case CMD_S:
-					canidate->sig_str = g_strndup(buf,total);
+					strncpy(canidate->sig_str,buf,total);
 					break;
 				case CMD_QUEST:
-					canidate->quest_str = g_strndup(buf,total);
+					strncpy(canidate->quest_str,buf,total);
 					break;
 				case CMD_Q:
 					memcpy(&(canidate->ver_num),buf,total);
@@ -371,8 +371,6 @@ void determine_ecu(void *ptr)
 	g_free(tmpbuf);
 
 cleanup:
-	g_free(canidate->sig_str);
-	g_free(canidate->quest_str);
 	g_free(canidate->v0_data);
 	g_free(canidate->v1_data);
 	g_free(canidate);

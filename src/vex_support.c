@@ -197,7 +197,7 @@ gboolean vetable_export(void *ptr)
 		fprintf(stderr,__FILE__": Error exporting VEX file\n");
 
 #ifdef DEBUG
-	fprintf(stderr,__FILE__": count of bytes written: %i\n",count);
+	fprintf(stderr,__FILE__": count of bytes written: %i\n",(gint)count);
 #endif
 
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
