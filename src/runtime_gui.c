@@ -32,6 +32,7 @@ int build_runtime(GtkWidget *parent_frame)
 	GtkWidget *frame;
 	GtkWidget *label;
 	GtkWidget *entry;
+	GtkWidget *table;
 	GtkWidget *sep;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -40,117 +41,157 @@ int build_runtime(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-	vbox2 = gtk_vbox_new(FALSE,10);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	hbox = gtk_hbox_new(FALSE,10);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox),10);
+	table = gtk_table_new(3,5,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+        gtk_table_set_col_spacings(GTK_TABLE(table),10);
+        gtk_container_set_border_width (GTK_CONTAINER (table), 20);
+	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,10);
 	label = gtk_label_new("Seconds");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("MAP (Kpa)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
-	label = gtk_label_new("Coolant Temp (F)");
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Temp (F)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Batt Voltage");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Gamma");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.secl_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 	gtk_widget_set_size_request(entry,55,-1);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.map_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.clt_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 3, 4,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.batt_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 4, 5,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.gammae_val = entry;/*copy pointer to struct for update */
 
 	sep = gtk_vseparator_new();
-	gtk_box_pack_start(GTK_BOX(hbox),sep,TRUE,FALSE,0);
+        gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 5,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
 	label = gtk_label_new("Barometer (Kpa)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Manifold Air Temp (F)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Throttle Pos (%)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("RPM");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 3, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
 	label = gtk_label_new("Pulse Width (ms)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 4, 5,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 	gtk_widget_set_size_request(entry,55,-1);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.baro_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.mat_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.tps_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 3, 4,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.rpm_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 4, 5,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.pw_val = entry;/*copy pointer to struct for update */
 
 	/* Corrections/Enrichments frame */
@@ -158,80 +199,104 @@ int build_runtime(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Corrections/Enrichments (Percent)");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-	vbox2 = gtk_vbox_new(FALSE,10);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	hbox = gtk_hbox_new(FALSE,10);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox), 5);
+	table = gtk_table_new(3,5,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+        gtk_table_set_col_spacings(GTK_TABLE(table),10);
+        gtk_container_set_border_width (GTK_CONTAINER (table), 20);
+	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,10);
+
 	label = gtk_label_new("EGO");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
-	label = gtk_label_new("Barometer                  ");
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Barometer    ");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new("Warmup");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 	gtk_widget_set_size_request(entry,55,-1);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.egocorr_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.barocorr_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
-        gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.warmcorr_val = entry;/*copy pointer to struct for update */
 
 	sep = gtk_vseparator_new();
-	gtk_box_pack_start(GTK_BOX(hbox),sep,TRUE,FALSE,0);
+        gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
-	label = gtk_label_new("Air Density ");
+	label = gtk_label_new("Air Density");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 	label = gtk_label_new("Volumetric Efficiency");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
-	label = gtk_label_new("Acceleration (millisec)");
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+	label = gtk_label_new("Acceleration (ms)");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 3, 4, 2, 3,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
 
-	vbox3 = gtk_vbox_new(TRUE,7);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
 	entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
         gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 	gtk_widget_set_size_request(entry,55,-1);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.aircorr_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
         gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 1, 2,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.vecurr_val = entry;/*copy pointer to struct for update */
 
 	entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry),5);
         gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_widget_set_size_request(entry,55,-1);
+        gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
 	runtime_data.tpsaccel_val = entry;/*copy pointer to struct for update */
 
 	return TRUE;
