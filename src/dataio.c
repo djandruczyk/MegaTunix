@@ -26,9 +26,9 @@ int ms_reset_count;
 int ms_goodread_count;
 int ms_ve_goodread_count;
 int just_starting;
-struct ms_data_v1_and_v2 runtime;
-struct ms_data_v1_and_v2 runtime_last;
-struct ms_ve_constants *ve_constants;
+extern struct ms_data_v1_and_v2 *runtime;
+extern struct ms_data_v1_and_v2 *runtime_last;
+extern struct ms_ve_constants *ve_constants;
        
 void handle_ms_data(int which_data)
 {
@@ -85,14 +85,13 @@ void handle_ms_data(int which_data)
 
 			/* copy last round to runtime_last for checking */
                         ms_goodread_count++;
-
-			runtime_last = runtime;
-			post_process(raw,&runtime);
+			memcpy(runtime_last,runtime,
+					sizeof(struct ms_data_v1_and_v2));
+			post_process(raw,runtime);
 
 			break;
 
 		case VE_AND_CONSTANTS:
-			/* Not written yet */
 			res = read(serial_params.fd,ptr,serial_params.veconst_size); 
 			/* the number of bytes expected for raw data read */
 			if (res != serial_params.veconst_size) 
@@ -117,8 +116,7 @@ void handle_ms_data(int which_data)
 //				setup_serial_params();
 //				return;
 			}
-			ve_constants = (struct ms_ve_constants *) buf;
-			printf("VEtable decel cut %i\n",ve_constants->decel_cut);
+			memcpy(ve_constants,buf,sizeof(struct ms_ve_constants));
                         ms_ve_goodread_count++;
 			break;
 	}

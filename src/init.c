@@ -37,6 +37,9 @@ extern int main_y_origin;
 extern int width;
 extern int height;
 extern GtkWidget *main_window;
+struct ms_ve_constants *ve_constants;
+struct ms_data_v1_and_v2 *runtime;
+struct ms_data_v1_and_v2 *runtime_last;
 
 void init()
 {
@@ -146,10 +149,16 @@ void make_megasquirt_dirs(void)
 
 void mem_alloc()
 {
+	ve_constants = malloc(sizeof(struct ms_ve_constants));
+	runtime = malloc(sizeof(struct ms_data_v1_and_v2));
+	runtime_last = malloc(sizeof(struct ms_data_v1_and_v2));
 //	printf("Allocating memory \n");
 }
 
 void mem_dealloc()
 {
+	free(ve_constants);
+	free(runtime);
+	free(runtime_last);
 //	printf("Deallocating memory \n");
 }

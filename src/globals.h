@@ -35,10 +35,6 @@ struct Serial_Params
 	int errcount;		/* Serial I/O errors read error count */
 } serial_params;
 
-/* Data storage */
-//struct ms_data_v1_and_v2 runtime;	/* processed data structure */
-//struct ms_data_v1_and_v2 runtime_last;	/* processed data structure */
-
 /* constants */
 int poll_min;			/* 5 millisecond minimum poll delay */
 int poll_max;			/* 500 millisecond maximum poll delay */

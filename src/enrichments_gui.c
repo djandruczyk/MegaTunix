@@ -24,6 +24,8 @@ struct v1_2_Constants constants;
 const gchar *warmup_labels[] = {"-40","-20",  "0", "20", "40",
 			         "60", "80","100","130","160"};
 const gchar *accel_labels[] = {"2V/Sec","4V/sec","8V/Sec","15V/Sec"};
+static gint warmup_bins_offset = 69;
+static gint accel_bins_offset = 79;
 
 int build_enrichments(GtkWidget *parent_frame)
 {
@@ -102,6 +104,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CRANK_PRIMING_PULSE));
 	constants.cr_priming_pulse_adj = adj;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(120));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -130,6 +133,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.as_enrich_adj = adj;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(67));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -148,6 +152,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.as_num_cycles_adj = adj;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(68));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -181,6 +186,7 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 		gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
+		gtk_object_set_data(G_OBJECT(entry),"offset", GINT_TO_POINTER(warmup_bins_offset+i));
 		constants.warmup_bins_ent[i] = entry;
 
 		label = gtk_label_new (warmup_labels[i]);
@@ -219,6 +225,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(84));
 	constants.tps_trig_thresh_ent = entry;
 
 	label = gtk_label_new("TPS Trigger Threshold\n(V/Sec)");
@@ -232,6 +239,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(85));
 	constants.accel_duration_ent = entry;
 
 	label = gtk_label_new("Accel Enrich\n Duration (Sec)");
@@ -245,6 +253,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(84));
 	constants.cold_accel_addon_ent = entry;
 
 	label = gtk_label_new("Cold Accel Enrich\nAdd-On (ms)");
@@ -258,6 +267,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(124));
 	constants.cold_accel_mult_ent = entry;
 
 	label = gtk_label_new("Cold Accel Enrich\nMultiplier (%)");
@@ -289,6 +299,7 @@ int build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
 		gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+		gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(accel_bins_offset+i));
 		constants.accel_bins_ent[i] = entry;
 
 		label = gtk_label_new(accel_labels[i]);
@@ -309,6 +320,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(86));
 	constants.decel_cut_ent = entry;
 
 	label = gtk_label_new("Decel Fuel Cut\n(Percent)");
@@ -334,6 +346,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(87));
 	constants.ego_temp_active_ent = entry;
 
 	label = gtk_label_new("Coolant Temp\nActivation(Deg F.)");
@@ -347,6 +360,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(121));
 	constants.ego_rpm_active_ent = entry;
 
 	label = gtk_label_new("EGO Active RPM");
@@ -360,6 +374,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(123));
 	constants.ego_sw_voltage_ent = entry;
 
 	label = gtk_label_new("EGO Switching\nVoltage");
@@ -373,6 +388,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(89));
 	constants.ego_step_ent = entry;
 
 	label = gtk_label_new("EGO Step\n(Percent)");
@@ -386,6 +402,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(88));
 	constants.ego_events_ent = entry;
 
 	label = gtk_label_new("# of Ignition Events\nBetween Steps");
@@ -399,6 +416,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
+	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(90));
 	constants.ego_limit_ent = entry;
 
 	label = gtk_label_new("EGO +/- Limit\n(Percent)");

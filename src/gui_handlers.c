@@ -19,6 +19,7 @@
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
 #include "globals.h"
+#include "constants.h"
 
 
 static int req_fuel_popup=FALSE;
@@ -28,13 +29,14 @@ extern int raw_reader_stopped;
 extern int ser_context_id;
 extern int read_wait_time;
 extern GtkWidget *ser_statbar;
+extern struct v1_2_Constants constants;
 struct {
 	GtkAdjustment *displacement;	/* Engine size  1-1000 Cu-in */
 	GtkAdjustment *cyls;		/* # of Cylinders  1-16 */
 	GtkAdjustment *inj_rate;	/* injector slow rate (lbs/hr) */
 	GtkAdjustment *afr;		/* Air fuel ratio 10-25.5 */
 } reqd_fuel;
-extern struct ms_ve_constants ve_constants;
+extern struct ms_ve_constants *ve_constants;
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -266,6 +268,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	gint tmp = 0;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
+	printf("spinner value: %f ,offset %i\n",value,offset);
 	
 	switch ((gint)data)
 	{
@@ -292,13 +295,13 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			 * one in SOME cases only..
 			 */
 			tmp = (int)((value*10.0)+.01);
-			ve_constants.inj_open_time = tmp;
-			write_ve_const(ve_constants.inj_open_time, offset);
+			ve_constants->inj_open_time = tmp;
+			write_ve_const(ve_constants->inj_open_time, offset);
 			break;
 		case BATT_CORR:
 			tmp = (int)((value*10.0)+.01);
-			ve_constants.batt_corr = tmp;
-			write_ve_const(ve_constants.batt_corr, offset);
+			ve_constants->batt_corr = tmp;
+			write_ve_const(ve_constants->batt_corr, offset);
 			break;
 
 		default:
@@ -310,6 +313,12 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 
 void update_const_ve()
 {
+	char buff[10];
+
+	printf("decel_cut data is %i\n",ve_constants->decel_cut);
+	g_snprintf(buff,10,"%i",ve_constants->decel_cut);
+	gtk_entry_set_text(GTK_ENTRY(constants.decel_cut_ent),buff);
+
 	printf("Updating constants/VEtable\n");
 	// Stub function, does nothing yet... 
 }
