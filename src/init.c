@@ -317,6 +317,8 @@ void mem_dealloc()
 			g_free(firmware->page_params[i]);
 		for (i=0;i<firmware->total_tables;i++)
 			g_free(firmware->table_params[i]);
+		for (i=0;i<firmware->total_tables;i++)
+			g_free(firmware->rf_params[i]);
 		g_free(firmware);
 		g_free(ms_data);
 		g_free(ms_data_last);

@@ -30,28 +30,6 @@
 
 extern GdkColor red;
 extern GdkColor black;
-gint num_squirts_1 = 1;
-gint num_squirts_2 = 1;
-gint num_cyls_1 = 1;
-gint num_cyls_2 = 1;
-gint num_inj_1 = 1;
-gint num_inj_2 = 1;
-gint divider_1 = 0;
-gint divider_2 = 0;
-gint alternate_1 = 0;
-gint last_num_squirts_1 = -1;
-gint last_num_squirts_2 = -1;
-gint last_num_cyls_1 = -1;
-gint last_num_cyls_2 = -1;
-gint last_num_inj_1 = -1;
-gint last_num_inj_2 = -1;
-gint last_divider_1= -1;
-gint last_divider_2 = -1;
-gint last_alternate_1 = -1;
-gfloat req_fuel_total_1 = 0.0;
-gfloat req_fuel_total_2 = 0.0;
-gfloat last_req_fuel_total_1 = 0.0;
-gfloat last_req_fuel_total_2 = 0.0;
 
 
 /*!
@@ -142,6 +120,7 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 
 	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	reqd_fuel->popup = popup;	
+	reqd_fuel->table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");	
 	tmpbuf = g_strdup_printf("Required Fuel Calculator for Page %i\n",reqd_fuel->page);
 	gtk_window_set_title(GTK_WINDOW(popup),tmpbuf);
 	g_free(tmpbuf);
@@ -383,7 +362,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(G_OBJECT(widget),"reqd_fuel");
 
-	tmpbuf = g_strdup_printf("req_fuel_per_cycle_%i_spin",1+reqd_fuel->page);
+	tmpbuf = g_strdup_printf("req_fuel_per_cycle_%i_spin",reqd_fuel->table_num);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON
 			(g_hash_table_lookup(dynamic_widgets,tmpbuf)),
 			reqd_fuel->calcd_reqd_fuel);
@@ -398,7 +377,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	else
 		ms_data[page][rpmk_offset] = (int)(12000.0/((double)reqd_fuel->cyls));
 
-	check_req_fuel_limits();
+	check_req_fuel_limits(reqd_fuel->table_num);
 	dload_val = ms_data[page][rpmk_offset];
 	write_ve_const(widget, reqd_fuel->page, rpmk_offset, dload_val, FALSE);
 
@@ -454,7 +433,7 @@ gboolean close_popup(GtkWidget * widget)
  error status on the gui if needed and send the new values to the ECU when 
  appropropriate
  */
-void check_req_fuel_limits()
+void check_req_fuel_limits(gint table_num)
 {
 	gfloat tmp = 0.0;
 	gfloat rf_per_squirt = 0.0;
@@ -463,8 +442,20 @@ void check_req_fuel_limits()
 	gint offset = 0;
 	gint page = -1;
 	gint rpmk_offset = 0;
+	gint num_squirts = 0;
+	gint num_cyls = 0;
+	gint num_inj = 0;
 	gint divider = 0;
 	gint alternate = 0;
+	gint last_num_squirts = -1;
+	gint last_num_cyls = -1;
+	gint last_num_inj = -1;
+	gint last_divider= -1;
+	gint last_alternate = -1;
+	gfloat rf_total = 0.0;
+	gfloat last_rf_total = 0.0;
+	gchar * g_name = NULL;
+	gchar * name = NULL;
 	union config11 cfg11;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
@@ -477,107 +468,66 @@ void check_req_fuel_limits()
 	{
 		/* F&H Dualtable required Fuel calc
 		 *
-		 *                                        /    num_inj_x  \
-		 *         	   rf_per_squirt * (------------------------)
-		 *                                        \    divider    /
-		 * req_fuel_total = -------------------------------------------
-		 *				10
+		 *                                  /    num_inj_x  \
+		 *                 rf_per_squirt * (-----------------)
+		 *                                  \    divider    /
+		 * req_fuel_total = -----------------------------------
+		 *                                 10
 		 *
 		 * where divider = num_cyls/num_squirts;
 		 *
 		 * rearranging to solve for rf_per_squirt...
 		 *
-		 *                        (req_fuel_total * 10)
-		 * rf_per_squirt =  ----------------------------
-		 *			    /   num_inj_x   \
-		 *                         (-----------------)
-		 *                          \    divider    /
+		 *                    (req_fuel_total * 10)
+		 * rf_per_squirt =  --------------------------
+		 *                      /   num_inj_x   \
+		 *                     (-----------------)
+		 *                      \    divider    /
 		 */
 
-		/* TABLE 1 */
-		page = 0;
+		page = firmware->table_params[table_num]->z_page;
 
-		if ((req_fuel_total_1 == last_req_fuel_total_1) &&
-			(num_cyls_1 == last_num_cyls_1) &&
-			(num_inj_1 == last_num_inj_1) &&
-			(num_squirts_1 == last_num_squirts_1) &&
-			(divider_1 == last_divider_1))
-			goto table2;
+		rf_total = firmware->rf_params[table_num]->req_fuel_total;
+		last_rf_total = firmware->rf_params[table_num]->last_req_fuel_total;
+		num_cyls = firmware->rf_params[table_num]->num_cyls;
+		last_num_cyls = firmware->rf_params[table_num]->last_num_cyls;
+		num_inj = firmware->rf_params[table_num]->num_inj;
+		last_num_inj = firmware->rf_params[table_num]->last_num_inj;
+		num_squirts = firmware->rf_params[table_num]->num_squirts;
+		last_num_squirts = firmware->rf_params[table_num]->last_num_squirts;
+		divider = firmware->rf_params[table_num]->divider;
+		last_divider = firmware->rf_params[table_num]->last_divider;
 
-		tmp = (float)(num_inj_1)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
-		rf_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
 
-		if (rf_per_squirt > 255)
-			lim_flag = TRUE;
-		if (rf_per_squirt < 0)
-			lim_flag = TRUE;
-		if (num_cyls_1 % num_squirts_1)
-			lim_flag = TRUE;
-
-		/* Throw warning if an issue */
-		if (lim_flag)
-			set_group_color(RED,"interdep_1_ctrl");
-		else
-		{
-			set_group_color(BLACK,"interdep_1_ctrl");
-			/* Required Fuel per SQUIRT */
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,"rf_per_squirt_1_spin")),rf_per_squirt/10.0);
-
-			if (paused_handlers)
-				return;
-
-			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
-			rpmk_offset = firmware->page_params[page]->rpmk_offset;
-			if (cfg11.bit.eng_type)
-				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls_1));
-			else
-				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_1));
-
-			dload_val = ms_data[page][rpmk_offset];
-			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
-
-			offset = firmware->page_params[page]->reqfuel_offset;
-			ms_data[page][offset] = rf_per_squirt;
-			write_ve_const(NULL, page, offset, rf_per_squirt, FALSE);
-			/* Call handler to empty interdependant hash table */
-			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
-
-		}
-
-		lim_flag = FALSE;
-		/* TABLE 2 */
-		table2:
-		page = 1;
-
-		/* If nothing changed , jsut break to next check */
-		if ((req_fuel_total_2 == last_req_fuel_total_2) &&
-			(num_cyls_2 == last_num_cyls_2) &&
-			(num_inj_2 == last_num_inj_2) &&
-			(num_squirts_2 == last_num_squirts_2) &&
-			(divider_2 == last_divider_2))
+		if ((rf_total == last_rf_total) &&
+				(num_cyls == last_num_cyls) &&
+				(num_inj == last_num_inj) &&
+				(num_squirts == last_num_squirts) &&
+				(divider == last_divider))
 			return;
 
-		tmp = (float)(num_inj_2)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
-		rf_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
+		tmp = (float)(num_inj)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
+		rf_per_squirt = ((float)rf_total * 10.0)/tmp;
 
 		if (rf_per_squirt > 255)
 			lim_flag = TRUE;
 		if (rf_per_squirt < 0)
 			lim_flag = TRUE;
-		if (num_cyls_2 % num_squirts_2)
+		if (num_cyls % num_squirts)
 			lim_flag = TRUE;
 
 		/* Throw warning if an issue */
+		g_name = g_strdup_printf("interdep_%i_ctrl",table_num);
 		if (lim_flag)
-			set_group_color(RED,"interdep_2_ctrl");
+			set_group_color(RED,g_name);
 		else
 		{
-			set_group_color(BLACK,"interdep_2_ctrl");
-
+			set_group_color(BLACK,g_name);
 			/* Required Fuel per SQUIRT */
+			name = g_strdup_printf("req_fuel_per_squirt_%i_spin",table_num);
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,"rf_per_squirt_2_spin")),rf_per_squirt/10.0);
+					(g_hash_table_lookup(dynamic_widgets,name)),rf_per_squirt/10.0);
+			g_free(name);
 
 			if (paused_handlers)
 				return;
@@ -585,9 +535,9 @@ void check_req_fuel_limits()
 			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
 			rpmk_offset = firmware->page_params[page]->rpmk_offset;
 			if (cfg11.bit.eng_type)
-				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls_2));
+				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls));
 			else
-				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_2));
+				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls));
 
 			dload_val = ms_data[page][rpmk_offset];
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
@@ -599,67 +549,83 @@ void check_req_fuel_limits()
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 
 		}
-
+		g_free(g_name);
 
 	}// END Dualtable Req fuel checks... */
 	else
 	{
 		/* B&G, MSnS, MSnEDIS Required Fuel Calc
 		 *
-		 *                              /     num_inj_1     \
+		 *                    /       num_inj         \
 		 *   rf_per_squirt * (-------------------------)
-		 *                              \ divider*(alternate+1) /
-		 * req_fuel_total = ----------------------------------------
-		 *				10
+		 *                    \ divider*(alternate+1) /
+		 * req_fuel_total = ------------------------------
+		 *                               10
 		 *
-		 * where divider = num_cyls_1/num_squirts_1;
+		 * where divider = num_cyls/num_squirts;
 		 *
 		 * rearranging to solve for rf_per_squirt...
 		 *
-		 *                        (req_fuel_total * 10)
-		 * rf_per_squirt =  ----------------------
-		 *			    /  num_inj_1  \
-		 *                         (-------------------)
-		 *                          \ divider*(alt+1) /
+		 *                   (req_fuel_total * 10)
+		 * rf_per_squirt =  ------------------------
+		 *                     /     num_inj     \
+		 *                    (-------------------)
+		 *                     \ divider*(alt+1) /
 		 *
 		 * 
 		 */
+		page = firmware->table_params[table_num]->z_page;
 
-		page = 0;
+		rf_total = firmware->rf_params[table_num]->req_fuel_total;
+		last_rf_total = firmware->rf_params[table_num]->last_req_fuel_total;
+		num_cyls = firmware->rf_params[table_num]->num_cyls;
+		last_num_cyls = firmware->rf_params[table_num]->last_num_cyls;
+		num_inj = firmware->rf_params[table_num]->num_inj;
+		last_num_inj = firmware->rf_params[table_num]->last_num_inj;
+		num_squirts = firmware->rf_params[table_num]->num_squirts;
+		last_num_squirts = firmware->rf_params[table_num]->last_num_squirts;
+		divider = firmware->rf_params[table_num]->divider;
+		last_divider = firmware->rf_params[table_num]->last_divider;
+		alternate = firmware->rf_params[table_num]->alternate;
+		last_alternate = firmware->rf_params[table_num]->last_alternate;
 
-		if ((req_fuel_total_1 == last_req_fuel_total_1) &&
-			(num_cyls_1 == last_num_cyls_1) &&
-			(num_inj_1 == last_num_inj_1) &&
-			(num_squirts_1 == last_num_squirts_1) &&
-			(alternate_1 == last_alternate_1) &&
-			(divider_1 == last_divider_1))
+
+		if ((rf_total == last_rf_total) &&
+				(num_cyls == last_num_cyls) &&
+				(num_inj == last_num_inj) &&
+				(num_squirts == last_num_squirts) &&
+				(alternate == last_alternate) &&
+				(divider == last_divider))
 			return;
 
 		divider = ms_data[page][firmware->page_params[page]->divider_offset];
 		alternate = ms_data[page][firmware->page_params[page]->alternate_offset];
-		tmp =	((float)(num_inj_1))/((float)divider*(float)(alternate+1));
+		tmp =	((float)(num_inj))/((float)divider*(float)(alternate+1));
 
 		/* This is 1/10 the value as the on screen stuff is 1/10th 
 		 * for the ms variable,  it gets converted farther down, just 
 		 * before download to the MS
 		 */
-		rf_per_squirt = ((float)req_fuel_total_1*10.0)/tmp;
+		rf_per_squirt = ((float)rf_total*10.0)/tmp;
 
 		if (rf_per_squirt > 255)
 			lim_flag = TRUE;
 		if (rf_per_squirt < 0)
 			lim_flag = TRUE;
-		if (num_cyls_1 % num_squirts_1)
+		if (num_cyls % num_squirts)
 			lim_flag = TRUE;
 
+		g_name = g_strdup_printf("interdep_%i_ctrl",table_num);
 		if (lim_flag)
-			set_group_color(RED,"interdep_1_ctrl");
+			set_group_color(RED,g_name);
 		else
 		{
-			set_group_color(BLACK,"interdep_1_ctrl");
+			set_group_color(BLACK,g_name);
 			/* req-fuel info box  */
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,"rf_per_squirt_1_spin")),rf_per_squirt/10.0);
-							     
+			name = g_strdup_printf("req_fuel_per_squirt_%i_spin",table_num);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,name)),rf_per_squirt/10.0);
+			g_free(name);
+
 
 			/* All Tested succeeded, download Required fuel, 
 			 * then iterate through the list of offsets of changed
@@ -677,9 +643,9 @@ void check_req_fuel_limits()
 			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
 			rpmk_offset = firmware->page_params[page]->rpmk_offset;
 			if (cfg11.bit.eng_type)
-				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls_1));
+				ms_data[page][rpmk_offset] = (int)(6000.0/((double)num_cyls));
 			else
-				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls_1));
+				ms_data[page][rpmk_offset] = (int)(12000.0/((double)num_cyls));
 			dload_val = ms_data[page][rpmk_offset];
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
@@ -689,6 +655,7 @@ void check_req_fuel_limits()
 			write_ve_const(NULL, page, offset, rf_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 		}
+		g_free(g_name);
 	} // End B&G style Req Fuel check 
 	return ;
 

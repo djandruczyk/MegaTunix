@@ -687,7 +687,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="num_cylinders_1_spin">
+			    <widget class="GtkSpinButton" id="num_cylinders_0_spin">
 			      <property name="width_request">45</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
@@ -714,7 +714,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="num_injectors_1_spin">
+			    <widget class="GtkSpinButton" id="num_injectors_0_spin">
 			      <property name="width_request">45</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
@@ -741,7 +741,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="inj_per_cycle_1_spin">
+			    <widget class="GtkSpinButton" id="inj_per_cycle_0_spin">
 			      <property name="width_request">45</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
@@ -768,7 +768,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="req_fuel_per_cycle_1_spin">
+			    <widget class="GtkSpinButton" id="req_fuel_per_cycle_0_spin">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
@@ -777,7 +777,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1.38778e-16 0 25.5 0.1 1 1</property>
+			      <property name="adjustment">0 0 25.5 0.1 1 1</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 26 Sep 2004 23:18:02 GMT"/>
 			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -794,7 +794,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="req_fuel_per_squirt_1_spin">
+			    <widget class="GtkSpinButton" id="req_fuel_per_squirt_0_spin">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
@@ -804,7 +804,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1.38778e-16 0 25.5 0.1 1 1</property>
+			      <property name="adjustment">0 0 25.5 0.1 1 1</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -1294,7 +1294,7 @@ Threshold (ms.)</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="num_cylinders_2_spin">
+			    <widget class="GtkSpinButton" id="num_cylinders_1_spin">
 			      <property name="width_request">45</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
@@ -1321,7 +1321,7 @@ Threshold (ms.)</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="num_injectors_2_spin">
+			    <widget class="GtkSpinButton" id="num_injectors_1_spin">
 			      <property name="width_request">45</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
@@ -1348,7 +1348,7 @@ Threshold (ms.)</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="inj_per_cycle_2_spin">
+			    <widget class="GtkSpinButton" id="inj_per_cycle_1_spin">
 			      <property name="width_request">45</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
@@ -1423,7 +1423,7 @@ Threshold (ms.)</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="req_fuel_per_cycle_2_spin">
+			    <widget class="GtkSpinButton" id="req_fuel_per_cycle_1_spin">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
@@ -1432,7 +1432,7 @@ Threshold (ms.)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1.38778e-16 0 25.5 0.1 1 1</property>
+			      <property name="adjustment">0 0 25.5 0.1 1 1</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 26 Sep 2004 23:18:02 GMT"/>
 			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -1449,7 +1449,7 @@ Threshold (ms.)</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="req_fuel_per_squirt_2_spin">
+			    <widget class="GtkSpinButton" id="req_fuel_per_squirt_1_spin">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
@@ -1459,7 +1459,7 @@ Threshold (ms.)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">1.38778e-16 0 25.5 0.1 1 1</property>
+			      <property name="adjustment">0 0 25.5 0.1 1 1</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>

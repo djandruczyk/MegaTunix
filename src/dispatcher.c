@@ -61,6 +61,7 @@ gboolean dispatcher(gpointer data)
 	extern struct Firmware_Details * firmware;
 	gint len=0;
 	gint i=0;
+	gint j=0;
 	gint val=-1;
 	gint count = 0;
 	GtkWidget *widget = NULL;
@@ -79,7 +80,7 @@ trypop:
 	message = g_async_queue_try_pop(dispatch_queue);
 	if (!message)
 	{
-		//printf("no messages waiting, returning\n");
+	//	printf("no messages waiting, returning\n");
 		return TRUE;
 	}
 
@@ -104,7 +105,9 @@ trypop:
 			{
 				case UPD_LOGBAR:
 					t_message = (struct Text_Message *)message->payload;
+					gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
+					gdk_threads_leave();
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
@@ -176,8 +179,8 @@ trypop:
 					break;
 				case UPD_SET_STORE_BLACK:
 					set_group_color(BLACK,"burners");
-					for (i=0;i<firmware->total_pages;i++)
-						set_reqfuel_color(BLACK,i);
+					for (j=0;j<firmware->total_tables;j++)
+						set_reqfuel_color(BLACK,j);
 					break;
 				case UPD_ENABLE_THREE_D_BUTTONS:
 					g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
@@ -202,12 +205,12 @@ trypop:
 					break;
 
 			}
-			thread_protect = FALSE;
+		thread_protect = FALSE;
 
-			gdk_threads_enter();
-			while (gtk_events_pending())
-				gtk_main_iteration();
-			gdk_threads_leave();
+		gdk_threads_enter();
+		while (gtk_events_pending())
+			gtk_main_iteration();
+		gdk_threads_leave();
 		}
 	}
 	dealloc_message(message);

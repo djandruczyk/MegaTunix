@@ -323,15 +323,20 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->write_cmd = g_strdup(potential->write_cmd);
 	firmware->burn_cmd = g_strdup(potential->burn_cmd);
 	firmware->page_cmd = g_strdup(potential->page_cmd);
-	/* Allocate ram for the necessary structures... */
 
+	/* Allocate RAM for the Req_Fuel_Params structures. */
+	firmware->rf_params = g_new0(struct Req_Fuel_Params *,firmware->total_tables);
+
+	/* Allocate RAM for the Table_Params structures and copy data in.. */
 	firmware->table_params = g_new0(struct Table_Params *,firmware->total_tables);
 	for (i=0;i<firmware->total_tables;i++)
 	{
+		firmware->rf_params[i] = g_new0(struct Req_Fuel_Params ,1);
 		firmware->table_params[i] = initialize_table_params();
 		memcpy(firmware->table_params[i],potential->table_params[i],sizeof(struct Table_Params));
 	}
 
+	/* Allocate RAM for the Page_Params structures and copy data in.. */
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{

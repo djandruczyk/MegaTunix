@@ -45,9 +45,12 @@ void set_group_color(GuiColor color, gchar *group)
  \param page (gint) the page number ofthe group to switch colors of.
  \see set_widget_color
  */
-void set_reqfuel_color(GuiColor color, gint page)
+void set_reqfuel_color(GuiColor color, gint table_num)
 {
-	g_list_foreach(get_list(g_strdup_printf("reqfuel_%i_ctrl",page+1)), set_widget_color,(gpointer)color);
+	gchar *name = NULL;
+	name = g_strdup_printf("reqfuel_%i_ctrl",table_num);
+	g_list_foreach(get_list(name), set_widget_color,(gpointer)color);
+	g_free(name);
 }
 
 

@@ -78,7 +78,7 @@ Required Fuel</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="req_fuel_per_cycle_1_spin">
+			    <widget class="GtkSpinButton" id="req_fuel_per_cycle_0_spin">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
@@ -106,7 +106,7 @@ Required Fuel</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="req_fuel_per_squirt_1_spin">
+			    <widget class="GtkSpinButton" id="req_fuel_per_squirt_0_spin">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="climb_rate">1</property>
@@ -1251,7 +1251,7 @@ Limit (%)</property>
 		  <property name="column_spacing">0</property>
 
 		  <child>
-		    <widget class="GtkSpinButton" id="inj_per_cycle_1_spin">
+		    <widget class="GtkSpinButton" id="inj_per_cycle_0_spin">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="climb_rate">1</property>
@@ -1277,7 +1277,7 @@ Limit (%)</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkSpinButton" id="num_injectors_1_spin">
+		    <widget class="GtkSpinButton" id="num_injectors_0_spin">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="climb_rate">1</property>
@@ -1303,7 +1303,7 @@ Limit (%)</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkSpinButton" id="num_cylinders_1_spin">
+		    <widget class="GtkSpinButton" id="num_cylinders_0_spin">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="climb_rate">1</property>

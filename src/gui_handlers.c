@@ -64,28 +64,6 @@ GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
 
 gboolean paused_handlers = FALSE;
-extern gint num_squirts_1;
-extern gint num_squirts_2;
-extern gint num_cyls_1;
-extern gint num_cyls_2;
-extern gint num_inj_1;
-extern gint num_inj_2;
-extern gint divider_1;
-extern gint divider_2;
-extern gint alternate_1;
-extern gint last_num_squirts_1;
-extern gint last_num_squirts_2;
-extern gint last_num_cyls_1;
-extern gint last_num_cyls_2;
-extern gint last_num_inj_1;
-extern gint last_num_inj_2;
-extern gint last_divider_1;
-extern gint last_divider_2;
-extern gint last_alternate_1;
-extern gfloat req_fuel_total_1;
-extern gfloat req_fuel_total_2;
-extern gfloat last_req_fuel_total_1;
-extern gfloat last_req_fuel_total_2;
 static gboolean err_flag = FALSE;
 gboolean leaving = FALSE;
 
@@ -291,6 +269,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
 	gint handler = 0;
+	gint table_num = -1;
 	gchar * toggle_group = NULL;
 	gchar * swap_label = NULL;
 	gboolean invert_state = FALSE;
@@ -299,6 +278,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
+	extern struct Firmware_Details *firmware;
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -362,14 +342,15 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				last_alternate_1 = alternate_1;
-				alternate_1 = bitval;
+				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
+				firmware->rf_params[table_num]->alternate = bitval;
 				ms_data[page][offset] = bitval;
 				dload_val = bitval;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
-				check_req_fuel_limits();
+				check_req_fuel_limits(table_num);
 			}
 			break;
 		default:
@@ -700,6 +681,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint tmp = 0;
 	gint handler = -1;
 	gint divider_offset = 0;
+	gint table_num = -1;
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	extern gint realtime_id;
@@ -772,14 +754,11 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_1:
-			last_req_fuel_total_1 = req_fuel_total_1;
-			req_fuel_total_1 = value;
-			check_req_fuel_limits();
-			break;
 		case REQ_FUEL_2:
-			last_req_fuel_total_2 = req_fuel_total_2;
-			req_fuel_total_2 = value;
-			check_req_fuel_limits();
+			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
+			firmware->rf_params[table_num]->req_fuel_total = value;
+			check_req_fuel_limits(table_num);
 			break;
 		case LOGVIEW_ZOOM:
 			lv_zoom = tmpi;
@@ -790,43 +769,46 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case NUM_SQUIRTS_1:
+		case NUM_SQUIRTS_2:
 			/* This actuall effects another variable */
 			divider_offset = firmware->page_params[page]->divider_offset;
-			last_num_squirts_1 = num_squirts_1;
-			last_divider_1 = ms_data[page][divider_offset];
+			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			firmware->rf_params[table_num]->last_num_squirts = firmware->rf_params[table_num]->num_squirts;
+			firmware->rf_params[table_num]->last_divider = ms_data[page][divider_offset];
 
-			num_squirts_1 = tmpi;
-			if (num_cyls_1 % num_squirts_1)
+			firmware->rf_params[table_num]->num_squirts = tmpi;
+			if (firmware->rf_params[table_num]->num_cyls % firmware->rf_params[table_num]->num_squirts)
 			{
 				err_flag = TRUE;
-				set_reqfuel_color(RED,page);
+				set_reqfuel_color(RED,table_num);
 			}
 			else
 			{
-				dload_val = 
-					(gint)(((float)num_cyls_1/
-						(float)num_squirts_1)+0.001);
+				dload_val = (gint)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
+
 				ms_data[page][divider_offset] = dload_val;
-				divider_1 = dload_val;
+				firmware->rf_params[table_num]->divider = dload_val;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
-				set_reqfuel_color(BLACK,page);
-				check_req_fuel_limits();
+				set_reqfuel_color(BLACK,table_num);
+				check_req_fuel_limits(table_num);
 			}
 			break;
 		case NUM_CYLINDERS_1:
+		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
 			divider_offset = firmware->page_params[page]->divider_offset;
-			last_divider_1 = ms_data[page][divider_offset];
-			last_num_cyls_1 = num_cyls_1;
+			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			firmware->rf_params[table_num]->last_divider = ms_data[page][divider_offset];
+			firmware->rf_params[table_num]->last_num_cyls = firmware->rf_params[table_num]->num_cyls;
 
-			num_cyls_1 = tmpi;
-			if (num_cyls_1 % num_squirts_1)
+			firmware->rf_params[table_num]->num_cyls = tmpi;
+			if (firmware->rf_params[table_num]->num_cyls % firmware->rf_params[table_num]->num_squirts)
 			{
 				err_flag = TRUE;
-				set_reqfuel_color(RED,page);	
+				set_reqfuel_color(RED,table_num);	
 			}
 			else
 			{
@@ -840,104 +822,26 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(dload_val));
 
 				dload_val = 
-					(gint)(((float)num_cyls_1/
-						(float)num_squirts_1)+0.001);
+					(gint)(((float)firmware->rf_params[table_num]->num_cyls/
+						(float)firmware->rf_params[table_num]->num_squirts)+0.001);
 				ms_data[page][divider_offset] = dload_val;
-				divider_1 = dload_val;
+				firmware->rf_params[table_num]->divider = dload_val;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
 						GINT_TO_POINTER(dload_val));
 
 				err_flag = FALSE;
-				set_reqfuel_color(BLACK,page);	
-				check_req_fuel_limits();
+				set_reqfuel_color(BLACK,table_num);	
+				check_req_fuel_limits(table_num);
 			}
 			break;
 		case NUM_INJECTORS_1:
-			/* Updates a shared bitfield */
-			last_num_inj_1 = num_inj_1;
-			num_inj_1 = tmpi;
-
-			tmp = ms_data[page][offset];
-			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bitshift);
-			ms_data[page][offset] = tmp;
-			dload_val = tmp;
-			g_hash_table_insert(interdep_vars[page],
-					GINT_TO_POINTER(offset),
-					GINT_TO_POINTER(dload_val));
-
-			check_req_fuel_limits();
-			break;
-		case NUM_SQUIRTS_2:
-			divider_offset = firmware->page_params[page]->divider_offset;
-			/* This actuall effects another variable */
-			last_num_squirts_2 = num_squirts_2;
-			last_divider_2 = ms_data[page][divider_offset];
-
-			num_squirts_2 = tmpi;
-			if (num_cyls_2 % num_squirts_2)
-			{
-				err_flag = TRUE;
-				set_reqfuel_color(RED,page);
-			}
-			else
-			{
-				dload_val = 
-					(gint)(((float)num_cyls_2/
-						(float)num_squirts_2)+0.001);
-				ms_data[page][divider_offset] = dload_val;
-				divider_2 = dload_val;
-				g_hash_table_insert(interdep_vars[page],
-						GINT_TO_POINTER(divider_offset),
-						GINT_TO_POINTER(dload_val));
-				err_flag = FALSE;
-				set_reqfuel_color(BLACK,page);
-				check_req_fuel_limits();
-			}
-			break;
-		case NUM_CYLINDERS_2:
-			divider_offset = firmware->page_params[page]->divider_offset;
-			/* Updates a shared bitfield */
-			last_divider_2 = ms_data[page][divider_offset];
-			last_num_cyls_2 = num_cyls_2;
-
-			num_cyls_2 = tmpi;
-			if (num_cyls_2 % num_squirts_2)
-			{
-				err_flag = TRUE;
-				set_reqfuel_color(RED,page);	
-			}
-			else
-			{
-				tmp = ms_data[page][offset];
-				tmp = tmp & ~bitmask;	/*clears top 4 bits */
-				tmp = tmp | ((tmpi-1) << bitshift);
-				ms_data[page][offset] = tmp;
-				dload_val = tmp;
-				g_hash_table_insert(interdep_vars[page],
-						GINT_TO_POINTER(offset),
-						GINT_TO_POINTER(dload_val));
-
-				dload_val = 
-					(gint)(((float)num_cyls_2/
-						(float)num_squirts_2)+0.001);
-				ms_data[page][divider_offset] = dload_val;
-				divider_2 = dload_val;
-				g_hash_table_insert(interdep_vars[page],
-						GINT_TO_POINTER(divider_offset),
-						GINT_TO_POINTER(dload_val));
-
-				err_flag = FALSE;
-				set_reqfuel_color(BLACK,page);	
-				check_req_fuel_limits();
-			}
-			break;
 		case NUM_INJECTORS_2:
 			/* Updates a shared bitfield */
+			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			firmware->rf_params[table_num]->last_num_inj = firmware->rf_params[table_num]->num_inj;
+			firmware->rf_params[table_num]->num_inj = tmpi;
 
-			last_num_inj_2 = num_inj_2;
-			num_inj_2 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << bitshift);
@@ -947,7 +851,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 					GINT_TO_POINTER(offset),
 					GINT_TO_POINTER(dload_val));
 
-			check_req_fuel_limits();
+			check_req_fuel_limits(table_num);
 			break;
 		case TRIGGER_ANGLE:
 			spconfig_offset = firmware->page_params[page]->spconfig_offset;
@@ -956,7 +860,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
 				dl_type = 0;  
 				break;
-			
+
 			}
 			if (value > 112.15)	/* Extra long trigger needed */	
 			{
@@ -1023,6 +927,8 @@ void update_ve_const()
 	gint offset = 0;
 	gfloat tmp = 0.0;
 	gint reqfuel = 0;
+	gint i = 0;
+	gint z_page = 0;
 	union config11 cfg11;
 	union config12 cfg12;
 	extern gint **ms_data;
@@ -1047,63 +953,43 @@ void update_ve_const()
 	 * where divider = num_cyls/num_squirts;
 	 *
 
-	 */
+*/
 	if (ecu_caps & DUALTABLE)
 	{
-		/* Table 1 */
-		page = 0;
-		cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
-		cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
-		num_cyls_1 = cfg11.bit.cylinders+1;
-		last_num_cyls_1 = cfg11.bit.cylinders+1;
-                num_inj_1 = cfg12.bit.injectors+1;
-                last_num_inj_1 = cfg12.bit.injectors+1;
+		/* All Tables */
+		for (i=0;i<firmware->total_tables;i++)
+		{
+			z_page = firmware->table_params[i]->z_page;
+			if (firmware->page_params[z_page]->reqfuel_offset < 0)
+				continue;
+			page = z_page;
 
-		divider_1 = ms_data[page][firmware->page_params[page]->divider_offset];
-		last_divider_1 = divider_1;
-		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
+			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
+			cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
+			firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
+			firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
+			firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
+			firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
 
-		/* ReqFuel Total */
-                tmp = (float)(num_inj_1)/(float)(divider_1);
-                tmp *= (float)reqfuel;
-                tmp /= 10.0;
-                req_fuel_total_1 = tmp;
-                last_req_fuel_total_1 = tmp;
+			firmware->rf_params[i]->divider = ms_data[page][firmware->page_params[page]->divider_offset];
+			firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
+			reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
 
-		/* Injections per cycle */
-		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider_1);
-		if (num_squirts_1 < 1 )
-			num_squirts_1 = 1;
-		last_num_squirts_1 = num_squirts_1;
+			/* ReqFuel Total */
+			tmp = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
+			tmp *= (float)reqfuel;
+			tmp /= 10.0;
+			firmware->rf_params[i]->req_fuel_total = tmp;
+			firmware->rf_params[i]->last_req_fuel_total = tmp;
 
+			/* Injections per cycle */
+			firmware->rf_params[i]->num_squirts = (float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
+			if (firmware->rf_params[i]->num_squirts < 1 )
+				firmware->rf_params[i]->num_squirts = 1;
+			firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
 
-		/* Table 2 */
-		page = 1;
-		cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
-		cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
-		num_cyls_2 = cfg11.bit.cylinders+1;
-		last_num_cyls_2 = cfg11.bit.cylinders+1;
-                num_inj_2 = cfg12.bit.injectors+1;
-                last_num_inj_2 = cfg12.bit.injectors+1;
-
-		divider_2 = ms_data[page][firmware->page_params[page]->divider_offset];
-		last_divider_2 = divider_2;
-		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
-
-		/* ReqFuel Total */
-                tmp = (float)(num_inj_2)/(float)(divider_2);
-                tmp *= (float)reqfuel;
-                tmp /= 10.0;
-                req_fuel_total_2 = tmp;
-                last_req_fuel_total_2 = tmp;
-
-		/* Injections per cycle */
-		num_squirts_2 =	(float)(num_cyls_2)/(float)(divider_2);
-		if (num_squirts_2 < 1 )
-			num_squirts_2 = 1;
-		last_num_squirts_2 = num_squirts_2;
-
-		set_reqfuel_color(BLACK,page);
+			set_reqfuel_color(BLACK,i);
+		}
 	}
 	else
 	{
@@ -1123,36 +1009,42 @@ void update_ve_const()
 		 * in the MS.  
 		 * 
 		 */
-		/* Table 1 */
-		page = 0;
-		cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
-		cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
-		num_cyls_1 = cfg11.bit.cylinders+1;
-		last_num_cyls_1 = cfg11.bit.cylinders+1;
-                num_inj_1 = cfg12.bit.injectors+1;
-                last_num_inj_1 = cfg12.bit.injectors+1;
-		divider_1 = ms_data[page][firmware->page_params[page]->divider_offset];
-		last_divider_1 = divider_1;
-		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
-		alternate_1 = ms_data[page][firmware->page_params[page]->alternate_offset];
-		last_alternate_1 = alternate_1;
+		for (i=0;i<firmware->total_tables;i++)
+		{
+			z_page = firmware->table_params[i]->z_page;
+			if (firmware->page_params[z_page]->reqfuel_offset < 0)
+				continue;
+			page = z_page;
 
-		/* ReqFuel Total */
-                tmp = (float)(num_inj_1)/
-			((float)(divider_1)*((float)(alternate_1)+1.0));
-                tmp *= (float)reqfuel;
-                tmp /= 10.0;
-                req_fuel_total_1 = tmp;
-                last_req_fuel_total_1 = tmp;
+			cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];	
+			cfg12.value = ms_data[page][firmware->page_params[page]->cfg12_offset];	
+			firmware->rf_params[i]->num_cyls = cfg11.bit.cylinders+1;
+			firmware->rf_params[i]->last_num_cyls = cfg11.bit.cylinders+1;
+			firmware->rf_params[i]->num_inj = cfg12.bit.injectors+1;
+			firmware->rf_params[i]->last_num_inj = cfg12.bit.injectors+1;
+			firmware->rf_params[i]->divider = ms_data[page][firmware->page_params[page]->divider_offset];
+			firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
+			reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
+			firmware->rf_params[i]->alternate = ms_data[page][firmware->page_params[page]->alternate_offset];
+			firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
 
-		/* Injections per cycle */
-		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider_1);
-		if (num_squirts_1 < 1 )
-			num_squirts_1 = 1;
-		last_num_squirts_1 = num_squirts_1;
+			/* ReqFuel Total */
+			tmp = (float)(firmware->rf_params[i]->num_inj)/
+				((float)(firmware->rf_params[i]->divider)*((float)(firmware->rf_params[i]->alternate)+1.0));
+			tmp *= (float)reqfuel;
+			tmp /= 10.0;
+			firmware->rf_params[i]->req_fuel_total = tmp;
+			firmware->rf_params[i]->last_req_fuel_total = tmp;
 
-		set_reqfuel_color(BLACK,page);
-	}	// End of B&G specific code...
+			/* Injections per cycle */
+			firmware->rf_params[i]->num_squirts =	(float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
+			if (firmware->rf_params[i]->num_squirts < 1 )
+				firmware->rf_params[i]->num_squirts = 1;
+			firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
+
+			set_reqfuel_color(BLACK,i);
+		}	// End of B&G specific code...
+	}
 
 
 	/* Update all on screen controls (except bitfields (done above)*/
@@ -1165,6 +1057,7 @@ void update_ve_const()
 						update_widget,NULL);
 		}
 	}
+
 }
 
 
@@ -1270,7 +1163,7 @@ void update_widget(gpointer object, gpointer user_data)
 		else
 			dbg_func(g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"),CRITICAL);
 
-	 	if (use_color)
+		if (use_color)
 		{
 			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33);
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
@@ -1364,12 +1257,12 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (value < (upper-10))
 				ms_data[page][offset]+=10;
 			retval = TRUE;
-				break;
+			break;
 		case GDK_Page_Down:
 			if (value > (lower+10))
 				ms_data[page][offset]-=10;
 			retval = TRUE;
-				break;
+			break;
 		case GDK_plus:
 		case GDK_KP_Add:
 		case GDK_KP_Equal:
@@ -1377,13 +1270,13 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			if (value < (upper-1))
 				ms_data[page][offset]+=1;
 			retval = TRUE;
-				break;
+			break;
 		case GDK_minus:
 		case GDK_KP_Subtract:
 			if (value > (lower+1))
 				ms_data[page][offset]-=1;
 			retval = TRUE;
-				break;
+			break;
 		case GDK_Escape:
 			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);

@@ -68,6 +68,7 @@ struct Firmware_Details
 	gchar *page_cmd;	/*! Command to send to change pages ... */
 	struct Page_Params **page_params;/*! special vars per page */
 	struct Table_Params **table_params;/*! details each table */
+	struct Req_Fuel_Params **rf_params;/*! req_fuel params */
 };
 
 /*! 
@@ -90,6 +91,7 @@ struct Reqd_Fuel
         gfloat actual_inj_flow;		/*! injector flow rate (lbs/hr) */
         gfloat target_afr;		/*! Air fuel ratio 10-25.5 */
         gint page;			/*! Which page is this for */
+	gint table_num;			/*! Which table this refers to */
 	gboolean visible;		/*! Is it visible? */
 };
 
@@ -217,6 +219,7 @@ struct Table_Params
 	gchar *x_conv_expr;	/*! x conversion expression */
 	gboolean x_disp_float;	/*! display as a float */
 	gint x_disp_precision;	/*! how many decimal places */
+
 	gint y_page;		/*! what page the load (Y axis) resides in */
 	gint y_base;		/*! where load table starts  (Y Axis) */
 	gint y_bincount;	/*! how many load bins (Y axis) */
@@ -224,6 +227,7 @@ struct Table_Params
 	gchar *y_conv_expr;	/*! y conversion expression */
 	gboolean y_disp_float;	/*! display as a float */
 	gint y_disp_precision;	/*! how many decimal places */
+
 	gint z_page;		/*! what page the vetable resides in */
 	gint z_base;		/*! where the vetable starts */
 	gchar *z_suffix;	/*! text suffix used on 3D view */
@@ -269,6 +273,30 @@ struct Canidate
 	struct Page_Params **page_params;/*! special vars per page */
 	struct Table_Params **table_params;/*! details on ve/rpm/load tables*/
 };
+
+
+/*!
+ \brief The Req_Fuel_Params structure is used to store the current and last
+ values of the interdependant required fuel parameters for the function
+ that verifies req_fuel status and downloads it.  There is one structure
+ allocated PER Table (even if the table's aren't fuel..)
+ */
+struct Req_Fuel_Params
+{
+	gint num_squirts;
+	gint num_cyls;
+	gint num_inj;
+	gint divider;
+	gint alternate;
+	gint last_num_squirts;
+	gint last_num_cyls;
+	gint last_num_inj;
+	gint last_divider;
+	gint last_alternate;
+	gfloat req_fuel_total;
+	gfloat last_req_fuel_total;
+};
+
 
 /*!
  \brief the Command struct is used to store details on the commands that

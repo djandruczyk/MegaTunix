@@ -129,6 +129,7 @@ gboolean signal_read_rtvars()
 	gint length = 0;
 	extern gboolean connected;
 	extern GAsyncQueue *io_queue;
+	extern gboolean rtvars_loaded;
 	static gint errcount = 0;
 
 	length = g_async_queue_length(io_queue);
@@ -146,6 +147,8 @@ gboolean signal_read_rtvars()
 		stop_realtime_tickler();
 		errcount = 0;
 	}
+	if (!rtvars_loaded)
+		return TRUE;
 	if (connected)
 		io_cmd(IO_REALTIME_READ,NULL);			
 	else
