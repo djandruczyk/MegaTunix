@@ -84,6 +84,7 @@ void leave(GtkWidget *, gpointer *);
 int std_button_handler(GtkWidget *, gpointer *);
 void text_entry_handler(GtkWidget *, gpointer *);
 void update_statusbar(GtkWidget *, int, gchar *);
+int calc_reqd_fuel_func(GtkWidget *, gpointer *);
 
 /* gui_handlers.c */
 

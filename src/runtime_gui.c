@@ -27,75 +27,320 @@ int build_runtime(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
+	GtkWidget *vbox3;
 	GtkWidget *hbox;
 	GtkWidget *frame;
 	GtkWidget *label;
-	GtkWidget *scale;
+	GtkWidget *entry;
 	GtkWidget *sep;
-	GtkObject *adj;
 
 	//	memset(runtime_data,0,sizeof(struct v1_2_Runtime_Gui));
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
-	frame = gtk_frame_new("Real Time Variables");
+	frame = gtk_frame_new("Real-Time Variables");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-	vbox2 = gtk_vbox_new(FALSE,0);
+	vbox2 = gtk_vbox_new(FALSE,10);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-//	hbox = gtk_hbox_new(FALSE,0);
-//	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
+	hbox = gtk_hbox_new(FALSE,10);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
 
-	label = gtk_label_new("Battery Voltage");
-        gtk_box_pack_start(GTK_BOX(vbox2),label,TRUE,TRUE,0);
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,10);
+	label = gtk_label_new("Seconds");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("MAP (Kpa)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Coolant Temp (deg F)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Batt Voltage");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Gamma");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
 
-        adj = gtk_adjustment_new((float)0,1.0,18.0,1.0,1.0,1.0);
-        scale = gtk_hscale_new(GTK_ADJUSTMENT(adj));
-	runtime_data.batt_adj = adj;
-        gtk_scale_set_digits(GTK_SCALE(scale),1);
-        gtk_box_pack_start(GTK_BOX(vbox2),scale,TRUE,TRUE,0);
-        gtk_range_set_update_policy(GTK_RANGE (scale),
-                        GTK_UPDATE_CONTINUOUS);
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.secl_val = entry;/*copy pointer to struct for update */
 
-	sep = gtk_hseparator_new();
-        gtk_box_pack_start(GTK_BOX(vbox2),sep,TRUE, TRUE, 0);
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.map_val = entry;/*copy pointer to struct for update */
 
-	label = gtk_label_new("Throttle Position");
-        gtk_box_pack_start(GTK_BOX(vbox2),label,TRUE,TRUE,0);
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.clt_val = entry;/*copy pointer to struct for update */
 
-        adj = gtk_adjustment_new((float)0,1.0,255.0,1.0,1.0,1.0);
-        scale = gtk_hscale_new(GTK_ADJUSTMENT(adj));
-	runtime_data.tps_adj = adj;
-        gtk_scale_set_digits(GTK_SCALE(scale),1);
-        gtk_box_pack_start(GTK_BOX(vbox2),scale,TRUE,TRUE,0);
-        gtk_range_set_update_policy(GTK_RANGE (scale),
-                        GTK_UPDATE_CONTINUOUS);
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.batt_val = entry;/*copy pointer to struct for update */
 
-	//	
-	/* Not written yet */
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.gammae_val = entry;/*copy pointer to struct for update */
+
+	sep = gtk_vseparator_new();
+	gtk_box_pack_start(GTK_BOX(hbox),sep,TRUE,FALSE,0);
+
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	label = gtk_label_new("Barometer (Kpa)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Manifold Air Temp (F)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Throttle Pos (%)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("RPM");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Pulse Width (ms)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.baro_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.mat_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.tps_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.rpm_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.pw_val = entry;/*copy pointer to struct for update */
+
+	/* Corrections/Enrichments frame */
+
+	frame = gtk_frame_new("Corrections/Enrichments (Percent)");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	vbox2 = gtk_vbox_new(FALSE,10);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+
+	hbox = gtk_hbox_new(FALSE,10);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,FALSE,0);
+
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,10);
+	label = gtk_label_new("EGO");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Barometer                  ");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Warmup");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.egocorr_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.barocorr_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.warmcorr_val = entry;/*copy pointer to struct for update */
+
+	sep = gtk_vseparator_new();
+	gtk_box_pack_start(GTK_BOX(hbox),sep,TRUE,FALSE,0);
+
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	label = gtk_label_new("Air Density ");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Volumetric Efficiency");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+	label = gtk_label_new("Acceleration (millisec)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox3),label,FALSE,FALSE,0);
+
+	vbox3 = gtk_vbox_new(TRUE,7);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox3,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.aircorr_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.vecurr_val = entry;/*copy pointer to struct for update */
+
+	entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry),4);
+	gtk_widget_set_usize(entry,64,20);
+//	gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	runtime_data.tpsaccel_val = entry;/*copy pointer to struct for update */
+
+
+
+
 	return TRUE;
 }
 
 void update_runtime_vars()
 {
-//	char buff[10];
+	char buff[10];
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?
 	 * Makes the code a little uglier, but the gui won't
 	 * flicker the text widgets at high update rates
 	 */
+	gdk_threads_enter();
+	if (out.secl != out_last.secl)
+	{
+		g_snprintf(buff,10,"%i",out.secl);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.secl_val),buff);
+	}
+	if (out.map != out_last.map)
+	{
+		g_snprintf(buff,10,"%i",out.map);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.map_val),buff);
+	}
+	if (out.clt != out_last.clt)
+	{
+		g_snprintf(buff,10,"%i",out.clt);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.clt_val),buff);
+	}
 	if (out.batt != out_last.batt)
-		gtk_adjustment_set_value(GTK_ADJUSTMENT(runtime_data.batt_adj),\
-				out.batt);
+	{
+		g_snprintf(buff,10,"%.2f",out.batt);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.batt_val),buff);
+	}
+	if (out.gammae != out_last.gammae)
+	{
+		g_snprintf(buff,10,"%i",out.gammae);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.gammae_val),buff);
+	}
+	if (out.baro != out_last.baro)
+	{
+		g_snprintf(buff,10,"%i",out.baro);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.baro_val),buff);
+	}
+	if (out.mat != out_last.mat)
+	{
+		g_snprintf(buff,10,"%i",out.mat);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.mat_val),buff);
+	}
 	if (out.tps != out_last.tps)
-		gtk_adjustment_set_value(GTK_ADJUSTMENT(runtime_data.tps_adj),\
-				out.tps*51);
-//	if (out.mat != out_last.mat)
-//	{
-//		g_snprintf(buff,10,"%.2f",out.mat);
-//		gtk_entry_set_text(GTK_ENTRY(runtime_data.mat_val),buff);
-//	}
+	{
+		g_snprintf(buff,10,"%i",out.tps);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.tps_val),buff);
+	}
+	if (out.rpm != out_last.rpm)
+	{
+		g_snprintf(buff,10,"%i",out.rpm);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.rpm_val),buff);
+	}
+	if (out.pw != out_last.pw)
+	{
+		g_snprintf(buff,10,"%.1f",out.pw);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.pw_val),buff);
+	}
+	if (out.egocorr != out_last.egocorr)
+	{
+		g_snprintf(buff,10,"%i",out.egocorr);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.egocorr_val),buff);
+	}
+	if (out.barocorr != out_last.barocorr)
+	{
+		g_snprintf(buff,10,"%i",out.barocorr);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.barocorr_val),buff);
+	}
+	if (out.warmcorr != out_last.warmcorr)
+	{
+		g_snprintf(buff,10,"%i",out.warmcorr);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.warmcorr_val),buff);
+	}
+	if (out.aircorr != out_last.aircorr)
+	{
+		g_snprintf(buff,10,"%i",out.aircorr);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.aircorr_val),buff);
+	}
+	if (out.vecurr != out_last.vecurr)
+	{
+		g_snprintf(buff,10,"%i",out.vecurr);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.vecurr_val),buff);
+	}
+	if (out.tpsaccel != out_last.tpsaccel)
+	{
+		g_snprintf(buff,10,"%i",out.tpsaccel);
+		gtk_entry_set_text(GTK_ENTRY(runtime_data.tpsaccel_val),buff);
+	}
+	gdk_threads_leave();
 }
 	

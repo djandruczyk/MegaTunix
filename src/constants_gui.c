@@ -27,7 +27,7 @@ int build_constants(GtkWidget *parent_frame)
 	GtkWidget *vbox3;
 	GtkWidget *entry;
 	GtkWidget *hbox;
-	GtkWidget *hbox2;
+//	GtkWidget *hbox2;
 	GtkWidget *hbox3;
 	GtkWidget *label;
 	GtkWidget *frame;
@@ -40,7 +40,7 @@ int build_constants(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
-	vbox2 = gtk_vbox_new(FALSE,0);
+	vbox2 = gtk_vbox_new(FALSE,4);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
 
 	frame = gtk_frame_new("Required Fuel - One Cylinder (ms)");
@@ -49,6 +49,9 @@ int build_constants(GtkWidget *parent_frame)
 	hbox3 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox3);
 	button = gtk_button_new_with_label("Calculate\nRequired Fuel...");
+	gtk_signal_connect(GTK_OBJECT(button), "clicked",
+			GTK_SIGNAL_FUNC(calc_reqd_fuel_func),
+				NULL);
 	
 	gtk_box_pack_start(GTK_BOX(hbox3),button,FALSE,FALSE,0);
 
@@ -78,7 +81,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	entry = gtk_entry_new();
 	gtk_widget_set_usize(entry,64,20);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,4);
 	gtk_signal_connect(GTK_OBJECT(entry),"activate",
 			GTK_SIGNAL_FUNC (text_entry_handler),
 			(gpointer)INJ_OPEN_TIME);
@@ -91,7 +94,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	entry = gtk_entry_new();
 	gtk_widget_set_usize(entry,64,20);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,4);
 	gtk_signal_connect(GTK_OBJECT(entry),"activate",
 			GTK_SIGNAL_FUNC (text_entry_handler),
 			(gpointer)BATT_CORR);
@@ -110,7 +113,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	entry = gtk_entry_new();
 	gtk_widget_set_usize(entry,64,20);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,4);
 	gtk_signal_connect(GTK_OBJECT(entry),"activate",
 			GTK_SIGNAL_FUNC (text_entry_handler),
 			(gpointer)PWM_CUR_LIM);
@@ -123,7 +126,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	entry = gtk_entry_new();
 	gtk_widget_set_usize(entry,64,20);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,4);
 	gtk_signal_connect(GTK_OBJECT(entry),"activate",
 			GTK_SIGNAL_FUNC (text_entry_handler),
 			(gpointer)PWM_TIME_THRES);
@@ -138,9 +141,11 @@ int build_constants(GtkWidget *parent_frame)
 	vbox3 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox3);
 
+	hbox3 = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),hbox3,FALSE,FALSE,4);
 	entry = gtk_entry_new();
 	gtk_widget_set_usize(entry,64,20);
-	gtk_box_pack_start(GTK_BOX(vbox3),entry,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox3),entry,FALSE,FALSE,65);
 	gtk_signal_connect(GTK_OBJECT(entry),"activate",
 			GTK_SIGNAL_FUNC (text_entry_handler),
 			(gpointer)FAST_IDLE_THRES);

@@ -37,7 +37,6 @@ int build_comms(GtkWidget *parent_frame)
 	GtkWidget *label;
 	GtkWidget *spinner;
 	GtkAdjustment *adj;
-	GSList *group;
 	char buff[10];
 
 	vbox = gtk_vbox_new(FALSE,0);

@@ -109,3 +109,74 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 			message);
 }
 
+int calc_reqd_fuel_func(GtkWidget *widget, gpointer *data)
+{
+	GtkWidget *window;
+	GtkWidget *button;
+	GtkWidget *entry;
+	GtkWidget *frame;
+	GtkWidget *vbox;
+	GtkWidget *vbox2;
+	GtkWidget *hbox;
+	GtkWidget *label;
+
+	printf("Build required fuel window\n");
+	window = gtk_window_new(GTK_WINDOW_DIALOG);
+	gtk_widget_set_usize(window,250,163);
+	gtk_window_set_title(GTK_WINDOW(window),"Required Fuel Calc");
+	gtk_container_set_border_width(GTK_CONTAINER(window),10);
+
+	vbox = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(window),vbox);
+
+	frame = gtk_frame_new("Constants for your vehicle");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	hbox = gtk_hbox_new(FALSE,10);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	
+	/* left column */
+	vbox2 = gtk_vbox_new(TRUE,2);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	label = gtk_label_new("Engine Displacement (CID)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
+	label = gtk_label_new("Number of Cylinders");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
+	label = gtk_label_new("Injector Flow (lbs/hr)");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
+	label = gtk_label_new("Air-Fuel Ratio");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(vbox2),label,FALSE,FALSE,0);
+
+	/* right column */
+	vbox2 = gtk_vbox_new(TRUE,2);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_widget_set_usize(entry,64,20);
+	gtk_box_pack_start(GTK_BOX(vbox2),entry,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_widget_set_usize(entry,64,20);
+	gtk_box_pack_start(GTK_BOX(vbox2),entry,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_widget_set_usize(entry,64,20);
+	gtk_box_pack_start(GTK_BOX(vbox2),entry,FALSE,FALSE,0);
+	entry = gtk_entry_new();
+	gtk_widget_set_usize(entry,64,20);
+	gtk_box_pack_start(GTK_BOX(vbox2),entry,FALSE,FALSE,0);
+	
+	
+	frame = gtk_frame_new("Exit");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	hbox = gtk_hbox_new(TRUE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	button = gtk_button_new_with_label("OK");
+	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
+	button = gtk_button_new_with_label("Cancel");
+	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,15);
+
+	gtk_widget_show_all(window);
+	
+	return TRUE;
+}

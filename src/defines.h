@@ -123,16 +123,16 @@ struct ms_data_v1_and_v2 {
 	union engine	engine;		/* Variable bit-field to hold engine current status */
 	unsigned char	baro;		/* Barometer ADC Raw Reading - KPa (0 - 255) */
 	unsigned char	map;		/* Manifold Absolute Pressure ADC Raw Reading - KPa (0 - 255) */
-	float		mat;		/* Manifold Air Temp ADC Raw Reading - counts (0 - 255) */
-	float		clt;		/* Coolant Temperature ADC Raw Reading - counts (0 - 255) */
-	float		tps;		/* Throttle Position Sensor ADC Raw Reading - counts, represents 0 - 5 volts */
-	float		batt;		/* Battery Voltage ADC Raw Reading - counts */
-	float		ego;		/* Exhaust Gas Oxygen ADC Raw Reading - counts */
+	unsigned char	mat;		/* Manifold Air Temp converted via lookuptable */
+	unsigned char	clt;		/* Coolant Temperature converted via lookuptable */
+	unsigned char	tps;		/* Throttle Position Sensor open percentage (0-100) */
+	float		batt;		/* Battery Voltage ADC Raw Reading - converted to volts */
+	float		ego;		/* Exhaust Gas Oxygen ADC Raw Reading - converted to volts */
 	unsigned char	egocorr;	/* Oxygen Sensor Correction */
 	unsigned char	aircorr;	/* Air Density Correction lookup - percent */
 	unsigned char	warmcorr;	/* Total Warmup Correction - percent */
-	unsigned short	rpm;		/* Computed engine RPM - rpm/100 */
-	float		pw;		/* injector squirt time in 1/10 millesec (0 to 25.5 millisec) - applied */
+	unsigned short	rpm;		/* Computed engine RPM - rpm */
+	float		pw;		/* injector squirt time in millesec (0 to 25.5 millisec) - applied */
 	unsigned char	tpsaccel;	/* Acceleration enrichment - percent */
 	unsigned char	barocorr;	/* Barometer Lookup Correction - percent */
 	unsigned char	gammae;		/* Total Gamma Enrichments - percent */

@@ -19,23 +19,23 @@
 
 struct v1_2_Runtime_Gui
 {
-	GtkObject *secl_adj;		/* Counter entry */
-	GtkObject *baro_adj;		/* baro entry from MS */
-	GtkObject *map_adj;		/* map entry from MS */
-	GtkObject *mat_adj;		/* mat entry from MS */
-	GtkObject *clt_adj;		/* clt entry from MS */
-	GtkObject *tps_adj;		/* tps entry from MS */
-	GtkObject *batt_adj;		/* batt entry from MS */
+	GtkWidget *secl_val;		/* Counter entry */
+	GtkWidget *baro_val;		/* baro entry from MS */
+	GtkWidget *map_val;		/* map entry from MS */
+	GtkWidget *mat_val;		/* mat entry from MS */
+	GtkWidget *clt_val;		/* clt entry from MS */
+	GtkWidget *tps_val;		/* tps entry from MS */
+	GtkWidget *batt_val;		/* batt entry from MS */
 	GtkWidget *ego_val;		/* ego entry from MS */
-	GtkWidget *egocorr_val;		/* ego entry from MS */
-	GtkWidget *aircorr_val;		/* ego entry from MS */
-	GtkWidget *warmcorr_val;	/* ego entry from MS */
-	GtkWidget *rpm_val;		/* ego entry from MS */
-	GtkWidget *pw_val;		/* ego entry from MS */
-	GtkWidget *tpsaccel_val;	/* ego entry from MS */
-	GtkWidget *barocorr_val;	/* ego entry from MS */
-	GtkWidget *gammae_val;		/* ego entry from MS */
-	GtkWidget *vecurr_val;		/* ego entry from MS */
+	GtkWidget *egocorr_val;		/* egocorr entry from MS */
+	GtkWidget *aircorr_val;		/* aircorr entry from MS */
+	GtkWidget *warmcorr_val;	/* warmcorr entry from MS */
+	GtkWidget *rpm_val;		/* rpm entry from MS */
+	GtkWidget *pw_val;		/* pw entry from MS */
+	GtkWidget *tpsaccel_val;	/* tpsaccel entry from MS */
+	GtkWidget *barocorr_val;	/* barocorr entry from MS */
+	GtkWidget *gammae_val;		/* gammae entry from MS */
+	GtkWidget *vecurr_val;		/* vecurr entry from MS */
 };
 
 
