@@ -209,14 +209,14 @@ struct Page_Params
  */
 struct Table_Params
 {
+	gint x_page;		/*! what page the rpm (X axis) resides in */
+	gint y_page;		/*! what page the load (Y axis) resides in */
 	gint tbl_page;		/*! what page the vetable resides in */
-	gint rpm_page;		/*! what page the rpm array resides in */
-	gint load_page;		/*! what page the load array resides in */
+	gint x_base;		/*! where rpm table starts (X axis) */
+	gint y_base;		/*! where load table starts  (Y Axis) */
 	gint tbl_base;		/*! where the vetable starts */
-	gint rpm_base;		/*! where rpm table starts */
-	gint load_base;		/*! where load table starts */
-	gint rpm_bincount;	/*! how many RPM bins */
-	gint load_bincount;	/*! how many load bins... */
+	gint x_bincount;	/*! how many RPM bins (X axis) */
+	gint y_bincount;	/*! how many load bins (Y axis) */
 	gboolean is_spark;	/*! is this a spark table?? */
 	gchar *table_name;	/*! Name for the 3D Table editor title */
 };

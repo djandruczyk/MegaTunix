@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <structures.h>
 #include <sys/types.h>
+#include <threads.h>
 #include <unistd.h>
 #include <vex_support.h>
 #ifdef __WIN32__
@@ -467,7 +468,6 @@ void restore_all_ms_settings(gchar *filename)
 	gint num_keys = 0;
 	extern gint **ms_data;
 	extern gint **ms_data_last;
-	extern GList ***ve_widgets;
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)

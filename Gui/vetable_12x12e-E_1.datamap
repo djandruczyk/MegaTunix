@@ -74,10 +74,12 @@ page=1
 bind_to_list=burners
 
 [3d_view_button]
-keys=page,table_num,z_source
-key_types=_INT_,_INT_,_STRING_
+keys=page,table_num,x_source,y_source,z_source
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
+x_source=raw_rpm
+y_source=mapcount
 z_source=vecurr1
 
 [recalc_scaling_button]

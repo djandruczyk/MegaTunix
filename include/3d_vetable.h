@@ -60,8 +60,8 @@ struct Ve_View_3D
 {
 	gint beginX;
 	gint beginY;
-	gint active_load;
-	gint active_rpm;
+	gint active_y;
+	gint active_x;
 	gfloat dt;
 	gfloat sphi;
 	gfloat stheta;
@@ -69,30 +69,32 @@ struct Ve_View_3D
 	gfloat zNear;
 	gfloat zFar;
 	gfloat aspect;
-	gfloat rpm_div;
-	gfloat load_div;
-	gfloat ve_div;
+	gfloat x_div;
+	gfloat y_div;
+	gfloat z_div;
 	gfloat h_strafe;
 	gfloat v_strafe;
-	gint rpm_max;
-	gint load_max;
-	gint ve_max;
-	gint ve_min;
+	gint x_max;
+	gint y_max;
+	gint z_max;
+	gint z_min;
+	gchar *x_source;
+	gchar *y_source;
 	gchar *z_source;
 	GtkWidget *drawing_area;
 	GtkWidget *window;
 	GtkWidget *burn_but;
-	gint tbl_page;
-	gint rpm_page;
-	gint load_page;
-	gint table_num;
-	gint load_bincount;
-	gint rpm_bincount;
+	gint y_base;
+	gint y_page;
+	gint y_bincount;
 	gint tbl_base;
-	gint rpm_base;
-	gint load_base;
+	gint tbl_page;
+	gint x_base;
+	gint x_page;
+	gint x_bincount;
 	gboolean is_spark;
 	gchar *table_name;
+	gint table_num;
 };
 
 #endif

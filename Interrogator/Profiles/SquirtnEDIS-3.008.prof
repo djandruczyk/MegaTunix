@@ -20,14 +20,26 @@ TotalPages=2
 [table_0]
 is_spark=FALSE
 table_name=VE-Table 0, MSnEDIS-3.008
-rpm_page=0
-load_page=0
+x_page=0
+y_page=0
 tbl_page=0
+x_base_offset=100
+y_base_offset=108
 tbl_base_offset=0
-rpm_base_offset=100
-load_base_offset=108
-rpm_bincount=8
-load_bincount=8
+x_bincount=8
+y_bincount=8
+
+[table_1]
+is_spark=TRUE
+table_name=Spark Advance Table, MSnEDIS-3.008
+x_page=1
+y_page=1
+tbl_page=1
+x_base_offset=64
+y_base_offset=72
+tbl_base_offset=0
+x_bincount=8
+y_bincount=8
 
 [page_0]
 length=125
@@ -39,18 +51,6 @@ rpmk_offset=98
 cfg11_offset=116
 cfg12_offset=117
 cfg13_offset=118
-
-[table_1]
-is_spark=TRUE
-table_name=Spark Advance Table, MSnEDIS-3.008
-rpm_page=1
-load_page=1
-tbl_page=1
-tbl_base_offset=0
-rpm_base_offset=64
-load_base_offset=72
-rpm_bincount=8
-load_bincount=8
 
 [page_1]
 length=95

@@ -49,8 +49,8 @@ void rescale_table(void * data)
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
 	table_num = (gint)g_object_get_data(G_OBJECT(scaler),"table_num");
 	tbl_base = firmware->table_params[table_num]->tbl_base;
-	rpm_bins = firmware->table_params[table_num]->rpm_bincount;
-	load_bins = firmware->table_params[table_num]->load_bincount;
+	rpm_bins = firmware->table_params[table_num]->x_bincount;
+	load_bins = firmware->table_params[table_num]->y_bincount;
 	is_spark = firmware->table_params[table_num]->is_spark;
 	tbl_page = firmware->table_params[table_num]->tbl_page;
 
