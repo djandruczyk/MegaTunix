@@ -30,8 +30,9 @@ static gint max_viewables = 0;
 static gboolean adj_scale = TRUE;
 static gboolean blocked = FALSE;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
-static gfloat hue_angle = -60.0;
-static gfloat saturation = 1.0;
+static gfloat hue = -60.0;
+static gfloat col_sat = 1.0;
+static gfloat col_val = 1.0;
 
 static struct Logview_Data *lv_data = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
@@ -96,8 +97,14 @@ void present_viewer_choices(void)
 
 	}
 	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
+			G_CALLBACK(reenable_select_params_button),
+			NULL);
+	g_signal_connect_swapped(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
+	g_signal_connect_swapped(G_OBJECT(window),"delete_event",
+			G_CALLBACK(reenable_select_params_button),
+			NULL);
 	g_signal_connect_swapped(G_OBJECT(window),"delete_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -197,9 +204,9 @@ void present_viewer_choices(void)
 
 	button = gtk_button_new_with_label("Close");
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,TRUE,0);
-//	g_signal_connect_swapped(G_OBJECT(button),"clicked",
-//			G_CALLBACK(reenable_select_log_button),
-//			NULL);
+	g_signal_connect_swapped(G_OBJECT(button),"clicked",
+			G_CALLBACK(reenable_select_params_button),
+			NULL);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -209,10 +216,10 @@ void present_viewer_choices(void)
 }
 
 
-gboolean reenable_select_log_button(GtkWidget *widget)
+gboolean reenable_select_params_button(GtkWidget *widget)
 {
 	extern GHashTable *dynamic_widgets;
-	gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button")),TRUE);
 	return FALSE;
 
 }
@@ -319,17 +326,29 @@ void populate_viewer()
 			{
 				v_value = (struct Viewable_Value *)g_hash_table_lookup(lv_data->traces,name);
 				lv_data->tlist = g_list_remove(lv_data->tlist,(gpointer)v_value);
-				if ((hue_angle > 0) && ((gint)hue_angle%780 == 0))
+				if ((hue > 0) && ((gint)hue%1110 == 0))
 				{
-					hue_angle-= 30;
-					saturation+= 0.2;
+					hue-= 30;
+					col_sat = 1.0;
+					col_val = 0.75;
+				//	printf("hue at 1110 deg, reducing to 1080, sat at 1.0, val at 0.75\n");
 				}
-				if ((hue_angle > 0) && ((gint)hue_angle%390 == 0)) /* phase shift */
+				if ((hue > 0) && ((gint)hue%780 == 0))
 				{
-					hue_angle-=30.0;
-					saturation+=0.2;
+					hue-= 30;
+					col_sat = 0.5;
+					col_val = 1.0;
+				//	printf("hue at 780 deg, reducing to 750, sat at 0.5, val at 1.0\n");
 				}
-				hue_angle -=60;
+				if ((hue > 0) && ((gint)hue%390 == 0)) /* phase shift */
+				{
+					hue-=30.0;
+					col_sat=1.0;
+					col_val = 1.0;
+				//	printf("hue at 390 deg, reducing to 360, sat at 0.5, val at 1.0\n");
+				}
+				hue -=60;
+			//	printf("angle at %f, sat %f, val %f\n",hue,col_sat,col_val);
 
 				/* Remove entry in from hash table */
 				g_hash_table_remove(lv_data->traces,name);
@@ -489,19 +508,23 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			break;
 
 		case TRACE:
-			hue_angle += 60;
+			hue += 60;
+			//printf("angle at %f, sat %f, val %f\n",hue,col_sat,col_val);
 
-			if ((hue_angle > 0) && ((gint)hue_angle%360 == 0))
+			if ((hue > 0) && ((gint)hue%360 == 0))
 			{
-				hue_angle+=30.0;
-				saturation-=0.2;
+				hue+=30.0;
+				col_sat=0.5;
+				col_val=1.0;
 			}
-			if ((hue_angle > 0) && ((gint)hue_angle%750 == 0))
+			if ((hue > 0) && ((gint)hue%750 == 0))
 			{
-				hue_angle+=30;
-				saturation-=0.2;
+				hue+=30;
+				col_sat=1.0;
+				col_val = 0.75;
 			}
-			color = (GdkColor)  get_colors_from_hue(hue_angle,1.0);
+			//printf("JBA angle at %f, sat %f, val %f\n",hue,col_sat,col_val);
+			color = (GdkColor)  get_colors_from_hue(hue,col_sat,col_val);
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
@@ -528,18 +551,19 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 /*!
  \brief get_colors_from_hue(gets a color back from an angle passed in degrees.
  The degrees represent the arc aroudn a color circle.
- \param hue_Angle (gfloat) degrees around the color circle
- \param sat (gfloat) saturation from 0-1.0
+ \param hue_(gfloat) degrees around the color circle
+ \param sat (gfloat) col_sat from 0-1.0
+ \param val (gfloat) col_val from 0-1.0
  \returns a GdkColor at the hue angle requested
  */
-GdkColor get_colors_from_hue(gfloat hue_angle, gfloat sat)
+GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	GdkColor color;
 	gfloat tmp = 0.0;	
 	gint i = 0;
 	gfloat fract = 0.0;
-	gfloat S = sat;	// using saturation of 1.0
-	gfloat V = 1.0;	// using Value of 1.0
+	gfloat S = sat;	// using col_sat of 1.0
+	gfloat V = val;	// using Value of 1.0
 	gfloat p = 0.0;
 	gfloat q = 0.0;
 	gfloat t = 0.0;
@@ -547,9 +571,9 @@ GdkColor get_colors_from_hue(gfloat hue_angle, gfloat sat)
 	gfloat g = 0.0;
 	gfloat b = 0.0;
 
-	while (hue_angle > 360.0)
-		hue_angle -= 360.0;
-	tmp = hue_angle/60.0;
+	while (hue > 360.0)
+		hue -= 360.0;
+	tmp = hue/60.0;
 	i = floor(tmp);
 	fract = tmp-i;
 
@@ -1135,8 +1159,9 @@ void set_playback_mode(void)
 	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
 	if (GTK_IS_RANGE(widget))
 		gtk_range_set_value(GTK_RANGE(widget),0.0);
-	hue_angle = -60.0;
-	saturation = 1.0;
+	hue = -60.0;
+	col_sat = 1.0;
+	col_val = 1.0;
 }
 
 
@@ -1159,8 +1184,9 @@ void set_realtime_mode(void)
 	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
 	if (GTK_IS_RANGE(widget))
 		gtk_range_set_value(GTK_RANGE(widget),100.0);
-	hue_angle = -60.0;
-	saturation = 1.0;
+	hue = -60.0;
+	col_sat = 1.0;
+	col_val = 1.0;
 }
 
 

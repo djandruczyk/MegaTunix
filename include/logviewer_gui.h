@@ -28,7 +28,7 @@ gboolean set_lview_choices_state(GtkWidget *, gpointer);
 gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
 struct Viewable_Value * build_v_value(GObject * );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
-GdkColor get_colors_from_hue(gfloat, gfloat);
+GdkColor get_colors_from_hue(gfloat, gfloat, gfloat);
 void draw_infotext();
 void draw_valtext(gboolean);
 gboolean rt_update_logview_traces(gboolean);
@@ -39,7 +39,7 @@ void set_realtime_mode(void);
 void set_playback_mode(void);
 void finish_logviewer(void);
 void populate_viewer(void);
-gboolean reenable_select_log_button(GtkWidget *);
+gboolean reenable_select_params_button(GtkWidget *);
 
 /* Prototypes */
 

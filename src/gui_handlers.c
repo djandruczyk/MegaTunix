@@ -682,6 +682,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case SELECT_PARAMS:
 			if (!interrogated)
 				break;
+			gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button")),FALSE);
 			present_viewer_choices();
 			break;
@@ -1204,7 +1205,7 @@ void update_widget(gpointer object, gpointer user_data)
 
 		if (use_color)
 		{
-			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33);
+			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33, 1.0);
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 		}
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
@@ -1214,7 +1215,7 @@ void update_widget(gpointer object, gpointer user_data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 		if (use_color)
 		{
-			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33);
+			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/255.0)*360.0,0.33, 1.0);
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
 		}
 	}
