@@ -388,6 +388,7 @@ void build_datalogging(GtkWidget *parent_frame)
 void start_datalogging(void)
 {
 	gchar * tmpbuf;
+	GtkWidget * widget = NULL;
 	if (logging_active)
 		return;   /* Logging already running ... */
 
@@ -400,7 +401,11 @@ void start_datalogging(void)
 	tmpbuf = g_strdup_printf("DataLogging Started...\n");
 	update_logbar(dlog_view,NULL,tmpbuf,TRUE,FALSE);
 	g_free(tmpbuf);
-	std_button_handler(NULL,GINT_TO_POINTER(START_REALTIME));
+	widget = gtk_button_new();
+	g_object_set_data(G_OBJECT(widget),"handler",
+			GINT_TO_POINTER(START_REALTIME));
+	std_button_handler(widget,NULL);
+	gtk_widget_destroy(widget);
 	return;
 }
 
