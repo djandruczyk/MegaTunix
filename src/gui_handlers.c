@@ -53,7 +53,8 @@ void leave(GtkWidget *widget, gpointer data)
 	stop_serial_thread();
 	/* Free all buffers */
 	close_serial();
-	close_datalog();
+	stop_datalogging();
+	close_logfile();
 	usleep(100000); /* make sure thread dies cleanly.. */
 	mem_dealloc();
 	gtk_main_quit();
@@ -203,6 +204,10 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case TRUNCATE_LOGFILE:
 			truncate_log();
+			break;
+		case CLOSE_LOGFILE:
+			stop_datalogging();
+			close_logfile();
 			break;
 		case START_DATALOGGING:
 			start_datalogging();

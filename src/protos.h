@@ -158,7 +158,7 @@ void check_filename(GtkWidget *, GtkFileSelection *);
 void truncate_log(void);
 void start_datalogging(void);
 void stop_datalogging(void);
-void close_datalog(void);
+void close_logfile(void);
 /* datalogging_gui.c */
 
 /* general_gui.c */

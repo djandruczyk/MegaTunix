@@ -28,6 +28,7 @@ gint log_opened=FALSE;
 GtkWidget *dlog_statbar;
 static GtkWidget *file_label;
 static int logfile;	/* DataLog File Handle*/
+static gchar * log_file_name;
 
 int build_datalogging(GtkWidget *parent_frame)
 {
@@ -71,6 +72,12 @@ int build_datalogging(GtkWidget *parent_frame)
 	file_label = gtk_label_new("No Log Selected Yet");
 	gtk_box_pack_start(GTK_BOX(hbox),file_label,FALSE,FALSE,30);
 
+	button = gtk_button_new_with_label("Close Log File");
+	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,0);
+	g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(CLOSE_LOGFILE));
+
 	button = gtk_button_new_with_label("Clear Log File");
 	gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
@@ -78,15 +85,6 @@ int build_datalogging(GtkWidget *parent_frame)
                         GINT_TO_POINTER(TRUNCATE_LOGFILE));
 
 	return TRUE;
-}
-
-void close_datalog(void)
-{
-	if (log_opened == TRUE)
-	{
-		close(logfile); 
-		printf("Closing Datalog file\n");
-	}
 }
 
 void create_dlog_filesel(void)
@@ -151,6 +149,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		else
 		{
 			log_opened=TRUE;
+			log_file_name = g_strdup(selected_filename);
 			gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
 			g_snprintf(buff,100,"DataLog File Opened");
 			update_statusbar(dlog_statbar,dlog_context_id,buff);
@@ -176,6 +175,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			else
 			{	
 				log_opened=TRUE;
+				log_file_name = g_strdup(selected_filename);
 				gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
 				g_snprintf(buff,100,"DataLog File Opened");
 				update_statusbar(dlog_statbar,
@@ -193,6 +193,19 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 	
 
+}
+
+void close_logfile(void)
+{
+	if (log_opened == TRUE)
+	{
+		close(logfile); 
+		printf("Closing Datalog file\n");
+		g_free(log_file_name);
+		gtk_label_set_text(GTK_LABEL(file_label),"No Log Selected Yet");
+		log_opened = FALSE;
+	
+	}
 }
 
 void truncate_log()
