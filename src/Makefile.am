@@ -31,8 +31,8 @@ megatunix_SOURCES = \
 	init.c \
 	lowlevel_gui.c \
 	main.c \
-	ms_constants.c \
 	notifications.c \
+	post_process.c \
 	req_fuel.c \
 	runtime_gui.c \
 	serialio.c \

@@ -79,7 +79,7 @@ INCLUDES = @PACKAGE_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJ
 
 bin_PROGRAMS = megatunix
 
-megatunix_SOURCES =  	Makefile 	c_gauge.h 	configfile.h 	constants.h 	datalogging.h 	defines.h 	globals.h 	lookuptables.h 	protos.h 	runtime_gui.h 	logo.h 	about_gui.c 	c_gauge.c 	comms_gui.c 	configfile.c 	constants_gui.c 	conversions.c 	core_gui.c 	dataio.c 	datalogging_gui.c 	enrichments_gui.c 	general_gui.c 	gui_handlers.c 	ignition.c 	init.c 	lowlevel_gui.c 	main.c 	ms_constants.c 	notifications.c 	req_fuel.c 	runtime_gui.c 	serialio.c 	threads.c 	tools_gui.c 	tuning_gui.c 	vetable_gui.c 
+megatunix_SOURCES =  	Makefile 	c_gauge.h 	configfile.h 	constants.h 	datalogging.h 	defines.h 	globals.h 	lookuptables.h 	protos.h 	runtime_gui.h 	logo.h 	about_gui.c 	c_gauge.c 	comms_gui.c 	configfile.c 	constants_gui.c 	conversions.c 	core_gui.c 	dataio.c 	datalogging_gui.c 	enrichments_gui.c 	general_gui.c 	gui_handlers.c 	ignition.c 	init.c 	lowlevel_gui.c 	main.c 	notifications.c 	post_process.c 	req_fuel.c 	runtime_gui.c 	serialio.c 	threads.c 	tools_gui.c 	tuning_gui.c 	vetable_gui.c 
 
 
 megatunix_LDADD = @PACKAGE_LIBS@
@@ -105,7 +105,7 @@ LDFLAGS = @LDFLAGS@
 megatunix_OBJECTS =  about_gui.o c_gauge.o comms_gui.o configfile.o \
 constants_gui.o conversions.o core_gui.o dataio.o datalogging_gui.o \
 enrichments_gui.o general_gui.o gui_handlers.o ignition.o init.o \
-lowlevel_gui.o main.o ms_constants.o notifications.o req_fuel.o \
+lowlevel_gui.o main.o notifications.o post_process.o req_fuel.o \
 runtime_gui.o serialio.o threads.o tools_gui.o tuning_gui.o \
 vetable_gui.o
 megatunix_DEPENDENCIES = 
@@ -125,7 +125,7 @@ DEP_FILES =  .deps/about_gui.P .deps/c_gauge.P .deps/comms_gui.P \
 .deps/core_gui.P .deps/dataio.P .deps/datalogging_gui.P \
 .deps/enrichments_gui.P .deps/general_gui.P .deps/gui_handlers.P \
 .deps/ignition.P .deps/init.P .deps/lowlevel_gui.P .deps/main.P \
-.deps/ms_constants.P .deps/notifications.P .deps/req_fuel.P \
+.deps/notifications.P .deps/post_process.P .deps/req_fuel.P \
 .deps/runtime_gui.P .deps/serialio.P .deps/threads.P .deps/tools_gui.P \
 .deps/tuning_gui.P .deps/vetable_gui.P
 SOURCES = $(megatunix_SOURCES)
