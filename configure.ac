@@ -112,6 +112,7 @@ MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$datadir/MegaTunix\\\" -DLOOKUPTABLE_D
 AC_SUBST(MEGATUNIX_DEFINES)
 
 AC_OUTPUT([
+megatunix.spec
 Makefile 
 mtxmatheval/Makefile
 src/Makefile

@@ -12,5 +12,5 @@ DEPDIR = ${subdirs}/.deps
 
 CLEANFILES = *~ core -rf autom4te.cache
 
-EXTRA_DIST = configure CREDITS AUTHORS TODO README INSTALL 
+EXTRA_DIST = configure CREDITS AUTHORS TODO README INSTALL megatunix.spec
 
