@@ -131,7 +131,7 @@ GtkWidget * get_raw_widget(gint page, gint offset)
 	{
 		raw = FALSE;
 		widget = g_list_nth_data(list,i);
-		raw = g_object_get_data(G_OBJECT(widget),"raw");
+		raw = (gboolean)g_object_get_data(G_OBJECT(widget),"raw");
 		if (raw)
 			return widget;
 		i++;

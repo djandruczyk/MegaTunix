@@ -92,6 +92,8 @@ EXPORT void finish_raweditor(void)
 			g_object_set_data(G_OBJECT(entry),"page",GINT_TO_POINTER(i));
 			g_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(j));
 			g_object_set_data(G_OBJECT(entry),"base",GINT_TO_POINTER(16));
+			g_object_set_data(G_OBJECT(entry),"lower_limit",GINT_TO_POINTER(0));
+			g_object_set_data(G_OBJECT(entry),"upper_limit",GINT_TO_POINTER(255));
 			g_object_set_data(G_OBJECT(entry),"raw",GINT_TO_POINTER(TRUE));
 			if (firmware->page_params[i]->is_spark)
 				g_object_set_data(G_OBJECT(entry),"ign_parm",GINT_TO_POINTER(TRUE));
@@ -103,6 +105,8 @@ EXPORT void finish_raweditor(void)
 					G_CALLBACK(entry_changed_handler),NULL);
 			g_signal_connect (G_OBJECT(entry), "activate",
 					G_CALLBACK(std_entry_handler),NULL);
+			g_signal_connect (G_OBJECT(entry), "key_press_event",
+					G_CALLBACK(key_event),NULL);
 
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),4);
 			gtk_entry_set_has_frame(GTK_ENTRY(entry),TRUE);

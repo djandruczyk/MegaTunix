@@ -186,7 +186,22 @@ void close_serial()
 void set_ms_page(gint ms_page)
 {
 	extern struct Firmware_Details *firmware;
+	static gint last_page = 0;
+	extern gint **ms_data;
+	extern gint **ms_data_last;
 	gint res = 0;
+	gint i =0;
+	extern gboolean tabs_loaded;
+
+	/*
+	if (ms_page == last_page)
+		return;
+	else if ((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0) || (memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0))
+	{
+		printf("\n\nset_ms_page, forcing burn cause of data not saved on page %i or %i\n",last_page,ms_page);
+		burn_ms_flash();
+	}
+	*/
 
 	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
 	
@@ -196,4 +211,8 @@ void set_ms_page(gint ms_page)
 	res = write(serial_params->fd,&ms_page,1);
 	if (res != 1)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i\n",ms_page),CRITICAL);
+	last_page = ms_page;
+
+	return;
+
 }

@@ -201,18 +201,15 @@ void writeto_ecu(void *ptr)
 
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	if (res != 1 )
-		dbg_func(__FILE__": writeto_ecu()\n\tSending write command FAILED!!!\n",CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED!!!\n",write_cmd),CRITICAL);
 	else
-		dbg_func(__FILE__": writeto_ecu()\n\tSending of write command to ECU succeeded\n",SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd),SERIAL_WR);
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 	if (res != count )
-		dbg_func(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n",CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n"),CRITICAL);
 	else
-		dbg_func(__FILE__": writeto_ecu()\n\tSending of value to ECU succeeded\n",SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
 	g_usleep(5000);
-
-	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change) && (page > 0)) 
-		set_ms_page(0);
 
 	g_free(write_cmd);
 
@@ -244,14 +241,6 @@ void burn_ms_flash()
 	}
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	/* doing this may NOT be necessary,  but who knows... */
-/*	if (firmware->multi_page)
-	{
-		set_ms_page(0);
-		g_usleep(50000);
-	}
-	*/
-
 	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
 	if (res != 1)
 	{
@@ -259,7 +248,7 @@ void burn_ms_flash()
 	}
 	g_usleep(5000);
 
-	dbg_func(__FILE__": burn_ms_flash()\n\tBurn to Flash\n",SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn to Flash page %i\n",i),SERIAL_WR);
 
 	flush_serial(serial_params->fd, TCIOFLUSH);
 copyover:

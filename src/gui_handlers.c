@@ -367,11 +367,17 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
 	gchar *text = NULL;
-	gint value = 0;
+	gfloat tmpf = 0;
+	gint tmpi = 0;
 	gint page = 0;
 	gint base = 0;
 	gint offset = 0;
 	gint dload_val = 0;
+	gint lower = 0;
+	gint upper = 0;
+	gint precision = 0;
+	gfloat real_value = 0.0;
+	gboolean is_float = FALSE;
 	gboolean ign_parm = 0;
 
 
@@ -389,11 +395,61 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	base = (gint)g_object_get_data(G_OBJECT(widget),"base");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
+	lower = (gint)g_object_get_data(G_OBJECT(widget),"lower_limit");
+	upper = (gint)g_object_get_data(G_OBJECT(widget),"upper_limit");
+	precision = (gint)g_object_get_data(G_OBJECT(widget),"precision");
+	is_float = (gboolean)g_object_get_data(G_OBJECT(widget),"is_float");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	value = (gint)strtol(text,NULL,base);
+	tmpi = (gint)strtol(text,NULL,base);
+	tmpf = g_ascii_strtod(text,NULL);
+	printf("base %i, lower %i, upper %i text %s int val %i, float val %f \n",base,lower,upper,text,tmpi,tmpf);
 	g_free(text);
-	dload_val = convert_before_download(widget,value);
+	/* This isn't quite correct, as the base can either be base10 
+	 * or base16, the problem is the limits are in base10
+	 */
+
+	if (tmpf > upper)
+		tmpf = upper;
+	if (tmpf < lower)
+		tmpf = lower;
+
+	if (tmpi > upper)
+		tmpi = upper;
+	if (tmpi < lower)
+		tmpi = lower;
+
+	if ((tmpf != (gfloat)tmpi) && (!is_float))
+		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",tmpi));
+
+	if (base == 10)
+	{
+		if (is_float)
+			dload_val = convert_before_download(widget,tmpf);
+		else
+			dload_val = convert_before_download(widget,tmpi);
+	}
+	else if (base == 16)
+		dload_val = convert_before_download(widget,tmpi);
+	else
+	{
+		dbg_func(g_strdup_printf(__FILE__": std_entry_handler()\n\tBase of textentry \"%i\" is invalid!!!\n",base),CRITICAL);
+		return TRUE;
+	}
+	/* What we are doing is doing the forware/reverse conversion which
+	 * will give us an exact value if the user inputs something in
+	 * between,  thus we can reset the display to a sane value...
+	 */
+	real_value = convert_after_upload(widget);
+	if (is_float)
+		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.*2$f",real_value,precision));
+	else
+	{
+		if (base == 10)
+			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)real_value));
+		else
+			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.2X",(gint)real_value));
+	}
 
 	write_ve_const(widget, page, offset, dload_val, ign_parm);
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
@@ -1028,6 +1084,7 @@ void update_widget(gpointer object, gpointer user_data)
 	GtkWidget * widget = object;
 	gint dl_type = -1;
 	gboolean temp_dep = FALSE;
+	gboolean is_float = FALSE;
 	gint tmpi = -1;
 	gint page = -1;
 	gint offset = -1;
@@ -1064,6 +1121,8 @@ void update_widget(gpointer object, gpointer user_data)
 			"base");
 	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
 			"temp_dep");
+	is_float = (gboolean)g_object_get_data(G_OBJECT(widget),
+			"is_float");
 	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
 			"toggle_group");
 	invert_state = (gboolean)g_object_get_data(G_OBJECT(widget),
@@ -1083,7 +1142,12 @@ void update_widget(gpointer object, gpointer user_data)
 	if ((GTK_IS_ENTRY(widget)) && (!GTK_IS_SPIN_BUTTON(widget)))
 	{
 		if (base == 10)
-			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)value));
+		{
+			if (is_float)
+				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.1f",value));
+			else
+				gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",(gint)value));
+		}
 		else if (base == 16)
 			gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%.2X",(gint)value));
 		else
@@ -1126,19 +1190,64 @@ void update_widget(gpointer object, gpointer user_data)
 
 }
 
-EXPORT gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if(event->keyval == GDK_Shift_L)
+	gint page = 0;
+	gint offset = 0;
+	gint value = 0;
+	gint lower = 0;
+	gint upper = 0;
+	extern gint **ms_data;
+	extern GList ***ve_widgets;
+
+	lower = (gint) g_object_get_data(G_OBJECT(widget),"lower_limit");
+	upper = (gint) g_object_get_data(G_OBJECT(widget),"upper_limit");
+	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
+	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
+
+	if (upper == 0)
+		upper = 255;	// BAD assumption!!!
+
+	value = ms_data[page][offset];
+	switch (event->keyval)
 	{
-		if (event->type == GDK_KEY_PRESS)
-			grab_allowed = TRUE;
-		else
-			grab_allowed = FALSE;
+		case GDK_Shift_L:
+			if (event->type == GDK_KEY_PRESS)
+				grab_allowed = TRUE;
+			else
+				grab_allowed = FALSE;
+			return FALSE;
+			break;
+		case GDK_Page_Up:
+			if (value < (upper-10))
+				ms_data[page][offset]+=10;
+			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+			return TRUE;
+			break;
+		case GDK_Page_Down:
+			if (value > (lower+10))
+				ms_data[page][offset]-=10;
+			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+			return TRUE;
+			break;
+		case GDK_KP_Add:
+			if (value < (upper-1))
+				ms_data[page][offset]+=1;
+			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+			return TRUE;
+			break;
+		case GDK_KP_Subtract:
+			if (value > (lower+1))
+				ms_data[page][offset]-=1;
+			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+			return TRUE;
+			break;
+		default:	
+			return FALSE;
 	}
-	return FALSE;
 }
 
-EXPORT gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
+EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
 	gint page = -1;

@@ -14,11 +14,15 @@
 #ifndef __TABLOADER_H__
 #define __TABLOADER_H__
 
+#include <configfile.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
 gboolean load_gui_tabs(void);
-void bind_data(GtkWidget *, gpointer );
+void group_free(gpointer );
+void load_groups(ConfigFile *, GHashTable * );
+void bind_data(GtkWidget *, gpointer);
+gint bind_group_data(GtkWidget *, GHashTable *, gchar *);
 void run_post_function_with_arg(gchar *, GtkWidget *);
 void run_post_function(gchar * );
 /* Prototypes */

@@ -33,6 +33,7 @@
 
 gboolean tabs_loaded = FALSE;
 
+
 gboolean load_gui_tabs()
 {
 	extern struct Firmware_Details * firmware;
@@ -46,6 +47,8 @@ gboolean load_gui_tabs()
 	gchar * tab_name = NULL;
 	GtkWidget * label = NULL;
 	GtkWidget *topframe = NULL;
+	GHashTable *groups = NULL;
+	struct BindGroup *bindgroup = NULL;
 	extern GtkWidget * notebook;
 
 	if (!firmware)
@@ -55,6 +58,7 @@ gboolean load_gui_tabs()
 	if (!firmware->tab_confs)
 		return FALSE;
 
+	bindgroup = g_new0(struct BindGroup,1);
 
 	while (firmware->tab_list[i])
 	{
@@ -73,7 +77,12 @@ gboolean load_gui_tabs()
 				/* bind_data() is recursive and will take 
 				 * care of all children
 				 */
-				bind_data(topframe,(gpointer)cfgfile);
+				groups = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,group_free);
+				load_groups(cfgfile,groups);
+				bindgroup->cfgfile = cfgfile;
+				bindgroup->groups = groups;
+				bind_data(topframe,(gpointer)bindgroup);
+				g_hash_table_destroy(groups);
 				populate_master(topframe,(gpointer)cfgfile);
 
 				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
@@ -115,14 +124,179 @@ gboolean load_gui_tabs()
 	}
 	tabs_loaded = TRUE;
 	dbg_func(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n",TABLOADER);
+	g_free(bindgroup);
 	return TRUE;
 
 }
 
+void group_free(gpointer value)
+{
+	struct Group *group = value;
+	gint i = 0;
+
+	for (i=0;i<group->num_keys;i++)
+		g_object_set_data(group->object,group->keys[i],NULL);
+	g_strfreev(group->keys);
+	g_free(group->keytypes);
+	g_free(group);
+}
+
+void load_groups(ConfigFile *cfgfile, GHashTable *groups)
+{
+	gint i = 0;
+	gint x = 0;
+	gint tmpi = 0;
+	gchar * tmpbuf = NULL;
+	gchar **groupnames = NULL;
+	gchar *section = NULL;
+	gint num_groups = 0;
+	struct Group *group = NULL;
+
+	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
+	{
+		groupnames = parse_keys(tmpbuf,&num_groups,",");
+		dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of groups to load settigns for is %i\n",num_groups),TABLOADER);
+		g_free(tmpbuf);
+	}
+	else
+		return;
+	for (x=0;x<num_groups;x++)
+	{
+		/* Create structure and allocate ram for it */
+		group = g_new0(struct Group, 1);
+		section = g_strdup(groupnames[x]);
+		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
+		{
+			group->keys = parse_keys(tmpbuf,&group->num_keys,",");
+			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys),TABLOADER);
+			g_free(tmpbuf);
+		}
+		else
+		{
+			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"keys\" section NOT found, aborting this group %s\n",section),TABLOADER);
+			continue;
+		}
+		if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
+		{
+			group->keytypes = parse_keytypes(tmpbuf,&group->num_keytypes,",");
+			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keytypes for section %s is %i\n",section,group->num_keytypes),TABLOADER);
+			g_free(tmpbuf);
+		}
+		else
+		{
+			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"key_types\" section NOT found, aborting this group %s\n",section),TABLOADER);
+			continue;
+		}
+
+		if (group->num_keytypes != group->num_keys)
+		{
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section),CRITICAL);
+			g_strfreev(group->keys);
+			g_free(group->keytypes);
+			return;
+
+		}
+		if (cfg_read_int(cfgfile,section,"page",&tmpi))
+			group->page = tmpi;
+
+		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		for (i=0;i<group->num_keys;i++)
+		{
+			switch((DataType)group->keytypes[i])
+			{
+				case MTX_INT:
+					if (cfg_read_int(cfgfile,section,group->keys[i],&tmpi))
+					{
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
+						g_object_set_data(G_OBJECT(group->object),
+								g_strdup(group->keys[i]),
+								GINT_TO_POINTER(tmpi));	
+					}
+					else
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+					break;
+				case MTX_ENUM:
+					if (cfg_read_string(cfgfile,section,group->keys[i],&tmpbuf))
+					{
+						tmpi = translate_string(tmpbuf);
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
+						g_object_set_data(G_OBJECT(group->object),
+								g_strdup(group->keys[i]),
+								GINT_TO_POINTER(tmpi));	
+						g_free(tmpbuf);
+					}
+					else
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+					break;
+				case MTX_BOOL:
+					if (cfg_read_boolean(cfgfile,section,group->keys[i],&tmpi))
+					{
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",group->keys[i],tmpi,section),TABLOADER);
+						g_object_set_data(G_OBJECT(group->object),
+								g_strdup(group->keys[i]),
+								GINT_TO_POINTER(tmpi));	
+					}
+					else
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+					break;
+				case MTX_STRING:
+					if(cfg_read_string(cfgfile,section,group->keys[i],&tmpbuf))
+					{
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",group->keys[i],tmpbuf,section),TABLOADER);
+						g_object_set_data(G_OBJECT(group->object),
+								g_strdup(group->keys[i]),
+								g_strdup(tmpbuf));
+						g_free(tmpbuf);
+					}
+					else
+						dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",group->keys[i],section),CRITICAL);
+					break;
+
+			}
+		}
+		/* Store it in the hashtable... */
+		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
+		g_free(section);
+	}
+	g_strfreev(groupnames);
+}
+
+gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
+{
+	gint i = 0;
+	gint tmpi = 0;
+	struct Group *group = NULL;
+
+	group = g_hash_table_lookup(groups,groupname);
+	if (!group)
+	{
+		dbg_func(g_strdup_printf(__FILE__": bind_group_data()\n\t group \"%s\" not found in hashtable\n",groupname),CRITICAL);
+		return -1;
+	}
+	/* Copy data from the group object to the */
+	for (i=0;i<group->num_keys;i++)
+	{
+		switch((DataType)group->keytypes[i])
+		{
+			case MTX_INT:
+			case MTX_BOOL:
+			case MTX_ENUM:
+				tmpi = (gint)g_object_get_data(group->object,group->keys[i]);
+				g_object_set_data(G_OBJECT(widget),g_strdup(group->keys[i]),GINT_TO_POINTER(tmpi));
+				break;
+			case MTX_STRING:
+				g_object_set_data(G_OBJECT(widget),g_strdup(group->keys[i]),g_strdup(g_object_get_data(group->object,group->keys[i])));
+				break;
+		}
+	}
+	return group->page;
+}
 
 void bind_data(GtkWidget *widget, gpointer user_data)
 {
-	ConfigFile *cfgfile = (ConfigFile *)user_data;
+	struct BindGroup *bindgroup = user_data;
+	ConfigFile *cfgfile = bindgroup->cfgfile;
+	GHashTable *groups = bindgroup->groups;
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** bind_keys = NULL;
@@ -136,6 +310,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint page = 0;
 	gint tmpi = 0;
 	extern GList ***ve_widgets;
+
 
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
@@ -165,7 +340,13 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		return;
 	}
 	page = -1;
-	if (!cfg_read_int(cfgfile,section,"page",&page))
+	if (cfg_read_string(cfgfile,section,"group",&tmpbuf))
+	{
+		page = bind_group_data(widget,groups,tmpbuf);
+		g_free(tmpbuf);
+	}
+
+	if ((!cfg_read_int(cfgfile,section,"page",&page)) && (page == -1))
 		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
 
 	/* Bind widgets to lists if thy have the bind_to_list flag set...
@@ -205,7 +386,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 
 	/* If this widget (a label) has "set_lanel" we set the label on it
-	 */
+	*/
 	if (cfg_read_string(cfgfile,section,"set_label",&tmpbuf))
 	{
 		gtk_label_set_text(GTK_LABEL(widget),tmpbuf);
@@ -224,6 +405,10 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 				ve_widgets[page][offset],
 				(gpointer)widget);
 	}
+	/* If there is a "group" key in a sectio nit means that it gets the
+	 * rest of it's setting from the groupname listed.  This reduces
+	 * redundant keys all throughout the file...
+	 */
 
 	for (i=0;i<num_keys;i++)
 	{
@@ -296,6 +481,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	dbg_func(__FILE__": bind_data()\n\t All is well, leaving...\n\n",TABLOADER);
 }
 
+
 void run_post_function(gchar * function_name)
 {
 	void (*function)(void);
@@ -341,6 +527,3 @@ void run_post_function_with_arg(gchar * function_name, GtkWidget *widget)
 			dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
 	}
 }
-
-
-

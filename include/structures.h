@@ -18,6 +18,7 @@
 #ifndef __STRUCTURES_H__
 #define __STRUCTURES_H__
 
+#include <configfile.h>
 #include <defines.h>
 #include <enums.h>
 #include <gtk/gtk.h>
@@ -361,6 +362,33 @@ struct DebugLevel
 	Dbg_Class dclass;	/*! Bit mask for this level (0-31) */
 	Dbg_Shift dshift;	/*! Bit shift amount */
 	gboolean enabled;	/*! Enabled or not? */
+};
+
+
+/*!
+ \brief Group holds common settings from groups of control as defined in a 
+ datamap file.  This should reduce redundancy and significantly shrink the 
+ datamap files.
+ */
+struct Group
+{
+	gchar **keys;		/*! String array for key names */
+	gint *keytypes;		/*! Int array of key types... */
+	GObject *object;	/*! To hold the data cleanly */
+	gint num_keys;		/* How many keys we hold */
+	gint num_keytypes;	/* How many keytypes we hold */
+	gint page;		/* page of this group of data */
+};
+
+
+/*!
+ \brief BindGroup is a small container used to pass multiple params into
+ a function that is limited to a certain number of arguments...
+ */
+struct BindGroup
+{
+	ConfigFile *cfgfile;	/*! where the configfile ptr goes... */
+	GHashTable *groups;	/*! where the groups table goes */
 };
 
 #endif
