@@ -1,0 +1,54 @@
+This README describes the contents of this dir and their file structure.
+
+Last Edited, Dec 2nd 23:12 PM
+
+Inside this dir (RuntimeSliders) are files with an .rts_conf extension.  They
+are ASCII text files in .ini file format, using the common "section", 
+"key", and "value" layout as shown below.
+
+[section]
+key=value
+
+The rts_conf files define all of the sliders shown on the Runtime and 
+WarmupWizard tabs.  They get their data from the RealTimeMaps (rtv_map)
+
+
+NOTES regarding the files:
+
+- The value names are CaSe SeNsItIvE, so be warned.  Ironically the
+keys themselves are not, as the string compare functions are case insensitive.
+
+[global] section
+contains a "description" key (not really used in the code, but may be in the 
+future
+Also contains two more interger keys, rt_total_sliders, and ww_total_sliders
+defining the total number of sliders on the runtime and warmup wizard tabs
+respectively.
+
+Following that are sections for each slider.
+
+The sections are named [rt_slider_xx], rt for runtime or ww for warmup wizard.
+the xx is a number starting at 0 and going up to rt/ww_total_sliders-1 
+(since we start from 0 not 1)
+
+Inside each section are 4 keys;
+control_name	[string] name used to refer to this control
+table		[integer] a table number in the runtime tab (or zero for warmup
+		wizard), tables are arranged as follows (runtime tab):
+		[table 0][table 1]
+		[table 2][table 3]
+row		[integer], row of above table this control appears on.  You
+		should NEVER put two sliders on the same table/row as they
+		will cause a gui error.
+source		[string]  This is the datasource name,  you get these from 
+		looking into the RealTimeMap file and looking for the 
+		"internal_name" key for the variable you're interested in.  
+		Everything else is automagic. This is CaSe SenSiTiVe just so
+		you know....
+
+If you want to modify the sliders for your own use, copy this file to
+~/.MegaTunix/RuntimeSliders and edit to taste. I suggest submitting the file
+to the author for inclusion into the official distribution though. After 
+interrogation is completed, the file search routine will look in your 
+homedir FIRST for files so even if the name isn't changed megatunix
+will prefer the file in your homedir over the system wide one...
