@@ -306,13 +306,13 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint offset = -1;
 	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
-	gint single = -1;
+	gboolean single = FALSE;
 	extern unsigned char *ms_data;
 	extern unsigned int ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
-	//struct Ignition_Table *ign_table = NULL;
+	struct Ignition_Table *ign_table = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
 
 	if (ecu_caps & DUALTABLE)
@@ -320,6 +320,8 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 	}
+	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
+		ign_table = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 
 	if (paused_handlers)
 		return TRUE;
@@ -330,19 +332,30 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
-	single = (gint)g_object_get_data(G_OBJECT(widget),"single");
+	single = (gboolean)g_object_get_data(G_OBJECT(widget),"single");
 	
 	/* to handle check buttons */
-	if (single == 1)
-	{
+	if (single)	// If it's true....
 		bit_val = gtk_toggle_button_get_active( 
 				GTK_TOGGLE_BUTTON (widget));
-	}
 
 	if ((offset == 92) || (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
 	{
 		switch (offset)
 		{
+			case 85:
+				if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
+				{
+					g_fprintf(stderr,__FILE__": Setting spark_config1 but NOT using spark capable firmware...\n");	
+					break;
+				}
+					tmp = ign_table->spark_config1.value;
+					tmp = tmp & ~bitmask;	/*clears bits */
+					tmp = tmp | (bit_val << bit_pos);
+					ign_table->spark_config1.value = tmp;
+					dload_val = tmp;
+				
+				break;	
 			case 92: /* alternate OR tblcnf (firmware dependant) */
 				if (ecu_caps & DUALTABLE)
 				{
@@ -399,7 +412,6 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp | (bit_val << bit_pos);
 				ve_const_dt2->bcfreq.value = tmp;
 				dload_val = tmp;
-				check_bcfreq(dload_val,FALSE);
 				break;
 			default:
 				g_printf(" Toggle button NOT handled ERROR!!, contact author\n");
@@ -453,6 +465,8 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case READ_VE_CONST:
 			if (!interrogated)
 				interrogate_ecu();
+			if (!connected)
+				check_ecu_comms(NULL,NULL);
 			if (!connected)
 				no_ms_connection();
 			else
@@ -800,12 +814,15 @@ void update_ve_const()
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
+	struct Ignition_Table *ign_table = NULL;
 
 	/* Point to Table0 (stock MS ) data... */
 	ve_const = (struct Ve_Const_Std *) ms_data;
 
 	check_config11(ve_const->config11.value);
 	check_config13(ve_const->config13.value);
+	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
+		ign_table = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 	
 
 	/* DualTable Fuel Calculations
@@ -1098,6 +1115,49 @@ void update_ve_const()
 					TRUE);
 	}
 
+	/* This gets a little confusing thanks to the MSnEDIS firmware that 
+	 * instead of making use of the 4 leftover bits in spark_config1
+	 * decided to rename the 3rd and 4th bits (actually 2&3) for their
+	 * own use instead of doing something smart and using the UNUSED BITS!!!
+	 */
+	if (ecu_caps & (S_N_SPARK))
+	{
+		/* Timebased or Trigger return */
+		if (ign_table->spark_config1.bit.multi_sp)
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.time_based_but),TRUE);
+		else
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.trig_return_but),TRUE);
+					
+		/* Inverted or normal output */
+		if (ign_table->spark_config1.bit.boost_ret)
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.invert_out_but),TRUE);
+					
+		else
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.normal_out_but),TRUE);
+	}
+	if (ecu_caps & (S_N_EDIS))
+	{
+		/* Multispark mode or normal mode */
+		if (ign_table->spark_config1.bit.multi_sp)
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.multi_spark_but),TRUE);
+		else
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.norm_spark_but),TRUE);
+					
+		/* Boost retard enabled, or not? */
+		if (ign_table->spark_config1.bit.boost_ret)
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.boost_retard_but),TRUE);
+		else
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.noboost_retard_but),TRUE);
+					
+	}
 
 	/* Update all on screen controls (except bitfields (done above)*/
 	for (i=0;i<2*MS_PAGE_SIZE;i++)

@@ -16,6 +16,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <ignition_gui.h>
+#include <structures.h>
 
 
 void build_ignition(GtkWidget *parent_frame)
@@ -33,6 +34,7 @@ void build_ignition(GtkWidget *parent_frame)
 	extern GList * store_controls;
 	GSList *group;
 	extern GtkWidget * ign_widgets[];
+	extern struct DynamicButtons buttons;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
@@ -98,7 +100,7 @@ void build_ignition(GtkWidget *parent_frame)
 
 	/* Time based crank timing */
 	button = gtk_radio_button_new_with_label(NULL, "Time Based");
-//	buttons.time_based_but = button;
+	buttons.time_based_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         g_object_set_data(G_OBJECT(button),"ign_parm",GINT_TO_POINTER(TRUE));
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(85));
@@ -116,7 +118,7 @@ void build_ignition(GtkWidget *parent_frame)
 
 	/* OR Trigger Return (hall effect pickups) based crank timing */
 	button = gtk_radio_button_new_with_label(group, "Trigger Return");
-//	buttons.trig_return_but = button;
+	buttons.trig_return_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         g_object_set_data(G_OBJECT(button),"ign_parm",GINT_TO_POINTER(TRUE));
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(85));
@@ -140,7 +142,7 @@ void build_ignition(GtkWidget *parent_frame)
 
 	/* Normal output */
 	button = gtk_radio_button_new_with_label(NULL, "Normal");
-//	buttons.time_based_but = button;
+	buttons.normal_out_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         g_object_set_data(G_OBJECT(button),"ign_parm",GINT_TO_POINTER(TRUE));
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(85));
@@ -158,7 +160,7 @@ void build_ignition(GtkWidget *parent_frame)
 
 	/* OR Inverted */
 	button = gtk_radio_button_new_with_label(group, "Inverted");
-//	buttons.trig_return_but = button;
+	buttons.invert_out_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         g_object_set_data(G_OBJECT(button),"ign_parm",GINT_TO_POINTER(TRUE));
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(85));

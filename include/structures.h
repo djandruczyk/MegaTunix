@@ -168,6 +168,14 @@ struct DynamicButtons
 	GtkWidget *boost_39hz;
 	GtkWidget *boost_19hz;
 	GtkWidget *boost_10hz;
+	GtkWidget *time_based_but;
+	GtkWidget *trig_return_but;
+	GtkWidget *normal_out_but;
+	GtkWidget *invert_out_but;
+	GtkWidget *multi_spark_but;
+	GtkWidget *norm_spark_but;
+	GtkWidget *boost_retard_but;
+	GtkWidget *noboost_retard_but;
 };
 
 /* Simple struct to store the pointers to the entry and button

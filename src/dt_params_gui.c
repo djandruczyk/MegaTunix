@@ -72,7 +72,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
-        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
 	g_object_set_data(G_OBJECT(button),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -184,7 +184,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(5));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(32));
-        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
 	g_object_set_data(G_OBJECT(button),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -261,7 +261,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
         g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(6));
         g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(64));
-        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(TRUE));
 	g_object_set_data(G_OBJECT(button),"dl_type",
                         GINT_TO_POINTER(IMMEDIATE));
 	g_signal_connect(G_OBJECT(button),"toggled",
