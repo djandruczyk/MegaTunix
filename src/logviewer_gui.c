@@ -201,8 +201,6 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	GObject *object = NULL;
 	gboolean state = FALSE;
-	struct Viewable_Value *v_value = NULL;
-	gchar * name = NULL;
 
 
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
@@ -212,6 +210,20 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	if (!object)
 		printf("object was null during view_value_set()\n");
 	g_object_set_data(object,"being_viewed",GINT_TO_POINTER(state));
+	populate_viewer();
+	return FALSE;
+}
+
+void populate_viewer()
+{
+	gint i = 0;
+	gint total = 0;
+	struct Viewable_Value *v_value = NULL;
+	gchar * name = NULL;
+        gboolean being_viewed = FALSE;
+        extern struct Rtv_Map *rtv_map;
+        extern GHashTable *dynamic_widgets;
+	GObject *object = NULL;
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -226,44 +238,63 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	 * into the table for it..
 	 */
 	if (playback_mode)
-		name = g_strdup(g_object_get_data(object,"lview_name"));
+		total = log_info->field_count;
 	else
-		name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
-	if (!name)
-		printf("ERROR, name is NULL\n");
+		total = rtv_map->derived_total;
 
-	/* if not found in table check to see if we need to insert*/
-	if (g_hash_table_lookup(active_traces,name)==NULL)
+	for (i=0;i<total;i++)
 	{
-		if (state)	/* Marked viewable widget */
+		object = NULL;
+		name = NULL;
+		if (playback_mode)
 		{
-			/* Call the build routine, feed it the drawing_area*/
-			v_value = build_v_value(lv_darea,object);
-			// store location of master
-			g_hash_table_insert(active_traces,
-					g_strdup(name),
-					(gpointer)v_value);
+			object = g_array_index(log_info->log_list,GObject *, i);        
+			name = g_strdup(g_object_get_data(object,"lview_name"));
 		}
-	}
-	else
-	{	/* If in table but now de-selected, remove it */
-		if (!state)
+		else
 		{
-			v_value = (struct Viewable_Value *)g_hash_table_lookup(active_traces,name);
-			/* Remove entry in from hash table */
-			g_hash_table_remove(active_traces,name);
+			object = g_array_index(rtv_map->rtv_list,GObject *, i); 
+			name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
+		}
+		if (!name)
+			printf("ERROR, name is NULL\n");
+		if (!object)
+			printf("ERROR, object is NULL\n");
 
-			/* Free all resources of the datastructure 
-			 * before de-allocating it... 
-			 */
-			if (!playback_mode)
-				g_array_free(v_value->data_array,TRUE);
+		being_viewed = (gboolean)g_object_get_data(object,"being_viewed");
+		/* if not found in table check to see if we need to insert*/
+		if (g_hash_table_lookup(active_traces,name)==NULL)
+		{
+			if (being_viewed)	/* Marked viewable widget */
+			{
+				/* Call the build routine, feed it the drawing_area*/
+				v_value = build_v_value(lv_darea,object);
+				// store location of master
+				g_hash_table_insert(active_traces,
+						g_strdup(name),
+						(gpointer)v_value);
+			}
+		}
+		else
+		{	/* If in table but now de-selected, remove it */
+			if (!being_viewed)
+			{
+				v_value = (struct Viewable_Value *)g_hash_table_lookup(active_traces,name);
+				/* Remove entry in from hash table */
+				g_hash_table_remove(active_traces,name);
 
-			g_object_unref(v_value->trace_gc);
-			g_object_unref(v_value->font_gc);
-			g_free(v_value->vname);
-			g_free(v_value);
-			v_value = NULL;
+				/* Free all resources of the datastructure 
+				 * before de-allocating it... 
+				 */
+				if (!playback_mode)
+					g_array_free(v_value->data_array,TRUE);
+
+				g_object_unref(v_value->trace_gc);
+				g_object_unref(v_value->font_gc);
+				g_free(v_value->vname);
+				g_free(v_value);
+				v_value = NULL;
+			}
 		}
 	}
 	active_viewables = g_hash_table_size(active_traces);
@@ -271,9 +302,9 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
 	if ((active_traces) && (g_hash_table_size(active_traces) >= 0))
-		lv_configure_event(lv_darea,NULL,NULL);
+		lv_configure_event(g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea"),NULL,NULL);
 
-	return FALSE; /* want other handlers to run... */
+	return; 
 }
 
 void reset_logviewer_state()
@@ -301,6 +332,7 @@ void reset_logviewer_state()
 			g_object_set_data(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
+	populate_viewer();
 		
 }
 
@@ -525,8 +557,9 @@ void draw_infotext(void *data)
 
 }
 
-gboolean update_logview_traces()
+gboolean update_logview_traces(gboolean force_redraw)
 {
+
 	/* Called from one of two possible places:
 	 * 1. a GTK timeout used when playing back a log...
 	 * 2. as a hook onto the update_realtime stats box...
@@ -537,7 +570,7 @@ gboolean update_logview_traces()
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 	{
 		scroll_logviewer_traces();
-		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(FALSE));
+		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(force_redraw));
 	}
 
 	return TRUE;
@@ -556,6 +589,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 	gint lo_width;
 	gint total = 0;
 	gint i = 0;
+	gfloat log_pos = 0.0;
 	GdkPoint pts[2048]; // Bad idea as static...
 	struct Viewable_Value * v_value = NULL;
 
@@ -571,6 +605,7 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 	w = v_value->d_area->allocation.width;
 	h = v_value->d_area->allocation.height;
 
+	log_pos = (gfloat)((gint)g_object_get_data(G_OBJECT(v_value->d_area),"log_pos_x100"))/100.0;
 	if ((gboolean)redraw_all)
 	{
 		draw_infotext(v_value);
@@ -578,12 +613,14 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		len = v_value->data_array->len;
 		if (len == 0)	/* If empty */
 			return;
-		total = len < lo_width/lv_scroll ? len : lo_width/lv_scroll;
+//		printf("length is %i\n", len);
+		len *= (log_pos/100);
+//		printf("length after is  %i\n", len);
 
-		/* Debugging code
-		   printf("\nlo_width %i\n",lo_width);
-		   printf("total points %i\n",total);
+		/* Determine total number of points that'll fit on the window
+		 * taking into account the scroll amount
 		 */
+		total = len < lo_width/lv_scroll ? len : lo_width/lv_scroll;
 
 		// Draw is reverse order, from right to left, 
 		// easier to think out in my head... :) 
@@ -632,16 +669,23 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 
 	/* Draw the data.... */
 	percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+
 	if (v_value->last_y == -1)
-		v_value->last_y = (gint)(percent*(h-2))+1;
+		v_value->last_y = (gint)((percent*(h-2))+1);
 
-	gdk_draw_line(pixmap,
-			v_value->trace_gc,
-			w-lv_scroll-1,v_value->last_y,
-			w-1,(gint)(percent*(h-2))+1);
-
-	//	printf("drawing line from (%i,%i) to (%i,%i)\n",w-lv_scroll,v_value->last_y,w,(gint)(percent*(h-2))+1);
-
+//	if (log_pos == 100)
+	{
+		gdk_draw_line(pixmap,
+				v_value->trace_gc,
+				w-lv_scroll-1,v_value->last_y,
+				w-1,(gint)(percent*(h-2))+1);
+	}
+/*	else
+	{
+		val = g_array_index(v_value->data_array,gfloat,len-i);
+		percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
+	}
+	*/
 	v_value->last_y = (gint)((percent*(h-2))+1);
 
 	/* Update textual data */
@@ -755,6 +799,9 @@ gboolean set_lview_choices_state(GtkWidget *widget, gpointer data)
 gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 {
 	gfloat val = 0.0;
+	GtkWidget *darea = NULL;
+	extern GHashTable *dynamic_widgets;
+
 	/* If we pass "TRUE" as the widget data we just ignore this signal as 
 	 * the redraw routine wil have to adjsut the slider as it scrolls 
 	 * through the data...
@@ -762,7 +809,11 @@ gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 	if ((gboolean)data)
 		return TRUE;
 	val = gtk_range_get_value(GTK_RANGE(widget));
-	g_object_set_data(G_OBJECT(lv_darea),"log_pos",g_strdup_printf("%.3f",val));
+	darea = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
+	if (GTK_IS_WIDGET(darea))
+		g_object_set_data(G_OBJECT(darea),"log_pos_x100",GINT_TO_POINTER((gint)(val*100)));
+	//update_logview_traces(TRUE);
+	lv_configure_event(darea,NULL,NULL);
 	return TRUE;
 }
 
@@ -805,5 +856,9 @@ EXPORT void finish_logviewer(void)
 	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_scroll_spinner");
 	if (GTK_IS_SPIN_BUTTON(widget))
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),lv_scroll);
+
+	widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
+	if (GTK_IS_RANGE(widget))
+		gtk_range_set_value(GTK_RANGE(widget),100.0);
 	return;
 }

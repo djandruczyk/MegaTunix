@@ -31,12 +31,13 @@ GdkColor get_colors_from_hue(gfloat);
 void draw_graticule(void * );
 void draw_infotext(void * );
 void draw_old_data(void * );
-gboolean update_logview_traces(void);
+gboolean update_logview_traces(gboolean);
 void trace_update(gpointer, gpointer, gpointer );
 gboolean logviewer_log_position_change(GtkWidget *, gpointer);
 void set_realtime_mode(void);
 void set_playback_mode(void);
 void finish_logviewer(void);
+void populate_viewer(void);
 
 /* Prototypes */
 
