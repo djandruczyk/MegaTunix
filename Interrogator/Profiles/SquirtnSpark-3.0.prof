@@ -19,7 +19,9 @@ TotalPages=2
 
 [table_0]
 is_spark=FALSE
-page=0
+rpm_page=0
+load_page=0
+tbl_page=0
 tbl_base_offset=0
 rpm_base_offset=100
 load_base_offset=108
@@ -39,7 +41,9 @@ cfg13_offset=118
 
 [table_1]
 is_spark=TRUE
-page=1
+rpm_page=1
+tbl_page=1
+load_page=1
 tbl_base_offset=0
 rpm_base_offset=64
 load_base_offset=72

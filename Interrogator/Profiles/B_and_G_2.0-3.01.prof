@@ -18,7 +18,9 @@ TotalPages=1
 
 [table_0]
 is_spark=FALSE
-page=0
+rpm_page=0
+load_page=0
+tbl_page=0
 tbl_base_offset=0
 rpm_base_offset=100
 load_base_offset=108

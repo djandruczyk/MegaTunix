@@ -729,8 +729,12 @@ void load_profile_details(void *ptr)
 		{
 			canidate->table_params[i] = g_new0(struct Table_Params,1);
 			section = g_strdup_printf("table_%i",i);
-			if(!cfg_read_int(cfgfile,section,"page",&canidate->table_params[i]->page))
-				dbg_func(__FILE__": load_profile_details()\n\t\"page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"tbl_page",&canidate->table_params[i]->tbl_page))
+				dbg_func(__FILE__": load_profile_details()\n\t\"tbl_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"rpm_page",&canidate->table_params[i]->rpm_page))
+				dbg_func(__FILE__": load_profile_details()\n\t\"rpm_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"load_page",&canidate->table_params[i]->load_page))
+				dbg_func(__FILE__": load_profile_details()\n\t\"load_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->table_params[i]->is_spark))
 				dbg_func(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"tbl_base_offset",&canidate->table_params[i]->tbl_base))

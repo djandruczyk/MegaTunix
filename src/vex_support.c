@@ -86,9 +86,11 @@ gboolean vetable_export(void *ptr)
 	gint j = 0;
 	gint z = 0;
 	gint table = -1;
-	gint page = -1;
 	gsize count = 0;
 	gint index = 0;
+	gint load_page = 0;
+	gint tbl_page = 0;
+	gint rpm_page = 0;
 	gint load_base = 0;
 	gint tbl_base = 0;
 	gint rpm_base = 0;
@@ -108,13 +110,14 @@ gboolean vetable_export(void *ptr)
 	for (z=0;z<firmware->total_tables;z++)
 	{
 		table = z;
-		page = firmware->table_params[table]->page;
+		tbl_page = firmware->table_params[table]->tbl_page;
+		rpm_page = firmware->table_params[table]->rpm_page;
+		load_page = firmware->table_params[table]->load_page;
 		tbl_base = firmware->table_params[table]->tbl_base;
 		load_base = firmware->table_params[table]->load_base;
 		rpm_base = firmware->table_params[table]->rpm_base;
 		load_bincount = firmware->table_params[table]->load_bincount;
 		rpm_bincount = firmware->table_params[table]->rpm_bincount;
-		//printf("table %i, page %i, base %i, load %i, rpm %i\n",table,page,tbl_base,load_base,rpm_base);
 
 		t = g_malloc(sizeof(time_t));
 		time(t);
@@ -129,15 +132,15 @@ gboolean vetable_export(void *ptr)
 		output = g_string_append(output, g_strdup_printf("Date: %i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year)));
 
 		output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
-		output = g_string_append(output, g_strdup_printf("Page %i\n",page));
+		output = g_string_append(output, g_strdup_printf("Page %i\n",tbl_page));
 		output = g_string_append(output, g_strdup_printf("VE Table RPM Range              [%2i]\n",rpm_bincount));
 
 		for (i=0;i<rpm_bincount;i++)
-			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ms_data[page][rpm_base+i]));
+			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ms_data[rpm_page][rpm_base+i]));
 
 		output = g_string_append(output, g_strdup_printf("VE Table Load Range (MAP)       [%2i]\n",load_bincount));
 		for (i=0;i<load_bincount;i++)
-			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ms_data[page][load_base+i]));
+			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ms_data[load_page][load_base+i]));
 
 		output = g_string_append(output, g_strdup_printf("VE Table                        [%3i][%3i]\n",rpm_bincount,load_bincount));
 		output = g_string_append(output, "           ");
@@ -155,9 +158,9 @@ gboolean vetable_export(void *ptr)
 			for (j=0;j<load_bincount;j++)
 			{
 				if (j == 0)
-					output = g_string_append (output,g_strdup_printf("  %3d",ms_data[page][index+tbl_base]));
+					output = g_string_append (output,g_strdup_printf("  %3d",ms_data[tbl_page][index+tbl_base]));
 				else
-					output = g_string_append (output,g_strdup_printf("   %3d",ms_data[page][index+tbl_base]));
+					output = g_string_append (output,g_strdup_printf("   %3d",ms_data[tbl_page][index+tbl_base]));
 				index++;
 			}
 			output = g_string_append(output,"\n");

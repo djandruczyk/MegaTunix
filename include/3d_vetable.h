@@ -81,7 +81,9 @@ struct Ve_View_3D
 	GtkWidget *drawing_area;
 	GtkWidget *window;
 	GtkWidget *burn_but;
-	gint page;
+	gint tbl_page;
+	gint rpm_page;
+	gint load_page;
 	gint table_num;
 	gint load_bincount;
 	gint rpm_bincount;
@@ -89,6 +91,7 @@ struct Ve_View_3D
 	gint rpm_base;
 	gint load_base;
 	gboolean is_spark;
+	gchar *table_name;
 };
 
 #endif

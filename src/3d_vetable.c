@@ -64,7 +64,6 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
 	extern struct Firmware_Details *firmware;
-	gchar *tmpbuf = NULL;
 	gint table_num =  -1;
 	
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
@@ -78,20 +77,22 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	initialize_ve3d_view((void *)ve_view);
 	ve_view->z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"z_source"));
 	ve_view->table_num = table_num;
-	ve_view->rpm_bincount = firmware->table_params[table_num]->rpm_bincount;
-	ve_view->load_bincount = firmware->table_params[table_num]->load_bincount; 
+	ve_view->tbl_page = firmware->table_params[table_num]->tbl_page;
 	ve_view->tbl_base = firmware->table_params[table_num]->tbl_base;
-	ve_view->load_base = firmware->table_params[table_num]->load_base;
+
+	ve_view->rpm_page = firmware->table_params[table_num]->rpm_page;
 	ve_view->rpm_base = firmware->table_params[table_num]->rpm_base;
+	ve_view->rpm_bincount = firmware->table_params[table_num]->rpm_bincount;
+
+	ve_view->load_page = firmware->table_params[table_num]->load_page;
+	ve_view->load_base = firmware->table_params[table_num]->load_base;
+	ve_view->load_bincount = firmware->table_params[table_num]->load_bincount; 
+	ve_view->table_name = g_strdup(firmware->table_params[table_num]->table_name);
+
 	ve_view->is_spark = firmware->table_params[table_num]->is_spark;
-	if(ve_view->is_spark)
-		tmpbuf = g_strdup("3D Spark Advance Table");
-	else
-		tmpbuf = g_strdup_printf("3D VE-Table for table %i",table_num+1);
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window), tmpbuf);
-	g_free(tmpbuf);
+	gtk_window_set_title(GTK_WINDOW(window), ve_view->table_name);
 	gtk_widget_set_size_request(window,DEFAULT_WIDTH,DEFAULT_HEIGHT);
 	gtk_container_set_border_width(GTK_CONTAINER(window),0);
 	ve_view->window = window;
@@ -530,7 +531,9 @@ void ve3d_calculate_scaling(void *ptr)
 	gint i=0;
 	extern gint **ms_data;
 	struct Ve_View_3D *ve_view = NULL;
-	gint * ve_ptr = NULL;
+	gint rpm_page = 0;
+	gint load_page = 0;
+	gint tbl_page = 0;
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint tbl_base = 0;
@@ -540,10 +543,13 @@ void ve3d_calculate_scaling(void *ptr)
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	ve_ptr = (gint *)ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
+
+	rpm_page = ve_view->rpm_page;
+	load_page = ve_view->load_page;
+	tbl_page = ve_view->tbl_page;
 
 	ve_view->rpm_max = 0;
 	ve_view->load_max = 0;
@@ -556,19 +562,19 @@ void ve3d_calculate_scaling(void *ptr)
 
 	for (i=0;i<ve_view->rpm_bincount;i++) 
 	{
-		if (ve_ptr[rpm_base+i] > ve_view->rpm_max) 
-			ve_view->rpm_max = ve_ptr[rpm_base+i];
+		if (ms_data[rpm_page][rpm_base+i] > ve_view->rpm_max) 
+			ve_view->rpm_max = ms_data[rpm_page][rpm_base+i];
 	}
 
 	for (i=0;i<ve_view->load_bincount;i++) 
 	{
-		if (ve_ptr[load_base+i] > ve_view->load_max) 
-			ve_view->load_max = ve_ptr[load_base+i];
+		if (ms_data[load_page][load_base+i] > ve_view->load_max) 
+			ve_view->load_max = ms_data[load_page][load_base+i];
 	}
 	for (i=0;i<(ve_view->rpm_bincount*ve_view->load_bincount);i++) 
 	{
-		if (ve_ptr[tbl_base+i]/divider > ve_view->ve_max) 
-			ve_view->ve_max = ve_ptr[tbl_base+i]/divider;
+		if (ms_data[tbl_page][tbl_base+i]/divider > ve_view->ve_max) 
+			ve_view->ve_max = ms_data[tbl_page][tbl_base+i]/divider;
 	}
 
 	ve_view->rpm_div = ((gfloat)ve_view->rpm_max/(gfloat)ve_view->rpm_bincount);
@@ -585,8 +591,10 @@ void ve3d_draw_ve_grid(void *ptr)
 {
 	gint rpm=0, load=0;
 	extern gint **ms_data;
-	gint *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
+	gint rpm_page = 0;
+	gint load_page = 0;
+	gint tbl_page = 0;
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint tbl_base = 0;
@@ -596,10 +604,13 @@ void ve3d_draw_ve_grid(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_ve_grid() \n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
+
+	rpm_page = ve_view->rpm_page;
+	load_page = ve_view->load_page;
+	tbl_page = ve_view->tbl_page;
 
 	glColor3f(1.0, 1.0, 1.0);
 	glLineWidth(1.5);
@@ -617,11 +628,11 @@ void ve3d_draw_ve_grid(void *ptr)
 		for(load=0;load<ve_view->load_bincount;load++) 
 		{
 			glVertex3f(
-					(gfloat)(ve_ptr[rpm_base+rpm])
+					(gfloat)(ms_data[rpm_page][rpm_base+rpm])
 					/ve_view->rpm_div,
-					(gfloat)(ve_ptr[load_base+load])
+					(gfloat)(ms_data[load_page][load_base+load])
 					/ve_view->load_div, 	 	
-					(gfloat)(ve_ptr[tbl_base+(load*ve_view->load_bincount)+rpm])/divider
+					(gfloat)(ms_data[tbl_page][tbl_base+(load*ve_view->load_bincount)+rpm])/divider
 					/ve_view->ve_div);
 		}
 		glEnd();
@@ -634,11 +645,11 @@ void ve3d_draw_ve_grid(void *ptr)
 		for(rpm=0;rpm<ve_view->rpm_bincount;rpm++)
 		{
 			glVertex3f(	
-					(gfloat)(ve_ptr[rpm_base+rpm])
+					(gfloat)(ms_data[rpm_page][rpm_base+rpm])
 					/ve_view->rpm_div,
-					(gfloat)(ve_ptr[load_base+load])
+					(gfloat)(ms_data[load_page][load_base+load])
 					/ve_view->load_div,
-					(gfloat)(ve_ptr[tbl_base+(load*ve_view->load_bincount)+rpm])/divider
+					(gfloat)(ms_data[tbl_page][tbl_base+(load*ve_view->load_bincount)+rpm])/divider
 					/ve_view->ve_div);	
 		}
 		glEnd();
@@ -652,10 +663,12 @@ void ve3d_draw_ve_grid(void *ptr)
  */
 void ve3d_draw_active_indicator(void *ptr)
 {
-	gint *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
 	extern gint **ms_data;
+	gint rpm_page = 0;
+	gint load_page = 0;
+	gint tbl_page = 0;
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint tbl_base = 0;
@@ -663,10 +676,13 @@ void ve3d_draw_active_indicator(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_active_indicator()\n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
+
+	rpm_page = ve_view->rpm_page;
+	load_page = ve_view->load_page;
+	tbl_page = ve_view->tbl_page;
 
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
 	if (ve_view->is_spark)
@@ -679,9 +695,9 @@ void ve3d_draw_active_indicator(void *ptr)
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
-			(gfloat)(ve_ptr[rpm_base+ve_view->active_rpm])/ve_view->rpm_div,
-			(gfloat)(ve_ptr[load_base+ve_view->active_load])/ve_view->load_div,	
-			((gfloat)ve_ptr[tbl_base+(ve_view->active_load*ve_view->load_bincount)+ve_view->active_rpm]/divider)/ve_view->ve_div);
+			(gfloat)(ms_data[rpm_page][rpm_base+ve_view->active_rpm])/ve_view->rpm_div,
+			(gfloat)(ms_data[load_page][load_base+ve_view->active_load])/ve_view->load_div,	
+			((gfloat)ms_data[tbl_page][tbl_base+(ve_view->active_load*ve_view->load_bincount)+ve_view->active_rpm]/divider)/ve_view->ve_div);
 	glEnd();	
 }
 
@@ -734,10 +750,12 @@ void ve3d_draw_axis(void *ptr)
 	gint i=0, rpm=0, load=0;
 	gfloat top = 0.0;
 	gchar *label;
-	gint *ve_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)ptr;
 	extern gint **ms_data;
+	gint rpm_page = 0;
+	gint load_page = 0;
+	gint tbl_page = 0;
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint rpm_bincount = 0;
@@ -746,10 +764,14 @@ void ve3d_draw_axis(void *ptr)
 
 	dbg_func(__FILE__": ve3d_draw_axis()\n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
+
+	rpm_page = ve_view->rpm_page;
+	load_page = ve_view->load_page;
+	tbl_page = ve_view->tbl_page;
+
 	rpm_bincount = ve_view->rpm_bincount;
 	load_bincount = ve_view->load_bincount;
 
@@ -764,16 +786,16 @@ void ve3d_draw_axis(void *ptr)
 	{
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(
-				((ve_ptr[rpm_base])/ve_view->rpm_div),
-				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),		
+				((ms_data[rpm_page][rpm_base])/ve_view->rpm_div),
+				((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),		
 				((gfloat)i)/ve_view->ve_div);
 		glVertex3f(
-				((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
-				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),		
+				((ms_data[rpm_page][rpm_base+rpm_bincount-1])/ve_view->rpm_div),
+				((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),		
 				((gfloat)i)/ve_view->ve_div);
 		glVertex3f(
-				((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
-				((ve_ptr[load_base])/ve_view->load_div),		
+				((ms_data[rpm_page][rpm_base+rpm_bincount-1])/ve_view->rpm_div),
+				((ms_data[load_page][load_base])/ve_view->load_div),		
 				((gfloat)i)/ve_view->ve_div);
 		glEnd();	
 	}
@@ -783,12 +805,12 @@ void ve3d_draw_axis(void *ptr)
 	{
 		glBegin(GL_LINES);
 		glVertex3f(
-				((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
-				((ve_ptr[load_base+i])/ve_view->load_div),		
+				((ms_data[rpm_page][rpm_base+rpm_bincount-1])/ve_view->rpm_div),
+				((ms_data[load_page][load_base+i])/ve_view->load_div),		
 				0.0);
 		glVertex3f(
-				((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
-				((ve_ptr[load_base+i])/ve_view->load_div),		
+				((ms_data[rpm_page][rpm_base+rpm_bincount-1])/ve_view->rpm_div),
+				((ms_data[load_page][load_base+i])/ve_view->load_div),		
 				top);
 		glEnd();
 	}
@@ -798,12 +820,12 @@ void ve3d_draw_axis(void *ptr)
 	{
 		glBegin(GL_LINES);
 		glVertex3f(
-				((ve_ptr[rpm_base+i])/ve_view->rpm_div),		
-				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),
+				((ms_data[rpm_page][rpm_base+i])/ve_view->rpm_div),		
+				((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),
 				0.0);
 		glVertex3f(
-				((ve_ptr[rpm_base+i])/ve_view->rpm_div),
-				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),		
+				((ms_data[rpm_page][rpm_base+i])/ve_view->rpm_div),
+				((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),		
 				top);
 		glEnd();
 	}
@@ -811,54 +833,54 @@ void ve3d_draw_axis(void *ptr)
 	/* Add the back corner top lines */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(
-			((ve_ptr[rpm_base])/ve_view->rpm_div),	
-			((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),
+			((ms_data[rpm_page][rpm_base])/ve_view->rpm_div),	
+			((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),
 			top);
 	glVertex3f(
-			((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),	
-			((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),
+			((ms_data[rpm_page][rpm_base+rpm_bincount-1])/ve_view->rpm_div),	
+			((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),
 			top);
 	glVertex3f(
-			((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
-			((ve_ptr[load_base])/ve_view->load_div),	
+			((ms_data[rpm_page][rpm_base+rpm_bincount-1])/ve_view->rpm_div),
+			((ms_data[load_page][load_base])/ve_view->load_div),	
 			top);
 	glEnd();
 
 	/* Add front corner base lines */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(
-			((ve_ptr[rpm_base])/ve_view->rpm_div),	
-			((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),
+			((ms_data[rpm_page][rpm_base])/ve_view->rpm_div),	
+			((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),
 			0.0);
 	glVertex3f(
-			((ve_ptr[rpm_base])/ve_view->rpm_div),	
-			((ve_ptr[load_base])/ve_view->load_div),
+			((ms_data[rpm_page][rpm_base])/ve_view->rpm_div),	
+			((ms_data[load_page][load_base])/ve_view->load_div),
 			0.0);
 	glVertex3f(
-			((ve_ptr[rpm_base+rpm_bincount-1])/ve_view->rpm_div),
-			((ve_ptr[load_base])/ve_view->load_div),
+			((ms_data[rpm_page][rpm_base+rpm_bincount-1])/ve_view->rpm_div),
+			((ms_data[load_page][load_base])/ve_view->load_div),
 			0.0);
 	glEnd();
 
 	/* Draw RPM and KPA labels */
 	for (i=0;i<load_bincount;i++)
 	{
-		load = (ve_ptr[load_base+i]);
+		load = (ms_data[load_page][load_base+i]);
 		label = g_strdup_printf("%i",load);
 		ve3d_draw_text(label,
-				((ve_ptr[rpm_base])/ve_view->rpm_div),
-				((ve_ptr[load_base+i])/ve_view->load_div),
+				((ms_data[rpm_page][rpm_base])/ve_view->rpm_div),
+				((ms_data[load_page][load_base+i])/ve_view->load_div),
 				0.0);
 		g_free(label);
 	}
 
 	for (i=0;i<rpm_bincount;i++)
 	{
-		rpm = (ve_ptr[rpm_base+i])*100;
+		rpm = (ms_data[rpm_page][rpm_base+i])*100;
 		label = g_strdup_printf("%i",rpm);
 		ve3d_draw_text(label,
-				((ve_ptr[rpm_base+i])/ve_view->rpm_div),
-				((ve_ptr[load_base])/ve_view->load_div),
+				((ms_data[rpm_page][rpm_base+i])/ve_view->rpm_div),
+				((ms_data[load_page][load_base])/ve_view->load_div),
 				0.0);
 		g_free(label);
 	}
@@ -868,8 +890,8 @@ void ve3d_draw_axis(void *ptr)
 	{
 		label = g_strdup_printf("%i",i);
 		ve3d_draw_text(label,
-				((ve_ptr[rpm_base])/ve_view->rpm_div),
-				((ve_ptr[load_base+load_bincount-1])/ve_view->load_div),
+				((ms_data[rpm_page][rpm_base])/ve_view->rpm_div),
+				((ms_data[load_page][load_base+load_bincount-1])/ve_view->load_div),
 				(gfloat)i/ve_view->ve_div);
 		g_free(label);
 	}
@@ -936,6 +958,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	gint offset = 0;
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
+	gint load_page = 0;
+	gint rpm_page = 0;
+	gint tbl_page = 0;
 	gint load_base = 0;
 	gint rpm_base = 0;
 	gint tbl_base = 0;
@@ -943,19 +968,22 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	extern GList ***ve_widgets;
 	struct Ve_View_3D *ve_view = NULL;
 	extern gint **ms_data;
-	gint * ve_ptr = NULL;
 	GtkWidget *spinner = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
 	dbg_func(__FILE__": ve3d_key_press_event()\n",OPENGL);
 
-	ve_ptr = (gint *) ms_data[ve_view->table_num];
 	load_bincount = ve_view->load_bincount;
 	rpm_bincount = ve_view->rpm_bincount;
+
 	rpm_base = ve_view->rpm_base;
 	load_base = ve_view->load_base;
 	tbl_base = ve_view->tbl_base;
+
+	rpm_page = ve_view->rpm_page;
+	load_page = ve_view->load_page;
+	tbl_page = ve_view->tbl_page;
 
 	// Spark requires a divide by 2.84 to convert from ms units to degrees
 	if (ve_view->is_spark)
@@ -996,10 +1024,10 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_Page_Up:
 			dbg_func("\t\"Page Up\"\n",OPENGL);
 
-			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] <= 245)
+			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] <= 245)
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
-				value = ve_ptr[offset] + 10;
+				value = ms_data[tbl_page][offset] + 10;
 				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
@@ -1008,10 +1036,10 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_KP_Add:
 			dbg_func("\t\"PLUS\"\n",OPENGL);
 
-			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] < 255)
+			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] < 255)
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
-				value = ve_ptr[offset] + 1;
+				value = ms_data[tbl_page][offset] + 1;
 				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 
@@ -1020,10 +1048,10 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_Page_Down:
 			dbg_func("\t\"Page Down\"\n",OPENGL);
 
-			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] >= 10)
+			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] >= 10)
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
-				value = ve_ptr[offset] - 10;
+				value = ms_data[tbl_page][offset] - 10;
 				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
@@ -1034,10 +1062,10 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 		case GDK_KP_Subtract:
 			dbg_func("\t\"MINUS\"\n",OPENGL);
 
-			if (ve_ptr[tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] > 0)
+			if (ms_data[tbl_page][tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm] > 0)
 			{
 				offset = tbl_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
-				value = ve_ptr[offset] - 1;
+				value = ms_data[tbl_page][offset] - 1;
 				spinner = g_list_nth_data(ve_widgets[ve_view->table_num][offset],0);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
@@ -1082,11 +1110,15 @@ void initialize_ve3d_view(void *ptr)
 	ve_view->load_max = 0;
 	ve_view->ve_max = 0;
 	ve_view->is_spark = FALSE;
+	ve_view->rpm_page = 0;
+	ve_view->load_page = 0;
+	ve_view->tbl_page = 0;
 	ve_view->rpm_base = 0;
 	ve_view->load_base = 0;
 	ve_view->tbl_base = 0;
 	ve_view->rpm_bincount = 0;
 	ve_view->load_bincount = 0;
+	ve_view->table_name = NULL;
 	return;
 }
 

@@ -29,7 +29,6 @@ EXPORT void finish_raweditor(void)
 	GtkWidget *frame = NULL;
 	GtkWidget *lbl_table = NULL;
 	GtkWidget *table = NULL;
-	GtkWidget *ebox = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *notebook = NULL;
 	GtkWidget *top = NULL;
@@ -38,7 +37,6 @@ EXPORT void finish_raweditor(void)
 	gint col = 0;
 	gint i = 0;
 	gint j = 0;
-	gint k = 0;
 	gint cols = 8;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
@@ -57,7 +55,7 @@ EXPORT void finish_raweditor(void)
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		label = gtk_label_new(g_strdup_printf("Page %i",i));
-		frame = gtk_frame_new(g_strdup_printf("Page %i",i));
+		frame = gtk_frame_new(g_strdup_printf("Page %i RAW ECU data (in HEX)",i));
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
 
 		vbox = gtk_vbox_new(FALSE,0);
