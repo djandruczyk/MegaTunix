@@ -285,6 +285,7 @@ void *thread_dispatcher(gpointer data)
  */
 void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm)
 {
+	gint i = 0;
 	struct OutputData *output = NULL;
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
@@ -293,7 +294,11 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 	if ((g_list_length(ve_widgets[page][offset]) > 1))
 	{
 		paused_handlers = TRUE;
-		g_list_foreach(ve_widgets[page][offset],update_widget,widget);
+		for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+		{
+			if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[page][offset],i)),"dl_type") == IMMEDIATE)
+				update_widget(g_list_nth_data(ve_widgets[page][offset],i),NULL);
+		}
 		paused_handlers = FALSE;
 	}
 	if (offline)

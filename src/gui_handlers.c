@@ -755,7 +755,15 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case REQ_FUEL_1:
 		case REQ_FUEL_2:
+			printf("req_fuel_changed!!!\n");
 			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+	//		if (firmware->rf_params[table_num]->last_req_fuel_total == value)
+	//		{
+	//			printf("last %f, current %f\n",firmware->rf_params[table_num]->last_req_fuel_total,value);
+	//			printf("reqfuel_hasn't changed, returning\n");
+	//			break;
+	//		}
+			printf("value changed to %f\n",value);
 			firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
 			firmware->rf_params[table_num]->req_fuel_total = value;
 			check_req_fuel_limits(table_num);
