@@ -23,10 +23,11 @@
 
 enum
 {
-	COL_NAME = 0,
+	COL_OBJECT = 0,
+	COL_NAME,
 	COL_LOWER,
 	COL_UPPER,
-	COL_OBJECT,
+	COL_ENTRY,
 	NUM_COLS
 } ;
 
@@ -52,12 +53,15 @@ void populate_user_output_choices(void)
 	}
 
 	table = gtk_table_new(2,2,FALSE);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_table_set_col_spacings(GTK_TABLE(table),15);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(parent),table);
 
-	view = create_view();
+	view = create_view(1);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
+			      				       
 	sw = gtk_scrolled_window_new(NULL,NULL);
-	gtk_widget_set_size_request(sw,100,50);
 
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
@@ -65,6 +69,21 @@ void populate_user_output_choices(void)
 	gtk_container_add(GTK_CONTAINER(sw),view);
 	gtk_table_attach(GTK_TABLE(table),sw,
 			0,1,0,1,
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+			0,0);
+
+	view = create_view(2);
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
+	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
+			      				       
+	sw = gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+			GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC);
+	gtk_container_add(GTK_CONTAINER(sw),view);
+	gtk_table_attach(GTK_TABLE(table),sw,
+			1,2,0,1,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 			0,0);
@@ -86,7 +105,7 @@ GtkTreeModel * create_model(void)
 	GObject * object = NULL;
 	extern struct Rtv_Map *rtv_map;
 
-	store = gtk_list_store_new (NUM_COLS, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, G_TYPE_POINTER);
+	store = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
 
 	/* Append a row and fill in some data */
 	while ((data = rtv_map->raw_list[i])!= NULL)
@@ -105,57 +124,65 @@ GtkTreeModel * create_model(void)
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
+				COL_OBJECT, object,
 				COL_NAME, name,
 				COL_LOWER, lower,
 				COL_UPPER, upper,
-				COL_OBJECT, object,
+				COL_ENTRY, -1,
 				-1);
 	}
 	return GTK_TREE_MODEL(store);
 }
 
 
-GtkWidget * create_view(void)
+GtkWidget * create_view(gint output)
 {
 	GtkTreeViewColumn   *col;
 	GtkCellRenderer     *renderer;
 	GtkTreeModel        *model;
-	GtkWidget           *view;
+	GtkTreeView           *view;
 
-	view = gtk_tree_view_new ();
+	view = (GtkTreeView *)gtk_tree_view_new ();
 
 	/* --- Column #1 --- */
 	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
-			-1,      
-			"Variable",  
+	col = gtk_tree_view_column_new_with_attributes (
+			g_strdup_printf("Out %i Variable",output),  
 			renderer,
-			"markup", 0,
+			"markup", COL_NAME,
 			NULL);
+	gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
+	gtk_tree_view_append_column (view, col);
 
 	/* --- Column #2 --- */
 
-	col = gtk_tree_view_column_new();
-
 	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
-			-1,      
+	col = gtk_tree_view_column_new_with_attributes (
 			"Lower",  
 			renderer,
 			"text", COL_LOWER,
 			NULL);
+	gtk_tree_view_append_column (view, col);
 
 	/* --- Column #3 --- */
 
-	col = gtk_tree_view_column_new();
-
 	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
-			-1,      
+	col = gtk_tree_view_column_new_with_attributes (
 			"Upper",  
 			renderer,
 			"text", COL_UPPER,
 			NULL);
+	gtk_tree_view_append_column (view, col);
+
+	/* --- Column #4 --- */
+
+	renderer = gtk_cell_renderer_text_new ();
+	col = gtk_tree_view_column_new_with_attributes (
+			"Value",  
+			renderer,
+			"text", COL_ENTRY,
+			NULL);
+	gtk_tree_view_append_column (view, col);
 
 	model = create_model ();
 
@@ -163,5 +190,5 @@ GtkWidget * create_view(void)
 
 	g_object_unref (model); /* destroy model automatically with view */
 
-	return view;
+	return (GtkWidget *)view;
 }
