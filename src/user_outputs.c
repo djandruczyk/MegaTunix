@@ -37,7 +37,7 @@ enum
 	NUM_COLS
 } ;
 
-void build_model_and_view(GtkWidget * widget)
+EXPORT void build_model_and_view(GtkWidget * widget)
 {
 	extern gboolean rtvars_loaded;
 	GtkWidget *view = NULL;

@@ -56,7 +56,7 @@ void stop_realtime_tickler()
 		while (leaving && ((g_async_queue_length(io_queue) > 0) || (dispatcher_id != 0)))
 		{
 		//	printf("waiting for queue to finish\n");
-			usleep(10000);
+			g_usleep(10000);
 		}
 	}
 	else
