@@ -67,7 +67,7 @@ static struct
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STD},
 { "MegaSquirt Tuning", build_tuning, "_Tuning",STD},
 { "MegaSquirt Tools", build_tools, "T_ools",STD},
-{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",STD},
+{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",RAW_MEMORY},
 { "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STD},
 { "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STD},
 { "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STD},
@@ -84,6 +84,7 @@ int setup_gui()
 	GtkWidget *vbox;
 	GtkWidget *button;
 	extern GList *dt_controls;
+	extern GList *raw_mem_controls;
 	extern GList *ign_controls;
 	gint i=0;
 
@@ -120,6 +121,13 @@ int setup_gui()
 
 		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
 
+		if (notebook_tabs[i].capabilities & RAW_MEMORY)
+		{
+			raw_mem_controls = g_list_append(raw_mem_controls, 
+					(gpointer)frame);
+			raw_mem_controls = g_list_append(raw_mem_controls, 
+					(gpointer)label);
+		}
 		if (notebook_tabs[i].capabilities & DUALTABLE)
 		{
 			dt_controls = g_list_append(dt_controls, 

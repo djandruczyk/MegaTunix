@@ -256,8 +256,8 @@ int handle_ms_data(InputData which_data)
 
 			ms_ve_goodread_count++;
 			break;
-		case RAW_MEMORY:
-			dbg_func("RAW_MEMORY read not designed yet...\n",CRITICAL);
+		case RAW_MEMORY_DUMP:
+			dbg_func("RAW_MEMORY_DUMP read not designed yet...\n",CRITICAL);
 			break;
 		default:
 			dbg_func("handle_ms_data, improper case, contact author\n",CRITICAL);

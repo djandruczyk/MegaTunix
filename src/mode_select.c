@@ -29,6 +29,7 @@ void parse_ecu_capabilities(unsigned int ecu_caps)
 	set_dualtable_mode((ecu_caps & DUALTABLE) == 0 ? FALSE:TRUE);
 	set_launch_ctrl_mode((ecu_caps & LAUNCH_CTRL) == 0 ? FALSE:TRUE);
 	set_enhanced_mode((ecu_caps & ENHANCED) == 0 ? FALSE:TRUE);
+	set_raw_memory_mode((ecu_caps & RAW_MEMORY) == 0 ? FALSE:TRUE);
 	if (ecu_caps & IAC_STEPPER)
 		gtk_button_set_label(GTK_BUTTON(buttons.pwm_idle_but),
 				"Stepper Controlled");
@@ -43,6 +44,13 @@ void set_dt_table_mapping_state(gboolean state)
 
 	dbg_func(g_strdup_printf("Setting DT map controls state to %s\n",states[state]),INTERROGATOR);
         g_list_foreach(table_map_controls, set_widget_state,(gpointer)state);
+}
+
+void set_raw_memory_mode(gboolean state)
+{
+        extern GList *raw_mem_controls;
+	dbg_func(g_strdup_printf("Setting RAW Memory controls state to %s\n",states[state]),INTERROGATOR);
+        g_list_foreach(raw_mem_controls, set_widget_state,(gpointer)state);
 }
 
 void set_enhanced_mode(gboolean state)

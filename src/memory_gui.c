@@ -15,6 +15,7 @@
 #include <defines.h>
 #include <memory_gui.h>
 
+GList *raw_mem_controls = NULL;
 
 void build_memory(GtkWidget *parent_frame)
 {
@@ -35,7 +36,7 @@ void build_memory(GtkWidget *parent_frame)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-
+	
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 

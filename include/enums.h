@@ -23,7 +23,7 @@ typedef enum
 	VE_AND_CONSTANTS_1,
 	VE_AND_CONSTANTS_2,
 	IGNITION_VARS,
-	RAW_MEMORY
+	RAW_MEMORY_DUMP
 }InputData;
 
 /* Regular Buttons */
@@ -173,13 +173,14 @@ typedef enum
 	S_N_SPARK	= 1<<1,
 	S_N_EDIS	= 1<<2,
 	ENHANCED	= 1<<3,
-	IAC_PWM		= 1<<4,
-	IAC_STEPPER	= 1<<5,
-	BOOST_CTRL	= 1<<6,
-	OVERBOOST_SFTY	= 1<<7,
-	LAUNCH_CTRL	= 1<<8,
-	TEMP_DEP	= 1<<9,	/* Temp units dependancy, used by Rt_Controls */
-	O2_DEP		= 1<<10	/* O2 scale dependancy, used by Rt_Controls */
+	RAW_MEMORY	= 1<<4,
+	IAC_PWM		= 1<<5,
+	IAC_STEPPER	= 1<<6,
+	BOOST_CTRL	= 1<<7,
+	OVERBOOST_SFTY	= 1<<8,
+	LAUNCH_CTRL	= 1<<9,
+	TEMP_DEP	= 1<<10,/* Temp units dependancy, used by Rt_Controls */
+	O2_DEP		= 1<<11	/* O2 scale dependancy, used by Rt_Controls */
 }Capabilities;
 
 typedef enum
