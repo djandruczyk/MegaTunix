@@ -37,7 +37,7 @@ GHashTable *dynamic_widgets = NULL;
  anywhere in the program.
  \param widget a (GtkWidget *) pointer, name is derived from this pointer by
  a call to glade_get_widget_name
- \param user_data currently unused.
+ \param user_data (gpointer) is currently unused.
  */
 void populate_master(GtkWidget *widget, gpointer user_data)
 {
@@ -76,10 +76,10 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 
 
 /*!
- \brief register_widget adds a widget to the master hashtable (dynamic_widgets)
+ \brief register_widget() adds a widget to the master hashtable (dynamic_widgets)
  \see dynamic_widgets
- \param name (gchar *) String of widget name to store (any strings are allowed)
- \param widget (GtkWidget *) Pointer to widget to be stored by name
+ \param name (gchar *) Names of widget to store (any strings are allowed)
+ \param widget (GtkWidget *) Pointer to the widget to be stored by name.
  \see deregister_widget
  */
 void register_widget(gchar *name, GtkWidget * widget)
@@ -98,9 +98,9 @@ void register_widget(gchar *name, GtkWidget * widget)
 
 
 /*!
- \brief deregister_widget removes a widget to the master hashtable (dynamic_widgets)
+ \brief deregister_widget() removes a widget from the master hashtable (dynamic_widgets)
  \see dynamic_widgets
- \param name (gchar *) String of widget name to remove (any strings are allowed)
+ \param name (gchar *) Name of widget to remove (any strings are allowed)
  \returns TRUE on success removing, FALSE on failure removing 
  \see register_widget
  */
@@ -110,12 +110,12 @@ gboolean deregister_widget(gchar *name)
 }
 
 /*!
- \brief get_raw_widget is a concenience function to return a pointer to
+ \brief get_raw_widget() is a convenience function to return a pointer to
  the text entry on the raweditor for the widget at the provided page/offset
  We find this widget by looking for the "raw" flag set on the widget
- \param page (gint), page to search for this widget
- \param offset (gint) offset in above page that this widget resides
- \returns Pointer (GtkWidget *) to the widget requested.
+ \param page (gint) The page to search for this widget
+ \param offset (gint) The offset in above page that this widget resides
+ \returns (GtkWidget *) to the widget requested.
  */
 GtkWidget * get_raw_widget(gint page, gint offset)
 {

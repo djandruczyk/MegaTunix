@@ -20,6 +20,7 @@
 #ifdef __WIN32__
  #include <io.h>
  #include <windows.h>
+#endif
 
 extern struct Serial_Params *serial_params;
 /*
@@ -30,11 +31,12 @@ void win32_open_comm_port()
 */
 
 /*!
- \brief, win32_setup_serial_params() sets up the serial port attributes for win32
+ \brief win32_setup_serial_params() sets up the serial port attributes for win32
  by setting things basically for 8N1, no flow, no escapes, etc....
  */
 void win32_setup_serial_params()
 {
+#ifdef __WIN32__
 	DCB dcb;
 	COMMTIMEOUTS timeouts;
 	extern gint baudrate;
@@ -88,19 +90,21 @@ void win32_setup_serial_params()
 
 
 	return;
+#endif
 }
 
 
 /*!
- \brief win32_fluch_serial(fd,mode) is used to flush the serial port.  It effectively
- does the same thing as "tcflush(fd,mode)". and a wrapper function is used to call
+ \brief win32_fluch_serial() is used to flush the serial port.  It effectively
+ does the same thing as "tcflush()". and a wrapper function is used to call
  this or tcflush depending what OS we are compiled for.
- \param fd, (integer) filedescriptor to flush
- \param mode, (integer enum) either TCIFLUSH (input flush) TCOFLUSH (output flush) 
+ \param fd (integer) filedescriptor to flush
+ \param mode (integer enum) either TCIFLUSH (input flush), TCOFLUSH (output flush), 
  or TCIOFLUSH (both input and output flush).
  */
 void win32_flush_serial(int fd, int mode)
 {
+#ifdef __WIN32__
 	switch (mode)
 	{
 		case TCIFLUSH:
@@ -115,6 +119,6 @@ void win32_flush_serial(int fd, int mode)
 			PurgeComm((HANDLE) _get_osfhandle (fd),PURGE_TXCLEAR|PURGE_RXCLEAR);
 			break;
 	}
-}
-
 #endif
+    return;
+}
