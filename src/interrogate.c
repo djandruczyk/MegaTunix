@@ -149,6 +149,10 @@ void interrogate_ecu()
 		{
 			interrogated = FALSE;
 			no_ms_connection();
+			/* Set caps to std, no flags, disable all extra
+			 * controls 
+			 */
+			parse_ecu_capabilities(0);
 			g_static_mutex_unlock(&mutex);
 			return;
 		}

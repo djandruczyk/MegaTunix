@@ -691,6 +691,11 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	float * f_ptr = NULL;
 	
 	v_value = (struct Viewable_Value *) value;
+	if (v_value == NULL)
+	{
+		printf("no traces, exiting...\n");
+		return;
+		}
 	pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),
 				"pixmap");
 

@@ -1198,3 +1198,10 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 	return FALSE;	// Allow other handles to run... 
 
 }
+
+void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+{
+//	printf("page changed to %i\n",page_no);
+
+	return;
+}

@@ -26,7 +26,6 @@
 #include <vetable_gui.h>
 #include <warmwizard_gui.h>
 
-
 extern struct DynamicEntries entries;
 extern struct DynamicLabels labels;
 struct DynamicProgress progress;
@@ -247,7 +246,6 @@ void build_runtime(GtkWidget *parent_frame)
 
 gboolean update_runtime_vars()
 {
-	static gint count = 0;
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
 	extern unsigned int ecu_caps;
@@ -260,7 +258,6 @@ gboolean update_runtime_vars()
 	gchar * tmpbuf = NULL;
 	gfloat tmpf = 0.0;
 
-	gdk_threads_enter();
 
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(ve_widgets[0]),"data");
@@ -272,13 +269,13 @@ gboolean update_runtime_vars()
 	/* Count is used  to force an update after 5 runs EVEN IF the 
 	 * value hasn't changed.  seems to fix a "stuck bar" I've seen
 	 */
-	count++;
 	
 	/* The additional NULL test is to avoid a timing-based problem
 	 * where ve_view can exist, but the window doesn't yet.
 	 * It's a small window, but I hit it several times.
 	 */
 
+	gdk_threads_enter();
 	if ((ve_view0 != NULL) && (ve_view0->drawing_area->window != NULL)) 
 	        gdk_window_invalidate_rect (ve_view0->drawing_area->window, 
 					&ve_view0->drawing_area->allocation, 
@@ -304,7 +301,7 @@ gboolean update_runtime_vars()
 	g_hash_table_foreach(rt_controls,rt_update_values,NULL);
 
 	/* Update all the controls on the warmup wizrd page... */
-	if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update) || (count > 5))
+	if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update))
 	{
 		tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
 		gtk_label_set_text(GTK_LABEL(labels.ww_ego_lab),tmpbuf);
@@ -315,7 +312,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if ((runtime->map != runtime_last->map) || (count > 5))
+	if (runtime->map != runtime_last->map)
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->map);
 		gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
@@ -326,7 +323,7 @@ gboolean update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if ((runtime->clt != runtime_last->clt) || (forced_update) || (count > 5))
+	if ((runtime->clt != runtime_last->clt) || (forced_update))
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
 		gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
@@ -337,7 +334,7 @@ gboolean update_runtime_vars()
 		g_free(tmpbuf);
 		warmwizard_update_status(runtime->clt);
 	}
-	if ((runtime->warmcorr != runtime_last->warmcorr) || (count > 5))
+	if ((runtime->warmcorr != runtime_last->warmcorr))
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->warmcorr);
 		gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
@@ -358,7 +355,7 @@ gboolean update_runtime_vars()
 	gtk_widget_set_sensitive(misc.status[CONNECTED],
 			connected);
 
-	if ((forced_update) || (runtime->engine.value != runtime_last->engine.value) || (count > 5))
+	if ((forced_update) || (runtime->engine.value != runtime_last->engine.value))
 	{
 		/* Cranking */
 		gtk_widget_set_sensitive(misc.status[CRANKING],
@@ -394,8 +391,6 @@ gboolean update_runtime_vars()
 	}
 	if (forced_update)
 		forced_update = FALSE;
-	if (count > 5)
-		count = 0;
 	gdk_threads_leave();
 	return TRUE;
 }
@@ -428,13 +423,14 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat fvalue = 0.0;
 	gfloat tmpf;
 	gchar * tmpbuf = NULL;
-	gint count = control->count++;
 	
+
 	if (control->size == UCHAR)
 	{
 		uc_ptr = (unsigned char *) runtime;
 		l_uc_ptr = (unsigned char *) runtime_last;
-		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (count > 5))
+		//if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (count > 5))
+		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]))
 		{
 			ivalue = uc_ptr[offset];
 			tmpbuf = g_strdup_printf("%i",ivalue);
@@ -444,15 +440,16 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 			g_free(tmpbuf);
-			if (control->count > 5)
-				control->count = 0;
+//			if (control->count > 5)
+//				control->count = 0;
 		}
 	}
 	else if (control->size == SHORT)
 	{
 		sh_ptr = (short *) runtime;
 		l_sh_ptr = (short *) runtime_last;
-		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (count > 5))
+		//if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (count > 5))
+		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT])) 
 		{
 			svalue = sh_ptr[offset/SHORT];
 			tmpbuf = g_strdup_printf("%i",svalue);
@@ -462,15 +459,15 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 			g_free(tmpbuf);
-			if (control->count > 5)
-				control->count = 0;
+//			if (control->count > 5)
+//				control->count = 0;
 		}
 	}
 	else if (control->size == FLOAT)
 	{
 		fl_ptr = (float *) runtime;
 		l_fl_ptr = (float *) runtime_last;
-		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]) || (count > 5))
+		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]))
 		{
 			fvalue = fl_ptr[offset/FLOAT];
 			tmpbuf = g_strdup_printf("%.2f",fvalue);
@@ -480,8 +477,8 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 			g_free(tmpbuf);
-			if (control->count > 5)
-				control->count = 0;
+//			if (control->count > 5)
+//				control->count = 0;
 		}
 	}
 	else
