@@ -51,6 +51,7 @@ static const gboolean valid_logables[]=
 void build_logviewer(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
+	GtkWidget *sbar;
 	GtkWidget *vbox2;
 	GtkWidget *vbox3;
 	GtkWidget *hbox;
@@ -73,7 +74,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	/* Holds all the log traces... */
-	vbox2 = gtk_vbox_new(TRUE,1);
+	vbox2 = gtk_vbox_new(FALSE,1);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
@@ -100,6 +101,10 @@ void build_logviewer(GtkWidget *parent_frame)
                         "expose_event",
                         G_CALLBACK(lv_expose_event),
                         NULL);
+
+	adj =  (GtkAdjustment *) gtk_adjustment_new(1.00,0.0,1.0,0.001,0.1,0);
+	sbar = gtk_hscrollbar_new(adj);
+	gtk_box_pack_start(GTK_BOX(vbox2),sbar,FALSE,TRUE,0);
 
 	/* Settings/Parameters frame... */
 	frame = gtk_frame_new("Playback/Viewer Parameters");
@@ -707,20 +712,34 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 	if ((gboolean)data == TRUE)
 	{
 		lo_width = v_value->d_area->allocation.width-info_width;
-		total = v_value->data_array->len < lo_width  
-			? v_value->data_array->len : lo_width;
-
 		len = v_value->data_array->len;
+		if (len == 0)	/* If empty */
+			return;
+		total = len < lo_width/lv_scroll ? len : lo_width/lv_scroll;
+			
+		printf("\nlo_width %i\n",lo_width);
+		printf("total points %i\n",total);
+
 		// Draw is reverse order, from right to left, 
 		// easier to think out in my head... :) 
 		//
 		for (i=0;i<total;i++)
 		{
-			val = g_array_index(v_value->data_array,gfloat,len-i);
+			val = g_array_index(v_value->data_array,gfloat,len-1-i);
 			percent = 1.0-(val/(v_value->upper-v_value->lower));
-			pts[i].x = w-(i*lv_scroll);
+			pts[i].x = w-(i*lv_scroll)-lv_scroll-1;
 			pts[i].y = (gint) (percent*(h-2))+1;
 		}
+		/* Debugging code
+		i = total - 1;
+		printf("i %i; total %i, last coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		i--;
+		printf("i %i; total %i, second last coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		i = 0;
+		printf("i %i; total %i, first coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		i = 1;
+		printf("i %i; total %i, second coord is (%i,%i)\n",i,total,pts[i].x,pts[i].y);
+		*/
 		gdk_draw_lines(pixmap,
 				v_value->trace_gc,
 				pts,
@@ -760,18 +779,19 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 
 	last_grat = v_value->last_grat;
 	grat_interval = v_value->grat_interval;
-	
 
-	/* Draw thedata.... */
+	/* Draw the data.... */
 	percent = 1.0-(val/(v_value->upper-v_value->lower));
 	if (v_value->last_y == -1)
-		v_value->last_y = (gint)(percent*h);
+		v_value->last_y = (gint)(percent*(h-2))+1;
 	
 	gdk_draw_line(pixmap,
 			v_value->trace_gc,
-			w-1-lv_scroll,v_value->last_y,
+			w-lv_scroll-1,v_value->last_y,
 			w-1,(gint)(percent*(h-2))+1);
 
+//	printf("drawing line from (%i,%i) to (%i,%i)\n",w-lv_scroll,v_value->last_y,w,(gint)(percent*(h-2))+1);
+                        
 	v_value->last_y = (gint)((percent*(h-2))+1);
 			
 	/* Update textual data */
@@ -782,7 +802,7 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 
 void scroll_logviewer_traces()
 {
-	gint start = 0;
+	gint start = info_width;
 	gint end = info_width;
 	gint w = lv_darea->allocation.width;
 	gint h = lv_darea->allocation.height;
@@ -795,10 +815,17 @@ void scroll_logviewer_traces()
 	gdk_draw_drawable(pixmap,
 			lv_darea->style->black_gc,
 			pixmap,
-			start,0,
-			end,0,
-			w-start,h);
+			info_width+lv_scroll,0,
+			info_width,0,
+			w-info_width-lv_scroll,h);
 
+/*	Debugging code..
+	printf("\nscreen dimensions: (%i,%i), info_width %i\n",w,h,info_width);
+	printf("copying rect starting at (%i,%i), to (%i,%i), w,h of (%i,%i)\n",
+			info_width+lv_scroll,0,
+                        info_width,0,
+                        w-info_width-lv_scroll,h);
+*/
 	// Init new "blank space" as black 
 	gdk_draw_rectangle(pixmap,
 			lv_darea->style->black_gc,
