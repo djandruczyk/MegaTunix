@@ -53,14 +53,13 @@ typedef struct {
         int             count;  /* Number of evaluator variables. */
         char          **names;  /* Array of pointers to evaluator
                                  * variable names. */
-}               Evaluator;
+}Evaluator;
 
-void           *
-evaluator_create(char *string)
+void * evaluator_create(char *string)
 {
-	Evaluator      *evaluator;	/* Evaluator representing function
+	Evaluator      *evaluator = NULL;/* Evaluator representing function
 					 * given by string.  */
-	char           *stringn;/* Copy of string terminated by newline
+	char           *stringn  = NULL;/* Copy of string terminated by newline
 				 * character.  */
 
 	/*
@@ -115,8 +114,7 @@ evaluator_create(char *string)
 	return evaluator;
 }
 
-void
-evaluator_destroy(void *evaluator)
+void evaluator_destroy(void *evaluator)
 {
 	/*
 	 * Destroy tree represention of function, symbol table, array of
@@ -130,8 +128,8 @@ evaluator_destroy(void *evaluator)
 	XFREE(evaluator);
 }
 
-double
-evaluator_evaluate(void *evaluator, int count, char **names, double *values)
+
+double evaluator_evaluate(void *evaluator, int count, char **names, double *values)
 {
 	Record         *record;	/* Symbol table record corresponding to give
 				 * variable name.  */
@@ -153,8 +151,7 @@ evaluator_evaluate(void *evaluator, int count, char **names, double *values)
 	return node_evaluate(((Evaluator *) evaluator)->root);
 }
 
-char            *
-evaluator_get_string(void *evaluator)
+char * evaluator_get_string(void *evaluator)
 {
         int             length; /* Length of evaluator textual
                                  * representaion. */
@@ -174,8 +171,7 @@ evaluator_get_string(void *evaluator)
 	return ((Evaluator *) evaluator)->string;
 }
 
-void
-evaluator_get_variables(void *evaluator, char ***names, int *count)
+void evaluator_get_variables(void *evaluator, char ***names, int *count)
 {
         Record        **records;/* Array of symbol table records
                                  * containing evaluator variables. */
@@ -203,8 +199,7 @@ evaluator_get_variables(void *evaluator, char ***names, int *count)
         *names = ((Evaluator*) evaluator)->names;
 }
 
-void           *
-evaluator_derivative(void *evaluator, char *name)
+void * evaluator_derivative(void *evaluator, char *name)
 {
 	Evaluator      *derivative;	/* Derivative function evaluator.  */
 
@@ -222,8 +217,7 @@ evaluator_derivative(void *evaluator, char *name)
 	return derivative;
 }
 
-double
-evaluator_evaluate_x(void *evaluator, double x)
+double evaluator_evaluate_x(void *evaluator, double x)
 {
 	char           *names[] = {"x"};	/* Array of variable names.  */
 	double          values[1];	        /* Array of variable values.  */
@@ -235,8 +229,7 @@ evaluator_evaluate_x(void *evaluator, double x)
 	return evaluator_evaluate(evaluator, sizeof(names) / sizeof(names[0]), names, values);
 }
 
-double
-evaluator_evaluate_x_y(void *evaluator, double x, double y)
+double evaluator_evaluate_x_y(void *evaluator, double x, double y)
 {
 	char           *names[] = {"x", "y"};	/* Array of variable names.  */
 	double          values[2];	        /* Array of variable values.  */
@@ -248,8 +241,7 @@ evaluator_evaluate_x_y(void *evaluator, double x, double y)
 	return evaluator_evaluate(evaluator, sizeof(names) / sizeof(names[0]), names, values);
 }
 
-double
-evaluator_evaluate_x_y_z(void *evaluator, double x, double y, double z)
+double evaluator_evaluate_x_y_z(void *evaluator, double x, double y, double z)
 {
 	char           *names[] = {"x", "y", "z"};	/* Array of variable
 							 * names.  */
@@ -262,8 +254,7 @@ evaluator_evaluate_x_y_z(void *evaluator, double x, double y, double z)
 	return evaluator_evaluate(evaluator, sizeof(names) / sizeof(names[0]), names, values);
 }
 
-void           *
-evaluator_derivative_x(void *evaluator)
+void * evaluator_derivative_x(void *evaluator)
 {
 	/*
 	 * Differentiate function using derivation variable "x".
@@ -271,8 +262,7 @@ evaluator_derivative_x(void *evaluator)
 	return evaluator_derivative(evaluator, "x");
 }
 
-void           *
-evaluator_derivative_y(void *evaluator)
+void * evaluator_derivative_y(void *evaluator)
 {
 	/*
 	 * Differentiate function using derivation variable "y".
@@ -280,8 +270,7 @@ evaluator_derivative_y(void *evaluator)
 	return evaluator_derivative(evaluator, "y");
 }
 
-void           *
-evaluator_derivative_z(void *evaluator)
+void * evaluator_derivative_z(void *evaluator)
 {
 	/*
 	 * Differentiate function using derivation variable "z".

@@ -35,10 +35,9 @@ const char      lib_name[] = "libmatheval";	/* Library name to be printed
  * than zero, terminate calling program.  Argument mode is intended to
  * describe error severity.
  */
-static void     error_issue(int status, const char *mode, const char *message);
+static void error_issue(int status, const char *mode, const char *message);
 
-void
-error_warning(const char *message)
+void error_warning(const char *message)
 {
 	/*
 	 * Issue warning.
@@ -46,8 +45,7 @@ error_warning(const char *message)
 	error_issue(-1, "warning", message);
 }
 
-void
-error_fatal(const char *message)
+void error_fatal(const char *message)
 {
 	/*
 	 * Issue error.
@@ -55,8 +53,7 @@ error_fatal(const char *message)
 	error_issue(EXIT_FAILURE, "FATAL", message);
 }
 
-static void
-error_issue(int status, const char *mode, const char *message)
+static void error_issue(int status, const char *mode, const char *message)
 {
 	/*
 	 * Print error message.

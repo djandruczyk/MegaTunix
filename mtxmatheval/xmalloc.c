@@ -29,8 +29,7 @@
 #define bzero(buf, bytes) ((void) memset (buf, 0, bytes))
 #endif
 
-void           *
-xmalloc(size_t num)
+void * xmalloc(size_t num)
 {
 	/*
 	 * Call malloc() and check return value.
@@ -42,8 +41,7 @@ xmalloc(size_t num)
 	return ptr_new;
 }
 
-void           *
-xrealloc(void *ptr, size_t num)
+void * xrealloc(void *ptr, size_t num)
 {
 	void           *ptr_new;
 
@@ -63,8 +61,7 @@ xrealloc(void *ptr, size_t num)
 	return ptr_new;
 }
 
-void           *
-xcalloc(size_t num, size_t size)
+void * xcalloc(size_t num, size_t size)
 {
 	/*
 	 * Allocate memory and fill with zeroes.

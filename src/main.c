@@ -73,6 +73,7 @@ int main(int argc, char ** argv)
 	/* Startup status counters timeout handler... */
 	/* Run it about 15 times/second.. proc use seems negligable... */
 	statuscounts_id = gtk_timeout_add(66,(GtkFunction)update_errcounts,NULL);
+	test_math();
 	ready = TRUE;
 	gdk_threads_enter();
 	gtk_main();

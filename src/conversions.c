@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <assert.h>
 #include <config.h>
 #include <conversions.h>
 #include <defines.h>
@@ -42,6 +43,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	if (!evaluator) 	/* if no evaluator create one */
 	{
 		evaluator = evaluator_create(conv_expr);
+		assert(evaluator);
 		g_object_set_data(G_OBJECT(widget),"dl_evaluator",(gpointer)evaluator);
 	}
 	return_value = evaluator_evaluate_x(evaluator,value)+0.001;
@@ -75,6 +77,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	if (!evaluator) 	/* if no evaluator create one */
 	{
 		evaluator = evaluator_create(conv_expr);
+		assert(evaluator);
 		g_object_set_data(G_OBJECT(widget),"ul_evaluator",(gpointer)evaluator);
 	}
 	return_value = evaluator_evaluate_x(evaluator,ve_const_arr[offset])+0.001;

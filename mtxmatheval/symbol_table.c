@@ -37,8 +37,7 @@ typedef double  (*function_type) (double);
 /* Calculate hash value for given name and hash table length.  */
 static int      hash(char *name, int length);
 
-SymbolTable    *
-symbol_table_create(int length)
+SymbolTable * symbol_table_create(int length)
 {
 	SymbolTable    *symbol_table;	/* Pointer to symbol table.  */
 	static char    *names[] = {"exp", "log", "sqrt", "sin", "cos", "tan", "cot", "sec", "csc",
@@ -47,10 +46,12 @@ symbol_table_create(int length)
 		"abs", "step", "delta", "nandelta"
 	};			/* Symbol table predefined functions names.  */
 	static double   (*functions[]) (double)= {
-	exp, log, sqrt, sin, cos, tan, math_cot, math_sec, math_csc, asin, acos, atan, math_acot, math_asec, math_acsc, sinh, cosh, tanh, math_coth, math_sech, math_csch, math_asinh, math_acosh, math_atanh, math_acoth, math_asech, math_acsch, fabs, math_step, math_delta, math_nandelta};	/* Symbol table
-																	 * predefined functions
-																	 * pointers to functions
-																	 * to calculate them.  */
+		exp, log, sqrt, sin, cos, tan, math_cot, math_sec, math_csc, asin, acos, atan, math_acot, math_asec, math_acsc, sinh, cosh, tanh, math_coth, math_sech, math_csch, math_asinh, math_acosh, math_atanh, math_acoth, math_asech, math_acsch, fabs, math_step, math_delta, math_nandelta};	
+	/* Symbol table
+	 * predefined functions
+	 * pointers to functions
+	 * to calculate them.  
+	 */
 	int             i;	/* Loop counter.  */
 
 	/*
@@ -75,8 +76,7 @@ symbol_table_create(int length)
 	return symbol_table;
 }
 
-void
-symbol_table_destroy(SymbolTable * symbol_table)
+void symbol_table_destroy(SymbolTable * symbol_table)
 {
 	Record         *curr, *next;	/* Pointers to current and next
 					 * record while traversing hash table
@@ -105,8 +105,7 @@ symbol_table_destroy(SymbolTable * symbol_table)
 	XFREE(symbol_table);
 }
 
-Record         *
-symbol_table_insert(SymbolTable * symbol_table, char *name, char type,...)
+Record * symbol_table_insert(SymbolTable * symbol_table, char *name, char type,...)
 {
 	Record         *record;	/* Pointer to symbol table record
 				 * corresponding to name given.  */
@@ -157,8 +156,7 @@ symbol_table_insert(SymbolTable * symbol_table, char *name, char type,...)
 	return record;
 }
 
-Record         *
-symbol_table_lookup(SymbolTable * symbol_table, char *name)
+Record * symbol_table_lookup(SymbolTable * symbol_table, char *name)
 {
 	int             i;	/* Hash value. */
 	Record         *curr;	/* Pointer to current symbol table record.  */
@@ -179,8 +177,7 @@ symbol_table_lookup(SymbolTable * symbol_table, char *name)
 	return NULL;
 }
 
-void
-symbol_table_clear_flags(SymbolTable * symbol_table)
+void symbol_table_clear_flags(SymbolTable * symbol_table)
 {
 	Record         *curr;   /* Pointer to current symbol table record 
                                  * while traversing hash table bucket. */
@@ -194,8 +191,7 @@ symbol_table_clear_flags(SymbolTable * symbol_table)
                         curr->flag = FALSE;
 }
 
-int
-symbol_table_get_flagged_count(SymbolTable * symbol_table)
+int symbol_table_get_flagged_count(SymbolTable * symbol_table)
 {
         int             count;  /* Number of flagged symbol table records. */
 	Record         *curr;   /* Pointer to current symbol table record 
@@ -213,8 +209,7 @@ symbol_table_get_flagged_count(SymbolTable * symbol_table)
         return count;
 }
 
-int
-symbol_table_get_flagged(SymbolTable * symbol_table, Record **records, int length)
+int symbol_table_get_flagged(SymbolTable * symbol_table, Record **records, int length)
 {
         int             count;  /* Number of pointers to symbol table 
                                    records put into given array. */
@@ -238,8 +233,7 @@ symbol_table_get_flagged(SymbolTable * symbol_table, Record **records, int lengt
         return count;
 }
 
-SymbolTable    *
-symbol_table_assign(SymbolTable * symbol_table)
+SymbolTable * symbol_table_assign(SymbolTable * symbol_table)
 {
 	/*
 	 * Increase symbol table reference count and return pointer to data
@@ -254,8 +248,7 @@ symbol_table_assign(SymbolTable * symbol_table)
  * Principle, Techniques, and Tools", Addison-Wesley, 1986, pp 435-437, and
  * in turn from P.J. Weineberger's C compiler.
  */
-static int
-hash(char *s, int n)
+static int hash(char *s, int n)
 {
 	char           *p;
 	unsigned        h, g;

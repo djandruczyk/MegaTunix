@@ -28,6 +28,16 @@
 
 struct RtvMap *rtv_map = NULL;
 
+void test_math(void);
+void test_math()
+{
+	return;
+	void *eval = NULL;
+	eval = evaluator_create("x/10");
+	assert(eval);
+	printf("x*10 == %f\n",evaluator_evaluate_x(eval,5.5));
+}
+
 gboolean load_realtime_map(void )
 {
 	ConfigFile *cfgfile;
@@ -190,7 +200,8 @@ gboolean load_realtime_map(void )
 							g_hash_table_insert(rtv_map->rtv_hash,g_strdup(tmpbuf),(gpointer)object);
 						if (strstr(keys[j],"conv_expr") != NULL)
 						{
-							evaluator = evaluator_create(g_strdup(tmpbuf));
+							evaluator = evaluator_create(tmpbuf);
+							assert(evaluator);
 							if (evaluator)
 								g_object_set_data(object,"evaulator",evaluator);
 							else

@@ -158,7 +158,8 @@ typedef enum
 typedef enum
 {
 	MAT=0xf0,
-	CLT
+	CLT,
+	AFR
 }TableType;
 
 typedef enum
