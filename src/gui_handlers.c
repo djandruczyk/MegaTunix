@@ -67,6 +67,7 @@ extern struct Serial_Params *serial_params;
 static gint update_rate = 24;
 static gint runtime_id = -1;
 static gint logviewer_id = -1;
+gboolean using_pwm_idle;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean fahrenheit;
@@ -1044,21 +1045,14 @@ void update_ve_const()
 
 	if (!dualtable)
 	{
-		printf("setting alt/simul but\n");
 		if (ve_const->alternate > 0)
-		{
 			gtk_toggle_button_set_active(
 					GTK_TOGGLE_BUTTON(buttons.alternate_but),
 					TRUE);
-		printf("set alternate mode\n");
-		}
 		else
-		{
 			gtk_toggle_button_set_active(
 					GTK_TOGGLE_BUTTON(buttons.simul_but),
 					TRUE);
-		printf("set simul mode\n");
-		}
 	}
 
 
@@ -1369,10 +1363,16 @@ void check_config13(unsigned char tmp)
 	if (((tmp >> 4)&0x1) == 1)
 	{
 		// Brian Fielding PWM method, enable controls
+		using_pwm_idle = TRUE;
 		set_enhanced_idle_state(TRUE);
+		reset_temps(GINT_TO_POINTER(fahrenheit));
 	}
 	else
+	{
+		using_pwm_idle = FALSE;
 		set_enhanced_idle_state(FALSE);
+		reset_temps(GINT_TO_POINTER(fahrenheit));
+	}
 		
 }
 
