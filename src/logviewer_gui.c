@@ -21,7 +21,8 @@
 #include <ms_structures.h>
 #include <structures.h>
 
-static gint info_width = 100;
+static gint tcount = 0;	/* used to draw_infotext to know where to put the text*/
+static gint info_width = 120;
 static gint max_viewables = 0;
 static gint total_viewables = 0;
 static struct Logables viewables;
@@ -81,9 +82,6 @@ void build_logviewer(GtkWidget *parent_frame)
 			gtk_widget_get_visual(d_area)->depth);
 
 	gtk_box_pack_start(GTK_BOX(vbox2),d_area,TRUE,TRUE,0);
-
-	gdk_window_set_back_pixmap(d_area->window,pixmap,0);
-	g_object_set_data(G_OBJECT(d_area),"pixmap",(gpointer)pixmap);
 
 	/* Add events to capture mouse button presses (for popup menus...) */
         gtk_widget_add_events(d_area,
@@ -512,30 +510,45 @@ void draw_infotext(void *data)
 	struct Viewable_Value *v_value = (struct Viewable_Value *) data;
 	gint len;
 	gfloat val;
+	gint name_x = 10;
+	gint name_y ;
+	gint h = 0;
+	gint val_x_offset = 10;
+	gint val_y_offset = 20;
         PangoFontDescription *font_desc;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = (GdkPixmap *) g_object_get_data(G_OBJECT(v_value->d_area),"pixmap");
 
+	h = v_value->d_area->allocation.height;
+	if (tcount == 0)  /*clear text area */
+		gdk_draw_rectangle(pixmap,
+				v_value->d_area->style->black_gc,
+				TRUE, 0,0,
+				info_width,h);
+
+	name_y = (gint) (((float)h/(float)(total_viewables+1))*(tcount+1));
+	name_y -= 15;
 	len = v_value->data_array->len;
 	val = g_array_index(v_value->data_array,gfloat,len-1);
 
 	font_desc = pango_font_description_from_string("courier 12");
 	layout = gtk_widget_create_pango_layout(v_value->d_area,v_value->vname);
 	pango_layout_set_font_description(layout,font_desc);
-	gdk_draw_layout(pixmap,v_value->trace_gc,10,10,layout);
+	gdk_draw_layout(pixmap,v_value->trace_gc,name_x,name_y,layout);
 
 	gdk_draw_rectangle(pixmap,
 			lv_darea->style->black_gc,
 			TRUE,
-			20,30,
-			80,15);
+			name_x+val_x_offset,name_y+val_y_offset,
+			info_width-(name_x+val_x_offset),15);
 	if (v_value->size == 4)
 		layout = gtk_widget_create_pango_layout(v_value->d_area,g_strdup_printf("%.2f",val));
 	else
 		layout = gtk_widget_create_pango_layout(v_value->d_area,g_strdup_printf("%i",(gint)val));
 
 	pango_layout_set_font_description(layout,font_desc);
-	gdk_draw_layout(pixmap,v_value->trace_gc,20,30,layout);
+	gdk_draw_layout(pixmap,v_value->font_gc,name_x+val_x_offset,name_y+val_y_offset,layout);
+	tcount++;
 
 }
 
@@ -636,6 +649,7 @@ void trace_update(gpointer key, gpointer value, gpointer data)
 				v_value->trace_gc,
 				pts,
 				total);
+		draw_infotext(v_value);
 		return;
 	}
 
@@ -729,5 +743,6 @@ void scroll_logviewer_traces()
 	}
 */
 
+	tcount = 0;
 	gdk_window_clear(lv_darea->window);
 }
