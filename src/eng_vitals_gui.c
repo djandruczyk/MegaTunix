@@ -458,7 +458,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The basic Bowling/Grippo MegaSquirt units, (version 1.1 or versiosn 2.2 hardware, and software versions up through version 3.01 all use a very simple idle control,  it's either on high-idle or it's not, and it's temperature controlled, once the engine temp gets above the Fast Idle temp, the high idle solenoid is disengaged and the engine goes down to its normal idle.  The DualTable code variants added in a PWM idle control (for driving a ford style 2 wire PWM actuated idle air valve (or similar).  This code supports 5 variables, the high idle rpm, high idle temp, the low idle rpm, and low idle temp and an idle threshold.  Sensible numbers would be to set the high idle temp to be a low temperature, like 0deg F, and a high idle RPM of 1800 RPM, and a slow idle RPM or 900, and slow idle temp of 145 deg F, and an idle threshold of 100RPM. ",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   The basic Bowling/Grippo MegaSquirt units, (version 1.1 or versiosn 2.2 hardware, and software versions up through version 3.01 all use a very simple idle control,  it's either on high-idle or it's not, and it's temperature controlled, once the engine temp gets above the Fast Idle temp, the high idle solenoid is disengaged and the engine goes down to its normal idle.  The DualTable code variants added in a PWM idle control (for driving a ford style 2 wire PWM actuated idle air valve (or similar).  This code supports 5 variables, the high idle rpm, high idle temp, the low idle rpm, and low idle temp and an idle threshold.  The way it works is simple; At temps below the Fast Idle Temp, the engien is kept at the Fast idle speed,  as the engine tep rises, the ECU drops the idle speed until the engine reaches the Slow idle temp, above this temp the engine temp is maintained at the slow idle speed.  Sensible numbers would be to set the high idle temp to be a low temperature, like 60 deg F, and a high idle RPM of 1800 RPM, and a slow idle RPM of 900 RPM, and slow idle temp of 145 deg F, and an idle threshold of 100RPM. ",NULL);
 	table = gtk_table_new(4,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
@@ -579,8 +579,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), spinner, 3, 4, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
-
-
 
 
 

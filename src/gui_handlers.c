@@ -1034,6 +1034,9 @@ void set_dualtable_mode(gboolean state)
 	gtk_widget_set_sensitive(buttons.alternate_but,!state);
 	gtk_widget_set_sensitive(buttons.simul_but,!state);
 	g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
+
+	/* fahrenheit is a FLAG... */
+	reset_temps(GINT_TO_POINTER(fahrenheit));
 	if (state)
 		printf("enabling dualtable mode controls\n");
 	else

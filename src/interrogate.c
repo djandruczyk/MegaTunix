@@ -30,7 +30,6 @@
 #include <threads.h>
 #include <unistd.h>
 
-extern gboolean dualtable;
 extern gboolean connected;
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
