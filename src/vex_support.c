@@ -804,12 +804,15 @@ void revert_to_previous_data()
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-	    for (j = 0;j<firmware->page_params[i]->length;j++)
-	    {
-		if (ms_data_backup[i][j] != ms_data[i][j])
-		    write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark);
-	    }
-	    memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->length);
+		for (j = 0;j<firmware->page_params[i]->length;j++)
+		{
+			if (ms_data_backup[i][j] != ms_data[i][j])
+			{
+				ms_data[i][j] = ms_data_backup[i][j];
+				write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark);
+			}
+		}
+		memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->length);
 	}
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),FALSE);
 	update_logbar("tools_view","warning","Reverting to previous settings....\n",TRUE,FALSE);
