@@ -66,6 +66,7 @@ void build_logviewer(GtkWidget *parent_frame)
 
 	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	button = gtk_radio_button_new_with_label(group,"Playback Mode");
+	gtk_widget_set_sensitive(button,FALSE);
 	gtk_box_pack_start(GTK_BOX(vbox3),button,FALSE,FALSE,0);
 
 	/* Holds the Select Button */
