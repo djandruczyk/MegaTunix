@@ -546,7 +546,6 @@ void build_constants_2(GtkWidget *parent_frame)
 	extern GList *interdep_2_widgets;
 	extern GList *reqfuel_2_widgets;
 	extern GtkTooltips *tip;
-	extern struct DynamicMisc misc;
 
 	reqd_fuel = g_malloc0(sizeof(struct Reqd_Fuel));
 	initialize_reqd_fuel((void *)reqd_fuel, 2); /* 2 for TABLE 2 */
@@ -559,9 +558,8 @@ void build_constants_2(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,"    Here is where you punch in some data for your vehicle and the system will calculate the required fuel to be used in the MegaSquirt calculations.\n   \"Required Fuel\" is the total amount of fuel that needs to be injected at 100% VE (max power for a NA engine assuming no resonant effects) for ONE cylinder for 1 complete engine cycle.  You will see two required fuel numbers, one for \"per cyl/cycle\" and another for \"ms per squirt\". The top one is the amount of fuel injected in one complete engine cycle, the bottom one is the amount of fuel sprayed on each injection event.\n   NOTE: If the required fuel per squirt gets below 2.0 milliseconds, you will have difficulty tuning as you are approaching the open-time limit of the injector, and fuel flow becomes less precise, and there is much less adjustability. (you may not be able to get the mixture set approriately)\n   The \"Rated Fuel Pressure\" and the \"Actual Fuel Pressure\" are there so that if you are using injectors at a differnt pressure than their original application, the required fuel calculations will take that into account, and adjust accordingly.\n   The \"Target Air-Fuel Ratio\" calculates the required fuel for a specific fuel mixture. ( It defaults to 14.7:1 for gasoline) if you want to target a richer mixture set this to the desired AFR (lower = richer)\n   The \"Number of Injectors\" is your total number of fuel injectors,  this affects required fuel as it ties in with the number of cylinders and number of squirts.\n   The \"Number of Squirts per Cycle\" determines how many times the injectors are fired during one engine cycle,  if you set this too high, the number of squirts gets too low making the injection pulsewidth too short causing inconsistent fuel flow.\n   The \"Simultaneous\"/\"Alternate\" buttons determine how the injectors fire.  (This applies to B&G code only Dualtable code can set the number of squirts/cyls/req_fue sperately per table).  If \"Simultaneous\" mode is chosen, both banks of fuel injectors fire at the same time,  if this is set to \"Alternate\", then one one bank fires at a time, and the channels are alternated back and forth. (NOTE this delivers the same amount of fuel,  but in alternate mode there are 1/2 as many squirts, (thus longer squirts)). Some engines respond better one way or the other,  Testing is recommended to determine which works best for you.",NULL);
 
-	frame = gtk_frame_new("Required Fuel");
+	frame = gtk_frame_new("Required Fuel for Table 2");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
-	misc.tbl1_reqd_fuel_frame = frame;
 
 	table = gtk_table_new(8,5,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);

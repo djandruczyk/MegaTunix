@@ -541,6 +541,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 		case NUM_SQUIRTS_1:
 			/* This actuall effects another variable */
 			num_squirts_1 = tmpi;
+			printf("num_squirts %i, %i\n",tmpi,num_squirts_1);
 			ve_const->divider = 
 				(gint)(((float)num_cylinders_1/
 					(float)num_squirts_1)+0.001);

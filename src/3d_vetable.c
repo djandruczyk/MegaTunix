@@ -798,9 +798,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] < 255)
 			{
 				offset = (ve_view->active_load*8)+ve_view->active_rpm;
-				printf("offset is %i\n",offset);
 				value = ve_ptr->ve_bins[offset] + 1;
-				printf("value is %i\n",value);
 				if (ve_view->table == 1)
 					offset+=MS_PAGE_SIZE;
 				dload_val = convert_before_download(offset,value);

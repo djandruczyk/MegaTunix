@@ -256,9 +256,9 @@ struct Ve_Const_DT_2
         unsigned short	rpmk;			/* 226, 12K/ncyl */
         unsigned char	rpm_bins[8];		/* 228, VEtable RPM bins */
         unsigned char	load_bins[8];		/* 236, VEtable KPA bins */
-        union	config11 config11;		/* 244, Config for PC Config */
-        union	config12 config12;		/* 245, Config for PC Config */
-	unsigned char	unused246;		/* 246, unused */
+        union config11 	config11;		/* 244, Config for PC Config */
+        union config12  config12;		/* 245, Config for PC Config */
+	unsigned char 	unused246;		/* 246, Unused  */
 	unsigned char	bcfreqdiv;		/* 247, PWM rate for boost */
 						/* 0-ERROR, 1=39hz, 2=19 Hz */
 						/* 3 = 10 Hz */
