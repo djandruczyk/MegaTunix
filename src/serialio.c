@@ -29,9 +29,6 @@ extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
 char buff[60];
 static gint burn_needed = 0;
-extern GdkColor red;
-extern GdkColor black;
-extern struct Buttons buttons;
        
 int open_serial(int port_num)
 {
@@ -292,19 +289,7 @@ void write_ve_const(gint value, gint offset)
 	res = write (serial_params.fd,buff,count);	/* Send write command */
 	if (!burn_needed)
 	{
-		/* Let user know to burn vars byt turnign button text red */
-		gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-				GTK_STATE_PRELIGHT,&red);
-		gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-				GTK_STATE_PRELIGHT,&red);
-		gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-				GTK_STATE_NORMAL,&red);
-		gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-				GTK_STATE_PRELIGHT,&red);
+		set_store_red();
 		burn_needed = 1;
 	}
 }
@@ -313,19 +298,8 @@ void burn_flash()
 {
 	write (serial_params.fd,"B",1);	/* Send Burn command */
 
-	burn_needed = 0;
 	/* Take away the red on the "Store" button */
-	gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-                                GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.const_store_but)->child,
-				GTK_STATE_PRELIGHT,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-                                GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.enrich_store_but)->child,
-				GTK_STATE_PRELIGHT,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-                                GTK_STATE_NORMAL,&black);
-	gtk_widget_modify_fg(GTK_BIN(buttons.vetable_store_but)->child,
-				GTK_STATE_PRELIGHT,&black);
+	set_store_black();
+	burn_needed = 0;
 }
 

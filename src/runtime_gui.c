@@ -22,36 +22,25 @@
 
 
 struct v1_2_Runtime_Gui runtime_data;
-GtkWidget *run_statbar;
-gint run_context_id;
+const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
+				"AFTERSTART","ACCEL","DECEL"};
+extern gint raw_reader_running;
 
 int build_runtime(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
+	GtkWidget *hbox;
 	GtkWidget *frame;
 	GtkWidget *label;
 	GtkWidget *table;
 	GtkWidget *pbar;
 	GtkWidget *button;
+	gint i=0;
 
 	vbox = gtk_vbox_new(FALSE,0);
         gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-
-	frame = gtk_frame_new("Runtime Status Messages");
-        gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-
-        vbox2 = gtk_vbox_new(FALSE,0);
-        gtk_container_add(GTK_CONTAINER(frame),vbox2);
-        gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
-
-        run_statbar = gtk_statusbar_new();
-        gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(run_statbar),FALSE);
-        gtk_box_pack_start(GTK_BOX(vbox2),run_statbar,TRUE,TRUE,0);
-        run_context_id = gtk_statusbar_get_context_id(
-                        GTK_STATUSBAR(run_statbar),
-                        "Runtime Status");
 
 	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
@@ -507,13 +496,30 @@ int build_runtime(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
+	frame = gtk_frame_new("Runtime Status");
+        gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+
+        vbox2 = gtk_vbox_new(FALSE,0);
+        gtk_container_add(GTK_CONTAINER(frame),vbox2);
+        gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+	hbox = gtk_hbox_new(TRUE,5);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
+	for (i=0;i<7;i++)
+	{
+		frame = gtk_frame_new(NULL);
+		gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
+		runtime_data.status[i] = gtk_label_new(status_msgs[i]);
+		gtk_widget_set_sensitive(runtime_data.status[i],FALSE);
+		gtk_container_add(GTK_CONTAINER(frame),runtime_data.status[i]);
+		gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+	}
+
 	return TRUE;
 }
 
 void update_runtime_vars()
 {
 	char buff[120];
-	gint pos = 0;
 	gfloat tmpf;
 	extern struct ms_data_v1_and_v2 *runtime;
 	extern struct ms_data_v1_and_v2 *runtime_last;
@@ -675,25 +681,23 @@ void update_runtime_vars()
 				(runtime_data.dcycle_pbar),
 				tmpf);
 	}
+
+	gtk_widget_set_sensitive(runtime_data.status[0],
+			raw_reader_running);
 	if (runtime->engine.value != runtime_last->engine.value)
 	{
-		/* these first two are mutually exclusive */
-		if (runtime->engine.bit.running)
-			pos = g_snprintf(buff,120,"Engine is Running, ");
-		if (runtime->engine.bit.crank)
-			pos = g_snprintf(buff,120,"Engine is Cranking, ");
-		if (runtime->engine.bit.startw)
-			pos += g_snprintf(buff+pos,120,"AfterStart Enrich, ");
-		if (runtime->engine.bit.warmup)
-			pos += g_snprintf(buff+pos,120,"Normal Warmup Enrich ");
-		if (runtime->engine.bit.tpsaen)
-			pos += g_snprintf(buff+pos,120,"Accel Shot (TPSAEN) ");
-		if (runtime->engine.bit.tpsden)
-			pos += g_snprintf(buff+pos,120,"Engine is Decelerating (TPSDEN) ");
-		if (runtime->engine.bit.mapaen)
-			pos += g_snprintf(buff+pos,120,"MAP accel mode (MAPAEN) ");
-		update_statusbar(run_statbar,run_context_id,buff);
-
+		gtk_widget_set_sensitive(runtime_data.status[1],
+				runtime->engine.bit.crank);
+		gtk_widget_set_sensitive(runtime_data.status[2],
+				runtime->engine.bit.running);
+		gtk_widget_set_sensitive(runtime_data.status[3],
+				runtime->engine.bit.warmup);
+		gtk_widget_set_sensitive(runtime_data.status[4],
+				runtime->engine.bit.startw);
+		gtk_widget_set_sensitive(runtime_data.status[5],
+				runtime->engine.bit.tpsaen);
+		gtk_widget_set_sensitive(runtime_data.status[6],
+				runtime->engine.bit.tpsden);
 		
 	}
 	gdk_threads_leave();

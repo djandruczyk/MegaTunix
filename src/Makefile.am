@@ -12,6 +12,7 @@ megatunix_SOURCES = \
 	constants.h \
 	lookuptables.h \
 	c_gauge.h \
+	notifications.c \
 	c_gauge.c \
 	core_gui.c \
 	req_fuel.c \

@@ -161,6 +161,7 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 			paused_handlers = TRUE;
 			read_ve_const();
 			update_const_ve();
+			set_store_black();
 			paused_handlers = FALSE;
 			break;
 		case WRITE_TO_MS:

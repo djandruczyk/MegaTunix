@@ -79,7 +79,7 @@ INCLUDES = @PACKAGE_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJ
 
 bin_PROGRAMS = megatunix
 
-megatunix_SOURCES =  	Makefile 	configfile.h 	globals.h 	defines.h 	protos.h 	constants.h 	lookuptables.h 	c_gauge.h 	c_gauge.c 	core_gui.c 	req_fuel.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
+megatunix_SOURCES =  	Makefile 	configfile.h 	globals.h 	defines.h 	protos.h 	constants.h 	lookuptables.h 	c_gauge.h 	notifications.c 	c_gauge.c 	core_gui.c 	req_fuel.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
 
 
 megatunix_LDADD = @PACKAGE_LIBS@
@@ -102,11 +102,11 @@ PROGRAMS =  $(bin_PROGRAMS)
 DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
-megatunix_OBJECTS =  c_gauge.o core_gui.o req_fuel.o gui_handlers.o \
-about_gui.o comms_gui.o main.o serialio.o dataio.o threads.o \
-configfile.o init.o constants_gui.o runtime_gui.o enrichments_gui.o \
-vetable_gui.o tuning_gui.o tools_gui.o general_gui.o datalogging_gui.o \
-ms_constants.o
+megatunix_OBJECTS =  notifications.o c_gauge.o core_gui.o req_fuel.o \
+gui_handlers.o about_gui.o comms_gui.o main.o serialio.o dataio.o \
+threads.o configfile.o init.o constants_gui.o runtime_gui.o \
+enrichments_gui.o vetable_gui.o tuning_gui.o tools_gui.o general_gui.o \
+datalogging_gui.o ms_constants.o
 megatunix_DEPENDENCIES = 
 megatunix_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -123,9 +123,9 @@ DEP_FILES =  .deps/about_gui.P .deps/c_gauge.P .deps/comms_gui.P \
 .deps/configfile.P .deps/constants_gui.P .deps/core_gui.P \
 .deps/dataio.P .deps/datalogging_gui.P .deps/enrichments_gui.P \
 .deps/general_gui.P .deps/gui_handlers.P .deps/init.P .deps/main.P \
-.deps/ms_constants.P .deps/req_fuel.P .deps/runtime_gui.P \
-.deps/serialio.P .deps/threads.P .deps/tools_gui.P .deps/tuning_gui.P \
-.deps/vetable_gui.P
+.deps/ms_constants.P .deps/notifications.P .deps/req_fuel.P \
+.deps/runtime_gui.P .deps/serialio.P .deps/threads.P .deps/tools_gui.P \
+.deps/tuning_gui.P .deps/vetable_gui.P
 SOURCES = $(megatunix_SOURCES)
 OBJECTS = $(megatunix_OBJECTS)
 

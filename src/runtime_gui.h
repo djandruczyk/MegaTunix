@@ -64,6 +64,7 @@ struct v1_2_Runtime_Gui
 	GtkWidget *vecurr_pbar;		/* vecurr label from MS */
 	GtkWidget *dcycle_lab;		/* vecurr label from MS */
 	GtkWidget *dcycle_pbar;		/* vecurr label from MS */
+	GtkWidget *status[7];		/* Status boxes */
 };
 
 

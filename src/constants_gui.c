@@ -215,8 +215,7 @@ int build_constants(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Fast Idle Control");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
-
-	table = gtk_table_new(2,3,FALSE);
+	table = gtk_table_new(2,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
@@ -233,13 +232,13 @@ int build_constants(GtkWidget *parent_frame)
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(FAST_IDLE_THRES));
-	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Fast Idle Threshold\n(Degrees F)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -618,7 +617,7 @@ int build_constants(GtkWidget *parent_frame)
 	/* Injection Control cyls/injectors, etc.. */
 	frame = gtk_frame_new("Cylinder/Injection Configuration");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
@@ -667,7 +666,7 @@ int build_constants(GtkWidget *parent_frame)
 	label = gtk_label_new("# of Fuel Injectors");
 	labels.injectors_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Number of Cylinders part of config11 */

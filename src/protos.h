@@ -161,4 +161,9 @@ int build_general(GtkWidget *);
 gboolean file_exists(const char *);
 /* main.c */
 
+/* notifications.c */
+void set_store_red(void);
+void set_store_black(void);
+/* notifications.c */
+
 #endif
