@@ -68,7 +68,9 @@ static struct Canidate
 	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,NULL,NULL,30,
 			"SquirtnSpark 3.0\0",FALSE,TRUE,FALSE},
 	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.005\0",30,
-			"MegaSquirtnEDIS 3.05\0",FALSE,TRUE,FALSE}
+			"MegaSquirtnEDIS 3.005\0",FALSE,TRUE,FALSE},
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.007\0",30,
+			"MegaSquirtnEDIS 3.007\0",FALSE,TRUE,FALSE}
 };
 
 static struct 
@@ -196,10 +198,10 @@ void interrogate_ecu()
 					canidate->v1_data = g_memdup(buf,total);
 					break;
 				case CMD_S:
-					canidate->sig_str = g_memdup(buf,total);
+					canidate->sig_str = g_strndup(buf,total);
 					break;
 				case CMD_QUEST:
-					canidate->quest_str = g_memdup(buf,total);
+					canidate->quest_str = g_strndup(buf,total);
 					break;
 				case CMD_Q:
 					memcpy(&(canidate->ver_num),buf,total);
@@ -253,23 +255,37 @@ void determine_ecu(void *ptr)
 	for (i=0;i<num_choices;i++)
 	{
 		passcount = 0;
-		//printf("checking canidate %i\n",i);
+		retest:
 		for (j=0;j<num_tests;j++)
 		{
-			//printf("checking test %i\n",j);
 			if (canidate->bytes[j] != canidates[i].bytes[j])
 			{
-				//printf("fail\n");
-				continue;
+				i++;
+				goto retest;
 			}
-			else
-				passcount++;
-			//printf("pass\n");
 		}
-		if (passcount == num_tests) /* All tests pass */
+		/* If all test pass, now check the Extended version
+		 * If it matches,  jump out...
+		 */
+		if ((canidates[i].quest_str != NULL) && (canidate->quest_str != NULL))
+		{
+			if (strstr(canidate->quest_str,canidates[i].quest_str) != NULL)
+			{
+				match = i;
+				break;
+			}
+		}
+		else if ((canidates[i].sig_str != NULL) && (canidate->sig_str != NULL))
+		{
+			if (strstr(canidate->sig_str,canidates[i].sig_str) != NULL)
+			{
+				match = i;
+				break;
+			}
+		}
+		else
 		{
 			match = i;
-			//	printf("found match to canidate %i\n",i);
 			break;
 		}
 	}
