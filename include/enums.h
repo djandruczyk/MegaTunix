@@ -118,6 +118,13 @@ typedef enum
         DECEL
 }RuntimeStatus;
 
+typedef enum
+{
+	VE_EXPORT = 10,
+	VE_IMPORT,
+	DATALOG_EXPORT,
+	DATALOG_IMPORT
+}FileIoType;
 
 
 

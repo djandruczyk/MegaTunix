@@ -15,9 +15,11 @@
 #define __VEX_SUPPORT_H__
 
 #include <gtk/gtk.h>
+#include <enums.h>
 
 /* Prototypes */
 void vetable_export(void);
+void present_filesavebox(FileIoType);
 void vetable_import(void);
 /* Prototypes */
 

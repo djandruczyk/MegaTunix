@@ -30,11 +30,11 @@ extern GtkTextBuffer *textbuffer;
 extern struct Serial_Params serial_params;
 gfloat ecu_version;
 const gchar *cmd_chars[] = {"A","C","Q","V","S","I"};
-static struct Cmd_Results
+struct Cmd_Results
 {
 	gchar *cmd_string;
 	gint count;
-};
+} ;
 
 /* The Various MegaSquirt variants that MegaTunix attempts to support
  * have one major problem.  Inconsistent version numbering.  Several

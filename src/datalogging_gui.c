@@ -63,8 +63,8 @@ static GtkWidget *dlog_statbar;
 static GtkWidget *file_label;
 static GtkWidget *stop_button;
 static GtkWidget *start_button;
-static FILE * logfile;				/* DataLog File Handle*/
-static gchar * log_file_name;			/* log pathname */
+static FILE * io_file;				/* DataLog File Handle*/
+static gchar * io_file_name;			/* log pathname */
 static gchar buff[100];				/* General purpose buffer */
 static gint max_logables = 0;
 struct Logables logables;
@@ -344,6 +344,9 @@ void create_dlog_filesel(void)
 			GTK_FILE_SELECTION(file_selector),
 			FALSE);
 
+	g_object_set_data(G_OBJECT(file_selector),"iotype",
+				GINT_TO_POINTER(DATALOG_EXPORT));
+
 	g_signal_connect (GTK_OBJECT 
 			(GTK_FILE_SELECTION (file_selector)->ok_button),
 			"clicked",
@@ -373,79 +376,69 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 {
 	const gchar *selected_filename;
 	struct stat status;
+	gint iotype = -1;
+	static gboolean opened;
 
-	selected_filename = gtk_file_selection_get_filename (
-			GTK_FILE_SELECTION (file_selector));
-//	g_print ("Selected filename: %s\n", selected_filename);
+	iotype = (FileIoType )g_object_get_data(G_OBJECT(file_selector),"iotype");
 
 	if (log_opened)
 		close_logfile();	
 
-	/* Test to see if it exists or not */
+	selected_filename = gtk_file_selection_get_filename (
+			GTK_FILE_SELECTION (file_selector));
+
+	/* Test to see if it DOES NOT exist */
 	if (lstat(selected_filename, &status) == -1)
 	{
-		//logfile = open(selected_filename,
-		//		O_CREAT|O_APPEND|O_RDWR, /* Create, append mode */
-		//		S_IRUSR|S_IWUSR); /* User RW access */
+		/* Open in Append mode, create if it doesn't exist */
+		io_file = fopen(selected_filename,"a"); 
 
-		/* Append, create if not exists */
-		logfile = fopen(selected_filename,"a"); 
-				
-		if(!logfile)
-		{
-			log_opened = FALSE;
-			gtk_widget_set_sensitive(stop_button,FALSE);
-			gtk_widget_set_sensitive(start_button,FALSE);
-			g_snprintf(buff,100,"Failure creating datalogfile, Error Code: %s",strerror(errno));
-			update_statusbar(dlog_statbar,dlog_context_id,buff);
-
-		}
+		if(!io_file)
+			opened = FALSE;
 		else
-		{
-			log_opened = TRUE;
-			gtk_widget_set_sensitive(stop_button,TRUE);
-			gtk_widget_set_sensitive(start_button,TRUE);
-			log_file_name = g_strdup(selected_filename);
-			gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
-			g_snprintf(buff,100,"DataLog File Opened");
-			update_statusbar(dlog_statbar,dlog_context_id,buff);
-		}
+			opened = TRUE;
 	}
-	else
+	else /* Now see if it DOES exist.. */
 	{
 		if (status.st_size > 0)
-		{	/* warn user for non empty file*/
 			warn_datalog_not_empty();
-		}
+		/* Open in Append mode, create if it doesn't exist */
+		io_file = fopen(selected_filename,"a"); 
 
-		//logfile = open(selected_filename,
-		//		O_CREAT|O_APPEND|O_RDWR, 
-		//		S_IRUSR|S_IWUSR); /* User RW access */
-		/* Append, create if not exists */
-		logfile = fopen(selected_filename,"a"); 
-				
-		if(!logfile)
-		{
-			log_opened = FALSE;
-			gtk_widget_set_sensitive(stop_button,FALSE);
-			gtk_widget_set_sensitive(start_button,FALSE);
-			g_snprintf(buff,100,"Failure opening datalogfile, Error Code: %s",strerror(errno));
-			update_statusbar(dlog_statbar,
-					dlog_context_id,buff);
-		}
+		if(!io_file)
+			opened = FALSE;
 		else
-		{	
-			log_opened = TRUE;
+			opened = TRUE;
+	}
+
+	if (iotype == DATALOG_EXPORT)
+	{
+		if (opened == TRUE)
+		{
 			gtk_widget_set_sensitive(stop_button,TRUE);
 			gtk_widget_set_sensitive(start_button,TRUE);
-			log_file_name = g_strdup(selected_filename);
-			gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
+			io_file_name = g_strdup(selected_filename);
+			gtk_label_set_text(GTK_LABEL(file_label),
+					selected_filename);
 			g_snprintf(buff,100,"DataLog File Opened");
+			update_statusbar(dlog_statbar,
+					dlog_context_id,buff);
+			log_opened = TRUE;
+		}
+		else  /* Failed to open */
+		{
+			opened = FALSE;
+			gtk_widget_set_sensitive(stop_button,FALSE);
+			gtk_widget_set_sensitive(start_button,FALSE);
+			g_snprintf(buff,100,"Failure opening DataLog File, Error Code: %s",strerror(errno));
 			update_statusbar(dlog_statbar,
 					dlog_context_id,buff);
 		}
 
 	}
+	else
+		printf("something's wrong..\n");
+
 
 
 }
@@ -454,11 +447,11 @@ void close_logfile(void)
 {
 	if (log_opened == TRUE)
 	{
-		fclose(logfile); 
-		g_free(log_file_name);
+		fclose(io_file); 
+		g_free(io_file_name);
 		gtk_label_set_text(GTK_LABEL(file_label),"No Log Selected Yet");
 		log_opened = FALSE;
-		logfile = 0;
+		g_free(io_file);
 		g_snprintf(buff,100,"Logfile Closed");
 		update_statusbar(dlog_statbar,dlog_context_id,buff);
 		gtk_widget_set_sensitive(stop_button,FALSE);
@@ -472,7 +465,7 @@ void truncate_log()
 {
 	if (log_opened == TRUE)
 	{
-		truncate(log_file_name,0);
+		truncate(io_file_name,0);
 		if (errno)
 			g_snprintf(buff,100,"DataLog Truncation Error: %s",strerror(errno));
 		else
@@ -592,7 +585,7 @@ void run_datalog(void)
 						last.tv_sec = now.tv_sec;
 						last.tv_usec = now.tv_usec;
 						begin = FALSE;
-						fprintf(logfile,"%f%s",0.0,delim);
+						fprintf(io_file,"%f",0.0);
 					}
 					else
 					{
@@ -602,18 +595,23 @@ void run_datalog(void)
 							 1000000.0);
 						last.tv_sec = now.tv_sec;
 						last.tv_usec = now.tv_usec;
-						fprintf(logfile,"%f%s",cumulative,delim);
+						fprintf(io_file,"%f",cumulative);
 					}
 					break;
 				case 13: /* RPM */
-					fprintf(logfile,"%i%s",100*log_ptr[offset],delim);
+					fprintf(io_file,"%i",100*log_ptr[offset]);
 					break;
 				default:
-					fprintf(logfile,"%i%s",log_ptr[offset],delim);
+					fprintf(io_file,"%i",log_ptr[offset]);
 					break;
 			}
+			/* Print delimiter to log here so there isnt an extra
+			 * char at the end fo the line 
+			 */
+			if (i < (total_logables-1))
+				fprintf(io_file,"%s",delim);
 		}
-		fprintf(logfile,"\n");
+		fprintf(io_file,"\n");
 	}
 }
 
@@ -622,6 +620,14 @@ void write_log_header(void)
 	gint i = 0;
 	gint j = 0;
 	gint tmp = logables.logbits.value;
+	gint total_logables = 0;
+
+	
+	for (i=0;i<max_logables;i++)
+	{
+		if ((tmp >> i) &0x1) /* If bit is set, increment counter */
+			total_logables++;
+	}
 	
 	for (i=0;i<max_logables;i++)
 	{
@@ -629,9 +635,11 @@ void write_log_header(void)
 		{
 			offset_list[j] = logging_offset_map[i];
 			j++;
-			fprintf(logfile, "\"%s\"%s",logable_names[i],delim);
+			fprintf(io_file, "\"%s\"",logable_names[i]);
+		if (j < (total_logables))
+			fprintf(io_file,"%s",delim);
 		}
 	}
-	fprintf(logfile,"\n");
+	fprintf(io_file,"\n");
 	
 }

@@ -92,10 +92,10 @@ static gint page_data[5]; /* Only 4 interdependant vars... */
 
 void leave(GtkWidget *widget, gpointer data)
 {
+	stop_datalogging();
 	save_config();
 	stop_serial_thread();
 	close_serial();
-	stop_datalogging();
 	close_logfile();
 	/* Free all buffers */
 	mem_dealloc();
