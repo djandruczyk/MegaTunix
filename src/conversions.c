@@ -71,8 +71,8 @@ void read_conversions(void)
 		}
 		if (i == 90)	/* Required fuel special case */
 		{
-			conv_chart->conv_type[i] = MULT;
-			conv_chart->conv_factor[i] = 10.0;
+			conv_chart->conv_type[i] = NOTHING;
+			conv_chart->conv_factor[i] = 1.0;
 		}
 #ifdef DEBUG
 		printf("BASE Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);

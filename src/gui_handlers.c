@@ -110,7 +110,8 @@ gint num_cylinders_1 = 1;
 gint num_cylinders_2 = 1;
 static gint num_injectors_1 = 1;
 static gint num_injectors_2 = 1;
-static gfloat req_fuel_total = 0.0;
+static gfloat req_fuel_total_1 = 0.0;
+static gfloat req_fuel_total_2 = 0.0;
 static gboolean err_flag = FALSE;
 static GList *offsets_1 = NULL;
 static gint offset_data_1[5]; /* Only 4 interdependant vars... */
@@ -498,6 +499,8 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	extern unsigned char * ms_data;
 	struct Reqd_Fuel *reqd_fuel;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
+	struct Ve_Const_DT_2 * ve_const_dt2 = 
+			(struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 	reqd_fuel = (struct Reqd_Fuel *) g_object_get_data(G_OBJECT(widget),
 			"data");
 
@@ -534,14 +537,17 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 		case REQ_FUEL_AFR:
 			reqd_fuel->target_afr = value;
 			break;
-		case REQ_FUEL:
-			req_fuel_total = value;
+		case REQ_FUEL_1:
+			req_fuel_total_1 = value;
+			check_req_fuel_limits();
+			break;
+		case REQ_FUEL_2:
+			req_fuel_total_2 = value;
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS_1:
 			/* This actuall effects another variable */
 			num_squirts_1 = tmpi;
-			printf("num_squirts %i, %i\n",tmpi,num_squirts_1);
 			ve_const->divider = 
 				(gint)(((float)num_cylinders_1/
 					(float)num_squirts_1)+0.001);
@@ -633,6 +639,100 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			check_req_fuel_limits();
 			break;
+		case NUM_SQUIRTS_2:
+			/* This actuall effects another variable */
+			num_squirts_2 = tmpi;
+			ve_const_dt2->divider = 
+				(gint)(((float)num_cylinders_2/
+					(float)num_squirts_2)+0.001);
+			dload_val = ve_const_dt2->divider;
+			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
+			{
+				offsets_2 = g_list_append(offsets_2,
+						GINT_TO_POINTER(offset));
+				offset_data_2[g_list_index(offsets_2,
+						GINT_TO_POINTER(offset))] 
+					= dload_val;	
+			}
+			else
+			{
+				offset_data_2[g_list_index(offsets_2,
+						GINT_TO_POINTER(offset))] 
+					= dload_val;	
+			}
+			if (num_cylinders_2 % num_squirts_2)
+			{
+				err_flag = TRUE;
+				set_reqfuel_state(RED,2);
+			}
+			else
+			{
+				err_flag = FALSE;
+				set_reqfuel_state(BLACK,2);
+				check_req_fuel_limits();
+			}
+			break;
+		case NUM_CYLINDERS_2:
+			/* Updates a shared bitfield */
+			num_cylinders_2 = tmpi;
+			tmp = ve_const_dt2->config11.value;
+			tmp = tmp & ~0xf0;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << 4);
+			ve_const_dt2->config11.value = tmp;
+			ve_const_dt2->divider = 
+				(gint)(((float)num_cylinders_2/
+					(float)num_squirts_2)+0.001);
+			dload_val = tmp;
+			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
+			{
+				offsets_2 = g_list_append(offsets_2,
+						GINT_TO_POINTER(offset));
+				offset_data_2[g_list_index(offsets_2,
+						GINT_TO_POINTER(offset))] 
+					= dload_val;	
+			}
+			else
+			{
+				offset_data_2[g_list_index(offsets_2,
+						GINT_TO_POINTER(offset))] 
+					= dload_val;	
+			}
+			if (num_cylinders_2 % num_squirts_2)
+			{
+				err_flag = TRUE;
+				set_reqfuel_state(RED,2);	
+			}
+			else
+			{
+				err_flag = FALSE;
+				set_reqfuel_state(BLACK,2);	
+				check_req_fuel_limits();
+			}
+			break;
+		case NUM_INJECTORS_2:
+			/* Updates a shared bitfield */
+			num_injectors_2 = tmpi;
+			tmp = ve_const_dt2->config12.value;
+			tmp = tmp & ~0xf0;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << 4);
+			ve_const_dt2->config12.value = tmp;
+			dload_val = tmp;
+			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
+			{
+				offsets_2 = g_list_append(offsets_2,
+						GINT_TO_POINTER(offset));
+				offset_data_2[g_list_index(offsets_2,
+						GINT_TO_POINTER(offset))] 
+					= dload_val;	
+			}
+			else
+			{
+				offset_data_2[g_list_index(offsets_2,
+						GINT_TO_POINTER(offset))] 
+					= dload_val;	
+			}
+			check_req_fuel_limits();
+			break;
 		case GENERIC:	/* Handles almost ALL other variables */
 			temp_dep = (gboolean)g_object_get_data(
 					G_OBJECT(ve_widgets->widget[offset]),
@@ -666,68 +766,194 @@ void update_ve_const()
 	gfloat value = 0.0;
 	gboolean temp_dep = FALSE;
 	extern unsigned char *ms_data;
-	struct Ve_Const_Std *ve_const;
+	struct Ve_Const_Std *ve_const = NULL;
+	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
+	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 
 	/* Point to Table0 (stock MS ) data... */
 	ve_const = (struct Ve_Const_Std *) ms_data;
+	if (dualtable)
+	{
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
+		check_tblcnf(ve_const_dt1->tblcnf.value);
+	}
 
 	check_config11(ve_const->config11.value);
 	check_config13(ve_const->config13.value);
+	
 
 	/* This formula is ONLY VALID for NON-Dualtable variants..
 	 * Dualtable no longer has an "Alternate" variable thus all this
 	 * shit breaks...  New version is in progress and is buggy 
 	 * 02-16-2004
 	 */
-
-	/* req-fuel 
+	/* DualTable Fuel Calculations
+	 * DT code no longer uses the "alternate" firing mode as each table
+	 * is pretty much independant from the other,  so the calcs are a 
+	 * little simpler...
+	 *
 	 *                                        /     num_injectors_1   \
 	 *         	   req_fuel_per_squirt * (-------------------------)
-	 *                                        \ divider*(alternate+1) /
+	 *                                        \ 	    divider       /
 	 * req_fuel_total = --------------------------------------------------
 	 *				10
 	 *
-	 * where divider = num_cylinders_1/num_squirts_1;
+	 * where divider = num_cylinders/num_squirts;
 	 *
-	 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
-	 * the req_fuel variable.  Take note when doing conversions.  On screen
-	 * the value is divided by ten from what is in the MS.  
-	 * 
+	
 	 */
-	tmp =	(float)(ve_const->config12.bit.injectors+1) /
-		(float)(ve_const->divider*(ve_const->alternate+1));
-	tmp *= (float)ve_const->req_fuel;
-	tmp /= 10.0;
-	req_fuel_total = tmp;
+	if (dualtable)
+	{
+		/*printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
+				ve_const_dt1->req_fuel,
+				ve_const_dt1->config12.bit.injectors+1,
+				ve_const_dt1->config11.bit.cylinders+1,
+				ve_const_dt1->divider);
+		*/
+		/* Table 1 */
+		tmp =	(float)(ve_const_dt1->config12.bit.injectors+1) /
+			(float)(ve_const_dt1->divider);
+		tmp *= (float)ve_const_dt1->req_fuel;
+		tmp /= 10.0;
+		req_fuel_total_1 = tmp;
 
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_total_1_spin),
-			tmp);
+		/* Req Fuel total per cycle */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+				(spinners.req_fuel_total_1_spin),
+				tmp);
 
-	/* req-fuel info box  */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinners.req_fuel_per_squirt_1_spin),
-			ve_const->req_fuel/10.0);
+		/* Req Fuel per SQUIRT */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+				(spinners.req_fuel_per_squirt_1_spin),
+				ve_const_dt1->req_fuel/10.0);
 
-	/* CONFIG11-13 related buttons */
-	/* Cylinders */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(spinners.cylinders_1_spin),
-			ve_const->config11.bit.cylinders+1);
-	num_cylinders_1 = ve_const->config11.bit.cylinders+1;
+		/* Config11 bits */
+		/* Cylinders */
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.cylinders_1_spin),
+				ve_const_dt1->config11.bit.cylinders+1);
+		num_cylinders_1 = ve_const_dt1->config11.bit.cylinders+1;
 
-	/* Number of injectors */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(spinners.injectors_1_spin),
-			ve_const->config12.bit.injectors+1);
-	num_injectors_1 = ve_const->config12.bit.injectors+1;
+		/* Injections per cycle */
+		tmp =	(float)(ve_const_dt1->config11.bit.cylinders+1) /
+			(float)(ve_const_dt1->divider);
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
+				tmp);
+		num_squirts_1 = (gint)tmp;
 
-	/* Injections per cycle */
-	tmp =	(float)(ve_const->config11.bit.cylinders+1) /
-		(float)(ve_const->divider);
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
-			tmp);
-	num_squirts_1 = (gint)tmp;
+		/* Config12 bits */
+		/* Number of injectors */
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.injectors_1_spin),
+				ve_const_dt1->config12.bit.injectors+1);
+		num_injectors_1 = ve_const_dt1->config12.bit.injectors+1;
 
+
+		/* Table 2 */
+		tmp =	(float)(ve_const_dt2->config12.bit.injectors+1) /
+			(float)(ve_const_dt2->divider);
+		tmp *= (float)ve_const_dt2->req_fuel;
+		tmp /= 10.0;
+		req_fuel_total_2 = tmp;
+
+		/* Total Req Fuel per CYCLE */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+				(spinners.req_fuel_total_2_spin),
+				tmp);
+
+		/* Req Fuel per SQUIRT */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+				(spinners.req_fuel_per_squirt_2_spin),
+				ve_const_dt2->req_fuel/10.0);
+
+		/* Config11 bits */
+		/* Cylinders */
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.cylinders_2_spin),
+				ve_const_dt2->config11.bit.cylinders+1);
+		num_cylinders_2 = ve_const_dt2->config11.bit.cylinders+1;
+
+		/* Injections per cycle */
+		tmp =	(float)(ve_const_dt2->config11.bit.cylinders+1) /
+			(float)(ve_const_dt2->divider);
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.inj_per_cycle_2_spin),
+				tmp);
+		num_squirts_2 = (gint)tmp;
+
+		/* Config12 bits */
+		/* Number of injectors */
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.injectors_2_spin),
+				ve_const_dt2->config12.bit.injectors+1);
+		num_injectors_2 = ve_const_dt2->config12.bit.injectors+1;
+
+	}
+	else
+	{
+		/*  B&G, MSnS, MSnEDIS req Fuel calc *
+		 * req-fuel 
+		 *                                        /     num_injectors_1   \
+		 *         	   req_fuel_per_squirt * (-------------------------)
+		 *                                        \ divider*(alternate+1) /
+		 * req_fuel_total = --------------------------------------------------
+		 *				10
+		 *
+		 * where divider = num_cylinders_1/num_squirts_1;
+		 *
+		 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
+		 * the req_fuel variable.  Take note when doing conversions.  On screen
+		 * the value is divided by ten from what is in the MS.  
+		 * 
+		 */
+		tmp =	(float)(ve_const->config12.bit.injectors+1) /
+			(float)(ve_const->divider*(ve_const->alternate+1));
+		tmp *= (float)ve_const->req_fuel;
+		tmp /= 10.0;
+		req_fuel_total_1 = tmp;
+
+		/* printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i, alt %i\n",
+				ve_const->req_fuel,
+				ve_const->config12.bit.injectors+1,
+				ve_const->config11.bit.cylinders+1,
+				ve_const->divider, 
+				ve_const->alternate);
+		*/
+		/* Total Req Fuel per CYCLE */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+				(spinners.req_fuel_total_1_spin),
+				tmp);
+
+		/* Req Fuel per SQUIRT */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON
+				(spinners.req_fuel_per_squirt_1_spin),
+				ve_const->req_fuel/10.0);
+
+		/* Config11 bits */
+		/* Cylinders */
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.cylinders_1_spin),
+				ve_const->config11.bit.cylinders+1);
+		num_cylinders_1 = ve_const->config11.bit.cylinders+1;
+
+		/* Injections per cycle */
+		tmp =	(float)(ve_const->config11.bit.cylinders+1) /
+			(float)(ve_const->divider);
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
+				tmp);
+		num_squirts_1 = (gint)tmp;
+
+		/* Config12 bits */
+		/* Number of injectors */
+		gtk_spin_button_set_value(
+				GTK_SPIN_BUTTON(spinners.injectors_1_spin),
+				ve_const->config12.bit.injectors+1);
+		num_injectors_1 = ve_const->config12.bit.injectors+1;
+
+	}
 	/* Speed Density or Alpha-N */
 	if (ve_const->config13.bit.inj_strat)
 		gtk_toggle_button_set_active(
@@ -802,18 +1028,25 @@ void update_ve_const()
 
 	if (!dualtable)
 	{
+		printf("setting alt/simul but\n");
 		if (ve_const->alternate > 0)
+		{
 			gtk_toggle_button_set_active(
 					GTK_TOGGLE_BUTTON(buttons.alternate_but),
 					TRUE);
+		printf("set alternate mode\n");
+		}
 		else
+		{
 			gtk_toggle_button_set_active(
 					GTK_TOGGLE_BUTTON(buttons.simul_but),
 					TRUE);
+		printf("set simul mode\n");
+		}
 	}
 
 
-	/* Table 1 for dualtable, and all std megasquirt units */
+	/* Update all on screen controls (except bitfields (done above)*/
 	for (i=0;i<2*MS_PAGE_SIZE;i++)
 	{
 		temp_dep = FALSE;
@@ -844,113 +1077,212 @@ void check_req_fuel_limits()
 {
 	gfloat tmp = 0.0;
 	gfloat req_fuel_per_squirt = 0.0;
-	gfloat req_fuel_per_squirt_dl = 0.0;
 	gint lim_flag = 0;
-	gint tuning_zone_flag = 0;  
 	gint index = 0;
 	gint dload_val = 0;
 	gint offset = 0;
-	gint page = -1;
 	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const = NULL;
-	/* Set it to point to page 0 (stock MS) */
-	ve_const = (struct Ve_Const_Std *)ms_data;
+	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
+	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 
-	/* req-fuel 
-	 *                                        /     num_injectors_1     \
-	 *         	   req_fuel_per_squirt * (-------------------------)
-	 *                                        \ divider*(alternate+1) /
-	 * req_fuel_total = --------------------------------------------------
-	 *				10
-	 *
-	 * where divider = num_cylinders_1/num_squirts_1;
-	 *
-	 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
-	 * the req_fuel variable.  Take note when doing conversions.  On screen
-	 * the value is divided by ten from what is in the MS.  
-	 * 
-	 */
 
-	tmp =	(float)(ve_const->divider*(float)(ve_const->alternate+1))/(float)(num_injectors_1);
-
-	/* This is 1 tenth the value as the one screen stuff is 1/10th 
-	 * for the ms variable,  it gets converted farther down, just 
-	 * before download to the MS
-	 */
-	req_fuel_per_squirt = tmp * req_fuel_total;
-	req_fuel_per_squirt_dl = (gint)((req_fuel_per_squirt*10.0)+0.001);
-
-	if (req_fuel_per_squirt_dl != ve_const->req_fuel)
+	if (dualtable)
 	{
-		if (req_fuel_per_squirt_dl > 255)
-			lim_flag = 1;
-		if (req_fuel_per_squirt_dl < 0)
-			lim_flag = 1;
-		if ((req_fuel_per_squirt_dl > 80) & (req_fuel_per_squirt_dl < 120))
-			tuning_zone_flag = 1;      
-	}
-	/* req-fuel info box  */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-				spinners.req_fuel_per_squirt_1_spin),
-			req_fuel_per_squirt);
-	page = 0;
-	if (tuning_zone_flag)
-	{ /*
-	   * This means each injector squirt is within sane limits, and
-	   * should be tunable and operate over a full rev-range
-	   */
-		//		gtk_widget_modify_text(GTK_WIDGET(								spinners.req_fuel_per_squirt_spin),
-		//				GTK_STATE_INSENSITIVE,&green);
-	}
-	if (lim_flag)
-	{	/*
-		 * ERROR, something is out of bounds 
-		 * change the color of the potential offenders onscreen to
-		 * let the user know something is wrong..
-		 */
-		set_interdep_state(RED,1);
-	}
-	else
-	{	/*
-		 * Everything is OK with all inter-dependant variables.
-		 * settings all previous gui enties to normal state...
-		 */
-		set_interdep_state(BLACK,1);
-
-		/* All Tested succeeded, download Required fuel, 
-		 * then iterate through the list of offsets of changed
-		 * inter-dependant variables, extract the data out of 
-		 * the companion array, and send to ECU.  Then free
-		 * the offset GList, and clear the array...
+		ve_const_dt1 = (struct Ve_Const_DT_1 *)ms_data;
+		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
+		/* F&H Dualtable required Fuel calc
+		 *
+		 *                                        / num_injectors \
+		 *         	   req_fuel_per_squirt * (-----------------)
+		 *                                        \    divider    /
+		 * req_fuel_total = -------------------------------------------
+		 *				10
+		 *
+		 * where divider = num_cylinders/num_squirts;
+		 *
+		 * rearranging to solve for req_fuel_per_squirt...
+		 *
+		 *                        (req_fuel_total * 10)
+		 * req_fuel_per_squirt =  ---------------------
+		 *			    / num_injectors \
+		 *                         (-----------------)
+		 *                          \    divider    /
 		 */
 
-		/* Handlers get paused during a read of MS VE/Constants. We
-		 * don't need to write anything back during this window. 
-		 */
-		if (paused_handlers)
-			return;
-		offset = 90;
-		dload_val = convert_before_download(offset,req_fuel_per_squirt);
-		write_ve_const(dload_val, offset);
-		for (index=0;index<g_list_length(offsets_1);index++)
+		/* TABLE 1 */
+		tmp = (float)(num_injectors_1)/(float)(ve_const_dt1->divider);
+		req_fuel_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
+
+		if (req_fuel_per_squirt != ve_const_dt1->req_fuel)
 		{
-			gint offset;
-			gint data;
-			offset = GPOINTER_TO_INT(g_list_nth_data(offsets_1,index));
-			data = offset_data_1[g_list_index(offsets_1,
-					g_list_nth_data(offsets_1,index))];
-			write_ve_const(data, offset);
+			if (req_fuel_per_squirt > 255)
+				lim_flag = 1;
+			if (req_fuel_per_squirt < 0)
+				lim_flag = 1;
 		}
-		g_list_free(offsets_1);
-		offsets_1 = NULL;
-		for (index=0;index<5;index++)
-			offset_data_1[index]=0;
-	}
+		/* Required Fuel per SQUIRT */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+					spinners.req_fuel_per_squirt_1_spin),
+				req_fuel_per_squirt/10.0);
+
+		/* Throw warning if an issue */
+		if (lim_flag)
+			set_interdep_state(RED,1);
+		else
+		{
+			set_interdep_state(BLACK,1);
+
+			if (paused_handlers)
+				return;
+			offset = 90;
+			dload_val = convert_before_download(offset,(gint)req_fuel_per_squirt);
+			write_ve_const(dload_val, offset);
+			for (index=0;index<g_list_length(offsets_1);index++)
+			{
+				gint offset;
+				gint data;
+				offset = GPOINTER_TO_INT(g_list_nth_data(offsets_1,index));
+				data = offset_data_1[g_list_index(offsets_1,
+						g_list_nth_data(offsets_1,index))];
+				write_ve_const(data, offset);
+			}
+			g_list_free(offsets_1);
+			offsets_1 = NULL;
+			for (index=0;index<5;index++)
+				offset_data_1[index]=0;
+		}
+
+		/* TABLE 2 */
+		tmp = (float)(num_injectors_2)/(float)(ve_const_dt2->divider);
+		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
+
+		if (req_fuel_per_squirt != ve_const_dt2->req_fuel)
+		{
+			if (req_fuel_per_squirt > 255)
+				lim_flag = 1;
+			if (req_fuel_per_squirt < 0)
+				lim_flag = 1;
+		}
+
+		/* Required Fuel per SQUIRT */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+					spinners.req_fuel_per_squirt_2_spin),
+				req_fuel_per_squirt/10);
+
+		/* Throw warning if an issue */
+		if (lim_flag)
+			set_interdep_state(RED,2);
+		else
+		{
+			set_interdep_state(BLACK,2);
+
+			if (paused_handlers)
+				return;
+			offset = 90 + MS_PAGE_SIZE;
+			dload_val = convert_before_download(offset,(gint)req_fuel_per_squirt);
+			write_ve_const(dload_val, offset);
+			for (index=0;index<g_list_length(offsets_2);index++)
+			{
+				gint offset;
+				gint data;
+				offset = GPOINTER_TO_INT(g_list_nth_data(offsets_2,index));
+				data = offset_data_2[g_list_index(offsets_2,
+						g_list_nth_data(offsets_2,index))];
+				write_ve_const(data, offset);
+			}
+			g_list_free(offsets_2);
+			offsets_2 = NULL;
+			for (index=0;index<5;index++)
+				offset_data_2[index]=0;
+		}
+	}// END Dualtable Req fuel checks... */
+	else
+	{
+		ve_const = (struct Ve_Const_Std *)ms_data;
+
+		/* B&G, MSnS, MSnEDIS Required Fuel Calc
+		 *
+		 *                                        /     num_injectors_1     \
+		 *         	   req_fuel_per_squirt * (-------------------------)
+		 *                                        \ divider*(alternate+1) /
+		 * req_fuel_total = --------------------------------------------------
+		 *				10
+		 *
+		 * where divider = num_cylinders_1/num_squirts_1;
+		 *
+		 * rearranging to solve for req_fuel_per_squirt...
+		 *
+		 *                        (req_fuel_total * 10)
+		 * req_fuel_per_squirt =  ----------------------
+		 *			    /  num_injectors  \
+		 *                         (-------------------)
+		 *                          \ divider*(alt+1) /
+		 *
+		 * 
+		 */
+
+		tmp =	((float)(num_injectors_1))/((float)ve_const->divider*(float)(ve_const->alternate+1));
+
+		/* This is 1 tenth the value as the one screen stuff is 1/10th 
+		 * for the ms variable,  it gets converted farther down, just 
+		 * before download to the MS
+		 */
+		req_fuel_per_squirt = ((float)req_fuel_total_1*10.0)/tmp;
+
+		if (req_fuel_per_squirt != ve_const->req_fuel)
+		{
+			if (req_fuel_per_squirt > 255)
+				lim_flag = 1;
+			if (req_fuel_per_squirt < 0)
+				lim_flag = 1;
+		}
+		/* req-fuel info box  */
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+					spinners.req_fuel_per_squirt_1_spin),
+				req_fuel_per_squirt/10.0);
+
+		if (lim_flag)
+			set_interdep_state(RED,1);
+		else
+		{
+			set_interdep_state(BLACK,1);
+
+			/* All Tested succeeded, download Required fuel, 
+			 * then iterate through the list of offsets of changed
+			 * inter-dependant variables, extract the data out of 
+			 * the companion array, and send to ECU.  Then free
+			 * the offset GList, and clear the array...
+			 */
+
+			/* Handlers get paused during a read of MS VE/Constants. We
+			 * don't need to write anything back during this window. 
+			 */
+			if (paused_handlers)
+				return;
+			offset = 90;
+			dload_val = convert_before_download(offset,(gint)req_fuel_per_squirt);
+			write_ve_const(dload_val, offset);
+			for (index=0;index<g_list_length(offsets_1);index++)
+			{
+				gint offset;
+				gint data;
+				offset = GPOINTER_TO_INT(g_list_nth_data(offsets_1,index));
+				data = offset_data_1[g_list_index(offsets_1,
+						g_list_nth_data(offsets_1,index))];
+				write_ve_const(data, offset);
+			}
+			g_list_free(offsets_1);
+			offsets_1 = NULL;
+			for (index=0;index<5;index++)
+				offset_data_1[index]=0;
+		}
+	} // End B&G style Req Fuel check 
 	return ;
 
 }
 
-void check_config11(int tmp)
+void check_config11(unsigned char tmp)
 {
 	/* checks some of the bits in the config11 variable and 
 	 * adjusts some important things as necessary....
@@ -969,7 +1301,7 @@ void check_config11(int tmp)
 	}
 }
 
-void check_config13(int tmp)
+void check_config13(unsigned char tmp)
 {
 	GtkWidget *label;
 	/* checks bits of the confgi13 bitfield and forces
@@ -1015,6 +1347,11 @@ void check_config13(int tmp)
 				(labels.p0_map_tps_lab),
 				"Kpa");
 	}
+}
+
+void check_tblcnf(unsigned char tmp)
+{
+	printf("check_tblcnf() not written yet\n");
 }
 
 void set_dualtable_mode(gboolean state)
