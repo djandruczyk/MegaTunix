@@ -22,3 +22,24 @@ Suggestions are welcomed for improving the functionality of MegaTunix...
 Send suggestions, bug reports and general feedback to (SPAM not welcome) 
 djandruczyk <at> yahoo <dot> com
 
+System requirements:
+	MegaTunix is developed on a Gentoo Linux distribution, the package
+names will vary if you don't use Gentoo.  Most RPM and Debian based distros
+split packages into a runtime and devel package.  Runtime ones are needed
+to run the program, and devel packages are needed for programs like megatunix
+to compile against.
+
+MegaTunix requires the following libraries (and their dependancies);
+* GTK-2.4 (and the dev package)
+  - GTK+ depends on pango, fontconfig, freetype2, pango, glib and atk
+* Gtkglext-1.x (and the dev package)
+  - gtkglext depends on gtk+ and glib
+* Xorg or XFree86 development libraries (xorg-devel or XF86-devel)
+  - libglade-2.0 (and dev package)
+  - libglade depends on libxml-2.x and gtk+
+
+Optional:
+  The Glade GUI designer can be installed to modify and add new gui tabs to
+megatunix for your own custom firmware needs.  This is ONLY needed if you want
+to modify megatunix.  I recommend glade-2.4.x
+

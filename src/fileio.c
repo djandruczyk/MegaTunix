@@ -153,7 +153,6 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		preexisting = TRUE;
 #ifdef __WIN32__
 		size = GetCompressedFileSize((LPCTSTR) selected_filename,NULL);
-		printf("size from \"GetCompressedFileSize\" is %i\n",size);
 #else
 		stat(selected_filename, &status);
 		size = status.st_size;

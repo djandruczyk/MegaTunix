@@ -307,7 +307,9 @@ void readfrom_ecu(void *ptr)
 	if (message->handler == RAW_MEMORY_DUMP)
 	{
 		result = write(serial_params->fd,&message->offset,1);
-		if (result != 1)	
+		if (result == -1)
+			dbg_func(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n",CRITICAL);
+		else if (result != 1)	
 			dbg_func(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n",CRITICAL);
 		else
 			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset of \"%i\" for raw mem cmd succeeded\n",message->offset),SERIAL_WR);

@@ -20,12 +20,14 @@
 #include <structures.h>
 
 GArray *raw_editor_widgets = NULL;
+gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data);
 
 EXPORT void finish_raweditor(void)
 {
 	GtkWidget *sw = NULL;
 	GtkWidget *hbox = NULL;
 	GtkWidget *vbox = NULL;
+	GtkWidget *ebox = NULL;
 	GtkWidget *frame = NULL;
 	GtkWidget *lbl_table = NULL;
 	GtkWidget *table = NULL;
@@ -70,8 +72,13 @@ EXPORT void finish_raweditor(void)
 
 		hbox = gtk_hbox_new(FALSE,0);
 		gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw),hbox);
+		ebox = gtk_event_box_new();
+		gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,5);
 		lbl_table = gtk_table_new((firmware->page_params[i]->length)/cols,1,TRUE);
-		gtk_box_pack_start(GTK_BOX(hbox),lbl_table,FALSE,TRUE,5);
+		g_object_set_data(G_OBJECT(lbl_table),"format",GINT_TO_POINTER(MTX_HEX));
+		gtk_container_add(GTK_CONTAINER(ebox),lbl_table);
+		g_signal_connect(G_OBJECT(ebox),"button_press_event",
+				G_CALLBACK(swap_labels),NULL);
 
 		table = gtk_table_new((firmware->page_params[i]->length)/cols,cols,TRUE);
 		gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,5);
@@ -79,10 +86,8 @@ EXPORT void finish_raweditor(void)
 		col = 0;
 		for (j=0;j<firmware->page_params[i]->length;j++)
 		{
-
-
 			entry = gtk_entry_new();
-			gtk_entry_set_alignment(GTK_ENTRY(entry),0.5);
+//			gtk_entry_set_alignment(GTK_ENTRY(entry),0.5);
 			g_object_set_data(G_OBJECT(entry),"page",GINT_TO_POINTER(i));
 			g_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(j));
 			g_object_set_data(G_OBJECT(entry),"base",GINT_TO_POINTER(16));
@@ -128,60 +133,40 @@ EXPORT void finish_raweditor(void)
 	gtk_widget_show_all(top);
 	
 }
-	/*
-				label = gtk_label_new(NULL);
-				*/
-				/* (z+range)+(y*8)+x
-				 * z = block of 256 labels,
-				 * y = column in table,
-				 * x = row in table.
-				 * If it works right, the array is populated in
-				 * order with 1024 widgets assuming z=4, and 
-				 * range = 256 (number of elements per table)
-				 */
-	/*
-				raw_memory_widgets = g_array_insert_val(raw_memory_widgets,(z*range)+(y*8)+(x),label);
-				gtk_container_add(GTK_CONTAINER(ebox),label);
 
-			}
-		}
+gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+	gint format = 0;
+	gint i = 0;
+	GtkTable *table = NULL;
+	GtkTableChild *child = NULL;
 
-		if (mem_view_style[z] == HEX_VIEW)
-		{
-			name = g_strdup_printf("memviewer_tab%i_hex_radio_button",z);
-			button = g_hash_table_lookup(dynamic_widgets,name);
-			if (!button)
-				dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name),CRITICAL);
-			else
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-			g_free(name);
-		}
-		if (mem_view_style[z] == BINARY_VIEW)
-		{
-			name = g_strdup_printf("memviewer_tab%i_binary_radio_button",z);
-			button = g_hash_table_lookup(dynamic_widgets,name);
-			if (!button)
-				dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name),CRITICAL);
-			else
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-			g_free(name);
-		}
-		if (mem_view_style[z] == DECIMAL_VIEW)
-		{
-			name = g_strdup_printf("memviewer_tab%i_decimal_radio_button",z);
-			button = g_hash_table_lookup(dynamic_widgets,name);
-			if (!button)
-				dbg_func(g_strdup_printf(__FILE__": finish_memviewer()\n\tButton %s NOT found\n",name),CRITICAL);
-			else
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
-			g_free(name);
-		}
+	table = (GtkTable *)gtk_bin_get_child(GTK_BIN(widget));
+	if (GTK_IS_TABLE(table))
+		format = (gint)g_object_get_data(G_OBJECT(table),"format");
+	else
+		return FALSE;
 
-		base += range;
-		gtk_widget_show_all(table);
+	if (format == MTX_HEX)
+	{
+		for (i=0;i<table->nrows;i++)
+		{
+			child = g_list_nth_data(table->children,i);
+			if (GTK_IS_LABEL(child->widget))
+				gtk_label_set_text(GTK_LABEL(child->widget),g_strdup_printf("%i",child->top_attach*8));
+		}
+		g_object_set_data(G_OBJECT(table),"format",GINT_TO_POINTER(MTX_DECIMAL));
+	}
+	else
+	{
+		for (i=0;i<table->nrows;i++)
+		{
+			child = g_list_nth_data(table->children,i);
+			if (GTK_IS_LABEL(child->widget))
+				gtk_label_set_text(GTK_LABEL(child->widget),g_strdup_printf("0x%.4X",child->top_attach*8));
+		}
+		g_object_set_data(G_OBJECT(table),"format",GINT_TO_POINTER(MTX_HEX));
 	}
 
-
-	return;
+	return FALSE;
 }
-*/

@@ -293,5 +293,10 @@ typedef enum
 	RTV,
 }ConvType;
 
+typedef enum
+{
+	MTX_HEX=0x190,
+	MTX_DECIMAL,
+}Base;
 
 #endif
