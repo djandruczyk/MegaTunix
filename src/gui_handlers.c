@@ -49,12 +49,13 @@ extern GtkWidget *custom_logables;
 static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
-static gfloat req_fuel_total_copy = 0.0;
+static gfloat req_fuel_total = 0.0;
 static gboolean err_flag = FALSE;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
 static GList *offsets = NULL;
 static gint offset_data[5]; /* Only 4 interdependant vars... */
+static gint page_data[5]; /* Only 4 interdependant vars... */
 GtkWidget *veconst_widgets_1[VEBLOCK_SIZE];
 GtkWidget *veconst_widgets_2[VEBLOCK_SIZE];
 
@@ -172,12 +173,18 @@ int bitmask_button_handler(GtkWidget *widget, gpointer data)
 					offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+					page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 				}
 				else
 				{
 					offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+					page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 				}
 				if (!err_flag)
 					check_req_fuel_limits();
@@ -189,7 +196,7 @@ int bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 		}
 		if (dl_type == IMMEDIATE)
-			write_ve_const(dload_val, offset);
+			write_ve_const(dload_val, offset, page);
 	}
 	return TRUE;
 }
@@ -273,7 +280,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 	gint page = -1;
 	gint tmpi = 0;
 	gint tmp = 0;
-	gint dload_val = 0;
+	gint dload_val = -1;
 	gint dl_type = 0;
 	if (paused_handlers)
 		return TRUE;
@@ -317,7 +324,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			reqd_fuel.afr = value;
 			break;
 		case REQ_FUEL:
-			req_fuel_total_copy = value;
+			req_fuel_total = value;
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS:
@@ -334,12 +341,18 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+				page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 			}
 			else
 			{
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+				page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 			}
 			if (num_cylinders % num_squirts)
 			{
@@ -371,12 +384,18 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+				page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 			}
 			else
 			{
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+				page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 			}
 			if (num_cylinders % num_squirts)
 			{
@@ -406,12 +425,18 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+				page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 			}
 			else
 			{
 				offset_data[g_list_index(offsets,
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
+				page_data[g_list_index(offsets,
+						GINT_TO_POINTER(offset))] 
+						= page;	
 			}
 			check_req_fuel_limits();
 			break;
@@ -424,8 +449,8 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			dl_type = 0;  
 			break;
 	}
-	if (dl_type == IMMEDIATE)
-		write_ve_const(dload_val, offset);
+	if (dl_type == IMMEDIATE) 
+		write_ve_const(dload_val, offset, page);
 	return TRUE;
 
 }
@@ -441,20 +466,24 @@ void update_ve_const()
 	check_config13(ve_constants->config13.value);
 
 	/* req-fuel 
-	 *				/     num_injectors     \
-	 *          req_fuel_from_MS * |-------------------------|
-	 * Result =                     \ divider*(alternate+1) /
-	 *	    -----------------------------------------------
+	 *                                        /     num_injectors     \
+	 *         	   req_fuel_per_squirt * (-------------------------)
+	 *                                        \ divider*(alternate+1) /
+	 * req_fuel_total = --------------------------------------------------
 	 *				10
 	 *
 	 * where divider = num_cylinders/num_squirts;
 	 *
+	 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
+	 * the req_fuel variable.  Take note when doing conversions.  On screen
+	 * the value is divided by ten from what is in the MS.  
+	 * 
 	 */
 	tmp =	(float)(ve_constants->config12.bit.injectors+1) /
 		(float)(ve_constants->divider*(ve_constants->alternate+1));
 	tmp *= (float)ve_constants->req_fuel;
 	tmp /= 10.0;
-	req_fuel_total_copy = tmp;
+	req_fuel_total = tmp;
 	
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_total_spin),
 			tmp);
@@ -586,34 +615,42 @@ void check_req_fuel_limits()
 {
 	gfloat tmp = 0.0;
 	gfloat req_fuel_per_squirt = 0.0;
+	gfloat req_fuel_per_squirt_dl = 0.0;
 	gint lim_flag = 0;
 	gint index = 0;
 	gint dload_val = 0;
 	gint offset = 0;
+	gint page = -1;
 
 	/* req-fuel 
-	 *				/     num_injectors     \
-	 *          req_fuel_from_MS * |-------------------------|
-	 * Result =                     \ divider*(alternate+1) /
-	 *	    -----------------------------------------------
+	 *                                        /     num_injectors     \
+	 *         	   req_fuel_per_squirt * (-------------------------)
+	 *                                        \ divider*(alternate+1) /
+	 * req_fuel_total = --------------------------------------------------
 	 *				10
 	 *
 	 * where divider = num_cylinders/num_squirts;
 	 *
+	 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
+	 * the req_fuel variable.  Take note when doing conversions.  On screen
+	 * the value is divided by ten from what is in the MS.  
+	 * 
 	 */
+
 	tmp =	(float)(ve_constants->divider*(float)(ve_constants->alternate+1))/(float)(num_injectors);
 	
 	/* This is 1 tenth the value as the one screen stuff is 1/10th 
 	 * for the ms variable,  it gets converted farther down, just 
 	 * before download to the MS
 	 */
-	req_fuel_per_squirt = tmp * req_fuel_total_copy;
+	req_fuel_per_squirt = tmp * req_fuel_total;
+	req_fuel_per_squirt_dl = (gint)((req_fuel_per_squirt*10.0)+0.001);
 
-	if ((int)req_fuel_per_squirt != ve_constants->req_fuel)
+	if (req_fuel_per_squirt_dl != ve_constants->req_fuel)
 	{
-		if (req_fuel_per_squirt > 255.0)
+		if (req_fuel_per_squirt_dl > 255)
 			lim_flag = 1;
-		if (req_fuel_per_squirt < 0.0)
+		if (req_fuel_per_squirt_dl < 0)
 			lim_flag = 1;
 	}
 		/* req-fuel info box  */
@@ -678,17 +715,21 @@ void check_req_fuel_limits()
 		  */
 		if (paused_handlers)
 			return;
-		dload_val = (gint)(req_fuel_per_squirt*10.0);
 		offset = 90;
-		write_ve_const(dload_val, offset);
+		dload_val = convert_before_download(offset,req_fuel_per_squirt);
+		page = 0;
+		write_ve_const(dload_val, offset, page);
 		for (index=0;index<g_list_length(offsets);index++)
 		{
 			gint offset;
 			gint data;
+			page = -1;
 			offset = GPOINTER_TO_INT(g_list_nth_data(offsets,index));
 			data = offset_data[g_list_index(offsets,
 					g_list_nth_data(offsets,index))];
-			write_ve_const(data, offset);
+			page = page_data[g_list_index(offsets,
+					g_list_nth_data(offsets,index))];
+			write_ve_const(data, offset, page);
 		}
 		g_list_free(offsets);
 		offsets = NULL;

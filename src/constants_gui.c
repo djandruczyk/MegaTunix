@@ -80,7 +80,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	
-	/* Required Fuel Base Value*/
+	/* Required Fuel Total/cycle Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
         constants.req_fuel_total_spin = spinner;
@@ -100,18 +100,13 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	/* Required Fuel per squirt Value*/
+	/* Required Fuel Per Squirt Value*/
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
         constants.req_fuel_per_squirt_spin = spinner;
 	gtk_widget_set_sensitive(spinner,FALSE);
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
-	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(90));
-	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-			GINT_TO_POINTER(10*100));
-	g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(MULT));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);

@@ -277,7 +277,7 @@ void read_ve_const()
 }
 
 
-void write_ve_const(gint value, gint offset)
+void write_ve_const(gint value, gint offset, gint page)
 {
 	gint highbyte = 0;
 	gint lowbyte = 0;
@@ -319,8 +319,19 @@ void write_ve_const(gint value, gint offset)
 		buff[1]=value;
 		count = 2;
 	}
-	res = write (serial_params.fd,"W",1);	/* Send write command */
-	res = write (serial_params.fd,buff,count);	/* Send write command */
+	if (page == 0)
+	{
+		res = write (serial_params.fd,"W",1);	/* Send write command */
+		res = write (serial_params.fd,buff,count);	/* Send write command */
+	}
+	else if (page == 1)
+	{	/* DUAL Table code only thus far.... */
+		printf("DualTable write operation...\n");
+		res = write (serial_params.fd,"P1",2);	/* Send write command */
+		res = write (serial_params.fd,"W",1);	/* Send write command */
+		res = write (serial_params.fd,buff,count);	/* Send write command */
+	
+	}
 
 	/* We check to see if the last burn copy of the MS VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.

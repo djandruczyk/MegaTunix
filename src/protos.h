@@ -172,7 +172,7 @@ int handle_ms_data(int);
 int check_ecu_comms(GtkWidget *, gpointer);
 void read_ve_const(void);
 void update_ve_const(void);
-void write_ve_const(gint, gint);
+void write_ve_const(gint, gint, gint);
 void burn_flash(void);
 /* serialio.c */
 

@@ -180,6 +180,7 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
 {
         gfloat tmp1,tmp2;
 	gint dload_val;
+	gint page = -1;
 
         tmp1 = 36.0*((double)reqd_fuel.disp)*4.27793;
         tmp2 = ((double) reqd_fuel.cyls) \
@@ -204,7 +205,8 @@ int update_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	check_req_fuel_limits();
 	dload_val = ve_constants->rpmk;
-        write_ve_const(dload_val, rpmk_offset);
+	page = 0;
+        write_ve_const(dload_val, rpmk_offset, page);
 
         return TRUE;
 }

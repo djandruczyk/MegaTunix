@@ -66,9 +66,16 @@ void read_conversions(void)
 			}
                                 
                 }
+		if (i == 90)	/* Required fuel special case */
+		{
+			std_conversions.conv_type[i] = MULT;
+			std_conversions.conv_factor[i] = 10.0;
+		}
+#ifdef DEBUG
+		printf("Offset, %i, conv_type %i, conv_factor %f\n",i,std_conversions.conv_type[i],std_conversions.conv_factor[i]);
+#endif
         }
-
-	return TRUE;
+	return;
 }
 
 gint convert_before_download(gint offset, gfloat value)
