@@ -191,7 +191,7 @@ void reset_temps(gpointer type)
 					"Engine Temp in Degrees Fahrenheit");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
-					"Coolant Temp\nActivation(\302\260 F.)");
+					"EGO Active Temp(\302\260 F.)");
 			if (((dualtable) || (iac_variant)) && (using_pwm_idle))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
@@ -283,7 +283,7 @@ void reset_temps(gpointer type)
 					"Engine Temp in Degrees Celsius");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
-					"Coolant Temp\nActivation(\302\260 C.)");
+					"EGO Active Temp(\302\260 C.)");
 			if (((dualtable) || (iac_variant)) && (using_pwm_idle))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),

@@ -281,7 +281,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
-	gtk_table_set_row_spacing(GTK_TABLE(table),1,7);
+	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
 
 	/* TPS trigger threashold */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
@@ -392,7 +392,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox2,FALSE,TRUE,0);
 
 	table = gtk_table_new(3,4,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),1);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 3);
 	gtk_box_pack_start(GTK_BOX(hbox2),table,FALSE,TRUE,10);
@@ -484,12 +484,13 @@ void build_enrichments(GtkWidget *parent_frame)
 	/* EGO feedback parameters... */
 
 	table = gtk_table_new(6,2,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),7);
+	gtk_table_set_row_spacings(GTK_TABLE(table),20);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_table_set_row_spacing(GTK_TABLE(table),0,2);
+	gtk_table_set_row_spacing(GTK_TABLE(table),2,2);
+	gtk_table_set_row_spacing(GTK_TABLE(table),4,2);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
-	gtk_table_set_row_spacing(GTK_TABLE(table),1,10);
-	gtk_table_set_row_spacing(GTK_TABLE(table),3,10);
 
 	/* EGO Temp Activation */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
@@ -513,7 +514,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Coolant Temp\nActivation(\302\260 F.)");
+	label = gtk_label_new("EGO Active Temp(\302\260 F.)");
 	labels.ego_temp_lab = label;
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,

@@ -776,7 +776,6 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 					value = (value*(9.0/5.0))+32;
 			}
 			dload_val = convert_before_download(offset,value);
-			printf("GENERIC, value %f, offset %i, dloa %i\n",value,offset,dload_val);
 					
 			break;
 		default:
