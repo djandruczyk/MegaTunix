@@ -79,7 +79,7 @@ INCLUDES = @PACKAGE_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJ
 
 bin_PROGRAMS = megatunix
 
-megatunix_SOURCES =  	Makefile 	configfile.h 	globals.h 	defines.h 	protos.h 	lookuptables.h 	core_gui.c 	req_fuel.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
+megatunix_SOURCES =  	Makefile 	configfile.h 	globals.h 	defines.h 	protos.h 	constants.h 	lookuptables.h 	core_gui.c 	req_fuel.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
 
 
 megatunix_LDADD = @PACKAGE_LIBS@

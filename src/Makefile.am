@@ -9,6 +9,7 @@ megatunix_SOURCES = \
 	globals.h \
 	defines.h \
 	protos.h \
+	constants.h \
 	lookuptables.h \
 	core_gui.c \
 	req_fuel.c \

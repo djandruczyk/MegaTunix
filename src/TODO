@@ -1,13 +1,14 @@
 
 
 Tools (reqd fuel calc, memory editor, TPS guage calibrator)
-Datalogging gui and necessaru I/O functions. (will draw upon eXtace code)
-
-Also not written yet is serial routines for VEtable/constants retrieval, 
-as I don't have a map of how the data is laid out. (will use a struct once
-I get the info...)
+Datalogging gui and necessary I/O functions. (will draw upon eXtace code)
 
 serial output routines for burning changes to the MS need to be written.
-have not had time to research this yet..
+Most of the prelim code is already in place.  all that is needed is the 
+write function.  Waiting to get final confirm from Bruce on some details 
+before enabling it, as I don't want to hose my MS's yet... :)
 
+Still needs tuning GUI.  Will probably end up starting yet another project
+to design gui dashboard widgets for GTK and make a library for it..  Would
+prefer to find out someone else alreay built it, and did it right...
 
