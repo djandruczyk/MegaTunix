@@ -449,7 +449,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = -1;
 	static gboolean queue_referenced =  FALSE;
-	extern GAsyncQueue *io_queue;
 	extern gboolean no_update;
 	extern gboolean offline;
 	if (!GTK_IS_OBJECT(widget))
@@ -458,8 +457,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	obj_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
 
-	if (queue_referenced == FALSE)
-		g_async_queue_ref(io_queue);
 	if (handler == 0)
 	{
 		dbg_func(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n",CRITICAL);

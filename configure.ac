@@ -19,8 +19,14 @@ dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_LN_S
 AC_PROG_AWK
-AM_PROG_LEX
+AC_PROG_LEX
+if test "$LEX" != "flex"; 
+then
+	echo "You need the 'flex' package"
+	exit 1
+fi
 AC_PROG_YACC
+
 AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
