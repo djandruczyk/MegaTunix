@@ -546,12 +546,16 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_change(widget);
 			break;
 		case REQ_FUEL_1:
+			printf("req_fuel_1\n");
 			req_fuel_total_1 = value;
 			check_req_fuel_limits();
+			printf("req_fuel_1_breakout\n");
 			break;
 		case REQ_FUEL_2:
+			printf("req_fuel_2\n");
 			req_fuel_total_2 = value;
 			check_req_fuel_limits();
+			printf("req_fuel_2_breakout\n");
 			break;
 		case LOGVIEW_ZOOM:
 			lv_scroll = tmpi;
@@ -559,6 +563,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case NUM_SQUIRTS_1:
+			printf("num_squirts_1\n");
 			/* This actuall effects another variable */
 			num_squirts_1 = tmpi;
 			if (num_cylinders_1 % num_squirts_1)
@@ -581,6 +586,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		case NUM_CYLINDERS_1:
+			printf("num_cyls_1\n");
 			/* Updates a shared bitfield */
 			num_cylinders_1 = tmpi;
 			tmp = ve_const->config11.value;
@@ -612,6 +618,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		case NUM_INJECTORS_1:
+			printf("num_injectors_1\n");
 			/* Updates a shared bitfield */
 			num_injectors_1 = tmpi;
 			tmp = ve_const->config12.value;
@@ -626,6 +633,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS_2:
+			printf("num_squirts_2\n");
 			/* This actuall effects another variable */
 			num_squirts_2 = tmpi;
 			if (num_cylinders_2 % num_squirts_2)
@@ -649,6 +657,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
+			printf("num_cylinders_2\n");
 			num_cylinders_2 = tmpi;
 			tmp = ve_const_dt2->config11.value;
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
@@ -679,6 +688,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		case NUM_INJECTORS_2:
+			printf("num_injectors_2\n");
 			/* Updates a shared bitfield */
 			num_injectors_2 = tmpi;
 			tmp = ve_const_dt2->config12.value;
@@ -745,10 +755,11 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
-			dbg_func(__FILE__": spin_button_handler(), ERROR spinbutton not handled\n",CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": spin_button_handler(), ERROR spinbutton not handled, handler = %i\n",handler),CRITICAL);
 			dl_type = 0;  
 			break;
 	}
+	printf("end of switch\n\n");
 	if (dl_type == IMMEDIATE) 
 		write_ve_const(page, offset, dload_val, ign_parm);
 	return TRUE;

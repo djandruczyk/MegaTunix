@@ -90,9 +90,9 @@ gboolean load_gui_tabs()
 void populate_master(gpointer name, gpointer value,gpointer user_data)
 {
 	/* Populates a big master hashtable of all dynamic widgets so that 
-	 * various functions can do a lookup for hte widgets name and get it's
+	 * various functions can do a lookup for the widgets name and get it's
 	 * GtkWidget * for manipulation.  We do NOT insert the topframe
-	 * widgets fro mthe XML tree as if more htan 1 tab loads there will 
+	 * widgets from the XML tree as if more than 1 tab loads there will 
 	 * be a clash, and there's no need to store the top frame widget 
 	 * anyways...
 	 */
@@ -187,49 +187,49 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 			case MTX_INT:
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							GINT_TO_POINTER(tmpi));	
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_INT: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_ENUM:
 				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
 					tmpi = translate_string(tmpbuf);
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding ENUM %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							GINT_TO_POINTER(tmpi));	
 					g_free(tmpbuf);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_ENUM: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							GINT_TO_POINTER(tmpi));	
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_BOOL: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_STRING:
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING key:%s value:%s to widget %s\n",keys[i],tmpbuf,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							g_strdup(tmpbuf));
 					g_free(tmpbuf);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_STRING: read of key %s from section %s failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 
 		}
