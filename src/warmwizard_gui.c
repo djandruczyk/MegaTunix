@@ -404,7 +404,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 void warmwizard_update_status(gfloat temp)
 {
-	extern gboolean temp_units;
+	extern gint temp_units;
 	extern GdkColor red;
 	extern GdkColor black;
 	gboolean skipnext = FALSE;

@@ -36,7 +36,7 @@ extern gint ms_goodread_count;
 extern gboolean just_starting;
 extern gboolean raw_reader_running;
 extern gboolean tips_in_use;
-extern gboolean temp_units;
+extern gint temp_units;
 extern gint main_x_origin;
 extern gint main_y_origin;
 extern gint lv_scroll;

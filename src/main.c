@@ -26,7 +26,7 @@
 #include <timeout_handlers.h>
 
 
-extern gboolean temp_units;
+extern gint temp_units;
 extern struct Serial_Params *serial_params;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;

@@ -22,7 +22,6 @@
 #include <post_process.h>
 
 extern unsigned char *kpa_conversion;
-extern gboolean temp_units;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
 
@@ -35,6 +34,7 @@ void post_process(void *input, void *output)
 	 */
 	extern unsigned char *ms_data;
 	extern unsigned int ecu_caps;
+	extern gint temp_units;
 	gint stroke = 0;
 	gint cyls = 0;
 	gfloat ign_int = 0.0;

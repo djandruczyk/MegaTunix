@@ -20,7 +20,7 @@
 #include <structures.h>
 
 extern gboolean tips_in_use;
-extern gboolean temp_units;
+extern gint temp_units;
 extern struct DynamicEntries entries;
 extern GdkColor black;
 GtkWidget *ms_ecu_revision_entry;

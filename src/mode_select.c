@@ -18,7 +18,6 @@
 #include <serialio.h>
 #include <structures.h>
 
-extern gboolean temp_units;
 
 void parse_ecu_capabilities(unsigned int ecu_caps)
 {
@@ -45,6 +44,7 @@ void set_ignition_mode(gboolean state)
 {
         extern GList *ign_controls;
         extern GList *inv_ign_controls;
+	extern gint temp_units;
 
         g_list_foreach(ign_controls, set_widget_state,(gpointer)state);
         g_list_foreach(inv_ign_controls, set_widget_state,(gpointer)(!state));
@@ -70,6 +70,7 @@ void set_dualtable_mode(gboolean state)
 {
         extern GList *dt_controls;
         extern GList *inv_dt_controls;
+	extern gint temp_units;
 
         g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
         g_list_foreach(inv_dt_controls, set_widget_state,(gpointer)(!state));
