@@ -22,7 +22,7 @@ void open_serial(gchar *);
 int setup_serial_params(void);
 void close_serial(void);
 int handle_ms_data(InputData);
-int check_ecu_comms(GtkWidget *, gpointer);
+gboolean check_ecu_comms(GtkWidget *, gpointer);
 void read_ve_const(void);
 void update_ve_const(void);
 void write_ve_const(gint, gint, gboolean);
