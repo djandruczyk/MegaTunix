@@ -14,6 +14,7 @@
 #ifndef __UNIONS_H__
 #define __UNIONS_H__
 
+#include <endian.h>
 
 /* Megasquirt unions defined in C provided by Perry Harrington */
 
@@ -23,7 +24,7 @@
  */
 
 /* unions used in the various structures... */
-#ifdef MSB_BITFIELD /* PDA's possibly? */
+#if __BYTE_ORDER == __BIG_ENDIAN /* PDA's possibly? */
 /* Big endian systems (MSB) */
 union squirt
 {
@@ -195,7 +196,7 @@ union spark_config1
 };
 
 
-#else
+#elif __BYTE_ORDER == __LITTLE_ENDIAN
 /* Little Endian systems (LSB), intel x86) */
 union squirt
 {
@@ -356,6 +357,8 @@ union spark_config1
 		unsigned char unused	:4;
 	} bit;
 };
+#else
+#error  Endian-ness note defined, contact author!!!
 #endif
 
 #endif
