@@ -300,14 +300,20 @@ gboolean populate_viewer(GtkWidget * widget)
 					g_hash_table_lookup(
 							active_traces,
 							GINT_TO_POINTER(i));
-				/* Need to remove the widgets as well */
-				gtk_widget_destroy(v_value->d_area);
+				/* Remove entry in from hash table */
 				g_hash_table_remove(active_traces,
 						GINT_TO_POINTER(i));
-				v_value->parent = NULL;
-				v_value->d_area = NULL;
-				v_value->runtime_offset = -1;
-				v_value->size = 0;
+
+				/* Free all resources of the datastructure 
+				 * before de-allocating it... 
+				 */
+				gtk_widget_destroy(v_value->d_area);
+				g_array_free(v_value->data_array,TRUE);
+				g_object_unref(v_value->trace_pmap);
+				g_object_unref(v_value->trace_gc);
+				g_object_unref(v_value->font_gc);
+				g_object_unref(v_value->grat_gc);
+				g_free(v_value->vname);
 				g_free(v_value);
 				v_value = NULL;
 			}

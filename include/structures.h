@@ -23,6 +23,7 @@
 #include <unistd.h>
 
 
+/* Serial parameters, */
 struct Serial_Params
 {
         int fd;                 /* File descriptor */
@@ -39,6 +40,7 @@ struct Serial_Params
 };
 
 
+/* Progress bars that are updated from various functions... */
 struct DynamicProgress
 {
         GtkWidget *ego_pbar;            /* O2 Voltage bar */
@@ -64,6 +66,7 @@ struct DynamicProgress
 	GtkWidget *ww_map_pbar;
 };
 
+/* Misc widgets that need to be modified/updated during runtime */
 struct DynamicMisc
 {
 	GtkWidget *p0_map_tps_frame;
@@ -168,11 +171,6 @@ struct DynamicAdjustments
  */
 struct DynamicButtons
 {
-	GtkWidget *const_store_but;		/* Button */
-	GtkWidget *enrich_store_but;		/* Button */
-	GtkWidget *vetable_store_but;		/* Button */
-	GtkWidget *tuning_store_but;		/* Button */
-	GtkWidget *ww_store_but;		/* Button */
 	GtkWidget *speed_den_but;		/* Toggle button */
 	GtkWidget *alpha_n_but;			/* Toggle button */
 	GtkWidget *two_stroke_but;		/* Toggle button */
@@ -195,8 +193,8 @@ struct DynamicButtons
 	GtkWidget *close_dlog_but;		/* Close DataLog file */
 	GtkWidget *logplay_sel_log_but;		/* Select playback log */
 	GtkWidget *logplay_sel_parm_but;	/* Select rt parms for play */
-	GtkWidget *logplay_start_rt_but;
-	GtkWidget *logplay_stop_rt_but;
+	GtkWidget *logplay_start_rt_but;	/* Logplay star realtime */
+	GtkWidget *logplay_stop_rt_but;		/* Logplay stop realtime */
 };
 
 /* Simple struct to store the pointers to the entry and button
@@ -227,12 +225,15 @@ struct DynamicEntries
 	GtkWidget *ecu_signature_entry;
 };
 
-
+/* Pointers to the widgets, sorted by OFFSET 
+ * into the ms datablock (ve/constants)
+ */
 struct Ve_Widgets
 {
 	GtkWidget *widget[2*MS_PAGE_SIZE];
 };
 
+/* Logable data sorted by offset into runtime_data memory block */
 struct Logables
 {
 	GtkWidget *widgets[64];
@@ -246,6 +247,9 @@ struct Io_File
 	FileIoType iotype;
 };
 
+/* Viewable_Value is the datastructure bound 
+ * to every trace viewed in the logviewer. 
+ */
 struct Viewable_Value
 {
 	GtkWidget *parent; 		/* Parent Widget */
@@ -268,6 +272,10 @@ struct Viewable_Value
 	GArray *data_array;		/* History of all values recorded */
 };
 	
+/* Limit are used for the above Viewable_Value
+ * strcture to help set sane limits to the traces
+ * in the logviewer...
+ */
 struct Limits
 {
 	gfloat lower;

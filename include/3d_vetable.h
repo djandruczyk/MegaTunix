@@ -78,6 +78,7 @@ struct Ve_View_3D
 	gint ve_max;
 	GtkWidget *drawing_area;
 	GtkWidget *window;
+	GtkWidget *burn_but;
 	gint table;
 };
 

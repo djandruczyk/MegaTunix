@@ -26,79 +26,29 @@ extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;
-
+GList *store_buttons;	/* list of buttons that have color change attributes*/
 
 
 void set_store_buttons_state(GuiState state)
 {
-	switch (state)
+	g_list_foreach(store_buttons, set_button_color,(gpointer)state);
+}
+
+void set_button_color(gpointer button, gpointer state)
+{
+	switch ((GuiState)state)
 	{
 		case RED:
-			/* Let user know to burn vars byt turnign button text red */
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.ww_store_but)->child,
+			gtk_widget_modify_fg(GTK_BIN(button)->child,
 					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.ww_store_but)->child,
+			gtk_widget_modify_fg(GTK_BIN(button)->child,
 					GTK_STATE_PRELIGHT,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.const_store_but)->child,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.const_store_but)->child,
-					GTK_STATE_PRELIGHT,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.enrich_store_but)->child,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.enrich_store_but)->child,
-					GTK_STATE_PRELIGHT,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.vetable_store_but)->child,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.vetable_store_but)->child,
-					GTK_STATE_PRELIGHT,&red);
-/*			gtk_widget_modify_fg(GTK_BIN(
-						buttons.tuning_store_but)->child,
-					GTK_STATE_NORMAL,&red);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.tuning_store_but)->child,
-					GTK_STATE_PRELIGHT,&red);
-*/
 			break;
 		case BLACK:
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.ww_store_but)->child,
+			gtk_widget_modify_fg(GTK_BIN(button)->child,
 					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.ww_store_but)->child,
+			gtk_widget_modify_fg(GTK_BIN(button)->child,
 					GTK_STATE_PRELIGHT,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.const_store_but)->child,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.const_store_but)->child,
-					GTK_STATE_PRELIGHT,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.enrich_store_but)->child,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.enrich_store_but)->child,
-					GTK_STATE_PRELIGHT,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.vetable_store_but)->child,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.vetable_store_but)->child,
-					GTK_STATE_PRELIGHT,&black);
-/*			gtk_widget_modify_fg(GTK_BIN(
-						buttons.tuning_store_but)->child,
-					GTK_STATE_NORMAL,&black);
-			gtk_widget_modify_fg(GTK_BIN(
-						buttons.tuning_store_but)->child,
-					GTK_STATE_PRELIGHT,&black);
-*/
 			break;
 	}
 }
