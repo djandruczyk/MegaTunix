@@ -77,6 +77,7 @@ struct Ve_View_3D
 	gint rpm_max;
 	gint load_max;
 	gint ve_max;
+	gint ve_min;
 	gchar *z_source;
 	GtkWidget *drawing_area;
 	GtkWidget *window;
