@@ -32,6 +32,8 @@ void handle_ms_data(int which_data)
 	int res = 0;
 	unsigned char buf[255];
 	char *ptr = buf;
+	struct ms_raw_data_v1_and_v2 *raw;
+
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
 	 */
@@ -62,6 +64,7 @@ void handle_ms_data(int which_data)
 				setup_serial_params();
 				return;
 			}
+
 			raw = (struct ms_raw_data_v1_and_v2 *) buf;
 
 			/* Test for MS reset */
@@ -77,10 +80,12 @@ void handle_ms_data(int which_data)
 			}
 			lastcount = raw->secl;
 
-			/* copy last round to out_last for checking */
+			/* copy last round to runtime_last for checking */
                         ms_goodread_count++;
-			out_last = out;
-			post_process(raw,&out);
+
+			runtime_last = runtime;
+			post_process(raw,&runtime);
+
 			break;
 
 		case VE_AND_CONSTANTS:
@@ -113,7 +118,6 @@ void handle_ms_data(int which_data)
 			{
                         	ms_ve_goodread_count++;
 			}
-			printf("VEtable/constants came in\n");
 			break;
 	}
 
@@ -167,5 +171,4 @@ void handle_ms_data(int which_data)
  *	printf("Error Count: %i\n",serial_params.errcount);
  *	printf("Reset Count: %i\n",ms_reset_count);
  */
-	printf("leaving handle_ms_data()\n");
 }

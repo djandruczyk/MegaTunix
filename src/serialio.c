@@ -215,7 +215,7 @@ void read_ve_const()
 
 	/* save state */
 	tmp = serial_params.newtio.c_cc[VMIN]; /* wait for VE table */
-	serial_params.newtio.c_cc[VMIN]     = 126;
+	serial_params.newtio.c_cc[VMIN]     = 125;
 	tcflush(serial_params.fd, TCIFLUSH);
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 

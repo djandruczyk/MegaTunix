@@ -61,6 +61,7 @@ int main(int argc, char ** argv)
 			"widget \"*.testgtk-version-label\" style \"testgtk-version-label\"");
 
 	init();			/* initialize global vars */
+	mem_alloc();
 	make_megasquirt_dirs();	/*Create config file dirs if missing */
 
 	cfg_result = read_config();

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 /* DO NOT include defines.h, as protos.h already does... */

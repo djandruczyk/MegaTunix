@@ -302,6 +302,8 @@ int build_runtime(GtkWidget *parent_frame)
 void update_runtime_vars()
 {
 	char buff[10];
+	struct ms_data_v1_and_v2 *current = &runtime;
+	struct ms_data_v1_and_v2 *last = &runtime_last;
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?
@@ -310,85 +312,84 @@ void update_runtime_vars()
 	 */
 
 	gdk_threads_enter();
-
-	if (out.secl != out_last.secl)
+	if (current->secl != last->secl)
 	{
-		g_snprintf(buff,10,"%i",out.secl);
+		g_snprintf(buff,10,"%i",current->secl);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.secl_ent),buff);
 	}
-	if (out.map != out_last.map)
+	if (current->map != last->map)
 	{
-		g_snprintf(buff,10,"%i",out.map);
+		g_snprintf(buff,10,"%i",current->map);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.map_ent),buff);
 	}
-	if (out.clt != out_last.clt)
+	if (current->clt != last->clt)
 	{
-		g_snprintf(buff,10,"%i",out.clt);
+		g_snprintf(buff,10,"%i",current->clt);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.clt_ent),buff);
 	}
-	if (out.batt != out_last.batt)
+	if (current->batt != last->batt)
 	{
-		g_snprintf(buff,10,"%.2f",out.batt);
+		g_snprintf(buff,10,"%.2f",current->batt);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.batt_ent),buff);
 	}
-	if (out.gammae != out_last.gammae)
+	if (current->gammae != last->gammae)
 	{
-		g_snprintf(buff,10,"%i",out.gammae);
+		g_snprintf(buff,10,"%i",current->gammae);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.gammae_ent),buff);
 	}
-	if (out.baro != out_last.baro)
+	if (current->baro != last->baro)
 	{
-		g_snprintf(buff,10,"%i",out.baro);
+		g_snprintf(buff,10,"%i",current->baro);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.baro_ent),buff);
 	}
-	if (out.mat != out_last.mat)
+	if (current->mat != last->mat)
 	{
-		g_snprintf(buff,10,"%i",out.mat);
+		g_snprintf(buff,10,"%i",current->mat);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.mat_ent),buff);
 	}
-	if (out.tps != out_last.tps)
+	if (current->tps != last->tps)
 	{
-		g_snprintf(buff,10,"%i",out.tps);
+		g_snprintf(buff,10,"%i",current->tps);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.tps_ent),buff);
 	}
-	if (out.rpm != out_last.rpm)
+	if (current->rpm != last->rpm)
 	{
-		g_snprintf(buff,10,"%i",out.rpm);
+		g_snprintf(buff,10,"%i",current->rpm);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.rpm_ent),buff);
 	}
-	if (out.pw != out_last.pw)
+	if (current->pw != last->pw)
 	{
-		g_snprintf(buff,10,"%.1f",out.pw);
+		g_snprintf(buff,10,"%.1f",current->pw);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.pw_ent),buff);
 	}
-	if (out.egocorr != out_last.egocorr)
+	if (current->egocorr != last->egocorr)
 	{
-		g_snprintf(buff,10,"%i",out.egocorr);
+		g_snprintf(buff,10,"%i",current->egocorr);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.egocorr_ent),buff);
 	}
-	if (out.barocorr != out_last.barocorr)
+	if (current->barocorr != last->barocorr)
 	{
-		g_snprintf(buff,10,"%i",out.barocorr);
+		g_snprintf(buff,10,"%i",current->barocorr);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.barocorr_ent),buff);
 	}
-	if (out.warmcorr != out_last.warmcorr)
+	if (current->warmcorr != last->warmcorr)
 	{
-		g_snprintf(buff,10,"%i",out.warmcorr);
+		g_snprintf(buff,10,"%i",current->warmcorr);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.warmcorr_ent),buff);
 	}
-	if (out.aircorr != out_last.aircorr)
+	if (current->aircorr != last->aircorr)
 	{
-		g_snprintf(buff,10,"%i",out.aircorr);
+		g_snprintf(buff,10,"%i",current->aircorr);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.aircorr_ent),buff);
 	}
-	if (out.vecurr != out_last.vecurr)
+	if (current->vecurr != last->vecurr)
 	{
-		g_snprintf(buff,10,"%i",out.vecurr);
+		g_snprintf(buff,10,"%i",current->vecurr);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.vecurr_ent),buff);
 	}
-	if (out.tpsaccel != out_last.tpsaccel)
+	if (current->tpsaccel != last->tpsaccel)
 	{
-		g_snprintf(buff,10,"%i",out.tpsaccel);
+		g_snprintf(buff,10,"%i",current->tpsaccel);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.tpsaccel_ent),buff);
 	}
 	gdk_threads_leave();
