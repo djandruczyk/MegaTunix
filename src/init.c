@@ -238,13 +238,16 @@ void mem_dealloc()
 	g_free(serial_params);
 
 	/* Firmware datastructure.... */
-	if (firmware->firmware_name)
-		g_free(firmware->firmware_name);
-	if (firmware->tab_list)
-		g_strfreev(firmware->tab_list);
-	for (i=0;i<firmware->total_pages;i++)
-		g_free(firmware->page_params[i]);
-	g_free(firmware);
+	if (firmware)
+	{
+		if (firmware->firmware_name)
+			g_free(firmware->firmware_name);
+		if (firmware->tab_list)
+			g_strfreev(firmware->tab_list);
+		for (i=0;i<firmware->total_pages;i++)
+			g_free(firmware->page_params[i]);
+		g_free(firmware);
+	}
 
 	for (i=0;i<MAX_SUPPORTED_PAGES;i++)
 	{
