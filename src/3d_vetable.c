@@ -1023,6 +1023,36 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				ve_view->active_rpm += 1;
 			break;				
 
+		case GDK_Page_Up:
+			dbg_func("\"Page Up\"\n",OPENGL);
+
+			if (ve_view->table != 3) // Std VE Table
+			{
+				if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] <= 245)
+				{
+					offset = (ve_view->active_load*8)+ve_view->active_rpm;
+					value = ve_ptr->ve_bins[offset] + 10;
+					if (ve_view->table == 2)
+						offset+=MS_PAGE_SIZE;
+					dload_val = convert_before_download(offset,value,FALSE);
+					write_ve_const(dload_val,offset,FALSE);
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+								ve_widgets[offset]),
+							value);
+
+				}
+			}
+			else		// Spark Table
+			{
+				if (ign_ptr->spark_table[(ve_view->active_load*8)+ve_view->active_rpm] <= 245)
+				{
+					offset = (ve_view->active_load*8)+ve_view->active_rpm;
+					value = ign_ptr->spark_table[offset] + 10;
+					write_ve_const(value,offset,TRUE);
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(ign_widgets[offset]),value/2.84);
+				}
+			}
+			break;				
 		case GDK_plus:
 		case GDK_KP_Add:
 			dbg_func("\"PLUS\"\n",OPENGL);
@@ -1054,6 +1084,36 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				}
 			}
 			break;				
+		case GDK_Page_Down:
+			dbg_func("\"Page Down\"\n",OPENGL);
+
+			if (ve_view->table != 3) // STD VE table
+			{
+				if (ve_ptr->ve_bins[(ve_view->active_load*8)+ve_view->active_rpm] >= 10)
+				{
+					offset = (ve_view->active_load*8)+ve_view->active_rpm;
+					value = ve_ptr->ve_bins[offset] - 10;
+					if (ve_view->table == 2)
+						offset+=MS_PAGE_SIZE;
+					dload_val = convert_before_download(offset,value,FALSE);
+					write_ve_const(dload_val,offset,FALSE);
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+								ve_widgets[offset]),
+							value);
+				}
+			}
+			else		// Spark Table
+			{
+				if (ign_ptr->spark_table[(ve_view->active_load*8)+ve_view->active_rpm] >= 10)
+				{
+					offset = (ve_view->active_load*8)+ve_view->active_rpm;
+					value = ign_ptr->spark_table[offset] - 10;
+					write_ve_const(value,offset,TRUE);
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(ign_widgets[offset]),value/2.84);
+				}
+			}
+			break;							
+
 
 		case GDK_minus:
 		case GDK_KP_Subtract:
@@ -1087,6 +1147,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			break;							
 
 		default:
+			dbg_func(g_strdup_printf(__FILE__": \"Keypress not handled, code: %#.4X\"\n",event->keyval),OPENGL);
 			return FALSE;
 	}
 
