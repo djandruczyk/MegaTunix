@@ -56,6 +56,7 @@ temp_dep=TRUE
 [cpulse_pos170_label]
 keys=page,c_label,f_label,temp_dep
 key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
 c_label=77 \302\260C.
 f_label=170 \302\260F.
 temp_dep=TRUE

@@ -21,13 +21,8 @@
 
 #include <configfile.h>
 #include <glib/gprintf.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <strings.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
 
 static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name);
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value);
@@ -69,25 +64,28 @@ ConfigFile *cfg_open_file(gchar * filename)
 	buffer[stats.st_size] = '\0';
 
 	cfg = g_malloc0(sizeof (ConfigFile));
+
 	lines = g_strsplit(buffer, "\n", 0);
 	g_free(buffer);
 	i = 0;
 	while (lines[i])
 	{
-		if (lines[i][0] == '[')
+		if (g_str_has_prefix(lines[i],"["))
 		{
-			if ((tmp = strchr(lines[i], ']')))
+			if ((tmp = g_strrstr(lines[i], "]")))
 			{
 				*tmp = '\0';
 				section = cfg_create_section(cfg, &lines[i][1]);
 			}
 		}
-		else if (lines[i][0] != '#' && section)
+		else if ((!g_str_has_prefix(lines[i],"#") && section))
 		{
-			if ((tmp = strchr(lines[i], '=')))
+			if ((tmp = g_strrstr(lines[i], "=")))
 			{
 				*tmp = '\0';
 				tmp++;
+				/* Allow extended chars */
+				tmp = g_strcompress(tmp);
 				cfg_create_string(section, lines[i], tmp);
 			}
 		}
@@ -160,7 +158,7 @@ gboolean cfg_read_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboole
 
 	if (!cfg_read_string(cfg, section, key, &str))
 		return FALSE;
-	if (!strcasecmp(str, "TRUE"))
+	if (!g_ascii_strcasecmp(str, "TRUE"))
 		*value = TRUE;
 	else
 		*value = FALSE;
@@ -175,7 +173,7 @@ gboolean cfg_read_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat *
 	if (!cfg_read_string(cfg, section, key, &str))
 		return FALSE;
 
-	*value = (gfloat) g_strtod(str, NULL);
+	*value = (gfloat) g_ascii_strtod(str, NULL);
 	g_free(str);
 
 	return TRUE;
@@ -188,7 +186,7 @@ gboolean cfg_read_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble
 	if (!cfg_read_string(cfg, section, key, &str))
 		return FALSE;
 
-	*value = g_strtod(str, NULL);
+	*value = g_ascii_strtod(str, NULL);
 	g_free(str);
 
 	return TRUE;
@@ -205,7 +203,7 @@ void cfg_write_string(ConfigFile * cfg, gchar * section, gchar * key, gchar * va
 	if ((line = cfg_find_string(sect, key)))
 	{
 		g_free(line->value);
-		line->value = g_strchug(g_strchomp(g_strdup(value)));
+		line->value = g_strescape(g_strchug(g_strchomp(g_strdup(value))),NULL);
 	}
 	else
 		cfg_create_string(sect, key, value);
@@ -324,7 +322,7 @@ static ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name)
 	while (list)
 	{
 		section = (ConfigSection *) list->data;
-		if (!strcasecmp(section->name, name))
+		if (!g_ascii_strcasecmp(section->name, name))
 			return section;
 		list = g_list_next(list);
 	}
@@ -340,7 +338,7 @@ static ConfigLine *cfg_find_string(ConfigSection * section, gchar * key)
 	while (list)
 	{
 		line = (ConfigLine *) list->data;
-		if (!strcasecmp(line->key, key))
+		if (!g_ascii_strcasecmp(line->key, key))
 			return line;
 		list = g_list_next(list);
 	}

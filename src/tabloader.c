@@ -110,7 +110,6 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	ConfigFile *cfgfile = (ConfigFile *)user_data;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = (GtkWidget *) value;
-	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	gchar * section = g_strdup((gchar *)widget_name);
 	gchar ** keys = NULL;
 	gint keytypes[50];	/* bad idea to be fixed size!! */
@@ -120,6 +119,8 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint tmpi = 0;
 	gint offset = 0;
 	gint page = 0;
+	extern GList *temp_dep;
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
 	if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		return;
@@ -143,6 +144,10 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	if (!cfg_read_int(cfgfile,section,"page",&page))
 		dbg_func(g_strdup_printf(__FILE__": bind_data(), Object %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
 	
+	/* Add temp dependant widgets to list... */
+	if (cfg_read_boolean(cfgfile,section,"temp_dep",&tmpi))
+		temp_dep = g_list_append(temp_dep,(gpointer)widget);
+
 	if (offset >= 0)
 	{
 		/* The way we do it now is to STORE widgets in LISTS for each

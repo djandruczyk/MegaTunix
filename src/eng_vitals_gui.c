@@ -595,8 +595,12 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	/* This label is dynamic and will change based on unit preference
 	 * AND based on if we are using DT code or not... 
 	 */
-	label = gtk_label_new("Fast Idle Temp (\302\260F.)");
-        labels.fast_idle_temp_lab = label;
+	label = gtk_label_new(NULL);
+	g_object_set_data(G_OBJECT(label),"f_label",
+			g_strdup("Fast Idle Temp (\302\260F.)"));
+	g_object_set_data(G_OBJECT(label),"c_label",
+			g_strdup("Fast Idle Temp (\302\260C.)"));
+	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -661,7 +665,11 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	// Slow Idle Temp
-	label = gtk_label_new("Slow Idle Temp (\302\260F.)");
+	label = gtk_label_new(NULL);
+	g_object_set_data(G_OBJECT(label),"f_label",
+			g_strdup("Slow Idle Temp (\302\260F.)"));
+	g_object_set_data(G_OBJECT(label),"c_label",
+			g_strdup("Slow Idle Temp (\302\260C.)"));
 	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	dt_controls = g_list_append(dt_controls, (gpointer)label);
 	iac_idle_controls = g_list_append(iac_idle_controls, (gpointer)label);

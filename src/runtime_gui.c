@@ -266,6 +266,7 @@ gboolean update_runtime_vars()
 	gdk_threads_enter();
 
 
+	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		tmpwidget = g_list_nth_data(ve_widgets[i][0],0);
@@ -274,18 +275,10 @@ gboolean update_runtime_vars()
 		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
 		        gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 	}
-	/* Count is used  to force an update after 5 runs EVEN IF the 
-	 * value hasn't changed.  seems to fix a "stuck bar" I've seen
-	 */
 	
-	/* The additional NULL test is to avoid a timing-based problem
-	 * where ve_view can exist, but the window doesn't yet.
-	 * It's a small window, but I hit it several times.
-	 */
-
 
 	/* Update all the dynamic RT controls */
-	if (active_page == RUNTIME_DISP)	/* Runtime display is visible */
+	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
 	{
 		g_hash_table_foreach(rt_controls,rt_update_values,rt_last);
 
@@ -318,7 +311,7 @@ gboolean update_runtime_vars()
 		}
 	}
 
-	if (active_page == WARMUP_WIZARD) /* Warmup wizard visible... */
+	if (active_page == WARMUP_WIZ_PAGE) /* Warmup wizard visible... */
 	{
 		/* Update all the controls on the warmup wizrd page... */
 		if ((runtime->ego_volts != rt_last->ego_volts) || (forced_update))

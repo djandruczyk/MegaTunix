@@ -50,26 +50,23 @@ static struct
 	gchar *frame_name;	/* Textual name at the top of the frame */
 	void (*Function) (GtkWidget *);	/* builder function */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
-	gint capabilities;	/* What does it do */
+	Capabilities capabilities;	/* What does it do */
+	PageIdent page_ident;	/* Page Identifier... */
 } notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",STANDARD},
-{ "General MegaTunix Settings", build_general, "_General",STANDARD},
-{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STANDARD},
-{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD},
-{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD},
-{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE},
-//{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",STANDARD},
-//{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",STANDARD},
-//{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",DUALTABLE},
-//{ "MegaSquirtnSpark/EDIS Spark Table", build_sparktable, "_Spark Advance",S_N_SPARK | S_N_EDIS},
-{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS},
-{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD},
-{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD},
-{ "MegaSquirt Tools", build_tools, "T_ools",STANDARD},
-{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",RAW_MEMORY},
-{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD},
-{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STANDARD},
-{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STANDARD},
+{ "About MegaTunix", build_about, "_About",STANDARD,ABOUT_PAGE},
+{ "General MegaTunix Settings", build_general, "_General",STANDARD,GENERAL_PAGE},
+{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STANDARD,COMMS_PAGE},
+{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD,ENG_VITALS_PAGE},
+{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD,CONSTANTS_PAGE},
+{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE,DT_PARAMS_PAGE},
+{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS,IGNITON_PAGE},
+{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
+{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
+{ "MegaSquirt Tools", build_tools, "T_ools",STANDARD,TOOLS_PAGE},
+{ "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",RAW_MEMORY,RAW_MEM_PAGE},
+{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD,WARMUP_WIZ_PAGE},
+{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STANDARD,DATALOGGING_PAGE},
+{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STANDARD,LOGVIEWER_PAGE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -140,6 +137,7 @@ int setup_gui()
 			ign_controls = g_list_append(ign_controls, 
 					(gpointer)label);
 		}
+		g_object_set_data(G_OBJECT(frame),"page_ident",GINT_TO_POINTER(notebook_tabs[i].page_ident));
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	}
 	g_signal_connect(G_OBJECT(notebook),"switch-page",

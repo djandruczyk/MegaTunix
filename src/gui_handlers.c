@@ -1246,7 +1246,11 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 //	printf("page changed to %i\n",page_no);
-	active_page = page_no;
+	gint page_ident = 0;
+	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
+	
+	page_ident = (PageIdent)g_object_get_data(G_OBJECT(widget),"page_ident");
+	active_page = page_ident;
 	force_an_update();
 
 	return;
