@@ -241,16 +241,6 @@ struct Viewable_Value
 	GArray *data_array;		/* History of all values recorded */
 };
 	
-/* Limit are used for the above Viewable_Value
- * strcture to help set sane limits to the traces
- * in the logviewer...
- */
-struct Limits
-{
-	gfloat lower;
-	gfloat upper;
-};
-
 /* The Rt_Control struct contains info on the runtime display tab controls
  * as they are now stored in the config file and adjustable in position
  * and placement and such..
@@ -300,6 +290,7 @@ struct Default_Limits
 	gchar * field_name;
 	gfloat lower;
 	gfloat upper;
+	LogType logtype;
 };
 
 /* The Log_Info datastructure is populated when a datalog file is opened
@@ -310,7 +301,7 @@ struct Log_Info
 	gint field_count;	/* How many fields in the logfile */
 	gchar *delimiter;	/* delimiter between fields for this logfile */
 	gchar **fields;		/* NULL term'd vector of string field names */
-	GArray *fields_data;	/* Array of or arrays for stored data */
+	GArray *fields_data;	/* Array of arrays for stored data */
 };
 
 #endif

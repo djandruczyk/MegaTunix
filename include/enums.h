@@ -180,4 +180,12 @@ typedef enum
 	O2_DEP		= 1<<9	/* O2 scale dependancy, used by Rt_Controls */
 }Capabilities;
 
+typedef enum
+{
+	MTX,
+	MT_CLASSIC,
+	MT_FULL,
+	MT_RAW
+}LogType;
+
 #endif

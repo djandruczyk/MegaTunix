@@ -150,52 +150,6 @@ static const gint logging_datasizes_map[] =
 	UCHAR,UCHAR
 };
 
-
-static struct Limits limits[]= {
-{ 0.0,4294967269.0},/* 0 HR clock */
-{ 0.0,255.0},	/* 1 MS clock */
-{ 0.0,25500.0},	/* 2 RPM */
-{ 0.0,255.0},	/* 3 EngineBit */
-{ 0.0,100.0},	/* 4 IdleDC */
-{ 0.0,5.0},	/* 5 TPS Volts */
-{ 0.0,5.0},	/* 6 MAP Volts */
-{ 0.0,5.0},	/* 7 BARO Volts */
-{ 0.0,5.0},	/* 8 MAT Volts */
-{ 0.0,5.0},	/* 9 CLT Volts */
-{ 0.0,255.0},	/* 10 TPS Counts */
-{ 0.0,255.0},	/* 11 MAP Counts */
-{ 0.0,255.0},	/* 12 BARO Counts */
-{ 0.0,255.0},	/* 13 MAT Counts */
-{ 0.0,255.0},	/* 14 CLT Counts */
-{ 0.0,100.0},	/* 15 TPS % */
-{ 0.0,255.0},	/* 16 MAP (in KPA) */
-{ 0.0,255.0},	/* 17 Baro (in KPA) */
-{ -40.0,215.0},	/* 18 MAT (in DEG) */
-{ -40.0,215.0},	/* 19 CLT (in DEG) */
-{ 0.0,5.0},	/* 20 O2 Volts */
-{ 0.0,255.0},	/* 21 O2 Counts */
-{ 0.0,255.0},	/* 22 Gammae */
-{ 0.0,18.0},	/* 23 BATT Volts */
-{ 0.0,255.0},	/* 24 BATT Counts */
-{ 0.0,255.0},	/* 25 AirCorr */
-{ 0.0,255.0},	/* 26 BAROCorr */
-{ 0.0,255.0},	/* 27 EGOCorr */
-{ 0.0,255.0},	/* 28 WARMCorr */
-{ 0.0,255.0},	/* 29 TpsAccel */
-{ 0.0,255.0},	/* 30 VE1 */
-{ 0.0,255.0},	/* 31 VE2 */
-{ 0.0,25.5},	/* 32 PW1 */
-{ 0.0,25.5},	/* 33 PW2 */
-{ 0.0,100.0},	/* 34 Dcycle1 */
-{ 0.0,100.0},	/* 35 Dcycle2 */
-{ 0.0,255.0},	/* 36 CycleTimeH */
-{ 0.0,255.0},	/* 37 CycleTimeL */
-{ 0.0,90.0},	/* 38 SparkAngle */
-{ 0.0,255.0},	/* 39 BSPOT1 */
-{ 0.0,255.0},	/* 40 BSPOT2 */
-{ 0.0,255.0}	/* 41 BSPOT3 */
-};
-
 /* Tooltips for each of the above.... */
 static const gchar * logable_names_tips[] = 
 {

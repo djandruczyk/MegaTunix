@@ -16,6 +16,7 @@
 #include <config.h>
 #include <datalogging_const.h>
 #include <defines.h>
+#include <default_limits.h>
 #include <enums.h>
 #include <glib/gprintf.h>
 #include <gui_handlers.h>
@@ -41,6 +42,7 @@ extern struct DynamicLabels labels;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 GtkWidget *rt_table[4];
+extern GdkColor red;
 
 
 void build_runtime(GtkWidget *parent_frame)
@@ -55,6 +57,7 @@ void build_runtime(GtkWidget *parent_frame)
 	GtkWidget *entry;
 	GtkWidget *ebox;
 	extern GtkTooltips *tip;
+
 	gint i=0;
 
 	/* ugly hack to prevent a compiler warning,  find a better way to
@@ -232,7 +235,8 @@ void build_runtime(GtkWidget *parent_frame)
 	{
 		frame = gtk_frame_new(NULL);
 		gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-		misc.status[i] = gtk_label_new(status_msgs[i]);
+		label = gtk_label_new(status_msgs[i]);
+		misc.status[i] = label;
 		gtk_widget_set_sensitive(misc.status[i],FALSE);
 		gtk_container_add(GTK_CONTAINER(frame),misc.status[i]);
 		gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
@@ -417,8 +421,8 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	extern struct Runtime_Common *runtime_last;
 	struct Rt_Control *control = (struct Rt_Control *)value;
 	gint offset = control->runtime_offset;
-	//gfloat lower = limits[control->limits_index].lower;
-	gfloat upper = limits[control->limits_index].upper;
+	//gfloat lower = def_limits[control->limits_index].lower;
+	gfloat upper = def_limits[control->limits_index].upper;
 	gint ivalue = 0;
 	gshort svalue = 0;
 	gfloat fvalue = 0.0;

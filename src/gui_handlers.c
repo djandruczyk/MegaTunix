@@ -68,8 +68,8 @@ extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;
 
 static gfloat update_rate = 24;
-static gint runtime_id = -1;
-static gint logviewer_id = -1;
+static gint runtime_id = 0;
+static gint logviewer_id = 0;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean temp_units;
@@ -1437,10 +1437,12 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 
 void start_runtime_display()
 {
-	runtime_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
-			(GtkFunction)update_runtime_vars,NULL);
-	logviewer_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
-			(GtkFunction)update_logview_traces,NULL);
+	if (runtime_id == 0)
+		runtime_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
+				(GtkFunction)update_runtime_vars,NULL);
+	if (logviewer_id == 0)
+		logviewer_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
+				(GtkFunction)update_logview_traces,NULL);
 }
 
 void stop_runtime_display()

@@ -14,6 +14,7 @@
 #include <config.h>
 #include <datalogging_const.h>
 #include <defines.h>
+#include <default_limits.h>
 #include <enums.h>
 #include <glib/gprintf.h>
 #include <gui_handlers.h>
@@ -452,8 +453,8 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, gint offset)
 	}
 	else
 	{
-		v_value->lower = limits[offset].lower;
-		v_value->upper = limits[offset].upper;
+		v_value->lower = def_limits[offset].lower;
+		v_value->upper = def_limits[offset].upper;
 		/* Tell where we get the data from */
 		v_value->runtime_offset = logging_offset_map[offset];
 		/* How big the data is (needed when indexing into the data */
