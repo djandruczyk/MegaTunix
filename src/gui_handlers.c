@@ -24,6 +24,9 @@
 
 
 extern gint req_fuel_popup;
+extern unsigned char *kpa_conversion;
+extern unsigned char na_map[];
+extern unsigned char turbo_map[];
 static gint paused_handlers = FALSE;
 static gint constants_loaded = FALSE;
 extern gint raw_reader_running;
@@ -749,13 +752,19 @@ void update_ve_const()
 	/* CONFIG11 related buttons */
 	/* Map sensor 115kPA or 250 kPA */
 	if (ve_constants->config11.bit.map_type)
+	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.map_250_but),
                                 TRUE);
+		kpa_conversion = turbo_map;
+	}
 	else
+	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.map_115_but),
                                 TRUE);
+		kpa_conversion = na_map;
+	}
 	/* 2 stroke or 4 Stroke */
 	if (ve_constants->config11.bit.eng_type)
 		gtk_toggle_button_set_active(
@@ -896,10 +905,16 @@ void check_config11(int tmp)
 	/* checks some of the bits in the config11 variable and 
 	 * adjusts some important things as necessary....
 	 */
-//	if ((tmp &0x3) == 0)	
-//		printf("using 115KPA map sensor\n");
-//	if ((tmp &0x3) == 1)	
-//		printf("using 250KPA map sensor\n");
+	if ((tmp &0x3) == 0)	
+	{
+		kpa_conversion = na_map;
+	//	printf("using 115KPA map sensor\n");
+	}
+	if ((tmp &0x3) == 1)	
+	{
+		kpa_conversion = turbo_map;
+	//	printf("using 250KPA map sensor\n");
+	}
 }
 void check_config13(int tmp)
 {
