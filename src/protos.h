@@ -12,6 +12,8 @@
  */
 
 
+#ifndef _PROTOS_H_
+#define _PROTOS_H
 
 #include <config.h>
 #include "defines.h"
@@ -32,9 +34,11 @@ int check_ecu_comms(GtkWidget *, gpointer *);
 /* serialio.c */
 
 /* threads.c */
-int serial_raw_thread_starter(void); /* bootstrap function to get IO started */
-int serial_raw_thread_stopper(void); /* Realtime thread stopper */
+void * serial_raw_thread_starter(void *); /* bootstrap function to get IO started */
+void * serial_raw_thread_stopper(void *); /* Realtime thread stopper */
 void * raw_reader_thread(void *); /* Serial raw reader thread */
+int stop_serial_thread();	/* cancels reader thread */
+void start_serial_thread(void);	/*bootstrp function fopr above */
 /* threads.c */
 
 /* Configfile.c function protos, derived from XMMS */
@@ -104,7 +108,7 @@ int build_about(GtkWidget *);
 
 /* comms_gui.c */
 int build_comms(GtkWidget *);
-int set_serial_port(GtkWidget *, gpointer *);
+void update_errcounts(void);
 /* comms_gui.c */
 
 /* constants_gui.c */
@@ -139,3 +143,5 @@ int build_datalogging(GtkWidget *);
 /* general_gui.c */
 int build_general(GtkWidget *);
 /* general_gui.c */
+
+#endif

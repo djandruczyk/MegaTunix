@@ -11,11 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
 #include "globals.h"
@@ -49,32 +49,10 @@ void leave(GtkWidget *widget, gpointer *data)
 void text_entry_handler(GtkWidget * widget, gpointer *data)
 {
 	gchar *entry_text;
-	gint tmp = 0;
 	gfloat tmpf = 0;
-	gchar buff[10];
 	entry_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 	switch ((gint)data)
 	{
-		case SER_POLL_TIMEO:
-			tmp = atoi(entry_text);
-			if (tmp < poll_min)
-				tmp = poll_min;
-			else if (tmp > poll_max)
-				tmp = poll_max;
-			serial_params.poll_timeout = tmp;
-			sprintf(buff,"%i",tmp);
-			gtk_entry_set_text(GTK_ENTRY(widget),buff);
-			break;
-		case SER_INTERVAL_DELAY:
-			tmp = atoi(entry_text);
-			if (tmp < interval_min)
-				tmp = interval_min;
-			else if (tmp > interval_max)
-				tmp = interval_max;
-			read_wait_time = tmp;
-			sprintf(buff,"%i",tmp);
-			gtk_entry_set_text(GTK_ENTRY(widget),buff);
-			break;
 		case INJ_OPEN_TIME:
 			tmpf = atof(entry_text);
 			printf("inj open time set to %f\n",tmpf);
@@ -89,10 +67,10 @@ int std_button_handler(GtkWidget *widget, gpointer *data)
 	switch ((gint)data)
 	{
 		case START_REALTIME:
-			serial_raw_thread_starter();
+			start_serial_thread();
 			break;
 		case STOP_REALTIME:
-			serial_raw_thread_stopper();
+			stop_serial_thread();
 			break;
 	}
 	return TRUE;
@@ -106,7 +84,9 @@ void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
 	 * and the string to be sent to that bar
 	 *
 	 * Fairly generic, should work for multiple statusbars
+	 *
 	 */
+	
 
 	gtk_statusbar_pop(GTK_STATUSBAR(status_bar),
 			context_id);
@@ -127,7 +107,6 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	GtkWidget *label;
 	GtkAdjustment *adj;
 
-	printf("Build required fuel window\n");
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_widget_set_size_request(window,250,163);
 	gtk_window_set_title(GTK_WINDOW(window),"Required Fuel Calc");
@@ -170,7 +149,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(350.0,1.0,1000,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,55,-1);
-        g_signal_connect (G_OBJECT(adj), "value_changed",
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_DISP));
         reqd_fuel.displacement = adj;
@@ -181,7 +160,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(8.0,1.0,16,1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,55,-1);
-        g_signal_connect (G_OBJECT(adj), "value_changed",
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_CYLS));
         reqd_fuel.cyls = adj;
@@ -192,7 +171,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(19.0,1.0,100.0,1.0,1.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,55,-1);
-        g_signal_connect (G_OBJECT(adj), "value_changed",
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_INJ_RATE));
         reqd_fuel.inj_rate = adj;
@@ -203,7 +182,7 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(14.7,10.0,25.5,0.1,0.1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         gtk_widget_set_size_request(spinner,55,-1);
-        g_signal_connect (G_OBJECT(adj), "value_changed",
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_AFR));
         reqd_fuel.afr = adj;
@@ -236,7 +215,6 @@ int reqd_fuel_popup(GtkWidget *widget, gpointer *data)
 
 int close_window(GtkWidget *widget, gpointer *data)
 {
-	printf("Closing window \n");
 	gtk_widget_destroy(GTK_WIDGET(data));
 	return TRUE;
 }
@@ -248,7 +226,35 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 
 int spinner_changed(GtkWidget *widget, gpointer *data)
 {
-	printf("spinner_changed function called\n");
+	/* Gets the value from the spinbutton then modifues the 
+	 * necessary deta in the the app and calls any handlers 
+	 * if necessary.  works well,  one generic function with a 
+	 * select/case branch to handle the choices..
+	 */
+	gdouble value;
+	value = gtk_spin_button_get_value((GtkSpinButton *)widget);
+	
+	switch ((gint)data)
+	{
+		case SET_SER_PORT:
+			if(serial_params.open)
+			{
+				if (raw_reader_running)
+					stop_serial_thread();
+				close_serial();
+			}
+			open_serial((int)value);
+			setup_serial_params();
+			break;
+		case SER_POLL_TIMEO:
+			serial_params.poll_timeout = (gint)value;
+			break;
+		case SER_INTERVAL_DELAY:
+			serial_params.read_wait = (gint)value;
+			break;
+		default:
+			break;
+	}
 	return TRUE;
 
 }

@@ -11,6 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#ifndef _DEFINES_H_
+#define _DEFINES_H_
+
 #include <glib.h>
 
 
@@ -168,31 +171,35 @@ struct ms_data_v1_and_v2 {
 #define REQ_FUEL_CYLS		0x41
 #define REQ_FUEL_INJ_RATE	0x42
 #define REQ_FUEL_AFR		0x43
-#define REQ_FUEL		0x44
-#define	INJ_OPEN_TIME		0x45
-#define	BATT_CORR		0x46
+#define REQ_FUEL_1		0x44
+#define REQ_FUEL_2		0x45
+#define	INJ_OPEN_TIME		0x46
+#define	BATT_CORR		0x47
+#define	PWM_CUR_LIM		0x48
+#define	PWM_TIME_THRES		0x49
+#define	FAST_IDLE_THRES		0x4a
+#define CRANK_PULSE_NEG_40	0x4b
+#define CRANK_PULSE_170		0x4c
+#define CRANK_PRIMING_PULSE	0x4d
+#define AFTERSTART_ENRICH	0x4e
+#define AFTERSTART_NUM_CYCLES	0x4f
+#define	SER_POLL_TIMEO		0x50
+#define	SER_INTERVAL_DELAY	0x51
+#define SET_SER_PORT		0x52
 
 /* text entries */
-#define	SER_POLL_TIMEO		0x40
-#define	SER_INTERVAL_DELAY	0x41
-#define	PWM_CUR_LIM		0x44
-#define	PWM_TIME_THRES		0x45
-#define	FAST_IDLE_THRES		0x46
-#define CRANK_PULSE_NEG_40	0x47
-#define CRANK_PULSE_170		0x48
-#define CRANK_PRIMING_PULSE	0x49
-#define AFTERSTART_ENRICH	0x4a
-#define AFTERSTART_NUM_CYCLES	0x4b
-#define WARMUP_NEG_40		0x4c
-#define WARMUP_NEG_20		0x4d
-#define WARMUP_0		0x4e
-#define WARMUP_20		0x4f
-#define WARMUP_40		0x50
-#define WARMUP_60		0x51
-#define WARMUP_80		0x52
-#define WARMUP_100		0x53
-#define WARMUP_130		0x54
-#define WARMUP_160		0x55
+#define WARMUP_NEG_40		0x70
+#define WARMUP_NEG_20		0x71
+#define WARMUP_0		0x72
+#define WARMUP_20		0x73
+#define WARMUP_40		0x74
+#define WARMUP_60		0x75
+#define WARMUP_80		0x76
+#define WARMUP_100		0x77
+#define WARMUP_130		0x78
+#define WARMUP_160		0x79
+#define MS_RESET_COUNT		0x7a
+#define MS_SER_ERRCOUNT		0x7b
 
 /* Configfile structs. (derived from an older version of XMMS) */
 
@@ -221,3 +228,4 @@ typedef struct
 ConfigFile;
 #endif 
 
+#endif

@@ -15,6 +15,8 @@
  * to real world numbers. From Bruce Bowlings PCC tuning wsoftware.
  */
 
+#ifndef _LOOKUPTABLES_H_
+#define _LOOKUPTABLES_H_
 
 /* Coolant sensor lookup table 
  * Raw value from ADC is used as an index into this table
@@ -136,3 +138,4 @@ unsigned char turbo_map[256]=
 250,251,252,253,254,255,
 255,255,255,255,100};
 
+#endif

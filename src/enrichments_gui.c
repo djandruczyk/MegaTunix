@@ -11,10 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
 #include "globals.h"
@@ -25,11 +25,7 @@ struct v1_2_Constants constants;
 int build_enrichments(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
-	GtkWidget *vbox2;
-	GtkWidget *vbox3;
 	GtkWidget *hbox;
-	GtkWidget *hbox2;
-	GtkWidget *hbox3;
 	GtkWidget *entry;
 	GtkWidget *frame;
 	GtkWidget *label;
@@ -58,7 +54,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
-	g_signal_connect (G_OBJECT(adj), "value_changed",
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_NEG_40));
 	constants.crank_pulse_40 = adj;
@@ -71,7 +67,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
-	g_signal_connect (G_OBJECT(adj), "value_changed",
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_170));
 	constants.crank_pulse_170 = adj;
@@ -84,7 +80,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
-	g_signal_connect (G_OBJECT(adj), "value_changed",
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PRIMING_PULSE));
 	constants.crank_priming_pulse = adj;
@@ -108,7 +104,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
-	g_signal_connect (G_OBJECT(adj), "value_changed",
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(AFTERSTART_ENRICH));
 	constants.afterstart_enrich = adj;
@@ -122,7 +118,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
-	g_signal_connect (G_OBJECT(adj), "value_changed",
+	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_170));
 	constants.afterstart_num_cycles = adj;
@@ -153,6 +149,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.neg40_entry = entry;
 
 	/* -20 deg entry */
 	entry = gtk_entry_new ();
@@ -160,6 +157,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.neg20_entry = entry;
 
 	/* 0 deg entry */
 	entry = gtk_entry_new ();
@@ -167,6 +165,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.neg0_entry = entry;
 
 	/* 20 deg entry */
 	entry = gtk_entry_new ();
@@ -174,6 +173,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.pos20_entry = entry;
 
 	/* 40 deg entry */
 	entry = gtk_entry_new ();
@@ -181,6 +181,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.pos40_entry = entry;
 
 	/* 60 deg entry */
 	entry = gtk_entry_new ();
@@ -188,6 +189,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.pos60_entry = entry;
 
 	/* 80 deg entry */
 	entry = gtk_entry_new ();
@@ -195,6 +197,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.pos80_entry = entry;
 
 	/* 100 deg entry */
 	entry = gtk_entry_new ();
@@ -202,6 +205,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.pos100_entry = entry;
 
 	/* 130 deg entry */
 	entry = gtk_entry_new ();
@@ -209,6 +213,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.pos130_entry = entry;
 
 	/* 160 deg entry */
 	entry = gtk_entry_new ();
@@ -216,6 +221,7 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	constants.pos160_entry = entry;
 
 	label = gtk_label_new ("-40");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,

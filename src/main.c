@@ -11,14 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/poll.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
+#include "defines.h"
 #include "protos.h"
 #include "globals.h"
 

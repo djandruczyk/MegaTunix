@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
 #include "globals.h"
@@ -26,9 +26,8 @@ gint major_ver;
 gint minor_ver;
 gint micro_ver;
 extern int def_comm_port;
-extern int read_wait_time;
 extern int ms_reset_count;
-extern int goodread_count;
+extern int ms_goodread_count;
 extern int just_starting;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
@@ -41,9 +40,9 @@ extern GtkWidget *main_window;
 void init()
 {
 	/* defaults */
-	poll_min = 5;		/* 5 millisecond minimum poll delay */
+	poll_min = 25;		/* 25 millisecond minimum poll delay */
 	poll_max = 500;		/* 500 millisecond maximum poll delay */
-	interval_min = 25;	/* 25 millisecond minimum interval delay */
+	interval_min = 50;	/* 50 millisecond minimum interval delay */
 	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
 
 
@@ -56,10 +55,10 @@ void init()
 	serial_params.raw_bytes = 22; /* number of bytes for realtime vars */
 	raw_reader_running = 0;  /* We're not reading raw data yet... */
 	raw_reader_stopped = 1;  /* We're not reading raw data yet... */
-	read_wait_time = 1000;	/* delay between reads in milliseconds */
+	serial_params.read_wait = 1000;	/* delay between reads in milliseconds */
 	just_starting = 1; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
-	goodread_count = 0; 	/* How many reads of realtime vars completed */
+	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
 	width = 640;		/* default window width */
 	height = 480;		/* default window height */
 	main_x_origin = 160;	/* offset from left edge of screen */
@@ -85,7 +84,7 @@ int read_config(void)
 		cfg_read_int(cfgfile, "Window", "main_y_origin", &main_y_origin);
 		cfg_read_int(cfgfile, "Serial", "comm_port", &serial_params.comm_port);
 		cfg_read_int(cfgfile, "Serial", "polling_timeout", &serial_params.poll_timeout);
-		cfg_read_int(cfgfile, "Serial", "read_delay", &read_wait_time);
+		cfg_read_int(cfgfile, "Serial", "read_delay", &serial_params.read_wait);
 		cfg_free(cfgfile);
 		g_free(filename);
 		return(0);
@@ -120,7 +119,7 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 	cfg_write_int(cfgfile, "Serial", "comm_port", serial_params.comm_port);
 	cfg_write_int(cfgfile, "Serial", "polling_timeout", serial_params.poll_timeout);
-	cfg_write_int(cfgfile, "Serial", "read_delay", read_wait_time);
+	cfg_write_int(cfgfile, "Serial", "read_delay", serial_params.read_wait);
 
 
 	cfg_write_file(cfgfile, filename);

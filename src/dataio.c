@@ -11,10 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <config.h>
 #include <pthread.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
@@ -23,7 +23,7 @@
 
 static int lastcount=0;
 int ms_reset_count;
-int goodread_count;
+int ms_goodread_count;
 int just_starting;
        
 void handle_ms_data(int which_data)
@@ -77,7 +77,7 @@ void handle_ms_data(int which_data)
 			lastcount = raw->secl;
 
 			/* copy last round to out_last for checking */
-                        goodread_count++;
+                        ms_goodread_count++;
 			out_last = out;
 			post_process(raw,&out);
 			break;

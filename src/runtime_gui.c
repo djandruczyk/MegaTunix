@@ -11,10 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
 #include "globals.h"
@@ -246,7 +246,9 @@ void update_runtime_vars()
 	 * Makes the code a little uglier, but the gui won't
 	 * flicker the text widgets at high update rates
 	 */
+
 	gdk_threads_enter();
+
 	if (out.secl != out_last.secl)
 	{
 		g_snprintf(buff,10,"%i",out.secl);

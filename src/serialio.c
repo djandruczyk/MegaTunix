@@ -11,13 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/poll.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
 #include "globals.h"
@@ -150,7 +150,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer *data)
                 if (raw_reader_running)
                 {
                         restart_thread = 1;
-			serial_raw_thread_stopper(); /* stops realtime read */
+			stop_serial_thread(); /* stops realtime read */
                 }
 
                 ufds.fd = serial_params.fd;
@@ -181,7 +181,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer *data)
                 tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
 
                 if (restart_thread)
-                        serial_raw_thread_starter();
+                        start_serial_thread();
         }
         else
         {

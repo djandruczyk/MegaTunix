@@ -13,6 +13,9 @@
 
 /* Global Variables */
 
+#ifndef _GLOBALS_H_
+#define _GLOBALS_H_
+
 #include <config.h>
 #include <sys/types.h>
 #include <termios.h>
@@ -24,6 +27,7 @@ struct Serial_Params
 	int comm_port;		/* DOS/Windows COM port number, 1-8 typically */
 	int open;		/* flag, 1 for open 0 for closed */
 	int poll_timeout;	/* Pollng interval in MILLISECONDS */
+	int read_wait;		/* time delay between each read */
 	int raw_bytes;		/* number of bytes to read for realtime vars */
 	struct termios oldtio;	/* serial port settings before we touch it */
 	struct termios newtio;	/* serial port settings we use when running */
@@ -40,3 +44,5 @@ int poll_min;			/* 5 millisecond minimum poll delay */
 int poll_max;			/* 500 millisecond maximum poll delay */
 int interval_min;		/* 25 millisecond minimum interval delay */
 int interval_max;		/* 1000 millisecond maximum interval  delay */
+
+#endif

@@ -13,6 +13,9 @@
 
 /* Runtime Gui Structures */
 
+#ifndef _RUNTIME_GUI_H_
+#define _RUNTIME_GUI_H_
+
 #include <config.h>
 #include <sys/types.h>
 #include <gtk/gtk.h>
@@ -39,3 +42,4 @@ struct v1_2_Runtime_Gui
 };
 
 
+#endif

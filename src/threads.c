@@ -11,42 +11,58 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
 #include <sys/poll.h>
-#include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
 #include "globals.h"
 
 
-int read_wait_time;	/* delay between reads in milliseconds */	
-pthread_t raw_input_thread;     /* thread handle */
-int raw_reader_running;         /* flag for thread */
-int raw_reader_stopped;         /* flag for thread */
+pthread_t raw_input_thread;	/* thread handle */
+pthread_t starter;		/* thread handle */
+volatile int raw_reader_running;		/* flag for thread */
+int raw_reader_stopped;		/* flag for thread */
 extern int ser_context_id;
 extern GtkWidget *ser_statbar;
 char buff[60];
 
 
-int serial_raw_thread_starter()
+void start_serial_thread()
+{
+	pthread_create(&starter,
+			NULL,
+			serial_raw_thread_starter,
+			NULL);
+	return;
+}
+void *serial_raw_thread_starter(void *params)
 {
 	/* Spawns the thread that reads realtime vars data from the MS box */
 	int retcode = 0;
+
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+
 	if (serial_params.open == 0)
 	{
                 g_snprintf(buff,60,"Serial Port Not Open, Can NOT Start Thread in This State");
                 /* Serial not opened, can't start thread in this state */
+		gdk_threads_enter();
 		update_statusbar(ser_statbar,ser_context_id,buff);
-		return -1;	
+		gdk_threads_leave();
+		return 0;	
 	}
 	if (raw_reader_running)
 	{
                 g_snprintf(buff,60,"Serial Reader Thread ALREADY Running");
                 /* Thread already running, can't run more than 1 */
+		gdk_threads_enter();
 		update_statusbar(ser_statbar,ser_context_id,buff);
+		gdk_threads_leave();
 		return 0;
 	}
 	else
@@ -61,37 +77,43 @@ int serial_raw_thread_starter()
 		/* SUCCESS */
                 g_snprintf(buff,60,"Successful Start of Realtime Reader Thread");
                 /* Thread started successfully */
+		gdk_threads_enter();
 		update_statusbar(ser_statbar,ser_context_id,buff);
+		gdk_threads_leave();
 	}
 	else
 	{
 		/* FAILURE */
                 g_snprintf(buff,60,"FAILURE Attempting To Start Realtime Reader Thread");
                 /* Thread failed to start */
+		gdk_threads_enter();
 		update_statusbar(ser_statbar,ser_context_id,buff);
+		gdk_threads_leave();
 	}
-	return retcode;
+	return 0;
 }
 
-int serial_raw_thread_stopper()
+int stop_serial_thread()
 {
+	gint tmp;
 	if (raw_reader_stopped)
 	{
                 g_snprintf(buff,60,"Realtime Reader Thread ALREADY Stopped");
                 /* Thread not running, can't stop what hasn't started yet*/
 		update_statusbar(ser_statbar,ser_context_id,buff);
+		raw_reader_running = 0;
+		raw_reader_stopped = 1;
 		return 0;	/* its already stopped */
 	}
 	else
 	{
 		raw_reader_running = 0; /* thread will die on next loop */
-		while (!raw_reader_stopped)
-		{
-			usleep(100000);	/* sleep 100 milliseconds */
-		}
+		tmp = pthread_cancel(raw_input_thread);
                 g_snprintf(buff,60,"Realtime Reader Thread Stopped Normally");
                 /* Thread stopped normally */
 		update_statusbar(ser_statbar,ser_context_id,buff);
+		raw_reader_running = 0;
+		raw_reader_stopped = 1;
 	}
 	return 0;
 }
@@ -124,10 +146,12 @@ void *raw_reader_thread(void *params)
 			update_runtime_vars();
 		}
 
-                usleep(read_wait_time *1000);
+		update_errcounts();
+                usleep(serial_params.read_wait *1000);
 	}
 	/* if we get here, the thread got killed, mark it as "stopped" */
 	raw_reader_stopped = 1;
+	raw_reader_running = 0;
 	return 0;
 }
 
