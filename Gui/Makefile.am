@@ -57,15 +57,15 @@ gui_files = 	README \
 		tools.glade \
 		tools.datamap \
 		vetable_12x12s.glade \
-		vetable_12x12s-E_1.datamap \
-		vetable_12x12s-E_2.datamap \
+		vetable_12x12s-021E_1.datamap \
+		vetable_12x12s-021E_2.datamap \
 		vetable_12x12s-E_3.datamap \
 		vetable_12x12s-022E_1.datamap \
 		vetable_12x12s-022E_2.datamap \
 		vetable_12x12s-023E_2.datamap \
 		vetable_12x12e.glade \
-		vetable_12x12e-E_1.datamap \
-		vetable_12x12e-E_2.datamap \
+		vetable_12x12e-021E_1.datamap \
+		vetable_12x12e-021E_2.datamap \
 		vetable_12x12e-E_3.datamap \
 		vetable_12x12e-022E_1.datamap \
 		vetable_12x12e-022E_2.datamap \
