@@ -379,7 +379,6 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	if ((paused_handlers) || (!ready))
 	{
-		printf("resetting to black\n");
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
 	}
@@ -573,7 +572,10 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	extern struct Firmware_Details *firmware;
 
 	if ((paused_handlers) || (!ready))
+	{
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(widget))
 	{
@@ -866,6 +868,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			dl_type = 0;  
 			break;
 	}
+	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	if (dl_type == IMMEDIATE) 
 		write_ve_const(page, offset, dload_val, ign_parm);
 	return TRUE;

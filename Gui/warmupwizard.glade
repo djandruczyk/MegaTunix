@@ -68,6 +68,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:46:32 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -91,6 +92,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:20 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -114,6 +116,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:04 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -137,6 +140,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:33 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -160,6 +164,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:41 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -183,6 +188,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:48 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -206,6 +212,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:44:55 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -229,6 +236,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:45:02 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -252,6 +260,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:45:08 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -275,6 +284,7 @@
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 255 1 10 10</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:45:14 GMT"/>
+			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -674,6 +684,7 @@
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:57:03 GMT"/>
+			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -697,6 +708,7 @@
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:57:10 GMT"/>
+			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -720,6 +732,7 @@
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 00:57:32 GMT"/>
+			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -864,6 +877,7 @@
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 01:18:54 GMT"/>
+			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -887,6 +901,7 @@
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 255 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 02 Dec 2004 01:18:46 GMT"/>
+			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
