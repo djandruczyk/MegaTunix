@@ -184,10 +184,14 @@ int build_enrichments(GtkWidget *parent_frame)
 		gtk_widget_set_size_request(spinner,45,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (generic_spinner_changed),
-				GINT_TO_POINTER(WARMUP_BINS_OFFSET+i));
+				NULL);
 		constants.warmup_bins_spin[i] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-		gtk_object_set_data(G_OBJECT(spinner),"class", GINT_TO_POINTER(WARMUP));
+		/* Bind data to the object */
+		gtk_object_set_data(G_OBJECT(spinner),"class", 
+				GINT_TO_POINTER(WARMUP));
+		gtk_object_set_data(G_OBJECT(spinner),"offset", 
+				GINT_TO_POINTER(WARMUP_BINS_OFFSET+i));
 		gtk_table_attach (GTK_TABLE (table), spinner, i, i+1, 0, 1,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);
@@ -309,10 +313,14 @@ int build_enrichments(GtkWidget *parent_frame)
 		gtk_widget_set_size_request(spinner,45,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (generic_spinner_changed),
-				GINT_TO_POINTER(ACCEL_BINS_OFFSET+i));
+				NULL);
 		constants.accel_bins_spin[i] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-		gtk_object_set_data(G_OBJECT(spinner),"class", GINT_TO_POINTER(ACCEL));
+		/* Bind data to he object for the handlers */
+		gtk_object_set_data(G_OBJECT(spinner),"class", 
+				GINT_TO_POINTER(ACCEL));
+		gtk_object_set_data(G_OBJECT(spinner),"offset", 
+				GINT_TO_POINTER(ACCEL_BINS_OFFSET+i));
 		gtk_table_attach (GTK_TABLE (table), spinner, i, i+1, 1, 2,
 				(GtkAttachOptions) (GTK_EXPAND),
 				(GtkAttachOptions) (0), 0, 0);

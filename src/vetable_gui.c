@@ -67,9 +67,12 @@ int build_vetable(GtkWidget *parent_frame)
 		gtk_widget_set_size_request(spinner,45,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (generic_spinner_changed),
-				GINT_TO_POINTER(KPA_BINS_OFFSET+y));
+				NULL);
+		/* Bind data to object for handlers */
 		gtk_object_set_data(G_OBJECT(spinner),"class", 
 				GINT_TO_POINTER(KPA));
+		gtk_object_set_data(G_OBJECT(spinner),"offset", 
+				GINT_TO_POINTER(KPA_BINS_OFFSET+y));
 		constants.kpa_bins_spin[y] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, y+1, y+2,
@@ -102,21 +105,25 @@ int build_vetable(GtkWidget *parent_frame)
 	{
 		for (x=0;x<8;x++)
 		{
-			adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
+			adj =  (GtkAdjustment *) gtk_adjustment_new(
+					1.0,1.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
 			gtk_widget_set_size_request(spinner,52,-1);
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
 					G_CALLBACK (generic_spinner_changed),
-					GINT_TO_POINTER(VE_TABLE_OFFSET+index));
+					NULL);
+			/* Bind data to object for handlers */
 			gtk_object_set_data(G_OBJECT(spinner),"class", 
 					GINT_TO_POINTER(VE));
-
+			gtk_object_set_data(G_OBJECT(spinner),"offset", 
+					GINT_TO_POINTER(VE_TABLE_OFFSET+index));
 			constants.ve_bins_spin[index] = spinner;
-			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-			gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, y+1, y+2,
+			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), 
+					FALSE);
+			gtk_table_attach (GTK_TABLE (table), spinner, 
+					x, x+1, y+1, y+2,
 					(GtkAttachOptions) (GTK_EXPAND),
 					(GtkAttachOptions) (0), 0, 0);
-
 			index++;
 		}
 	}
@@ -138,9 +145,12 @@ int build_vetable(GtkWidget *parent_frame)
 		gtk_widget_set_size_request(spinner,52,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (generic_spinner_changed),
-				GINT_TO_POINTER(RPM_BINS_OFFSET+x));
+				NULL);
+		/* Bind data to object for handlers */
 		gtk_object_set_data(G_OBJECT(spinner),"class", 
 				GINT_TO_POINTER(RPM));
+		gtk_object_set_data(G_OBJECT(spinner),"offset", 
+				GINT_TO_POINTER(RPM_BINS_OFFSET+x));
 		constants.rpm_bins_spin[x] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,

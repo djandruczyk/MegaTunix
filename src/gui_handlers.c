@@ -336,9 +336,10 @@ int generic_spinner_changed(GtkWidget *widget, gpointer *data)
         if (paused_handlers)
                 return TRUE;
         value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-        offset = GPOINTER_TO_INT(data);
+//        offset = GPOINTER_TO_INT(data);
 	/* Class is set to determine the course of action */
 	class = (gint) gtk_object_get_data(G_OBJECT(widget),"class");
+	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
 	switch (class)
 	{
 		case WARMUP:
