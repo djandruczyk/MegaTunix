@@ -25,13 +25,6 @@ extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern GtkWidget *ve_widgets[];
 
-gboolean spinbutton_highlighter(GtkWidget *, gpointer);
-
-gboolean spinbutton_highlighter(GtkWidget *widget, gpointer data)
-{
-	printf("spinbutton clicked on...\n");
-	return FALSE;
-}
 void build_vetable_1(GtkWidget *parent_frame)
 {
 	gint x,y;
@@ -95,8 +88,6 @@ void build_vetable_1(GtkWidget *parent_frame)
 	for (y=0;y<8;y++)
 	{
 		spinner = gtk_spin_button_new(adj,1,0);
-		gtk_widget_add_events(spinner,
-				GDK_BUTTON_PRESS_MASK);
 		ve_widgets[VE1_KPA_BINS_OFFSET+index] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		g_object_set_data(G_OBJECT(spinner),"offset", 
@@ -107,9 +98,6 @@ void build_vetable_1(GtkWidget *parent_frame)
 				GINT_TO_POINTER(NOTHING));
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
-		g_signal_connect (G_OBJECT(spinner), "button_press_event",
-				G_CALLBACK (spinbutton_highlighter),
-				NULL);
 		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (spin_button_handler),
@@ -149,6 +137,8 @@ void build_vetable_1(GtkWidget *parent_frame)
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
 					0.0,0.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
+			gtk_widget_add_events(spinner,
+					GDK_BUTTON_PRESS_MASK);
 			ve_widgets[VE1_TABLE_OFFSET+index] = spinner;
 			g_object_set_data(G_OBJECT(spinner),"offset", 
 					GINT_TO_POINTER(VE1_TABLE_OFFSET+index));
@@ -158,6 +148,9 @@ void build_vetable_1(GtkWidget *parent_frame)
 					GINT_TO_POINTER(NOTHING));
 			g_object_set_data(G_OBJECT(spinner),"dl_type",
 					GINT_TO_POINTER(IMMEDIATE));
+			g_signal_connect (G_OBJECT(spinner), "button_press_event",
+					G_CALLBACK (spin_button_grab),
+					NULL);
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
 					G_CALLBACK (spin_button_handler),
 					GINT_TO_POINTER(GENERIC));
@@ -361,6 +354,8 @@ void build_vetable_2(GtkWidget *parent_frame)
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
 					0.0,0.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
+			gtk_widget_add_events(spinner,
+					GDK_BUTTON_PRESS_MASK);
 			ve_widgets[VE2_TABLE_OFFSET+index] = spinner;
 			g_object_set_data(G_OBJECT(spinner),"offset", 
 					GINT_TO_POINTER(VE2_TABLE_OFFSET+index));
@@ -370,6 +365,9 @@ void build_vetable_2(GtkWidget *parent_frame)
 					GINT_TO_POINTER(NOTHING));
 			g_object_set_data(G_OBJECT(spinner),"dl_type",
 					GINT_TO_POINTER(IMMEDIATE));
+			g_signal_connect (G_OBJECT(spinner), "button_press_event",
+					G_CALLBACK (spin_button_grab),
+					NULL);
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
 					G_CALLBACK (spin_button_handler),
 					GINT_TO_POINTER(GENERIC));

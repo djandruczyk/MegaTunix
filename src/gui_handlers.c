@@ -1165,3 +1165,36 @@ void update_ve_const()
 		}
 	}
 }
+
+gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	static gboolean marked[MS_PAGE_SIZE];
+	gint index = 0;
+	extern GdkColor red;
+	extern GdkColor black;
+
+	if (event->button != 2) // Middle button click 
+		return FALSE;
+
+	index = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+	if (index >= MS_PAGE_SIZE)
+		index -= (MS_PAGE_SIZE/2);
+
+	if (marked[index])
+	{
+		marked[index] = FALSE;
+		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_fg(widget,GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+	}
+	else
+	{
+		marked[index] = TRUE;
+		gtk_widget_modify_bg(widget,GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_fg(widget,GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+	}
+
+	return FALSE;	// Allow other handles to run... 
+
+}

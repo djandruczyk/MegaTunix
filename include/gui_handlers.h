@@ -23,6 +23,7 @@ gboolean std_button_handler(GtkWidget *, gpointer);
 gboolean toggle_button_handler(GtkWidget *, gpointer);
 gboolean bitmask_button_handler(GtkWidget *, gpointer);
 gboolean spin_button_handler(GtkWidget *, gpointer);
+gboolean spin_button_grab(GtkWidget *, GdkEventButton *, gpointer );
 /* Prototypes */
 
 #endif
