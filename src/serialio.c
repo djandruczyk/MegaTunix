@@ -25,6 +25,7 @@
 #include <structures.h>
 #include <sys/poll.h>
 #include <sys/stat.h>
+#include <termios.h>
 #include <threads.h>
 #include <unistd.h>
 
@@ -104,21 +105,30 @@ int setup_serial_params()
 	 * CREAD   : enable receiving characters
 	 */
 
-	serial_params->newtio.c_cflag = BAUDRATE | CS8 | CLOCAL | CREAD;
-	/*
-	 * IGNPAR  : ignore bytes with parity errors
-	 * ICRNL   : map CR to NL (otherwise a CR input on the other computer
-	 * will not terminate input)
-	 * otherwise make device raw (no other input processing)
-	 */
+	/* Set baud (posix way) */
+	cfsetispeed(&serial_params->newtio, BAUDRATE);
+	cfsetospeed(&serial_params->newtio, BAUDRATE);
 
-	//      serial_params->newtio.c_iflag = IGNPAR |IGNBRK;
+	/* Set additional flags, note |= syntax.. */
+	serial_params->newtio.c_cflag |= CLOCAL | CREAD;
+	/* Mask and set to 8N1 mode... */
+	serial_params->newtio.c_cflag &= ~PARENB;
+	serial_params->newtio.c_cflag &= ~CSTOPB;
+	serial_params->newtio.c_cflag &= ~CSIZE;
+	serial_params->newtio.c_cflag |= CS8;
+
+	/* Disable hardware flow control */
+	//serial_params->newtio.c_cflag &= ~CNEW_RTS_CTS;
+	
+
 	/* RAW Input */
-	serial_params->newtio.c_iflag = 0;
-	/* RAW Ouput also */
-	serial_params->newtio.c_oflag = 0;
-	/* set input mode (non-canonical, no echo,...) */
-	serial_params->newtio.c_lflag = 0;
+	serial_params->newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+
+	/* Disable software flow control */
+	serial_params->newtio.c_iflag &= ~(IXON | IXOFF | IXANY);
+	
+	/* Set raw output */
+	serial_params->newtio.c_oflag &= ~OPOST;
 
 	cfmakeraw(&serial_params->newtio);
 
@@ -132,21 +142,10 @@ int setup_serial_params()
 	serial_params->newtio.c_cc[VERASE]   = 0;     /* del */
 	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
-	serial_params->newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
-	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arriv
-							 es */
-	serial_params->newtio.c_cc[VSWTC]    = 0;     /* '\0' */
-	serial_params->newtio.c_cc[VSTART]   = 0;     /* Ctrl-q */
-	serial_params->newtio.c_cc[VSTOP]    = 0;     /* Ctrl-s */
-	serial_params->newtio.c_cc[VSUSP]    = 0;     /* Ctrl-z */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
-	serial_params->newtio.c_cc[VREPRINT] = 0;     /* Ctrl-r */
-	serial_params->newtio.c_cc[VDISCARD] = 0;     /* Ctrl-u */
-	serial_params->newtio.c_cc[VWERASE]  = 0;     /* Ctrl-w */
-	serial_params->newtio.c_cc[VLNEXT]   = 0;     /* Ctrl-v */
 	serial_params->newtio.c_cc[VEOL2]    = 0;     /* '\0' */
-
-	/* blocking read until proper number of chars arrive */
+	serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
+	serial_params->newtio.c_cc[VTIME]    = 0;     /* inter-character timer unused */
 
 	tcflush(serial_params->fd, TCIFLUSH);
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
