@@ -452,7 +452,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 			g_free(tmpbuf);
 			last_upd = count;
 		}
-		
+
 	}
 	else if (control->size == SHORT)
 	{
@@ -481,7 +481,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 			g_free(tmpbuf);
 			last_upd = count;
 		}
-		
+
 	}
 	else if (control->size == FLOAT)
 	{
@@ -512,7 +512,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		}
 	}
 	else
-		dbg_func(g_strdup_printf(__FILE__": MAJOR error, rt_update_values(), size invalid: %i\n",control->size),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": rt_update_values()\n\tMAJOR error, size invalid: %i\n",control->size),CRITICAL);
 
 	rate++;
 	if (rate >25)

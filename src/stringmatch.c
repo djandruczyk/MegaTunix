@@ -118,7 +118,7 @@ void build_string_2_enum_table()
 }
 void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
-	dbg_func(g_strdup_printf(__FILE__": dump_hash(), Key %s, Value %i\n",(gchar *)key, (gint)value),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %i\n",(gchar *)key, (gint)value),CRITICAL);
 }
 
 gint translate_string(gchar *string)
@@ -126,6 +126,6 @@ gint translate_string(gchar *string)
 	gpointer value = 0;
 	value = g_hash_table_lookup(str_2_enum,string);
 	if (value == NULL)
-		dbg_func(g_strdup_printf(__FILE__": translate_string() string \"%s\" NOT FOUND in hashtable....\n",string),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string),CRITICAL);
 	return (gint)value;
 }

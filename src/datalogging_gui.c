@@ -498,7 +498,10 @@ void write_log_header(void *ptr)
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
 	else
-		dbg_func(__FILE__": write_log_header() iofile pointer was undefined...\n",CRITICAL);
+	{
+		dbg_func(__FILE__": write_log_header()\n\tIo_File pointer was undefined, returning NOW...\n",CRITICAL);
+		return;
+	}
 
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
@@ -581,7 +584,10 @@ void run_datalog(void)
 	if (data != NULL)
 		iofile = (struct Io_File *)data;
 	else
-		dbg_func(__FILE__": run_datalog(), iofile undefined\n",CRITICAL);
+	{
+		dbg_func(__FILE__": run_datalog()\n\tIo_File undefined, returning NOW!!!\n",CRITICAL);
+		return;
+	}
 
 
 	output = g_string_sized_new(64); /*64 char initial size */
@@ -636,7 +642,7 @@ void run_datalog(void)
 								output,"%i",(guchar)uchar_ptr[offset]);
 						break;
 					default:
-						dbg_func(g_strdup_printf(__FILE__": run_datalog(), SIZE not defined (%i)\n",i),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": run_datalog()\n\tSIZE not defined (%i), log corruption likely!!\n",i),CRITICAL);
 						break;
 				}
 

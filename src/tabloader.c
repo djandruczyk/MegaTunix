@@ -65,22 +65,34 @@ gboolean load_gui_tabs()
 				cfg_free(cfgfile);
 			}
 			else
-				dbg_func(g_strdup_printf("DATAMAP: %s NOT FOUND\n",map_file),CRITICAL);
+			{
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: %s NOT FOUND\n",map_file),CRITICAL);
+				g_free(map_file);
+				g_free(glade_file);
+				return FALSE;
+			}
 
 			g_free(map_file);
 			g_free(glade_file);
 			frame = glade_xml_get_widget(xml,"topframe");
 			if (frame == NULL)
-				dbg_func(__FILE__": load_gui_tabs() \"topframe\" not found in xml\n",CRITICAL);
+			{
+				dbg_func(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n",CRITICAL);
+				return FALSE;
+			}
+			else
+			{
 
-			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
-			gtk_widget_show_all(frame);
-			glade_xml_signal_autoconnect(xml);
+				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
+				gtk_widget_show_all(frame);
+				glade_xml_signal_autoconnect(xml);
+			}
 			g_free(xml);
+			
 
 		}
 		else
-			dbg_func(__FILE__": load_gui_tabs() .glade/.datamap file NOT FOUND!! \n",CRITICAL);
+			dbg_func(__FILE__": load_gui_tabs()\n\t.glade/.datamap file NOT FOUND!! \n",CRITICAL);
 		i++;
 
 	}
@@ -111,7 +123,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if (!g_hash_table_lookup(dynamic_widgets,name))
 		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
 	else
-		dbg_func(g_strdup_printf(__FILE__": populate_master(), key %s already exists in master table\n",name),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s already exists in master table\n",name),CRITICAL);
 }
 
 void bind_data(GtkWidget *widget, gpointer user_data)
@@ -139,7 +151,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys);
-		dbg_func(g_strdup_printf(__FILE__": bind_data() number_keys for %s is %i\n",section,num_keys),TABLOADER);
+		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber_keys for %s is %i\n",section,num_keys),TABLOADER);
 		g_free(tmpbuf);
 	}
 	else
@@ -153,14 +165,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if (num_keytypes != num_keys)
 	{
-		dbg_func(g_strdup_printf(__FILE__": Number of keys (%i) and keytypes(%i) does NOT match for widget %s, CRITICAL!!!\n",num_keys,num_keytypes,section),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",num_keys,num_keytypes,section),CRITICAL);
 		g_strfreev(keys);
 		g_free(keytypes);
 		return;
 	}
 	page = -1;
 	if (!cfg_read_int(cfgfile,section,"page",&page))
-		dbg_func(g_strdup_printf(__FILE__": bind_data(), Object %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
+		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
 
 	/* Bind widgets to lists if thy have the bind_to_list flag set...
 	 */
@@ -201,31 +213,31 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 			case MTX_INT:
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							GINT_TO_POINTER(tmpi));	
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_ENUM:
 				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
 					tmpi = translate_string(tmpbuf);
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							GINT_TO_POINTER(tmpi));	
 					g_free(tmpbuf);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t\MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							GINT_TO_POINTER(tmpi));	
@@ -233,19 +245,19 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 						load_complex_params(G_OBJECT(widget),cfgfile,section);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 			case MTX_STRING:
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),TABLOADER);
 					g_object_set_data(G_OBJECT(widget),
 							g_strdup(keys[i]),
 							g_strdup(tmpbuf));
 					g_free(tmpbuf);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_data(), MTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
 				break;
 
 		}
@@ -291,9 +303,9 @@ gint * parse_keytypes(gchar * string, gint * count)
 	keytypes = (gint *)g_malloc0(ct*sizeof(gint));	
 	while (vector[i])
 	{
-		dbg_func(g_strdup_printf(__FILE__": parse_keytypes() trying to translate %s\n",vector[i]),TABLOADER);
+		dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttrying to translate %s\n",vector[i]),TABLOADER);
 		keytypes[i] = translate_string(vector[i]);
-		dbg_func(g_strdup_printf(__FILE__": parse_keytypes() translated value of %s is %i\n",vector[i],keytypes[i]),TABLOADER);
+		dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttranslated value of %s is %i\n",vector[i],keytypes[i]),TABLOADER);
 		i++;
 	}
 	g_strfreev(vector);

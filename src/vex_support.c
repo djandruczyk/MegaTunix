@@ -158,7 +158,7 @@ gboolean vetable_export(void *ptr)
 	status = g_io_channel_write_chars(
 			iofile->iochannel,output->str,output->len,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(__FILE__": vetable_export(), Error exporting VEX file\n",CRITICAL);
+		dbg_func(__FILE__": vetable_export()\n\tError exporting VEX file\n",CRITICAL);
 	g_string_free(output,TRUE);
 
 	tmpbuf = g_strdup_printf("VE-Table(s) Exported Successfully\n");
@@ -183,7 +183,7 @@ gboolean vetable_import(void *ptr)
 		iofile = (struct Io_File *)ptr;
 	else
 	{
-		dbg_func(__FILE__": vetable_import(), iofile undefined\n",CRITICAL);
+		dbg_func(__FILE__": vetable_import()\n\tIo_File undefined, returning!!\n",CRITICAL);
 		return FALSE;
 	}
 	vex_import = g_new0(struct Vex_Import, 1);
@@ -191,7 +191,7 @@ gboolean vetable_import(void *ptr)
 	//reset_import_flags();
 	status = g_io_channel_seek_position(iofile->iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(__FILE__": vetable_import() Eror seeking to beginning of the file\n",CRITICAL);
+		dbg_func(__FILE__": vetable_import()\n\tError seeking to beginning of the file\n",CRITICAL);
 	/* process lines while we can */
 	while (go)
 	{
@@ -221,7 +221,7 @@ gboolean vetable_import(void *ptr)
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		dbg_func(g_strdup_printf(__FILE__": vetable_import(), Read was unsuccessful. %i %i %i %i \n",vex_import->got_page, vex_import->got_load, vex_import->got_rpm, vex_import->got_ve),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": vetable_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex_import->got_page, vex_import->got_load, vex_import->got_rpm, vex_import->got_ve),CRITICAL);
 		return FALSE;
 	}
 	return TRUE;
@@ -242,7 +242,7 @@ GIOStatus process_vex_line(void * ptr, GIOChannel *iochannel)
 			{
 				status = handler_dispatch(ptr, import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
-					dbg_func(__FILE__": process_vex_line(), VEX_line parsing ERROR\n",CRITICAL);
+					dbg_func(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n",CRITICAL);
 				goto breakout;
 			}
 		}
@@ -516,7 +516,6 @@ GIOStatus process_vex_table(void *ptr, gchar * string, GIOChannel *iochannel)
 		for (j=0; j<x_bins; j++) 
 		{
 			value = (int)strtol(numbers,&numbers,10);
-			//			dbg_func(g_strdup_printf("(%i,%i) %i ",i,j,value),VETABLE);
 			if ((value < 0) || (value > 255))
 			{
 				status = G_IO_STATUS_ERROR;

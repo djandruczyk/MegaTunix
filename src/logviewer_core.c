@@ -35,7 +35,7 @@ void load_logviewer_file(void *ptr)
 		iofile = (struct Io_File*) ptr;
 	else
 	{
-		dbg_func(__FILE__": load_logviewer_file() pointer null\n",CRITICAL);
+		dbg_func(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n",CRITICAL);
 		return;
 	}
 	log_info = g_malloc0(sizeof(struct Log_Info));
@@ -91,7 +91,7 @@ void get_limits(gchar *target_field, void *ptr, gint position)
 	{
 		lower = 0.0;
 		upper = 255.0;
-		dbg_func(g_strdup_printf(__FILE__": get_limits(), Field \"%s\" NOT found in internal list, assuming limits bound of 0.0<-%s->255.0, send the datalog you're trying to open to the Author for analysis\n",target_field,target_field),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": get_limits()\n\tField \"%s\" NOT found in internal list,\n\tassuming limits bound of 0.0<-%s->255.0,\n\tsend the datalog you're trying to open\n\tto the Author for analysis\n",target_field,target_field),CRITICAL);
 	}
 	g_array_insert_val(log_info->lowers,
 			position,def_limits[i].lower);

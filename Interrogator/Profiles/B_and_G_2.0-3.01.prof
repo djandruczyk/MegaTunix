@@ -3,7 +3,7 @@ name=Standard Bowling & Grippo v2.0-3.01
 
 [parameters]
 SignatureQueryString=
-ExtVerString=
+ExtVerQueryString=
 VerNumber=20
 Capabilities=_STANDARD_
 Rt_Cmd_Key=CMD_A_0

@@ -133,7 +133,7 @@ gboolean read_config(void)
 	else
 	{
 		serial_params->port_name = g_strdup("/dev/tt???");
-		dbg_func(__FILE__": read_config(), Config file not found, using defaults\n",CRITICAL);
+		dbg_func(__FILE__": read_config()\n\tConfig file not found, using defaults\n",CRITICAL);
 		g_free(filename);
 		save_config();
 		return FALSE;	/* No file found */

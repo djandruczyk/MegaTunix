@@ -41,7 +41,7 @@ void start_realtime_tickler()
 	}
 	else
 	{
-		dbg_func(__FILE__": start_realtime_tickler(), Tickler already running\n",CRITICAL);
+		dbg_func(__FILE__": start_realtime_tickler()\n\tTickler already running\n",CRITICAL);
 		update_logbar(comms_view,"warning","Realtime Reader ALREADY started\n",TRUE,FALSE);
 	}
 }
@@ -57,7 +57,7 @@ void stop_realtime_tickler()
 	}
 	else
 	{
-		dbg_func(__FILE__": stop_realtime_tickler(), Tickler already stopped...\n",CRITICAL);
+		dbg_func(__FILE__": stop_realtime_tickler()\n\tTickler already stopped...\n",CRITICAL);
 		update_logbar(comms_view,"warning","Realtime Reader ALREADY stopped\n",TRUE,FALSE);
 	}
 }
@@ -76,7 +76,7 @@ gboolean signal_read_rtvars()
 		return TRUE;
 
 	io_cmd(IO_REALTIME_READ,NULL);			
-	dbg_func(__FILE__": signal_read_rtvars(), sending message to thread to read RT vars\n",SERIAL_RD|SERIAL_WR);
+	dbg_func(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n",SERIAL_RD|SERIAL_WR);
 
 	return TRUE;	/* Keep going.... */
 }

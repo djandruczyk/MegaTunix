@@ -3,7 +3,7 @@ name=Old Bowling & Grippo v1.0
 
 [parameters]
 SignatureQueryString=
-ExtVerString=
+ExtVerQueryString=
 VerNumber=0
 Capabilities=_STANDARD_
 Rt_Cmd_Key=CMD_A_0

@@ -144,7 +144,7 @@ void post_process_realtime_vars(void *input, void *output)
 	{	/* Std B&G Code */
 		if ((ve_const->divider == 0) || ((ve_const->config11.bit.cylinders+1)%ve_const->divider))
 		{
-			dbg_func(g_strdup_printf(__FILE__": Std Code, divider invalid, cyls %i, divider %i\n",ve_const->config11.bit.cylinders+1,ve_const->divider),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": post_process_realtime_vars()\n\tStd Code, divider invalid, cyls %i, divider %i\n",ve_const->config11.bit.cylinders+1,ve_const->divider),CRITICAL);
 			ve_const->divider = 1;
 			invalid_divider_1 = TRUE;
 		} 
@@ -184,7 +184,7 @@ void post_process_realtime_vars(void *input, void *output)
 		/* Table 1 */
 		if ((ve_const_dt1->divider == 0) || ((ve_const_dt1->config11.bit.cylinders+1)%ve_const_dt1->divider))
 		{
-			dbg_func(g_strdup_printf(__FILE__": Dualtable FW, Table1, divider invalid, cyls %i, divider %i\n",ve_const_dt1->config11.bit.cylinders+1,ve_const_dt1->divider),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": post_process_realtime_Vars()\n\tDualtable FW, Table1, divider invalid, cyls %i, divider %i\n",ve_const_dt1->config11.bit.cylinders+1,ve_const_dt1->divider),CRITICAL);
 			ve_const_dt1->divider = 1;
 			invalid_divider_1 = TRUE;
 		} 
@@ -201,7 +201,7 @@ void post_process_realtime_vars(void *input, void *output)
 		/* Table 2 */
 		if ((ve_const_dt2->divider == 0) || ((ve_const_dt2->config11.bit.cylinders+1)%ve_const_dt2->divider))
 		{
-			dbg_func(g_strdup_printf(__FILE__": Dualtable FW, Table2, divider invalid, cyls %i, divider %i\n",ve_const_dt2->config11.bit.cylinders+1,ve_const_dt2->divider),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": post_process_realtime_vars()\n\tDualtable FW, Table2, divider invalid, cyls %i, divider %i\n",ve_const_dt2->config11.bit.cylinders+1,ve_const_dt2->divider),CRITICAL);
 			invalid_divider_2 = TRUE;
 			ve_const_dt2->divider = 1;
 		} 

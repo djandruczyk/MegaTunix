@@ -39,14 +39,9 @@ void set_store_buttons_state(GuiState state)
 			set_widget_color,(gpointer)state);
 }
 
-void set_interdep_state(GuiState state, gint table)
+void set_interdep_state(GuiState state, gchar *group)
 {
-	if (table == 1)
-		g_list_foreach(get_list("interdep_1_ctrl"), set_widget_color,(gpointer)state);
-	else if (table == 2)
-		g_list_foreach(get_list("interdep_2_ctrl"), set_widget_color,(gpointer)state);
-	else
-		dbg_func(g_strdup_printf(__FILE__": set_interdep_state(), invalid table number %i\n",table),CRITICAL);
+	g_list_foreach(get_list(group), set_widget_color,(gpointer)state);
 }
 
 void set_reqfuel_state(GuiState state, gint page)

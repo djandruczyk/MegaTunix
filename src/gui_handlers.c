@@ -326,7 +326,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		default:
-			dbg_func(g_strdup_printf(__FILE__": bitmask_button_handler() bitmask button at page: %i, offset %i, NOT handled ERROR!!, contact author\n",page,offset),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": bitmask_button_handler()\n\tbitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n",page,offset),CRITICAL);
 			return FALSE;
 			break;
 
@@ -355,7 +355,10 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	if (queue_referenced == FALSE)
 		g_async_queue_ref(io_queue);
 	if (handler == 0)
-		dbg_func(__FILE__": std_button_handler(), handler not bound to object, CRITICAL ERROR\n",CRITICAL);
+	{
+		dbg_func(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n",CRITICAL);
+		return FALSE;
+	}
 
 	switch ((StdButton)handler)
 	{
@@ -491,27 +494,25 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	if ((paused_handlers) || (!ready))
 		return TRUE;
 
-	if (GTK_IS_WIDGET(widget))
+	if (!GTK_IS_WIDGET(widget))
 	{
-		reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(
-				G_OBJECT(widget),"reqd_fuel");
-		handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
-		info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
-		ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-		spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
-		dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
-		page = (gint) g_object_get_data(G_OBJECT(widget),"page");
-		offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
-		bitmask = (gint) g_object_get_data(G_OBJECT(widget),"bitmask");
-		bit_shift = (gint) g_object_get_data(G_OBJECT(widget),"bit_shift");
-		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
-		value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-	}
-	else
-	{
-		dbg_func(__FILE__": widget pointer is NOT valid\n",CRITICAL);
+		dbg_func(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n",CRITICAL);
 		return FALSE;
 	}
+
+	reqd_fuel = (struct Reqd_Fuel *)g_object_get_data(
+			G_OBJECT(widget),"reqd_fuel");
+	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
+	info = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"info");
+	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
+	spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
+	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
+	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
+	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
+	bitmask = (gint) g_object_get_data(G_OBJECT(widget),"bitmask");
+	bit_shift = (gint) g_object_get_data(G_OBJECT(widget),"bit_shift");
+	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
+	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
 	if (ecu_caps & DUALTABLE)
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data[1]);
@@ -707,9 +708,14 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case TRIGGER_ANGLE:
 			if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
-				dbg_func(__FILE__": ERROR, Trigger angle set but not using Ignition Firmware\n",CRITICAL);
+				dbg_func(__FILE__": spin_button_handler()\n\tERROR, Trigger angle set but not using Ignition Firmware\n",CRITICAL);
 			if (spconfig == 0)
-				dbg_func(__FILE__": ERROR Triggler Angle spinbuttoncall, but spconfig variable is unset, BAD THINGS!!!\n",CRITICAL);
+			{
+				dbg_func(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig variable is unset, Aborting handler!!!\n",CRITICAL);
+				dl_type = 0;  
+				break;
+			
+			}
 			if (value > 112.15)	/* Extra long trigger needed */	
 			{
 				tmp = ms_data[page][spconfig];
@@ -752,7 +758,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
-			dbg_func(g_strdup_printf(__FILE__": spin_button_handler(), ERROR spinbutton not handled, handler = %i\n",handler),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": spin_button_handler()\n\tERROR spinbutton not handled, handler = %i\n",handler),CRITICAL);
 			dl_type = 0;  
 			break;
 	}

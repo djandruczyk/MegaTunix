@@ -209,7 +209,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case DATALOG_EXPORT:
 			if (dlog_open)
 			{
-				dbg_func(__FILE__": check_filename(), Datalog already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(__FILE__": check_filename()\n\tDatalog already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -229,7 +229,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case DATALOG_IMPORT:
 			if (logview_open)
 			{
-				dbg_func(__FILE__": check_filename(), Datalog viewfile already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(__FILE__": check_filename()\n\tDatalog viewfile already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -243,7 +243,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case FULL_BACKUP:
 			if (backup_open)
 			{
-				dbg_func(__FILE__": check_filename(), Settings Backup file already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(__FILE__": check_filename()\n\tSettings Backup file already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -255,7 +255,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case FULL_RESTORE:
 			if (restore_open)
 			{
-				dbg_func(__FILE__": check_filename(), Settings Restore file already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(__FILE__": check_filename()\n\tSettings Restore file already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -268,7 +268,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_EXPORT:
 			if (vex_open)
 			{
-				dbg_func(__FILE__": check_filename(), VEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(__FILE__": check_filename()\n\tVEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -287,7 +287,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		case VE_IMPORT:
 			if (vex_open)
 			{
-				dbg_func(__FILE__": check_filename(), VEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
+				dbg_func(__FILE__": check_filename()\n\tVEX File already open, should not open it twice...BUG!!!\n",CRITICAL);
 				g_free(iofile);
 				return;
 			}
@@ -310,20 +310,21 @@ void close_file(void *ptr)
 	struct Io_File *iofile = NULL;
 	gchar *tmpbuf = NULL;
 	GIOStatus status;
+	GError *error = NULL;
 
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
 	else
 	{
-		dbg_func(__FILE__": close_file() iofile pointer is NULL!!\n",CRITICAL);
+		dbg_func(__FILE__": close_file()\n\tIo_File pointer is NULL, REturning NOW!!\n",CRITICAL);
 		return;
 	}
 
 	if (iofile->iochannel != NULL)
 	{
-		status = g_io_channel_shutdown(iofile->iochannel,TRUE,NULL);
+		status = g_io_channel_shutdown(iofile->iochannel,TRUE,&error);
 		if (status != G_IO_STATUS_NORMAL)
-			dbg_func(__FILE__": close_file(), Error closing iochannel\n",CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": close_file()\n\tError closing iochannel. message %s\n",error->message),CRITICAL);
 	}
 
 	switch (iofile->iotype)
@@ -465,7 +466,7 @@ void restore_all_ms_settings(gchar *filename)
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
 		if (g_strcasecmp(tmpbuf,firmware->name) != 0)
 		{
-			dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings() Firmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),CRITICAL);
 			if (tmpbuf)
 				g_free(tmpbuf);
 			cfg_free(cfgfile);
@@ -476,15 +477,15 @@ void restore_all_ms_settings(gchar *filename)
 			section = g_strdup_printf("page_%i",i);
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
 				if (tmpi != firmware->page_params[i]->size)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings() Number of variables in backup \"%i\" and firmware specification \"%i\" do NOT match, corruption SHOULD be expected\n",tmpi,firmware->page_params[i]->size),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[i]->size),CRITICAL);
 			if (cfg_read_int(cfgfile,section,"is_spark",&tmpi))
 				if (tmpi != firmware->page_params[i]->is_spark)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings() Spark table data mismatch for page %i, restore file \"%i\", firmware specification \"%i\"\n",i,tmpi,firmware->page_params[i]->size),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tSpark table data mismatch for page %i, restore file \"%i\", firmware specification \"%i\"\n",i,tmpi,firmware->page_params[i]->size),CRITICAL);
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
 				keys = parse_keys(tmpbuf,&num_keys);
 				if (num_keys != firmware->page_params[i]->size)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings() Number of variables  in this backup \"%i\" does NOT match the size of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->size),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the size of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->size),CRITICAL);
 				for (x=0;x<num_keys;x++)
 					ms_data[i][x]=atoi(keys[x]);
 				g_strfreev(keys);

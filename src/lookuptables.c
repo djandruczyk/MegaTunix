@@ -40,8 +40,8 @@ void get_table(gpointer table, gpointer fname, gpointer user_data)
 	g_free(filename);
 	if (!status)
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_lookuptables(), FAILURE loading \"%s\" lookuptable\n",(gchar *)table),CRITICAL);
-		exit (-1);
+		dbg_func(g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table),CRITICAL);
+		exit (-2);
 	}
 
 }
@@ -62,7 +62,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	iochannel = g_io_channel_new_file(filename,"r", NULL);
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(__FILE__": load_lookuptables() Error seeking to beginning of the file\n",CRITICAL);
+		dbg_func(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n",CRITICAL);
 	while (go)	
 	{
 		a_line = g_string_new("\0");

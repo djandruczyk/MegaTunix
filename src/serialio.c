@@ -60,7 +60,7 @@ void open_serial(gchar * port_name)
 		serial_params->fd = fd;
 		/* Save serial port status */
 		tcgetattr(serial_params->fd,&serial_params->oldtio);
-		dbg_func(g_strdup_printf(__FILE__" open_serial(), %s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
 		update_logbar(comms_view,NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 	}
 	else
@@ -69,7 +69,7 @@ void open_serial(gchar * port_name)
 		/* An Error occurred opening the port */
 		serial_params->open = FALSE;
 		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": open_serial(),\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
 
 		update_logbar(comms_view,"warning",g_strdup_printf("Error Opening %s Error Code: %s \n",device,err_text),TRUE,FALSE);
 		g_free(err_text);
@@ -154,7 +154,7 @@ void close_serial()
 	//			connected);
 
 	/* An Closing the comm port */
-	dbg_func(__FILE__": close_serial(), COM Port Closed\n",SERIAL_RD|SERIAL_WR);
+	dbg_func(__FILE__": close_serial()\n\tCOM Port Closed\n",SERIAL_RD|SERIAL_WR);
 	update_logbar(comms_view,NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
 }
 
@@ -162,24 +162,15 @@ void set_ms_page(gint ms_page)
 {
 	gint res = 0;
 	gchar buf;
-	gchar *tmpbuf = NULL;
 
 	if ((ms_page > 1) || (ms_page < 0))
-	{
-		tmpbuf = g_strdup_printf(__FILE__": page choice %i is out of range(0,1)\n",ms_page);
-		dbg_func(tmpbuf,CRITICAL);
-		g_free(tmpbuf);
-	}
+		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tpage choice %i is out of range(0,1)\n",ms_page),CRITICAL);
 
 	buf = ms_page & 0x01;
 	res = write(serial_params->fd,"P",1);
 	if (res != 1)
-		dbg_func(__FILE__": FAILURE sending \"P\" (change page) command to ECU \n",CRITICAL);
+		dbg_func(__FILE__": set_ms_page()\n\tFAILURE sending \"P\" (change page) command to ECU \n",CRITICAL);
 	res = write(serial_params->fd,&buf,1);
 	if (res != 1)
-	{
-		tmpbuf = g_strdup_printf(__FILE__": FAILURE changing page on ECU to %i\n",ms_page);
-		dbg_func(tmpbuf,CRITICAL);
-		g_free(tmpbuf);
-	}
+		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i\n",ms_page),CRITICAL);
 }

@@ -184,24 +184,24 @@ void *serial_io_handler(gpointer data)
 		switch ((CmdType)message->command)
 		{
 			case INTERROGATION:
-				dbg_func(__FILE__": serial_io_handler() Interrogate_ecu requested\n",SERIAL_RD|SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu requested\n",SERIAL_RD|SERIAL_WR);
 				if (connected)
 					interrogate_ecu();
 				break;
 			case COMMS_TEST:
-				dbg_func(__FILE__": serial_io_handler() comms_test requested \n",SERIAL_RD|SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\tcomms_test requested \n",SERIAL_RD|SERIAL_WR);
 				comms_test();
 				break;
 			case READ_CMD:
-				dbg_func(g_strdup_printf(__FILE__": serial_io_handler() read_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD);
+				dbg_func(g_strdup_printf(__FILE__": serial_io_handler()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD);
 				readfrom_ecu(message);
 				break;
 			case WRITE_CMD:
-				dbg_func(__FILE__": serial_io_handler() write_command requested\n",SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\twrite_command requested\n",SERIAL_WR);
 				writeto_ecu(message);
 				break;
 			case BURN_CMD:
-				dbg_func(__FILE__": serial_io_handler() burn_command requested\n",SERIAL_WR);
+				dbg_func(__FILE__": serial_io_handler()\n\tburn_command requested\n",SERIAL_WR);
 				burn_ms_flash();
 				break;
 
@@ -323,9 +323,9 @@ void readfrom_ecu(void *ptr)
 			message->out_str,
 			message->out_len);
 	if (result != message->out_len)	
-		dbg_func(__FILE__": readfrom_ecu() write command to ECU failed\n",CRITICAL);
+		dbg_func(__FILE__": readfrom_ecu()\n\twrite command to ECU failed\n",CRITICAL);
 
-	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu() Sent %s to the ECU\n",message->out_str),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str),SERIAL_WR);
 	if (message->handler == RAW_MEMORY_DUMP)
 		result = write(serial_params->fd,&message->offset,1);
 
@@ -334,14 +334,14 @@ void readfrom_ecu(void *ptr)
 	result = poll (&ufds,1,5*serial_params->poll_timeout);
 	if (result == 0)   /* Error */
 	{
-		dbg_func(__FILE__": readfrom_ecu(), failure reading Data from ECU\n",CRITICAL);
+		dbg_func(__FILE__": readfrom_ecu()\n\tfailure reading Data from ECU\n",CRITICAL);
 		serial_params->errcount++;
 		connected = FALSE;
 	}
 	else            /* Data arrived */
 	{
 		connected = TRUE;
-		dbg_func(g_strdup_printf(__FILE__": reading %s\n",
+		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tReading %s\n",
 					handler_types[message->handler]),SERIAL_RD);
 		if (message->handler != -1)
 			handle_ms_data(message->handler,message);
@@ -362,7 +362,7 @@ void comms_test()
 	if (serial_params->open == FALSE)
 	{
 		connected = FALSE;
-		dbg_func(__FILE__": comms_test(), Serial Port is NOT opened can NOT check ecu comms...\n",CRITICAL);
+		dbg_func(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n",CRITICAL);
 		gdk_threads_enter();
 		no_ms_connection();
 		gdk_threads_leave();
@@ -376,9 +376,9 @@ void comms_test()
 	while (write(serial_params->fd,"C",1) != 1)
 	{
 		usleep(10000);
-		dbg_func(__FILE__": Error writing \"C\" to the ecu in comms_test()\n",CRITICAL);
+		dbg_func(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n",CRITICAL);
 	}
-	dbg_func(__FILE__": check_ecu_comms() Requesting MS Clock (\"C\" cmd)\n",SERIAL_RD);
+	dbg_func(__FILE__": commes_test()\n\tRequesting MS Clock (\"C\" cmd)\n",SERIAL_RD);
 	result = poll (&ufds,1,serial_params->poll_timeout*5);
 	if (result)
 	{
@@ -387,7 +387,7 @@ void comms_test()
 
 		tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
 		/* COMMS test succeeded */
-		dbg_func(__FILE__": comms_test(), ECU Comms Test Successfull\n",SERIAL_RD);
+		dbg_func(__FILE__": comms_test()\n\tECU Comms Test Successfull\n",SERIAL_RD);
 		gdk_threads_enter();
 		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
@@ -403,7 +403,7 @@ void comms_test()
 		connected = FALSE;
 		tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
 		/* An I/O Error occurred with the MegaSquirt ECU */
-		dbg_func(__FILE__": comms_test(), I/O with ECU Timeout\n",CRITICAL);
+		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
 		gdk_threads_enter();
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
@@ -422,6 +422,7 @@ void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct OutputData *output = NULL;
 
+	dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm),SERIAL_WR);
 	output = g_new0(struct OutputData,1);
 	output->page = page;
 	output->offset = offset;
@@ -460,20 +461,20 @@ void writeto_ecu(void *ptr)
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */
 	}
-	dbg_func(g_strdup_printf(__FILE__": writeto_ecu() MS Serial Write, Page, %i, Value %i, Mem Offset %i\n",page,value,offset),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tMS Serial Write, Page, %i, Value %i, Mem Offset %i\n",page,value,offset),SERIAL_WR);
 
 	if (value > 255)
 	{
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Large value being sent: %i, to page %i, offset %i\n",value,page,offset),SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tLarge value being sent: %i, to page %i, offset %i\n",value,page,offset),SERIAL_WR);
 
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
 		twopart = TRUE;
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Highbyte: %i, Lowbyte %i\n",highbyte,lowbyte),SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tHighbyte: %i, Lowbyte %i\n",highbyte,lowbyte),SERIAL_WR);
 	}
 	if (value < 0)
 	{
-		dbg_func(__FILE__": WARNING!!, value sent is below 0\n",CRITICAL);
+		dbg_func(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n",CRITICAL);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
@@ -483,7 +484,7 @@ void writeto_ecu(void *ptr)
 		if (ign_parm == FALSE)
 			set_ms_page(page);
 
-	dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Ignition param %i\n",ign_parm),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
 
 	if (ign_parm)
 		write_cmd = g_strdup("J");
@@ -496,22 +497,22 @@ void writeto_ecu(void *ptr)
 		lbuff[1]=highbyte;
 		lbuff[2]=lowbyte;
 		count = 3;
-		dbg_func(__FILE__": writeto_ecu() Sending 16 bit value to ECU\n",SERIAL_WR);
+		dbg_func(__FILE__": writeto_ecu()\n\tSending 16 bit value to ECU\n",SERIAL_WR);
 	}
 	else
 	{
 		lbuff[1]=value;
 		count = 2;
-		dbg_func(__FILE__": writeto_ecu() Sending 8 bit value to ECU\n",SERIAL_WR);
+		dbg_func(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n",SERIAL_WR);
 	}
 
 
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	if (res != 1 )
-		dbg_func(__FILE__": writeto_ecu() Sending write command FAILED!!!\n",CRITICAL);
+		dbg_func(__FILE__": writeto_ecu()\n\tSending write command FAILED!!!\n",CRITICAL);
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 	if (res != count )
-		dbg_func(__FILE__": writeto_ecu() Sending offset+data FAILED!!!\n",CRITICAL);
+		dbg_func(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n",CRITICAL);
 	usleep(5000);
 	if (page > 0)
 		set_ms_page(0);
@@ -557,11 +558,11 @@ void burn_ms_flash()
 	res = write (serial_params->fd,"B",1);  /* Send Burn command */
 	if (res != 1)
 	{
-		dbg_func(g_strdup_printf(__FILE__": Burn Failure, write command failed %i\n",res),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
 	}
 	usleep(5000);
 
-	dbg_func(__FILE__": Burn to Flash\n",SERIAL_WR);
+	dbg_func(__FILE__": burn_ms_flash()\n\tBurn to Flash\n",SERIAL_WR);
 
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)

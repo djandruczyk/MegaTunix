@@ -56,7 +56,7 @@ gboolean load_realtime_map(void )
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 	{
-		dbg_func(g_strdup_printf(__FILE__": realtime_map_load(), can't find realtime vars map file %s\n",filename),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find realtime vars map file %s\n",filename),CRITICAL);
 		g_free(rtv_map);
 		return FALSE;
 	}
@@ -64,10 +64,10 @@ gboolean load_realtime_map(void )
 	g_free(filename);
 
 	if(!cfg_read_string(cfgfile,"realtime_map","firmware_name",&tmpbuf))
-		dbg_func(__FILE__": realtime_map_load(), can't find firmware name\n",CRITICAL);
+		dbg_func(__FILE__": load_realtime_map()\n\tCan't find firmware name\n",CRITICAL);
 	if (g_strcasecmp(tmpbuf,firmware->name) != 0)	
 	{
-		dbg_func(g_strdup_printf(__FILE__": realtime_map_load(), firmware name(%s) in this file(%s) does NOT match firmware name(%s) of loaded firmware, ABORT!\n",tmpbuf,filename,firmware->name),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tFirmware name(%s) in this file(%s)\n\tdoes NOT match firmware name(%s) of loaded firmware, ABORT!\n",tmpbuf,filename,firmware->name),CRITICAL);
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 		g_free(tmpbuf);
@@ -79,9 +79,9 @@ gboolean load_realtime_map(void )
 	 * the main mapping structures...
 	 */
 	if(!cfg_read_int(cfgfile,"realtime_map","raw_total",&raw_total))
-		dbg_func(__FILE__": realtime_map_load(), can't find \"raw_total\" in the \"[realtime_map]\" section\n",CRITICAL);
+		dbg_func(__FILE__": load_realtime_map()\n\tcan't find \"raw_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
-		dbg_func(__FILE__": realtime_map_load(), can't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
+		dbg_func(__FILE__": load_realtime_map()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
 	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE,sizeof(struct GTimeVal *),50);
 	rtv_map->rtv_array = g_array_sized_new(FALSE,TRUE,sizeof(struct GList *),raw_total);
@@ -103,7 +103,7 @@ gboolean load_realtime_map(void )
 		/* Get key list and parse */
 		if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
-			dbg_func(g_strdup_printf(__FILE__": realtime_map_load(), can't find \"keys\" in the \"[derived_%i]\" section\n",i),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find \"keys\" in the \"[%s]\" section\n",section),CRITICAL);
 			return FALSE;
 		}
 		else
@@ -114,7 +114,7 @@ gboolean load_realtime_map(void )
 		/* Get key TYPE list and parse */
 		if(!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 		{
-			dbg_func(g_strdup_printf(__FILE__": realtime_map_load(), can't find \"key_types\" in the \"[derived_%i]\" section\n",i),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find \"key_types\" in the \"[%s]\" section\n",section),CRITICAL);
 			return FALSE;
 		}
 		else
@@ -124,14 +124,13 @@ gboolean load_realtime_map(void )
 		}
 		if (num_keytypes != num_keys)
 		{
-			dbg_func(g_strdup_printf(__FILE__": Number of keys (%i) and keytypes(%i) does NOT match for: \"%s\", CRITICAL!!!\n",num_keys,num_keytypes,section),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tNumber of keys (%i) and keytypes(%i)\n\tdoes NOT match for: \"%s\", CRITICAL!!!\n",num_keys,num_keytypes,section),CRITICAL);
 			g_free(keytypes);
 			g_strfreev(keys);
 			return FALSE;
 		}
 		if (!cfg_read_int(cfgfile,section,"offset",&offset))
-			dbg_func(g_strdup_printf(__FILE__": Offset not defined for: \"%s\", CRITICAL!!!\n",section),CRITICAL);
-
+			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find \"offset\" in the \"[%s]\" section, CRITICAL!!!\n",section),CRITICAL);
 
 		/* Create object to hold all the data. (dynamically)*/
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
@@ -147,31 +146,31 @@ gboolean load_realtime_map(void )
 				case MTX_INT:
 					if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
 					{
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map() binding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								GINT_TO_POINTER(tmpi));
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map(), MTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
 					break;
 				case MTX_ENUM:
 					if (cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
 						tmpi = translate_string(tmpbuf);
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map() binding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								GINT_TO_POINTER(tmpi));
 						g_free(tmpbuf);
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map(), MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
 					break;
 				case MTX_BOOL:
 					if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
 					{
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map() binding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),TABLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								GINT_TO_POINTER(tmpi));
@@ -179,12 +178,12 @@ gboolean load_realtime_map(void )
 							load_complex_params(object,cfgfile,section);
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map(), MTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
 					break;
 				case MTX_STRING:
 					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map() binding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section),TABLOADER);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section),TABLOADER);
 						g_object_set_data(object,
 								g_strdup(keys[j]),
 								g_strdup(tmpbuf));
@@ -193,7 +192,7 @@ gboolean load_realtime_map(void )
 						g_free(tmpbuf);
 					}
 					else
-						dbg_func(g_strdup_printf(__FILE__": load_realtime_map(), MTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section),CRITICAL);
 					break;
 
 			}
@@ -223,7 +222,7 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_complex_params(), read of \"expr_symbols\" from section \"%s\" failed\n",section),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_symbols\" from section \"[%s]\" failed\n",section),CRITICAL);
 		g_free(tmpbuf);
 		return;
 	}
@@ -234,7 +233,7 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 	}
 	if (!cfg_read_string(cfgfile,section,"expr_types",&tmpbuf))
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_complex_params(), read of \"expr_types\" from section \"%s\" failed\n",section),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_types\" from section \"[%s]\" failed\n",section),CRITICAL);
 		g_free(tmpbuf);
 		return;
 	}
@@ -245,7 +244,7 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 	}
 	if (total_symbols!=total_symtypes)
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_complex_params(), Number of symbols(%i) and symbol types(%i) are different, ABORTING\n",total_symbols,total_symtypes),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": load_complex_params()\n\tNumber of symbols(%i) and symbol types(%i)\n\tare different, ABORTING\n",total_symbols,total_symtypes),CRITICAL);
 		g_free(expr_types);
 		g_free(expr_symbols);
 		return;
@@ -263,22 +262,22 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				name=NULL;
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				name=g_strdup_printf("%s_bitshift",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				break;
@@ -287,12 +286,12 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				name=NULL;
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name),CRITICAL);
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name),CRITICAL);
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				break;
@@ -301,7 +300,7 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(g_strdup_printf(__FILE__": load_compex_params(), VE_EMB+BIT, failure looking for:\n\t%s\n",name),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_VAR, failure looking for:%s\n",name),CRITICAL);
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				break;

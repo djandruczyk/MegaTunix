@@ -227,7 +227,10 @@ void present_viewer_choices(void *ptr)
 	if (ptr != NULL)
 		hand_me_down = (GtkWidget *)ptr;
 	else
-		dbg_func(__FILE__": present_viewer_choices(), pointer fed was NULL\n",CRITICAL);
+	{
+		dbg_func(__FILE__": present_viewer_choices()\n\tpointer fed was NULL, returning!!!\n",CRITICAL);
+		return;
+	}
 
 	/* basty hack to prevent a compiler warning... */
 	max_viewables = sizeof(mt_classic_names)/sizeof(gchar *);

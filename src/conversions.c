@@ -32,6 +32,7 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	void *evaluator = NULL;
 	gint page = -1;
 	gint offset = -1;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
@@ -40,7 +41,8 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	if (conv_expr == NULL)
 	{
-		dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): NO CONVERSION defined for page: %i, offset: %i\n",page, offset),CONVERSIONS);
+		dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tNO CONVERSION defined for page: %i, offset: %i\n",page, offset),CONVERSIONS);
+		ms_data[page][offset] = (gint)value;
 		return ((gint)value);		
 	}
 	if (!evaluator) 	/* if no evaluator create one */
@@ -51,8 +53,9 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	return_value = evaluator_evaluate_x(evaluator,value)+0.001;
 
-	dbg_func(g_strdup_printf(__FILE__": convert_before_dl(): page %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value),CONVERSIONS);
+	dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value),CONVERSIONS);
 
+	ms_data[page][offset] = return_value;
 	return (return_value);
 }
 
@@ -79,7 +82,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	ve_const_arr = (guchar *)ms_data[page];
 	if (conv_expr == NULL)
 	{
-		dbg_func(g_strdup_printf(__FILE__": convert_after_ul(): NO CONVERSION defined for page: %i, offset: %i\n",page, offset),CONVERSIONS);
+		dbg_func(g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i\n",page, offset),CONVERSIONS);
 
 		return_value = ve_const_arr[offset];
 		return (return_value);		
@@ -92,7 +95,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	}
 	return_value = evaluator_evaluate_x(evaluator,ve_const_arr[offset])+0.001;
 
-	dbg_func(g_strdup_printf(__FILE__": convert_after_ul(),offset %i, raw %i, val %f, page %i\n",offset,ve_const_arr[offset],return_value,page),CONVERSIONS);
+	dbg_func(g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,ve_const_arr[offset],return_value),CONVERSIONS);
 	return (return_value);
 }
 

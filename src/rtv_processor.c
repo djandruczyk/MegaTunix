@@ -46,7 +46,7 @@ void process_rt_vars(void *incoming)
 	len = firmware->rtvars_size;
 	if (len != rtv_map->raw_total)
 	{
-		dbg_func(g_strdup_printf(__FILE__": process_rt_vars(): length of buffer(%i) and relatime map raw_length(%i) DO NOT match, critical ERROR!\n",len,rtv_map->raw_total),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tlength of buffer(%i) and realtime map raw_length(%i)\n\tDO NOT match, critical ERROR!\n",len,rtv_map->raw_total),CRITICAL);
 		return;
 	}
 	for (i=0;i<len;i++)
@@ -188,10 +188,10 @@ gdouble handle_complex_expr(GObject *object, void * incoming,ConvType type)
 		else if (type == DOWNLOAD)
 			evaluator = evaluator_create(g_object_get_data(object,"dl_conv_expr"));
 		else
-			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t evaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
 		if (!evaluator)
 		{
-			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t evaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
 			exit (-1);
 		}
 		else
