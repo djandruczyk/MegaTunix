@@ -76,7 +76,7 @@ static struct Canidate
 			{"MegaSquirtnEDIS 3.005\0"},FALSE,TRUE,FALSE},
 	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,{},{"EDIS v3.007\0"},30,
 			{"MegaSquirtnEDIS 3.007\0"},FALSE,TRUE,FALSE},
-	{ {22,1,1,125,125,0,0,99,0,0},NULL,NULL,{},{},13,
+	{ {22,1,1,125,125,0,0,99,255,255},NULL,NULL,{},{},13,
 			{"MegaSquirt'N'Spark Extended 3.0.1\0"},
 			FALSE,TRUE,FALSE}
 };
