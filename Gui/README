@@ -99,6 +99,10 @@ keys themselves are not, as the string compare functions are case insensitive.
 			a dl_type is OK, but is usually only used for controls
 			that display something but don't directly map to an
 			ECU location.
+	ign_parm	(bool) Used to flag an ignition var for ONLY the 
+			MSnS (NOT Extra series) and MSnEDIS, as they used a
+			different command to write ignition variables to the
+			ECU.
 
 HOW Bitfields are used:
 	Controls that associate to a bitfield can either be a button, 
