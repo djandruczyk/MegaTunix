@@ -25,10 +25,14 @@
 #include "config.h"
 #endif
 
-/* Print library warning message.  */
+/*!
+ \brief Print library warning message.  
+ */
 void            error_warning(const char *message);
 
-/* Print library error message and terminate program using library.  */
+/*! 
+ \brief Print library error message and terminate program using library.  
+ */
 void            error_fatal(const char *message);
 
 #endif

@@ -27,13 +27,19 @@
 #define XCALLOC(type, num) ((type *) xcalloc ((num), sizeof(type)))
 #define XFREE(stale) free (stale);
 
-/* Replacement for malloc() function with error checking.  */
+/*! 
+ \brief Replacement for malloc() function with error checking.  
+ */
 void           *xmalloc(size_t size);
 
-/* Same as above from realloc().  */
+/* 
+ \brief Same as above from realloc(). 
+ */
 void           *xrealloc(void *ptr, size_t size);
 
-/* Same as above for calloc().  */
+/*! 
+ \brief Same as above for calloc().  
+ */
 void           *xcalloc(size_t num, size_t size);
 
 #endif

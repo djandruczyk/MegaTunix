@@ -55,6 +55,12 @@ void ve_draw_runtime_indicator(void *);
 /* Prototypes */
 
 /* Datastructures... */
+
+/*!
+ \brief the Ve_View_3D structure contains all the field to create and 
+ manipulate a 3D view of a MegaSquirt VE/Spark table, and should work in
+ theory for any sized table
+ */
 struct Ve_View_3D
 {
 	gint beginX;

@@ -27,7 +27,9 @@
 
 #include "symbol_table.h"
 
-/* Data structure representing function tree node.  */
+/*! 
+ \brief Node is a Data structure representing function tree node.  
+ */
 typedef struct _Node {
 	char            type;	/* Node type ('c' for constant, 'v' for
 				 * variable, 'f' for function, 'u' for unary
@@ -61,58 +63,58 @@ typedef struct _Node {
 	}               data;
 }               Node;
 
-/*
- * Create node of given type and initialize it from optional arguments.
- * Function returns pointer to node object that should be passed as first
- * argument to all other node functions.
+/*!
+ \brief Create node of given type and initialize it from optional arguments.
+ Function returns pointer to node object that should be passed as first
+ argument to all other node functions.
  */
 Node           *node_create(char type,...);
 
 /* Destroy subtree rooted at specified node.  */
 void            node_destroy(Node * node);
 
-/*
- * Make a copy of subtree rooted at given node.  Deep copy operation is
- * employed.
+/*!
+ \brief Make a copy of subtree rooted at given node.  Deep copy operation is
+ employed.
  */
 Node           *node_copy(Node * node);
 
-/*
- * Simplify subtree rooted at given node.  Function returns root of
- * simplified subtree (that may or may not be original node).
+/*!
+ \brief Simplify subtree rooted at given node.  Function returns root of
+ simplified subtree (that may or may not be original node).
  */
 Node           *node_simplify(Node * node);
 
-/*
- * Evaluate subtree rooted at given node.  For variables, values from symbol
- * table are used.
+/*!
+ \brief Evaluate subtree rooted at given node.  For variables, values from 
+ symbol table are used.
  */
 double          node_evaluate(Node * node);
 
-/*
- * Create derivative tree for subtree rooted at given node.  Second argument
- * is derivation variable, third argument is symbol table (needed for
- * functions derivatives).  Function returns root of corresponding derivation
- * tree.
+/*!
+ \brief Create derivative tree for subtree rooted at given node.  Second arg
+ is derivation variable, third argument is symbol table (needed for
+ functions derivatives).  Function returns root of corresponding derivation
+ tree.
  */
 Node           *node_derivative(Node * node, char *name, SymbolTable * symbol_table);
 
-/*
- * Flag each variable in symbol table that is used from subtree rooted
- * at specified node.
+/*!
+ \brief Flag each variable in symbol table that is used from subtree rooted
+ at specified node.
  */
 void            node_flag_variables(Node * node);
 
-/*
- * Calculate length of the string representing subtree rooted at specified
- * node.
+/*!
+ \brief Calculate length of the string representing subtree rooted at specified
+ node.
  */
 int             node_get_length(Node * node);
 
-/*
- * Write subtree rooted at specified node to given string variable.  No
- * checking of string overflow is done by this procedure; it is expected that
- * string of appropriate length is passed as argument.
+/*!
+ \brief Write subtree rooted at specified node to given string variable.  No
+ checking of string overflow is done by this procedure; it is expected that
+ string of appropriate length is passed as argument.
  */
 void            node_write(Node * node, char *string);
 

@@ -20,6 +20,11 @@
 
 /* Structures */
 
+/*!
+ \brief The ConfigLine struct stores just the key and value for a Line within
+ a ConfigSection
+ \see ConfigSection
+ */
 typedef struct
 {
         gchar *key;
@@ -27,6 +32,10 @@ typedef struct
 }
 ConfigLine;
 
+/*!
+ \brief The ConfigSection struct stores the section name anda GList of 
+ lines 
+ */
 typedef struct
 {
         gchar *name;
@@ -34,6 +43,9 @@ typedef struct
 }
 ConfigSection;
 
+/*!
+ \brief The ConfigFile struct stores a GList of Sections
+ */
 typedef struct
 {
         GList *sections;
@@ -41,6 +53,7 @@ typedef struct
 ConfigFile;
 
 /* Structures */
+
 /* Prototypes */
 ConfigFile *cfg_new(void);
 ConfigFile *cfg_open_file(gchar * filename);

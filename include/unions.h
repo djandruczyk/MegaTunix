@@ -25,6 +25,11 @@
 /* unions used in the various structures... */
 #ifdef WORDS_BIGENDIAN /* PDA's possibly? */
 /* Big endian systems (MSB) */
+
+/*!
+ \brief the Squirt union contains bits showingthe injection status events
+ This structure isn't used anyplace yet.
+ */
 union squirt
 {
         guchar   value;
@@ -43,7 +48,14 @@ union squirt
                 guchar inj1      :1;     /* 0 = no squirt 1 = squirt */
         } bit;
 };
+
+
 /* Big endian systems (MSB) */
+/*!
+ \brief the engine union contains bits showing the engien status including
+ the following mode, mapaccel, tpsaccel, tpsdecel, warmup_enrich, 
+ afterstart_enrich, cranking and running
+ */
 union engine
 {
         guchar      value;
@@ -67,7 +79,13 @@ union engine
         } bit;
 };
 
+
 /* Big endian systems (MSB) */
+/*!
+ \brief the config11 unions embedds the map_sensor type(115/250 kpa), 
+ engine_type (2/4 stroke), injection type (tbi/multiport), and he number of
+ cylinders
+ */
 union config11
 {
         guchar      value;
@@ -93,7 +111,12 @@ union config11
         } bit;
 };
 
+
 /* Big endian systems (MSB) */
+/*!
+ \brief the config12 unions embedds the mat sensor type(gm/unused), 
+ clt sensor type (gm/undefined), and the number of injectors
+ */
 union config12
 {
         guchar      value;
@@ -119,7 +142,13 @@ union config12
         } bit;
 };
 
+
 /* Big endian systems (MSB) */
+/*!
+ \brief the config13 unions embedds the firing type (even/odd),
+ the ego sensor type (nbo2/wbo2), injection strategy (SpeedDensity/Alpha-N),
+ baro correction (enabled/disabled), idle policy (B&G/PWM)
+ */
 union config13
 {
         guchar      value;
@@ -138,7 +167,12 @@ union config13
         } bit;
 };
 
+
 /* Big Endian systems (MSB) */
+/*!
+ \brief the bcfreq union embedds the boost controller frequency choices
+, 39hz, 19hz and 10hz and nothing else
+ */
 union bcfreq
 {
 	guchar 	value;
@@ -151,7 +185,15 @@ union bcfreq
 	} bit;
 };
 
+
 /* Big Endian systems (MSB) */
+/*!
+ \brief the tblcnf union embedds the injection mode (simultaneous B&G/DT Mode),
+ the injector_1 mapping (inj1 off/from table1/from table2),
+ the injector_2 mapping (inj1 off/from table1/from table2),
+ whether gammae (sum of enrichments) is applied to injector channel 1, and
+ whether gammae (sum of enrichments) is applied to injector channel 2
+ */
 union tblcnf
 {
 	guchar 	value;
@@ -181,6 +223,11 @@ union tblcnf
 };
 
 /* Big Endian systems (MSB) */
+/*!
+ \brief the spark_config1 union embeds the boost_retard, multi_spark, 
+ extra_long_trigger and long_trigger options specific to EDIS and spark
+ firmwares
+ */
 union spark_config1
 {
 	guchar 	value;
@@ -197,6 +244,12 @@ union spark_config1
 
 #else
 /* Little Endian systems (LSB), intel x86) */
+
+
+/*!
+ \brief the Squirt union contains bits showingthe injection status events
+ This structure isn't used anyplace yet.
+ */
 union squirt
 {
         guchar      value;
@@ -215,7 +268,14 @@ union squirt
                 guchar reserved  :2;
         } bit;
 };
+
+
 /* Little Endian systems (LSB), intel x86) */
+/*!
+ \brief the engine union contains bits showing the engien status including
+ the following mode, mapaccel, tpsaccel, tpsdecel, warmup_enrich, 
+ afterstart_enrich, cranking and running
+ */
 union engine
 {
         guchar      value;
@@ -233,7 +293,13 @@ union engine
         } bit;
 };
 
+
 /* Little Endian systems (LSB), intel x86) */
+/*!
+ \brief the config11 unions embedds the map_sensor type(115/250 kpa), 
+ engine_type (2/4 stroke), injection type (tbi/multiport), and he number of
+ cylinders
+ */
 union config11
 {
         guchar      value;
@@ -258,7 +324,13 @@ union config11
                                                  */
         } bit;
 };
+
+
 /* Little Endian systems (LSB), intel x86) */
+/*!
+ \brief the config12 unions embedds the mat sensor type(gm/unused), 
+ clt sensor type (gm/undefined), and the number of injectors
+ */
 union config12
 {
         guchar      value;
@@ -283,7 +355,14 @@ union config12
                                                  */
         } bit;
 };
+
+
 /* Little Endian systems (LSB), intel x86) */
+/*!
+ \brief the config13 unions embedds the firing type (even/odd),
+ the ego sensor type (nbo2/wbo2), injection strategy (SpeedDensity/Alpha-N),
+ baro correction (enabled/disabled), idle policy (B&G/PWM)
+ */
 union config13
 {
         guchar      value;
@@ -302,7 +381,12 @@ union config13
         } bit;
 };
 
+
 /* Little Endian systems (LSB), intel x86) */
+/*!
+ \brief the bcfreq union embedds the boost controller frequency choices
+, 39hz, 19hz and 10hz and nothing else
+ */
 union bcfreq
 {
 	guchar 	value;
@@ -315,7 +399,15 @@ union bcfreq
 	} bit;
 };
 
+
 /* Little Endian systems (LSB), intel x86) */
+/*!
+ \brief the tblcnf union embedds the injection mode (simultaneous B&G/DT Mode),
+ the injector_1 mapping (inj1 off/from table1/from table2),
+ the injector_2 mapping (inj1 off/from table1/from table2),
+ whether gammae (sum of enrichments) is applied to injector channel 1, and
+ whether gammae (sum of enrichments) is applied to injector channel 2
+ */
 union tblcnf
 {
 	guchar 	value;
@@ -344,7 +436,13 @@ union tblcnf
 	}bit;
 };
 
+
 /* Little Endian systems (LSB), intel x86 */
+/*!
+ \brief the spark_config1 union embeds the boost_retard, multi_spark, 
+ extra_long_trigger and long_trigger options specific to EDIS and spark
+ firmwares
+ */
 union spark_config1
 {
 	guchar 	value;
