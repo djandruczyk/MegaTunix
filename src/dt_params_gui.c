@@ -32,6 +32,7 @@ void build_dt_params(GtkWidget *parent_frame)
 	GtkWidget *sep;
 	GSList *group = NULL;
 	extern GList *store_widgets;
+	extern struct DynamicButtons buttons;
 	extern GtkTooltips *tip;
 	extern GList *dt_widgets;
 
@@ -60,6 +61,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(NULL,"Not Driven");
+	buttons.inj1_not_driven = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
@@ -67,6 +69,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(group,"Driven from Table 1");
+	buttons.inj1_table1 = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
@@ -74,6 +77,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(group,"Driven from Table 2");
+	buttons.inj1_table2 = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 3, 4,
@@ -92,6 +96,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(NULL,"Not Driven");
+	buttons.inj2_not_driven = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
@@ -99,6 +104,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(group,"Driven from Table 1");
+	buttons.inj2_table1 = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
@@ -106,6 +112,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(group,"Driven from Table 2");
+	buttons.inj2_table2 = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4,
@@ -129,6 +136,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(NULL,"Applied");
+	buttons.inj1_gammae_ena = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
@@ -136,6 +144,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(group,"Ignored");
+	buttons.inj1_gammae_dis = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
@@ -148,6 +157,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(NULL,"Applied");
+	buttons.inj2_gammae_ena = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
@@ -155,6 +165,7 @@ void build_dt_params(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(group,"Ignored");
+	buttons.inj2_gammae_dis = button;
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,

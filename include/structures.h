@@ -203,6 +203,16 @@ struct DynamicButtons
 	GtkWidget *logplay_stop_rt_but;		/* Logplay stop realtime */
 	GtkWidget *onoff_idle_but;		/* B&G idle method */
 	GtkWidget *pwm_idle_but;		/* Fielding PWM idle method */
+	GtkWidget *inj1_not_driven;		/* Inj1 not driven */
+	GtkWidget *inj1_table1;			/* Inj1 driven from table 1 */
+	GtkWidget *inj1_table2;			/* Inj1 driven from table 2 */
+	GtkWidget *inj2_not_driven;		/* Inj2 not driven */
+	GtkWidget *inj2_table1;			/* Inj2 driven from table 1 */
+	GtkWidget *inj2_table2;			/* Inj2 driven from table 2 */
+	GtkWidget *inj1_gammae_ena;		/* Inj1 gammae enabled */
+	GtkWidget *inj1_gammae_dis;		/* Inj1 gammae disabled */
+	GtkWidget *inj2_gammae_ena;		/* Inj2 gammae enabled */
+	GtkWidget *inj2_gammae_dis;		/* Inj2 gammae disabled */
 };
 
 /* Simple struct to store the pointers to the entry and button

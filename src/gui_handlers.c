@@ -524,28 +524,36 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			break;
 		case REQ_FUEL_DISP:
 			reqd_fuel->disp = (gint)value;
+			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_CYLS:
 			reqd_fuel->cyls = (gint)value;
+			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_RATED_INJ_FLOW:
 			reqd_fuel->rated_inj_flow = (gint)value;
+			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_RATED_PRESSURE:
 			reqd_fuel->rated_pressure = (gfloat)value;
+			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_ACTUAL_PRESSURE:
 			reqd_fuel->actual_pressure = (gfloat)value;
+			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_AFR:
 			reqd_fuel->target_afr = value;
+			req_fuel_change(reqd_fuel);
 			break;
 		case REQ_FUEL_1:
 			req_fuel_total_1 = value;
+			req_fuel_change(reqd_fuel);
 			check_req_fuel_limits();
 			break;
 		case REQ_FUEL_2:
 			req_fuel_total_2 = value;
+			req_fuel_change(reqd_fuel);
 			check_req_fuel_limits();
 			break;
 		case NUM_SQUIRTS_1:
@@ -606,6 +614,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
+			req_fuel_change(reqd_fuel);
 			if (num_cylinders_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
@@ -701,6 +710,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset))] 
 					= dload_val;	
 			}
+			req_fuel_change(reqd_fuel);
 			if (num_cylinders_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
@@ -846,6 +856,8 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.inj_per_cycle_1_spin),
 				tmp);
 		num_squirts_1 = (gint)tmp;
+		if (num_squirts_1 <1 )
+			num_squirts_1 = 1;
 
 		/* Config12 bits */
 		/* Number of injectors */
@@ -886,6 +898,8 @@ void update_ve_const()
 				GTK_SPIN_BUTTON(spinners.inj_per_cycle_2_spin),
 				tmp);
 		num_squirts_2 = (gint)tmp;
+		if (num_squirts_2 <1 )
+			num_squirts_2 = 1;
 
 		/* Config12 bits */
 		/* Number of injectors */
@@ -1378,7 +1392,80 @@ void check_config13(unsigned char tmp)
 
 void check_tblcnf(unsigned char tmp)
 {
-	printf("check_tblcnf() not written yet\n");
+	unsigned char val = 0;
+	if ((tmp &0x1) == 0)
+	{	/* B&G Simul style both channels driven from table 1*/
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+				(buttons.inj1_table1),
+				TRUE);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+				(buttons.inj2_table1),
+				TRUE);
+		/* all other bits don't matter, quit now... */
+		return;
+	}
+	val = (tmp >> 1)&0x3;  //(interested in bits 1-2) 
+	switch (val)
+	{
+		case 0:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj1_not_driven),
+					TRUE);
+			break;
+		case 1:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj1_table1),
+					TRUE);
+			break;
+		case 2:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj1_table2),
+					TRUE);
+			break;
+		default:
+			fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
+	}
+	val = (tmp >> 3)&0x3;  //(interested in bits 3-4) 
+	switch (val)
+	{
+		case 0:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj2_not_driven),
+					TRUE);
+			break;
+		case 1:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj2_table1),
+					TRUE);
+			break;
+		case 2:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj2_table2),
+					TRUE);
+			break;
+		default:
+			fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
+	}
+	/* Gammae for injection channel 1 */
+	if (((tmp >> 5)&0x1) == 0)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+				(buttons.inj1_gammae_dis),
+				TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+				(buttons.inj1_gammae_ena),
+				TRUE);
+		
+	/* Gammae for injection channel 2 */
+	if (((tmp >> 6)&0x1) == 0)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+				(buttons.inj2_gammae_dis),
+				TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+				(buttons.inj2_gammae_ena),
+				TRUE);
+	return;	
 }
 
 void set_enhanced_idle_state(gboolean state)

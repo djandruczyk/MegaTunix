@@ -109,6 +109,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	reqd_fuel->cyls_spin = spinner;
 	reqfuel_1_widgets = g_list_append(reqfuel_1_widgets,(gpointer)spinner);
 	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
+	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
 	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
@@ -608,6 +609,7 @@ void build_constants_2(GtkWidget *parent_frame)
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
 	spinners.cylinders_2_spin = spinner;
 	reqd_fuel->cyls_spin = spinner;
+	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
 	reqfuel_2_widgets = g_list_append(reqfuel_2_widgets,(gpointer)spinner);
 	interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
 	gtk_widget_set_size_request(spinner,60,-1);
