@@ -18,6 +18,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <structures.h>
+#include <threads.h>
 #include <vetable_gui.h>
 
 
@@ -35,6 +36,7 @@ void rescale_table(void * data)
 	gint load_bins = -1;
 	gint page = 0;
 	gint offset = 0;
+	gboolean ign_parm = FALSE;
 	extern gint **ms_data;
 	gboolean is_spark = FALSE;
 	GtkWidget *scaler = NULL;
@@ -65,11 +67,13 @@ void rescale_table(void * data)
 				widget = (GtkWidget *)g_list_nth_data(list,j);
 				if ((gboolean)g_object_get_data(G_OBJECT(widget),"marked"))
 				{
+					ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 					page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 					offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 					value = ms_data[page][offset];
 					value = (value*percentage)/100.0;
-					ms_data[page][offset] = value;
+					ms_data[page][offset] = (gint)value;
+					write_ve_const(widget,page,offset,(gint)value,ign_parm);
 					g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
 
 					widget_grab(widget,NULL,GINT_TO_POINTER(TRUE));

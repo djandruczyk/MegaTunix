@@ -332,6 +332,8 @@
 			  <property name="adjustment">0 0 134.64 0.3516 3.516 3.516</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:55:04 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -357,6 +359,8 @@
 			  <property name="adjustment">0 0 89.64 0.3516 3.516 3.516</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:55:10 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -382,6 +386,8 @@
 			  <property name="adjustment">1 0 10 1 2 2</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:55:16 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -487,6 +493,8 @@
 			  <property name="adjustment">0 0 25500 100 1000 1000</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:54:12 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -512,6 +520,8 @@
 			  <property name="adjustment">0 0 89.64 0.3516 3.516 3.516</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:54:24 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -537,6 +547,8 @@
 			  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:54:38 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -562,6 +574,8 @@
 			  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:54:48 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -587,6 +601,8 @@
 			  <property name="adjustment">0 0 25500 100 1000 1000</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 19 Sep 2004 19:54:56 GMT"/>
 			  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+			  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+			  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
