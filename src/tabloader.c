@@ -22,6 +22,7 @@
 #include <tabloader.h>
 #include <glade-private.h>
 
+gboolean tabs_loaded = FALSE;
 
 void load_gui_tabs()
 {
@@ -72,6 +73,7 @@ void load_gui_tabs()
 		i++;
 		
 	}
+	tabs_loaded = TRUE;
 
 }
 
@@ -81,6 +83,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = (GtkWidget *) value;
 	extern GtkWidget *ve_widgets[];
+	extern GtkWidget *ign_widgets[];
 	gchar * section = g_strdup((gchar *)widget_name);
 	gchar ** keys = NULL;
 	gint keytypes[50];	/* bad idea to be fixed size!! */
@@ -88,6 +91,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint num_keytypes = 0;
 	gint i = 0;
 	gint tmpi = 0;
+	gboolean ign_parm = FALSE;
 
 	//	printf("bind_data to key %s\n",(gchar *)key);	
 
@@ -109,8 +113,14 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	}
 	tmpi = -1;
 	cfg_read_int(cfgfile,section,"offset",&tmpi);
+	cfg_read_int(cfgfile,section,"ign_parm",&ign_parm);
 	if (tmpi >= 0)
-		ve_widgets[tmpi] = widget;
+	{
+		if (ign_parm)
+			ign_widgets[tmpi] = widget;
+		else
+			ve_widgets[tmpi] = widget;
+	}
 	for (i=0;i<num_keys;i++)
 	{
 		switch((DataTypes)keytypes[i])
@@ -130,6 +140,13 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 						g_strdup(keys[i]),
 						GINT_TO_POINTER(tmpi));	
 				dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
+				break;
+			case BOOL:
+				cfg_read_boolean(cfgfile,section,keys[i],&tmpi);
+				g_object_set_data(G_OBJECT(widget),
+						g_strdup(keys[i]),
+						GINT_TO_POINTER(tmpi));	
+				dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
 				break;
 		}
 	}

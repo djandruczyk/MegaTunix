@@ -49,6 +49,7 @@ void io_cmd(IoCommands cmd, gpointer data)
 	struct Io_Message *message = NULL;
 	extern gint ecu_caps;
 	extern struct IoCmds *cmds;
+	extern gboolean tabs_loaded;
 	gint tmp = -1;
 
 	/* This function is the bridge from the main GTK thread (gui) to
@@ -80,12 +81,16 @@ void io_cmd(IoCommands cmd, gpointer data)
 			message = g_new0(struct Io_Message,1);
 			message->command = INTERROGATION;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-			tmp = UPD_LOAD_GUI_TABS;
-			g_array_append_val(message->funcs,tmp);
-			g_async_queue_push(io_queue,(gpointer)message);
-			//tmp = UPD_READ_VE_CONST;
-			//g_array_append_val(message->funcs,tmp);
-			//g_async_queue_push(io_queue,(gpointer)message);
+			printf("called IO_INTERROGATE_ECU\n");
+			if (!tabs_loaded)
+			{
+				tmp = UPD_LOAD_GUI_TABS;
+				g_array_append_val(message->funcs,tmp);
+				g_async_queue_push(io_queue,(gpointer)message);
+			}
+//			tmp = UPD_READ_VE_CONST;
+//			g_array_append_val(message->funcs,tmp);
+//			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_COMMS_TEST:
 			message = g_new0(struct Io_Message,1);

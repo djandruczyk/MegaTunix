@@ -89,7 +89,6 @@ void force_an_update()
               gtk_timeout_add((int)((3.0/update_rate)*1000.0),
                                 (GtkFunction)cancel_forced_update,NULL);
       }
-
 }
 
 gboolean cancel_forced_update()

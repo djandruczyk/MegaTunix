@@ -280,5 +280,6 @@ typedef enum
 {
 	INT = 0x50,
 	STRING,
+	BOOL,
 }DataTypes;
 #endif

@@ -59,6 +59,8 @@ void build_string_2_enum_table()
 	/* Data Types for glade data binder.... */
 	g_hash_table_insert(str_2_enum,"_INT_",GINT_TO_POINTER(INT));
 	g_hash_table_insert(str_2_enum,"_STRING_",GINT_TO_POINTER(STRING));
+	g_hash_table_insert(str_2_enum,"_BOOL_",GINT_TO_POINTER(BOOL));
+
 	g_hash_table_insert(str_2_enum,"_NOTHING_",GINT_TO_POINTER(CONV_NOTHING));
 	g_hash_table_insert(str_2_enum,"_MULTIPLY_",GINT_TO_POINTER(CONV_MULT));
 	g_hash_table_insert(str_2_enum,"_DIVIDE_",GINT_TO_POINTER(CONV_DIV));

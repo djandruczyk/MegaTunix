@@ -10,6 +10,7 @@ Rt_Cmd_Key=CMD_A_0
 VE_Cmd_Key=CMD_V_0
 Ign_Cmd_Key=CMD_I_0
 Raw_Mem_Cmd_Key=CMD_F_0
+MultiPage=FALSE
 
 [bytecounts]
 CMD_A_0=27
@@ -21,3 +22,6 @@ CMD_S_0=30
 CMD_?_0=0
 CMD_I_0=128
 CMD_F_0=0
+
+[gui]
+LoadTabs=vetable_8x8_1,sparktable_8x8_1

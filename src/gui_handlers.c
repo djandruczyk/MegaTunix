@@ -1200,15 +1200,9 @@ gboolean key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	if(event->keyval == GDK_Shift_L)
 	{
 		if (event->type == GDK_KEY_PRESS)
-		{
 			grab_allowed = TRUE;
-			printf("shift_pressed\n");
-		}
 		else
-		{
-			printf("shift_released\n");
 			grab_allowed = FALSE;
-		}
 	}
 	return TRUE;
 }
