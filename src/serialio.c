@@ -11,8 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+
 #include <comms_gui.h>
 #include <config.h>
+#include <comms.h>
 #include <dataio.h>
 #include <defines.h>
 #include <debugging.h>

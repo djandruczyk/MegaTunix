@@ -466,6 +466,8 @@ void restore_all_ms_settings(gchar *filename)
 	gchar **keys = NULL;
 	gint num_keys = 0;
 	extern gint **ms_data;
+	extern gint **ms_data_last;
+	extern GList ***ve_widgets;
 
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -491,7 +493,14 @@ void restore_all_ms_settings(gchar *filename)
 				if (num_keys != firmware->page_params[i]->length)
 					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->length),CRITICAL);
 				for (x=0;x<num_keys;x++)
+				{
 					ms_data[i][x]=atoi(keys[x]);
+					if (ms_data[i][x] != ms_data_last[i][x])
+					{
+						write_ve_const(NULL,i,x,ms_data[i][x],firmware->page_params[i]->is_spark);
+					}
+				}
+
 				g_strfreev(keys);
 				g_free(tmpbuf);
 			}

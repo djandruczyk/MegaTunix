@@ -399,7 +399,6 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
 	tmpf = g_ascii_strtod(text,NULL);
-	printf("entry handler for page %i, offset %i\n",page,offset);
 	//printf("base %i, text %s int val %i, float val %f \n",base,text,tmpi,tmpf);
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 
@@ -641,7 +640,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	tmpi = (int)(value+.001);
 
 
-	printf("spinbutton handler for page %i, offset %i\n",page,offset);
 	switch ((SpinButton)handler)
 	{
 		case SER_INTERVAL_DELAY:

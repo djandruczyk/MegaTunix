@@ -4,7 +4,7 @@
 
 [global]
 description=Object data map for the Spark Advance Table (MSnS-Extra)
-tab_name=_Spark Advance
+tab_name=_Spark Table 2
 id_prefix=SP2_
 groups=load,rpm,sparkspin
 
