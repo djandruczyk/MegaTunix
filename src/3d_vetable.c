@@ -42,8 +42,7 @@ static GLuint font_list_base;
 
 #define DEFAULT_WIDTH  475
 #define DEFAULT_HEIGHT 320                                                                                  
-static gboolean winstat[8] = {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
-
+static GHashTable *winstat = NULL;
 /*!
  \brief create_ve3d_view does the initial work of creating the 3D vetable
  widget, it creates the datastructures, creates the window, initializes OpenGL
@@ -75,10 +74,13 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	}
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 
-	if (winstat[table_num] == TRUE)
+	if (winstat == NULL)
+		winstat = g_hash_table_new(NULL,NULL);
+
+	if ((gboolean)g_hash_table_lookup(winstat,(gpointer)table_num) == TRUE)
 		return TRUE;
 	else
-		winstat[table_num] = TRUE;
+		g_hash_table_insert(winstat,(gpointer)table_num, (gpointer)TRUE);
 
 	ve_view = g_malloc0(sizeof(struct Ve_View_3D));
 	initialize_ve3d_view((void *)ve_view);
@@ -287,7 +289,7 @@ gint free_ve3d_view(GtkWidget *widget)
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	store_list("burners",g_list_remove(
 			get_list("burners"),(gpointer)ve_view->burn_but));
-	winstat[ve_view->table_num] = FALSE;
+	g_hash_table_remove(winstat,(gpointer)ve_view->table_num);
 	g_object_set_data(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("ve_view_%i",ve_view->table_num)),"ve_view",NULL);
 	deregister_widget(g_strdup_printf("ve_view_%i",ve_view->table_num));
 	deregister_widget(g_strdup_printf("rpmcoord_label_%i",ve_view->table_num));
@@ -830,15 +832,15 @@ void ve3d_draw_axis(void *ptr)
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
 
-	top = ((gfloat)(ve_view->z_max+20))/ve_view->z_div;
+	top = ((gfloat)(ve_view->z_max+10))/ve_view->z_div;
 	bottom = ((gfloat)(ve_view->z_min-10))/ve_view->z_div;
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.7,0.7,0.7);
 
 	/* Draw horizontal background grid lines  
-	   starting at 0 VE and working up to VE+20% */
-	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+20);i = i + 10)
+	   starting at 0 VE and working up to VE+10% */
+	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+10);i = i + 10)
 	{
 		glBegin(GL_LINE_STRIP);
 		glVertex3f(
@@ -942,7 +944,7 @@ void ve3d_draw_axis(void *ptr)
 	}
 
 	/* Draw VE labels */
-	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+20);i=i+10)
+	for (i=10*(ve_view->z_min/10);i<(ve_view->z_max+10);i=i+10)
 	{
 		label = g_strdup_printf("%i",i);
 		ve3d_draw_text(label,

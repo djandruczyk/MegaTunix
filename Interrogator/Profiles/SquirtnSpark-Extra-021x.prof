@@ -13,8 +13,7 @@ Burn_Cmd=B
 MultiPage=TRUE
 RequirePageChange=TRUE
 Page_Cmd=P
-#TotalTables=10
-TotalTables=7
+TotalTables=10
 # Fuel1, Fuel2, Fuel3, Spark1, Spark2, AFR1, AFR2, Boost1, Boost2, Boost3
 TotalPages=8
 
@@ -101,6 +100,42 @@ y_base_offset=152
 tbl_base_offset=80
 x_bincount=8
 y_bincount=8
+
+[table_7]
+is_spark=FALSE
+table_name=Boost Table 1, MSnSpark-Extra
+x_page=7
+y_page=7
+tbl_page=7
+x_base_offset=36
+y_base_offset=42
+tbl_base_offset=0
+x_bincount=6
+y_bincount=6
+
+[table_8]
+is_spark=FALSE
+table_name=Boost Table 2, MSnSpark-Extra
+x_page=7
+y_page=7
+tbl_page=7
+x_base_offset=84
+y_base_offset=90
+tbl_base_offset=48
+x_bincount=6
+y_bincount=6
+
+[table_9]
+is_spark=FALSE
+table_name=Boost Table 3, MSnSpark-Extra
+x_page=7
+y_page=7
+tbl_page=7
+x_base_offset=132
+y_base_offset=138
+tbl_base_offset=96
+x_bincount=6
+y_bincount=6
 
 [page_0]
 length=212
@@ -201,8 +236,8 @@ CMD_UPPER_S=32
 [gui]
 RealtimeMapFile=MSnS-Extra
 SliderMapFile=msns-extra-firmware
-LoadTabs=runtime,datalogging,logviewer,tools,vetable_12x12e,vetable_12x12e,vetable_12x12e,sparktable_12x12e,sparktable_12x12e,afrtable_8x8e,afrtable_8x8e,raweditor
-TabConfs=runtime,datalogging,logviewer,tools,vetable_12x12e-E_1,vetable_12x12e-E_2,vetable_12x12e-E_3,sparktable_12x12e-E_1,sparktable_12x12e-E_2,afrtable_8x8e_E_1,afrtable_8x8e_E_2,raweditor
+LoadTabs=runtime,datalogging,logviewer,tools,vetable_12x12e,vetable_12x12e,vetable_12x12e,sparktable_12x12e,sparktable_12x12e,afrtable_8x8e,afrtable_8x8e,boost_6x6e,boost_6x6e,raweditor
+TabConfs=runtime,datalogging,logviewer,tools,vetable_12x12e-E_1,vetable_12x12e-E_2,vetable_12x12e-E_3,sparktable_12x12e-E_1,sparktable_12x12e-E_2,afrtable_8x8e-E_1,afrtable_8x8e-E_2,boost_6x6e-E_1,boost_6x6e-E_2,raweditor
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map
