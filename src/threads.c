@@ -192,9 +192,6 @@ void io_cmd(Io_Command cmd, gpointer data)
 void *serial_io_handler(gpointer data)
 {
 	struct Io_Message *message = NULL;	
-	/* Create Queue to listen for commands */
-	io_queue = g_async_queue_new();
-	dispatch_queue = g_async_queue_new();
 
 	/* Endless Loop, wiat for message, processs and repeat... */
 	while (1)

@@ -41,6 +41,9 @@ struct Io_Cmds *cmds;
 
 gint main(gint argc, gchar ** argv)
 {
+	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *dispatch_queue;
+
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 
@@ -60,6 +63,10 @@ gint main(gint argc, gchar ** argv)
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();
+
+	/* Create Queue to listen for commands */
+	io_queue = g_async_queue_new();
+	dispatch_queue = g_async_queue_new();
 
 	read_config();
 	setup_gui();		
