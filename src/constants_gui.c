@@ -304,6 +304,7 @@ void build_constants_1(GtkWidget *parent_frame)
         buttons.simul_but = button;
 	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
         g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
         g_object_set_data(G_OBJECT(button),"dl_type",
@@ -318,6 +319,7 @@ void build_constants_1(GtkWidget *parent_frame)
         button = gtk_radio_button_new_with_label(group,"Alternate");
         buttons.alternate_but = button;
 	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
+        g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
         g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"dl_type",

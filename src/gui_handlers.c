@@ -301,17 +301,22 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 
 gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
-	gint config_num = 0;
-	gint bit_pos = 0;
-	gint bit_val = 0;
-	gint bitmask = 0;
-	gint dload_val = 0;
+	gint config_num = -1;
+	gint bit_pos = -1;
+	gint bit_val = -1;
+	gint bitmask = -1;
+	gint dload_val = -1;
 	unsigned char tmp = 0;
-	gint offset = 0;
-	gint dl_type = 0;
+	gint offset = -1;
+	gint dl_type = -1;
+	gint single = -1;
 	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const = NULL;
+	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
+
+	if (dualtable)
+		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 
 	if (paused_handlers)
 		return TRUE;
@@ -321,9 +326,17 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
+	single = (gint)g_object_get_data(G_OBJECT(widget),"single");
+	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	
+	/* to handle check buttons */
+	if (single == 1)
+	{
+		bit_val = gtk_toggle_button_get_active( 
+				GTK_TOGGLE_BUTTON (widget));
+	}
 
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
+	if ((config_num == 14)||(gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))))
 	{
 		/* If control reaches here, the toggle button is down */
 		switch (config_num)
@@ -334,56 +347,61 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp | (bit_val << bit_pos);
 				ve_const->config11.value = tmp;
 				dload_val = tmp;
-				offset = 116;
+				//offset = 116;
 				check_config11(dload_val);
 				break;
+			/*
 			case 12:
 				tmp = ve_const->config12.value;
-				tmp = tmp & ~bitmask;	/*clears bits */
+				tmp = tmp & ~bitmask;	// clears bits 
 				tmp = tmp | (bit_val << bit_pos);
 				ve_const->config12.value = tmp;
 				dload_val = tmp;
 				offset = 117;
 				break;
+			*/
 			case 13:
 				tmp = ve_const->config13.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
 				tmp = tmp | (bit_val << bit_pos);
-					ve_const->config13.value = tmp;
+				ve_const->config13.value = tmp;
 				dload_val = tmp;
-				offset = 118;
+				//offset = 118;
 				check_config13(dload_val);
 				break;
-			case 14:
-				/*SPECIAL*/
-				offset = 92;
-				if (bit_val)
+			case 14: /* either alt/simul or tblcnf */
+				if (dualtable)
 				{
-					ve_const->alternate=1;
-					dload_val = 1;
+					tmp = ve_const_dt1->tblcnf.value;
+					tmp = tmp & ~bitmask;	/*clears bits */
+					tmp = tmp | (bit_val << bit_pos);
+					ve_const_dt1->tblcnf.value = tmp;
+					dload_val = tmp;
+					check_tblcnf(dload_val,FALSE);
 				}
 				else
 				{
-					ve_const->alternate=0;
-					dload_val = 0;
+					if (bit_val)
+					{
+						ve_const->alternate = 1;
+						dload_val = 1;
+					}
+					else
+					{
+						ve_const->alternate = 0;
+						dload_val = 0;
+					}
+					if (g_list_find(offsets_1,GINT_TO_POINTER(offset))==NULL)
+					{
+						offsets_1 = g_list_append(offsets_1,GINT_TO_POINTER(offset));
+						offset_data_1[g_list_index(offsets_1,GINT_TO_POINTER(offset))] = dload_val;	
+							
+					}
+					else
+						offset_data_1[g_list_index(offsets_1,GINT_TO_POINTER(offset))] = dload_val;	
+					if (!err_flag)
+						check_req_fuel_limits();
 				}
-				if (g_list_find(offsets_1,
-							GINT_TO_POINTER(offset))==NULL)
-				{
-					offsets_1 = g_list_append(offsets_1,
-							GINT_TO_POINTER(offset));
-					offset_data_1[g_list_index(offsets_1,
-							GINT_TO_POINTER(offset))] 
-						= dload_val;	
-				}
-				else
-				{
-					offset_data_1[g_list_index(offsets_1,
-							GINT_TO_POINTER(offset))] 
-						= dload_val;	
-				}
-				if (!err_flag)
-					check_req_fuel_limits();
 				break;
 			default:
 				printf(" Toggle button NOT handled ERROR!!, contact author\n");
@@ -790,7 +808,7 @@ void update_ve_const()
 	{
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
-		check_tblcnf(ve_const_dt1->tblcnf.value);
+		check_tblcnf(ve_const_dt1->tblcnf.value,TRUE);
 	}
 
 	check_config11(ve_const->config11.value);
@@ -1390,20 +1408,36 @@ void check_config13(unsigned char tmp)
 		
 }
 
-void check_tblcnf(unsigned char tmp)
+void check_tblcnf(unsigned char tmp, gboolean update)
 {
+
 	unsigned char val = 0;
 	if ((tmp &0x1) == 0)
 	{	/* B&G Simul style both channels driven from table 1*/
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
-				(buttons.inj1_table1),
-				TRUE);
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
-				(buttons.inj2_table1),
-				TRUE);
+		if (update)
+		{
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj1_table1),
+					TRUE);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.inj2_table1),
+					TRUE);
+		}
+		set_table_mapping_state(FALSE);
 		/* all other bits don't matter, quit now... */
 		return;
 	}
+	else
+	{
+		set_table_mapping_state(TRUE);
+		if (update)
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
+					(buttons.dt_mode),
+					TRUE);
+	}
+	if (update == FALSE)
+		return;
+	/* If update is true proceed to update all controls */
 	val = (tmp >> 1)&0x3;  //(interested in bits 1-2) 
 	switch (val)
 	{
@@ -1447,25 +1481,23 @@ void check_tblcnf(unsigned char tmp)
 			fprintf(stderr,__FILE__":bits 1-2 in tblcnf invalid\n");
 	}
 	/* Gammae for injection channel 1 */
-	if (((tmp >> 5)&0x1) == 0)
+	val = (tmp >> 5)&0x1;
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
-				(buttons.inj1_gammae_dis),
-				TRUE);
-	else
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
-				(buttons.inj1_gammae_ena),
-				TRUE);
+				(buttons.inj1_gammae),
+				val);
 		
 	/* Gammae for injection channel 2 */
-	if (((tmp >> 6)&0x1) == 0)
+	val =  (tmp >> 6)&0x1;
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
-				(buttons.inj2_gammae_dis),
-				TRUE);
-	else
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
-				(buttons.inj2_gammae_ena),
-				TRUE);
+				(buttons.inj2_gammae),
+				val);
 	return;	
+}
+
+void set_table_mapping_state(gboolean state)
+{
+	extern GList *table_map_widgets;
+        g_list_foreach(table_map_widgets, set_widget_state,(gpointer)state);
 }
 
 void set_enhanced_idle_state(gboolean state)

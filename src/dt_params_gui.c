@@ -19,6 +19,7 @@
 #include <gui_handlers.h>
 #include <structures.h>
 
+GList *table_map_widgets;
 
 
 void build_dt_params(GtkWidget *parent_frame)
@@ -29,7 +30,6 @@ void build_dt_params(GtkWidget *parent_frame)
 	GtkWidget *label;
 	GtkWidget *frame;
 	GtkWidget *table;
-	GtkWidget *sep;
 	GSList *group = NULL;
 	extern GList *store_widgets;
 	extern struct DynamicButtons buttons;
@@ -48,129 +48,232 @@ void build_dt_params(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
 
-	table = gtk_table_new(4,3,FALSE);
+	table = gtk_table_new(4,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	label = gtk_label_new("Inj Chan. 1 mapping");
+	label = gtk_label_new("Dual Table Mode");
 	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+	gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-        button = gtk_radio_button_new_with_label(NULL,"Not Driven");
+	/* Dualtable Mode Enable button */
+        button = gtk_check_button_new();
+	buttons.dt_mode = button;
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Off");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Table 1");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Table 2");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Gamma E");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 4, 5, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 20, 0);
+
+	label = gtk_label_new("Injector 1");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Injector 2");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	/* Radio buttons for injector Channel 1 */
+	/* Inj 1 not driven */
+        button = gtk_radio_button_new(NULL);
 	buttons.inj1_not_driven = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(6));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 2, 3,
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-        button = gtk_radio_button_new_with_label(group,"Driven from Table 1");
+	/* Inj 1 bound to table 1 */
+        button = gtk_radio_button_new(group);
 	buttons.inj1_table1 = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(6));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-        button = gtk_radio_button_new_with_label(group,"Driven from Table 2");
+	/* Inj 1 bound to table 2 */
+        button = gtk_radio_button_new(group);
 	buttons.inj1_table2 = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 3, 4,
-			(GtkAttachOptions) (GTK_FILL),
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(6));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 2, 3,
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	
-	sep = gtk_vseparator_new();
-	gtk_table_attach (GTK_TABLE (table), sep, 1, 2, 0, 4,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
-	label = gtk_label_new("Inj Chan. 2 mapping");
-	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+	/* Inj 1 Gamma E enable */
+        button = gtk_check_button_new();
+	buttons.inj1_gammae = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(5));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(32));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 2, 3,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 20, 0);
 
-        button = gtk_radio_button_new_with_label(NULL,"Not Driven");
+
+	/* Radio buttons for injector Channel 2 */
+	/* Inj 2 not driven */
+        button = gtk_radio_button_new(NULL);
 	buttons.inj2_not_driven = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(24));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 3, 4,
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-        button = gtk_radio_button_new_with_label(group,"Driven from Table 1");
+	/* Inj 2 bound to table 1 */
+        button = gtk_radio_button_new(group);
 	buttons.inj2_table1 = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-        button = gtk_radio_button_new_with_label(group,"Driven from Table 2");
-	buttons.inj2_table2 = button;
-	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
-        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(24));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	
-	frame = gtk_frame_new("Gammae Settings");
-	dt_widgets = g_list_append(dt_widgets,(gpointer)frame);
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
-
-	table = gtk_table_new(3,5,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table), 5);
-	gtk_container_add(GTK_CONTAINER(frame),table);
-
-	label = gtk_label_new("Chan. 1 Gammae");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-        button = gtk_radio_button_new_with_label(NULL,"Applied");
-	buttons.inj1_gammae_ena = button;
+	/* Inj 2 bound to table 2 */
+        button = gtk_radio_button_new(group);
+	buttons.inj2_table2 = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+        g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(2));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(24));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 3, 4,
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-        button = gtk_radio_button_new_with_label(group,"Ignored");
-	buttons.inj1_gammae_dis = button;
+	/* Inj 2 Gamma E enable */
+        button = gtk_check_button_new();
+	buttons.inj2_gammae = button;
+	table_map_widgets = g_list_append(table_map_widgets,(gpointer)button);
 	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
-        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Chan. 2 Gammae");
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-        button = gtk_radio_button_new_with_label(NULL,"Applied");
-	buttons.inj2_gammae_ena = button;
-	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
-        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-        button = gtk_radio_button_new_with_label(group,"Ignored");
-	buttons.inj2_gammae_dis = button;
-	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
-        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
-	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+	g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(14));
+        g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(6));
+        g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(64));
+        g_object_set_data(G_OBJECT(button),"single",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+	g_signal_connect(G_OBJECT(button),"toggled",
+                        G_CALLBACK(bitmask_button_handler),
+                        NULL);
+	gtk_table_attach (GTK_TABLE (table), button, 4, 5, 3, 4,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 20, 0);
 
 	frame = gtk_frame_new("Commands");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
