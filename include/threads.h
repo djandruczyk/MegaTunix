@@ -20,7 +20,7 @@
 /* Prototypes */
 void io_cmd(Io_Command, gpointer);	/* Send message down the queue */
 void *thread_dispatcher(gpointer);	/* thread that processes messages */
-void write_ve_const(GtkWidget *, gint, gint, gint, gboolean);
+void write_ve_const(GtkWidget *, gint, gint, gint, gboolean, gboolean);
 void thread_update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
 void thread_update_widget(gchar *, WidgetType, gchar *);
 		

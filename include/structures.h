@@ -401,6 +401,7 @@ struct Output_Data
 	gint offset;		/*! Offset in block */
 	gint value;		/*! Value to send */
 	gboolean ign_parm;	/*! Ignition parameter, True or False */
+	gboolean queue_update;	/*! If true queues a member widget update */
 };
 
 

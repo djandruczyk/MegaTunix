@@ -498,6 +498,7 @@ void restore_all_ecu_settings(gchar *filename)
 			cfg_free(cfgfile);
 			return;
 		}
+		set_title("Restoring ECU settings from File\n");
 		for (page=0;page<firmware->total_pages;page++)
 		{
 			writecount = 0;
@@ -515,7 +516,8 @@ void restore_all_ecu_settings(gchar *filename)
 					dload_val = atoi(keys[offset]);
 					if (dload_val != ms_data_last[page][offset])
 					{
-						write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark);
+		//				printf("writing data for page %i, offset %i\n",page,offset);
+						write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark, FALSE);
 						writecount++;
 					}
 				}
@@ -527,5 +529,5 @@ void restore_all_ecu_settings(gchar *filename)
 				io_cmd(IO_BURN_MS_FLASH,NULL);
 		}
 	}
-	update_ve_const();
+	io_cmd(IO_UPDATE_VE_CONST,NULL);
 }

@@ -41,7 +41,6 @@
 #include <unistd.h>
 
 
-gboolean thread_protect = TRUE;
 extern GAsyncQueue *dispatch_queue;
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
@@ -98,7 +97,6 @@ trypop:
 		len = message->funcs->len;
 		for (i=0;i<len;i++)
 		{
-			thread_protect = TRUE;
 			val = g_array_index(message->funcs,UpdateFunction, i);
 
 			switch ((UpdateFunction)val)
@@ -134,38 +132,42 @@ trypop:
 				case UPD_POPULATE_DLOGGER:
 					if (connected)
 					{
-						set_title("Populating Datalogger");
+						set_title("Populating Datalogger...");
 						populate_dlog_choices();
 					}
 					break;
 				case UPD_LOAD_RT_SLIDERS:
 					if (connected)
 					{
-						set_title("Loading RT Sliders");
+						set_title("Loading RT Sliders...");
 						load_sliders();
 						reset_temps(GINT_TO_POINTER(temp_units));
+						set_title("RT Sliders Loaded...");
 					}
 					break;
 				case UPD_LOAD_REALTIME_MAP:
-					if (connected)
+					if ((connected) || (offline))
 					{
-						set_title("Loading RT Map");
+						set_title("Loading RT Map...");
 						load_realtime_map();
+						set_title("RT Map Loaded...");
 					}
 					break;
 				case UPD_LOAD_GUI_TABS:
-					if (connected)
+					if ((connected) || (offline))
 					{
-						set_title("Loading Gui Tabs");
+						set_title("Loading Gui Tabs...");
 						load_gui_tabs();
 						reset_temps(GINT_TO_POINTER(temp_units));
+						set_title("Gui Tabs Loaded...");
 					}
 					break;
 				case UPD_READ_VE_CONST:
 					if (connected)
 					{
-						set_title("Reading VE/Constants");
+						set_title("Reading VE/Constants...");
 						io_cmd(IO_READ_VE_CONST,NULL);
+						set_title("VE/Constants Read...");
 					}
 					break;
 				case UPD_REENABLE_INTERROGATE_BUTTON:
@@ -183,9 +185,9 @@ trypop:
 						update_runtime_vars();
 					break;
 				case UPD_VE_CONST:
-					set_title("Updating Gui");
+					set_title("Updating Controls...");
 					paused_handlers = TRUE;
-					if (connected)
+					if ((connected) || (offline))
 						update_ve_const();
 					paused_handlers = FALSE;
 					set_title("Ready...");
@@ -221,7 +223,6 @@ trypop:
 					break;
 
 			}
-		thread_protect = FALSE;
 
 		gdk_threads_enter();
 		while (gtk_events_pending())

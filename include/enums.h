@@ -225,6 +225,7 @@ typedef enum
 	BURN_CMD = 0x120,
 	READ_CMD,
 	WRITE_CMD,
+	NULL_CMD,
 	COMMS_TEST,
 	INTERROGATION
 }CmdType;
@@ -238,6 +239,9 @@ typedef enum
 	IO_READ_RAW_MEMORY,
 	IO_BURN_MS_FLASH,
 	IO_WRITE_DATA,
+	IO_UPDATE_VE_CONST,
+	IO_LOAD_REALTIME_MAP,
+	IO_LOAD_GUI_TABS,
 }Io_Command;
 
 typedef enum

@@ -18,7 +18,7 @@ key_types=_ENUM_,_INT_
 handler=_EXPORT_VETABLE_
 page=0
 
-[tools_revert_button]
+[tools_undo_vex_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
 handler=_REVERT_TO_BACKUP_

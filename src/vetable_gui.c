@@ -75,10 +75,7 @@ void rescale_table(gchar * widget_name)
 					offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 					value = ms_data[page][offset];
 					value = (value*percentage)/100.0;
-					//ms_data[page][offset] = (gint)value;
-					write_ve_const(widget,page,offset,(gint)value,ign_parm);
-					g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-
+					write_ve_const(widget, page, offset, (gint)value, ign_parm, TRUE);
 					widget_grab(widget,NULL,GINT_TO_POINTER(TRUE));
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(scaler),100.0);
 

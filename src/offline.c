@@ -26,6 +26,7 @@
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <tabloader.h>
+#include <threads.h>
 
 
 gchar * offline_firmware_choice = NULL;
@@ -48,9 +49,7 @@ void set_offline_mode(void)
 	struct Canidate *canidate = NULL;
 	extern struct Firmware_Details *firmware;
 	extern gint ecu_caps;
-	extern gint temp_units;
 	extern gboolean interrogated;
-	extern gboolean thread_protect;
 	gint i = 0;
 
 	cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
@@ -110,11 +109,10 @@ void set_offline_mode(void)
 	g_array_free(cmd_array,TRUE);
 
 	interrogated = TRUE;
-	load_realtime_map();
-	thread_protect = FALSE;
-	load_gui_tabs();
-	thread_protect = TRUE;
-	reset_temps(GINT_TO_POINTER(temp_units));
+	offline = TRUE;
+
+	io_cmd(IO_LOAD_REALTIME_MAP,NULL);
+	io_cmd(IO_LOAD_GUI_TABS,NULL);
 
 	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
 	if (GTK_IS_WIDGET(widget))
@@ -123,7 +121,6 @@ void set_offline_mode(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-	offline = TRUE;
 
 }
 

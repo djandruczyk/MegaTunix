@@ -131,6 +131,40 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
+		case IO_UPDATE_VE_CONST:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->command = NULL_CMD;
+			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
+			tmp = UPD_VE_CONST;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_ENABLE_THREE_D_BUTTONS;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_SET_STORE_BLACK;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_REENABLE_GET_DATA_BUTTONS;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_LOAD_REALTIME_MAP:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->command = NULL_CMD;
+			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
+			tmp = UPD_LOAD_REALTIME_MAP;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_LOAD_GUI_TABS:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->command = NULL_CMD;
+			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
+			tmp = UPD_LOAD_GUI_TABS;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+
 		case IO_READ_VE_CONST:
 			if (!firmware)
 				break;
@@ -204,8 +238,11 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message->payload = data;
 			message->need_page_change = TRUE;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
-			tmp = UPD_WRITE_STATUS;
-			g_array_append_val(message->funcs,tmp);
+			if (((struct Output_Data *)data)->queue_update)
+			{
+				tmp = UPD_WRITE_STATUS;
+				g_array_append_val(message->funcs,tmp);
+			}
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 	}
@@ -228,6 +265,7 @@ void *thread_dispatcher(gpointer data)
 	/* Endless Loop, wiat for message, processs and repeat... */
 	while (1)
 	{
+		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
 		switch ((CmdType)message->command)
 		{
@@ -268,6 +306,10 @@ void *thread_dispatcher(gpointer data)
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_ecu_flash skipped, NOT Connected!!\n"),CRITICAL);
 
 				break;
+			case NULL_CMD:
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tnull_command requested\n"),THREADS);
+				break;
+
 
 		}
 		/* Send rest of message back up to main context for gui
@@ -292,14 +334,12 @@ void *thread_dispatcher(gpointer data)
  \param ign_parm (gboolean) a flag stating if this requires special handling
  for being an MSnEDIS/MSnSpark ignition variable (alternate command for 
  sending the data to the ECU.)
+ \param queue_update (gboolean), if true queues a gui update, used to prevent
+ a horrible stall when doing an ECU restore or batch load...
  */
-void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm)
+void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm, gboolean queue_update)
 {
 	struct Output_Data *output = NULL;
-	extern gboolean offline;
-
-	if (offline)
-		return;
 
 	dbg_func(g_strdup_printf(__FILE__": write_ve_const()\n\t Sending page %i, offset %i, value %i, ign_parm %i\n",page,offset,value,ign_parm),SERIAL_WR);
 	output = g_new0(struct Output_Data, 1);
@@ -307,6 +347,7 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 	output->offset = offset;
 	output->value = value;
 	output->ign_parm = ign_parm;
+	output->queue_update = queue_update;
 	io_cmd(IO_WRITE_DATA,output);
 	return;
 }

@@ -223,7 +223,7 @@ gboolean vetable_import(struct Io_File *iofile)
 	}
 	dealloc_vex_struct(vex);
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),TRUE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
@@ -543,15 +543,20 @@ GIOStatus process_vex_range(struct Vex_Import *vex, ImportParserArg arg, gchar *
 			{
 				case VEX_RPM_RANGE:
 					vex->x_bins[i] = value;
-					update_logbar("tools_view",NULL,g_strdup("VEX Import: RPM bins loaded successfully \n"),TRUE,FALSE);
 					break;
 				case VEX_LOAD_RANGE:
 					vex->y_bins[i] = value;
-					update_logbar("tools_view",NULL,g_strdup("VEX Import: LOAD bins loaded successfully \n"),TRUE,FALSE);
 					break;
 				default:
 					break;
 			}
+	}
+	if (status == G_IO_STATUS_NORMAL)
+	{
+		if (arg == VEX_RPM_RANGE)
+			update_logbar("tools_view",NULL,g_strdup("VEX Import: RPM bins loaded successfully \n"),TRUE,FALSE);
+		if (arg == VEX_LOAD_RANGE)
+			update_logbar("tools_view",NULL,g_strdup("VEX Import: LOAD bins loaded successfully \n"),TRUE,FALSE);
 	}
 	return status;
 }
@@ -639,16 +644,16 @@ GIOStatus process_vex_table(struct Vex_Import *vex, gchar * string, GIOChannel *
 				goto breakout;
 			}
 			else
-			{
 				vex->tbl_bins[j+(i*x_bins)] = value;
-				update_logbar("tools_view","warning",g_strdup_printf("VEX Import: VE-Table loaded successfully\n"),TRUE,FALSE);
-			}
 		}		
 		g_string_free(a_line, TRUE);
 	}
 breakout:
 	if (status == G_IO_STATUS_NORMAL)
+	{
 		vex->got_ve = TRUE;
+		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: VE-Table loaded successfully\n"),TRUE,FALSE);
+	}
 	return status;
 }
 
@@ -758,7 +763,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	{
 		if (vex->x_bins[i] != ms_data_last[page][base+i])
 		{
-			write_ve_const(NULL,page,base+i,vex->x_bins[i],is_spark);
+			write_ve_const(NULL,page,base+i,vex->x_bins[i],is_spark, TRUE);
 			writecount++;
 		}
 	}
@@ -774,7 +779,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	{
 		if (vex->y_bins[i] != ms_data_last[page][base+i])
 		{
-			write_ve_const(NULL,page,base+i,vex->y_bins[i],is_spark);
+			write_ve_const(NULL,page,base+i,vex->y_bins[i],is_spark, TRUE);
 			writecount++;
 		}
 	}
@@ -790,7 +795,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	{
 		if (vex->tbl_bins[i] != ms_data_last[page][base+i])
 		{
-			write_ve_const(NULL,page,base+i,vex->tbl_bins[i],is_spark);
+			write_ve_const(NULL,page,base+i,vex->tbl_bins[i],is_spark, TRUE);
 			writecount++;
 		}
 	}
@@ -824,12 +829,13 @@ void revert_to_previous_data()
 			if (ms_data_backup[i][j] != ms_data[i][j])
 			{
 				ms_data[i][j] = ms_data_backup[i][j];
-				write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark);
+				write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark, FALSE);
 			}
 		}
 		memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->length);
 	}
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),FALSE);
+	io_cmd(IO_UPDATE_VE_CONST,NULL);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),FALSE);
 	update_logbar("tools_view","warning",g_strdup("Reverting to previous settings....\n"),TRUE,FALSE);
 	io_cmd(IO_BURN_MS_FLASH,NULL);
 }

@@ -116,7 +116,6 @@ void update_write_status(struct Output_Data *data)
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 
-
 	if ((g_list_length(ve_widgets[data->page][data->offset]) > 1))
 	{
 		paused_handlers = TRUE;
@@ -131,6 +130,7 @@ void update_write_status(struct Output_Data *data)
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
 	 */
+
 	for (i=0;i<firmware->total_pages;i++)
 	{
 	
@@ -175,7 +175,13 @@ void writeto_ecu(struct Io_Message *message)
 
 	g_static_mutex_lock(&mutex);
 
-	if ((!connected) || (offline))
+	if (offline)
+	{
+		ms_data[page][offset] = value;
+		g_static_mutex_unlock(&mutex);
+		return;		/* can't write anything if offline */
+	}
+	if (!connected)
 	{
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */

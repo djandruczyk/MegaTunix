@@ -575,10 +575,10 @@ void check_req_fuel_limits(gint table_num)
 		else
 			dload_val = (int)(12000.0/((double)num_cyls));
 
-		write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
+		write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE, TRUE);
 
 		offset = firmware->table_params[table_num]->reqfuel_offset;
-		write_ve_const(widget, page, offset, rf_per_squirt, FALSE);
+		write_ve_const(widget, page, offset, rf_per_squirt, FALSE, TRUE);
 		/* Call handler to empty interdependant hash table */
 		g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 

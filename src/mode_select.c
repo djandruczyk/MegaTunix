@@ -58,6 +58,6 @@ gboolean drain_hashtable(gpointer offset, gpointer value, gpointer page)
 {
 	extern struct Firmware_Details *firmware;
 	/* called per element from the hash table to drain and send to ECU */
-	write_ve_const(NULL, (gint)page, (gint)offset,(gint)value, firmware->page_params[(gint)page]->is_spark);
+	write_ve_const(NULL, (gint)page, (gint)offset,(gint)value, firmware->page_params[(gint)page]->is_spark, TRUE);
 	return TRUE;
 }

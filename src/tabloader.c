@@ -43,7 +43,6 @@ gboolean tabs_loaded = FALSE;
 gboolean load_gui_tabs(void)
 {
 	extern struct Firmware_Details * firmware;
-	extern gboolean thread_protect;
 	gint i = 0;
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
@@ -146,13 +145,13 @@ gboolean load_gui_tabs(void)
 
 		}
 		i++;
-		if (thread_protect)
-			gdk_threads_enter();
+
+		/* Allow gui to update as it should.... */
+		gdk_threads_enter();
 		while (gtk_events_pending())
 			gtk_main_iteration();
+		gdk_threads_leave();
 
-		if (thread_protect)
-			gdk_threads_leave();
 		update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 
 	}

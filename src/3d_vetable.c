@@ -1141,7 +1141,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			if (ms_data[z_page][offset] <= 245)
 			{
 				dload_val = ms_data[z_page][offset] + 10;
-				//ms_data[z_page][offset] += 10;
 				update_widgets = TRUE;
 			}
 			break;				
@@ -1155,7 +1154,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			if (ms_data[z_page][offset] < 255)
 			{
 				dload_val = ms_data[z_page][offset] + 1;
-				//ms_data[z_page][offset] += 1;
 				update_widgets = TRUE;
 			}
 			break;				
@@ -1166,7 +1164,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			if (ms_data[z_page][offset] >= 10)
 			{
 				dload_val = ms_data[z_page][offset] - 10;
-				//ms_data[z_page][offset] -= 10;
 				update_widgets = TRUE;
 			}
 			break;							
@@ -1180,7 +1177,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			if (ms_data[z_page][offset] > 0)
 			{
 				dload_val = ms_data[z_page][offset] - 1;
-				//ms_data[z_page][offset] -= 1;
 				update_widgets = TRUE;
 			}
 			break;							
@@ -1191,10 +1187,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	}
 	if (update_widgets)
 	{
-		write_ve_const(widget,z_page,offset,dload_val,firmware->page_params[z_page]->is_spark);
-		//		paused_handlers = TRUE;
-		//		g_list_foreach(ve_widgets[z_page][offset],update_widget,NULL);
-		//		paused_handlers = FALSE;
+		write_ve_const(widget,z_page,offset,dload_val,firmware->page_params[z_page]->is_spark, TRUE);
 	}
 
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);

@@ -79,11 +79,11 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkButton" id="tools_revert_button">
+			<widget class="GtkButton" id="tools_undo_vex_button">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Revert to Last</property>
+			  <property name="label" translatable="yes">UNDO VEX Load</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <signal name="clicked" handler="std_button_handler" last_modification_time="Tue, 26 Oct 2004 02:28:22 GMT"/>

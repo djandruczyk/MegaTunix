@@ -384,7 +384,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (dl_type == IMMEDIATE)
 	{
 		dload_val = convert_before_download(widget,dload_val);
-		write_ve_const(widget, page, offset, dload_val, ign_parm);
+		write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
 	}
 	return TRUE;
 }
@@ -427,6 +427,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint tmpi = 0;
 	gint page = 0;
 	gint base = 0;
+	gint old = 0;
 	gint offset = 0;
 	gint dload_val = 0;
 	gint precision = 0;
@@ -486,9 +487,12 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	 * will give us an exact value if the user inputs something in
 	 * between,  thus we can reset the display to a sane value...
 	 */
+	old = ms_data[page][offset];
 	ms_data[page][offset] = dload_val;
 
 	real_value = convert_after_upload(widget);
+	ms_data[page][offset] = old;
+
 	if (is_float)
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
@@ -511,7 +515,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		}
 	}
 
-	write_ve_const(widget, page, offset, dload_val, ign_parm);
+	write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 
 	return TRUE;
@@ -582,7 +586,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case READ_VE_CONST:
 			if (offline)
 				break;
-			set_title("Reading VE/Constants");
+			set_title("Reading VE/Constants...");
 			io_cmd(IO_READ_VE_CONST, NULL);
 			break;
 		case READ_RAW_MEMORY:
@@ -672,6 +676,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_change(widget);
 			break;
 		case OFFLINE_MODE:
+			set_title("Offline Mode...");
 			set_offline_mode();
 			break;
 		default:
@@ -892,7 +897,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 1);	/* Set xlong_trig */
 				//ms_data[page][spconfig_offset] = tmp;
-				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm, TRUE);
 				value -= 45.0;
 				dload_val = convert_before_download(widget,value);
 			}
@@ -902,7 +907,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 0);	/* Set long_trig */
 				//ms_data[page][spconfig_offset] = tmp;
-				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm, TRUE);
 				value -= 22.5;
 				dload_val = convert_before_download(widget,value);
 			}
@@ -911,7 +916,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ms_data[page][spconfig_offset];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				//ms_data[page][spconfig_offset] = tmp;
-				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm);
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm, TRUE);
 				dload_val = convert_before_download(widget,value);
 			}
 
@@ -933,7 +938,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 	}
 	if (dl_type == IMMEDIATE) 
-		write_ve_const(widget, page, offset, dload_val, ign_parm);
+		write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	return TRUE;
 
@@ -1013,7 +1018,9 @@ void update_ve_const()
 
 		//printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
 		//printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
-		//printf("req_fuel_per_squirt is %i\n",reqfuel);
+		//printf("req_fuel_per_lsquirt is %i\n",reqfuel);
+
+
 		/* Calcs vary based on firmware. 
 		 * DT uses nim_inj/divider
 		 * MSnS-E use the SAME in DT mode only
@@ -1313,12 +1320,8 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			retval = FALSE;
 	}
 	if (retval)
-	{
-		write_ve_const(widget,page,offset,dload_val,ign_parm);
-//		paused_handlers = TRUE;
-//		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-//		paused_handlers = FALSE;
-	}
+		write_ve_const(widget,page,offset,dload_val,ign_parm, TRUE);
+
 	return retval;
 }
 

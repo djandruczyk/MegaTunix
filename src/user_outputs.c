@@ -285,8 +285,8 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 		result = (gint)tmpf;
 
-	write_ve_const(NULL,page,src_offset,rt_offset,ign_parm);
-	write_ve_const(NULL,page,lim_offset,result,ign_parm);
+	write_ve_const(NULL, page, src_offset, rt_offset, ign_parm, TRUE);
+	write_ve_const(NULL, page, lim_offset, result, ign_parm, TRUE);
 	update_model_from_view((GtkWidget *)view);
 
 }
