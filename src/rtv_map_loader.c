@@ -27,7 +27,6 @@ void realtime_map_load(void *ptr, gchar *basename)
 	ConfigFile *cfgfile;
 	struct Firmware_Details *firmware = ptr;
 	gchar * filename = NULL;
-	gint tmpi = 0;
 	gchar *tmpbuf = NULL;
 
 	filename = g_strconcat(DATA_DIR,"/",REALTIME_MAP_DIR,"/",basename,NULL);
