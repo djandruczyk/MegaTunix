@@ -42,6 +42,8 @@ extern GtkWidget * veconst_widgets_1[];
 extern GtkWidget * veconst_widgets_2[];
 extern struct Labels labels;
 extern struct Adjustments adjustments;
+extern struct v1_2_Constants constants;
+
 
 void read_conversions(void)
 {
@@ -147,6 +149,8 @@ gfloat convert_after_upload(gint offset)
 void reset_temps(gpointer type)
 {
 	gint i;
+	gfloat value;
+	gfloat upper;
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
 	switch ((gint)type)
@@ -177,6 +181,32 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 					GTK_LABEL(labels.warmup_bins_lab[i]),
 					F_warmup_labels[i]);
+			upper = adjustments.fast_idle_temp_adj->upper;
+			if (upper < 215) /* if so it was celsius, if not skip*/
+			{	
+				value = adjustments.fast_idle_temp_adj->value;
+				adjustments.fast_idle_temp_adj->upper=215.0;
+				adjustments.fast_idle_temp_adj->value=
+					(value *(9.0/5.0))+32;
+				gtk_adjustment_changed(
+						adjustments.fast_idle_temp_adj);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+						constants.fast_idle_thresh_spin),
+						(value*(9.0/5.0))+32);
+			}
+			upper = adjustments.ego_temp_adj->upper;
+			if (upper < 215) /* if so it was celsius, if not skip*/
+			{	
+				value = adjustments.ego_temp_adj->value;
+				adjustments.ego_temp_adj->upper=215.0;
+				adjustments.ego_temp_adj->value=
+					(value *(9.0/5.0))+32;
+				gtk_adjustment_changed(
+						adjustments.ego_temp_adj);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+						constants.ego_temp_active_spin),
+						(value*(9.0/5.0))+32);
+			}
 			break;
 
 		case CELSIUS:
@@ -205,6 +235,33 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 					GTK_LABEL(labels.warmup_bins_lab[i]),
 					C_warmup_labels[i]);
+
+			upper = adjustments.fast_idle_temp_adj->upper;
+			if (upper > 102) /* if so it was fahren, if not skip*/
+			{
+				value = adjustments.fast_idle_temp_adj->value;
+				adjustments.fast_idle_temp_adj->upper=101.6;
+				adjustments.fast_idle_temp_adj->value=
+						(value-32)*(5.0/9.0);
+				gtk_adjustment_changed(
+						adjustments.fast_idle_temp_adj);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+						constants.fast_idle_thresh_spin),
+						(value-32)*(5.0/9.0));
+			}
+			upper = adjustments.ego_temp_adj->upper;
+			if (upper > 102) /* if so it was fahren, if not skip*/
+			{	
+				value = adjustments.ego_temp_adj->value;
+				adjustments.ego_temp_adj->upper=101.6;
+				adjustments.ego_temp_adj->value=
+						(value-32)*(5.0/9.0);
+				gtk_adjustment_changed(
+						adjustments.ego_temp_adj);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+						constants.ego_temp_active_spin),
+						(value-32)*(5.0/9.0));
+			}
 			break;
 	}
 	return;	

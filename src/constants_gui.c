@@ -271,6 +271,7 @@ int build_constants(GtkWidget *parent_frame)
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"page",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(40*100));

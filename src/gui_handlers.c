@@ -294,6 +294,7 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 	gint tmp = 0;
 	gint dload_val = -1;
 	gint dl_type = 0;
+	gboolean temp_dep = FALSE;
 	if (paused_handlers)
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
@@ -453,6 +454,14 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			check_req_fuel_limits();
 			break;
 		case GENERIC:	/* Handles almost ALL other variables */
+			temp_dep = (gboolean)g_object_get_data(
+					G_OBJECT(veconst_widgets_1[offset]),
+					"temp_dep");
+			if (temp_dep)
+			{
+				if (!fahrenheit) /* using celsius, convert it */
+					value = (value*(9.0/5.0))+32;
+			}
 			dload_val = convert_before_download(offset,value);
 			break;
 		default:
@@ -473,6 +482,7 @@ void update_ve_const()
 	gint dl_type = 0;
 	gfloat tmp = 0.0;
 	gfloat value = 0.0;
+	gboolean temp_dep = FALSE;
 
 	check_config11(ve_constants->config11.value);
 	check_config13(ve_constants->config13.value);
@@ -496,10 +506,10 @@ void update_ve_const()
 	tmp *= (float)ve_constants->req_fuel;
 	tmp /= 10.0;
 	req_fuel_total = tmp;
-	
+
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_total_spin),
 			tmp);
-	
+
 	/* req-fuel info box  */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_per_squirt_spin),
 			ve_constants->req_fuel/10.0);
@@ -529,20 +539,20 @@ void update_ve_const()
 	if (ve_constants->config13.bit.inj_strat)
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.alpha_n_but),
-                                TRUE);
+				TRUE);
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.speed_den_but),
-                                TRUE);
+				TRUE);
 	/* Even Fire of Odd Fire */
 	if (ve_constants->config13.bit.firing)
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.odd_fire_but),
-                                TRUE);
+				TRUE);
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.even_fire_but),
-                                TRUE);
+				TRUE);
 	/* NarrowBand O2 or WideBand O2 */
 	if (ve_constants->config13.bit.ego_type)
 	{
@@ -561,7 +571,7 @@ void update_ve_const()
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.baro_disa_but),
-                                TRUE);
+				TRUE);
 	/* CONFIG11 related buttons */
 	/* Map sensor 115kPA or 250 kPA */
 	if (ve_constants->config11.bit.map_type)
@@ -582,11 +592,11 @@ void update_ve_const()
 	if (ve_constants->config11.bit.eng_type)
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.two_stroke_but),
-                                TRUE);
+				TRUE);
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.four_stroke_but),
-                                TRUE);
+				TRUE);
 	/* Multi-Port or TBI */
 	if (ve_constants->config11.bit.inj_type)
 		gtk_toggle_button_set_active(
@@ -594,34 +604,45 @@ void update_ve_const()
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.multi_port_but),
-                                TRUE);
+				TRUE);
 
 	/* THIS is NOT compatible with DualTable code,  must be changed */
 	if (ve_constants->alternate > 0)
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.alternate_but),
-                                TRUE);
+				TRUE);
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.simul_but),
-                                TRUE);
+				TRUE);
 
 
 	/* Table 1 for dualtable, and all std megasquirt units */
 	for (i=0;i<VEBLOCK_SIZE;i++)
 	{
+		temp_dep = FALSE;
 		if (GTK_IS_OBJECT(veconst_widgets_1[i]))
 		{
 			dl_type = (gint)g_object_get_data(
-				G_OBJECT(veconst_widgets_1[i]),"dl_type");
+					G_OBJECT(veconst_widgets_1[i]),
+					"dl_type");
+			temp_dep = (gboolean)g_object_get_data(
+					G_OBJECT(veconst_widgets_1[i]),
+					"temp_dep");
 			if (dl_type == IMMEDIATE)
-				value = convert_after_upload(i);  /* i is the offset */
+				value = convert_after_upload(i);  
+			if (temp_dep)
+			{
+				if (!fahrenheit)
+					value = (value-32)*(5.0/9.0);
+			}
+
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(
-					veconst_widgets_1[i]),
-					value);
+						veconst_widgets_1[i]),value);
+					
 		}
+
 	}
-			
 }
 void check_req_fuel_limits()
 {
