@@ -1,0 +1,10 @@
+[interrogation_profile]
+name="MegaSquirtnEDIS v3.005"
+
+[parameters]
+bytecounts=22,1,1,125,125,0,32,95,0,0,0
+SignatureQueryString=""
+ExtVerQueryString="EDIS v3.005"
+VerNumber=30
+Capabilities=_S_N_EDIS_
+

@@ -42,43 +42,41 @@ gboolean interrogated = FALSE;
 static struct Canidate
 {
 	gint bytes[11];		/* byte count for each of the 11 test cmds */
-	unsigned char *v0_data;	/* V0 data */
-	unsigned char *v1_data;	/* V1 data */
 	gchar *sig_str;		/* Signature string to search for */
 	gchar *quest_str;	/* Ext Version string to search for */
 	gint ver_num;		/* Version number to search for */
 	gchar *firmware_name;	/* Name of this firmware */
-	gint capabilities;	/* Bitmask of capabilities.... */
+	Capabilities capabilities;	/* Bitmask of capabilities.... */
 } canidates[] = 
 {
-	{ {22,0,0,125,125,0,0,0,0,0,0},NULL,NULL,NULL,NULL,0,
+	{ {22,0,0,125,125,0,0,0,0,0,0},NULL,NULL,0,
 			"Old Bowling & Grippo 1.0\0",STD},
-	{ {22,1,1,125,125,0,0,0,0,0,0},NULL,NULL,NULL,NULL,20,
+	{ {22,1,1,125,125,0,0,0,0,0,0},NULL,NULL,20,
 			"Standard Bowling & Grippo (2.0-3.01)\0",
 			STD},
-	{ {22,1,1,128,128,0,0,0,0,255,255}, NULL,NULL,NULL,NULL,1,
+	{ {22,1,1,128,128,0,0,0,0,255,255}, NULL,NULL,1,
 			"Dualtable 0.90-1.0\0",DUALTABLE|RAW_MEMORY},
-	{ {22,1,1,128,128,18,0,0,0,255,255},NULL,NULL,"v.1.01\0",NULL,1,
+	{ {22,1,1,128,128,18,0,0,0,255,255},"v.1.01\0",NULL,1,
 			"Dualtable 1.01\0",DUALTABLE|RAW_MEMORY},
-	{ {22,1,1,128,128,19,0,0,0,255,255},NULL,NULL,"v.1.02\0",NULL,1,
+	{ {22,1,1,128,128,19,0,0,0,255,255},"v.1.02\0",NULL,1,
 			"Dualtable 1.02\0",DUALTABLE|IAC_PWM|RAW_MEMORY},
-	{ {22,1,1,128,128,17,0,0,0,0,0},NULL,NULL,"Rover IAC\0",NULL,30,
+	{ {22,1,1,128,128,17,0,0,0,0,0},"Rover IAC\0",NULL,30,
 			"MS-3.0 Rover IAC (3.0.4)\0",IAC_STEPPER},
-	{ {22,1,1,128,128,16,0,0,0,0,0},NULL,NULL,"Rover IAC\0",NULL,30,
+	{ {22,1,1,128,128,16,0,0,0,0,0},"Rover IAC\0",NULL,30,
 			"MS-3.0 Rover IAC (3.0.5)\0",IAC_STEPPER},
-	{ {22,1,1,125,125,0,0,83,0,0,0},NULL,NULL,NULL,NULL,20,
+	{ {22,1,1,125,125,0,0,83,0,0,0},NULL,NULL,20,
 			"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0",
 			S_N_EDIS},
-	{ {22,1,1,125,125,0,0,95,0,0,0},NULL,NULL,NULL,NULL,30,
+	{ {22,1,1,125,125,0,0,95,0,0,0},NULL,NULL,30,
 			"SquirtnSpark 3.0\0",S_N_SPARK},
-	{ {22,1,1,125,125,0,32,95,0,0,0},NULL,NULL,NULL,"EDIS v3.005\0",30,
+	{ {22,1,1,125,125,0,32,95,0,0,0},NULL,"EDIS v3.005\0",30,
 			"MegaSquirtnEDIS 3.005\0",S_N_EDIS},
-	{ {22,1,1,125,125,0,32,95,0,0,0},NULL,NULL,NULL,"EDIS v3.007\0",30,
+	{ {22,1,1,125,125,0,32,95,0,0,0},NULL,"EDIS v3.007\0",30,
 			"MegaSquirtnEDIS 3.007\0",S_N_EDIS},
-	{ {22,1,1,125,125,0,0,99,0,255,255},NULL,NULL,NULL,NULL,13,
+	{ {22,1,1,125,125,0,0,99,0,255,255},NULL,NULL,13,
 			"MegaSquirt'N'Spark Extended 3.0.1\0",
 			S_N_SPARK|LAUNCH_CTRL|RAW_MEMORY},
-	{ {27,1,1,128,128,30,0,128,0,0,0},NULL,NULL,"Enhanced-V0.63\0",NULL,30,
+	{ {27,1,1,128,128,30,0,128,0,0,0},"Enhanced-V0.63\0",NULL,30,
 			"MegaSquirtnSpark Enhanced V0.63\0",
 			S_N_SPARK|ENHANCED}
 };
@@ -217,12 +215,6 @@ void interrogate_ecu()
 			ptr = buf;
 			switch (i)
 			{
-				case CMD_V0:
-					canidate->v0_data = g_memdup(buf,total);
-					break;
-				case CMD_V1:
-					canidate->v1_data = g_memdup(buf,total);
-					break;
 				case CMD_S:
 					canidate->sig_str = g_strndup(buf,total);
 					break;
@@ -390,10 +382,6 @@ cleanup:
 	serial_params->rtvars_size = 22;  /* assumptions!!!! */
 
 freeup:
-	if (canidate->v0_data)
-		g_free(canidate->v0_data);
-	if (canidate->v1_data)
-		g_free(canidate->v1_data);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
