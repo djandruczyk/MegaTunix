@@ -5,7 +5,7 @@ name=MegaSquirtnSpark-Extra 022x
 SignatureQueryString=extra format 022
 ExtVerQueryString=
 VerNumber=
-Capabilities=_DUALTABLE_
+Capabilities=_MSNS_E_
 Rt_Cmd_Key=CMD_UPPER_R
 VE_Cmd_Key=CMD_UPPER_V
 Write_Cmd=W
@@ -20,6 +20,8 @@ TotalPages=8
 [table_0]
 table_name=Fuel VE-Table 1, MSnSpark-Extra
 is_fuel=TRUE
+dtmode_offset=33
+dtmode_page=0
 reqfuel_offset=148
 divider_offset=149
 alternate_offset=150
@@ -48,6 +50,8 @@ z_disp_float=FALSE
 [table_1]
 table_name=Fuel VE-Table 2, MSnSpark-Extra
 is_fuel=TRUE
+dtmode_offset=33
+dtmode_page=0
 reqfuel_offset=147
 divider_offset=148
 alternate_offset=149

@@ -44,6 +44,7 @@
 #include <user_outputs.h>
 #include <vetable_gui.h>
 #include <vex_support.h>
+#include <widgetmgmt.h>
 
 
 
@@ -267,14 +268,18 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint tmp = 0;
 	gint tmp32 = 0;
 	gint offset = -1;
+	gint i = 0;
 	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
 	gint handler = 0;
 	gint table_num = -1;
-	gchar * toggle_group = NULL;
+	gint num_groups = -1;
+	gchar ** groups = NULL;
+	gchar * toggle_groups = NULL;
+	gchar * group_states = NULL;
 	gchar * swap_labels = NULL;
-	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
+	gboolean invert_state = FALSE;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
@@ -295,8 +300,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
-	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),"toggle_group");
-	invert_state = (gboolean )g_object_get_data(G_OBJECT(widget),"invert_state");
+	toggle_groups = (gchar *)g_object_get_data(G_OBJECT(widget),"toggle_groups");
+	group_states = (gchar *)g_object_get_data(G_OBJECT(widget),"group_states");
 	swap_labels = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_labels");
 
 	// If it's a check button then it's state is dependant on the button's state
@@ -304,10 +309,17 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 	/* Toggles a group ON/OFF based on a widgets state.... */
-	if (toggle_group)
+	if (toggle_groups)
 	{
-		state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
+		i = 0;
+		groups = parse_keys(toggle_groups,&num_groups,",");
+		for (i=0;i<num_groups;i++)
+		{
+			invert_state = get_state(group_states,i);
+			state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			g_list_foreach(get_list(groups[i]),set_widget_sensitive,(gpointer)state);
+		}
+		g_strfreev(groups);
 	}
 	/* Swaps the label of another control based on widget state... */
 	if (swap_labels)
@@ -331,7 +343,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 		case ALT_SIMUL:
 			/* Alternate or simultaneous */
-			if (ecu_caps & DUALTABLE)
+			if (ecu_caps & MSNS_E)
 			{
 				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
@@ -340,6 +352,10 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~bitmask;// clears bits 
 				tmp = tmp | (bitval << bitshift);
 				dload_val = tmp;
+				g_hash_table_insert(interdep_vars[page],
+						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(dload_val));
+				check_req_fuel_limits(table_num);
 			}
 			else
 			{
@@ -791,7 +807,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			{
 				dload_val = (gint)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
 
-				//ms_data[page][divider_offset] = dload_val;
 				firmware->rf_params[table_num]->divider = dload_val;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
@@ -820,16 +835,14 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ms_data[page][offset];
 				tmp = tmp & ~bitmask;	/*clears top 4 bits */
 				tmp = tmp | ((tmpi-1) << bitshift);
-				//ms_data[page][offset] = tmp;
 				dload_val = tmp;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 
 				dload_val = 
-					(gint)(((float)firmware->rf_params[table_num]->num_cyls/
-						(float)firmware->rf_params[table_num]->num_squirts)+0.001);
-				//ms_data[page][divider_offset] = dload_val;
+					(gint)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
+						
 				firmware->rf_params[table_num]->divider = dload_val;
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(divider_offset),
@@ -1075,6 +1088,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean temp_dep = FALSE;
 	gboolean is_float = FALSE;
 	gboolean use_color = FALSE;
+	gint i = 0;
 	gint tmpi = -1;
 	gint page = -1;
 	gint offset = -1;
@@ -1084,7 +1098,10 @@ void update_widget(gpointer object, gpointer user_data)
 	gint bitmask = -1;
 	gint base = -1;
 	gint precision = -1;
-	gchar * toggle_group = NULL;
+	gint num_groups = 0;
+	gchar ** groups = NULL;
+	gchar * toggle_groups = NULL;
+	gchar * group_states = NULL;
 	gboolean invert_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_labels = NULL;
@@ -1127,10 +1144,10 @@ void update_widget(gpointer object, gpointer user_data)
 			"temp_dep");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(widget),
 			"is_float");
-	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
-			"toggle_group");
-	invert_state = (gboolean)g_object_get_data(G_OBJECT(widget),
-			"invert_state");
+	toggle_groups = (gchar *)g_object_get_data(G_OBJECT(widget),
+			"toggle_groups");
+	group_states = (gchar *)g_object_get_data(G_OBJECT(widget),
+			"group_states");
 	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),
 			"use_color");
 	swap_labels = (gchar *)g_object_get_data(G_OBJECT(widget),
@@ -1209,10 +1226,17 @@ void update_widget(gpointer object, gpointer user_data)
 		 */
 		update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
 	}
-	if (toggle_group)
+	if (toggle_groups)
 	{
-		state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		g_list_foreach(get_list(toggle_group),set_widget_sensitive,(gpointer)state);
+		groups = parse_keys(toggle_groups,&num_groups,",");
+
+		for (i=0;i<num_groups;i++)
+		{
+			invert_state = get_state(group_states,i);
+			state = invert_state == FALSE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			g_list_foreach(get_list(groups[i]),set_widget_sensitive,(gpointer)state);
+		}
+		g_strfreev(groups);
 	}
 	/* Swaps the label of another control based on widget state... */
 	if (swap_labels)

@@ -206,6 +206,8 @@ struct Page_Params
 struct Table_Params
 {
 	gboolean is_fuel;	/*! If true next 7 params must exist */
+	gint dtmode_offset;	/*! DT mode offset (msns-e ONLY) */
+	gint dtmode_page;	/*! DT mode page (msns-e ONLY) */
 	gint cfg11_offset;	/*! Where config11 value is located */
 	gint cfg12_offset;	/*! Where config12 value is located */
 	gint cfg13_offset;	/*! Where config13 value is located */

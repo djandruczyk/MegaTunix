@@ -448,6 +448,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 			store_list(bind_keys[i],g_list_append(get_list(bind_keys[i]),(gpointer)widget));
 		g_strfreev(bind_keys);
 	}
+
 	/* If this widget has a "depend_on" tag we need to load the dependancy
 	 * information  and store it for use when needed...
 	 */

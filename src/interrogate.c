@@ -702,6 +702,13 @@ void load_profile_details(struct Canidate *canidate)
 					if(!cfg_read_int(cfgfile,section,"alternate_offset",&canidate->table_params[i]->alternate_offset))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"alternate_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 				}
+				if (canidate->capabilities & MSNS_E)
+				{
+					if(!cfg_read_int(cfgfile,section,"dtmode_offset",&canidate->table_params[i]->dtmode_offset))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+					if(!cfg_read_int(cfgfile,section,"dtmode_page",&canidate->table_params[i]->dtmode_page))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+				}
 			}
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);

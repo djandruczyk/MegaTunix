@@ -102,6 +102,20 @@ key_types=_INT_,_STRING_
 page=2
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 
+#----- Widgets ---------------------------------------------------------------
+
+[table2_inj_sq_cyls_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=2
+bind_to_list=dt_features
+
+[table2_inj_ctrl_params_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=2
+bind_to_list=dt_features
+
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [speed_density_radio_button]
@@ -258,6 +272,32 @@ bitval=1
 bitmask=2
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+
+[alt_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler,bind_to_list
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=1
+offset=150
+bitshift=0
+bitval=1
+bitmask=255
+table_num=0
+dl_type=_DEFERRED_
+handler=_ALT_SIMUL_
+bind_to_list=alt_simul
+
+[simul_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler,bind_to_list
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=1
+offset=150
+bitshift=0
+bitval=0
+bitmask=255
+table_num=0
+dl_type=_DEFERRED_
+handler=_ALT_SIMUL_
+bind_to_list=alt_simul
 
 #----- SpinButtons -----------------------------------------------------------
 

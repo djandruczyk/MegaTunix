@@ -109,3 +109,26 @@ gboolean deregister_widget(gchar *name)
 	return (g_hash_table_remove(dynamic_widgets,name));
 }
 
+
+/*!
+ \brief get_State() returns either TRUE or false based on the encoded value 
+ passed across as a string.  The string is split up using g_strsplit, the 
+ values are check for true/false and hte appropriate value is returned
+ \param string (gchar *) string to parse and dissect
+ \param index (int) which one we want to check
+ \returns the decoded state from the string
+ */
+gboolean get_state(gchar *string, gint index)
+{
+	gchar **tmpbuf = NULL;
+	gboolean state = FALSE;
+
+	tmpbuf = g_strsplit(string,",",0);
+	if (g_ascii_strcasecmp(g_ascii_strup(tmpbuf[index],-1),"ENABLED") == 0)
+		state = TRUE;
+	if (g_ascii_strcasecmp(g_ascii_strup(tmpbuf[index],-1),"DISABLED") == 0)
+		state =  FALSE;
+	g_strfreev(tmpbuf);
+	return state;
+}
+

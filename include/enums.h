@@ -169,6 +169,7 @@ typedef enum
 	/* No capabilities == Standard B&G code with no modifications */
 	STANDARD	= 1<<0,
 	DUALTABLE	= 1<<1,
+	MSNS_E		= 1<<2,
 }Capability;
 
 typedef enum

@@ -517,9 +517,20 @@ void check_req_fuel_limits(gint table_num)
 		return;
 
 	if (ecu_caps & DUALTABLE)
+	{
+	//	printf ("dualtable\n");
 		tmp = (float)num_inj/(float)divider;
+	}
+	else if ((ecu_caps & MSNS_E) && (((ms_data[firmware->table_params[table_num]->dtmode_page][firmware->table_params[table_num]->dtmode_offset] & 0x10) >> 4) == 1))
+	{
+	//	printf ("msns-E with DT enabled\n");
+		tmp = (float)num_inj/(float)divider;
+	}
 	else	/* B&G style */
+	{
+	//	printf ("B&G\n");
 		tmp =	((float)(num_inj))/((float)divider*(float)(alternate+1));
+	}
 
 	rf_per_squirt = ((float)rf_total * 10.0)/tmp;
 

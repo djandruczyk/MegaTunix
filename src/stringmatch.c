@@ -34,6 +34,8 @@ void build_string_2_enum_table()
 	/* Firmware capabilities */
 	g_hash_table_insert(str_2_enum,"_DUALTABLE_",
 			GINT_TO_POINTER(DUALTABLE));
+	g_hash_table_insert(str_2_enum,"_MSNS_E_",
+			GINT_TO_POINTER(MSNS_E));
 
 	/* Storage Types for reading interrogation tests */
 	g_hash_table_insert(str_2_enum,"_SIG_",
