@@ -500,7 +500,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 
-	hbox = gtk_hbox_new(FALSE,0);
+	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
 
 	frame = gtk_frame_new("Injector to Table Mapping");
@@ -514,7 +514,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	label = gtk_label_new("Injector 1 mapping");
+	label = gtk_label_new("Inj Chan. 1 mapping");
 	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -546,7 +546,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
-	label = gtk_label_new("Injector 2 mapping");
+	label = gtk_label_new("Inj Chan. 2 mapping");
 	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
 	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
@@ -573,17 +573,54 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	
-	frame = gtk_frame_new("Gammae Usage");
+	frame = gtk_frame_new("Gammae Settings");
 	dt_widgets = g_list_append(dt_widgets,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,5);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
-	table = gtk_table_new(3,2,FALSE);
+	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table), 5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
+	label = gtk_label_new("Chan. 1 Gammae");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(NULL,"Applied");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(group,"Ignored");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Chan. 2 Gammae");
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(NULL,"Applied");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(group,"Ignored");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Commands");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
