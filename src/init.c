@@ -346,6 +346,97 @@ struct Io_Message * initialize_io_message()
 
 
 /*!
+ *  \brief initialize_page_params() creates and initializes the page_params
+ *   datastructure to sane defaults and returns it
+ *    */
+struct Page_Params * initialize_page_params(void)
+{
+	struct Page_Params *page_params = NULL;
+	page_params = g_malloc0(sizeof(struct Page_Params));
+	page_params->length = 0;
+	page_params->is_spark = FALSE;
+	page_params->cfg11_offset = -1;
+	page_params->cfg12_offset = -1;
+	page_params->cfg13_offset = -1;
+	page_params->alternate_offset = -1;
+	page_params->divider_offset = -1;
+	page_params->rpmk_offset = -1;
+	page_params->reqfuel_offset = -1;
+	page_params->spconfig_offset = -1;
+	return page_params;
+}
+
+         
+/*!
+ *  \brief initialize_canidate() creates and initializes the Candidate
+ *   datastructure to sane defaults and returns it
+ *    */
+struct Table_Params * initialize_table_params(void)
+{
+	struct Table_Params *table_params = NULL;
+	table_params = g_malloc0(sizeof(struct Table_Params));
+	table_params->x_page = -1;
+	table_params->y_page = -1;
+	table_params->z_page = -1;
+	table_params->x_base = -1;
+	table_params->y_base = -1;
+	table_params->z_base = -1;
+	table_params->x_bincount = -1;
+	table_params->y_bincount = -1;
+	table_params->x_disp_precision = 0;
+	table_params->y_disp_precision = 0;
+	table_params->z_disp_precision = 0;
+	table_params->x_disp_float = FALSE;
+	table_params->y_disp_float = FALSE;
+	table_params->z_disp_float = FALSE;
+	table_params->x_suffix = NULL;
+	table_params->y_suffix = NULL;
+	table_params->z_suffix = NULL;
+	table_params->x_conv_expr = NULL;
+	table_params->y_conv_expr = NULL;
+	table_params->z_conv_expr = NULL;
+	table_params->table_name = NULL;
+
+	return table_params;
+}
+
+
+/*!
+ *  \brief initialize_canidate() creates and initializes the Candidate
+ *   datastructure to sane defaults and returns it
+ *    */
+struct Canidate * initialize_canidate(void)
+{
+	struct Canidate *canidate = NULL;
+	canidate = g_malloc0(sizeof(struct Canidate));
+	canidate->name = NULL;
+	canidate->filename = NULL;
+	canidate->bytecounts = NULL;
+	canidate->sig_str = NULL;
+	canidate->quest_str = NULL;
+	canidate->ver_num = -1;
+	canidate->load_tabs = NULL;
+	canidate->tab_confs = NULL;
+	canidate->rtv_map_file = NULL;
+	canidate->sliders_map_file = NULL;
+	canidate->rt_cmd_key = NULL;
+	canidate->ve_cmd_key = NULL;
+	canidate->ign_cmd_key = NULL;
+	canidate->raw_mem_cmd_key = NULL;
+	canidate->write_cmd = NULL;
+	canidate->burn_cmd = NULL;
+	canidate->page_cmd = NULL;
+	canidate->lookuptables = NULL;
+	canidate->total_pages = -1;
+	canidate->total_tables = -1;
+	canidate->capabilities = 0;
+	canidate->page_params = NULL;
+	canidate->table_params = NULL;
+	return canidate;
+}
+
+
+/*!
  \brief dealloc_message() deallocates the structure used to pass an I/O
  message from a thread to here..
  \param message (struct Io_Message *) pointer to message data
@@ -391,5 +482,38 @@ void dealloc_textmessage(struct Text_Message * message)
 	message = NULL;
 }
 
+
+/*!
+ \brief dealloc_table_params() deallocates the structure used for firmware
+ table parameters
+ \param table_params (struct TableParams *) pointer to struct to deallocate
+ */
+void dealloc_table_params(struct Table_Params * table_params)
+{
+	if(table_params->x_suffix)
+		g_free(table_params->x_suffix);
+	if(table_params->y_suffix)
+		g_free(table_params->y_suffix);
+	if(table_params->z_suffix)
+		g_free(table_params->z_suffix);
+	if(table_params->x_conv_expr)
+		g_free(table_params->x_conv_expr);
+	if(table_params->y_conv_expr)
+		g_free(table_params->y_conv_expr);
+	if(table_params->z_conv_expr)
+		g_free(table_params->z_conv_expr);
+	if(table_params->table_name)
+		g_free(table_params->table_name);
+	table_params->x_suffix = NULL;
+	table_params->y_suffix = NULL;
+	table_params->z_suffix = NULL;
+	table_params->x_conv_expr = NULL;
+	table_params->y_conv_expr = NULL;
+	table_params->z_conv_expr = NULL;
+	table_params->table_name = NULL;
+
+	g_free(table_params);
+	return;
+}
 
 

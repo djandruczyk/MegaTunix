@@ -26,8 +26,6 @@ void free_test_commands(GArray *);
 void load_bytecounts(GArray *, GHashTable *, ConfigFile *);
 void close_profile(struct Canidate * );
 struct Canidate * load_potential_match(GArray * , gchar * );
-struct Canidate * initialize_canidate(void);
-struct Page_Params * initialize_page_params(void);
 gboolean check_for_match(GArray *, struct Canidate *, struct Canidate *);
 void load_profile_details(struct Canidate * );
 gint translate_capabilities(gchar *);

@@ -328,7 +328,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->table_params = g_new0(struct Table_Params *,firmware->total_tables);
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		firmware->table_params[i] = g_new0(struct Table_Params, 1);
+		firmware->table_params[i] = initialize_table_params();
 		memcpy(firmware->table_params[i],potential->table_params[i],sizeof(struct Table_Params));
 	}
 
@@ -516,7 +516,7 @@ void close_profile(struct Canidate *canidate)
 			g_free(canidate->page_params[i]);
 	for (i=0;i<(canidate->total_tables);i++)
 		if (canidate->table_params[i])
-			g_free(canidate->table_params[i]);
+			dealloc_table_params(canidate->table_params[i]);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
@@ -530,63 +530,6 @@ void close_profile(struct Canidate *canidate)
 
 }
 
-
-/*!
- \brief initialize_page_params() creates and initializes the page_params
- datastructure to sane defaults and returns it
- */
-struct Page_Params * initialize_page_params(void)
-{
-	struct Page_Params *page_params = NULL;
-	page_params = g_malloc0(sizeof(struct Page_Params));
-	page_params->length = 0;
-	page_params->is_spark = FALSE;
-	page_params->cfg11_offset = -1;
-	page_params->cfg12_offset = -1;
-	page_params->cfg13_offset = -1;
-	page_params->alternate_offset = -1;
-	page_params->divider_offset = -1;
-	page_params->rpmk_offset = -1;
-	page_params->reqfuel_offset = -1;
-	page_params->spconfig_offset = -1;
-	return page_params;
-}
-
-
-/*!
- \brief initialize_canidate() creates and initializes the Candidate
- datastructure to sane defaults and returns it
- */
-struct Canidate * initialize_canidate(void)
-{
-	struct Canidate *canidate = NULL;
-	canidate = g_malloc0(sizeof(struct Canidate));
-	canidate->name = NULL;
-	canidate->filename = NULL;
-	canidate->bytecounts = NULL;
-	canidate->sig_str = NULL;
-	canidate->quest_str = NULL;
-	canidate->ver_num = -1;
-	canidate->load_tabs = NULL;
-	canidate->tab_confs = NULL;
-	canidate->rtv_map_file = NULL;
-	canidate->sliders_map_file = NULL;
-	canidate->rt_cmd_key = NULL;
-	canidate->ve_cmd_key = NULL;
-	canidate->ign_cmd_key = NULL;
-	canidate->raw_mem_cmd_key = NULL;
-	canidate->write_cmd = NULL;
-	canidate->burn_cmd = NULL;
-	canidate->page_cmd = NULL;
-	canidate->lookuptables = NULL;
-	canidate->total_pages = -1;
-	canidate->total_tables = -1;
-	canidate->capabilities = 0;
-	canidate->page_params = NULL;
-	canidate->table_params = NULL;
-	return canidate;
-}
-		
 
 /*! 
  \brief load_potential_match() loads an interrogation profile and loads only
@@ -732,7 +675,8 @@ void load_profile_details(struct Canidate *canidate)
 		canidate->table_params = g_new0(struct Table_Params *,canidate->total_tables);
 		for (i=0;i<canidate->total_tables;i++)
 		{
-			canidate->table_params[i] = g_new0(struct Table_Params,1);
+			canidate->table_params[i] = initialize_table_params();
+
 			section = g_strdup_printf("table_%i",i);
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
@@ -764,18 +708,21 @@ void load_profile_details(struct Canidate *canidate)
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_conv_expr\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
 			if(cfg_read_boolean(cfgfile,section,"x_disp_float",&canidate->table_params[i]->x_disp_float))
 			{
-				if(!cfg_read_int(cfgfile,section,"x_disp_precision",&canidate->table_params[i]->x_disp_precision))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_disp_precision\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
+				if (canidate->table_params[i]->x_disp_float)	
+					if(!cfg_read_int(cfgfile,section,"x_disp_precision",&canidate->table_params[i]->x_disp_precision))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_disp_precision\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
 			}
 			if(cfg_read_boolean(cfgfile,section,"y_disp_float",&canidate->table_params[i]->y_disp_float))
 			{
-				if(!cfg_read_int(cfgfile,section,"y_disp_precision",&canidate->table_params[i]->y_disp_precision))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_disp_precision\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
+				if (canidate->table_params[i]->y_disp_float)	
+					if(!cfg_read_int(cfgfile,section,"y_disp_precision",&canidate->table_params[i]->y_disp_precision))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_disp_precision\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
 			}
 			if(cfg_read_boolean(cfgfile,section,"z_disp_float",&canidate->table_params[i]->z_disp_float))
 			{
-				if(!cfg_read_int(cfgfile,section,"z_disp_precision",&canidate->table_params[i]->z_disp_precision))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_disp_precision\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
+				if (canidate->table_params[i]->z_disp_float)	
+					if(!cfg_read_int(cfgfile,section,"z_disp_precision",&canidate->table_params[i]->z_disp_precision))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_disp_precision\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
 			}
 			if(!cfg_read_string(cfgfile,section,"table_name",&canidate->table_params[i]->table_name))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"table_name\" variable not found in interrogation profile, ERROR\n"),CRITICAL);

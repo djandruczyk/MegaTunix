@@ -686,7 +686,6 @@ gboolean update_logview_traces(gboolean force_redraw)
 		adj_scale = TRUE;
 		g_static_mutex_lock(&update_mutex);
 		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(force_redraw));
-		scroll_logviewer_traces();
 		g_static_mutex_unlock(&update_mutex);
 	}
 

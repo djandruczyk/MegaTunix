@@ -826,19 +826,19 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	glEnd();
 
 	tmpbuf = g_strdup_printf("x_runtime_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->x_eval,x_val),ve_view->x_suffix);
+	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->x_eval,x_val),ve_view->x_precision,ve_view->x_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("y_runtime_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_suffix);
+	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_precision,ve_view->y_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("z_runtime_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%.1f %s",evaluator_evaluate_x(ve_view->z_eval,z_val),ve_view->z_suffix);
+	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,z_val),ve_view->z_precision,ve_view->z_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);

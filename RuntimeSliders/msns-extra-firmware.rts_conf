@@ -1,6 +1,6 @@
 [global]
 description=Runtime Slider definitions for MSnS-Extra firmwares 
-rt_total_sliders=21
+rt_total_sliders=22
 ww_total_sliders=0
 ve3d_total_sliders=4
 
@@ -129,6 +129,12 @@ slider_name=idledc
 table=3
 row=3
 source=idledc
+
+[rt_slider_21]
+slider_name=sparkangle
+table=3
+row=4
+source=sparkangle
 
 [ww_slider_0]
 slider_name=ww_clt
