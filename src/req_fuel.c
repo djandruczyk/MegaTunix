@@ -457,7 +457,7 @@ gboolean close_popup(GtkWidget * widget)
 void check_req_fuel_limits()
 {
 	gfloat tmp = 0.0;
-	gfloat req_fuel_per_squirt = 0.0;
+	gfloat rf_per_squirt = 0.0;
 	gboolean lim_flag = FALSE;
 	gint dload_val = 0;
 	gint offset = 0;
@@ -478,17 +478,17 @@ void check_req_fuel_limits()
 		/* F&H Dualtable required Fuel calc
 		 *
 		 *                                        /    num_inj_x  \
-		 *         	   req_fuel_per_squirt * (-----------------)
+		 *         	   rf_per_squirt * (------------------------)
 		 *                                        \    divider    /
 		 * req_fuel_total = -------------------------------------------
 		 *				10
 		 *
 		 * where divider = num_cyls/num_squirts;
 		 *
-		 * rearranging to solve for req_fuel_per_squirt...
+		 * rearranging to solve for rf_per_squirt...
 		 *
 		 *                        (req_fuel_total * 10)
-		 * req_fuel_per_squirt =  ---------------------
+		 * rf_per_squirt =  ----------------------------
 		 *			    /   num_inj_x   \
 		 *                         (-----------------)
 		 *                          \    divider    /
@@ -505,11 +505,11 @@ void check_req_fuel_limits()
 			goto table2;
 
 		tmp = (float)(num_inj_1)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
-		req_fuel_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
+		rf_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
 
-		if (req_fuel_per_squirt > 255)
+		if (rf_per_squirt > 255)
 			lim_flag = TRUE;
-		if (req_fuel_per_squirt < 0)
+		if (rf_per_squirt < 0)
 			lim_flag = TRUE;
 		if (num_cyls_1 % num_squirts_1)
 			lim_flag = TRUE;
@@ -522,7 +522,7 @@ void check_req_fuel_limits()
 			set_group_color(BLACK,"interdep_1_ctrl");
 			/* Required Fuel per SQUIRT */
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
+					(g_hash_table_lookup(dynamic_widgets,"rf_per_squirt_1_spin")),rf_per_squirt/10.0);
 
 			if (paused_handlers)
 				return;
@@ -538,8 +538,8 @@ void check_req_fuel_limits()
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			offset = firmware->page_params[page]->reqfuel_offset;
-			ms_data[page][offset] = req_fuel_per_squirt;
-			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
+			ms_data[page][offset] = rf_per_squirt;
+			write_ve_const(NULL, page, offset, rf_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 
@@ -559,11 +559,11 @@ void check_req_fuel_limits()
 			return;
 
 		tmp = (float)(num_inj_2)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
-		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
+		rf_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
 
-		if (req_fuel_per_squirt > 255)
+		if (rf_per_squirt > 255)
 			lim_flag = TRUE;
-		if (req_fuel_per_squirt < 0)
+		if (rf_per_squirt < 0)
 			lim_flag = TRUE;
 		if (num_cyls_2 % num_squirts_2)
 			lim_flag = TRUE;
@@ -577,7 +577,7 @@ void check_req_fuel_limits()
 
 			/* Required Fuel per SQUIRT */
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
-					(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_2_spin")),req_fuel_per_squirt/10.0);
+					(g_hash_table_lookup(dynamic_widgets,"rf_per_squirt_2_spin")),rf_per_squirt/10.0);
 
 			if (paused_handlers)
 				return;
@@ -593,8 +593,8 @@ void check_req_fuel_limits()
 			write_ve_const(NULL, page, rpmk_offset, dload_val, FALSE);
 
 			offset = firmware->page_params[page]->reqfuel_offset;
-			ms_data[page][offset] = req_fuel_per_squirt;
-			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
+			ms_data[page][offset] = rf_per_squirt;
+			write_ve_const(NULL, page, offset, rf_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 
@@ -607,17 +607,17 @@ void check_req_fuel_limits()
 		/* B&G, MSnS, MSnEDIS Required Fuel Calc
 		 *
 		 *                              /     num_inj_1     \
-		 *   req_fuel_per_squirt * (-------------------------)
+		 *   rf_per_squirt * (-------------------------)
 		 *                              \ divider*(alternate+1) /
 		 * req_fuel_total = ----------------------------------------
 		 *				10
 		 *
 		 * where divider = num_cyls_1/num_squirts_1;
 		 *
-		 * rearranging to solve for req_fuel_per_squirt...
+		 * rearranging to solve for rf_per_squirt...
 		 *
 		 *                        (req_fuel_total * 10)
-		 * req_fuel_per_squirt =  ----------------------
+		 * rf_per_squirt =  ----------------------
 		 *			    /  num_inj_1  \
 		 *                         (-------------------)
 		 *                          \ divider*(alt+1) /
@@ -643,11 +643,11 @@ void check_req_fuel_limits()
 		 * for the ms variable,  it gets converted farther down, just 
 		 * before download to the MS
 		 */
-		req_fuel_per_squirt = ((float)req_fuel_total_1*10.0)/tmp;
+		rf_per_squirt = ((float)req_fuel_total_1*10.0)/tmp;
 
-		if (req_fuel_per_squirt > 255)
+		if (rf_per_squirt > 255)
 			lim_flag = TRUE;
-		if (req_fuel_per_squirt < 0)
+		if (rf_per_squirt < 0)
 			lim_flag = TRUE;
 		if (num_cyls_1 % num_squirts_1)
 			lim_flag = TRUE;
@@ -658,7 +658,7 @@ void check_req_fuel_limits()
 		{
 			set_group_color(BLACK,"interdep_1_ctrl");
 			/* req-fuel info box  */
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,"rf_per_squirt_1_spin")),rf_per_squirt/10.0);
 							     
 
 			/* All Tested succeeded, download Required fuel, 
@@ -685,8 +685,8 @@ void check_req_fuel_limits()
 
 			/* Send reqd_fuel_per_squirt */
 			offset = firmware->page_params[page]->reqfuel_offset;
-			ms_data[page][offset] = req_fuel_per_squirt;
-			write_ve_const(NULL, page, offset, req_fuel_per_squirt, FALSE);
+			ms_data[page][offset] = rf_per_squirt;
+			write_ve_const(NULL, page, offset, rf_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars[page],drain_hashtable,GINT_TO_POINTER(page));
 		}
 	} // End B&G style Req Fuel check 

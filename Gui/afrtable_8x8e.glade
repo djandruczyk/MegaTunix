@@ -345,7 +345,7 @@
 			      <property name="n_rows">9</property>
 			      <property name="n_columns">8</property>
 			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">2</property>
+			      <property name="row_spacing">0</property>
 			      <property name="column_spacing">0</property>
 
 			      <child>
@@ -2295,8 +2295,8 @@
 			      <property name="n_rows">9</property>
 			      <property name="n_columns">1</property>
 			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">2</property>
-			      <property name="column_spacing">2</property>
+			      <property name="row_spacing">0</property>
+			      <property name="column_spacing">0</property>
 
 			      <child>
 				<widget class="GtkEntry" id="load_entry_0">

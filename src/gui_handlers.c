@@ -809,7 +809,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				ms_data[page][divider_offset] = dload_val;
 				divider_1 = dload_val;
 				g_hash_table_insert(interdep_vars[page],
-						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(divider_offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
 				set_reqfuel_color(BLACK,page);
@@ -889,7 +889,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				ms_data[page][divider_offset] = dload_val;
 				divider_2 = dload_val;
 				g_hash_table_insert(interdep_vars[page],
-						GINT_TO_POINTER(offset),
+						GINT_TO_POINTER(divider_offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
 				set_reqfuel_color(BLACK,page);

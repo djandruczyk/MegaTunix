@@ -1,8 +1,8 @@
-# Dual Table Parameters data map, DT 0.9-1.02
+# MSnS-E Multi Table Fuel Parameters data map, MSnS-Extra
 
 [global]
-description=Object data map for Dualtable (0.9-1.02)
-tab_name=_Dualtable Constants
+description=Object data map for MSnS-Extra Fuel
+tab_name=_Fuel Parameters
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -10,26 +10,26 @@ tab_name=_Dualtable Constants
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_READ_VE_CONST_
-page=0
+page=1
 bind_to_list=get_data_buttons
 
 [dt_burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_
-page=0
+page=1
 bind_to_list=burners
 
 [calc_req_fuel_1_button]
 keys=page,handler
 key_types=_INT_,_ENUM_
-page=0
+page=1
 handler=_REQ_FUEL_POPUP_
 
 [calc_req_fuel_2_button]
 keys=page,handler
 key_types=_INT_,_ENUM_
-page=1
+page=2
 handler=_REQ_FUEL_POPUP_
 
 #----- Labels ----------------------------------------------------------------
@@ -37,67 +37,67 @@ handler=_REQ_FUEL_POPUP_
 [topframe_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
-page=0
-set_label=MegaSquirt ECU Dualtable Constants
+page=1
+set_label=MegaSquirt ECU MSnS-Extra Fuel Constants
 
 [table1_inj_sq_cyls_frame_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
-page=0
-set_label=Table 1 Cylinders,Injectors and Squirts.
+page=1
+set_label=Table 1/3 Cylinders,Injectors and Squirts.
 
 [table2_inj_sq_cyls_frame_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
-page=0
+page=1
 set_label=Table 2 Cylinders,Injectors and Squirts.
 
 [table1_inj_ctrl_params_frame_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
-page=0
-set_label=Table 1 Injector Control Parameters
+page=1
+set_label=Table 1/3 Injector Control Parameters
 
 [table2_inj_ctrl_params_frame_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
-page=0
+page=1
 set_label=Table 2 Injector Control Parameters
 
 [num_injectors_1_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
-page=0
+page=1
 bind_to_list=interdep_1_ctrl
 
 [num_squirts_per_cycle_1_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
-page=0
+page=1
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 
 [num_cylinders_1_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
-page=0
+page=1
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 
 [num_injectors_2_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
-page=0
+page=2
 bind_to_list=interdep_2_ctrl
 
 [num_squirts_per_cycle_2_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
-page=0
+page=2
 bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
 
 [num_cylinders_2_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
-page=0
+page=2
 bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
 
 #----- Radio/Checkbuttons ----------------------------------------------------
@@ -105,8 +105,8 @@ bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
 [speed_density_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=2
 bitval=0
 bitmask=4
@@ -116,8 +116,8 @@ handler=_GENERIC_
 [alpha_n_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=2
 bitval=1
 bitmask=4
@@ -127,8 +127,8 @@ handler=_GENERIC_
 [multi_port_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
+page=1
+offset=182
 bitshift=3
 bitval=0
 bitmask=8
@@ -138,8 +138,8 @@ handler=_GENERIC_
 [tbi_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
+page=1
+offset=182
 bitshift=3
 bitval=1
 bitmask=8
@@ -149,8 +149,8 @@ handler=_GENERIC_
 [four_stroke_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
+page=1
+offset=182
 bitshift=2
 bitval=0
 bitmask=4
@@ -160,8 +160,8 @@ handler=_GENERIC_
 [two_stroke_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
+page=1
+offset=182
 bitshift=2
 bitval=1
 bitmask=4
@@ -171,8 +171,8 @@ handler=_GENERIC_
 [even_fire_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=0
 bitval=0
 bitmask=1
@@ -182,8 +182,8 @@ handler=_GENERIC_
 [odd_fire_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=0
 bitval=1
 bitmask=1
@@ -193,8 +193,8 @@ handler=_GENERIC_
 [115kpa_map_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
+page=1
+offset=182
 bitshift=0
 bitval=0
 bitmask=3
@@ -204,8 +204,8 @@ handler=_GENERIC_
 [250kpa_map_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=116
+page=1
+offset=182
 bitshift=0
 bitval=1
 bitmask=3
@@ -215,8 +215,8 @@ handler=_GENERIC_
 [baro_enabled_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=3
 bitval=1
 bitmask=8
@@ -226,8 +226,8 @@ handler=_GENERIC_
 [baro_disabled_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=3
 bitval=0
 bitmask=8
@@ -237,8 +237,8 @@ handler=_GENERIC_
 [nbo2_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=1
 bitval=0
 bitmask=2
@@ -248,8 +248,8 @@ handler=_GENERIC_
 [wbo2_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=118
+page=1
+offset=184
 bitshift=1
 bitval=1
 bitmask=2
@@ -261,8 +261,8 @@ handler=_GENERIC_
 [req_fuel_per_cycle_1_spin]
 keys=page,offset,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=0
-offset=90
+page=1
+offset=148
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
 bind_to_list=interdep_1_ctrl
@@ -270,20 +270,20 @@ ul_complex=TRUE
 ul_conv_expr=(reqfuel_1*((injectors_1+1)/divider_1))/10.0
 expr_symbols=reqfuel_1,injectors_1,divider_1
 expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_
-reqfuel_1_page=0
-reqfuel_1_offset=90
-injectors_1_page=0
-injectors_1_offset=117
+reqfuel_1_page=1
+reqfuel_1_offset=148
+injectors_1_page=1
+injectors_1_offset=183
 injectors_1_bitmask=240
 injectors_1_bitshift=4
-divider_1_page=0
-divider_1_offset=91
+divider_1_page=1
+divider_1_offset=149
 
 [req_fuel_per_cycle_2_spin]
 keys=page,offset,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=1
-offset=90
+page=2
+offset=147
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_2_
 bind_to_list=interdep_2_ctrl
@@ -291,36 +291,36 @@ ul_complex=TRUE
 ul_conv_expr=(reqfuel_2*((injectors_2+1)/divider_2))/10.0
 expr_symbols=reqfuel_2,injectors_2,divider_2
 expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_
-reqfuel_2_page=1
-reqfuel_2_offset=90
-injectors_2_page=1
-injectors_2_offset=117
+reqfuel_2_page=2
+reqfuel_2_offset=147
+injectors_2_page=2
+injectors_2_offset=182
 injectors_2_bitmask=240
 injectors_2_bitshift=4
-divider_2_page=1
-divider_2_offset=91
+divider_2_page=2
+divider_2_offset=148
 
 [req_fuel_per_squirt_1_spin]
 keys=page,offset,ul_conv_expr,bind_to_list
 key_types=_INT_,_INT_,_STRING_,_STRING_
-page=0
-offset=90
+page=1
+offset=148
 ul_conv_expr=x/10.0
 bind_to_list=interdep_1_ctrl
 
 [req_fuel_per_squirt_2_spin]
 keys=page,offset,ul_conv_expr,bind_to_list
 key_types=_INT_,_INT_,_STRING_,_STRING_
-page=1
-offset=90
+page=2
+offset=147
 ul_conv_expr=x/10.0
 bind_to_list=interdep_2_ctrl
 
 [inj_open_time_1_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=0
-offset=93
+page=1
+offset=151
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
@@ -329,8 +329,8 @@ handler=_GENERIC_
 [inj_open_time_2_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=1
-offset=93
+page=2
+offset=150
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
@@ -339,8 +339,8 @@ handler=_GENERIC_
 [batt_correction_1_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=0
-offset=97
+page=1
+offset=155
 dl_conv_expr=x*60
 ul_conv_expr=x/60
 dl_type=_IMMEDIATE_
@@ -349,8 +349,8 @@ handler=_GENERIC_
 [batt_correction_2_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=1
-offset=97
+page=2
+offset=154
 dl_conv_expr=x*60
 ul_conv_expr=x/60
 dl_type=_IMMEDIATE_
@@ -359,24 +359,24 @@ handler=_GENERIC_
 [pwm_limit_1_spin]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=0
-offset=95
+page=1
+offset=153
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [pwm_limit_2_spin]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=95
+page=2
+offset=152
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [pwm_time_thresh_1_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=0
-offset=96
+page=1
+offset=154
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
@@ -385,8 +385,8 @@ handler=_GENERIC_
 [pwm_time_thresh_2_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
-page=1
-offset=96
+page=2
+offset=153
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
@@ -395,7 +395,7 @@ handler=_GENERIC_
 [inj_per_cycle_1_spin]
 keys=page,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=0
+page=1
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_1_
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
@@ -403,17 +403,17 @@ ul_complex=TRUE
 ul_conv_expr=(cylinders_1+1)/divider_1
 expr_symbols=cylinders_1,divider_1
 expr_types=_VE_EMB_BIT_,_VE_VAR_
-cylinders_1_page=0
-cylinders_1_offset=116
+cylinders_1_page=1
+cylinders_1_offset=182
 cylinders_1_bitmask=240
 cylinders_1_bitshift=4
-divider_1_page=0
-divider_1_offset=91
+divider_1_page=1
+divider_1_offset=149
 
 [inj_per_cycle_2_spin]
 keys=page,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=1
+page=2
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_2_
 bind_to_list=interdep_2_ctrl,reqfuel_2_ctrl
@@ -421,18 +421,18 @@ ul_complex=TRUE
 ul_conv_expr=(cylinders_2+1)/divider_2
 expr_symbols=cylinders_2,divider_2
 expr_types=_VE_EMB_BIT_,_VE_VAR_
-cylinders_2_page=1
-cylinders_2_offset=116
+cylinders_2_page=2
+cylinders_2_offset=181
 cylinders_2_bitmask=240
 cylinders_2_bitshift=4
-divider_2_page=1
-divider_2_offset=91
+divider_2_page=2
+divider_2_offset=148
 
 [num_injectors_1_spin]
 keys=page,offset,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=0
-offset=117
+page=1
+offset=183
 bitmask=240
 bitshift=4
 dl_type=_DEFERRED_
@@ -442,16 +442,16 @@ ul_complex=TRUE
 ul_conv_expr=injectors_1+1
 expr_symbols=injectors_1
 expr_types=_VE_EMB_BIT_
-injectors_1_page=0
-injectors_1_offset=117
+injectors_1_page=1
+injectors_1_offset=183
 injectors_1_bitmask=240
 injectors_1_bitshift=4
 
 [num_injectors_2_spin]
 keys=page,offset,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=1
-offset=117
+page=2
+offset=182
 bitmask=240
 bitshift=4
 dl_type=_DEFERRED_
@@ -461,16 +461,16 @@ ul_complex=TRUE
 ul_conv_expr=injectors_2+1
 expr_symbols=injectors_2
 expr_types=_VE_EMB_BIT_
-injectors_2_page=1
-injectors_2_offset=117
+injectors_2_page=2
+injectors_2_offset=182
 injectors_2_bitmask=240
 injectors_2_bitshift=4
 
 [num_cylinders_1_spin]
 keys=page,offset,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=0
-offset=116
+page=1
+offset=182
 bitmask=240
 bitshift=4
 dl_type=_DEFERRED_
@@ -480,8 +480,8 @@ ul_complex=TRUE
 ul_conv_expr=cylinders_1+1
 expr_symbols=cylinders_1
 expr_types=_VE_EMB_BIT_
-cylinders_1_page=0
-cylinders_1_offset=116
+cylinders_1_page=1
+cylinders_1_offset=182
 cylinders_1_bitmask=240
 cylinders_1_bitshift=4
 
@@ -489,8 +489,8 @@ cylinders_1_bitshift=4
 [num_cylinders_2_spin]
 keys=page,offset,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=1
-offset=116
+page=2
+offset=181
 bitmask=240
 bitshift=4
 dl_type=_DEFERRED_
@@ -500,8 +500,8 @@ ul_complex=TRUE
 ul_conv_expr=cylinders_2+1
 expr_symbols=cylinders_2
 expr_types=_VE_EMB_BIT_
-cylinders_2_page=1
-cylinders_2_offset=116
+cylinders_2_page=2
+cylinders_2_offset=181
 cylinders_2_bitmask=240
 cylinders_2_bitshift=4
 

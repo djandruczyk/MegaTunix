@@ -29,6 +29,8 @@ gui_files = 	template.glade \
 		msnedis-3.0.x_ignition.datamap \
 		msns-3.0_ignition.glade \
 		msns-3.0_ignition.datamap \
+		msns-e-fuelconstants.glade \
+		msns-e-fuelconstants.datamap \
 		raweditor.glade \
 		raweditor.datamap \
 		runtime.glade \
