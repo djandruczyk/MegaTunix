@@ -230,5 +230,11 @@ struct Ve_Widgets
 	GtkWidget *widget[MS_PAGE_SIZE];
 };
 
+struct Logables
+{
+	GtkWidget *widgets[64];
+	gboolean index[64];
+};
+
 	
 #endif

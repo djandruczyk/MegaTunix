@@ -13,7 +13,6 @@
 
 #include <config.h>
 #include <conversions.h>
-#include <datalogging.h>
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <enums.h>
