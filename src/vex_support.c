@@ -620,6 +620,10 @@ void feed_import_data_to_ms(void *ptr)
 	struct Vex_Import *vex_import = ptr;
 	extern struct Firmware_Details *firmware;
 
+	/* Since we assume the page is where the table is this can cause
+	 * major problems with some firmwares that use two tables inside
+	 * of one page....
+	 */
 	page = vex_import->page;
 	/* If dimensions do NOT match, ABORT!!! */
 	if (firmware->table_params[page]->rpm_bincount != vex_import->total_rpm_bins)

@@ -71,14 +71,26 @@ void set_offline_mode(void)
 	firmware->rtv_map_file = g_strdup(canidate->rtv_map_file);
 	firmware->sliders_map_file = g_strdup(canidate->sliders_map_file);
 	firmware->multi_page = canidate->multi_page;
+	firmware->require_page = canidate->require_page;
+	firmware->total_tables = canidate->total_tables;
 	firmware->total_pages = canidate->total_pages;
+	firmware->write_cmd = g_strdup(canidate->write_cmd);
+	firmware->burn_cmd = g_strdup(canidate->burn_cmd);
+	firmware->page_cmd = g_strdup(canidate->page_cmd);
 	/* Allocate ram for the necessary structures... */
+
+	firmware->table_params = g_new0(struct Table_Params *,firmware->total_tables);
+	for (i=0;i<firmware->total_tables;i++)
+	{
+		firmware->table_params[i] = g_new0(struct Table_Params, 1);
+		memcpy(firmware->table_params[i],canidate->table_params[i],sizeof(struct Table_Params));
+	}
 
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		firmware->page_params[i] = g_new0(struct Page_Params, 1);
-		g_memmove(firmware->page_params[i],canidate->page_params[i],sizeof(struct Page_Params));
+		firmware->page_params[i] = initialize_page_params();
+		memcpy(firmware->page_params[i],canidate->page_params[i],sizeof(struct Page_Params));
 	}
 
 	mem_alloc();
