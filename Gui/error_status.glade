@@ -112,7 +112,7 @@ you should burn the setings to the ECU and power cycle it.</property>
 	      <child>
 		<widget class="GtkLabel" id="error_status_reboot_frame_title">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">VE/Spark Table Import/Export (VEX Files)</property>
+		  <property name="label" translatable="yes">ECU diagnostics on boot</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>

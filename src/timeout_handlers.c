@@ -44,10 +44,7 @@ void start_realtime_tickler()
 		update_logbar("comms_view",NULL,g_strdup("Realtime Reader started\n"),TRUE,FALSE);
 	}
 	else
-	{
-		dbg_func(g_strdup(__FILE__": start_realtime_tickler()\n\tTickler already running\n"),CRITICAL);
 		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY started\n"),TRUE,FALSE);
-	}
 }
 
 
@@ -61,7 +58,7 @@ void start_logviewer_playback()
 {
 
 	if (playback_id == 0)
-		playback_id = g_timeout_add(33,(GtkFunction)update_logview_traces,GINT_TO_POINTER(FALSE));
+		playback_id = g_timeout_add(33,(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 	else
 		dbg_func(g_strdup(__FILE__": start_logviewer_playback()\n\tPlayback already running \n"),CRITICAL);
 }
@@ -80,8 +77,6 @@ void stop_logviewer_playback()
 		g_source_remove(playback_id);
 		playback_id = 0;
 	}
-	else
-		dbg_func(g_strdup(__FILE__": stop_logviewer_playback()\n\tPlayback already stopped...\n"),CRITICAL);
 }
 
 
@@ -108,10 +103,8 @@ void stop_realtime_tickler()
 		}
 	}
 	else
-	{
-		dbg_func(g_strdup(__FILE__": stop_realtime_tickler()\n\tTickler already stopped...\n"),CRITICAL);
 		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY stopped\n"),TRUE,FALSE);
-	}
+
 	reset_runtime_status();
 }
 

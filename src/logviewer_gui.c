@@ -23,6 +23,7 @@
 #include <ms_structures.h>
 #include <structures.h>
 #include <tabloader.h>
+#include <timeout_handlers.h>
 
 static gint tcount = 0;	/* used to draw_infotext to know where to put the text*/
 static gint info_width = 120;
@@ -199,9 +200,9 @@ void present_viewer_choices(void)
 
 	button = gtk_button_new_with_label("Close");
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,TRUE,0);
-	g_signal_connect_swapped(G_OBJECT(button),"clicked",
-			G_CALLBACK(reenable_select_log_button),
-			NULL);
+//	g_signal_connect_swapped(G_OBJECT(button),"clicked",
+//			G_CALLBACK(reenable_select_log_button),
+//			NULL);
 	g_signal_connect_swapped(G_OBJECT(button),"clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
@@ -237,7 +238,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 	/* get object from widget */
 	object = (GObject *)g_object_get_data(G_OBJECT(widget),"object");
 	if (!object)
-		printf("object was null during view_value_set()\n");
+		dbg_func(g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"),CRITICAL);
 	g_object_set_data(object,"being_viewed",GINT_TO_POINTER(state));
 	populate_viewer();
 	return FALSE;
@@ -334,8 +335,6 @@ void populate_viewer()
 				/* Free all resources of the datastructure 
 				 * before de-allocating it... 
 				 */
-				if (!playback_mode)
-					g_array_free(v_value->data_array,TRUE);
 
 				g_object_unref(v_value->trace_gc);
 				g_object_unref(v_value->font_gc);
@@ -373,6 +372,7 @@ void reset_logviewer_state()
 
 	if (playback_mode)
 	{
+		stop_logviewer_playback();
 		widget = g_hash_table_lookup(dynamic_widgets,"logviewer_log_position_hscale");
 		if (GTK_IS_RANGE(widget))
 			gtk_range_set_value(GTK_RANGE(widget),1.0);
@@ -443,7 +443,7 @@ struct Viewable_Value * build_v_value(GtkWidget * d_area, GObject *object)
 		 * enough size to prevent reallocating memory too often. 
 		 * (more initial mem usage,  but less calls to malloc...
 		 */
-		v_value->data_array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+		v_value->data_array = (GArray *)g_object_get_data(object,"history");
 	}
 	/* Store pointer to d_area, but DO NOT FREE THIS on v_value destruction
 	 * as its the SAME one used for all Viewable_Values */
@@ -667,22 +667,42 @@ void draw_infotext(struct Viewable_Value *v_value)
 
 
 /*!
- \brief update_logview_traces() updates each trace in turn and then scrolls 
+ \brief rt_update_logview_traces() updates each trace in turn and then scrolls 
  the display
  \param force_redraw (gboolean) flag to force all data to be redrawn not 
  just the new data...
  \returns TRUE
  */
-gboolean update_logview_traces(gboolean force_redraw)
+gboolean rt_update_logview_traces(gboolean force_redraw)
 {
 
-	/* Called from one of two possible places:
-	 * 1. a GTK timeout used when playing back a log...
-	 * 2. as a hook onto the update_realtime stats box...
-	 *
-	 * If table does NOT exist or table is empty do NOTHING
-	 */
+	if (playback_mode)
+		return TRUE;
+	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
+	{
+		adj_scale = TRUE;
+		g_static_mutex_lock(&update_mutex);
+		g_hash_table_foreach(active_traces, trace_update,GINT_TO_POINTER(force_redraw));
+		g_static_mutex_unlock(&update_mutex);
+		scroll_logviewer_traces();
+	}
 
+	return TRUE;
+}
+
+
+/*!
+ \brief pb_update_logview_traces() updates each trace in turn and then scrolls 
+ the display
+ \param force_redraw (gboolean) flag to force all data to be redrawn not 
+ just the new data...
+ \returns TRUE
+ */
+gboolean pb_update_logview_traces(gboolean force_redraw)
+{
+
+	if (!playback_mode)
+		return TRUE;
 	if ((active_traces) && (g_hash_table_size(active_traces) > 0))
 	{
 		adj_scale = TRUE;
@@ -815,13 +835,15 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 			blocked=FALSE;
 			g_object_set_data(G_OBJECT(v_value->d_area),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
 			adj_scale = FALSE;
+			if (newpos >= 100)
+				stop_logviewer_playback();
 			//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
 		}
 		draw_infotext(v_value);
 		return;
 	}
 
-	history = (GArray *)g_object_get_data(v_value->object,"history");
+	history = v_value->data_array;
 	current_index = (gint)g_object_get_data(v_value->object,"current_index");
 	val = g_array_index(history,gfloat, current_index);
 
@@ -829,8 +851,6 @@ void trace_update(gpointer key, gpointer value, gpointer redraw_all)
 		v_value->max = val;
 	if (val < (v_value->min))
 		v_value->min = val;
-
-	g_array_append_val(v_value->data_array,val);
 
 	if (v_value->last_y == -1)
 		v_value->last_y = (gint)((percent*(h-2))+1);

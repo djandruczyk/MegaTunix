@@ -205,7 +205,7 @@ trypop:
 					break;
 				case UPD_LOGVIEWER:
 					if (connected)
-						update_logview_traces(FALSE);
+						rt_update_logview_traces(FALSE);
 					break;
 				case UPD_RAW_MEMORY:
 					if (connected)
