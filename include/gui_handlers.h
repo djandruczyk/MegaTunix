@@ -27,6 +27,7 @@ gboolean spin_button_grab(GtkWidget *, GdkEventButton *, gpointer );
 gboolean key_press_event(GtkWidget *, GdkEventKey *, gpointer );
 void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 void update_ve_const(void);
+void update_widget(gpointer, gpointer );
 /* Prototypes */
 
 #endif

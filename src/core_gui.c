@@ -20,7 +20,6 @@
 #include <defines.h>
 #include <dt_params_gui.h>
 #include <eng_vitals_gui.h>
-#include <enrichments_gui.h>
 #include <enums.h>
 #include <general_gui.h>
 #include <gui_handlers.h>

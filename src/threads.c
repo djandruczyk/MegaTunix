@@ -107,8 +107,6 @@ void io_cmd(IoCommands cmd, gpointer data)
 			message->out_len = cmds->ve_cmd_len;
 			message->handler = VE_AND_CONSTANTS_0;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-			tmp = UPD_STORE_CONVERSIONS;
-			g_array_append_val(message->funcs,tmp);
 			tmp = UPD_VE_CONST;
 			g_array_append_val(message->funcs,tmp);
 			tmp = UPD_STORE_BLACK;
@@ -191,7 +189,8 @@ void *serial_io_handler(gpointer data)
 		{
 			case INTERROGATION:
 				dbg_func(__FILE__": serial_io_handler() Interrogate_ecu requested\n",SERIAL_GEN);
-				interrogate_ecu();
+				if (connected)
+					interrogate_ecu();
 				break;
 			case COMMS_TEST:
 				dbg_func(__FILE__": serial_io_handler() comms_test requested \n",SERIAL_GEN);
@@ -226,17 +225,17 @@ void *serial_io_handler(gpointer data)
 				switch ((UpdateFunctions)val)
 				{
 					case UPD_LOAD_GUI_TABS:
-						gdk_threads_enter();
-						result = load_gui_tabs();
-						gdk_threads_leave();
-						if (result == FALSE)
-							goto breakout;
+						if (connected)
+						{
+							gdk_threads_enter();
+							result = load_gui_tabs();
+							gdk_threads_leave();
+							if (result == FALSE)
+								goto breakout;
+						}
 						break;
 					case UPD_READ_VE_CONST:
 						io_cmd(IO_READ_VE_CONST,NULL);
-						break;
-					case UPD_STORE_CONVERSIONS:
-						store_conversions();
 						break;
 					case UPD_REALTIME:
 						update_runtime_vars();
@@ -378,8 +377,8 @@ void comms_test()
 		g_free(tmpbuf);
 		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
-		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-				connected);
+//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+//				connected);
 		gdk_threads_leave();
 
 	}
@@ -394,8 +393,8 @@ void comms_test()
 		g_free(tmpbuf);
 		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
-		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-				connected);
+////		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+//				connected);
 		gdk_threads_leave();
 	}
 	/* Flush the toilet again.... */

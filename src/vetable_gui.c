@@ -31,7 +31,7 @@ void hilite_ve_entries(gint rpm, gint map, gint page)
 	extern GdkColor red;
 	extern GdkColor white;
 	struct Ve_Const_Std *ve_const = NULL;
-	extern GtkWidget *ve_widgets[];
+	extern GList *ve_widgets[];
 	static struct Indexes kpa_index[2],rpm_index[2];
 	static struct Indexes l_kpa_index[2],l_rpm_index[2];
 	static gint index[2][4] = {{-1,-1,-1,-1},{-1,-1,-1,-1}};

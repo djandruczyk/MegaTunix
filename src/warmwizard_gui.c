@@ -18,14 +18,15 @@
 #include <structures.h>
 #include <warmwizard_gui.h>
 
-extern const gchar *F_warmup_labels[];
+const gchar *F_warmup_labels[] = {"-40","-20",  "0", "20", "40",
+                                 "60", "80","100","130","160"};
 extern const gchar *status_msgs[];
 extern struct DynamicLabels labels;
 extern struct DynamicProgress progress;
 extern struct DynamicButtons buttons;
 extern struct DynamicSpinners spinners;
 extern struct DynamicMisc misc;
-extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 extern GdkColor red;
 
 
@@ -48,6 +49,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	extern GList *store_controls;
 	extern GList *temp_dep;
 
+	return;
 	/* MAin box inside parent frame */
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -73,9 +75,20 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	for (i=0;i<10;i++)
 	{
-		tmpspin = ve_widgets[0][WARMUP_BINS_OFFSET+i];
+		tmpspin = g_list_nth_data(ve_widgets[0][WARMUP_BINS_OFFSET+i],0);
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 		spinner = gtk_spin_button_new(adj,1,0);
+		ve_widgets[0][WARMUP_BINS_OFFSET+i] = g_list_append(ve_widgets[0][WARMUP_BINS_OFFSET+i],(gpointer)spinner);
+		g_object_set_data(G_OBJECT(spinner),"page",
+				GINT_TO_POINTER(0));
+		g_object_set_data(G_OBJECT(spinner),"offset",
+				GINT_TO_POINTER(WARMUP_BINS_OFFSET+i));
+		g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+				GINT_TO_POINTER(1*100));
+		g_object_set_data(G_OBJECT(spinner),"conv_type",
+				GINT_TO_POINTER(CONV_NOTHING));
+		g_object_set_data(G_OBJECT(spinner),"dl_type",
+				GINT_TO_POINTER(IMMEDIATE));
 		spinners.warmwizard[i] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -137,9 +150,20 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Priming pulse copy */
-	tmpspin = ve_widgets[0][119];
+	tmpspin = g_list_nth_data(ve_widgets[0][119],0);
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,0,1);
+	ve_widgets[0][119] = g_list_append(ve_widgets[0][119],(gpointer)spinner);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(119));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_MULT));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
@@ -147,9 +171,20 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	/* Cranking Pulsewidth at -40 deg F */
-	tmpspin = ve_widgets[0][64];
+	tmpspin = g_list_nth_data(ve_widgets[0][64],0);
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,0,1);
+	ve_widgets[0][64] = g_list_append(ve_widgets[0][64],(gpointer)spinner);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(64));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_MULT));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
@@ -157,9 +192,22 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	/* Cranking Pulsewidth at 170 deg F */
-	tmpspin = ve_widgets[0][65];
+	tmpspin = g_list_nth_data(ve_widgets[0][65],0);
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,0,1);
+	ve_widgets[0][65] = g_list_append(ve_widgets[0][65],(gpointer)spinner);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(65));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+			GINT_TO_POINTER(10*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_MULT));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 2, 3,
@@ -192,9 +240,20 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
 	/* Enrichment % */
-	tmpspin = ve_widgets[0][66];
+	tmpspin = g_list_nth_data(ve_widgets[0][66],0);
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,1,0);
+	ve_widgets[0][66] = g_list_append(ve_widgets[0][66],(gpointer)spinner);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(66));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_NOTHING));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
@@ -202,9 +261,20 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 40, 0);
 
 	/* Number of cycles  */
-	tmpspin = ve_widgets[0][67];
+	tmpspin = g_list_nth_data(ve_widgets[0][67],0);
 	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
 	spinner = gtk_spin_button_new(adj,1,0);
+	ve_widgets[0][67] = g_list_append(ve_widgets[0][67],(gpointer)spinner);
+	g_object_set_data(G_OBJECT(spinner),"page",
+			GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(67));
+	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+			GINT_TO_POINTER(1*100));
+	g_object_set_data(G_OBJECT(spinner),"conv_type",
+			GINT_TO_POINTER(CONV_NOTHING));
+	g_object_set_data(G_OBJECT(spinner),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
 	gtk_widget_set_size_request(spinner,55,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
@@ -454,6 +524,6 @@ void warmwizard_update_status(gfloat temp)
 					GTK_STATE_NORMAL,&red);
 		}
 	}
-	
+
 }
 

@@ -104,22 +104,28 @@ void check_config13(unsigned char tmp)
 	 */
 	if (((tmp >> 2)&0x1) == 1)
 	{
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_frame_title");
-		if (label)
-			gtk_label_set_text(GTK_LABEL(label),"TPS Bins");
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_table_units");
-		if (label)
-			gtk_label_set_text(GTK_LABEL(label),"TPS %");
-				
+		if (dynamic_widgets)
+		{
+			label = g_hash_table_lookup(dynamic_widgets,"VE1_load_frame_title");
+			if (label)
+				gtk_label_set_text(GTK_LABEL(label),"TPS Bins");
+			label = g_hash_table_lookup(dynamic_widgets,"VE1_load_table_units");
+			if (label)
+				gtk_label_set_text(GTK_LABEL(label),"TPS %");
+		}
+
 	}
 	else
 	{
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_frame_title");
-		if (label)
-			gtk_label_set_text(GTK_LABEL(label),"MAP Bins");
-		label = g_hash_table_lookup(dynamic_widgets,"VE1_load_table_units");
-		if (label)
-			gtk_label_set_text(GTK_LABEL(label),"Kpa");
+		if (dynamic_widgets)
+		{
+			label = g_hash_table_lookup(dynamic_widgets,"VE1_load_frame_title");
+			if (label)
+				gtk_label_set_text(GTK_LABEL(label),"MAP Bins");
+			label = g_hash_table_lookup(dynamic_widgets,"VE1_load_table_units");
+			if (label)
+				gtk_label_set_text(GTK_LABEL(label),"Kpa");
+		}
 	}
 
 	/* Check Idle method */
@@ -135,8 +141,8 @@ void check_config13(unsigned char tmp)
 				set_widget_state,(gpointer)FALSE);
 		reset_temps(GINT_TO_POINTER(temp_units));
 	}
-      
-		
+
+
 }
 
 void check_tblcnf(unsigned char tmp, gboolean update)

@@ -35,7 +35,7 @@ void build_ignition(GtkWidget *parent_frame)
 	extern GtkTooltips *tip;
 	extern GList *store_controls;
 	GSList *group;
-	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern struct DynamicButtons buttons;
 	extern struct DynamicLabels labels;
 
@@ -196,7 +196,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Trigger Angle */
         adj =  (GtkAdjustment *) gtk_adjustment_new(72.0,0.0,134.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
-        ve_widgets[1][80] = spinner;
+        ve_widgets[1][80] = g_list_append(ve_widgets[1][80],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -226,7 +226,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Crank Angle */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
-        ve_widgets[1][83] = spinner;
+        ve_widgets[1][83] = g_list_append(ve_widgets[1][83],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -256,7 +256,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Hold Cycles */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,1.0,10,1.0,1.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
-        ve_widgets[1][84] = spinner;
+        ve_widgets[1][84] = g_list_append(ve_widgets[1][84],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -300,7 +300,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Soft RevLimit RPM */
         adj =  (GtkAdjustment *) gtk_adjustment_new(7000.0,000.0,25500.0,100.0,1000.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
-        ve_widgets[1][86] = spinner;
+        ve_widgets[1][86] = g_list_append(ve_widgets[1][86],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -330,7 +330,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Soft RevLimit Sparkangle */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
-        ve_widgets[1][87] = spinner;
+        ve_widgets[1][87] = g_list_append(ve_widgets[1][87],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -360,7 +360,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Soft RevLimit MaxTime */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
         spinner = gtk_spin_button_new(adj,1,1);
-        ve_widgets[1][88] = spinner;
+        ve_widgets[1][88] = g_list_append(ve_widgets[1][88],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -390,7 +390,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Soft RevLimit Cooldown time */
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1.0,0);
         spinner = gtk_spin_button_new(adj,1,1);
-        ve_widgets[1][89] = spinner;
+        ve_widgets[1][89] = g_list_append(ve_widgets[1][89],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -420,7 +420,7 @@ void build_ignition(GtkWidget *parent_frame)
 	/* Hard RevLimit RPM */
         adj =  (GtkAdjustment *) gtk_adjustment_new(7000.0,000.0,25500.0,100.0,1000.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
-        ve_widgets[1][90] = spinner;
+        ve_widgets[1][90] = g_list_append(ve_widgets[1][90],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -466,7 +466,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(5000.0,000.0,25500.0,100.0,1000.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
         launch_controls = g_list_append(launch_controls,(gpointer)spinner);
-        ve_widgets[1][95] = spinner;
+        ve_widgets[1][95] = g_list_append(ve_widgets[1][95],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -498,7 +498,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,89.64,0.3516,3.516,0);
         spinner = gtk_spin_button_new(adj,1,1);
         launch_controls = g_list_append(launch_controls,(gpointer)spinner);
-        ve_widgets[1][96] = spinner;
+        ve_widgets[1][96] = g_list_append(ve_widgets[1][96],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -530,7 +530,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(5500.0,000.0,25500.0,100.0,1000.0,0);
         spinner = gtk_spin_button_new(adj,1,0);
         launch_controls = g_list_append(launch_controls,(gpointer)spinner);
-        ve_widgets[1][97] = spinner;
+        ve_widgets[1][97] = g_list_append(ve_widgets[1][97],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -562,7 +562,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(128.0,0.0,255.0,1,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
         launch_controls = g_list_append(launch_controls,(gpointer)spinner);
-        ve_widgets[1][98] = spinner;
+        ve_widgets[1][98] = g_list_append(ve_widgets[1][98],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -592,7 +592,7 @@ void build_ignition(GtkWidget *parent_frame)
         adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,255.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
         launch_controls = g_list_append(launch_controls,(gpointer)spinner);
-        ve_widgets[1][99] = spinner;
+        ve_widgets[1][99] = g_list_append(ve_widgets[1][99],(gpointer)spinner);
         gtk_widget_set_size_request(spinner,55,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",

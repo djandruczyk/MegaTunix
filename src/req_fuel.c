@@ -416,6 +416,7 @@ void check_req_fuel_limits()
 	gint dload_val = 0;
 	gint offset = 0;
 	gint page = -1;
+	GtkWidget *widget = NULL;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
 	extern GHashTable * interdep_vars_1;
@@ -424,6 +425,7 @@ void check_req_fuel_limits()
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 
 
 	if (ecu_caps & DUALTABLE)
@@ -478,7 +480,8 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90;
-			dload_val = convert_before_download(page, offset,
+			widget = g_list_nth_data(ve_widgets[page][offset],0);
+			dload_val = convert_before_download(widget,
 					req_fuel_per_squirt);
 			write_ve_const(page, offset, dload_val, FALSE);
 			/* Call handler to empty interdependant hash table */
@@ -534,8 +537,9 @@ void check_req_fuel_limits()
 			dload_val = ve_const_dt1->rpmk;
 			write_ve_const(1, rpmk_offset, dload_val, FALSE);
 
-			offset = 90 + MS_PAGE_SIZE;
-			dload_val = convert_before_download(page, offset,
+			offset = 90;
+			widget = g_list_nth_data(ve_widgets[page][offset],0);
+			dload_val = convert_before_download(widget,
 					req_fuel_per_squirt);
 			write_ve_const(page, offset, dload_val, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(1));
@@ -621,7 +625,8 @@ void check_req_fuel_limits()
 
 			/* Send reqd_fuel_per_squirt */
 			offset = 90;
-			dload_val = convert_before_download(page, offset,
+			widget = g_list_nth_data(ve_widgets[page][offset],0);
+			dload_val = convert_before_download(widget,
 					req_fuel_per_squirt);
 			write_ve_const(page, offset, dload_val, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(0));

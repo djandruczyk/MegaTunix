@@ -21,7 +21,6 @@ megatunix_SOURCES = \
 	debugging.c \
 	dt_params_gui.c \
 	eng_vitals_gui.c \
-	enrichments_gui.c \
 	fileio.c \
 	general_gui.c \
 	gui_handlers.c \

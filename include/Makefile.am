@@ -17,7 +17,6 @@ headers = \
         default_limits.h \
 	dt_params_gui.h \
 	eng_vitals_gui.h \
-        enrichments_gui.h \
 	enums.h \
 	fileio.h \
 	general_gui.h \

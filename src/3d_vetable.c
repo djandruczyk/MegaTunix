@@ -50,10 +50,11 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *vbox2;
 	GtkWidget *hbox;
 	GtkWidget *drawing_area;
+	GtkWidget *tmpwidget = NULL;
 	GdkGLConfig *gl_config;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
-	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern GList *store_controls;
 	gchar *tmpbuf;
 	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
@@ -86,7 +87,8 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	g_object_set_data(G_OBJECT(window),"ve_view",(gpointer)ve_view);
 
 	/* Bind pointer to veview to an object for retrieval elsewhere */
-	g_object_set_data(G_OBJECT(ve_widgets[page][0]),
+	tmpwidget = g_list_nth_data(ve_widgets[page][0],0);
+	g_object_set_data(G_OBJECT(tmpwidget),
 			"ve_view",(gpointer)ve_view);
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
@@ -209,12 +211,14 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 gint reset_3d_winstat(GtkWidget *widget)
 {
 	struct Ve_View_3D *ve_view;
-	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	GtkWidget *tmpwidget = NULL;
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern GList *store_controls;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	store_controls = g_list_remove(store_controls,(gpointer)ve_view->burn_but);	
 	winstat[ve_view->page] = FALSE;
-	g_object_set_data(G_OBJECT(ve_widgets[ve_view->page][0]),
+	tmpwidget = g_list_nth_data(ve_widgets[ve_view->page][0],0);
+	g_object_set_data(G_OBJECT(tmpwidget),
 			"ve_view",NULL);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
@@ -818,10 +822,11 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	gint rpm_base = 0;
 	gint ve_base = 0;
 	gfloat divider = 0.0;
-	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	struct Ve_View_3D *ve_view = NULL;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	unsigned char * ve_ptr = NULL;
+	GtkWidget *spinner = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
@@ -877,9 +882,10 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			{
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 10;
-				dload_val = convert_before_download(ve_view->page,offset,value);
+				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				dload_val = convert_before_download(spinner,value);
 				write_ve_const(page, offset,dload_val,ve_view->is_spark);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(ve_widgets[ve_view->page][offset]),value/divider);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;				
 		case GDK_plus:
@@ -890,9 +896,10 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			{
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 1;
-				dload_val = convert_before_download(ve_view->page,offset,value);
+				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				dload_val = convert_before_download(spinner,value);
 				write_ve_const(page, offset, dload_val,ve_view->is_spark);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(ve_widgets[ve_view->page][offset]),value/divider);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 
 			}
 			break;				
@@ -903,9 +910,10 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			{
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 10;
-				dload_val = convert_before_download(ve_view->page,offset,value);
+				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				dload_val = convert_before_download(spinner,value);
 				write_ve_const(page, offset, dload_val,ve_view->is_spark);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(ve_widgets[ve_view->page][offset]),value/divider);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;							
 
@@ -918,9 +926,10 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 			{
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 1;
-				dload_val = convert_before_download(ve_view->page,offset,value);
+				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
+				dload_val = convert_before_download(spinner,value);
 				write_ve_const(page, offset, dload_val,ve_view->is_spark);
-				gtk_spin_button_set_value(GTK_SPIN_BUTTON(ve_widgets[ve_view->page][offset]),value/divider);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;							
 

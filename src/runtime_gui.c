@@ -252,10 +252,11 @@ gboolean update_runtime_vars()
 	extern struct Runtime_Common *runtime;
 	extern gint ecu_caps;
 	struct Ve_View_3D * ve_view = NULL;
-	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
+	extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 	extern GHashTable *rt_controls;
 	gchar * tmpbuf = NULL;
 	gfloat tmpf = 0.0;
+	GtkWidget * tmpwidget=NULL;
 	static struct Runtime_Common *rt_last = NULL;	
 	extern struct Firmware_Details *firmware;
 
@@ -267,8 +268,9 @@ gboolean update_runtime_vars()
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
+		tmpwidget = g_list_nth_data(ve_widgets[i][0],0);
 		ve_view = (struct Ve_View_3D *)g_object_get_data(
-				G_OBJECT(ve_widgets[i][0]),"ve_view");
+				G_OBJECT(tmpwidget),"ve_view");
 		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL)) 
 		        gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 	}

@@ -37,7 +37,7 @@ extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
 GList *temp_dep = NULL;
-static gchar * conv_text[] = 
+/*static gchar * conv_text[] = 
 {
 	"Add",
 	"Subtract",
@@ -45,61 +45,22 @@ static gchar * conv_text[] =
 	"Divide",
 	"No Conversion"
 };
+*/
 
-void store_conversions(void)
-{
-	gint i = 0;
-	gint x = 0;
-	gint dl_type;
-	struct Conversion_Chart *conv_chart=NULL;
-	extern GtkWidget *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
-
-
-	for (x=0;x<MAX_SUPPORTED_PAGES;x++)
-	{
-		conv_chart = std_conversions[x];
-		for (i=0;i<2*MS_PAGE_SIZE;i++)
-		{
-			if (GTK_IS_OBJECT(ve_widgets[x][i]))
-			{
-				dl_type = (gint)g_object_get_data(
-						G_OBJECT(ve_widgets[x][i]),
-						"dl_type");
-				if (dl_type == IMMEDIATE)
-				{
-					conv_chart->conv_type[i] = (gint)g_object_get_data(G_OBJECT(ve_widgets[x][i]),"conv_type");
-					conv_chart->conv_factor[i] = (gfloat)((gint)g_object_get_data(G_OBJECT(ve_widgets[x][i]),"conv_factor_x100"))/100.0;
-				}
-
-			}
-			if ((i == 90) && ((x == 0)||(x==1)))	/* Required fuel special case */
-			{
-				conv_chart->conv_type[i] = CONV_NOTHING;
-				conv_chart->conv_factor[i] = 1.0;
-			}
-
-			dbg_func(g_strdup_printf(__FILE__": load_conversions() PAGE: %i,BASE Offset, %i, conv_type %s, conv_factor %f\n",x,i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]),DL_CONV);
-		}
-	}
-
-	return;
-}
-
-gint convert_before_download(gint page, gint offset, gfloat value)
+gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	gint return_value = 0;
-	gint tmp_val = (gint)(value+0.001);
-	gfloat factor;
 	unsigned char *ve_const_arr; 
-	struct Conversion_Chart *conv_chart;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	gint tmp_val = (gint)(value+0.001);
+	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	gint offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+	gfloat factor = (gfloat)((gint)g_object_get_data(G_OBJECT(widget),"conv_factor_x100"))/100.0;
+	Conversions conv_type = (Conversions)g_object_get_data(G_OBJECT(widget),"conv_type");
 
-	conv_chart = std_conversions[page];
 	ve_const_arr = (unsigned char *)ms_data[page];
 
-	factor = conv_chart->conv_factor[offset];
-
-	switch ((Conversions)conv_chart->conv_type[offset])
+	switch (conv_type)
 	{
 		case (CONV_ADD):
 			return_value = tmp_val + factor;
@@ -133,25 +94,24 @@ gint convert_before_download(gint page, gint offset, gfloat value)
 	return (return_value);
 }
 
-gfloat convert_after_upload(gint page, gint offset)
+gfloat convert_after_upload(GtkWidget * widget)
 {
 	gfloat return_value = 0.0;
-	gfloat factor = 0.0;
 	unsigned char *ve_const_arr;
-	struct Conversion_Chart *conv_chart;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	gint page = (gint)g_object_get_data(G_OBJECT(widget),"page");
+	gint offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+	gfloat factor = (gfloat)((gint)g_object_get_data(G_OBJECT(widget),"conv_factor_x100"))/100.0;
+	Conversions conv_type = (Conversions)g_object_get_data(G_OBJECT(widget),"conv_type");
 
-	conv_chart = std_conversions[page];
 	ve_const_arr = (unsigned char *)ms_data[page];
-
-	factor = conv_chart->conv_factor[offset];
 
 	/* Since this is the upload we actually do the CONVERSE mathematical 
 	 * operation since the algorithm was designed for the download side, 
 	 * On upload we need to "un-convert" from MS values to Gui friendly
 	 * versions....
 	 */
-	switch ((Conversions)conv_chart->conv_type[offset])
+	switch (conv_type)
 	{
 		case (CONV_ADD):
 			return_value = ve_const_arr[offset] - factor;
@@ -176,13 +136,15 @@ gfloat convert_after_upload(gint page, gint offset)
 	dbg_func(g_strdup_printf(__FILE__": convert_after_ul(),offset %i, raw %i, val %f, page %i\n",offset,ve_const_arr[offset],return_value,page),UL_CONV);
 	return (return_value);
 }
+
 void convert_temps(gpointer widget, gpointer units)
 {
 	gchar *text = NULL;
 	gchar * newtext = NULL;
 	gchar **array = NULL;
-	gfloat upper, value;
-	GtkAdjustment * adj;
+	gfloat upper = 0.0;
+	gfloat value = 0.0;
+	GtkAdjustment * adj = NULL;
 
 	if ((int)units == FAHRENHEIT)
 	{

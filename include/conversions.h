@@ -18,11 +18,10 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void store_conversions(void);
 void reset_temps(gpointer);
 void convert_temps(gpointer,gpointer);
-gint convert_before_download(gint, gint, gfloat);
-gfloat convert_after_upload(gint, gint);
+gint convert_before_download(GtkWidget *, gfloat);
+gfloat convert_after_upload(GtkWidget *);
 /* Prototypes */
 
 struct Conversion_Chart
