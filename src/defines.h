@@ -298,22 +298,6 @@ struct ms_ve_constants
 #define	SER_POLL_TIMEO		0x50
 #define	SER_INTERVAL_DELAY	0x51
 #define SET_SER_PORT		0x52
-#define KPA0			0x53
-#define KPA1			0x54
-#define KPA2			0x55
-#define KPA3			0x56
-#define KPA4			0x57
-#define KPA5			0x58
-#define KPA6			0x59
-#define KPA7			0x5a
-#define RPM0			0x5b
-#define RPM1			0x5c
-#define RPM2			0x5d
-#define RPM3			0x5e
-#define RPM4			0x5f
-#define RPM5			0x60
-#define RPM6			0x61
-#define RPM7			0x62
 
 /* text entries */
 #define WARMUP_NEG_40		0x70

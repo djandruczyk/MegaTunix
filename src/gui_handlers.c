@@ -303,7 +303,49 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 }
 
 int ve_spinner_changed(GtkWidget *widget, gpointer *data)
-{ return TRUE;}
+{
+	gfloat value = 0.0;
+	gint offset = 0;
+	if (paused_handlers)
+		return TRUE;
+	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	offset = GPOINTER_TO_INT(data);
+	printf("spinner value: %.1f ,offset %i\n",value,offset);
+
+	ve_constants->ve_bins[offset] = (gint)value;
+	write_ve_const(value, offset);
+	return TRUE;
+}
+
+int rpm_spinner_changed(GtkWidget *widget, gpointer *data)
+{
+	gfloat value = 0.0;
+	gint offset = 0;
+	if (paused_handlers)
+		return TRUE;
+	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	offset = GPOINTER_TO_INT(data);
+	printf("spinner value: %.1f ,offset %i\n",value,offset);
+
+	ve_constants->rpm_bins[offset] = (gint)value;
+	write_ve_const(value, offset);
+	return TRUE;
+}
+
+int kpa_spinner_changed(GtkWidget *widget, gpointer *data)
+{
+	gfloat value = 0.0;
+	gint offset = 0;
+	if (paused_handlers)
+		return TRUE;
+	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	offset = GPOINTER_TO_INT(data);
+	printf("spinner value: %.1f ,offset %i\n",value,offset);
+
+	ve_constants->kpa_bins[offset] = (gint)value;
+	write_ve_const(value, offset);
+	return TRUE;
+}
 
 int spinner_changed(GtkWidget *widget, gpointer *data)
 {
