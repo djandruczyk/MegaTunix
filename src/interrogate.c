@@ -65,6 +65,8 @@ static struct Canidate
 			{"Dualtable 1.02\0"},TRUE,FALSE,TRUE},
 	{ {22,1,1,125,125,31,0,0,0,0},NULL,NULL,"GM-IAC\0",{},29,
 			{"MS-2.9 GM-IAC\0"},FALSE,FALSE,TRUE},
+	{ {22,1,1,128,128,17,0,0,0,0},NULL,NULL,"Rover IAC\0",{},29,
+			{"MS-3.0 Rover IAC\0"},FALSE,FALSE,TRUE},
 	{ {22,1,1,125,125,0,0,83,0,0},NULL,NULL,{},{},20,
 			{"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0"},
 			FALSE,TRUE,FALSE},
