@@ -32,6 +32,8 @@ static GtkWidget *lv_darea = NULL; //for scroller  :(
 static gboolean adj_scale = TRUE;
 static gboolean blocked = FALSE;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
+static gfloat hue_angle = -60.0;
+static gfloat saturation = 1.0;
 
 static GHashTable *active_traces = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
@@ -314,6 +316,18 @@ void populate_viewer()
 			if (!being_viewed)
 			{
 				v_value = (struct Viewable_Value *)g_hash_table_lookup(active_traces,name);
+				if ((hue_angle > 0) && ((gint)hue_angle%780 == 0))
+				{
+					hue_angle-= 30;
+					saturation+= 0.2;
+				}
+				if ((hue_angle > 0) && ((gint)hue_angle%390 == 0)) /* phase shift */
+				{
+					hue_angle-=30.0;
+					saturation+=0.2;
+				}
+				hue_angle -=60;
+
 				/* Remove entry in from hash table */
 				g_hash_table_remove(active_traces,name);
 
@@ -467,7 +481,6 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 	GdkGC * gc = NULL;
 	GdkGCValues values;
 	GdkColormap *cmap = NULL;
-	static gfloat hue_angle = 0.0;
 
 	cmap = gdk_colormap_get_system();
 
@@ -485,15 +498,26 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			break;
 
 		case TRACE:
+			hue_angle += 60;
+
+			if ((hue_angle > 0) && ((gint)hue_angle%360 == 0))
+			{
+				hue_angle+=30.0;
+				saturation-=0.2;
+			}
+			if ((hue_angle > 0) && ((gint)hue_angle%750 == 0))
+			{
+				hue_angle+=30;
+				saturation-=0.2;
+			}
 			color = (GdkColor)  get_colors_from_hue(hue_angle,1.0);
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
 					GDK_GC_FOREGROUND);
-			hue_angle += 75;
-			if (hue_angle >= 360)
-				hue_angle -= 360.0;
+
+
 			break;
 		case GRATICULE:
 			color.red = 36288;
@@ -532,6 +556,8 @@ GdkColor get_colors_from_hue(gfloat hue_angle, gfloat sat)
 	gfloat g = 0.0;
 	gfloat b = 0.0;
 
+	while (hue_angle > 360.0)
+		hue_angle -= 360.0;
 	tmp = hue_angle/60.0;
 	i = floor(tmp);
 	fract = tmp-i;
@@ -1029,6 +1055,8 @@ void set_playback_mode(void)
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_logfile_button"), TRUE);
 	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
 	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+	hue_angle = -60.0;
+	saturation = 1.0;
 }
 
 
@@ -1046,6 +1074,8 @@ void set_realtime_mode(void)
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"logviewer_select_params_button"), TRUE);
 	gtk_widget_show(g_hash_table_lookup(dynamic_widgets,"logviewer_rt_control_vbox1"));
 	gtk_widget_hide(g_hash_table_lookup(dynamic_widgets,"logviewer_playback_control_vbox1"));
+	hue_angle = -60.0;
+	saturation = 1.0;
 }
 
 
