@@ -38,7 +38,7 @@ extern struct DynamicLabels labels;
 extern GdkColor white;
 extern gboolean dualtable;
 gchar *delim;
-gfloat cumulative = 0.0;
+gfloat cumu = 0.0;
 gint logging_mode = CUSTOM_LOG;
 static gint total_logables = 0;
 static gint delimiter = SPACE;
@@ -58,6 +58,8 @@ GtkWidget *logables_table;
 GtkWidget *delim_table;
 GtkWidget *tab_delim_button;
 struct Logables logables;
+	/* basty hack to prevent a compiler warning... */
+gint max_limits = sizeof(limits)/sizeof(struct Limits);
 
 
 void build_datalogging(GtkWidget *parent_frame)
@@ -393,10 +395,9 @@ void run_datalog(void)
 	gint offset = 0;
 	gint size = 0;
 	gint begin = FALSE;
-	gint pos = 0;
 	gint count = 0;
 	void *data;
-	gchar * tmpbuf;
+	GString *output;
 	struct Io_File *iofile = NULL;
 	unsigned char * uchar_ptr = (unsigned char *)runtime;
 	short * short_ptr = (short *)runtime;
@@ -404,78 +405,82 @@ void run_datalog(void)
 
 	if (!logging) /* Logging isn't enabled.... */
 		return;
+
+	data =  g_object_get_data(G_OBJECT(buttons.close_dlog_but),"data");
+	if (data != NULL)
+		iofile = (struct Io_File *)data;
 	else
+		fprintf(stderr,__FILE__": run_datalog, iofile undefined\n");
+
+
+	output = g_string_sized_new(64); /*64 char initial size */
+
+	if (header_needed)
 	{
-		tmpbuf = malloc(4096);
-		data =  g_object_get_data(G_OBJECT(buttons.close_dlog_but),"data");
-		if (data != NULL)
-			iofile = (struct Io_File *)data;
-		else
-			fprintf(stderr,__FILE__": run_datalog, iofile undefined\n");
-
-		if (header_needed)
-		{
-			write_log_header((void *)iofile);
-			begin = TRUE;
-			header_needed = FALSE;
-		}
-		for(i=0;i<total_logables;i++)
-		{
-			offset = offset_list[i];
-			size = size_list[i];
-			switch (offset)
-			{
-				case 99:
-					/* Special Hi-Res clock to be logged */
-					if (begin == TRUE)
-					{	
-						gettimeofday(&now,NULL);
-						last.tv_sec = now.tv_sec;
-						last.tv_usec = now.tv_usec;
-						begin = FALSE;
-						pos += g_sprintf(tmpbuf+pos,"%.3f",0.0);
-					}
-					else
-					{
-						gettimeofday(&now,NULL);
-						cumulative += (now.tv_sec-last.tv_sec)+
-							((double)(now.tv_usec-last.tv_usec)/
-							 1000000.0);
-						last.tv_sec = now.tv_sec;
-						last.tv_usec = now.tv_usec;
-						pos += g_sprintf(tmpbuf+pos,"%.3f",cumulative);
-					}
-					break;
-				default:
-					switch (size)
-					{
-						case FLOAT:
-							pos += g_sprintf(tmpbuf+pos,"%.3f",(float)float_ptr[offset/FLOAT]);
-							break;
-						case UCHAR:
-							pos += g_sprintf(tmpbuf+pos,"%i",(unsigned char)uchar_ptr[offset]);
-							break;
-						case SHORT:
-							pos += g_sprintf(tmpbuf+pos,"%i",short_ptr[offset/SHORT]);
-							break;
-						default:
-							printf("SIZE not defiend\n");
-							break;
-					}
-
-					break;
-			}
-			/* Print delimiter to log here so there isnt an extra
-			 * char at the end fo the line 
-			 */
-			if (i < (total_logables-1))
-				pos += g_sprintf(tmpbuf+pos,"%s",delim);
-		}
-		pos += g_sprintf(tmpbuf+pos,"\n");
-		g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
-		g_free(tmpbuf);
-
+		write_log_header((void *)iofile);
+		begin = TRUE;
+		header_needed = FALSE;
 	}
+	for(i=0;i<total_logables;i++)
+	{
+		offset = offset_list[i];
+		size = size_list[i];
+		switch (offset)
+		{
+			case 99:
+				/* Special Hi-Res clock to be logged */
+				if (begin == TRUE)
+				{	
+					gettimeofday(&now,NULL);
+					last.tv_sec = now.tv_sec;
+					last.tv_usec = now.tv_usec;
+					begin = FALSE;
+					output = g_string_append(output,"0.0");
+				}
+				else
+				{
+					gettimeofday(&now,NULL);
+					cumu += (now.tv_sec-last.tv_sec)+
+						((double)(now.tv_usec-last.tv_usec)/1000000.0);
+					last.tv_sec = now.tv_sec;
+					last.tv_usec = now.tv_usec;
+					g_string_append_printf(
+							output,"%.3f",cumu);
+							
+				}
+				break;
+			default:
+				switch (size)
+				{
+					case FLOAT:
+						g_string_append_printf(
+							output,"%.3f",(float)float_ptr[offset/FLOAT]);
+						break;
+					case UCHAR:
+						g_string_append_printf(
+							output,"%i",(unsigned char)uchar_ptr[offset]);
+						break;
+					case SHORT:
+						g_string_append_printf(
+							output,"%i",short_ptr[offset/SHORT]);
+						break;
+					default:
+						printf("SIZE not defiend\n");
+						break;
+				}
+
+				break;
+		}
+		/* Print delimiter to log here so there isnt an extra
+		 * char at the end fo the line 
+		 */
+		if (i < (total_logables-1))
+			output = g_string_append(output,delim);
+	}
+	output = g_string_append(output,"\n");
+	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_string_free(output,TRUE);
+
 }
 
 void write_log_header(void *ptr)
@@ -491,13 +496,11 @@ void write_log_header(void *ptr)
 	else
 		fprintf(stderr,__FILE__": iofile pointer was undefined...\n");
 		
-	output = g_string_new("");
+	output = g_string_sized_new(64); /*pre-allccate for 4 chars */
 
 	for (i=0;i<max_logables;i++)
-	{
 		if (logables.index[i])/* If bit is set, increment counter */
 			total_logables++;
-	}
 
 	for (i=0;i<max_logables;i++)
 	{
@@ -506,7 +509,8 @@ void write_log_header(void *ptr)
 			offset_list[j] = logging_offset_map[i];
 			size_list[j] = logging_datasizes_map[i];
 			j++;
-			if ((logging_mode == MT_CLASSIC_LOG) || (logging_mode == MT_FULL_LOG))
+			if ((logging_mode == MT_CLASSIC_LOG) || 
+					(logging_mode == MT_FULL_LOG))
 				output = g_string_append(output, 
 						mt_compat_names[i]);
 			else
