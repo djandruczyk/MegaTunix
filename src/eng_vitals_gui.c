@@ -406,7 +406,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
@@ -417,8 +417,8 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
 	table = gtk_table_new(2,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),3);
+	gtk_table_set_row_spacings(GTK_TABLE(table),15);
+	gtk_container_set_border_width(GTK_CONTAINER(table),15);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	label = gtk_label_new("Idle Control Methodology");
