@@ -88,12 +88,11 @@ EXPORT void finish_raweditor(void)
 		for (j=0;j<firmware->page_params[i]->length;j++)
 		{
 			entry = gtk_entry_new();
-			gtk_entry_set_activates_default(GTK_ENTRY(entry),TRUE);
 			g_object_set_data(G_OBJECT(entry),"page",GINT_TO_POINTER(i));
 			g_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(j));
 			g_object_set_data(G_OBJECT(entry),"base",GINT_TO_POINTER(16));
-			g_object_set_data(G_OBJECT(entry),"lower_limit",GINT_TO_POINTER(0));
-			g_object_set_data(G_OBJECT(entry),"upper_limit",GINT_TO_POINTER(255));
+			g_object_set_data(G_OBJECT(entry),"raw_lower",GINT_TO_POINTER(0));
+			g_object_set_data(G_OBJECT(entry),"raw_upper",GINT_TO_POINTER(255));
 			g_object_set_data(G_OBJECT(entry),"raw",GINT_TO_POINTER(TRUE));
 			if (firmware->page_params[i]->is_spark)
 				g_object_set_data(G_OBJECT(entry),"ign_parm",GINT_TO_POINTER(TRUE));

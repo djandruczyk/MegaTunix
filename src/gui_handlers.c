@@ -373,12 +373,10 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint base = 0;
 	gint offset = 0;
 	gint dload_val = 0;
-	gint lower = 0;
-	gint upper = 0;
 	gint precision = 0;
 	gfloat real_value = 0.0;
 	gboolean is_float = FALSE;
-	gboolean ign_parm = 0;
+	gboolean ign_parm = FALSE;
 
 
 	if ((paused_handlers) || (!ready))
@@ -395,33 +393,21 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	base = (gint)g_object_get_data(G_OBJECT(widget),"base");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-	lower = (gint)g_object_get_data(G_OBJECT(widget),"lower_limit");
-	upper = (gint)g_object_get_data(G_OBJECT(widget),"upper_limit");
 	precision = (gint)g_object_get_data(G_OBJECT(widget),"precision");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(widget),"is_float");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
 	tmpf = g_ascii_strtod(text,NULL);
-	printf("base %i, lower %i, upper %i text %s int val %i, float val %f \n",base,lower,upper,text,tmpi,tmpf);
+	printf("entry handler for page %i, offset %i\n",page,offset);
+	//printf("base %i, text %s int val %i, float val %f \n",base,text,tmpi,tmpf);
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 
 	 * or base16, the problem is the limits are in base10
 	 */
 
-	if (tmpf > upper)
-		tmpf = upper;
-	if (tmpf < lower)
-		tmpf = lower;
-
-	if (tmpi > upper)
-		tmpi = upper;
-	if (tmpi < lower)
-		tmpi = lower;
-
 	if ((tmpf != (gfloat)tmpi) && (!is_float))
 		gtk_entry_set_text(GTK_ENTRY(widget),g_strdup_printf("%i",tmpi));
-
 	if (base == 10)
 	{
 		if (is_float)
@@ -655,6 +641,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	tmpi = (int)(value+.001);
 
 
+	printf("spinbutton handler for page %i, offset %i\n",page,offset);
 	switch ((SpinButton)handler)
 	{
 		case SER_INTERVAL_DELAY:
@@ -1197,17 +1184,20 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint value = 0;
 	gint lower = 0;
 	gint upper = 0;
+	gchar * signal = NULL;
+	gboolean retval = FALSE;
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
-	lower = (gint) g_object_get_data(G_OBJECT(widget),"lower_limit");
-	upper = (gint) g_object_get_data(G_OBJECT(widget),"upper_limit");
+	lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
+	upper = (gint) g_object_get_data(G_OBJECT(widget),"raw_upper");
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 
-	if (upper == 0)
-		upper = 255;	// BAD assumption!!!
-
+	if (GTK_IS_SPIN_BUTTON(widget))
+		signal = g_strdup("value_changed");
+	else if (GTK_IS_ENTRY(widget))
+		signal = g_strdup("activate");
 	value = ms_data[page][offset];
 	switch (event->keyval)
 	{
@@ -1216,40 +1206,45 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				grab_allowed = TRUE;
 			else
 				grab_allowed = FALSE;
-			return FALSE;
+			retval = FALSE;
 			break;
 		case GDK_Page_Up:
 			if (value < (upper-10))
 				ms_data[page][offset]+=10;
-			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-			return TRUE;
-			break;
+			retval = TRUE;
+				break;
 		case GDK_Page_Down:
 			if (value > (lower+10))
 				ms_data[page][offset]-=10;
-			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-			return TRUE;
-			break;
+			retval = TRUE;
+				break;
 		case GDK_KP_Add:
 			if (value < (upper-1))
 				ms_data[page][offset]+=1;
-			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-			return TRUE;
-			break;
+			retval = TRUE;
+				break;
 		case GDK_KP_Subtract:
 			if (value > (lower+1))
 				ms_data[page][offset]-=1;
-			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
-			return TRUE;
-			break;
+			retval = TRUE;
+				break;
 		case GDK_Escape:
 			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			retval = FALSE;
 			break;
 		default:	
-			return FALSE;
+			retval = FALSE;
 	}
-	return FALSE;
+	if (retval)
+	{
+		paused_handlers = TRUE;
+		g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+		paused_handlers=FALSE;
+		g_signal_emit_by_name(widget,signal,NULL);
+	}
+	g_free(signal);
+	return retval;;
 }
 
 EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -1300,7 +1295,7 @@ testit:
 	frame_name = (gchar *)g_object_get_data(G_OBJECT(parent),"rescaler_frame");
 	if (!frame_name)
 	{
-		printf("frame_name could NOT be found\n");
+		dbg_func(__FILE__": widget_grab()\n\t\"rescale_frame\" key could NOT be found\n",CRITICAL);
 		return FALSE;
 	}
 

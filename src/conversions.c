@@ -34,10 +34,21 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	void *evaluator = NULL;
 	gint page = -1;
 	gint offset = -1;
+	gint lower = -1;
+	gint upper = -1;
 	extern gint **ms_data;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
+
+	if (NULL == g_object_get_data(G_OBJECT(widget),"raw_lower"))
+		lower = 0; // BAD assumption
+	else
+		lower = (gint)g_object_get_data(G_OBJECT(widget),"raw_lower");
+	if (NULL == g_object_get_data(G_OBJECT(widget),"raw_upper"))
+		upper = 255; // BAD assumption
+	else
+		upper = (gint)g_object_get_data(G_OBJECT(widget),"raw_upper");
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
@@ -47,6 +58,16 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	if (conv_expr == NULL)
 	{
 		dbg_func(g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value),CONVERSIONS);
+		if(value > upper)
+		{
+			dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (no eval)!!\n",CRITICAL);
+			value = upper;
+		}
+		if (value < lower)
+		{
+			dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (no eval)!!\n",CRITICAL);
+			value = lower;
+		}
 		ms_data[page][offset] = (gint)value;
 		g_static_mutex_unlock(&mutex);
 		return ((gint)value);		
@@ -60,6 +81,17 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	return_value = evaluator_evaluate_x(evaluator,value)+0.001;
 
 	dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value),CONVERSIONS);
+
+	if (return_value > upper)
+	{
+		dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (evaluated)!!\n",CRITICAL);
+		return_value = upper;
+	}
+	if (return_value < lower)
+	{
+		dbg_func(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (evaluated)!!\n",CRITICAL);
+		return_value = lower;
+	}
 
 	ms_data[page][offset] = return_value;
 
