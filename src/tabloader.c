@@ -168,14 +168,14 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	{
 		switch((DataTypes)keytypes[i])
 		{
-			case INT:
+			case MTX_INT:
 				cfg_read_int(cfgfile,section,keys[i],&tmpi);
 				g_object_set_data(G_OBJECT(widget),
 						g_strdup(keys[i]),
 						GINT_TO_POINTER(tmpi));	
 				dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
 				break;
-			case ENUM:
+			case MTX_ENUM:
 				cfg_read_string(cfgfile,section,keys[i],&tmpbuf);
 				tmpi = translate_string(tmpbuf);
 				g_free(tmpbuf);
@@ -184,14 +184,14 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 						GINT_TO_POINTER(tmpi));	
 				dbg_func(g_strdup_printf(__FILE__": bind_data() binding STRING %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
 				break;
-			case BOOL:
+			case MTX_BOOL:
 				cfg_read_boolean(cfgfile,section,keys[i],&tmpi);
 				g_object_set_data(G_OBJECT(widget),
 						g_strdup(keys[i]),
 						GINT_TO_POINTER(tmpi));	
 				dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
 				break;
-			case STRING:
+			case MTX_STRING:
 				cfg_read_string(cfgfile,section,keys[i],&tmpbuf);
 				g_object_set_data(G_OBJECT(widget),
 						g_strdup(keys[i]),

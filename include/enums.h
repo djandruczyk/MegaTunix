@@ -256,10 +256,10 @@ typedef enum
 
 typedef enum
 {
-	INT = 0x150,
-	ENUM,
-	BOOL,
-	STRING,
+	MTX_INT = 0x150,
+	MTX_ENUM,
+	MTX_BOOL,
+	MTX_STRING,
 }DataTypes;
 
 typedef enum

@@ -50,7 +50,7 @@ ConfigFile *cfg_open_file(gchar * filename)
 
 	if (lstat(filename, &stats) == -1)
 		return NULL;
-	if (!(file = fopen(filename, "r")))
+	if (!(file = fopen(filename, "rb")))
 		return NULL;
 
 	buffer = g_malloc(stats.st_size + 1);
@@ -102,7 +102,7 @@ gboolean cfg_write_file(ConfigFile * cfg, gchar * filename)
 	ConfigSection *section;
 	ConfigLine *line;
 
-	if (!(file = fopen(filename, "w")))
+	if (!(file = fopen(filename, "wb")))
 		return FALSE;
 
 	section_list = cfg->sections;
