@@ -1,16 +1,13 @@
 
+GaugeEngine.  Gauges using libgnomecanvas and XML or other based config files
+defining gauge look/feel (photorealistic and scalable if possible)
 
-Tools (memory editor, TPS guage calibrator, others? )
-Datalogging gui and necessary I/O functions. (will draw upon existing code)
-
-Still needs tuning GUI.  Will probably end up starting yet another project
-to design gui dashboard widgets for GTK and make a library for it..  Would
-prefer to find out someone else alreay built it, and did it right...
-Currently leaning towards libgnomecanvas. The Canvas seems extremely power-
-full, though I'd like to see more documentation on it... The gauge-engien code
-will probably use the canvas for rendering and XML to store the gauge "Themes"
-
-
-Use gtkglext to display the VEtable in OpenGL. (should be too cpu intensive
-as it'll be wireframe.)  Just make the perspective view much easier to do...
+Works in progress:
+	Moving of interrogation profiles to external files. (complete 8/1/04)
+	defining of realtime vars and derived variables outside of the code
+and loaded after interrogation sequence completes.  (in design and initial 
+implementation stages (8/7/04).
+	Defining of all major controls outside of the sourcecode and loaded
+after interrogation procedure completes.  (in design, implementation scheduled
+for sept/oct 2004)  This will allow massive customization by end users...
 

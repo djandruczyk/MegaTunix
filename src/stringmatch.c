@@ -66,7 +66,12 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_CMD_F0_",GINT_TO_POINTER(CMD_F0));
 	g_hash_table_insert(str_2_enum,"_CMD_F1_",GINT_TO_POINTER(CMD_F1));
 	g_hash_table_insert(str_2_enum,"_CMD_QUEST_",GINT_TO_POINTER(CMD_QUEST));
+	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 
+}
+void dump_hash(gpointer key, gpointer value, gpointer user_data)
+{
+	dbg_func(g_strdup_printf(__FILE__": dump_hash(), Key %s, Value %i\n",(gchar *)key, (gint)value),CRITICAL);
 }
 
 gint translate_string(gchar *string)

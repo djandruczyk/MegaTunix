@@ -35,8 +35,6 @@ void post_process_realtime_vars(void *input, void *output)
 	extern unsigned char *ms_data;
 	extern unsigned int ecu_caps;
 	extern gint temp_units;
-	gint stroke = 0;
-	gint cyls = 0;
 	gfloat ign_int = 0.0;
 	struct Raw_Runtime_Std *in = input;
 	struct Raw_Runtime_Dualtable *in_dt = input;
@@ -111,20 +109,20 @@ void post_process_realtime_vars(void *input, void *output)
 	else	 /* Spark variants,  SquirtnSpark and SquirtnEDIS */
 	{
 		/* Funky high resolution RPM output from MegaSquirtnSpark */
-		cyls = ve_const->config11.bit.cylinders+1;
-		if (ve_const->config11.bit.eng_type == 0)
-			stroke = 4;
-		else
-			stroke = 2;
 		out->ctimecommH = ign_in->ctimecommH;
 		out->ctimecommL = ign_in->ctimecommL;
-		ign_int = (((out->ctimecommH*256)+out->ctimecommL)/7.3728)*8.0;
+		/* 0.92 is there cause of clock of 7.3728 mhz....
+		 * if clock goes to 8 mhz, get rid of 0.92 factor...
+		 */
+
+		ign_int = (((out->ctimecommH*256)+out->ctimecommL)/0.92)/1000;
 		if (ign_in->rpm < 5)
 			out->rpm = ign_in->rpm*100;
 		else
-			out->rpm = 1000000*60.0/(float)(ign_int*((float)stroke/(float)cyls*2));
-			if (out->rpm > 25500)
-				out->rpm = 25500;
+			out->rpm = (float)ve_const->rpmk/(float)ign_int;
+
+		if (out->rpm > 25500)
+			out->rpm = 25500;
 
 		out->sparkangle = (gint)((float)ign_in->sparkangle/2.84);
 	}
@@ -267,6 +265,8 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 	}
 }
 
+/// get_bin(gint) converts a decimal number into binary and returns it
+/// as a gchar *. used in the memory viewer to print numbers in binary
 gchar * get_bin(gint x)
 {
 	GString *string = g_string_new(NULL);
