@@ -29,7 +29,6 @@
 #include <logviewer_gui.h>
 #include <offline.h>
 #include <mode_select.h>
-#include <ms_structures.h>
 #include <notifications.h>
 #include <post_process.h>
 #include <req_fuel.h>

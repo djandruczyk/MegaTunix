@@ -18,9 +18,10 @@
 #include <gui_handlers.h>
 #include <listmgmt.h>
 #include <logviewer_core.h>
+#include <logviewer_events.h>
 #include <logviewer_gui.h>
+#include <math.h>
 #include <mode_select.h>
-#include <ms_structures.h>
 #include <structures.h>
 #include <tabloader.h>
 #include <timeout_handlers.h>
@@ -34,7 +35,7 @@ static gfloat hue = -60.0;
 static gfloat col_sat = 1.0;
 static gfloat col_val = 1.0;
 
-static struct Logview_Data *lv_data = NULL;
+struct Logview_Data *lv_data = NULL;
 gint lv_zoom = 0;		/* logviewer scroll amount */
 gboolean playback_mode = FALSE;
 extern struct Log_Info *log_info;
@@ -1016,77 +1017,6 @@ void scroll_logviewer_traces()
 			lv_zoom,h);
 
 	gdk_window_clear(widget->window);
-}
-
-
-/*! 
- \brief lv_configure_event() is the logviewer configure event that gets called
- whenever the display is resized or created
- \param widget (GtkWidget *) pointer to widget receiving event
- \param event (GdkEventConfigure *) pointerto event structure
- \param data (gpointer) unused)
- \returns FALSE
- */
-EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
-{
-	GdkPixmap *pixmap = NULL;
-	gint w = 0;
-	gint h = 0;
-
-	/* Get pointer to backing pixmap ... */
-	pixmap = lv_data->pixmap;
-			
-	if (widget->window)
-	{
-		if (pixmap)
-			g_object_unref(pixmap);
-
-		w=widget->allocation.width;
-		h=widget->allocation.height;
-		pixmap=gdk_pixmap_new(widget->window,
-				w,h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(pixmap,
-				widget->style->black_gc,
-				TRUE, 0,0,
-				w,h);
-		gdk_window_set_back_pixmap(widget->window,pixmap,0);
-		lv_data->pixmap = pixmap;
-
-		if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
-		{
-			draw_infotext();
-			trace_update(TRUE);
-		}
-		gdk_window_clear(widget->window);
-	}
-
-	return FALSE;
-}
-
-
-/*!
- \brief lv_expose_event() is alled whenever part of the display is uncovered
- so that the screen can be redraw from the backing pixmap
- \param widget (GtkWidget *) widget receiving the event
- \param event (GdkEventExpose *) event structure
- \param data (gpointer) unused
- \returns TRUE
- */
-EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
-{
-	GdkPixmap *pixmap = NULL;
-	pixmap = lv_data->pixmap;
-
-	/* Expose event handler... */
-	gdk_draw_drawable(widget->window,
-                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                        pixmap,
-                        event->area.x, event->area.y,
-                        event->area.x, event->area.y,
-                        event->area.width, event->area.height);
-
-	return TRUE;
 }
 
 

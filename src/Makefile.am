@@ -30,6 +30,7 @@ megatunix_SOURCES = \
 	keyparser.c \
 	listmgmt.c \
 	logviewer_core.c \
+	logviewer_events.c \
 	logviewer_gui.c \
 	lookuptables.c \
 	main.c \

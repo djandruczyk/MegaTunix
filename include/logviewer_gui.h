@@ -21,8 +21,6 @@
 void present_viewer_choices(void);
 void scroll_logviewer_traces(void);
 void reset_logviewer_state(void);
-gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
-gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean view_value_set(GtkWidget *, gpointer );
 gboolean set_lview_choices_state(GtkWidget *, gpointer);
 gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);

@@ -17,7 +17,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <init.h>
-#include <ms_structures.h>
 #include <structures.h>
 #include <string.h>
 #include <sys/stat.h>

@@ -29,7 +29,6 @@
 #include <gtk/gtkgl.h>
 #include <listmgmt.h>
 #include <../mtxmatheval/mtxmatheval.h>
-#include <ms_structures.h>
 #include <notifications.h>
 #include <pango/pangoft2.h>
 #include <rtv_processor.h>

@@ -21,7 +21,6 @@
 #include <glib.h>
 #include <gui_handlers.h>
 #include <math.h>
-#include <ms_structures.h>
 #include <notifications.h>
 #include <structures.h>
 #include <sys/types.h>

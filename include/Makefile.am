@@ -25,6 +25,7 @@ headers = \
 	listmgmt.h \
         logo.h \
         logviewer_core.h \
+        logviewer_events.h \
         logviewer_gui.h \
         lookuptables.h \
         main.h \
