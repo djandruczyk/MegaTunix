@@ -15,22 +15,138 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-/* DO NOT include defines.h, as protos.h already does... */
+#include "constants.h"
 #include "protos.h"
 #include "globals.h"
+
+extern struct v1_2_Constants constants;
+extern struct ms_ve_constants ve_constants;
+static int kpa_offset = 109;
+static int rpm_offset = 101;
+const gint kpa_arr_ptrs[] = {KPA0,KPA1,KPA2,KPA3,
+			     KPA4,KPA5,KPA6,KPA7};
+const gint rpm_arr_ptrs[] = {RPM0,RPM1,RPM2,RPM3,
+			     RPM4,RPM5,RPM6,RPM7};
+			     
 
 int build_vetable(GtkWidget *parent_frame)
 {
         GtkWidget *vbox;
+        GtkWidget *vbox2;
+        GtkWidget *hbox;
+        GtkWidget *hbox2;
         GtkWidget *label;
+        GtkWidget *table;
+        GtkWidget *spinner;
+        GtkWidget *entry;
+        GtkWidget *frame;
+        GtkAdjustment *adj;
+	gint x,y;
 
         vbox = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-        label = gtk_label_new("Not Implemented yet");
-        gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
+
+	hbox = gtk_hbox_new(FALSE,0);
+        gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+
+	frame = gtk_frame_new("MAP Bins");
+        gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,5);
+	
+
+	table = gtk_table_new(9,1,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_container_add(GTK_CONTAINER(frame),table);
+
+	/* KPA spinbuttons */
+	label = gtk_label_new("Kpa");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	for (y=0;y<8;y++)
+	{
+		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
+		spinner = gtk_spin_button_new(adj,1,0);
+		gtk_widget_set_size_request(spinner,45,-1);
+		g_signal_connect (G_OBJECT(spinner), "value_changed",
+				G_CALLBACK (spinner_changed),
+				GINT_TO_POINTER(kpa_arr_ptrs[y]));
+		constants.kpa_bins_spin[y] = spinner;
+		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+		gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(kpa_offset+y));
+		gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 8-y, 9-y,
+				(GtkAttachOptions) (GTK_EXPAND),
+				(GtkAttachOptions) (0), 0, 0);
+
+	}
+
+
+	vbox2 = gtk_vbox_new(FALSE,0);
+        gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+
+	frame = gtk_frame_new("Volumetry Efficiency (%)");
+        gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+	
+	table = gtk_table_new(9,8,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_container_add(GTK_CONTAINER(frame),table);
+
+	/* VeTable spinbuttons */
+	label = gtk_label_new(" ");
+	gtk_table_attach (GTK_TABLE (table), label, 0, 8, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	for (x=0;x<8;x++)
+	{
+		for (y=0;y<8;y++)
+		{
+			adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
+			spinner = gtk_spin_button_new(adj,1,0);
+			gtk_widget_set_size_request(spinner,52,-1);
+			g_signal_connect (G_OBJECT(spinner), "value_changed",
+					G_CALLBACK (ve_spinner_changed),
+					GINT_TO_POINTER(x+y));
+			constants.ve_bins_spin[x+y] = spinner;
+			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+			gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 8-y, 9-y,
+					(GtkAttachOptions) (GTK_EXPAND),
+					(GtkAttachOptions) (0), 0, 0);
+
+		}
+	}
+
+	/* RPM Table */
+	frame = gtk_frame_new("RPM Bins");
+        gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+
+	table = gtk_table_new(1,8,FALSE);
+	gtk_table_set_col_spacings(GTK_TABLE(table),2);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
+        gtk_container_add(GTK_CONTAINER(frame),table);
+
+	for(x=0;x<8;x++)
+	{
+		adj =  (GtkAdjustment *) gtk_adjustment_new(100.0,100.0,25500,100,100,0);
+		spinner = gtk_spin_button_new(adj,1,0);
+		gtk_widget_set_size_request(spinner,52,-1);
+		g_signal_connect (G_OBJECT(spinner), "value_changed",
+				G_CALLBACK (spinner_changed),
+				GINT_TO_POINTER(rpm_arr_ptrs[x]));
+		constants.rpm_bins_spin[x] = spinner;
+		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+		gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(rpm_offset+x));
+		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,
+				(GtkAttachOptions) (GTK_EXPAND),
+				(GtkAttachOptions) (0), 0, 0);
+
+	}
 
 
 
-	/* Not written yet */
 	return TRUE;
 }

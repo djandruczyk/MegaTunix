@@ -39,6 +39,9 @@ struct v1_2_Constants
 	GtkWidget *cr_priming_pulse_spin;	/* Spinner */
 	GtkWidget *as_enrich_spin;		/* Spinner */
 	GtkWidget *as_num_cycles_spin;		/* Spinner */
+	GtkWidget *kpa_bins_spin[8];		/* Spinner */
+	GtkWidget *rpm_bins_spin[8];		/* Spinner */
+	GtkWidget *ve_bins_spin[64];		/* Spinner */
 	GtkWidget *warmup_bins_ent[10];		/* Text Entries */
 	GtkWidget *tps_trig_thresh_ent;		/* Text Entry */
 	GtkWidget *accel_duration_ent;		/* Text Entry */

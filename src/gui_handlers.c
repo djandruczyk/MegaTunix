@@ -302,6 +302,9 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 	return TRUE;
 }
 
+int ve_spinner_changed(GtkWidget *widget, gpointer *data)
+{}
+
 int spinner_changed(GtkWidget *widget, gpointer *data)
 {
 	/* Gets the value from the spinbutton then modifues the 
