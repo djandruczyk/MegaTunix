@@ -50,12 +50,13 @@ static struct
 	{ "C", "MS Clock", 1, 0,NULL },
 	{ "Q", "MS Revision", 1, 0,NULL },
 	{ "V", "Ve/Constants", 1, 0,NULL },
+	{ "F0", "Memory readback first 256 bytes ", 2, 0,NULL },
 	{ "P1V", "Ve/Constants (page1)", 3, 0,NULL },
+	{ "F1", "Memory readback second 256 bytes ", 2, 0,NULL },
 	{ "S", "Signature Echo", 1, 0,NULL },
 	{ "I", "Ignition Vars", 1, 0,NULL },
 	{ "?", "Extended Version", 1, 0,NULL }
 };
-
 /*
  * The Various MegaSquirt variants that MegaTunix attempts to support
  * have one major problem.  Inconsistent version numbering.  Several
@@ -100,12 +101,13 @@ void interrogate_ecu()
 	 * try and get as close as possible.
 	 */
 	struct pollfd ufds;
-	gint size = 255;
+	gint size = 1024;
 	unsigned char buf[size];
-	unsigned char *ptr;
+	unsigned char *ptr = buf;
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
+	gint j = 0;
 	gint len = 0;
 	gint total = 0;
 	gint table0_index = 0;
@@ -149,38 +151,45 @@ void interrogate_ecu()
 		count = 0;
 		total = 0;
 		/* flush buffer to known state.. */
-		memset (&buf,0,size);
-		/* assign pointer to start of buffer */
-		ptr = buf;
+		memset (buf,0,size);
 
+		ptr = buf;
 		string = g_strdup(commands[i].cmd_string);
 		len = commands[i].cmd_len;
 		res = write(serial_params->fd,string,len);
-		//printf("Command %s\n",string);
-		g_free(string);
-
+		if (res != len)
+			fprintf(stderr,__FILE__": Error writing data to the ECU\n");
 		res = poll (&ufds,1,10);
 		if (res)
 		{	
+			printf("command %s returned ",string);
 			while (poll(&ufds,1,10))
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
 				//printf("count %i, total %i\n",count,total);
 			}
-			if (commands[i].buffer == NULL)
-				commands[i].buffer = g_malloc(total);
-			else
-				commands[i].buffer = g_realloc(
-						commands[i].buffer,total);
+			printf("%i bytes\n",total);
 			
-
-			memset(commands[i].buffer,0,total);
-			memcpy(commands[i].buffer,&buf,total);
+			for (j=0;j<total;j++)
+				printf("buffer [%i]= %i\n",j,buf[j]);
+			
+			ptr = buf;
+			/* copy data from tmp buffer to struct pointer */
+			commands[i].buffer = g_memdup(buf,total);
 		}
+		g_free(string);
 		commands[i].count = total;
 	}
-	tcflush(serial_params->fd, TCIFLUSH);
-	tcflush(serial_params->fd, TCIFLUSH);
+//	tcflush(serial_params->fd, TCIFLUSH);
+//	tcflush(serial_params->fd, TCIFLUSH);
+
+	res = memcmp(commands[3].buffer, commands[5].buffer,128);
+	printf("result of comparing 3 to 5 is %i\n",res);
+	for (i=0;i<128;i++)
+	{
+		printf("buffer 3[%i]= %i, 5[%i]= %i\n",i,commands[3].buffer[i],i,commands[5].buffer[i]);
+		
+	}
 
 	for (i=0;i<tests_to_run;i++)
 	{

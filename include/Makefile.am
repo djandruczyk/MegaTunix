@@ -1,7 +1,6 @@
 
 headers = \
 	about_gui.h \
-        c_gauge.h \
         comms_gui.h \
         configfile.h \
         constants_gui.h \

@@ -14,7 +14,6 @@ bin_PROGRAMS = megatunix
 megatunix_SOURCES = \
 	Makefile \
 	about_gui.c \
-	c_gauge.c \
 	comms_gui.c \
 	configfile.c \
 	constants_gui.c \
