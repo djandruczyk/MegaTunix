@@ -488,14 +488,14 @@ void ve_calculate_scaling(void *ptr)
 		}
 		for (i=0;i<grid*8;i++) {
 			if (((float)ign_ptr->spark_table[i]/2.84) > ve_view->ve_max) {
-				ve_view->ve_max = ign_ptr->spark_table[i];
+				ve_view->ve_max = ign_ptr->spark_table[i]/2.84;
 			}
 		}	
 	}
 
 	ve_view->rpm_div = ((float)ve_view->rpm_max/8.0);
 	ve_view->load_div = ((float)ve_view->load_max/8.0);
-	ve_view->ve_div  = ((float)ve_view->ve_max/4.0);	
+	ve_view->ve_div = ((float)ve_view->ve_max/4.0);	
 }
 
 void ve_draw_ve_grid(void *ptr)
