@@ -326,22 +326,28 @@ void readfrom_ecu(void *ptr)
 	if (result != message->out_len)	
 		dbg_func(__FILE__": readfrom_ecu()\n\twrite command to ECU failed\n",CRITICAL);
 
-	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str),SERIAL_WR);
+	else
+		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str),SERIAL_WR);
+
 	if (message->handler == RAW_MEMORY_DUMP)
+	{
 		result = write(serial_params->fd,&message->offset,1);
+		if (result != 1)	
+			dbg_func(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n",CRITICAL);
+	}
 
 
-	/* check for data,,,, */
+	// check for data,,,, 
 	result = poll (&ufds,1,5*serial_params->poll_timeout);
-	if (result < 0)	   /* Error */
+	if (result < 0)	   // Error 
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError polling for data: %s\n",g_strerror(errno)),CRITICAL);
-	else if (result == 0)   /* Timeout */
+	else if (result == 0)   // Timeout 
 	{
 		dbg_func(__FILE__": readfrom_ecu()\n\tTimeout reading Data from ECU\n",CRITICAL);
 		serial_params->errcount++;
 		connected = FALSE;
 	}
-	else            /* Data arrived */
+	else            // Data arrived 
 	{
 		connected = TRUE;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tReading %s\n",
@@ -357,9 +363,8 @@ void readfrom_ecu(void *ptr)
  */
 void comms_test()
 {
-	struct pollfd ufds;
-	gint result = -1;
-	gchar * tmpbuf = NULL;
+//	struct pollfd ufds;
+	gboolean result = FALSE;
 
 
 	if (serial_params->open == FALSE)
@@ -372,8 +377,8 @@ void comms_test()
 		return;
 	}
 
-	ufds.fd = serial_params->fd;
-	ufds.events = POLLIN;
+//	ufds.fd = serial_params->fd;
+//	ufds.events = POLLIN;
 	/* Flush the toilet.... */
 	tcflush(serial_params->fd, TCIOFLUSH);	
 	while (write(serial_params->fd,"C",1) != 1)
@@ -382,41 +387,32 @@ void comms_test()
 		dbg_func(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n",CRITICAL);
 	}
 	dbg_func(__FILE__": commes_test()\n\tRequesting MS Clock (\"C\" cmd)\n",SERIAL_RD);
-	result = poll (&ufds,1,serial_params->poll_timeout*5);
-	if (result < 0)		// Error
-		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError polling for data: %s\n",g_strerror(errno)),CRITICAL);
-	else if (result == 0)	// Timeout
+	result = handle_ms_data(C_TEST,NULL);
+	if (result)	// Success
 	{
-		connected = FALSE;
-		tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
-		/* An I/O Error occurred with the MegaSquirt ECU */
-		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
-		gdk_threads_enter();
-		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
-		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
-				connected);
-		////		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-		//				connected);
-		gdk_threads_leave();
-	}
-	else
-	{
-		handle_ms_data(C_TEST,NULL);
+		// COMMS test succeeded 
 		connected = TRUE;
-
-		tmpbuf = g_strdup_printf("ECU Comms Test Successfull\n");
-		/* COMMS test succeeded */
 		dbg_func(__FILE__": comms_test()\n\tECU Comms Test Successfull\n",SERIAL_RD);
 		gdk_threads_enter();
-		update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
+		update_logbar(comms_view,NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
 		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
 		//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 		//				connected);
 		gdk_threads_leave();
-
+	}
+	else
+	{
+		// An I/O Error occurred with the MegaSquirt ECU 
+		connected = FALSE;
+		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
+		gdk_threads_enter();
+		update_logbar(comms_view,"warning","I/O with MegaSquirt Timeout\n",TRUE,FALSE);
+		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
+				connected);
+//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+		//				connected);
+		gdk_threads_leave();
 	}
 	/* Flush the toilet again.... */
 	tcflush(serial_params->fd, TCIOFLUSH);

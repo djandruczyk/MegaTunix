@@ -31,10 +31,12 @@ gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
-       
-void handle_ms_data(InputHandler handler, void * msg)
+
+/// Returns true on success or false for failure....
+gboolean handle_ms_data(InputHandler handler, void * msg)
 {
 	gint res = 0;
+	gboolean state = TRUE;
 	gint total_read = 0;
 	gint total_wanted = 0;
 	gint zerocount = 0;
@@ -90,6 +92,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 				dbg_func("\tC_TEST,Error reading MS Clock (C_TEST)\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
+				state = FALSE;
 				goto jumpout;
 			}
 			break;
@@ -127,6 +130,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 				dbg_func("\tError reading Real-Time Variables \n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
+				state = FALSE;
 				goto jumpout;
 			}
 
@@ -188,6 +192,7 @@ void handle_ms_data(InputHandler handler, void * msg)
 				dbg_func(g_strdup_printf("\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
+				state = FALSE;
 				goto jumpout;
 			}
 			/* Two copies, working copy and temp for 
@@ -228,16 +233,18 @@ void handle_ms_data(InputHandler handler, void * msg)
 				dbg_func("\tError reading Raw Memory Block\n",CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
+				state = FALSE;
 				goto jumpout;
 			}
 			post_process_raw_memory((void *)buf, message->offset);
 			break;
 		default:
 			dbg_func(__FILE__": handle_ms_data()\n\timproper case, contact author!\n",CRITICAL);
+			state = FALSE;
 			break;
 	}
 jumpout:
 
 	dbg_func("\n"__FILE__": handle_ms_data\tLEAVING...\n\n",IO_PROCESS);
-	return;
+	return state;
 }

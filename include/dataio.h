@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void handle_ms_data(InputHandler, void * );
+gboolean handle_ms_data(InputHandler, void * );
 /* Prototypes */
 
 #endif

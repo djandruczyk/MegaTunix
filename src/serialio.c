@@ -23,8 +23,6 @@
 #include <serialio.h>
 #include <string.h>
 #include <structures.h>
-#include <sys/poll.h>
-#include <sys/stat.h>
 #include <termios.h>
 #include <threads.h>
 #include <unistd.h>
@@ -131,8 +129,8 @@ void setup_serial_params()
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	//serial_params->newtio.c_cc[VMIN]     = 1;     /* blocking read until 1 character arrives */
-	serial_params->newtio.c_cc[VMIN]     = 0;     /* blocking read until 1 character arrives */
-	serial_params->newtio.c_cc[VTIME]    = 5;     /* inter-character timer unused */
+	serial_params->newtio.c_cc[VMIN]     = 0;     
+	serial_params->newtio.c_cc[VTIME]    = 10;     /* inter-character timer */
 
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 
