@@ -342,7 +342,7 @@ void update_runtime_vars()
 	}
 	if (runtime->clt != runtime_last->clt)
 	{
-		g_snprintf(buff,10,"%i",runtime->clt);
+		g_snprintf(buff,10,"%i",runtime->clt-40);
 		gtk_entry_set_text(GTK_ENTRY(runtime_data.clt_ent),buff);
 	}
 	if (runtime->batt != runtime_last->batt)

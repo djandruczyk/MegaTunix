@@ -67,6 +67,14 @@ int build_constants(GtkWidget *parent_frame)
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
+//      Equation for determining Req_fuel_download from Req_fuel:
+//
+//      REQ_FUEL_DL = REQ*FUEL * (B * N)/NINJ
+//
+//      B = 1 if simultaneous, 2 = Alternate
+//      N = divder_number = ncyl/numer_of_squirts
+//      NINJ = Number of Inejctors   
+
 	frame = gtk_frame_new("Required Fuel - One Cylinder (ms)");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
