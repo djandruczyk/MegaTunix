@@ -70,23 +70,22 @@ GTK_LIBS = @GTK_LIBS@
 LN_S = @LN_S@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
-MEGASQUIRT_LIN_MAJOR_VERSION = @MEGASQUIRT_LIN_MAJOR_VERSION@
-MEGASQUIRT_LIN_MICRO_VERSION = @MEGASQUIRT_LIN_MICRO_VERSION@
-MEGASQUIRT_LIN_MINOR_VERSION = @MEGASQUIRT_LIN_MINOR_VERSION@
-MEGASQUIRT_LIN_VERSION = @MEGASQUIRT_LIN_VERSION@
+MEGATUNIX_LIN_MAJOR_VERSION = @MEGATUNIX_LIN_MAJOR_VERSION@
+MEGATUNIX_LIN_MICRO_VERSION = @MEGATUNIX_LIN_MICRO_VERSION@
+MEGATUNIX_LIN_MINOR_VERSION = @MEGATUNIX_LIN_MINOR_VERSION@
+MEGATUNIX_LIN_VERSION = @MEGATUNIX_LIN_VERSION@
 PACKAGE = @PACKAGE@
 PFLAGS = @PFLAGS@
 VERSION = @VERSION@
 
-INCLUDES = @GTK_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGASQUIRT_LIN_MAJOR_VERSION@  -D_MINOR_=@MEGASQUIRT_LIN_MINOR_VERSION@ -D_MICRO_=@MEGASQUIRT_LIN_MICRO_VERSION@
+INCLUDES = @GTK_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJOR_VERSION@  -D_MINOR_=@MEGATUNIX_LIN_MINOR_VERSION@ -D_MICRO_=@MEGATUNIX_LIN_MICRO_VERSION@
 
-bin_PROGRAMS = megasquirt
+bin_PROGRAMS = megatunix
 
-megasquirt_SOURCES =  	Makefile 	globals.h 	defines.h 	protos.h 	lookuptables.h 	core_gui.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
+megatunix_SOURCES =  	Makefile 	globals.h 	defines.h 	protos.h 	lookuptables.h 	core_gui.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	runtime_gui.h 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
 
 
-megasquirt_LDADD = @GTK_LIBS@ @EXTRA_LIBS@
-#megasquirt_LDADD = @EXTRA_LIBS@
+megatunix_LDADD = @GTK_LIBS@ @EXTRA_LIBS@
 
 LIBS = -lpthread
 
@@ -106,12 +105,12 @@ PROGRAMS =  $(bin_PROGRAMS)
 DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
-megasquirt_OBJECTS =  core_gui.o gui_handlers.o about_gui.o comms_gui.o \
+megatunix_OBJECTS =  core_gui.o gui_handlers.o about_gui.o comms_gui.o \
 main.o serialio.o dataio.o threads.o configfile.o init.o \
 constants_gui.o runtime_gui.o enrichments_gui.o vetable_gui.o \
 tuning_gui.o tools_gui.o general_gui.o datalogging_gui.o ms_constants.o
-megasquirt_DEPENDENCIES = 
-megasquirt_LDFLAGS = 
+megatunix_DEPENDENCIES = 
+megatunix_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
@@ -128,8 +127,8 @@ DEP_FILES =  .deps/about_gui.P .deps/comms_gui.P .deps/configfile.P \
 .deps/gui_handlers.P .deps/init.P .deps/main.P .deps/ms_constants.P \
 .deps/runtime_gui.P .deps/serialio.P .deps/threads.P .deps/tools_gui.P \
 .deps/tuning_gui.P .deps/vetable_gui.P
-SOURCES = $(megasquirt_SOURCES)
-OBJECTS = $(megasquirt_OBJECTS)
+SOURCES = $(megatunix_SOURCES)
+OBJECTS = $(megatunix_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -183,9 +182,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-megasquirt: $(megasquirt_OBJECTS) $(megasquirt_DEPENDENCIES)
-	@rm -f megasquirt
-	$(LINK) $(megasquirt_LDFLAGS) $(megasquirt_OBJECTS) $(megasquirt_LDADD) $(LIBS)
+megatunix: $(megatunix_OBJECTS) $(megatunix_DEPENDENCIES)
+	@rm -f megatunix
+	$(LINK) $(megatunix_LDFLAGS) $(megatunix_OBJECTS) $(megatunix_LDADD) $(LIBS)
 
 tags: TAGS
 

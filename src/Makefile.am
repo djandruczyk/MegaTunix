@@ -1,9 +1,9 @@
 
-INCLUDES = @GTK_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGASQUIRT_LIN_MAJOR_VERSION@  -D_MINOR_=@MEGASQUIRT_LIN_MINOR_VERSION@ -D_MICRO_=@MEGASQUIRT_LIN_MICRO_VERSION@
+INCLUDES = @GTK_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJOR_VERSION@  -D_MINOR_=@MEGATUNIX_LIN_MINOR_VERSION@ -D_MICRO_=@MEGATUNIX_LIN_MICRO_VERSION@
 
-bin_PROGRAMS = megasquirt
+bin_PROGRAMS = megatunix
 
-megasquirt_SOURCES = \
+megatunix_SOURCES = \
 	Makefile \
 	globals.h \
 	defines.h \
@@ -30,8 +30,7 @@ megasquirt_SOURCES = \
 	datalogging_gui.c \
 	ms_constants.c
 
-megasquirt_LDADD = @GTK_LIBS@ @EXTRA_LIBS@
-#megasquirt_LDADD = @EXTRA_LIBS@
+megatunix_LDADD = @GTK_LIBS@ @EXTRA_LIBS@
 
 LIBS= -lpthread
 

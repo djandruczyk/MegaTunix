@@ -51,7 +51,7 @@ int build_runtime(GtkWidget *parent_frame)
 
 void update_runtime_vars()
 {
-	char buff[10];
+//	char buff[10];
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?

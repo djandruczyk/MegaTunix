@@ -23,6 +23,7 @@
 GtkWidget *ser_statbar;                 /* serial statusbar */ 
 int ser_context_id;                     /* for ser_statbar */
 extern int read_wait_time;
+extern int raw_reader_running;
 
 int build_comms(GtkWidget *parent_frame)
 {
@@ -167,7 +168,12 @@ int set_serial_port(GtkWidget *widget, gpointer port)
 {
 	if (GTK_TOGGLE_BUTTON(widget)->active)
 	{
-		close_serial();
+		if(serial_params.open)
+		{
+			if (raw_reader_running)
+				serial_raw_thread_stopper();
+			close_serial();
+		}
 		open_serial((int)port);
 		setup_serial_params();
 	}

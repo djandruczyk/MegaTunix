@@ -22,7 +22,8 @@
 
 
 static int lastcount=0;
-int reset_count;
+int ms_reset_count;
+int goodread_count;
 int just_starting;
        
 void handle_ms_data(int which_data)
@@ -71,11 +72,12 @@ void handle_ms_data(int which_data)
 			if ((lastcount - raw->secl > 1) \
 					&& (lastcount - raw->secl != 255))
 			{	/* Counter jump, megasquirt reset occurred */
-				reset_count++;
+				ms_reset_count++;
 			}
 			lastcount = raw->secl;
 
 			/* copy last round to out_last for checking */
+                        goodread_count++;
 			out_last = out;
 			post_process(raw,&out);
 			break;
@@ -134,6 +136,6 @@ void handle_ms_data(int which_data)
  *
  *	printf("iteration: %i\n",count);
  *	printf("Error Count: %i\n",serial_params.errcount);
- *	printf("Reset Count: %i\n",reset_count);
+ *	printf("Reset Count: %i\n",ms_reset_count);
  */
 }

@@ -37,24 +37,16 @@ int serial_raw_thread_starter()
 	int retcode = 0;
 	if (serial_params.open == 0)
 	{
-                g_snprintf(buff,60,"Serial not open, can't start thread in this state");
-                /* An Error occurred opening the port */
-                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id);
-                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id,
-                                buff);
+                g_snprintf(buff,60,"Serial Port Not Open, Can NOT Start Thread in This State");
+                /* Serial not opened, can't start thread in this state */
+		update_statusbar(ser_statbar,ser_context_id,buff);
 		return -1;	
 	}
 	if (raw_reader_running)
 	{
-                g_snprintf(buff,60,"Serial Reader thread ALREADY running");
-                /* An Error occurred opening the port */
-                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id);
-                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id,
-                                buff);
+                g_snprintf(buff,60,"Serial Reader Thread ALREADY Running");
+                /* Thread already running, can't run more than 1 */
+		update_statusbar(ser_statbar,ser_context_id,buff);
 		return 0;
 	}
 	else
@@ -67,24 +59,16 @@ int serial_raw_thread_starter()
 	if (retcode == 0)
 	{
 		/* SUCCESS */
-                g_snprintf(buff,60,"Successful start of realtime reader thread");
-                /* An Error occurred opening the port */
-                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id);
-                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id,
-                                buff);
+                g_snprintf(buff,60,"Successful Start of Realtime Reader Thread");
+                /* Thread started successfully */
+		update_statusbar(ser_statbar,ser_context_id,buff);
 	}
 	else
 	{
 		/* FAILURE */
-                g_snprintf(buff,60,"FAILURE starting realtime reader thread");
-                /* An Error occurred opening the port */
-                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id);
-                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id,
-                                buff);
+                g_snprintf(buff,60,"FAILURE Attempting To Start Realtime Reader Thread");
+                /* Thread failed to start */
+		update_statusbar(ser_statbar,ser_context_id,buff);
 	}
 	return retcode;
 }
@@ -93,13 +77,9 @@ int serial_raw_thread_stopper()
 {
 	if (raw_reader_stopped)
 	{
-                g_snprintf(buff,60,"realtime reader thread ALREADY stopped");
-                /* An Error occurred opening the port */
-                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id);
-                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id,
-                                buff);
+                g_snprintf(buff,60,"Realtime Reader Thread ALREADY Stopped");
+                /* Thread not running, can't stop what hasn't started yet*/
+		update_statusbar(ser_statbar,ser_context_id,buff);
 		return 0;	/* its already stopped */
 	}
 	else
@@ -109,13 +89,9 @@ int serial_raw_thread_stopper()
 		{
 			usleep(100000);	/* sleep 100 milliseconds */
 		}
-                g_snprintf(buff,60,"realtime reader thread stopped normally");
-                /* An Error occurred opening the port */
-                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id);
-                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id,
-                                buff);
+                g_snprintf(buff,60,"Realtime Reader Thread Stopped Normally");
+                /* Thread stopped normally */
+		update_statusbar(ser_statbar,ser_context_id,buff);
 	}
 	return 0;
 }
@@ -141,13 +117,6 @@ void *raw_reader_thread(void *params)
                 if (res == 0)
 		{
 			serial_params.errcount++;
-//			g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
-//			/* An Error occurred opening the port */
-//			gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-//					ser_context_id);
-//			gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-//					ser_context_id,
-//					buff);
 		}
                 else
 		{

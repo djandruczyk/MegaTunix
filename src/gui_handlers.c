@@ -85,3 +85,21 @@ int std_button_handler(GtkWidget *widget, gpointer *data)
 	}
 	return TRUE;
 }
+
+void update_statusbar(GtkWidget *status_bar,int context_id, gchar * message)
+{
+	/* takes 3 args, 
+	 * the GtkWidget pointer to the statusbar,
+	 * the context_id of the statusbar in arg[0],
+	 * and the string to be sent to that bar
+	 *
+	 * Fairly generic, should work for multiple statusbars
+	 */
+
+	gtk_statusbar_pop(GTK_STATUSBAR(status_bar),
+			context_id);
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar),
+			context_id,
+			message);
+}
+

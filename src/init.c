@@ -27,7 +27,8 @@ gint minor_ver;
 gint micro_ver;
 extern int def_comm_port;
 extern int read_wait_time;
-extern int reset_count;
+extern int ms_reset_count;
+extern int goodread_count;
 extern int just_starting;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
@@ -57,7 +58,8 @@ void init()
 	raw_reader_stopped = 1;  /* We're not reading raw data yet... */
 	read_wait_time = 1000;	/* delay between reads in milliseconds */
 	just_starting = 1; 	/* to handle initial errors */
-	reset_count = 0; 	/* to handle initial errors */
+	ms_reset_count = 0; 	/* Counts MS clock resets */
+	goodread_count = 0; 	/* How many reads of realtime vars completed */
 	width = 640;		/* default window width */
 	height = 480;		/* default window height */
 	main_x_origin = 160;	/* offset from left edge of screen */

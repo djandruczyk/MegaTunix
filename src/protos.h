@@ -83,6 +83,8 @@ int framebuild_dispatch(GtkWidget *, int);
 void leave(GtkWidget *, gpointer *);
 int std_button_handler(GtkWidget *, gpointer *);
 void text_entry_handler(GtkWidget *, gpointer *);
+void update_statusbar(GtkWidget *, int, gchar *);
+
 /* gui_handlers.c */
 
 /* for each of the *_gui.c files will be  a main core function called 

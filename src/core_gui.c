@@ -37,6 +37,8 @@ int setup_gui()
 	GtkWidget *button;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	/* set name so MegaTunixrc can alter the settings */
+	gtk_widget_set_name(main_window, "main window");
         gtk_widget_set_uposition(main_window, main_x_origin, main_y_origin);
         gtk_widget_set_usize(main_window,def_width,def_height);
         gtk_window_set_default_size(GTK_WINDOW(main_window),width,height);
@@ -53,6 +55,7 @@ int setup_gui()
 	gtk_container_add(GTK_CONTAINER(main_window),vbox);
 
 	notebook = gtk_notebook_new ();
+	gtk_widget_set_name(notebook, "main notebook");
 	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
 	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
 

@@ -41,26 +41,18 @@ int open_serial(int port_num)
 	if (serial_params.fd < 0)
 	{
 		/* FAILURE */
+		/* An Error occurred opening the port */
 		serial_params.open = 0;
 		g_snprintf(buff,60,"Error Opening COM%i",port_num);
-		/* An Error occurred opening the port */
-		gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-				ser_context_id);
-		gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-				ser_context_id,
-				buff);
+		update_statusbar(ser_statbar,ser_context_id,buff);
 	}
 	else
 	{
 		/* SUCCESS */
+		/* NO Errors occurred opening the port */
 		serial_params.open = 1;
-		g_snprintf(buff,60,"COM%i opened successfully",port_num);
-		/* An Error occurred opening the port */
-		gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-				ser_context_id);
-		gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-				ser_context_id,
-				buff);
+		g_snprintf(buff,60,"COM%i Opened Successfully",port_num);
+		update_statusbar(ser_statbar,ser_context_id,buff);
 
 	}
 	return serial_params.fd;
@@ -140,13 +132,9 @@ void close_serial()
 	close(serial_params.fd);
 	serial_params.open = 0;
 
-	g_snprintf(buff,60,"COM port closed ");
-	/* An Error occurred opening the port */
-	gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-			ser_context_id);
-	gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-			ser_context_id,
-			buff);
+	g_snprintf(buff,60,"COM Port Closed ");
+	/* An Closing the comm port */
+	update_statusbar(ser_statbar,ser_context_id,buff);
 }
 
 int check_ecu_comms(GtkWidget *widget, gpointer data)
@@ -161,7 +149,6 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         {
                 if (raw_reader_running)
                 {
-                        raw_reader_running = 0;
                         restart_thread = 1;
 			serial_raw_thread_stopper(); /* stops realtime read */
                 }
@@ -179,22 +166,14 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
                 if (res == 0)
                 {
                         g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
-                        /* An Error occurred opening the port */
-                        gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                        ser_context_id);
-                        gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                        ser_context_id,
-                                        buff);
+                        /* An I/O Error occurred with the MegaSquirt ECU */
+			update_statusbar(ser_statbar,ser_context_id,buff);
                 }
                 else
                 {
-                        g_snprintf(buff,60,"ECU comms test successfull");
-                        /* An Error occurred opening the port */
-                        gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                        ser_context_id);
-                        gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                        ser_context_id,
-                                        buff);
+                        g_snprintf(buff,60,"ECU Comms Test Successfull");
+                        /* COMMS test succeeded */
+			update_statusbar(ser_statbar,ser_context_id,buff);
                 }
 
                 serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
@@ -206,13 +185,9 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         }
         else
         {
-                g_snprintf(buff,60,"Serial port not opened, can't test ECU comms");
-                /* An Error occurred opening the port */
-                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id);
-                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
-                                ser_context_id,
-                                buff);
+                g_snprintf(buff,60,"Serial port not opened, Can NOT test ECU Communications");
+                /* Serial port not opened, can't test */
+		update_statusbar(ser_statbar,ser_context_id,buff);
         }
         return (0);
 

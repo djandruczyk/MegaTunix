@@ -15,6 +15,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/poll.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <config.h>
 /* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
@@ -25,13 +27,30 @@ int def_comm_port;
 int main(int argc, char ** argv)
 {
 	int cfg_result;
+	struct stat statbuf;
+
+	gtk_set_locale();
+	/* Check to see if we are being run from the correct
+	 * directory.
+	 */
+	if (stat("./MegaTunixrc", &statbuf) < 0)
+	{
+		fprintf (stderr, "MegaTunixrc file not found.\n");
+
+		//      exit (1);
+	}
+
+	gtk_rc_add_default_file ("MegaTunixrc");
 
 	g_thread_init(NULL);
-        gtk_init(&argc, &argv);
+
+	gtk_init(&argc, &argv);
+
+	gdk_rgb_init();
 
 	init();			/* initialize global vars */
 	make_megasquirt_dirs();	/*Create config file dirs if missing */
-	 
+
 	cfg_result = read_config();
 	setup_gui();		
 
@@ -42,6 +61,8 @@ int main(int argc, char ** argv)
 
 	setup_serial_params();	/* Setup the serial port for I/O */
 
+	gdk_threads_enter();
 	gtk_main();
+	gdk_threads_leave();
 	return (0) ;
 }
