@@ -23,6 +23,7 @@ extern GdkColor black;
 extern struct Buttons buttons;
 extern struct Labels labels;
 extern struct v1_2_Constants constants;
+static gint warning_present = FALSE;
 
 
 void set_store_red()
@@ -80,7 +81,8 @@ void no_ms_connection(void)
 {
 	gchar *buff;
 	buff = g_strdup("The MegaSquirt ECU appears to be currently disconnected.  This means that either one of the following occurred:\n   1. Wrong Comm port is selected on the Communications Tab\n   2. The MegaSquirt serial link is not plugged in\n   3. The MegaSquirt ECU does not have adequate power.\n\nSuggest checking the serial settings on the Communications page first, and then check the Serial Statusbar at the bottom of that page. If the Serial StatusBar says \"I/O with MegaSquirt Timeout\", it means one of a few possible problems:\n   1. You selected the wrong COMM port (older systems came with 2, most newer ones only have one, try the other one...)\n   2. Faulty cable to the MegaSquirt unit. (Should be a straight thru DB9 Male/Female cable)\n   3. The cable is OK, but the MS doesn't have adequate power.\n\n If it says \"Serial Port NOT Opened, Can NOT Test ECU Communications\", this can mean one of two things:\n   1. The COMM port doesn't exist on your computer,\n\t\t\t\t\tOR\n   2. You don't have permission to open the port. (/dev/ttySx).\nChange the permissions on /dev/ttyS* to 666 (\"chmod 666 /dev/ttyS*\" as root), NOTE: This has potential security implications. Check the Unix/Linux system documentation regarding \"security\" for more information...");
-	warn_user(buff);
+	if (!warning_present)
+		warn_user(buff);
 	g_free(buff);
 }
 
@@ -91,23 +93,27 @@ void warn_user(gchar *message)
 			GTK_BUTTONS_CLOSE,message);
 	g_signal_connect (G_OBJECT(dialog),
 			"delete_event",
-			G_CALLBACK (gtk_widget_destroy),
+			G_CALLBACK (close_dialog),
 			dialog);
 	g_signal_connect (G_OBJECT(dialog),
 			"destroy_event",
-			G_CALLBACK (gtk_widget_destroy),
+			G_CALLBACK (close_dialog),
 			dialog);
 	g_signal_connect (G_OBJECT(dialog),
-			"destroy_event",
-			G_CALLBACK (gtk_widget_destroy),
-			dialog);
-	g_signal_connect_swapped (dialog,
 			"response",
-			G_CALLBACK (gtk_widget_destroy),
+			G_CALLBACK (close_dialog),
 			dialog);
 
+	warning_present = TRUE;
 	gtk_widget_show_all(dialog);
 
+}
+
+gint close_dialog(GtkWidget *widget, gpointer data)
+{
+	gtk_widget_destroy(widget);
+	warning_present = FALSE;
+	return TRUE;
 }
 
 void squirt_cyl_inj_red(void)

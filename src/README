@@ -21,9 +21,15 @@ so your ideal font size may vary.
 	Currently all Serial I/O is working. Reading of Realtime vars works.  
 Reading of VEtable/Constants works fine.  Changing any var checks for limits
 and sends directly to the MS (new as of 5/25/2003). Flash burn works..
+	As of July something-or-other,  datalogging is complete and works.
+It's more flexible than any existing logging on any of the windows editions.
+Currently it can do a MegaTune style "classic" datalog in the same format which
+should be readable by mstweek3K (under winblows unfortunately). It can also log
+any of the runtime variables along with the addition of a high resolution clock
+which can be used to track things precisely in time...
 
 The only things not done yet are the Tuning gui (guages, VEtable graphical
-editor..) and the datalogging/tools pages.
+editor..) and the low-level and tools pages.
 
 Suggestions are welcomed for improving the functionality of MegaTunix...
 

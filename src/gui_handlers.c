@@ -42,6 +42,7 @@ extern struct Logables logables;
 extern gint connected;
 extern gint force_status_update;
 extern gfloat ego_pbar_divisor;
+extern gfloat map_pbar_divisor;
 extern GtkWidget *map_tps_frame;
 extern GtkWidget *map_tps_label;
 extern GtkWidget *custom_logables;
@@ -193,8 +194,9 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((gint)data)
 	{
 		case START_REALTIME:
+			check_ecu_comms(NULL,NULL);
 			if (!connected)
-				check_ecu_comms(NULL,NULL);
+				no_ms_connection();
 			if (constants_loaded == FALSE)
 			{	/*Read constants first at least once */
 				paused_handlers = TRUE;
@@ -216,6 +218,7 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 				reqd_fuel_popup();
 			break;
 		case READ_FROM_MS:
+			check_ecu_comms(NULL,NULL);
 			if (!connected)
 			{
 				no_ms_connection();
@@ -783,6 +786,7 @@ void update_ve_const()
 				GTK_TOGGLE_BUTTON(constants.map_250_but),
                                 TRUE);
 		kpa_conversion = turbo_map;
+		map_pbar_divisor = 255.0;
 	}
 	else
 	{
@@ -790,6 +794,7 @@ void update_ve_const()
 				GTK_TOGGLE_BUTTON(constants.map_115_but),
                                 TRUE);
 		kpa_conversion = na_map;
+		map_pbar_divisor = 115.0;
 	}
 	/* 2 stroke or 4 Stroke */
 	if (ve_constants->config11.bit.eng_type)
@@ -934,11 +939,13 @@ void check_config11(int tmp)
 	if ((tmp &0x3) == 0)	
 	{
 		kpa_conversion = na_map;
+		map_pbar_divisor = 115.0;
 	//	printf("using 115KPA map sensor\n");
 	}
 	if ((tmp &0x3) == 1)	
 	{
 		kpa_conversion = turbo_map;
+		map_pbar_divisor = 255.0;
 	//	printf("using 250KPA map sensor\n");
 	}
 }

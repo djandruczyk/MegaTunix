@@ -27,6 +27,7 @@ const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 gint force_status_update=TRUE;
 extern gint connected;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
+gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 
 int build_runtime(GtkWidget *parent_frame)
 {
@@ -547,7 +548,7 @@ void update_runtime_vars()
 		g_snprintf(buff,10,"%i",runtime->secl);
 		gtk_label_set_text(GTK_LABEL(runtime_data.secl_lab),buff);
 	}
-//	if (runtime->ego != runtime_last->ego)
+	if (runtime->ego != runtime_last->ego)
 	{
 		g_snprintf(buff,10,"%.2f",runtime->ego);
 		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),buff);
@@ -561,7 +562,8 @@ void update_runtime_vars()
 	{
 		g_snprintf(buff,10,"%i",runtime->map);
 		gtk_label_set_text(GTK_LABEL(runtime_data.map_lab),buff);
-		tmpf = runtime->map/255.0 <= 1.0 ? runtime->map/255.0: 1.0;
+		tmpf = runtime->map/map_pbar_divisor <= 1.0 
+				? runtime->map/map_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.map_pbar),
 				tmpf);
