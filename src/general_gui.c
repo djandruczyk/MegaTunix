@@ -20,6 +20,7 @@
 #include <math.h>
 #include <structures.h>
 #include <tabloader.h>
+#include <widgetmgmt.h>
 
 extern gboolean tips_in_use;
 extern gint temp_units;

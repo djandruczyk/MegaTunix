@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <structures.h>
-#include <tabloader.h>
 
 GHashTable *rt_controls = NULL;
 GHashTable *ww_controls = NULL;

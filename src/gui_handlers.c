@@ -23,6 +23,7 @@
 #include <gui_handlers.h>
 #include <glib.h>
 #include <init.h>
+#include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
 #include <ms_structures.h>

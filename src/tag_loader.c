@@ -21,7 +21,6 @@
 #include <keyparser.h>
 #include <stdlib.h>
 #include <stringmatch.h>
-#include <tabloader.h>
 #include <tag_loader.h>
 
 void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)

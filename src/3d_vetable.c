@@ -25,6 +25,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <gtk/gtkgl.h>
+#include <listmgmt.h>
 #include <ms_structures.h>
 #include <notifications.h>
 #include <rtv_processor.h>

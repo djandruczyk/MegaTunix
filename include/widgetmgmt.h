@@ -11,14 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __TABLOADER_H__
-#define __TABLOADER_H__
+#ifndef __WIDGETMGMT_H__
+#define __WIDGETMGMT_H__
 
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean load_gui_tabs(void);
-void bind_data(GtkWidget *, gpointer );
+void populate_master(GtkWidget *, gpointer );
+void register_widget(gchar *, GtkWidget *);
+gboolean deregister_widget(gchar *);
 /* Prototypes */
 
 #endif

@@ -15,6 +15,7 @@
 #include <debugging.h>
 #include <fileio.h>
 #include <gtk/gtk.h>
+#include <listmgmt.h>
 #include <notifications.h>
 #include <structures.h>
 #include <tabloader.h>

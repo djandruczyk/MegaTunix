@@ -22,6 +22,7 @@ headers = \
         init.h \
         interrogate.h \
 	keyparser.h \
+	listmgmt.h \
         logo.h \
         logviewer_core.h \
         logviewer_gui.h \
@@ -48,7 +49,8 @@ headers = \
         unions.h \
         vetable_gui.h \
 	vex_support.h \
-	warmwizard_gui.h
+	warmwizard_gui.h \
+	widgetmgmt.h 
 
 
 EXTRA_DIST=$(headers)

@@ -18,6 +18,7 @@
 #include <enums.h>
 #include <fileio.h>
 #include <gui_handlers.h>
+#include <keyparser.h>
 #include <logviewer_core.h>
 #include <logviewer_gui.h>
 #include <ms_structures.h>

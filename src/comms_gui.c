@@ -22,6 +22,7 @@
 #include <structures.h>
 #include <tabloader.h>
 #include <unistd.h>
+#include <widgetmgmt.h>
 
 extern gint read_wait_time;
 extern gint raw_reader_running;

@@ -16,6 +16,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
+#include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
 #include <ms_structures.h>

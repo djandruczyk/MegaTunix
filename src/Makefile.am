@@ -27,6 +27,7 @@ megatunix_SOURCES = \
 	init.c \
 	interrogate.c \
 	keyparser.c \
+	listmgmt.c \
 	logviewer_core.c \
 	logviewer_gui.c \
 	lookuptables.c \
@@ -49,7 +50,8 @@ megatunix_SOURCES = \
 	tuning_gui.c \
 	vetable_gui.c \
 	vex_support.c \
-	warmwizard_gui.c 
+	warmwizard_gui.c \
+	widgetmgmt.c
 
 #megatunix_LDADD = @PACKAGE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
 megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl 

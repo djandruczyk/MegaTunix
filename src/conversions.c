@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <dep_processor.h>
 #include <enums.h>
+#include <listmgmt.h>
 #include <notifications.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_processor.h>
