@@ -106,24 +106,22 @@ gboolean vetable_export(void *ptr)
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
 	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
+	extern struct Firmware_Details *firmware;
 	unsigned char * ve_const_arr = NULL;
 	extern gint ecu_caps;
 	gchar * tmpbuf;
 	GIOStatus status;
 	GString *output;
 	struct Io_File *iofile = (struct Io_File *)ptr;
-	GtkWidget * widget = NULL;
-	extern GHashTable *dynamic_widgets;
 
 
 	/* For Page 0.... */
-	widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,"VE1_3d_view_button");
-	load_base = (gint)g_object_get_data(G_OBJECT(widget),"load_base_offset");
-	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-	ve_base = (gint)g_object_get_data(G_OBJECT(widget),"ve_base_offset");
-	rpm_base = (gint)g_object_get_data(G_OBJECT(widget),"rpm_base_offset");
-	load_bincount = (gint)g_object_get_data(G_OBJECT(widget),"load_bincount");
-	rpm_bincount = (gint)g_object_get_data(G_OBJECT(widget),"rpm_bincount");
+	page = 0;
+	ve_base = firmware->page_params[page]->ve_base;
+	load_base = firmware->page_params[page]->load_base;
+	rpm_base = firmware->page_params[page]->rpm_base;
+	load_bincount = firmware->page_params[page]->load_bincount;
+	rpm_bincount = firmware->page_params[page]->rpm_bincount;
 	
 
 	t = g_malloc(sizeof(time_t));
@@ -182,20 +180,13 @@ gboolean vetable_export(void *ptr)
 	}
 	if (ecu_caps & DUALTABLE)
 	{
-		widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,
-				"VE2_3d_view_button");
-		load_base = (gint)g_object_get_data(G_OBJECT(widget),
-				"load_base_offset");
-		page = (gint)g_object_get_data(G_OBJECT(widget),
-				"page");
-		ve_base = (gint)g_object_get_data(G_OBJECT(widget),
-				"ve_base_offset");
-		rpm_base = (gint)g_object_get_data(G_OBJECT(widget),
-				"rpm_base_offset");
-		load_bincount = (gint)g_object_get_data(G_OBJECT(widget),
-				"load_bincount");
-		rpm_bincount = (gint)g_object_get_data(G_OBJECT(widget),
-				"rpm_bincount");
+		page = 1;
+		ve_base = firmware->page_params[page]->ve_base;
+		load_base = firmware->page_params[page]->load_base;
+		rpm_base = firmware->page_params[page]->rpm_base;
+		load_bincount = firmware->page_params[page]->load_bincount;
+		rpm_bincount = firmware->page_params[page]->rpm_bincount;
+
 		ve_const_arr = (unsigned char *)ms_data[page];
 
 		output = g_string_append(output, g_strdup_printf("Page %i\n",page));

@@ -41,4 +41,4 @@ CMD_I_0=99
 CMD_F_0=255
 
 [gui]
-LoadTabs=enrichments_BnG,vetable_8x8_1,msns-3.01-ext_ignition,sparktable_8x8_1
+LoadTabs=B_n_G_constants,enrichments_BnG,vetable_8x8_1,msns-3.01-ext_ignition,sparktable_8x8_1
