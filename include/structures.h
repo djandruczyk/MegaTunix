@@ -125,6 +125,7 @@ struct Viewable_Value
 	gchar *vname;			/*! Name of widget being logged */
 	gboolean is_float;		/*! TRUE or FALSE */
 	gboolean force_update;		/*! flag to force update on addition */
+	gboolean highlight;		/*! flag it highlight it.. */
 	gint last_y;			/*! Last point on screen of trace */
 	gint last_index;		/*! latest entryu into data array */
 	gfloat min;			/*! for auto-scaling */

@@ -482,6 +482,7 @@ struct Viewable_Value * build_v_value(GObject *object)
 	v_value->log_rect = g_new0(PangoRectangle, 1);
 
 	v_value->force_update = TRUE;
+	v_value->highlight = FALSE;
 
 	return v_value;
 }
@@ -843,6 +844,7 @@ void trace_update(gboolean redraw_all)
 	gint total = 0;
 	gint last_index = 0;
 	gint i = 0;
+	gint j = 0;
 	gint x = 0;
 	gfloat log_pos = 0.0;
 	gfloat newpos = 0.0;
@@ -897,6 +899,21 @@ void trace_update(gboolean redraw_all)
 					v_value->trace_gc,
 					pts,
 					total);
+			if (v_value->highlight)
+			{
+				for (j=0;j<total;j++)	
+					pts[j].y -= 1;
+				gdk_draw_lines(pixmap,
+						lv_data->darea->style->white_gc,
+						pts,
+						total);
+				for (j=0;j<total;j++)	
+					pts[j].y += 2;
+				gdk_draw_lines(pixmap,
+						lv_data->darea->style->white_gc,
+						pts,
+						total);
+			}
 
 			v_value->last_y = pts[0].y;
 			v_value->last_index = len-1;
@@ -945,6 +962,17 @@ void trace_update(gboolean redraw_all)
 				if (newpos >= 100)
 					stop_logviewer_playback();
 				//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
+			}
+			if (v_value->highlight)
+			{
+				gdk_draw_line(pixmap,
+						lv_data->darea->style->white_gc,
+						w-lv_zoom-1,v_value->last_y-1,
+						w-1,(gint)(percent*(h-2)));
+				gdk_draw_line(pixmap,
+						lv_data->darea->style->white_gc,
+						w-lv_zoom-1,v_value->last_y+1,
+						w-1,(gint)(percent*(h-2))+2);
 			}
 		}
 		draw_valtext(FALSE);
@@ -1003,6 +1031,17 @@ void trace_update(gboolean redraw_all)
 		}
 		/* Draw the data.... */
 		v_value->last_y = (gint)((percent*(h-2))+1);
+		if (v_value->highlight)
+		{
+			gdk_draw_line(pixmap,
+					lv_data->darea->style->white_gc,
+					w-lv_zoom-1,v_value->last_y-1,
+					w-1,(gint)(percent*(h-2)));
+			gdk_draw_line(pixmap,
+					lv_data->darea->style->white_gc,
+					w-lv_zoom-1,v_value->last_y+1,
+					w-1,(gint)(percent*(h-2))+2);
+		}
 	}
 	/* Update textual data */
 	draw_valtext(FALSE);

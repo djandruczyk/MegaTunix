@@ -206,7 +206,16 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	if (tnum >= g_list_length(lv_data->tlist))
 		return TRUE;
 	v_value = g_list_nth_data(lv_data->tlist,tnum);
-	printf("Should print trace info on this trace...\n");
+	if (event->button == 3) /* right mouse button */
+	{
+		v_value->highlight = TRUE;
+		lv_configure_event(lv_data->darea,NULL,NULL);
+	}
+	if (event->state & (GDK_BUTTON3_MASK))
+	{
+		v_value->highlight = FALSE;
+		lv_configure_event(lv_data->darea,NULL,NULL);
+	}
 
 	return TRUE;
 }
