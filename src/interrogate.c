@@ -70,6 +70,7 @@ void interrogate_ecu()
 	GArray *cmd_array = NULL;
 	guchar buf[size];
 	guchar *ptr = buf;
+	gboolean keep_polling=FALSE;
 	GHashTable *cmd_details = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -133,10 +134,19 @@ void interrogate_ecu()
 		}
 		g_free(string);
 		res = poll (&ufds,1,25);
-		if (res)
+		if (res > 0)
 		{	
-			while (poll(&ufds,1,50))
-				total += count = read(serial_params->fd,ptr+total,64);
+			keep_polling = TRUE;
+			while (keep_polling)
+			{
+				res = poll(&ufds,1,50);
+				if (res == 0) /* Timeout, we're done */
+					keep_polling=FALSE;
+				else if (res < 0) /* Error */
+					dbg_func(g_strdup_printf(__FILE__": interrogate_ecu()\n\t, Polling error %s\n",g_strerror(errno)),CRITICAL);
+				else
+					total += count = read(serial_params->fd,ptr+total,64);
+			}
 			dbg_func(g_strdup_printf("\tReceived %i bytes\n",total),INTERROGATOR);
 			ptr = buf;
 
@@ -270,7 +280,7 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	if (match == FALSE) // (we DID NOT find one)
 	{
 		tmpbuf = g_strdup_printf("Firmware NOT DETECTED properly, Expect MegaTunix to NOT behave properly \nContact the author with the contents of this window\n");
-		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, send contents of\ntheinterrogation window and the firmware details\nto the MegaTunix author\n"),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, send contents of the interrogation window\n\tand the firmware details to the MegaTunix author\n"),CRITICAL);
 		gdk_threads_enter();
 		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();

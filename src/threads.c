@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <errno.h>
 #include <gui_handlers.h>
 #include <interrogate.h>
 #include <logviewer_gui.h>
@@ -332,9 +333,11 @@ void readfrom_ecu(void *ptr)
 
 	/* check for data,,,, */
 	result = poll (&ufds,1,5*serial_params->poll_timeout);
-	if (result == 0)   /* Error */
+	if (result < 0)	   /* Error */
+		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError polling for data: %s\n",g_strerror(errno)),CRITICAL);
+	else if (result == 0)   /* Timeout */
 	{
-		dbg_func(__FILE__": readfrom_ecu()\n\tfailure reading Data from ECU\n",CRITICAL);
+		dbg_func(__FILE__": readfrom_ecu()\n\tTimeout reading Data from ECU\n",CRITICAL);
 		serial_params->errcount++;
 		connected = FALSE;
 	}
@@ -380,7 +383,24 @@ void comms_test()
 	}
 	dbg_func(__FILE__": commes_test()\n\tRequesting MS Clock (\"C\" cmd)\n",SERIAL_RD);
 	result = poll (&ufds,1,serial_params->poll_timeout*5);
-	if (result)
+	if (result < 0)		// Error
+		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError polling for data: %s\n",g_strerror(errno)),CRITICAL);
+	else if (result == 0)	// Timeout
+	{
+		connected = FALSE;
+		tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
+		/* An I/O Error occurred with the MegaSquirt ECU */
+		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
+		gdk_threads_enter();
+		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
+		g_free(tmpbuf);
+		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
+				connected);
+		////		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
+		//				connected);
+		gdk_threads_leave();
+	}
+	else
 	{
 		handle_ms_data(C_TEST,NULL);
 		connected = TRUE;
@@ -397,21 +417,6 @@ void comms_test()
 		//				connected);
 		gdk_threads_leave();
 
-	}
-	else
-	{
-		connected = FALSE;
-		tmpbuf = g_strdup_printf("I/O with MegaSquirt Timeout\n");
-		/* An I/O Error occurred with the MegaSquirt ECU */
-		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
-		gdk_threads_enter();
-		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
-		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
-				connected);
-		////		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-		//				connected);
-		gdk_threads_leave();
 	}
 	/* Flush the toilet again.... */
 	tcflush(serial_params->fd, TCIOFLUSH);
