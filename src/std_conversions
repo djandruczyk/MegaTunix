@@ -1,0 +1,104 @@
+[VERSION]
+major_ver=0
+minor_ver=1
+micro_ver=96
+
+[Offset 64]
+conv_type=MULT
+conv_factor=10
+
+[Offset 65]
+conv_type=MULT
+conv_factor=10
+
+[Offset 78]
+conv_type=MULT
+conv_factor=10
+
+[Offset 79]
+conv_type=MULT
+conv_factor=10
+
+[Offset 80]
+conv_type=MULT
+conv_factor=10
+
+[Offset 81]
+conv_type=MULT
+conv_factor=10
+
+[Offset 82]
+conv_type=MULT
+conv_factor=10
+
+[Offset 83]
+conv_type=MULT
+conv_factor=5
+
+[Offset 84]
+conv_type=MULT
+conv_factor=10
+
+[Offset 86]
+conv_type=ADD
+conv_factor=40
+
+[Offset 93]
+conv_type=MULT
+conv_factor=10
+
+[Offset 96]
+conv_type=MULT
+conv_factor=10
+
+[Offset 97]
+conv_type=MULT
+conv_factor=60
+
+[Offset 100]
+conv_type=DIV
+conv_factor=100
+
+[Offset 101]
+conv_type=DIV
+conv_factor=100
+
+[Offset 102]
+conv_type=DIV
+conv_factor=100
+
+[Offset 103]
+conv_type=DIV
+conv_factor=100
+
+[Offset 104]
+conv_type=DIV
+conv_factor=100
+
+[Offset 105]
+conv_type=DIV
+conv_factor=100
+
+[Offset 106]
+conv_type=DIV
+conv_factor=100
+
+[Offset 107]
+conv_type=DIV
+conv_factor=100
+
+[Offset 119]
+conv_type=MULT
+conv_factor=10
+
+[Offset 120]
+conv_type=DIV
+conv_factor=100
+
+[Offset 121]
+conv_type=ADD
+conv_factor=40
+
+[Offset 122]
+conv_type=MULT
+conv_factor=51

@@ -25,10 +25,10 @@ extern gint tips_in_use;
 
 int build_general(GtkWidget *parent_frame)
 {
-        extern GtkTooltips *tip;
+//        extern GtkTooltips *tip;
         GtkWidget *vbox;
-        GtkWidget *vbox2;
-        GtkWidget *label;
+ //       GtkWidget *vbox2;
+  //      GtkWidget *label;
         GtkWidget *frame;
         GtkWidget *hbox;
         GtkWidget *button;

@@ -110,8 +110,6 @@ int read_config(void)
 				&serial_params.comm_port);
 		cfg_read_int(cfgfile, "Serial", "polling_timeout", 
 				&serial_params.poll_timeout);
-//		cfg_read_string(cfgfile, "Sensors", "map_type", 
-//				map_type);
 		cfg_free(cfgfile);
 		g_free(filename);
 		return(0);
