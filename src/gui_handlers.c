@@ -390,8 +390,9 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				paused_handlers = FALSE;
 				constants_loaded = TRUE;
 			}
-			start_runtime_display();
 			start_serial_thread();
+			start_runtime_display();
+			forced_update = TRUE;
 			break;
 		case STOP_REALTIME:
 			stop_serial_thread();
@@ -1204,6 +1205,7 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 {
 //	printf("page changed to %i\n",page_no);
 	active_page = page_no;
+	forced_update = TRUE;
 
 	return;
 }

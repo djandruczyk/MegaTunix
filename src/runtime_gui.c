@@ -258,6 +258,7 @@ gboolean update_runtime_vars()
 	extern GHashTable *rt_controls;
 	gchar * tmpbuf = NULL;
 	gfloat tmpf = 0.0;
+	static gint count = 0;
 
 
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
@@ -296,7 +297,7 @@ gboolean update_runtime_vars()
 	
 
 	/* Update all the dynamic RT controls */
-	if (active_page == 11)	/* Runtime display is visible */
+	if (active_page == RUNTIME_DISP)	/* Runtime display is visible */
 	{
 		g_hash_table_foreach(rt_controls,rt_update_values,NULL);
 
@@ -310,41 +311,30 @@ gboolean update_runtime_vars()
 			/* Cranking */
 			gtk_widget_set_sensitive(misc.status[CRANKING],
 					runtime->engine.bit.crank);
-			gtk_widget_set_sensitive(misc.ww_status[CRANKING],
-					runtime->engine.bit.crank);
 			/* Running */
 			gtk_widget_set_sensitive(misc.status[RUNNING],
-					runtime->engine.bit.running);
-			gtk_widget_set_sensitive(misc.ww_status[RUNNING],
 					runtime->engine.bit.running);
 			/* Warmup */
 			gtk_widget_set_sensitive(misc.status[WARMUP],
 					runtime->engine.bit.warmup);
-			gtk_widget_set_sensitive(misc.ww_status[WARMUP],
-					runtime->engine.bit.warmup);
 			/* Afterstart Enrichment */
 			gtk_widget_set_sensitive(misc.status[AS_ENRICH],
-					runtime->engine.bit.startw);
-			gtk_widget_set_sensitive(misc.ww_status[AS_ENRICH],
 					runtime->engine.bit.startw);
 			/* Accel Enrichment */
 			gtk_widget_set_sensitive(misc.status[ACCEL],
 					runtime->engine.bit.tpsaen);
-			gtk_widget_set_sensitive(misc.ww_status[ACCEL],
-					runtime->engine.bit.tpsaen);
 			/* Decel Enleanment */
 			gtk_widget_set_sensitive(misc.status[DECEL],
-					runtime->engine.bit.tpsden);
-			gtk_widget_set_sensitive(misc.ww_status[DECEL],
 					runtime->engine.bit.tpsden);
 
 		}
 	}
 
-	if (active_page == 15) /* Warmup wizard visible... */
+	if (active_page == WARMUP_WIZARD) /* Warmup wizard visible... */
 	{
+		count++;
 		/* Update all the controls on the warmup wizrd page... */
-		if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update))
+		if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update) || (count > 5))
 		{
 			tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
 			gtk_label_set_text(GTK_LABEL(labels.ww_ego_lab),tmpbuf);
@@ -355,7 +345,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if (runtime->map != runtime_last->map)
+		if ((runtime->map != runtime_last->map) || (forced_update) || (count > 5))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->map);
 			gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
@@ -366,7 +356,7 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
-		if ((runtime->clt != runtime_last->clt) || (forced_update))
+		if ((runtime->clt != runtime_last->clt) || (forced_update) || (count > 5))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
 			gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
@@ -377,7 +367,7 @@ gboolean update_runtime_vars()
 			g_free(tmpbuf);
 			warmwizard_update_status(runtime->clt);
 		}
-		if ((runtime->warmcorr != runtime_last->warmcorr))
+		if ((runtime->warmcorr != runtime_last->warmcorr) || (forced_update) || (count > 5))
 		{
 			tmpbuf = g_strdup_printf("%i",(int)runtime->warmcorr);
 			gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
@@ -387,6 +377,28 @@ gboolean update_runtime_vars()
 					tmpf);
 			g_free(tmpbuf);
 		}
+		if ((forced_update) || (runtime->engine.value != runtime_last->engine.value) || (count > 5))
+		{
+			/* Cranking */
+			gtk_widget_set_sensitive(misc.ww_status[CRANKING],
+					runtime->engine.bit.crank);
+			/* Running */
+			gtk_widget_set_sensitive(misc.ww_status[RUNNING],
+					runtime->engine.bit.running);
+			/* Warmup */
+			gtk_widget_set_sensitive(misc.ww_status[WARMUP],
+					runtime->engine.bit.warmup);
+			/* Afterstart Enrichment */
+			gtk_widget_set_sensitive(misc.ww_status[AS_ENRICH],
+					runtime->engine.bit.startw);
+			/* Accel Enrichment */
+			gtk_widget_set_sensitive(misc.ww_status[ACCEL],
+					runtime->engine.bit.tpsaen);
+			/* Decel Enleanment */
+			gtk_widget_set_sensitive(misc.ww_status[DECEL],
+					runtime->engine.bit.tpsden);
+
+		}
 	}
 
 	if (ecu_caps & DUALTABLE)
@@ -394,6 +406,8 @@ gboolean update_runtime_vars()
 		/* Color the boxes on the VEtable closest to the operating point */
 
 	}
+	if (count > 5)
+		count = 0;
 
 	if (forced_update)
 		forced_update = FALSE;
@@ -429,14 +443,18 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat fvalue = 0.0;
 	gfloat tmpf;
 	gchar * tmpbuf = NULL;
+//	gint count = -1;
+
+//	control->count++;
+//	count = control->count;
 	
 
 	if (control->size == UCHAR)
 	{
 		uc_ptr = (unsigned char *) runtime;
 		l_uc_ptr = (unsigned char *) runtime_last;
-		//if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (count > 5))
-		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]))
+		//if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]))
+		if ((uc_ptr[offset/UCHAR] != l_uc_ptr[offset/UCHAR]) || (forced_update))
 		{
 			ivalue = uc_ptr[offset];
 			tmpbuf = g_strdup_printf("%i",ivalue);
@@ -454,8 +472,8 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	{
 		sh_ptr = (short *) runtime;
 		l_sh_ptr = (short *) runtime_last;
-		//if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (count > 5))
-		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT])) 
+		//if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT])) 
+		if ((sh_ptr[offset/SHORT] != l_sh_ptr[offset/SHORT]) || (forced_update))
 		{
 			svalue = sh_ptr[offset/SHORT];
 			tmpbuf = g_strdup_printf("%i",svalue);
@@ -473,7 +491,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	{
 		fl_ptr = (float *) runtime;
 		l_fl_ptr = (float *) runtime_last;
-		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]))
+		if ((fl_ptr[offset/FLOAT] != l_fl_ptr[offset/FLOAT]) || (forced_update))
 		{
 			fvalue = fl_ptr[offset/FLOAT];
 			tmpbuf = g_strdup_printf("%.2f",fvalue);
