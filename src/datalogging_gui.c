@@ -435,6 +435,80 @@ gint log_value_set(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
+void write_log_header(void *ptr)
+{
+	gint i = 0;
+	gint j = 0;
+	gint total_logables = 0;
+	gsize count = 0;
+	gint index = -1;
+	GString *output;
+	struct Io_File *iofile = NULL;
+	if (ptr != NULL)
+		iofile = (struct Io_File *)ptr;
+	else
+		g_fprintf(stderr,__FILE__": write_log_header() iofile pointer was undefined...\n");
+		
+	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
+
+	// Get total number of logables....
+	for (i=0;i<max_logables;i++)
+		if (logables.index[i])
+			total_logables++;
+
+	for (i=0;i<max_logables;i++)
+	{
+		index = -1;
+		if (logging_mode == MT_CLASSIC_LOG)
+		{
+			index = (gint)g_hash_table_lookup(classic_ord_hash,
+					GINT_TO_POINTER(i));
+			if (index == 0)
+				continue;
+			index -= 1;
+			output = g_string_append(output, 
+					mt_classic_names[index]);
+			offset_list[j] = logging_offset_map[index];
+			size_list[j] = logging_datasizes_map[index];
+			j++;
+		}
+		else if (logging_mode == MT_FULL_LOG)
+		{
+			index = (gint)g_hash_table_lookup(full_ord_hash,
+					GINT_TO_POINTER(i));
+			if (index == 0)
+				continue;
+			index -= 1;
+			output = g_string_append(output, 
+					mt_full_names[index]);
+			offset_list[j] = logging_offset_map[index];
+			size_list[j] = logging_datasizes_map[index];
+			j++;
+		}
+		else
+		{
+			index = (gint)g_hash_table_lookup(custom_ord_hash,
+					GINT_TO_POINTER(i));
+			if (index == 0)
+				continue;
+			index -= 1;
+			//g_printf("i %i, index %i\n",i,index);
+			output = g_string_append(output, 
+					g_strdelimit(g_strdup(logable_names[index])," ",'_'));
+			offset_list[j] = logging_offset_map[index];
+			size_list[j] = logging_datasizes_map[index];
+			j++;
+		}
+
+		if (j < (total_logables))
+			output = g_string_append(output,delim);
+	}
+	output = g_string_append(output,"\r\n");
+	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_string_free(output,TRUE);
+
+}
+
 void run_datalog(void)
 {
 	gint i = 0;
@@ -502,13 +576,13 @@ void run_datalog(void)
 						g_string_append_printf(
 							output,"%.3f",(float)float_ptr[offset/FLOAT]);
 						break;
-					case UCHAR:
-						g_string_append_printf(
-							output,"%i",(unsigned char)uchar_ptr[offset]);
-						break;
 					case SHORT:
 						g_string_append_printf(
 							output,"%i",short_ptr[offset/SHORT]);
+						break;
+					case UCHAR:
+						g_string_append_printf(
+							output,"%i",(unsigned char)uchar_ptr[offset]);
 						break;
 					default:
 						g_fprintf(stderr,__FILE__": SIZE not defined (%i)\n",i);
@@ -523,81 +597,7 @@ void run_datalog(void)
 		if (i < (total_logables-1))
 			output = g_string_append(output,delim);
 	}
-	output = g_string_append(output,"\n");
-	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
-	g_string_free(output,TRUE);
-
-}
-
-void write_log_header(void *ptr)
-{
-	gint i = 0;
-	gint j = 0;
-	gint total_logables = 0;
-	gsize count = 0;
-	gint index = -1;
-	GString *output;
-	struct Io_File *iofile = NULL;
-	if (ptr != NULL)
-		iofile = (struct Io_File *)ptr;
-	else
-		g_fprintf(stderr,__FILE__": iofile pointer was undefined...\n");
-		
-	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
-
-	// Get total number of logables....
-	for (i=0;i<max_logables;i++)
-		if (logables.index[i])
-			total_logables++;
-
-	for (i=0;i<max_logables;i++)
-	{
-		index = -1;
-		if (logging_mode == MT_CLASSIC_LOG)
-		{
-			index = (gint)g_hash_table_lookup(classic_ord_hash,
-					GINT_TO_POINTER(i));
-			if (index == 0)
-				continue;
-			index -= 1;
-			output = g_string_append(output, 
-					mt_classic_names[index]);
-			offset_list[j] = logging_offset_map[index];
-			size_list[j] = logging_datasizes_map[index];
-			j++;
-		}
-		else if (logging_mode == MT_FULL_LOG)
-		{
-			index = (gint)g_hash_table_lookup(full_ord_hash,
-					GINT_TO_POINTER(i));
-			if (index == 0)
-				continue;
-			index -= 1;
-			output = g_string_append(output, 
-					mt_full_names[index]);
-			offset_list[j] = logging_offset_map[index];
-			size_list[j] = logging_datasizes_map[index];
-			j++;
-		}
-		else
-		{
-			index = (gint)g_hash_table_lookup(custom_ord_hash,
-					GINT_TO_POINTER(i));
-			if (index == 0)
-				continue;
-			index -= 1;
-			//g_printf("i %i, index %i\n",i,index);
-			output = g_string_append(output, 
-					g_strdelimit(g_strdup(logable_names[index])," ",'_'));
-			offset_list[j] = logging_offset_map[index];
-			size_list[j] = logging_datasizes_map[index];
-			j++;
-		}
-
-		if (j < (total_logables))
-			output = g_string_append(output,delim);
-	}
-	output = g_string_append(output,"\n");
+	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
 	g_string_free(output,TRUE);
 
