@@ -12,17 +12,20 @@
  */
 
 #include <config.h>
+#include <configfile.h>
 #include <datalogging_gui.h>
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
 #include <gtk/gtk.h>
+#include <gui_handlers.h>
 #include <logviewer_core.h>
 #include <notifications.h>
 #include <structures.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <tabloader.h>
 #include <unistd.h>
 #include <vex_support.h>
 
@@ -408,14 +411,87 @@ void truncate_file(FileIoType filetype, gchar *filename)
 void backup_all_ms_settings(gchar *filename)
 {
 	extern struct Firmware_Details *firmware;
-	printf("backup settings to %s\n",filename);
-	
-	dbg_func(__FILE__": backup all MS settings to file isn't written yet...\n",CRITICAL);
+	ConfigFile *cfgfile;
+	gchar * section = NULL;
+	gint i = 0;
+	gint x = 0;
+	extern unsigned char * ms_data[MAX_SUPPORTED_PAGES];
+	GString *string = NULL;
 
+	printf("backup data\n");
+	cfgfile = cfg_open_file(filename);
+	if (!cfgfile)
+		cfgfile = cfg_new();
+
+	cfg_write_string(cfgfile,"Firmware","signature",firmware->firmware_name);
+	for(i=0;i<firmware->total_pages;i++)
+	{
+		string = g_string_sized_new(64);
+		section = g_strdup_printf("page_%i",i);
+		cfg_write_int(cfgfile,section,"num_variables",firmware->page_params[i]->size);
+		cfg_write_boolean(cfgfile,section,"is_spark",firmware->page_params[i]->is_spark);
+		for(x=0;x<firmware->page_params[i]->size;x++)
+		{
+			string = g_string_append(string,g_strdup_printf("%i",ms_data[i][x]));
+			if (x < (firmware->page_params[i]->size-1))
+				string = g_string_append(string,",");
+		}
+		cfg_write_string(cfgfile,section,"data",string->str);
+		g_string_free(string,TRUE);
+	}
+	cfg_write_file(cfgfile,filename);
+	cfg_free(cfgfile);
+
+	if (section)
+		g_free(section);
 }
 
 void restore_all_ms_settings(gchar *filename)
 {
-	dbg_func(__FILE__": restore all MS settings to file isn't written yet...\n",CRITICAL);
+	extern struct Firmware_Details *firmware;
+	ConfigFile *cfgfile;
+	gchar * section = NULL;
+	gint i = 0;
+	gint x = 0;
+	gint tmpi = 0;
+	gchar *tmpbuf = NULL;
+	gchar **keys = NULL;
+	gint num_keys = 0;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 	
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
+	{
+		cfg_read_string(cfgfile,"Firmware","signature",&tmpbuf);
+		if (g_strcasecmp(tmpbuf,firmware->firmware_name) != 0)
+		{
+			printf("Firmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->firmware_name);
+			if (tmpbuf)
+				g_free(tmpbuf);
+			cfg_free(cfgfile);
+			return;
+		}
+		for (i=0;i<firmware->total_pages;i++)
+		{
+			section = g_strdup_printf("page_%i",i);
+			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
+				if (tmpi != firmware->page_params[i]->size)
+					printf("Number of variables in backup \"%i\" and firmware specification \"%i\" do NOT match, corruption is expected\n",tmpi,firmware->page_params[i]->size);
+			if (cfg_read_int(cfgfile,section,"is_spark",&tmpi))
+				if (tmpi != firmware->page_params[i]->is_spark)
+					printf("Spark table data mismatch for page %i, restore file \"%i\", firmware specification \"%i\"\n",i,tmpi,firmware->page_params[i]->size);
+			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
+			{
+				keys = parse_keys(tmpbuf,&num_keys);
+				if (num_keys != firmware->page_params[i]->size)
+					printf("Number of variables  in this backup \"%i\" does NOT match the size of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[i]->size);
+				for (x=0;x<num_keys;x++)
+					ms_data[i][x]=atoi(keys[x]);
+				g_strfreev(keys);
+				g_free(tmpbuf);
+			}
+
+		}
+	}
+	update_ve_const();
 }
