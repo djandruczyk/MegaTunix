@@ -25,7 +25,7 @@ void post_process(struct ms_raw_data_v1_and_v2 *, struct ms_data_v1_and_v2 *);
 int open_serial(int); /* arg is COMM (dos/win style) port number */
 int setup_serial_params(void); /* Setups serial i/o settings */
 void close_serial(void); /* arg is filedescriptor that was opened */
-void handle_ms_data(void); /* arg is filedescriptor that was opened */
+void handle_ms_data(int); /* arg is filedescriptor that was opened */
 
 /* threads.c */
 int serial_raw_thread_starter(void); /*botstrap function to get IO started */

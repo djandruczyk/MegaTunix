@@ -13,6 +13,7 @@
 
 #include <glib.h>
 
+
 #define BAUDRATE B9600
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
 
@@ -142,7 +143,7 @@ struct ms_data_v1_and_v2 {
 };
 		
 /* Definitions */
-/* frames */
+/* Gui frames */
 #define ABOUT_PAGE		0x01
 #define COMMS_PAGE		0x02
 #define CONSTANTS_PAGE		0x03
@@ -152,6 +153,10 @@ struct ms_data_v1_and_v2 {
 #define TUNING_PAGE		0x07
 #define TOOLS_PAGE		0x08
 #define DATALOGGING_PAGE	0x09
+
+/* Serial I/O case handling */
+#define REALTIME_VARS		0x20
+#define VE_AND_CONSTANTS	0x21
  
 /* Configfile structs. (derived from an older version of XMMS) */
 
@@ -179,3 +184,4 @@ typedef struct
 }
 ConfigFile;
 #endif 
+

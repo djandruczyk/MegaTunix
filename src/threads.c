@@ -24,10 +24,10 @@
 
 int serial_raw_thread_starter()
 {
-	/* Spawns the thread that reads data from the MS box */
+	/* Spawns the thread that reads realtime vars data from the MS box */
 	int retcode = 0;
 	if (raw_reader_running)
-		printf("ERROR!, Seral raw data reading is already running\n");
+		printf("ERROR!, Seral raw data reader is already running\n");
 	else
 	{
 		retcode = pthread_create(&raw_input_thread,\
@@ -59,11 +59,10 @@ void * raw_reader_thread(void *params)
                 if (res == 0)
                 {
                         printf("I/O with MegaSquirt Timeout\n");
-//			tcflush(serial_params.fd,TCIOFLUSH);
                         serial_params.errcount++;
                 }
                 else
-                        handle_ms_data();
+                        handle_ms_data(REALTIME_VARS);
 
                 usleep(read_wait_time *1000);
 	}

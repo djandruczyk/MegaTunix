@@ -15,7 +15,7 @@ megasquirt_SOURCES = \
 	comms_gui.c \
 	main.c \
 	serialio.c \
-	textout.c \
+	dataio.c \
 	threads.c \
 	configfile.c \
 	init.c \
