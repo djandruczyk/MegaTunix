@@ -26,7 +26,7 @@ gboolean tabs_loaded = FALSE;
 GHashTable *dynamic_widgets = NULL;
 
 void check_ve_widgets();
-void load_gui_tabs()
+gboolean load_gui_tabs()
 {
 	extern struct Firmware_Details * firmware;
 	gint i = 0;
@@ -38,6 +38,10 @@ void load_gui_tabs()
 	gchar * tmpbuf = NULL;
 	GtkWidget * label = NULL;
 	extern GtkWidget * notebook;
+	
+	if (!firmware->tab_list[i])
+		return FALSE;
+
 	
 	while (firmware->tab_list[i])
 	{
@@ -77,6 +81,7 @@ void load_gui_tabs()
 		
 	}
 	tabs_loaded = TRUE;
+	return TRUE;
 
 }
 

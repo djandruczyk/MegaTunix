@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void load_gui_tabs(void);
+gboolean load_gui_tabs(void);
 void bind_data(gpointer,gpointer,gpointer);
 void populate_master(gpointer,gpointer,gpointer);
 gchar ** parse_keys(gchar * , gint * );

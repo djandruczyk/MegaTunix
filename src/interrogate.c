@@ -328,7 +328,6 @@ end_of_loop:
 		update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();
 		g_free(tmpbuf);
-		sleep(5);
 		goto cleanup;
 	}
 
@@ -432,6 +431,9 @@ cleanup:
 	/* Enable/Disable Controls */
 	parse_ecu_capabilities(ecu_caps);
 
+	if (!firmware)
+		firmware = g_malloc0(sizeof(struct Firmware_Details));
+	firmware->tab_list = g_strsplit("",",",0);
 	firmware->table0_size = 125;	/* assumptions!!!! */
 	firmware->table1_size = 0;	/* assumptions!!!! */
 	firmware->rtvars_size = 22;	/* assumptions!!!! */

@@ -177,6 +177,7 @@ void *serial_io_handler(gpointer data)
 	gint len=0;
 	gint i=0;
 	gint val=-1;
+	gboolean result = FALSE;
 	extern gboolean paused_handlers;
 	extern gint mem_view_style[];
 	/* Create Queue to listen for commands */
@@ -226,8 +227,10 @@ void *serial_io_handler(gpointer data)
 				{
 					case UPD_LOAD_GUI_TABS:
 						gdk_threads_enter();
-						load_gui_tabs();
+						result = load_gui_tabs();
 						gdk_threads_leave();
+						if (result == FALSE)
+							goto breakout;
 						break;
 					case UPD_READ_VE_CONST:
 						io_cmd(IO_READ_VE_CONST,NULL);
@@ -266,6 +269,7 @@ void *serial_io_handler(gpointer data)
 				}
 			}
 		}
+		breakout:
 		dealloc_message(message);
 	}
 }
