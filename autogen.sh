@@ -6,6 +6,14 @@ test -z "$srcdir" && srcdir=.
 
 DIE=0
 
+# Determine whether to use configure.in or configure.ac
+if [ -f $srcdir/configure.ac ]; then
+  CONFIGURE="$srcdir/configure.ac"
+else
+  CONFIGURE="$srcdir/configure.in"
+fi
+
+
 if [ -n "$GNOME2_DIR" ]; then
 	ACLOCAL_FLAGS="-I $GNOME2_DIR/share/aclocal $ACLOCAL_FLAGS"
 	LD_LIBRARY_PATH="$GNOME2_DIR/lib:$LD_LIBRARY_PATH"
@@ -14,7 +22,7 @@ if [ -n "$GNOME2_DIR" ]; then
 	export LD_LIBRARY_PATH
 fi
 
-(test -f $srcdir/configure.in) || {
+(test -f $CONFIGURE) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level package directory"
     exit 1
@@ -28,37 +36,37 @@ fi
   DIE=1
 }
 
-(grep "^AC_PROG_INTLTOOL" $srcdir/configure.in >/dev/null) && {
+(grep "^AC_PROG_INTLTOOL" "$CONFIGURE" >/dev/null) && {
   (intltoolize --version) < /dev/null > /dev/null 2>&1 || {
     echo 
-    echo "**Error**: You must have \`intltool' installed."
+    echo "**Error**: You must have \`intltoolize\' installed."
     echo "You can get it from:"
     echo "  ftp://ftp.gnome.org/pub/GNOME/"
     DIE=1
   }
 }
 
-(grep "^AM_PROG_XML_I18N_TOOLS" $srcdir/configure.in >/dev/null) && {
+(grep "^AM_PROG_XML_I18N_TOOLS" "$CONFIGURE" >/dev/null) && {
   (xml-i18n-toolize --version) < /dev/null > /dev/null 2>&1 || {
     echo
-    echo "**Error**: You must have \`xml-i18n-toolize' installed."
+    echo "**Error**: You must have \`xml-i18n-toolize\' installed."
     echo "You can get it from:"
     echo "  ftp://ftp.gnome.org/pub/GNOME/"
     DIE=1
   }
 }
 
-(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
+(grep "^AM_PROG_LIBTOOL" "$CONFIGURE" >/dev/null) && {
   (libtool --version) < /dev/null > /dev/null 2>&1 || {
     echo
-    echo "**Error**: You must have \`libtool' installed."
+    echo "**Error**: You must have \`libtool\' installed."
     echo "You can get it from: ftp://ftp.gnu.org/pub/gnu/"
     DIE=1
   }
 }
 
-(grep "^AM_GLIB_GNU_GETTEXT" $srcdir/configure.in >/dev/null) && {
-  (grep "sed.*POTFILES" $srcdir/configure.in) > /dev/null || \
+(grep "^AM_GLIB_GNU_GETTEXT" "$CONFIGURE" >/dev/null) && {
+  (grep "sed.*POTFILES" "$CONFIGURE" ) > /dev/null || \
   (glib-gettextize --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`glib' installed."
@@ -101,9 +109,10 @@ xlc )
   am_opt=--include-deps;;
 esac
 
-for coin in `find $srcdir -path $srcdir/CVS -prune -o -name configure.in -print`
+for coin in `find $srcdir -path $srcdir/CVS -prune -o -name configure.in -or -name configure.ac -print`
 do 
   dr=`dirname $coin`
+  bn=`basename $coin`
   if test -f $dr/NO-AUTO-GEN; then
     echo skipping $dr -- flagged as no auto-gen
   else
@@ -112,7 +121,7 @@ do
 
       aclocalinclude="$ACLOCAL_FLAGS"
 
-      if grep "^AM_GLIB_GNU_GETTEXT" configure.in >/dev/null; then
+      if grep "^AM_GLIB_GNU_GETTEXT" "$bn" >/dev/null; then
 	echo "Creating $dr/aclocal.m4 ..."
 	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 	echo "Running glib-gettextize...  Ignore non-fatal messages."
@@ -120,15 +129,15 @@ do
 	echo "Making $dr/aclocal.m4 writable ..."
 	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi
-      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
+      if grep "^AC_PROG_INTLTOOL" "$bn" >/dev/null; then
         echo "Running intltoolize..."
 	intltoolize --copy --force --automake
       fi
-      if grep "^AM_PROG_XML_I18N_TOOLS" configure.in >/dev/null; then
+      if grep "^AM_PROG_XML_I18N_TOOLS" "$bn" >/dev/null; then
         echo "Running xml-i18n-toolize..."
 	xml-i18n-toolize --copy --force --automake
       fi
-      if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
+      if grep "^AM_PROG_LIBTOOL" "$bn" >/dev/null; then
 	if test -z "$NO_LIBTOOLIZE" ; then 
 	  echo "Running libtoolize..."
 	  libtoolize --force --copy
@@ -136,7 +145,7 @@ do
       fi
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
-      if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
+      if grep "^AM_CONFIG_HEADER" "$bn" >/dev/null; then
 	echo "Running autoheader..."
 	autoheader
       fi
