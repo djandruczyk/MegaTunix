@@ -11,31 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/* Configfile structs. (derived from an older version of XMMS) */
+#ifndef __TOOLS_GUI_H__
+#define __TOOLS_GUI_H__
 
-#ifndef __CONFIGFILE_H__
-#define __CONFIGFILE_H__
+#include <gtk/gtk.h>
 
-#include <glib.h>
+/* Prototypes */
+int build_tools(GtkWidget *);
+/* Prototypes */
 
-typedef struct
-{
-        gchar *key;
-        gchar *value;
-}
-ConfigLine;
-
-typedef struct
-{
-        gchar *name;
-        GList *lines;
-}
-ConfigSection;
-typedef struct
-{
-        GList *sections;
-}
-ConfigFile;
 #endif
-
-

@@ -16,9 +16,11 @@
 #include <unistd.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <structures.h>
+#include <comms_gui.h>
+#include <enums.h>
+#include <gui_handlers.h>
 #include <runtime_gui.h>
 
 

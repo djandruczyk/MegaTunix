@@ -75,11 +75,12 @@ PFLAGS = @PFLAGS@
 PKG_CONFIG = @PKG_CONFIG@
 VERSION = @VERSION@
 
-INCLUDES = @PACKAGE_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJOR_VERSION@  -D_MINOR_=@MEGATUNIX_LIN_MINOR_VERSION@ -D_MICRO_=@MEGATUNIX_LIN_MICRO_VERSION@ -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED
+INCLUDES =  	-I$(top_srcdir)/include 	@PACKAGE_CFLAGS@ 	-DGTK_DISABLE_COMPAT_H 	-D_MAJOR_=@MEGATUNIX_LIN_MAJOR_VERSION@ 	-D_MINOR_=@MEGATUNIX_LIN_MINOR_VERSION@ 	-D_MICRO_=@MEGATUNIX_LIN_MICRO_VERSION@ 	-DGDK_DISABLE_DEPRECATED 	-DGTK_DISABLE_DEPRECATED
+
 
 bin_PROGRAMS = megatunix
 
-megatunix_SOURCES =  	Makefile 	c_gauge.h 	configfile.h 	conversions.h 	structures.h 	datalogging.h 	defines.h 	enums.h 	globals.h 	lookuptables.h 	protos.h 	runtime_gui.h 	logo.h 	about_gui.c 	c_gauge.c 	comms_gui.c 	configfile.c 	constants_gui.c 	conversions.c 	core_gui.c 	dataio.c 	datalogging_gui.c 	enrichments_gui.c 	general_gui.c 	gui_handlers.c 	ignition.c 	init.c 	interrogate.c 	lowlevel_gui.c 	main.c 	notifications.c 	post_process.c 	req_fuel.c 	runtime_gui.c 	serialio.c 	threads.c 	tools_gui.c 	tuning_gui.c 	vetable_gui.c 
+megatunix_SOURCES =  	Makefile 	about_gui.c 	c_gauge.c 	comms_gui.c 	configfile.c 	constants_gui.c 	conversions.c 	core_gui.c 	dataio.c 	datalogging_gui.c 	enrichments_gui.c 	general_gui.c 	gui_handlers.c 	ignition.c 	init.c 	interrogate.c 	lowlevel_gui.c 	main.c 	notifications.c 	post_process.c 	req_fuel.c 	runtime_gui.c 	serialio.c 	threads.c 	tools_gui.c 	tuning_gui.c 	vetable_gui.c 
 
 
 megatunix_LDADD = @PACKAGE_LIBS@

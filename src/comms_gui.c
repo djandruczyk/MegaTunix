@@ -17,9 +17,12 @@
 #include <string.h>
 #include <sys/poll.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <structures.h>
+#include <comms_gui.h>
+#include <gui_handlers.h>
+#include <serialio.h>
+#include <enums.h>
 
 struct Counts counts;
 gint ser_context_id;			/* for ser_statbar */

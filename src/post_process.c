@@ -15,8 +15,8 @@
 
 #include <config.h>
 #include <defines.h>
-#include <protos.h>
 #include <lookuptables.h>
+#include <post_process.h>
 
 extern unsigned char *kpa_conversion;
 extern gboolean fahrenheit;

@@ -16,8 +16,12 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <defines.h>
-#include <protos.h>
 #include <structures.h>
+#include <req_fuel.h>
+#include <gui_handlers.h>
+#include <enums.h>
+#include <globals.h>
+#include <serialio.h>
 
 gboolean req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;

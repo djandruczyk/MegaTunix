@@ -16,8 +16,6 @@
 #ifndef __STRUCTURES_H__
 #define __STRUCTURES_H__
 
-#include <config.h>
-#include <sys/types.h>
 #include <gtk/gtk.h>
 
 /* this is required so we keep track of the gui controls so we

@@ -16,8 +16,11 @@
 #include <unistd.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
+#include <general_gui.h>
+#include <gui_handlers.h>
+#include <interrogate.h>
+#include <enums.h>
 
 extern gboolean tips_in_use;
 extern gboolean fahrenheit;

@@ -16,9 +16,13 @@
 #ifndef __RUNTIME_GUI_H__
 #define __RUNTIME_GUI_H__
 
-#include <config.h>
-#include <sys/types.h>
 #include <gtk/gtk.h>
+
+/* Prototypes */
+int build_runtime(GtkWidget *);
+void update_runtime_vars(void);
+void reset_runtime_status(void);
+/* Prototypes */
 
 	/* This structure contains all the gui pointers to the 
 	 * objects used on the runtime_gui.  These are needed  

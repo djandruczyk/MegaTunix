@@ -11,13 +11,17 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/* Conversions.h structures */
-
 #ifndef __CONVERSIONS_H__
 #define __CONVERSIONS_H__
 
-#include <config.h>
-#include <sys/types.h>
+#include <gtk/gtk.h>
+
+/* Prototypes */
+void read_conversions(void);
+void reset_temps(gpointer);
+gint convert_before_download(gint, gfloat);
+gfloat convert_after_upload(gint);
+/* Prototypes */
 
 struct Conversion_Chart
 {

@@ -19,10 +19,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <configfile.h>
-
+#include <init.h>
 
 gint major_ver;
 gint minor_ver;

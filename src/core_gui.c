@@ -17,9 +17,24 @@
 #include <string.h>
 #include <sys/poll.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <enums.h>
+#include <core_gui.h>
+#include <gui_handlers.h>
+#include <about_gui.h>
+#include <comms_gui.h>
+#include <general_gui.h>
+#include <constants_gui.h>
+#include <enrichments_gui.h>
+#include <vetable_gui.h>
+#include <ignition_gui.h>
+#include <runtime_gui.h>
+#include <tuning_gui.h>
+#include <tools_gui.h>
+#include <lowlevel_gui.h>
+#include <datalogging_gui.h>
+
+
 
 /* Default window size and MINIMUM size as well... */
 static int def_width=690;

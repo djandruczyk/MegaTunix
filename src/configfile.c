@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <protos.h>
+#include <configfile.h>
 
 static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name);
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value);

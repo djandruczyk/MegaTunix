@@ -16,13 +16,20 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <protos.h>
 #include <defines.h>
 #include <globals.h>
 #include <structures.h>
 #include <datalogging.h>
 #include <enums.h>
-
+#include <gui_handlers.h>
+#include <serialio.h>
+#include <threads.h>
+#include <conversions.h>
+#include <init.h>
+#include <datalogging_gui.h>
+#include <notifications.h>
+#include <runtime_gui.h>
+#include <req_fuel.h>
 
 extern gint req_fuel_popup;
 extern unsigned char *kpa_conversion;

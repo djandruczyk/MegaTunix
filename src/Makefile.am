@@ -1,22 +1,18 @@
 
-INCLUDES = @PACKAGE_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGATUNIX_LIN_MAJOR_VERSION@  -D_MINOR_=@MEGATUNIX_LIN_MINOR_VERSION@ -D_MICRO_=@MEGATUNIX_LIN_MICRO_VERSION@ -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED
+INCLUDES = \
+	-I$(top_srcdir)/include \
+	@PACKAGE_CFLAGS@ \
+	-DGTK_DISABLE_COMPAT_H \
+	-D_MAJOR_=@MEGATUNIX_LIN_MAJOR_VERSION@ \
+	-D_MINOR_=@MEGATUNIX_LIN_MINOR_VERSION@ \
+	-D_MICRO_=@MEGATUNIX_LIN_MICRO_VERSION@ \
+	-DGDK_DISABLE_DEPRECATED \
+	-DGTK_DISABLE_DEPRECATED
 
 bin_PROGRAMS = megatunix
 
 megatunix_SOURCES = \
 	Makefile \
-	c_gauge.h \
-	configfile.h \
-	conversions.h \
-	structures.h \
-	datalogging.h \
-	defines.h \
-	enums.h \
-	globals.h \
-	lookuptables.h \
-	protos.h \
-	runtime_gui.h \
-	logo.h \
 	about_gui.c \
 	c_gauge.c \
 	comms_gui.c \
@@ -55,3 +51,4 @@ CFLAGS += $(COMMON_FLAGS) -Wall
 CLEANFILES = *~ core .deps/* gmon.out nohup.out -r .deps
 
 EXTRA_DIST = README NEWS TODO AUTHORS
+

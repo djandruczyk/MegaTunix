@@ -16,9 +16,11 @@
 #include <unistd.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <structures.h>
+#include <enrichments_gui.h>
+#include <enums.h>
+#include <gui_handlers.h>
 
 struct v1_2_Constants constants;
 extern struct Buttons buttons;

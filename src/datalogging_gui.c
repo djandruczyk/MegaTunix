@@ -22,16 +22,20 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <datalogging.h>
 #include <enums.h>
+#include <datalogging_gui.h>
+#include <gui_handlers.h>
+#include <notifications.h>
 
+/* Local #defines */
 #define TABLE_COLS 6
 #define MAX_LOGABLES 32
 #define STD_LOGABLES 18
 #define DUALTABLE_LOGABLES 21
 #define DUALTABLE 64
+/* Local #defines */
 
 gint ms_type = 0;
 extern gint ready;

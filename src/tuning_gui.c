@@ -16,8 +16,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
+#include <tuning_gui.h>
 
 int build_tuning(GtkWidget *parent_frame)
 {

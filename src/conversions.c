@@ -16,11 +16,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <structures.h>
-#include <conversions.h>
 #include <enums.h>
+#include <conversions.h>
 
 /* Conversions.c
  * 

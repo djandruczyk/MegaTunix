@@ -18,9 +18,14 @@
 #include <pthread.h>
 #include <sys/poll.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <runtime_gui.h>
+#include <threads.h>
+#include <dataio.h>
+#include <datalogging_gui.h>
+#include <enums.h>
+#include <notifications.h>
+#include <comms_gui.h>
 
 
 pthread_t raw_input_thread;			/* thread handle */

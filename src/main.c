@@ -19,9 +19,14 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <defines.h>
-#include <defines.h>
-#include <protos.h>
 #include <globals.h>
+#include <main.h>
+#include <enums.h>
+#include <init.h>
+#include <core_gui.h>
+#include <gui_handlers.h>
+#include <serialio.h>
+#include <conversions.h>
 
 
 gint def_comm_port;

@@ -5,26 +5,24 @@
  * 
  * 
  * This software comes under the GPL (GNU Public License)
- * You may freely copy,distribute etc. this as long as the source code
+ * You may freely copy,distribute, etc. this as long as all the source code
  * is made available for FREE.
  * 
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#ifndef __INIT_H__
+#define __INIT_H__
 
-#ifndef __PROTOS_H__
-#define __PROTOS_H__
-
-#include <config.h>
-#include <globals.h>
-#include <defines.h>
-#include <configfile.h>
-#include <enums.h>
 #include <gtk/gtk.h>
 
-
-/* vetable_gui.c */
-int build_vetable(GtkWidget *);
-/* vetable_gui.c */
+/* Prototypes */
+void init(void);
+int read_config(void);
+void save_config(void);
+void make_megasquirt_dirs(void);
+void mem_alloc(void);
+void mem_dealloc(void);
+/* Prototypes */
 
 #endif

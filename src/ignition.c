@@ -16,8 +16,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
+#include <ignition_gui.h>
+
 
 int build_ignition(GtkWidget *parent_frame)
 {

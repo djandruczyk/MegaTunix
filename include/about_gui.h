@@ -5,26 +5,19 @@
  * 
  * 
  * This software comes under the GPL (GNU Public License)
- * You may freely copy,distribute etc. this as long as the source code
+ * You may freely copy,distribute, etc. this as long as all the source code
  * is made available for FREE.
  * 
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#ifndef __ABOUT_H__
+#define __ABOUT_H__
 
-#ifndef __PROTOS_H__
-#define __PROTOS_H__
-
-#include <config.h>
-#include <globals.h>
-#include <defines.h>
-#include <configfile.h>
-#include <enums.h>
 #include <gtk/gtk.h>
 
-
-/* vetable_gui.c */
-int build_vetable(GtkWidget *);
-/* vetable_gui.c */
+/* Prototypes */
+int build_about(GtkWidget *);
+/* Prototypes */
 
 #endif

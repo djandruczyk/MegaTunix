@@ -16,10 +16,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-//#include <defines.h>
 #include <globals.h>
 #include <logo.h>
-
+#include <about_gui.h>
 
 
 int build_about(GtkWidget *frame)

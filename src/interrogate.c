@@ -21,10 +21,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
 #include <structures.h>
 #include <globals.h>
 #include <errno.h>
+#include <interrogate.h>
 
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;

@@ -17,9 +17,12 @@
 #include <string.h>
 #include <pthread.h>
 #include <defines.h>
-#include <protos.h>
 #include <globals.h>
 #include <enums.h>
+#include <dataio.h>
+#include <serialio.h>
+#include <post_process.h>
+
 
 
 static gint lastcount=0;

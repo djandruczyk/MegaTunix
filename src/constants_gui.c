@@ -16,9 +16,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <defines.h>
-#include <protos.h>
+#include <constants_gui.h>
 #include <globals.h>
 #include <structures.h>
+#include <enums.h>
+#include <gui_handlers.h>
+
 
 extern struct v1_2_Constants constants;
 struct Adjustments adjustments;

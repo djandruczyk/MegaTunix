@@ -3,7 +3,7 @@
 AUTOMAKE_OPTIONS = foreign
 
 
-subdirs = src 
+subdirs = src include
 
 SUBDIRS = $(subdirs) 
 
