@@ -1,13 +1,3 @@
 
-Note:
-
-./configure, aclocal.m4, acinclude.m4, Makefile.in, src/Makefile.in and 
-include/Makefile.in have been REMOVED.  You should run "autoreconf" followed
-by "./configure" to regenerate these files.  Due to them being autobuilt
-they should NOT be in CVS, as they impede the creation and application of 
-patches to the developers tree...
-
-01/02/2004 DJA
-
-
+To generate the necessary files to use from CVS run "./autogen.sh"
 
