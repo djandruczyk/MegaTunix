@@ -403,7 +403,7 @@ void run_datalog(void)
 	gint offset = 0;
 	gint size = 0;
 	gint begin = FALSE;
-	gint count = 0;
+	gsize count = 0;
 	void *data;
 	GString *output;
 	struct Io_File *iofile = NULL;
@@ -496,7 +496,7 @@ void write_log_header(void *ptr)
 	gint i = 0;
 	gint j = 0;
 	gint total_logables = 0;
-	gint count = 0;
+	gsize count = 0;
 	GString *output;
 	struct Io_File *iofile = NULL;
 	if (ptr != NULL)

@@ -97,7 +97,7 @@ gboolean vetable_export(void *ptr)
 	time_t *t;
 	gint i = 0;
 	gint j = 0;
-	gint count = 0;
+	gsize count = 0;
 	gint index = 0;
 	extern unsigned char * ms_data;
 	unsigned char * ve_const_arr = NULL;
