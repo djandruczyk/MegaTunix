@@ -1,4 +1,4 @@
-# 8x8 sparktables,  used by the SquirtnSpark and SquirtnEDIS firmwares but 
+# 8x8 tables,  used by the SquirtnSpark and SquirtnEDIS firmwares but 
 # NOT by the SquirtnSpark-Extra code which uses 12x12 tables and more pages.
 
 
@@ -107,7 +107,7 @@ table_num=1
 
 #----- MAIN SparkTable Container ---------------------------------------------
 
-[sparktable]
+[main_sparktable]
 keys=page,rescaler_frame
 key_types=_INT_,_STRING_
 page=0

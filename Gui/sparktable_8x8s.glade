@@ -323,7 +323,7 @@
 			  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			  <child>
-			    <widget class="GtkTable" id="sparktable">
+			    <widget class="GtkTable" id="main_sparktable">
 			      <property name="border_width">5</property>
 			      <property name="visible">True</property>
 			      <property name="n_rows">9</property>

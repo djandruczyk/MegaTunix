@@ -27,14 +27,14 @@ gui_files = 	template.glade \
 		sparktable_12x12e-Extra.datamap \
 		sparktable_12x12s.glade \
 		sparktable_12x12s-Extra.datamap \
-		sparktable_8x8.glade \
-		sparktable_8x8-EDIS.datamap \
-		sparktable_8x8-Std.datamap \
+		sparktable_8x8s.glade \
+		sparktable_8x8s-EDIS.datamap \
+		sparktable_8x8s-Std.datamap \
 		tools.glade \
 		tools.datamap \
-		vetable_8x8.glade \
-		vetable_8x8-BnG.datamap \
-		vetable_8x8-DT_2.datamap \
+		vetable_8x8s.glade \
+		vetable_8x8s-BnG.datamap \
+		vetable_8x8s-DT_2.datamap \
 		warmupwizard.datamap \
 		warmupwizard.glade 
 
