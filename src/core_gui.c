@@ -58,7 +58,7 @@ static struct
 { "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD,ENG_VITALS_PAGE},
 { "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD,CONSTANTS_PAGE},
 //{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE,DT_PARAMS_PAGE},
-{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS,IGNITON_PAGE},
+//{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS,IGNITON_PAGE},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
 { "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
 { "MegaSquirt Tools", build_tools, "T_ools",STANDARD,TOOLS_PAGE},

@@ -101,6 +101,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_READ_VE_CONST:
+			if (!firmware)
+				break;
 			for (i=0;i<firmware->total_pages;i++)
 			{
 				message = g_new0(struct Io_Message,1);

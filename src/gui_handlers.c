@@ -287,6 +287,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	switch ((SpinButton)handler)
 	{
 		case GENERIC:
+			printf("changing generic bitfield at page/offset %i,%i\n",page,offset);
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
 			tmp = tmp | (bit_val << bit_pos);

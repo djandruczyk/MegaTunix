@@ -69,6 +69,7 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_DEFERRED_",GINT_TO_POINTER(DEFERRED));
 	/* Signal handler mapping */
 	g_hash_table_insert(str_2_enum,"_GENERIC_",GINT_TO_POINTER(GENERIC));
+	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",GINT_TO_POINTER(TRIGGER_ANGLE));
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",GINT_TO_POINTER(READ_VE_CONST));
 	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",GINT_TO_POINTER(BURN_MS_FLASH));
 	/* mappings to lists of controls */
