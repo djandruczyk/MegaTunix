@@ -28,20 +28,21 @@
 
 extern struct DynamicEntries entries;
 extern struct DynamicLabels labels;
-struct DynamicProgress progress;
 extern struct DynamicMisc misc;
-const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
-				"AS_ENRICH","ACCEL","DECEL"};
-gboolean force_status_update = TRUE;
 extern gboolean connected;
 extern gboolean forced_update;
+extern gint active_page;
 extern GdkColor white;
 extern GdkColor black;
-extern struct DynamicLabels labels;
+extern GdkColor red;
+
+struct DynamicProgress progress;
+GtkWidget *rt_table[4];
+gboolean force_status_update = TRUE;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
-GtkWidget *rt_table[4];
-extern GdkColor red;
+const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
+				"AS_ENRICH","ACCEL","DECEL"};
 
 
 void build_runtime(GtkWidget *parent_frame)
@@ -293,56 +294,99 @@ gboolean update_runtime_vars()
 					FALSE);
 	}
 	
-	
-	/* Color the boxes on the VEtable closest to the operating point */
 
+	/* Update all the dynamic RT controls */
+	if (active_page == 11)	/* Runtime display is visible */
+	{
+		g_hash_table_foreach(rt_controls,rt_update_values,NULL);
 
-	/* Update allthe dynamic RT controls */
-	g_hash_table_foreach(rt_controls,rt_update_values,NULL);
+		/* Status boxes.... */
+		/* "Connected" */
+		gtk_widget_set_sensitive(misc.status[CONNECTED],
+				connected);
 
-	/* Update all the controls on the warmup wizrd page... */
-	if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update))
-	{
-		tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
-		gtk_label_set_text(GTK_LABEL(labels.ww_ego_lab),tmpbuf);
-		tmpf = runtime->ego_volts/ego_pbar_divisor <= 1.0 
-			? runtime->ego_volts/ego_pbar_divisor: 1.0;
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(progress.ww_ego_pbar),
-				tmpf);
-		g_free(tmpbuf);
+		if ((forced_update) || (runtime->engine.value != runtime_last->engine.value))
+		{
+			/* Cranking */
+			gtk_widget_set_sensitive(misc.status[CRANKING],
+					runtime->engine.bit.crank);
+			gtk_widget_set_sensitive(misc.ww_status[CRANKING],
+					runtime->engine.bit.crank);
+			/* Running */
+			gtk_widget_set_sensitive(misc.status[RUNNING],
+					runtime->engine.bit.running);
+			gtk_widget_set_sensitive(misc.ww_status[RUNNING],
+					runtime->engine.bit.running);
+			/* Warmup */
+			gtk_widget_set_sensitive(misc.status[WARMUP],
+					runtime->engine.bit.warmup);
+			gtk_widget_set_sensitive(misc.ww_status[WARMUP],
+					runtime->engine.bit.warmup);
+			/* Afterstart Enrichment */
+			gtk_widget_set_sensitive(misc.status[AS_ENRICH],
+					runtime->engine.bit.startw);
+			gtk_widget_set_sensitive(misc.ww_status[AS_ENRICH],
+					runtime->engine.bit.startw);
+			/* Accel Enrichment */
+			gtk_widget_set_sensitive(misc.status[ACCEL],
+					runtime->engine.bit.tpsaen);
+			gtk_widget_set_sensitive(misc.ww_status[ACCEL],
+					runtime->engine.bit.tpsaen);
+			/* Decel Enleanment */
+			gtk_widget_set_sensitive(misc.status[DECEL],
+					runtime->engine.bit.tpsden);
+			gtk_widget_set_sensitive(misc.ww_status[DECEL],
+					runtime->engine.bit.tpsden);
+
+		}
 	}
-	if (runtime->map != runtime_last->map)
+
+	if (active_page == 15) /* Warmup wizard visible... */
 	{
-		tmpbuf = g_strdup_printf("%i",(int)runtime->map);
-		gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
-		tmpf = runtime->map/map_pbar_divisor <= 1.0 
-			? runtime->map/map_pbar_divisor: 1.0;
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(progress.ww_map_pbar),
-				tmpf);
-		g_free(tmpbuf);
-	}
-	if ((runtime->clt != runtime_last->clt) || (forced_update))
-	{
-		tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
-		gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
-		tmpf = runtime->clt/215.0 <= 1.0 ? runtime->clt/215.0 : 1.0;
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(progress.ww_clt_pbar),
-				tmpf);
-		g_free(tmpbuf);
-		warmwizard_update_status(runtime->clt);
-	}
-	if ((runtime->warmcorr != runtime_last->warmcorr))
-	{
-		tmpbuf = g_strdup_printf("%i",(int)runtime->warmcorr);
-		gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
-		tmpf = runtime->warmcorr/255.0 <= 1.0 ? runtime->warmcorr/255.0: 1.0;
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(progress.ww_warmcorr_pbar),
-				tmpf);
-		g_free(tmpbuf);
+		/* Update all the controls on the warmup wizrd page... */
+		if ((runtime->ego_volts != runtime_last->ego_volts) || (forced_update))
+		{
+			tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
+			gtk_label_set_text(GTK_LABEL(labels.ww_ego_lab),tmpbuf);
+			tmpf = runtime->ego_volts/ego_pbar_divisor <= 1.0 
+				? runtime->ego_volts/ego_pbar_divisor: 1.0;
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+					(progress.ww_ego_pbar),
+					tmpf);
+			g_free(tmpbuf);
+		}
+		if (runtime->map != runtime_last->map)
+		{
+			tmpbuf = g_strdup_printf("%i",(int)runtime->map);
+			gtk_label_set_text(GTK_LABEL(labels.ww_map_lab),tmpbuf);
+			tmpf = runtime->map/map_pbar_divisor <= 1.0 
+				? runtime->map/map_pbar_divisor: 1.0;
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+					(progress.ww_map_pbar),
+					tmpf);
+			g_free(tmpbuf);
+		}
+		if ((runtime->clt != runtime_last->clt) || (forced_update))
+		{
+			tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
+			gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
+			tmpf = runtime->clt/215.0 <= 1.0 ? runtime->clt/215.0 : 1.0;
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+					(progress.ww_clt_pbar),
+					tmpf);
+			g_free(tmpbuf);
+			warmwizard_update_status(runtime->clt);
+		}
+		if ((runtime->warmcorr != runtime_last->warmcorr))
+		{
+			tmpbuf = g_strdup_printf("%i",(int)runtime->warmcorr);
+			gtk_label_set_text(GTK_LABEL(labels.ww_warmcorr_lab),tmpbuf);
+			tmpf = runtime->warmcorr/255.0 <= 1.0 ? runtime->warmcorr/255.0: 1.0;
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+					(progress.ww_warmcorr_pbar),
+					tmpf);
+			g_free(tmpbuf);
+		}
 	}
 
 	if (ecu_caps & DUALTABLE)
@@ -351,44 +395,6 @@ gboolean update_runtime_vars()
 
 	}
 
-	/* Connected */
-	gtk_widget_set_sensitive(misc.status[CONNECTED],
-			connected);
-
-	if ((forced_update) || (runtime->engine.value != runtime_last->engine.value))
-	{
-		/* Cranking */
-		gtk_widget_set_sensitive(misc.status[CRANKING],
-				runtime->engine.bit.crank);
-		gtk_widget_set_sensitive(misc.ww_status[CRANKING],
-				runtime->engine.bit.crank);
-		/* Running */
-		gtk_widget_set_sensitive(misc.status[RUNNING],
-				runtime->engine.bit.running);
-		gtk_widget_set_sensitive(misc.ww_status[RUNNING],
-				runtime->engine.bit.running);
-		/* Warmup */
-		gtk_widget_set_sensitive(misc.status[WARMUP],
-				runtime->engine.bit.warmup);
-		gtk_widget_set_sensitive(misc.ww_status[WARMUP],
-				runtime->engine.bit.warmup);
-		/* Afterstart Enrichment */
-		gtk_widget_set_sensitive(misc.status[AS_ENRICH],
-				runtime->engine.bit.startw);
-		gtk_widget_set_sensitive(misc.ww_status[AS_ENRICH],
-				runtime->engine.bit.startw);
-		/* Accel Enrichment */
-		gtk_widget_set_sensitive(misc.status[ACCEL],
-				runtime->engine.bit.tpsaen);
-		gtk_widget_set_sensitive(misc.ww_status[ACCEL],
-				runtime->engine.bit.tpsaen);
-		/* Decel Enleanment */
-		gtk_widget_set_sensitive(misc.status[DECEL],
-				runtime->engine.bit.tpsden);
-		gtk_widget_set_sensitive(misc.ww_status[DECEL],
-				runtime->engine.bit.tpsden);
-
-	}
 	if (forced_update)
 		forced_update = FALSE;
 	gdk_threads_leave();

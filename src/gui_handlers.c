@@ -72,6 +72,7 @@ extern GHashTable *interdep_vars_2;
 gboolean tips_in_use;
 gboolean forced_update;
 gint temp_units;
+gint active_page = -1;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
@@ -1202,6 +1203,7 @@ gboolean spin_button_grab(GtkWidget *widget, GdkEventButton *event, gpointer dat
 void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 //	printf("page changed to %i\n",page_no);
+	active_page = page_no;
 
 	return;
 }

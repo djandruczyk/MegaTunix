@@ -110,8 +110,6 @@ int setup_gui()
 	gtk_container_add(GTK_CONTAINER(main_window),vbox);
 
 	notebook = gtk_notebook_new ();
-	g_signal_connect(G_OBJECT(notebook),"switch-page",
-			G_CALLBACK(page_changed),NULL);
 	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
 	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
 
@@ -147,6 +145,8 @@ int setup_gui()
 		}
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	}
+	g_signal_connect(G_OBJECT(notebook),"switch-page",
+			G_CALLBACK(page_changed),NULL);
 
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
