@@ -701,7 +701,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (num_cyls_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,page);
+				set_reqfuel_color(RED,page);
 			}
 			else
 			{
@@ -714,7 +714,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,page);
+				set_reqfuel_color(BLACK,page);
 				check_req_fuel_limits();
 			}
 			break;
@@ -728,7 +728,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (num_cyls_1 % num_squirts_1)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,page);	
+				set_reqfuel_color(RED,page);	
 			}
 			else
 			{
@@ -751,7 +751,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(dload_val));
 
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,page);	
+				set_reqfuel_color(BLACK,page);	
 				check_req_fuel_limits();
 			}
 			break;
@@ -781,7 +781,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (num_cyls_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,page);
+				set_reqfuel_color(RED,page);
 			}
 			else
 			{
@@ -794,7 +794,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,page);
+				set_reqfuel_color(BLACK,page);
 				check_req_fuel_limits();
 			}
 			break;
@@ -808,7 +808,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (num_cyls_2 % num_squirts_2)
 			{
 				err_flag = TRUE;
-				set_reqfuel_state(RED,page);	
+				set_reqfuel_color(RED,page);	
 			}
 			else
 			{
@@ -831,7 +831,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(dload_val));
 
 				err_flag = FALSE;
-				set_reqfuel_state(BLACK,page);	
+				set_reqfuel_color(BLACK,page);	
 				check_req_fuel_limits();
 			}
 			break;
@@ -999,7 +999,7 @@ void update_ve_const()
 			num_squirts_2 = 1;
 		last_num_squirts_2 = num_squirts_2;
 
-		set_reqfuel_state(BLACK,page);
+		set_reqfuel_color(BLACK,page);
 	}
 	else
 	{
@@ -1047,7 +1047,7 @@ void update_ve_const()
 			num_squirts_1 = 1;
 		last_num_squirts_1 = num_squirts_1;
 
-		set_reqfuel_state(BLACK,page);
+		set_reqfuel_color(BLACK,page);
 	}	// End of B&G specific code...
 
 

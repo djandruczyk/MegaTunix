@@ -31,6 +31,13 @@
 gchar * offline_firmware_choice = NULL;
 gboolean offline = FALSE;
 
+
+/*!
+ \brief set_offline_mode() is called when the "Offline Mode" button is clicked
+ in the general tab and is used to present the user with list of firmware 
+ choices to select one for loading to work in offline mode (no connection to
+ an ECU)
+ */
 void set_offline_mode(void)
 {
 	extern GHashTable *dynamic_widgets;
@@ -115,6 +122,14 @@ void set_offline_mode(void)
 }
 
 
+/*!
+ \brief present_firmware_choices() presents a dialog box with the firmware
+ choices.
+ \param cmd_array (GArray) array of commands to be passed to subfunctions
+ \param cmd_details (GHashTable) hashtable of details re the commands in the
+ cmd_array array.
+ \returns the name of the chosen firmware
+ */
 gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 {
 	gchar ** filenames = NULL;

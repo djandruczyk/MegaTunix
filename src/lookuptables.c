@@ -24,12 +24,30 @@
 
 GHashTable *lookuptables = NULL;
 
+
+/*!
+ \brief load_lookuptables() loads the lookuptables specified in the ECU's
+ interrogation profile. Any number of lookuptables are allowed and they 
+ are referenced internally by a string name to a hashtable.
+ \param ptr (void *) pointer to the canidate interrogation profile struct
+ */
 void load_lookuptables(void *ptr)
 {
 	struct Canidate *canidate = ptr;
 	g_hash_table_foreach(canidate->lookuptables,get_table,NULL);
 }
 
+
+/*!
+ \brief get_table() gets a valid filehandle of the lookuptable from 
+ get_file and passes it to load_table()
+ \see load_table
+ \see get_File
+ \param table_name (gpointer) textual name of the table to use as the key
+ to the lookuptables hashtable
+ \param fname (gpointer) textual name of the filename to load
+ \param user_data (gpointer) unused
+ */
 void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
 	gboolean status = FALSE;
@@ -47,6 +65,15 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 
 }
 
+
+/*!
+ \brief load_table() physically handles load ingthe table datafrom disk, 
+ populating and array and sotring a pointer to that array in the lookuptables
+ hashtable referenced by the table_name passed
+ \param table_name (gchar *) key to lookuptables hashtable
+ \param filename (gchar *) filename to load table data from
+ \returns TRUE on success, FALSE on failure
+ */
 gboolean load_table(gchar *table_name, gchar *filename)
 {
 	GIOStatus status;
@@ -94,6 +121,14 @@ gboolean load_table(gchar *table_name, gchar *filename)
 }
 
 
+/*!
+ \brief reverse_lookup() looks for the INDEX of this value in the specified
+ lookuptable.  This has a couple potentiela faults for tables that are 
+ NOT 1:1 relationships and can mistakenly give the wrong value in that case
+ \param value (gint) value to lookup
+ \param table (gint *) pointer to lookuptable array
+ \returns the index closest to that data
+ */
 gint reverse_lookup(gint value, gint *table)
 {
 	gint i = 0;
@@ -113,6 +148,14 @@ gint reverse_lookup(gint value, gint *table)
 	return closest_index;
 }
 
+
+/*!
+ \brief lookup_data() returns the value represented by the lookuptable 
+ associated with the passed object and offset
+ \param object (GObject *) container of parameters we need to do the lookup
+ \param offset (gint) offset into lookuptable
+ \returns the value at that offset of the lokuptable
+ */
 gfloat lookup_data(GObject *object, gint offset)
 {
 	extern GHashTable *lookuptables;

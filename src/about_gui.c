@@ -17,6 +17,10 @@
 #include <logo.h>
 
 
+
+/*!
+ \brief build_about makes the about tab and presents the MegaTunix logo
+ */
 void build_about(GtkWidget *frame)
 {
 	gchar *tmpbuf = NULL;

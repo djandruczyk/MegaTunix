@@ -23,6 +23,11 @@ gint num_mem_pages = 4;
 gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
 
 
+/*!
+ \brief finish_memviewer() puts hte final finishing touches on the memory
+ viewer including populataing hte notebook andtabels with GtkLabels so we
+ can see the memviewer data
+ */
 EXPORT void finish_memviewer(void)
 {
 	GtkWidget *label = NULL;

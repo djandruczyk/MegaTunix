@@ -21,6 +21,12 @@
 #include <timeout_handlers.h>
 
 
+
+/*!
+ \brief check_config13() checks the bits in the config13 bitfield and enables
+ disables certain gui elementas base on various bits (See sourcecode)
+ \param tmp (guchar) value of config13
+ */
 void check_config13(guchar tmp)
 {
 	GtkWidget *label;

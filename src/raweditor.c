@@ -22,6 +22,13 @@
 GArray *raw_editor_widgets = NULL;
 gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data);
 
+
+/*!
+ \brief finish_raweditor() completes the raweditor view by populating the
+ gui with a notebook populated by several tables to access any variable in the
+ firmware via a raw textentry (in hex). The notebook will have a page for each
+ page defined in the ECU firmware's interrogation profile
+ */
 EXPORT void finish_raweditor(void)
 {
 	GtkWidget *sw = NULL;
@@ -136,6 +143,14 @@ EXPORT void finish_raweditor(void)
 	
 }
 
+
+/*!
+ \brief swap_labels() swaps the address labels between hex or decimal
+ base on a mouse click in the table.
+ \param widget (GtkWidget *) the eventbox we click in
+ \param event (GdkEvent *) the event type
+ \param data (gpointer) unused
+ */
 gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	gint format = 0;

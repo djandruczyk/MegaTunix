@@ -23,33 +23,43 @@
 extern GdkColor red;
 extern GdkColor black;
 static gboolean warning_present = FALSE;
-extern GtkWidget *tools_view;
-extern GtkWidget *dlog_view;
-GList *interdep_1_controls;/* list of widgets that have color change attributes*/
-GList *interdep_2_controls;/* list of widgets that have color change attributes*/
-GList *reqfuel_1_controls;	/* list of widgets that have color change attributes*/
-GList *reqfuel_2_controls;	/* list of widgets that have color change attributes*/
 
 
-void set_store_buttons_state(GuiState state)
+/*!
+ \brief set_group_color() sets all the widgets in the passed group to 
+ the color passed.
+ \param color (GuiColor enumeration) the color to set the widgets to
+ \param group (gchar *) textual name of the group of controls to alter color
+ \see set_widget_color
+ */
+void set_group_color(GuiColor color, gchar *group)
 {
-	g_list_foreach(get_list("burners"), 
-			set_widget_color,(gpointer)state);
+	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
 }
 
-void set_interdep_state(GuiState state, gchar *group)
+
+/*!
+ \brief set_reqfuel_color() sets all the widgets in the reqfuel group as 
+ defined by the page number passed to the color passed.
+ \param color (GuiColor enumeration) the color to set the widgets to
+ \param page (gint) the page number ofthe group to switch colors of.
+ \see set_widget_color
+ */
+void set_reqfuel_color(GuiColor color, gint page)
 {
-	g_list_foreach(get_list(group), set_widget_color,(gpointer)state);
+	g_list_foreach(get_list(g_strdup_printf("reqfuel_%i_ctrl",page+1)), set_widget_color,(gpointer)color);
 }
 
-void set_reqfuel_state(GuiState state, gint page)
-{
-	g_list_foreach(get_list(g_strdup_printf("reqfuel_%i_ctrl",page+1)), set_widget_color,(gpointer)state);
-}
 
-void set_widget_color(gpointer widget, gpointer state)
+/*!
+ \brief set_widget_color() sets all the widgets in the passed group to 
+ the color passed.
+ \param widget (gpointer) the widget to  change color
+ \param color (gpointer) enumeration of the color to switch to..
+ */
+void set_widget_color(gpointer widget, gpointer color)
 {
-	switch ((GuiState)state)
+	switch ((GuiColor)color)
 	{
 		case RED:
 			if (GTK_IS_BUTTON(widget))
@@ -100,6 +110,17 @@ void set_widget_color(gpointer widget, gpointer state)
 	}
 }
 
+
+/*!
+ \brief update_logbar() updates the logbar passed with the text passed to it
+ \param view_name (gchar *) textual name of the textview hte text is supposed 
+ to go to. (required)
+ \param tagname (gchar *) textual tagname to be used to set attributes on the
+ text (optional, can be NULL)
+ \param message (gchar *) message to display (required)
+ \param count (gboolean) flag to show a running count or not
+ \param clear (gboolean) if set, clear display before displaying text
+ */
 void  update_logbar(
 		gchar * view_name, 
 		gchar * tagname, 
@@ -176,6 +197,11 @@ void  update_logbar(
 	return;	
 }
 
+
+/*!
+ \brief no_ms_connection() displays a warning message when connection is 
+ either lost or not detected with the ECU
+ */
 void no_ms_connection(void)
 {
 	gchar *buff = NULL;
@@ -185,6 +211,11 @@ void no_ms_connection(void)
 	g_free(buff);
 }
 
+
+/*!
+ \brief warn_user() displays a warning message on the screen as a error dialog
+ \param message (gchar *) the text to display
+ */
 void warn_user(gchar *message)
 {
 	GtkWidget *dialog;
@@ -208,6 +239,14 @@ void warn_user(gchar *message)
 
 }
 
+
+/*!
+ \brief close_dialog() is a handler to closeth edialog and reset the flag
+ showing if it was up or not so it prevents displaying the error multiple
+ times
+ \param widget (GtkWidget *) widget to destroy
+ \param data (gpointer) unused
+ */
 gint close_dialog(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_destroy(widget);
@@ -215,6 +254,15 @@ gint close_dialog(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+ \brief warn_input_file_not_exist() displays a message when trying to import
+ a file but the file does NOT exist.  It has been generalized somewhat to
+ handle multple cases..
+ \param iotype (FileIoType enumeration)  the type of file operation that 
+ was intended
+ \param filename (gchar *) the name ofthe file tryingto be imported...
+ */
 void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
 {
 	gchar *buff = NULL;
@@ -257,6 +305,16 @@ void warn_input_file_not_exist(FileIoType iotype, gchar * filename)
 	return;
 }
 
+
+/*!
+ \brief warn_file_not_empty() is called whe na file exists that we are trying
+ to write to.  It presents a dialog box giveing hyte user the choice to 
+ truncate the file (overwrite) or cancel.
+ \param iotype (FileIoType enumeration)  the type of file operation that 
+ was intended
+ \param filename (gchar *) the name ofthe file trying to be exported...
+ \returns result of truncation (TRUE if overwritten, FALSE if cancelled) 
+ */
 gboolean warn_file_not_empty(FileIoType iotype,gchar * filename)
 {
 	GtkWidget *dialog;

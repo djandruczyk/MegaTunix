@@ -515,10 +515,10 @@ void check_req_fuel_limits()
 
 		/* Throw warning if an issue */
 		if (lim_flag)
-			set_interdep_state(RED,"interdep_1_ctrl");
+			set_group_color(RED,"interdep_1_ctrl");
 		else
 		{
-			set_interdep_state(BLACK,"interdep_1_ctrl");
+			set_group_color(BLACK,"interdep_1_ctrl");
 			/* Required Fuel per SQUIRT */
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
 					(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
@@ -570,10 +570,10 @@ void check_req_fuel_limits()
 
 		/* Throw warning if an issue */
 		if (lim_flag)
-			set_interdep_state(RED,"interdep_2_ctrl");
+			set_group_color(RED,"interdep_2_ctrl");
 		else
 		{
-			set_interdep_state(BLACK,"interdep_2_ctrl");
+			set_group_color(BLACK,"interdep_2_ctrl");
 
 			/* Required Fuel per SQUIRT */
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON
@@ -653,10 +653,10 @@ void check_req_fuel_limits()
 			lim_flag = TRUE;
 
 		if (lim_flag)
-			set_interdep_state(RED,"interdep_1_ctrl");
+			set_group_color(RED,"interdep_1_ctrl");
 		else
 		{
-			set_interdep_state(BLACK,"interdep_1_ctrl");
+			set_group_color(BLACK,"interdep_1_ctrl");
 			/* req-fuel info box  */
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
 							     

@@ -136,12 +136,12 @@ trypop:
 					paused_handlers = FALSE;
 					break;
 				case UPD_STORE_RED:
-					set_store_buttons_state(RED);
+					set_group_color(RED,"burners");
 					break;
 				case UPD_STORE_BLACK:
-					set_store_buttons_state(BLACK);
+					set_group_color(BLACK,"burners");
 					for (i=0;i<firmware->total_pages;i++)
-						set_reqfuel_state(BLACK,i);
+						set_reqfuel_color(BLACK,i);
 					break;
 				case UPD_LOGVIEWER:
 					if (connected)

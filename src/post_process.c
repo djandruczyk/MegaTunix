@@ -21,6 +21,13 @@
 
 static GArray * raw_memory_data;
 
+
+/*!
+ \brief post_process_raw_memory() handles processing the data returned by the
+ ecu for raw memory readback and feeds it into an array for display
+ \param input (void *) pointer to the input stream
+ \param offset (gint) offset of the datablock received (more correctly a page)
+ */
 void post_process_raw_memory(void *input, gint offset)
 {
 	gint i = 0;
@@ -41,6 +48,13 @@ void post_process_raw_memory(void *input, gint offset)
 
 }
 
+/*!
+ \brief update_raw_memory_view() updates the gui display of raw data returned
+ from the ECU by the "F" command
+ \param type (ToggleButton enumeration) used to determine what way to display
+ the data (hex,binary.decimal)
+ \param page_offset (gint) which page of data are we updating?
+ */
 void update_raw_memory_view(ToggleButton type, gint page_offset)
 {
 	extern GArray * raw_memory_widgets;
@@ -82,8 +96,12 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 	}
 }
 
-/// get_bin(gint) converts a decimal number into binary and returns it
-/// as a gchar *. used in the memory viewer to print numbers in binary
+/*!
+ \breif get_bin(gint) converts a decimal number into binary and returns it
+ as a gchar *. used in the memory viewer to print numbers in binary
+ \param x (gint) the value to conver to binary
+ \returns a textual string of the value in binary
+ */
 gchar * get_bin(gint x)
 {
 	GString *string = g_string_new(NULL);

@@ -114,12 +114,12 @@ void update_write_status(void)
 	
 		if(memcmp(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->length) != 0)
 		{
-			set_store_buttons_state(RED);
+			set_group_color(RED,"burners");
 			return;
 		}
 	}
 
-	set_store_buttons_state(BLACK);
+	set_group_color(BLACK,"burners");
 	return;
 }
 
