@@ -21,9 +21,6 @@
 
 extern GdkColor red;
 extern GdkColor black;
-extern struct DynamicButtons buttons;
-extern struct DynamicLabels labels;
-extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;

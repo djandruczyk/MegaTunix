@@ -25,16 +25,12 @@
 #include <vetable_gui.h>
 #include <warmwizard_gui.h>
 
-extern struct DynamicEntries entries;
-struct DynamicLabels labels;
-struct DynamicMisc misc;
 extern gboolean connected;
 extern gint active_page;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
 
-struct DynamicProgress progress;
 GtkWidget *rt_table[4];
 gboolean forced_update;
 

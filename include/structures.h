@@ -1,4 +1,6 @@
-/*
+/*!
+  \author David Andruczyk
+
  * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
@@ -23,122 +25,73 @@
 #include <unistd.h>
 
 
-/* Serial parameters, */
+/*! 
+ \brief Serial_Params holds all variables related to the state of the serial
+ port being used by MegaTunix
+ */
 struct Serial_Params
 {
-        gint fd;		/* File descriptor */
-        gchar *port_name;	/* textual name of comm port */
-        gboolean open;		/* flag, TRUE for open FALSE for closed */
-        gint read_wait;		/* time delay between each read */
-        gint errcount;		/* Serial I/O errors read error count */
-        struct termios oldtio;	/* serial port settings before we touch it */
-        struct termios newtio;	/* serial port settings we use when running */
+        gint fd;		/*! File descriptor */
+        gchar *port_name;	/*! textual name of comm port */
+        gboolean open;		/*! flag, TRUE for open FALSE for closed */
+        gint read_wait;		/*! time delay between each read */
+        gint errcount;		/*! Serial I/O errors read error count */
+        struct termios oldtio;	/*! serial port settings before we touch it */
+        struct termios newtio;	/*! serial port settings we use when running */
 };
 
+
+/*! 
+ \brief Firmware_Details stores all attributes about the firmware being used
+ after detection (\see interrogate_ecu ) including lists of tabs to be loaded
+ by the glade loader (\see load_gui_tabs ), the configuration for the realtime
+ variables map (\see rtv_map_loader) and the controls_map_file (\see 
+ load_runtime_controls )
+ */
 struct Firmware_Details
 {
-	gchar *name;		/* textual name */
-	gchar **tab_list;	/* vector string of tabs to load */
-	gchar *rtv_map_file;	/* realtime vars map filename */
-	gchar *controls_map_file;/* runtime controls map filename */
-        gint rtvars_size;       /* Size of Realtime vars datablock */
-        gint ignvars_size;      /* Size of Realtime vars datablock */
-        gint memblock_size;     /* Size of Raw_Memory datablock */
-	gboolean multi_page;	/* Multi-page firmware? */
-	gint total_pages;	/* How many pages do we handle? */
-	struct Page_Params *page_params[8];	/* details on data per page.. */
+	gchar *name;		/*! textual name */
+	gchar **tab_list;	/*! vector string of tabs to load */
+	gchar *rtv_map_file;	/*! realtime vars map filename */
+	gchar *controls_map_file;/*! runtime controls map filename */
+        gint rtvars_size;       /*! Size of Realtime vars datablock */
+        gint ignvars_size;      /*! Size of Realtime vars datablock */
+        gint memblock_size;     /*! Size of Raw_Memory datablock */
+	gboolean multi_page;	/*! Multi-page firmware? */
+	gint total_pages;	/*! How many pages do we handle? */
+	struct Page_Params *page_params[8];	/*! details on data per page.. */
 };
 
-/* Progress bars that are updated from various functions... */
-struct DynamicProgress
-{
-	GtkWidget *ww_clt_pbar;
-	GtkWidget *ww_warmcorr_pbar;
-	GtkWidget *ww_ego_pbar;
-	GtkWidget *ww_map_pbar;
-};
-
-/* Misc widgets that need to be modified/updated during runtime */
-struct DynamicMisc
-{
-	GtkWidget *warmwizard_table;
-        GtkWidget *status[7];           /* Status boxes */
-        GtkWidget *ww_status[7];           /* Status boxes */
-};
-
-/* this is required so we keep track of the gui controls so we
- * can update them as needed (color changes, sensitivity, etc...
+/*! 
+ Controls for the Required Fuel Calculator... 
+ \brief The Req_Fuel struct contains jsut about all widgets for the rewuired
+ fuel popup.  most of the values are loaded/saved from the main config file
+ when used.
  */
-struct DynamicSpinners
-{
-	GtkWidget *warmwizard[10];		/* Spinner */
-};
-
-/* Controls for the Required Fuel Calculator... */
 struct Reqd_Fuel
 {
-	GtkWidget *popup;		/* the popup window */
-	GtkWidget *calcd_val_spin;	/* Preliminary value */
-	GtkWidget *reqd_fuel_spin;	/* Used value */
-	gfloat calcd_reqd_fuel;		/* calculated value... */
-        gint disp;			/* Engine size  1-1000 Cu-in */
-        gint cyls;			/* # of Cylinders  1-12 */
-        gfloat rated_inj_flow;		/* Rated injector flow */
-        gfloat rated_pressure;		/* Rated fuel pressure */
-        gfloat actual_pressure;		/* Actual fuel pressure */
-        gfloat actual_inj_flow;		/* injector flow rate (lbs/hr) */
-        gfloat target_afr;		/* Air fuel ratio 10-25.5 */
-        gint page;			/* Which page is this for */
-	gboolean visible;		/* Is it visible? */
+	GtkWidget *popup;		/*! the popup window */
+	GtkWidget *calcd_val_spin;	/*! Preliminary value */
+	GtkWidget *reqd_fuel_spin;	/*! Used value */
+	gfloat calcd_reqd_fuel;		/*! calculated value... */
+        gint disp;			/*! Engine size  1-1000 Cu-in */
+        gint cyls;			/*! # of Cylinders  1-12 */
+        gfloat rated_inj_flow;		/*! Rated injector flow */
+        gfloat rated_pressure;		/*! Rated fuel pressure */
+        gfloat actual_pressure;		/*! Actual fuel pressure */
+        gfloat actual_inj_flow;		/*! injector flow rate (lbs/hr) */
+        gfloat target_afr;		/*! Air fuel ratio 10-25.5 */
+        gint page;			/*! Which page is this for */
+	gboolean visible;		/*! Is it visible? */
 };
 
 
-/* These are defined as they are semi-dynamic and are modified
- * during run of MegaTunix for status or units related reasons
+/*!
+ \brief Io_File is the datastructure used for file I/O in the inport/export
+ routines.
+ \see vetable_import
+ \see vetable_export
  */
-struct DynamicLabels
-{
-	GtkWidget *ww_cr_pulse_hightemp_lab;
-	GtkWidget *warmwizard_lab[10];
-	GtkWidget *dlog_file_lab;
-	GtkWidget *ww_clt_lab;
-	GtkWidget *ww_warmcorr_lab;
-	GtkWidget *ww_ego_lab;
-	GtkWidget *ww_map_lab;
-
-};
-
-/* These are defined here instead of the individual .c files as
- * we manipulate their attributes to give feedback to the user
- */
-struct DynamicButtons
-{
-	GtkWidget *tools_revert_but;		/* revert to old data */
-	GtkWidget *logplay_sel_log_but;		/* Select playback log */
-	GtkWidget *logplay_sel_parm_but;	/* Select rt parms for play */
-	GtkWidget *logplay_start_rt_but;	/* Logplay star realtime */
-	GtkWidget *logplay_stop_rt_but;		/* Logplay stop realtime */
-};
-
-/* These are defined here instead of the individual .c files as
- * we manipulate their attributes to give feedback to the user
- */
-struct DynamicEntries
-{
-	GtkWidget *comms_reset_entry;
-	GtkWidget *runtime_reset_entry;
-	GtkWidget *comms_sioerr_entry;
-	GtkWidget *runtime_sioerr_entry;
-	GtkWidget *comms_readcount_entry;
-	GtkWidget *runtime_readcount_entry;
-	GtkWidget *comms_ve_readcount_entry;
-	GtkWidget *runtime_ve_readcount_entry;
-	GtkWidget *vex_comment_entry;
-	GtkWidget *ecu_revision_entry;
-	GtkWidget *extended_revision_entry;
-	GtkWidget *ecu_signature_entry;
-};
-
 struct Io_File
 {
 	GIOChannel *iochannel;
@@ -146,191 +99,229 @@ struct Io_File
 	FileIoType iotype;
 };
 
-/* Viewable_Value is the datastructure bound 
- * to every trace viewed in the logviewer. 
+/*!
+ \brief Viewable_Value is the datastructure bound 
+ to every trace viewed in the logviewer. 
  */
 struct Viewable_Value
 {
-	GdkGC *font_gc;			/* GC used for the fonts */
-	GdkGC *trace_gc;		/* GC used for the trace */
-	GtkWidget *d_area;		/* Drawing Area */
-	GObject *object;		/* object */
-	gchar *vname;			/* Name of widget being logged */
-	gint runtime_offset;		/* Offset into runtime struct */
-	gboolean is_float;		/* TRUE or FALSE */
-	gint last_y;			/* Last point on screen of trace */
-	gfloat min;			/* for auto-scaling */
-	gfloat max;			/* for auto-scaling */
-	gfloat lower;			/* hard limits to use for scaling */
-	gfloat upper;			/* hard limits to use for scaling */
-	gfloat cur_low;			/* User limits to use for scaling */
-	gfloat cur_high;		/* User limits to use for scaling */
-	GArray *data_array;		/* History of all values recorded */
-	struct LogInfo *log_info;	/* important */
+	GdkGC *font_gc;			/*! GC used for the fonts */
+	GdkGC *trace_gc;		/*! GC used for the trace */
+	GtkWidget *d_area;		/*! Drawing Area */
+	GObject *object;		/*! object */
+	gchar *vname;			/*! Name of widget being logged */
+	gint runtime_offset;		/*! Offset into runtime struct */
+	gboolean is_float;		/*! TRUE or FALSE */
+	gint last_y;			/*! Last point on screen of trace */
+	gfloat min;			/*! for auto-scaling */
+	gfloat max;			/*! for auto-scaling */
+	gfloat lower;			/*! hard limits to use for scaling */
+	gfloat upper;			/*! hard limits to use for scaling */
+	gfloat cur_low;			/*! User limits to use for scaling */
+	gfloat cur_high;		/*! User limits to use for scaling */
+	GArray *data_array;		/*! History of all values recorded */
+	struct LogInfo *log_info;	/*! important */
 };
 	
-/* The Rt_Control struct contains info on the runtime display tab controls
- * as they are now stored in the config file and adjustable in position
- * and placement and such..
+/*! 
+ \brief The Rt_Control struct contains info on the runtime display tab controls
+ as they are now stored in the config file and adjustable in position
+ and placement and such..
  */
 struct Rt_Control
 {
-	gchar *ctrl_name; /* Control name in config file (key in hashtable) */
-	GtkWidget *parent;/* Parent of the table below  */
-	GtkWidget *table; /* Table to contain the next 3 widgets */
-	GtkWidget *label; /* Label in runtime display */
-	GtkWidget *textval; /* Label in runtime display */
-	GtkWidget *pbar;  /* progress bar for the data */
-	gint tbl;	  /* Table number (0-3) */
-	gint row;	  /* Starting row */
-	gchar *friendly_name; /* text for Label above */
-	gint lower;	 /* Offset into limits[] structure array */
-	gint upper;	 /* offset into Runtime_Common struct (using []) */
-	gfloat * history;/* where the data is from the runtime section */
-	GObject *object;  /* object of obsession.... */
-	gboolean enabled; /* Pretty obvious */
-	gint count;	  /* used to making sure things update */
-	gint rate;	  /* used to making sure things update */
-	gint last_upd;	  /* used to making sure things update */
+	gchar *ctrl_name; /*! Control name in config file (key in hashtable) */
+	GtkWidget *parent;/*! Parent of the table below  */
+	GtkWidget *table; /*! Table to contain the next 3 widgets */
+	GtkWidget *label; /*! Label in runtime display */
+	GtkWidget *textval; /*! Label in runtime display */
+	GtkWidget *pbar;  /*! progress bar for the data */
+	gint tbl;	  /*! Table number (0-3) */
+	gint row;	  /*! Starting row */
+	gchar *friendly_name; /*! text for Label above */
+	gint lower;	 /*! Offset into limits[] structure array */
+	gint upper;	 /*! offset into Runtime_Common struct (using []) */
+	gfloat * history;/*! where the data is from the runtime section */
+	GObject *object;  /*! object of obsession.... */
+	gboolean enabled; /*! Pretty obvious */
+	gint count;	  /*! used to making sure things update */
+	gint rate;	  /*! used to making sure things update */
+	gint last_upd;	  /*! used to making sure things update */
 };
 
-/* The Def_Control struct contains info on the default controls that are 
- * written to the config file on startup.
- */
-struct Default_Control
-{
-	gchar *ctrl_name;
-	gint tbl;
-	gint row;
-	gchar *friendly_name;
-	gint limits_index;
-	gint runtime_offset;
-	gint size;
-	gboolean enabled;
-	Capability flags;
-};
 
-/* the Default_Limits struct maps field names to limits. used for importing
- * datalogs from megatune mainly as that friggin peice of work uses different
- * friggin field names per log type/version.
+/*! 
+ \brief the Default_Limits struct maps field names to limits. used for 
+ importing datalogs from megatune mainly as that peice of work 
+ uses different field names per log type/version.
  */
-
 struct Default_Limits
 {
-	gchar *field;		/* Field name */
-	gfloat lower;		/* Lower Limit */
-	gfloat upper;		/* Upper Limit */
+	gchar *field;		/*! Field name */
+	gfloat lower;		/*! Lower Limit */
+	gfloat upper;		/*! Upper Limit */
 };
 
-/* The LogInfo datastructure is populated when a datalog file is opened
- * for viewing in the Datalog viewer.
+/*! 
+ \brief The LogInfo datastructure is populated when a datalog file is opened
+ for viewing in the Datalog viewer.
  */
 struct LogInfo
 {
-	gint field_count;	/* How many fields in the logfile */
-	gchar *delimiter;	/* delimiter between fields for this logfile */
-	GArray *log_list;	/* List of objects */
-	gint active_viewables;	/* Number of active traces.. */
+	gint field_count;	/*! How many fields in the logfile */
+	gchar *delimiter;	/*! delimiter between fields for this logfile */
+	GArray *log_list;	/*! List of objects */
+	gint active_viewables;	/*! Number of active traces.. */
 };
 
+/*! 
+ \brief The Page_Params structure contains fields defining the size of the 
+ page returned from the ECU, the VEtable, RPm and Load table base offsets and
+ sizes, along with a flag signifying if it's a spark table
+ */
 struct Page_Params
 {
-	gint size;		/* total size of this page as returned... */
-	gint ve_base;		/* where the vetable starts */
-	gint rpm_base;		/* where rpm table starts */
-	gint load_base;		/* where load table starts */
-	gint rpm_bincount;	/* how many RPM bins */
-	gint load_bincount;	/* how many load bins... */
-	gboolean is_spark;	/* is this a spark table?? */
+	gint size;		/*! total size of this page as returned... */
+	gint ve_base;		/*! where the vetable starts */
+	gint rpm_base;		/*! where rpm table starts */
+	gint load_base;		/*! where load table starts */
+	gint rpm_bincount;	/*! how many RPM bins */
+	gint load_bincount;	/*! how many load bins... */
+	gboolean is_spark;	/*! is this a spark table?? */
 };
-	/* Interrogator structures.... */
+
+
+/*! 
+ \brief The Canidate strucutre is used for interrogation, each potential
+ firmware is interrogated and as it is the data is fed into this structure
+ for comparison against know values (interrogation profiles), upon a match
+ the needed data is copied into a struct Firmware_Details structure
+ \see Firmware_Details
+ */
 struct Canidate
 {
-	gchar *name;		/* Name of this firmware */
-	gchar *filename;	/* absolute path to this canidate profile */
-	GHashTable *bytecounts;	/* byte count for each of the 10 test cmds */
-	gchar *sig_str;		/* Signature string to search for */
-	gchar *quest_str;	/* Ext Version string to search for */
-	gint ver_num;		/* Version number to search for */
-	gchar *load_tabs;	/* list of tabs to load into the gui */
-	gchar *rtv_map_file;	/* name of realtime vars map file */
-	gchar *controls_map_file;/* runtime controls map filename */
-	Capability capabilities;/* Bitmask of capabilities.... */
-	gchar * rt_cmd_key;	/* string key to hashtable for RT command */
-	gchar * ve_cmd_key;	/* string key to hashtable for VE command */
-	gchar * ign_cmd_key;	/* string key to hashtable for Ign command */
-	gchar * raw_mem_cmd_key;/* string key to hashtable for RAW command */
-	gboolean multi_page;	/* Multi-page firmware ??? */
-	gint total_pages;	/* how many pages do we handle? */
-	GHashTable *lookuptables;/* Lookuptables hashtable... */
-	struct Page_Params *page_params[8];/* details on ve/rpm/load tables*/
+	gchar *name;		/*! Name of this firmware */
+	gchar *filename;	/*! absolute path to this canidate profile */
+	GHashTable *bytecounts;	/*! byte count for each of the 10 test cmds */
+	gchar *sig_str;		/*! Signature string to search for */
+	gchar *quest_str;	/*! Ext Version string to search for */
+	gint ver_num;		/*! Version number to search for */
+	gchar *load_tabs;	/*! list of tabs to load into the gui */
+	gchar *rtv_map_file;	/*! name of realtime vars map file */
+	gchar *controls_map_file;/*! runtime controls map filename */
+	Capability capabilities;/*! Bitmask of capabilities.... */
+	gchar * rt_cmd_key;	/*! string key to hashtable for RT command */
+	gchar * ve_cmd_key;	/*! string key to hashtable for VE command */
+	gchar * ign_cmd_key;	/*! string key to hashtable for Ign command */
+	gchar * raw_mem_cmd_key;/*! string key to hashtable for RAW command */
+	gboolean multi_page;	/*! Multi-page firmware ??? */
+	gint total_pages;	/*! how many pages do we handle? */
+	GHashTable *lookuptables;/*! Lookuptables hashtable... */
+	struct Page_Params *page_params[8];/*! details on ve/rpm/load tables*/
 };
 
+/*!
+ \brief the Command struct is used to store details on the commands that
+ are valid for the ECU, they are loaded from a config file "tests" normally
+ installed in /usr/local/share/MegaTunix/Interrogator/tests. There will be
+ one Command struct created per command, and they are used to interrogate the
+ target ECU.
+ */
 struct Command
 {
-	gint page;		/* ms page in memory where it resides */
-	gchar *string;		/* command to get the data */
-	gint len;		/* Command length in chars to send */
-	gboolean multipart;	/* Multipart command? (raw_memory) */
-	gint cmd_int_arg;	/* multipart arg, integer */
-	gchar *desc;		/* command description */
-	gboolean store_data;	/* Store returned data ? */
-	StoreType store_type;	/* Store data where */
+	gint page;		/*! ms page in memory where it resides */
+	gchar *string;		/*! command to get the data */
+	gint len;		/*! Command length in chars to send */
+	gboolean multipart;	/*! Multipart command? (raw_memory) */
+	gint cmd_int_arg;	/*! multipart arg, integer */
+	gchar *desc;		/*! command description */
+	gboolean store_data;	/*! Store returned data ? */
+	StoreType store_type;	/*! Store data where */
 };
 
+
+/*!
+ \brief Io_Message structure is used for passing data around in threads.c for
+ kicking off commands to send data to/from the ECU or run specified handlers.
+ messages and postfunctiosn can be bound into this strucutre to do some complex
+ things with a simple subcommand.
+ \see IoCmds
+ */
 struct Io_Message
 {
-	IoCommand cmd;		/* Source command (initiator)*/
-	CmdType command;	/* Command type */
-	gchar *out_str;		/* Data sent to the ECU  for READ_CMD's */
-	gint page;		/* multipage firmware specific */
-	gint out_len;		/* number of bytes in out_str */
-	gint offset;		/* used for RAW_MEMORY and more */
-	GArray *funcs;		/* List of functiosn to be dispatched... */
-	InputHandler handler;	/* Command handler for inbound data */
-	void *payload;		/* data passed along, arbritrary size.. */
+	IoCommand cmd;		/*! Source command (initiator)*/
+	CmdType command;	/*! Command type */
+	gchar *out_str;		/*! Data sent to the ECU  for READ_CMD's */
+	gint page;		/*! multipage firmware specific */
+	gint out_len;		/*! number of bytes in out_str */
+	gint offset;		/*! used for RAW_MEMORY and more */
+	GArray *funcs;		/*! List of functiosn to be dispatched... */
+	InputHandler handler;	/*! Command handler for inbound data */
+	void *payload;		/*! data passed along, arbritrary size.. */
 };
 
+/*!
+ \brief Io_Cmds stores the basic data for the critical megasquirt command
+ codes. (realtime, VE, ign and spark) including the length of each of those
+ commands.  
+ \warning This really should be done a better way...
+ */
 struct IoCmds
 {
-	gchar *realtime_cmd;	/* Command sent to get RT vars.... */
-	gint rt_cmd_len;	/* length in bytes of rt_cmd_len */
-	gchar *veconst_cmd;	/* Command sent to get VE/Const vars.... */
-	gint ve_cmd_len;	/* length in bytes of veconst_cmd */
-	gchar *ignition_cmd;	/* Command sent to get Ignition vars.... */
-	gint ign_cmd_len;	/* length in bytes of ignition_cmd */
-	gchar *raw_mem_cmd;	/* Command sent to get raw_mem vars.... */
-	gint raw_mem_cmd_len;	/* length in bytes of raw_mem_cmd */
+	gchar *realtime_cmd;	/*! Command sent to get RT vars.... */
+	gint rt_cmd_len;	/*! length in bytes of rt_cmd_len */
+	gchar *veconst_cmd;	/*! Command sent to get VE/Const vars.... */
+	gint ve_cmd_len;	/*! length in bytes of veconst_cmd */
+	gchar *ignition_cmd;	/*! Command sent to get Ignition vars.... */
+	gint ign_cmd_len;	/*! length in bytes of ignition_cmd */
+	gchar *raw_mem_cmd;	/*! Command sent to get raw_mem vars.... */
+	gint raw_mem_cmd_len;	/*! length in bytes of raw_mem_cmd */
 };
 
+/*! 
+ \brief OutputData A simple wrapper struct to pass data to the output 
+ function which makes the function a lot simpler.
+ */
 struct OutputData
 {
-	gint page;		/* Page in ECU */
-	gint offset;		/* Offset in block */
-	gint value;		/* Value to send */
-	gboolean ign_parm;	/* Ignition parameter, True or False */
+	gint page;		/*! Page in ECU */
+	gint offset;		/*! Offset in block */
+	gint value;		/*! Value to send */
+	gboolean ign_parm;	/*! Ignition parameter, True or False */
 };
 
+
+/*! 
+ \brief RtvMap is the RealTime Variables Map structure, containing fields to
+ access the realtime derived data via a hashtable, and via raw index. Stores
+ timestamps of each incoming data byte for advanced future use.
+ */
 struct RtvMap
 {
-	gint raw_total;		/* Number of raw variables */
-	gint derived_total;	/* Number of derived variables */
-	GArray *rtv_array;	/* Realtime Values array of lists.. */
-	GTimeVal *ts_array;	/* Timestamp array */
-	gint ts_position;	/* Latest timestamp marker position.. */
-	gint ts_max;		/* # elements in the timestamp array */
-	GArray *rtv_list;	/* List of derived vars IN ORDER */
-	GHashTable *rtv_hash;	/* Hashtable of rtv derived values indexed by
+	gint raw_total;		/*! Number of raw variables */
+	gint derived_total;	/*! Number of derived variables */
+	GArray *rtv_array;	/*! Realtime Values array of lists.. */
+	GTimeVal *ts_array;	/*! Timestamp array */
+	gint ts_position;	/*! Latest timestamp marker position.. */
+	gint ts_max;		/*! # elements in the timestamp array */
+	GArray *rtv_list;	/*! List of derived vars IN ORDER */
+	GHashTable *rtv_hash;	/*! Hashtable of rtv derived values indexed by
 				 * it's internal name */
 };
 
+
+/*! 
+ \brief DebugLevel stores the debugging name, handler, class (bitmask) and 
+ shift (forgot why this is here) and a enable/disable flag. Used to make the
+ debugging core a little more configurable
+ */
 struct DebugLevel
 {
-	gchar * name;		/* Debugging name */
-	gint	handler;	/* Signal handler name */
-	Dbg_Class dclass;	/* Bit mask for this level (0-31) */
-	Dbg_Shift dshift;	/* Bit shift amount */
-	gboolean enabled;	/* Enabled or not? */
+	gchar * name;		/*! Debugging name */
+	gint	handler;	/*! Signal handler name */
+	Dbg_Class dclass;	/*! Bit mask for this level (0-31) */
+	Dbg_Shift dshift;	/*! Bit shift amount */
+	gboolean enabled;	/*! Enabled or not? */
 };
 
 #endif

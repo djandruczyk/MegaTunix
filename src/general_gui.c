@@ -23,7 +23,6 @@
 
 extern gboolean tips_in_use;
 extern gint temp_units;
-extern struct DynamicEntries entries;
 extern GdkColor black;
 extern guint dbg_lvl;
 GtkWidget *ms_ecu_revision_entry;
@@ -207,7 +206,7 @@ void build_general(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	entry = gtk_entry_new();
-	entries.ecu_revision_entry = entry;
+	register_widget("ecu_revision_entry",entry);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
@@ -224,7 +223,7 @@ void build_general(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	entries.extended_revision_entry = entry;
+	register_widget("ext_revision_entry",entry);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 64);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);
@@ -242,7 +241,7 @@ void build_general(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	entries.ecu_signature_entry = entry;
+	register_widget("ecu_signature_entry",entry);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 64);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);

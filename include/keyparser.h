@@ -11,19 +11,14 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __TABLOADER_H__
-#define __TABLOADER_H__
+#ifndef __KEYPARSER_H__
+#define __KEYPARSER_H__
 
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean load_gui_tabs(void);
-void register_widget(gchar *, GtkWidget *);
-gboolean deregister_widget(gchar *);
-void bind_data(GtkWidget *, gpointer );
-void populate_master(GtkWidget *, gpointer );
-GList * get_list(gchar * );
-void store_list(gchar * , GList * );
+gchar ** parse_keys(gchar *, gint *, gchar * );
+gint * parse_keytypes(gchar *, gint *, gchar * );
 
 /* Prototypes */
 

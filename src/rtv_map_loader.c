@@ -21,12 +21,12 @@
 #include <dep_loader.h>
 #include <enums.h>
 #include <getfiles.h>
+#include <keyparser.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
 #include <structures.h>
-#include <tabloader.h>
 
 struct RtvMap *rtv_map = NULL;
 

@@ -23,7 +23,6 @@
 #include <tabloader.h>
 #include <unistd.h>
 
-struct DynamicEntries entries;
 extern gint read_wait_time;
 extern gint raw_reader_running;
 extern gint ms_reset_count;
@@ -226,7 +225,7 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	entries.comms_ve_readcount_entry = entry;
+	register_widget("comms_vecount_entry",entry);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
@@ -241,7 +240,7 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	entry = gtk_entry_new();
-	entries.comms_readcount_entry = entry;
+	register_widget("comms_rtcount_entry",entry);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
@@ -255,7 +254,7 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	entry = gtk_entry_new();
-	entries.comms_reset_entry = entry;
+	register_widget("comms_reset_entry",entry);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
@@ -269,7 +268,7 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	entry = gtk_entry_new();
-	entries.comms_sioerr_entry = entry;
+	register_widget("comms_sioerr_entry",entry);
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
@@ -302,29 +301,34 @@ gboolean update_errcounts()
 {
 	gchar *tmpbuf = NULL;
 	extern GHashTable *dynamic_widgets;
+	GtkWidget * widget = NULL;
 
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_ve_readcount_entry),tmpbuf);
-	if (g_hash_table_lookup(dynamic_widgets,"runtime_good_ve_entry"))	
-		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_good_ve_entry")),tmpbuf);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"comms_vecount_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_good_ve_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_goodread_count);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_readcount_entry),tmpbuf);
-	if (g_hash_table_lookup(dynamic_widgets,"runtime_good_rt_read_entry"))
-		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_good_rt_read_entry")),tmpbuf);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"comms_rtcount_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_good_rt_read_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_reset_count);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_reset_entry),tmpbuf);
-	if(g_hash_table_lookup(dynamic_widgets,"runtime_hardreset_entry"))
-		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_hardreset_entry")),tmpbuf);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"comms_reset_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+	if(NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_hardreset_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",serial_params->errcount);
-	gtk_entry_set_text(GTK_ENTRY(entries.comms_sioerr_entry),tmpbuf);
-	if(g_hash_table_lookup(dynamic_widgets,"runtime_sioerr_entry"))
-		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_sioerr_entry")),tmpbuf);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"comms_sioerr_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+	if(NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_sioerr_entry")))
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	return TRUE;

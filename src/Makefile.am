@@ -26,6 +26,7 @@ megatunix_SOURCES = \
 	gui_handlers.c \
 	init.c \
 	interrogate.c \
+	keyparser.c \
 	logviewer_core.c \
 	logviewer_gui.c \
 	lookuptables.c \

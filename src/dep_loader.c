@@ -19,9 +19,9 @@
 #include <defines.h>
 #include <dep_loader.h>
 #include <enums.h>
+#include <keyparser.h>
 #include <stdlib.h>
 #include <stringmatch.h>
-#include <tabloader.h>
 
 
 void load_dependancy(GObject *object, ConfigFile *cfgfile,gchar * section)

@@ -40,7 +40,6 @@ static GLuint font_list_base;
 #define DEFAULT_WIDTH  475
 #define DEFAULT_HEIGHT 320                                                                                  
 static gboolean winstat[3] = {FALSE,FALSE,FALSE};
-extern struct DynamicButtons buttons;
 
 gint create_3d_view(GtkWidget *widget, gpointer data)
 {

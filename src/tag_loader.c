@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <keyparser.h>
 #include <stdlib.h>
 #include <stringmatch.h>
 #include <tabloader.h>

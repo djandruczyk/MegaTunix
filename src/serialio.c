@@ -30,7 +30,6 @@
 
 extern gboolean raw_reader_running;
 extern GtkWidget *comms_view;
-extern struct DynamicMisc misc;
 struct Serial_Params *serial_params;
 gboolean connected;
        
@@ -139,6 +138,8 @@ void setup_serial_params()
 void close_serial()
 {
 	extern GHashTable *dynamic_widgets;
+	GtkWidget *widget = NULL;
+
 	if (serial_params->open == FALSE)
 		return;
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
@@ -146,10 +147,10 @@ void close_serial()
 	serial_params->fd = -1;
 	serial_params->open = FALSE;
 	connected = FALSE;
-	if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-	//	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-	//			connected);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_connected_label")))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ww_connected_label")))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
 
 	/* An Closing the comm port */
 	dbg_func(__FILE__": close_serial()\n\tCOM Port Closed\n",SERIAL_RD|SERIAL_WR);

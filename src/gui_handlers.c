@@ -48,7 +48,6 @@ extern gint statuscounts_id;
 extern gint ready;
 extern GtkTooltips *tip;
 extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
-struct DynamicButtons buttons;
 extern struct Serial_Params *serial_params;
 extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;

@@ -43,7 +43,6 @@ gboolean raw_reader_running;			/* flag for thread */
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 extern GtkWidget * comms_view;
-extern struct DynamicMisc misc;
 extern struct Serial_Params *serial_params;
 static gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test"};
 
@@ -397,6 +396,7 @@ void readfrom_ecu(void *ptr)
 void comms_test()
 {
 	gboolean result = FALSE;
+	GtkWidget *widget = NULL;
 	extern GHashTable *dynamic_widgets;
 
 	if (serial_params->open == FALSE)
@@ -425,11 +425,6 @@ void comms_test()
 		dbg_func(__FILE__": comms_test()\n\tECU Comms Test Successfull\n",SERIAL_RD);
 		gdk_threads_enter();
 		update_logbar("comms_view",NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
-		if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-		if (g_hash_table_lookup(dynamic_widgets,"ww_connected_label"))
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
-		gdk_threads_leave();
 	}
 	else
 	{
@@ -438,12 +433,13 @@ void comms_test()
 		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
 		gdk_threads_enter();
 		update_logbar("comms_view","warning","I/O with MegaSquirt Timeout\n",TRUE,FALSE);
-		if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-		if (g_hash_table_lookup(dynamic_widgets,"ww_connected_label"))
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
-		gdk_threads_leave();
 	}
+
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_connected_label")))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ww_connected_label")))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+	gdk_threads_leave();
 	/* Flush the toilet again.... */
 	tcflush(serial_params->fd, TCIOFLUSH);
 	return;

@@ -28,8 +28,6 @@
 #include <serialio.h>
 
 gchar *vex_comment;
-extern struct DynamicButtons buttons;
-extern struct Tools tools;
 extern GtkWidget *tools_view;
 
 

@@ -20,13 +20,13 @@
 #include <fileio.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
+#include <keyparser.h>
 #include <logviewer_core.h>
 #include <notifications.h>
 #include <stdlib.h>
 #include <structures.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <tabloader.h>
 #include <unistd.h>
 #include <vex_support.h>
 
@@ -34,7 +34,6 @@
 extern gchar * vex_comment;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;
-extern struct DynamicEntries entries;
 extern GHashTable *dynamic_widgets;
 static gboolean dlog_open = FALSE;
 static gboolean vex_open = FALSE;

@@ -39,7 +39,6 @@ extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern struct Serial_Params *serial_params;
-extern struct DynamicEntries entries;
 struct Firmware_Details *firmware = NULL;
 gboolean interrogated = FALSE;
 
@@ -211,6 +210,8 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	gchar * tmpbuf = NULL;
 	gchar ** filenames = NULL;
 	extern struct IoCmds *cmds;
+	extern GHashTable *dynamic_widgets;
+	GtkWidget * widget = NULL;
 
 	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL));	
 
@@ -250,8 +251,9 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 				tmpbuf = g_strdup_printf("%.1f",
 						((float)canidate->ver_num/10.0));
 			gdk_threads_enter();
-			gtk_entry_set_text(GTK_ENTRY(entries.ecu_revision_entry)
-					,tmpbuf);
+			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_revision_entry")))
+				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					
 			gdk_threads_leave();
 			g_free(tmpbuf);
 		}
@@ -264,7 +266,8 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 						canidate->sig_str,
 						(gint)g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
 			gdk_threads_enter();
-			gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
+			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_signature_entry")))
+				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			gdk_threads_leave();
 			g_free(tmpbuf);
 		}
@@ -277,7 +280,8 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 						canidate->quest_str,
 						(gint)g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
 			gdk_threads_enter();
-			gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
+			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ext_revision_entry")))
+				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			gdk_threads_leave();
 			g_free(tmpbuf);
 		}

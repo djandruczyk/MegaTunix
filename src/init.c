@@ -17,7 +17,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <init.h>
-#include <kpatables.h>
 #include <ms_structures.h>
 #include <structures.h>
 #include <string.h>
@@ -31,10 +30,7 @@ gint micro_ver;
 gint preferred_delimiter;
 extern guint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
-guchar *kpa_conversion; 
 extern gint mem_view_style[];
-extern guchar turbo_map[];
-extern guchar na_map[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
@@ -58,9 +54,15 @@ guchar *ms_data_backup[MAX_SUPPORTED_PAGES];
 GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
-struct IoCmds *cmds;
+struct IoCmds *cmds; 
 
-void init()
+
+/*!
+ * init()
+ * \brief Sets sane values to global variables for a clean startup of 
+ * MegaTunix
+ */
+void init(void)
 {
 	/* defaults */
 	interval_min = 5;	/* 5 millisecond minimum interval delay */
@@ -82,13 +84,20 @@ void init()
 	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
-	kpa_conversion = turbo_map;
 	tips_in_use = TRUE;	/* Use tooltips by default */
 	temp_units = FAHRENHEIT;/* Use SAE units by default */
 	lv_scroll = 1;		/* Logviewer scroll speed */
 	preferred_delimiter = TAB;
 }
 
+
+/*!
+ * read_config()
+ * \brief Reads state of various control variables, like window position
+ * size, serial port and parameters and other user defaults from the default
+ * config file located at ~/.MegaTunix/config
+ * \see save_config()
+ */
 gboolean read_config(void)
 {
 	ConfigFile *cfgfile;
@@ -134,6 +143,13 @@ gboolean read_config(void)
 	return TRUE;
 }
 
+
+/*!
+ * save_config()
+ * \brief Saves state of various control variables, like window position
+ * size, serial port and parameters and other user defaults
+ * \see read_config()
+ */
 void save_config(void)
 {
 	gchar *filename = NULL;
@@ -181,6 +197,12 @@ void save_config(void)
 
 }
 
+
+/*!
+ * make_megasquirt_dirs()
+ * \brief Creates the directories for user modified config files in the
+ * users home directory under ~/.MegaTunix
+ */
 void make_megasquirt_dirs(void)
 {
 	gchar *filename = NULL;
@@ -210,6 +232,12 @@ void make_megasquirt_dirs(void)
 	return;
 }
 
+
+/*!
+ * mem_alloc()
+ * \brief Allocates memory allocated, to be deallocated at close by mem_dalloc
+ * \see mem_dealloc
+ */
 void mem_alloc()
 {
 	gint i=0;
@@ -236,6 +264,12 @@ void mem_alloc()
 
 }
 
+
+/*!
+ * mem_dealloc()
+ * \brief Deallocates memory allocated with mem_alloc
+ * \see mem_alloc
+ */
 void mem_dealloc()
 {
 	gint i = 0;
