@@ -247,6 +247,10 @@ int handle_ms_data(InputData which_data)
 			 * comparison against to know if we have 
 			 * to burn stuff to flash.
 			 */
+			/* clear memory area */
+			memset(ms_data+MS_PAGE_SIZE,0,MS_PAGE_SIZE);
+			memset(ms_data_last+MS_PAGE_SIZE,0,MS_PAGE_SIZE);
+			/* Copy new data into memory and backup blocks */
 			memcpy(ms_data+MS_PAGE_SIZE,buf,
 					sizeof(struct Ignition_Table));
 			memcpy(ms_data_last+MS_PAGE_SIZE,buf,

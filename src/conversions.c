@@ -135,6 +135,9 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 
 	factor = conv_chart->conv_factor[offset];
 
+#ifdef DEBUG
+	printf("convert_before_dl(),offset %i, val %f, ign_parm %i\n",offset,value,(gint)ign_var);
+#endif
 	switch ((Conversions)conv_chart->conv_type[offset])
 	{
 		case (ADD):
@@ -220,6 +223,9 @@ gfloat convert_after_upload(gint offset, gboolean ign_var)
 			break;
 
 	}
+#ifdef DEBUG
+	g_printf("convert_after_ul(),offset %i, val %f, ign_parm %i\n",offset,return_value,(gint)ign_var);
+#endif
 	return (return_value);
 }
 void convert_temps(gpointer widget, gpointer units)
