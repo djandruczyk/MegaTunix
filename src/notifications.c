@@ -136,9 +136,12 @@ void
 	else
 		counter = (gint)result;
 
+	if (count)
+	{
 	counter++;
 	tmpbuf = g_strdup_printf(" %i. ",counter);
 	g_object_set_data(G_OBJECT(view),"counter",GINT_TO_POINTER(counter));	
+	}
 
 	if (tagname == NULL)
 	{
@@ -167,6 +170,8 @@ void
 		gtk_adjustment_value_changed(GTK_ADJUSTMENT(adj));
 	}
 
+	if (tmpbuf)
+		g_free(tmpbuf);
 	return;	
 }
 

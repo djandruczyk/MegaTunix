@@ -15,7 +15,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <enums.h>
-#include <glib/gprintf.h>
+#include <notifications.h>
 #include <stdio.h>
 #include <structures.h>
 
@@ -40,6 +40,17 @@ extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
 GList *temp_dep = NULL;
+extern gint debug_level;
+extern GtkWidget *debug_view;
+static gchar * conv_text[] = 
+{
+	"Add",
+	"Subtract",
+	"Multiply",
+	"Divide",
+	"No Conversion"
+};
+	
 
 
 void read_conversions(void)
@@ -50,6 +61,7 @@ void read_conversions(void)
 	extern unsigned int ecu_caps;
 	extern GtkWidget *ve_widgets[];
 	extern GtkWidget *ign_widgets[];
+	gchar * tmpbuf = NULL;
 
 	conv_chart = std_conversions;
 
@@ -79,9 +91,12 @@ void read_conversions(void)
 			conv_chart->conv_type[i] = NOTHING;
 			conv_chart->conv_factor[i] = 1.0;
 		}
-#ifdef DEBUG
-		g_printf("BASE Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
-#endif
+		if (debug_level >= DL_CONV)
+		{
+			tmpbuf = g_strdup_printf(__FILE__":\t Load_Conversions() BASE Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
+			update_logbar(debug_view,NULL,tmpbuf,TRUE,FALSE);
+			g_free(tmpbuf);
+		}
 	}
 
 	/* Ignition variant specific */
@@ -110,9 +125,12 @@ void read_conversions(void)
 				}
 
 			}
-#ifdef DEBUG
-			g_printf("Ign Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
-#endif
+			if (debug_level >= DL_CONV)
+			{
+				tmpbuf = g_strdup_printf(__FILE__":\t Load_Conversions() Ignition Offset, %i, conv_type %s, conv_factor %f\n",i,conv_text[conv_chart->conv_type[i]],conv_chart->conv_factor[i]);
+				update_logbar(debug_view,NULL,tmpbuf,TRUE,FALSE);
+				g_free(tmpbuf);
+			}
 		}
 	}
 	return;
@@ -126,6 +144,7 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 	unsigned char *ve_const_arr; 
 	struct Conversion_Chart *conv_chart;
 	extern unsigned char *ms_data;
+	gchar * tmpbuf = NULL;
 
 	if (ign_var)
 		conv_chart = ign_conversions;
@@ -135,9 +154,6 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 
 	factor = conv_chart->conv_factor[offset];
 
-#ifdef DEBUG
-	printf("convert_before_dl(),offset %i, val %f, ign_parm %i\n",offset,value,(gint)ign_var);
-#endif
 	switch ((Conversions)conv_chart->conv_type[offset])
 	{
 		case (ADD):
@@ -156,9 +172,18 @@ gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 			return_value = tmp_val;
 			break;
 		default:
-			g_printf("Convert_before_download() NO CONVERSION defined, BUG!!!\b\b\n");
+			tmpbuf = g_strdup_printf(__FILE__":\tConvert_before_download(): NO CONVERSION defined, BUG!!! offset: %i\n",offset);
+			update_logbar(debug_view,"warning",tmpbuf,TRUE,FALSE);
+			g_free(tmpbuf);
 			break;
 	}
+	if (debug_level >= DL_CONV)
+	{
+		tmpbuf = g_strdup_printf(__FILE__":\tconvert_before_dl(): offset %i, raw %.2f, sent %i, ign_parm %i\n",offset,value,return_value,(gint)ign_var);
+		update_logbar(debug_view,NULL,tmpbuf,TRUE,FALSE);
+		g_free(tmpbuf);
+	}
+
 	/* Store value in veconst_arr pointer (to structure) 
 	 * (accessing it via array syntax as it's friggin easier).... 
 	 *
@@ -180,6 +205,7 @@ gfloat convert_after_upload(gint offset, gboolean ign_var)
 	struct Conversion_Chart *conv_chart;
 	extern unsigned char *ms_data;
 	gint index;
+	gchar * tmpbuf = NULL;
 
 	if (ign_var)
 	{
@@ -219,13 +245,18 @@ gfloat convert_after_upload(gint offset, gboolean ign_var)
 			return_value = ve_const_arr[index];
 			break;
 		default:
-			g_printf("Convert_after_upload() NO CONVERSION defined, index %i BUG!!!\n",index);
+			tmpbuf = g_strdup_printf(__FILE__":\tConvert_after_upload() NO CONVERSION defined, index %i BUG!!!\n",index);
+			update_logbar(debug_view,"warning",tmpbuf,TRUE,FALSE);
+			g_free(tmpbuf);
 			break;
 
 	}
-#ifdef DEBUG
-	g_printf("convert_after_ul(),offset %i, val %f, ign_parm %i\n",offset,return_value,(gint)ign_var);
-#endif
+	if (debug_level >= UL_CONV)
+	{
+		tmpbuf = g_strdup_printf(__FILE__":\tconvert_after_ul(),offset %i, raw %i, val %f, ign_parm %i\n",offset,ve_const_arr[index],return_value,(gint)ign_var);
+		update_logbar(debug_view,NULL,tmpbuf,TRUE,FALSE);
+		g_free(tmpbuf);
+	}
 	return (return_value);
 }
 void convert_temps(gpointer widget, gpointer units)

@@ -89,6 +89,7 @@ typedef enum
 	NUM_INJECTORS_2,
 	TRIGGER_ANGLE,
 	LOGVIEW_SCROLL,
+	DEBUG_LEVEL,
 	GENERIC
 }SpinButton;
 
@@ -209,5 +210,17 @@ typedef enum
 	DATALOGGING,
 	LOGVIEWER
 }PageName;
+
+typedef enum
+{
+	NO_DEBUG = 0,
+	UNHANDELED_CTRL,
+	OPENGL,
+	IO_ERROR,
+	DL_CONV,
+	UL_CONV,
+	DL_TRANS,
+	MAX
+}DebugLevel;
 
 #endif

@@ -17,6 +17,7 @@
 #include <constants_gui.h>
 #include <core_gui.h>
 #include <datalogging_gui.h>
+#include <debug_gui.h>
 #include <defines.h>
 #include <dt_params_gui.h>
 #include <eng_vitals_gui.h>
@@ -73,6 +74,7 @@ static struct
 { "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE, FALSE, FALSE},
 { "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE, FALSE, FALSE},
 { "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",TRUE, FALSE, FALSE},
+{ "Debug Messages", build_debug, "_Debugging",TRUE, FALSE, FALSE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);

@@ -85,8 +85,9 @@ void build_vetable_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	index = 0;
-	for (y=0;y<8;y++)
+	for (y=0;y < 8;y++)
 	{
+		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		spinner = gtk_spin_button_new(adj,1,0);
 		ve_widgets[VE1_KPA_BINS_OFFSET+index] = spinner;
 		gtk_widget_set_size_request(spinner,45,-1);
@@ -98,7 +99,6 @@ void build_vetable_1(GtkWidget *parent_frame)
 				GINT_TO_POINTER(NOTHING));
 		g_object_set_data(G_OBJECT(spinner),"dl_type",
 				GINT_TO_POINTER(IMMEDIATE));
-		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (spin_button_handler),
 				GINT_TO_POINTER(GENERIC));
@@ -302,7 +302,7 @@ void build_vetable_2(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	index = 0;
-	for (y=0;y<8;y++)
+	for (y=0;y < 8;y++)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,255,1,10,0);
 		spinner = gtk_spin_button_new(adj,1,0);
