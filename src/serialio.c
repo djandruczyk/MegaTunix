@@ -154,9 +154,9 @@ void close_serial()
 	close(serial_params->fd);
 	serial_params->open = FALSE;
 	connected = FALSE;
-	gtk_widget_set_sensitive(misc.status[CONNECTED],
+	gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 			connected);
-	gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
+	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 			connected);
 
 	tmpbuf = g_strdup_printf("COM Port Closed\n");
@@ -217,9 +217,9 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 			update_logbar(comms_view,NULL,tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			connected = TRUE;
-			gtk_widget_set_sensitive(misc.status[CONNECTED],
+			gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 					connected);
-			gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 					connected);
 			
 		}
@@ -231,9 +231,9 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 			update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 			g_free(tmpbuf);
 			connected = FALSE;
-			gtk_widget_set_sensitive(misc.status[CONNECTED],
+			gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 					connected);
-			gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 					connected);
 
 		}
@@ -402,9 +402,9 @@ void read_ve_const()
 		}
 	}
 
-	gtk_widget_set_sensitive(misc.status[CONNECTED],
+	gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 			connected);
-	gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
+	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 			connected);
 
 	tcflush(serial_params->fd, TCIOFLUSH);

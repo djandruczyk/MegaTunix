@@ -304,28 +304,28 @@ gboolean update_runtime_vars()
 
 		/* Status boxes.... */
 		/* "Connected" */
-		gtk_widget_set_sensitive(misc.status[CONNECTED],
+		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
 				connected);
 
 		if ((forced_update) || (runtime->engine.value != rt_last->engine.value))
 		{
 			/* Cranking */
-			gtk_widget_set_sensitive(misc.status[CRANKING],
+			gtk_widget_set_sensitive(misc.status[STAT_CRANKING],
 					runtime->engine.bit.crank);
 			/* Running */
-			gtk_widget_set_sensitive(misc.status[RUNNING],
+			gtk_widget_set_sensitive(misc.status[STAT_RUNNING],
 					runtime->engine.bit.running);
 			/* Warmup */
-			gtk_widget_set_sensitive(misc.status[WARMUP],
+			gtk_widget_set_sensitive(misc.status[STAT_WARMUP],
 					runtime->engine.bit.warmup);
 			/* Afterstart Enrichment */
-			gtk_widget_set_sensitive(misc.status[AS_ENRICH],
+			gtk_widget_set_sensitive(misc.status[STAT_AS_ENRICH],
 					runtime->engine.bit.startw);
 			/* Accel Enrichment */
-			gtk_widget_set_sensitive(misc.status[ACCEL],
+			gtk_widget_set_sensitive(misc.status[STAT_ACCEL],
 					runtime->engine.bit.tpsaen);
 			/* Decel Enleanment */
-			gtk_widget_set_sensitive(misc.status[DECEL],
+			gtk_widget_set_sensitive(misc.status[STAT_DECEL],
 					runtime->engine.bit.tpsden);
 
 		}
@@ -380,22 +380,22 @@ gboolean update_runtime_vars()
 		if ((forced_update) || (runtime->engine.value != rt_last->engine.value))
 		{
 			/* Cranking */
-			gtk_widget_set_sensitive(misc.ww_status[CRANKING],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_CRANKING],
 					runtime->engine.bit.crank);
 			/* Running */
-			gtk_widget_set_sensitive(misc.ww_status[RUNNING],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_RUNNING],
 					runtime->engine.bit.running);
 			/* Warmup */
-			gtk_widget_set_sensitive(misc.ww_status[WARMUP],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_WARMUP],
 					runtime->engine.bit.warmup);
 			/* Afterstart Enrichment */
-			gtk_widget_set_sensitive(misc.ww_status[AS_ENRICH],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_AS_ENRICH],
 					runtime->engine.bit.startw);
 			/* Accel Enrichment */
-			gtk_widget_set_sensitive(misc.ww_status[ACCEL],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_ACCEL],
 					runtime->engine.bit.tpsaen);
 			/* Decel Enleanment */
-			gtk_widget_set_sensitive(misc.ww_status[DECEL],
+			gtk_widget_set_sensitive(misc.ww_status[STAT_DECEL],
 					runtime->engine.bit.tpsden);
 
 		}

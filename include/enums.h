@@ -110,13 +110,13 @@ typedef enum
 /* Runtime Status flags */
 typedef enum 
 {       
-	CONNECTED, 
-        CRANKING, 
-        RUNNING, 
-        WARMUP, 
-        AS_ENRICH, 
-        ACCEL, 
-        DECEL
+	STAT_CONNECTED, 
+        STAT_CRANKING, 
+        STAT_RUNNING, 
+        STAT_WARMUP, 
+        STAT_AS_ENRICH, 
+        STAT_ACCEL, 
+        STAT_DECEL
 }RuntimeStatus;
 
 typedef enum
