@@ -16,8 +16,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-/* DO NOT include defines.h, as protos.h already does... */
 #include "protos.h"
+#include "defines.h"
 #include "globals.h"
 #include "constants.h"
 
@@ -29,20 +29,20 @@ static int rpmk_offset = 99;
 extern int raw_reader_running;
 extern int raw_reader_stopped;
 extern int read_wait_time;
+extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
 struct 
 {
-	GtkWidget *disp_spin;	/* Engine size  1-1000 Cu-in */
-	GtkWidget *cyls_spin;	/* # of Cylinders  1-16 */
-	GtkWidget *inj_rate_spin;	/* injector slow rate (lbs/hr) */
+	GtkWidget *disp_spin;		/* Engine size  1-1000 Cu-in */
+	GtkWidget *cyls_spin;		/* # of Cylinders  1-12 */
+	GtkWidget *inj_rate_spin;	/* injector flow rate (lbs/hr) */
 	GtkWidget *afr_spin;		/* Air fuel ratio 10-25.5 */
 	gint disp;
 	gint cyls;
 	gint inj_rate;
 	gfloat afr;
-} reqd_fuel;
+}reqd_fuel ;
 
-extern struct ms_ve_constants *ve_constants;
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -64,7 +64,7 @@ int text_entry_handler(GtkWidget * widget, gpointer *data)
 	offset = (gint)gtk_object_get_data(G_OBJECT(widget),"offset");
 	switch ((gint)data)
 	{
-		case WARMUP_NEG_40:
+/*		case WARMUP_NEG_40:
 			ve_constants->warmup_bins[0] = atoi(entry_text);
 			write_ve_const(ve_constants->warmup_bins[0], offset);
 			break;
@@ -104,6 +104,7 @@ int text_entry_handler(GtkWidget * widget, gpointer *data)
 			ve_constants->warmup_bins[9] = atoi(entry_text);
 			write_ve_const(ve_constants->warmup_bins[9], offset);
 			break;
+	*/
 		default:
 			break;
 	}
@@ -327,45 +328,46 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
 	return TRUE;
 }
 
-int ve_spinner_changed(GtkWidget *widget, gpointer *data)
+int generic_spinner_changed(GtkWidget *widget, gpointer *data)
 {
-	gfloat value = 0.0;
-	gint offset = 0;
-	if (paused_handlers)
-		return TRUE;
-	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-	offset = GPOINTER_TO_INT(data);
+        gfloat value = 0.0;
+        gint offset = 0;
+	gint class = 0;
+        if (paused_handlers)
+                return TRUE;
+        value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
+        offset = GPOINTER_TO_INT(data);
+	/* Class is set to determine the course of action */
+	class = (gint) gtk_object_get_data(G_OBJECT(widget),"class");
+	switch (class)
+	{
+		case WARMUP:
+			ve_constants->warmup_bins[offset-WARMUP_BINS_OFFSET] 
+				= (gint)value;
+			write_ve_const((gint)value, offset);
+			break;
+		case RPM:
+			ve_constants->rpm_bins[offset-RPM_BINS_OFFSET] 
+				= (gint)value/100.0;
+			write_ve_const((gint)value/100.0, offset);
+			break;
+		case KPA:
+			ve_constants->kpa_bins[offset-KPA_BINS_OFFSET] 
+				= (gint)value;
+			write_ve_const((gint)value, offset);
+			break;
+		case VE:
+			ve_constants->ve_bins[offset-VE_TABLE_OFFSET] 
+				= (gint)value;
+			write_ve_const((gint)value, offset);
+			break;
+		case ACCEL:
+			ve_constants->accel_bins[offset-ACCEL_BINS_OFFSET] 
+				= (gint)((value*10.0)+.01);
+			write_ve_const((gint)((value*10.0)+.01), offset);
+			break;
+	}
 
-	ve_constants->ve_bins[offset] = (gint)value;
-	write_ve_const(value, offset);
-	return TRUE;
-}
-
-int rpm_spinner_changed(GtkWidget *widget, gpointer *data)
-{
-	gfloat value = 0.0;
-	gint offset = 0;
-	if (paused_handlers)
-		return TRUE;
-	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-	offset = GPOINTER_TO_INT(data);
-
-	ve_constants->rpm_bins[offset] = (gint)value;
-	write_ve_const(value, offset);
-	return TRUE;
-}
-
-int kpa_spinner_changed(GtkWidget *widget, gpointer *data)
-{
-	gfloat value = 0.0;
-	gint offset = 0;
-	if (paused_handlers)
-		return TRUE;
-	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
-	offset = GPOINTER_TO_INT(data);
-
-	ve_constants->kpa_bins[offset] = (gint)value;
-	write_ve_const(value, offset);
 	return TRUE;
 }
 
@@ -490,16 +492,16 @@ void update_const_ve()
 	/* Warmup Enrichment bins */
 	for (i=0;i<10;i++)
 	{
-		g_snprintf(buff,10,"%i",ve_constants->warmup_bins[i]);
-		gtk_entry_set_text(GTK_ENTRY(constants.warmup_bins_ent[i]),
-				buff);
+		gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.warmup_bins_spin[i]),
+			ve_constants->warmup_bins[i]);
 	}
 	/* accel enrichments */
 	for (i=0;i<4;i++)
 	{
-		g_snprintf(buff,10,"%.1f",ve_constants->accel_bins[i]/10.0);
-		gtk_entry_set_text(GTK_ENTRY(constants.accel_bins_ent[i]),
-				buff);
+		gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.accel_bins_spin[i]),
+			ve_constants->accel_bins[i]/10.0);
 	}
 
 	/* TPS Trigger Threshold */

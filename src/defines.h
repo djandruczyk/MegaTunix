@@ -22,6 +22,13 @@
 
 
 /* Definitions */
+
+/* Memroy offsets */
+#define VE_TABLE_OFFSET		0
+#define WARMUP_BINS_OFFSET	69
+#define ACCEL_BINS_OFFSET	79
+#define RPM_BINS_OFFSET		101
+#define KPA_BINS_OFFSET		109
 /* Gui frames */
 #define ABOUT_PAGE		0x01
 #define GENERAL_PAGE		0x02
@@ -67,18 +74,15 @@
 #define SET_SER_PORT		0x52
 
 /* text entries */
-#define WARMUP_NEG_40		0x70
-#define WARMUP_NEG_20		0x71
-#define WARMUP_0		0x72
-#define WARMUP_20		0x73
-#define WARMUP_40		0x74
-#define WARMUP_60		0x75
-#define WARMUP_80		0x76
-#define WARMUP_100		0x77
-#define WARMUP_130		0x78
-#define WARMUP_160		0x79
 #define MS_RESET_COUNT		0x7a
 #define MS_SER_ERRCOUNT		0x7b
+
+/* Group classes */
+#define	ACCEL			0x80
+#define RPM			0x81
+#define KPA			0x82
+#define VE			0x83
+#define WARMUP			0x84
 
 /* Configfile structs. (derived from an older version of XMMS) */
 

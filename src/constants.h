@@ -39,15 +39,15 @@ struct v1_2_Constants
 	GtkWidget *cr_priming_pulse_spin;	/* Spinner */
 	GtkWidget *as_enrich_spin;		/* Spinner */
 	GtkWidget *as_num_cycles_spin;		/* Spinner */
-	GtkWidget *kpa_bins_spin[8];		/* Spinner */
-	GtkWidget *rpm_bins_spin[8];		/* Spinner */
-	GtkWidget *ve_bins_spin[64];		/* Spinner */
-	GtkWidget *warmup_bins_ent[10];		/* Text Entries */
+	GtkWidget *kpa_bins_spin[8];		/* Spinners */
+	GtkWidget *rpm_bins_spin[8];		/* Spinners */
+	GtkWidget *ve_bins_spin[64];		/* Spinners */
+	GtkWidget *warmup_bins_spin[10];	/* Spinners */
 	GtkWidget *tps_trig_thresh_ent;		/* Text Entry */
 	GtkWidget *accel_duration_ent;		/* Text Entry */
 	GtkWidget *cold_accel_addon_ent;	/* Text Entry */
 	GtkWidget *cold_accel_mult_ent;		/* Text Entry */
-	GtkWidget *accel_bins_ent[4];		/* Text Entries */
+	GtkWidget *accel_bins_spin[4];		/* Spinners */
 	GtkWidget *decel_cut_ent;		/* Text Entry */
 	GtkWidget *ego_temp_active_ent;		/* Text Entry */
 	GtkWidget *ego_rpm_active_ent;		/* Text Entry */

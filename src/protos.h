@@ -97,9 +97,7 @@ int reqd_fuel_popup();
 int update_reqd_fuel(GtkWidget *widget, gpointer *data);
 int close_popup(GtkWidget *widget, gpointer *data);
 int spinner_changed(GtkWidget *, gpointer *);
-int ve_spinner_changed(GtkWidget *, gpointer *);
-int rpm_spinner_changed(GtkWidget *, gpointer *);
-int kpa_spinner_changed(GtkWidget *, gpointer *);
+int generic_spinner_changed(GtkWidget *, gpointer *);
 
 /* gui_handlers.c */
 

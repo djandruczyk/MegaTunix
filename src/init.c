@@ -53,7 +53,7 @@ void init()
 	poll_min = 25;		/* 25 millisecond minimum poll delay */
 	poll_step = 5;		/* 5 ms steps */
 	poll_max = 500;		/* 500 millisecond maximum poll delay */
-	interval_min = 50;	/* 50 millisecond minimum interval delay */
+	interval_min = 25;	/* 50 millisecond minimum interval delay */
 	interval_step = 10;	/* 10ms steps */
 	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
 	width = 640;		/* min window width */

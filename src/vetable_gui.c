@@ -21,8 +21,6 @@
 
 extern struct v1_2_Constants constants;
 extern struct ms_ve_constants ve_constants;
-static int kpa_offset = 109;
-static int rpm_offset = 101;
 
 int build_vetable(GtkWidget *parent_frame)
 {
@@ -68,8 +66,10 @@ int build_vetable(GtkWidget *parent_frame)
 		spinner = gtk_spin_button_new(adj,1,0);
 		gtk_widget_set_size_request(spinner,45,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (kpa_spinner_changed),
-				GINT_TO_POINTER(kpa_offset+y));
+				G_CALLBACK (generic_spinner_changed),
+				GINT_TO_POINTER(KPA_BINS_OFFSET+y));
+		gtk_object_set_data(G_OBJECT(spinner),"class", 
+				GINT_TO_POINTER(KPA));
 		constants.kpa_bins_spin[y] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, y+1, y+2,
@@ -106,8 +106,11 @@ int build_vetable(GtkWidget *parent_frame)
 			spinner = gtk_spin_button_new(adj,1,0);
 			gtk_widget_set_size_request(spinner,52,-1);
 			g_signal_connect (G_OBJECT(spinner), "value_changed",
-					G_CALLBACK (ve_spinner_changed),
-					GINT_TO_POINTER(index));
+					G_CALLBACK (generic_spinner_changed),
+					GINT_TO_POINTER(VE_TABLE_OFFSET+index));
+			gtk_object_set_data(G_OBJECT(spinner),"class", 
+					GINT_TO_POINTER(VE));
+
 			constants.ve_bins_spin[index] = spinner;
 			gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 			gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, y+1, y+2,
@@ -134,8 +137,10 @@ int build_vetable(GtkWidget *parent_frame)
 		spinner = gtk_spin_button_new(adj,1,0);
 		gtk_widget_set_size_request(spinner,52,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
-				G_CALLBACK (rpm_spinner_changed),
-				GINT_TO_POINTER(rpm_offset+x));
+				G_CALLBACK (generic_spinner_changed),
+				GINT_TO_POINTER(RPM_BINS_OFFSET+x));
+		gtk_object_set_data(G_OBJECT(spinner),"class", 
+				GINT_TO_POINTER(RPM));
 		constants.rpm_bins_spin[x] = spinner;
 		gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 		gtk_table_attach (GTK_TABLE (table), spinner, x, x+1, 0, 1,
