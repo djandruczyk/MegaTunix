@@ -91,13 +91,13 @@ DEPDIR = ${subdirs).deps
 
 CLEANFILES = *~ core -rf .dep*
 
-EXTRA_DIST = configure CREDITS VERSION AUTHORS TODO README INSTALL
+EXTRA_DIST = configure CREDITS VERSION AUTHORS TODO README INSTALL NEWS
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =  VERSION
 DIST_COMMON =  README ./stamp-h.in AUTHORS INSTALL Makefile.am \
-Makefile.in TODO VERSION.in acconfig.h acinclude.m4 aclocal.m4 \
+Makefile.in NEWS TODO VERSION.in acconfig.h acinclude.m4 aclocal.m4 \
 config.guess config.h.in config.sub configure configure.in install-sh \
 ltmain.sh missing mkinstalldirs
 
