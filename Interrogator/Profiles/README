@@ -89,7 +89,9 @@ MultiPage
 RequirePageChange
   - Boolean, If set to True, Page changing is done. (ecu responds to the 
   Page_CMD).  MSnS/MSnEDIS have this set to FALSE as they use alternate 
-  commands to modify data in the higher pages, see "is_spark".
+  commands to modify data in the higher pages, see "is_spark" as it applies
+  to the page_x sections ONLY (is_spark in table_x sections has a different
+  meaning).
 
 Page_CMD
   - A string sent to the ECU followed by an argument to change the current
@@ -111,7 +113,7 @@ TotalPages
 
 [table_x] sections, 1 per table as defined by TotalTables
 is_spark
-  - Boolean,  if this table is a spark table and uses the unusualy 2.84 
+  - Boolean,  if this table is a spark table and uses the 0.352 -10
   conversion factor then this flag is set to TRUE, otherwise FALSE.
 
 table_name
@@ -156,7 +158,9 @@ length
 is_spark
   - Boolean, a Flag that when FALSE requires the following fields to be
   present: reqfuel_offset, divider_offset, alternate_offset, rpmk_offset,
-  cfg11_offset, cfg12_offset, cfg13_offset.
+  cfg11_offset, cfg12_offset, cfg13_offset. This ALSO means that the page
+  uses alternate commands for writing/reading, (I/J) This meaning is NOT
+  the same as "is_spark" in the table_x sections
 
 NOTES regarding reqfuel_offset, divider_offset, alternate_offset, 
   rpmk_offset,cfg11_offset, cfg12_offset, cfg13_offset, spconfg_offset.

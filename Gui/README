@@ -1,6 +1,6 @@
 This README describes the contents of this dir and their file structure.
 
-Last Edited, Sept 19th 16:04 PM
+Last Edited, Feb 2nd 09:00 AM
 
 	Inside this dir "Gui", contains several files with a ".glade" and a 
 ".datamap" extension.  The .glade files are glade GUI description files 
@@ -33,6 +33,18 @@ are loaded and bound to the widget using the g_object_set_data() call.  This
 is done because all of the signal handlers throughout megatunix extract that
 data to make apprpriate decisions about handling data.
 
+NEW:
+ New functionality has been done to reduce the redundancy of keys needing
+to be set on a large range of variables that share common settings. This 
+is done in the form of "groups".  If you have a group or multiple groups
+of controls that share flags and don't want to set those flags for each
+and every widget.  In the [global] section ad a key called "groups". This
+key is a comma seperated list of section names.  These group sections are
+the exact same format as any normal section below.  In widget sections where
+you want to inherit the group settings, just add a key/value pair 
+like "group=groupname". If you want to override a group setting the setting
+defnied in the widget section WILL OVERRIDE the grop setting if you want to.
+
 NOTES regarding the datamap files:
 
 1. The value names are CaSe SeNsItIvE, so be warned.  Ironically the
@@ -49,6 +61,8 @@ keys themselves are not, as the string compare functions are case insensitive.
 3. There is no limit to the number of keys that you can bind to a widget.
 
 4. Most commonly used keys are:
+	group		(string) Points to a section to get additional 
+			params from. See notes above regarding groups
 	page		(integer) page in ecu that this control refers to
 	offset		(integer) offset from the beginning of said page that
 			this control refers to. 
