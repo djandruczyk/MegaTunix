@@ -33,6 +33,9 @@ void post_process(void *input, void *output)
 	 * choose below which ones to take based on whether
 	 * dualtable is set or not..
 	 */
+	gint stroke = 0;
+	gint cyls = 0;
+	gfloat ign_int = 0.0;
 	struct Raw_Runtime_Std *in = input;
 	struct Raw_Runtime_Dualtable *in_dt = input;
 	struct Runtime_Common *out = output;
@@ -99,10 +102,21 @@ void post_process(void *input, void *output)
 
 	if (ign_variant)
 	{
+		/* Funky high resolution RPM output from MegaSquirtnSpark */
+		cyls = ve_const->config11.bit.cylinders+1;
+		if (ve_const->config11.bit.eng_type == 0)
+			stroke = 4;
+		else
+			stroke = 2;
 		out->ctimecommH = ign_in->ctimecommH;
 		out->ctimecommL = ign_in->ctimecommL;
+		ign_int = (((out->ctimecommH*256)+out->ctimecommL)/7.3728)*8.0;
+		if (ign_in->rpm < 5)
+			out->rpm = ign_in->rpm*100;
+		else
+			out->rpm = 1000000*60/(ign_int*(stroke/cyls*2));
+
 		out->sparkangle = ign_in->sparkangle;
-		out->rpm = in->rpm*100;
 	}
 	else
 	{

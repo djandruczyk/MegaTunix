@@ -68,6 +68,7 @@ extern GHashTable *interdep_vars_2;
 static gint update_rate = 24;
 static gint runtime_id = -1;
 static gint logviewer_id = -1;
+static gint hilite_id = -1;
 gboolean using_pwm_idle;
 gboolean tips_in_use;
 gboolean forced_update;
@@ -1295,7 +1296,10 @@ void start_runtime_display()
 			(GtkFunction)update_runtime_vars,NULL);
 	logviewer_id = gtk_timeout_add((int)((1.0/(float)update_rate)*1000.0),
 			(GtkFunction)update_logview_traces,NULL);
+//	hilite_id = gtk_timeout_add((int)((1.0/(float)hilite_rate)*1000.0),
+//			(GtkFuntion)hilite_ve_entries,NULL);
 }
+
 void stop_runtime_display()
 {
 	if (runtime_id)
@@ -1304,6 +1308,9 @@ void stop_runtime_display()
 	if (logviewer_id)
 		gtk_timeout_remove(logviewer_id);
 	logviewer_id = 0;
+//	if (hilite_id)
+//		gtk_timeout_remove(hilite_id);
+//	hilite_id = 0;
 }
 
 gboolean populate_gui()
