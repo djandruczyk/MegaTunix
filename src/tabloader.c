@@ -41,7 +41,7 @@ gboolean load_gui_tabs()
 	gchar * glade_file = NULL;
 	GladeXML *xml = NULL;
 	GtkWidget *frame = NULL;
-	gchar * tmpbuf = NULL;
+	gchar * tab_name = NULL;
 	GtkWidget * label = NULL;
 	GtkWidget *topframe = NULL;
 	extern GtkWidget * notebook;
@@ -63,9 +63,8 @@ gboolean load_gui_tabs()
 			cfgfile = cfg_open_file(map_file);
 			if (cfgfile)
 			{
-				cfg_read_string(cfgfile,"global","tab_name",&tmpbuf);
-				label = gtk_label_new_with_mnemonic(g_strdup(tmpbuf));
-				g_free(tmpbuf);
+				cfg_read_string(cfgfile,"global","tab_name",&tab_name);
+				label = gtk_label_new_with_mnemonic(g_strdup(tab_name));
 				topframe = glade_xml_get_widget(xml,"topframe");
 				/* bind_data() is recursive and will take 
 				 * care of all children
@@ -91,6 +90,8 @@ gboolean load_gui_tabs()
 					}
 				}
 				
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
+				g_free(tab_name);
 				cfg_free(cfgfile);
 			}
 
@@ -123,6 +124,7 @@ gboolean load_gui_tabs()
 
 	}
 	tabs_loaded = TRUE;
+	dbg_func(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n",TABLOADER);
 	return TRUE;
 
 }
@@ -323,6 +325,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	g_free(keytypes);
 	g_strfreev(keys);
+	dbg_func(__FILE__": bind_data()\n\t All is well, leaving...\n\n",TABLOADER);
 }
 
 GList * get_list(gchar * key)
