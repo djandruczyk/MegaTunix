@@ -4,7 +4,7 @@ INCLUDES = \
 	@PACKAGE_CFLAGS@ \
 	@MEGATUNIX_DEFINES@
 
-bin_PROGRAMS = megatunix
+bin_PROGRAMS = megatunix$(EXEEXT)
 
 megatunix_SOURCES = \
 	Makefile \
@@ -51,7 +51,8 @@ megatunix_SOURCES = \
 	warmwizard_gui.c 
 
 #megatunix_LDADD = @PACKAGE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @PACKAGE_LIBS@  -L../mtxmatheval -lmtxmatheval -lfl
+megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl 
+
 
 megatunix_LDFLAGS =
 

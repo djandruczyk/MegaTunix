@@ -38,7 +38,7 @@ noinst_LTLIBRARIES = libmtxmatheval.la
 libmtxmatheval_la_SOURCES = parser.y scanner.l error.c matheval.c	\
 node.c symbol_table.c xmalloc.c xmath.c
 
-libmtxmatheval_la_LDFLAGS =
+libmtxmatheval_la_LDFLAGS = -static
 libmtxmatheval_la_LIBADD = -lfl -lm 
 
 noinst_HEADERS = mtxmatheval.h common.h error.h node.h \

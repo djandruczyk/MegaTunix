@@ -295,7 +295,6 @@ gfloat handle_special(GObject *object,gchar *handler_name)
 	{
 		if (begin == TRUE)
 		{       
-			printf("just beginning returing 0\n");
 			g_get_current_time(&now);
 			last.tv_sec = now.tv_sec;
 			last.tv_usec = now.tv_usec;
@@ -309,7 +308,6 @@ gfloat handle_special(GObject *object,gchar *handler_name)
 				((double)(now.tv_usec-last.tv_usec)/1000000.0);
 			last.tv_sec = now.tv_sec;
 			last.tv_usec = now.tv_usec;
-			printf("normal run returing %f\n",cumu);
 			return cumu;
 		}
 

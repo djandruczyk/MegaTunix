@@ -437,7 +437,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 
-			if (abs(count-last_upd) > 5)
+			if ((abs(count-last_upd) > 5) || (forced_update))
 			{
 				tmpbuf = g_strdup_printf("%i",uc_ptr[offset/UCHAR]);
 				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
@@ -466,7 +466,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 
-			if (abs(count-last_upd) > 5)
+			if ((abs(count-last_upd) > 5) || (forced_update))
 			{
 				tmpbuf = g_strdup_printf("%i",sh_ptr[offset/SHORT]);
 				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
@@ -495,7 +495,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 					(control->pbar),
 					tmpf);
 
-			if (abs(count-last_upd) > 5)
+			if ((abs(count-last_upd) > 5) || (forced_update))
 			{
 				tmpbuf = g_strdup_printf("%.2f",fl_ptr[offset/FLOAT]);
 				gtk_label_set_text(GTK_LABEL(control->data),tmpbuf);
