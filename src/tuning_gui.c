@@ -20,7 +20,6 @@ int build_tuning(GtkWidget *parent_frame)
 {
         GtkWidget *vbox;
         GtkWidget *label;
-	GtkWidget *graphic;
 
         vbox = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);

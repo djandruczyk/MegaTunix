@@ -32,7 +32,7 @@ int build_general(GtkWidget *parent_frame)
         extern GtkTooltips *tip;
         GtkWidget *vbox;
  //       GtkWidget *vbox2;
-  //      GtkWidget *label;
+        GtkWidget *sw;
         GtkWidget *frame;
         GtkWidget *hbox;
         GtkWidget *hbox2;
@@ -135,19 +135,26 @@ int build_general(GtkWidget *parent_frame)
                         G_CALLBACK (interrogate_ecu), \
                         NULL);
 
-	view = gtk_text_view_new ();
- 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-	gtk_text_buffer_create_tag(textbuffer,
-				"red_foreground",
-				"foreground",
-				"red", NULL);
 	frame = gtk_frame_new ("ECU Output");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
         gtk_table_attach (GTK_TABLE (table), frame, 0, 2, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
-	gtk_container_add(GTK_CONTAINER(frame),view);
+	sw = gtk_scrolled_window_new(NULL,NULL);
+	gtk_widget_set_size_request(sw,0,150);
+	gtk_container_add(GTK_CONTAINER(frame),sw);
+
+	view = gtk_text_view_new ();
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
+ 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+	gtk_text_buffer_create_tag(textbuffer,
+				"red_foreground",
+				"foreground",
+				"red", NULL);
+	gtk_container_add(GTK_CONTAINER(sw),view);
+	
+
 
 
 	
