@@ -472,7 +472,7 @@ void restore_all_ms_settings(gchar *filename)
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
 				if (tmpi != firmware->page_params[i]->size)
 					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[i]->size),CRITICAL);
-			if (cfg_read_int(cfgfile,section,"is_spark",&tmpi))
+			if (cfg_read_boolean(cfgfile,section,"is_spark",&tmpi))
 				if (tmpi != firmware->page_params[i]->is_spark)
 					dbg_func(g_strdup_printf(__FILE__": restore_all_ms_settings()\n\tSpark table data mismatch for page %i, restore file \"%i\", firmware specification \"%i\"\n",i,tmpi,firmware->page_params[i]->size),CRITICAL);
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))

@@ -217,7 +217,6 @@ void *serial_io_handler(gpointer data)
 				break;
 			case WRITE_CMD:
 				dbg_func(__FILE__": serial_io_handler()\n\twrite_command requested\n",SERIAL_WR|THREADS);
-				printf("offline is %i, connected is %i\n",offline,connected);
 				if ((connected) || (offline))
 					writeto_ecu(message);
 				else
