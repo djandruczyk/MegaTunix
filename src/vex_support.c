@@ -77,10 +77,10 @@ gboolean vetable_export(struct Io_File *iofile)
 	gsize count = 0;
 	gint index = 0;
 	gint y_page = 0;
-	gint tbl_page = 0;
+	gint z_page = 0;
 	gint x_page = 0;
 	gint y_base = 0;
-	gint tbl_base = 0;
+	gint z_base = 0;
 	gint x_base = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
@@ -97,10 +97,10 @@ gboolean vetable_export(struct Io_File *iofile)
 	for (z=0;z<firmware->total_tables;z++)
 	{
 		table = z;
-		tbl_page = firmware->table_params[table]->tbl_page;
+		z_page = firmware->table_params[table]->z_page;
 		x_page = firmware->table_params[table]->x_page;
 		y_page = firmware->table_params[table]->y_page;
-		tbl_base = firmware->table_params[table]->tbl_base;
+		z_base = firmware->table_params[table]->z_base;
 		y_base = firmware->table_params[table]->y_base;
 		x_base = firmware->table_params[table]->x_base;
 		y_bincount = firmware->table_params[table]->y_bincount;
@@ -119,7 +119,7 @@ gboolean vetable_export(struct Io_File *iofile)
 		output = g_string_append(output, g_strdup_printf("Date: %i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year)));
 
 		output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
-		output = g_string_append(output, g_strdup_printf("Page %i\n",tbl_page));
+		output = g_string_append(output, g_strdup_printf("Page %i\n",z_page));
 		output = g_string_append(output, g_strdup_printf("VE Table RPM Range              [%2i]\n",x_bincount));
 
 		for (i=0;i<x_bincount;i++)
@@ -145,9 +145,9 @@ gboolean vetable_export(struct Io_File *iofile)
 			for (j=0;j<y_bincount;j++)
 			{
 				if (j == 0)
-					output = g_string_append (output,g_strdup_printf("  %3d",ms_data[tbl_page][index+tbl_base]));
+					output = g_string_append (output,g_strdup_printf("  %3d",ms_data[z_page][index+z_base]));
 				else
-					output = g_string_append (output,g_strdup_printf("   %3d",ms_data[tbl_page][index+tbl_base]));
+					output = g_string_append (output,g_strdup_printf("   %3d",ms_data[z_page][index+z_base]));
 				index++;
 			}
 			output = g_string_append(output,"\n");
@@ -736,7 +736,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 			vex->load_bins[i];
 
 	for (i=0;i<((vex->total_load_bins)*(vex->total_rpm_bins));i++)
-		ms_data[page][firmware->table_params[page]->tbl_base + i] =
+		ms_data[page][firmware->table_params[page]->z_base + i] =
 			vex->ve_bins[i];
 
 	for (i=0;i<firmware->page_params[page]->length;i++)

@@ -211,13 +211,25 @@ struct Page_Params
 struct Table_Params
 {
 	gint x_page;		/*! what page the rpm (X axis) resides in */
-	gint y_page;		/*! what page the load (Y axis) resides in */
-	gint tbl_page;		/*! what page the vetable resides in */
 	gint x_base;		/*! where rpm table starts (X axis) */
-	gint y_base;		/*! where load table starts  (Y Axis) */
-	gint tbl_base;		/*! where the vetable starts */
 	gint x_bincount;	/*! how many RPM bins (X axis) */
+	gchar *x_suffix;	/*! text suffix used on 3D view */
+	gchar *x_conv_expr;	/*! x conversion expression */
+	gboolean x_disp_float;	/*! display as a float */
+	gint x_disp_precision;	/*! how many decimal places */
+	gint y_page;		/*! what page the load (Y axis) resides in */
+	gint y_base;		/*! where load table starts  (Y Axis) */
 	gint y_bincount;	/*! how many load bins (Y axis) */
+	gchar *y_suffix;	/*! text suffix used on 3D view */
+	gchar *y_conv_expr;	/*! y conversion expression */
+	gboolean y_disp_float;	/*! display as a float */
+	gint y_disp_precision;	/*! how many decimal places */
+	gint z_page;		/*! what page the vetable resides in */
+	gint z_base;		/*! where the vetable starts */
+	gchar *z_suffix;	/*! text suffix used on 3D view */
+	gchar *z_conv_expr;	/*! z conversion expression */
+	gboolean z_disp_float;	/*! display as a float */
+	gint z_disp_precision;	/*! how many decimal places */
 	gboolean is_spark;	/*! is this a spark table?? */
 	gchar *table_name;	/*! Name for the 3D Table editor title */
 };
@@ -442,32 +454,47 @@ struct Ve_View_3D
 	gfloat zNear;
 	gfloat zFar;
 	gfloat aspect;
+	gfloat h_strafe;
+	gfloat v_strafe;
+	gfloat z_offset;
 	gfloat x_div;
 	gfloat y_div;
 	gfloat z_div;
-	gfloat h_strafe;
-	gfloat v_strafe;
+	gboolean x_disp_float;
+	gboolean y_disp_float;
+	gboolean z_disp_float;
+	gint x_precision;
+	gint y_precision;
+	gint z_precision;
 	gint x_max;
 	gint x_min;
 	gint y_max;
 	gint y_min;
 	gint z_max;
 	gint z_min;
-	gfloat z_offset;
 	gchar *x_source;
 	gchar *y_source;
 	gchar *z_source;
+	gchar *x_suffix;
+	gchar *y_suffix;
+	gchar *z_suffix;
+	gchar *x_conv_expr;
+	gchar *y_conv_expr;
+	gchar *z_conv_expr;
+	void *x_eval;
+	void *y_eval;
+	void *z_eval;
 	GtkWidget *drawing_area;
 	GtkWidget *window;
 	GtkWidget *burn_but;
 	gint y_base;
 	gint y_page;
 	gint y_bincount;
-	gint tbl_base;
-	gint tbl_page;
 	gint x_base;
 	gint x_page;
 	gint x_bincount;
+	gint z_base;
+	gint z_page;
 	gboolean is_spark;
 	gchar *table_name;
 	gint table_num;

@@ -35,8 +35,8 @@ void rescale_table(gchar * widget_name)
 	extern GList ***ve_widgets;
 	extern GHashTable *dynamic_widgets;
 	gint table_num = -1;
-	gint tbl_base = -1;
-	gint tbl_page = -1;
+	gint z_base = -1;
+	gint z_page = -1;
 	gint rpm_bins = -1;
 	gint load_bins = -1;
 	gint page = 0;
@@ -55,16 +55,16 @@ void rescale_table(gchar * widget_name)
 	scaler = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
 	table_num = (gint)g_object_get_data(G_OBJECT(scaler),"table_num");
-	tbl_base = firmware->table_params[table_num]->tbl_base;
+	z_base = firmware->table_params[table_num]->z_base;
 	rpm_bins = firmware->table_params[table_num]->x_bincount;
 	load_bins = firmware->table_params[table_num]->y_bincount;
 	is_spark = firmware->table_params[table_num]->is_spark;
-	tbl_page = firmware->table_params[table_num]->tbl_page;
+	z_page = firmware->table_params[table_num]->z_page;
 
 	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(scaler));
-	for (i=tbl_base;i<(rpm_bins*load_bins);i++)
+	for (i=z_base;i<(rpm_bins*load_bins);i++)
 	{
-		if (NULL != (list = ve_widgets[tbl_page][i]))
+		if (NULL != (list = ve_widgets[z_page][i]))
 		{
 			list = g_list_first(list);
 			for (j=0;j<g_list_length(list);j++)

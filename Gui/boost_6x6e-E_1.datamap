@@ -9,12 +9,14 @@ groups=load,rpm,table
 #----- Groups ----------------------------------------------------------------
 
 [load]
-keys=page,base,raw_lower,raw_upper,is_float,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_
+keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_
 page=7
 base=10
 raw_lower=0
 raw_upper=255
+dl_conv_expr=(x/100)*255
+ul_conv_expr=(x/255)*100
 is_float=FALSE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

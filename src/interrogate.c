@@ -742,24 +742,51 @@ void load_profile_details(struct Canidate *canidate)
 		{
 			canidate->table_params[i] = g_new0(struct Table_Params,1);
 			section = g_strdup_printf("table_%i",i);
-			if(!cfg_read_int(cfgfile,section,"tbl_page",&canidate->table_params[i]->tbl_page))
-				dbg_func(__FILE__": load_profile_details()\n\t\"tbl_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->table_params[i]->is_spark))
+				dbg_func(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))
 				dbg_func(__FILE__": load_profile_details()\n\t\"x_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"y_page",&canidate->table_params[i]->y_page))
 				dbg_func(__FILE__": load_profile_details()\n\t\"y_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_boolean(cfgfile,section,"is_spark",&canidate->table_params[i]->is_spark))
-				dbg_func(__FILE__": load_profile_details()\n\t\"is_spark\" flag not found in interrogation profile, ERROR\n",CRITICAL);
-			if(!cfg_read_int(cfgfile,section,"tbl_base_offset",&canidate->table_params[i]->tbl_base))
-				dbg_func(__FILE__": load_profile_details()\n\t\"tbl_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"z_page",&canidate->table_params[i]->z_page))
+				dbg_func(__FILE__": load_profile_details()\n\t\"z_page\" flag not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"x_base_offset",&canidate->table_params[i]->x_base))
 				dbg_func(__FILE__": load_profile_details()\n\t\"x_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"y_base_offset",&canidate->table_params[i]->y_base))
 				dbg_func(__FILE__": load_profile_details()\n\t\"y_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_int(cfgfile,section,"z_base_offset",&canidate->table_params[i]->z_base))
+				dbg_func(__FILE__": load_profile_details()\n\t\"z_base_offset\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"x_bincount",&canidate->table_params[i]->x_bincount))
 				dbg_func(__FILE__": load_profile_details()\n\t\"x_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"y_bincount",&canidate->table_params[i]->y_bincount))
 				dbg_func(__FILE__": load_profile_details()\n\t\"y_bincount\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_string(cfgfile,section,"x_suffix",&canidate->table_params[i]->x_suffix))
+				dbg_func(__FILE__": load_profile_details()\n\t\"x_suffix\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_string(cfgfile,section,"y_suffix",&canidate->table_params[i]->y_suffix))
+				dbg_func(__FILE__": load_profile_details()\n\t\"y_suffix\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_string(cfgfile,section,"z_suffix",&canidate->table_params[i]->z_suffix))
+				dbg_func(__FILE__": load_profile_details()\n\t\"z_suffix\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_string(cfgfile,section,"x_conv_expr",&canidate->table_params[i]->x_conv_expr))
+				dbg_func(__FILE__": load_profile_details()\n\t\"x_conv_expr\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_string(cfgfile,section,"y_conv_expr",&canidate->table_params[i]->y_conv_expr))
+				dbg_func(__FILE__": load_profile_details()\n\t\"y_conv_expr\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(!cfg_read_string(cfgfile,section,"z_conv_expr",&canidate->table_params[i]->z_conv_expr))
+				dbg_func(__FILE__": load_profile_details()\n\t\"z_conv_expr\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			if(cfg_read_boolean(cfgfile,section,"x_disp_float",&canidate->table_params[i]->x_disp_float))
+			{
+				if(!cfg_read_int(cfgfile,section,"x_disp_precision",&canidate->table_params[i]->x_disp_precision))
+					dbg_func(__FILE__": load_profile_details()\n\t\"x_disp_precision\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			}
+			if(cfg_read_boolean(cfgfile,section,"y_disp_float",&canidate->table_params[i]->y_disp_float))
+			{
+				if(!cfg_read_int(cfgfile,section,"y_disp_precision",&canidate->table_params[i]->y_disp_precision))
+					dbg_func(__FILE__": load_profile_details()\n\t\"y_disp_precision\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			}
+			if(cfg_read_boolean(cfgfile,section,"z_disp_float",&canidate->table_params[i]->z_disp_float))
+			{
+				if(!cfg_read_int(cfgfile,section,"z_disp_precision",&canidate->table_params[i]->z_disp_precision))
+					dbg_func(__FILE__": load_profile_details()\n\t\"z_disp_precision\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+			}
 			if(!cfg_read_string(cfgfile,section,"table_name",&canidate->table_params[i]->table_name))
 				dbg_func(__FILE__": load_profile_details()\n\t\"table_name\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 			g_free(section);
