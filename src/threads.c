@@ -435,16 +435,16 @@ void writeto_ecu(void *ptr)
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */
 	}
-	dbg_func(g_strdup_printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": writeto_ecu() MS Serial Write, Value %i, Mem Offset %i\n",value,offset),SERIAL_WR);
 
 	if (value > 255)
 	{
-		dbg_func(g_strdup_printf(__FILE__": Large value being sent: %i, to offset %i\n",value,offset),SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Large value being sent: %i, to offset %i\n",value,offset),SERIAL_WR);
 
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
 		twopart = TRUE;
-		dbg_func(g_strdup_printf(__FILE__": Highbyte: %i, Lowbyte %i\n",highbyte,lowbyte),SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Highbyte: %i, Lowbyte %i\n",highbyte,lowbyte),SERIAL_WR);
 	}
 	if (value < 0)
 	{
@@ -458,6 +458,8 @@ void writeto_ecu(void *ptr)
 		if (ign_parm == FALSE)
 			set_ms_page(page);
 
+	dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Ignition param %i\n",ign_parm),SERIAL_WR);
+
 	if (ign_parm)
 		write_cmd = g_strdup("J");
 	else
@@ -469,22 +471,23 @@ void writeto_ecu(void *ptr)
 		lbuff[1]=highbyte;
 		lbuff[2]=lowbyte;
 		count = 3;
-		dbg_func(__FILE__": Sending 16 bit value to ECU\n",SERIAL_WR);
+		dbg_func(__FILE__": writeto_ecu() Sending 16 bit value to ECU\n",SERIAL_WR);
 	}
 	else
 	{
 		lbuff[1]=value;
 		count = 2;
-		dbg_func(__FILE__": Sending 8 bit value to ECU\n",SERIAL_WR);
+		dbg_func(__FILE__": writeto_ecu() Sending 8 bit value to ECU\n",SERIAL_WR);
 	}
 
 
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	if (res != 1 )
-		dbg_func("Sending write command FAILED!!!\n",CRITICAL);
+		dbg_func(__FILE__": writeto_ecu() Sending write command FAILED!!!\n",CRITICAL);
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 	if (res != count )
-		dbg_func("Sending offset+data FAILED!!!\n",CRITICAL);
+		dbg_func(__FILE__": writeto_ecu() Sending offset+data FAILED!!!\n",CRITICAL);
+	usleep(5000);
 	if (page > 0)
 		set_ms_page(0);
 	g_free(write_cmd);
@@ -521,13 +524,17 @@ void burn_ms_flash()
 
         /* doing this may NOT be necessary,  but who knows... */
         if (ecu_caps & DUALTABLE)
+	{
                 set_ms_page(0);
+		usleep(5000);
+	}
 
         res = write (serial_params->fd,"B",1);  /* Send Burn command */
         if (res != 1)
         {
                 dbg_func(g_strdup_printf(__FILE__": Burn Failure, write command failed %i\n",res),CRITICAL);
         }
+	usleep(5000);
 
         dbg_func(__FILE__": Burn to Flash\n",SERIAL_WR);
 

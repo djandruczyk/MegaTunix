@@ -629,7 +629,7 @@ void load_profile_details(void *ptr)
 			dbg_func(__FILE__": load_profile_details(), \"LoadTabs\" list not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
 				&canidate->rtv_map_file))
-			dbg_func(__FILE__": load_profile_details(), \"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
+//			dbg_func(__FILE__": load_profile_details(), \"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);
 		if (!cfg_read_string(cfgfile,"lookuptables","mat",
 				&canidate->mat_tbl_name))
 			dbg_func(__FILE__": load_profile_details(), \"MAT\" lookuptable name not found in interrogation profile, ERROR\n",CRITICAL);

@@ -294,8 +294,6 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	if (swap_label)
 		switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 		
-
-//	printf("bit_val \"%i\", bit_pos \"%i\", bitmask \"%i\"\n",bit_val,bit_pos,bitmask);
 	switch ((SpinButton)handler)
 	{
 		case GENERIC:
@@ -755,6 +753,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			dl_type = 0;  
 			break;
 	}
+	printf("spin_handler, ign_parm == %i\n",ign_parm);
 	if (dl_type == IMMEDIATE) 
 		write_ve_const(page, offset, dload_val, ign_parm);
 	return TRUE;

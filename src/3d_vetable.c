@@ -817,7 +817,6 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 {
 	gint value = 0;
 	gint offset = 0;
-	gint dload_val = 0;
 	gint page = 0;
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
@@ -835,6 +834,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 	dbg_func(__FILE__": Key Press Event: ",OPENGL);
 
+	printf("page is %i\n",ve_view->page);
 	ve_ptr = (unsigned char *) ms_data[ve_view->page];
 	load_bincount = ve_view->load_bincount;
 	rpm_bincount = ve_view->rpm_bincount;
@@ -886,8 +886,6 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 10;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
-				dload_val = convert_before_download(spinner,value);
-				write_ve_const(page, offset,dload_val,ve_view->is_spark);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;				
@@ -900,8 +898,6 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] + 1;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
-				dload_val = convert_before_download(spinner,value);
-				write_ve_const(page, offset, dload_val,ve_view->is_spark);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 
 			}
@@ -914,8 +910,6 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 10;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
-				dload_val = convert_before_download(spinner,value);
-				write_ve_const(page, offset, dload_val,ve_view->is_spark);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;							
@@ -930,8 +924,6 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 				offset = ve_base+(ve_view->active_load*load_bincount)+ve_view->active_rpm;
 				value = ve_ptr[offset] - 1;
 				spinner = g_list_nth_data(ve_widgets[ve_view->page][offset],0);
-				dload_val = convert_before_download(spinner,value);
-				write_ve_const(page, offset, dload_val,ve_view->is_spark);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner),value/divider);
 			}
 			break;							

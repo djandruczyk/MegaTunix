@@ -28,7 +28,7 @@ page=1
 
 #----- Temp Timing Controls --------------------------------------------------
 [SP1_trimangle_spin]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=82
@@ -36,10 +36,10 @@ conv_factor_x100=284
 conv_type=_MULTIPLY_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_fixedangle_spin]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=81
@@ -47,94 +47,94 @@ conv_factor_x100=284
 conv_type=_MULTIPLY_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 #----- Load Spinners (MAP/TPS) -----------------------------------------------
 
 [SP1_load_spin_1]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=72
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_load_spin_2]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=73
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_load_spin_3]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=74
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_load_spin_4]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=75
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_load_spin_5]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=76
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_load_spin_6]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=77
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_load_spin_7]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=78
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_load_spin_8]
-keys=page,offset,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=79
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 #----- RPM Spinners ---------------------------------------------------------
 
 [SP1_rpm_spin_1]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=64
@@ -142,10 +142,10 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_rpm_spin_2]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=65
@@ -153,10 +153,10 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_rpm_spin_3]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=66
@@ -164,10 +164,10 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_rpm_spin_4]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=67
@@ -175,10 +175,10 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_rpm_spin_5]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=68
@@ -186,10 +186,10 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_rpm_spin_6]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=69
@@ -197,10 +197,10 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_rpm_spin_7]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=70
@@ -208,10 +208,10 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_rpm_spin_8]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_param
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=71
@@ -219,12 +219,12 @@ conv_factor_x100=10000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 #----- VE-Table Spinners -----------------------------------------------------
 
 [SP1_sparkspin_(1,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=0
@@ -232,10 +232,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=1
@@ -243,10 +243,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=2
@@ -254,10 +254,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=3
@@ -265,10 +265,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=4
@@ -276,10 +276,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=5
@@ -287,10 +287,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=6
@@ -298,10 +298,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,1)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=7
@@ -309,10 +309,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(1,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=8
@@ -320,10 +320,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=9
@@ -331,10 +331,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=10
@@ -342,10 +342,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=11
@@ -353,10 +353,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=12
@@ -364,10 +364,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=13
@@ -375,10 +375,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=14
@@ -386,10 +386,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,2)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=15
@@ -397,10 +397,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(1,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=16
@@ -408,10 +408,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=17
@@ -419,10 +419,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=18
@@ -430,10 +430,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=19
@@ -441,10 +441,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=20
@@ -452,10 +452,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=21
@@ -463,10 +463,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=22
@@ -474,10 +474,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,3)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=23
@@ -485,10 +485,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(1,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=24
@@ -496,10 +496,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=25
@@ -507,10 +507,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=26
@@ -518,10 +518,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=27
@@ -529,10 +529,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=28
@@ -540,10 +540,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=29
@@ -551,10 +551,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=30
@@ -562,10 +562,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,4)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=31
@@ -573,10 +573,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(1,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=32
@@ -584,10 +584,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=33
@@ -595,10 +595,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=34
@@ -606,10 +606,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=35
@@ -617,10 +617,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=36
@@ -628,10 +628,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=37
@@ -639,10 +639,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=38
@@ -650,10 +650,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,5)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=39
@@ -661,10 +661,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(1,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=40
@@ -672,10 +672,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=41
@@ -683,10 +683,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=42
@@ -694,10 +694,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=43
@@ -705,10 +705,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=44
@@ -716,10 +716,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=45
@@ -727,10 +727,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=46
@@ -738,10 +738,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,6)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=47
@@ -749,10 +749,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(1,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=48
@@ -760,10 +760,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=49
@@ -771,10 +771,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=50
@@ -782,10 +782,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=51
@@ -793,10 +793,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=52
@@ -804,10 +804,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=53
@@ -815,10 +815,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=54
@@ -826,10 +826,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,7)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=55
@@ -837,10 +837,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(1,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=56
@@ -848,10 +848,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(2,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=57
@@ -859,10 +859,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(3,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=58
@@ -870,10 +870,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(4,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=59
@@ -881,10 +881,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(5,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=60
@@ -892,10 +892,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(6,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=61
@@ -903,10 +903,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(7,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=62
@@ -914,10 +914,10 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
 [SP1_sparkspin_(8,8)]
-keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_param
+keys=page,offset,conv_type,conv_factor_x100,dl_type,handler,ign_parm
 key_types=_INT_,_INT_,_ENUM_,_INT_,_ENUM_,_ENUM_,_BOOL_
 page=1
 offset=63
@@ -925,5 +925,5 @@ conv_type=_MULTIPLY_
 conv_factor_x100=284
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-ign_param=TRUE
+ign_parm=TRUE
 
