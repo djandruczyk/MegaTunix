@@ -53,7 +53,29 @@
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">10</property>
-			  <property name="column_spacing">30</property>
+			  <property name="column_spacing">0</property>
+
+			  <child>
+			    <widget class="GtkButton" id="calc_req_fuel_button">
+			      <property name="border_width">5</property>
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Calculate
+Required Fuel</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 20 Sep 2004 00:26:04 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">0</property>
+			      <property name="bottom_attach">2</property>
+			      <property name="x_padding">15</property>
+			      <property name="x_options">expand|shrink|fill</property>
+			      <property name="y_options">shrink|fill</property>
+			    </packing>
+			  </child>
 
 			  <child>
 			    <widget class="GtkSpinButton" id="req_fuel_per_cycle_1_spin">
@@ -74,8 +96,8 @@
 			      <property name="top_attach">0</property>
 			      <property name="bottom_attach">1</property>
 			      <property name="x_padding">7</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options"></property>
+			      <property name="x_options">shrink|fill</property>
+			      <property name="y_options">shrink|fill</property>
 			    </packing>
 			  </child>
 
@@ -97,29 +119,8 @@
 			      <property name="top_attach">1</property>
 			      <property name="bottom_attach">2</property>
 			      <property name="x_padding">7</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkButton" id="calc_req_fuel_button">
-			      <property name="border_width">5</property>
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Calculate
-Required Fuel</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 20 Sep 2004 00:26:04 GMT"/>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">1</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_padding">30</property>
-			      <property name="y_options">fill</property>
+			      <property name="x_options">shrink|fill</property>
+			      <property name="y_options">shrink|fill</property>
 			    </packing>
 			  </child>
 			</widget>
@@ -220,7 +221,7 @@ Required Fuel</property>
 			    <widget class="GtkLabel" id="batt_corr_label">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Battery Voltage
-Correction (ms/Volt)</property>
+Correction (ms/V)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_CENTER</property>
