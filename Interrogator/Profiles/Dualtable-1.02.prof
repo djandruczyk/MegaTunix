@@ -5,11 +5,10 @@ name=Dualtable v1.02
 SignatureQueryString=v.1.02
 ExtVerQueryString=
 VerNumber=1
-Capabilities=_DUALTABLE_,_IAC_PWM_
-Rt_Cmd_Key=CMD_A_0
-VE_Cmd_Key=CMD_V_0
-Ign_Cmd_Key=CMD_I_0
-Raw_Mem_Cmd_Key=CMD_F_0
+Capabilities=_DUALTABLE_
+Rt_Cmd_Key=CMD_UPPER_A
+VE_Cmd_Key=CMD_UPPER_V
+Raw_Mem_Cmd_Key=CMD_UPPER_F
 MultiPage=TRUE
 TotalPages=2
 
@@ -42,15 +41,12 @@ cfg12_offset=117
 cfg13_offset=118
 
 [bytecounts]
-CMD_A_0=22
-CMD_C_0=1
-CMD_Q_0=1
-CMD_V_0=128
-CMD_V_1=128
-CMD_S_0=19
-CMD_?_0=0
-CMD_I_0=0
-CMD_F_0=255
+CMD_UPPER_A=22
+CMD_UPPER_C=1
+CMD_UPPER_Q=1
+CMD_UPPER_V=128
+CMD_UPPER_S=19
+CMD_UPPER_F=255
 
 [gui]
 RealtimeMapFile=Dualtable-1.02

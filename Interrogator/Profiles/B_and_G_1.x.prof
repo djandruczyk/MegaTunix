@@ -6,10 +6,8 @@ SignatureQueryString=
 ExtVerQueryString=
 VerNumber=0
 Capabilities=_STANDARD_
-Rt_Cmd_Key=CMD_A_0
-VE_Cmd_Key=CMD_V_0
-Ign_Cmd_Key=CMD_I_0
-Raw_Mem_Cmd_Key=CMD_F_0
+Rt_Cmd_Key=CMD_UPPER_A
+VE_Cmd_Key=CMD_UPPER_V
 MultiPage=FALSE
 TotalPages=1
 
@@ -29,15 +27,9 @@ cfg12_offset=117
 cfg13_offset=118
 
 [bytecounts]
-CMD_A_0=22
-CMD_C_0=0
-CMD_Q_0=1
-CMD_V_0=125
-CMD_V_1=125
-CMD_S_0=0
-CMD_?_0=0
-CMD_I_0=0
-CMD_F_0=0
+CMD_UPPER_A=22
+CMD_UPPER_Q=1
+CMD_UPPER_V=125
 
 [gui]
 RealtimeMapFile=B_and_G_1.x.rtv_map

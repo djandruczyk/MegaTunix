@@ -26,26 +26,8 @@ void build_string_2_enum_table()
 	str_2_enum = g_hash_table_new(g_str_hash,g_str_equal);
 
 	/* Firmware capabilities */
-	g_hash_table_insert(str_2_enum,"_STANDARD_",
-			GINT_TO_POINTER(STANDARD));
 	g_hash_table_insert(str_2_enum,"_DUALTABLE_",
 			GINT_TO_POINTER(DUALTABLE));
-	g_hash_table_insert(str_2_enum,"_S_N_SPARK_",
-			GINT_TO_POINTER(S_N_SPARK));
-	g_hash_table_insert(str_2_enum,"_S_N_EDIS_",
-			GINT_TO_POINTER(S_N_EDIS));
-	g_hash_table_insert(str_2_enum,"_ENHANCED_",
-			GINT_TO_POINTER(ENHANCED));
-	g_hash_table_insert(str_2_enum,"_IAC_PWM_",
-			GINT_TO_POINTER(IAC_PWM));
-	g_hash_table_insert(str_2_enum,"_IAC_STEPPER_",
-			GINT_TO_POINTER(IAC_STEPPER));
-	g_hash_table_insert(str_2_enum,"_BOOST_CTRL_",
-			GINT_TO_POINTER(BOOST_CTRL));
-	g_hash_table_insert(str_2_enum,"_OVERBOOST_SFTY_",
-			GINT_TO_POINTER(OVERBOOST_SFTY));
-	g_hash_table_insert(str_2_enum,"_LAUNCH_CTRL_",
-			GINT_TO_POINTER(LAUNCH_CTRL));
 
 	/* Storage Types for reading interrogation tests */
 	g_hash_table_insert(str_2_enum,"_SIG_",

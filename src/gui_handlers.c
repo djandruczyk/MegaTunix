@@ -72,6 +72,7 @@ extern gint num_inj_1;
 extern gint num_inj_2;
 extern gint divider_1;
 extern gint divider_2;
+extern gint alternate_1;
 extern gint last_num_squirts_1;
 extern gint last_num_squirts_2;
 extern gint last_num_cyls_1;
@@ -80,6 +81,7 @@ extern gint last_num_inj_1;
 extern gint last_num_inj_2;
 extern gint last_divider_1;
 extern gint last_divider_2;
+extern gint last_alternate_1;
 extern gfloat req_fuel_total_1;
 extern gfloat req_fuel_total_2;
 extern gfloat last_req_fuel_total_1;
@@ -329,6 +331,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
+				last_alternate_1 = alternate_1;
+				alternate_1 = bitval;
 				ms_data[page][offset] = bitval;
 				dload_val = bitval;
 				g_hash_table_insert(interdep_vars_1,
@@ -786,7 +790,6 @@ void update_ve_const()
 	gint page = 0;
 	gint offset = 0;
 	gfloat tmp = 0.0;
-	gint divider = 0;
 	gint reqfuel = 0;
 	union config11 cfg11;
 	union config12 cfg12;
@@ -824,18 +827,19 @@ void update_ve_const()
                 num_inj_1 = cfg12.bit.injectors+1;
                 last_num_inj_1 = cfg12.bit.injectors+1;
 
-		divider = ms_data[page][firmware->page_params[page]->divider_offset];
+		divider_1 = ms_data[page][firmware->page_params[page]->divider_offset];
+		last_divider_1 = divider_1;
 		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
 
 		/* ReqFuel Total */
-                tmp = (float)(num_inj_1)/(float)(divider);
+                tmp = (float)(num_inj_1)/(float)(divider_1);
                 tmp *= (float)reqfuel;
                 tmp /= 10.0;
                 req_fuel_total_1 = tmp;
                 last_req_fuel_total_1 = tmp;
 
 		/* Injections per cycle */
-		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider);
+		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider_1);
 		if (num_squirts_1 < 1 )
 			num_squirts_1 = 1;
 		last_num_squirts_1 = num_squirts_1;
@@ -849,18 +853,20 @@ void update_ve_const()
 		last_num_cyls_2 = cfg11.bit.cylinders+1;
                 num_inj_2 = cfg12.bit.injectors+1;
                 last_num_inj_2 = cfg12.bit.injectors+1;
-		divider = ms_data[page][firmware->page_params[page]->divider_offset];
+
+		divider_2 = ms_data[page][firmware->page_params[page]->divider_offset];
+		last_divider_2 = divider_2;
 		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
 
 		/* ReqFuel Total */
-                tmp = (float)(num_inj_2)/(float)(divider);
+                tmp = (float)(num_inj_2)/(float)(divider_2);
                 tmp *= (float)reqfuel;
                 tmp /= 10.0;
                 req_fuel_total_2 = tmp;
                 last_req_fuel_total_2 = tmp;
 
 		/* Injections per cycle */
-		num_squirts_2 =	(float)(num_cyls_2)/(float)(divider);
+		num_squirts_2 =	(float)(num_cyls_2)/(float)(divider_2);
 		if (num_squirts_2 < 1 )
 			num_squirts_2 = 1;
 		last_num_squirts_2 = num_squirts_2;
@@ -893,17 +899,22 @@ void update_ve_const()
 		last_num_cyls_1 = cfg11.bit.cylinders+1;
                 num_inj_1 = cfg12.bit.injectors+1;
                 last_num_inj_1 = cfg12.bit.injectors+1;
-		divider = ms_data[page][firmware->page_params[page]->divider_offset];
+		divider_1 = ms_data[page][firmware->page_params[page]->divider_offset];
+		last_divider_1 = divider_1;
 		reqfuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
+		alternate_1 = ms_data[page][firmware->page_params[page]->alternate_offset];
+		last_alternate_1 = alternate_1;
+
 		/* ReqFuel Total */
-                tmp = (float)(num_inj_1)/(float)(divider);
+                tmp = (float)(num_inj_1)/
+			((float)(divider_1)*((float)(alternate_1)+1.0));
                 tmp *= (float)reqfuel;
                 tmp /= 10.0;
                 req_fuel_total_1 = tmp;
                 last_req_fuel_total_1 = tmp;
 
 		/* Injections per cycle */
-		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider);
+		num_squirts_1 =	(float)(num_cyls_1)/(float)(divider_1);
 		if (num_squirts_1 < 1 )
 			num_squirts_1 = 1;
 		last_num_squirts_1 = num_squirts_1;

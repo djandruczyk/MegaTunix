@@ -60,14 +60,12 @@ void interrogate_ecu()
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
-	gint last_page = 0;
 	gint tests_to_run = 0;
 	gint total_read = 0;
 	gint total_wanted = 0;
 //	gint read_amount = 0;
 	gint zerocount = 0;
 	gchar *string = NULL;
-	gchar * tmpbuf = NULL;
 	GArray *cmd_array = NULL;
 	guchar buf[size];
 	guchar *ptr = buf;
@@ -108,10 +106,6 @@ void interrogate_ecu()
 		memset (buf,0,size);
 
 		ptr = buf;
-		/* set page */
-		if (last_page != cmd->page)
-			set_ms_page(cmd->page);
-		last_page = cmd->page;
 
 		string = g_strdup(cmd->string);
 		res = write(serial_params->fd,string,cmd->len);
@@ -170,13 +164,9 @@ void interrogate_ecu()
 		}
 
 		/* store number of bytes received in counter variable */
-		tmpbuf = g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page);
-		g_hash_table_insert(canidate->bytecounts,g_strdup(tmpbuf),
+		g_hash_table_insert(canidate->bytecounts,g_strdup(cmd->key),
 				GINT_TO_POINTER(total_read));
-		g_free(tmpbuf);
 	}
-	/* Reset page to 0 just to be 100% sure... */
-	set_ms_page(0);
 
 	interrogated = determine_ecu(canidate,cmd_array,cmd_details);	
 
@@ -227,20 +217,23 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	for (i=0;i<num_tests;i++)
 	{
 		cmd = g_array_index(cmd_array,struct Command *,i);
-		tmpbuf = g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",
-				cmd->string, 
-				cmd->desc, 
-				(gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
-
-		// Store counts for VE/realtime readback... 
 		dbg_func(g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
 					cmd->string,
 					cmd->desc,
-					(gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page))),INTERROGATOR);
-		gdk_threads_enter();
-		update_logbar("interr_view",NULL,tmpbuf,FALSE,FALSE);
-		gdk_threads_leave();
-		g_free(tmpbuf);
+					(gint) g_hash_table_lookup(canidate->bytecounts, cmd->key)),INTERROGATOR);
+		if ((gint) g_hash_table_lookup(canidate->bytecounts,g_strdup(cmd->key)) > 0)
+		{
+			tmpbuf = g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",
+					cmd->string, 
+					cmd->desc, 
+					(gint) g_hash_table_lookup(canidate->bytecounts, cmd->key));
+
+			// Store counts for VE/realtime readback... 
+			gdk_threads_enter();
+			update_logbar("interr_view",NULL,tmpbuf,FALSE,FALSE);
+			gdk_threads_leave();
+			g_free(tmpbuf);
+		}
 		if (cmd->store_type == VNUM)
 		{
 			if (canidate->ver_num == 0)
@@ -248,11 +241,12 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 			else
 				tmpbuf = g_strdup_printf("%.1f",
 						((float)canidate->ver_num/10.0));
-			gdk_threads_enter();
 			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_revision_entry")))
+			{
+				gdk_threads_enter();
 				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-
-			gdk_threads_leave();
+				gdk_threads_leave();
+			}
 			g_free(tmpbuf);
 		}
 		if (cmd->store_type == SIG)
@@ -262,11 +256,13 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 			else
 				tmpbuf = g_strndup(
 						canidate->sig_str,
-						(gint)g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
-			gdk_threads_enter();
+						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key));
 			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_signature_entry")))
+			{
+				gdk_threads_enter();
 				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-			gdk_threads_leave();
+				gdk_threads_leave();
+			}
 			g_free(tmpbuf);
 		}
 		if (cmd->store_type == EXTVER)
@@ -276,11 +272,13 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 			else
 				tmpbuf = g_strndup(
 						canidate->quest_str,
-						(gint)g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
-			gdk_threads_enter();
+						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key));
 			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ext_revision_entry")))
+			{
+				gdk_threads_enter();
 				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-			gdk_threads_leave();
+				gdk_threads_leave();
+			}
 			g_free(tmpbuf);
 		}
 
@@ -297,7 +295,6 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	}
 
 	load_profile_details(potential);
-
 	load_lookuptables(potential);
 	/* Set flags */
 	ecu_caps = potential->capabilities;
@@ -322,15 +319,13 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		memcpy(firmware->page_params[i],potential->page_params[i],sizeof(struct Page_Params));
 		if (potential->page_params[i]->is_spark)
 		{
-			firmware->page_params[i]->size = (gint)g_hash_table_lookup(
-					potential->bytecounts,
-					g_strdup("CMD_I_0"));
+			cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
+			firmware->page_params[i]->size = (gint)g_hash_table_lookup(potential->bytecounts,cmd->key);
 		}
 		else
 		{
-			firmware->page_params[i]->size = (gint)g_hash_table_lookup(
-					potential->bytecounts,
-					g_strdup_printf("CMD_V_%i",i));
+			cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
+			firmware->page_params[i]->size = (gint)g_hash_table_lookup(potential->bytecounts,cmd->key);
 		}
 	}
 
@@ -345,15 +340,10 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		cmds->realtime_cmd = g_strdup(cmd->string);
 		cmds->rt_cmd_len = cmd->len;
 		firmware->rtvars_size = (gint)g_hash_table_lookup(
-				potential->bytecounts,g_strdup_printf("CMD_%s_0",cmds->realtime_cmd));
+				potential->bytecounts,cmd->key);
 	}
 	else
-	{
-		dbg_func(__FILE__": determine_ecu()\n\tRead cmd is NOT defined in interrogation profile,\n\tusing hardcoded default\n",CRITICAL);
-		cmds->realtime_cmd = g_strdup("A");
-		cmds->rt_cmd_len = 1;
-		firmware->rtvars_size = 22;
-	}
+		dbg_func(__FILE__": determine_ecu()\n\tRead cmd is NOT defined in interrogation profile,\n\tCRITICAL ERROR, expect imminent crash\n\n",CRITICAL);
 	/* VE/Constants */
 	if (potential->ve_cmd_key != NULL)
 	{
@@ -362,23 +352,13 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		cmds->ve_cmd_len = cmd->len;
 	}
 	else
-	{
-		dbg_func(__FILE__": determine_ecu()\n\tVE/Constants Read cmd is NOT defined in interrogation profile,\n\tusing hardcoded default\n",CRITICAL);
-		cmds->veconst_cmd = g_strdup("V");
-		cmds->ve_cmd_len = 1;
-	}
+		dbg_func(__FILE__": determine_ecu()\n\tVE/Constants cmd is NOT defined in interrogation profile,\n\tCRITICAL ERROR, expect imminent crash\n\n",CRITICAL);
 	/* Ignition vars */
 	if (potential->ign_cmd_key != NULL)
 	{
 		cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
 		cmds->ignition_cmd = g_strdup(cmd->string);
 		cmds->ign_cmd_len = cmd->len;
-	}
-	else
-	{
-		dbg_func(__FILE__": determine_ecu()\n\tIgnition Read cmd is NOT defined in interrogation profile,\n\tusing hardcoded default\n",CRITICAL);
-		cmds->ignition_cmd = g_strdup("I");
-		cmds->ign_cmd_len = 1;
 	}
 
 	/* Raw memory */
@@ -388,14 +368,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 		cmds->raw_mem_cmd = g_strdup(cmd->string);
 		cmds->raw_mem_cmd_len = cmd->len;
 		firmware->memblock_size = (gint)g_hash_table_lookup(
-				potential->bytecounts,g_strdup_printf("CMD_%s_0",cmds->raw_mem_cmd));
-	}
-	else
-	{
-		dbg_func(__FILE__": determine_ecu()\n\tRaw Memory Read cmd is NOT defined in interrogation profile,\n\tusing hardcoded default\n",CRITICAL);
-		cmds->raw_mem_cmd = g_strdup("F");
-		cmds->raw_mem_cmd_len = 1;
-		firmware->memblock_size = 256;
+				potential->bytecounts,cmd->key);
 	}
 
 
@@ -457,8 +430,6 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 				cfg_read_int(cfgfile,section,"cmd_int_arg",
 						&cmd->cmd_int_arg);
 
-			cfg_read_int(cfgfile,section,"page",
-					&cmd->page);
 			cfg_read_boolean(cfgfile,section,"store_data",
 					&tmpi);
 			if (tmpi)
@@ -470,8 +441,17 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			}
 
 			g_free(section);
+			if (g_ascii_islower(*(cmd->string)))
+			{
+				cmd->key = g_strdup_printf("CMD_LOWER_%s",cmd->string);
+				g_hash_table_insert(cmd_details,g_strdup(cmd->key),cmd);
+			}
+			else
+			{
+				cmd->key = g_strdup_printf("CMD_UPPER_%s",cmd->string);
+				g_hash_table_insert(cmd_details,g_strdup(cmd->key),cmd);
+			}
 			g_array_insert_val(cmd_array,i,cmd);
-			g_hash_table_insert(cmd_details,g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page),cmd);
 		}
 		cfg_free(cfgfile);
 	}
@@ -496,6 +476,8 @@ void free_test_commands(GArray * cmd_array)
 			g_free(cmd->string);
 		if (cmd->desc)
 			g_free(cmd->desc);
+		if (cmd->key)
+			g_free(cmd->key);
 		g_free(cmd);
 	}
 	g_array_free(cmd_array,TRUE);
@@ -601,13 +583,10 @@ void load_profile_details(void *ptr)
 		if(!cfg_read_string(cfgfile,"parameters","VE_Cmd_Key",
 					&canidate->ve_cmd_key))
 			dbg_func(__FILE__": load_profile_details()\n\t\"VE_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-		if(!cfg_read_string(cfgfile,"parameters","Ign_Cmd_Key",
-					&canidate->ign_cmd_key))
-			dbg_func(__FILE__": load_profile_details()\n\t\"Ign_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-		if(!cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
-					&canidate->raw_mem_cmd_key))
-			dbg_func(__FILE__": load_profile_details()\n\t\"Raw_Mem_Cmd_Key\" variable not found in interrogation profile, ERROR\n",CRITICAL);
-
+		cfg_read_string(cfgfile,"parameters","Ign_Cmd_Key",
+					&canidate->ign_cmd_key);
+		cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
+					&canidate->raw_mem_cmd_key);
 		if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
 					&canidate->multi_page))
 			dbg_func(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in interrogation profile, ERROR\n",CRITICAL);
@@ -712,23 +691,18 @@ void load_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 	struct Command *cmd = NULL;
 	gint i = 0;
 	gint bytecount = -2;
-	gchar * tmpbuf = NULL;
 	ConfigFile *cfgfile = (ConfigFile *) input;
 
 	for (i=0;i<cmd_array->len;i++)
 	{
 		bytecount = -1;
 		cmd = g_array_index(cmd_array,struct Command *, i);
-		tmpbuf = g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page);
-		if(!cfg_read_int(cfgfile,"bytecounts",tmpbuf,
-					&bytecount))
-			dbg_func(g_strdup_printf(__FILE__": load_bytecounts()\n\t\"%s\" key not found in interrogation profile, ERROR\n",tmpbuf),CRITICAL);
-		else
-		{
-			g_hash_table_insert(hash, g_strdup(tmpbuf),GINT_TO_POINTER(bytecount));
-			dbg_func(g_strdup_printf(__FILE__": load_bytecounts()\n\tInserting key %s, val %i\n",tmpbuf,bytecount),INTERROGATOR);
-			g_free(tmpbuf);
-		}
+
+		if(!cfg_read_int(cfgfile,"bytecounts",cmd->key,&bytecount))
+			bytecount = 0;
+		g_hash_table_insert(hash, g_strdup(cmd->key),GINT_TO_POINTER(bytecount));
+		dbg_func(g_strdup_printf(__FILE__": load_bytecounts()\n\tInserting key %s, val %i\n",cmd->key,bytecount),INTERROGATOR);
+
 	}	
 
 }
@@ -776,12 +750,10 @@ gboolean check_for_match(GArray *cmd_array, void *pot_ptr, void *can_ptr)
 		cmd = g_array_index(cmd_array,struct Command *, j);
 		cbytes = (gint)g_hash_table_lookup(
 				canidate->bytecounts,
-				g_strdup_printf("CMD_%s_%i",
-					cmd->string,cmd->page));
+				cmd->key);
 		pbytes = (gint)g_hash_table_lookup(
 				potential->bytecounts,
-				g_strdup_printf("CMD_%s_%i",
-					cmd->string,cmd->page));
+				cmd->key);
 		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTest %s, canidate bytes %i, potential %i\n",cmd->string,cbytes,pbytes),INTERROGATOR);
 		if (cbytes != pbytes)
 		{

@@ -45,7 +45,6 @@ void start_realtime_tickler()
 void stop_realtime_tickler()
 {
 	extern GAsyncQueue *io_queue;
-	extern GAsyncQueue *dispatch_queue;
 	extern gint dispatcher_id;
 	extern gboolean leaving;
 

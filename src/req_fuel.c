@@ -38,14 +38,16 @@ gint num_inj_1 = 1;
 gint num_inj_2 = 1;
 gint divider_1 = 0;
 gint divider_2 = 0;
-gint last_num_squirts_1 = 1;
-gint last_num_squirts_2 = 1;
-gint last_num_cyls_1 = 1;
-gint last_num_cyls_2 = 1;
-gint last_num_inj_1 = 1;
-gint last_num_inj_2 = 1;
-gint last_divider_1= 1;
-gint last_divider_2 = 1;
+gint alternate_1 = 0;
+gint last_num_squirts_1 = -1;
+gint last_num_squirts_2 = -1;
+gint last_num_cyls_1 = -1;
+gint last_num_cyls_2 = -1;
+gint last_num_inj_1 = -1;
+gint last_num_inj_2 = -1;
+gint last_divider_1= -1;
+gint last_divider_2 = -1;
+gint last_alternate_1 = -1;
 gfloat req_fuel_total_1 = 0.0;
 gfloat req_fuel_total_2 = 0.0;
 gfloat last_req_fuel_total_1 = 0.0;
@@ -366,7 +368,6 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	/* Top is two stroke, botton is four stroke.. */
 	page = reqd_fuel->page;
-	printf("saving reqfuel for page %i\n",page);
 	cfg11.value = ms_data[page][firmware->page_params[page]->cfg11_offset];
 	rpmk_offset = firmware->page_params[page]->rpmk_offset;
 	if (cfg11.bit.eng_type)
@@ -427,7 +428,6 @@ void check_req_fuel_limits()
 	gint rpmk_offset = 0;
 	gint divider = 0;
 	gint alternate = 0;
-	gfloat req_fuel = 0;
 	union config11 cfg11;
 	extern gint ecu_caps;
 	extern gboolean paused_handlers;
@@ -461,17 +461,15 @@ void check_req_fuel_limits()
 		/* TABLE 1 */
 		page = 0;
 
-//		printf("Current cyls %i, inj %i, squirts %i req_fuel %f\n",num_cyls_1,num_inj_1,num_squirts_1,req_fuel_total_1);
-//		printf("Last    cyls %i, inj %i, squirts %i req_fuel %f\n",last_num_cyls_1,last_num_inj_1,last_num_squirts_1,last_req_fuel_total_1);
-		tmp = (float)(num_inj_1)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
-		req_fuel_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
-
-		/* If nothing changed , jsut break to next check */
 		if ((req_fuel_total_1 == last_req_fuel_total_1) &&
 			(num_cyls_1 == last_num_cyls_1) &&
 			(num_inj_1 == last_num_inj_1) &&
-			(num_squirts_1 == last_num_squirts_1))
+			(num_squirts_1 == last_num_squirts_1) &&
+			(divider_1 == last_divider_1))
 			goto table2;
+
+		tmp = (float)(num_inj_1)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
+		req_fuel_per_squirt = ((float)req_fuel_total_1 * 10.0)/tmp;
 
 		if (req_fuel_per_squirt > 255)
 			lim_flag = TRUE;
@@ -505,6 +503,7 @@ void check_req_fuel_limits()
 			write_ve_const(page, rpmk_offset, dload_val, FALSE);
 
 			offset = firmware->page_params[page]->reqfuel_offset;
+			ms_data[page][offset] = req_fuel_per_squirt;
 			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
@@ -516,17 +515,16 @@ void check_req_fuel_limits()
 		table2:
 		page = 1;
 
-//		printf("Current cyls %i, inj %i, squirts %i req_fuel %f\n",num_cyls_2,num_inj_2,num_squirts_2,req_fuel_total_2);
-//		printf("Last    cyls %i, inj %i, squirts %i req_fuel %f\n",last_num_cyls_2,last_num_inj_2,last_num_squirts_2,last_req_fuel_total_2);
-		tmp = (float)(num_inj_2)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
-		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
-
 		/* If nothing changed , jsut break to next check */
 		if ((req_fuel_total_2 == last_req_fuel_total_2) &&
 			(num_cyls_2 == last_num_cyls_2) &&
 			(num_inj_2 == last_num_inj_2) &&
-			(num_squirts_2 == last_num_squirts_2))
+			(num_squirts_2 == last_num_squirts_2) &&
+			(divider_2 == last_divider_2))
 			return;
+
+		tmp = (float)(num_inj_2)/(float)(ms_data[page][firmware->page_params[page]->divider_offset]);
+		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
 
 		if (req_fuel_per_squirt > 255)
 			lim_flag = TRUE;
@@ -560,6 +558,7 @@ void check_req_fuel_limits()
 			write_ve_const(page, rpmk_offset, dload_val, FALSE);
 
 			offset = firmware->page_params[page]->reqfuel_offset;
+			ms_data[page][offset] = req_fuel_per_squirt;
 			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,GINT_TO_POINTER(page));
@@ -572,10 +571,10 @@ void check_req_fuel_limits()
 	{
 		/* B&G, MSnS, MSnEDIS Required Fuel Calc
 		 *
-		 *                                        /     num_inj_1     \
-		 *         	   req_fuel_per_squirt * (-------------------------)
-		 *                                        \ divider*(alternate+1) /
-		 * req_fuel_total = --------------------------------------------------
+		 *                              /     num_inj_1     \
+		 *   req_fuel_per_squirt * (-------------------------)
+		 *                              \ divider*(alternate+1) /
+		 * req_fuel_total = ----------------------------------------
 		 *				10
 		 *
 		 * where divider = num_cyls_1/num_squirts_1;
@@ -596,11 +595,13 @@ void check_req_fuel_limits()
 		if ((req_fuel_total_1 == last_req_fuel_total_1) &&
 			(num_cyls_1 == last_num_cyls_1) &&
 			(num_inj_1 == last_num_inj_1) &&
-			(num_squirts_1 == last_num_squirts_1))
+			(num_squirts_1 == last_num_squirts_1) &&
+			(alternate_1 == last_alternate_1) &&
+			(divider_1 == last_divider_1))
 			return;
 
 		divider = ms_data[page][firmware->page_params[page]->divider_offset];
-		alternate = (float)ms_data[page][firmware->page_params[page]->alternate_offset];
+		alternate = ms_data[page][firmware->page_params[page]->alternate_offset];
 		tmp =	((float)(num_inj_1))/((float)divider*(float)(alternate+1));
 
 		/* This is 1/10 the value as the on screen stuff is 1/10th 
@@ -608,7 +609,6 @@ void check_req_fuel_limits()
 		 * before download to the MS
 		 */
 		req_fuel_per_squirt = ((float)req_fuel_total_1*10.0)/tmp;
-		req_fuel = ms_data[page][firmware->page_params[page]->reqfuel_offset];
 
 		if (req_fuel_per_squirt > 255)
 			lim_flag = TRUE;
@@ -650,6 +650,7 @@ void check_req_fuel_limits()
 
 			/* Send reqd_fuel_per_squirt */
 			offset = firmware->page_params[page]->reqfuel_offset;
+			ms_data[page][offset] = req_fuel_per_squirt;
 			write_ve_const(page, offset, req_fuel_per_squirt, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,GINT_TO_POINTER(page));
 		}

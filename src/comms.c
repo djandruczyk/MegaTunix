@@ -151,6 +151,10 @@ void writeto_ecu(void *ptr)
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */
 	}
+	if ((!firmware->multi_page) && (page > 0))
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO!!!\n"),CRITICAL);
+
+
 	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tMS Serial Write, Page, %i, Value %i, Mem Offset %i\n",page,value,offset),SERIAL_WR);
 
 	if (value > 255)
@@ -207,6 +211,7 @@ void writeto_ecu(void *ptr)
 	else
 		dbg_func(__FILE__": writeto_ecu()\n\tSending of value to ECU succeeded\n",SERIAL_WR);
 	g_usleep(5000);
+
 	if (page > 0)
 		set_ms_page(0);
 	g_free(write_cmd);
@@ -261,8 +266,8 @@ void readfrom_ecu(void *ptr)
 {
 	struct Io_Message *message = (struct Io_Message *)ptr;
 	gint result = 0;
-	extern gint ecu_caps;
 	extern struct Serial_Params *serial_params;
+	extern struct Firmware_Details *firmware;
 	static gint seqerrcount = 0;
 	extern gboolean connected;
 	extern gchar *handler_types[];
@@ -273,8 +278,11 @@ void readfrom_ecu(void *ptr)
 	/* Flush serial port... */
 	tcflush(serial_params->fd, TCIOFLUSH);
 
-	if (ecu_caps & DUALTABLE)
+	if (firmware->multi_page)
 		set_ms_page(message->page);
+	else if (message->page > 0)
+		dbg_func(__FILE__": readfrom_ecu()\n\t CRITICAL ERROR, requesting data for a page above 0 for NON Multi-Page firmware!!!!\n",CRITICAL);
+
 	result = write(serial_params->fd,
 			message->out_str,
 			message->out_len);

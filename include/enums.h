@@ -159,16 +159,6 @@ typedef enum
 	/* No capabilities == Standard B&G code with no modifications */
 	STANDARD	= 1<<0,
 	DUALTABLE	= 1<<1,
-	S_N_SPARK	= 1<<2,
-	S_N_EDIS	= 1<<3,
-	ENHANCED	= 1<<4,
-	RAW_MEMORY	= 1<<5,
-	IAC_PWM		= 1<<6,
-	IAC_STEPPER	= 1<<7,
-	BOOST_CTRL	= 1<<8,
-	OVERBOOST_SFTY	= 1<<9,
-	LAUNCH_CTRL	= 1<<10,
-	TEMP_DEP	= 1<<11,
 }Capability;
 
 typedef enum

@@ -236,12 +236,12 @@ struct Canidate
  */
 struct Command
 {
-	gint page;		/*! ms page in memory where it resides */
 	gchar *string;		/*! command to get the data */
+	gchar *desc;		/*! command description */
+	gchar *key;		/*! key into cmd_details hashtable */
 	gint len;		/*! Command length in chars to send */
 	gboolean multipart;	/*! Multipart command? (raw_memory) */
 	gint cmd_int_arg;	/*! multipart arg, integer */
-	gchar *desc;		/*! command description */
 	gboolean store_data;	/*! Store returned data ? */
 	StoreType store_type;	/*! Store data where */
 };

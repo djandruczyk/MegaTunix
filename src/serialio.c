@@ -162,10 +162,7 @@ void set_ms_page(gint ms_page)
 	gint res = 0;
 	gchar buf;
 
-	if ((ms_page > 1) || (ms_page < 0))
-		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tpage choice %i is out of range(0,1)\n",ms_page),CRITICAL);
-
-	buf = ms_page & 0x01;
+	buf = ms_page & 0xF;
 	res = write(serial_params->fd,"P",1);
 	if (res != 1)
 		dbg_func(__FILE__": set_ms_page()\n\tFAILURE sending \"P\" (change page) command to ECU \n",CRITICAL);
