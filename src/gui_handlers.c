@@ -70,6 +70,7 @@ extern struct Serial_Params *serial_params;
 
 static gint update_rate = 33;
 static gint runtime_id = -1;
+static gint logviewer_id = -1;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean fahrenheit;
@@ -1038,12 +1039,17 @@ void start_runtime_display()
 {
 	runtime_id = gtk_timeout_add((int)((1.0/(float)update_rate)*1000.0),
 			(GtkFunction)update_runtime_vars,NULL);
+	logviewer_id = gtk_timeout_add((int)((1.0/(float)update_rate)*1000.0),
+			(GtkFunction)update_logview_traces,NULL);
 }
 void stop_runtime_display()
 {
 	if (runtime_id)
 		gtk_timeout_remove(runtime_id);
 	runtime_id = 0;
+	if (logviewer_id)
+		gtk_timeout_remove(logviewer_id);
+	logviewer_id = 0;
 }
 
 gboolean populate_gui()

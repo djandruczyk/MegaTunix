@@ -248,7 +248,6 @@ struct Viewable_Value
 	GtkWidget *parent; 		/* Parent Widget */
 	GtkWidget *d_area;		/* Drawing area widget */
 	GdkPixmap *trace_pmap;		/* area used for the trace */
-	GdkPixmap *info_pmap;		/* area use for the trace info */
 	GdkGC *font_gc;			/* GC used for the fonts */
 	GdkGC *trace_gc;		/* GC used for the trace */
 	GdkGC *grat_gc;			/* GC used for the graticule */
@@ -256,7 +255,19 @@ struct Viewable_Value
 	gchar *vname;			/* Name of widget being logged */
 	gint runtime_offset;		/* Offset into runtime struct */
 	gint size;			/* 1=byte, 2=float, 4=float */
+	gint last_y;			/* Last point on screen of trace */
+	gfloat min;			/* for auto-scaling */
+	gfloat max;			/* for auto-scaling */
+	gint last_grat;			/* last grat line position */
+	gint grat_interval;		/* graticule interval in pixels */
+	gfloat lower;			/* limits to use for scaling */
+	gfloat upper;			/* limits to use for scaling */
+};
+	
+struct Limits
+{
+	gfloat lower;
+	gfloat upper;
 };
 
-	
 #endif

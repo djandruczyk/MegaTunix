@@ -15,6 +15,7 @@
 #define __DATALOGGING_CONST_H__
 
 #include <gtk/gtk.h>
+#include <structures.h>
 
 #define UCHAR sizeof(unsigned char)
 #define FLOAT sizeof(float)
@@ -46,6 +47,48 @@ static const gchar *mt_compat_names[] =
 "Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSaccel",
 "Gve",		"VE2",		"PW1",		"PW2",		"INJ-1 Dcycle",
 "INJ-2 Dcycle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+};
+
+static struct Limits limits[]= {
+{ 0.0,4294967269.0},/* HR clock */
+{ 0.0,255.0},	/* MS clock */
+{ 0.0,25500.0},	/* RPM */
+{ 0.0,255.0},	/* EngineBit */
+{ 0.0,100.0},	/* IdleDC */
+{ 0.0,5.0},	/* TPS Volts */
+{ 0.0,5.0},	/* MAP Volts */
+{ 0.0,5.0},	/* BARO Volts */
+{ 0.0,5.0},	/* MAT Volts */
+{ 0.0,5.0},	/* CLT Volts */
+{ 0.0,255.0},	/* TPS Counts */
+{ 0.0,255.0},	/* MAP Counts */
+{ 0.0,255.0},	/* BARO Counts */
+{ 0.0,255.0},	/* MAT Counts */
+{ 0.0,255.0},	/* CLT Counts */
+{ 0.0,100.0},	/* TPS % */
+{ 0.0,255.0},	/* MAP (in KPA) */
+{ 0.0,255.0},	/* Baro (in KPA) */
+{ -40.0,215.0},	/* MAT (in DEG) */
+{ -40.0,215.0},	/* CLT (in DEG) */
+{ 0.0,5.0},	/* O2 Volts */
+{ 0.0,255.0},	/* O2 Counts */
+{ 0.0,255.0},	/* Gammae */
+{ 0.0,30.0},	/* BATT Volts */
+{ 0.0,255.0},	/* BATT Counts */
+{ 0.0,255.0},	/* AirCorr */
+{ 0.0,255.0},	/* BAROCorr */
+{ 0.0,255.0},	/* EGOCorr */
+{ 0.0,255.0},	/* WARMCorr */
+{ 0.0,255.0},	/* TpsAccel */
+{ 0.0,255.0},	/* VE1 */
+{ 0.0,255.0},	/* VE2 */
+{ 0.0,25.5},	/* PW1 */
+{ 0.0,25.5},	/* PW2 */
+{ 0.0,100.0},	/* Dcycle1 */
+{ 0.0,100.0},	/* Dcycle2 */
+{ 0.0,255.0},	/* BSPOT1 */
+{ 0.0,255.0},	/* BSPOT2 */
+{ 0.0,255.0}	/* BSPOT3 */
 };
 
 /* Tooltips for each of the above.... */

@@ -23,8 +23,11 @@
 
 static gint max_viewables = 0;
 static gint total_viewables = 0;
-struct Logables viewables;
-GHashTable *active_traces = NULL;
+static struct Logables viewables;
+static GHashTable *active_traces = NULL;
+static guint16 red = 0;
+static guint16 green = 32768;
+static guint16 blue = 65535;
 /* This table is the same dimensions as the table used  for datalogging.
  * FALSE means it's greyed out asa choice for the logviewer, TRUE means
  * it's visible.  Some logable variables (like the clock) don't make a lot
@@ -62,7 +65,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	/* Holds all the log traces... */
-	vbox2 = gtk_vbox_new(TRUE,1);
+	vbox2 = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
@@ -95,6 +98,22 @@ void build_logviewer(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(SEL_PARAMS));
 	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+	
+	vbox4 = gtk_vbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox4,FALSE,FALSE,0);
+	button = gtk_button_new_with_label("Start Reading RT Vars");
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(START_REALTIME));
+	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+	button = gtk_button_new_with_label("Stop Reading RT vars");
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(STOP_REALTIME));
+
+	gtk_box_pack_start(GTK_BOX(vbox4),button,TRUE,FALSE,0);
+
+
 	
 	/* Not written yet */
 	return;
@@ -250,7 +269,7 @@ gboolean populate_viewer(GtkWidget * widget)
 				/* Call the build routine, feed it it's parent*/
 				v_value = build_v_value(widget,i);
 					
-				//printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
+//				printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
 				g_hash_table_insert(active_traces,
 						GINT_TO_POINTER(i),
 						(gpointer)v_value);
@@ -286,8 +305,6 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	GdkPixmap *trace_pmap = NULL;
 	gint w = 0;
 	gint h = 0;
-	gint parent_h;
-	GdkPixmap *info_pmap = NULL;
 	struct Viewable_Value *v_value = NULL;
 
 	/* Get rest of important data... */
@@ -314,33 +331,6 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 
 	v_value->trace_pmap = trace_pmap;
 
-
-	/* info_pmap is a small block of space set aside for trace 
-	 * information which is static.  Thsi is done so that we don't need
-	 * to redraw the fonts on EVERY call to update the traces.. 
-	 */
-	info_pmap = v_value->info_pmap;
-	if (info_pmap)
-		g_object_unref(info_pmap);
-
-	parent_h = v_value->d_area->allocation.height;
-	w = 130;
-	h = parent_h;
-	info_pmap = gdk_pixmap_new(v_value->d_area->window,w,h,
-			gtk_widget_get_visual(v_value->d_area)->depth);
-	gdk_draw_rectangle(info_pmap,
-			v_value->d_area->style->black_gc,
-			TRUE, 0,0,
-			w,h);
-	v_value->info_width = w;
-	v_value->info_pmap = info_pmap;
-
-	gdk_draw_drawable(v_value->trace_pmap,
-                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                        info_pmap,
-                        0, 0,
-                        0, 0,
-                        w, h);
 	draw_graticule(v_value);
 	draw_infotext(v_value);
 
@@ -352,7 +342,6 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkPixmap *trace_pmap = NULL;
-	GdkPixmap *info_pmap = NULL;
 	struct Viewable_Value *v_value = NULL;
 	v_value = (struct Viewable_Value *)g_object_get_data(G_OBJECT(widget),
 				"data");
@@ -366,18 +355,6 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
                         event->area.x, event->area.y,
                         event->area.width, event->area.height);
 
-	info_pmap = v_value->info_pmap;
-	if (event->area.x < v_value->info_width)
-	{
-//		printf("exposing info_pmap area...\n");
-		gdk_draw_drawable(widget->window,
-                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                        info_pmap,
-                        event->area.x, event->area.y,
-                        event->area.x, event->area.y,
-                        -1,-1);
-	}
-			
 //	printf("expose event....\n");
 	return TRUE;
 }
@@ -390,16 +367,17 @@ struct Viewable_Value * build_v_value(GtkWidget * widget, gint offset)
 	v_value->parent = widget;
 	v_value->d_area = gtk_drawing_area_new();
 
+	v_value->lower = limits[offset].lower;
+	v_value->upper = limits[offset].upper;
+	v_value->last_y = -1;
 
 	v_value->trace_pmap = gdk_pixmap_new(
 			v_value->d_area->window, 
 			10,10, 
 			gtk_widget_get_visual(v_value->d_area)->depth);
 
-	v_value->info_pmap = gdk_pixmap_new(
-			v_value->d_area->window, 
-			10,10, 
-			gtk_widget_get_visual(v_value->d_area)->depth);
+	/* space set aside for textual information... */
+	v_value->info_width = 100;
 
 	gtk_box_pack_start(GTK_BOX(widget),
 			v_value->d_area,
@@ -444,11 +422,8 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 {
 	GdkColor color;
 	GdkGC * gc = NULL;
-	static guint16 red = 0;
-	static guint16 green = 32768;
-	static guint16 blue = 65535;
 	GdkGCValues values;
-	GdkColormap *cmap;
+	GdkColormap *cmap = NULL;
 
 	cmap = gdk_colormap_get_system();
 
@@ -469,14 +444,14 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			color.red = red;
 			color.green = green;
 			color.blue = blue;
-			values.foreground = color;
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
+			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
 					GDK_GC_FOREGROUND);
-			red += 8192;
-			green += 4096;
-			blue += 12288;
+			red += 24000;
+			green += 24000;
+			blue += 24000;
 			if (red > 65536)
 				red -= 65536;
 			if (green > 65536)
@@ -500,6 +475,9 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 
 void draw_infotext(void *data)
 {
+	/* Draws the textual (static) information on the left side of 
+	 * the window..
+	 */
 	struct Viewable_Value *v_value = (struct Viewable_Value *)data;
         PangoFontDescription *font_desc;
 	PangoLayout *layout;
@@ -507,7 +485,7 @@ void draw_infotext(void *data)
 	font_desc = pango_font_description_from_string("sans 12");
 	layout = gtk_widget_create_pango_layout(v_value->d_area,v_value->vname);
 	pango_layout_set_font_description(layout,font_desc);
-	gdk_draw_layout(v_value->info_pmap,v_value->font_gc,0,0,layout);
+	gdk_draw_layout(v_value->trace_pmap,v_value->font_gc,0,0,layout);
 	gdk_window_clear(v_value->d_area->window);
 
 }
@@ -519,14 +497,16 @@ void draw_graticule(void * data)
 	gint lo_height = 0;
 	gint i = 0;
 	gint count = 0;
-	gint rem = 0;
+	gint grat_interval = 40;
+	//gint rem = 0;
 	GdkSegment segs[200];	/*bad idea to do statically*/
 	struct Viewable_Value *v_value = (struct Viewable_Value *)data;
 
 	lo_width = v_value->d_area->allocation.width-v_value->info_width;
 	lo_height = v_value->d_area->allocation.height;
+	v_value->grat_interval = 40;
 		
-	for (i=0;i<lo_width;i+=40)
+	for (i=0;i<lo_width;i+=grat_interval)
 	{
 
 		segs[count].x1 = v_value->info_width+i;
@@ -536,6 +516,7 @@ void draw_graticule(void * data)
 		count++;
 	}
 	gdk_draw_segments(v_value->trace_pmap,v_value->grat_gc,segs,count);
+	v_value->last_grat = segs[count-1].x1;
 /*	rem = lo_height%40;
 	count = 0;
 	for (i=0;i<lo_height;i+=40)
@@ -554,3 +535,110 @@ void draw_graticule(void * data)
 
 }
 
+gboolean update_logview_traces()
+{
+	/* Called from one of two possible places:
+	 * 1. a GTK timeout used when playing back a log...
+	 * 2. as a hook onto the update_realtime stats box...
+	 */
+	
+	if (active_traces)
+		g_hash_table_foreach(active_traces, trace_update,NULL);
+	return TRUE;
+}
+
+void trace_update(gpointer key, gpointer value, gpointer data)
+{
+	gint w = 0;
+	gint h = 0;
+	gint start = 0;
+	gint end = 0;
+	gfloat val = 0.0;
+	gfloat percent = 0.0;
+	gint size = 0;
+	gint scroll = 1;
+	gint last_grat = 0;
+	gint grat_interval = 0;
+	struct Viewable_Value * v_value = NULL;
+	extern struct Runtime_Common *runtime;
+	unsigned char * uc_ptr = NULL;
+	short * s_ptr = NULL;
+	float * f_ptr = NULL;
+	
+
+	v_value = (struct Viewable_Value *) value;
+	uc_ptr = (unsigned char *)runtime;
+	s_ptr = (short *)runtime;
+	f_ptr = (float *)runtime;
+
+	size = v_value->size;
+	/* this weird way is needed cause we are accessing various sized
+	 * objects from a datastructure in array notation.  This works as 
+	 * long as the structure is arranged in largest order first. 
+	 * i.e. floats before shorts before chars, etc...
+	 */
+	switch (size)
+	{	
+		case FLOAT:
+			val = (float)f_ptr[v_value->runtime_offset/FLOAT];
+			break;
+		case UCHAR:
+			val = (unsigned char)uc_ptr[v_value->runtime_offset];
+			break;
+		case SHORT:
+			val = (short)s_ptr[v_value->runtime_offset/SHORT];
+			break;
+	}
+	if (val > (v_value->max))
+		v_value->max = val;
+	if (val < (v_value->min))
+		v_value->min = val;
+
+	last_grat = v_value->last_grat;
+	grat_interval = v_value->grat_interval;
+	
+	end = v_value->info_width;
+	start = end + scroll;
+	w = v_value->d_area->allocation.width;
+	h = v_value->d_area->allocation.height;
+
+	/* Scroll the screen to the left... */
+	gdk_draw_drawable(v_value->trace_pmap,
+			v_value->trace_gc,
+			v_value->trace_pmap,
+			start,0,
+			end,0,
+			w-start,h);
+
+	gdk_draw_rectangle(v_value->trace_pmap,
+			v_value->d_area->style->black_gc,
+			TRUE,
+			w-scroll,0,
+			scroll,h);
+
+	/* Update the graticule... */
+	v_value->last_grat -= scroll;
+	if ((last_grat + grat_interval) < w)
+	{
+		gdk_draw_line(v_value->trace_pmap,
+				v_value->grat_gc,
+				w-1, 0,
+				w-1, h);
+
+		v_value->last_grat = w-1;
+	}
+
+	/* Draw thedata.... */
+	percent = 1.0-(val/(v_value->upper-v_value->lower));
+	if (v_value->last_y == -1)
+		v_value->last_y = (gint)(percent*h);
+	
+	gdk_draw_line(v_value->trace_pmap,
+			v_value->trace_gc,
+			w-1-scroll,v_value->last_y,
+			w-1,(gint)(percent*h));
+
+	v_value->last_y = (gint)(percent*h);
+			
+	gdk_window_clear(v_value->d_area->window);
+}
