@@ -21,15 +21,20 @@
 
 /* ms_constants.c */
 void post_process(struct ms_raw_data_v1_and_v2 *, struct ms_data_v1_and_v2 *);
+/* ms_constants.c */
+
 /* serialio.c */
 int open_serial(int); /* arg is COMM (dos/win style) port number */
 int setup_serial_params(void); /* Setups serial i/o settings */
 void close_serial(void); /* arg is filedescriptor that was opened */
 void handle_ms_data(int); /* arg is filedescriptor that was opened */
+int check_ecu_comms(GtkWidget *, gpointer);
+/* serialio.c */
 
 /* threads.c */
 int serial_raw_thread_starter(void); /*botstrap function to get IO started */
 void * raw_reader_thread(void *); /*Serial raw reader thread */
+/* threads.c */
 
 /* Configfile.c function protos, derived from XMMS */
 ConfigFile *cfg_new(void);
@@ -57,6 +62,7 @@ void cfg_write_float(ConfigFile * cfg, gchar * section, \
 void cfg_write_double(ConfigFile * cfg, gchar * section, \
 		gchar * key, gdouble value);
 void cfg_remove_key(ConfigFile * cfg, gchar * section, gchar * key);
+/* Configfile.c function protos, derived from XMMS */
 
 /* init.c */
 void init(void);
@@ -65,11 +71,13 @@ void save_config(void);
 void make_megasquirt_dirs(void);
 void mem_alloc(void);
 void mem_dealloc(void);
+/* init.c */
 
 /* core_gui.c */
 int setup_gui(void);
 void leave(GtkWidget *, gpointer *);
 int framebuild_dispatch(GtkWidget *, int);
+/* core_gui.c */
 
 /* for each of the *_gui.c files will be  a main core function called 
  * int build_****(Gtkwidget *).  The "****" will be that core function 
@@ -85,7 +93,6 @@ int build_about(GtkWidget *);
 /* comms_gui.c */
 int build_comms(GtkWidget *);
 int set_serial_port(GtkWidget *, gpointer);
-int check_ecu_comms(GtkWidget *, gpointer);
 /* comms_gui.c */
 
 /* constants_gui.c */

@@ -21,7 +21,7 @@
 /* I/O related */
 int def_comm_port;		/* default com port (DOS/WIN32 style) */
 int read_wait_time;		/* Time delay between rawreads (milliseconds) */
-int reset_count;			/* number of MS Power resets */
+int reset_count;		/* number of MS Power resets */
 
 struct Serial_Params
 {
@@ -45,13 +45,14 @@ int just_starting;		/* to handle errors */
 struct ms_data_v1_and_v2 out;		/* processed data structure */
 struct ms_raw_data_v1_and_v2 *raw;	/* RAW data pointer */
 
-
 /* GUI */
 int width;				/* main window width */
 int height;				/* main window height */
-int def_width;				/* main window width */
-int def_height;				/* main window height */
-GtkWidget	*main_window;		
+int def_width;				/* main window default width */
+int def_height;				/* main window default height */
+GtkWidget	*main_window;		/* main window object */
 int main_x_origin;			/* main window position */
 int main_y_origin;			/* main window position */
 int ready;
+GtkWidget *ser_statbar;			/* serial statusbar */ 
+int ser_context_id;			/* for ser_statbar */

@@ -120,3 +120,82 @@ void close_serial()
 	serial_params.open = 0;
 }
 
+int check_ecu_comms(GtkWidget *widget, gpointer data)
+{
+        gint tmp;
+        gint res;
+        struct pollfd ufds;
+	gchar buff[60];
+        gint restart_thread = 0;
+
+        if(serial_params.open)
+        {
+                if (raw_reader_running)
+                {
+        //              printf("realtime reader thread running, stopping it\n");
+                        raw_reader_running = 0;
+                        restart_thread = 1;
+                }
+                while (raw_reader_stopped == 0)
+                {
+        //              printf("Waiting for thread to die\n");
+                        usleep(1000);
+                }
+
+                ufds.fd = serial_params.fd;
+                ufds.events = POLLIN;
+                /* save state */
+                tmp = serial_params.newtio.c_cc[VMIN];
+                serial_params.newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
+                tcflush(serial_params.fd, TCIFLUSH);
+                tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+
+                res = write(serial_params.fd,"C",1);
+                res = poll (&ufds,1,serial_params.poll_timeout);
+                if (res == 0)
+                {
+                        g_snprintf(buff,60,"I/O with MegaSquirt Timeout");
+                        /* An Error occurred opening the port */
+                        gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
+                                        ser_context_id);
+                        gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
+                                        ser_context_id,
+                                        buff);
+                }
+                else
+                {
+                        g_snprintf(buff,60,"ECU comms test successfull");
+                        /* An Error occurred opening the port */
+                        gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
+                                        ser_context_id);
+                        gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
+                                        ser_context_id,
+                                        buff);
+                }
+
+                serial_params.newtio.c_cc[VMIN]     = tmp; /*restore original*/
+                tcflush(serial_params.fd, TCIFLUSH);
+                tcsetattr(serial_params.fd,TCSANOW,&serial_params.newtio);
+
+                if (restart_thread)
+                {
+        //              printf("restarting thread\n");
+                        serial_raw_thread_starter();
+                }
+
+
+        }
+        else
+        {
+                g_snprintf(buff,60,"Serial port not opened, can't test ECU comms");
+                /* An Error occurred opening the port */
+                gtk_statusbar_pop(GTK_STATUSBAR(ser_statbar),
+                                ser_context_id);
+                gtk_statusbar_push(GTK_STATUSBAR(ser_statbar),
+                                ser_context_id,
+                                buff);
+        }
+        return (0);
+
+}
+
