@@ -46,18 +46,15 @@ void open_serial(int port_num)
 	 */
 	gint result = -1;
 	char devicename[11]; /* temporary unix name of the serial port */
-	serial_params.comm_port = port_num;
+	serial_params.comm_port = port_num; /* DOS/Win32 semantics here */
+
+	/* Unix port names are always 1 lower than the DOS/Win32 semantics. 
+	 * Thus com1 = /dev/ttyS0 on unix 
+	 */
 	g_snprintf(devicename,11,"/dev/ttyS%i",port_num-1);
+	/* Open Read/Write and NOT as the controlling TTY */
 	result = open(devicename, O_RDWR | O_NOCTTY);
-	if (result < 0)
-	{
-		/* FAILURE */
-		/* An Error occurred opening the port */
-		serial_params.open = FALSE;
-		g_snprintf(buff,60,"Error Opening COM%i Error Code: %s",port_num,strerror(errno));
-		update_statusbar(ser_statbar,ser_context_id,buff);
-	}
-	else
+	if (result >= 0)
 	{
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
@@ -65,9 +62,18 @@ void open_serial(int port_num)
 		serial_params.fd = result;
 		/* Save serial port status */
 		tcgetattr(serial_params.fd,&serial_params.oldtio);
-		g_snprintf(buff,60,"COM%i Opened Successfully, Suggest Testing ECU Comms",port_num);
+		g_snprintf(buff,60,"COM%i Opened Successfully,  \
+				Suggest Testing ECU Comms",port_num);
 		update_statusbar(ser_statbar,ser_context_id,buff);
-
+	}
+	else
+	{
+		/* FAILURE */
+		/* An Error occurred opening the port */
+		serial_params.open = FALSE;
+		g_snprintf(buff,60,"Error Opening COM%i Error Code: %s",
+				port_num,strerror(errno));
+		update_statusbar(ser_statbar,ser_context_id,buff);
 	}
 	
 	return;
@@ -75,6 +81,11 @@ void open_serial(int port_num)
 	
 int setup_serial_params()
 {
+	/* Sets up serial port for the modes we want to use. 
+	 * NOTE: Original serial tio params are stored and restored 
+	 * in the open_serial() and close_serial() functions.
+	 */ 
+
 	/*clear struct for new settings*/
 	bzero(&serial_params.newtio, sizeof(serial_params.newtio)); 
 	/* 
@@ -168,14 +179,21 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 	char buf[2];
         gint restart_reader = FALSE;
 	gint count;
+	static gboolean locked;
 
+	if (locked)
+		return 0;
+	else
+		locked = TRUE;
+	/* If port isn't opened no sense trying here... */
         if(serial_params.open)
 	{
+		/* If realtime reader thread is running shut it down... */
 		if (raw_reader_running)
 		{
 			restart_reader = TRUE;
 			stop_serial_thread(); /* stops realtime read */
-			usleep(100000);	/* sleep 100 ms to be sure thread ends */
+			usleep(100000);
 		}
 
 		ufds.fd = serial_params.fd;
@@ -191,9 +209,12 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		res = poll (&ufds,1,serial_params.poll_timeout);
 		if (res)
 		{
-			
-			count = 44;
-			while (poll(&ufds,1,serial_params.poll_timeout))
+			/* Command succeeded,  but we still need to drain the
+			 * buffer...
+			 */
+			count = 44;	/* Arbritrary number */
+			//while (poll(&ufds,1,serial_params.poll_timeout))
+			while (poll(&ufds,1,100))
 				res = read(serial_params.fd,&buf,count);
 
 			g_snprintf(buff,60,"ECU Comms Test Successfull");
@@ -227,6 +248,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
                 /* Serial port not opened, can't test */
 		update_statusbar(ser_statbar,ser_context_id,buff);
         }
+	locked = FALSE;
         return (0);
 
 }
@@ -247,7 +269,6 @@ void read_ve_const()
 	{
 		restart_reader = TRUE;
 		stop_serial_thread(); /* stops realtime read */
-		usleep(100000);	/* sleep 100 ms to be sure thread ends */
 	}
 
 	ufds.fd = serial_params.fd;

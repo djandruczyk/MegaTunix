@@ -69,7 +69,6 @@ void leave(GtkWidget *widget, gpointer data)
 	close_serial();
 	stop_datalogging();
 	close_logfile();
-	usleep(100000); /* make sure thread dies cleanly.. */
 	mem_dealloc();
 	gtk_main_quit();
 }
@@ -218,10 +217,8 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((gint)data)
 	{
 		case START_REALTIME:
-			if (!raw_reader_running)
-				check_ecu_comms(NULL,NULL);
 			if (!connected)
-				no_ms_connection();
+				check_ecu_comms(NULL,NULL);
 			else if (!constants_loaded)
 			{	/*Read constants first at least once */
 				paused_handlers = TRUE;
@@ -313,7 +310,6 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 				if (raw_reader_running)
 					stop_serial_thread();
 				close_serial();
-				usleep(100000);
 			}
 			open_serial((int)value);
 			setup_serial_params();

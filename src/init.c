@@ -35,7 +35,6 @@ extern gint ms_reset_count;
 extern gint ms_goodread_count;
 extern gboolean just_starting;
 extern gboolean raw_reader_running;
-extern gboolean raw_reader_stopped;
 extern gboolean tips_in_use;
 extern gboolean fahrenheit;
 extern gint main_x_origin;
@@ -82,7 +81,6 @@ void init()
 
 	/* Set flags to clean state */
 	raw_reader_running = FALSE;  /* We're not reading raw data yet... */
-	raw_reader_stopped = TRUE;  /* We're not reading raw data yet... */
 	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
