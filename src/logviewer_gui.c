@@ -24,6 +24,11 @@ static gint max_viewables = 0;
 static gint total_viewables = 0;
 struct Logables viewables;
 GHashTable *active_traces = NULL;
+/* This table is the same dimensions as the table used  for datalogging.
+ * FALSE means it's greyed out asa choice for the logviewer, TRUE means
+ * it's visible.  Some logable variables (like the clock) don't make a lot
+ * of sense on a stripchart view...
+ */
 static const gboolean valid_logables[]=
 {
 	FALSE,FALSE,TRUE,FALSE,TRUE,
@@ -243,43 +248,9 @@ gboolean populate_viewer(GtkWidget * widget)
 			if (viewables.index[i])	/* Marked viewable widget */
 			{
 				printf("allocating struct and putting into table\n");
-				/* Allocate data struct and insert ptr to it*/
-				v_value = g_malloc(sizeof(struct Viewable_Value));		
-				v_value->parent = widget;
-				v_value->d_area = gtk_drawing_area_new();
-
-				v_value->pmap = gdk_pixmap_new(
-						v_value->d_area->window, 
-						10,10, 
-						gtk_widget_get_visual(
-							v_value->d_area)->depth);
-				gtk_box_pack_start(GTK_BOX(widget),
-						v_value->d_area,
-						TRUE,TRUE,0);
-				gtk_widget_add_events(v_value->d_area,
-						GDK_BUTTON_PRESS_MASK |
-						GDK_BUTTON_RELEASE_MASK |
-						GDK_FOCUS_CHANGE_MASK);
-						
-				g_signal_connect(G_OBJECT
-						(v_value->d_area),
-						"configure_event",
-						G_CALLBACK(lv_configure_event),
-						NULL);
-						
-				g_signal_connect(G_OBJECT
-						(v_value->d_area),
-						"expose_event",
-						G_CALLBACK(lv_expose_event),
-						NULL);
-						
-				g_object_set_data(G_OBJECT(v_value->d_area),
-						"data",(gpointer)v_value);
-		
-				v_value->runtime_offset = logging_offset_map[i];
-				v_value->size = logging_datasizes_map[i];
-				
-				gtk_widget_show_all(widget);
+				/* Call the build routine, feed it it's parent*/
+				v_value = (struct Viewable_Value *)
+						build_v_value(widget,i);
 				printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
 				g_hash_table_insert(active_traces,
 						GINT_TO_POINTER(i),
@@ -370,4 +341,46 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 
 	printf("expose event....\n");
 	return TRUE;
+}
+
+void * build_v_value(GtkWidget * widget, gint offset)
+{
+	struct Viewable_Value *v_value;
+	v_value = g_malloc(sizeof(struct Viewable_Value));		
+	v_value->parent = widget;
+	v_value->d_area = gtk_drawing_area_new();
+
+	v_value->pmap = gdk_pixmap_new(
+			v_value->d_area->window, 
+			10,10, 
+			gtk_widget_get_visual(
+				v_value->d_area)->depth);
+	gtk_box_pack_start(GTK_BOX(widget),
+			v_value->d_area,
+			TRUE,TRUE,0);
+	gtk_widget_add_events(v_value->d_area,
+			GDK_BUTTON_PRESS_MASK |
+			GDK_BUTTON_RELEASE_MASK |
+			GDK_FOCUS_CHANGE_MASK);
+
+	g_signal_connect(G_OBJECT
+			(v_value->d_area),
+			"configure_event",
+			G_CALLBACK(lv_configure_event),
+			NULL);
+
+	g_signal_connect(G_OBJECT
+			(v_value->d_area),
+			"expose_event",
+			G_CALLBACK(lv_expose_event),
+			NULL);
+
+	g_object_set_data(G_OBJECT(v_value->d_area),
+			"data",(gpointer)v_value);
+
+	v_value->runtime_offset = logging_offset_map[offset];
+	v_value->size = logging_datasizes_map[offset];
+
+	gtk_widget_show_all(widget);
+	return v_value;
 }
