@@ -59,10 +59,12 @@ struct Firmware_Details
         gint ignvars_size;      /*! Size of Realtime vars datablock */
         gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gboolean multi_page;	/*! Multi-page firmware? */
+	gboolean require_page;	/*! Require page changing ??? */
 	gint total_pages;	/*! How many pages do we handle? */
 	gint total_tables;	/*! How many tables do we handle? */
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
+	gchar *page_cmd;	/*! Command to send to change pages ... */
 	struct Page_Params **page_params;/*! special vars per page */
 	struct Table_Params **table_params;/*! details each table */
 };
@@ -242,7 +244,9 @@ struct Canidate
 	gchar *raw_mem_cmd_key;	/*! string key to hashtable for RAW command */
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
+	gchar *page_cmd;	/*! Command to send to change pages... */
 	gboolean multi_page;	/*! Multi-page firmware ??? */
+	gboolean require_page;	/*! Require page changing ??? */
 	gint total_pages;	/*! how many pages do we handle? */
 	gint total_tables;	/*! how many tables do we handle? */
 	GHashTable *lookuptables;/*! Lookuptables hashtable... */
@@ -288,7 +292,6 @@ struct Io_Message
 	GArray *funcs;		/*! List of functiosn to be dispatched... */
 	InputHandler handler;	/*! Command handler for inbound data */
 	void *payload;		/*! data passed along, arbritrary size.. */
-	gboolean need_page_change; /*! Do we need to change pages for this cmd*/
 };
 
 /*!

@@ -67,7 +67,6 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message = g_new0(struct Io_Message,1);
 			message->cmd = cmd;
 			message->command = READ_CMD;
-			message->need_page_change = FALSE;
 			message->out_str = g_strdup(cmds->realtime_cmd);
 			message->out_len = cmds->rt_cmd_len;
 			message->handler = REALTIME_VARS;
@@ -127,13 +126,11 @@ void io_cmd(Io_Command cmd, gpointer data)
 				message->page = i;
 				if (firmware->page_params[i]->is_spark)
 				{
-					message->need_page_change = FALSE;
 					message->out_str = g_strdup(cmds->ignition_cmd);
 					message->out_len = cmds->ign_cmd_len;
 				}
 				else
 				{
-					message->need_page_change = TRUE;
 					message->out_str = g_strdup(cmds->veconst_cmd);
 					message->out_len = cmds->ve_cmd_len;
 				}
@@ -153,7 +150,6 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message = g_new0(struct Io_Message,1);
 			message->cmd = cmd;
 			message->command = READ_CMD;
-			message->need_page_change = FALSE;
 			message->page = 0;
 			message->offset = (gint)data;
 			message->out_str = g_strdup(cmds->raw_mem_cmd);

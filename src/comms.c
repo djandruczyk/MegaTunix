@@ -295,7 +295,7 @@ void readfrom_ecu(void *ptr)
 	/* Flush serial port... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	if ((firmware->multi_page ) && (message->need_page_change))
+	if ((firmware->multi_page ) && (firmware->require_page))
 		set_ms_page(message->page);
 
 	result = write(serial_params->fd,
@@ -338,7 +338,7 @@ void readfrom_ecu(void *ptr)
 		serial_params->errcount++;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),CRITICAL);
 	}
-	if ((firmware->multi_page ) && (message->need_page_change))
+	if ((firmware->multi_page ) && (firmware->require_page))
 		set_ms_page(0);
 }
 

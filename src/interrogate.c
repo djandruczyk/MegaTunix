@@ -340,10 +340,12 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	firmware->rtv_map_file = g_strdup(potential->rtv_map_file);
 	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
 	firmware->multi_page = potential->multi_page;
+	firmware->require_page = potential->require_page;
 	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
 	firmware->write_cmd = g_strdup(potential->write_cmd);
 	firmware->burn_cmd = g_strdup(potential->burn_cmd);
+	firmware->page_cmd = g_strdup(potential->page_cmd);
 	/* Allocate ram for the necessary structures... */
 
 	firmware->table_params = g_new0(struct Table_Params *,firmware->total_tables);
@@ -570,6 +572,7 @@ struct Canidate * initialize_canidate(void)
 	canidate->raw_mem_cmd_key = NULL;
 	canidate->write_cmd = NULL;
 	canidate->burn_cmd = NULL;
+	canidate->page_cmd = NULL;
 	canidate->lookuptables = NULL;
 	canidate->total_pages = -1;
 	canidate->total_tables = -1;
@@ -646,6 +649,15 @@ void load_profile_details(void *ptr)
 		if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
 					&canidate->multi_page))
 			dbg_func(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_boolean(cfgfile,"parameters","RequirePageChange",
+					&canidate->require_page))
+			dbg_func(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+		if ((canidate->multi_page) && (canidate->require_page))
+		{
+			if(!cfg_read_string(cfgfile,"parameters","Page_Cmd",
+						&canidate->page_cmd))
+				dbg_func(__FILE__": load_profile_details()\n\t\"Page_Cmd\" flag not found in interrogation profile, ERROR\n",CRITICAL);
+		}
 		if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 					&canidate->total_pages))
 			dbg_func(__FILE__": load_profile_details()\n\t\"TotalPages\" value not found in interrogation profile, ERROR\n",CRITICAL);
