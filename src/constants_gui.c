@@ -335,6 +335,7 @@ void build_constants_1(GtkWidget *parent_frame)
 
 
 	label = gtk_label_new("Required Fuel (per cyl/cycle)");
+	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 5, 6,
                         (GtkAttachOptions) (GTK_FILL),
@@ -362,6 +363,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Required Fuel (ms. per squirt)");
+	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 6, 7,
                         (GtkAttachOptions) (GTK_FILL),
@@ -818,6 +820,7 @@ void build_constants_2(GtkWidget *parent_frame)
 
 
 	label = gtk_label_new("Required Fuel (per cyl/cycle)");
+	interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 5, 6,
                         (GtkAttachOptions) (GTK_FILL),
@@ -846,6 +849,7 @@ void build_constants_2(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Required Fuel (ms. per squirt)");
+	interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 6, 7,
                         (GtkAttachOptions) (GTK_FILL),

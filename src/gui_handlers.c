@@ -34,6 +34,7 @@
 
 extern gboolean interrogated;
 extern gboolean dualtable;
+extern gboolean iac_variant;
 extern gboolean connected;
 extern gboolean force_status_update;
 extern gboolean raw_reader_running;
@@ -308,7 +309,8 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint offset = 0;
 	gint dl_type = 0;
 	extern unsigned char *ms_data;
-	struct Ve_Const_Std *ve_const = (struct Ve_Const_Std *) ms_data;
+	struct Ve_Const_Std *ve_const = NULL;
+	ve_const = (struct Ve_Const_Std *) ms_data;
 
 	if (paused_handlers)
 		return TRUE;
@@ -346,7 +348,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				tmp = ve_const->config13.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
 				tmp = tmp | (bit_val << bit_pos);
-				ve_const->config13.value = tmp;
+					ve_const->config13.value = tmp;
 				dload_val = tmp;
 				offset = 118;
 				check_config13(dload_val);
@@ -642,13 +644,10 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 		case NUM_SQUIRTS_2:
 			/* This actuall effects another variable */
 			num_squirts_2 = tmpi;
-			printf("divider for table 2 before %i\n",ve_const_dt2->divider);
 			ve_const_dt2->divider = 
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
 			dload_val = ve_const_dt2->divider;
-			printf("divider for table 2 after %i\n",ve_const_dt2->divider);
-			printf("offset %i\n",offset);
 			if (g_list_find(offsets_2,GINT_TO_POINTER(offset))==NULL)
 			{
 				offsets_2 = g_list_append(offsets_2,
@@ -679,11 +678,9 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			/* Updates a shared bitfield */
 			num_cylinders_2 = tmpi;
 			tmp = ve_const_dt2->config11.value;
-			printf("table2 config 11 value before %i\n",ve_const_dt2->config11.value);
 			tmp = tmp & ~0xf0;	/*clears top 4 bits */
 			tmp = tmp | ((tmpi-1) << 4);
 			ve_const_dt2->config11.value = tmp;
-			printf("table2 config 11 value after %i\n",ve_const_dt2->config11.value);
 			ve_const_dt2->divider = 
 				(gint)(((float)num_cylinders_2/
 					(float)num_squirts_2)+0.001);
@@ -811,12 +808,6 @@ void update_ve_const()
 	 */
 	if (dualtable)
 	{
-		printf("table1 cfg11 value %i, cfg12 %i\n",
-				ve_const_dt1->config11.value,
-				ve_const_dt1->config12.value);
-		printf("table2 cfg11 value %i, cfg12 %i\n",
-				ve_const_dt2->config11.value,
-				ve_const_dt2->config12.value);
 		/*printf("raw_req_fuel from ecu %i, inj %i, cyls %i, div %i\n",
 				ve_const_dt1->req_fuel,
 				ve_const_dt1->config12.bit.injectors+1,
@@ -1038,6 +1029,18 @@ void update_ve_const()
 				GTK_TOGGLE_BUTTON(buttons.multi_port_but),
 				TRUE);
 
+	/* B&G idle or PWM */
+	if ((dualtable) || (iac_variant))
+	{
+		if (ve_const->config13.bit.idle_policy)
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.pwm_idle_but),TRUE);
+		else
+			gtk_toggle_button_set_active(
+					GTK_TOGGLE_BUTTON(buttons.onoff_idle_but),
+					TRUE);
+	}
+
 
 	if (!dualtable)
 	{
@@ -1166,6 +1169,7 @@ void check_req_fuel_limits()
 				offset_data_1[index]=0;
 		}
 
+		lim_flag = 0;
 		/* TABLE 2 */
 		tmp = (float)(num_injectors_2)/(float)(ve_const_dt2->divider);
 		req_fuel_per_squirt = ((float)req_fuel_total_2 * 10.0)/tmp;
@@ -1360,11 +1364,27 @@ void check_config13(unsigned char tmp)
 				(labels.p0_map_tps_lab),
 				"Kpa");
 	}
+
+	/* Check Idle method */
+	if (((tmp >> 4)&0x1) == 1)
+	{
+		// Brian Fielding PWM method, enable controls
+		set_enhanced_idle_state(TRUE);
+	}
+	else
+		set_enhanced_idle_state(FALSE);
+		
 }
 
 void check_tblcnf(unsigned char tmp)
 {
 	printf("check_tblcnf() not written yet\n");
+}
+
+void set_enhanced_idle_state(gboolean state)
+{
+	extern GList *enh_idle_widgets;
+        g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
 }
 
 void set_dualtable_mode(gboolean state)

@@ -26,6 +26,7 @@ struct DynamicButtons buttons;
 extern struct Ve_Widgets *ve_widgets;
 extern GdkColor black;
 GList *dt_widgets;
+GList *enh_idle_widgets;
 
 void build_eng_vitals(GtkWidget *parent_frame)
 {
@@ -51,12 +52,12 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Injection Control");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
-	hbox = gtk_hbox_new(FALSE,1);
+	hbox = gtk_hbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	/* Injection Control Section */
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,5);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
 	/* Fuel Injection Control Strategy */
 	ebox = gtk_event_box_new();
@@ -65,7 +66,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),7);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
 	label = gtk_label_new("Fuel Injection Control Strategy");
@@ -114,7 +115,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),7);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
 	label = gtk_label_new("Injection Type");
@@ -163,7 +164,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),7);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
 	label = gtk_label_new("Engine Stroke");
@@ -212,7 +213,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),7);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
 	label = gtk_label_new("Engine Type");
@@ -255,7 +256,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),sep,TRUE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,5);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
 	/* MAP Sensor Type selectors */
 	ebox = gtk_event_box_new();
@@ -264,7 +265,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),7);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
 	label = gtk_label_new("MAP Sensor Type");
@@ -313,7 +314,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         table = gtk_table_new(2,2,TRUE);
         gtk_table_set_row_spacings(GTK_TABLE(table),5);
         gtk_table_set_col_spacings(GTK_TABLE(table),10);
-        gtk_container_set_border_width(GTK_CONTAINER(table),7);
+        gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
 
@@ -365,7 +366,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	table = gtk_table_new(2,2,TRUE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),7);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(ebox),table);
 
 	label = gtk_label_new("Barometer Correction");
@@ -405,21 +406,76 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			NULL);
 
 
-	frame = gtk_frame_new("Idle Control");
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
-	hbox = gtk_hbox_new(FALSE,1);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The basic Bowling/Grippo MegaSquirt units, (version 1.1 or versiosn 2.2 hardware, and software versions up through version 3.01 all use a very simple idle control,  it's either on high-idle or it's not, and it's temperature controlled, once the engine temp gets above the Fast Idle temp, the high idle solenoid is disengaged and the engine goes down to its normal idle.  The DualTable code variants added in a PWM idle control (for driving a ford style 2 wire PWM actuated idle air valve (or similar).  This code supports 5 variables, the high idle rpm, high idle temp, the low idle rpm, and low idle temp and an idle threshold.  The way it works is simple; At temps below the Fast Idle Temp, the engien is kept at the Fast idle speed,  as the engine tep rises, the ECU drops the idle speed until the engine reaches the Slow idle temp, above this temp the engine temp is maintained at the slow idle speed.  Sensible numbers would be to set the high idle temp to be a low temperature, like 60 deg F, and a high idle RPM of 1800 RPM, and a slow idle RPM of 900 RPM, and slow idle temp of 145 deg F, and an idle threshold of 100RPM.  The Idle Threshold is the point at which when the throttle (TPS) input is BELOW this value idle control is enabled. Thus if when your throttle is closed and your TPS gauge reads 10%% in the runtime screen, setting this to 12 would enable idle control when you are idling, if you set it too low, idle control will never turn on and the engine may idle too low or not at all. ",NULL);
-	table = gtk_table_new(4,4,FALSE);
+
+	frame = gtk_frame_new("Idle Control Method");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
+
+	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),7);
-	gtk_container_add(GTK_CONTAINER(ebox),table);
+	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	label = gtk_label_new("Idle Control Methodology");
+        gtk_table_attach (GTK_TABLE (table), label, 0, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	button = gtk_radio_button_new_with_label(NULL,"B&G On-Off");
+	buttons.onoff_idle_but = button;
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(16));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
+
+	button = gtk_radio_button_new_with_label(group,"PWM Controlled");
+	buttons.pwm_idle_but = button;
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	g_object_set_data(G_OBJECT(button),"config_num",GINT_TO_POINTER(13));
+	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(16));
+	g_object_set_data(G_OBJECT(button),"dl_type",
+			GINT_TO_POINTER(IMMEDIATE));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 10, 0);
+	g_signal_connect(G_OBJECT(button),"toggled",
+			G_CALLBACK(bitmask_button_handler),
+			NULL);
+
+
+
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+
+	frame = gtk_frame_new("Idle Control Parameters");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
+
+
+	gtk_tooltips_set_tip(tip,ebox,"   The basic Bowling/Grippo MegaSquirt units, (version 1.1 or versiosn 2.2 hardware, and software versions up through version 3.01 all use a very simple idle control,  it's either on high-idle or it's not, and it's temperature controlled, once the engine temp gets above the Fast Idle temp, the high idle solenoid is disengaged and the engine goes down to its normal idle.  The DualTable code variants added in a PWM idle control (for driving a ford style 2 wire PWM actuated idle air valve (or similar).  This code supports 5 variables, the high idle rpm, high idle temp, the low idle rpm, and low idle temp and an idle threshold.  The way it works is simple; At temps below the Fast Idle Temp, the engien is kept at the Fast idle speed,  as the engine tep rises, the ECU drops the idle speed until the engine reaches the Slow idle temp, above this temp the engine temp is maintained at the slow idle speed.  Sensible numbers would be to set the high idle temp to be a low temperature, like 60 deg F, and a high idle RPM of 1800 RPM, and a slow idle RPM of 900 RPM, and slow idle temp of 145 deg F, and an idle threshold of 100RPM.  The Idle Threshold is the point at which when the throttle (TPS) input is BELOW this value idle control is enabled. Thus if when your throttle is closed and your TPS gauge reads 10%% in the runtime screen, setting this to 12 would enable idle control when you are idling, if you set it too low, idle control will never turn on and the engine may idle too low or not at all. ",NULL);
+	table = gtk_table_new(5,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	/* This label is dynamic and will change based on unit preference
 	 * AND based on if we are using DT code or not... 
@@ -452,39 +508,10 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Slow Idle Temp (\302\260 F.)");
-        labels.slow_idle_temp_lab = label;
-	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
-        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
-        /* Slow Idle Temp */
-        adj =  (GtkAdjustment *) gtk_adjustment_new(145.0,-40.0,215.0,1.0,10.0,0);
-        adjustments.slow_idle_temp_adj = adj;
-        spinner = gtk_spin_button_new(adj,0,0);
-	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
-        spinners.slow_idle_temp_spin = spinner;
-        ve_widgets->widget[124] = spinner;
-        gtk_widget_set_size_request(spinner,60,-1);
-        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(124));
-        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-                        GINT_TO_POINTER(40*100));
-        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
-        g_object_set_data(G_OBJECT(spinner),"dl_type",
-                        GINT_TO_POINTER(IMMEDIATE));
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-                        GINT_TO_POINTER(GENERIC));
-        gtk_table_attach (GTK_TABLE (table), spinner, 3, 4, 0, 1,
-                        (GtkAttachOptions) (GTK_EXPAND),
-                        (GtkAttachOptions) (0), 0, 0);
-
 	/* Fast Idle Speed */
 	label = gtk_label_new("Fast Idle Speed (RPM)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
         gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
@@ -494,6 +521,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         spinner = gtk_spin_button_new(adj,0,0);
         ve_widgets->widget[125] = spinner;
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(125));
@@ -509,17 +537,53 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
+	// Slow Idle Temp
+	label = gtk_label_new("Slow Idle Temp (\302\260 F.)");
+        labels.slow_idle_temp_lab = label;
+	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
+        gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+        /* Slow Idle Temp */
+        adj =  (GtkAdjustment *) gtk_adjustment_new(145.0,-40.0,215.0,1.0,10.0,0);
+        adjustments.slow_idle_temp_adj = adj;
+        spinner = gtk_spin_button_new(adj,0,0);
+	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
+        spinners.slow_idle_temp_spin = spinner;
+        ve_widgets->widget[124] = spinner;
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(124));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER(40*100));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
+
 	/* Slow Idle Speed */
 	label = gtk_label_new("Slow Idle Speed (RPM)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
         gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
         /* Slow Idle Speed */
         adj =  (GtkAdjustment *) gtk_adjustment_new(900.0,0.0,2550.0,10.0,100.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         ve_widgets->widget[126] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -532,7 +596,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(GENERIC));
-        gtk_table_attach (GTK_TABLE (table), spinner, 3, 4, 1, 2,
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 3, 4,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
@@ -541,14 +605,16 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	 */
 	label = gtk_label_new("Idle Threshold (TPS%)");
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)label);
         gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 4, 5,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
         /* Idle Threshold (% of TPS )*/
         adj =  (GtkAdjustment *) gtk_adjustment_new(10.0,0.0,100.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)spinner);
+	enh_idle_widgets = g_list_append(enh_idle_widgets, (gpointer)spinner);
         ve_widgets->widget[127] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -562,7 +628,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(GENERIC));
-        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 2, 3,
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 4, 5,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 

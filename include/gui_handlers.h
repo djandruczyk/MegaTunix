@@ -26,6 +26,7 @@ gint spinner_changed(GtkWidget *, gpointer);
 gint classed_spinner_changed(GtkWidget *, gpointer);
 gint set_logging_mode(GtkWidget * widget, gpointer *data);
 void set_widget_state(gpointer, gpointer);
+void set_enhanced_idle_state(gboolean);
 void check_req_fuel_limits(void);
 void check_config11(unsigned char);
 void check_config13(unsigned char);

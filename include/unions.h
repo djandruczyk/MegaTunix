@@ -125,24 +125,8 @@ union config13
         unsigned char      value;
         struct
         {
-                unsigned char unused:4;         /* Last 4 bits... */
-                unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
-                                                /* 1 = Enrichment on  */
-                unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
-                unsigned char ego_type  :1;     /* 0 = narrow, 1=wide */
-                unsigned char firing    :1;     /* 0 = normal, 1=odd fire */
-
-        } bit;
-};
-
-/* Big endian systems (MSB) */
-union dt_config13
-{
-        unsigned char      value;
-        struct
-        {
                 unsigned char unused:3;         /* Last 3 bits... */
-                /*DUALTABLE CODE SPECIFIC*/
+                /*Idle policy is IAC or DUALTABLE CODE SPECIFIC*/
                 unsigned char idle_policy:1;    /* 0 = B%G style, */
 						/* 1 = Brian Fielding PWM */
                 unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
@@ -281,21 +265,7 @@ union config13
                 unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
                 unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
                                                 /* 1 = Enrichment on  */
-                unsigned char unused:4;         /* Last 4 bits... */
-        } bit;
-};
-
-/* Little Endian systems (LSB), intel x86) */
-union dt_config13
-{
-        unsigned char      value;
-        struct
-        {
-                unsigned char firing    :1;     /* 0 = normal, 1=odd fire */
-                unsigned char ego_type  :1;     /* 0 = narrow, 1=wide */
-                unsigned char inj_strat :1;     /* 0 = SD, 1 = Alpha-N */
-                unsigned char baro_corr :1;     /* 0 = Enrichment off (100%) */
-                                                /* 1 = Enrichment on  */
+		/* idle_policy is IAC or Dualtable CODE SPECIFIC */
                 unsigned char idle_policy:1;    /* 0 = B%G style, */
                                                 /* 1 = Brian fielding PWM */
 

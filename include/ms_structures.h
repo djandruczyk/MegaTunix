@@ -223,7 +223,7 @@ struct Ve_Const_DT_1
 
         union	config11 config11;		/* 116, Config for PC Config */
         union	config12 config12;		/* 117, Config for PC Config */
-        union	dt_config13 config13;		/* 118, Config for PC Config */
+        union config13	config13;		/* 118, Config for PC Config */
         unsigned char	cr_priming_pulse;	/* 119, priming pulse b4 start*/
         unsigned char	ego_rpm_active;		/* 120, EGO RPM trigger volt  */
         unsigned char	fastidle_temp;		/* 121, fast idle temp */

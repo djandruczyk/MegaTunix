@@ -28,9 +28,9 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
-gint dualtable = FALSE;	/* Talking to a dualtable MS ?? */
+gboolean dualtable = FALSE;	/* Talking to a dualtable MS ?? */
+gboolean iac_variant = FALSE;	/* Talking to a dualtable MS ?? */
 unsigned char *kpa_conversion; 
-extern gboolean dualtable;
 extern unsigned char turbo_map[];
 extern unsigned char na_map[];
 extern gint ms_reset_count;
