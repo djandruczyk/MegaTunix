@@ -342,14 +342,18 @@ void set_ms_page(gint ms_page)
 {
 	gint res = 0;
 	gchar buf;
+
+#ifdef DEBUG
+	fprintf(stderr,__FILE__": Changing page on MS to %i\n",ms_page);
+#endif
 	if ((ms_page > 1) || (ms_page < 0))
 		fprintf(stderr,__FILE__": page choice %i is out of range(0,1)\n",ms_page);
 	
 	buf = ms_page & 0x01;
-#ifdef DEBUG
-	fprintf(stderr,__FILE__": Changing page on MS to %i\n",ms_page);
-#endif
+	printf("sending P followed by %i\n",buf);
 	res = write(serial_params->fd,"P",1);
+	if (res != 1)
+		fprintf(stderr,__FILE__": FAILURE sending \"P\" command to ECU \n");
 	res = write(serial_params->fd,&buf,1);
 	if (res != 1)
 		fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);

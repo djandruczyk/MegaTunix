@@ -40,9 +40,14 @@ void start_serial_thread()
 {
 	int retcode = 0;
 	gchar *tmpbuf;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
+
 	if (!connected)
 	{
 		no_ms_connection();
+		g_static_mutex_unlock(&mutex);
 		return;
 	}
 
@@ -52,6 +57,7 @@ void start_serial_thread()
 		/* Serial not opened, can't start thread in this state */
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
+		g_static_mutex_unlock(&mutex);
 		return;	
 	}
 	if (raw_reader_running)
@@ -60,6 +66,7 @@ void start_serial_thread()
 		/* Thread already running, can't run more than 1 */
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
+		g_static_mutex_unlock(&mutex);
 		return;
 	}
 	else
@@ -85,6 +92,7 @@ void start_serial_thread()
 		update_logbar(comms_view,"warning",tmpbuf,TRUE,FALSE);
 		g_free(tmpbuf);
 	}
+	g_static_mutex_unlock(&mutex);
 	return;
 }
 
