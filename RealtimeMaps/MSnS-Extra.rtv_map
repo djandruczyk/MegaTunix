@@ -43,14 +43,14 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="RAW RPM" Is the engine RPM, as sent from the ECU in units of rpmx100
+tooltip="RAW RPM" Is the engine RPM, as sent from the ECU in units of rpm/100
 
 [derived_3]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,ul_conv_expr,complex_expr,is_float,tooltip,lower_limit,upper_limit
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_,_BOOL_,_STRING_,_INT_,_INT_
-internal_name=rpmx100
-dlog_gui_name=RPMx100
-dlog_field_name=RPMX100
+internal_name=rpm
+dlog_gui_name=RPM
+dlog_field_name=RPM
 offset=13
 lower_limit=0
 upper_limit=25500
@@ -70,7 +70,7 @@ cyls_bitmask=240
 cyls_bitshift=4
 ctimeH_offset=22
 ctimeL_offset=23
-tooltip="RPMx100" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of about 1-5 RPM with the this firmware but NOT below 500 RPM. 
+tooltip="RPM" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of about 1-5 RPM with the this firmware but NOT below 500 RPM. 
 
 [derived_4]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit

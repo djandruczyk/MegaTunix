@@ -23,10 +23,10 @@ row=2
 source=o2volt
 
 [rt_slider_3]
-slider_name=rpmx100
+slider_name=rpm
 table=0
 row=3
-source=rpmx100
+source=rpm
 
 [rt_slider_4]
 slider_name=pw1
@@ -155,10 +155,10 @@ row=3
 source=mapkpa
 
 [ve3d_slider_0]
-slider_name=ve3d_rpmx100
+slider_name=ve3d_rpm
 table=0
 row=0
-source=rpmx100
+source=rpm
 
 [ve3d_slider_1]
 slider_name=ve3d_o2volt

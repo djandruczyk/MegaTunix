@@ -17,10 +17,10 @@ row=1
 source=battvolt
 
 [rt_slider_2]
-slider_name=rpmx100
+slider_name=rpm
 table=0
 row=2
-source=rpmx100
+source=rpm
 
 [rt_slider_3]
 slider_name=pw
@@ -132,10 +132,10 @@ source=mapkpa
 
 
 [ve3d_slider_0]
-slider_name=ve3d_rpmx100
+slider_name=ve3d_rpm
 table=0
 row=0
-source=rpmx100
+source=rpm
 
 [ve3d_slider_1]
 slider_name=ve3d_o2volt
