@@ -26,6 +26,7 @@ gboolean view_value_set(GtkWidget *, gpointer );
 gboolean populate_viewer(GtkWidget * );
 struct Viewable_Value * build_v_value(GtkWidget *, gint );
 GdkGC * initialize_gc(GdkDrawable *, GcType );
+GdkColor get_colors_from_hue(gfloat);
 void draw_graticule(void * );
 void draw_infotext(void * );
 void draw_old_data(void * );

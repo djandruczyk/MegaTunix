@@ -27,9 +27,6 @@ static gint max_viewables = 0;
 static gint total_viewables = 0;
 static struct Logables viewables;
 static GHashTable *active_traces = NULL;
-static gint red = 0;
-static gint green = 32768;
-static gint blue = 65535;
 static GtkWidget * lv_darea;
 
 /* This table is the same dimensions as the table used for datalogging.
@@ -454,15 +451,16 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 	GdkGC * gc = NULL;
 	GdkGCValues values;
 	GdkColormap *cmap = NULL;
+	static gfloat hue_angle = 0.0;
 
 	cmap = gdk_colormap_get_system();
 
 	switch((GcType)type)
 	{
 		case FONT:
-			color.red = 10000;
+			color.red = 0;
 			color.green = 65535;
-			color.blue = 10000;
+			color.blue = 0;
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
@@ -471,23 +469,15 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			break;
 
 		case TRACE:
-			color.red = red;
-			color.green = green;
-			color.blue = blue;
+			color = (GdkColor)  get_colors_from_hue(hue_angle);
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
 					GDK_GC_FOREGROUND);
-			red += 24000;
-			green += 24000;
-			blue += 24000;
-			if (red > 65536)
-				red -= 65536;
-			if (green > 65536)
-				green -= 65536;
-			if (blue > 65536)
-				blue -= 65536;
+			hue_angle += 65;
+			if (hue_angle >= 360)
+				hue_angle -= 360.0;
 			break;
 		case GRATICULE:
 			color.red = 36288;
@@ -501,6 +491,69 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			break;
 	}	
 	return gc;	
+}
+
+GdkColor get_colors_from_hue(gfloat hue_angle)
+{
+	GdkColor color;
+	gfloat tmp = 0.0;	
+	gint i;
+	gfloat fract = 0.0;
+	gfloat S = 1.0;	// using saturation of 1.0
+	gfloat V = 1.0;	// using Value of 1.0
+	gfloat p = 0.0;
+	gfloat q = 0.0;
+	gfloat t = 0.0;
+	gfloat r = 0.0;
+	gfloat g = 0.0;
+	gfloat b = 0.0;
+
+	tmp = hue_angle/60.0;
+	i = floor(tmp);
+	fract = tmp-i;
+
+	p = V*(1.0-S);	
+	q = V*(1.0-(S*fract));	
+	t = V*(1.0-(S*(1.0-fract)));
+
+	switch (i)
+	{
+		case 0:
+			r = V;
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = V;
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = V;
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = V;
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = V;
+			break;
+		case 5:
+			r = V;
+			g = p;
+			b = q;
+			break;
+	}
+	color.red = r * 65535;
+	color.green = g * 65535;
+	color.blue = b * 65535;
+
+	return (color);	
 }
 
 void draw_infotext(void *data)
