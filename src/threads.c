@@ -349,3 +349,44 @@ void  thread_update_logbar(
 	g_async_queue_unref(dispatch_queue);
 	return;
 }
+
+
+
+/*!
+ \brief thread_update_widget() is a function to be called from within threads
+ to update a widget (spinner/entry/label). It's not safe to update a 
+ widget from a threaded context in win32, hence this fucntion is created 
+ to pass the information to the main thread via an GAsyncQueue to a 
+ dispatcher that will take care of the message. 
+ \param widget_name (gchar *) textual name of the widget to update
+ \param type (WidgetType enumeration) type of widget to update
+ \param msg (gchar *) the message to be sent (required)
+ */
+void  thread_update_widget(
+		gchar * widget_name,
+		WidgetType type,
+		gchar * msg)
+{
+	struct Io_Message *message = NULL;
+	struct Widget_Update *w_update = NULL;
+	extern GAsyncQueue *dispatch_queue;
+	gint tmp = 0;
+
+	message = g_new0(struct Io_Message,1);
+
+	w_update = g_new0(struct Widget_Update, 1);
+	w_update->widget_name = g_strdup(widget_name);
+	w_update->type = type;
+	w_update->msg = g_strdup(msg);
+
+	message->payload = w_update;
+	message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_WIDGET;
+	g_array_append_val(message->funcs,tmp);
+
+	g_async_queue_ref(dispatch_queue);
+	g_async_queue_push(dispatch_queue,(gpointer)message);
+	g_async_queue_unref(dispatch_queue);
+	return;
+}
+

@@ -300,6 +300,7 @@ struct Io_Message
 	gboolean need_page_change; /*! flag to set if we need to change page */
 };
 
+
 /*
  \brief Text_Message strcture is used for a thread to pass messages up
  a GAsyncQueue to the main gui thread for updating a textview in a thread
@@ -313,6 +314,20 @@ struct Text_Message
 	gchar *msg;		/*! message to display */
 	gboolean count;		/*! display a counter */
 	gboolean clear;		/*! Clear the window? */
+};
+
+
+/*
+ \brief Widget_Update strcture is used for a thread to pass a widget update
+ call up a GAsyncQueue to the main gui thread for updating a widget in 
+ a thread safe manner. A dispatch queue runs 5 times per second checking 
+ for messages to dispatch...
+ */
+struct Widget_Update
+{
+	gchar *widget_name;	/*! Widget name */
+	WidgetType type;	/*! what type of widget are we updating */
+	gchar *msg;		/*! message to display */
 };
 
 

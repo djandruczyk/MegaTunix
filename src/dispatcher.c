@@ -58,8 +58,10 @@ gboolean dispatcher(gpointer data)
 	gint i=0;
 	gint val=-1;
 	gint count = 0;
+	GtkWidget *widget = NULL;
 	struct Io_Message *message = NULL;
 	struct Text_Message *t_message = NULL;
+	struct Widget_Update *w_update = NULL;
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gint mem_view_style[];
@@ -98,6 +100,26 @@ trypop:
 					t_message = (struct Text_Message *)message->payload;
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
 					dealloc_textmessage(t_message);
+					message->payload = NULL;
+					break;
+				case UPD_WIDGET:
+					widget = NULL;
+					w_update = (struct Widget_Update *)message->payload;
+					if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
+						break;
+					switch (w_update->type)
+					{
+						case MTX_ENTRY:
+							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
+							break;
+						case MTX_LABEL:
+							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
+							break;
+//						case MTX_SPINBUTTON:
+//							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
+//							break;
+					}
+					dealloc_w_update(w_update);
 					message->payload = NULL;
 					break;
 				case UPD_POPULATE_DLOGGER:
@@ -211,7 +233,7 @@ void dealloc_textmessage(struct Text_Message * message)
 
 /*!
  \brief dealloc_message() deallocates the structure used to pass an I/O
- message from the thread to here..
+ message from a thread to here..
  \param message (struct Io_Message *) pointer to message data
  */
 void dealloc_message(struct Io_Message * message)
@@ -223,6 +245,23 @@ void dealloc_message(struct Io_Message * message)
         if (message->payload)
                 g_free(message->payload);
         g_free(message);
+
+}
+
+
+/*!
+ \brief dealloc_w_update() deallocates the structure used to pass an I/O
+ widget update message from a thread to here..
+ \param w_update (struct Widget_Update *) pointer to message data
+ */
+void dealloc_w_update(struct Widget_Update * w_update)
+{
+        if (w_update->widget_name)
+                g_free(w_update->widget_name);
+        if (w_update->msg)
+                g_free(w_update->msg);
+        g_free(w_update);
+	w_update = NULL;
 
 }
 

@@ -239,6 +239,7 @@ typedef enum
 	UPD_REALTIME = 0x140,
 	UPD_LOGBAR,
 	UPD_LOGVIEWER,
+	UPD_WIDGET,
 	UPD_DATALOGGER,
 	UPD_VE_CONST,
 	UPD_READ_VE_CONST,
@@ -301,4 +302,10 @@ typedef enum
 	MTX_DECIMAL,
 }Base;
 
+typedef enum
+{
+	MTX_ENTRY=0x19a,
+//	MTX_SPINBUTTON,
+	MTX_LABEL,
+}WidgetType;
 #endif

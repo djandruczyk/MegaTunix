@@ -1,8 +1,8 @@
 [interrogation_profile]
-name=MegaSquirtnSpark-Extra 021x7
+name=MegaSquirtnSpark-Extra 021x
 
 [parameters]
-SignatureQueryString=extra format 021x7
+SignatureQueryString=extra format 021x
 ExtVerQueryString=
 VerNumber=
 Capabilities=

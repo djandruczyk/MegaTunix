@@ -239,8 +239,6 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	gchar * tmpbuf = NULL;
 	gchar ** filenames = NULL;
 	extern struct Io_Cmds *cmds;
-	extern GHashTable *dynamic_widgets;
-	GtkWidget * widget = NULL;
 
 	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL));	
 	if (!filenames)
@@ -276,12 +274,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 			else
 				tmpbuf = g_strdup_printf("%.1f",
 						((float)canidate->ver_num/10.0));
-			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_revision_entry")))
-			{
-//				gdk_threads_enter();
-//				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-//				gdk_threads_leave();
-			}
+			thread_update_widget("ecu_revision_entry",MTX_ENTRY,tmpbuf);
 			g_free(tmpbuf);
 		}
 		if (cmd->store_type == SIG)
@@ -292,12 +285,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 				tmpbuf = g_strndup(
 						canidate->sig_str,
 						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key));
-			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ecu_signature_entry")))
-			{
-//				gdk_threads_enter();
-//				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-//				gdk_threads_leave();
-			}
+			thread_update_widget("ecu_signature_entry",MTX_ENTRY,tmpbuf);
 			g_free(tmpbuf);
 		}
 		if (cmd->store_type == EXTVER)
@@ -308,12 +296,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 				tmpbuf = g_strndup(
 						canidate->quest_str,
 						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key));
-			if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ext_revision_entry")))
-			{
-//				gdk_threads_enter();
-//				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-//				gdk_threads_leave();
-			}
+			thread_update_widget("ext_revision_entry",MTX_ENTRY,tmpbuf);
 			g_free(tmpbuf);
 		}
 
