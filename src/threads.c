@@ -46,6 +46,18 @@ extern struct Serial_Params *serial_params;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test"};
 
 
+/*!
+ \brief io_cmd() is called from all over the gui to kick off a threaded I/O
+ command.  A command enumeration and an option block of data is passed and
+ this function allocates a struct Io_Message and shoves it down an GAsyncQueue
+ to the main thread dispatcher which runs things and then passes any 
+ needed information back to the gui via another GAsyncQueue which takes care
+ of any post thread GUI updates. (which can NOT be done in a thread context
+ due to reentrancy and deadlock conditions)
+ \param cmd (Io_Command) and enumerated representation of a command to execute
+ \param data (gpointer) data passed to be appended to the message ot send as
+ a "payload")
+ */
 void io_cmd(Io_Command cmd, gpointer data)
 {
 	struct Io_Message *message = NULL;
@@ -189,7 +201,15 @@ void io_cmd(Io_Command cmd, gpointer data)
 	}
 }
 
-void *serial_io_handler(gpointer data)
+
+/*!
+ \brief thread_dispatcher() runs continuously as a thread listening to the 
+ io_queue and running handlers as messages come in. After they are done it
+ passes the message back to the gui via the dispatch_queue for further
+ gui handling (for things that can't run in a thread context)
+ \param data (gpointer) unused
+ */
+void *thread_dispatcher(gpointer data)
 {
 	struct Io_Message *message = NULL;	
 
@@ -200,40 +220,40 @@ void *serial_io_handler(gpointer data)
 		switch ((CmdType)message->command)
 		{
 			case INTERROGATION:
-				dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu requested\n",SERIAL_RD|SERIAL_WR|THREADS);
+				dbg_func(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n",SERIAL_RD|SERIAL_WR|THREADS);
 				if (!connected)
 					comms_test();
 				if (connected)
 					interrogate_ecu();
 				else
-					dbg_func(__FILE__": serial_io_handler()\n\tInterrogate_ecu request denied, NOT Connected!!\n",CRITICAL);
+					dbg_func(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n",CRITICAL);
 				break;
 			case COMMS_TEST:
-				dbg_func(__FILE__": serial_io_handler()\n\tcomms_test requested \n",SERIAL_RD|SERIAL_WR|THREADS);
+				dbg_func(__FILE__": thread_dispatcher()\n\tcomms_test requested \n",SERIAL_RD|SERIAL_WR|THREADS);
 				comms_test();
 				if (!connected)
-					dbg_func(__FILE__": serial_io_handler()\n\tComms Test failed, NOT Connected!!\n",CRITICAL);
+					dbg_func(__FILE__": thread_dispatcher()\n\tComms Test failed, NOT Connected!!\n",CRITICAL);
 				break;
 			case READ_CMD:
-				dbg_func(g_strdup_printf(__FILE__": serial_io_handler()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD|THREADS);
+				dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD|THREADS);
 				if (connected)
 					readfrom_ecu(message);
 				else
-					dbg_func(g_strdup_printf(__FILE__": serial_io_handler()\n\treadfrom_ecu skipped, NOT Connected initiator %i!!\n",message->cmd),CRITICAL);
+					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\treadfrom_ecu skipped, NOT Connected initiator %i!!\n",message->cmd),CRITICAL);
 				break;
 			case WRITE_CMD:
-				dbg_func(__FILE__": serial_io_handler()\n\twrite_command requested\n",SERIAL_WR|THREADS);
+				dbg_func(__FILE__": thread_dispatcher()\n\twrite_command requested\n",SERIAL_WR|THREADS);
 				if ((connected) || (offline))
 					writeto_ecu(message);
 				else
-					dbg_func(__FILE__": serial_io_handler()\n\twriteto_ecu skipped, NOT Connected!!\n",CRITICAL);
+					dbg_func(__FILE__": thread_dispatcher()\n\twriteto_ecu skipped, NOT Connected!!\n",CRITICAL);
 				break;
 			case BURN_CMD:
-				dbg_func(__FILE__": serial_io_handler()\n\tburn_command requested\n",SERIAL_WR|THREADS);
+				dbg_func(__FILE__": thread_dispatcher()\n\tburn_command requested\n",SERIAL_WR|THREADS);
 				if ((connected) || (offline))
 					burn_ms_flash();
 				else
-					dbg_func(__FILE__": serial_io_handler()\n\tburn_ms_flash skipped, NOT Connected!!\n",CRITICAL);
+					dbg_func(__FILE__": thread_dispatcher()\n\tburn_ms_flash skipped, NOT Connected!!\n",CRITICAL);
 
 				break;
 
@@ -246,6 +266,21 @@ void *serial_io_handler(gpointer data)
 }
 
 
+/*!
+ \brief write_ve_const() gets called to send a value to the ECU.  This function
+ will check if the value sent is NOT the reqfuel_offset (that has special
+ interdependancy issues) and then will check if there are more than 1 widgets
+ that are associated with this page/offset and update those widgets before
+ sending the value to the ECU.
+ \param widget (GtkWidget *) pointer to hte widget that was modified or NULL
+ \param page (gint) page in which the value refers to.
+ \param offset (gint) offset from the beginning of the page that this data
+ refers to.
+ \param value (gint) the value that should be sent to the ECU At page.offset
+ \param ign_parm (gboolean) a flag stating if this requires special handling
+ for being an MSnEDIS/MSnSpark ignition variable (alternate command for 
+ sending the data to the ECU.)
+ */
 void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct OutputData *output = NULL;
@@ -273,6 +308,19 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 }
 
 
+/*!
+ \brief thread_update_logbar() is a function to be called from within threads
+ to update a logbar (textview). It's not safe to update a widget from a 
+ threaded context in win32, hence this fucntion is created to pass the 
+ information to the main thread via an GAsyncQueue to a dispatcher that will
+ take care of the message.
+ \param view_name (gchar *) textual name fothe textview to update (required)
+ \param tagname (gchar *) textual name ofthe tag to be applied to the text 
+ sent.  This can be NULL is no tag is desired
+ \param msg (gchar *) the message to be sent (required)
+ \param count (gboolean) Flag to display a counter
+ \param clear (gboolean) Flag to clear the display before writing the text
+ */
 void  thread_update_logbar(
 		gchar * view_name, 
 		gchar * tagname, 
@@ -293,6 +341,5 @@ void  thread_update_logbar(
 	g_async_queue_ref(textmessage_queue);
 	g_async_queue_push(textmessage_queue,(gpointer)message);
 	g_async_queue_unref(textmessage_queue);
+	return;
 }
-
-

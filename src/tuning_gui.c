@@ -16,6 +16,11 @@
 #include <tuning_gui.h>
 
 
+/*!
+ \brief build_tuning() should buildthe tuning gui, except for now it's just
+ a stub function which doesn't do anything yet as this is yet to be written
+ /param parent_frame (GtkWidget *) pointer to the parent widget
+ */
 void build_tuning(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;

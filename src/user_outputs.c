@@ -37,6 +37,14 @@ enum
 	NUM_COLS
 } ;
 
+
+/*!
+ \brief build_model_and_view() is called to create the model and view for
+ a preexisting textview. Currently used to generate the User controlled outputs
+ lists for MSnS and MSnEDIS firmwares
+ \param widget (GtkWidget *) The textview that this model and view is to be
+ created for.
+ */
 EXPORT void build_model_and_view(GtkWidget * widget)
 {
 	extern gboolean rtvars_loaded;
@@ -67,6 +75,11 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 
 }
 
+
+/*!
+ \brief create_model() Creates a TreeModel used by the user outputs treeviews
+ \returns a pointer to a newly created GtkTreeModel.
+ */
 GtkTreeModel * create_model(void)
 {
 	GtkListStore  *model;
@@ -112,6 +125,11 @@ GtkTreeModel * create_model(void)
 }
 
 
+/*!
+ \brief add_columns() creates the column fields for a treeview.
+ \param view (GtkTreeView *) pointer to the Treeview
+ \param output (gint) a number passed used for in a colum title
+ */
 void add_columns(GtkTreeView *view, gint output)
 {
 	GtkCellRenderer     *renderer;
@@ -157,6 +175,16 @@ void add_columns(GtkTreeView *view, gint output)
 
 }
 
+
+/*!
+ \brief cell_edited() is called whenever an editable cell on the user outputs
+ treeviews are modified. This function will vheck and verify the user input
+ is valid, and process it and send it to the ECU
+ \param cell (GtkCellRendererText *)  pointer to the cell that was edited
+ \param path_string (const gchar *) tree_path for the treeview (see GTK+ docs)
+ \param new_text (const gchar *) new text thatwas entered into the cell
+ \param data (gpointer) pointer to the GtkTreeModel
+ */
 void cell_edited(GtkCellRendererText *cell, 
 		const gchar * path_string,
 		const gchar * new_text,
@@ -219,7 +247,7 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 		gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
 				g_strdup_printf("%i",(gint)new), -1);
-	
+
 	if (!evaluator)
 	{
 		evaluator = evaluator_create(g_object_get_data(G_OBJECT(object),"dl_conv_expr"));
@@ -263,9 +291,16 @@ void cell_edited(GtkCellRendererText *cell,
 	write_ve_const(NULL,page,src_offset,rt_offset,ign_parm);
 	write_ve_const(NULL,page,lim_offset,result,ign_parm);
 	update_model_from_view((GtkWidget *)view);
-	
+
 }
 
+
+/*!
+ \brief update_model_from_view() is called after a cell is cuccessfully edited
+ and updates the treemodel associated with the view.
+ \see cell_edited
+ \param widget (GtkWidget *) pointer to the TreeView widget.
+ */
 void update_model_from_view(GtkWidget * widget)
 {
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(widget));
@@ -350,7 +385,4 @@ void update_model_from_view(GtkWidget * widget)
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup(""), -1);
 		looptest = gtk_tree_model_iter_next(model,&iter);
 	}
-
-
-
 }

@@ -35,6 +35,11 @@
 gboolean tabs_loaded = FALSE;
 
 
+/*!
+ \brief load_gui_tabs() is called after interrogation completes successfully.
+ It's purpose is to load all the glade files and datamaps as specified in the
+ interrogation profile of the detected firmware. 
+ */
 gboolean load_gui_tabs()
 {
 	extern struct Firmware_Details * firmware;
@@ -78,8 +83,7 @@ gboolean load_gui_tabs()
 				/* bind_data() is recursive and will take 
 				 * care of all children
 				 */
-				groups = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,group_free);
-				load_groups(cfgfile,groups);
+				groups = load_groups(cfgfile);
 				bindgroup->cfgfile = cfgfile;
 				bindgroup->groups = groups;
 				bind_data(topframe,(gpointer)bindgroup);
@@ -145,6 +149,12 @@ gboolean load_gui_tabs()
 
 }
 
+
+/*!
+ \brief group_free() free's the data from the struct Group structure
+ \param value (gpointer) pointer to the struct Group to be deallocated
+ \see load_groups
+ */
 void group_free(gpointer value)
 {
 	struct Group *group = value;
@@ -157,7 +167,18 @@ void group_free(gpointer value)
 	g_free(group);
 }
 
-void load_groups(ConfigFile *cfgfile, GHashTable *groups)
+
+/*!
+ \brief load_groups() is called from the load_gui_tabs function in order to
+ load common settings for a group of controls.
+ \param cfgfile (ConfigFile *) the pointer to the configuration file to read
+ the group information from.
+ \see group_free
+ \see load_gui_tabs
+ \returns a GHashTable * to a newly created hashtable of the groups that were
+ loaded. The groups are indexed in the hashtable by group name.
+ */
+GHashTable * load_groups(ConfigFile *cfgfile)
 {
 	gint i = 0;
 	gint x = 0;
@@ -167,7 +188,8 @@ void load_groups(ConfigFile *cfgfile, GHashTable *groups)
 	gchar *section = NULL;
 	gint num_groups = 0;
 	struct Group *group = NULL;
-
+	GHashTable *groups = NULL;
+	groups = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,group_free);
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
 		groupnames = parse_keys(tmpbuf,&num_groups,",");
@@ -175,7 +197,7 @@ void load_groups(ConfigFile *cfgfile, GHashTable *groups)
 		g_free(tmpbuf);
 	}
 	else
-		return;
+		return NULL;
 	for (x=0;x<num_groups;x++)
 	{
 		/* Create structure and allocate ram for it */
@@ -209,7 +231,7 @@ void load_groups(ConfigFile *cfgfile, GHashTable *groups)
 			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section),CRITICAL);
 			g_strfreev(group->keys);
 			g_free(group->keytypes);
-			return;
+			return NULL;
 
 		}
 		if (cfg_read_int(cfgfile,section,"page",&tmpi))
@@ -275,8 +297,21 @@ void load_groups(ConfigFile *cfgfile, GHashTable *groups)
 		g_free(section);
 	}
 	g_strfreev(groupnames);
+	return groups;
 }
 
+
+/*!
+ \brief bind_group_data() is called to bind data widget that is defined in
+ a group. (saves from having to duplicate a large number of keys.values for 
+ a big group of widgets) This function will set the necessary data on the 
+ Gui object.
+ \param widget (GtkWidget *) the widget to bind the data to
+ \param groups (GHashTable *) the hashtable that holds the  group common data
+ \param groupname (gchar *) textual name of the group to get the data for to
+ be bound to the widget
+ \returns the page of the group
+ */
 gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
@@ -308,6 +343,16 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 	return group->page;
 }
 
+
+/*!
+ \brief bind_data() is a recursive function that is called for every container
+ widget in a glade frame and it's purpose is to search the datamap file passed
+ for the widget names in the glade file and if it's fond in the datamap to
+ load all the attribues listed and bind them to the object using GTK+'s
+ object model.
+ \param widget (GtkWidget *) widget passed to load attributes on
+ \param user_data (gpointer) pointer to a BingGroup structure.
+ */
 void bind_data(GtkWidget *widget, gpointer user_data)
 {
 	struct BindGroup *bindgroup = user_data;
@@ -498,6 +543,12 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 }
 
 
+/*!
+ \brief run_post_function() is called to run a function AFTER tab loading.
+ It'll search the exported symbols of MegaTunix for the function and if
+ found execute it
+ \param function_name (gchar *) textual name of the function to run.
+ */
 void run_post_function(gchar * function_name)
 {
 	void (*function)(void);
@@ -522,6 +573,14 @@ void run_post_function(gchar * function_name)
 
 
 
+/*!
+ \brief run_post_function_with_arg() is called to run a function AFTER 
+ tab loading is complete. It'll search the exported symbols of MegaTunix 
+ for the function and if found execute it with the passed widget as an
+ argument.
+ \param function_name (gchar *) textual name of the function to run.
+ \param widget (GtkWidget *) pointer to widget to be passed to the function
+ */
 void run_post_function_with_arg(gchar * function_name, GtkWidget *widget)
 {
 	void (*function)(GtkWidget *);

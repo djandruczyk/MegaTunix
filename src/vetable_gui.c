@@ -22,7 +22,13 @@
 #include <vetable_gui.h>
 
 
-
+/*!
+ \brief rescale_table() is called to rescale a subset of a Table (doesn't
+ matter what kind of table). 
+ \param data (void *) is the widget name of the scaler widget that was used.
+ From this widget we extract the table number and other needed data to 
+ properly do the rescaling.
+ */
 void rescale_table(void * data)
 {
 	extern struct Firmware_Details *firmware;
@@ -87,108 +93,3 @@ void rescale_table(void * data)
 
 
 }
-
-/* Currently unused due to being horribly slow... 
- * highlights the four boxes currounding the current VE point...
-void hilite_ve_entries(gint rpm, gint map, gint table_num)
-{
-	// Highlights the VEtable entries around the current engine
-	// Operating point to assist with tuning the table.
-	//
-	extern gint **ms_data;
-	extern GdkColor red;
-	extern GdkColor white;
-	extern GList ***ve_widgets;
-	static struct Indexes kpa_index[2],rpm_index[2];
-	static struct Indexes l_kpa_index[2],l_rpm_index[2];
-	static gint index[2][4] = {{-1,-1,-1,-1},{-1,-1,-1,-1}};
-	gint offset = 0;
-	gint i = 0;
-
-
-
-	get_indexes(KPA,map, &kpa_index[table_num],table_num);
-	get_indexes(RPM,rpm/100, &rpm_index[table_num],table_num);
-
-	// If nothing has changed, exit now saving CPU time 
-	if ((l_kpa_index[table_num].low == kpa_index[table_num].low) &&
-			(l_kpa_index[table_num].high == kpa_index[table_num].high) &&
-			(l_rpm_index[table_num].low == rpm_index[page].low) &&
-			(l_rpm_index[page].high == rpm_index[page].high))
-		return;
-
-	for (i=0;i<4;i++)
-	{
-		if (index[page][i] >= 0)
-		{
-			gtk_widget_modify_base(ve_widgets[offset+index[page][i]],
-					GTK_STATE_NORMAL,&white);
-		}
-	}
-	dbg_func(g_strdup_printf(__FILE__": hilite_ve_entries() rpm %i,%i, kpa %i,%i\n",rpm_index[page].low,rpm_index[page].high,kpa_index[page].low,kpa_index[page].high),IO_PROCESS);
-
-	index[page][0] = (kpa_index[page].low * 8) + rpm_index[page].low;
-	index[page][1] = (kpa_index[page].low * 8) + rpm_index[page].high;
-	index[page][2] = (kpa_index[page].high * 8) + rpm_index[page].low;
-	index[page][3] = (kpa_index[page].high * 8) + rpm_index[page].high;
-
-	for (i=0;i<4;i++)
-	{
-		gtk_widget_modify_base(ve_widgets[offset+index[page][i]],
-				GTK_STATE_NORMAL,&red);
-	}
-
-	// save last run 
-	l_kpa_index[page].low = kpa_index[page].low;
-	l_kpa_index[page].high = kpa_index[page].high;
-	l_rpm_index[page].low = rpm_index[page].low;
-	l_rpm_index[page].high = rpm_index[page].high;
-
-	return;
-
-}
-
-void get_indexes(TableType type, gint value, void *ptr,gint page)
-{
-	extern gint **ms_data;
-	struct Indexes *index = (struct Indexes *) ptr;
-	gint start = -1;
-	const gint span = 8;
-	gint i = -1;
-
-	if (type == KPA)
-		start = VE1_KPA_BINS_OFFSET;
-	else if (type == RPM)
-		start = VE1_RPM_BINS_OFFSET;
-	else
-	{
-		dbg_func(__FILE__": get_indexes(), Invalid TableType passed to get_indexes()\n",CRITICAL);
-		index->low = -1;
-		index->high = -1;
-		return;
-	}
-	
-	for (i=0;i<span-1;i++)
-	{
-		// If value is out of page bounds on low side 
-		if (value < ms_data[start])
-		{
-			index->low=0;
-			index->high=0;
-			break;
-		}
-		// Somewhere inside page.... 
-		if ((value >= ms_data[start+i])&&(value <= ms_data[start+i+1]))
-		{	
-			index->low=i;
-			index->high=i+1;
-			break;
-		}
-		// Above page bounds 
-		index->low = span-1;
-		index->high = span-1;
-	}
-
-	return;
-}
- */

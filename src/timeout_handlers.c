@@ -26,6 +26,11 @@ gint realtime_id = 0;
 gint playback_id = 0;
 
 
+/*!
+ \brief start_realtime_tickler() starts up a GTK+ timeout function to run
+ the signal_read_rtvars function on a periodic time schedule
+ \see signal_read_rtvars
+ */
 void start_realtime_tickler()
 {
 	extern struct Serial_Params *serial_params;
@@ -43,6 +48,13 @@ void start_realtime_tickler()
 	}
 }
 
+
+/*!
+ \brief start_logviewer_playback() kicks off a GTK+ timeout to update the
+ logviewer display on a periodic basis.
+ \see update_logview_traces
+ \see stop_logviewer_playback
+ */
 void start_logviewer_playback()
 {
 
@@ -52,6 +64,13 @@ void start_logviewer_playback()
 		dbg_func(__FILE__": start_logviewer_playback()\n\tPlayback already running \n",CRITICAL);
 }
 
+
+/*!
+ \brief stop_logviewer_playback() kills off the GTK+ timeout that updates the
+ logviewer display on a periodic basis.
+ \see update_logview_traces
+ \see start_logviewer_playback
+ */
 void stop_logviewer_playback()
 {
 	if (playback_id)
@@ -63,6 +82,12 @@ void stop_logviewer_playback()
 		dbg_func(__FILE__": stop_logviewer_playback()\n\tPlayback already stopped...\n",CRITICAL);
 }
 
+
+/*!
+ \brief stop_realtime_tickler() kills off the GTK+ timeout that gets the
+ realtime variables on a periodic basis.
+ \see start_realtime_tickler
+ */
 void stop_realtime_tickler()
 {
 	extern GAsyncQueue *io_queue;
@@ -88,6 +113,15 @@ void stop_realtime_tickler()
 	reset_runtime_status();
 }
 
+
+/*!
+ \brief signal_read_rtvars() is called by a GTK+ timeout on a periodic basis
+ to get a new set of realtiem variables.  It does so by queing messages to
+ a thread which handles I/O.  This function will check the queue depth and 
+ if the queue is backed up it will skip sending a request for data, as that 
+ will only aggravate the queue roadblock.
+ \returns TRUE
+ */
 gboolean signal_read_rtvars()
 {
 	gint length = 0;
@@ -124,16 +158,15 @@ gboolean signal_read_rtvars()
 		dbg_func(__FILE__": signal_read_rtvars()\n\tNOT connected, not queing message to thread handler....\n",CRITICAL);
 
 	}
-
 	return TRUE;	/* Keep going.... */
 }
 
-void force_an_update()
-{
-      extern gboolean forced_update;
-      forced_update = TRUE;
-}
 
+/*!
+ \brief early interrogation() is called from a one shot timeout from main
+ in order to start the interrogation process as soon as hte gui is up and 
+ running.
+ */
 gboolean early_interrogation()
 {
 	update_logbar("interr_view","warning","Initiating background ECU interrogation...\n",FALSE,FALSE);

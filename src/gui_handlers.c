@@ -167,6 +167,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = 0; 
 	extern gint preferred_delimiter;
 	extern gchar *offline_firmware_choice;
+	extern gboolean forced_update;
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -190,12 +191,12 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case FAHRENHEIT:
 				temp_units = FAHRENHEIT;
 				reset_temps(GINT_TO_POINTER(temp_units));
-				force_an_update();
+				forced_update = TRUE;
 				break;
 			case CELSIUS:
 				temp_units = CELSIUS;
 				reset_temps(GINT_TO_POINTER(temp_units));
-				force_an_update();
+				forced_update = TRUE;
 				break;
 			case COMMA:
 				preferred_delimiter = COMMA;
@@ -450,6 +451,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = -1;
 	extern gboolean no_update;
 	extern gboolean offline;
+	extern gboolean forced_update;
+
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
@@ -487,7 +490,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			if (!constants_loaded)
 				io_cmd(IO_READ_VE_CONST, NULL);
 			start_realtime_tickler();
-			force_an_update();
+			forced_update = TRUE;
 			break;
 		case STOP_REALTIME:
 			if (offline)
@@ -1315,11 +1318,12 @@ testit:
 void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint page_ident = 0;
+	extern gboolean forced_update;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	page_ident = (PageIdent)g_object_get_data(G_OBJECT(widget),"page_ident");
 	active_page = page_ident;
-	force_an_update();
+	forced_update = TRUE;
 
 	return;
 }
