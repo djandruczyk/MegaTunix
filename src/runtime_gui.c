@@ -18,7 +18,8 @@
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
-#include <ms_structures.h>
+#include <listmgmt.h>
+#include <mode_select.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
 #include <structures.h>
@@ -32,7 +33,8 @@ extern GdkColor black;
 extern GdkColor red;
 
 GtkWidget *rt_table[4];
-gboolean forced_update;
+gboolean forced_update = TRUE;
+gboolean no_update = FALSE;
 
 gboolean update_runtime_vars()
 {
@@ -44,28 +46,11 @@ gboolean update_runtime_vars()
 	GtkWidget * tmpwidget=NULL;
 	extern struct Firmware_Details *firmware;
 	extern GHashTable * dynamic_widgets;
-	extern struct Rtv_Map *rtv_map;
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
-	static GObject *eng_obj = NULL;
-	static gfloat *history = NULL;
-	static gint hist_max = 0;
-	gint last_engine_entry = 0;
-	union engine engine_val = {0};
-	static union engine last_engine_val;
 
-
-	if (!eng_obj)
-	{
-		eng_obj = g_hash_table_lookup(rtv_map->rtv_hash,"enginebit");
-		history = (gfloat *)g_object_get_data(eng_obj,"history");
-		hist_max = (gint)g_object_get_data(eng_obj,"hist_max");
-	}
-	last_engine_entry = (gint)g_object_get_data(eng_obj,"last_entry");
-	
-	gdk_threads_enter();
-
-
+	if(no_update)
+		return FALSE;
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_pages;i++)
 	{
@@ -76,108 +61,86 @@ gboolean update_runtime_vars()
 			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 	}
 
-	engine_val = (union engine)(guchar)history[last_engine_entry];
-
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
 	{
 		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
-
-		/* Status boxes.... */
-		/* "Connected" */
+		g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
+		// "Connected" Status box
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-				
-		if ((forced_update) || (engine_val.value != last_engine_val.value))
-		{
-			/* Cranking */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_cranking_label"),engine_val.bit.crank);
-					
-			/* Running */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_running_label"),engine_val.bit.running);
-					
-			/* Warmup */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_warmup_label"),engine_val.bit.warmup);
-					
-			/* Afterstart Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_ase_label"),engine_val.bit.ase);
-					
-			/* Accel Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_accel_label"),engine_val.bit.tpsaccel);
-					
-			/* Decel Enleanment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_decel_label"),engine_val.bit.tpsdecel);
-					
-
-			
-		}
 	}
 
 	if (active_page == WARMUP_WIZ_PAGE)	/* Warmup wizard is visible */
 	{
 		g_hash_table_foreach(ww_sliders,rt_update_values,NULL);
+		g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
 			dbg_func(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n",CRITICAL);
 		if ((coolant != last_coolant) || (forced_update))
 			warmwizard_update_status(coolant);
-
-		/* Status boxes.... */
-		/* "Connected" */
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
-				
-		if ((forced_update) || (engine_val.value != last_engine_val.value))
-		{
-			/* Cranking */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_cranking_label"),engine_val.bit.crank);
-					
-			/* Running */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_running_label"),engine_val.bit.running);
-					
-			/* Warmup */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_warmup_label"),engine_val.bit.warmup);
-					
-			/* Afterstart Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_ase_label"),engine_val.bit.ase);
-					
-			/* Accel Enrichment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_accel_label"),engine_val.bit.tpsaccel);
-					
-			/* Decel Enleanment */
-			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_decel_label"),engine_val.bit.tpsdecel);
-					
-		}
 		last_coolant = coolant;
+
+		// "Connected" Status box
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
+
 	}
 
-	last_engine_val = engine_val;
 	forced_update = FALSE;
 
-	gdk_threads_leave();
 	return TRUE;
 }
 
 void reset_runtime_status()
 {
-	extern GHashTable *dynamic_widgets;
 	// Runtime screen
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_cranking_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_running_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_warmup_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_ase_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_accel_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_decel_label"),FALSE);
-
-	// Warmup wizard....
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_cranking_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_running_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_warmup_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_ase_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_accel_label"),FALSE);
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_decel_label"),FALSE);
+	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+	// Warmup Wizard screen
+	g_list_foreach(get_list("ww_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
 }
+
+void rt_update_status(gpointer key, gpointer data)
+{
+	GtkWidget *widget = (GtkWidget *) key;
+	gint bitval = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	gint value = 0;
+	gint last_entry = 0;
+	static GObject *object = NULL;
+	static gfloat * history = NULL;
+	static gchar * source = NULL;
+	static gchar * last_source = "";
+	extern struct Rtv_Map *rtv_map;
+
+	g_return_if_fail(GTK_IS_WIDGET(widget));
+
+	source = (gchar *)g_object_get_data(G_OBJECT(widget),"source");
+	if ((g_strcasecmp(source,last_source) != 0))
+	{
+		object = NULL;
+		object = (GObject *)g_hash_table_lookup(rtv_map->rtv_hash,source);
+		if (!object)
+			return;
+		history = (gfloat *)g_object_get_data(object,"history");
+	}
+	last_entry = (gint)g_object_get_data(object,"last_entry");
+
+	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
+	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
+	bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
+	
+	value = (gint)history[last_entry];
+	if (((value &bitmask) >> bitshift) == bitval) // enable it
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
+	else	// disable it..
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+		
+	last_source = source;
+
+}
+
 
 void rt_update_values(gpointer key, gpointer value, gpointer data)
 {

@@ -23,7 +23,6 @@
 #include <threads.h>
 
 gint realtime_id = 0;
-static gint update_rate = 24;
 
 
 void start_realtime_tickler()
@@ -46,6 +45,7 @@ void start_realtime_tickler()
 void stop_realtime_tickler()
 {
 	extern GAsyncQueue *io_queue;
+	extern GAsyncQueue *dispatch_queue;
 	extern gint dispatcher_id;
 	extern gboolean leaving;
 
@@ -65,6 +65,7 @@ void stop_realtime_tickler()
 		dbg_func(__FILE__": stop_realtime_tickler()\n\tTickler already stopped...\n",CRITICAL);
 		update_logbar("comms_view","warning","Realtime Reader ALREADY stopped\n",TRUE,FALSE);
 	}
+	reset_runtime_status();
 }
 
 gboolean signal_read_rtvars()

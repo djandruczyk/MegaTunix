@@ -357,6 +357,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = -1;
 	static gboolean queue_referenced =  FALSE;
 	extern GAsyncQueue *io_queue;
+	extern gboolean no_update;
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
@@ -378,6 +379,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		case START_REALTIME:
+			no_update = FALSE;
 			if (!interrogated)
 				io_cmd(IO_INTERROGATE_ECU, NULL);
 			if (!constants_loaded)
@@ -387,8 +389,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case STOP_REALTIME:
 			stop_realtime_tickler();
-			//stop_datalogging();
-			reset_runtime_status();
+			no_update = TRUE;
 			break;
 		case READ_VE_CONST:
 			io_cmd(IO_READ_VE_CONST, NULL);

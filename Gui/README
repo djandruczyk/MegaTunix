@@ -122,6 +122,12 @@ keys themselves are not, as the string compare functions are case insensitive.
 			_VE_EMB_BIT_ (meaning a bitfield imbedded into the VE
 			Variables, can be in any page), _VE_VAR_ menaing just
 			a VE variable, at any page offset.
+	source		(string) string name of the source that this widget's
+			state relies upon (bitfields ONLY).  The source names
+			are defined in a RealTimeMap file that is firmware
+			specific. (Specified in the interrogation profile)
+			Used primarily for status indicators using data 
+			from the realtime variables datasources...
 	post_function	(string) This is the textual name of a pre-existing 
 			function within megatunix that will be ran after the
 			tab is loaded and the datamap has been processed. The
