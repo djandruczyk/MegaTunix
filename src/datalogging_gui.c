@@ -57,6 +57,10 @@ void populate_dlog_choices()
 	extern GHashTable *dynamic_widgets;
 	extern GtkTooltips *tip;
 	extern gint preferred_delimiter;
+	extern gboolean tabs_loaded;
+
+	if (!tabs_loaded)
+		return;
 
 	vbox = g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1");
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);

@@ -35,7 +35,10 @@ void load_controls()
 	gchar *source = NULL;
 	gchar *section = NULL;
 	gint i = 0;
+	extern gboolean tabs_loaded;
 
+	if (!tabs_loaded)
+		return;
 	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->controls_map_file,".rts_conf",NULL));
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -81,8 +84,10 @@ void load_controls()
 			g_free(ctrl_name);
 			g_free(source);
 		}
+		cfg_free(cfgfile);
 	}
-	cfg_free(cfgfile);
+	else
+		dbg_func(g_strdup_printf(__FILE__": load_controls()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename),CRITICAL);
 	g_free(filename);
 }
 

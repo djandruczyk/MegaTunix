@@ -67,7 +67,7 @@ source=matdeg
 control_name=pw2
 table=1
 row=4
-source=dcycle2
+source=pw2
 
 [rt_slider_11]
 control_name=dutycycle2
