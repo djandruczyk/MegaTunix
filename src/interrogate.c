@@ -95,6 +95,11 @@ void interrogate_ecu()
 
 	/* Load tests from config files */
 	cmd_array = validate_and_load_tests(cmd_details);
+	if (!cmd_array)
+	{
+		dbg_func(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n",CRITICAL);
+		return;
+	}
 	/* how many tests.... */
 	tests_to_run = cmd_array->len;
 
@@ -444,6 +449,12 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 	struct Command *cmd = NULL;
 
 	filename = get_file(g_strconcat(INTERROGATOR_DIR,"/","tests",NULL));
+	if (!filename)
+	{
+		dbg_func(g_strdup_printf(__FILE__":validate_and_load_tests()\n\tfailure opening \"%s\"\n\tMegaTunix was NOT installed!!!! \n\tPlease run \"make install\" from the top level MegaTunix dir\n",filename),CRITICAL);
+		return NULL;
+	}
+
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{	
@@ -490,11 +501,6 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			g_array_insert_val(cmd_array,i,cmd);
 		}
 		cfg_free(cfgfile);
-	}
-	else
-	{
-		dbg_func(g_strdup_printf(__FILE__":validate_and_load_tests()\n\tfailure opening \"%s\"\n\tMegaTunix was NOT installed!!!! \n\tPlease run \"make install\" from the top level MegaTunix dir\n",filename),CRITICAL);
-		exit(-1);
 	}
 
 	g_free(filename);
