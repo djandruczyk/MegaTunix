@@ -436,13 +436,15 @@ handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
 
 [pwm_idle_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitval=1
 bitshift=3
 bitmask=8
+toggle_groups=pwm_idle
+group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires the addition of a power transistor to the ECU board to handle this actuator.  See http://megasquirt.sf.net/extra for more information.

@@ -577,6 +577,7 @@ struct Logview_Data
 	GdkGC *highlight_gc;	/*! GC used for the highlight */
 	GtkWidget *darea;	/*! Trace drawing area... */
 	GdkPixmap *pixmap;	/*! pointer to backing pixmap... */
+	GdkPixmap *pmap;	/*! pointer to Win32 pixmap hack!!! */
 	GHashTable *traces;	/*! Hash table of v_values key'd by name */
 	GList *tlist;		/*! Doubly linked lists of v_Values*/
 	GList *used_colors;	/*! List of colors in use.... */

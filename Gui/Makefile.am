@@ -32,6 +32,8 @@ gui_files = 	README \
 		msnedis-3.0.x_ignition.datamap \
 		msns-3.0_ignition.glade \
 		msns-3.0_ignition.datamap \
+		msns-e-boost_idle.glade \
+		msns-e-boost_idle.datamap \
 		msns-e-features.glade \
 		msns-e-features.datamap \
 		msns-e-fuelconstants.glade \

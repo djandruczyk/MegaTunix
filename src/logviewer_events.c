@@ -35,16 +35,21 @@ extern struct Logview_Data *lv_data;
 EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
+	GdkPixmap *pmap = NULL;
 	gint w = 0;
 	gint h = 0;
 
 	/* Get pointer to backing pixmap ... */
 	pixmap = lv_data->pixmap;
+	pmap = lv_data->pmap;
 			
 	if (widget->window)
 	{
 		if (pixmap)
 			g_object_unref(pixmap);
+
+		if (pmap)
+			g_object_unref(pmap);
 
 		w=widget->allocation.width;
 		h=widget->allocation.height;
@@ -55,8 +60,16 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 				widget->style->black_gc,
 				TRUE, 0,0,
 				w,h);
+		pmap=gdk_pixmap_new(widget->window,
+				w,h,
+				gtk_widget_get_visual(widget)->depth);
+		gdk_draw_rectangle(pmap,
+				widget->style->black_gc,
+				TRUE, 0,0,
+				w,h);
 		gdk_window_set_back_pixmap(widget->window,pixmap,0);
 		lv_data->pixmap = pixmap;
+		lv_data->pmap = pmap;
 
 		if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 		{
@@ -187,6 +200,8 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 {
 	gint x = 0;
 	gint y = 0;
+	gint w = 0;
+	gint h = 0;
 	gint tnum = 0;
 	GdkModifierType state;
 	extern struct Logview_Data *lv_data;
@@ -195,8 +210,14 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 
 	x = event->x;
 	y = event->y;
+	w=widget->allocation.width;
+	h=widget->allocation.height;
 	state = event->state;
 
+	return FALSE;
+
+	printf("button with event is %i\n",event->button);
+	printf("state of event is %i\n",state);
 	if (x > info_width) /* If out of bounds just return... */
 		return TRUE;
 
@@ -206,16 +227,30 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	if (tnum >= g_list_length(lv_data->tlist))
 		return TRUE;
 	v_value = g_list_nth_data(lv_data->tlist,tnum);
-	if (event->button == 3) /* right mouse button */
-	{
-		v_value->highlight = TRUE;
-		lv_configure_event(lv_data->darea,NULL,NULL);
-	}
 	if (event->state & (GDK_BUTTON3_MASK))
 	{
+		printf("right button released... \n");
 		v_value->highlight = FALSE;
-		lv_configure_event(lv_data->darea,NULL,NULL);
-	}
+		gdk_draw_rectangle(lv_data->pixmap,
+				widget->style->black_gc,
+				TRUE, info_width,0,
+				w-info_width,h);
+		trace_update(TRUE);
+		highlight_tinfo(tnum,TRUE);
+		return TRUE;
 
+	}
+	else if (event->button == 3) /* right mouse button */
+	{
+		printf("right button pushed... \n");
+		v_value->highlight = TRUE;
+		gdk_draw_rectangle(lv_data->pixmap,
+				widget->style->black_gc,
+				TRUE, info_width,0,
+				w-info_width,h);
+		trace_update(TRUE);
+		highlight_tinfo(tnum,TRUE);
+		return TRUE;
+	}
 	return TRUE;
 }

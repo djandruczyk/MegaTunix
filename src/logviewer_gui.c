@@ -1058,6 +1058,7 @@ void scroll_logviewer_traces()
 	gint w = 0;
 	gint h = 0;
 	GdkPixmap *pixmap = NULL;
+	GdkPixmap *pmap = NULL;
 	static GtkWidget * widget = NULL;
 	extern GHashTable *dynamic_widgets;
 
@@ -1067,12 +1068,36 @@ void scroll_logviewer_traces()
 	if (!widget)
 		return;
 	pixmap = lv_data->pixmap;
+	pmap = lv_data->pmap;
 	if (!pixmap)
 		return;
 
 	w = widget->allocation.width;
 	h = widget->allocation.height;
 	start = end + lv_zoom;
+
+	/* NASTY NASTY NASTY win32 hack to get it to scroll because
+	 * draw_drawable seems to fuckup on windows when souce/dest are 
+	 * in the same widget...  This works however on EVERY OTHER
+	 * OS where GTK+ runs.  grr.....
+	 */
+#ifdef __WIN32__
+	// Scroll the screen to the left... 
+	gdk_draw_drawable(pmap,
+			widget->style->black_gc,
+			pixmap,
+			info_width+lv_zoom,0,
+			info_width,0,
+			w-info_width-lv_zoom,h);
+
+	gdk_draw_drawable(pixmap,
+			widget->style->black_gc,
+			pmap,
+			info_width,0,
+			info_width,0,
+			w-info_width,h);
+#else
+
 	// Scroll the screen to the left... 
 	gdk_draw_drawable(pixmap,
 			widget->style->black_gc,
@@ -1080,6 +1105,7 @@ void scroll_logviewer_traces()
 			info_width+lv_zoom,0,
 			info_width,0,
 			w-info_width-lv_zoom,h);
+#endif
 
 	// Init new "blank space" as black 
 	gdk_draw_rectangle(pixmap,
