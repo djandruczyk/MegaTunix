@@ -218,6 +218,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 	table = gtk_table_new(2,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
 	label = gtk_label_new("Current Edit Position");
         gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,

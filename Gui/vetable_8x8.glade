@@ -80,7 +80,7 @@
 			      <property name="visible">True</property>
 			      <property name="n_rows">9</property>
 			      <property name="n_columns">8</property>
-			      <property name="homogeneous">True</property>
+			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">2</property>
 			      <property name="column_spacing">0</property>
 
@@ -110,7 +110,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -138,7 +138,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -166,7 +166,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -194,7 +194,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -222,7 +222,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -250,7 +250,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -278,7 +278,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -306,7 +306,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(1,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -334,7 +334,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -362,7 +362,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -390,7 +390,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -418,7 +418,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -446,7 +446,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -474,7 +474,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -502,7 +502,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -530,7 +530,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(2,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -558,7 +558,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -586,7 +586,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -614,7 +614,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -642,7 +642,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -670,7 +670,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -698,7 +698,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -726,7 +726,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -754,7 +754,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(3,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -782,7 +782,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -810,7 +810,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -838,7 +838,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -866,7 +866,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -894,7 +894,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -922,7 +922,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -950,7 +950,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -978,7 +978,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(4,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1006,7 +1006,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1034,7 +1034,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1062,7 +1062,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1090,7 +1090,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1118,7 +1118,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1146,7 +1146,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1174,7 +1174,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1202,7 +1202,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(5,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1230,7 +1230,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1258,7 +1258,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1286,7 +1286,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1314,7 +1314,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1342,7 +1342,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1370,7 +1370,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1398,7 +1398,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1426,7 +1426,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(6,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1454,7 +1454,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1482,7 +1482,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1510,7 +1510,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1538,7 +1538,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1566,7 +1566,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1594,7 +1594,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1622,7 +1622,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1650,7 +1650,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(7,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1678,7 +1678,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,1)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1706,7 +1706,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,2)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1734,7 +1734,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,3)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1762,7 +1762,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,4)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1790,7 +1790,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,5)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1818,7 +1818,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,6)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1846,7 +1846,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,7)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1874,7 +1874,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="vespin_(8,8)">
-				  <property name="width_request">52</property>
+				  <property name="width_request">40</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
@@ -1932,7 +1932,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkFrame" id="Load_frame">
+			<widget class="GtkFrame" id="load_frame">
 			  <property name="visible">True</property>
 			  <property name="label_xalign">0</property>
 			  <property name="label_yalign">0.5</property>
@@ -1944,7 +1944,7 @@
 			      <property name="visible">True</property>
 			      <property name="n_rows">9</property>
 			      <property name="n_columns">1</property>
-			      <property name="homogeneous">True</property>
+			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">2</property>
 			      <property name="column_spacing">2</property>
 
@@ -2196,26 +2196,6 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkButton" id="3d_view_button">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">3D View</property>
-			  <property name="use_underline">True</property>
-			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <signal name="clicked" handler="create_ve3d_view" last_modification_time="Mon, 30 Aug 2004 18:44:05 GMT"/>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">1</property>
-			  <property name="top_attach">1</property>
-			  <property name="bottom_attach">2</property>
-			  <property name="x_padding">3</property>
-			  <property name="y_padding">7</property>
-			  <property name="x_options">fill</property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkFrame" id="rpm_frame">
 			  <property name="visible">True</property>
 			  <property name="label_xalign">0</property>
@@ -2234,7 +2214,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_1">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2258,7 +2238,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_2">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2282,7 +2262,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_3">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2306,7 +2286,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_4">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2330,7 +2310,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_5">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2354,7 +2334,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_6">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2378,7 +2358,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_7">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2402,7 +2382,7 @@
 
 			      <child>
 				<widget class="GtkSpinButton" id="rpm_spin_8">
-				  <property name="width_request">54</property>
+				  <property name="width_request">50</property>
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="climb_rate">100</property>
@@ -2452,6 +2432,27 @@
 			  <property name="bottom_attach">2</property>
 			  <property name="x_options">expand|shrink|fill</property>
 			  <property name="y_options">expand|shrink</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkButton" id="3d_view_button">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">3D View</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <signal name="clicked" handler="create_ve3d_view" last_modification_time="Mon, 30 Aug 2004 18:44:05 GMT"/>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
+			  <property name="top_attach">1</property>
+			  <property name="bottom_attach">2</property>
+			  <property name="x_padding">3</property>
+			  <property name="y_padding">7</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options">fill</property>
 			</packing>
 		      </child>
 		    </widget>
