@@ -22,12 +22,19 @@ GtkWidget *tools_statbar;
 gint tools_context_id;
 extern GdkColor white;
 
+struct Tools
+{
+	GtkWidget *export_but;
+	GtkWidget *export_comment_entry;
+}tools;
 
 int build_tools(GtkWidget *parent_frame)
 {
         GtkWidget *vbox;
         GtkWidget *vbox2;
         GtkWidget *ebox;
+        GtkWidget *label;
+	GtkWidget *entry;
         GtkWidget *frame;
         GtkWidget *table;
         GtkWidget *button;
@@ -60,7 +67,7 @@ int build_tools(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 
-	table = gtk_table_new(3,3,TRUE);
+	table = gtk_table_new(3,3,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
@@ -71,6 +78,18 @@ int build_tools(GtkWidget *parent_frame)
 	"Export VE Table(s) will create a .vex file with the contents of your VEtable(s) (more tables if tyou are using the DualTable mode). NOTE: This button is greyed out until you fill in the comment field to the right",NULL);
         gtk_table_attach (GTK_TABLE (table), ebox, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("VEX File Comment");
+        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+	entry = gtk_entry_new();
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 50);
+
+	tools.export_comment_entry = entry;
+        gtk_table_attach (GTK_TABLE (table), entry, 2, 3, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Export VE Table(s)");
