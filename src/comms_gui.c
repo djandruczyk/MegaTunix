@@ -98,7 +98,7 @@ void build_comms(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-			"Sets the comm port to use.  MegaTunix use DOS/Win32 style port numbers like 1 for COM1, 2 for COM2 and so on.",NULL);
+			"Sets the comm port to use. Type in the device name of your serial connection (Typical values under linux would be /dev/ttyS0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
 
 	frame = gtk_frame_new("Select Communications Port");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -109,17 +109,17 @@ void build_comms(GtkWidget *parent_frame)
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox2),table,FALSE,TRUE,20);
+	gtk_box_pack_start(GTK_BOX(hbox2),table,FALSE,TRUE,5);
 
 
-	label = gtk_label_new("Communications Port");
+	label = gtk_label_new("Comms Device");
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
 	//entries.comms_port = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 16);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 22);
 	gtk_entry_set_text(GTK_ENTRY(entry),serial_params->port_name);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), TRUE);
 	g_signal_connect (G_OBJECT(entry), "changed",
@@ -128,16 +128,6 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-/*
-	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
-	spinner = gtk_spin_button_new(adj,0,0);
-	gtk_widget_set_size_request(spinner,55,-1);
-	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params->comm_port);
-	g_signal_connect (G_OBJECT(spinner), "value_changed",
-			G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(SET_SER_PORT));
-*/
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,FALSE,TRUE,0);
@@ -168,11 +158,11 @@ void build_comms(GtkWidget *parent_frame)
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,5);
 
 
 	label = gtk_label_new("Polling Timeout (ms)");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -203,8 +193,8 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Serial Interval Delay\nBetween Reads(ms)");
-	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
+	label = gtk_label_new("Delay Between Reads(ms)");
+	gtk_misc_set_alignment (GTK_MISC (label), 0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
@@ -224,7 +214,7 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	button = gtk_button_new_with_label("Stop Reading RT vars");
+	button = gtk_button_new_with_label("Stop Reading RT vars ");
 	gtk_tooltips_set_tip(tip,button,
 			"Stops reading the RT variables from the MS.  NOTE: you don't have to stop reading the RT vars to read the VEtable and Constants.  It is handled automatically for you.",NULL);
 	g_signal_connect(G_OBJECT (button), "clicked",
@@ -249,7 +239,7 @@ void build_comms(GtkWidget *parent_frame)
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,20);
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,5);
 
 	label = gtk_label_new("Good VE/Constants Reads");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
