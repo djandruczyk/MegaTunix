@@ -68,7 +68,7 @@ void build_tools(GtkWidget *parent_frame)
 			"red", NULL);
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
-	frame = gtk_frame_new("VE Table Import/Export (VEX Files)");
+	frame = gtk_frame_new("VE/Spark Table Import/Export (VEX Files)");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
@@ -77,14 +77,14 @@ void build_tools(GtkWidget *parent_frame)
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
 
-	button = gtk_button_new_with_label("Import VE Table(s)");
+	button = gtk_button_new_with_label("Import VE/Spark Table(s)");
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(IMPORT_VETABLE));
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler),
 			NULL);
 
-	button = gtk_button_new_with_label("Export VE Table(s)");
+	button = gtk_button_new_with_label("Export VE/Spark Table(s)");
 	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,3);
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(EXPORT_VETABLE));
 	g_signal_connect(G_OBJECT (button), "clicked",
@@ -100,7 +100,7 @@ void build_tools(GtkWidget *parent_frame)
 			G_CALLBACK (std_button_handler),
 			NULL);
 
-	hbox = gtk_hbox_new(FALSE,0);
+	hbox = gtk_hbox_new(FALSE,5);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
 
@@ -114,7 +114,7 @@ void build_tools(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(entry), "activate",
 			G_CALLBACK (vex_comment_parse),
 			GINT_TO_POINTER(0));
-	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,10);
+	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Backup/Restore All Settings");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);

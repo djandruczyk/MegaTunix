@@ -431,18 +431,26 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			stop_datalogging();
 			break;
 		case EXPORT_VETABLE:
+			if (!interrogated)
+				break;
 			present_filesavebox(VE_EXPORT,(gpointer)widget);
 			break;
 		case IMPORT_VETABLE:
+			if (!interrogated)
+				break;
 			present_filesavebox(VE_IMPORT,(gpointer)widget);
 			break;
 		case REVERT_TO_BACKUP:
 			revert_to_previous_data();
 			break;
 		case BACKUP_ALL:
+			if (!interrogated)
+				break;
 			present_filesavebox(FULL_BACKUP,(gpointer)widget);
 			break;
 		case RESTORE_ALL:
+			if (!interrogated)
+				break;
 			present_filesavebox(FULL_RESTORE,(gpointer)widget);
 			break;
 		case SELECT_PARAMS:

@@ -51,12 +51,12 @@ static struct
 } notebook_tabs[] = { 
 { "About MegaTunix", build_about, "_About",STANDARD,ABOUT_PAGE},
 { "General MegaTunix Settings", build_general, "_General",STANDARD,GENERAL_PAGE},
-{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STANDARD,COMMS_PAGE},
+{ "MegaSquirt Communications Parameters", build_comms, "_Communications",STANDARD,COMMS_PAGE},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
-{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
+//{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
 { "MegaSquirt Tools", build_tools, "T_ools",STANDARD,TOOLS_PAGE},
 { "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",RAW_MEMORY,RAW_MEM_PAGE},
-{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD,WARMUP_WIZ_PAGE},
+//{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD,WARMUP_WIZ_PAGE},
 { "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STANDARD,DATALOGGING_PAGE},
 { "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STANDARD,LOGVIEWER_PAGE},
 };
