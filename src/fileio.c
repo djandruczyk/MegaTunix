@@ -316,7 +316,7 @@ void close_file(void *ptr)
 		iofile = (struct Io_File *)ptr;
 	else
 	{
-		dbg_func(__FILE__": close_file()\n\tIo_File pointer is NULL, REturning NOW!!\n",CRITICAL);
+//		dbg_func(__FILE__": close_file()\n\tIo_File pointer is NULL, REturning NOW!!\n",CRITICAL);
 		return;
 	}
 

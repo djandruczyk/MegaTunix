@@ -44,6 +44,8 @@ void process_rt_vars(void *incoming)
 	gfloat result = 0.0;
 	gfloat tmpf = 0.0;
 	void *evaluator = NULL;
+	GTimeVal timeval;
+	gint ts_position;
 
 	len = firmware->rtvars_size;
 	if (len != rtv_map->raw_total)
@@ -51,6 +53,18 @@ void process_rt_vars(void *incoming)
 		dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tlength of buffer(%i) and realtime map raw_length(%i)\n\tDO NOT match, critical ERROR!\n",len,rtv_map->raw_total),CRITICAL);
 		return;
 	}
+	/* Store timestamps in ringbuffer */
+	ts_position = rtv_map->ts_position;
+	timeval = rtv_map->ts_array[ts_position];
+	g_get_current_time(&timeval);
+	rtv_map->ts_array[ts_position] = timeval;
+	ts_position++;
+	/* wrap around.. */
+	if (ts_position > rtv_map->ts_max)
+		ts_position = 0;
+	rtv_map->ts_position = ts_position;
+	
+	
 	for (i=0;i<len;i++)
 	{
 		/* Get list of derived vars for raw offset "i" */

@@ -85,15 +85,18 @@ gboolean load_realtime_map(void )
 	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
 		dbg_func(__FILE__": load_realtime_map()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
-	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE,sizeof(struct GTimeVal *),50);
-	rtv_map->rtv_array = g_array_sized_new(FALSE,TRUE,sizeof(struct GList *),raw_total);
+	rtv_map->rtv_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
 	rtv_map->rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);
 	rtv_map->raw_total = raw_total;
 	rtv_map->derived_total = derived_total;
+	rtv_map->ts_array = (GTimeVal *)g_malloc0(50*sizeof(GTimeVal));
+	rtv_map->ts_position = 0;
+	rtv_map->ts_max=50;
 
-	/* Populate the array wiht NULL pointers (GList's are assumed
+	/* Populate the arrays with NULL pointers (GList's are assumed
 	 * to be NULL when they don't exist.  This ensures that there
-	 * are no funky memory errors...
+	 * are no funky memory errors... Same with the timestamp pointers
+	 * so we can handle it cleanly in rtv_processor.c
 	 */
 	list = NULL;
 	for (i=0;i<raw_total;i++)
@@ -137,6 +140,8 @@ gboolean load_realtime_map(void )
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		/* Create history array, last 50 values */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),50);
+		g_object_set_data(object,"hist_position",GINT_TO_POINTER(0));
+		g_object_set_data(object,"hist_max",GINT_TO_POINTER(50));
 		/* bind hostory array to object for future retrieval */
 		g_object_set_data(object,"history",(gpointer)history);
 

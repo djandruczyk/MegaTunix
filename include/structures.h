@@ -325,8 +325,10 @@ struct RtvMap
 {
 	gint raw_total;		/* Number of raw variables */
 	gint derived_total;	/* Number of derived variables */
-	GArray *ts_array;	/* Timestamp array */
 	GArray *rtv_array;	/* Realtime Values array of lists.. */
+	GTimeVal *ts_array;	/* Timestamp array */
+	gint ts_position;	/* Latest timestamp marker position.. */
+	gint ts_max;		/* # elements in the timestamp array */
 	GHashTable *rtv_hash;	/* Hashtable of rtv derived values indexed by
 				 * it's internal name */
 };
