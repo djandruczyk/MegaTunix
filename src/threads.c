@@ -66,6 +66,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 		case IO_REALTIME_READ:
 			message = g_new0(struct Io_Message,1);
 			message->cmd = cmd;
+			message->need_page_change = FALSE;
 			message->command = READ_CMD;
 			message->out_str = g_strdup(cmds->realtime_cmd);
 			message->out_len = cmds->rt_cmd_len;
@@ -108,6 +109,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message->cmd = cmd;
 			message->command = COMMS_TEST;
 			message->page = 0;
+			message->need_page_change = FALSE;
 			message->out_str = g_strdup("Q");
 			message->out_len = 1;
 			message->handler = C_TEST;
@@ -124,6 +126,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 				message = g_new0(struct Io_Message,1);
 				message->command = READ_CMD;
 				message->page = i;
+				message->need_page_change = TRUE;
 				if (firmware->page_params[i]->is_spark)
 				{
 					message->out_str = g_strdup(cmds->ignition_cmd);
@@ -150,7 +153,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message = g_new0(struct Io_Message,1);
 			message->cmd = cmd;
 			message->command = READ_CMD;
-			message->page = 0;
+			message->need_page_change = FALSE;
 			message->offset = (gint)data;
 			message->out_str = g_strdup(cmds->raw_mem_cmd);
 			message->out_len = cmds->raw_mem_cmd_len;
@@ -163,6 +166,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 		case IO_BURN_MS_FLASH:
 			message = g_new0(struct Io_Message,1);
 			message->cmd = cmd;
+			message->need_page_change = FALSE;
 			message->command = BURN_CMD;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 			tmp = UPD_STORE_BLACK;
@@ -174,6 +178,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message->cmd = cmd;
 			message->command = WRITE_CMD;
 			message->payload = data;
+			message->need_page_change = TRUE;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 			tmp = UPD_WRITE_STATUS;
 			g_array_append_val(message->funcs,tmp);

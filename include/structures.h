@@ -292,6 +292,7 @@ struct Io_Message
 	GArray *funcs;		/*! List of functiosn to be dispatched... */
 	InputHandler handler;	/*! Command handler for inbound data */
 	void *payload;		/*! data passed along, arbritrary size.. */
+	gboolean need_page_change; /*! flag to set if we need to change page */
 };
 
 /*!
