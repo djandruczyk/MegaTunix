@@ -268,7 +268,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	gint tmp = 0;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
-	printf("spinner value: %f ,offset %i\n",value,offset);
+//	printf("spinner value: %f ,offset %i\n",value,offset);
 	
 	switch ((gint)data)
 	{
@@ -314,11 +314,120 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 void update_const_ve()
 {
 	char buff[10];
+	gint i;
 
-	printf("decel_cut data is %i\n",ve_constants->decel_cut);
+	/* req-fuel  */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_1_spin),
+			ve_constants->req_fuel_1/10);
+
+	/* inj_open_time */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.inj_open_time_spin),
+			ve_constants->inj_open_time/10);
+
+	/* batt_corr */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.batt_corr_spin),
+			ve_constants->batt_corr/10);
+
+	/* pwm_curr_lim */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.pwm_curr_lim_spin),
+			ve_constants->pwm_curr_lim);
+
+	/* pwm_time_thresh */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.pwm_time_max_spin),
+			ve_constants->pwm_time_max/10);
+
+	/* fast_idle_thresh */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.fast_idle_thresh_spin),
+			ve_constants->fast_idle_thresh);
+
+	/* crank pulse -40 */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_pulse_neg40_spin),
+			ve_constants->cr_pulse_neg40/10);
+
+	/* crank pulse 170 */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_pulse_pos170_spin),
+			ve_constants->cr_pulse_pos170/10);
+
+	/* Priming pulse */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cr_priming_pulse_spin),
+			ve_constants->cr_priming_pulse/10);
+
+	/* Afterstart Enrich % */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.as_enrich_spin),
+			ve_constants->as_enrich);
+
+	/* Afterstart Enrich # of cycles */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.as_num_cycles_spin),
+			ve_constants->as_num_cycles);
+
+	for (i=0;i<10;i++)
+	{
+		g_snprintf(buff,10,"%i",ve_constants->warmup_bins[i]);
+		gtk_entry_set_text(GTK_ENTRY(constants.warmup_bins_ent[i]),
+				buff);
+	}
+	for (i=0;i<4;i++)
+	{
+		g_snprintf(buff,10,"%i",ve_constants->accel_bins[i]);
+		gtk_entry_set_text(GTK_ENTRY(constants.accel_bins_ent[i]),
+				buff);
+	}
+
+	/* TPS Trigger Threshold */
+	g_snprintf(buff,10,"%.1f",ve_constants->tps_trig_thresh/10.0);
+	gtk_entry_set_text(GTK_ENTRY(constants.tps_trig_thresh_ent),
+			buff);
+
+	/* Accel Enrich Duration */
+	g_snprintf(buff,10,"%.1f",ve_constants->accel_duration/10.0);
+	gtk_entry_set_text(GTK_ENTRY(constants.accel_duration_ent),
+			buff);
+
+	/* Cold Accel Enrich Add On */
+	g_snprintf(buff,10,"%.1f",ve_constants->cold_accel_addon/10.0);
+	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_addon_ent),
+			buff);
+
+	/* Cold Accel Enrich Multiplier */
+	g_snprintf(buff,10,"%i",ve_constants->cold_accel_mult);
+	gtk_entry_set_text(GTK_ENTRY(constants.cold_accel_mult_ent),
+			buff);
+
+	/* Decel Fuel Cut*/
 	g_snprintf(buff,10,"%i",ve_constants->decel_cut);
-	gtk_entry_set_text(GTK_ENTRY(constants.decel_cut_ent),buff);
+	gtk_entry_set_text(GTK_ENTRY(constants.decel_cut_ent),
+			buff);
 
-	printf("Updating constants/VEtable\n");
+	/* EGO coolant activation temp */
+	g_snprintf(buff,10,"%i",ve_constants->ego_temp_active);
+	gtk_entry_set_text(GTK_ENTRY(constants.ego_temp_active_ent),
+			buff);
+
+	/* EGO activation RPM */
+	g_snprintf(buff,10,"%i",ve_constants->ego_rpm_active*100);
+	gtk_entry_set_text(GTK_ENTRY(constants.ego_rpm_active_ent),
+			buff);
+
+	/* EGO switching voltage */
+	g_snprintf(buff,10,"%.1f",ve_constants->ego_sw_voltage/10.0);
+	gtk_entry_set_text(GTK_ENTRY(constants.ego_sw_voltage_ent),
+			buff);
+
+	/* EGO step percent */
+	g_snprintf(buff,10,"%.1f",ve_constants->ego_step/10.0);
+	gtk_entry_set_text(GTK_ENTRY(constants.ego_step_ent),
+			buff);
+
+	/* EGO events between steps */
+	g_snprintf(buff,10,"%i",ve_constants->ego_events);
+	gtk_entry_set_text(GTK_ENTRY(constants.ego_events_ent),
+			buff);
+
+	/* EGO limit % between steps */
+	g_snprintf(buff,10,"%i",ve_constants->ego_limit);
+	gtk_entry_set_text(GTK_ENTRY(constants.ego_limit_ent),
+			buff);
+
+
 	// Stub function, does nothing yet... 
 }

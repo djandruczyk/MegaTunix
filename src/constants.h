@@ -27,19 +27,19 @@
 
 struct v1_2_Constants
 {
-	GtkAdjustment *inj_open_time_adj;	/* Adjustment */
-	GtkAdjustment *batt_corr_adj;		/* Adjustment */
-	GtkAdjustment *pwm_curr_lim_adj;	/* Adjustment */
-	GtkAdjustment *pwm_time_max_adj;	/* Adjustment */
-	GtkAdjustment *fast_idle_thresh_adj;	/* Adjustment */
-	GtkAdjustment *req_fuel_1_adj;		/* Adjustment */
-	GtkAdjustment *req_fuel_2_adj;		/* Adjustment */
-	GtkAdjustment *cr_pulse_neg40_adj;	/* Adjustment */
-	GtkAdjustment *cr_pulse_pos170_adj;	/* Adjustment */
-	GtkAdjustment *cr_priming_pulse_adj;	/* Adjustment */
-	GtkAdjustment *as_enrich_adj;		/* Adjustment */
-	GtkAdjustment *as_num_cycles_adj;	/* Adjustment */
-	GtkWidget *warmup_bins_ent[8];		/* Text Entries */
+	GtkWidget *inj_open_time_spin;		/* Spinner */
+	GtkWidget *batt_corr_spin;		/* Spinner */
+	GtkWidget *pwm_curr_lim_spin;		/* Spinner */
+	GtkWidget *pwm_time_max_spin;		/* Spinner */
+	GtkWidget *fast_idle_thresh_spin;	/* Spinner */
+	GtkWidget *req_fuel_1_spin;		/* Spinner */
+	GtkWidget *req_fuel_2_spin;		/* Spinner */
+	GtkWidget *cr_pulse_neg40_spin;		/* Spinner */
+	GtkWidget *cr_pulse_pos170_spin;	/* Spinner */
+	GtkWidget *cr_priming_pulse_spin;	/* Spinner */
+	GtkWidget *as_enrich_spin;		/* Spinner */
+	GtkWidget *as_num_cycles_spin;		/* Spinner */
+	GtkWidget *warmup_bins_ent[10];		/* Text Entries */
 	GtkWidget *tps_trig_thresh_ent;		/* Text Entry */
 	GtkWidget *accel_duration_ent;		/* Text Entry */
 	GtkWidget *cold_accel_addon_ent;	/* Text Entry */

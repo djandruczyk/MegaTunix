@@ -66,7 +66,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_NEG_40));
-	constants.cr_pulse_neg40_adj = adj;
+	constants.cr_pulse_neg40_spin = spinner;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(65));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
@@ -84,7 +84,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_170));
-	constants.cr_pulse_pos170_adj = adj;
+	constants.cr_pulse_pos170_spin = spinner;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(66));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
@@ -102,7 +102,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PRIMING_PULSE));
-	constants.cr_priming_pulse_adj = adj;
+	constants.cr_priming_pulse_spin = spinner;
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(120));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
@@ -130,7 +130,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(AFTERSTART_ENRICH));
-	constants.as_enrich_adj = adj;
+	constants.as_enrich_spin = spinner;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(67));
@@ -149,7 +149,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_170));
-	constants.as_num_cycles_adj = adj;
+	constants.as_num_cycles_spin = spinner;
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(68));
@@ -163,7 +163,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	/* Warmup enrichments */
 	frame = gtk_frame_new(NULL);
-	label = gtk_label_new ("Warmup Enrich Bins (Percent)");
+	label = gtk_label_new ("Warmup Enrichment Bins (Percent)");
 	gtk_frame_set_label_widget (GTK_FRAME (frame), label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 
