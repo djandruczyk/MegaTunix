@@ -87,7 +87,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("-40 \302\260 F.");
+	label = gtk_label_new("-40 \302\260F.");
 	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -112,7 +112,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("170 \302\260 F.");
+	label = gtk_label_new("170 \302\260F.");
 	labels.cr_pulse_hightemp_lab = label;
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -256,7 +256,7 @@ void build_enrichments(GtkWidget *parent_frame)
 				(GtkAttachOptions) (0), 0, 0);
 	}
 
-	label = gtk_label_new("Engine Temperature in \302\260 F.");
+	label = gtk_label_new("Engine Temperature in \302\260F.");
 	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 10, 2, 3,
@@ -513,7 +513,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("EGO Active Temp(\302\260 F.)");
+	label = gtk_label_new("EGO Active Temp (\302\260F.)");
 	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,

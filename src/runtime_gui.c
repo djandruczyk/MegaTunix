@@ -79,8 +79,8 @@ void build_runtime(GtkWidget *parent_frame)
 	rt_table[0] = gtk_table_new(8,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(rt_table[0]),1);
 	gtk_table_set_col_spacings(GTK_TABLE(rt_table[0]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[0]), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),rt_table[0],TRUE,TRUE,5);
+	gtk_container_set_border_width (GTK_CONTAINER (rt_table[0]), 5);
+	gtk_box_pack_start(GTK_BOX(hbox),rt_table[0],TRUE,TRUE,0);
 
 
 	/* Second column */
@@ -88,7 +88,7 @@ void build_runtime(GtkWidget *parent_frame)
 	rt_table[1] = gtk_table_new(8,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(rt_table[1]),1);
 	gtk_table_set_col_spacings(GTK_TABLE(rt_table[1]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[1]), 0);
+	gtk_container_set_border_width (GTK_CONTAINER (rt_table[1]), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),rt_table[1],TRUE,TRUE,0);
 
 
@@ -104,17 +104,17 @@ void build_runtime(GtkWidget *parent_frame)
 	rt_table[2] = gtk_table_new(3,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(rt_table[2]),1);
 	gtk_table_set_col_spacings(GTK_TABLE(rt_table[2]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[2]), 0);
-	gtk_box_pack_start(GTK_BOX(hbox),rt_table[2],TRUE,TRUE,5);
+	gtk_container_set_border_width (GTK_CONTAINER (rt_table[2]), 5);
+	gtk_box_pack_start(GTK_BOX(hbox),rt_table[2],TRUE,TRUE,0);
 
 	rt_table[3] = gtk_table_new(3,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(rt_table[3]),1);
 	gtk_table_set_col_spacings(GTK_TABLE(rt_table[3]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[3]), 0);
+	gtk_container_set_border_width (GTK_CONTAINER (rt_table[3]), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),rt_table[3],TRUE,TRUE,0);
 
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
 			"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
 

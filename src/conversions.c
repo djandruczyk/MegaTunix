@@ -268,27 +268,27 @@ void reset_temps(gpointer type)
 		case FAHRENHEIT:
 			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
-					"170\302\260 F.");
+					"170 \302\260F.");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ww_cr_pulse_hightemp_lab),
-					"Pulsewidth at 170 \302\260 F.");
+					"Pulsewidth at 170 \302\260F.");
 			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
-						"Fast Idle Temp (\302\260 F.)");
+						"Fast Idle Temp (\302\260F.)");
 			else
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
-						"Fast Idle Cutoff Temp (\302\260 F.)");
+						"Fast Idle Cutoff Temp (\302\260F.)");
 			for (i=0;i<10;i++)
 			{
-				string = g_strdup_printf("%s\302\260",
+				string = g_strdup_printf("%s \302\260",
 						F_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmup_bins_lab[i]),
 						string);
 				g_free(string);
-				string = g_strdup_printf("%s\302\260 F.",
+				string = g_strdup_printf("%s \302\260F.",
 						F_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmwizard_lab[i]),
@@ -300,27 +300,27 @@ void reset_temps(gpointer type)
 		case CELSIUS:
 			gtk_label_set_text(
 					GTK_LABEL(labels.cr_pulse_hightemp_lab),
-					"77\302\260 C.");
+					"77 \302\260C.");
 			gtk_label_set_text(
 					GTK_LABEL(labels.ww_cr_pulse_hightemp_lab),
-					"Pulsewidth at 77 \302\260 C.");
+					"Pulsewidth at 77 \302\260C.");
 			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
-						"Fast Idle Temp (\302\260 C.)");
+						"Fast Idle Temp (\302\260C.)");
 			else
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
-						"Fast Idle Cutoff Temp (\302\260 C.)");
+						"Fast Idle Cutoff Temp (\302\260C.)");
 			for (i=0;i<10;i++)
 			{
-				string = g_strdup_printf("%s\302\260",
+				string = g_strdup_printf("%s \302\260",
 						C_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmup_bins_lab[i]),
 						string);
 				g_free(string);
-				string = g_strdup_printf("%s\302\260 C.",
+				string = g_strdup_printf("%s \302\260C.",
 						C_warmup_labels[i]);
 				gtk_label_set_text(
 						GTK_LABEL(labels.warmwizard_lab[i]),

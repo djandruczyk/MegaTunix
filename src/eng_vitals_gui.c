@@ -472,7 +472,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
-	label = gtk_label_new("Cooling Fan Turn-On Temp (\302\260 F.)");
+	label = gtk_label_new("Cooling Fan Turn-On Temp (\302\260F.)");
 	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
@@ -524,7 +524,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	/* This label is dynamic and will change based on unit preference
 	 * AND based on if we are using DT code or not... 
 	 */
-	label = gtk_label_new("Fast Idle Temp (\302\260 F.)");
+	label = gtk_label_new("Fast Idle Temp (\302\260F.)");
         labels.fast_idle_temp_lab = label;
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
@@ -585,7 +585,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	// Slow Idle Temp
-	label = gtk_label_new("Slow Idle Temp (\302\260 F.)");
+	label = gtk_label_new("Slow Idle Temp (\302\260F.)");
 	temp_dep = g_list_append(temp_dep,(gpointer)label);
 	dt_widgets = g_list_append(dt_widgets, (gpointer)label);
 	iac_idle_widgets = g_list_append(iac_idle_widgets, (gpointer)label);
