@@ -22,6 +22,7 @@
 #include <init.h>
 #include <interrogate.h>
 #include <logviewer_gui.h>
+#include <mode_select.h>
 #include <ms_structures.h>
 #include <notifications.h>
 #include <req_fuel.h>
@@ -34,7 +35,6 @@
 
 extern gboolean interrogated;
 extern gboolean dualtable;
-extern gboolean ignition_variant;
 extern gboolean iac_variant;
 extern gboolean connected;
 extern gboolean raw_reader_running;
@@ -1242,13 +1242,6 @@ void check_req_fuel_limits()
 
 }
 
-gboolean drain_hashtable(gpointer offset, gpointer value, gpointer data)
-{
-	/* called per element fromthe hash table to drain and send to ECU */
-	write_ve_const((gint)value,(gint)offset);
-	return TRUE;
-}
-
 void check_bcfreq(unsigned char tmp, gboolean update)
 {
 	gint val;	
@@ -1375,13 +1368,13 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 					(buttons.inj2_table1),
 					TRUE);
 		}
-		set_table_mapping_state(FALSE);
+		set_dt_table_mapping_state(FALSE);
 		/* all other bits don't matter, quit now... */
 		//return;
 	}
 	else
 	{
-		set_table_mapping_state(TRUE);
+		set_dt_table_mapping_state(TRUE);
 		if (update)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON
 					(buttons.dt_mode),
@@ -1444,44 +1437,6 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 				(buttons.inj2_gammae),
 				val);
 	return;	
-}
-
-void set_table_mapping_state(gboolean state)
-{
-	extern GList *table_map_widgets;
-        g_list_foreach(table_map_widgets, set_widget_state,(gpointer)state);
-}
-
-void set_ignition_mode(gboolean state)
-{
-	ignition_variant = state;
-//	printf("ignition mode controls not implemented yet\n");
-}
-
-void set_iac_mode(gboolean state)
-{
-	extern GList *enh_idle_widgets;
-	using_pwm_idle = state;
-	g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
-
-}
-
-void set_dualtable_mode(gboolean state)
-{
-	extern GList *dt_widgets;
-	extern GList *inv_dt_widgets;
-	dualtable = state;
-
-	g_list_foreach(inv_dt_widgets, set_widget_state,(gpointer)(!state));
-	g_list_foreach(dt_widgets, set_widget_state,(gpointer)state);
-
-	/* fahrenheit is a FLAG... */
-	reset_temps(GINT_TO_POINTER(fahrenheit));
-}
-
-void set_widget_state(gpointer widget, gpointer state)
-{
-	gtk_widget_set_sensitive(GTK_WIDGET(widget),(gboolean)state);	
 }
 
 void start_runtime_display()

@@ -52,24 +52,25 @@ static struct
 	gchar *tab_name;	/* The Tab textual name for the main gui */
 	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
 	gboolean dt_specific;	/* Dualtable ONLY page */
+	gboolean ign_specific;	/* Dualtable ONLY page */
 } notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",TRUE, FALSE},
-{ "General MegaTunix Settings", build_general, "_General",TRUE, FALSE},
-{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE, FALSE},
-{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",TRUE, FALSE},
-{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",TRUE, FALSE},
-{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",TRUE, TRUE},
-{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE, FALSE},
-{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",TRUE, FALSE},
-{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",TRUE, TRUE},
-{ "MegaSquirt Ignition Settings", build_ignition, "_Ignition Settings",FALSE, FALSE},
-{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE, FALSE},
-{ "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE, FALSE},
-{ "MegaSquirt Tools", build_tools, "T_ools",TRUE, FALSE},
-{ "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE, FALSE},
-{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE, FALSE},
-{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE, FALSE},
-{ "MegaSquirt DataLog Viewer", build_logviewer, "Log _Playback",TRUE, FALSE},
+{ "About MegaTunix", build_about, "_About",TRUE, FALSE, FALSE},
+{ "General MegaTunix Settings", build_general, "_General",TRUE, FALSE, FALSE},
+{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE, FALSE, FALSE},
+{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",TRUE, FALSE, FALSE},
+{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",TRUE, FALSE, FALSE},
+{ "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",TRUE, TRUE, FALSE},
+{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE, FALSE, FALSE},
+{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",TRUE, FALSE, FALSE},
+{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",TRUE, TRUE, FALSE},
+{ "MegaSquirt Ignition Settings", build_ignition, "_Ignition Settings",FALSE, FALSE, TRUE},
+{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE, FALSE, FALSE},
+{ "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE, FALSE, FALSE},
+{ "MegaSquirt Tools", build_tools, "T_ools",TRUE, FALSE, FALSE},
+{ "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE, FALSE, FALSE},
+{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE, FALSE, FALSE},
+{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE, FALSE, FALSE},
+{ "MegaSquirt DataLog Viewer", build_logviewer, "Log _Playback",TRUE, FALSE, FALSE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -82,6 +83,7 @@ int setup_gui()
 	GtkWidget *vbox;
 	GtkWidget *button;
 	extern GList *dt_widgets;
+	extern GList *ign_widgets;
 	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -122,6 +124,14 @@ int setup_gui()
 			dt_widgets = g_list_append(dt_widgets, 
 					(gpointer)frame);
 			dt_widgets = g_list_append(dt_widgets, 
+					(gpointer)label);
+		}
+
+		if (notebook_tabs[i].ign_specific == TRUE)
+		{
+			ign_widgets = g_list_append(ign_widgets, 
+					(gpointer)frame);
+			ign_widgets = g_list_append(ign_widgets, 
 					(gpointer)label);
 		}
 

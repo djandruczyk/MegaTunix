@@ -34,6 +34,7 @@ megatunix_SOURCES = \
 	logviewer_gui.c \
 	lowlevel_gui.c \
 	main.c \
+	mode_select.c \
 	notifications.c \
 	post_process.c \
 	req_fuel.c \

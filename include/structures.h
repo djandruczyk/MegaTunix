@@ -102,6 +102,7 @@ struct DynamicSpinners
 	GtkWidget *injectors_2_spin;		/* Spinner */
 	GtkWidget *cylinders_2_spin;		/* Spinner */
 	GtkWidget *warmwizard[10];		/* Spinner */
+	GtkWidget *cooling_fan_temp_spin;
 };
 
 /* Controls for the Required Fuel Calculator... */
@@ -168,6 +169,7 @@ struct DynamicLabels
 	GtkWidget *ww_warmcorr_lab;
 	GtkWidget *ww_ego_lab;
 	GtkWidget *ww_map_lab;
+	GtkWidget *cooling_fan_temp_lab;
 };
 
 /* These are defined as they are semi-dynamic and are modified
@@ -175,6 +177,7 @@ struct DynamicLabels
  */
 struct DynamicAdjustments
 {
+	GtkAdjustment *cooling_fan_temp_adj;
 	GtkAdjustment *fast_idle_temp_adj;
 	GtkAdjustment *slow_idle_temp_adj;
 	GtkAdjustment *ego_temp_adj;

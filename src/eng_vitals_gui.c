@@ -25,8 +25,9 @@ struct DynamicLabels labels;
 struct DynamicButtons buttons;
 extern struct Ve_Widgets *ve_widgets;
 extern GdkColor black;
-GList *dt_widgets;
-GList *enh_idle_widgets;
+GList *enh_idle_widgets = NULL;
+GList *inv_ign_widgets = NULL;
+GList *ign_widgets = NULL;
 
 void build_eng_vitals(GtkWidget *parent_frame)
 {
@@ -40,10 +41,12 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	GtkWidget *table;
 	GtkWidget *ebox;
 	GtkWidget *spinner;
+	GtkWidget *tmpspin;
 	GtkAdjustment *adj;
 	GSList	*group;
 	extern GList *store_widgets;
 	extern GtkTooltips *tip;
+	extern GList *dt_widgets;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
@@ -402,10 +405,14 @@ void build_eng_vitals(GtkWidget *parent_frame)
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
+
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Idle Control Method");
+	inv_ign_widgets = g_list_append(inv_ign_widgets,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -451,11 +458,52 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
+
+	frame = gtk_frame_new("Radiator Fan Control");
+	ign_widgets = g_list_append(ign_widgets,(gpointer)frame);
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
+
+	table = gtk_table_new(1,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	label = gtk_label_new("Cooling Fan Turn-On Temp (\302\260 F.)");
+        labels.cooling_fan_temp_lab = label;
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (0), 0, 0);
+
+        /* Cooling Fan Turn-On Temp */
+        adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
+        spinner = gtk_spin_button_new(adj,0,0);
+        ve_widgets->widget[121] = spinner;
+        gtk_widget_set_size_request(spinner,60,-1);
+        gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+        g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
+        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
+        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
+                        GINT_TO_POINTER(40*100));
+        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
+        g_object_set_data(G_OBJECT(spinner),"dl_type",
+                        GINT_TO_POINTER(IMMEDIATE));
+        g_signal_connect (G_OBJECT(spinner), "value_changed",
+                        G_CALLBACK (spinner_changed),
+                        GINT_TO_POINTER(GENERIC));
+        gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
+                        (GtkAttachOptions) (GTK_EXPAND),
+                        (GtkAttachOptions) (0), 0, 0);
+
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Idle Control Parameters");
+	inv_ign_widgets = g_list_append(inv_ign_widgets,(gpointer)frame);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
@@ -475,24 +523,26 @@ void build_eng_vitals(GtkWidget *parent_frame)
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
-        /* Fast Idle Temp */
-        adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
+	/* SPECIAL CASE!!!!
+	 * If you notice no data is bound to this object NOR any signal 
+	 * handler.  This is NOT A BUG, it is because this spinbutton is 
+	 * bound to the adjustment of ANOTHER control (Cooling Fan Temp)
+	 * thus any change in this spinbutton will cause the other control
+	 * to emit the necessary signals and feed the changes to the ECU
+	 * this had to be done as the MegaSquirtnEDIS/Spark codes do NOT have
+	 * fast idle control re-used this memory position for a different 
+	 * feature.  We use this method and a selective method to turn 
+	 * on/off the appropriate controls based on the detected firmware.
+	 * IF this does NOT make sense to you feel free to email the 
+	 * author and I'll explain to you...  :) */
+        /* Fast Idle Temp (tied to "Cooling Fan Temp" (MSnEDIS/spark ) */
+	tmpspin = ve_widgets->widget[121];
+	adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(tmpspin));
         adjustments.fast_idle_temp_adj = adj;
         spinner = gtk_spin_button_new(adj,0,0);
         spinners.fast_idle_temp_spin = spinner;
-        ve_widgets->widget[121] = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_object_set_data(G_OBJECT(spinner),"temp_dep",GINT_TO_POINTER(TRUE));
-        g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(121));
-        g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
-                        GINT_TO_POINTER(40*100));
-        g_object_set_data(G_OBJECT(spinner),"conv_type",GINT_TO_POINTER(ADD));
-        g_object_set_data(G_OBJECT(spinner),"dl_type",
-                        GINT_TO_POINTER(IMMEDIATE));
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-                        GINT_TO_POINTER(GENERIC));
         gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);

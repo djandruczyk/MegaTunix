@@ -22,7 +22,7 @@
 extern unsigned char *kpa_conversion;
 extern gboolean fahrenheit;
 extern gboolean dualtable;
-extern gboolean ignition_variant;
+extern gboolean ign_variant;
 gboolean invalid_divider_1 = FALSE;
 gboolean invalid_divider_2 = FALSE;
 
@@ -96,7 +96,7 @@ void post_process(void *input, void *output)
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
 
-	if (ignition_variant)
+	if (ign_variant)
 	{
 		out->ctimecommH = edis_in->ctimecommH;
 		out->ctimecommL = edis_in->ctimecommL;

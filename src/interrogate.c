@@ -16,8 +16,9 @@
 #include <config.h>
 #include <defines.h>
 #include <errno.h>
-#include <gui_handlers.h>
+//#include <gui_handlers.h>
 #include <interrogate.h>
+#include <mode_select.h>
 #include <notifications.h>
 #include <serialio.h>
 #include <stdio.h>
@@ -244,7 +245,7 @@ void determine_ecu(void *ptr)
 	extern struct DynamicButtons buttons;
 	extern gboolean dualtable;
 	extern gboolean iac_variant;
-	extern gboolean ignition_variant;
+	extern gboolean ign_variant;
 
 	/* compare the canidate to all the choices.  As OF now we are ONLY
 	 * comparing byte counts as that is enough to guarantee unique-ness
@@ -343,7 +344,7 @@ void determine_ecu(void *ptr)
 	/* Set flags */
 	dualtable =  canidates[match].dt_cap;
 	iac_variant =  canidates[match].iac_cap;
-	ignition_variant =  canidates[match].ign_cap;
+	ign_variant =  canidates[match].ign_cap;
 	/* Enable/Disable Controls */
 	set_dualtable_mode(canidates[match].dt_cap);	
 	set_ignition_mode(canidates[match].ign_cap);	

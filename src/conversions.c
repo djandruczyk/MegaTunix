@@ -175,6 +175,7 @@ void reset_temps(gpointer type)
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
 	extern gboolean dualtable;
+	extern gboolean ign_variant;
 	extern gboolean iac_variant;
 	extern gboolean using_pwm_idle;
 	switch ((gint)type)
@@ -200,6 +201,12 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Cutoff Temp (\302\260 F.)");
+			if (ign_variant)
+			{
+				gtk_label_set_text(
+						GTK_LABEL(labels.cooling_fan_temp_lab),
+						"Cooling Fan Turn-On Temp (\302\260 F.)");
+			}
 			gtk_label_set_text(
 					GTK_LABEL(labels.slow_idle_temp_lab),
 					"Slow Idle Temp (\302\260 F.)");
@@ -227,6 +234,7 @@ void reset_temps(gpointer type)
 						string);
 				g_free(string);
 			}
+			/* Cooling Fan Temp  (MSnEDIS/Spark ONLY) */
 			/* Fast Idle Temp */
 			upper = adjustments.fast_idle_temp_adj->upper;
 			if (upper < 215) /* if so it was celsius, if not skip*/
@@ -292,6 +300,12 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Cutoff Temp (\302\260 C.)");
+			if (ign_variant)
+			{
+				gtk_label_set_text(
+						GTK_LABEL(labels.cooling_fan_temp_lab),
+						"Cooling Fan Turn-On Temp (\302\260 C.)");
+			}
 			gtk_label_set_text(
 					GTK_LABEL(labels.slow_idle_temp_lab),
 					"Slow Idle Temp (\302\260 C.)");

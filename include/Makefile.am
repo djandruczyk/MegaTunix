@@ -26,6 +26,7 @@ headers = \
         lookuptables.h \
         lowlevel_gui.h \
         main.h \
+        mode_select.h \
         ms_structures.h \
         notifications.h \
         post_process.h \
