@@ -56,6 +56,7 @@ extern unsigned char *kpa_conversion;
 extern unsigned char na_map[];
 extern unsigned char turbo_map[];
 extern GtkWidget *ve_widgets[];
+extern GtkWidget *ign_widgets[];
 extern struct DynamicSpinners spinners;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
@@ -407,7 +408,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 		}
 		if (dl_type == IMMEDIATE)
-			write_ve_const(dload_val, offset);
+			write_ve_const(dload_val, offset, ign_parm);
 	}
 	return TRUE;
 }
@@ -457,6 +458,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			else
 			{
 				paused_handlers = TRUE;
+				read_conversions();
 				read_ve_const();
 				update_ve_const();
 				set_store_buttons_state(BLACK);
@@ -729,14 +731,12 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			temp_dep = (gboolean)g_object_get_data(
 					G_OBJECT(ve_widgets[offset]),
 						"temp_dep");
-
 			if (temp_dep)
 			{
 				if (temp_units == FAHRENHEIT)
 					value = (value*(9.0/5.0))+32;
 			}
-			dload_val = convert_before_download(offset,value);
-					
+			dload_val = convert_before_download(offset,value,ign_parm);
 			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
@@ -745,7 +745,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 			break;
 	}
 	if (dl_type == IMMEDIATE) 
-		write_ve_const(dload_val, offset);
+		write_ve_const(dload_val, offset, ign_parm);
 	return TRUE;
 
 }
@@ -1075,7 +1075,7 @@ void update_ve_const()
 					G_OBJECT(ve_widgets[i]),
 					"temp_dep");
 			if (dl_type == IMMEDIATE)
-				value = convert_after_upload(i);  
+				value = convert_after_upload(i,FALSE);  
 			if (temp_dep)
 			{
 				if (temp_units == CELSIUS)
@@ -1084,6 +1084,34 @@ void update_ve_const()
 
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(
 						ve_widgets[i]),value);
+		}
+	}
+	/* Update Spark Control spinbuttons if using Spark firmware */
+	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
+	{
+		for (i=0;i<MS_PAGE_SIZE;i++)
+		{
+			temp_dep = FALSE;
+			dl_type = -1;
+			if (GTK_IS_OBJECT(ign_widgets[i]))
+			{
+				dl_type = (gint)g_object_get_data(
+						G_OBJECT(ign_widgets[i]),
+						"dl_type");
+				temp_dep = (gboolean)g_object_get_data(
+						G_OBJECT(ign_widgets[i]),
+						"temp_dep");
+				if (dl_type == IMMEDIATE)
+					value = convert_after_upload(i,TRUE);  
+				if (temp_dep)
+				{
+					if (temp_units == CELSIUS)
+						value = (value-32)*(5.0/9.0);
+				}
+
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(
+							ign_widgets[i]),value);
+			}
 		}
 	}
 }
@@ -1138,7 +1166,7 @@ void check_config11(unsigned char tmp)
 void check_config13(unsigned char tmp)
 {
 	GtkWidget *label;
-	extern GList *enh_idle_widgets;
+	extern GList *enh_idle_controls;
 	/* checks bits of the confgi13 bitfield and forces
 	 * gui to update/adapt as necessary...
 	 */
@@ -1186,13 +1214,13 @@ void check_config13(unsigned char tmp)
 	/* Check Idle method */
 	if (((tmp >> 4)&0x1) == 1) /* If Set turn idle controls, else turn off */
 	{
-		g_list_foreach(enh_idle_widgets, 
+		g_list_foreach(enh_idle_controls, 
 				set_widget_state,(gpointer)TRUE);
 		reset_temps(GINT_TO_POINTER(temp_units));
 	}
 	else
 	{
-		g_list_foreach(enh_idle_widgets, 
+		g_list_foreach(enh_idle_controls, 
 				set_widget_state,(gpointer)FALSE);
 		reset_temps(GINT_TO_POINTER(temp_units));
 	}

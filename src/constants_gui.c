@@ -25,8 +25,8 @@ extern struct DynamicButtons buttons;
 extern GtkWidget *ve_widgets[];
 extern GdkColor black;
 extern GdkColor white;
-GList *inv_dt_widgets = NULL;
-GList *dt_widgets = NULL;
+GList *inv_dt_controls = NULL;
+GList *dt_controls = NULL;
 
 void build_constants_1(GtkWidget *parent_frame)
 {
@@ -44,11 +44,11 @@ void build_constants_1(GtkWidget *parent_frame)
 	struct Reqd_Fuel *reqd_fuel_1 = NULL;
 	struct Reqd_Fuel *reqd_fuel_2 = NULL;
 
-	extern GList *store_widgets;
-	extern GList *interdep_1_widgets;
-	extern GList *interdep_2_widgets;
-	extern GList *reqfuel_1_widgets;
-	extern GList *reqfuel_2_widgets;
+	extern GList *store_controls;
+	extern GList *interdep_1_controls;
+	extern GList *interdep_2_controls;
+	extern GList *reqfuel_1_controls;
+	extern GList *reqfuel_2_controls;
 	extern GtkTooltips *tip;
 
 	reqd_fuel_1 = g_malloc0(sizeof(struct Reqd_Fuel));
@@ -84,8 +84,8 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 	
         label = gtk_label_new("# Cylinders");
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
-	reqfuel_1_widgets = g_list_append(reqfuel_1_widgets,(gpointer)label);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)label);
+	reqfuel_1_controls = g_list_append(reqfuel_1_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -96,8 +96,8 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.cylinders_1_spin = spinner;
-	reqfuel_1_widgets = g_list_append(reqfuel_1_widgets,(gpointer)spinner);
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
+	reqfuel_1_controls = g_list_append(reqfuel_1_controls,(gpointer)spinner);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)spinner);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel_1);
 	gtk_widget_set_size_request(spinner,45,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -117,7 +117,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         label = gtk_label_new("# Injectors");
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -127,7 +127,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.injectors_1_spin = spinner;
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)spinner);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel_1);
 	gtk_widget_set_size_request(spinner,45,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -147,8 +147,8 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
         label = gtk_label_new("Squirts/Cycle");
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
-	reqfuel_1_widgets = g_list_append(reqfuel_1_widgets,(gpointer)label);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)label);
+	reqfuel_1_controls = g_list_append(reqfuel_1_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -158,8 +158,8 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	spinners.inj_per_cycle_1_spin = spinner;
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
-	reqfuel_1_widgets = g_list_append(reqfuel_1_widgets,(gpointer)spinner);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)spinner);
+	reqfuel_1_controls = g_list_append(reqfuel_1_controls,(gpointer)spinner);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel_1);
 	gtk_widget_set_size_request(spinner,45,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -184,7 +184,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
 	table = gtk_table_new(2,2,TRUE);
-	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)table);
+	inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)table);
         gtk_table_set_row_spacings(GTK_TABLE(table),0);
         gtk_table_set_col_spacings(GTK_TABLE(table),20);
         gtk_container_set_border_width(GTK_CONTAINER(table),0);
@@ -194,14 +194,14 @@ void build_constants_1(GtkWidget *parent_frame)
 
         label = gtk_label_new("Injector Staging");
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
-	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)label);
+	inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)label);
         gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(NULL,"Simultaneous");
         buttons.simul_but = button;
-	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
+	inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(0));
@@ -216,7 +216,7 @@ void build_constants_1(GtkWidget *parent_frame)
 
         button = gtk_radio_button_new_with_label(group,"Alternate");
         buttons.alternate_but = button;
-	inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
+	inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)button);
         g_object_set_data(G_OBJECT(button),"offset",GINT_TO_POINTER(92));
         g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
         g_object_set_data(G_OBJECT(button),"dl_type",
@@ -252,7 +252,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         GINT_TO_POINTER(REQD_FUEL_POPUP));
 
 	label = gtk_label_new("Required Fuel (per cyl/cycle)");
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
@@ -263,7 +263,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1.0,1);
 	spinners.req_fuel_total_1_spin = spinner;
 	reqd_fuel_1->reqd_fuel_spin = spinner;
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)spinner);
 	gtk_widget_set_size_request(spinner,50,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(90));
@@ -281,7 +281,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("Required Fuel (ms. per squirt)");
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)label);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
@@ -291,7 +291,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
 	spinners.req_fuel_per_squirt_1_spin = spinner;
-	interdep_1_widgets = g_list_append(interdep_1_widgets,(gpointer)spinner);
+	interdep_1_controls = g_list_append(interdep_1_controls,(gpointer)spinner);
 	gtk_widget_set_sensitive(spinner,FALSE);
 	gtk_widget_modify_text(spinner,GTK_STATE_INSENSITIVE,&black);
 	gtk_widget_modify_base(spinner,GTK_STATE_INSENSITIVE,&white);
@@ -438,7 +438,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	// Table 2 Constants.... 
 
 	ebox = gtk_event_box_new();
-        dt_widgets = g_list_append(dt_widgets,(gpointer)ebox);
+        dt_controls = g_list_append(dt_controls,(gpointer)ebox);
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,"    Here is where you punch in some data for your vehicle and the system will calculate the required fuel to be used in the MegaSquirt calculations.\n   \"Required Fuel\" is the total amount of fuel that needs to be injected at 100% VE (max power for a NA engine assuming no resonant effects) for ONE cylinder for 1 complete engine cycle.  You will see two required fuel numbers, one for \"per cyl/cycle\" and another for \"ms per squirt\". The top one is the amount of fuel injected in one complete engine cycle, the bottom one is the amount of fuel sprayed on each injection event.\n   NOTE: If the required fuel per squirt gets below 2.0 milliseconds, you will have difficulty tuning as you are approaching the open-time limit of the injector, and fuel flow becomes less precise, and there is much less adjustability. (you may not be able to get the mixture set approriately)\n   The \"Rated Fuel Pressure\" and the \"Actual Fuel Pressure\" are there so that if you are using injectors at a differnt pressure than their original application, the required fuel calculations will take that into account, and adjust accordingly.\n   The \"Target Air-Fuel Ratio\" calculates the required fuel for a specific fuel mixture. ( It defaults to 14.7:1 for gasoline) if you want to target a richer mixture set this to the desired AFR (lower = richer)\n   The \"Number of Injectors\" is your total number of fuel injectors,  this affects required fuel as it ties in with the number of cylinders and number of squirts.\n   The \"Number of Squirts per Cycle\" determines how many times the injectors are fired during one engine cycle,  if you set this too high, the number of squirts gets too low making the injection pulsewidth too short causing inconsistent fuel flow.\n   The \"Simultaneous\"/\"Alternate\" buttons determine how the injectors fire.  (This applies to B&G code only Dualtable code can set the number of squirts/cyls/req_fue sperately per table).  If \"Simultaneous\" mode is chosen, both banks of fuel injectors fire at the same time,  if this is set to \"Alternate\", then one one bank fires at a time, and the channels are alternated back and forth. (NOTE this delivers the same amount of fuel,  but in alternate mode there are 1/2 as many squirts, (thus longer squirts)). Some engines respond better one way or the other,  Testing is recommended to determine which works best for you.",NULL);
 
@@ -460,8 +460,8 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
         
         label = gtk_label_new("# Cylinders");
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
-        reqfuel_2_widgets = g_list_append(reqfuel_2_widgets,(gpointer)label);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)label);
+        reqfuel_2_controls = g_list_append(reqfuel_2_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -473,8 +473,8 @@ void build_constants_1(GtkWidget *parent_frame)
         spinner = gtk_spin_button_new(adj,1,0);
         g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel_2);
         spinners.cylinders_2_spin = spinner;
-        reqfuel_2_widgets = g_list_append(reqfuel_2_widgets,(gpointer)spinner);
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
+        reqfuel_2_controls = g_list_append(reqfuel_2_controls,(gpointer)spinner);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)spinner);
         g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel_2);
         gtk_widget_set_size_request(spinner,45,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -494,7 +494,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
         label = gtk_label_new("# Injectors");
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -504,7 +504,7 @@ void build_constants_1(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
         spinner = gtk_spin_button_new(adj,1,0);
         spinners.injectors_2_spin = spinner;
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)spinner);
         g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel_2);
         gtk_widget_set_size_request(spinner,45,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -524,8 +524,8 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
         label = gtk_label_new("Squirts/Cycle");
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
-        reqfuel_2_widgets = g_list_append(reqfuel_2_widgets,(gpointer)label);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)label);
+        reqfuel_2_controls = g_list_append(reqfuel_2_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
@@ -535,8 +535,8 @@ void build_constants_1(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,12,1.0,1.0,0.0);
         spinner = gtk_spin_button_new(adj,1,0);
         spinners.inj_per_cycle_2_spin = spinner;
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
-        reqfuel_2_widgets = g_list_append(reqfuel_2_widgets,(gpointer)spinner);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)spinner);
+        reqfuel_2_controls = g_list_append(reqfuel_2_controls,(gpointer)spinner);
         g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel_2);
         gtk_widget_set_size_request(spinner,45,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
@@ -561,7 +561,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
         table = gtk_table_new(2,2,TRUE);
-        inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)table);
+        inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)table);
         gtk_table_set_row_spacings(GTK_TABLE(table),0);
         gtk_table_set_col_spacings(GTK_TABLE(table),20);
         gtk_container_set_border_width(GTK_CONTAINER(table),0);
@@ -571,20 +571,20 @@ void build_constants_1(GtkWidget *parent_frame)
 
         label = gtk_label_new("Injector Staging");
         gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
-        inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)label);
+        inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)label);
         gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
                         (GtkAttachOptions) (GTK_FILL),
                         (GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(NULL,"Simultaneous");
-        inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
+        inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)button);
         group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
         gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
 
         button = gtk_radio_button_new_with_label(group,"Alternate");
-        inv_dt_widgets = g_list_append(inv_dt_widgets,(gpointer)button);
+        inv_dt_controls = g_list_append(inv_dt_controls,(gpointer)button);
         gtk_table_attach (GTK_TABLE (table), button, 1, 2, 1, 2,
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (0), 0, 0);
@@ -613,7 +613,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         GINT_TO_POINTER(REQD_FUEL_POPUP));
 
         label = gtk_label_new("Required Fuel (per cyl/cycle)");
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
                         (GtkAttachOptions) (GTK_FILL),
@@ -624,7 +624,7 @@ void build_constants_1(GtkWidget *parent_frame)
         spinner = gtk_spin_button_new(adj,1.0,1);
         spinners.req_fuel_total_2_spin = spinner;
         reqd_fuel_2->reqd_fuel_spin = spinner;
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)spinner);
         gtk_widget_set_size_request(spinner,50,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_object_set_data(G_OBJECT(spinner),"offset",
@@ -643,7 +643,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         (GtkAttachOptions) (0), 0, 0);
 
         label = gtk_label_new("Required Fuel (ms. per squirt)");
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)label);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)label);
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
                         (GtkAttachOptions) (GTK_FILL),
@@ -653,7 +653,7 @@ void build_constants_1(GtkWidget *parent_frame)
         adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
         spinner = gtk_spin_button_new(adj,1.0,1);
         spinners.req_fuel_per_squirt_2_spin = spinner;
-        interdep_2_widgets = g_list_append(interdep_2_widgets,(gpointer)spinner);
+        interdep_2_controls = g_list_append(interdep_2_controls,(gpointer)spinner);
         gtk_widget_set_sensitive(spinner,FALSE);
         gtk_widget_modify_text(spinner,GTK_STATE_INSENSITIVE,&black);
 	gtk_widget_modify_base(spinner,GTK_STATE_INSENSITIVE,&white);
@@ -665,7 +665,7 @@ void build_constants_1(GtkWidget *parent_frame)
 
 
 	ebox = gtk_event_box_new();
-        dt_widgets = g_list_append(dt_widgets,(gpointer)ebox);
+        dt_controls = g_list_append(dt_controls,(gpointer)ebox);
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,"   The \"Injector Open Time\" is the amount of time that it takes your fuel injectors to open.  This is added to the MegaSquirt fuel calculations internally.  Typical values are are 1.1 ms for Hi-Z injectors and 0.9 ms for Lo-Z injectors.\n   The \"Battery Correction\" is a correction factor that increases injection pulsewidth based on lower battery voltage (which slows down injector opening). The values are in milliseconds per Volt. Thus if your battery is putting out 9 Volts during cranking, and you have this set to 0.2 ms/Volt, then your pulsewidth will be increased by 0.6 milliseconds.\n   The \"PWM Current Limit\" is used if you are using Low impedance (Lo-Z) injectors.  For Hi-Z (i.e. \"Saturated\") injectors, set this to 100% (which disables PWM as it is NOT used with Hi-Z injectors).  Lo-Z injectors are also known as Peak and Hold injectors.  P&H injectors require full battery voltage to snap them open,  but then power is reduced to a \"Hold\" value to keep it open (without burning it out or letting them close prematurely).  This value of \"PWM Current Limit\" determines the \"Hold\" value.  Unmodified V2 ECU's usually need this around 60-75%, ECU's with the flyback board and the the v2.986 or NEWER firmware usually have this in the 18-30% range.  If you are driving large Lo-Z injectors, (like a Holley Pro-jection TBI setup), installing a flyback board and new firmware is recommended as those injectors can damage a Stock V2 ECU in some rare scenarios.\n   The \"PWM Time Threshold\" is the amount of time that the injector is in \"Peak\" mode. (full power), This should be set to about 1 ms for Lo-Z injectors, or 25.5 for Hi-Z injectors. Setting this value too high for Lo-Z injectors can cause them to overheat and fail (freeze open, or burn out), 1-1.5 ms is a pretty safe value to use.",NULL);
 
@@ -822,7 +822,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			GINT_TO_POINTER(READ_VE_CONST));
 
 	button = gtk_button_new_with_label("Permanently Store Data in ECU");
-        store_widgets = g_list_append(store_widgets,(gpointer)button);
+        store_controls = g_list_append(store_controls,(gpointer)button);
 	gtk_tooltips_set_tip(tip,button,
 			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 1, 2, 0, 1,

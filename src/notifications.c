@@ -26,24 +26,24 @@ extern struct DynamicSpinners spinners;
 static gboolean warning_present = FALSE;
 extern GtkWidget *tools_view;
 extern GtkWidget *dlog_view;
-GList *store_widgets;	/* list of widgets that have color change attributes*/
-GList *interdep_1_widgets;/* list of widgets that have color change attributes*/
-GList *interdep_2_widgets;/* list of widgets that have color change attributes*/
-GList *reqfuel_1_widgets;	/* list of widgets that have color change attributes*/
-GList *reqfuel_2_widgets;	/* list of widgets that have color change attributes*/
+GList *store_controls;	/* list of widgets that have color change attributes*/
+GList *interdep_1_controls;/* list of widgets that have color change attributes*/
+GList *interdep_2_controls;/* list of widgets that have color change attributes*/
+GList *reqfuel_1_controls;	/* list of widgets that have color change attributes*/
+GList *reqfuel_2_controls;	/* list of widgets that have color change attributes*/
 
 
 void set_store_buttons_state(GuiState state)
 {
-	g_list_foreach(store_widgets, set_widget_color,(gpointer)state);
+	g_list_foreach(store_controls, set_widget_color,(gpointer)state);
 }
 
 void set_interdep_state(GuiState state, gint table)
 {
 	if (table == 1)
-		g_list_foreach(interdep_1_widgets, set_widget_color,(gpointer)state);
+		g_list_foreach(interdep_1_controls, set_widget_color,(gpointer)state);
 	else if (table == 2)
-		g_list_foreach(interdep_2_widgets, set_widget_color,(gpointer)state);
+		g_list_foreach(interdep_2_controls, set_widget_color,(gpointer)state);
 	else
 		g_fprintf(stderr,__FILE__": set_interdep_state(), invalid table number %i\n",table);
 }
@@ -51,9 +51,9 @@ void set_interdep_state(GuiState state, gint table)
 void set_reqfuel_state(GuiState state, gint table)
 {
 	if (table == 1)
-		g_list_foreach(reqfuel_1_widgets, set_widget_color,(gpointer)state);
+		g_list_foreach(reqfuel_1_controls, set_widget_color,(gpointer)state);
 	else if (table == 2)
-		g_list_foreach(reqfuel_2_widgets, set_widget_color,(gpointer)state);
+		g_list_foreach(reqfuel_2_controls, set_widget_color,(gpointer)state);
 	else
 		g_fprintf(stderr,__FILE__": set_reqfuel_state(), invalid table number %i\n",table);
 }

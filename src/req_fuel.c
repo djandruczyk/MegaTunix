@@ -358,9 +358,9 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	check_req_fuel_limits();
 	dload_val = ve_const->rpmk;
 	if (reqd_fuel->table == 1)
-		write_ve_const(dload_val, rpmk_offset);
+		write_ve_const(dload_val, rpmk_offset, FALSE);
 	else
-		write_ve_const(dload_val, rpmk_offset+MS_PAGE_SIZE);
+		write_ve_const(dload_val, rpmk_offset+MS_PAGE_SIZE, FALSE);
 
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Table_%i",reqd_fuel->table);
@@ -469,8 +469,8 @@ void check_req_fuel_limits()
 				return;
 			offset = 90;
 			dload_val = convert_before_download(offset,
-					req_fuel_per_squirt);
-			write_ve_const(dload_val, offset);
+					req_fuel_per_squirt,FALSE);
+			write_ve_const(dload_val, offset, FALSE);
 			/* Call handler to empty interdependant hash table */
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
 					
@@ -506,8 +506,9 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90 + MS_PAGE_SIZE;
-			dload_val = convert_before_download(offset,req_fuel_per_squirt);
-			write_ve_const(dload_val, offset);
+			dload_val = convert_before_download(offset,
+					req_fuel_per_squirt,FALSE);
+			write_ve_const(dload_val, offset, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_2,drain_hashtable,NULL);
 					
 		}
@@ -578,8 +579,9 @@ void check_req_fuel_limits()
 			if (paused_handlers)
 				return;
 			offset = 90;
-			dload_val = convert_before_download(offset,req_fuel_per_squirt);
-			write_ve_const(dload_val, offset);
+			dload_val = convert_before_download(offset,
+					req_fuel_per_squirt,FALSE);
+			write_ve_const(dload_val, offset, FALSE);
 			g_hash_table_foreach_remove(interdep_vars_1,drain_hashtable,NULL);
 		}
 	} // End B&G style Req Fuel check 

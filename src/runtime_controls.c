@@ -168,8 +168,8 @@ void add_control(gchar *control_name, gchar *parameters)
 	control = g_malloc0(sizeof(struct Rt_Control));
 	GtkWidget *label;
 	GtkWidget *pbar;
-	extern GList *dt_widgets;
-	extern GList *ign_widgets;
+	extern GList *dt_controls;
+	extern GList *ign_controls;
 	extern GList *temp_dep;
 
 	if (!rt_controls)
@@ -217,15 +217,15 @@ void add_control(gchar *control_name, gchar *parameters)
 	gtk_widget_show_all(control->parent);
 	if (control->flags & DUALTABLE)
 	{
-		dt_widgets = g_list_append(dt_widgets,(gpointer)control->label);
-		dt_widgets = g_list_append(dt_widgets,(gpointer)control->data);
-		dt_widgets = g_list_append(dt_widgets,(gpointer)control->pbar);
+		dt_controls = g_list_append(dt_controls,(gpointer)control->label);
+		dt_controls = g_list_append(dt_controls,(gpointer)control->data);
+		dt_controls = g_list_append(dt_controls,(gpointer)control->pbar);
 	}
 	if (control->flags & (S_N_SPARK|S_N_EDIS))
 	{
-		ign_widgets = g_list_append(ign_widgets,(gpointer)control->label);
-		ign_widgets = g_list_append(ign_widgets,(gpointer)control->data);
-		ign_widgets = g_list_append(ign_widgets,(gpointer)control->pbar);
+		ign_controls = g_list_append(ign_controls,(gpointer)control->label);
+		ign_controls = g_list_append(ign_controls,(gpointer)control->data);
+		ign_controls = g_list_append(ign_controls,(gpointer)control->pbar);
 	}
 	if (control->flags & TEMP_DEP)	/* name has temp unit in it */
 	{

@@ -312,6 +312,23 @@ void read_ve_const()
 		}
 		set_ms_page(0);
 	}
+	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
+	{
+		res = write(serial_params->fd,"I",1);
+		res = poll (&ufds,1,serial_params->poll_timeout);
+		if (res == 0)	// Error 
+		{
+			g_fprintf(stderr,__FILE__": failure reading Ignition-Table\n");
+			serial_params->errcount++;
+			connected = FALSE;
+		}
+		else		// Data arrived 
+		{
+			connected = TRUE;
+			res = handle_ms_data(IGNITION_VARS);
+		}
+	}
+
 	gtk_widget_set_sensitive(misc.status[CONNECTED],
 			connected);
 	gtk_widget_set_sensitive(misc.ww_status[CONNECTED],
@@ -346,7 +363,7 @@ void set_ms_page(gint ms_page)
 		g_fprintf(stderr,__FILE__": FAILURE changing page on MS to %i\n",ms_page);
 }
 
-void write_ve_const(gint value, gint offset)
+void write_ve_const(gint value, gint offset, gboolean ign_var)
 {
 	gint highbyte = 0;
 	gint lowbyte = 0;
@@ -401,7 +418,10 @@ void write_ve_const(gint value, gint offset)
 	else if (ecu_caps & DUALTABLE)
 		set_ms_page(0);
 
-	write_cmd = g_strdup("W");
+	if (ign_var)
+		write_cmd = g_strdup("J");
+	else
+		write_cmd = g_strdup("W");
 
 	lbuff[0]=offset;
 	if(twopart)

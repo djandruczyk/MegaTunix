@@ -249,7 +249,9 @@ gboolean update_runtime_vars()
 	extern unsigned int ecu_caps;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
+	struct Ve_View_3D * ve_view2 = NULL;
 	extern GtkWidget *ve_widgets[];
+	extern GtkWidget *ign_widgets[];
 	extern GHashTable *rt_controls;
 	gchar * tmpbuf = NULL;
 	gfloat tmpf = 0.0;
@@ -260,6 +262,9 @@ gboolean update_runtime_vars()
 				G_OBJECT(ve_widgets[0]),"data");
 	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(ve_widgets[0+MS_PAGE_SIZE]),"data");
+	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
+		ve_view2 = (struct Ve_View_3D *)g_object_get_data(
+					G_OBJECT(ign_widgets[0]),"data");
 	/* Count is used  to force an update after 5 runs EVEN IF the 
 	 * value hasn't changed.  seems to fix a "stuck bar" I've seen
 	 */
@@ -279,6 +284,13 @@ gboolean update_runtime_vars()
 	        gdk_window_invalidate_rect (ve_view1->drawing_area->window, 
 					&ve_view1->drawing_area->allocation, 
 					FALSE);
+	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
+	{
+		if ((ve_view2 != NULL) && (ve_view2->drawing_area->window != NULL)) 
+			gdk_window_invalidate_rect (ve_view2->drawing_area->window, 
+					&ve_view2->drawing_area->allocation, 
+					FALSE);
+	}
 	
 	
 	/* Color the boxes on the VEtable closest to the operating point */

@@ -215,7 +215,44 @@ int handle_ms_data(InputData which_data)
 			break;
 
 		case IGNITION_VARS:
-			g_printf("handling of read ignition data isn't handled yet\n");
+			total_read = 0;
+			total_wanted = serial_params->ignvars_size;
+			zerocount = 0;
+
+			while (total_read < total_wanted )
+			{
+				total_read += res = read(serial_params->fd,
+						ptr+total_read,
+						total_wanted-total_read);
+
+				// Increment bad read counter....
+				if (res == 0)
+					zerocount++;
+
+				if (zerocount == 3)  // 3 bad reads, abort
+				{
+					bad_read = TRUE;
+					goto jumpout;
+				}
+			}
+			/* the number of bytes expected for raw data read */
+			if (bad_read)
+			{
+				g_fprintf(stderr,__FILE__":  Error reading VE/Constants for table 2\n");
+				tcflush(serial_params->fd, TCIOFLUSH);
+				serial_params->errcount++;
+				goto jumpout;
+			}
+			/* Two copies, working copy and temp for 
+			 * comparison against to know if we have 
+			 * to burn stuff to flash.
+			 */
+			memcpy(ms_data+MS_PAGE_SIZE,buf,
+					sizeof(struct Ignition_Table));
+			memcpy(ms_data_last+MS_PAGE_SIZE,buf,
+					sizeof(struct Ignition_Table));
+
+			ms_ve_goodread_count++;
 			break;
 		case RAW_MEMORY:
 			g_printf("Not designed yet...\n");

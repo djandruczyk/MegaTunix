@@ -21,8 +21,8 @@
 void read_conversions(void);
 void reset_temps(gpointer);
 void convert_temps(gpointer,gpointer);
-gint convert_before_download(gint, gfloat);
-gfloat convert_after_upload(gint);
+gint convert_before_download(gint, gfloat, gboolean);
+gfloat convert_after_upload(gint, gboolean);
 /* Prototypes */
 
 struct Conversion_Chart

@@ -82,8 +82,8 @@ int setup_gui()
 	GtkWidget *label;
 	GtkWidget *vbox;
 	GtkWidget *button;
-	extern GList *dt_widgets;
-	extern GList *ign_widgets;
+	extern GList *dt_controls;
+	extern GList *ign_controls;
 	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -121,17 +121,17 @@ int setup_gui()
 
 		if (notebook_tabs[i].dt_specific == TRUE)
 		{
-			dt_widgets = g_list_append(dt_widgets, 
+			dt_controls = g_list_append(dt_controls, 
 					(gpointer)frame);
-			dt_widgets = g_list_append(dt_widgets, 
+			dt_controls = g_list_append(dt_controls, 
 					(gpointer)label);
 		}
 
 		if (notebook_tabs[i].ign_specific == TRUE)
 		{
-			ign_widgets = g_list_append(ign_widgets, 
+			ign_controls = g_list_append(ign_controls, 
 					(gpointer)frame);
-			ign_widgets = g_list_append(ign_widgets, 
+			ign_controls = g_list_append(ign_controls, 
 					(gpointer)label);
 		}
 

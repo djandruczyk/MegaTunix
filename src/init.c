@@ -52,11 +52,12 @@ struct Serial_Params *serial_params;
 unsigned char *ms_data;
 unsigned char *ms_data_last;
 unsigned char *ms_data_backup;
-struct Conversion_Chart *conversions;
+struct Conversion_Chart *std_conversions;
+struct Conversion_Chart *ign_conversions;
 struct Runtime_Common *runtime;
 struct Runtime_Common *runtime_last;
 GtkWidget *ve_widgets[2*MS_PAGE_SIZE];
-GtkWidget *spark_widgets[MS_PAGE_SIZE];
+GtkWidget *ign_widgets[MS_PAGE_SIZE];
 
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
@@ -204,7 +205,8 @@ void mem_alloc()
 	runtime = g_malloc(sizeof(struct Runtime_Common));
 	runtime_last = g_malloc(sizeof(struct Runtime_Common));
 
-	conversions =  g_malloc(sizeof(struct Conversion_Chart));
+	std_conversions =  g_malloc(sizeof(struct Conversion_Chart));
+	ign_conversions =  g_malloc(sizeof(struct Conversion_Chart));
 
 	/* Set memory blocks to known states... */
 	memset((void *)serial_params, 0, sizeof(struct Serial_Params));
@@ -214,7 +216,8 @@ void mem_alloc()
 
 	memset((void *)runtime, 0, sizeof(struct Runtime_Common));
 	memset((void *)runtime_last, 0, sizeof(struct Runtime_Common));
-	memset((void *)conversions, 0, sizeof(struct Conversion_Chart));
+	memset((void *)std_conversions, 0, sizeof(struct Conversion_Chart));
+	memset((void *)ign_conversions, 0, sizeof(struct Conversion_Chart));
 }
 
 void mem_dealloc()
@@ -227,7 +230,8 @@ void mem_dealloc()
 	g_free(ms_data_backup);
 	g_free(runtime);
 	g_free(runtime_last);
-	g_free(conversions);
+	g_free(std_conversions);
+	g_free(ign_conversions);
 	g_hash_table_destroy(interdep_vars_1);
 	g_hash_table_destroy(interdep_vars_2);
 }

@@ -36,36 +36,36 @@ void parse_ecu_capabilities(unsigned int ecu_caps)
 
 void set_dt_table_mapping_state(gboolean state)
 {
-        extern GList *table_map_widgets;
-        g_list_foreach(table_map_widgets, set_widget_state,(gpointer)state);
+        extern GList *table_map_controls;
+        g_list_foreach(table_map_controls, set_widget_state,(gpointer)state);
 }
 
 void set_ignition_mode(gboolean state)
 {
-        extern GList *ign_widgets;
-        extern GList *inv_ign_widgets;
+        extern GList *ign_controls;
+        extern GList *inv_ign_controls;
 
-        g_list_foreach(ign_widgets, set_widget_state,(gpointer)state);
-        g_list_foreach(inv_ign_widgets, set_widget_state,(gpointer)(!state));
+        g_list_foreach(ign_controls, set_widget_state,(gpointer)state);
+        g_list_foreach(inv_ign_controls, set_widget_state,(gpointer)(!state));
         reset_temps(GINT_TO_POINTER(temp_units));
 }
 
 void set_iac_mode(gboolean state)
 {
-        extern GList *iac_idle_widgets;
-        extern GList *enh_idle_widgets;
+        extern GList *iac_idle_controls;
+        extern GList *enh_idle_controls;
 
-        g_list_foreach(enh_idle_widgets, set_widget_state,(gpointer)state);
-        g_list_foreach(iac_idle_widgets, set_widget_state,(gpointer)state);
+        g_list_foreach(enh_idle_controls, set_widget_state,(gpointer)state);
+        g_list_foreach(iac_idle_controls, set_widget_state,(gpointer)state);
 }
 
 void set_dualtable_mode(gboolean state)
 {
-        extern GList *dt_widgets;
-        extern GList *inv_dt_widgets;
+        extern GList *dt_controls;
+        extern GList *inv_dt_controls;
 
-        g_list_foreach(dt_widgets, set_widget_state,(gpointer)state);
-        g_list_foreach(inv_dt_widgets, set_widget_state,(gpointer)(!state));
+        g_list_foreach(dt_controls, set_widget_state,(gpointer)state);
+        g_list_foreach(inv_dt_controls, set_widget_state,(gpointer)(!state));
 
         /* temp_units is a FLAG... */
         reset_temps(GINT_TO_POINTER(temp_units));
@@ -79,7 +79,7 @@ void set_widget_state(gpointer widget, gpointer state)
 gboolean drain_hashtable(gpointer offset, gpointer value, gpointer data)
 {
         /* called per element from the hash table to drain and send to ECU */
-        write_ve_const((gint)value,(gint)offset);
+        write_ve_const((gint)value,(gint)offset, FALSE);
         return TRUE;
 }
 

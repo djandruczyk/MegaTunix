@@ -34,11 +34,11 @@
  * put in the right place to be loaded...
  */
 
-extern struct Conversion_Chart *conversions;
+extern struct Conversion_Chart *std_conversions;
+extern struct Conversion_Chart *ign_conversions;
 extern struct DynamicLabels labels;
 extern struct DynamicAdjustments adjustments;
 extern struct DynamicSpinners spinners;
-extern GtkWidget *ve_widgets[];
 GList *temp_dep = NULL;
 
 
@@ -47,8 +47,11 @@ void read_conversions(void)
 	gint i = 0;
 	gint dl_type;
 	struct Conversion_Chart *conv_chart=NULL;
+	extern unsigned int ecu_caps;
+	extern GtkWidget *ve_widgets[];
+	extern GtkWidget *ign_widgets[];
 
-	conv_chart = conversions;
+	conv_chart = std_conversions;
 
 	for (i=0;i<2*MS_PAGE_SIZE;i++)
 	{
@@ -80,10 +83,42 @@ void read_conversions(void)
 		g_printf("BASE Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
 #endif
 	}
+
+	/* Ignition variant specific */
+	if (ecu_caps & (S_N_SPARK|S_N_EDIS))
+	{
+		conv_chart = ign_conversions;
+
+		for (i=0;i<MS_PAGE_SIZE;i++)
+		{
+			if (GTK_IS_OBJECT(ign_widgets[i]))
+			{
+				dl_type = (gint)g_object_get_data(
+						G_OBJECT(ign_widgets[i]),
+						"dl_type");
+				if (dl_type == IMMEDIATE)
+				{
+					conv_chart->conv_type[i] = (gint)
+						g_object_get_data(G_OBJECT
+								(ign_widgets[i]),
+								"conv_type");
+					conv_chart->conv_factor[i] = (gfloat)((gint)
+							g_object_get_data(G_OBJECT
+								(ign_widgets[i]),
+								"conv_factor_x100"))
+						/100.0;
+				}
+
+			}
+#ifdef DEBUG
+			g_printf("Ign Offset, %i, conv_type %i, conv_factor %f\n",i,conv_chart->conv_type[i],conv_chart->conv_factor[i]);
+#endif
+		}
+	}
 	return;
 }
 
-gint convert_before_download(gint offset, gfloat value)
+gint convert_before_download(gint offset, gfloat value, gboolean ign_var)
 {
 	gint return_value = 0;
 	gint tmp_val = (gint)(value+0.001);
@@ -92,7 +127,10 @@ gint convert_before_download(gint offset, gfloat value)
 	struct Conversion_Chart *conv_chart;
 	extern unsigned char *ms_data;
 
-	conv_chart = conversions;
+	if (ign_var)
+		conv_chart = ign_conversions;
+	else
+		conv_chart = std_conversions;
 	ve_const_arr = (unsigned char *)ms_data;
 
 	factor = conv_chart->conv_factor[offset];
@@ -120,20 +158,37 @@ gint convert_before_download(gint offset, gfloat value)
 	}
 	/* Store value in veconst_arr pointer (to structure) 
 	 * (accessing it via array syntax as it's friggin easier).... 
+	 *
+	 * Ignition variables are stored in the second page,  but referenced
+	 * by an offset from the beginning of their page.
 	 */
+
+	if (ign_var)
+		offset += MS_PAGE_SIZE;
 	ve_const_arr[offset] = return_value; 
 	return (return_value);
 }
 
-gfloat convert_after_upload(gint offset)
+gfloat convert_after_upload(gint offset, gboolean ign_var)
 {
 	gfloat return_value = 0.0;
 	gfloat factor = 0.0;
 	unsigned char *ve_const_arr;
 	struct Conversion_Chart *conv_chart;
 	extern unsigned char *ms_data;
+	gint index;
 
-	conv_chart = conversions;
+	if (ign_var)
+	{
+		conv_chart = ign_conversions;
+		/* Ignition vars are stored in second page */
+		index = offset+MS_PAGE_SIZE;
+	}
+	else
+	{
+		conv_chart = std_conversions;
+		index = offset;
+	}
 	ve_const_arr = (unsigned char *)ms_data;
 
 	factor = conv_chart->conv_factor[offset];
@@ -146,19 +201,19 @@ gfloat convert_after_upload(gint offset)
 	switch ((Conversions)conv_chart->conv_type[offset])
 	{
 		case (ADD):
-			return_value = ve_const_arr[offset] - factor;
+			return_value = ve_const_arr[index] - factor;
 			break;
 		case (SUB):
-			return_value = ve_const_arr[offset] + factor;
+			return_value = ve_const_arr[index] + factor;
 			break;
 		case (MULT):
-			return_value = (gfloat)ve_const_arr[offset] / factor;
+			return_value = (gfloat)ve_const_arr[index] / factor;
 			break;
 		case (DIV):
-			return_value = (gfloat)ve_const_arr[offset] * factor;
+			return_value = (gfloat)ve_const_arr[index] * factor;
 			break;
 		case (NOTHING):
-			return_value = ve_const_arr[offset];
+			return_value = ve_const_arr[index];
 			break;
 		default:
 			g_printf("Convert_after_upload() NO CONVERSION defined, BUG!!!\b\b\n");
