@@ -25,7 +25,6 @@ void build_about(GtkWidget *frame)
 	GtkWidget *alignment;
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
-	GError *error = NULL;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
@@ -40,7 +39,6 @@ void build_about(GtkWidget *frame)
 	gtk_box_pack_start(GTK_BOX(vbox),alignment,TRUE,FALSE,0);
 
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
-	gdk_pixbuf_save(pixbuf,"logo.png","png",&error,NULL);
 
 	image = gtk_image_new_from_pixbuf(pixbuf);
 
