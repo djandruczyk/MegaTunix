@@ -121,7 +121,7 @@ int calc_reqd_fuel_func(GtkWidget *widget, gpointer *data)
 	GtkWidget *label;
 
 	printf("Build required fuel window\n");
-	window = gtk_window_new(GTK_WINDOW_DIALOG);
+	window = gtk_dialog_new();
 	gtk_widget_set_usize(window,250,163);
 	gtk_window_set_title(GTK_WINDOW(window),"Required Fuel Calc");
 	gtk_container_set_border_width(GTK_CONTAINER(window),10);

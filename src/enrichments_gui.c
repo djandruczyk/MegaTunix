@@ -62,8 +62,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.crank_pulse_40 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
@@ -74,8 +72,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.crank_pulse_170 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
@@ -86,8 +82,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.crank_priming_pulse = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,2,3,0,1);
 
 	label = gtk_label_new("-40 Deg. F");
@@ -117,8 +111,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.afterstart_enrich = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
@@ -129,8 +121,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.afterstart_num_cycles = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
 
 	label = gtk_label_new("Enrichment (%)");
@@ -155,8 +145,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_neg_40 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -167,8 +155,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_neg_20 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -179,8 +165,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_0 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,2,3,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -191,8 +175,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_20 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,3,4,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -203,8 +185,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_40 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,4,5,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -215,8 +195,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_60 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,5,6,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -227,8 +205,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_80 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,6,7,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -239,8 +215,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_100 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,7,8,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -251,8 +225,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_130 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,8,9,0,1);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(100,100,255,1,10,0);
@@ -263,8 +235,6 @@ int build_enrichments(GtkWidget *parent_frame)
 	constants.warmup_160 = adj;
 
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-        gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,9,10,0,1);
 
 	label = gtk_label_new("-40");

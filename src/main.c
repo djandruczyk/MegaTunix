@@ -29,6 +29,11 @@ int main(int argc, char ** argv)
 	int cfg_result;
 	struct stat statbuf;
 
+	g_thread_init(NULL);
+	gdk_threads_init();
+
+	gtk_init(&argc, &argv);
+
 	gtk_set_locale();
 	/* Check to see if we are being run from the correct
 	 * directory.
@@ -36,15 +41,9 @@ int main(int argc, char ** argv)
 	if (stat("./MegaTunixrc", &statbuf) < 0)
 	{
 		fprintf (stderr, "MegaTunixrc file not found.\n");
-
-		//      exit (1);
 	}
 
 	gtk_rc_add_default_file ("MegaTunixrc");
-
-	g_thread_init(NULL);
-
-	gtk_init(&argc, &argv);
 
 	gdk_rgb_init();
 

@@ -80,8 +80,6 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.comm_port);
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-	gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-                                       GTK_SHADOW_OUT);
 	gtk_box_pack_start (GTK_BOX (hbox2), spinner, FALSE, TRUE, 0);
 
 	frame = gtk_frame_new("Verify ECU Communication");

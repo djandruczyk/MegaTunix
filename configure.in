@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/main.c)
+AC_INIT(configure.in)
 
 MEGATUNIX_LIN_MAJOR_VERSION=0
 MEGATUNIX_LIN_MINOR_VERSION=0
@@ -21,8 +21,15 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_CC
 AC_PROG_MAKE_SET
-AM_PATH_GTK(1.2.0, , AC_MSG_ERROR([** GTK 1.2.0 not installed or broken **]),gthread)
-AM_PATH_GLIB(1.2.0, , AC_MSG_ERROR([** GLIB 1.2.0 not installed or broken **]),gthread)
+
+dnl check paths for necessary files
+pkg_modules="gtk+-2.0 gthread-2.0 "
+PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
+AC_SUBST(PACKAGE_CFLAGS)
+AC_SUBST(PACKAGE_LIBS)
+
+#AM_PATH_GTK(1.2.0, , AC_MSG_ERROR([** GTK 1.2.0 not installed or broken **]),gthread)
+#AM_PATH_GLIB(1.2.0, , AC_MSG_ERROR([** GLIB 1.2.0 not installed or broken **]),gthread)
 
 
 dnl Checks for libraries.
@@ -41,6 +48,8 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_TIME
 
 dnl Checks for library functions.
+
+dnl optimizations
 
 CFLAGS="-O2"
 AC_SUBST(CFLAGS)
@@ -73,7 +82,9 @@ PFLAGS="-pg"
 fi
 AC_SUBST(PFLAGS)
 
-
+dnl ==============
+dnl Output files for build
+dnl ==============
 
 AC_SUBST(MEGATUNIX_LIN_MAJOR_VERSION)
 AC_SUBST(MEGATUNIX_LIN_MINOR_VERSION)
@@ -83,3 +94,11 @@ AC_OUTPUT([
 Makefile 
 src/Makefile
 VERSION])
+
+echo "
+Configuration:
+
+    Install Path:                       ${prefix}
+    General Debugging:                  ${enable_debug}
+    Profiling:                          ${enable_profiling}
+"
