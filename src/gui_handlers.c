@@ -1356,11 +1356,15 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 				ms_data[page][offset]-=10;
 			retval = TRUE;
 				break;
+		case GDK_plus:
 		case GDK_KP_Add:
+		case GDK_KP_Equal:
+		case GDK_equal:
 			if (value < (upper-1))
 				ms_data[page][offset]+=1;
 			retval = TRUE;
 				break;
+		case GDK_minus:
 		case GDK_KP_Subtract:
 			if (value > (lower+1))
 				ms_data[page][offset]-=1;

@@ -1147,6 +1147,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 			break;				
 		case GDK_plus:
 		case GDK_KP_Add:
+		case GDK_KP_Equal:
+		case GDK_equal:
 			dbg_func(g_strdup("\t\"PLUS\"\n"),OPENGL);
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
