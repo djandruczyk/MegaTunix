@@ -427,8 +427,8 @@ void comms_test()
 		update_logbar("comms_view",NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
 		if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
 			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-		//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-		//				connected);
+		if (g_hash_table_lookup(dynamic_widgets,"ww_connected_label"))
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
 		gdk_threads_leave();
 	}
 	else
@@ -440,8 +440,8 @@ void comms_test()
 		update_logbar("comms_view","warning","I/O with MegaSquirt Timeout\n",TRUE,FALSE);
 		if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
 			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
-//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
-		//				connected);
+		if (g_hash_table_lookup(dynamic_widgets,"ww_connected_label"))
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"ww_connected_label"),connected);
 		gdk_threads_leave();
 	}
 	/* Flush the toilet again.... */
@@ -497,7 +497,9 @@ void writeto_ecu(void *ptr)
 
 	if (!connected)
 	{
+		gdk_threads_enter();
 		no_ms_connection();
+		gdk_threads_leave();
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */
 	}

@@ -26,25 +26,24 @@
 /* Default window size and MINIMUM size as well... */
 static gint def_width=650;
 static gint def_height=525;
-gint width;
-gint height;
-gint main_x_origin;
-gint main_y_origin;
-extern gint tips_in_use;
-GtkWidget *main_window;
-GtkTooltips *tip;
-GtkWidget *notebook;
+gint width = 0;
+gint height = 0;
+gint main_x_origin = 0;
+gint main_y_origin = 0;
+extern gboolean tips_in_use;
+GtkWidget *main_window = NULL;
+GtkTooltips *tip = NULL;
+GtkWidget *notebook = NULL;
 static struct 
 {
 	gchar *frame_name;	/* Textual name at the top of the frame */
 	void (*Function) (GtkWidget *);	/* builder function */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
-	Capability capabilities;	/* What does it do */
 	PageIdent page_ident;	/* Page Identifier... */
 } notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",STANDARD,ABOUT_PAGE},
-{ "General MegaTunix Settings", build_general, "_General",STANDARD,GENERAL_PAGE},
-{ "MegaSquirt Communications Parameters", build_comms, "_Communications",STANDARD,COMMS_PAGE},
+{ "About MegaTunix", build_about, "_About",ABOUT_PAGE},
+{ "General MegaTunix Settings", build_general, "_General",GENERAL_PAGE},
+{ "MegaSquirt Communications Parameters", build_comms, "_Communications",COMMS_PAGE},
 //{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
 };
 
