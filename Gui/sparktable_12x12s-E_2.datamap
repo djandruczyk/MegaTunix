@@ -46,7 +46,7 @@ type=_INT_
 raw_lower=0
 raw_upper=255
 is_float=TRUE
-precision=2
+precision=1
 
 
 #----- Labels ----------------------------------------------------------------

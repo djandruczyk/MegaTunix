@@ -119,11 +119,9 @@ trypop:
 					paused_handlers = FALSE;
 					break;
 				case UPD_STORE_RED:
-					printf("set to red\n\n\n");
 					set_store_buttons_state(RED);
 					break;
 				case UPD_STORE_BLACK:
-					printf("set to black\n\n\n");
 					set_store_buttons_state(BLACK);
 					for (i=0;i<firmware->total_pages;i++)
 						set_reqfuel_state(BLACK,i);

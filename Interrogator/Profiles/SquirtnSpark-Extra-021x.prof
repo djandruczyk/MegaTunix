@@ -13,7 +13,7 @@ Burn_Cmd=B
 MultiPage=TRUE
 RequirePageChange=TRUE
 Page_Cmd=P
-TotalTables=4
+TotalTables=5
 TotalPages=8
 
 [table_0]
@@ -54,10 +54,22 @@ load_bincount=12
 
 [table_3]
 is_spark=TRUE
-table_name=Spak Table 2, MSnSpark-Extra
+table_name=Spark Table 2, MSnSpark-Extra
 rpm_page=4
 load_page=4
 tbl_page=4
+tbl_base_offset=0
+rpm_base_offset=144
+load_base_offset=156
+rpm_bincount=12
+load_bincount=12
+
+[table_4]
+is_spark=FALSE
+table_name=VE Table 3, MSnSpark-Extra
+rpm_page=5
+load_page=5
+tbl_page=5
 tbl_base_offset=0
 rpm_base_offset=144
 load_base_offset=156
@@ -163,8 +175,8 @@ CMD_UPPER_S=32
 [gui]
 RealtimeMapFile=MSnS-Extra
 SliderMapFile=msns-extra-firmware
-LoadTabs=runtime,datalogging,logviewer,tools,sparktable_12x12e,sparktable_12x12e,raweditor
-TabConfs=runtime,datalogging,logviewer,tools,sparktable_12x12e-E_1,sparktable_12x12e-E_2,raweditor
+LoadTabs=runtime,datalogging,logviewer,tools,vetable_12x12e,vetable_12x12e,vetable_12x12e,sparktable_12x12e,sparktable_12x12e,raweditor
+TabConfs=runtime,datalogging,logviewer,tools,vetable_12x12e-E_1,vetable_12x12e-E_2,vetable_12x12e-E_3,sparktable_12x12e-E_1,sparktable_12x12e-E_2,raweditor
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map
