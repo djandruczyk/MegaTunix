@@ -60,7 +60,7 @@ void build_runtime(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
 	frame = gtk_frame_new("Real-Time Variables");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
@@ -421,7 +421,7 @@ void build_runtime(GtkWidget *parent_frame)
 	/* Corrections/Enrichments frame */
 
 	frame = gtk_frame_new("Corrections/Enrichments (Percent)");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 
 	hbox = gtk_hbox_new(TRUE,0);
@@ -580,7 +580,7 @@ void build_runtime(GtkWidget *parent_frame)
 	progress.tpsaccel_pbar = pbar;
 
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
 			"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
 
@@ -662,7 +662,7 @@ void build_runtime(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	frame = gtk_frame_new("Commands");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	table = gtk_table_new(1,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);

@@ -65,7 +65,7 @@ void build_comms(GtkWidget *parent_frame)
 
 	frame = gtk_frame_new("Serial Status Messages");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_end(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);

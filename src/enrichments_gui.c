@@ -35,7 +35,6 @@ void build_enrichments(GtkWidget *parent_frame)
 	GtkWidget *sep;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
-	GtkWidget *vbox3;
 	GtkWidget *hbox;
 	GtkWidget *hbox2;
 	GtkWidget *button;
@@ -54,7 +53,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 
 	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
@@ -209,7 +208,7 @@ void build_enrichments(GtkWidget *parent_frame)
 
 	/* Warmup enrichments */
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,"   The Warmup enrichments are a longer term enrichment to assist engine performance when starting up cold.  The values are in percentage, a value of 100, means no enrichment a value of 150 means 1.5 times more fuel.  (255 is the maximum you can select) There are ten bins from the -40 \302\260 F (-40 \302\260 C.). to 160 \302\260 F (71.1 \302\260 C).  At temperatures between this the MS box interpolates the correct amount of enrichment.  See the FAQ for tuning tips and recommendations.",NULL);
 	frame = gtk_frame_new("Warmup Enrichment Bins (Percent)");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -478,8 +477,8 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_frame_set_label_widget(GTK_FRAME(frame),GTK_WIDGET(label));
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
-	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox3);
+	hbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox2);
 
 	/* EGO feedback parameters... */
 
@@ -490,7 +489,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_row_spacing(GTK_TABLE(table),2,2);
 	gtk_table_set_row_spacing(GTK_TABLE(table),4,2);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_box_pack_start(GTK_BOX(vbox3),table,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),table,TRUE,TRUE,0);
 
 	/* EGO Temp Activation */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);

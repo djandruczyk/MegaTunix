@@ -119,7 +119,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
 	frame = gtk_frame_new("Data Log File Selection");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
 	file_selection = hbox;
@@ -144,7 +144,7 @@ void build_datalogging(GtkWidget *parent_frame)
 			GINT_TO_POINTER(CLOSE_LOGFILE));
 
 	frame = gtk_frame_new("Logable Variables");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox2), 5);
@@ -192,11 +192,11 @@ void build_datalogging(GtkWidget *parent_frame)
 	}
 
 	vbox3 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(vbox),vbox3,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),vbox3,TRUE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
-	gtk_box_pack_start(GTK_BOX(vbox3),hbox,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox3),hbox,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Logging Format ");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
@@ -314,7 +314,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	}
 
 	frame = gtk_frame_new("DataLogging Operations");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	hbox = gtk_hbox_new(FALSE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);

@@ -54,11 +54,11 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	/* splits window into left/right halves */
 	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
 	/*  Box to contain the warmup entries */
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Warmup Enrichment (%)");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
@@ -103,7 +103,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Cranking Pulsewidth (ms)");
-	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
 	hbox2 = gtk_hbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
@@ -164,7 +164,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	/* Afterstart Enrichment frame */
 	frame = gtk_frame_new("Afterstart Enrichment");
-	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
 	hbox2 = gtk_hbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
@@ -208,7 +208,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	frame = gtk_frame_new("Runtime Status");
-	gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,TRUE,0);
 
 	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
@@ -327,7 +327,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	/* Commands box */
 	frame = gtk_frame_new("Commands");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	table = gtk_table_new(1,4,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
