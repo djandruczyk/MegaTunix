@@ -16,12 +16,15 @@
 
 #include <config.h>
 #include <defines.h>
+#include <enums.h>
 #include <globals.h>
+#include <gui_handlers.h>
 #include <tuning_gui.h>
 
 #define DEFAULT_WIDTH  320
 #define DEFAULT_HEIGHT 320
                                                                                                                             
+
 int grid = 8;
 int beginX, beginY;
 int active_map, active_rpm = 0;
@@ -33,6 +36,7 @@ float sdepth = 7.533;
 float zNear = 0.8;
 float zFar = 23;
 float aspect = 1.333;
+static GtkWidget *drawing_area;
 
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
@@ -41,9 +45,9 @@ int build_tuning(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
-	GtkWidget *drawing_area;
 	GtkWidget *frame;
 	GtkWidget *hbox;
+	GtkWidget *button;
 	GdkGLConfig *gl_config;
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -73,6 +77,7 @@ int build_tuning(GtkWidget *parent_frame)
 			GDK_BUTTON_PRESS_MASK	|
 			GDK_KEY_PRESS_MASK	|
 			GDK_KEY_RELEASE_MASK	|
+			GDK_FOCUS_CHANGE_MASK	|
 			GDK_VISIBILITY_NOTIFY_MASK);	
 
 
@@ -87,16 +92,39 @@ int build_tuning(GtkWidget *parent_frame)
 			G_CALLBACK (tuning_gui_motion_notify_event), NULL);	
 	g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
 			G_CALLBACK (tuning_gui_button_press_event), NULL);	
-	g_signal_connect_swapped (G_OBJECT (drawing_area), "key_press_event",
-			G_CALLBACK (tuning_gui_key_press_event), drawing_area);	
+	g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
+			G_CALLBACK (tuning_gui_key_press_event), NULL);	
 
+	/* End of GL window, Now controls for it.... */
 	frame = gtk_frame_new("3D Display Controls");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
-	vbox2 = gtk_vbox_new(TRUE,0);
+	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+	button = gtk_button_new_with_label("Reset Display");
+        gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+        g_signal_connect(G_OBJECT (button), "clicked",
+                        G_CALLBACK (std_button_handler), \
+                        GINT_TO_POINTER(RESET_3D_VIEW));
+
 	/* Probably want something meaningful here */
 	return TRUE;
+}
+
+void reset_3d_view()
+{
+	grid = 8;
+	active_map = 0;
+	active_rpm = 0;
+	dt = 0.008;
+	sphi = 25.0; 
+	stheta = 75.0; 
+	sdepth = 7.533;
+	zNear = 0.8;
+	zFar = 23;
+	aspect = 1.333;
+	tuning_gui_configure_event(drawing_area, NULL,NULL);
+	tuning_gui_expose_event(drawing_area, NULL,NULL);
 }
 
 GdkGLConfig* get_gl_config(void)
@@ -330,31 +358,37 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 	switch (event->keyval)
 	{
 		case GDK_Up:
+			printf("UP\n");
 			if (active_map < 8)
 				active_map += 1;
 			break;
 
 		case GDK_Down:
+			printf("DOWN\n");
 			if (active_map > 0)
 				active_map -= 1;
 			break;				
 
 		case GDK_Left:
+			printf("LEFT\n");
 			if (active_rpm > 0)
 				active_rpm -= 1;
 			break;					
 
 		case GDK_Right:
+			printf("RIGHT\n");
 			if (active_rpm < 8)
 				active_rpm += 1;
 			break;				
 
 		case GDK_plus:
+			printf("PLUS\n");
 			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] < 255)
 				ve_const_p0->ve_bins[(active_rpm*8)+active_map] += 1;
 			break;				
 
 		case GDK_minus:
+			printf("MINUS\n");
 			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] > 0)
 				ve_const_p0->ve_bins[(active_rpm*8)+active_map] -= 1;
 			break;							

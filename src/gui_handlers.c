@@ -26,6 +26,7 @@
 #include <serialio.h>
 #include <stdio.h>
 #include <structures.h>
+#include <tuning_gui.h>
 #include <threads.h>
 #include <vex_support.h>
 
@@ -152,8 +153,6 @@ gint toggle_button_handler(GtkWidget *widget, gpointer data)
 			case SPACE:
 				delim = g_strdup(" ");
 				break;
-
-
 		}
 	}
 	else
@@ -417,6 +416,9 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case TRUNCATE_VEXFILE:
 			truncate_file(VE_EXPORT);
+			break;
+		case RESET_3D_VIEW:
+			reset_3d_view();
 			break;
 	}
 	return TRUE;

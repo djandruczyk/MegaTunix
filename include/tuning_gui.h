@@ -30,19 +30,20 @@
 /* Prototypes */
 int build_tuning(GtkWidget *);
 GdkGLConfig* get_gl_config(void);
-void tuning_gui_realize (GtkWidget *widget, gpointer data);
-gboolean tuning_gui_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data);
-gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
-gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data);
-gboolean tuning_gui_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data);
-gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data);
-gboolean tuning_gui_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
-gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer data);
+void tuning_gui_realize (GtkWidget *, gpointer );
+gboolean tuning_gui_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);
+gboolean tuning_gui_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
+gboolean tuning_gui_motion_notify_event(GtkWidget *, GdkEventMotion *,gpointer);
+gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
+gboolean tuning_gui_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
+gboolean tuning_gui_key_press_event (GtkWidget *, GdkEventKey *, gpointer );
 void tuning_gui_draw_ve_grid(void);
 void tuning_gui_reset_ve_grid(void);
-void tuning_gui_normalize(float v[3]);
-void tuning_gui_draw_grid_point(float i, float j, float k, int normalise);
+void tuning_gui_normalize(float );
+void tuning_gui_draw_grid_point(float , float , float , int );
 void tuning_gui_draw_labels(void);
+void reset_3d_view(void);
 /* Prototypes */
 
 #endif

@@ -62,7 +62,8 @@ typedef enum
 	EXPORT_VETABLE,
 	REVERT_TO_BACKUP,
 	IMPORT_VETABLE,
-	TRUNCATE_VEXFILE
+	TRUNCATE_VEXFILE,
+	RESET_3D_VIEW
 }StdButton;
 
 /* Toggle/Radio buttons */
