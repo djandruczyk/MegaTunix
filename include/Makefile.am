@@ -43,9 +43,9 @@ headers = \
 	stringmatch.h \
         structures.h \
         tabloader.h \
+        tag_loader.h \
         threads.h \
         timeout_handlers.h \
-        tools_gui.h \
         tuning_gui.h \
         unions.h \
         vetable_gui.h \

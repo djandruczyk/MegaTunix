@@ -1,0 +1,45 @@
+# Tools Tab
+
+[global]
+description=Object data map for MegaSquirt Tools (backup/restore, etc...)
+tab_name=_Tools
+
+#----- Buttons ---------------------------------------------------------------
+[tools_import_vex_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_IMPORT_VETABLE_
+page=0
+
+[tools_export_vex_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_EXPORT_VETABLE_
+page=0
+
+[tools_revert_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_REVERT_TO_BACKUP_
+page=0
+
+[tools_backup_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_BACKUP_ALL_
+page=0
+
+[tools_restore_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_RESTORE_ALL_
+page=0
+
+#----- Textview ----------------------------------------------------
+
+[tools_view]
+keys=page,create_tags
+key_types=_INT_,_STRING_
+page=0
+create_tags=warning
+warning=foreground,red

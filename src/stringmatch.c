@@ -131,6 +131,16 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(CLOSE_LOGFILE));
 	g_hash_table_insert(str_2_enum,"_LOGVIEW_ZOOM_",
 			GINT_TO_POINTER(LOGVIEW_ZOOM));
+	g_hash_table_insert(str_2_enum,"_IMPORT_VETABLE_",
+			GINT_TO_POINTER(IMPORT_VETABLE));
+	g_hash_table_insert(str_2_enum,"_EXPORT_VETABLE_",
+			GINT_TO_POINTER(EXPORT_VETABLE));
+	g_hash_table_insert(str_2_enum,"_REVERT_TO_BACKUP_",
+			GINT_TO_POINTER(REVERT_TO_BACKUP));
+	g_hash_table_insert(str_2_enum,"_BACKUP_ALL_",
+			GINT_TO_POINTER(BACKUP_ALL));
+	g_hash_table_insert(str_2_enum,"_RESTORE_ALL_",
+			GINT_TO_POINTER(RESTORE_ALL));
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
 			GINT_TO_POINTER(COMMA));

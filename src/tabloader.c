@@ -24,6 +24,7 @@
 #include <stringmatch.h>
 #include <structures.h>
 #include <tabloader.h>
+#include <tag_loader.h>
 
 gboolean tabs_loaded = FALSE;
 GHashTable *dynamic_widgets = NULL;
@@ -206,6 +207,13 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		load_dependancy(G_OBJECT(widget),cfgfile,section);
+
+	/* If this widget (a textview) has "create_tags" we call a special
+	 * handler jsut for that..
+	 */
+	if (cfg_read_string(cfgfile,section,"create_tags",&tmpbuf))
+		load_tags(G_OBJECT(widget),cfgfile,section);
+
 
 	offset = -1;
 	cfg_read_int(cfgfile,section,"offset",&offset);

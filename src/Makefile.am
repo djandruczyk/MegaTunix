@@ -42,9 +42,9 @@ megatunix_SOURCES = \
 	serialio.c \
 	stringmatch.c \
 	tabloader.c \
+	tag_loader.c \
 	threads.c \
 	timeout_handlers.c \
-	tools_gui.c \
 	tuning_gui.c \
 	vetable_gui.c \
 	vex_support.c \

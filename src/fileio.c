@@ -359,8 +359,8 @@ void close_file(void *ptr)
 		case VE_IMPORT: /* VE Export/import.. */
 			tmpbuf = g_strdup_printf("VEX File Closed\n");
 			update_logbar("tools_view",NULL,tmpbuf,TRUE,FALSE);
-			gtk_entry_set_text(GTK_ENTRY(
-						entries.vex_comment_entry),"");
+			gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
+
 			vex_open = FALSE;
 			g_free(vexfile);
 			break;

@@ -441,7 +441,7 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case SELECT_PARAMS:
 			if (!interrogated)
 				break;
-			present_viewer_choices(obj_data);
+			present_viewer_choices();
 			break;
 		case REQ_FUEL_POPUP:
 			reqd_fuel_popup(widget);

@@ -15,16 +15,13 @@
 #include <comms_gui.h>
 #include <config.h>
 #include <core_gui.h>
-#include <datalogging_gui.h>
 #include <defines.h>
 #include <enums.h>
 #include <general_gui.h>
 #include <gui_handlers.h>
-#include <logviewer_gui.h>
 #include <memory_gui.h>
 #include <runtime_gui.h>
 #include <tuning_gui.h>
-#include <tools_gui.h>
 #include <vetable_gui.h>
 #include <warmwizard_gui.h>
 
@@ -54,11 +51,8 @@ static struct
 { "MegaSquirt Communications Parameters", build_comms, "_Communications",STANDARD,COMMS_PAGE},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
 //{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
-{ "MegaSquirt Tools", build_tools, "T_ools",STANDARD,TOOLS_PAGE},
 { "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",RAW_MEMORY,RAW_MEM_PAGE},
 //{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD,WARMUP_WIZ_PAGE},
-//{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STANDARD,DATALOGGING_PAGE},
-{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STANDARD,LOGVIEWER_PAGE},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);

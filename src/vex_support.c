@@ -178,6 +178,7 @@ gboolean vetable_import(void *ptr)
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
 	struct Vex_Import *vex_import = NULL;
+	extern GHashTable *dynamic_widgets;
 
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
@@ -217,7 +218,7 @@ gboolean vetable_import(void *ptr)
 	}
 	dealloc_ve_struct(vex_import);
 
-	gtk_widget_set_sensitive(buttons.tools_revert_but,TRUE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),TRUE);
 
 	if (status == G_IO_STATUS_ERROR)
 	{
@@ -632,12 +633,13 @@ void revert_to_previous_data()
 	extern guchar * ms_data[MAX_SUPPORTED_PAGES];
 	extern guchar * ms_data_backup[MAX_SUPPORTED_PAGES];
 	extern struct Firmware_Details *firmware;
+	extern GHashTable *dynamic_widgets;
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		memcpy(ms_data[i], ms_data_backup[i], 2*MS_PAGE_SIZE);
 	}
 	update_ve_const();
-	gtk_widget_set_sensitive(buttons.tools_revert_but,FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_revert_button"),FALSE);
 	update_logbar("tools_view","warning","Reverting to previous settings....\n",TRUE,FALSE);
 }

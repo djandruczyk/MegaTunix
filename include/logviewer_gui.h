@@ -17,8 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void build_logviewer(GtkWidget *);
-void present_viewer_choices(void *);
+void present_viewer_choices(void);
 void scroll_logviewer_traces(void);
 gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);

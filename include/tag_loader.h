@@ -11,13 +11,14 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __TOOLS_GUI_H__
-#define __TOOLS_GUI_H__
+#ifndef __TAG_LOADER_H__
+#define __TAG_LOADER_H__
 
+#include <configfile.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void build_tools(GtkWidget *);
+void load_tags(GObject *, ConfigFile *, gchar * );
 /* Prototypes */
 
 #endif

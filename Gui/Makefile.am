@@ -21,6 +21,8 @@ gui_files = 	template.glade \
 		msns-3.01-ext_ignition.datamap \
 		sparktable_8x8_1.glade \
 		sparktable_8x8_1.datamap \
+		tools.glade \
+		tools.datamap \
 		vetable_8x8_1.glade \
 		vetable_8x8_1.datamap \
 		vetable_8x8_2.glade \

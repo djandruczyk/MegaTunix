@@ -41,7 +41,7 @@ CMD_I_0=99
 CMD_F_0=255
 
 [gui]
-LoadTabs=datalogging,B_n_G_constants,enrichments_BnG,vetable_8x8_1,msns-3.01-ext_ignition,sparktable_8x8_1
+LoadTabs=datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8_1,msns-3.01-ext_ignition,sparktable_8x8_1,tools
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map
