@@ -30,6 +30,7 @@ void check_config13(gint);
 void set_dualtable_mode(gboolean);
 void start_runtime_display(void);
 void stop_runtime_display(void);
+gboolean populate_gui(void);
 /* Prototypes */
 
 #endif

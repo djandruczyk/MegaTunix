@@ -61,7 +61,6 @@ int main(int argc, char ** argv)
 	read_conversions();
 
 	/* Force a read of constants to populate the gui */
-	std_button_handler(NULL,GINT_TO_POINTER(READ_VE_CONST));
 
 	/* Convert the gui based on temp preference.  This MUST BE DONE
 	 * AFTER data has been read once to make sure it's displayed correctly
@@ -71,9 +70,12 @@ int main(int argc, char ** argv)
 	else
 		reset_temps(GINT_TO_POINTER(CELSIUS));
 
-	ready = TRUE;
+
+	gtk_timeout_add(100,(GtkFunction)populate_gui,NULL);
 	/* Startup status counters timeout handler... */
+	/* Run it about 30 times/second.. proc use seems negligable... */
 	statuscounts_id = gtk_timeout_add(33,(GtkFunction)update_errcounts,NULL);
+	ready = TRUE;
 	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();
