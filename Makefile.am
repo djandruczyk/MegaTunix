@@ -2,7 +2,6 @@
 # directories and type `make'.
 AUTOMAKE_OPTIONS = foreign
 
-
 subdirs = src include
 
 SUBDIRS = $(subdirs) 

@@ -43,8 +43,8 @@ megatunix_SOURCES = \
 	runtime_gui.c \
 	serialio.c \
 	sparktable_gui.c \
-	timeout_handlers.c \
 	threads.c \
+	timeout_handlers.c \
 	tools_gui.c \
 	tuning_gui.c \
 	vetable_gui.c \
@@ -55,7 +55,7 @@ megatunix_LDADD = @PACKAGE_LIBS@
 
 megatunix_LDFLAGS =
 
-COMMON_FLAGS = @PFLAGS@ @DFLAGS@ 
+COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
 CFLAGS += $(COMMON_FLAGS) -Wall 
 

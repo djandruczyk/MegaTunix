@@ -57,18 +57,18 @@ AC_ARG_ENABLE(debug,
 [  --enable-debug         enable debugging [default=no]],, enable_debug=no)
 
 if test "$enable_debug" = yes; then
-DFLAGS="$DFLAGS -g -DDEBUG"
+DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
 fi
-AC_SUBST(DFLAGS)
+AC_SUBST(DEBUG_FLAGS)
 
 dnl OpenGL Debugging code
 AC_ARG_ENABLE(gldebug,
 [  --enable-gldebug         enable OpenGL debugging [default=no]],, enable_gldebug=no)
 
 if test "$enable_gldebug" = yes; then
-DFLAGS="$DFLAGS -g -DGLDEBUG"
+DEBUG_FLAGS="$DEBUG_FLAGS -g -DGLDEBUG"
 fi
-AC_SUBST(DFLAGS)
+AC_SUBST(DEBUG_FLAGS)
 
 dnl ==============
 dnl profiling
@@ -78,9 +78,9 @@ AC_ARG_ENABLE(profiling,
 [  --enable-profiling     enable profiling ],, enable_profiling=no)
 
 if test "$enable_profiling" = yes; then
-PFLAGS="-pg"
+PROF_FLAGS="-pg"
 fi
-AC_SUBST(PFLAGS)
+AC_SUBST(PROF_FLAGS)
 
 dnl ==============
 dnl Output files for build
