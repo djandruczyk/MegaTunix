@@ -41,6 +41,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 	GtkWidget *hbox;
 	GtkWidget *hbox2;
 	GtkWidget *vbox2;
+	GtkWidget *vbox3;
 	GtkWidget *tmpspin;
 	GtkWidget *spinner;
 	GtkAdjustment *adj;
@@ -100,16 +101,19 @@ void build_warmwizard(GtkWidget *parent_frame)
 
 	/*  Box to contain the cranking/afterstart frames */
 	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),vbox2,TRUE,TRUE,0);
 
 	frame = gtk_frame_new("Cranking Pulsewidth (ms)");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,FALSE,0);
+
+	hbox2 = gtk_hbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox2);
 
 	table = gtk_table_new(3,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_container_add(GTK_CONTAINER(frame),table);
+	gtk_box_pack_start(GTK_BOX(hbox2),table,TRUE,TRUE,20);
 
 	label = gtk_label_new("Priming Pulse");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
@@ -163,11 +167,14 @@ void build_warmwizard(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Afterstart Enrichment");
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,TRUE,FALSE,0);
 
+	hbox2 = gtk_hbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),hbox2);
+
 	table = gtk_table_new(3,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_container_add(GTK_CONTAINER(frame),table);
+	gtk_box_pack_start(GTK_BOX(hbox2),table,TRUE,TRUE,20);
 
 	label = gtk_label_new("Enrichment (%)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
@@ -175,7 +182,7 @@ void build_warmwizard(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Number of Ignition Cycles");
+	label = gtk_label_new("Num of Ignition Cycles");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
@@ -397,6 +404,8 @@ void warmwizard_update_status(gfloat temp)
 	{
 		if (skipnext == FALSE)
 		{
+			gtk_widget_modify_fg(labels.warmwizard_lab[i],
+					GTK_STATE_NORMAL,&black);
 			gtk_widget_modify_text(spinners.warmwizard[i],
 					GTK_STATE_NORMAL,&black);
 			gtk_widget_modify_fg(spinners.warmwizard[i],
@@ -407,9 +416,13 @@ void warmwizard_update_status(gfloat temp)
 		if ((temp > range[i]) && (temp < range[i+1]))
 		{
 			skipnext = TRUE;
+			gtk_widget_modify_fg(labels.warmwizard_lab[i],
+					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_text(spinners.warmwizard[i],
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_fg(spinners.warmwizard[i],
+					GTK_STATE_NORMAL,&red);
+			gtk_widget_modify_fg(labels.warmwizard_lab[i+1],
 					GTK_STATE_NORMAL,&red);
 			gtk_widget_modify_text(spinners.warmwizard[i+1],
 					GTK_STATE_NORMAL,&red);
