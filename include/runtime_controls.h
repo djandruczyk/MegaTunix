@@ -14,57 +14,62 @@
 #ifndef __RUNTIME_CONTROLS_H__
 #define __RUNTIME_CONTROLS_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
 #include <structures.h>
 
 /* Prototypes */
 void create_default_controls();
+void load_controls();
+void add_control(gchar *,gchar *);
+void save_controls();
 /* Prototypes */
 
-static struct Controls all_controls[] = {
+/* Structure defined in structures.h */
+static struct Rt_Control all_controls[] = {
 /* Default visible Controls */
-{"Clock",0,0,0,"Seconds",1,TRUE,0},
-{"O2_Volts",0,1,0,"O<sub>2</sub> (Volts)",20,TRUE,0}, /*scale varies */
-{"Batt_Volts",0,2,0,"Batt (Volts)",23,TRUE,0},
-{"TPS_percent",0,3,0,"TPS (%)",15,TRUE,0},
-{"RPM",0,4,0,"RPM",2,TRUE,0},
-{"Inj_1_PW",0,5,0,"Ch. 1 PW (ms)",32,TRUE,0},
-{"Inj_1_DC",0,6,0,"Ch. 1 DC (%)",34,TRUE,0},
-{"GammaE",1,0,0,"GammaE (%)",22,TRUE,0},
-{"MAP",1,1,0,"MAP (kPa)",16,TRUE,0},	/* Special,  scale varies based on ECU*/
-{"Coolant",1,2,0,"Coolant (\302\260 F.)",19,TRUE,0}, /* Temp SPECIAL!!! */
-{"MAT",1,3,0,"MAT (\302\260 F.)",18,TRUE,0},	/* Temp SPECIAL!!! */
-{"Idle_DC",1,4,0,"Idle DC (%)",4,TRUE,0},
-{"Inj_2_PW",1,5,0,"Ch. 2 PW (ms)",33,TRUE,0},
-{"Inj_2_DC",1,6,0,"Ch. 2 DC (%)",35,TRUE,0},
-{"EGOcorr",2,0,0,"EGO (%)",27,TRUE,0},
-{"BAROcorr",2,1,0,"Baro (%)",26,TRUE,0},
-{"WARMcorr",2,2,0,"Warmup (%)",28,TRUE,0},
-{"AIRcorr",3,0,0,"Air Density (%)",25,TRUE,0},
-{"VE_1",3,0,0,"VE 1 (%)",30,TRUE,0},
-{"TPSaccel",3,0,0,"Accel (ms)",29,TRUE,0},
+{"Clock",NULL,NULL,NULL,NULL,0,0,0,"Seconds",1,54,UCHAR,TRUE,0,0},
+{"O2_Volts",NULL,NULL,NULL,NULL,0,1,0,"O<sub>2</sub> (Volts)",20,12,FLOAT,TRUE,0,O2_DEP}, /*scale varies */
+{"Batt_Volts",NULL,NULL,NULL,NULL,0,2,0,"Batt (Volts)",23,4,FLOAT,TRUE,0,0},
+{"TPS_percent",NULL,NULL,NULL,NULL,0,3,0,"TPS (%)",15,44,FLOAT,TRUE,0,0},
+{"RPM",NULL,NULL,NULL,NULL,0,4,0,"RPM",2,52,SHORT,TRUE,0,0},
+{"Inj_1_PW",NULL,NULL,NULL,NULL,0,5,0,"Ch. 1 PW (ms)",32,36,FLOAT,TRUE,0,0},
+{"Inj_1_DC",NULL,NULL,NULL,NULL,0,6,0,"Ch. 1 DC (%)",34,28,FLOAT,TRUE,0,0},
+{"GammaE",NULL,NULL,NULL,NULL,1,0,0,"GammaE (%)",22,61,UCHAR,TRUE,0,0},
+{"MAP",NULL,NULL,NULL,NULL,1,1,0,"MAP (kPa)",16,60,UCHAR,TRUE,0,0},	/* Special,  scale varies based on ECU*/
+{"Coolant",NULL,NULL,NULL,NULL,1,2,0,"Coolant (\302\260 F.)",19,48,SHORT,TRUE,0,TEMP_DEP}, /* Temp SPECIAL!!! */
+{"MAT",NULL,NULL,NULL,NULL,1,3,0,"MAT (\302\260 F.)",18,50,SHORT,TRUE,0,TEMP_DEP},	/* Temp SPECIAL!!! */
+{"Idle_DC",NULL,NULL,NULL,NULL,1,4,0,"Idle DC (%)",4,74,UCHAR,TRUE,0,DUALTABLE|IAC_PWM|IAC_STEPPER},
+{"Inj_2_PW",NULL,NULL,NULL,NULL,1,5,0,"Ch. 2 PW (ms)",33,40,FLOAT,TRUE,0,DUALTABLE},
+{"Inj_2_DC",NULL,NULL,NULL,NULL,1,6,0,"Ch. 2 DC (%)",35,32,FLOAT,TRUE,0,DUALTABLE},
+{"EGOcorr",NULL,NULL,NULL,NULL,2,0,0,"EGO (%)",27,71,UCHAR,TRUE,0,0},
+{"BAROcorr",NULL,NULL,NULL,NULL,2,1,0,"Baro (%)",26,70,UCHAR,TRUE,0,0},
+{"WARMcorr",NULL,NULL,NULL,NULL,2,2,0,"Warmup (%)",28,73,UCHAR,TRUE,0,0},
+{"AIRcorr",NULL,NULL,NULL,NULL,3,0,0,"Air Density (%)",25,69,UCHAR,TRUE,0,0},
+{"VE_1",NULL,NULL,NULL,NULL,3,1,0,"VE 1 (%)",30,57,UCHAR,TRUE,0,0},
+{"TPSaccel",NULL,NULL,NULL,NULL,3,2,0,"Accel (ms)",29,72,UCHAR,TRUE,0,0},
 
 /* Other usable controls,  but not normally used */
-{"VE_2",-1,-1,-1,"VE 2 (%)",31,FALSE,0},
-{"SparkAngle",-1,-1,-1,"SparkAngle",38,FALSE,0},
-{"TPS_Volts",-1,-1,-1,"TPS (Volts)",5,FALSE,0},
-{"MAP_Volts",-1,-1,-1,"MAP (Volts)",6,FALSE,0},
-{"BARO_Volts",-1,-1,-1,"BARO (Volts)",7,FALSE,0},
-{"MAT_Volts",-1,-1,-1,"MAT (Volts)",8,FALSE,0},
-{"CLT_Volts",-1,-1,-1,"CLT (Volts)",9,FALSE,0},
-{"TPS_Counts",-1,-1,-1,"TPS (Counts)",10,FALSE,0},
-{"MAP_Counts",-1,-1,-1,"MAP (Counts)",11,FALSE,0},
-{"BARO_Counts",-1,-1,-1,"BARO (Counts)",12,FALSE,0},
-{"MAT_Counts",-1,-1,-1,"MAT (Counts)",13,FALSE,0},
-{"CLT_Counts",-1,-1,-1,"CLT (Counts)",14,FALSE,0},
-{"O2_Counts",-1,-1,-1,"O<sub>2</sub> (Counts)",21,FALSE,0},
-{"BATT_Counts",-1,-1,-1,"BATT (Counts)",24,FALSE,0},
-{"BARO",-1,-1,-1,"BARO (kPa)",17,FALSE,0},
-{"CycleTimeH",-1,-1,-1,"CycleTimeH",36,FALSE,0},
-{"CycleTimeL",-1,-1,-1,"CycleTimeL",37,FALSE,0},
-{"BSPOT1",-1,-1,-1,"BSPOT1",39,FALSE,0},
-{"BSPOT2",-1,-1,-1,"BSPOT2",40,FALSE,0},
-{"BSPOT3",-1,-1,-1,"BSPOT3",41,FALSE,0}
+{"VE_2",NULL,NULL,NULL,NULL,-1,-1,-1,"VE 2 (%)",31,58,UCHAR,FALSE,0,DUALTABLE},
+{"SparkAngle",NULL,NULL,NULL,NULL,-1,-1,-1,"SparkAngle",38,77,UCHAR,FALSE,0,S_N_SPARK|S_N_EDIS},
+{"TPS_Volts",NULL,NULL,NULL,NULL,-1,-1,-1,"TPS (Volts)",5,24,FLOAT,FALSE,0,0},
+{"MAP_Volts",NULL,NULL,NULL,NULL,-1,-1,-1,"MAP (Volts)",6,16,FLOAT,FALSE,0,0},
+{"BARO_Volts",NULL,NULL,NULL,NULL,-1,-1,-1,"BARO (Volts)",7,0,FLOAT,FALSE,0,0},
+{"MAT_Volts",NULL,NULL,NULL,NULL,-1,-1,-1,"MAT (Volts)",8,20,FLOAT,FALSE,0,0},
+{"CLT_Volts",NULL,NULL,NULL,NULL,-1,-1,-1,"CLT (Volts)",9,8,FLOAT,FALSE,0,0},
+{"TPS_Counts",NULL,NULL,NULL,NULL,-1,-1,-1,"TPS (Counts)",10,68,UCHAR,FALSE,0,0},
+{"MAP_Counts",NULL,NULL,NULL,NULL,-1,-1,-1,"MAP (Counts)",11,66,UCHAR,FALSE,0,0},
+{"BARO_Counts",NULL,NULL,NULL,NULL,-1,-1,-1,"BARO (Counts)",12,62,UCHAR,FALSE,0,0},
+{"MAT_Counts",NULL,NULL,NULL,NULL,-1,-1,-1,"MAT (Counts)",13,67,UCHAR,FALSE,0,0},
+{"CLT_Counts",NULL,NULL,NULL,NULL,-1,-1,-1,"CLT (Counts)",14,64,UCHAR,FALSE,0,0},
+{"O2_Counts",NULL,NULL,NULL,NULL,-1,-1,-1,"O<sub>2</sub> (Counts)",21,65,UCHAR,FALSE,0,0},
+{"BATT_Counts",NULL,NULL,NULL,NULL,-1,-1,-1,"BATT (Counts)",24,63,UCHAR,FALSE,0,0},
+{"BARO",NULL,NULL,NULL,NULL,-1,-1,-1,"BARO (kPa)",17,59,UCHAR,FALSE,0,0},
+{"CycleTimeH",NULL,NULL,NULL,NULL,-1,-1,-1,"CycleTimeH",36,75,UCHAR,FALSE,0,S_N_EDIS|S_N_SPARK},
+{"CycleTimeL",NULL,NULL,NULL,NULL,-1,-1,-1,"CycleTimeL",37,76,UCHAR,FALSE,0,S_N_EDIS|S_N_SPARK},
+{"BSPOT1",NULL,NULL,NULL,NULL,-1,-1,-1,"BSPOT1",39,78,UCHAR,FALSE,0,0},
+{"BSPOT2",NULL,NULL,NULL,NULL,-1,-1,-1,"BSPOT2",40,79,UCHAR,FALSE,0,0},
+{"BSPOT3",NULL,NULL,NULL,NULL,-1,-1,-1,"BSPOT3",41,80,UCHAR,FALSE,0,0}
 };
 
 

@@ -470,7 +470,9 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			}
 			break;
 		case BURN_MS_FLASH:
+			paused_handlers = TRUE;
 			burn_flash();
+			paused_handlers = FALSE;
 			break;
 		case SELECT_DLOG_EXP:
 			present_filesavebox(DATALOG_EXPORT);

@@ -447,10 +447,15 @@ void burn_flash()
 	extern unsigned char *ms_data_last;
 	gint res = 0;
 	gboolean restart_reader = FALSE;
+	extern unsigned int ecu_caps;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
 
 	if (!connected)
 	{
 		no_ms_connection();
+		g_static_mutex_unlock(&mutex);
 		return;		/* can't burn if disconnected */
 	}
 	if (raw_reader_running)
@@ -458,6 +463,10 @@ void burn_flash()
 		restart_reader = TRUE;
 		stop_serial_thread();
 	}
+	tcflush(serial_params->fd, TCIOFLUSH);
+	if (ecu_caps & DUALTABLE)
+		set_ms_page(0);
+
 	/* doing this may NOT be necessary,  but who knows... */
 	res = write (serial_params->fd,"B",1);	/* Send Burn command */
 	if (res != 1)
@@ -473,6 +482,11 @@ void burn_flash()
 	/* Take away the red on the "Store" button */
 	set_store_buttons_state(BLACK);
 	burn_needed = FALSE;
+
+	tcflush(serial_params->fd, TCIOFLUSH);
+
 	if (restart_reader)
 		start_serial_thread();
+	g_static_mutex_unlock(&mutex);
+	return;
 }

@@ -14,8 +14,12 @@
 
 #include <configfile.h>
 #include <runtime_controls.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <structures.h>
 
+GHashTable *rt_controls = NULL;
+extern GtkWidget *rt_table[];
 
 void create_default_controls()
 {
@@ -31,6 +35,7 @@ void create_default_controls()
 	gchar *ctrl_info = NULL;
 	gint total = 0;
 	gint i = 0;
+	gboolean setup = FALSE;
 
 	total = sizeof(all_controls) / sizeof(all_controls[0]);
 	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
@@ -54,29 +59,35 @@ void create_default_controls()
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
+		cfg_read_boolean(cfgfile,heading,"Setup",&setup);
 		cfg_write_int(cfgfile,heading,"Total_Controls",total);
 		cfg_write_string(cfgfile,heading,"Choices",choices);
+		if (setup)
+			goto exitpoint;
 		cfg_write_string(cfgfile,heading,"Defaults",defaults);
 		for (i=0;i<total;i++)
 		{
 			if (all_controls[i].enabled)
 			{
 				ctrl_info = g_strdup_printf(
-						"%i,%i,%i,%s,%i,%i",
+						"%i,%i,%i,%s,%i,%i,%i,%i",
 						all_controls[i].table,
 						all_controls[i].row,
 						all_controls[i].col,
 						all_controls[i].friendly_name,
 						all_controls[i].limits_index,
-						all_controls[i].special);
+						all_controls[i].runtime_offset,
+						all_controls[i].size,
+						all_controls[i].flags);
 				cfg_write_string(cfgfile,
 						heading,
 						all_controls[i].ctrl_name,
 						ctrl_info);
-			g_free(ctrl_info);
+				g_free(ctrl_info);
 			}
-	
+			cfg_write_boolean(cfgfile,heading,"Setup",TRUE);
 		}
+exitpoint:
 		cfg_write_file(cfgfile,filename);
 		cfg_free(cfgfile);
 		g_free(cfgfile);
@@ -90,4 +101,143 @@ void create_default_controls()
 
 	return;
 
+}
+
+void load_controls()
+{
+	ConfigFile *cfgfile = NULL;
+	gchar *filename = NULL;
+	gchar *heading = NULL;
+	gchar *ctrl_list = NULL;
+	gchar *ctrl_info = NULL;
+	gchar *defaults = NULL;
+	gchar **control_names = NULL;
+	gint i = 0;
+
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	heading = g_strdup("Runtime_Controls");
+
+	cfgfile = cfg_open_file(filename);
+	if (cfgfile)
+	{
+		cfg_read_string(cfgfile,heading,"Defaults",&defaults);
+		cfg_read_string(cfgfile,heading,"Control_List",&ctrl_list);
+//		printf("Default list:\n%s\n",defaults);
+//		printf("Control list:\n%s\n",ctrl_list);
+	}
+	if ((ctrl_list == NULL) && (defaults))
+	{
+//		printf("Using defaults\n");
+		control_names = g_strsplit(defaults, ",", 0);
+		i = 0;
+		while (control_names[i] != NULL)
+		{
+			cfg_read_string(cfgfile,
+					heading,
+					control_names[i],
+					&ctrl_info);
+			add_control(control_names[i],ctrl_info);
+			g_free(ctrl_info);
+			i++;
+		}
+		g_strfreev(control_names);
+	}
+	else
+	{
+//		printf("using user specified controls\n");
+		control_names = g_strsplit(ctrl_list, ",", 0);
+		i = 0;
+		while (control_names[i] != NULL)
+		{
+			cfg_read_string(cfgfile,
+					heading,
+					control_names[i],
+					&ctrl_info);
+			add_control(control_names[i],ctrl_info);
+			g_free(ctrl_info);
+			i++;
+		}
+		g_strfreev(control_names);
+	}
+
+	cfg_free(cfgfile);
+	g_free(filename);
+}
+
+void add_control(gchar *control_name, gchar *parameters)
+{
+	gchar **parm_array = NULL;
+	struct Rt_Control *control = NULL;
+	control = g_malloc0(sizeof(struct Rt_Control));
+	GtkWidget *label;
+	GtkWidget *pbar;
+	extern GList *dt_widgets;
+	extern GList *ign_widgets;
+
+	if (!rt_controls)
+		rt_controls = g_hash_table_new(NULL,NULL);
+	
+	parm_array = g_strsplit(parameters, ",", 0);
+	control->ctrl_name = g_strdup(control_name);
+	control->table = atoi(parm_array[0]);
+	control->row = atoi(parm_array[1]);
+	control->col = atoi(parm_array[2]);
+	control->friendly_name = g_strdup(parm_array[3]);
+	control->limits_index = atoi(parm_array[4]);
+	control->runtime_offset = atoi(parm_array[5]);
+	control->size = atoi(parm_array[6]);
+	control->flags = atoi(parm_array[7]);
+
+	g_strfreev(parm_array);
+
+	label = gtk_label_new(NULL);
+	gtk_label_set_markup(GTK_LABEL(label),g_strdup(control->friendly_name));
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_label_set_justify(GTK_LABEL (label),GTK_JUSTIFY_LEFT);
+	gtk_table_attach (GTK_TABLE (rt_table[control->table]),label,
+			control->col,(control->col)+1,
+			control->row,(control->row)+1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	control->label = label;
+	gtk_widget_show(label);
+
+	label = gtk_label_new(NULL);
+	gtk_widget_set_size_request(label,55,-1);
+	gtk_table_attach (GTK_TABLE (rt_table[control->table]),label,
+			(control->col)+1,(control->col)+2,
+			control->row,(control->row)+1,
+			(GtkAttachOptions) (GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	control->data = label;
+	gtk_widget_show(label);
+	
+	pbar = gtk_progress_bar_new();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
+			GTK_PROGRESS_LEFT_TO_RIGHT);
+	gtk_table_attach (GTK_TABLE (rt_table[control->table]),pbar,
+			(control->col)+2,(control->col)+3,
+			control->row,(control->row)+1,
+			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+			(GtkAttachOptions) (0), 0, 0);
+	control->pbar = pbar;
+	gtk_widget_show(pbar);
+
+	control->parent = rt_table[control->table];
+	if (control->flags & DUALTABLE)
+	{
+		dt_widgets = g_list_append(dt_widgets,(gpointer)control->label);
+		dt_widgets = g_list_append(dt_widgets,(gpointer)control->data);
+		dt_widgets = g_list_append(dt_widgets,(gpointer)control->pbar);
+	}
+	if (control->flags & (S_N_SPARK|S_N_EDIS))
+	{
+		ign_widgets = g_list_append(ign_widgets,(gpointer)control->label);
+		ign_widgets = g_list_append(ign_widgets,(gpointer)control->data);
+		ign_widgets = g_list_append(ign_widgets,(gpointer)control->pbar);
+	}
+
+	if (g_hash_table_lookup(rt_controls,g_strdup(control_name))==NULL)
+		g_hash_table_insert(rt_controls,g_strdup(control_name),
+				(gpointer)control);
 }

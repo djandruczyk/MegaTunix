@@ -46,4 +46,8 @@
 #define TABLE_COLS 6
 #define MAX_LOGABLES 64
 
+#define UCHAR sizeof(unsigned char)
+#define FLOAT sizeof(float)
+#define SHORT sizeof(short)
+
 #endif

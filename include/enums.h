@@ -172,7 +172,9 @@ typedef enum
 	IAC_STEPPER	= 1<<4,
 	BOOST_CTRL	= 1<<5,
 	OVERBOOST_SFTY	= 1<<6,
-	LAUNCH_CTRL	= 1<<7
+	LAUNCH_CTRL	= 1<<7,
+	TEMP_DEP	= 1<<8,	/* Temp units dependancy, used by Rt_Controls */
+	O2_DEP		= 1<<9	/* O2 scale dependancy, used by Rt_Controls */
 }Capabilities;
 
 #endif

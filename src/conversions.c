@@ -210,12 +210,13 @@ void reset_temps(gpointer type)
 			gtk_label_set_text(
 					GTK_LABEL(labels.warmwiz_clt_lab),
 					"Coolant (\302\260 F.)");
-			gtk_label_set_text(
+/*			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_clt_lab),
 					"Coolant (\302\260 F.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_mat_lab),
 					"MAT (\302\260 F.)");
+*/
 			for (i=0;i<10;i++)
 			{
 				string = g_strdup_printf("%s\302\260",
@@ -307,14 +308,15 @@ void reset_temps(gpointer type)
 					GTK_LABEL(labels.slow_idle_temp_lab),
 					"Slow Idle Temp (\302\260 C.)");
 			gtk_label_set_text(
-					GTK_LABEL(labels.runtime_clt_lab),
-					"Coolant (\302\260 C.)");
-			gtk_label_set_text(
 					GTK_LABEL(labels.warmwiz_clt_lab),
+					"Coolant (\302\260 C.)");
+/*			gtk_label_set_text(
+					GTK_LABEL(labels.runtime_clt_lab),
 					"Coolant (\302\260 C.)");
 			gtk_label_set_text(
 					GTK_LABEL(labels.runtime_mat_lab),
 					"MAT (\302\260 C.)");
+*/
 			for (i=0;i<10;i++)
 			{
 				string = g_strdup_printf("%s\302\260",

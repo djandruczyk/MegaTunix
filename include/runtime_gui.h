@@ -22,6 +22,7 @@
 void build_runtime(GtkWidget *);
 gboolean update_runtime_vars(void);
 void reset_runtime_status(void);
+void rt_update_values(gpointer,gpointer,gpointer);
 /* Prototypes */
 
 #endif

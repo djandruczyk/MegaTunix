@@ -306,20 +306,27 @@ struct Limits
 	gfloat upper;
 };
 
-/* The Controls struct contains info on the runtime display tab controls
+/* The Rt_Control struct contains info on the runtime display tab controls
  * as they are now stored in the config file and adjustable in position
  * and placement and such..
  */
-struct Controls
+struct Rt_Control
 {
-	gchar *ctrl_name;
-	gint table;
-	gint row;
-	gint col;
-	gchar *friendly_name;
-	gint limits_index;
-	gboolean enabled;
-	gint special;
+	gchar *ctrl_name; /* Control name in config file (key) */
+	GtkWidget *label; /* Label in runtime display */
+	GtkWidget *data;  /* textual representation of the data */
+	GtkWidget *pbar;  /* progress bar for the data */
+	GtkWidget *parent;/* Parent of these widgets (table) */
+	gint table;	  /* Table number (0-3) */
+	gint row;	  /* Starting row */
+	gint col;	  /* Starting Column */
+	gchar *friendly_name; /* text for Label above */
+	gint limits_index; /* Offset into limits[] structure array */
+	gint runtime_offset; /* offset into Runtime_Common struct (using []) */
+	gint size;	  /* UCHAR,SHORT or FLOAT (1,2, or 4) */
+	gboolean enabled; /* Pretty obvious */
+	gint count;	  /* used to making sure things update */
+	Capabilities flags;/* DT, Temp_dep, IGN or whatever ... */
 };
 
 #endif

@@ -120,7 +120,9 @@ void post_process(void *input, void *output)
 		if (ign_in->rpm < 5)
 			out->rpm = ign_in->rpm*100;
 		else
-			out->rpm = 1000000*60/(ign_int*(stroke/cyls*2));
+			out->rpm = 1000000*60.0/(float)(ign_int*(stroke/cyls*2));
+			if (out->rpm > 25500)
+				out->rpm = 25500;
 
 		out->sparkangle = ign_in->sparkangle;
 	}
@@ -181,7 +183,7 @@ void post_process(void *input, void *output)
 				/ (float)ve_const_dt1->divider;
 
 		possible_inj_time = (float)cycletime/(float)nsquirts;
-		out->dcycle1 =  10.0 * (float) out->pw1 / possible_inj_time;
+		out->dcycle1 =  100.0 * (float) out->pw1 / possible_inj_time;
 
 		/* Table 2 */
 		if ((ve_const_dt2->divider == 0) || ((ve_const_dt2->config11.bit.cylinders+1)%ve_const_dt2->divider))
@@ -197,7 +199,7 @@ void post_process(void *input, void *output)
 				+ (float)(ve_const_dt2->config11.bit.cylinders+1)
 				/ (float)ve_const_dt2->divider;
 		possible_inj_time = (float)cycletime/(float)nsquirts;
-		out->dcycle2 =  10.0 * (float) out->pw2 / possible_inj_time;
+		out->dcycle2 =  100.0 * (float) out->pw2 / possible_inj_time;
 
 	}
 }

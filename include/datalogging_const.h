@@ -17,10 +17,6 @@
 #include <gtk/gtk.h>
 #include <structures.h>
 
-#define UCHAR sizeof(unsigned char)
-#define FLOAT sizeof(float)
-#define SHORT sizeof(short)
-
 
 /* logable_names[] is an array of textual names corresponding to all logable
  * variables from the MS
@@ -142,48 +138,48 @@ static const gint logging_datasizes_map[] =
 
 
 static struct Limits limits[]= {
-{ 0.0,4294967269.0},/* HR clock */
-{ 0.0,255.0},	/* MS clock */
-{ 0.0,25500.0},	/* RPM */
-{ 0.0,255.0},	/* EngineBit */
-{ 0.0,100.0},	/* IdleDC */
-{ 0.0,5.0},	/* TPS Volts */
-{ 0.0,5.0},	/* MAP Volts */
-{ 0.0,5.0},	/* BARO Volts */
-{ 0.0,5.0},	/* MAT Volts */
-{ 0.0,5.0},	/* CLT Volts */
-{ 0.0,255.0},	/* TPS Counts */
-{ 0.0,255.0},	/* MAP Counts */
-{ 0.0,255.0},	/* BARO Counts */
-{ 0.0,255.0},	/* MAT Counts */
-{ 0.0,255.0},	/* CLT Counts */
-{ 0.0,100.0},	/* TPS % */
-{ 0.0,255.0},	/* MAP (in KPA) */
-{ 0.0,255.0},	/* Baro (in KPA) */
-{ -40.0,215.0},	/* MAT (in DEG) */
-{ -40.0,215.0},	/* CLT (in DEG) */
-{ 0.0,5.0},	/* O2 Volts */
-{ 0.0,255.0},	/* O2 Counts */
-{ 0.0,255.0},	/* Gammae */
-{ 0.0,30.0},	/* BATT Volts */
-{ 0.0,255.0},	/* BATT Counts */
-{ 0.0,255.0},	/* AirCorr */
-{ 0.0,255.0},	/* BAROCorr */
-{ 0.0,255.0},	/* EGOCorr */
-{ 0.0,255.0},	/* WARMCorr */
-{ 0.0,255.0},	/* TpsAccel */
-{ 0.0,255.0},	/* VE1 */
-{ 0.0,255.0},	/* VE2 */
-{ 0.0,25.5},	/* PW1 */
-{ 0.0,25.5},	/* PW2 */
-{ 0.0,100.0},	/* Dcycle1 */
-{ 0.0,100.0},	/* Dcycle2 */
-{ 0.0,255.0},	/* CycleTimeH */
-{ 0.0,255.0},	/* CycleTimeL */
-{ 0.0,255.0},	/* SparkAngle */
-{ 0.0,255.0},	/* BSPOT1 */
-{ 0.0,255.0},	/* BSPOT2 */
-{ 0.0,255.0}	/* BSPOT3 */
+{ 0.0,4294967269.0},/* 0 HR clock */
+{ 0.0,255.0},	/* 1 MS clock */
+{ 0.0,25500.0},	/* 2 RPM */
+{ 0.0,255.0},	/* 3 EngineBit */
+{ 0.0,100.0},	/* 4 IdleDC */
+{ 0.0,5.0},	/* 5 TPS Volts */
+{ 0.0,5.0},	/* 6 MAP Volts */
+{ 0.0,5.0},	/* 7 BARO Volts */
+{ 0.0,5.0},	/* 8 MAT Volts */
+{ 0.0,5.0},	/* 9 CLT Volts */
+{ 0.0,255.0},	/* 10 TPS Counts */
+{ 0.0,255.0},	/* 11 MAP Counts */
+{ 0.0,255.0},	/* 12 BARO Counts */
+{ 0.0,255.0},	/* 13 MAT Counts */
+{ 0.0,255.0},	/* 14 CLT Counts */
+{ 0.0,100.0},	/* 15 TPS % */
+{ 0.0,255.0},	/* 16 MAP (in KPA) */
+{ 0.0,255.0},	/* 17 Baro (in KPA) */
+{ -40.0,215.0},	/* 18 MAT (in DEG) */
+{ -40.0,215.0},	/* 19 CLT (in DEG) */
+{ 0.0,5.0},	/* 20 O2 Volts */
+{ 0.0,255.0},	/* 21 O2 Counts */
+{ 0.0,255.0},	/* 22 Gammae */
+{ 0.0,18.0},	/* 23 BATT Volts */
+{ 0.0,255.0},	/* 24 BATT Counts */
+{ 0.0,255.0},	/* 25 AirCorr */
+{ 0.0,255.0},	/* 26 BAROCorr */
+{ 0.0,255.0},	/* 27 EGOCorr */
+{ 0.0,255.0},	/* 28 WARMCorr */
+{ 0.0,255.0},	/* 29 TpsAccel */
+{ 0.0,255.0},	/* 30 VE1 */
+{ 0.0,255.0},	/* 31 VE2 */
+{ 0.0,25.5},	/* 32 PW1 */
+{ 0.0,25.5},	/* 33 PW2 */
+{ 0.0,100.0},	/* 34 Dcycle1 */
+{ 0.0,100.0},	/* 35 Dcycle2 */
+{ 0.0,255.0},	/* 36 CycleTimeH */
+{ 0.0,255.0},	/* 37 CycleTimeL */
+{ 0.0,255.0},	/* 38 SparkAngle */
+{ 0.0,255.0},	/* 39 BSPOT1 */
+{ 0.0,255.0},	/* 40 BSPOT2 */
+{ 0.0,255.0}	/* 41 BSPOT3 */
 };
 
 /* Tooltips for each of the above.... */
