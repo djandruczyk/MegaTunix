@@ -147,6 +147,7 @@ void *raw_reader_thread(void *params)
 	 */
 
 	//g_printf("thread staring\n");
+	usleep(9000);	// Sleep 9 ms to make sure the MS completes the "B" cmd.
 	raw_reader_running = TRUE; /* make sure it starts */
 	while(raw_reader_running == TRUE) 
 	{
