@@ -156,4 +156,11 @@ typedef enum
 	GRATICULE
 }GcType;
 
+typedef enum
+{
+	KPA,
+	RPM
+}TableType;
+
+
 #endif

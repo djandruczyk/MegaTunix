@@ -36,7 +36,7 @@ void post_process(void *input, void *output)
 	struct Raw_Runtime_Std *in = input;
 	struct Raw_Runtime_Dualtable *in_dt = input;
 	struct Runtime_Common *out = output;
-	struct Raw_Runtime_EDIS *edis_in = input;
+	struct Raw_Runtime_Ignition *ign_in = input;
 	extern unsigned char *ms_data;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
@@ -98,9 +98,9 @@ void post_process(void *input, void *output)
 
 	if (ign_variant)
 	{
-		out->ctimecommH = edis_in->ctimecommH;
-		out->ctimecommL = edis_in->ctimecommL;
-		out->sparkangle = edis_in->sparkangle;
+		out->ctimecommH = ign_in->ctimecommH;
+		out->ctimecommL = ign_in->ctimecommL;
+		out->sparkangle = ign_in->sparkangle;
 	}
 	else
 	{

@@ -23,6 +23,11 @@ struct DynamicMisc misc;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern GtkWidget *ve_widgets[];
+static struct Indexes
+{
+	gint low;
+	gint high;
+}null;
 
 void build_vetable_1(GtkWidget *parent_frame)
 {
@@ -445,6 +450,120 @@ void build_vetable_2(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(BURN_MS_FLASH));
+
+	return;
+}
+
+void hilite_ve_entries(gint rpm, gint map, gint table)
+{
+	/* Highlights the VEtable entries around the current engine
+	 * Operating point to assist with tuning the table.
+	 */
+	extern unsigned char *ms_data;
+	extern GdkColor red;
+	extern GdkColor white;
+	struct Ve_Const_Std *ve_const = NULL;
+	struct Ve_Const_Dt2 *ve_const_dt2 = NULL;
+	static struct Indexes kpa_index[2],rpm_index[2];
+	static struct Indexes l_kpa_index[2],l_rpm_index[2];
+	static gint index[2][4] = {{-1,-1,-1,-1},{-1,-1,-1,-1}};
+	gint offset = 0;
+	gint i = 0;
+
+
+	ve_const = (struct Ve_Const_Std *) ms_data;
+	if (table == 2)
+	{
+		ve_const_dt2 = (struct Ve_Const_Dt2 *) (ms_data+MS_PAGE_SIZE);
+		offset = MS_PAGE_SIZE;
+	}
+
+
+	get_indexes(KPA,map, &kpa_index[table],table);
+	get_indexes(RPM,rpm/100, &rpm_index[table],table);
+
+	/* If nothing has changed, exit now saving CPU time */
+	if ((l_kpa_index[table].low == kpa_index[table].low) &&
+			(l_kpa_index[table].high == kpa_index[table].high) &&
+			(l_rpm_index[table].low == rpm_index[table].low) &&
+			(l_rpm_index[table].high == rpm_index[table].high))
+		return;
+
+	for (i=0;i<4;i++)
+	{
+		if (index[table][i] >= 0)
+		{
+			gtk_widget_modify_base(ve_widgets[offset+index[table][i]],
+					GTK_STATE_NORMAL,&white);
+		}
+	}
+#ifdef DEBUG
+	printf("rpm %i,%i, kpa %i,%i\n",rpm_index[table].low,rpm_index[table].high,kpa_index[table].low,kpa_index[table].high);
+#endif
+
+	index[table][0] = (kpa_index[table].low * 8) + rpm_index[table].low;
+	index[table][1] = (kpa_index[table].low * 8) + rpm_index[table].high;
+	index[table][2] = (kpa_index[table].high * 8) + rpm_index[table].low;
+	index[table][3] = (kpa_index[table].high * 8) + rpm_index[table].high;
+
+	for (i=0;i<4;i++)
+	{
+		gtk_widget_modify_base(ve_widgets[offset+index[table][i]],
+				GTK_STATE_NORMAL,&red);
+	}
+
+	/* save last run */
+	l_kpa_index[table].low = kpa_index[table].low;
+	l_kpa_index[table].high = kpa_index[table].high;
+	l_rpm_index[table].low = rpm_index[table].low;
+	l_rpm_index[table].high = rpm_index[table].high;
+
+	return;
+
+}
+
+void get_indexes(TableType type, gint value, void *ptr,gint table)
+{
+	extern unsigned char *ms_data;
+	struct Indexes *index = (struct Indexes *) ptr;
+	gint start = -1;
+	const gint span = 8;
+	gint i = -1;
+
+	if (type == KPA)
+		start = VE1_KPA_BINS_OFFSET;
+	else if (type == RPM)
+		start = VE1_RPM_BINS_OFFSET;
+	else
+	{
+		fprintf(stderr,__FILE__": Invalid TableType passed to get_indexes()\n");
+		index->low = -1;
+		index->high = -1;
+		return;
+	}
+	if (table == 2)
+		start += MS_PAGE_SIZE;
+	
+	for (i=0;i<span-1;i++)
+	{
+		/* If value is out of table bounds on low side */
+		if (value < ms_data[start])
+		{
+			index->low=0;
+			index->high=0;
+			break;
+		}
+		/* Somewhere inside table.... */
+		if ((value >= ms_data[start+i])&&(value <= ms_data[start+i+1]))
+		{	
+			index->low=i;
+			index->high=i+1;
+			break;
+		}
+		/* Above table bounds */
+		index->low = span-1;
+		index->high = span-1;
+	}
 
 	return;
 }

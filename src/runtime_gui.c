@@ -20,6 +20,7 @@
 #include <ms_structures.h>
 #include <runtime_gui.h>
 #include <structures.h>
+#include <vetable_gui.h>
 #include <warmwizard_gui.h>
 
 
@@ -745,6 +746,9 @@ gboolean update_runtime_vars()
 					FALSE);
 	
 	
+	/* Color the boxes on the VEtable closest to the operating point */
+	hilite_ve_entries(runtime->rpm,runtime->map,1);
+
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?
@@ -945,6 +949,9 @@ gboolean update_runtime_vars()
 
 	if (dualtable)
 	{
+		/* Color the boxes on the VEtable closest to the operating point */
+		hilite_ve_entries(runtime->rpm,runtime->map,2);
+
 		if ((runtime->dcycle2 != runtime_last->dcycle2) || (count > 5))
 		{
 			tmpbuf = g_strdup_printf("%.1f",runtime->dcycle2);

@@ -15,10 +15,14 @@
 #define __VETABLE_GUI_H__
 
 #include <gtk/gtk.h>
+#include <enums.h>
 
 /* Prototypes */
+
 void build_vetable_1(GtkWidget *);
 void build_vetable_2(GtkWidget *);
+void hilite_ve_entries(gint, gint, gint);
+void get_indexes(TableType, gint, void *, gint);
 /* Prototypes */
 
 #endif

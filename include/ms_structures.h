@@ -84,7 +84,7 @@ struct Raw_Runtime_Dualtable
 	unsigned char	idledc;		/* Offset 21 */
 };
 
-struct Raw_Runtime_EDIS 
+struct Raw_Runtime_Ignition 
 {       /* This is RAW data that comes in via serial from the MegaSquirt
 	 * these values will be modified by post_process():
 	 * and fed into Runtime_Common (struct)
@@ -144,8 +144,8 @@ struct Runtime_Common
         unsigned char	secl;		/* 54 low seconds - from 0 to 255, then rollover */
         union squirt	squirt;		/* 55 Event variable bit field for Injector Firing */
         union engine	engine;		/* 56 Variable bit-field to hold engine current status */
-        unsigned char	vecurr1;	/* 57 Current VE value Table 1 */
-        unsigned char	vecurr2;	/* 58 Current VE table Table 2 */
+        unsigned char	vecurr1;	/* 57 Current VE value for Table 1 */
+        unsigned char	vecurr2;	/* 58 Current VE value for Table 2 */
 	unsigned char	baro;		/* 59 Barometer in KPA (converted) */
 	unsigned char	map;		/* 60 MAP in KPA (converted) */
         unsigned char	gammae;		/* 61 Total Gamma Enrichments % */
@@ -162,9 +162,9 @@ struct Runtime_Common
         unsigned char	tpsaccel;	/* 72 Acceleration enrichment % */
         unsigned char	warmcorr;	/* 73 Total Warmup Correction % */
         unsigned char	idledc;		/* 74 IdlePWM dutycycle */
-        unsigned char	ctimecommH;	/* 75 SquirtnEDIS Cycletime H */
-        unsigned char	ctimecommL;	/* 76 SquirtnEDIS Cycletime H */
-        unsigned char	sparkangle;	/* 77 SquirtnEDIS sparkangle */
+        unsigned char	ctimecommH;	/* 75 SquirtnSpark Cycletime H */
+        unsigned char	ctimecommL;	/* 76 SquirtnSpark Cycletime H */
+        unsigned char	sparkangle;	/* 77 SquirtnSpark sparkangle */
 	unsigned char	bspot1;		/* 78 blank spot 1 (for Std Runtime) */
 	unsigned char	bspot2;		/* 79 blank spot 2 (for Std Runtime) */
 	unsigned char	bspot3;		/* 80 blank spot 3 (for Std Runtime) */
