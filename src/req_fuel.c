@@ -19,8 +19,8 @@
 #include <protos.h>
 #include <constants.h>
 
-int req_fuel_popup = FALSE;
-static int rpmk_offset = 99;
+gint req_fuel_popup = FALSE;
+static gint rpmk_offset = 99;
 static GtkWidget *popup;
 struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,8,19,14.7};
 extern struct ms_ve_constants *ve_constants;
@@ -191,7 +191,12 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.cylinders_spin),
                         reqd_fuel.cyls);
 
-        ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
+	/* Top is two stroke, botton is four stroke.. */
+	if (ve_constants->config11.bit.eng_type)
+        	ve_constants->rpmk = (int)(6000.0/((double)reqd_fuel.cyls));
+	else
+        	ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
+
         write_ve_const(ve_constants->rpmk, rpmk_offset);
 
         return TRUE;

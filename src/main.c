@@ -23,11 +23,12 @@
 #include <protos.h>
 #include <globals.h>
 
-int def_comm_port;
+
+gint def_comm_port;
 
 int main(int argc, char ** argv)
 {
-	int cfg_result;
+	gint cfg_result;
 	GtkBindingSet *binding_set;
 
 

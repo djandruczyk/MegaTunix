@@ -21,11 +21,11 @@
 #include <globals.h>
 
 
-static int lastcount=0;
-int ms_reset_count;
-int ms_goodread_count;
-int ms_ve_goodread_count;
-int just_starting;
+static gint lastcount=0;
+gint ms_reset_count;
+gint ms_goodread_count;
+gint ms_ve_goodread_count;
+gint just_starting;
 extern struct ms_data_v1_and_v2 *runtime;
 extern struct ms_data_v1_and_v2 *runtime_last;
 extern struct ms_ve_constants *ve_constants;

@@ -110,7 +110,7 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 	
 	/* Injector Open Time */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         constants.inj_open_time_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
@@ -132,7 +132,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	/* Battery Voltage Correction Factor */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1,0);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
         constants.batt_corr_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
@@ -219,7 +219,7 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	/* Fast Idle Temp Threshold */
-	adj =  (GtkAdjustment *) gtk_adjustment_new(140.0,0.0,250.0,1.0,10.0,0);
+	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
         constants.fast_idle_thresh_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
@@ -625,11 +625,13 @@ int build_constants(GtkWidget *parent_frame)
         constants.inj_per_cycle_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(92));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
-			NULL);
+			GINT_TO_POINTER(NUM_SQUIRTS));
 	gtk_table_attach (GTK_TABLE (table), spinner, 0, 1, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -644,12 +646,13 @@ int build_constants(GtkWidget *parent_frame)
         constants.injectors_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(118));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
-			NULL);
-//			GINT_TO_POINTER(NUM_INJECTORS));
+			GINT_TO_POINTER(NUM_INJECTORS));
 	gtk_table_attach (GTK_TABLE (table), spinner, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
@@ -663,12 +666,13 @@ int build_constants(GtkWidget *parent_frame)
         constants.cylinders_spin = spinner;
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
+	g_object_set_data(G_OBJECT(spinner),"offset",
+			GINT_TO_POINTER(117));
 	g_object_set_data(G_OBJECT(spinner),"dl_type",
 			GINT_TO_POINTER(DEFERRED));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
-			NULL);
-//			GINT_TO_POINTER(NUM_CYLINDERS));
+			GINT_TO_POINTER(NUM_CYLINDERS));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);

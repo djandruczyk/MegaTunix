@@ -22,14 +22,17 @@
 #include <constants.h>
 
 
-extern int req_fuel_popup;
-static int paused_handlers = FALSE;
-extern int raw_reader_running;
-extern int raw_reader_stopped;
-extern int read_wait_time;
+extern gint req_fuel_popup;
+static gint paused_handlers = FALSE;
+extern gint raw_reader_running;
+extern gint raw_reader_stopped;
+extern gint read_wait_time;
 extern struct ms_ve_constants *ve_constants;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
+static gint num_squirts;
+static gint num_cylinders;
+static gint num_injectors;
 
 void leave(GtkWidget *widget, gpointer *data)
 {
@@ -219,8 +222,10 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 	gint offset;
 	gint tmpi_x10 = 0; /* value*10 converted to an INT */
 	gint tmpi = 0;
+	gint tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
+	gint err_flag = 0;
 	if (paused_handlers)
 		return TRUE;
 	printf("spinner changed handler \n");
@@ -274,8 +279,8 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			dload_val = tmpi_x10;
 			break;
 		case BATT_CORR:
-			ve_constants->batt_corr = tmpi_x10;
-			dload_val = tmpi_x10;
+			ve_constants->batt_corr = (gint)((value*60.0)+0.001);
+			dload_val = (gint)((value*60.0)+0.001);
 			break;
 		case PWM_CUR_LIM:
 			ve_constants->pwm_curr_lim = tmpi;
@@ -286,8 +291,8 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			dload_val = tmpi_x10;
 			break;
 		case FAST_IDLE_THRES:
-			ve_constants->fast_idle_thresh = tmpi;
-			dload_val = tmpi;
+			ve_constants->fast_idle_thresh = tmpi+40;
+			dload_val = tmpi+40;
 			break;
 		case CRANK_PULSE_NEG_40:
 			ve_constants->cr_pulse_neg40 = tmpi_x10;
@@ -355,6 +360,42 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			ve_constants->ego_limit = tmpi;
 			dload_val = tmpi;
 			break;
+		case NUM_SQUIRTS:
+			/* This actuall effects another variable */
+			num_squirts = tmpi;
+			ve_constants->divider = 
+				(ve_constants->config11.bit.cylinders+1)/tmpi;
+			dload_val = ve_constants->divider;
+			printf("num_squirts %i, divider %i\n",num_squirts,dload_val);
+			if (num_cylinders % num_squirts)
+			{
+				err_flag = 1;
+//				printf("ERROR!!! Number of injectios NOT an integer divisor of number of cylinders\n");
+			}
+			break;
+		case NUM_CYLINDERS:
+			/* Updates a shared bitfield */
+			num_cylinders = tmpi;
+			tmp = ve_constants->config11.value;
+			tmp = tmp & ~0xf0;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << 4);
+			ve_constants->config11.value = tmp;
+			dload_val = tmp;
+			if (num_cylinders % num_squirts)
+			{
+				err_flag = 1;
+//				printf("ERROR!!! Number of injectios NOT an integer divisor of number of cylinders\n");
+			}
+			break;
+		case NUM_INJECTORS:
+			/* Updates a shared bitfield */
+			num_injectors = tmpi;
+			tmp = ve_constants->config12.value;
+			tmp = tmp & ~0xf0;	/*clears top 4 bits */
+			tmp = tmp | ((tmpi-1) << 4);
+			ve_constants->config12.value = tmp;
+			dload_val = tmp;
+			break;
 		default:
 			/* Prevents MS corruption for a SW bug */
 			printf("ERROR spinbutton not handled\b\n");
@@ -392,7 +433,7 @@ void update_const_ve()
 	 * where divider = num_cylinders/num_squirts;
 	 *
 	 */
-	tmp =	(float)(ve_constants->config12.bit.injectors + 1) /
+	tmp =	(float)(ve_constants->config12.bit.injectors+1) /
 		(float)(ve_constants->divider*(ve_constants->alternate+1));
 	tmp *= (float)ve_constants->req_fuel;
 	tmp /= 10.0;
@@ -407,11 +448,13 @@ void update_const_ve()
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.cylinders_spin),
 			ve_constants->config11.bit.cylinders+1);
+	num_cylinders = ve_constants->config11.bit.cylinders+1;
 
 	/* Number of injectors */
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.injectors_spin),
 			ve_constants->config12.bit.injectors+1);
+	num_injectors = ve_constants->config12.bit.injectors+1;
 
 	/* Injections per cycle */
 	tmp =	(float)(ve_constants->config11.bit.cylinders+1) /
@@ -419,6 +462,7 @@ void update_const_ve()
 	gtk_spin_button_set_value(
 			GTK_SPIN_BUTTON(constants.inj_per_cycle_spin),
 			tmp);
+	num_squirts = tmp;
 
 	/* inj_open_time */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.inj_open_time_spin),

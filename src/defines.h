@@ -26,6 +26,7 @@
 #define ACCEL_BINS_OFFSET	79
 #define RPM_BINS_OFFSET		101
 #define KPA_BINS_OFFSET		109
+
 /* Gui frames */
 #define ABOUT_PAGE		0x01
 #define GENERAL_PAGE		0x02
@@ -80,6 +81,9 @@
 #define EGO_STEP		0x5b
 #define EGO_EVENTS		0x5c
 #define EGO_LIMIT		0x5d
+#define NUM_SQUIRTS		0x5e
+#define NUM_CYLINDERS		0x5f
+#define NUM_INJECTORS		0x60
 
 /* text entries */
 #define MS_RESET_COUNT		0x7a

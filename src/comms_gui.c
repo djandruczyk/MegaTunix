@@ -26,17 +26,17 @@ static GtkWidget *ms_readcount_entry;	/* MS Good read counter */
 static GtkWidget *ms_ve_readcount_entry;	/* MS Good read counter */
 gint ser_context_id;			/* for ser_statbar */
 GtkWidget *ser_statbar;			/* serial statusbar */ 
-extern int read_wait_time;
-extern int raw_reader_running;
-extern int ms_reset_count;
-extern int ms_goodread_count;
-extern int ms_ve_goodread_count;
-int poll_min;
-int poll_step;
-int poll_max;
-int interval_min;
-int interval_step;
-int interval_max;
+extern gint read_wait_time;
+extern gint raw_reader_running;
+extern gint ms_reset_count;
+extern gint ms_goodread_count;
+extern gint ms_ve_goodread_count;
+gint poll_min;
+gint poll_step;
+gint poll_max;
+gint interval_min;
+gint interval_step;
+gint interval_max;
 
 int build_comms(GtkWidget *parent_frame)
 {

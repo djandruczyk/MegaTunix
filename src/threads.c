@@ -22,12 +22,12 @@
 #include <globals.h>
 
 
-pthread_t raw_input_thread;	/* thread handle */
-pthread_t starter;		/* thread handle */
-volatile int raw_reader_running;		/* flag for thread */
-int raw_reader_stopped;		/* flag for thread */
-extern int ser_context_id;
-extern GtkWidget *ser_statbar;
+pthread_t raw_input_thread;			/* thread handle */
+pthread_t starter;				/* thread handle */
+volatile gint raw_reader_running;		/* flag for thread */
+gint raw_reader_stopped;			/* flag for thread */
+extern gint ser_context_id;			/* Statusbar related */
+extern GtkWidget *ser_statbar;			/* Statusbar */
 char buff[60];
 
 
