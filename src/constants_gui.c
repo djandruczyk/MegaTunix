@@ -85,7 +85,7 @@ int build_constants(GtkWidget *parent_frame)
 	
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
@@ -97,7 +97,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(15.5,0.1,25.5,0.1,0.1,1.0);
 	spinner = gtk_spin_button_new(adj,1.0,1);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
@@ -122,7 +122,7 @@ int build_constants(GtkWidget *parent_frame)
 	
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(INJ_OPEN_TIME));
@@ -134,7 +134,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1,0);
         spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(BATT_CORR));
@@ -170,8 +170,8 @@ int build_constants(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
-        spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,55,-1);
+        spinner = gtk_spin_button_new(adj,1,0);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(PWM_CUR_LIM));
@@ -183,7 +183,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,10.0,0.1,1.0,0);
         spinner = gtk_spin_button_new(adj,0,1);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(PWM_TIME_THRES));
@@ -216,7 +216,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(140.0,0.0,250.0,1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
-        gtk_widget_set_size_request(spinner,55,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(FAST_IDLE_THRES));
@@ -287,7 +287,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("# of Injections\nper cycle");
+	label = gtk_label_new("# of Injections\nPer Engine Cycle");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),

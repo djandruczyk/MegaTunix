@@ -27,38 +27,43 @@
 
 struct v1_2_Constants
 {
-	GtkAdjustment *inj_open_time;
-	GtkAdjustment *batt_corr;
-	GtkAdjustment *pwm_curr_lim;
-	GtkAdjustment *pwm_time_thresh;
-	GtkAdjustment *fast_idle_thresh;
-	GtkAdjustment *req_fuel_1;
-	GtkAdjustment *req_fuel_2;
-	GtkAdjustment *crank_pulse_40;	
-	GtkAdjustment *crank_pulse_170;	
-	GtkAdjustment *crank_priming_pulse;	
-	GtkAdjustment *afterstart_enrich;	
-	GtkAdjustment *afterstart_num_cycles;	
-	GtkAdjustment *warmup_neg_40;	
-	GtkAdjustment *warmup_neg_20;	
-	GtkAdjustment *warmup_0;	
-	GtkAdjustment *warmup_20;	
-	GtkAdjustment *warmup_40;	
-	GtkAdjustment *warmup_60;	
-	GtkAdjustment *warmup_80;	
-	GtkAdjustment *warmup_100;	
-	GtkAdjustment *warmup_130;	
-	GtkAdjustment *warmup_160;	
-	GtkWidget *neg40_entry;
-	GtkWidget *neg20_entry;
-	GtkWidget *neg0_entry;
-	GtkWidget *pos20_entry;
-	GtkWidget *pos40_entry;
-	GtkWidget *pos60_entry;
-	GtkWidget *pos80_entry;
-	GtkWidget *pos100_entry;
-	GtkWidget *pos130_entry;
-	GtkWidget *pos160_entry;
+	GtkAdjustment *inj_open_time;		/* Adjustment */
+	GtkAdjustment *batt_corr;		/* Adjustment */
+	GtkAdjustment *pwm_curr_lim;		/* Adjustment */
+	GtkAdjustment *pwm_time_thresh;		/* Adjustment */
+	GtkAdjustment *fast_idle_thresh;	/* Adjustment */
+	GtkAdjustment *req_fuel_1;		/* Adjustment */
+	GtkAdjustment *req_fuel_2;		/* Adjustment */
+	GtkAdjustment *crank_pulse_40;		/* Adjustment */
+	GtkAdjustment *crank_pulse_170;		/* Adjustment */
+	GtkAdjustment *crank_priming_pulse;	/* Adjustment */
+	GtkAdjustment *afterstart_enrich;	/* Adjustment */
+	GtkAdjustment *afterstart_num_cycles;	/* Adjustment */
+	GtkWidget *warmup_neg_40;		/* Text Entry */
+	GtkWidget *warmup_neg_20;		/* Text Entry */
+	GtkWidget *warmup_0;			/* Text Entry */
+	GtkWidget *warmup_20;			/* Text Entry */
+	GtkWidget *warmup_40;			/* Text Entry */
+	GtkWidget *warmup_60;			/* Text Entry */
+	GtkWidget *warmup_80;			/* Text Entry */
+	GtkWidget *warmup_100;			/* Text Entry */
+	GtkWidget *warmup_130;			/* Text Entry */
+	GtkWidget *warmup_160;			/* Text Entry */	
+	GtkWidget *tps_trig_thresh;		/* Text Entry */
+	GtkWidget *accel_duration;		/* Text Entry */
+	GtkWidget *cold_accel_addon;		/* Text Entry */
+	GtkWidget *cold_accel_mult;		/* Text Entry */
+	GtkWidget *accel_2v_sec;		/* Text Entry */
+	GtkWidget *accel_4v_sec;		/* Text Entry */
+	GtkWidget *accel_8v_sec;		/* Text Entry */
+	GtkWidget *accel_15v_sec;		/* Text Entry */
+	GtkWidget *decel_cut;			/* Text Entry */
+	GtkWidget *o2_temp_active;		/* Text Entry */
+	GtkWidget *o2_rpm_active;		/* Text Entry */
+	GtkWidget *o2_sw_voltage;		/* Text Entry */
+	GtkWidget *o2_step;			/* Text Entry */
+	GtkWidget *o2_events;			/* Text Entry */
+	GtkWidget *o2_limit;			/* Text Entry */
 };
 
 #endif
