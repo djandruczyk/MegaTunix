@@ -30,7 +30,7 @@
 #include <threads.h>
 #include <unistd.h>
 
-extern unsigned int ecu_flags;
+extern unsigned int ecu_caps;
 extern gboolean connected;
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
@@ -343,9 +343,9 @@ void determine_ecu(void *ptr)
 	}
 
 	/* Set flags */
-	ecu_flags = canidates[match].capabilities;
+	ecu_caps = canidates[match].capabilities;
 	/* Enable/Disable Controls */
-	parse_ecu_flags(ecu_flags);
+	parse_ecu_capabilities(ecu_caps);
 
 	/* Set expected sizes for commands */
 	serial_params->table0_size = canidates[match].bytes[CMD_V0];

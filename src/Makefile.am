@@ -38,6 +38,7 @@ megatunix_SOURCES = \
 	notifications.c \
 	post_process.c \
 	req_fuel.c \
+	runtime_controls.c \
 	runtime_gui.c \
 	serialio.c \
 	threads.c \

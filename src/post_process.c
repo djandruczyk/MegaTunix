@@ -33,7 +33,7 @@ void post_process(void *input, void *output)
 	 * dualtable is set or not..
 	 */
 	extern unsigned char *ms_data;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	gint stroke = 0;
 	gint cyls = 0;
 	gfloat ign_int = 0.0;
@@ -45,7 +45,7 @@ void post_process(void *input, void *output)
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
@@ -99,7 +99,7 @@ void post_process(void *input, void *output)
 	out->gammae = in->gammae;
 
 	/* NON Spark variants.... */
-	if (!(ecu_flags & (S_N_SPARK|S_N_EDIS)))
+	if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
 	{
 		out->rpm = in->rpm * 100;
 		out->bspot1 = in->bspot1;
@@ -125,7 +125,7 @@ void post_process(void *input, void *output)
 		out->sparkangle = ign_in->sparkangle;
 	}
 
-	if (!(ecu_flags & DUALTABLE))
+	if (!(ecu_caps & DUALTABLE))
 	{	/* Std B&G Code */
 		if ((ve_const->divider == 0) || ((ve_const->config11.bit.cylinders+1)%ve_const->divider))
 		{

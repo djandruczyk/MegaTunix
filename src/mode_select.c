@@ -20,13 +20,13 @@
 
 extern gboolean temp_units;
 
-void parse_ecu_flags(unsigned int ecu_flags)
+void parse_ecu_capabilities(unsigned int ecu_caps)
 {
 	extern struct DynamicButtons buttons;
-	set_ignition_mode(ecu_flags & (S_N_SPARK|S_N_EDIS));
-	set_iac_mode(ecu_flags & (IAC_PWM|IAC_STEPPER));
-	set_dualtable_mode(ecu_flags & DUALTABLE);
-	if (ecu_flags & IAC_STEPPER)
+	set_ignition_mode(ecu_caps & (S_N_SPARK|S_N_EDIS));
+	set_iac_mode(ecu_caps & (IAC_PWM|IAC_STEPPER));
+	set_dualtable_mode(ecu_caps & DUALTABLE);
+	if (ecu_caps & IAC_STEPPER)
 		gtk_button_set_label(GTK_BUTTON(buttons.pwm_idle_but),
 				"Stepper Controlled");
 	else

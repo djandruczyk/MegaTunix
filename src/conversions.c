@@ -172,7 +172,7 @@ void reset_temps(gpointer type)
 	gfloat value;
 	gfloat upper;
 	gchar * string;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
 	switch ((gint)type)
@@ -190,7 +190,7 @@ void reset_temps(gpointer type)
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
 					"EGO Active Temp(\302\260 F.)");
-			if (ecu_flags & (DUALTABLE|IAC_PWM|IAC_STEPPER))
+			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Temp (\302\260 F.)");
@@ -198,7 +198,7 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Cutoff Temp (\302\260 F.)");
-			if (ecu_flags & (S_N_SPARK|S_N_EDIS))
+			if (ecu_caps & (S_N_SPARK|S_N_EDIS))
 			{
 				gtk_label_set_text(
 						GTK_LABEL(labels.cooling_fan_temp_lab),
@@ -289,7 +289,7 @@ void reset_temps(gpointer type)
 			gtk_label_set_text(
 					GTK_LABEL(labels.ego_temp_lab),
 					"EGO Active Temp(\302\260 C.)");
-			if (ecu_flags & (DUALTABLE|IAC_PWM|IAC_STEPPER))
+			if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Temp (\302\260 C.)");
@@ -297,7 +297,7 @@ void reset_temps(gpointer type)
 				gtk_label_set_text(
 						GTK_LABEL(labels.fast_idle_temp_lab),
 						"Fast Idle Cutoff Temp (\302\260 C.)");
-			if (ecu_flags & (S_N_SPARK|S_N_EDIS))
+			if (ecu_caps & (S_N_SPARK|S_N_EDIS))
 			{
 				gtk_label_set_text(
 						GTK_LABEL(labels.cooling_fan_temp_lab),

@@ -20,6 +20,7 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <main.h>
+#include <runtime_controls.h>
 #include <serialio.h>
 #include <structures.h>
 
@@ -47,6 +48,7 @@ int main(int argc, char ** argv)
 	make_megasquirt_dirs();	/*Create config file dirs if missing */
 
 	cfg_result = read_config();
+	create_default_controls();
 	setup_gui();		
 
 	open_serial(serial_params->port_name);

@@ -306,4 +306,20 @@ struct Limits
 	gfloat upper;
 };
 
+/* The Controls struct contains info on the runtime display tab controls
+ * as they are now stored in the config file and adjustable in position
+ * and placement and such..
+ */
+struct Controls
+{
+	gchar *ctrl_name;
+	gint table;
+	gint row;
+	gint col;
+	gchar *friendly_name;
+	gint limits_index;
+	gboolean enabled;
+	gint special;
+};
+
 #endif

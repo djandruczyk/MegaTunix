@@ -100,7 +100,7 @@ gboolean vetable_export(void *ptr)
 	gint index = 0;
 	extern unsigned char * ms_data;
 	unsigned char * ve_const_arr = NULL;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	gchar * tmpbuf;
 	gchar *buffer; 
 	gint pos = 0;
@@ -155,7 +155,7 @@ gboolean vetable_export(void *ptr)
 		}
 		pos += g_sprintf(buffer+pos,"\n");
 	}
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 	{
 		pos += g_sprintf(buffer+pos, "Page 1\n");
 		pos += g_sprintf(buffer+pos, "VE Table RPM Range              [ 8]\n");

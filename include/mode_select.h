@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void parse_ecu_flags(unsigned int);
+void parse_ecu_capabilities(unsigned int);
 void set_widget_state(gpointer, gpointer);
 void set_enhanced_idle_state(gboolean);
 void set_dt_table_mapping_state(gboolean);

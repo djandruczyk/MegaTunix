@@ -31,6 +31,7 @@ headers = \
         notifications.h \
         post_process.h \
         req_fuel.h \
+        runtime_controls.h \
         runtime_gui.h \
         serialio.h \
         structures.h \

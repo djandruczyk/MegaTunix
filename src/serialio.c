@@ -252,7 +252,7 @@ void read_ve_const()
 	gboolean restart_reader = FALSE;
 	struct pollfd ufds;
 	int res = 0;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -277,7 +277,7 @@ void read_ve_const()
 	/* Flush serial port... */
 	tcflush(serial_params->fd, TCIOFLUSH);
 
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 		set_ms_page(0);
 	res = write(serial_params->fd,"V",1);
 	res = poll (&ufds,1,serial_params->poll_timeout);
@@ -292,7 +292,7 @@ void read_ve_const()
 		res = handle_ms_data(VE_AND_CONSTANTS_1);
 
 	}
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 	{
 		set_ms_page(1);
 		res = write(serial_params->fd,"V",1);
@@ -355,7 +355,7 @@ void write_ve_const(gint value, gint offset)
 	char lbuff[3] = {0, 0, 0};
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	gchar * write_cmd = NULL;;
 
 	if (!connected)
@@ -389,14 +389,14 @@ void write_ve_const(gint value, gint offset)
 	if (offset > MS_PAGE_SIZE)
 	{
 		offset -= MS_PAGE_SIZE;
-		if (ecu_flags & DUALTABLE)
+		if (ecu_caps & DUALTABLE)
 			set_ms_page(1);
 		else
 			fprintf(stderr,__FILE__": High offset (%i), but no DT flag\n",offset+MS_PAGE_SIZE);
 	
 	}
 	/* NOT high offset, but if using DT switch page back to 0 */
-	else if (ecu_flags & DUALTABLE)
+	else if (ecu_caps & DUALTABLE)
 		set_ms_page(0);
 
 	write_cmd = g_strdup("W");
@@ -417,7 +417,7 @@ void write_ve_const(gint value, gint offset)
 
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	res = write (serial_params->fd,lbuff,count);	/* Send write command */
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 		set_ms_page(0);
 	g_free(write_cmd);
 

@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <structures.h>
 #include <threads.h>
+#include <vetable_gui.h>
 #include <vex_support.h>
 
 extern gboolean interrogated;
@@ -63,10 +64,9 @@ extern struct Serial_Params *serial_params;
 extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;
 
-static gint update_rate = 24;
+static gfloat update_rate = 24;
 static gint runtime_id = -1;
 static gint logviewer_id = -1;
-static gint hilite_id = -1;
 gboolean tips_in_use;
 gboolean forced_update;
 gboolean temp_units;
@@ -306,14 +306,14 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint dl_type = -1;
 	gint single = -1;
 	extern unsigned char *ms_data;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
 	//struct Ignition_Table *ign_table = NULL;
 	ve_const = (struct Ve_Const_Std *) ms_data;
 
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
@@ -342,7 +342,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 		switch (offset)
 		{
 			case 92: /* alternate OR tblcnf (firmware dependant) */
-				if (ecu_flags & DUALTABLE)
+				if (ecu_caps & DUALTABLE)
 				{
 					tmp = ve_const_dt1->tblcnf.value;
 					tmp = tmp & ~bitmask;	/*clears bits */
@@ -396,7 +396,7 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				check_config13(dload_val);
 				break;
 			case 247: // Boost Controller (DT only)
-				if (!(ecu_flags & DUALTABLE))
+				if (!(ecu_caps & DUALTABLE))
 					break;
 				tmp = ve_const_dt2->bcfreq.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
@@ -530,7 +530,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	gint tmp = 0;
 	gfloat value = 0.0;
 	extern unsigned char * ms_data;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	struct Ve_Const_Std * ve_const = (struct Ve_Const_Std *) ms_data;
 	struct Ve_Const_DT_2 * ve_const_dt2 = NULL;
 	struct Reqd_Fuel *reqd_fuel = NULL;
@@ -544,7 +544,7 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 	if ((paused_handlers) || (!ready))
 		return TRUE;
 
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
 
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
@@ -761,7 +761,7 @@ void update_ve_const()
 	gfloat value = 0.0;
 	gboolean temp_dep = FALSE;
 	extern unsigned char *ms_data;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	struct Ve_Const_Std *ve_const = NULL;
 	struct Ve_Const_DT_1 *ve_const_dt1 = NULL;
 	struct Ve_Const_DT_2 *ve_const_dt2 = NULL;
@@ -788,7 +788,7 @@ void update_ve_const()
 	 *
 	
 	 */
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 	{
 		ve_const_dt1 = (struct Ve_Const_DT_1 *) ms_data;
 		ve_const_dt2 = (struct Ve_Const_DT_2 *) (ms_data+MS_PAGE_SIZE);
@@ -1035,7 +1035,7 @@ void update_ve_const()
 				TRUE);
 
 	/* B&G idle or PWM/Stepper */
-	if (ecu_flags & (DUALTABLE|IAC_PWM|IAC_STEPPER))
+	if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
 	{
 		if (ve_const->config13.bit.idle_policy)
 			gtk_toggle_button_set_active(
@@ -1051,7 +1051,7 @@ void update_ve_const()
 				TRUE);
 
 
-	if (!(ecu_flags & DUALTABLE))
+	if (!(ecu_caps & DUALTABLE))
 	{
 		if (ve_const->alternate > 0)
 			gtk_toggle_button_set_active(
@@ -1293,12 +1293,10 @@ void check_tblcnf(unsigned char tmp, gboolean update)
 
 void start_runtime_display()
 {
-	runtime_id = gtk_timeout_add((int)((1.0/(float)update_rate)*1000.0),
+	runtime_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
 			(GtkFunction)update_runtime_vars,NULL);
-	logviewer_id = gtk_timeout_add((int)((1.0/(float)update_rate)*1000.0),
+	logviewer_id = gtk_timeout_add((int)((1.0/update_rate)*1000.0),
 			(GtkFunction)update_logview_traces,NULL);
-//	hilite_id = gtk_timeout_add((int)((1.0/(float)hilite_rate)*1000.0),
-//			(GtkFuntion)hilite_ve_entries,NULL);
 }
 
 void stop_runtime_display()
@@ -1309,9 +1307,6 @@ void stop_runtime_display()
 	if (logviewer_id)
 		gtk_timeout_remove(logviewer_id);
 	logviewer_id = 0;
-//	if (hilite_id)
-//		gtk_timeout_remove(hilite_id);
-//	hilite_id = 0;
 }
 
 gboolean populate_gui()

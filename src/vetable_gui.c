@@ -23,11 +23,6 @@ struct DynamicMisc misc;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern GtkWidget *ve_widgets[];
-static struct Indexes
-{
-	gint low;
-	gint high;
-}null;
 
 void build_vetable_1(GtkWidget *parent_frame)
 {

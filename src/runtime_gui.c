@@ -714,7 +714,7 @@ gboolean update_runtime_vars()
 	static gint count = 0;
 	extern struct Runtime_Common *runtime;
 	extern struct Runtime_Common *runtime_last;
-	extern unsigned int ecu_flags;
+	extern unsigned int ecu_caps;
 	struct Ve_View_3D * ve_view0 = NULL;
 	struct Ve_View_3D * ve_view1 = NULL;
 	extern GtkWidget *ve_widgets[];
@@ -800,7 +800,7 @@ gboolean update_runtime_vars()
 		tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
 		gtk_label_set_text(GTK_LABEL(labels.clt_lab),tmpbuf);
 		gtk_label_set_text(GTK_LABEL(labels.ww_clt_lab),tmpbuf);
-		tmpf = runtime->clt/255.0 <= 1.0 ? runtime->clt/255.0 : 1.0;
+		tmpf = runtime->clt/215.0 <= 1.0 ? runtime->clt/215.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(progress.clt_pbar),
 				tmpf);
@@ -834,7 +834,7 @@ gboolean update_runtime_vars()
 	{
 		tmpbuf = g_strdup_printf("%i",(int)runtime->mat);
 		gtk_label_set_text(GTK_LABEL(labels.mat_lab),tmpbuf);
-		tmpf = runtime->mat/255.0 <= 1.0 ? runtime->mat/255.0 : 1.0;
+		tmpf = runtime->mat/215.0 <= 1.0 ? runtime->mat/215.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(progress.mat_pbar),
 				tmpf);
@@ -946,7 +946,7 @@ gboolean update_runtime_vars()
 		g_free(tmpbuf);
 	}
 
-	if (ecu_flags & DUALTABLE)
+	if (ecu_caps & DUALTABLE)
 	{
 		/* Color the boxes on the VEtable closest to the operating point */
 
