@@ -25,6 +25,7 @@
 #include <gui_handlers.h>
 #include <serialio.h>
 #include <structures.h>
+#include <time.h>
 #include <tuning_gui.h>
 
 #define DEFAULT_WIDTH  400
@@ -211,8 +212,8 @@ gboolean tuning_gui_configure_event(GtkWidget *widget, GdkEventConfigure *event,
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
 
-	#ifdef DEBUG
-	printf("%i Got Configure\n", clock());
+	#ifdef GLDEBUG
+	//printf("%i Got Configure\n", clock());
 	#endif
 	
 	/*** OpenGL BEGIN ***/
@@ -236,8 +237,8 @@ gboolean tuning_gui_expose_event(GtkWidget *widget, GdkEventExpose *event, gpoin
 	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
 	
-	#ifdef DEBUG
-	printf("%i Got Expose\n", clock());
+	#ifdef GLDEBUG
+	//printf("%i Got Expose\n", clock());
 	#endif
 	
 	/*** OpenGL BEGIN ***/
@@ -569,13 +570,13 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 	gint dload_val = 0;
 	extern struct Ve_Widgets *page0_widgets;
 //	extern struct Ve_Widgets *page1_widgets;
-	#ifdef DEBUG	
+	#ifdef GLDEBUG	
 	printf("Key press event\n");
 	#endif
 	switch (event->keyval)
 	{
 		case GDK_Up:
-			#ifdef DEBUG
+			#ifdef GLDEBUG
 			printf("UP\n");
 			#endif
 			if (active_map < 7)
@@ -583,7 +584,7 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			break;
 
 		case GDK_Down:
-			#ifdef DEBUG
+			#ifdef GLDEBUG
 			printf("DOWN\n");
 			#endif
 			if (active_map > 0)
@@ -591,7 +592,7 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			break;				
 
 		case GDK_Left:
-			#ifdef DEBUG
+			#ifdef GLDEBUG
 			printf("LEFT\n");
 			#endif
 			/* Reversed to match display orientation */
@@ -600,7 +601,7 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 			break;					
 
 		case GDK_Right:
-			#ifdef DEBUG
+			#ifdef GLDEBUG
 			printf("RIGHT\n");
 			#endif
 			/* Reversed to match display orientation */
@@ -610,7 +611,7 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 
 		case GDK_plus:
 		case GDK_KP_Add:
-			#ifdef DEBUG
+			#ifdef GLDEBUG
 			printf("PLUS\n");
 			#endif
 			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] < 255)
@@ -629,7 +630,7 @@ gboolean tuning_gui_key_press_event (GtkWidget *widget, GdkEventKey *event, gpoi
 
 		case GDK_minus:
 		case GDK_KP_Subtract:
-			#ifdef DEBUG
+			#ifdef GLDEBUG
 			printf("MINUS\n");
 			#endif
 			if (ve_const_p0->ve_bins[(active_rpm*8)+active_map] > 0)

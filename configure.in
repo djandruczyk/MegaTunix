@@ -67,6 +67,15 @@ DFLAGS="$DFLAGS -g -DDEBUG"
 fi
 AC_SUBST(DFLAGS)
 
+dnl OpenGL Debugging code
+AC_ARG_ENABLE(gldebug,
+[  --enable-gldebug         enable OpenGL debugging [default=no]],, enable_gldebug=no)
+
+if test "$enable_gldebug" = yes; then
+DFLAGS="$DFLAGS -g -DGLDEBUG"
+fi
+AC_SUBST(DFLAGS)
+
 dnl ==============
 dnl profiling
 dnl =============
@@ -98,5 +107,6 @@ Configuration:
 
     Install Path:                       ${prefix}
     General Debugging:                  ${enable_debug}
+    OpenGL Debugging:                   ${enable_gldebug}
     Profiling:                          ${enable_profiling}
 "
