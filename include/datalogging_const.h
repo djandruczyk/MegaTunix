@@ -176,7 +176,7 @@ static struct Limits limits[]= {
 { 0.0,100.0},	/* 35 Dcycle2 */
 { 0.0,255.0},	/* 36 CycleTimeH */
 { 0.0,255.0},	/* 37 CycleTimeL */
-{ 0.0,255.0},	/* 38 SparkAngle */
+{ 0.0,90.0},	/* 38 SparkAngle */
 { 0.0,255.0},	/* 39 BSPOT1 */
 { 0.0,255.0},	/* 40 BSPOT2 */
 { 0.0,255.0}	/* 41 BSPOT3 */
