@@ -71,7 +71,7 @@ DEBUG_FLAGS = @DEBUG_FLAGS@
 DEPDIR = @DEPDIR@
 EXTRA_LIBS = @EXTRA_LIBS@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-INTERROGATOR_PLUGIN_DIR = @INTERROGATOR_PLUGIN_DIR@
+INTERROGATOR_DATA_DIR = @INTERROGATOR_DATA_DIR@
 LN_S = @LN_S@
 MAINT = @MAINT@
 MEGATUNIX_DEFINES = @MEGATUNIX_DEFINES@
@@ -84,10 +84,9 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
+datadirsubs = @datadirsubs@
 install_sh = @install_sh@
-plugindir = @plugindir@
-pluginsubs = @pluginsubs@
-profilesdir = $(plugindir)/$(INTERROGATOR_PLUGIN_DIR)/Profiles
+profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles
 
 profiles = B_and_G_1.x.prof \
 	B_and_G_2.0-3.01.prof \

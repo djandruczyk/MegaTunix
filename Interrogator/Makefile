@@ -71,10 +71,10 @@ DEBUG_FLAGS =
 DEPDIR = .deps
 EXTRA_LIBS = 
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-INTERROGATOR_PLUGIN_DIR = Interrogator
+INTERROGATOR_DATA_DIR = Interrogator
 LN_S = ln -s
 MAINT = #
-MEGATUNIX_DEFINES = -O2 -DPLUGIN_DIR=\"${exec_prefix}/lib/MegaTunix\" -DPLUGINSUBS=\"Interrogator\" -DGTK_DISABLE_COMPAT_H -DGDK_DISABLE_DEPRECATED -D_MAJOR_=0 -D_MINOR_=4 -D_MICRO_=6 
+MEGATUNIX_DEFINES = -O2 -DDATA_DIR=\"${prefix}/share/MegaTunix\" -DINTERROGATOR_DIR=\"${prefix}/share/MegaTunix/Interrogator\" -DGTK_DISABLE_COMPAT_H -DGDK_DISABLE_DEPRECATED -D_MAJOR_=0 -D_MINOR_=4 -D_MICRO_=6 
 PACKAGE = megatunix
 PACKAGE_CFLAGS = -pthread -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/pango-1.0 -I/usr/X11R6/include -I/usr/include/freetype2 -I/usr/include/freetype2/config -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/gtkglext-1.0 -I/usr/lib/gtkglext-1.0/include  
 PACKAGE_LIBS = -Wl,--export-dynamic -pthread -L/usr/X11R6/lib -lgthread-2.0 -lgtkglext-x11-1.0 -lgdkglext-x11-1.0 -lGLU -lGL -lXmu -lXt -lSM -lICE -lgtk-x11-2.0 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangoxft-1.0 -lpangox-1.0 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0  
@@ -84,12 +84,11 @@ STRIP =
 VERSION = 0.4.6
 am__include = include
 am__quote = 
+datadirsubs = 
 install_sh = /home/dave/cvs/MegaTunix/install-sh
-plugindir = ${exec_prefix}/lib/MegaTunix
-pluginsubs = \"Interrogator\"
 SUBDIRS = Profiles
 
-testsdir = $(plugindir)/$(INTERROGATOR_PLUGIN_DIR)
+testsdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)
 
 tests_DATA = tests
 

@@ -1,6 +1,6 @@
 SUBDIRS = Profiles
 
-testsdir = $(plugindir)/$(INTERROGATOR_PLUGIN_DIR)
+testsdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)
 
 tests_DATA = tests
 

@@ -1,4 +1,4 @@
-profilesdir = $(plugindir)/$(INTERROGATOR_PLUGIN_DIR)/Profiles
+profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles
 
 profiles = B_and_G_1.x.prof \
 	B_and_G_2.0-3.01.prof \
