@@ -552,7 +552,7 @@ void update_runtime_vars()
 	{
 		g_snprintf(buff,10,"%i",runtime->clt-40);
 		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),buff);
-		tmpf = (runtime->clt-40)/255.0 <= 1.0 ? (runtime->clt-40)/255.0: 1.0;
+		tmpf = (runtime->clt)/255.0 <= 1.0 ? (runtime->clt)/255.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.clt_pbar),
 				tmpf);
@@ -579,7 +579,7 @@ void update_runtime_vars()
 	{
 		g_snprintf(buff,10,"%i",runtime->mat-40);
 		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),buff);
-		tmpf = (runtime->mat-40)/255.0 <= 1.0 ? (runtime->mat-40)/255.0: 1.0;
+		tmpf = (runtime->mat)/255.0 <= 1.0 ? (runtime->mat)/255.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.mat_pbar),
 				tmpf);

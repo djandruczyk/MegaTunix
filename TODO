@@ -1,0 +1,26 @@
+
+
+Tools (memory editor, TPS guage calibrator, others? )
+Datalogging gui and necessary I/O functions. (will draw upon existing code)
+
+Still needs tuning GUI.  Will probably end up starting yet another project
+to design gui dashboard widgets for GTK and make a library for it..  Would
+prefer to find out someone else alreay built it, and did it right...
+
+Currently leaning towards libgnomecanvas. The Canvas seems extremely power-
+full, though I'd like to see more documentation on it...  Now that flash
+burn works, I'll begin working on that...
+
+Find a way to make MegaTunix "template-able" so that it can easily load
+profiles for the different MS variants already out there like:
+	MS Version 1 or 2
+	Ms with Dual Table
+	MS with high-res code
+	MegaSquirt AVR (Amtel reimplementation)
+	Others?
+
+Probably will be very difficult for the gui,  The only easily template-able
+things will the be commands for the various ops (read realtime, read VE,
+write VE, check version, etc..) and the data arguments (size of block, 
+formatting, etc...)
+

@@ -260,9 +260,9 @@ void write_ve_const(gint value, gint offset)
 	gint count = 0;
 	char buff[3] = {0, 0, 0};
 
-//#ifdef DEBUG
+#ifdef DEBUG
 	printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
-//#endif
+#endif
 	if (value > 255)
 	{
 	//	printf("large value, %i, offset %i\n",value,offset);

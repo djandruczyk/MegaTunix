@@ -30,7 +30,8 @@
 
 typedef struct _C_Gauge C_Gauge;
 
-struct _C_Gauge {
+struct _C_Gauge 
+{
 	GtkWidget *canvas;
 	GdkBitmap *shape;
 	GnomeCanvasGroup *group;
@@ -44,6 +45,18 @@ struct _C_Gauge {
 	guint32 color;
 };
 
+typedef struct _DialType DialType;
+
+//struct _DialType 
+//{
+//        gchar *name;
+//        gchar *description;
+//        gint *labels;
+//        gchar *format;
+//        void (*edge_colors)(Dial *dial);
+//};
+
+
 gboolean 
 c_gauge_area_mark( C_Gauge *c_gauge, guint32 color, 
 		gdouble s_value, gdouble b_value );
@@ -54,4 +67,9 @@ c_gauge_value_set( C_Gauge *c_gauge, gdouble value );
 gboolean 
 c_gauge_make( C_Gauge *c_gauge, GtkWidget *canvas, char *label, gchar *format, 
 	   gchar *fontname, guint32 color, gint labels[]);
+
+
+//DialType *
+//make_dial_type (gchar *name, gchar *description, gchar *format,
+//                gint labels[], void (*edge_colors)(Dial *dial));
 

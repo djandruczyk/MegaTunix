@@ -48,7 +48,7 @@ will probably make the gauges look terrible...
 #define CENTER_CIRCLE_RADIUS 5
 
 /* Returns the coordinates of a point on a circle */
-static void 
+void 
 point_on_circle (gdouble c_x, gdouble c_y, gdouble radius, 
 		 gdouble degree, gdouble *x, gdouble *y)
 {
@@ -60,7 +60,7 @@ point_on_circle (gdouble c_x, gdouble c_y, gdouble radius,
 }
 
 /* Converts value within a range to degrees */
-static gdouble 
+gdouble 
 value_to_degree (C_Gauge * c_gauge, gdouble value)
 {
 	return (value - c_gauge->min) / (c_gauge->max - c_gauge->min) * 270;
@@ -367,3 +367,20 @@ c_gauge_make (C_Gauge *c_gauge, GtkWidget *canvas, char *label, char *format,
 	
 	return TRUE;
 }
+
+//DialType *
+//make_dial_type (gchar *name, gchar *description, gchar *format,
+//                gint labels[], void (*edge_colors)(Dial *dial))
+//{
+//        DialType *dial_type;
+//
+//        dial_type = g_new (DialType, 1);
+//        dial_type->name = name;
+//        dial_type->description = description;
+//        dial_type->format = format;
+//        dial_type->labels = labels;
+//        dial_type->edge_colors = edge_colors;
+//
+//        return dial_type;
+//}
+

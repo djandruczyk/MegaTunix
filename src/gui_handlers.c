@@ -131,6 +131,10 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				if (err_flag == 0)
 					check_req_fuel_limits();
 				break;
+			default:
+				printf(" Toggle button NOT handled ERROR!!, contact author\n");
+				return FALSE;
+				break;
 
 		}
 		if (dl_type == IMMEDIATE)

@@ -1,8 +1,11 @@
 
+	For ORIGINAL BG MegaSquirt ECU's Version 1 and 2.
+
 Translations from raw data from MS
+Realtime variables
 
 counter (byte 1 of 22)  (Seconds counter from CPU)
-	NO COVERSION necessary (data fed is in seconds)
+	NO CONVERSION necessary (data fed is in seconds)
 
 squirt	(byte 2 of 22)  Bitfield
 	Bit 1	injector 1  0=no squirt, 1=squirt
@@ -26,16 +29,13 @@ baro	(byte 4 of 22)  Inital map reading on power up (baromter)
 	Lookup table(s) (na or turbo) (from MegaSquirt PCC sourcecode)
 	Hardcoded into megasquirtDlg.cpp
 	value from MS is an index into the lookup table
-
-	stuff in bruce's code, does weird shit...
-			converted to float, multiplied by (5.0/256.0) 
-			(yields Voltage??)
-			5 volts at max input of 255.
+	lookup table converts from ADC "counts" to KPA
 
 map	(byte 5 of 22) MAP sensor reading
 	Lookup table(s) (na or turbo) (from MegaSquirt PCC sourcecode)
 	Hardcoded into megasquirtDlg.cpp
 	value from MS is an index into the lookup table
+	lookup table converts from ADC "counts" to KPA
 
 mat	(byte 6 of 22) Manifold Air Temp
 	Value returned is index into another lookup table -40
@@ -52,10 +52,11 @@ tps	(byte 8 of 22) Throttle Position Sensor
 	0-5 volt value.
 
 batt	(byte 9 of 22) Battery Voltage
-	First converted to 0-5 volt value (raw *(5/256))
+	First converted to 0-5 volt value (raw *(5/255))
 	Then multipled by 6
 
 ego	(byte 10 of 22) Exhaust Gas Oxygen
+	Value is converted to voltage (*5/255)
 		
 egocorr	(byte 11 of 22) Exhaust Gas Oxygen Correction
 	RAW value used (no converstion)
