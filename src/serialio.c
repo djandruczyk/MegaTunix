@@ -138,6 +138,7 @@ void setup_serial_params()
 
 void close_serial()
 {
+	extern GHashTable *dynamic_widgets;
 	if (serial_params->open == FALSE)
 		return;
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
@@ -145,8 +146,8 @@ void close_serial()
 	serial_params->fd = -1;
 	serial_params->open = FALSE;
 	connected = FALSE;
-	gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
-			connected);
+	if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
 	//	gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 	//			connected);
 

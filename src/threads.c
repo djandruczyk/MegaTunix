@@ -25,6 +25,7 @@
 #include <logviewer_gui.h>
 #include <notifications.h>
 #include <post_process.h>
+#include <runtime_controls.h>
 #include <runtime_gui.h>
 #include <rtv_map_loader.h>
 #include <serialio.h>
@@ -94,6 +95,8 @@ void io_cmd(IoCommand cmd, gpointer data)
 				tmp = UPD_LOAD_GUI_TABS;
 				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_POPULATE_DLOGGER;
+				g_array_append_val(message->funcs,tmp);
+				tmp = UPD_LOAD_RT_SLIDERS;
 				g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;
@@ -261,6 +264,12 @@ void *serial_io_handler(gpointer data)
 						populate_dlog_choices();
 						gdk_threads_leave();
 						break;
+					case UPD_LOAD_RT_SLIDERS:
+						gdk_threads_enter();
+						load_controls();
+						reset_temps(GINT_TO_POINTER(temp_units));
+						gdk_threads_leave();
+						break;
 					case UPD_LOAD_REALTIME_MAP:
 						gdk_threads_enter();
 						if (!load_realtime_map())
@@ -309,6 +318,7 @@ void *serial_io_handler(gpointer data)
 					case UPD_DATALOGGER:
 						run_datalog();
 						break;
+						
 				}
 			}
 		}
@@ -391,6 +401,7 @@ void readfrom_ecu(void *ptr)
 void comms_test()
 {
 	gboolean result = FALSE;
+	extern GHashTable *dynamic_widgets;
 
 	if (serial_params->open == FALSE)
 	{
@@ -418,8 +429,8 @@ void comms_test()
 		dbg_func(__FILE__": comms_test()\n\tECU Comms Test Successfull\n",SERIAL_RD);
 		gdk_threads_enter();
 		update_logbar("comms_view",NULL,"ECU Comms Test Successfull\n",TRUE,FALSE);
-		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
-				connected);
+		if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
 		//		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 		//				connected);
 		gdk_threads_leave();
@@ -431,8 +442,8 @@ void comms_test()
 		dbg_func(__FILE__": comms_test()\n\tI/O with ECU Timeout\n",CRITICAL);
 		gdk_threads_enter();
 		update_logbar("comms_view","warning","I/O with MegaSquirt Timeout\n",TRUE,FALSE);
-		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
-				connected);
+		if (g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"))
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
 //		gtk_widget_set_sensitive(misc.ww_status[STAT_CONNECTED],
 		//				connected);
 		gdk_threads_leave();

@@ -16,7 +16,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <dep_loader.h>
-//#include <dlfcn.h>
 #include <enums.h>
 #include <getfiles.h>
 #include <glade/glade.h>
@@ -68,8 +67,11 @@ gboolean load_gui_tabs()
 				label = gtk_label_new_with_mnemonic(g_strdup(tmpbuf));
 				g_free(tmpbuf);
 				topframe = glade_xml_get_widget(xml,"topframe");
-				gtk_container_foreach(GTK_CONTAINER(topframe),bind_data,(gpointer)cfgfile);
-				gtk_container_foreach(GTK_CONTAINER(topframe),populate_master,NULL);
+				/* bind_data() is recursive and will take 
+				 * care of all children
+				 */
+				bind_data(topframe,(gpointer)cfgfile);
+				populate_master(topframe,(gpointer)cfgfile);
 				if (cfg_read_string(cfgfile,"global","post_function",&post_function))
 				{
 					module = g_module_open(NULL,G_MODULE_BIND_LAZY);

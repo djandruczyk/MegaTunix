@@ -164,6 +164,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(REALTIME_VIEW));
 	g_hash_table_insert(str_2_enum,"_PLAYBACK_VIEW_",
 			GINT_TO_POINTER(PLAYBACK_VIEW));
+	/* Page Identifiers */
+	g_hash_table_insert(str_2_enum,"_RUNTIME_PAGE_",
+			GINT_TO_POINTER(RUNTIME_PAGE));
+	g_hash_table_insert(str_2_enum,"_WARMUP_WIZ_PAGE_",
+			GINT_TO_POINTER(WARMUP_WIZ_PAGE));
+
 
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 

@@ -164,10 +164,13 @@ void load_controls()
 void add_control(gchar *control_name, gchar *parameters)
 {
 	gchar **parm_array = NULL;
+	gchar *name = NULL;
 	struct Rt_Control *control = NULL;
 	control = g_malloc0(sizeof(struct Rt_Control));
-	GtkWidget *label;
+	GtkWidget *label = NULL;
 	GtkWidget *pbar = NULL;
+	GtkWidget *table = NULL;
+	extern GHashTable *dynamic_widgets;
 
 	if (!rt_controls)
 		rt_controls = g_hash_table_new(NULL,NULL);
@@ -187,7 +190,10 @@ void add_control(gchar *control_name, gchar *parameters)
 	label = gtk_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label),g_strdup(control->friendly_name));
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (rt_table[control->tbl]),label,
+	name = g_strdup_printf("runtime_rt_table%i",control->tbl);
+	table = g_hash_table_lookup(dynamic_widgets,name);
+	g_free(name);
+	gtk_table_attach (GTK_TABLE (table),label,
 			0,1,control->row,(control->row)+1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
@@ -195,7 +201,7 @@ void add_control(gchar *control_name, gchar *parameters)
 
 	label = gtk_label_new(NULL);
 	gtk_widget_set_size_request(label,55,-1);
-	gtk_table_attach (GTK_TABLE (rt_table[control->tbl]),label,
+	gtk_table_attach (GTK_TABLE (table),label,
 			1,2,control->row,(control->row)+1,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
@@ -204,13 +210,13 @@ void add_control(gchar *control_name, gchar *parameters)
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-	gtk_table_attach (GTK_TABLE (rt_table[control->tbl]),pbar,
+	gtk_table_attach (GTK_TABLE (table),pbar,
 			2,3,control->row,(control->row)+1,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK), 0, 0);
 	control->pbar = pbar;
 
-	control->parent = rt_table[control->tbl];
+	control->parent = table;
 	gtk_widget_show_all(control->parent);
 
 	if (control->flags & TEMP_DEP)	/* name has temp unit in it */

@@ -19,10 +19,7 @@
 #include <enums.h>
 #include <general_gui.h>
 #include <gui_handlers.h>
-#include <memory_gui.h>
-#include <runtime_gui.h>
 #include <tuning_gui.h>
-#include <vetable_gui.h>
 #include <warmwizard_gui.h>
 
 
@@ -49,7 +46,6 @@ static struct
 { "About MegaTunix", build_about, "_About",STANDARD,ABOUT_PAGE},
 { "General MegaTunix Settings", build_general, "_General",STANDARD,GENERAL_PAGE},
 { "MegaSquirt Communications Parameters", build_comms, "_Communications",STANDARD,COMMS_PAGE},
-{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD,RUNTIME_PAGE},
 //{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD,TUNING_PAGE},
 //{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD,WARMUP_WIZ_PAGE},
 };

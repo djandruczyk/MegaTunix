@@ -43,198 +43,6 @@ const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
 
 
-void build_runtime(GtkWidget *parent_frame)
-{
-	GtkWidget *vbox;
-	GtkWidget *vbox2;
-	GtkWidget *hbox;
-	GtkWidget *frame;
-	GtkWidget *label;
-	GtkWidget *table;
-	GtkWidget *button;
-	GtkWidget *entry;
-	GtkWidget *ebox;
-	extern GtkTooltips *tip;
-
-	gint i=0;
-
-	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
-
-	frame = gtk_frame_new("Real-Time Variables");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
-
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-
-	rt_table[0] = gtk_table_new(10,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(rt_table[0]),0);
-	gtk_table_set_col_spacings(GTK_TABLE(rt_table[0]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[0]), 5);
-	gtk_box_pack_start(GTK_BOX(hbox),rt_table[0],TRUE,TRUE,0);
-
-
-	/* Second column */
-
-	rt_table[1] = gtk_table_new(10,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(rt_table[1]),0);
-	gtk_table_set_col_spacings(GTK_TABLE(rt_table[1]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[1]), 5);
-	gtk_box_pack_start(GTK_BOX(hbox),rt_table[1],TRUE,TRUE,0);
-
-
-	/* Corrections/Enrichments frame */
-
-	frame = gtk_frame_new("Corrections/Enrichments (Percent)");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-
-	rt_table[2] = gtk_table_new(5,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(rt_table[2]),0);
-	gtk_table_set_col_spacings(GTK_TABLE(rt_table[2]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[2]), 5);
-	gtk_box_pack_start(GTK_BOX(hbox),rt_table[2],TRUE,TRUE,0);
-
-	rt_table[3] = gtk_table_new(5,3,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(rt_table[3]),0);
-	gtk_table_set_col_spacings(GTK_TABLE(rt_table[3]),5);
-	gtk_container_set_border_width (GTK_CONTAINER (rt_table[3]), 5);
-	gtk_box_pack_start(GTK_BOX(hbox),rt_table[3],TRUE,TRUE,0);
-
-	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,
-			"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable connection between this host computer and the MS.",NULL);
-
-	frame = gtk_frame_new("MegaSquirt I/O Status");
-	gtk_container_add(GTK_CONTAINER(ebox),frame);
-
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-
-	table = gtk_table_new(3,4,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),2);
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,5);
-
-	label = gtk_label_new("Good VE/Constants Reads");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	entry = gtk_entry_new();
-	entries.runtime_ve_readcount_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-
-	label = gtk_label_new("Good RealTime Reads");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
-
-	entry = gtk_entry_new();
-	entries.runtime_readcount_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
-	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Hard Reset Count");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
-
-	entry = gtk_entry_new();
-	entries.runtime_reset_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
-	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Serial I/O Error Count");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
-
-	entry = gtk_entry_new();
-	entries.runtime_sioerr_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
-	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_button_new_with_label("Reset Status Counters...");
-	g_signal_connect_swapped(G_OBJECT (button), "clicked",
-			G_CALLBACK (reset_errcounts), \
-			NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
-
-	frame = gtk_frame_new("Commands");
-	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-
-	table = gtk_table_new(1,2,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_container_add(GTK_CONTAINER(frame),table);
-
-	button = gtk_button_new_with_label("Start Reading RT Vars");
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler),
-			NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	button = gtk_button_new_with_label("Stop Reading RT vars");
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler),
-			NULL);
-	gtk_table_attach (GTK_TABLE (table), button, 3, 4, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	frame = gtk_frame_new("Runtime Status");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
-
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
-	hbox = gtk_hbox_new(TRUE,3);
-	gtk_box_pack_start(GTK_BOX(vbox2),hbox,TRUE,TRUE,0);
-	for (i=0;i<7;i++)
-	{
-		frame = gtk_frame_new(NULL);
-		gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
-		label = gtk_label_new(status_msgs[i]);
-		misc.status[i] = label;
-		gtk_widget_set_sensitive(misc.status[i],FALSE);
-		gtk_container_add(GTK_CONTAINER(frame),misc.status[i]);
-		gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
-	}
-
-	return;
-}
 
 gboolean update_runtime_vars()
 {
@@ -249,6 +57,7 @@ gboolean update_runtime_vars()
 	GtkWidget * tmpwidget=NULL;
 	static struct Runtime_Common *rt_last = NULL;	
 	extern struct Firmware_Details *firmware;
+	extern GHashTable * dynamic_widgets;
 
 	if (rt_last == NULL)
 		rt_last = g_malloc0(sizeof(struct Runtime_Common));
@@ -274,29 +83,29 @@ gboolean update_runtime_vars()
 
 		/* Status boxes.... */
 		/* "Connected" */
-		gtk_widget_set_sensitive(misc.status[STAT_CONNECTED],
-				connected);
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
+				
 
 		if ((forced_update) || (runtime->engine.value != rt_last->engine.value))
 		{
 			/* Cranking */
-			gtk_widget_set_sensitive(misc.status[STAT_CRANKING],
-					runtime->engine.bit.crank);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_cranking_label"),runtime->engine.bit.crank);
+					
 			/* Running */
-			gtk_widget_set_sensitive(misc.status[STAT_RUNNING],
-					runtime->engine.bit.running);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_running_label"),runtime->engine.bit.running);
+					
 			/* Warmup */
-			gtk_widget_set_sensitive(misc.status[STAT_WARMUP],
-					runtime->engine.bit.warmup);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_warmup_label"),runtime->engine.bit.warmup);
+					
 			/* Afterstart Enrichment */
-			gtk_widget_set_sensitive(misc.status[STAT_AS_ENRICH],
-					runtime->engine.bit.startw);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_as_enrich_label"),runtime->engine.bit.startw);
+					
 			/* Accel Enrichment */
-			gtk_widget_set_sensitive(misc.status[STAT_ACCEL],
-					runtime->engine.bit.tpsaen);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_accel_label"),runtime->engine.bit.tpsaen);
+					
 			/* Decel Enleanment */
-			gtk_widget_set_sensitive(misc.status[STAT_DECEL],
-					runtime->engine.bit.tpsden);
+			gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_decel_label"),runtime->engine.bit.tpsden);
+					
 
 		}
 	}
@@ -385,14 +194,15 @@ gboolean update_runtime_vars()
 
 void reset_runtime_status()
 {
-	gint i;
-	for(i=1;i<7;i++)
-	{
-		gtk_widget_set_sensitive(misc.status[i],
-				FALSE);
-		//		gtk_widget_set_sensitive(misc.ww_status[i],
-		//				FALSE);
-	}
+	extern GHashTable *dynamic_widgets;
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_connected_label"),connected);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_cranking_label"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_running_label"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_warmup_label"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_as_enrich_label"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_accel_label"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"runtime_decel_label"),FALSE);
+
 }
 
 void rt_update_values(gpointer key, gpointer value, gpointer data)

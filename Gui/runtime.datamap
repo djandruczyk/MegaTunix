@@ -1,0 +1,26 @@
+# Runtime display
+
+[global]
+description=Object data map for MegaSquirt Runtime Display
+tab_name=_Runtime Display
+page_ident=_RUNTIME_PAGE_
+
+#----- Buttons ---------------------------------------------------------------
+[runtime_start_realtime_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_START_REALTIME_
+page=0
+
+[runtime_stop_realtime_button]
+keys=handler,page
+key_types=_ENUM_,_INT_,_STRING_
+handler=_STOP_REALTIME_
+page=0
+
+#------ Gui objects ---------------------------------------------------------
+[topframe]
+keys=page,page_ident
+key_types=_INT_,_ENUM_
+page=0
+page_ident=_RUNTIME_PAGE_

@@ -60,13 +60,6 @@ gint main(gint argc, gchar ** argv)
 			TRUE, // Joinable
 			NULL); //GError Pointer
 
-	// Load runtime controls layout definitions from the main configfile 
-	load_controls();
-
-	/* Convert the gui based on temp preference.  This MUST BE DONE
-	 * AFTER data has been read once to make sure it's displayed correctly
-	 */
-
 	/* Kickoff fast interrogation */
 	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
 

@@ -301,25 +301,30 @@ gboolean reset_errcounts(GtkWidget *widget)
 gboolean update_errcounts()
 {
 	gchar *tmpbuf = NULL;
+	extern GHashTable *dynamic_widgets;
 
 	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
 	gtk_entry_set_text(GTK_ENTRY(entries.comms_ve_readcount_entry),tmpbuf);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_ve_readcount_entry),tmpbuf);
+	if (g_hash_table_lookup(dynamic_widgets,"runtime_good_ve_entry"))	
+		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_good_ve_entry")),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_goodread_count);
 	gtk_entry_set_text(GTK_ENTRY(entries.comms_readcount_entry),tmpbuf);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_readcount_entry),tmpbuf);
+	if (g_hash_table_lookup(dynamic_widgets,"runtime_good_rt_read_entry"))
+		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_good_rt_read_entry")),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",ms_reset_count);
 	gtk_entry_set_text(GTK_ENTRY(entries.comms_reset_entry),tmpbuf);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_reset_entry),tmpbuf);
+	if(g_hash_table_lookup(dynamic_widgets,"runtime_hardreset_entry"))
+		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_hardreset_entry")),tmpbuf);
 	g_free(tmpbuf);
 
 	tmpbuf = g_strdup_printf("%i",serial_params->errcount);
 	gtk_entry_set_text(GTK_ENTRY(entries.comms_sioerr_entry),tmpbuf);
-	gtk_entry_set_text(GTK_ENTRY(entries.runtime_sioerr_entry),tmpbuf);
+	if(g_hash_table_lookup(dynamic_widgets,"runtime_sioerr_entry"))
+		gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"runtime_sioerr_entry")),tmpbuf);
 	g_free(tmpbuf);
 
 	return TRUE;
