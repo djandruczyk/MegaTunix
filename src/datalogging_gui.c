@@ -17,6 +17,7 @@
 #include <defines.h>
 #include <enums.h>
 #include <errno.h>
+#include <fileio.h>
 #include <fcntl.h>
 #include <globals.h>
 #include <gui_handlers.h>
@@ -26,8 +27,8 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
+
 
 /* Local #defines */
 #define TABLE_COLS 6
@@ -46,7 +47,7 @@ gfloat cumulative = 0.0;
 extern GdkColor white;
 struct timeval now;
 struct timeval last;
-static gint dlog_context_id;
+gint dlog_context_id;
 static gint total_logables = 0;
 gint logging_mode = CUSTOM_LOG;
 static gint delimiter = SPACE;
@@ -59,12 +60,12 @@ static GtkWidget *file_selection;
 static GtkWidget *format_table;
 static GtkWidget *comma_delim_button;
 static GtkWidget *space_delim_button;
-static GtkWidget *dlog_statbar;
-static GtkWidget *file_label;
-static GtkWidget *stop_button;
-static GtkWidget *start_button;
-static FILE * io_file;				/* DataLog File Handle*/
-static gchar * io_file_name;			/* log pathname */
+GtkWidget *dlog_statbar;
+GtkWidget *file_label;
+GtkWidget *stop_button;
+GtkWidget *start_button;
+FILE * io_file;				/* DataLog File Handle*/
+gchar * io_file_name;			/* log pathname */
 static gchar buff[100];				/* General purpose buffer */
 static gint max_logables = 0;
 struct Logables logables;
@@ -370,77 +371,6 @@ void create_dlog_filesel(void)
 	/* Display that dialog */
 
 	gtk_widget_show (file_selector);
-}
-
-void check_filename (GtkWidget *widget, GtkFileSelection *file_selector) 
-{
-	const gchar *selected_filename;
-	struct stat status;
-	gint iotype = -1;
-	static gboolean opened;
-
-	iotype = (FileIoType )g_object_get_data(G_OBJECT(file_selector),"iotype");
-
-	if (log_opened)
-		close_logfile();	
-
-	selected_filename = gtk_file_selection_get_filename (
-			GTK_FILE_SELECTION (file_selector));
-
-	/* Test to see if it DOES NOT exist */
-	if (lstat(selected_filename, &status) == -1)
-	{
-		/* Open in Append mode, create if it doesn't exist */
-		io_file = fopen(selected_filename,"a"); 
-
-		if(!io_file)
-			opened = FALSE;
-		else
-			opened = TRUE;
-	}
-	else /* Now see if it DOES exist.. */
-	{
-		if (status.st_size > 0)
-			warn_datalog_not_empty();
-		/* Open in Append mode, create if it doesn't exist */
-		io_file = fopen(selected_filename,"a"); 
-
-		if(!io_file)
-			opened = FALSE;
-		else
-			opened = TRUE;
-	}
-
-	if (iotype == DATALOG_EXPORT)
-	{
-		if (opened == TRUE)
-		{
-			gtk_widget_set_sensitive(stop_button,TRUE);
-			gtk_widget_set_sensitive(start_button,TRUE);
-			io_file_name = g_strdup(selected_filename);
-			gtk_label_set_text(GTK_LABEL(file_label),
-					selected_filename);
-			g_snprintf(buff,100,"DataLog File Opened");
-			update_statusbar(dlog_statbar,
-					dlog_context_id,buff);
-			log_opened = TRUE;
-		}
-		else  /* Failed to open */
-		{
-			opened = FALSE;
-			gtk_widget_set_sensitive(stop_button,FALSE);
-			gtk_widget_set_sensitive(start_button,FALSE);
-			g_snprintf(buff,100,"Failure opening DataLog File, Error Code: %s",strerror(errno));
-			update_statusbar(dlog_statbar,
-					dlog_context_id,buff);
-		}
-
-	}
-	else
-		printf("something's wrong..\n");
-
-
-
 }
 
 void close_logfile(void)

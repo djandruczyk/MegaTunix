@@ -13,6 +13,7 @@ headers = \
         defines.h \
         enrichments_gui.h \
 	enums.h \
+	fileio.h \
 	general_gui.h \
         globals.h \
         gui_handlers.h \

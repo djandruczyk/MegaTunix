@@ -18,9 +18,9 @@
 #include <enums.h>
 
 /* Prototypes */
-void vetable_export(void);
+gboolean vetable_export(void);
+gboolean vetable_import(void);
 void present_filesavebox(FileIoType);
-void vetable_import(void);
 /* Prototypes */
 
 #endif

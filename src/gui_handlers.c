@@ -364,7 +364,7 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			burn_flash();
 			break;
 		case SELECT_LOGFILE:
-			create_dlog_filesel();
+			present_filesavebox(DATALOG_EXPORT);
 			break;
 		case TRUNCATE_LOGFILE:
 			truncate_log();
@@ -380,10 +380,10 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 			stop_datalogging();
 			break;
 		case EXPORT_VETABLE:
-			vetable_export();
+			present_filesavebox(VE_EXPORT);
 			break;
 		case IMPORT_VETABLE:
-			vetable_import();
+			present_filesavebox(VE_IMPORT);
 			break;
 	}
 	return TRUE;

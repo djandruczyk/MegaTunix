@@ -18,10 +18,16 @@
 #include <gui_handlers.h>
 #include <tools_gui.h>
 
+GtkWidget *tools_statbar;
+gint tools_context_id;
+extern GdkColor white;
+
+
 int build_tools(GtkWidget *parent_frame)
 {
         GtkWidget *vbox;
-//        GtkWidget *label;
+        GtkWidget *vbox2;
+        GtkWidget *ebox;
         GtkWidget *frame;
         GtkWidget *table;
         GtkWidget *button;
@@ -29,6 +35,25 @@ int build_tools(GtkWidget *parent_frame)
         vbox = gtk_vbox_new(FALSE,0);
         gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+
+	frame = gtk_frame_new("Tools Status Messages");
+        gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
+
+        vbox2 = gtk_vbox_new(FALSE,0);
+        gtk_container_add(GTK_CONTAINER(frame),vbox2);
+        gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
+
+        ebox = gtk_event_box_new();
+        gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
+        tools_statbar = gtk_statusbar_new();
+        gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(tools_statbar),FALSE);
+        gtk_container_add(GTK_CONTAINER(ebox),tools_statbar);
+        tools_context_id = gtk_statusbar_get_context_id(
+                        GTK_STATUSBAR(tools_statbar),
+                        "Tools Status");
+        gtk_widget_modify_bg(GTK_WIDGET(ebox),
+                        GTK_STATE_NORMAL,&white);
+
 
 	frame = gtk_frame_new("VE Table Export/Import (VEX Files)");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);

@@ -11,23 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __DATALOGGING_GUI_H__
-#define __DATALOGGING_GUI_H__
+#ifndef __FILEIO_H__
+#define __FILEIO_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
 
-
 /* Prototypes */
-int build_datalogging(GtkWidget *);
-void create_dlog_filesel(void);
-void truncate_log(void);
-void start_datalogging(void);
-void stop_datalogging(void);
-void close_logfile(void);
-void clear_logables(void);
-int log_value_set(GtkWidget *, gpointer);
-void write_log_header(void);
-void run_datalog(void);
+void present_filesavebox(FileIoType data);
+void check_filename(GtkWidget *, GtkFileSelection *);
 /* Prototypes */
 
 #endif
