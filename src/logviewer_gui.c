@@ -61,7 +61,7 @@ void build_logviewer(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,0);
 
 	/* Holds all the log traces... */
-	vbox2 = gtk_vbox_new(TRUE,2);
+	vbox2 = gtk_vbox_new(TRUE,1);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
@@ -192,7 +192,6 @@ void present_viewer_choices( void *ptr)
 			(gpointer)window);
 
 	gtk_widget_show_all(window);
-	printf("present choices...\n");
 	return;
 }
 
@@ -215,7 +214,7 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
                         total_viewables++;
         }
 
-	printf("total viewables is %i\n",total_viewables);
+	//printf("total viewables is %i\n",total_viewables);
 
 	return TRUE;
 }
@@ -225,7 +224,6 @@ gboolean populate_viewer(GtkWidget * widget)
 	struct Viewable_Value *v_value = NULL;
 	gint i = 0;
 
-	printf("populate_viewer()\n");
 	/* Checks if list is created, if not,  makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
 	 * and adds the mto the list,  also checks if entires are removed and
@@ -247,11 +245,11 @@ gboolean populate_viewer(GtkWidget * widget)
 		{
 			if (viewables.index[i])	/* Marked viewable widget */
 			{
-				printf("allocating struct and putting into table\n");
+				//printf("allocating struct and putting into table\n");
 				/* Call the build routine, feed it it's parent*/
 				v_value = build_v_value(widget,i);
 					
-				printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
+				//printf("put in offset %i, runtime_offset %i, size %i\n",i,v_value->runtime_offset, v_value->size);
 				g_hash_table_insert(active_traces,
 						GINT_TO_POINTER(i),
 						(gpointer)v_value);
@@ -287,6 +285,8 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	GdkPixmap *trace_pmap = NULL;
 	gint w = 0;
 	gint h = 0;
+	gint parent_h;
+	GdkPixmap *info_pmap = NULL;
 	struct Viewable_Value *v_value = NULL;
 
 	/* Get rest of important data... */
@@ -294,6 +294,9 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 			"data");
 	trace_pmap = v_value->trace_pmap;
 
+	/* Trace is the full size of the drawing area AND the backing 
+	 * pixmap forthe window...
+	 */
 	if (trace_pmap)
 		g_object_unref(trace_pmap);
 
@@ -310,31 +313,17 @@ gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 
 	v_value->trace_pmap = trace_pmap;
 
-	create_info_pmap(v_value);
 
-	gdk_window_clear(widget->window);
-	printf("configure event....\n");
-	return TRUE;
-}
-
-void create_info_pmap(void *data)
-{
-	gint w;
-	gint h;
-	gint parent_w;
-	gint parent_h;
-	GdkPixmap *info_pmap = NULL;
-	struct Viewable_Value * v_value = NULL;
-	v_value = (struct Viewable_Value *)data;
-
+	/* info_pmap is a small block of space set aside for trace 
+	 * information which is static.  Thsi is done so that we don't need
+	 * to redraw the fonts on EVERY call to update the traces.. 
+	 */
 	info_pmap = v_value->info_pmap;
 	if (info_pmap)
 		g_object_unref(info_pmap);
-	
-	parent_w = v_value->d_area->allocation.width;
-	parent_h = v_value->d_area->allocation.height;
 
-	w = 80;
+	parent_h = v_value->d_area->allocation.height;
+	w = 130;
 	h = parent_h;
 	info_pmap = gdk_pixmap_new(v_value->d_area->window,w,h,
 			gtk_widget_get_visual(v_value->d_area)->depth);
@@ -344,6 +333,18 @@ void create_info_pmap(void *data)
 			w,h);
 	v_value->info_width = w;
 	v_value->info_pmap = info_pmap;
+
+	gdk_draw_drawable(v_value->trace_pmap,
+                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                        info_pmap,
+                        0, 0,
+                        0, 0,
+                        w, h);
+	draw_graticule(v_value);
+
+	gdk_window_clear(widget->window);
+//	printf("configure event....\n");
+	return TRUE;
 }
 
 gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -366,7 +367,7 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	info_pmap = v_value->info_pmap;
 	if (event->area.x < v_value->info_width)
 	{
-		printf("exposing info_pmap area...\n");
+//		printf("exposing info_pmap area...\n");
 		gdk_draw_drawable(widget->window,
                         widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
                         info_pmap,
@@ -375,8 +376,7 @@ gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
                         -1,-1);
 	}
 			
-
-	printf("expose event....\n");
+//	printf("expose event....\n");
 	return TRUE;
 }
 
@@ -445,6 +445,9 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 	static guint16 green = 32768;
 	static guint16 blue = 65535;
 	GdkGCValues values;
+	GdkColormap *cmap;
+
+	cmap = gdk_colormap_get_system();
 
 	switch((GcType)type)
 	{
@@ -452,6 +455,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			color.red = 65535;
 			color.green = 65535;
 			color.blue = 65535;
+			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
@@ -463,6 +467,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			color.green = green;
 			color.blue = blue;
 			values.foreground = color;
+			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
 					GDK_GC_FOREGROUND);
@@ -477,9 +482,10 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 				blue -= 65536;
 			break;
 		case GRATICULE:
-			color.red = 12288;
+			color.red = 32288;
 			color.green = 2048;
 			color.blue = 2048;
+			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
 					&values,
@@ -487,5 +493,46 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			break;
 	}	
 	return gc;	
+}
+
+void draw_graticule(void * data)
+{
+	/* Draws graticule for the v_value passed to it.. */
+	gint lo_width = 0;
+	gint lo_height = 0;
+	gint i = 0;
+	gint count = 0;
+	gint rem = 0;
+	GdkSegment segs[200];	/*bad idea to do statically*/
+	struct Viewable_Value *v_value = (struct Viewable_Value *)data;
+
+	lo_width = v_value->d_area->allocation.width-v_value->info_width;
+	lo_height = v_value->d_area->allocation.height;
+		
+	for (i=0;i<lo_width;i+=40)
+	{
+
+		segs[count].x1 = v_value->info_width+i;
+		segs[count].x2 = v_value->info_width+i;
+		segs[count].y1 = 0;
+		segs[count].y2 = lo_height;
+		count++;
+	}
+	gdk_draw_segments(v_value->trace_pmap,v_value->grat_gc,segs,count);
+	rem = lo_height%40;
+	count = 0;
+	for (i=0;i<lo_height;i+=40)
+	{
+		segs[count].x1 = v_value->info_width;
+		segs[count].x2 = v_value->info_width+lo_width;
+		segs[count].y1 = rem/2+i;
+		segs[count].y2 = rem/2+i;
+		
+		count++;
+	}
+	gdk_draw_segments(v_value->trace_pmap,v_value->grat_gc,segs,count);
+		
+	gdk_window_clear(v_value->d_area->window);
+
 }
 
