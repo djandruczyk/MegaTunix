@@ -33,32 +33,16 @@
 gchar *delimiter;
 gfloat cumu = 0.0;
 gint logging_mode = CUSTOM_LOG;
-gint max_logables = 0;
-GtkWidget *dlog_view;
-GtkWidget *logables_table;
-GtkWidget *delim_table;
-GtkWidget *tab_delimiter_button;
-struct Logables logables;
 
 /* External global vars */
 extern gint ready;
 extern struct Runtime_Common *runtime;
-struct DynamicButtons buttons;
-struct DynamicLabels labels;
 extern GdkColor white;
 extern struct RtvMap *rtv_map;
 
 /* Static vars to all functions in this file... */
-static gint total_logables = 0;
-static gint offset_list[MAX_LOGABLES];
-static gint size_list[MAX_LOGABLES];
 static gboolean logging_active = FALSE;
 static gboolean header_needed = FALSE;
-static GtkWidget *file_selection;
-static GtkWidget *format_table;
-static GHashTable *custom_ord_hash;
-static GHashTable *classic_ord_hash;
-static GHashTable *full_ord_hash;
 static GTimeVal now;
 static GTimeVal last;
 
@@ -97,18 +81,18 @@ static const gboolean mt_full[] =
 void populate_dlog_choices()
 {
 	gint i,j,k;
-	GtkWidget *vbox;
-	GtkWidget *table;
-	GtkWidget *button;
-	GtkWidget *label;
+	GtkWidget *vbox = NULL;
+	GtkWidget *table = NULL;
+	GtkWidget *button = NULL;
+	GtkWidget *label = NULL;
 	gint table_rows = 0;
 	GObject * object = NULL;
 	gchar * dlog_name = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern gint preferred_delimiter;
 
 	vbox = g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1");
-	max_logables = rtv_map->derived_total;
-	table_rows = ceil((float)max_logables/(float)TABLE_COLS);
+	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
 //	logables_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
@@ -116,19 +100,45 @@ void populate_dlog_choices()
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
 
+	// Update status of the delimiter buttons...
+
+	switch (preferred_delimiter)
+	{
+		case COMMA:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")));
+			break;
+		case TAB:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_tab_delimit_radio_button")),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_tab_delimit_radio_button")));
+			break;
+		case SPACE:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_space_delimit_radio_button")),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_space_delimit_radio_button")));
+			break;
+		default:
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")),TRUE);
+			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")));
+			break;
+	
+	}
 	j = 0;	
 	k = 0;
-	for (i=0;i<max_logables;i++)
+	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
 		dlog_name = (gchar *)g_object_get_data(object,"dlog_gui_name");
-		button = gtk_check_button_new_with_label(dlog_name);
-		//button = gtk_check_button_new();
-		//label = gtk_label_new(NULL);
-		//gtk_label_set_markup(GTK_LABEL(label),dlog_name);
-		//gtk_button_set_label(GTK_BUTTON(button),gtk_label_get_label(GTK_LABEL(label)));
+		button = gtk_check_button_new();
+		label = gtk_label_new(NULL);
+		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
+		gtk_container_add(GTK_CONTAINER(button),label);
 		//gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
 
+		// Bind button to the object, Done so that we can set the state
+		// of the buttons from elsewhere... 
+		g_object_set_data(G_OBJECT(object),"dlog_button",
+				(gpointer)button);
+		// Bind object to the button 
 		g_object_set_data(G_OBJECT(button),"object",
 				(gpointer)object);
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -152,20 +162,19 @@ void populate_dlog_choices()
 
 void start_datalogging(void)
 {
-	gchar * tmpbuf;
 	GtkWidget * widget = NULL;
+	extern GHashTable *dynamic_widgets;
+
 	if (logging_active)
 		return;   /* Logging already running ... */
 
-	gtk_widget_set_sensitive(logables_table,FALSE);
-	gtk_widget_set_sensitive(delim_table,FALSE);
-	gtk_widget_set_sensitive(format_table,FALSE);
-	gtk_widget_set_sensitive(file_selection,FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logables_vars_vbox1"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),FALSE);
 	header_needed = TRUE;
 	logging_active = TRUE;
-	tmpbuf = g_strdup_printf("DataLogging Started...\n");
-	update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
-	g_free(tmpbuf);
+	update_logbar("dlog_view",NULL,"DataLogging Started...\n",TRUE,FALSE);
+
 	widget = gtk_button_new();
 	g_object_set_data(G_OBJECT(widget),"handler",
 			GINT_TO_POINTER(START_REALTIME));
@@ -176,18 +185,14 @@ void start_datalogging(void)
 
 void stop_datalogging()
 {
-	gchar *tmpbuf = NULL;
+	extern GHashTable *dynamic_widgets;
+
 	logging_active = FALSE;
-	if (logging_mode == CUSTOM_LOG)
-	{
-		gtk_widget_set_sensitive(logables_table,TRUE);
-		gtk_widget_set_sensitive(delim_table,TRUE);
-	}
-	gtk_widget_set_sensitive(format_table,TRUE);
-	gtk_widget_set_sensitive(file_selection,TRUE);
-	tmpbuf = g_strdup_printf("DataLogging Stopped...\n");
-	update_logbar("dlog_view",NULL,tmpbuf,TRUE,FALSE);
-	g_free(tmpbuf);
+
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),TRUE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
+	update_logbar("dlog_view",NULL,"DataLogging Stopped...\n",TRUE,FALSE);
 	return;
 }
 
@@ -195,59 +200,30 @@ void stop_datalogging()
 void clear_logables(void)
 {
 	gint i = 0;
+	GtkWidget * button = NULL;
+	GObject * object = NULL;
+
 	/* Uncheck all logable choices */
-	for (i=0;i<max_logables;i++)
-		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(logables.widgets[i]),
-				FALSE);
+	for (i=0;i<rtv_map->derived_total;i++)
+	{
+		object = NULL;
+		button = NULL;
+		object = g_array_index(rtv_map->rtv_list,GObject *, i);
+		button = (GtkWidget *)g_object_get_data(object,"dlog_button");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
+	}
 }
 
 gboolean log_value_set(GtkWidget * widget, gpointer data)
 {
-	gint index = 0;
-	gint size = 0;
-	gint classic_ord = -1;
-	gint full_ord = -1;
-	gint i = 0;
+	GObject *object = NULL;
+	gboolean state = FALSE;
 
-	index = (gint)g_object_get_data(G_OBJECT(widget),"index");
-	size = (gint)g_object_get_data(G_OBJECT(widget),"size");
-	classic_ord = (gint)g_object_get_data(G_OBJECT(widget),
-			"mt_classic_order");
-	full_ord = (gint)g_object_get_data(G_OBJECT(widget),
-			"mt_full_order");
-
-	/* Set state in array so total count can be determined... */
-	logables.index[index] = gtk_toggle_button_get_active 
-		(GTK_TOGGLE_BUTTON (widget));
-
-	/* insert into hash table for ordered printout (megatune compat) */
-	if (logables.index[index])
-	{
-		g_hash_table_insert(classic_ord_hash,
-				GINT_TO_POINTER(classic_ord),(gpointer)index+1);
-		g_hash_table_insert(full_ord_hash,
-				GINT_TO_POINTER(full_ord),(gpointer)index+1);
-		g_hash_table_insert(custom_ord_hash,
-				GINT_TO_POINTER(index),(gpointer)index+1);
-	}
-	else
-	{
-		g_hash_table_remove(classic_ord_hash,
-				GINT_TO_POINTER(classic_ord));
-		g_hash_table_remove(full_ord_hash,
-				GINT_TO_POINTER(full_ord));
-		g_hash_table_remove(custom_ord_hash,
-				GINT_TO_POINTER(index));
-	}
-
-	total_logables = 0;
-	// Update total count....
-	for (i=0;i<max_logables;i++)
-	{
-		if (logables.index[i])
-			total_logables++;
-	}
+	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
+                
+	/* get object from widget */
+	object = (GObject *)g_object_get_data(G_OBJECT(widget),"object");
+	g_object_set_data(object,"being_logged",GINT_TO_POINTER(state));
 
 	return TRUE;
 }
@@ -258,9 +234,10 @@ void write_log_header(void *ptr)
 	gint j = 0;
 	gint total_logables = 0;
 	gsize count = 0;
-	gint index = -1;
 	GString *output;
 	struct Io_File *iofile = NULL;
+	GObject * object = NULL;
+	gchar * string = NULL;
 	if (ptr != NULL)
 		iofile = (struct Io_File *)ptr;
 	else
@@ -268,60 +245,26 @@ void write_log_header(void *ptr)
 		dbg_func(__FILE__": write_log_header()\n\tIo_File pointer was undefined, returning NOW...\n",CRITICAL);
 		return;
 	}
-
+	/* Count total logable variables */
+	for (i=0;i<rtv_map->derived_total;i++)
+	{
+		object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		if((gboolean)g_object_get_data(object,"being_logged"))
+			total_logables++;
+	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
-	// Get total number of logables....
-	for (i=0;i<max_logables;i++)
-		if (logables.index[i])
-			total_logables++;
-
-	for (i=0;i<max_logables;i++)
+	for (i=0;i<rtv_map->derived_total;i++)
 	{
-		index = -1;
-		if (logging_mode == MT_CLASSIC_LOG)
+		object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		if((gboolean)g_object_get_data(object,"being_logged"))
 		{
-			index = (gint)g_hash_table_lookup(classic_ord_hash,
-					GINT_TO_POINTER(i));
-			if (index == 0)
-				continue;
-			index -= 1;
-			output = g_string_append(output, 
-					mt_classic_names[index]);
-			offset_list[j] = logging_offset_map[index];
-			size_list[j] = logging_datasizes_map[index];
+			string = (gchar *)g_object_get_data(object,"dlog_field_name");
+			output = g_string_append(output,string); 
 			j++;
+			if (j < total_logables)
+				output = g_string_append(output,delimiter);
 		}
-		else if (logging_mode == MT_FULL_LOG)
-		{
-			index = (gint)g_hash_table_lookup(full_ord_hash,
-					GINT_TO_POINTER(i));
-			if (index == 0)
-				continue;
-			index -= 1;
-			output = g_string_append(output, 
-					mt_full_names[index]);
-			offset_list[j] = logging_offset_map[index];
-			size_list[j] = logging_datasizes_map[index];
-			j++;
-		}
-		else
-		{
-			index = (gint)g_hash_table_lookup(custom_ord_hash,
-					GINT_TO_POINTER(i));
-			if (index == 0)
-				continue;
-			index -= 1;
-			//g_printf("i %i, index %i\n",i,index);
-			output = g_string_append(output, 
-					g_strdelimit(g_strdup(logable_names[index])," ",'_'));
-			offset_list[j] = logging_offset_map[index];
-			size_list[j] = logging_datasizes_map[index];
-			j++;
-		}
-
-		if (j < (total_logables))
-			output = g_string_append(output,delimiter);
 	}
 	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
@@ -332,16 +275,17 @@ void write_log_header(void *ptr)
 void run_datalog(void)
 {
 	gint i = 0;
-	gint offset = 0;
-	gint size = 0;
+	gint j = 0;
 	gint begin = FALSE;
 	gsize count = 0;
 	void *data;
+	gint total_logables = 0;
 	GString *output;
 	struct Io_File *iofile = NULL;
-	guchar * uchar_ptr = (guchar *)runtime;
-	gshort * short_ptr = (gshort *)runtime;
-	gfloat * float_ptr = (gfloat *)runtime;
+	GObject *object = NULL;
+	gfloat value = 0.0;
+	gfloat *history = NULL;
+	gint hist_position = 0;
 	extern GHashTable *dynamic_widgets;
 
 	if (!logging_active) /* Logging isn't enabled.... */
@@ -356,6 +300,12 @@ void run_datalog(void)
 		return;
 	}
 
+	for (i=0;i<rtv_map->derived_total;i++)
+	{
+		object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		if((gboolean)g_object_get_data(object,"being_logged"))
+			total_logables++;
+	}
 
 	output = g_string_sized_new(64); /*64 char initial size */
 
@@ -365,60 +315,51 @@ void run_datalog(void)
 		begin = TRUE;
 		header_needed = FALSE;
 	}
-	for(i=0;i<total_logables;i++)
+	j = 0;
+	for(i=0;i<rtv_map->derived_total;i++)
 	{
-		offset = offset_list[i];
-		size = size_list[i];
-		switch (offset)
-		{
-			case 99:
-				/* Special Hi-Res clock to be logged */
-				if (begin == TRUE)
-				{	
-					g_get_current_time(&now);
-					last.tv_sec = now.tv_sec;
-					last.tv_usec = now.tv_usec;
-					begin = FALSE;
-					output = g_string_append(output,"0.0");
-				}
-				else
-				{
-					g_get_current_time(&now);
-					cumu += (now.tv_sec-last.tv_sec)+
-						((double)(now.tv_usec-last.tv_usec)/1000000.0);
-					last.tv_sec = now.tv_sec;
-					last.tv_usec = now.tv_usec;
-					g_string_append_printf(
-							output,"%.3f",cumu);
+		object = g_array_index(rtv_map->rtv_list,GObject *,i);
+		if (!((gboolean)g_object_get_data(object,"being_logged")))
+			continue;
 
-				}
-				break;
-			default:
-				switch (size)
-				{
-					case FLOAT:
-						g_string_append_printf(
-								output,"%.3f",(float)float_ptr[offset/FLOAT]);
-						break;
-					case SHORT:
-						g_string_append_printf(
-								output,"%i",short_ptr[offset/SHORT]);
-						break;
-					case UCHAR:
-						g_string_append_printf(
-								output,"%i",(guchar)uchar_ptr[offset]);
-						break;
-					default:
-						dbg_func(g_strdup_printf(__FILE__": run_datalog()\n\tSIZE not defined (%i), log corruption likely!!\n",i),CRITICAL);
-						break;
-				}
+		history = (gfloat *)g_object_get_data(object,"history");
+		hist_position = (gint)g_object_get_data(object,"hist_position");
+		value = history[hist_position];
+		if ((gboolean)g_object_get_data(object,"is_float"))
+			g_string_append_printf(output,"%.3f",value);
+		else
+			g_string_append_printf(output,"%i",(gint)value);
+		j++;
 
-				break;
+
+		/*
+		// Special Hi-Res clock to be logged 
+		if (begin == TRUE)
+		{	
+		g_get_current_time(&now);
+		last.tv_sec = now.tv_sec;
+		last.tv_usec = now.tv_usec;
+		begin = FALSE;
+		output = g_string_append(output,"0.0");
 		}
+		else
+		{
+		g_get_current_time(&now);
+		cumu += (now.tv_sec-last.tv_sec)+
+		((double)(now.tv_usec-last.tv_usec)/1000000.0);
+		last.tv_sec = now.tv_sec;
+		last.tv_usec = now.tv_usec;
+		g_string_append_printf(
+		output,"%.3f",cumu);
+
+		}
+		break;
+		 */
+
 		/* Print delimiter to log here so there isnt an extra
 		 * char at the end fo the line 
 		 */
-		if (i < (total_logables-1))
+		if (j < total_logables)
 			output = g_string_append(output,delimiter);
 	}
 	output = g_string_append(output,"\r\n");
@@ -438,6 +379,7 @@ gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 
 	if (GTK_TOGGLE_BUTTON(widget)->active) /* its pressed */
 	{
+		clear_logables();
 		switch((ToggleButton)handler)
 		{
 			case MT_CLASSIC_LOG:

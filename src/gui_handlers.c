@@ -48,7 +48,7 @@ extern gint statuscounts_id;
 extern gint ready;
 extern GtkTooltips *tip;
 extern GList *ve_widgets[MAX_SUPPORTED_PAGES][2*MS_PAGE_SIZE];
-extern struct DynamicButtons buttons;
+struct DynamicButtons buttons;
 extern struct Serial_Params *serial_params;
 extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;
@@ -155,6 +155,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *obj_data = NULL;
 	gint handler = 0; 
+	extern gint preferred_delimiter;
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -181,18 +182,21 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				force_an_update();
 				break;
 			case COMMA:
+				preferred_delimiter = COMMA;
 				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Comma\"\n",TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup(",");
 				break;
 			case TAB:
+				preferred_delimiter = TAB;
 				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Tab\"\n",TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);
 				delimiter = g_strdup("\t");
 				break;
 			case SPACE:
+				preferred_delimiter = SPACE;
 				update_logbar("dlog_view", NULL,"Setting Log delimiter to a \"Space\"\n",TRUE,FALSE);
 				if (delimiter)
 					g_free(delimiter);

@@ -28,6 +28,7 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
+gint preferred_delimiter;
 extern guint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
 guchar *kpa_conversion; 
@@ -86,6 +87,7 @@ void init()
 	tips_in_use = TRUE;	/* Use tooltips by default */
 	temp_units = FAHRENHEIT;/* Use SAE units by default */
 	lv_scroll = 1;		/* Logviewer scroll speed */
+	preferred_delimiter = TAB;
 }
 
 gboolean read_config(void)
@@ -102,6 +104,7 @@ gboolean read_config(void)
 		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
 		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
+		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		cfg_read_int(cfgfile, "Window", "width", &width);
 		cfg_read_int(cfgfile, "Window", "height", &height);
 		cfg_read_int(cfgfile, "Window", "main_x_origin", 
@@ -160,6 +163,7 @@ void save_config(void)
 		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 	}
+	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
 	cfg_write_string(cfgfile, "Serial", "port_name", 
 			serial_params->port_name);
 	cfg_write_int(cfgfile, "Serial", "read_delay", 

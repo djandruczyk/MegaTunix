@@ -272,11 +272,7 @@ void *serial_io_handler(gpointer data)
 						break;
 					case UPD_LOAD_GUI_TABS:
 						gdk_threads_enter();
-						if (!load_gui_tabs())
-						{
-							gdk_threads_leave();
-							goto breakout;
-						}
+						load_gui_tabs();
 						reset_temps(GINT_TO_POINTER(temp_units));
 						gdk_threads_leave();
 						break;

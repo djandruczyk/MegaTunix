@@ -27,7 +27,7 @@
 #include <warmwizard_gui.h>
 
 extern struct DynamicEntries entries;
-extern struct DynamicLabels labels;
+struct DynamicLabels labels;
 struct DynamicMisc misc;
 extern gboolean connected;
 extern gint active_page;
