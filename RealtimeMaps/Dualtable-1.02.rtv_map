@@ -1,7 +1,7 @@
 [realtime_map]
 firmware_name=Dualtable v1.02
 raw_total=22
-derived_total=37
+derived_total=38
 
 [derived_0]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
@@ -314,50 +314,72 @@ key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
 internal_name=dcycle1
 dlog_gui_name=Dutycycle 1
 dlog_field_name=DCYCLE1
-offset=19
+offset=14
 complex_expr=TRUE
-conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw1/10)/((1200/eng_type+1)/raw_rpm))
-expr_symbols=cyls,divider,alternate,raw_pw1,eng_type,raw_rpm
-expr_types=_VE_EMB_BIT_,_VE_VAR_,_VE_VAR_,_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_
-cyls_page=0
-cyls_offset=116
-cyls_bitmask=240
-cyls_bitshift=4
-divider_page=0
-divider_offset=91
-alternate_page=0
-alternate_offset=92
+conv_expr=100*(raw_pw1/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
+expr_symbols=raw_pw1,eng_type,raw_rpm,cyls,divider
+expr_types=_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_VE_VAR_
 raw_pw1_offset=14
 eng_type_page=0
 eng_type_offset=116
 eng_type_bitmask=4
 eng_type_bitshift=2
 raw_rpm_offset=13
+cyls_page=0
+cyls_offset=116
+cyls_bitmask=240
+cyls_bitshift=4
+divider_page=0
+divider_offset=91
 
 [derived_34]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
-internal_name=bspot1
-dlog_gui_name=BSpot 1
-dlog_field_name=BSPOT1
+keys=internal_name,dlog_gui_name,offset,complex_expr,conv_expr
+key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_
+internal_name=dcycle2
+dlog_gui_name=Dutycycle 2
+dlog_field_name=DCYCLE2
 offset=19
-conv_expr=x*1
+complex_expr=TRUE
+conv_expr=100*(raw_pw2/10.0)/(((1200/(eng_type+1))/raw_rpm)/((cyls+1)/divider))
+expr_symbols=raw_pw2,eng_type,raw_rpm,cyls,divider
+expr_types=_RAW_VAR_,_VE_EMB_BIT_,_RAW_VAR_,_VE_EMB_BIT_,_VE_VAR_
+raw_pw2_offset=19
+eng_type_page=0
+eng_type_offset=116
+eng_type_bitmask=4
+eng_type_bitshift=2
+raw_rpm_offset=13
+cyls_page=1
+cyls_offset=116
+cyls_bitmask=240
+cyls_bitshift=4
+divider_page=1
+divider_offset=91
 
 [derived_35]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
-internal_name=bspot2
-dlog_gui_name=BSpot 2
-dlog_field_name=BSPOT2
-offset=20
-conv_expr=x*1
+internal_name=pw2
+dlog_gui_name=PW 2
+dlog_field_name=PW2
+offset=19
+conv_expr=x/10.0
 
 [derived_36]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
-internal_name=bspot3
-dlog_gui_name=BSpot 3
-dlog_field_name=BSPOT3
+internal_name=vecurr2
+dlog_gui_name=VE 2
+dlog_field_name=VE2
+offset=20
+conv_expr=x*1
+
+[derived_37]
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_
+internal_name=idledc
+dlog_gui_name=Idle DC
+dlog_field_name=IDLEDC
 offset=21
 conv_expr=x*1
 

@@ -195,6 +195,7 @@ typedef enum
 	REQ_FUEL	= 1<<9,
 	TABLOADER	= 1<<10,
 	RTMLOADER	= 1<<11,
+	COMPLEX_EXPR	= 1<<12,
 	CRITICAL	= 1<<31,
 }Dbg_Class;
 

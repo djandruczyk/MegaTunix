@@ -60,8 +60,9 @@ void process_rt_vars(void *incoming)
 			offset = (gint)g_object_get_data(object,"offset");
 			if (g_object_get_data(object,"complex_expr"))
 			{
-				handle_complex_expr(object);
-				break;
+				result = handle_complex_expr(object,incoming);
+				printf("Result of COMPLEX %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
+				continue;
 			}
 
 			if (g_object_get_data(object,"lookuptable"))
@@ -97,8 +98,86 @@ gfloat lookup_data(GObject *object, gint offset)
 	return lookuptable[offset];
 }
 
-void handle_complex_expr(GObject *object)
+gdouble handle_complex_expr(GObject *object, void * incoming)
 {
-	return;
+	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
+	gchar **symbols = NULL;
+	gchar **expr_types = NULL;
+	unsigned char *raw_data = incoming;
+	gint total_symbols = 0;
+	gint i = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	void * evaluator = NULL;
+	gchar **names = NULL;
+	gdouble * values = NULL;
+	gchar * tmpbuf = NULL;
+	gdouble result = 0.0;
+	
+
+	symbols = (gchar **)g_object_get_data(object,"expr_symbols");
+	expr_types = (gchar **)g_object_get_data(object,"expr_types");
+	total_symbols = (gint)g_object_get_data(object,"total_symbols");
+	
+	names = g_malloc0(total_symbols*sizeof(gchar *));
+	values = g_malloc0(total_symbols*sizeof(gdouble));
+
+	for (i=0;i<total_symbols;i++)
+	{
+		page = 0;
+		offset = 0;
+		bitmask = 0;
+		bitshift = 0;
+		switch ((ComplexExprType)expr_types[i])
+		{
+			case VE_EMB_BIT:
+				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
+				page = (gint) g_object_get_data(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (gint) g_object_get_data(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
+				bitmask = (gint) g_object_get_data(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_bitshift",symbols[i]);
+				bitshift = (gint) g_object_get_data(object,tmpbuf);
+				g_free(tmpbuf);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)(((ms_data[page][offset])&bitmask) >> bitshift);
+				break;
+			case VE_VAR:
+				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
+				page = (gint) g_object_get_data(object,tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (gint) g_object_get_data(object,tmpbuf);
+				g_free(tmpbuf);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)ms_data[page][offset];
+				break;
+			case RAW_VAR:
+				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
+				offset = (gint) g_object_get_data(object,tmpbuf);
+				g_free(tmpbuf);
+				names[i]=g_strdup(symbols[i]);
+				values[i]=(gdouble)raw_data[offset];
+		}
+		
+	}
+	evaluator = g_object_get_data(object,"evaluator");
+	assert(evaluator);
+	result = evaluator_evaluate(evaluator,total_symbols,names,values);
+	for (i=0;i<total_symbols;i++)
+	{
+		dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]),COMPLEX_EXPR);
+		g_free(names[i]);
+	}
+	dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\texpression is %s\n",evaluator_get_string(evaluator)),COMPLEX_EXPR);
+	g_free(names);
+	g_free(values);
+	return result;
 }
 

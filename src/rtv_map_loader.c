@@ -263,6 +263,7 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
 	g_object_set_data(object,"expr_types",(gpointer)expr_types);
 	g_object_set_data(object,"expr_symbols",(gpointer)expr_symbols);
+	g_object_set_data(object,"total_symbols",GINT_TO_POINTER(total_symbols));
 	for (i=0;i<total_symbols;i++)
 	{
 		switch ((ComplexExprType)expr_types[i])

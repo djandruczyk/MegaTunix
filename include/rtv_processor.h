@@ -20,7 +20,7 @@
 /* Prototypes */
 void process_rt_vars(void * buf );
 gfloat lookup_data(GObject *, gint );
-void handle_complex_expr(GObject *);
+gdouble handle_complex_expr(GObject *, void *);
 /* Prototypes */
 
 #endif
