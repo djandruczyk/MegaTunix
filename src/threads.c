@@ -418,6 +418,16 @@ void comms_test()
 void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct OutputData *output = NULL;
+	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
+
+	if (ms_data[page][offset] == value)
+	{
+		printf("value unchanged, returning\n");
+		return;
+	}
+	else
+		ms_data[page][offset] = value;
+
 	output = g_new0(struct OutputData,1);
 	output->page = page;
 	output->offset = offset;
@@ -456,11 +466,11 @@ void writeto_ecu(void *ptr)
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */
 	}
-	dbg_func(g_strdup_printf(__FILE__": writeto_ecu() MS Serial Write, Value %i, Mem Offset %i\n",value,offset),SERIAL_WR);
+	dbg_func(g_strdup_printf(__FILE__": writeto_ecu() MS Serial Write, Page, %i, Value %i, Mem Offset %i\n",page,value,offset),SERIAL_WR);
 
 	if (value > 255)
 	{
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Large value being sent: %i, to offset %i\n",value,offset),SERIAL_WR);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu() Large value being sent: %i, to page %i, offset %i\n",value,page,offset),SERIAL_WR);
 
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
