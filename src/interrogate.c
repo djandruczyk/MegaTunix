@@ -63,6 +63,7 @@ void interrogate_ecu()
 	gint tests_to_run = 0;
 	gint total_read = 0;
 	gint total_wanted = 0;
+	gint read_amount = 0;
 	gint zerocount = 0;
 	gchar *string = NULL;
 	gchar * tmpbuf = NULL;
@@ -136,9 +137,10 @@ void interrogate_ecu()
 		while (total_read < total_wanted )
 		{
 			dbg_func(g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",cmd->string,total_wanted-total_read),INTERROGATOR);
+			read_amount = (total_wanted-total_read) > 8? 8:total_wanted-total_read;
 			total_read += res = read(serial_params->fd,
 					ptr+total_read,
-					total_wanted-total_read);
+					read_amount);
 
 			dbg_func(g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",cmd->string,res,total_read),INTERROGATOR);
 			// If we get nothing back (i.e. timeout, assume done)
