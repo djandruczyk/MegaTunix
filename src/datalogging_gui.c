@@ -33,6 +33,7 @@
 gchar *delimiter;
 gfloat cumu = 0.0;
 gint logging_mode = CUSTOM_LOG;
+gboolean begin = TRUE;
 
 /* External global vars */
 extern gint ready;
@@ -43,39 +44,6 @@ extern struct RtvMap *rtv_map;
 /* Static vars to all functions in this file... */
 static gboolean logging_active = FALSE;
 static gboolean header_needed = FALSE;
-static GTimeVal now;
-static GTimeVal last;
-
-
-/* mt_classic[] and mt_full[] are arrays laid out like the datalogging
- * screen, insert a "1" where you want the button selected for that mode
- * otherwise use a zero...
- */
-static const gboolean mt_classic[] =
-{
-	FALSE,	TRUE,	TRUE,	TRUE,	FALSE,	
-	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
-	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
-	FALSE,	TRUE,	FALSE,	FALSE,	FALSE,	
-	TRUE,	FALSE,	TRUE,	FALSE,	FALSE,	
-	TRUE,	TRUE,	TRUE,	TRUE,	FALSE,	
-	TRUE,	FALSE,	FALSE,	FALSE,	FALSE,	
-	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
-	FALSE,	FALSE 
-};
-
-static const gboolean mt_full[] = 
-{
-	TRUE,	TRUE,	TRUE,	TRUE,	FALSE,	
-	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
-	FALSE,	FALSE,	FALSE,	FALSE,	FALSE,	
-	TRUE,	TRUE,	FALSE,	TRUE,	TRUE,	
-	TRUE,	FALSE,	TRUE,	FALSE,	FALSE,	
-	TRUE,	TRUE,	TRUE,	TRUE,	TRUE,	
-	TRUE,	TRUE,	TRUE,	TRUE,	TRUE,	
-	TRUE,	FALSE,	FALSE,	FALSE,	TRUE,	
-	TRUE,	TRUE 
-}; 
 
 
 void populate_dlog_choices()
@@ -88,7 +56,9 @@ void populate_dlog_choices()
 	gint table_rows = 0;
 	GObject * object = NULL;
 	gchar * dlog_name = NULL;
+	gchar * tooltip = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern GtkTooltips *tip;
 	extern gint preferred_delimiter;
 
 	vbox = g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1");
@@ -126,13 +96,16 @@ void populate_dlog_choices()
 	k = 0;
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
+		tooltip = NULL;
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
 		dlog_name = (gchar *)g_object_get_data(object,"dlog_gui_name");
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
 		gtk_container_add(GTK_CONTAINER(button),label);
-		//gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
+		tooltip = (gchar *)g_object_get_data(object,"tooltip");
+		if (tooltip)
+			gtk_tooltips_set_tip(tip,button,tooltip,NULL);
 
 		// Bind button to the object, Done so that we can set the state
 		// of the buttons from elsewhere... 
@@ -168,7 +141,7 @@ void start_datalogging(void)
 	if (logging_active)
 		return;   /* Logging already running ... */
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logables_vars_vbox1"),FALSE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),FALSE);
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),FALSE);
 	header_needed = TRUE;
@@ -189,7 +162,7 @@ void stop_datalogging()
 
 	logging_active = FALSE;
 
-	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),TRUE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_logable_vars_vbox1"),TRUE);
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),FALSE);
 	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
 	update_logbar("dlog_view",NULL,"DataLogging Stopped...\n",TRUE,FALSE);
@@ -276,7 +249,6 @@ void run_datalog(void)
 {
 	gint i = 0;
 	gint j = 0;
-	gint begin = FALSE;
 	gsize count = 0;
 	void *data;
 	gint total_logables = 0;
@@ -312,8 +284,8 @@ void run_datalog(void)
 	if (header_needed)
 	{
 		write_log_header((void *)iofile);
-		begin = TRUE;
 		header_needed = FALSE;
+		begin = TRUE;
 	}
 	j = 0;
 	for(i=0;i<rtv_map->derived_total;i++)
@@ -330,31 +302,6 @@ void run_datalog(void)
 		else
 			g_string_append_printf(output,"%i",(gint)value);
 		j++;
-
-
-		/*
-		// Special Hi-Res clock to be logged 
-		if (begin == TRUE)
-		{	
-		g_get_current_time(&now);
-		last.tv_sec = now.tv_sec;
-		last.tv_usec = now.tv_usec;
-		begin = FALSE;
-		output = g_string_append(output,"0.0");
-		}
-		else
-		{
-		g_get_current_time(&now);
-		cumu += (now.tv_sec-last.tv_sec)+
-		((double)(now.tv_usec-last.tv_usec)/1000000.0);
-		last.tv_sec = now.tv_sec;
-		last.tv_usec = now.tv_usec;
-		g_string_append_printf(
-		output,"%.3f",cumu);
-
-		}
-		break;
-		 */
 
 		/* Print delimiter to log here so there isnt an extra
 		 * char at the end fo the line 
@@ -383,64 +330,10 @@ gboolean set_logging_mode(GtkWidget * widget, gpointer *data)
 		switch((ToggleButton)handler)
 		{
 			case MT_CLASSIC_LOG:
-/*
-				logging_mode = MT_CLASSIC_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,FALSE);
-				gtk_toggle_button_set_active(
-						GTK_TOGGLE_BUTTON
-						(tab_delimiter_button),
-						TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,FALSE);
-
-				for (i=0;i<max_logables;i++)
-				{
-					if (mt_classic[i] == 1)
-					{
-						gtk_toggle_button_set_active(
-								GTK_TOGGLE_BUTTON
-								(logables.widgets[i]),
-								TRUE);
-					}
-				}
-*/
 				break;
 			case MT_FULL_LOG:
-/*
-				logging_mode = MT_FULL_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,FALSE);
-				gtk_toggle_button_set_active(
-						GTK_TOGGLE_BUTTON
-						(tab_delimiter_button),
-						TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,FALSE);
-
-				for (i=0;i<max_logables;i++)
-				{
-					if (mt_full[i] == 1)
-					{
-						gtk_toggle_button_set_active(
-								GTK_TOGGLE_BUTTON
-								(logables.widgets[i]),
-								TRUE);
-					}
-				}
-*/
 				break;
 			case CUSTOM_LOG:
-/*
-				logging_mode = CUSTOM_LOG;
-				clear_logables();
-				gtk_widget_set_sensitive(
-						logables_table,TRUE);
-				gtk_widget_set_sensitive(
-						delim_table,TRUE);
-*/
 				break;
 			default:
 				break;

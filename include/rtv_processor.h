@@ -21,7 +21,8 @@
 /* Prototypes */
 void process_rt_vars(void * );
 gfloat lookup_data(GObject *, gint );
-gdouble handle_complex_expr(GObject *, void *,ConvType);
+gfloat handle_complex_expr(GObject *, void *,ConvType);
+gfloat handle_special(GObject *,gchar *);
 /* Prototypes */
 
 #endif

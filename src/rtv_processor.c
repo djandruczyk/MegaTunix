@@ -35,7 +35,7 @@ void process_rt_vars(void *incoming)
 	guchar *raw_realtime = incoming;
 	GObject * object = NULL;
 	gchar * expr = NULL;
-	gint len =  0;
+	gint num_raw =  0;
 	GList * list= NULL;
 	gint i = 0;
 	gint j = 0;
@@ -48,12 +48,13 @@ void process_rt_vars(void *incoming)
 	gint ts_position;
 	gint hist_position;
 	gint hist_max;
-	gfloat *history = NULL;;
+	gfloat *history = NULL;
+	gchar *special = NULL;
 
-	len = firmware->rtvars_size;
-	if (len != rtv_map->raw_total)
+	num_raw = firmware->rtvars_size;
+	if (num_raw != rtv_map->raw_total)
 	{
-		dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tlength of buffer(%i) and realtime map raw_length(%i)\n\tDO NOT match, critical ERROR!\n",len,rtv_map->raw_total),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tlength of buffer(%i) and realtime map raw_length(%i)\n\tDO NOT match, critical ERROR!\n",num_raw,rtv_map->raw_total),CRITICAL);
 		return;
 	}
 	/* Store timestamps in ringbuffer */
@@ -68,7 +69,7 @@ void process_rt_vars(void *incoming)
 	rtv_map->ts_position = ts_position;
 	
 	
-	for (i=0;i<len;i++)
+	for (i=0;i<num_raw;i++)
 	{
 		/* Get list of derived vars for raw offset "i" */
 		list = g_array_index(rtv_map->rtv_array,GList *,i);
@@ -78,7 +79,19 @@ void process_rt_vars(void *incoming)
 		for (j=0;j<g_list_length(list);j++)
 		{
 			history = NULL;
+			special = NULL;
 			object=(GObject *)g_list_nth_data(list,j);
+			if (!object)
+			{
+				dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Object bound to list at offset %i is invalid!!!!\n",i),CRITICAL);
+				continue;
+			}
+			special=(gchar *)g_object_get_data(object,"special");
+			if (special)
+			{
+				result = handle_special(object,special);
+				goto store_it;
+			}
 			evaluator = (void *)g_object_get_data(object,"evaluator");
 			if (!evaluator)
 			{
@@ -166,7 +179,7 @@ gfloat lookup_data(GObject *object, gint offset)
 	return lookuptable[offset];
 }
 
-gdouble handle_complex_expr(GObject *object, void * incoming,ConvType type)
+gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 {
 	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
 	gchar **symbols = NULL;
@@ -269,4 +282,39 @@ gdouble handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	g_free(names);
 	g_free(values);
 	return result;
+}
+
+gfloat handle_special(GObject *object,gchar *handler_name)
+{
+	static GTimeVal now;
+	static GTimeVal last;
+	static gfloat cumu = 0.0;
+	extern gboolean begin;
+
+	if (g_strcasecmp(handler_name,"hr_clock")==0)
+	{
+		if (begin == TRUE)
+		{       
+			printf("just beginning returing 0\n");
+			g_get_current_time(&now);
+			last.tv_sec = now.tv_sec;
+			last.tv_usec = now.tv_usec;
+			begin = FALSE;
+			return 0.0;
+		}
+		else
+		{
+			g_get_current_time(&now);
+			cumu += (now.tv_sec-last.tv_sec)+
+				((double)(now.tv_usec-last.tv_usec)/1000000.0);
+			last.tv_sec = now.tv_sec;
+			last.tv_usec = now.tv_usec;
+			printf("normal run returing %f\n",cumu);
+			return cumu;
+		}
+
+	}
+	else
+		dbg_func(g_strdup_printf(__FILE__": handle_special()\n\t handler name is not recognized, \"%s\"\n",handler_name),CRITICAL);
+	return 0.0;
 }
