@@ -136,9 +136,7 @@ void interrogate_ecu()
 		if (res)
 		{	
 			while (poll(&ufds,1,50))
-			{
 				total += count = read(serial_params->fd,ptr+total,64);
-			}
 			dbg_func(g_strdup_printf("\tReceived %i bytes\n",total),INTERROGATOR);
 			ptr = buf;
 
@@ -214,13 +212,16 @@ void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 	for (i=0;i<num_tests;i++)
 	{
 		cmd = g_array_index(cmd_array,struct Command *,i);
-		tmpbuf = g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
+		tmpbuf = g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",
 				cmd->string, 
 				cmd->desc, 
 				(gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
 
 		// Store counts for VE/realtime readback... 
-		dbg_func(tmpbuf,INTERROGATOR);
+		dbg_func(g_strdup_printf("\tCommand \"%s\" (%s), returned %i bytes\n",
+                                cmd->string,
+                                cmd->desc,
+                                (gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page))),INTERROGATOR);
 		gdk_threads_enter();
 		update_logbar(interr_view,NULL,tmpbuf,FALSE,FALSE);
 		gdk_threads_leave();
