@@ -116,6 +116,8 @@ struct DynamicLabels
 	GtkWidget *ww_warmcorr_lab;
 	GtkWidget *ww_ego_lab;
 	GtkWidget *ww_map_lab;
+	GtkWidget *timing_multi_lab;
+	GtkWidget *output_boost_lab;
 
 };
 
@@ -148,6 +150,14 @@ struct DynamicButtons
 	GtkWidget *logplay_sel_parm_but;	/* Select rt parms for play */
 	GtkWidget *logplay_start_rt_but;	/* Logplay star realtime */
 	GtkWidget *logplay_stop_rt_but;		/* Logplay stop realtime */
+	GtkWidget *time_based_but;
+	GtkWidget *trig_return_but;
+	GtkWidget *invert_out_but;
+	GtkWidget *normal_out_but;
+	GtkWidget *multi_spark_but;
+	GtkWidget *norm_spark_but;
+	GtkWidget *boost_retard_but;
+	GtkWidget *noboost_retard_but;
 };
 
 /* Simple struct to store the pointers to the entry and button

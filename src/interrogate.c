@@ -341,8 +341,6 @@ end_of_loop:
 		firmware = g_new0(struct Firmware_Details,1);
 	firmware->rtvars_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_A_0");
-	firmware->ignvars_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"CMD_I_0");
 	firmware->memblock_size = (gint)g_hash_table_lookup(
 			potential->bytecounts,"CMD_F_0");
 	firmware->firmware_name = g_strdup(potential->firmware_name);
@@ -354,9 +352,18 @@ end_of_loop:
 	{
 		firmware->page_params[i] = g_new0(struct Page_Params, 1);
 				
-		firmware->page_params[i]->size = (gint)g_hash_table_lookup(
-				potential->bytecounts,
-				g_strdup_printf("CMD_V_%i",i));
+		if (potential->page_params[i]->is_spark)
+		{
+			firmware->page_params[i]->size = (gint)g_hash_table_lookup(
+					potential->bytecounts,
+					g_strdup("CMD_I_0"));
+		}
+		else
+		{
+			firmware->page_params[i]->size = (gint)g_hash_table_lookup(
+					potential->bytecounts,
+					g_strdup_printf("CMD_V_%i",i));
+		}
 		firmware->page_params[i]->ve_base = potential->page_params[i]->ve_base;
 		firmware->page_params[i]->rpm_base = potential->page_params[i]->rpm_base;
 		firmware->page_params[i]->load_base = potential->page_params[i]->load_base;

@@ -18,7 +18,6 @@
 #include <core_gui.h>
 #include <datalogging_gui.h>
 #include <defines.h>
-#include <dt_params_gui.h>
 #include <eng_vitals_gui.h>
 #include <enums.h>
 #include <general_gui.h>

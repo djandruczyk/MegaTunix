@@ -230,11 +230,11 @@ void mem_alloc()
 void mem_dealloc()
 {
 	gint i = 0;
-	extern struct Firmware_Details firmware;
+	extern struct Firmware_Details *firmware;
 	/* Allocate memory blocks */
 	
 	if (serial_params->port_name)
-		g_free(serial_params->port_name)
+		g_free(serial_params->port_name);
 	g_free(serial_params);
 
 	/* Firmware datastructure.... */

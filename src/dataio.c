@@ -32,7 +32,7 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
        
-void handle_ms_data(InputHandler handler, gint offset)
+void handle_ms_data(InputHandler handler, gint page)
 {
 	gint res = 0;
 	gint total_read = 0;
@@ -156,14 +156,14 @@ void handle_ms_data(InputHandler handler, gint offset)
 
 			break;
 
-		case VE_AND_CONSTANTS_0:
+		case VE_BLOCK:
 			total_read = 0;
-			total_wanted = firmware->page_params[0]->size;
+			total_wanted = firmware->page_params[page]->size;
 			zerocount = 0;
 
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf(__FILE__": VE_CONST_0, requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__": VE_BLOCK, page %i, requesting %i bytes, ",page,total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -183,7 +183,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(__FILE__":  Error reading VE/Constants for page 0\n",CRITICAL);
+				dbg_func(g_strdup_printf(__FILE__":  Error reading VE-BlockConstants for page %i\n",page),CRITICAL);
 				tcflush(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				goto jumpout;
@@ -192,97 +192,11 @@ void handle_ms_data(InputHandler handler, gint offset)
 			 * comparison against to know if we have 
 			 * to burn stuff to flash.
 			 */
-			memcpy(ms_data[0],buf,total_wanted);
-			memcpy(ms_data_last[0],buf,total_wanted);
+			memcpy(ms_data[page],buf,total_wanted);
+			memcpy(ms_data_last[page],buf,total_wanted);
 			ms_ve_goodread_count++;
 			break;
 
-		case VE_AND_CONSTANTS_1:
-			total_read = 0;
-			total_wanted = firmware->page_params[1]->size;
-			zerocount = 0;
-
-			while (total_read < total_wanted )
-			{
-				dbg_func(g_strdup_printf(__FILE__": VE_CONST_1, requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
-
-				total_read += res = read(serial_params->fd,
-						ptr+total_read,
-						total_wanted-total_read);
-
-				// Increment bad read counter....
-				if (res == 0)
-					zerocount++;
-
-				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  // 3 bad reads, abort
-				{
-					bad_read = TRUE;
-					break;
-				}
-			}
-			/* the number of bytes expected for raw data read */
-			if (bad_read)
-			{
-				dbg_func(__FILE__":  Error reading VE/Constants for page 1\n",CRITICAL);
-				tcflush(serial_params->fd, TCIOFLUSH);
-				serial_params->errcount++;
-				goto jumpout;
-			}
-			/* Two copies, working copy and temp for 
-			 * comparison against to know if we have 
-			 * to burn stuff to flash.
-			 */
-			memcpy(ms_data[1],buf,total_wanted);
-			memcpy(ms_data_last[1],buf,total_wanted);
-
-			ms_ve_goodread_count++;
-			break;
-
-		case IGNITION_VARS:
-			total_read = 0;
-			total_wanted = firmware->ignvars_size;
-			zerocount = 0;
-
-			while (total_read < total_wanted )
-			{
-				dbg_func(g_strdup_printf(__FILE__": IGNITON_VARS, requesting %i bytes, ",total_wanted-total_read),IO_PROCESS);
-				total_read += res = read(serial_params->fd,
-						ptr+total_read,
-						total_wanted-total_read);
-
-				// Increment bad read counter....
-				if (res == 0)
-					zerocount++;
-
-				dbg_func(g_strdup_printf("read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  // 3 bad reads, abort
-				{
-					bad_read = TRUE;
-					break;
-				}
-			}
-			/* the number of bytes expected for raw data read */
-			if (bad_read)
-			{
-				dbg_func(__FILE__": Error reading Spark Table\n",CRITICAL);
-				tcflush(serial_params->fd, TCIOFLUSH);
-				serial_params->errcount++;
-				goto jumpout;
-			}
-			/* Two copies, working copy and temp for 
-			 * comparison against to know if we have 
-			 * to burn stuff to flash.
-			 */
-			/* clear memory area */
-			memset(ms_data[1],0,2*MS_PAGE_SIZE);
-			memset(ms_data_last[1],0,2*MS_PAGE_SIZE);
-			/* Copy new data into memory and backup blocks */
-			memcpy(ms_data[1],buf,total_wanted);
-			memcpy(ms_data_last[1],buf,total_wanted);
-
-			ms_ve_goodread_count++;
-			break;
 		case RAW_MEMORY_DUMP:
 			total_read = 0;
 			total_wanted = firmware->memblock_size;
@@ -314,7 +228,7 @@ void handle_ms_data(InputHandler handler, gint offset)
 				serial_params->errcount++;
 				goto jumpout;
 			}
-			post_process_raw_memory((void *)buf, offset);
+			post_process_raw_memory((void *)buf, page);
 			break;
 		default:
 			dbg_func("handle_ms_data, improper case, contact author\n",CRITICAL);

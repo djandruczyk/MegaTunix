@@ -41,16 +41,17 @@ extern gboolean connected;			/* valid connection with MS */
 extern GtkWidget * comms_view;
 extern struct DynamicMisc misc;
 extern struct Serial_Params *serial_params;
-static gchar *handler_types[]={"Realtime Vars","VE/Constants(1)","VE/Constants(2)","Ignition Vars","Raw Memory Dump","Comms Test"};
+static gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test"};
 
 
 void io_cmd(IoCommands cmd, gpointer data)
 {
 	struct Io_Message *message = NULL;
-	extern gint ecu_caps;
 	extern struct IoCmds *cmds;
 	extern gboolean tabs_loaded;
+	extern struct Firmware_Details * firmware;
 	gint tmp = -1;
+	gint i = 0;
 
 	/* This function is the bridge from the main GTK thread (gui) to
 	 * the Serial I/O Handler (GThread). Communication is achieved through
@@ -100,41 +101,26 @@ void io_cmd(IoCommands cmd, gpointer data)
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_READ_VE_CONST:
-			message = g_new0(struct Io_Message,1);
-			message->command = READ_CMD;
-			message->page = 0;
-			message->out_str = g_strdup(cmds->veconst_cmd);
-			message->out_len = cmds->ve_cmd_len;
-			message->handler = VE_AND_CONSTANTS_0;
-			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-			tmp = UPD_VE_CONST;
-			g_array_append_val(message->funcs,tmp);
-			tmp = UPD_STORE_BLACK;
-			g_array_append_val(message->funcs,tmp);
-			g_async_queue_push(io_queue,(gpointer)message);
-			if (ecu_caps & DUALTABLE)
+			for (i=0;i<firmware->total_pages;i++)
 			{
 				message = g_new0(struct Io_Message,1);
 				message->command = READ_CMD;
-				message->page = 1;
-				message->out_str = g_strdup(cmds->veconst_cmd);
-				message->out_len = cmds->ve_cmd_len;
-				message->handler = VE_AND_CONSTANTS_1;
-				message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+				message->page = i;
+				if (firmware->page_params[i]->is_spark)
+				{
+					message->out_str = g_strdup(cmds->ignition_cmd);
+					message->out_len = cmds->ign_cmd_len;
+				}
+				else
+				{
+					message->out_str = g_strdup(cmds->veconst_cmd);
+					message->out_len = cmds->ve_cmd_len;
+				}
+				message->handler = VE_BLOCK;
+				message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
 				tmp = UPD_VE_CONST;
 				g_array_append_val(message->funcs,tmp);
-				g_async_queue_push(io_queue,(gpointer)message);
-			}
-			if (ecu_caps & (S_N_SPARK|S_N_EDIS))
-			{
-				message = g_new0(struct Io_Message,1);
-				message->command = READ_CMD;
-				message->page = 0;
-				message->out_str = g_strdup(cmds->ignition_cmd);
-				message->out_len = cmds->ign_cmd_len;
-				message->handler = IGNITION_VARS;
-				message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
-				tmp = UPD_VE_CONST;
+				tmp = UPD_STORE_BLACK;
 				g_array_append_val(message->funcs,tmp);
 				g_async_queue_push(io_queue,(gpointer)message);
 			}
@@ -142,11 +128,10 @@ void io_cmd(IoCommands cmd, gpointer data)
 		case IO_READ_RAW_MEMORY:
 			message = g_new0(struct Io_Message,1);
 			message->command = READ_CMD;
-			message->page = 0;
+			message->page = (gint)data;
 			message->out_str = g_strdup(cmds->raw_mem_cmd);
 			message->out_len = cmds->raw_mem_cmd_len;
 			message->handler = RAW_MEMORY_DUMP;
-			message->offset = (gint)data;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 			tmp = UPD_RAW_MEMORY;
 			g_array_append_val(message->funcs,tmp);
@@ -259,7 +244,7 @@ void *serial_io_handler(gpointer data)
 						break;
 					case UPD_RAW_MEMORY:
 						gdk_threads_enter();
-						update_raw_memory_view(mem_view_style[message->offset],message->offset);
+						update_raw_memory_view(mem_view_style[message->page],message->page);
 						gdk_threads_leave();
 						break;
 					case UPD_DATALOGGER:
@@ -310,9 +295,9 @@ void readfrom_ecu(void *ptr)
 		dbg_func(__FILE__": readfrom_ecu() write command to ECU failed\n",CRITICAL);
 
 	dbg_func(g_strdup_printf(__FILE__": readfrom_ecu() Sent %s to the ECU\n",message->out_str),SERIAL_WR);
-	// If reading raw_memory, need a second arg for the offset... 
+	// If reading raw_memory, need a second arg for the page... 
 	if (message->handler == RAW_MEMORY_DUMP)
-		result = write(serial_params->fd,&message->offset,1);
+		result = write(serial_params->fd,&message->page,1);
 
 	/* check for data,,,, */
         result = poll (&ufds,1,5*serial_params->poll_timeout);
@@ -328,7 +313,7 @@ void readfrom_ecu(void *ptr)
                 dbg_func(g_strdup_printf(__FILE__": reading %s\n",
 				handler_types[message->handler]),SERIAL_RD);
 		if (message->handler != -1)
-                	handle_ms_data(message->handler,message->offset);
+                	handle_ms_data(message->handler,message->page);
 
         }	
 }

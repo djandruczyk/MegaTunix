@@ -24,27 +24,12 @@ gchar *states[] = {"FALSE","TRUE"};
 
 void parse_ecu_capabilities(gint ecu_caps)
 {
-	extern struct DynamicButtons buttons;
 	set_dualtable_mode((ecu_caps & DUALTABLE) == 0 ? FALSE:TRUE);
 	set_enhanced_mode((ecu_caps & ENHANCED) == 0 ? FALSE:TRUE);
 	set_iac_mode((ecu_caps & (IAC_PWM|IAC_STEPPER)) == 0 ? FALSE:TRUE);
 	set_ignition_mode((ecu_caps & (S_N_SPARK|S_N_EDIS)) == 0 ? FALSE:TRUE);
 	set_launch_ctrl_mode((ecu_caps & LAUNCH_CTRL) == 0 ? FALSE:TRUE);
 	set_raw_memory_mode((ecu_caps & RAW_MEMORY) == 0 ? FALSE:TRUE);
-	if (ecu_caps & IAC_STEPPER)
-		gtk_button_set_label(GTK_BUTTON(buttons.pwm_idle_but),
-				"Stepper Controlled");
-	else
-		gtk_button_set_label(GTK_BUTTON(buttons.pwm_idle_but),
-				"PWM Controlled");
-}
-
-void set_dt_table_mapping_state(gboolean state)
-{
-        extern GList *table_map_controls;
-
-	dbg_func(g_strdup_printf(__FILE__": set_dt_table_mapping_state()\n\tSetting DT map controls state to %s\n",states[state]),INTERROGATOR);
-        g_list_foreach(table_map_controls, set_widget_state,(gpointer)state);
 }
 
 void set_raw_memory_mode(gboolean state)

@@ -484,6 +484,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
                         (GtkAttachOptions) (GTK_EXPAND),
                         (GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
 
+/*
 	button = gtk_radio_button_new_with_label(NULL,"B&G On-Off");
 	buttons.onoff_idle_but = button;
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
@@ -523,6 +524,7 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
+*/
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox2),ebox,TRUE,TRUE,0);
 

@@ -190,12 +190,18 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				force_an_update();
 				break;
 			case COMMA:
+				if (delimiter)
+					g_free(delimiter);
 				delimiter = g_strdup(",");
 				break;
 			case TAB:
+				if (delimiter)
+					g_free(delimiter);
 				delimiter = g_strdup("\t");
 				break;
 			case SPACE:
+				if (delimiter)
+					g_free(delimiter);
 				delimiter = g_strdup(" ");
 				break;
 			case REALTIME_VIEW:
@@ -1068,22 +1074,6 @@ void update_ve_const()
 	else
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(buttons.multi_port_but),
-				TRUE);
-
-	/* B&G idle or PWM/Stepper */
-	if (ecu_caps & (DUALTABLE|IAC_PWM|IAC_STEPPER))
-	{
-		if (ve_const->config13.bit.idle_policy)
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.pwm_idle_but),TRUE);
-		else
-			gtk_toggle_button_set_active(
-					GTK_TOGGLE_BUTTON(buttons.onoff_idle_but),
-					TRUE);
-	}
-	else
-		gtk_toggle_button_set_active(
-				GTK_TOGGLE_BUTTON(buttons.onoff_idle_but),
 				TRUE);
 
 
