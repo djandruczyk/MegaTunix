@@ -153,7 +153,8 @@ NOTES regarding reqfuel_offset, divider_offset, alternate_offset,
   These above parameters are the offset locations from the beginning of the 
   page. They are MegaSquirt firmware specific.  If you have added support for
   a NON MS ecu (VEMS) that does NOT make use of the internal functions that
-  use these variables, then they should all be set to ZERO.
+  use these variables, then they should all be set to -1 (NOT zero as that
+  will cause problems wiht the widget associated with offset zero).
   
 
 [gui] section
