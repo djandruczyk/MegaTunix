@@ -238,7 +238,6 @@ void determine_ecu(void *ptr)
 	struct Canidate *canidate = (struct Canidate *)ptr;
 	gint i = 0;
 	gint j = 0;
-	gint len = 0;
 	gint num_tests =  sizeof(cmds)/sizeof(cmds[0]);
 	gint num_choices = sizeof(canidates)/sizeof(canidates[0]);
 	gint passcount = 0;
@@ -364,8 +363,7 @@ void determine_ecu(void *ptr)
 
 		gtk_widget_set_sensitive(GTK_WIDGET(buttons.pwm_idle_but),FALSE);
 	/* Display firmware version in the window... */
-	len = strlen(canidates[match].firmware_name);
-	tmpbuf = g_strconcat("Detected Firmware: ",g_strndup(canidates[match].firmware_name,len),"\n");
+	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",canidates[match].firmware_name);
 
 	update_logbar(interr_view,"warning",tmpbuf,FALSE,FALSE);
 	g_free(tmpbuf);

@@ -204,7 +204,12 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 		/* request one batch of realtime vars */
-		res = write(serial_params->fd,"A",1);
+		while (write(serial_params->fd,"A",1) != 1)
+		{
+			usleep(100);
+			fprintf(stderr,__FILE__": Error writing \"A\" to the ecu in check_ecu_comms()\n");
+		}
+			
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res)
 		{

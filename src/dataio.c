@@ -61,12 +61,18 @@ int handle_ms_data(InputData which_data)
 		case REALTIME_VARS:
 			while (poll(&ufds,1,serial_params->poll_timeout))
 			{
+				count++;
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->rtvars_size); 
 				//printf("Realtime read %i, total %i\n",res,total);
-				if (total >= serial_params->rtvars_size)
+				if (count > serial_params->rtvars_size + 10)
+				{
+					/* waited too long, break out */
 					break;
+				}
 			}
+			//printf("REALTIME_VARS: polled %i times\n",count);
+			count = 0;
 			/* the number of bytes expected for raw data read */
 			if (total > serial_params->rtvars_size) 
 			{
@@ -146,11 +152,13 @@ int handle_ms_data(InputData which_data)
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->table0_size); 
 //				printf("polling VE/Const read %i, total %i\n",res,total);
-				if (count > 30)
+				if (count > serial_params->table0_size + 30)
 				{
+					/* waited too long, break out */
 					break;
 				}
 			}
+			//printf("VE_AND_CONSTANTS_1: polled %i times\n",count);
 			count = 0;
 			/* the number of bytes expected for raw data read */
 			if (total != serial_params->table0_size) 
@@ -180,11 +188,13 @@ int handle_ms_data(InputData which_data)
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->table1_size); 
 //				printf("polling VE/Const read %i, total %i\n",res,total);
-				if (count > 30)
+				if (count > serial_params->table1_size + 30)
 				{
+					/* waited too long, break out */
 					break;
 				}
 			}
+			//printf("VE_AND_CONSTANTS_2: polled %i times\n",count);
 			count = 0;
 			/* the number of bytes expected for raw data read */
 			if (total != serial_params->table1_size) 
