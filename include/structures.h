@@ -69,18 +69,18 @@ struct Runtime_Widgets
         GtkWidget *warmcorr_pbar;       /* warmcorr label from MS */
         GtkWidget *rpm_lab;             /* rpm label from MS */
         GtkWidget *rpm_pbar;            /* rpm label from MS */
-        GtkWidget *pw_lab;              /* pw label from MS */
-        GtkWidget *pw_pbar;             /* pw label from MS */
+        GtkWidget *pw1_lab;              /* pw label from MS */
+        GtkWidget *pw1_pbar;             /* pw label from MS */
         GtkWidget *tpsaccel_lab;        /* tpsaccel label from MS */
         GtkWidget *tpsaccel_pbar;       /* tpsaccel label from MS */
         GtkWidget *barocorr_lab;        /* barocorr label from MS */
         GtkWidget *barocorr_pbar;       /* barocorr label from MS */
         GtkWidget *gammae_lab;          /* gammae label from MS */
         GtkWidget *gammae_pbar;         /* gammae label from MS */
-        GtkWidget *vecurr_lab;          /* vecurr label from MS */
-        GtkWidget *vecurr_pbar;         /* vecurr label from MS */
-        GtkWidget *dcycle_lab;          /* vecurr label from MS */
-        GtkWidget *dcycle_pbar;         /* vecurr label from MS */
+        GtkWidget *vecurr1_lab;          /* vecurr label from MS */
+        GtkWidget *vecurr1_pbar;         /* vecurr label from MS */
+        GtkWidget *dcycle1_lab;          /* vecurr label from MS */
+        GtkWidget *dcycle1_pbar;         /* vecurr label from MS */
         GtkWidget *status[7];           /* Status boxes */
 };
 

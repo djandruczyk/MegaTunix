@@ -32,6 +32,7 @@ extern struct Tools tools;
 extern FILE * io_file;
 extern gchar * io_file_name;
 extern GtkWidget *tools_view;
+extern gboolean dualtable;
 
 GIOChannel *gio_channel;
 extern struct Ve_Const_Std *ve_const_p0;

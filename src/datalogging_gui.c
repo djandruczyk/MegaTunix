@@ -32,21 +32,22 @@
 
 /* Local #defines */
 #define TABLE_COLS 6
-#define MAX_LOGABLES 32
-#define STD_LOGABLES 18
-#define DUALTABLE_LOGABLES 21
-#define DUALTABLE 64
+#define MAX_LOGABLES 64
 /* Local #defines */
 
+#define UCHAR sizeof(unsigned char)
+#define FLOAT sizeof(float)
+#define SHORT sizeof(short)
+
 extern gint ready;
-extern struct Raw_Runtime_Std *raw_runtime;
+extern struct Runtime_Common *runtime;
 extern struct DynamicButtons buttons;
 extern struct DynamicLabels labels;
 extern GdkColor white;
+extern gboolean dualtable;
 gboolean log_opened = FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;
-gint ms_type = 0;
 gint logging_mode = CUSTOM_LOG;
 static gint total_logables = 0;
 static gint delimiter = SPACE;
@@ -56,30 +57,61 @@ static GtkWidget *file_selection;
 static GtkWidget *format_table;
 static GtkWidget *comma_delim_button;
 static GtkWidget *space_delim_button;
-static gint max_logables = 0;
+gint max_logables = 0;
 static gint offset_list[MAX_LOGABLES];
+static gint size_list[MAX_LOGABLES];
 struct timeval now;
 struct timeval last;
 GtkWidget *dlog_view;
 GtkWidget *logables_table;
 GtkWidget *delim_table;
 GtkWidget *tab_delim_button;
-extern FILE * io_file;				/* DataLog File Handle*/
-gchar * io_file_name;			/* log pathname */
+extern FILE * io_file;			/* DataLog File Handle*/
+gchar * io_file_name;			/* log file pathname */
 struct Logables logables;
+/* logable_names[] is an array of textual names corresponding to all logable
+ * variables from the MS
+ */
 const gchar *logable_names[] = 
 {
-"Hi-Res Clock", "MS Clock", "RPM", "TPS", "BATT","MAP","BARO","O2","MAT","CLT",	"VE","BaroCorr","EGOCorr","MATCorr","CLTCorr","PW","EngineBits","GammaE","PW2","VE2","IdleDC"
+"Hi-Res Clock","MS Clock","RPM","TPS Volts","TPS Counts",\
+"TPS %","BATT Volts","BATT Counts","MAP Volts","MAP Counts",\
+"MAP KPA","BARO Volts","BARO Counts","BARO KPA","O2 Volts",\
+"O2 Counts","MAT Volts","MAT Counts","MAT Degrees","CLT Volts",\
+"CLT Counts","CLT Degrees","BaroCorr","CLTCorr","EGOCorr",\
+"MATCorr","TPSACCEL","PW1","PW2","GammaE",\
+"VE1","VE2","IdleDC","EngineBits"
 };
-/* logging_offset_map is a mapping between the logable_names[] list above and 
- * the byte offset into the raw_runtime_std datastructure. The index 
+/* logging_offset_map is a mapping between the logable_names[] list above 
+ * and the byte offset into the Runtime_Common datastructure. The index 
  * is the index number of the logable variable from above, The value at that
  * index point is the offset into the struct for the data. Offset 0
  * is the first value in the struct (secl), offset 99 is a special case
  * for the Hi-Res clock which isn't stored in the structure...
  */
 const gint logging_offset_map[] = 
-{ 99,0,13,7,8,4,3,9,5,6,18,16,10,11,12,14,2,17,19,20,21 }; 
+{ 
+99,54,52,24,68,
+44, 4,63,16,66,
+60, 0,62,59,12,
+65,20,67,50,8,
+64,48,70,73,71,
+69,72,36,40,61,
+57,58,74,56 
+}; 
+
+/* Size of each logable vaiable in BYTES, so 4 = a 32 bit var */
+const gint logging_datasizes_map[] = 
+{ 
+FLOAT,UCHAR,SHORT,FLOAT,UCHAR,
+FLOAT,FLOAT,UCHAR,FLOAT,UCHAR,
+UCHAR,FLOAT,UCHAR,UCHAR,FLOAT,
+UCHAR,FLOAT,UCHAR,SHORT,FLOAT,
+UCHAR,SHORT,UCHAR,UCHAR,UCHAR,
+UCHAR,UCHAR,FLOAT,FLOAT,UCHAR,
+UCHAR,UCHAR,UCHAR,UCHAR 
+}; 
+
 
 int build_datalogging(GtkWidget *parent_frame)
 {
@@ -183,12 +215,10 @@ int build_datalogging(GtkWidget *parent_frame)
 	{
 		button = gtk_check_button_new_with_label(logable_names[i]);
 		logables.widgets[i] = button;
-		if ((ms_type != DUALTABLE) && (i >= STD_LOGABLES))
-			gtk_widget_set_sensitive(button,FALSE);
-		g_object_set_data(G_OBJECT(button),"bit_pos",
+//		if ((dualtable) && (i >= STD_LOGABLES))
+//			gtk_widget_set_sensitive(button,FALSE);
+		g_object_set_data(G_OBJECT(button),"index",
 				GINT_TO_POINTER(i));
-		g_object_set_data(G_OBJECT(button),"bitmask",
-				GINT_TO_POINTER((gint)pow(2,i)));
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(log_value_set),
 				NULL);
@@ -395,34 +425,22 @@ void clear_logables(void)
 
 gint log_value_set(GtkWidget * widget, gpointer data)
 {
-	gint bit_pos = 0;
-	gint bit_val = 0;
-	gint bitmask = 0;
-	gint tmp = 0;
+	gint index = 0;
 	gint i = 0;
 
-	bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
-	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
+	index = (gint)g_object_get_data(G_OBJECT(widget),"index");
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-		bit_val = 1;
+		logables.index[index] = TRUE;
 	else
-		bit_val = 0;
-
-	tmp = logables.logbits.value;
-	tmp = tmp & ~bitmask;
-	tmp = tmp |(bit_val << bit_pos);
-	logables.logbits.value = tmp;
+		logables.index[index] = FALSE;
 
 	total_logables = 0;
 	for (i=0;i<max_logables;i++)
 	{
-		//		if ((tmp >> i) &0x1)
-		//			printf("Logging %s\n",logable_names[i]);
-		total_logables += (tmp >> i) &0x1;
+		if (logables.index[i])
+			total_logables++;
 	}
-
-	//	printf("Total number of variables logged %i\n",total_logables);
 
 	return TRUE;
 }
@@ -431,13 +449,16 @@ void run_datalog(void)
 {
 	gint i = 0;
 	gint offset = 0;
+	gint size = 0;
 	gint begin = FALSE;
-	unsigned char * log_ptr;
+	unsigned char * uchar_ptr = (unsigned char *)runtime;
+	short * short_ptr = (short *)runtime;
+	float * float_ptr = (float *)runtime;
 	if (!logging) /* Logging isn't enabled.... */
 		return;
 	else
 	{
-		log_ptr = (unsigned char *)raw_runtime;
+
 		if (header_needed)
 		{
 			write_log_header();
@@ -447,6 +468,7 @@ void run_datalog(void)
 		for(i=0;i<total_logables;i++)
 		{
 			offset = offset_list[i];
+			size = size_list[i];
 			switch (offset)
 			{
 				case 99:
@@ -470,11 +492,23 @@ void run_datalog(void)
 						fprintf(io_file,"%f",cumulative);
 					}
 					break;
-				case 13: /* RPM */
-					fprintf(io_file,"%i",100*log_ptr[offset]);
-					break;
 				default:
-					fprintf(io_file,"%i",log_ptr[offset]);
+					switch (size)
+					{
+						case FLOAT:
+							fprintf(io_file,"%.3f",(float)float_ptr[offset/FLOAT]);
+							break;
+						case UCHAR:
+							fprintf(io_file,"%i",(unsigned char)uchar_ptr[offset]);
+							break;
+						case SHORT:
+							fprintf(io_file,"%i",short_ptr[offset/SHORT]);
+							break;
+						default:
+							printf("SIZE not defiend\n");
+							break;
+					}
+					
 					break;
 			}
 			/* Print delimiter to log here so there isnt an extra
@@ -491,21 +525,21 @@ void write_log_header(void)
 {
 	gint i = 0;
 	gint j = 0;
-	gint tmp = logables.logbits.value;
 	gint total_logables = 0;
 
 
 	for (i=0;i<max_logables;i++)
 	{
-		if ((tmp >> i) &0x1) /* If bit is set, increment counter */
+		if (logables.index[i])/* If bit is set, increment counter */
 			total_logables++;
 	}
 
 	for (i=0;i<max_logables;i++)
 	{
-		if ((tmp >> i) &0x1) /* If bit is set, we log this variable */
+		if (logables.index[i]) /* If bit is set, we log this variable */
 		{
 			offset_list[j] = logging_offset_map[i];
+			size_list[j] = logging_datasizes_map[i];
 			j++;
 			fprintf(io_file, "\"%s\"",logable_names[i]);
 			if (j < (total_logables))

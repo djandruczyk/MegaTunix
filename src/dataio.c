@@ -34,8 +34,8 @@ gint just_starting;
 extern gboolean raw_reader_running;
 extern struct Serial_Params *serial_params;
 extern struct Raw_Runtime_Std *raw_runtime;
-extern struct Runtime_Std *runtime;
-extern struct Runtime_Std *runtime_last;
+extern struct Runtime_Common *runtime;
+extern struct Runtime_Common *runtime_last;
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
 extern struct Ve_Const_Std *ve_const_p0_tmp;
@@ -121,7 +121,7 @@ int handle_ms_data(InputData which_data)
 
 			/* copy last round to runtime_last for checking */
 			memcpy(runtime_last,runtime,
-					sizeof(struct Runtime_Std));
+					sizeof(struct Runtime_Common));
 
 			post_process((void *)raw_runtime,(void *)runtime);
 

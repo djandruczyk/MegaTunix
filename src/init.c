@@ -29,6 +29,7 @@ gint major_ver;
 gint minor_ver;
 gint micro_ver;
 unsigned char *kpa_conversion; 
+extern gboolean dualtable;
 extern unsigned char turbo_map[];
 extern unsigned char na_map[];
 extern gint def_comm_port;
@@ -58,8 +59,8 @@ struct Ve_Const_Std *ve_const_p1_tmp;
 struct Conversion_Chart *page0_conversions;
 struct Conversion_Chart *page1_conversions;
 struct Raw_Runtime_Std *raw_runtime;
-struct Runtime_Std *runtime;
-struct Runtime_Std *runtime_last;
+struct Runtime_Common *runtime;
+struct Runtime_Common *runtime_last;
 struct Ve_Widgets *page0_widgets;
 struct Ve_Widgets *page1_widgets;
 
@@ -88,6 +89,7 @@ void init()
 	serial_params->read_wait = 100;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
+	dualtable = FALSE;
 	raw_reader_running = FALSE;  /* We're not reading raw data yet... */
 	raw_reader_stopped = TRUE;  /* We're not reading raw data yet... */
 	just_starting = TRUE; 	/* to handle initial errors */
@@ -195,8 +197,8 @@ void mem_alloc()
 	ve_const_p0_tmp = g_malloc(MS_PAGE_SIZE);
 	ve_const_p1_tmp = g_malloc(MS_PAGE_SIZE);
 	raw_runtime = g_malloc(sizeof(struct Raw_Runtime_Std));
-	runtime = g_malloc(sizeof(struct Runtime_Std));
-	runtime_last = g_malloc(sizeof(struct Runtime_Std));
+	runtime = g_malloc(sizeof(struct Runtime_Common));
+	runtime_last = g_malloc(sizeof(struct Runtime_Common));
 	page0_conversions =  g_malloc(sizeof(struct Conversion_Chart));
 	page1_conversions =  g_malloc(sizeof(struct Conversion_Chart));
 	page0_widgets = g_malloc(sizeof(struct Ve_Widgets));
@@ -209,8 +211,8 @@ void mem_alloc()
 	memset((void *)ve_const_p0_tmp, 0, MS_PAGE_SIZE);
 	memset((void *)ve_const_p1_tmp, 0, MS_PAGE_SIZE);
 	memset((void *)raw_runtime, 0, sizeof(struct Raw_Runtime_Std));
-	memset((void *)runtime, 0, sizeof(struct Runtime_Std));
-	memset((void *)runtime_last, 0, sizeof(struct Runtime_Std));
+	memset((void *)runtime, 0, sizeof(struct Runtime_Common));
+	memset((void *)runtime_last, 0, sizeof(struct Runtime_Common));
 	memset((void *)page0_conversions, 0, sizeof(struct Conversion_Chart));
 	memset((void *)page1_conversions, 0, sizeof(struct Conversion_Chart));
 	memset((void *)page0_widgets, 0, sizeof(struct Ve_Widgets));

@@ -27,7 +27,6 @@ const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
 gboolean force_status_update = TRUE;
 extern gboolean connected;
-extern gboolean fahrenheit;
 extern gboolean forced_update;
 extern GdkColor white;
 extern GdkColor black;
@@ -301,7 +300,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 4, 5,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.pw_lab = label;
+	runtime_data.pw1_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -309,7 +308,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 4, 5,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.pw_pbar = pbar;
+	runtime_data.pw1_pbar = pbar;
 
 	/* Duty Cycle */
 	label = gtk_label_new("Duty Cycle (%)");
@@ -324,7 +323,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 5, 6,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.dcycle_lab = label;
+	runtime_data.dcycle1_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -332,7 +331,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 5, 6,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.dcycle_pbar = pbar;
+	runtime_data.dcycle1_pbar = pbar;
 
 	/* Corrections/Enrichments frame */
 
@@ -462,7 +461,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.vecurr_lab = label;
+	runtime_data.vecurr1_lab = label;
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
@@ -470,7 +469,7 @@ int build_runtime(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), pbar, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
 			(GtkAttachOptions) (0), 0, 0);
-	runtime_data.vecurr_pbar = pbar;
+	runtime_data.vecurr1_pbar = pbar;
 
 	/* Accel Boost  */
 	label = gtk_label_new("Accel (ms)");
@@ -631,9 +630,8 @@ void update_runtime_vars()
 {
 	gchar *tmpbuf;
 	gfloat tmpf;
-	gint tmpi;
-	extern struct Runtime_Std *runtime;
-	extern struct Runtime_Std *runtime_last;
+	extern struct Runtime_Common *runtime;
+	extern struct Runtime_Common *runtime_last;
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?
@@ -648,12 +646,12 @@ void update_runtime_vars()
 		gtk_label_set_text(GTK_LABEL(runtime_data.secl_lab),tmpbuf);
 		g_free(tmpbuf);
 	}
-	if ((runtime->ego != runtime_last->ego)|| (force_status_update))
+	if ((runtime->ego_volts != runtime_last->ego_volts)|| (force_status_update))
 	{
-		tmpbuf = g_strdup_printf("%.2f",runtime->ego);
+		tmpbuf = g_strdup_printf("%.2f",runtime->ego_volts);
 		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),tmpbuf);
-		tmpf = runtime->ego/ego_pbar_divisor <= 1.0 
-			? runtime->ego/ego_pbar_divisor: 1.0;
+		tmpf = runtime->ego_volts/ego_pbar_divisor <= 1.0 
+			? runtime->ego_volts/ego_pbar_divisor: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.ego_pbar),
 				tmpf);
@@ -661,7 +659,7 @@ void update_runtime_vars()
 	}
 	if (runtime->map != runtime_last->map)
 	{
-		tmpbuf = g_strdup_printf("%i",runtime->map);
+		tmpbuf = g_strdup_printf("%i",(int)runtime->map);
 		gtk_label_set_text(GTK_LABEL(runtime_data.map_lab),tmpbuf);
 		tmpf = runtime->map/map_pbar_divisor <= 1.0 
 			? runtime->map/map_pbar_divisor: 1.0;
@@ -672,12 +670,7 @@ void update_runtime_vars()
 	}
 	if ((runtime->clt != runtime_last->clt) || (forced_update))
 	{
-		if (fahrenheit)/* subtract 40 from MS value */
-			tmpi = runtime->clt-40;
-		else	/* subtract 40 and then to F->C conversion */
-			tmpi = (runtime->clt-40-32)*(5.0/9.0);
-
-		tmpbuf = g_strdup_printf("%i",tmpi);
+		tmpbuf = g_strdup_printf("%i",(int)runtime->clt);
 		gtk_label_set_text(GTK_LABEL(runtime_data.clt_lab),tmpbuf);
 		tmpf = runtime->clt/255.0 <= 1.0 ? runtime->clt/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
@@ -685,11 +678,11 @@ void update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->batt != runtime_last->batt)
+	if (runtime->batt_volts != runtime_last->batt_volts)
 	{
-		tmpbuf = g_strdup_printf("%.2f",runtime->batt);
+		tmpbuf = g_strdup_printf("%.2f",runtime->batt_volts);
 		gtk_label_set_text(GTK_LABEL(runtime_data.batt_lab),tmpbuf);
-		tmpf = runtime->batt/18.0 <= 1.0 ? runtime->batt/18.0: 1.0;
+		tmpf = runtime->batt_volts/18.0 <= 1.0 ? runtime->batt_volts/18.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
 				(runtime_data.batt_pbar),
 				tmpf);
@@ -707,12 +700,7 @@ void update_runtime_vars()
 	}
 	if ((runtime->mat != runtime_last->mat) || (forced_update))
 	{
-		if (fahrenheit)	/* subtract 40 from MS value */
-			tmpi = runtime->mat-40;
-		else	/* subtract 40 and then to F->C conversion */
-			tmpi = (runtime->mat-40-32)*(5.0/9.0);
-
-		tmpbuf = g_strdup_printf("%i",tmpi);
+		tmpbuf = g_strdup_printf("%i",(int)runtime->mat);
 		gtk_label_set_text(GTK_LABEL(runtime_data.mat_lab),tmpbuf);
 		tmpf = runtime->mat/255.0 <= 1.0 ? runtime->mat/255.0 : 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
@@ -722,7 +710,7 @@ void update_runtime_vars()
 	}
 	if (runtime->tps != runtime_last->tps)
 	{
-		tmpbuf = g_strdup_printf("%i",runtime->tps);
+		tmpbuf = g_strdup_printf("%.1f",runtime->tps);
 		gtk_label_set_text(GTK_LABEL(runtime_data.tps_lab),tmpbuf);
 		tmpf = runtime->tps/100.0 <= 1.0 ? runtime->tps/100.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
@@ -740,13 +728,13 @@ void update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->pw != runtime_last->pw)
+	if (runtime->pw1 != runtime_last->pw1)
 	{
-		tmpbuf = g_strdup_printf("%.1f",runtime->pw);
-		gtk_label_set_text(GTK_LABEL(runtime_data.pw_lab),tmpbuf);
-		tmpf = runtime->pw/25.5 <= 1.0 ? runtime->pw/25.5: 1.0;
+		tmpbuf = g_strdup_printf("%.1f",runtime->pw1);
+		gtk_label_set_text(GTK_LABEL(runtime_data.pw1_lab),tmpbuf);
+		tmpf = runtime->pw1/25.5 <= 1.0 ? runtime->pw1/25.5: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.pw_pbar),
+				(runtime_data.pw1_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
@@ -790,13 +778,13 @@ void update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->vecurr != runtime_last->vecurr)
+	if (runtime->vecurr1 != runtime_last->vecurr1)
 	{
-		tmpbuf = g_strdup_printf("%i",runtime->vecurr);
-		gtk_label_set_text(GTK_LABEL(runtime_data.vecurr_lab),tmpbuf);
-		tmpf = runtime->vecurr/200.0 <= 1.0 ? runtime->vecurr/200.0: 1.0;
+		tmpbuf = g_strdup_printf("%i",runtime->vecurr1);
+		gtk_label_set_text(GTK_LABEL(runtime_data.vecurr1_lab),tmpbuf);
+		tmpf = runtime->vecurr1/200.0 <= 1.0 ? runtime->vecurr1/200.0: 1.0;
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.vecurr_pbar),
+				(runtime_data.vecurr1_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}
@@ -811,13 +799,13 @@ void update_runtime_vars()
 				tmpf);
 		g_free(tmpbuf);
 	}
-	if (runtime->dcycle != runtime_last->dcycle)
+	if (runtime->dcycle1 != runtime_last->dcycle1)
 	{
-		tmpbuf = g_strdup_printf("%.1f",runtime->dcycle);
-		tmpf = runtime->dcycle/100.0 <= 1.0 ? runtime->dcycle/100.0: 1.0;
-		gtk_label_set_text(GTK_LABEL(runtime_data.dcycle_lab),tmpbuf);
+		tmpbuf = g_strdup_printf("%.1f",runtime->dcycle1);
+		tmpf = runtime->dcycle1/100.0 <= 1.0 ? runtime->dcycle1/100.0: 1.0;
+		gtk_label_set_text(GTK_LABEL(runtime_data.dcycle1_lab),tmpbuf);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(runtime_data.dcycle_pbar),
+				(runtime_data.dcycle1_pbar),
 				tmpf);
 		g_free(tmpbuf);
 	}

@@ -15,46 +15,82 @@
 
 #include <config.h>
 #include <defines.h>
+#include <globals.h>
 #include <lookuptables.h>
 #include <post_process.h>
 
 extern unsigned char *kpa_conversion;
 extern gboolean fahrenheit;
+extern gboolean dualtable;
 
 void post_process(void *input, void *output)
 {
-	/* Std code uses these structures.. 
-	 * We'll use a switch statement here after the dualtable
-	 * and Spark derivatives are added in here.. 
+	/* We can use the dualtable struct ptr only because
+	 * all the ata is the same places in the structure.  We
+	 * choose below which ones to take based on whether
+	 * dualtable is set or not..
 	 */
-	struct Raw_Runtime_Std *in = input;
-	struct Runtime_Std *out = output;
+	struct Raw_Runtime_Dualtable *in = input;
+	struct Raw_Runtime_Std *in_std = input;
+	struct Runtime_Common *out = output;
 
 	out->secl = in->secl;
 	out->squirt.value = in->squirt.value;
 	out->engine.value = in->engine.value;
+
+	out->baro_volts = (float)in->baro * (5.0/255.0);
+	out->baro_raw = in->baro;
 	out->baro = kpa_conversion[in->baro];
+
+	out->map_volts = (float)in->map * (5.0/255.0);
+	out->map_raw = in->map;
 	out->map = kpa_conversion[in->map];
-	out->mat_volt = (float)in->mat*(5.0/255.0);
-	out->clt_volt = (float)in->clt*(5.0/255.0);
-	out->tps_volt = (float)in->tps*(5.0/255.0);
-	out->mat = thermfactor[in->mat];
-	out->clt = thermfactor[in->clt];
+
+	out->clt_volts = (float)in->clt * (5.0/255.0);
+	out->clt_raw = in->clt;
+	if (fahrenheit)
+		out->clt = thermfactor[in->clt]-40;
+	else
+		out->clt = (short)((thermfactor[in->clt]-40-32)*(5.0/9.0));
+
+	out->mat_volts = (float)in->mat * (5.0/255.0);
+	out->mat_raw = in->mat;
+	if (fahrenheit)
+		out->mat = thermfactor[in->mat]-40;
+	else
+		out->mat = (short)((thermfactor[in->mat]-40-32)*(5.0/9.0));
+
+	out->tps_volts = (float)in->tps * (5.0/255.0);
+	out->tps_raw = in->tps;
 	out->tps = ((float)in->tps/255.0)*100.0; /* Convert to percent of full scale */
-	out->batt = (float)in->batt * (5.0/255.0) * 6.0;
-	out->ego = (float)in->ego * (5.0/255.0);
+
+	out->batt_volts = (float)in->batt * (5.0/255.0) * 6.0;
+	out->batt_raw = in->batt;
+
+	out->ego_volts = (float)in->ego * (5.0/255.0);
+	out->ego_raw = in->ego;
 
 	out->egocorr = in->egocorr;
 	out->aircorr = in->aircorr;
 	out->warmcorr = in->warmcorr;
 	out->rpm = in->rpm * 100;
-	out->pw = in->pw / 10.0;
-	out->dcycle = (float) out->pw / (1200.0 / (float) out->rpm);
+	out->pw1 = (float)in->pw1 / 10.0;
+	out->dcycle1 = (float) out->pw1 / (1200.0 / (float) out->rpm);
 	out->tpsaccel = in->tpsaccel;
 	out->barocorr = in->barocorr;
 	out->gammae = in->gammae;
-	out->vecurr = in->vecurr;
-	out->bspot1 = in->bspot1;
-	out->bspot2 = in->bspot2;
-	out->bspot3 = in->bspot3;
+	out->vecurr1 = in->vecurr1;
+	if (dualtable)
+	{
+		out->vecurr2 = in->vecurr2;
+		out->pw2 = (float)in->pw2 / 10.0;
+		out->dcycle2 = (float) out->pw2 / (1200.0 / (float) out->rpm);
+		out->idleDC = in->idleDC;
+	}
+	else
+	{
+		out->bspot1 = in_std->bspot1;
+		out->bspot2 = in_std->bspot2;
+		out->bspot3 = in_std->bspot3;
+	}
 }

@@ -127,14 +127,17 @@ struct Raw_Runtime_Std
 	unsigned char   aircorr;	/* Offset 11 */
 	unsigned char   warmcorr;	/* Offset 12 */
 	unsigned char   rpm;		/* Offset 13 */
-	unsigned char   pw;		/* Offset 14 */
+	unsigned char   pw1;		/* Offset 14 */
 	unsigned char   tpsaccel;	/* Offset 15 */
 	unsigned char   barocorr;	/* Offset 16 */
 	unsigned char   gammae;		/* Offset 17 */
-	unsigned char   vecurr;		/* Offset 18 */
+	unsigned char   vecurr1;	/* Offset 18 */
 	unsigned char   bspot1;		/* Offset 19 */
 	unsigned char   bspot2;		/* Offset 20 */
 	unsigned char   bspot3;		/* Offset 21 */
+	/* NOTE: the last 3 are used diffeently in the other MS variants
+	 * like the dualtable, squirtnspark and such...
+	 */
 };
 
 struct Raw_Runtime_Dualtable 
@@ -156,74 +159,68 @@ struct Raw_Runtime_Dualtable
 	unsigned char   aircorr;	/* Offset 11 */
 	unsigned char   warmcorr;	/* Offset 12 */
 	unsigned char   rpm;		/* Offset 13 */
-	unsigned char   pw;		/* Offset 14 */
+	unsigned char   pw1;		/* Offset 14 */
 	unsigned char   tpsaccel;	/* Offset 15 */
 	unsigned char   barocorr;	/* Offset 16 */
 	unsigned char   gammae;		/* Offset 17 */
-	unsigned char   vecurr;		/* Offset 18 */
+	unsigned char   vecurr1;	/* Offset 18 */
 	unsigned char   pw2;		/* Offset 19 */
 	unsigned char   vecurr2;	/* Offset 20 */
 	unsigned char   idleDC;		/* Offset 21 */
 };
 
-struct Runtime_Std 
-{      
-        unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
-        union squirt    squirt;		/* Event variable bit field for Injector Firing */
-        union engine    engine;		/* Variable bit-field to hold engine current status */
-        unsigned char   baro;		/* Barometer ADC Raw Reading - KPa (0 - 255) */
-        unsigned char   map;		/* Manifold Absolute Pressure ADC Raw Reading - KPa (0 - 255) */
-        unsigned char   mat;		/* Manifold Air Temp converted via lookuptable */
-        unsigned char   mat_volt;	/* Manifold Air Temp ADC voltage(0-5) */
-        unsigned char   clt;		/* Coolant Temperature converted via lookuptable */
-        unsigned char   clt_volt;	/* Coolant Temp ADC voltage (0-5) */
-        unsigned char   tps;		/* Throttle Position Sensor open percentage (0-100) */
-        unsigned char   tps_volt;	/* Throttle Pos ADC voltage (0-5) */
-        float           batt;		/* Battery Voltage ADC Raw Reading - converted to volts */
-        float           ego;		/* Exhaust Gas Oxygen ADC Raw Reading - converted to volts */
-        unsigned char   egocorr;	/* Oxygen Sensor Correction */
-        unsigned char   aircorr;	/* Air Density Correction lookup - percent */
-        unsigned char   warmcorr;	/* Total Warmup Correction - percent */
-        unsigned short  rpm;		/* Computed engine RPM - rpm */
-        float           pw;		/* injector squirt time in millesec (0 to 25.5 millisec) - applied */
-	float		dcycle;		/* Injector duty cycle */
-        unsigned char   tpsaccel;	/* Acceleration enrichment - percent */
-        unsigned char   barocorr;	/* Barometer Lookup Correction - percent */
-        unsigned char   gammae;		/* Total Gamma Enrichments - percent */
-        unsigned char   vecurr;		/* Current VE value from lookup table - percent */
-        unsigned char   bspot1;		/* Blank Spot 1 */
-        unsigned char   bspot2;		/* Blank Spot 2 */
-        unsigned char   bspot3;		/* Blank Spot 3 */
-};
 
-struct Runtime_Dualtable 
-{      
-        unsigned char   secl;		/* low seconds - from 0 to 255, then rollover */
-        union squirt    squirt;		/* Event variable bit field for Injector Firing */
-        union engine    engine;		/* Variable bit-field to hold engine current status */
-        unsigned char   baro;		/* Barometer ADC Raw Reading - KPa (0 - 255) */
-        unsigned char   map;		/* Manifold Absolute Pressure ADC Raw Reading - KPa (0 - 255) */
-        unsigned char   mat;		/* Manifold Air Temp converted via lookuptable */
-        unsigned char   mat_volt;	/* Manifold Air Temp ADC voltage(0-5) */
-        unsigned char   clt;		/* Coolant Temperature converted via lookuptable */
-        unsigned char   clt_volt;	/* Coolant Temp ADC voltage (0-5) */
-        unsigned char   tps;		/* Throttle Position Sensor open percentage (0-100) */
-        unsigned char   tps_volt;	/* Throttle Pos ADC voltage (0-5) */
-        float           batt;		/* Battery Voltage ADC Raw Reading - converted to volts */
-        float           ego;		/* Exhaust Gas Oxygen ADC Raw Reading - converted to volts */
-        unsigned char   egocorr;	/* Oxygen Sensor Correction */
-        unsigned char   aircorr;	/* Air Density Correction lookup - percent */
-        unsigned char   warmcorr;	/* Total Warmup Correction - percent */
-        unsigned short  rpm;		/* Computed engine RPM - rpm */
-        float           pw;		/* injector squirt time in millesec (0 to 25.5 millisec) - applied */
-	float		dcycle;		/* Injector duty cycle */
-        unsigned char   tpsaccel;	/* Acceleration enrichment - percent */
-        unsigned char   barocorr;	/* Barometer Lookup Correction - percent */
-        unsigned char   gammae;		/* Total Gamma Enrichments - percent */
-        unsigned char   vecurr;		/* Current VE value from lookup table - percent */
-        unsigned char   pw2;		/* injector squirt time in ms. */
-        unsigned char   vecurr2;	/* current VE table from VEtable 2 */
-        unsigned char   idleDC;		/* IdlePWM dutycycle */
+struct Runtime_Common 
+{	/* This is the OUTPUT after the raw runtime structure has been 
+	 * parsed and fed here.  We keep around both the RAW and converted
+	 * values so that either can be datalogged. We also hav variables
+	 * here for dualtable variables as dataloging gets all info from 
+	 * this structure....
+	 * This structure is ordered such that all of the "bigger" variables
+	 * are first, as this structure gets array referenced in the 
+	 * dataloging code, and having a float on the wrong boundary gives 
+	 * BAD data...
+	 */
+				/*     Offset ------  Description */
+	float		baro_volts;	/* 0 Baro in volts (0-5) */
+	float		batt_volts;	/* 4 BATT in Volts  (0-5) */
+	float		clt_volts;	/* 8 CLT in volts  (0-5) */
+	float		ego_volts;	/* 12 EGO in Volts  (0-5) */
+	float		map_volts;	/* 16 MAP in volts  (0-5) */
+	float		mat_volts;	/* 20 MAT in volts  (0-5) */
+	float		tps_volts;	/* 24 TPS in volts  (0-5) */
+	float		dcycle1;	/* 28 Injector 1 duty cycle  */
+	float		dcycle2;	/* 32 Injector 2 duty cycle (DT) */
+        float		pw1;		/* 36 Injector squirt time in ms */
+        float		pw2;		/* 40 injector squirt time in ms (DT) */
+	float		tps;		/* 44 TPS in % fullscale (converted) */
+	short		clt;		/* 48 CLT in degrees (converted) */
+	short		mat;		/* 50 MAT in degrees (converted) */
+        unsigned short	rpm;		/* 52 Computed engine RPM - rpm */
+        unsigned char	secl;		/* 54 low seconds - from 0 to 255, then rollover */
+        union squirt	squirt;		/* 55 Event variable bit field for Injector Firing */
+        union engine	engine;		/* 56 Variable bit-field to hold engine current status */
+        unsigned char	vecurr1;	/* 57 Current VE value Table 1 */
+        unsigned char	vecurr2;	/* 58 Current VE table Table 2 */
+	unsigned char	baro;		/* 59 Barometer in KPA (converted) */
+	unsigned char	map;		/* 60 MAP in KPA (converted) */
+        unsigned char	gammae;		/* 61 Total Gamma Enrichments % */
+        unsigned char	baro_raw;	/* 62 Barometer ADC Raw Counts */
+        unsigned char	batt_raw;	/* 63 BATT Voltage ADC Raw Reading */
+        unsigned char	clt_raw;	/* 64 CLT Sensor ADC Raw Counts */
+	unsigned char	ego_raw;	/* 65 EGO Sensor ADC Raw Reading */
+        unsigned char	map_raw;	/* 66 MAP Sensor ADC Raw Counts */
+        unsigned char	mat_raw;	/* 67 MAT Sensor ADC Raw Counts */
+        unsigned char	tps_raw;	/* 68 TPS Sensor ADC Raw Counts */
+        unsigned char	aircorr;	/* 69 Air Density Correction % */
+        unsigned char	barocorr;	/* 70 Baro Correction % */
+	unsigned char	egocorr;	/* 71 Oxygen Sensor Correction  %*/
+        unsigned char	tpsaccel;	/* 72 Acceleration enrichment % */
+        unsigned char	warmcorr;	/* 73 Total Warmup Correction % */
+        unsigned char	idleDC;		/* 74 IdlePWM dutycycle */
+	unsigned char	bspot1;		/* 75 blank spot 1 (for Std Runtime) */
+	unsigned char	bspot2;		/* 76 blank spot 2 (for Std Runtime) */
+	unsigned char	bspot3;		/* 77 blank spot 3 (for Std Runtime) */
 };
 
 union config11 

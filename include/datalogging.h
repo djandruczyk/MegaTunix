@@ -47,12 +47,13 @@ union Logbits
 		unsigned short filler		:12;
 		
 	} bit;
+	
 };
 
 struct Logables
 {
-	GtkWidget *widgets[32];
-	union Logbits logbits;
+	GtkWidget *widgets[64];
+	gboolean index[64];
 };
 
 #endif

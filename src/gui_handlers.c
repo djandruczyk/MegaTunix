@@ -35,6 +35,7 @@ extern gboolean force_status_update;
 extern gboolean raw_reader_running;
 extern gboolean raw_reader_stopped;
 extern gchar *delim;
+extern gint max_logables;
 extern gint ready;
 static gint num_squirts = 1;
 extern gint req_fuel_popup;
@@ -71,18 +72,32 @@ GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
 
-/* mt_classic[] is an array of the bit POSITIONS that correspond with the names
- * in the logable_names[] list. When applying the "mt_classic" array to the 
- * bitfield of logable variables, we end up selecting all the stuff that 
- * MegaTune uses for its "Classic" style datalog...  The "mt_full" array is 
- * of the same except it's for MegaTune "Full" Style datalogs...
- */
 
+/* mt_classic[] and mt_full[] are arrays laid out like the datalogging
+ * screen, insert a "1" where you want the button selected for that mode
+ * otherwise use a zero...
+ */
 const gint mt_classic[] = 
-{ 1,2,5,7,9,10,11,12,13,14,16,17 }; /* from datalogging_gui.c */
+{
+0,1,1,0,0,
+0,0,0,0,0,
+1,0,0,0,1,
+1,0,0,0,0,
+0,0,1,1,1,
+1,0,0,0,1,
+1,0,0,1 };
 
 const gint mt_full[] = 
-{ 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 };
+{
+1,1,1,0,0,
+1,0,0,0,0,
+1,0,0,0,1,
+1,0,0,1,0,
+0,1,1,1,1,
+1,1,1,1,1,
+1,1,0,1 }; 
+
+
 
 static gboolean paused_handlers = FALSE;
 static gboolean constants_loaded = FALSE;
@@ -154,8 +169,6 @@ gint toggle_button_handler(GtkWidget *widget, gpointer data)
 
 gint set_logging_mode(GtkWidget * widget, gpointer *data)
 {
-	gint classic_max = sizeof(mt_classic)/sizeof(gint);
-	gint full_max = sizeof(mt_full)/sizeof(gint);
 	gint i = 0;
 	if (!ready)
 		return FALSE;
@@ -175,12 +188,16 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 				gtk_widget_set_sensitive(
 						delim_table,FALSE);
 
-				for (i=0;i<classic_max;i++)
+				for (i=0;i<max_logables;i++)
 				{
-					gtk_toggle_button_set_active(
+					if (mt_classic[i] == 1)
+					{
+						printf("pressing button %i\n",i);
+						gtk_toggle_button_set_active(
 							GTK_TOGGLE_BUTTON
-							(logables.widgets[mt_classic[i]]),
+							(logables.widgets[i]),
 							TRUE);
+					}
 				}
 				break;
 			case MT_FULL_LOG:
@@ -195,12 +212,15 @@ gint set_logging_mode(GtkWidget * widget, gpointer *data)
 				gtk_widget_set_sensitive(
 						delim_table,FALSE);
 
-				for (i=0;i<full_max;i++)
+				for (i=0;i<max_logables;i++)
 				{
+					if (mt_full[i] == 1)
+					{
 					gtk_toggle_button_set_active(
 							GTK_TOGGLE_BUTTON
-							(logables.widgets[mt_full[i]]),
+							(logables.widgets[i]),
 							TRUE);
+					}
 				}
 				break;
 			case CUSTOM_LOG:
@@ -590,7 +610,6 @@ gint spinner_changed(GtkWidget *widget, gpointer data)
 				if (!fahrenheit) /* using celsius, convert it */
 					value = (value*(9.0/5.0))+32;
 			}
-			printf("generic spinner at offset %i, val %f\n",offset,value);
 			dload_val = convert_before_download(
 					offset,value,page);
 			break;

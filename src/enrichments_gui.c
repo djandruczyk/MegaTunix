@@ -393,6 +393,9 @@ int build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
+	sep = gtk_hseparator_new();
+	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
+
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_box_pack_start(GTK_BOX(vbox2),hbox2,FALSE,TRUE,0);
 
