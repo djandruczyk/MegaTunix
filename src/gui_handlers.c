@@ -39,7 +39,7 @@ extern gboolean interrogated;
 extern gboolean connected;
 extern gboolean raw_reader_running;
 extern gboolean logviewer_mode;
-extern gchar *delim;
+extern gchar *delimiter;
 extern gint statuscounts_id;
 extern gint max_logables;
 extern gint ready;
@@ -195,13 +195,13 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				forced_update = TRUE;
 				break;
 			case COMMA:
-				delim = g_strdup(",");
+				delimiter = g_strdup(",");
 				break;
 			case TAB:
-				delim = g_strdup("\t");
+				delimiter = g_strdup("\t");
 				break;
 			case SPACE:
-				delim = g_strdup(" ");
+				delimiter = g_strdup(" ");
 				break;
 			case REALTIME_VIEW:
 				gtk_widget_set_sensitive(buttons.logplay_sel_log_but, FALSE);

@@ -15,6 +15,7 @@
 #define __DATALOGGING_CONST_H__
 
 #include <gtk/gtk.h>
+#include <enums.h>
 #include <structures.h>
 
 
@@ -55,6 +56,19 @@ static const gchar *mt_full_names[] =
 "Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSacc",
 "Gve",		"Gve2",		"PW",		"PW2",		"INJ-1_Dcycle",
 "INJ-2_Dcycle",	"CycleTimeH",	"CycleTimeL",	"SparkAngle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+};
+
+static const Capabilities dlog_caps[] = 
+{
+STD,		STD,		STD,		STD,	  DUALTABLE|IAC_PWM,
+STD,		STD,		STD,		STD,		STD,
+STD,		STD,		STD,		STD,		STD,
+STD,		STD,		STD,		STD,		STD,
+STD,		STD,		STD,		STD,		STD,
+STD,		STD,		STD,		STD,		STD,
+STD,		STD,		STD,		DUALTABLE,	STD,
+DUALTABLE,S_N_SPARK|S_N_EDIS,S_N_SPARK|S_N_EDIS,S_N_SPARK|S_N_EDIS, STD,
+STD,		STD
 };
 
 /* logging_offset_map is a mapping between the logable_names[] list above 

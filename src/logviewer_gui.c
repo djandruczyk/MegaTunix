@@ -18,6 +18,7 @@
 #include <glib/gprintf.h>
 #include <gui_handlers.h>
 #include <logviewer_gui.h>
+#include <mode_select.h>
 #include <ms_structures.h>
 #include <structures.h>
 
@@ -211,6 +212,10 @@ void present_viewer_choices(void *ptr)
 	gint table_cols = 5;
 	gchar * name = NULL;
 	GtkWidget *hand_me_down = NULL;
+	extern unsigned int ecu_caps;
+	extern GList *dt_controls;
+	extern GList *iac_idle_controls;
+	extern GList *ign_controls;
 	struct Log_Info *log_info = NULL;
 
 	if (ptr != NULL)
@@ -277,6 +282,15 @@ void present_viewer_choices(void *ptr)
 			if (valid_logables[i] == FALSE)
 				gtk_widget_set_sensitive(button,FALSE);
 			gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
+			if (dlog_caps[i] == DUALTABLE)
+				dt_controls = g_list_append(dt_controls,
+						(gpointer)button);
+			if (dlog_caps[i] == IAC_PWM)
+				iac_idle_controls = g_list_append(iac_idle_controls,
+						(gpointer)button);
+			if (dlog_caps[i] == (S_N_SPARK|S_N_EDIS))
+				ign_controls = g_list_append(ign_controls,
+						(gpointer)button);
 		}
 		if (viewables.index[i] == TRUE)
         		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),TRUE);
@@ -312,6 +326,7 @@ void present_viewer_choices(void *ptr)
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer)window);
 
+	parse_ecu_capabilities(ecu_caps);
 	gtk_widget_show_all(window);
 	return;
 }

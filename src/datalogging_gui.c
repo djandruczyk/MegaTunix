@@ -31,7 +31,7 @@
 
 
 /* global vars (owned here...) */
-gchar *delim;
+gchar *delimiter;
 gfloat cumu = 0.0;
 gint logging_mode = CUSTOM_LOG;
 gint max_logables = 0;
@@ -50,7 +50,7 @@ extern GdkColor white;
 
 /* Static vars to all functions in this file... */
 static gint total_logables = 0;
-static gint delimiter = SPACE;
+static gint delim_char = SPACE;
 static gint offset_list[MAX_LOGABLES];
 static gint size_list[MAX_LOGABLES];
 static gboolean logging = FALSE;
@@ -84,6 +84,9 @@ void build_datalogging(GtkWidget *parent_frame)
 	extern GtkTooltips *tip;
 	GSList  *group;
 	gint table_rows = 0;
+	extern GList *dt_controls;
+	extern GList *iac_idle_controls;
+	extern GList *ign_controls;
 
 	custom_ord_hash = g_hash_table_new(NULL,NULL);
 	classic_ord_hash = g_hash_table_new(NULL,NULL);
@@ -167,6 +170,16 @@ void build_datalogging(GtkWidget *parent_frame)
 		logables.widgets[i] = button;
 		//		if ((dualtable) && (i >= STD_LOGABLES))
 		//			gtk_widget_set_sensitive(button,FALSE);
+		if (dlog_caps[i] == DUALTABLE)
+			dt_controls = g_list_append(dt_controls,
+					(gpointer)button);
+		if (dlog_caps[i] == IAC_PWM)
+			iac_idle_controls = g_list_append(iac_idle_controls,
+					(gpointer)button);
+		if (dlog_caps[i] == (S_N_SPARK|S_N_EDIS))
+			ign_controls = g_list_append(ign_controls,
+					(gpointer)button);
+
 		g_object_set_data(G_OBJECT(button),"index",
 				GINT_TO_POINTER(i));
 		g_object_set_data(G_OBJECT(button),"mt_classic_order",
@@ -268,7 +281,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(COMMA));
-	if (delimiter == COMMA)
+	if (delim_char == COMMA)
 	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON
@@ -286,7 +299,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(TAB));
-	if (delimiter == TAB)
+	if (delim_char == TAB)
 	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON
@@ -304,7 +317,7 @@ void build_datalogging(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button),"toggled",
 			G_CALLBACK(toggle_button_handler),
 			GINT_TO_POINTER(SPACE));
-	if (delimiter == SPACE)
+	if (delim_char == SPACE)
 	{
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON
@@ -501,7 +514,7 @@ void write_log_header(void *ptr)
 		}
 
 		if (j < (total_logables))
-			output = g_string_append(output,delim);
+			output = g_string_append(output,delimiter);
 	}
 	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
@@ -595,7 +608,7 @@ void run_datalog(void)
 		 * char at the end fo the line 
 		 */
 		if (i < (total_logables-1))
-			output = g_string_append(output,delim);
+			output = g_string_append(output,delimiter);
 	}
 	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);

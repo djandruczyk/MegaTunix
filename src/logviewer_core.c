@@ -130,7 +130,7 @@ void allocate_buffers(void *ptr)
 void read_log_data(GIOChannel *iochannel, void *ptr)
 {
 	GString *a_line = g_string_new("\0");
-	GIOStatus  status = G_IO_STATUS_ERROR;
+	//GIOStatus  status = G_IO_STATUS_ERROR;
 	struct Log_Info *log_info = ptr;
 	gchar **data;
 	gint i = 0;

@@ -26,12 +26,14 @@ void build_about(GtkWidget *frame)
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
 
-	vbox = gtk_vbox_new(FALSE,10);
+	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	buffer = g_strdup_printf("MegaTunix %s Tuning Software for Unix/Linux\n\tdesigned by David J. Andruczyk",VERSION);
+	buffer = g_strdup_printf("MegaTunix %s Tuning Software for Linux,Unix and Mac OS-X",VERSION);
 	label = gtk_label_new(buffer);
 	g_free(buffer);
 	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
+	label = gtk_label_new("designed by David J. Adnruczyk");
+	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,TRUE,0);
 
 	alignment = gtk_alignment_new(0.5,0.5,0,0);
 	gtk_box_pack_start(GTK_BOX(vbox),alignment,TRUE,FALSE,0);

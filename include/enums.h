@@ -167,6 +167,7 @@ typedef enum
 typedef enum
 {	/* up to 32 Capability flags.... */
 	/* No capabilities == Standard B&G code with no modifications */
+	STD		= 0,
 	DUALTABLE	= 1<<0,
 	S_N_SPARK	= 1<<1,
 	S_N_EDIS	= 1<<2,
