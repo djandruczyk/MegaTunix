@@ -1,29 +1,4 @@
-# This file contains the mappings for extra data bound to widgets defined 
-# in the glade files.  Glade is used to build the Gui, this file is used to
-# bind all the necessary info to the controls so that the gui controls work 
-# as intended.  This method should be extremely flexible in the long run
-# with minimal changes to the core sourcecode once the boilerplate is completed
-#
-# Initial revision, 9/5/2004
-#
-# Format
-# Sections are defined ONLY for widgets that need data bound to them.  For
-# widgets like containers that don't need data bound to them, they are NOT 
-# listed here. The main code will just skip it and move on.
-#
-# Example
-#
-# [Section]
-# keys=key1,key2,key3
-# keytypes=_STRING_,INT_,_STRING_,_STRING_
-# key1=10
-# key2=20
-# key3=somestring
-#
-# Section matches to a widget name in the glade tree (ONLY one and they MUST 
-# be unique),  Keytypes is used so the code can call a cfg_read_string or       # cfg_read_int in the right places...
-# 
-#
+# Dual Table Parameters data map, DT 0.9-1.02
 
 [global]
 description=Object data map for Dualtable specific(0.90-1.02) Parameters

@@ -518,6 +518,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint offset = -1;
 	gint dload_val = -1;
 	gint page = -1;
+	gint spconfig = 0;
 	gboolean ign_parm = FALSE;
 	gboolean temp_dep = FALSE;
 	gint tmpi = 0;
@@ -553,6 +554,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
+	spconfig = (gint) g_object_get_data(G_OBJECT(widget),"spconfig");
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	temp_dep = (gboolean) g_object_get_data(G_OBJECT(widget),"temp_dep");
 
@@ -743,37 +745,45 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case TRIGGER_ANGLE:
 			if (!(ecu_caps & (S_N_SPARK|S_N_EDIS)))
 				dbg_func(__FILE__": ERROR, Trigger angle set but not using Ignition Firmware\n",CRITICAL);
+			if (spconfig == 0)
+				dbg_func(__FILE__": ERROR Triggler Angle spinbuttoncall, but spconfig variable is unset, BAD THINGS!!!\n",CRITICAL);
 			if (value > 112.15)	/* Extra long trigger needed */	
 			{
-				tmp = ign_parms->spark_config1.value;
+				//tmp = ign_parms->spark_config1.value;
+				tmp = ms_data[page][spconfig];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 1);	/* Set xlong_trig */
-				ign_parms->spark_config1.value = tmp;
-				write_ve_const(page, SPARK_CONFIG1, tmp, ign_parm);
+				//ign_parms->spark_config1.value = tmp;
+				ms_data[page][spconfig] = tmp;
+				write_ve_const(page, spconfig, tmp, ign_parm);
 				value -= 45.0;
 				dload_val = convert_before_download(widget,value);
 			}
 			else if (value > 89.65) /* Long trigger needed */
 			{
-				tmp = ign_parms->spark_config1.value;
+				//tmp = ign_parms->spark_config1.value;
+				tmp = ms_data[page][spconfig];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				tmp = tmp | (1 << 0);	/* Set long_trig */
-				ign_parms->spark_config1.value = tmp;
-				write_ve_const(page, SPARK_CONFIG1, tmp, ign_parm);
+				//ign_parms->spark_config1.value = tmp;
+				ms_data[page][spconfig] = tmp;
+				write_ve_const(page, spconfig, tmp, ign_parm);
 				value -= 22.5;
 				dload_val = convert_before_download(widget,value);
 			}
 			else	// value <= 89.65 degrees, no long trigger
 			{
-				tmp = ign_parms->spark_config1.value;
+				//tmp = ign_parms->spark_config1.value;
+				tmp = ms_data[page][spconfig];
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
-				ign_parms->spark_config1.value = tmp;
-				write_ve_const(page, SPARK_CONFIG1, tmp, ign_parm);
+				//ign_parms->spark_config1.value = tmp;
+				ms_data[page][spconfig] = tmp;
+				write_ve_const(page, spconfig, tmp, ign_parm);
 				dload_val = convert_before_download(widget,value);
 			}
-			
+
 			break;
-	 
+
 		case GENERIC:	/* Handles almost ALL other variables */
 			if (temp_dep)
 			{
