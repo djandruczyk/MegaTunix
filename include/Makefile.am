@@ -34,6 +34,7 @@ headers = \
         runtime_controls.h \
         runtime_gui.h \
         serialio.h \
+        sparktable_gui.h \
         structures.h \
         threads.h \
         tools_gui.h \

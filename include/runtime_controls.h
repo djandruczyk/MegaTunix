@@ -51,7 +51,7 @@ static struct Def_Control all_controls[] = {
 
 /* Other usable controls,  but not normally used */
 {"VE_2",1,-1,"VE 2 (%)",31,58,UCHAR,FALSE,DUALTABLE},
-{"SparkAngle",1,-1,"SparkAngle",38,77,UCHAR,FALSE,S_N_SPARK|S_N_EDIS},
+{"SparkAngle",1,8,"SparkAngle",38,77,UCHAR,TRUE,S_N_SPARK|S_N_EDIS},
 {"TPS_Volts",1,-1,"TPS (Volts)",5,24,FLOAT,FALSE,0},
 {"MAP_Volts",1,-1,"MAP (Volts)",6,16,FLOAT,FALSE,0},
 {"BARO_Volts",1,-1,"BARO (Volts)",7,0,FLOAT,FALSE,0},

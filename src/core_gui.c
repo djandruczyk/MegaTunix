@@ -28,6 +28,7 @@
 #include <logviewer_gui.h>
 #include <lowlevel_gui.h>
 #include <runtime_gui.h>
+#include <sparktable_gui.h>
 #include <tuning_gui.h>
 #include <tools_gui.h>
 #include <vetable_gui.h>
@@ -52,7 +53,7 @@ static struct
 	gchar *tab_name;	/* The Tab textual name for the main gui */
 	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
 	gboolean dt_specific;	/* Dualtable ONLY page */
-	gboolean ign_specific;	/* Dualtable ONLY page */
+	gboolean ign_specific;	/* Ignition ONLY page */
 } notebook_tabs[] = { 
 { "About MegaTunix", build_about, "_About",TRUE, FALSE, FALSE},
 { "General MegaTunix Settings", build_general, "_General",TRUE, FALSE, FALSE},
@@ -63,7 +64,8 @@ static struct
 { "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE, FALSE, FALSE},
 { "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",TRUE, FALSE, FALSE},
 { "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",TRUE, TRUE, FALSE},
-{ "MegaSquirt Ignition Settings", build_ignition, "_Ignition Settings",FALSE, FALSE, TRUE},
+{ "MegaSquirtnSpark/EDIS Spark Table", build_sparktable, "_Spark Advance",FALSE, FALSE, TRUE},
+{ "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",FALSE, FALSE, TRUE},
 { "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE, FALSE, FALSE},
 { "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE, FALSE, FALSE},
 { "MegaSquirt Tools", build_tools, "T_ools",TRUE, FALSE, FALSE},
