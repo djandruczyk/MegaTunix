@@ -18,6 +18,7 @@
 #include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_loader.h>
 #include <enums.h>
 #include <getfiles.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -61,6 +62,7 @@ gboolean load_realtime_map(void )
 		return FALSE;
 	}
 	/* If file found we continue... */
+		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tLoading realtime map from %s\n",filename),RTMLOADER);
 	g_free(filename);
 
 	if(!cfg_read_string(cfgfile,"realtime_map","firmware_name",&tmpbuf))
@@ -131,7 +133,6 @@ gboolean load_realtime_map(void )
 		}
 		if (!cfg_read_int(cfgfile,section,"offset",&offset))
 			dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tCan't find \"offset\" in the \"[%s]\" section, CRITICAL!!!\n",section),CRITICAL);
-
 		/* Create object to hold all the data. (dynamically)*/
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		/* Create history array, last 50 values */
@@ -139,6 +140,11 @@ gboolean load_realtime_map(void )
 		/* bind hostory array to object for future retrieval */
 		g_object_set_data(object,"history",(gpointer)history);
 
+		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
+		{
+	                load_dependancy(G_OBJECT(object),cfgfile,section);
+			g_free(tmpbuf);
+		}
 		for (j=0;j<num_keys;j++)
 		{
 			switch((DataType)keytypes[j])

@@ -234,8 +234,8 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 
 gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
-	gint bit_shift = -1;
-	gint bit_val = -1;
+	gint bitshift = -1;
+	gint bitval = -1;
 	gint bitmask = -1;
 	gint dload_val = -1;
 	gint page = -1;
@@ -262,8 +262,8 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 		offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 		dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
-		bit_shift = (gint)g_object_get_data(G_OBJECT(widget),"bit_shift");
-		bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
+		bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
+		bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 		bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 		handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 		toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
@@ -276,7 +276,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
-		bit_val = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 	/* Toggles a group ON/OFF based on a widgets state.... */
 	if (toggle_group)
@@ -293,7 +293,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		case GENERIC:
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
-			tmp = tmp | (bit_val << bit_shift);
+			tmp = tmp | (bitval << bitshift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			break;
@@ -301,7 +301,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			// Debugging selection buttons 
 			tmp32 = dbg_lvl;
 			tmp32 = tmp32 & ~bitmask;
-			tmp32 = tmp32 | (bit_val << bit_shift);
+			tmp32 = tmp32 | (bitval << bitshift);
 			dbg_lvl = tmp32;
 			break;
 
@@ -311,14 +311,14 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			{
 				tmp = ms_data[page][offset];
 				tmp = tmp & ~bitmask;// clears bits 
-				tmp = tmp | (bit_val << bit_shift);
+				tmp = tmp | (bitval << bitshift);
 				ms_data[page][offset] = tmp;
 				dload_val = tmp;
 			}
 			else
 			{
-				ms_data[page][offset] = bit_val;
-				dload_val = bit_val;
+				ms_data[page][offset] = bitval;
+				dload_val = bitval;
 				g_hash_table_insert(interdep_vars_1,
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
@@ -474,7 +474,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint dload_val = -1;
 	gint page = -1;
 	gint bitmask = -1;
-	gint bit_shift = -1;
+	gint bitshift = -1;
 	gint spconfig = 0;
 	gboolean ign_parm = FALSE;
 	gboolean temp_dep = FALSE;
@@ -510,7 +510,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	bitmask = (gint) g_object_get_data(G_OBJECT(widget),"bitmask");
-	bit_shift = (gint) g_object_get_data(G_OBJECT(widget),"bit_shift");
+	bitshift = (gint) g_object_get_data(G_OBJECT(widget),"bitshift");
 	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
@@ -597,7 +597,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_cylinders_1 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_shift);
+			tmp = tmp | ((tmpi-1) << bitshift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_1,
@@ -629,7 +629,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_injectors_1 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_shift);
+			tmp = tmp | ((tmpi-1) << bitshift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_1,
@@ -665,7 +665,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_cylinders_2 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_shift);
+			tmp = tmp | ((tmpi-1) << bitshift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_2,
@@ -697,7 +697,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_injectors_2 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_shift);
+			tmp = tmp | ((tmpi-1) << bitshift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_2,
@@ -909,8 +909,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gint page = -1;
 	gint offset = -1;
 	gfloat value = 0.0;
-	gint bit_val = -1;
-	gint bit_shift = -1;
+	gint bitval = -1;
+	gint bitshift = -1;
 	gint bitmask = -1;
 	gchar * toggle_group = NULL;
 	gboolean invert_state = FALSE;
@@ -925,10 +925,10 @@ void update_widget(gpointer object, gpointer user_data)
 				"page");
 		offset = (gint)g_object_get_data(G_OBJECT(widget),
 				"offset");
-		bit_val = (gint)g_object_get_data(G_OBJECT(widget),
-				"bit_val");
-		bit_shift = (gint)g_object_get_data(G_OBJECT(widget),
-				"bit_shift");
+		bitval = (gint)g_object_get_data(G_OBJECT(widget),
+				"bitval");
+		bitshift = (gint)g_object_get_data(G_OBJECT(widget),
+				"bitshift");
 		bitmask = (gint)g_object_get_data(G_OBJECT(widget),
 				"bitmask");
 		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
@@ -953,11 +953,11 @@ void update_widget(gpointer object, gpointer user_data)
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 		else if (GTK_IS_CHECK_BUTTON(widget))
 		{
-			/* If value masked by bitmask, shifted right by bit_shift = bit_val
+			/* If value masked by bitmask, shifted right by bitshift = bitval
 			 * then set button state to on...
 			 */
 			tmpi = (gint)value;
-			if (((tmpi & bitmask) >> bit_shift) == bit_val)
+			if (((tmpi & bitmask) >> bitshift) == bitval)
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
 			else
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);

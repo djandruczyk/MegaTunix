@@ -46,6 +46,7 @@ void load_dependancy(GObject *object, ConfigFile *cfgfile,gchar * section)
 	}
 	/* Store list of deps.... */
 	g_object_set_data(object,"deps",deps);
+	g_object_set_data(object,"num_deps",GINT_TO_POINTER(num_deps));
 
 	for (i=0;i<num_deps;i++)
 	{

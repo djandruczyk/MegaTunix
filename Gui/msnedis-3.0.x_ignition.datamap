@@ -22,48 +22,48 @@ bind_to_list=burners
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
 [multi_spark_enabled_radio_button]
-keys=page,offset,bit_shift,bit_val,bitmask,dl_type,ign_parm,handler
+keys=page,offset,bitshift,bitval,bitmask,dl_type,ign_parm,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_BOOL_,_ENUM_
 page=1
 offset=85
-bit_shift=2
-bit_val=1
+bitshift=2
+bitval=1
 bitmask=4
 dl_type=_IMMEDIATE_
 ign_parm=TRUE
 handler=_GENERIC_
 
 [multi_spark_disabled_radio_button]
-keys=page,offset,bit_shift,bit_val,bitmask,dl_type,ign_parm,handler
+keys=page,offset,bitshift,bitval,bitmask,dl_type,ign_parm,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_BOOL_,_ENUM_
 page=1
 offset=85
-bit_shift=2
-bit_val=0
+bitshift=2
+bitval=0
 bitmask=4
 dl_type=_IMMEDIATE_
 ign_parm=TRUE
 handler=_GENERIC_
 
 [boost_retard_enabled_radio_button]
-keys=page,offset,bit_shift,bit_val,bitmask,dl_type,ign_parm,handler
+keys=page,offset,bitshift,bitval,bitmask,dl_type,ign_parm,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_BOOL_,_ENUM_
 page=1
 offset=85
-bit_shift=3
-bit_val=0
+bitshift=3
+bitval=0
 bitmask=8
 dl_type=_IMMEDIATE_
 ign_parm=TRUE
 handler=_GENERIC_
 
 [boost_retard_disabled_radio_button]
-keys=page,offset,bit_shift,bit_val,bitmask,dl_type,ign_parm,handler
+keys=page,offset,bitshift,bitval,bitmask,dl_type,ign_parm,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_BOOL_,_ENUM_
 page=1
 offset=85
-bit_shift=3
-bit_val=1
+bitshift=3
+bitval=1
 bitmask=8
 dl_type=_IMMEDIATE_
 ign_parm=TRUE

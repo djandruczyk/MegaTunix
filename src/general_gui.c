@@ -41,6 +41,7 @@ static struct DebugLevel dbglevels[] = {
 { "Req Fuel", DEBUG_LEVEL, REQ_FUEL, REQ_FUEL_SHIFT, FALSE},
 { "Tabloader", DEBUG_LEVEL, TABLOADER, TABLOADER_SHIFT, FALSE},
 { "RealTime Maps", DEBUG_LEVEL, RTMLOADER, RTMLOADER_SHIFT, FALSE},
+{ "Complex Math", DEBUG_LEVEL, COMPLEX_EXPR, COMPLEX_EXPR_SHIFT, FALSE},
 { "Critical Errors", DEBUG_LEVEL, CRITICAL, CRITICAL_SHIFT, TRUE},
 };
 
@@ -145,9 +146,9 @@ void build_general(GtkWidget *parent_frame)
 
 		button = gtk_check_button_new_with_label(dbglevels[i].name);
 		g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(dbglevels[i].handler));
-		g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(shift));
+		g_object_set_data(G_OBJECT(button),"bitshift",GINT_TO_POINTER(shift));
 		g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(mask));
-		g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
+		g_object_set_data(G_OBJECT(button),"bitval",GINT_TO_POINTER(1));
 		g_signal_connect(G_OBJECT(button),"toggled",
 				G_CALLBACK(bitmask_button_handler),
 				NULL);

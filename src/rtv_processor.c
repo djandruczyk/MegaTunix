@@ -18,6 +18,7 @@
 #include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_processor.h>
 #include <enums.h>
 #include <glade/glade.h>
 #include "../mtxmatheval/mtxmatheval.h"
@@ -84,17 +85,24 @@ void process_rt_vars(void *incoming)
 			}
 
 			if (g_object_get_data(object,"lookuptable"))
+			{
+				dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset),COMPLEX_EXPR);
 				x = lookup_data(object,raw_realtime[offset]);
+			}
 			else
+			{
+				dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset),COMPLEX_EXPR);
 				x = raw_realtime[offset];
+			}
 
 
+			dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator)),COMPLEX_EXPR);
 			tmpf = evaluator_evaluate_x(evaluator,x);
 			if (temp_units == CELSIUS)
 				result = (tmpf-32)*(5.0/9.0);
 			else
 				result = tmpf;
-		//	printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
+			//printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 
 		}
 	}
@@ -106,12 +114,23 @@ gfloat lookup_data(GObject *object, gint offset)
 	extern GHashTable *lookuptables;
 	gint *lookuptable = NULL;
 	gchar *table = NULL;
+	gchar *alt_table = NULL;
+	gboolean state = FALSE;
 
 	table = (gchar *)g_object_get_data(object,"lookuptable");
-	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
+	if (g_object_get_data(object,"depend_on"))
+		state = check_dependancy(object);
+	if (state)
+		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
+	else
+		lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
 	//assert(lookuptable);
 	if (!lookuptable)
+	{
+		dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control bound to offset %i\n",offset),CRITICAL);
 		return 0.0;
+	}
 	return lookuptable[offset];
 }
 

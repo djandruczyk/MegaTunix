@@ -1,0 +1,101 @@
+This README describes the contents of this dir and their file structure.
+
+Last Edited, Nov 17th 19:39 PM
+
+Inside this dir (RealtimeMaps) are files with an .rtv_map extension.  They
+are ASCII text files in .ini file format, using the common "section", 
+"key", and "value" layout as shown below.
+
+[section]
+key=value
+
+The rtv_map files define all of the "derived" variables from the RAW data
+coming back from the ECU.  The derived variables are setup 1 per section.
+see below for descriptions of the various keys.
+
+NOTES regarding the files:
+
+1. The value names are CaSe SeNsItIvE, so be warned.  Ironically the
+keys themselves are not, as the string compare functions are case insensitive.
+
+2. Valid key_types are:
+	_INT_		Integer value
+	_ENUM_		String represnetation of an enumeration, translated via
+			a call to "translate_string()"
+	_STRING_	A literal string. (used for binding text to a widget
+			that changes (like a temperature label))
+	_BOOL_		A boolean, valid values are "TRUE" and "FALSE"
+
+3. There is no limit to the number of keys that you can bind to a widget.
+
+4. Most commonly used keys are:
+	keys		(string) list of keys, comma seperated to be loaded
+			by the main loading routine. (NOTE not all keys in
+			the section are listed on this line.  keys specifc to
+			complex conversions and depend_on are loaded by
+			specialized handlers.
+	key_types	(string) List of keytypes for the respective keys
+			above. 
+	internal_name	(string) name use for internal referencing
+	dlog_gui_name	(string) Name shown on datalogging tab
+	dlog_field_name	(string) name in datalog file for this variable
+	offset		(integer) offset from the beginning of raw vars 
+			block from ECU that this variable uses for its 
+			conversion
+	conv_expr	(string)  A string representation of a mathematical
+			expression. (something like x*60)  X is the value in
+			the raw data from the ECU at the offset above.
+	complex_expr	(bool) If complex, call a handler that looks for the 
+			following:
+	expr_symbols	(string) comma seperated list of variable names used
+			in the complex expression
+	expr_types	(enum list) comma seperated list of enumearted types
+			used to determine which keys to search for
+NOTE regarding complex_conversions:
+expr_symbols gives an ARBRITRATY listof names,  you can use whatever
+you want, jsut make sure you have all the necessary keys in there.
+The number of keys per variable varies based on the variable type 
+which is what it's marked as in expr_types. 
+expr_types an contain one of three choices. 
+ 1. _VE_VAR_, meaning VE variable, which requires a page/offset 
+ to resolve it. 
+ 2. _VE_EMB_BIT, meaning VE_embedded bit, which requires, page,offset
+ bitmask, bitshift to resolve completely
+ 3. _RAW_VAR meaning a raw variable, which only requires an offset to
+ resolve.
+The expr_types in combination of expr_symbols determine what following
+keys will be present in the section.  If expr_symbols contains "cyls,reqfuel"
+and expr_types contains "_VE_EMB_BIT_,_VE_VAR_" then the following fields will
+be searched for. "cyls_page","cyls_offset","cyls_bitmask","cyls_bitshift",
+"reqfuel_page" and "reqfuel_offset". 
+	
+	*_page		(integer) page in ecu that this control refers to
+	*_offset	(integer) offset from the beginning of said page that
+			this control refers to. 
+	*_bitshift	(integer) the starting point in a bitfield for bitval
+	*_bitmask	(integer) the bitmask of bitval..
+
+	lookuptable	(string) String name of the lookuptable to use to
+			convert the raw value to a real world value.  The
+			raw_Value is the INDEX into the lookuptable array.
+	alt_lookuptable	(string) alternate lookuptable used if the depend_on
+			conditions are met.
+	depend_on	(string) list of arbritrary names of variables to
+			match against to use an alternate lookuptable.
+			depend 
+	*_type		(enum) Type of variable (VE_VAR or VE_EMB_BIT)
+	*_page		(integer) Page in ve_vars
+	*_offset	(integer) Offset in ve_vars
+	*_bitmask	(integer) bitmask to mask value at page,offset
+	*_bitshift	(integer) how many bits to shift by before testing
+	*_bitval	(integer) value to match against for above 4 params
+
+NOTE on "depend_on":
+	depend_on is used for derived valeus that use a lookuptable that can
+be switched in the ECU based on some user setting,  This functionality is 
+here so that what the user sees is what the ECU is using,  You can bind one
+or multiple controls so that when they all evaluator to tree (i.e. the bitval
+you set in the map matches the state of that bitfield in the copy of ECU ram
+then the alternate lookuptable will be used.) Common controsl that use this
+are NBo2/WBo2 choices, and 115kpa/25kpa map sensors...
+

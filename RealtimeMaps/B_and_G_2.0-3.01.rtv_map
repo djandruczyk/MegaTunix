@@ -155,7 +155,7 @@ dlog_gui_name=MAP KpA
 dlog_field_name=MAPKPA
 offset=4
 lookuptable=115_map
-alt_lookup_table=250_map
+alt_lookuptable=250_map
 conv_expr=x*1
 depend_on=map_sensor
 map_sensor_type=_VE_EMB_BIT_
@@ -173,7 +173,7 @@ dlog_gui_name=BARO KpA
 dlog_field_name=BAROKPA
 offset=3
 lookuptable=115_map
-alt_lookup_table=250_map
+alt_lookuptable=250_map
 conv_expr=x*1
 depend_on=map_sensor
 map_sensor_type=_VE_EMB_BIT_
@@ -224,24 +224,41 @@ offset=9
 conv_expr=x*1
 
 [derived_22]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,conv_expr
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,conv_expr,depend_on
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 internal_name=afr
 dlog_gui_name=AFR
 dlog_field_name=AFR
 offset=9
-lookuptable=afr_table
-conv_expr=x*1
+lookuptable=nbo2_table
+alt_lookuptable=wbo2_table
+conv_expr=x/10.0
+depend_on=o2_sensor
+o2_sensor_type=_VE_EMB_BIT_
+o2_sensor_page=0
+o2_sensor_offset=118
+o2_sensor_bitmask=2
+o2_sensor_bitshift=1
+o2_sensor_bitval=1
 
 [derived_23]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,conv_expr
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,lookuptable,alt_lookuptable,conv_expr,depend_on
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 internal_name=lambda
 dlog_gui_name=Lambda
 dlog_field_name=LAMBDA
 offset=9
-lookuptable=afr_table
-conv_expr=x/1470
+lookuptable=nbo2_table
+alt_lookuptable=wbo2_table
+;conv_expr=x*1
+conv_expr=x/147.0
+depend_on=o2_sensor
+o2_sensor_type=_VE_EMB_BIT_
+o2_sensor_page=0
+o2_sensor_offset=118
+o2_sensor_bitmask=2
+o2_sensor_bitshift=1
+o2_sensor_bitval=1
 
 [derived_24]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,conv_expr
