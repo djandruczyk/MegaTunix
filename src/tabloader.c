@@ -81,7 +81,7 @@ gboolean load_gui_tabs()
 						dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
 					if (!g_module_symbol(module,post_function,(void *)&function))
 					{
-						dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tError finding symbol \"%s\", error:\n\t%s\n\tCheck the \"%s.datamap\" file in the Gui dir for a syntax error\n",post_function,g_module_error(),firmware->tab_list[i]),CRITICAL);
+						dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tError finding symbol \"%s\", error:\n\t%s\n\tCheck the \"%s.datamap\"\n\tfile in the Gui dir for a syntax error\n",post_function,g_module_error(),firmware->tab_list[i]),CRITICAL);
 						if (!g_module_close(module))
 							dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
 					}

@@ -49,6 +49,7 @@ headers = \
         timeout_handlers.h \
         tuning_gui.h \
         unions.h \
+	user_outputs.h \
         vetable_gui.h \
 	vex_support.h \
 	warmwizard_gui.h \

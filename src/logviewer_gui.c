@@ -32,7 +32,7 @@ static GtkWidget *lv_darea = NULL; //for scroller  :(
 static GHashTable *active_traces = NULL;
 gint lv_scroll = 0;		/* logviewer scroll amount */
 gboolean playback_mode = FALSE;
-extern struct LogInfo *log_info;
+extern struct Log_Info *log_info;
 
 
 void present_viewer_choices(void)
@@ -57,7 +57,7 @@ void present_viewer_choices(void)
 	GtkWidget *darea = NULL;
 	extern gint ecu_caps;
 	extern GHashTable *dynamic_widgets;
-	extern struct RtvMap *rtv_map;
+	extern struct Rtv_Map *rtv_map;
 
 	darea = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");
 	lv_darea = darea;
@@ -219,8 +219,8 @@ gboolean view_value_set(GtkWidget *widget, gpointer data)
 
 void reset_logviewer_state()
 {
-	extern struct RtvMap *rtv_map;
-	extern struct LogInfo *log_info;
+	extern struct Rtv_Map *rtv_map;
+	extern struct Log_Info *log_info;
 	gint i = 0 ;
 	GObject * object = NULL;
 
@@ -254,9 +254,9 @@ gboolean populate_viewer()
 	GObject * object = NULL;
 	gchar * name = NULL;
 	gboolean being_viewed = FALSE;
-	extern struct RtvMap *rtv_map;
+	extern struct Rtv_Map *rtv_map;
 
-//	log_info = (struct LogInfo *) g_object_get_data(G_OBJECT(d_area),"log_info");
+//	log_info = (struct Log_Info *) g_object_get_data(G_OBJECT(d_area),"log_info");
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute

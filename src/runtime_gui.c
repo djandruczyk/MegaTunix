@@ -44,7 +44,7 @@ gboolean update_runtime_vars()
 	GtkWidget * tmpwidget=NULL;
 	extern struct Firmware_Details *firmware;
 	extern GHashTable * dynamic_widgets;
-	extern struct RtvMap *rtv_map;
+	extern struct Rtv_Map *rtv_map;
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
 	static GObject *eng_obj = NULL;
@@ -150,6 +150,7 @@ gboolean update_runtime_vars()
 	}
 
 	last_engine_val = engine_val;
+	forced_update = FALSE;
 
 	gdk_threads_leave();
 	return TRUE;

@@ -120,7 +120,7 @@ struct Viewable_Value
 	gfloat cur_low;			/*! User limits to use for scaling */
 	gfloat cur_high;		/*! User limits to use for scaling */
 	GArray *data_array;		/*! History of all values recorded */
-	struct LogInfo *log_info;	/*! important */
+	struct Log_Info *log_info;	/*! important */
 };
 	
 /*! 
@@ -163,10 +163,10 @@ struct Default_Limits
 };
 
 /*! 
- \brief The LogInfo datastructure is populated when a datalog file is opened
+ \brief The Log_Info datastructure is populated when a datalog file is opened
  for viewing in the Datalog viewer.
  */
-struct LogInfo
+struct Log_Info
 {
 	gint field_count;	/*! How many fields in the logfile */
 	gchar *delimiter;	/*! delimiter between fields for this logfile */
@@ -303,10 +303,11 @@ struct OutputData
  access the realtime derived data via a hashtable, and via raw index. Stores
  timestamps of each incoming data byte for advanced future use.
  */
-struct RtvMap
+struct Rtv_Map
 {
 	gint raw_total;		/*! Number of raw variables */
 	gint derived_total;	/*! Number of derived variables */
+	gchar **raw_list;	/*! Char List of raw variables by name */
 	GArray *rtv_array;	/*! Realtime Values array of lists.. */
 	GTimeVal *ts_array;	/*! Timestamp array */
 	gint ts_position;	/*! Latest timestamp marker position.. */

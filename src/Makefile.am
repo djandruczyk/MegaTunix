@@ -50,6 +50,7 @@ megatunix_SOURCES = \
 	threads.c \
 	timeout_handlers.c \
 	tuning_gui.c \
+	user_outputs.c \
 	vetable_gui.c \
 	vex_support.c \
 	warmwizard_gui.c \

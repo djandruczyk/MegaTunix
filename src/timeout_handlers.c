@@ -23,7 +23,6 @@
 #include <threads.h>
 
 gint realtime_id = 0;
-static gint forced_id = 0;
 static gint update_rate = 24;
 
 
@@ -111,19 +110,7 @@ gboolean signal_read_rtvars()
 void force_an_update()
 {
       extern gboolean forced_update;
-      if (forced_id == 0)
-      {
-              forced_update = TRUE;
-              gtk_timeout_add((int)((3.0/update_rate)*1000.0),
-                                (GtkFunction)cancel_forced_update,NULL);
-      }
-}
-
-gboolean cancel_forced_update()
-{
-        extern gboolean forced_update;
-        forced_update = FALSE;
-        return FALSE;
+      forced_update = TRUE;
 }
 
 gboolean early_interrogation()

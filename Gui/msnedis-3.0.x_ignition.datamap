@@ -3,6 +3,7 @@
 [global]
 description=Object data map for MSnEDIS-3.0.x ignition params
 tab_name=_Ignition Params
+post_function=populate_user_output_choices
 
 
 #----- Buttons ---------------------------------------------------------------

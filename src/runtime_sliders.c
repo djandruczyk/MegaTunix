@@ -113,7 +113,7 @@ void add_slider(gchar *ctrl_name, gint tbl, gint row, gchar *source, PageIdent i
 	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
 	extern GHashTable *dynamic_widgets;
-	extern struct RtvMap *rtv_map;
+	extern struct Rtv_Map *rtv_map;
 	GObject *object = NULL;
 
 	slider = g_malloc0(sizeof(struct Rt_Slider));

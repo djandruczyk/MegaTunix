@@ -29,7 +29,7 @@
 
 void process_rt_vars(void *incoming)
 {
-	extern struct RtvMap *rtv_map;
+	extern struct Rtv_Map *rtv_map;
 	extern struct Firmware_Details *firmware;
 	extern gint temp_units;
 	guchar *raw_realtime = incoming;
@@ -321,7 +321,7 @@ gfloat handle_special(GObject *object,gchar *handler_name)
 
 gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 {
-	extern struct RtvMap *rtv_map;
+	extern struct Rtv_Map *rtv_map;
 	GObject * object = NULL;
 	gfloat * history = NULL;
 	gint last_entry = 0;

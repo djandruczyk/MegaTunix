@@ -26,7 +26,7 @@
 #include <structures.h>
 #include <tabloader.h>
 
-struct LogInfo *log_info = NULL;
+struct Log_Info *log_info = NULL;
 
 void load_logviewer_file(void *ptr)
 {
@@ -39,7 +39,7 @@ void load_logviewer_file(void *ptr)
 		dbg_func(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n",CRITICAL);
 		return;
 	}
-	log_info = g_malloc0(sizeof(struct LogInfo));
+	log_info = g_malloc0(sizeof(struct Log_Info));
 	initialize_log_info(log_info);
 	read_log_header(iofile->iochannel, log_info);
 	populate_limits(log_info);
@@ -52,7 +52,7 @@ void load_logviewer_file(void *ptr)
 /* Initializer routine for the log_info datastructure */
 void initialize_log_info(void *ptr)
 {
-	struct LogInfo *log_info;
+	struct Log_Info *log_info;
 	log_info = ptr;
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
@@ -77,7 +77,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 	GArray *array = NULL;
 	GObject *object = NULL;
 	gint i = 0;
-	struct LogInfo *log_info = ptr;
+	struct Log_Info *log_info = ptr;
 	extern GHashTable *dynamic_widgets;
 
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
@@ -123,7 +123,7 @@ void read_log_header(GIOChannel *iochannel, void *ptr)
 
 void populate_limits(void *ptr)
 {
-	struct LogInfo *log_info = NULL;
+	struct Log_Info *log_info = NULL;
 	gint i = 0;
 	log_info = ptr;
 	gchar * name = NULL;
@@ -177,7 +177,7 @@ void read_log_data(GIOChannel *iochannel, void *ptr)
 {
 	GString *a_line = g_string_new("\0");
 	//GIOStatus  status = G_IO_STATUS_ERROR;
-	struct LogInfo *log_info = ptr;
+	struct Log_Info *log_info = ptr;
 	gchar **data = NULL;
 	gint i = 0;
 	GArray *tmp_array = NULL;

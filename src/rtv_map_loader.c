@@ -28,7 +28,7 @@
 #include <stringmatch.h>
 #include <structures.h>
 
-struct RtvMap *rtv_map = NULL;
+struct Rtv_Map *rtv_map = NULL;
 gboolean rtvars_loaded = FALSE;
 
 gboolean load_realtime_map(void )
@@ -58,7 +58,7 @@ gboolean load_realtime_map(void )
 
 	if (!interrogated)
 		return FALSE;
-	rtv_map = g_new0(struct RtvMap, 1);
+	rtv_map = g_new0(struct Rtv_Map, 1);
 
 	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL));
 	cfgfile = cfg_open_file(filename);
@@ -92,6 +92,15 @@ gboolean load_realtime_map(void )
 	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
 		dbg_func(__FILE__": load_realtime_map()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
+	tmpbuf = NULL;
+	cfg_read_string(cfgfile,"realtime_map","raw_list",&tmpbuf);
+	if (tmpbuf)
+	{
+		rtv_map->raw_list = parse_keys(tmpbuf,&num_keys,",");
+		g_free(tmpbuf);
+		if (num_keys != raw_total)
+			dbg_func(g_strdup_printf(__FILE__": load_realtim_map()\n\t Number of raw variables (%i), and number of keys in raw_list %i don\t match\n"),CRITICAL);
+	}
 	rtv_map->rtv_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
 	rtv_map->rtv_list = g_array_new(FALSE,TRUE,sizeof(GObject *));
 	rtv_map->rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);

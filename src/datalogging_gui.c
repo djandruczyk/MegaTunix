@@ -36,7 +36,7 @@ gboolean begin = TRUE;
 
 /* External global vars */
 extern gint ready;
-extern struct RtvMap *rtv_map;
+extern struct Rtv_Map *rtv_map;
 
 /* Static vars to all functions in this file... */
 static gboolean logging_active = FALSE;
