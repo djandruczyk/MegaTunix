@@ -59,11 +59,9 @@ keys themselves are not, as the string compare functions are case insensitive.
 	c_label		(string)  Celsius label for temp dependant widgets
 	f_label		(string)  Fahrenheit label for temp dependant widgets
 	alt_c_label	(string)  Celsius label for temp dependant widget when
-			another widget is at a specific state (see 
-			depend_on)
+			another widget is at a specific state (see depend_on)
 	alt_f_label	(string)  Celsius label for temp dependant widget when
-			another widget is at a specific state (see 
-			depend_on)
+			another widget is at a specific state (see depend_on)
 	depend_on	(string) Name used to prepend the following vars (*)
 	*_type		(enum) Types of vars to depend on
 	*_page		(integer) Page in ve_vars

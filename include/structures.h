@@ -52,6 +52,7 @@ struct Firmware_Details
 {
 	gchar *name;		/*! textual name */
 	gchar **tab_list;	/*! vector string of tabs to load */
+	gchar **tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
         gint rtvars_size;       /*! Size of Realtime vars datablock */
@@ -216,6 +217,7 @@ struct Canidate
 	gchar *quest_str;	/*! Ext Version string to search for */
 	gint ver_num;		/*! Version number to search for */
 	gchar *load_tabs;	/*! list of tabs to load into the gui */
+	gchar *tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! name of realtime vars map file */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
 	Capability capabilities;/*! Bitmask of capabilities.... */

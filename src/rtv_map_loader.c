@@ -73,7 +73,10 @@ gboolean load_realtime_map(void )
 	/* If file found we continue... */
 	rtv_map = g_new0(struct Rtv_Map, 1);
 	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
-		dbg_func(__FILE__": load_realtime_map()\n\tCan't find firmware name\n",CRITICAL);
+	{
+		dbg_func(__FILE__": load_realtime_map()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n",CRITICAL);
+		return FALSE;
+	}
 	if (strstr(tmpbuf,firmware->name) == NULL)	
 	{
 		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tFirmware name \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->name,cfgfile->filename,tmpbuf),CRITICAL);

@@ -316,6 +316,7 @@ gboolean determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 
 	firmware->name = g_strdup(potential->name);
 	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
+	firmware->tab_confs = g_strsplit(potential->tab_confs,",",0);
 	firmware->rtv_map_file = g_strdup(potential->rtv_map_file);
 	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
 	firmware->multi_page = potential->multi_page;
@@ -529,6 +530,7 @@ struct Canidate * initialize_canidate(void)
 	canidate->quest_str = NULL;
 	canidate->ver_num = -1;
 	canidate->load_tabs = NULL;
+	canidate->tab_confs = NULL;
 	canidate->rtv_map_file = NULL;
 	canidate->sliders_map_file = NULL;
 	canidate->rt_cmd_key = NULL;
@@ -625,6 +627,9 @@ void load_profile_details(void *ptr)
 		if(!cfg_read_string(cfgfile,"gui","LoadTabs",
 					&canidate->load_tabs))
 			dbg_func(__FILE__": load_profile_details()\n\t\"LoadTabs\" list not found in interrogation profile, ERROR\n",CRITICAL);
+		if(!cfg_read_string(cfgfile,"gui","TabConfs",
+					&canidate->tab_confs))
+			dbg_func(__FILE__": load_profile_details()\n\t\"TabConfs\" list not found in interrogation profile, ERROR\n",CRITICAL);
 		if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
 					&canidate->rtv_map_file))
 			dbg_func(__FILE__": load_profile_details()\n\t\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n",CRITICAL);

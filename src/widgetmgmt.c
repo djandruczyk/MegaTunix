@@ -32,8 +32,9 @@
 GHashTable *dynamic_widgets = NULL;
 
 /*!
- \brief populate_master() stores a pointer to all of the glade loaded widgets into a 
- master hashtable so that it can be recalled by name anywhere in the program.
+ \brief populate_master() stores a pointer to all of the glade loaded 
+ widgets into a master hashtable so that it can be recalled by name 
+ anywhere in the program.
  \param widget Widget pointer, name is derived from this pointer by
  a call to glade_get_widget_name
  \param user_data currently unused.
@@ -41,6 +42,7 @@ GHashTable *dynamic_widgets = NULL;
 void populate_master(GtkWidget *widget, gpointer user_data)
 {
 	gchar *name = NULL;
+	gchar *prefix = NULL;
 	ConfigFile *cfg = (ConfigFile *) user_data;
 	/* Populates a big master hashtable of all dynamic widgets so that 
 	 * various functions can do a lookup for the widgets name and get it's
@@ -51,7 +53,11 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	 */
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),populate_master,user_data);
+	if (!cfg_read_string(cfg,"global","id_prefix",&prefix))
+		prefix = g_strdup("");
+
 	name = (char *)glade_get_widget_name(widget);
+
 	if (name == NULL)
 		return;
 	if (g_strrstr((gchar *)name,"topframe"))
@@ -59,9 +65,10 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if(!dynamic_widgets)
 		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
 	if (!g_hash_table_lookup(dynamic_widgets,name))
-		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
+		g_hash_table_insert(dynamic_widgets,g_strdup_printf("%s%s",prefix,name),(gpointer)widget);
 	else
 		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  from file %s already exists in master table\n",name,cfg->filename),CRITICAL);
+	g_free(prefix);
 }
 
 

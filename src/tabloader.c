@@ -53,10 +53,11 @@ gboolean load_gui_tabs()
 	if (!firmware->tab_list[i])
 		return FALSE;
 
+
 	while (firmware->tab_list[i])
 	{
 		glade_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_list[i],".glade",NULL));
-		map_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_list[i],".datamap",NULL));
+		map_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_confs[i],".datamap",NULL));
 		if ((g_file_test(glade_file,G_FILE_TEST_EXISTS)) &&
 				(g_file_test(map_file,G_FILE_TEST_EXISTS)))
 		{
@@ -187,14 +188,27 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 * information  and store it for use when needed...
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
+	{
 		load_dependancy(G_OBJECT(widget),cfgfile,section);
+		g_free(tmpbuf);
+	}
 
 	/* If this widget (a textview) has "create_tags" we call a special
 	 * handler jsut for that..
 	 */
 	if (cfg_read_string(cfgfile,section,"create_tags",&tmpbuf))
+	{
 		load_tags(G_OBJECT(widget),cfgfile,section);
+		g_free(tmpbuf);
+	}
 
+	/* If this widget (a label) has "set_lanel" we set the label on it
+	 */
+	if (cfg_read_string(cfgfile,section,"set_label",&tmpbuf))
+	{
+		gtk_label_set_text(GTK_LABEL(widget),tmpbuf);
+		g_free(tmpbuf);
+	}
 
 	offset = -1;
 	cfg_read_int(cfgfile,section,"offset",&offset);

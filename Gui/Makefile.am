@@ -21,14 +21,14 @@ gui_files = 	template.glade \
 		msns-3.0_ignition.datamap \
 		runtime.glade \
 		runtime.datamap \
-		sparktable_8x8_1.glade \
-		sparktable_8x8_1.datamap \
+		sparktable_8x8.glade \
+		sparktable_8x8-EDIS.datamap \
+		sparktable_8x8-Std.datamap \
 		tools.glade \
 		tools.datamap \
-		vetable_8x8_1.glade \
-		vetable_8x8_1.datamap \
-		vetable_8x8_2.glade \
-		vetable_8x8_2.datamap \
+		vetable_8x8.glade \
+		vetable_8x8-BnG.datamap \
+		vetable_8x8-DT_2.datamap \
 		warmupwizard.datamap \
 		warmupwizard.glade 
 
