@@ -134,3 +134,10 @@ void squirt_cyl_inj_black(void)
 			GTK_STATE_NORMAL,&black);
 }
 
+void warn_datalog_not_empty(void)
+{
+	gchar *buff;
+	buff = g_strdup("The Logfile you selected is NOT empty.  If you wish to overwrite this file, just hit \"Close\" to dismiss this warning, and select \"Clear Log File\" button.  If you do NOT clear out the logfile, the information already present in it will most likely confuse whatever program you use to process it.  If you do NOT wish to use this logfile, Close this warning and click on \"Select Logfile\" and either select a new empty file, or type in the name of your choice.");
+	warn_user(buff);
+	g_free(buff);
+}

@@ -29,6 +29,7 @@ GtkWidget *dlog_statbar;
 static GtkWidget *file_label;
 static int logfile;	/* DataLog File Handle*/
 static gchar * log_file_name;
+static gchar buff[100];
 
 int build_datalogging(GtkWidget *parent_frame)
 {
@@ -127,17 +128,19 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 {
 	const gchar *selected_filename;
 	struct stat status;
-	gchar buff[100];
 
 	selected_filename = gtk_file_selection_get_filename (
 			GTK_FILE_SELECTION (file_selector));
-	g_print ("Selected filename: %s\n", selected_filename);
+//	g_print ("Selected filename: %s\n", selected_filename);
 
-	log_opened=FALSE;
+	if (log_opened)
+		close_logfile();	
+
+	/* Test to see if it exists or not */
 	if (lstat(selected_filename, &status) == -1)
 	{
 		logfile = open(selected_filename,
-				O_CREAT|O_APPEND, /* Create, append mode */
+				O_CREAT|O_APPEND|O_RDWR, /* Create, append mode */
 				S_IRUSR|S_IWUSR); /* User RW access */
 		if(!logfile)
 		{
@@ -157,41 +160,33 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 	}
 	else
 	{
-		if (status.st_size == 0)
-		{
-			/* File is empty, we can use it safely without 
-			 * over-writing anything important... 
-			 */
-			logfile = open(selected_filename,
-					O_CREAT|O_APPEND, 
-					S_IRUSR|S_IWUSR); /* User RW access */
-			if(!logfile)
-			{
-				log_opened=FALSE;
-				g_snprintf(buff,100,"Failure creating datalogfile, Error Code: %s",strerror(errno));
-				update_statusbar(dlog_statbar,
-				dlog_context_id,buff);
-			}
-			else
-			{	
-				log_opened=TRUE;
-				log_file_name = g_strdup(selected_filename);
-				gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
-				g_snprintf(buff,100,"DataLog File Opened");
-				update_statusbar(dlog_statbar,
-						dlog_context_id,buff);
-			}
+		if (status.st_size > 0)
+		{	/* warn user for non empty file*/
+			warn_datalog_not_empty();
 		}
-		else
+
+		logfile = open(selected_filename,
+				O_CREAT|O_APPEND|O_RDWR, 
+				S_IRUSR|S_IWUSR); /* User RW access */
+		if(!logfile)
 		{
-			g_snprintf(buff,100,"File is Not Empty, NOT OPENING!!");
+			log_opened=FALSE;
+			g_snprintf(buff,100,"Failure opening datalogfile, Error Code: %s",strerror(errno));
 			update_statusbar(dlog_statbar,
 					dlog_context_id,buff);
-			printf("File not empty, warning user\n");
 		}
-	
+		else
+		{	
+			log_opened=TRUE;
+			log_file_name = g_strdup(selected_filename);
+			gtk_label_set_text(GTK_LABEL(file_label),selected_filename);
+			g_snprintf(buff,100,"DataLog File Opened");
+			update_statusbar(dlog_statbar,
+					dlog_context_id,buff);
+		}
+
 	}
-	
+
 
 }
 
@@ -200,17 +195,33 @@ void close_logfile(void)
 	if (log_opened == TRUE)
 	{
 		close(logfile); 
-		printf("Closing Datalog file\n");
 		g_free(log_file_name);
 		gtk_label_set_text(GTK_LABEL(file_label),"No Log Selected Yet");
 		log_opened = FALSE;
+		logfile = 0;
+		g_snprintf(buff,100,"Logfile Closed");
+		update_statusbar(dlog_statbar,dlog_context_id,buff);
+				
 	
 	}
 }
 
 void truncate_log()
 {
+	gint result;
 	/* Not written yet */
+	if (log_opened == TRUE)
+	{
+		result = ftruncate(logfile,0);
+		if (result < 0)
+			g_snprintf(buff,100,"Truncation error: %s", strerror(errno));
+		else
+			g_snprintf(buff,100,"DataLog Truncation successful");
+
+		update_statusbar(dlog_statbar,
+				dlog_context_id,buff);
+		
+	}
 }
 
 void start_datalogging()

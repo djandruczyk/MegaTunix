@@ -177,6 +177,7 @@ void no_ms_connection(void);
 void warn_user(gchar *);
 void squirt_cyl_inj_red(void);
 void squirt_cyl_inj_black(void);
+void warn_datalog_not_empty(void);
 /* notifications.c */
 
 #endif
