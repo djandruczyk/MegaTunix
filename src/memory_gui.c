@@ -30,6 +30,7 @@ void build_memory(GtkWidget *parent_frame)
 	GtkWidget *table2;
 	GtkWidget *ebox;
 	GtkWidget *frame;
+	GtkWidget *sw;
 	extern GdkColor white;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	gint rows = 32;
@@ -40,8 +41,14 @@ void build_memory(GtkWidget *parent_frame)
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
 
+	sw = gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+                        GTK_POLICY_AUTOMATIC,
+                        GTK_POLICY_AUTOMATIC);
+	gtk_box_pack_start(GTK_BOX(vbox),sw,TRUE,TRUE,0);
+
 	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw),hbox);	
 
 	table = gtk_table_new(rows,1,TRUE);
 	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,10);
@@ -55,17 +62,18 @@ void build_memory(GtkWidget *parent_frame)
 	}
 
 	table = gtk_table_new(rows,1,TRUE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),1);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
 	raw_memory = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
 
 	for (y=0;y<rows;y++)
 	{
-		frame = gtk_frame_new(NULL);
+	//	frame = gtk_frame_new(NULL);
 		ebox = gtk_event_box_new();
-		gtk_container_add(GTK_CONTAINER(frame),ebox);
+	//	gtk_container_add(GTK_CONTAINER(frame),ebox);
 
-		gtk_table_attach(GTK_TABLE(table),frame,0,1,y,y+1,
+		gtk_table_attach(GTK_TABLE(table),ebox,0,1,y,y+1,
 				(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL),
 				(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL), 0, 0);
 
@@ -91,12 +99,12 @@ void build_memory(GtkWidget *parent_frame)
 		}
 	}
 	frame = gtk_frame_new("Raw Memory Settings");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,5);
+	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,5);
 
 	hbox = gtk_hbox_new(FALSE,5);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-	button = gtk_button_new_with_label("Read RAW Memory\n");
+	button = gtk_button_new_with_label("Read RAW Memory");
 	/* Memory offset to retrieve... */
 	g_object_set_data(G_OBJECT(button),"data",GINT_TO_POINTER(0));
 	g_signal_connect(G_OBJECT(button),"clicked",
