@@ -29,6 +29,25 @@ int main_x_origin;
 int main_y_origin;
 GtkWidget *main_window;
 GtkTooltips *tip;
+static struct 
+{
+	gchar *frame_name;
+	gint identifier;
+	gchar *tab_name;
+} notebook_tabs[] = { 
+{ "About MegaTunix", ABOUT_PAGE, "About"},
+{ "General MegaTunix Settings", GENERAL_PAGE, "General"},
+{ "MegaSquirt Communications Parameters", COMMS_PAGE, "Communications"},
+{ "MegaSquirt Constants", CONSTANTS_PAGE, "Constants"},
+{ "MegaSquirt Enrichments", ENRICHMENTS_PAGE, "Enrichments"},
+{ "MegaSquirt VE Table(s)", VETABLES_PAGE, "VE Tables"},
+{ "MegaSquirt Runtime Display", RUNTIME_PAGE, "Runtime Disp."},
+{ "MegaSquirt Tuning", TUNING_PAGE, "Tuning"},
+{ "MegaSquirt Tools", TOOLS_PAGE, "Tools"},
+{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "DataLogging"}
+};
+
+static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
 
 int setup_gui()
 {
@@ -37,6 +56,7 @@ int setup_gui()
 	GtkWidget *label;
 	GtkWidget *vbox;
 	GtkWidget *button;
+	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	/* set name so MegaTunixrc can alter the settings */
@@ -59,115 +79,24 @@ int setup_gui()
 	gtk_container_add(GTK_CONTAINER(main_window),vbox);
 
 	notebook = gtk_notebook_new ();
-	gtk_widget_set_name(notebook, "main notebook");
 	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
 	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
 
-	/* About Page */
-	frame = gtk_frame_new ("About MegaTunix");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
+	for (i=0;i<num_tabs;i++)
+	{
+		frame = gtk_frame_new (notebook_tabs[i].frame_name);
+	        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 
-	framebuild_dispatch(frame,ABOUT_PAGE);
+		framebuild_dispatch(frame,notebook_tabs[i].identifier);
 
-        label = gtk_label_new ("About");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* About Page */
-
-	/* General Page */
-	frame = gtk_frame_new ("General MegaTunix Settings");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,GENERAL_PAGE);
-
-        label = gtk_label_new ("General");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* General Page */
-
-	/* Comms Page */
-	frame = gtk_frame_new ("MegaSquirt Communications Parameters");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,COMMS_PAGE);
-
-        label = gtk_label_new ("Communications");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* Comms Page */
-
-	/* Constants Page */
-	frame = gtk_frame_new ("MegaSquirt Constants");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,CONSTANTS_PAGE);
-
-        label = gtk_label_new ("Constants");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* Constants Page */
-
-	/* Enrichments Page */
-	frame = gtk_frame_new ("MegaSquirt Enrichments");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,ENRICHMENTS_PAGE);
-
-        label = gtk_label_new ("Enrichments");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* Enrichments Page */
-
-	/* VE Table Page */
-	frame = gtk_frame_new ("MegaSquirt VE Table");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,VETABLE_PAGE);
-
-        label = gtk_label_new ("VE Table");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* VE Table Page */
-
-	/* Runtime Page */
-	frame = gtk_frame_new ("MegaSquirt Runtime Display");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,RUNTIME_PAGE);
-
-        label = gtk_label_new ("Runtime Disp.");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* Runtime Page */
-
-	/* Tuning Page */
-	frame = gtk_frame_new ("MegaSquirt Tuning");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,TUNING_PAGE);
-
-        label = gtk_label_new ("Tuning");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* Tuning Page */
-
-	/* Tools Page */
-	frame = gtk_frame_new ("MegaSquirt Tools");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,TOOLS_PAGE);
-
-        label = gtk_label_new ("Tools");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* Tools Page */
-
-	/* Datalogging Page */
-	frame = gtk_frame_new ("MegaSquirt DataLogging");
-        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
-
-	framebuild_dispatch(frame,DATALOGGING_PAGE);
-
-        label = gtk_label_new ("DataLogging");
-        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	/* DataLogging Page */
+	        label = gtk_label_new (notebook_tabs[i].tab_name);
+	        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
+	}
 
 	button = gtk_button_new_with_label("Exit");
 	gtk_box_pack_start(GTK_BOX(vbox),button,FALSE,FALSE,0);
         g_signal_connect(G_OBJECT(button),"pressed",
                         G_CALLBACK(leave),NULL);
-
 
 	gtk_tooltips_enable(tip);
 	gtk_widget_show_all(main_window);
@@ -197,7 +126,7 @@ int framebuild_dispatch(GtkWidget *frame, gint data)
 		case RUNTIME_PAGE:
 			build_runtime(frame);
 			break;
-		case VETABLE_PAGE:
+		case VETABLES_PAGE:
 			build_vetable(frame);
 			break;
 		case TUNING_PAGE:

@@ -35,14 +35,19 @@ int build_vetable(GtkWidget *parent_frame)
         GtkWidget *spinner;
         GtkWidget *frame;
         GtkWidget *button;
+        GtkWidget *swin;
         GtkAdjustment *adj;
 	gint x,y;
 	gint index;
 	extern GtkTooltips *tip;
 
+	swin = gtk_scrolled_window_new(NULL,NULL);
+        gtk_container_add(GTK_CONTAINER(parent_frame),swin);
+
         vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
-        gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin),
+			vbox);
 
 	hbox = gtk_hbox_new(FALSE,5);
         gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
@@ -118,7 +123,6 @@ int build_vetable(GtkWidget *parent_frame)
 			adj =  (GtkAdjustment *) gtk_adjustment_new(
 					1.0,1.0,255,1,10,0);
 			spinner = gtk_spin_button_new(adj,1,0);
-//			gtk_widget_set_size_request(spinner,52,-1);
 			g_object_set_data(G_OBJECT(spinner),"class", 
 					GINT_TO_POINTER(VE));
 			g_object_set_data(G_OBJECT(spinner),"offset", 
@@ -143,7 +147,7 @@ int build_vetable(GtkWidget *parent_frame)
         gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
 
 	table = gtk_table_new(1,8,FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table),2);
+	gtk_table_set_col_spacings(GTK_TABLE(table),1);
 	gtk_table_set_row_spacings(GTK_TABLE(table),2);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
         gtk_container_add(GTK_CONTAINER(frame),table);
@@ -152,7 +156,7 @@ int build_vetable(GtkWidget *parent_frame)
 	{
 		adj =  (GtkAdjustment *) gtk_adjustment_new(100.0,100.0,25500,100,100,0);
 		spinner = gtk_spin_button_new(adj,1,0);
-		gtk_widget_set_size_request(spinner,52,-1);
+		gtk_widget_set_size_request(spinner,54,-1);
 		g_signal_connect (G_OBJECT(spinner), "value_changed",
 				G_CALLBACK (classed_spinner_changed),
 				NULL);
