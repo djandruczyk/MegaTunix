@@ -25,6 +25,11 @@
 5/26/2003 - Renamed widget to C_Gauge for Circular Gauge,  Didn't like 
 "dial" as to me that represented a knob, something to turn,  not a gauge.
 
+NOTE as of 5/26/2003 this code has not been ported to libgnomecanvas-2.0
+It was originally written for gnome-1.0.  Font handling is now completely
+different(pango) thus the font related sections are commented out which 
+will probably make the gauges look terrible...
+
 */
 
 #ifdef HAVE_CONFIG_H
@@ -295,7 +300,7 @@ c_gauge_make (C_Gauge *c_gauge, GtkWidget *canvas, char *label, char *format,
 				       "x", x1,
 				       "y", y1,
 				       "anchor", GTK_ANCHOR_CENTER,
-				       "font_gdk", gdk_font_load (fontname),
+//				       "font_gdk", gdk_font_load (fontname),
 				       "clip_width", 100.0,
 				       "clip_height", 20.0,
 				       "fill_color", "white",
@@ -311,7 +316,7 @@ c_gauge_make (C_Gauge *c_gauge, GtkWidget *canvas, char *label, char *format,
 			       "y", c_gauge->center_y + c_gauge->radius - 20,
 			       "anchor", GTK_ANCHOR_CENTER,
 			       "justification", GTK_JUSTIFY_CENTER,
-			       "font_gdk", gdk_font_load (fontname),
+//			       "font_gdk", gdk_font_load (fontname),
 			       "clip_width", c_gauge->radius,
 			       "clip_height", 40.0,
 			       "fill_color", "white",
@@ -327,7 +332,7 @@ c_gauge_make (C_Gauge *c_gauge, GtkWidget *canvas, char *label, char *format,
 				       "x", c_gauge->center_x,
 				       "y", c_gauge->center_y+7,
 				       "anchor", GTK_ANCHOR_NORTH,
-				       "font_gdk", gdk_font_load (fontname),
+//				       "font_gdk", gdk_font_load (fontname),
 				       "clip_width", 100.0,
 				       "clip_height", 20.0,
 				       "fill_color", "white",

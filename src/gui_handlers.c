@@ -83,21 +83,21 @@ int toggle_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp | (bit_val << (bit_pos-1));
 				ve_constants->config11.value = tmp;
 				dload_val = tmp;
-				offset = 117;
+				offset = 116;
 				break;
 			case 12:
 				tmp = ve_constants->config12.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
 				tmp = tmp | (bit_val << (bit_pos-1));
 				dload_val = tmp;
-				offset = 118;
+				offset = 117;
 				break;
 			case 13:
 				tmp = ve_constants->config13.value;
 				tmp = tmp & ~bitmask;	/*clears bits */
 				tmp = tmp | (bit_val << (bit_pos-1));
 				dload_val = tmp;
-				offset = 119;
+				offset = 118;
 				break;
 			case 14:
 				/*SPECIAL*/
