@@ -102,23 +102,35 @@ key_types=_INT_,_STRING_
 page=2
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 
+[o2_sensor_2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=2
+bind_to_list=dt_controls
+
+[fuel_inj_strat_2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=2
+bind_to_list=dt_controls
+
 #----- Widgets ---------------------------------------------------------------
 
 [table2_inj_sq_cyls_frame]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=2
-bind_to_list=dt_features
+bind_to_list=dt_controls
 
 [table2_inj_ctrl_params_frame]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=2
-bind_to_list=dt_features
+bind_to_list=dt_controls
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
-[speed_density_radio_button]
+[speed_density_1_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
@@ -129,7 +141,7 @@ bitmask=4
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[alpha_n_radio_button]
+[alpha_n_1_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,swap_labels
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=1
@@ -207,25 +219,27 @@ bitmask=1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[115kpa_map_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=182
-bitshift=0
+[speed_density_2_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+page=2
+offset=184
+bitshift=2
 bitval=0
-bitmask=3
+bitmask=4
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[250kpa_map_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
-page=1
-offset=182
-bitshift=0
+[alpha_n_2_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+page=2
+offset=184
+bitshift=2
 bitval=1
-bitmask=3
+bitmask=4
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
@@ -251,7 +265,7 @@ bitmask=8
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[nbo2_radio_button]
+[nbo2_1_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
@@ -262,7 +276,7 @@ bitmask=2
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[wbo2_radio_button]
+[wbo2_1_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
@@ -270,6 +284,30 @@ offset=184
 bitshift=1
 bitval=1
 bitmask=2
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[nbo2_2_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+page=2
+offset=184
+bitshift=1
+bitval=0
+bitmask=2
+bind_to_list=dt_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[wbo2_2_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,bind_to_list,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+page=2
+offset=184
+bitshift=1
+bitval=1
+bitmask=2
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 

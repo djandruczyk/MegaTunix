@@ -12,7 +12,8 @@ profiles = README \
 	SquirtnEDIS-3.007.prof \
 	SquirtnEDIS-3.008.prof \
 	SquirtnSpark-3.0.prof \
-	SquirtnSpark-Extra-022x.prof
+	SquirtnSpark-Extra-022x.prof \
+	SquirtnSpark-Extra-023x.prof
 
 profiles_DATA = $(profiles)
 

@@ -25,7 +25,8 @@
 
 /* Default window size and MINIMUM size as well... */
 static gint def_width=620;
-static gint def_height=525;
+//static gint def_height=525;
+static gint def_height=325;
 gint width = 0;
 gint height = 0;
 gint main_x_origin = 0;
@@ -84,6 +85,8 @@ int setup_gui()
 
 	notebook = gtk_notebook_new ();
 	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
+	gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
+	gtk_notebook_popup_enable(GTK_NOTEBOOK(notebook));
 	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
 
 	for (i=0;i<num_tabs;i++)

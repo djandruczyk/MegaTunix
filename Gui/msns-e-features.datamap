@@ -27,7 +27,7 @@ bind_to_list=burners
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=dt_features
+bind_to_list=dt_controls
 
 [variable_launch_feature_label]
 keys=page,bind_to_list
@@ -167,7 +167,7 @@ offset=33
 bitval=1
 bitshift=4
 bitmask=16
-toggle_groups=dt_features,alt_simul
+toggle_groups=dt_controls,alt_simul
 group_states=DISABLED,ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -205,7 +205,7 @@ offset=33
 bitval=1
 bitshift=6
 bitmask=64
-bind_to_list=dt_features
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is checked these enrichments are added into the pulsewidth sent to the injector. NOTE: This only applies if DT mode is set...
@@ -213,15 +213,28 @@ tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is 
 [2nd_o2_enabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
+page=2
+offset=191
 bitval=1
 bitshift=0
 bitmask=1
-bind_to_list=dt_features
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Enable the use of ADC6 as a secondary EGO input for DT mode ONLY
+
+[2nd_o2_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=2
+offset=191
+bitval=0
+bitshift=0
+bitmask=1
+bind_to_list=dt_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Disable the use of ADC6 as a secondary EGO input for DT mode ONLY
 
 [n2o_enrich_bank1_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
@@ -231,7 +244,7 @@ offset=66
 bitval=0
 bitshift=5
 bitmask=32
-bind_to_list=dt_features
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When nitrous input is active additional fuel PW will be added to Injector channel 1
@@ -244,23 +257,10 @@ offset=66
 bitval=1
 bitshift=5
 bitmask=32
-bind_to_list=dt_features
+bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When nitrous input is active additional fuel PW will be added to Injector channel 2
-
-[2nd_o2_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=66
-bitval=0
-bitshift=0
-bitmask=1
-bind_to_list=dt_features
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Disable the use of ADC6 as a secondary EGO input for DT mode ONLY
 
 [n2o_enabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
