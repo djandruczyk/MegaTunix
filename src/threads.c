@@ -86,8 +86,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 				tmp = UPD_LOAD_GUI_TABS;
 				g_array_append_val(message->funcs,tmp);
 			}
-//			tmp = UPD_READ_VE_CONST;
-//			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_READ_VE_CONST;
+			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_COMMS_TEST:
@@ -515,7 +515,9 @@ void burn_ms_flash()
         extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
         extern unsigned char *ms_data_last[MAX_SUPPORTED_PAGES];
         gint res = 0;
+	gint i = 0;
         extern gint ecu_caps;
+	extern struct Firmware_Details * firmware;
         static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
         g_static_mutex_lock(&mutex);
@@ -535,7 +537,8 @@ void burn_ms_flash()
         dbg_func(__FILE__": Burn to Flash\n",SERIAL_WR);
 
         /* sync temp buffer with current burned settings */
-        memcpy(ms_data_last,ms_data,2*MS_PAGE_SIZE);
+	for (i=0;i<firmware->total_pages;i++)
+	        memcpy(ms_data_last[i],ms_data[i],2*MS_PAGE_SIZE);
 
         tcflush(serial_params->fd, TCIOFLUSH);
 

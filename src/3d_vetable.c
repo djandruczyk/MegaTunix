@@ -72,7 +72,6 @@ gint create_3d_view(GtkWidget *widget, gpointer data)
 	ve_view->load_base_offset = (gint)g_object_get_data(G_OBJECT(widget),"load_base_offset"); 
 	ve_view->rpm_base_offset = (gint)g_object_get_data(G_OBJECT(widget),"rpm_base_offset"); 
 	ve_view->is_spark = (gboolean)g_object_get_data(G_OBJECT(widget),"is_spark"); 
-	printf("load_bincount %i, rpm_bincount %i\n",ve_view->load_bincount, ve_view->rpm_bincount);
 	if(ve_view->is_spark)
 		tmpbuf = g_strdup("3D Spark Advance Table");
 	else
@@ -371,7 +370,7 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	// Right Button
 	if (event->state & GDK_BUTTON3_MASK)
 	{
-		ve_view->sdepth -= ((event->y - ve_view->beginY)/(widget->allocation.height))*(((ve_view->load_bincount+ve_view->rpm_bincount)/2.0));
+		ve_view->sdepth -= ((event->y - ve_view->beginY)/(widget->allocation.height))*8;
 		redraw = TRUE;
 	}
 
@@ -449,6 +448,7 @@ void ve_calculate_scaling(void *ptr)
 	gint rpm_base = 0;
 	gint load_base = 0;
 	gint ve_base = 0;
+	gfloat divider = 0.0;
 
 	dbg_func(__FILE__": 3D View Calculate Scaling\n",OPENGL);
 
@@ -462,27 +462,33 @@ void ve_calculate_scaling(void *ptr)
 	ve_view->rpm_max = 0;
 	ve_view->load_max = 0;
 	ve_view->ve_max = 0;
+	// Spark requires a divide by 2.84 to convert from ms units to degrees
+	if (ve_view->is_spark)
+		divider = 2.84;
+	else
+		divider = 1.0;
 
 	for (i=0;i<ve_view->rpm_bincount;i++) 
 	{
 		if (ve_ptr[rpm_base+i] > ve_view->rpm_max) 
 			ve_view->rpm_max = ve_ptr[rpm_base+i];
-		for (i=0;i<ve_view->load_bincount;i++) 
-		{
-			if (ve_ptr[load_base+i] > ve_view->load_max) 
-				ve_view->load_max = ve_ptr[load_base+i];
-		}
-		for (i=0;i<(ve_view->rpm_bincount*ve_view->load_bincount);i++) 
-		{
-			if (ve_ptr[ve_base+i] > ve_view->ve_max) 
-				ve_view->ve_max = ve_ptr[ve_base+i];
-		}
-
-		ve_view->rpm_div = ((float)ve_view->rpm_max/(float)ve_view->rpm_bincount);
-		ve_view->load_div = ((float)ve_view->load_max/(float)ve_view->load_bincount);
-		/* NOT sure about this one... */
-		ve_view->ve_div = ((float)ve_view->ve_max/4.0);	
 	}
+
+	for (i=0;i<ve_view->load_bincount;i++) 
+	{
+		if (ve_ptr[load_base+i] > ve_view->load_max) 
+			ve_view->load_max = ve_ptr[load_base+i];
+	}
+	for (i=0;i<(ve_view->rpm_bincount*ve_view->load_bincount);i++) 
+	{
+		if (ve_ptr[ve_base+i]/divider > ve_view->ve_max) 
+			ve_view->ve_max = ve_ptr[ve_base+i]/divider;
+	}
+
+	ve_view->rpm_div = ((float)ve_view->rpm_max/(float)ve_view->rpm_bincount);
+	ve_view->load_div = ((float)ve_view->load_max/(float)ve_view->load_bincount);
+	/* NOT sure about this one... */
+	ve_view->ve_div = ((float)ve_view->ve_max/4.0);	
 }
 
 void ve_draw_ve_grid(void *ptr)
@@ -736,7 +742,7 @@ void ve_draw_axis(void *ptr)
 		g_free(label);
 	}
 
-	for (i=0;i<load_bincount;i++)
+	for (i=0;i<rpm_bincount;i++)
 	{
 		rpm = (ve_ptr[rpm_base+i])*100;
 		label = g_strdup_printf("%i",rpm);
