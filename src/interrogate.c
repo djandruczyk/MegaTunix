@@ -79,12 +79,14 @@ void interrogate_ecu()
 
 	if (!connected)
 	{
+		dbg_func(__FILE__": interrogate_ecu()\n\tNOT connected to ECU!!!!\n",CRITICAL);
 		gdk_threads_enter();
 		no_ms_connection();
 		gdk_threads_leave();
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
+
 
 	/* Allocate memory to store interrogation results */
 	canidate = g_malloc0(sizeof(struct Canidate));
@@ -145,6 +147,9 @@ void interrogate_ecu()
 			dbg_func(g_strdup_printf("\tInterrogation for command %s read %i bytes, running total %i\n",cmd->string,res,total_read),INTERROGATOR);
 			// If we get nothing back (i.e. timeout, assume done)
 			if (res == 0)
+				zerocount++;
+
+			if (zerocount > 1)
 				break;
 		}
 		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);

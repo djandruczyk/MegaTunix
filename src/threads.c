@@ -374,7 +374,7 @@ void comms_test()
 	tcflush(serial_params->fd, TCIOFLUSH);	
 	while (write(serial_params->fd,"C",1) != 1)
 	{
-		usleep(10000);
+		g_usleep(10000);
 		dbg_func(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n",CRITICAL);
 	}
 	dbg_func(__FILE__": commes_test()\n\tRequesting MS Clock (\"C\" cmd)\n",SERIAL_RD);
@@ -505,7 +505,7 @@ void writeto_ecu(void *ptr)
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 	if (res != count )
 		dbg_func(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n",CRITICAL);
-	usleep(5000);
+	g_usleep(5000);
 	if (page > 0)
 		set_ms_page(0);
 	g_free(write_cmd);
@@ -544,7 +544,7 @@ void burn_ms_flash()
 	if (ecu_caps & DUALTABLE)
 	{
 		set_ms_page(0);
-		usleep(5000);
+		g_usleep(5000);
 	}
 
 	res = write (serial_params->fd,"B",1);  /* Send Burn command */
@@ -552,7 +552,7 @@ void burn_ms_flash()
 	{
 		dbg_func(g_strdup_printf(__FILE__": burn_ms_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
 	}
-	usleep(5000);
+	g_usleep(5000);
 
 	dbg_func(__FILE__": burn_ms_flash()\n\tBurn to Flash\n",SERIAL_WR);
 
