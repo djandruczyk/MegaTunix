@@ -36,8 +36,8 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(errno.h fcntl.h stdio.h string.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
 
 dnl optimizations
-CFLAGS="-O2"
-AC_SUBST(CFLAGS)
+AM_CFLAGS="-O2"
+AC_SUBST(AM_CFLAGS)
 
 EXTRA_LIBS=""
 AC_SUBST(EXTRA_LIBS)

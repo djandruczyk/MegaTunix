@@ -51,7 +51,7 @@ megatunix_LDADD = @PACKAGE_LIBS@
 
 COMMON_FLAGS = @PFLAGS@ @DFLAGS@ 
 
-CFLAGS += $(COMMON_FLAGS) -Wall 
+AM_CFLAGS += $(COMMON_FLAGS) -Wall 
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
