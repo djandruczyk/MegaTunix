@@ -648,7 +648,7 @@ void update_runtime_vars()
 		gtk_label_set_text(GTK_LABEL(runtime_data.secl_lab),tmpbuf);
 		g_free(tmpbuf);
 	}
-	if (runtime->ego != runtime_last->ego)
+	if ((runtime->ego != runtime_last->ego)|| (force_status_update))
 	{
 		tmpbuf = g_strdup_printf("%.2f",runtime->ego);
 		gtk_label_set_text(GTK_LABEL(runtime_data.ego_lab),tmpbuf);

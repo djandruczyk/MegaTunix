@@ -270,7 +270,6 @@ gint bitmask_button_handler(GtkWidget *widget, gpointer data)
 				dload_val = tmp;
 				offset = 118;
 				check_config13(dload_val);
-
 				break;
 			case 14:
 				/*SPECIAL*/
@@ -937,9 +936,15 @@ void check_config13(int tmp)
 	/* check O2 sensor bit and adjust factor
 	   so runtime display has a sane scale... */
 	if (((tmp >> 1)&0x1) == 1)
-		ego_pbar_divisor=5.0;
+	{
+		ego_pbar_divisor = 5.0;
+		force_status_update = TRUE;
+	}
 	else
-		ego_pbar_divisor=1.2;
+	{
+		ego_pbar_divisor = 1.2;
+		force_status_update = TRUE;
+	}
 
 	/* Check SD/Alpha-N button and adjust VEtable labels
 	 * to suit
