@@ -1,10 +1,9 @@
 [interrogation_profile]
-name="Dualtable 1.01"
+name=Dualtable v1.01
 
 [parameters]
-bytecounts=22,1,1,128,128,18,0,0,0,255,255
-SignatureQueryString="v.1.01"
+bytecounts=22,1,1,128,128,18,0,0,255,255
+SignatureQueryString=v.1.01
 ExtVerQueryString=
 VerNumber=1
 Capabilities=_DUALTABLE_,_RAW_MEMORY_
-

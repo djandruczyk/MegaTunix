@@ -172,19 +172,18 @@ typedef enum
 typedef enum
 {	/* up to 32 Capability flags.... */
 	/* No capabilities == Standard B&G code with no modifications */
-	STD		= 0,
-	DUALTABLE	= 1<<0,
-	S_N_SPARK	= 1<<1,
-	S_N_EDIS	= 1<<2,
-	ENHANCED	= 1<<3,
-	RAW_MEMORY	= 1<<4,
-	IAC_PWM		= 1<<5,
-	IAC_STEPPER	= 1<<6,
-	BOOST_CTRL	= 1<<7,
-	OVERBOOST_SFTY	= 1<<8,
-	LAUNCH_CTRL	= 1<<9,
-	TEMP_DEP	= 1<<10,/* Temp units dependancy, used by Rt_Controls */
-	O2_DEP		= 1<<11	/* O2 scale dependancy, used by Rt_Controls */
+	STANDARD	= 1<<0,
+	DUALTABLE	= 1<<1,
+	S_N_SPARK	= 1<<2,
+	S_N_EDIS	= 1<<3,
+	ENHANCED	= 1<<4,
+	RAW_MEMORY	= 1<<5,
+	IAC_PWM		= 1<<6,
+	IAC_STEPPER	= 1<<7,
+	BOOST_CTRL	= 1<<8,
+	OVERBOOST_SFTY	= 1<<9,
+	LAUNCH_CTRL	= 1<<10,
+	TEMP_DEP	= 1<<11,/* Temp units dependancy, used by Rt_Controls */
 }Capabilities;
 
 typedef enum
@@ -236,9 +235,23 @@ typedef enum
 typedef enum
 {
         VNUM = 1,
-        EXTVER = 2,
-        SIG = 3
+        EXTVER,
+        SIG
 }StoreType;
+
+typedef enum
+{
+	CMD_A,
+	CMD_C,
+	CMD_Q,
+	CMD_V0,
+	CMD_V1,
+	CMD_S,
+	CMD_QUEST,
+	CMD_I,
+	CMD_F0,
+	CMD_F1
+}TestCmds;
 
 
 

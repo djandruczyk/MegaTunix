@@ -22,7 +22,7 @@
 static struct Default_Control all_controls[] = {
 /* Default visible Controls */
 {"Clock",0,0,"Seconds",1,54,UCHAR,TRUE,0},
-{"O2_Volts",0,1,"O<sub>2</sub> (Volts)",20,12,FLOAT,TRUE,O2_DEP}, /*scale varies */
+{"O2_Volts",0,1,"O<sub>2</sub> (Volts)",20,12,FLOAT,TRUE,0},
 {"Batt_Volts",0,2,"Batt (Volts)",23,4,FLOAT,TRUE,0},
 {"TPS_percent",0,3,"TPS (%)",15,44,FLOAT,TRUE,0},
 {"RPM",0,4,"RPM",2,52,SHORT,TRUE,0},

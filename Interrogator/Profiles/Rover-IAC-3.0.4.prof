@@ -1,10 +1,9 @@
 [interrogation_profile]
-name="MS-3.0 Rover IAC (3.0.4)"
+name=MS-3.0 Rover IAC v3.0.4
 
 [parameters]
-bytecounts=22,1,1,128,128,17,0,0,0,0,0
-SignatureQueryString="Rover IAC"
+bytecounts=22,1,1,128,128,17,0,0,0,0
+SignatureQueryString=Rover IAC
 ExtVerQueryString=
 VerNumber=30
-Capabilities=_IAC_STEPPER__
-
+Capabilities=_IAC_STEPPER_

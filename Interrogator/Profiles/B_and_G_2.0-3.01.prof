@@ -1,10 +1,9 @@
 [interrogation_profile]
-name="Standard Bowling & Grippo (V 2.0-3.01)"
+name=Standard Bowling & Grippo v2.0-3.01
 
 [parameters]
-bytecounts=22,1,1,125,125,0,0,0,0,0,0
+bytecounts=22,1,1,125,125,0,0,0,0,0
 SignatureQueryString=
 ExtVerString=
 VersionNumber=20
-Capabilities=_STD_
-
+Capabilities=_STANDARD_

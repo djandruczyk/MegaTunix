@@ -18,9 +18,13 @@
 
 /* Prototypes */
 void interrogate_ecu(void);
-void determine_ecu(void *);
+void determine_ecu(void *, GArray *);
 GArray * validate_and_load_tests(void);
 void * new_cmd_struct(void);
+void free_test_commands(GArray *);
+void parse_bytecounts(GArray *, GHashTable *, gchar *);
+void * load_profile(GArray * , gchar * );
+gint translate_capabilities(gchar *);
 /* Prototypes */
 
 #endif

@@ -53,24 +53,24 @@ static struct
 	gchar *tab_name;	/* The Tab textual name for the main gui */
 	gint capabilities;	/* What does it do */
 } notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",STD},
-{ "General MegaTunix Settings", build_general, "_General",STD},
-{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STD},
-{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STD},
-{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STD},
+{ "About MegaTunix", build_about, "_About",STANDARD},
+{ "General MegaTunix Settings", build_general, "_General",STANDARD},
+{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",STANDARD},
+{ "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD},
+{ "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD},
 { "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE},
-{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",STD},
-{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",STD},
+{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",STANDARD},
+{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",STANDARD},
 { "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",DUALTABLE},
 { "MegaSquirtnSpark/EDIS Spark Table", build_sparktable, "_Spark Advance",S_N_SPARK | S_N_EDIS},
 { "MegaSquirt Ignition Parameters", build_ignition, "_Ignition Settings",S_N_SPARK | S_N_EDIS},
-{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STD},
-{ "MegaSquirt Tuning", build_tuning, "_Tuning",STD},
-{ "MegaSquirt Tools", build_tools, "T_ools",STD},
+{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",STANDARD},
+{ "MegaSquirt Tuning", build_tuning, "_Tuning",STANDARD},
+{ "MegaSquirt Tools", build_tools, "T_ools",STANDARD},
 { "MegaSquirt Raw Memory Viewer", build_memory, "_Memory Viewer",RAW_MEMORY},
-{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STD},
-{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STD},
-{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STD},
+{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",STANDARD},
+{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",STANDARD},
+{ "MegaSquirt Visual Log Viewer", build_logviewer, "Log View/_Playback",STANDARD},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);

@@ -27,12 +27,9 @@
 #			changed to get proper data, set this to true and
 #			set the page value to the proper value
 #	page		<-- (Int) Used to change page. (DT specific hack)
-#	store_data	<-- (Bool) Flag used to store the returned data 
-#			so that it can be matched with data in the 
-#			interrogation profile to help determine a proper match.
-#	store_type	<-- (Strnig) Only _SIG_ , _VNUM_ , or _EXTVER_ are
-#			allowed here... This field is ONLY required if 
-#			store_data is TRUE, otherwise it is ignored.
+#	store_data	<-- (bool), true to save return vals or false to ignore
+#	store_type	<-- (String) Only _SIG_ , _VNUM_ , or _EXTVER_ are
+#			allowed here... 
 #	
 
 [interrogation_tests]
@@ -41,8 +38,8 @@ total_tests=10
 [test_00]
 raw_cmd=A
 cmd_length=1
-cmd_handle=_REALTIME_READ_
-cmd_description=Runtime Vars
+cmd_handle=_CMD_A_
+cmd_desc=Runtime Vars
 page_required=FALSE
 page=0
 store_data=FALSE
@@ -50,7 +47,8 @@ store_data=FALSE
 [test_01]
 raw_cmd=C
 cmd_length=1
-cmd_description=MS Clock
+cmd_handle=_CMD_C_
+cmd_desc=MS Clock
 page_required=FALSE
 page=0
 store_data=FALSE
@@ -58,17 +56,18 @@ store_data=FALSE
 [test_02]
 raw_cmd=Q
 cmd_length=1
-cmd_description=MS Revision
+cmd_handle=_CMD_Q_
+cmd_desc=MS Revision
 page_required=FALSE
 page=0
-store_data=TRUE
 store_type=_VNUM_
+store_data=TRUE
 
 [test_03]
 raw_cmd=V
 cmd_length=1
-cmd_handle=_VE_PAGE0_READ_
-cmd_description=VE/Constants page0
+cmd_handle=_CMD_V0_
+cmd_desc=VE/Constants page0
 page_required=TRUE
 page=0
 store_data=FALSE
@@ -76,8 +75,8 @@ store_data=FALSE
 [test_04]
 raw_cmd=V
 cmd_length=1
-cmd_handle=_VE_PAGE1_READ_
-cmd_description=VE/Constants page1
+cmd_handle=_CMD_V1_
+cmd_desc=VE/Constants page1
 page_required=TRUE
 page=1
 store_data=FALSE
@@ -85,26 +84,28 @@ store_data=FALSE
 [test_05]
 raw_cmd=S
 cmd_length=1
-cmd_description=Signature Echo
+cmd_handle=_CMD_S_
+cmd_desc=Signature Echo
 page_required=FALSE
 page=0
-store_data=TRUE
 store_type=_SIG_
+store_data=TRUE
 
 [test_06]
 raw_cmd=?
 cmd_length=1
-cmd_description=Extended Revision
+cmd_handle=_CMD_QUEST_
+cmd_desc=Extended Revision
 page_required=FALSE
 page=0
-store_data=TRUE
 store_type=_EXTVER_
+store_data=TRUE
 
 [test_07]
 raw_cmd=I
 cmd_length=1
-cmd_handle=_IGNITION_READ_
-cmd_description=Ignition Variables
+cmd_handle=_CMD_I_
+cmd_desc=Ignition Variables
 page_required=FALSE
 page=0
 store_data=FALSE
@@ -112,8 +113,8 @@ store_data=FALSE
 [test_08]
 raw_cmd=F0
 cmd_length=2
-cmd_handle=_RAW_MEMORY_READ_0_
-cmd_description=Memory Readback 1st 256 bytes
+cmd_handle=_CMD_F0_
+cmd_desc=Memory Readback 1st 256 bytes
 page_required=FALSE
 page=0
 store_data=FALSE
@@ -121,8 +122,8 @@ store_data=FALSE
 [test_09]
 raw_cmd=F1
 cmd_length=2
-cmd_handle=_RAW_MEMORY_READ_1_
-cmd_description=Memory Readback 2nd 256 bytes
+cmd_handle=_CMD_F1_
+cmd_desc=Memory Readback 2nd 256 bytes
 page_required=FALSE
 page=0
 store_data=FALSE

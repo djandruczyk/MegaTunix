@@ -1,10 +1,9 @@
 [interrogation_profile]
-name="MegaSquirtnEDIS v0.108 or MegaSquirtnSpark v2.02"
+name=MegaSquirtnEDIS v0.108 or MegaSquirtnSpark v2.02
 
 [parameters]
-bytecounts=22,1,1,125,125,0,0,83,0,0,0
-SignatureQueryString=""
+bytecounts=22,1,1,125,125,0,0,83,0,0
+SignatureQueryString=
 ExtVerQueryString=
 VerNumber=20
 Capabilities=_S_N_EDIS_
-
