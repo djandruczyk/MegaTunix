@@ -45,9 +45,9 @@ int build_comms(GtkWidget *parent_frame)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
 
 	frame = gtk_frame_new("Serial Status Messages");
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_end(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
@@ -64,7 +64,6 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
 
 	frame = gtk_frame_new("Select Communications Port");
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
 	hbox2 = gtk_hbox_new(FALSE,10);
@@ -85,7 +84,6 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_box_pack_start (GTK_BOX (hbox2), spinner, FALSE, TRUE, 0);
 
 	frame = gtk_frame_new("Verify ECU Communication");
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
 	hbox2 = gtk_hbox_new(TRUE,0);
@@ -98,7 +96,6 @@ int build_comms(GtkWidget *parent_frame)
 			NULL);
 
 	frame = gtk_frame_new("Runtime Parameters Configuration");
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(TRUE,0);
@@ -148,7 +145,6 @@ int build_comms(GtkWidget *parent_frame)
 			GINT_TO_POINTER(STOP_REALTIME));
 
 	frame = gtk_frame_new("MegaSquirt I/O Status");
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);

@@ -25,6 +25,7 @@ struct v1_2_Constants constants;
 int build_enrichments(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
+	GtkWidget *vbox2;
 	GtkWidget *hbox;
 	GtkWidget *entry;
 	GtkWidget *frame;
@@ -54,6 +55,7 @@ int build_enrichments(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,1.0,25.5,0.1,0.1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	gtk_widget_set_size_request(spinner,55,-1);
+//	gtk_widget_set_size_request(spinner,55,-1);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(CRANK_PULSE_NEG_40));
@@ -111,7 +113,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,0,1,0,1);
-	label = gtk_label_new("Enrichment (%)");
+	label = gtk_label_new("Enrich (%)");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,0,1,1,2);
 
 	/* Afterstart Enrichment Number of engine cycles */
@@ -125,7 +127,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	gtk_table_attach_defaults(GTK_TABLE(table),spinner,1,2,0,1);
-	label = gtk_label_new("Num of Cycles");
+	label = gtk_label_new("# of Cycles");
 	gtk_table_attach_defaults(GTK_TABLE(table),label,1,2,1,2);
 
 	/* Warmup enrichments */
@@ -136,9 +138,11 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 
-	table = gtk_table_new(3,10,FALSE);
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	gtk_container_add(GTK_CONTAINER(frame),table);
+	table = gtk_table_new(3,10,FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,0);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
 	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 10);
@@ -146,81 +150,81 @@ int build_enrichments(GtkWidget *parent_frame)
 	/* -40 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.neg40_entry = entry;
 
 	/* -20 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.neg20_entry = entry;
 
 	/* 0 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 2, 3, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.neg0_entry = entry;
 
 	/* 20 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 3, 4, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.pos20_entry = entry;
 
 	/* 40 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.pos40_entry = entry;
 
 	/* 60 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 5, 6, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.pos60_entry = entry;
 
 	/* 80 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 6, 7, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.pos80_entry = entry;
 
 	/* 100 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 7, 8, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.pos100_entry = entry;
 
 	/* 130 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 8, 9, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.pos130_entry = entry;
 
 	/* 160 deg entry */
 	entry = gtk_entry_new ();
 	gtk_table_attach (GTK_TABLE (table), entry, 9, 10, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 4);
 	constants.pos160_entry = entry;
 
 	label = gtk_label_new ("-40");

@@ -21,9 +21,14 @@
 #include "constants.h"
 
 extern struct v1_2_Constants constants;
+const gchar *control_strat[] = {"Speed-Density", "Alpha-N"};
+const gchar *inj_per_cycle[] = {"1-Squirt", "2-Squirts","3-Squirts","4-Squirts",
+			       "5-Squirts","6-Squirts","7-Squirts","8-Squirts"};
 
 int build_constants(GtkWidget *parent_frame)
 {
+	gint i;
+	gint total;
 	GtkWidget *button;
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
@@ -34,15 +39,18 @@ int build_constants(GtkWidget *parent_frame)
 	GtkWidget *frame;
 	GtkWidget *table;
 	GtkWidget *spinner;
+	GtkWidget *combo;
 	GtkAdjustment *adj;
+	GList *items = NULL;
 	
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent_frame),vbox);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
 
-	vbox2 = gtk_vbox_new(FALSE,4);
+	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
 
 	frame = gtk_frame_new("Required Fuel - One Cylinder (ms)");
@@ -50,7 +58,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox2),10);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
 
 	button = gtk_button_new_with_label("Calculate\nRequired Fuel...");
 	g_signal_connect(G_OBJECT(button), "clicked",
@@ -91,7 +99,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	table = gtk_table_new(2,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 	
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
@@ -125,7 +133,7 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Batt Voltage\nCorrection (ms/Volt)");
+	label = gtk_label_new("Batt Voltage\nCorrection (ms/V)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -140,7 +148,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	table = gtk_table_new(2,2,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_box_pack_start(GTK_BOX(vbox3),table,FALSE,FALSE,5);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
@@ -167,13 +175,13 @@ int build_constants(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("PWM Current Limit\n(Percent)");
+	label = gtk_label_new("PWM Current\n Limit (%)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Time Threshold for\nPWM mode (ms)");
+	label = gtk_label_new("PWM Time \nThreshold (ms)");
 	gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -185,7 +193,7 @@ int build_constants(GtkWidget *parent_frame)
 
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 
 	adj =  (GtkAdjustment *) gtk_adjustment_new(140.0,0.0,250.0,1.0,10.0,0);
@@ -209,14 +217,36 @@ int build_constants(GtkWidget *parent_frame)
 
 
 	frame = gtk_frame_new("Fuel Injection Control Strategy");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
+
+	table = gtk_table_new(2,3,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table),10);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	total = sizeof(control_strat)/sizeof(gpointer);
+	for (i=0;i<total;i++)
+	{
+		items = g_list_append(items, (gpointer)control_strat[i]);
+	}
+
+	combo = gtk_combo_new();
+	gtk_combo_set_popdown_strings(GTK_COMBO(combo),items);
+	gtk_combo_set_value_in_list(GTK_COMBO(combo),TRUE,TRUE);
+        gtk_widget_set_size_request(combo,140,-1);
+	gtk_table_attach (GTK_TABLE (table), combo, 1, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_box_pack_start(GTK_BOX(hbox),vbox2,FALSE,FALSE,0);
 	frame = gtk_frame_new("Injection Control");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(vbox2),frame,FALSE,FALSE,0);
 	
 	frame = gtk_frame_new("Commands");
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,FALSE,0);
 	/* Not written yet */
 	return TRUE;
