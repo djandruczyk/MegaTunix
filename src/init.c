@@ -27,6 +27,9 @@
 gint major_ver;
 gint minor_ver;
 gint micro_ver;
+unsigned char *kpa_conversion; 
+extern unsigned char turbo_map[];
+extern unsigned char na_map[];
 extern gint def_comm_port;
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
@@ -80,6 +83,7 @@ void init()
 	just_starting = 1; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
+	kpa_conversion = turbo_map;
 }
 
 int read_config(void)
@@ -103,8 +107,8 @@ int read_config(void)
 				&serial_params.comm_port);
 		cfg_read_int(cfgfile, "Serial", "polling_timeout", 
 				&serial_params.poll_timeout);
-		cfg_read_int(cfgfile, "Serial", "read_delay", 
-				&serial_params.read_wait);
+//		cfg_read_string(cfgfile, "Sensors", "map_type", 
+//				map_type);
 		cfg_free(cfgfile);
 		g_free(filename);
 		return(0);

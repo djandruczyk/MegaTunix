@@ -523,6 +523,7 @@ void update_runtime_vars()
 {
 	char buff[120];
 	gfloat tmpf;
+	gint  value;
 	extern struct ms_data_v1_and_v2 *runtime;
 	extern struct ms_data_v1_and_v2 *runtime_last;
 	/* test to see if data changed 

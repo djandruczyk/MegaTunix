@@ -18,13 +18,15 @@
 #include <protos.h>
 #include <lookuptables.h>
 
+extern unsigned char *kpa_conversion;
+
 void post_process(struct ms_raw_data_v1_and_v2 *in, struct ms_data_v1_and_v2 *out)
 {
 	out->secl = in->secl;
 	out->squirt.value = in->squirt.value;
 	out->engine.value = in->engine.value;
-	out->baro = in->baro;
-	out->map = in->map;
+	out->baro = kpa_conversion[in->baro];
+	out->map = kpa_conversion[in->map];
 	out->mat_volt = (float)in->mat*(5.0/255.0);
 	out->clt_volt = (float)in->clt*(5.0/255.0);
 	out->tps_volt = (float)in->tps*(5.0/255.0);
