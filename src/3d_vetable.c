@@ -817,7 +817,6 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 {
 	gint value = 0;
 	gint offset = 0;
-	gint page = 0;
 	gint rpm_bincount = 0;
 	gint load_bincount = 0;
 	gint load_base = 0;
@@ -834,7 +833,6 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 	dbg_func(__FILE__": Key Press Event: ",OPENGL);
 
-	printf("page is %i\n",ve_view->page);
 	ve_ptr = (unsigned char *) ms_data[ve_view->page];
 	load_bincount = ve_view->load_bincount;
 	rpm_bincount = ve_view->rpm_bincount;
