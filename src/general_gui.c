@@ -18,9 +18,11 @@
 #include <globals.h>
 #include <gui_handlers.h>
 #include <interrogate.h>
+#include <structures.h>
 
 extern gboolean tips_in_use;
 extern gboolean fahrenheit;
+extern struct DynamicEntries entries;
 extern GdkColor black;
 GtkWidget *ms_ecu_revision_entry;
 GtkWidget *interr_view;
@@ -31,7 +33,7 @@ int build_general(GtkWidget *parent_frame)
 {
 	extern GtkTooltips *tip;
 	GtkWidget *vbox;
-	//       GtkWidget *vbox2;
+	GtkWidget *vbox2;
 	GtkWidget *sw;
 	GtkWidget *view;
 	GtkWidget *frame;
@@ -100,20 +102,20 @@ int build_general(GtkWidget *parent_frame)
 
 	frame = gtk_frame_new("MegaSquirt ECU Information");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
-	hbox = gtk_hbox_new(TRUE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	table = gtk_table_new(2,5,FALSE);
+	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,5);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,5);
 
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
 			"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, so we offer the choice to select the API to use below",NULL);
-	gtk_table_attach (GTK_TABLE (table), ebox, 3, 5, 0, 1,
-			(GtkAttachOptions) (GTK_FILL),
+	gtk_table_attach (GTK_TABLE (table), ebox, 0, 2, 0, 1,
+			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 	button = gtk_button_new_with_label("Interrogate ECU capabilities");
 	gtk_container_add(GTK_CONTAINER(ebox),button);
@@ -121,13 +123,62 @@ int build_general(GtkWidget *parent_frame)
 			G_CALLBACK (interrogate_ecu), \
 			NULL);
 
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_table_attach (GTK_TABLE (table), hbox, 2, 5, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("ECU Revision Number");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+
+	entry = gtk_entry_new();
+	entries.ecu_revision_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 5);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
+
+
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_table_attach (GTK_TABLE (table), hbox, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("Extended Revision");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+
+	entry = gtk_entry_new();
+	entries.extended_revision_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 32);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
+
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_table_attach (GTK_TABLE (table), hbox, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	label = gtk_label_new("ECU Signature");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+
+	entry = gtk_entry_new();
+	entries.ecu_signature_entry = entry;
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 25);
+	gtk_widget_set_sensitive(entry,FALSE);
+	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
+	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
+
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
 			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100%% foolproof. as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on version 1 MS's)\n \"Q\" Which should return the version number of the firmware x10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" only used in the dualtable code.  Similar to the \"?\" command\n \"I\" which returns the igntion table and some constants (ignition variants ONLY)\n and \"?\" which is an extended version number query only supported by only a few firmware revisions",NULL);
 	frame = gtk_frame_new ("ECU Output");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
-	gtk_table_attach (GTK_TABLE (table), ebox, 0, 2, 0, 2,
+	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
@@ -135,7 +186,7 @@ int build_general(GtkWidget *parent_frame)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 			GTK_POLICY_AUTOMATIC,
 			GTK_POLICY_AUTOMATIC);
-	gtk_widget_set_size_request(sw,325,100);
+	gtk_widget_set_size_request(sw,-1,180);
 	gtk_container_add(GTK_CONTAINER(frame),sw);
 
 	view = gtk_text_view_new ();
@@ -148,19 +199,5 @@ int build_general(GtkWidget *parent_frame)
 			"red", NULL);
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
-	label = gtk_label_new("ECU Revision Number");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_table_attach (GTK_TABLE (table), label, 3, 4, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
-
-	entry = gtk_entry_new();
-	ms_ecu_revision_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 8);
-	gtk_widget_set_sensitive(entry,FALSE);
-	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
-	gtk_table_attach (GTK_TABLE (table), entry, 4, 5, 1, 2,
-			(GtkAttachOptions) (GTK_EXPAND),
-			(GtkAttachOptions) (0), 0, 0);
 	return TRUE;
 }

@@ -343,7 +343,11 @@ void read_ve_const()
 void set_ms_page(gint ms_page)
 {
 	gint res = 0;
-	gchar buf = ms_page & 0x01;
+	gchar buf;
+	if ((ms_page > 1) || (ms_page < 0))
+		fprintf(stderr,__FILE__": page choice %i is out of range(0,1)\n",ms_page);
+	
+	buf = ms_page & 0x01;
 #ifdef DEBUG
 	fprintf(stderr,__FILE__": Changing page on MS to %i\n",ms_page);
 #endif
@@ -396,15 +400,11 @@ void write_ve_const(gint value, gint offset, gint page)
 		lbuff[1]=value;
 		count = 2;
 	}
-	if (page != last_page)
-		set_ms_page(page);
+
+	set_ms_page(page);
 
 	res = write (serial_params->fd,"W",1);	/* Send write command */
 	res = write (serial_params->fd,lbuff,count);	/* Send write command */
-
-/*	if (page == 1)
-		printf("DualTable write operation offset %i, value %i.\n",offset,value);
-*/
 
 	/* We check to see if the last burn copy of the MS VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.

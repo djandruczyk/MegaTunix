@@ -36,6 +36,7 @@ extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern struct Serial_Params *serial_params;
+extern struct DynamicEntries entries;
 gboolean interrogated = FALSE;
 gfloat ecu_version;
 static struct 
@@ -45,13 +46,13 @@ static struct
 	gchar *cmd_desc;	/* command description */
 	gint cmd_len;		/* Command length in chars to send */
 	gint count;		/* number of bytes returned */
-	unsigned char *buffer;	/* buffer to store returned data... */
+	char *buffer;		/* buffer to store returned data... */
 } commands[] = {
 	{ 0,"A", "Runtime Vars", 1, 0,NULL },
 	{ 0,"C", "MS Clock", 1, 0,NULL },
 	{ 0,"Q", "MS Revision", 1, 0,NULL },
-	{ 0,"V", "Ve/Constants (page0)", 1, 0,NULL },
-	{ 1,"V", "Ve/Constants (page1)", 1, 0,NULL },
+	{ 0,"V", "Ve/Constants page0", 1, 0,NULL },
+	{ 1,"V", "Ve/Constants page1", 1, 0,NULL },
 	{ 0,"S", "Signature Echo", 1, 0,NULL },
 	{ 0,"I", "Ignition Vars", 1, 0,NULL },
 	{ 0,"?", "Extended Version", 1, 0,NULL },
@@ -106,17 +107,21 @@ void interrogate_ecu()
 	unsigned char buf[size];
 	unsigned char *ptr = buf;
 	gint res = 0;
-	gint tmppage = -1;
 	gint count = 0;
 	gint i = 0;
+	gint tmp = 0;
 	gint len = 0;
 	gint total = 0;
+	gint q_index = 0;
+	gint s_index = 0;
+	gint quest_index = 0;
 	gint table0_index = 0;
 	gint table1_index = 0;
 	gint v0_bytes = 0;
 	gint v1_bytes = 0;
 	gint s_bytes = 0;
 	gint i_bytes = 0;
+	gint q_bytes = 0;
 	gint quest_bytes = 0;
 	gchar *tmpbuf;
 	extern gboolean raw_reader_running;
@@ -156,12 +161,8 @@ void interrogate_ecu()
 
 		ptr = buf;
 		len = commands[i].cmd_len;
-		/* check page and reset */
-		if (tmppage != commands[i].page)
-		{
-			set_ms_page(commands[i].page);
-			tmppage = commands[i].page;
-		}
+		/* set page */
+		set_ms_page(commands[i].page);
 		string = g_strdup(commands[i].cmd_string);
 		res = write(serial_params->fd,string,len);
 		if (res != len)
@@ -204,14 +205,25 @@ void interrogate_ecu()
 			v1_bytes = commands[i].count;
 			table1_index = i;
 		}
+		else if (strstr(commands[i].cmd_string,"S"))
+		{
+			s_bytes = commands[i].count;
+			s_index = i;
+		}
+		else if (strstr(commands[i].cmd_string,"?"))
+		{
+			quest_bytes = commands[i].count;
+			quest_index = i;
+		}
+		else if (strstr(commands[i].cmd_string,"Q"))
+		{
+			q_bytes = commands[i].count;
+			q_index = i;
+		}
 		else if (strstr(commands[i].cmd_string,"A"))
 			serial_params->rtvars_size = commands[i].count;
-		else if (strstr(commands[i].cmd_string,"S"))
-			s_bytes = commands[i].count;
 		else if (strstr(commands[i].cmd_string,"I"))
 			i_bytes = commands[i].count;
-		else if (strstr(commands[i].cmd_string,"?"))
-			quest_bytes = commands[i].count;
 	}
 	if (v0_bytes == 128) /* dualtable potential */
 	{
@@ -228,19 +240,10 @@ void interrogate_ecu()
 	{
 		if (commands[i].count > 0)
 		{
-			if (strstr(commands[i].cmd_string,"V"))
-			{
-				tmpbuf = g_strdup_printf("Command %s (page %i), returned %i bytes\n",
-						commands[i].cmd_string, 
-						commands[i].page,
-						commands[i].count);
-			}
-			else
-			{
-				tmpbuf = g_strdup_printf("Command %s, returned %i bytes\n",
-						commands[i].cmd_string, 
-						commands[i].count);
-			}
+			tmpbuf = g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",
+					commands[i].cmd_string, 
+					commands[i].cmd_desc, 
+					commands[i].count);
 			/* Store counts for VE/realtime readback... */
 
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
@@ -248,21 +251,32 @@ void interrogate_ecu()
 		}
 		else
 		{
-			if (strstr(commands[i].cmd_string,"V"))
-			{
-				tmpbuf = g_strdup_printf("Command %s (page %i), isn't supported...\n",
-						commands[i].cmd_string,
-						commands[i].page);
-			}
-			else
-			{
-				tmpbuf = g_strdup_printf("Command %s isn't supported...\n",
-						commands[i].cmd_string);
-
-			}
+			tmpbuf = g_strdup_printf("Command \"%s\" (%s), isn't supported...\n",
+					commands[i].cmd_string,
+					commands[i].cmd_desc);
 			update_logbar(interr_view,NULL,tmpbuf,FALSE);
 			g_free(tmpbuf);
 		}
+	}
+	
+	if (q_bytes > 0) /* ECU reponded to basic version query */
+	{
+		memcpy(&tmp,commands[q_index].buffer,commands[q_index].count);
+		tmpbuf = g_strdup_printf("%.1f",((float)tmp/10.0));
+		gtk_entry_set_text(GTK_ENTRY(entries.ecu_revision_entry),tmpbuf);
+		g_free(tmpbuf);
+	}
+	if (s_bytes > 0) /* ECU reponded to basic version query */
+	{
+		tmpbuf = g_strdup(commands[s_index].buffer);
+		gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
+		g_free(tmpbuf);
+	}
+	if (quest_bytes > 0) /* ECU reponded to basic version query */
+	{
+		tmpbuf = g_strdup(commands[quest_index].buffer);
+		gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
+		g_free(tmpbuf);
 	}
 
 	if (v0_bytes > 125)

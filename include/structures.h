@@ -217,6 +217,9 @@ struct DynamicEntries
 	GtkWidget *comms_ve_readcount_entry;
 	GtkWidget *runtime_ve_readcount_entry;
 	GtkWidget *vex_comment_entry;
+	GtkWidget *ecu_revision_entry;
+	GtkWidget *extended_revision_entry;
+	GtkWidget *ecu_signature_entry;
 };
 
 
