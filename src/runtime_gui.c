@@ -24,8 +24,8 @@
 struct v1_2_Runtime_Gui runtime_data;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
-gint force_status_update=TRUE;
-extern gint connected;
+gboolean force_status_update = TRUE;
+extern gboolean connected;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 

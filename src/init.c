@@ -33,9 +33,10 @@ extern unsigned char na_map[];
 extern gint def_comm_port;
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
-extern gint just_starting;
-extern gint raw_reader_running;
-extern gint raw_reader_stopped;
+extern gboolean just_starting;
+extern gboolean raw_reader_running;
+extern gboolean raw_reader_stopped;
+extern gboolean tips_in_use;
 extern gint main_x_origin;
 extern gint main_y_origin;
 extern gint width;
@@ -46,7 +47,6 @@ extern gint poll_max;
 extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
-extern gint tips_in_use;
 extern GtkWidget *main_window;
 struct ve_const_std *ve_constants;
 struct ve_const_std *ve_const_tmp;
@@ -79,9 +79,9 @@ void init()
 	serial_params.read_wait = 100;	/* delay between reads in milliseconds */
 
 	/* Set flags to clean state */
-	raw_reader_running = 0;  /* We're not reading raw data yet... */
-	raw_reader_stopped = 1;  /* We're not reading raw data yet... */
-	just_starting = 1; 	/* to handle initial errors */
+	raw_reader_running = FALSE;  /* We're not reading raw data yet... */
+	raw_reader_stopped = TRUE;  /* We're not reading raw data yet... */
+	just_starting = TRUE; 	/* to handle initial errors */
 	ms_reset_count = 0; 	/* Counts MS clock resets */
 	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
 	kpa_conversion = turbo_map;

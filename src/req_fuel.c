@@ -19,7 +19,7 @@
 #include <protos.h>
 #include <constants.h>
 
-gint req_fuel_popup = FALSE;
+gboolean req_fuel_popup = FALSE;
 static gint rpmk_offset = 98;
 static GtkWidget *popup;
 struct Reqd_Fuel reqd_fuel = { NULL,NULL,NULL,NULL,350,0,19,14.7};
@@ -41,7 +41,7 @@ int reqd_fuel_popup()
         GtkWidget *table;
         GtkAdjustment *adj;
 
-        req_fuel_popup=TRUE;
+        req_fuel_popup = TRUE;
         popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         gtk_window_set_title(GTK_WINDOW(popup),"Required Fuel Calc");
         gtk_container_set_border_width(GTK_CONTAINER(popup),10);
@@ -173,7 +173,7 @@ int reqd_fuel_popup()
 int close_popup(GtkWidget *widget, gpointer data)
 {
         gtk_widget_destroy(popup);
-        req_fuel_popup=FALSE;
+        req_fuel_popup = FALSE;
         return TRUE;
 }
 int update_reqd_fuel(GtkWidget *widget, gpointer data)

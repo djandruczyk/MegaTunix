@@ -29,18 +29,18 @@ extern unsigned char na_map[];
 extern unsigned char turbo_map[];
 extern GtkTooltips *tip;
 gint tips_in_use;
-static gint paused_handlers = FALSE;
-static gint constants_loaded = FALSE;
-extern gint raw_reader_running;
-extern gint raw_reader_stopped;
+static gboolean paused_handlers = FALSE;
+static gboolean constants_loaded = FALSE;
+extern gboolean raw_reader_running;
+extern gboolean raw_reader_stopped;
 extern gint read_wait_time;
 extern struct ve_const_std *ve_constants;
 extern struct v1_2_Constants constants;
 extern struct Reqd_Fuel reqd_fuel;
 extern struct Labels labels;
 extern struct Logables logables;
-extern gint connected;
-extern gint force_status_update;
+extern gboolean connected;
+extern gboolean force_status_update;
 extern gfloat ego_pbar_divisor;
 extern gfloat map_pbar_divisor;
 extern GtkWidget *map_tps_frame;
@@ -50,7 +50,7 @@ static gint num_squirts = 1;
 gint num_cylinders = 1;
 static gint num_injectors = 1;
 static gfloat req_fuel_sav = 0.0;
-static gint err_flag = 0;
+static gboolean err_flag = FALSE;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
 static GList *offsets = NULL;
@@ -173,8 +173,7 @@ int bitmask_button_handler(GtkWidget *widget, gpointer data)
 						GINT_TO_POINTER(offset))] 
 						= dload_val;	
 				}
-				
-				if (err_flag == 0)
+				if (!err_flag)
 					check_req_fuel_limits();
 				break;
 			default:
@@ -194,10 +193,11 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((gint)data)
 	{
 		case START_REALTIME:
-			check_ecu_comms(NULL,NULL);
+			if (!raw_reader_running)
+				check_ecu_comms(NULL,NULL);
 			if (!connected)
 				no_ms_connection();
-			if (constants_loaded == FALSE)
+			else if (!constants_loaded)
 			{	/*Read constants first at least once */
 				paused_handlers = TRUE;
 				read_ve_const();
@@ -211,7 +211,7 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 		case STOP_REALTIME:
 			stop_serial_thread();
 			reset_runtime_status();
-			force_status_update=TRUE;
+			force_status_update = TRUE;
 			break;
 		case REQD_FUEL_POPUP:
 			if (!req_fuel_popup)
@@ -468,12 +468,12 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			if (num_cylinders % num_squirts)
 			{
-				err_flag = 1;
+				err_flag = TRUE;
 				squirt_cyl_inj_red();
 			}
 			else
 			{
-				err_flag = 0;
+				err_flag = FALSE;
 				squirt_cyl_inj_black();
 				check_req_fuel_limits();
 			}
@@ -505,12 +505,12 @@ int spinner_changed(GtkWidget *widget, gpointer data)
 			}
 			if (num_cylinders % num_squirts)
 			{
-				err_flag = 1;
+				err_flag = TRUE;
 				squirt_cyl_inj_red();
 			}
 			else
 			{
-				err_flag = 0;
+				err_flag = FALSE;
 				squirt_cyl_inj_black();
 				check_req_fuel_limits();
 			}

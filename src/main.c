@@ -25,7 +25,7 @@
 
 
 gint def_comm_port;
-gint ready = FALSE;
+gboolean ready = FALSE;
 
 int main(int argc, char ** argv)
 {

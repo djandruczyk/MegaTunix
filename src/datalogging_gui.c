@@ -35,7 +35,7 @@
 gint ms_type = 0;
 extern gint ready;
 extern struct raw_runtime_std *raw_runtime;
-gint log_opened=FALSE;
+gboolean log_opened = FALSE;
 gchar *delim;
 gfloat cumulative = 0.0;
 struct timeval now;
@@ -44,8 +44,8 @@ static gint dlog_context_id;
 static gint total_logables = 0;
 static gint mode = CUSTOM_LOG;
 static gint delimiter = SPACE;
-static gint logging=FALSE;
-static gint header_needed=FALSE;
+static gboolean logging = FALSE;
+static gboolean header_needed = FALSE;
 static GtkWidget *logables_table;
 static GtkWidget *file_selection;
 static GtkWidget *delim_table;
@@ -379,7 +379,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				
 		if(!logfile)
 		{
-			log_opened=FALSE;
+			log_opened = FALSE;
 			gtk_widget_set_sensitive(stop_button,FALSE);
 			gtk_widget_set_sensitive(start_button,FALSE);
 			g_snprintf(buff,100,"Failure creating datalogfile, Error Code: %s",strerror(errno));
@@ -388,7 +388,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		}
 		else
 		{
-			log_opened=TRUE;
+			log_opened = TRUE;
 			gtk_widget_set_sensitive(stop_button,TRUE);
 			gtk_widget_set_sensitive(start_button,TRUE);
 			log_file_name = g_strdup(selected_filename);
@@ -412,7 +412,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				
 		if(!logfile)
 		{
-			log_opened=FALSE;
+			log_opened = FALSE;
 			gtk_widget_set_sensitive(stop_button,FALSE);
 			gtk_widget_set_sensitive(start_button,FALSE);
 			g_snprintf(buff,100,"Failure opening datalogfile, Error Code: %s",strerror(errno));
@@ -421,7 +421,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		}
 		else
 		{	
-			log_opened=TRUE;
+			log_opened = TRUE;
 			gtk_widget_set_sensitive(stop_button,TRUE);
 			gtk_widget_set_sensitive(start_button,TRUE);
 			log_file_name = g_strdup(selected_filename);
@@ -620,7 +620,7 @@ void run_datalog(void)
 	gint offset = 0;
 	gint begin = FALSE;
 	unsigned char * log_ptr;
-	if (logging == FALSE) /* Logging isn't enabled.... */
+	if (!logging) /* Logging isn't enabled.... */
 		return;
 	else
 	{

@@ -23,7 +23,7 @@ extern GdkColor black;
 extern struct Buttons buttons;
 extern struct Labels labels;
 extern struct v1_2_Constants constants;
-static gint warning_present = FALSE;
+static gboolean warning_present = FALSE;
 
 
 void set_store_red()

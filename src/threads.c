@@ -24,10 +24,10 @@
 
 pthread_t raw_input_thread;			/* thread handle */
 pthread_t starter;				/* thread handle */
-gint raw_reader_running;			/* flag for thread */
-gint raw_reader_stopped;			/* flag for thread */
+gboolean raw_reader_running;			/* flag for thread */
+gboolean raw_reader_stopped;			/* flag for thread */
+extern gboolean connected;			/* valid connection with MS */
 extern gint ser_context_id;			/* Statusbar related */
-extern gint connected;				/* valid connection with MS */
 extern GtkWidget *ser_statbar;			/* Statusbar */
 char buff[60];
 
@@ -53,7 +53,7 @@ void *serial_raw_thread_starter(void *params)
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
 
-	if (serial_params.open == 0)
+	if (!serial_params.open)
 	{
                 g_snprintf(buff,60,"Serial Port Not Open, Can NOT Start Thread in This State");
                 /* Serial not opened, can't start thread in this state */
@@ -70,6 +70,7 @@ void *serial_raw_thread_starter(void *params)
 		update_statusbar(ser_statbar,ser_context_id,buff);
 		gdk_threads_leave();
 		return 0;
+		printf("should not happen\n");
 	}
 	else
 	{
@@ -107,19 +108,18 @@ int stop_serial_thread()
                 g_snprintf(buff,60,"Realtime Reader Thread ALREADY Stopped");
                 /* Thread not running, can't stop what hasn't started yet*/
 		update_statusbar(ser_statbar,ser_context_id,buff);
-		raw_reader_running = 0;
-		raw_reader_stopped = 1;
+		raw_reader_running = FALSE;
+		raw_reader_stopped = TRUE;
 		return 0;	/* its already stopped */
 	}
 	else
 	{
-		raw_reader_running = 0; /* thread will die on next loop */
+		raw_reader_running = FALSE; /* thread will die on next loop */
 		tmp = pthread_cancel(raw_input_thread);
                 g_snprintf(buff,60,"Realtime Reader Thread Stopped Normally");
                 /* Thread stopped normally */
 		update_statusbar(ser_statbar,ser_context_id,buff);
-		raw_reader_running = 0;
-		raw_reader_stopped = 1;
+		raw_reader_stopped = TRUE;
 	}
 	return 0;
 }
@@ -133,19 +133,18 @@ void *raw_reader_thread(void *params)
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
 
-	raw_reader_running = 1; /* make sure it starts */
-	raw_reader_stopped = 0;	/* set opposite flag */
+	raw_reader_running = TRUE; /* make sure it starts */
+	raw_reader_stopped = FALSE;	/* set opposite flag */
 	ufds.fd = serial_params.fd;
 	ufds.events = POLLIN;
 	
-	while(raw_reader_running > 0) /* set it to zero jump out, thread will die*/
+	while(raw_reader_running == TRUE) /* set it to zero jump out, thread will die*/
 	{
+		pthread_testcancel();
                 res = write(serial_params.fd,"A",1);
                 res = poll (&ufds,1,serial_params.poll_timeout);
                 if (res == 0)
-		{
 			serial_params.errcount++;
-		}
                 else
 		{
                         res = handle_ms_data(REALTIME_VARS);
@@ -162,11 +161,12 @@ void *raw_reader_thread(void *params)
 		update_errcounts();
 		gdk_threads_leave();
 
-                usleep(serial_params.read_wait *1000);
+		pthread_testcancel();
+                usleep(serial_params.read_wait * 1000); /* Sleep */
 	}
 	/* if we get here, the thread got killed, mark it as "stopped" */
-	raw_reader_stopped = 1;
-	raw_reader_running = 0;
+	raw_reader_stopped = TRUE;
+	raw_reader_running = FALSE;
 	return 0;
 }
 

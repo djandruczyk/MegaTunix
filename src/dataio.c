@@ -84,7 +84,7 @@ int handle_ms_data(int which_data)
 			if (just_starting)
 			{
 				lastcount = raw_runtime->secl;
-				just_starting = 0;
+				just_starting  = FALSE;
 			}
 			/* Check for clock jump from the MS, a jump in time
 			 * from the MS clock indicates a reset due to power

@@ -26,15 +26,15 @@
 #include <errno.h>
 
 
-extern gint raw_reader_running;
+extern gboolean raw_reader_running;
 extern gint ser_context_id;
 extern GtkWidget *ser_statbar;
 char buff[60];
-static gint burn_needed = FALSE;
-gint connected;
+static gboolean burn_needed = FALSE;
 extern struct v1_2_Runtime_Gui runtime_data;
 extern struct ve_const_std *ve_constants;
 extern struct ve_const_std *ve_const_tmp;
+gboolean connected;
        
 int open_serial(int port_num)
 {
@@ -50,7 +50,7 @@ int open_serial(int port_num)
 	{
 		/* FAILURE */
 		/* An Error occurred opening the port */
-		serial_params.open = 0;
+		serial_params.open = FALSE;
 		g_snprintf(buff,60,"Error Opening COM%i Error Code: %s",port_num,strerror(errno));
 		update_statusbar(ser_statbar,ser_context_id,buff);
 	}
@@ -58,7 +58,7 @@ int open_serial(int port_num)
 	{
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
-		serial_params.open = 1;
+		serial_params.open = TRUE;
 		g_snprintf(buff,60,"COM%i Opened Successfully, Suggest Testing ECU Comms",port_num);
 		update_statusbar(ser_statbar,ser_context_id,buff);
 
@@ -144,7 +144,7 @@ void close_serial()
 
 	tcsetattr(serial_params.fd,TCSANOW,&serial_params.oldtio);
 	close(serial_params.fd);
-	serial_params.open = 0;
+	serial_params.open = FALSE;
 	connected = FALSE;
         gtk_widget_set_sensitive(runtime_data.status[0],
                         connected);
@@ -160,13 +160,13 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
         gint res;
         struct pollfd ufds;
 	gchar buff[60];
-        gint restart_reader = 0;
+        gint restart_reader = FALSE;
 
         if(serial_params.open)
 	{
 		if (raw_reader_running)
 		{
-			restart_reader = 1;
+			restart_reader = TRUE;
 			stop_serial_thread(); /* stops realtime read */
 			usleep(100000);	/* sleep 100 ms to be sure thread ends */
 		}
@@ -219,7 +219,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 
 void read_ve_const()
 {
-	int restart_reader = 0;
+	int restart_reader = FALSE;
 	struct pollfd ufds;
 	int res = 0;
 	int tmp = 0;
@@ -231,7 +231,7 @@ void read_ve_const()
 	}
 	if (raw_reader_running)
 	{
-		restart_reader = 1;
+		restart_reader = TRUE;
 		stop_serial_thread(); /* stops realtime read */
 		usleep(100000);	/* sleep 100 ms to be sure thread ends */
 	}
@@ -295,7 +295,7 @@ void write_ve_const(gint value, gint offset)
 	//	printf("large value, %i, offset %i\n",value,offset);
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
-		twopart = 1;
+		twopart = TRUE;
 	}
 	if (value < 0)
 	{
