@@ -30,6 +30,7 @@
 #include <threads.h>
 #include <vex_support.h>
 
+extern gboolean interrogated;
 extern gboolean connected;
 extern gboolean force_status_update;
 extern gboolean raw_reader_running;
@@ -347,7 +348,9 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 		case START_REALTIME:
 			if (!connected)
 				check_ecu_comms(NULL,NULL);
-			else if (!constants_loaded)
+			if (!interrogated)
+				interrogate_ecu();
+			if (!constants_loaded)
 			{	/*Read constants first at least once */
 				paused_handlers = TRUE;
 				read_ve_const();
@@ -369,6 +372,8 @@ gint std_button_handler(GtkWidget *widget, gpointer data)
 				reqd_fuel_popup();
 			break;
 		case READ_VE_CONST:
+			if (!interrogated)
+				interrogate_ecu();
 			if (!connected)
 				no_ms_connection();
 			else

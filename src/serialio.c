@@ -255,7 +255,7 @@ int check_ecu_comms(GtkWidget *widget, gpointer data)
 		g_free(tmpbuf);
 	}
 	locked = FALSE;
-	return (0);
+	return (connected);
 
 }
 

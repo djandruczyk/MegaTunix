@@ -59,11 +59,13 @@ int handle_ms_data(InputData which_data)
 	switch (which_data)
 	{
 		case REALTIME_VARS:
-			while (poll(&ufds,1,serial_params->poll_timeout) )
+			while (poll(&ufds,1,serial_params->poll_timeout))
 			{
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->rtvars_size); 
 				//printf("Realtime read %i, total %i\n",res,total);
+				if (total == serial_params->rtvars_size)
+					break;
 			}
 			/* the number of bytes expected for raw data read */
 			if (total > serial_params->rtvars_size) 
@@ -147,7 +149,7 @@ int handle_ms_data(InputData which_data)
 			{
 				total += res = read(serial_params->fd,ptr+total,
 						serial_params->table0_size); 
-				//printf("VE/Const read %i, total %i\n",res,total);
+				//printf("polling VE/Const read %i, total %i\n",res,total);
 			}
 			/* the number of bytes expected for raw data read */
 			if (total != serial_params->table0_size) 

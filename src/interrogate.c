@@ -19,15 +19,18 @@
 #include <globals.h>
 #include <interrogate.h>
 #include <notifications.h>
+#include <serialio.h>
 #include <string.h>
 #include <structures.h>
 #include <sys/stat.h>
 #include <sys/poll.h>
 #include <unistd.h>
 
+extern gboolean connected;
 extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
+gboolean interrogated = FALSE;
 
 extern struct Serial_Params *serial_params;
 gfloat ecu_version;
@@ -85,7 +88,6 @@ void interrogate_ecu()
 	char buf[size];
 	gint res = 0;
 	gint count = 0;
-	gint tmp = 0;
 	gint i = 0;
 	gint len = 0;
 	gint v_bytes = 0;
@@ -93,16 +95,24 @@ void interrogate_ecu()
 	gint i_bytes = 0;
 	gint quest_bytes = 0;
 	gchar *tmpbuf;
+	gboolean con_status = FALSE;
 	gint tests_to_run = sizeof(cmd_chars)/sizeof(gchar *);
 	struct Cmd_Results cmd_res[tests_to_run]; 
+
+	if (!connected)
+	{
+		con_status = check_ecu_comms(NULL,NULL);
+		if (con_status == FALSE)
+		{
+			interrogated = FALSE;
+			return;
+		}
+	}
 
 	ufds.fd = serial_params->fd;
 	ufds.events = POLLIN;
 
-	tmp = serial_params->newtio.c_cc[VMIN];
-	serial_params->newtio.c_cc[VMIN]     = 1; /*wait for 1 char */
 	tcflush(serial_params->fd, TCIFLUSH);
-	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	for (i=0;i<tests_to_run;i++)
 	{
@@ -115,6 +125,10 @@ void interrogate_ecu()
 		{	
 			while (poll(&ufds,1,serial_params->poll_timeout))
 				count += read(serial_params->fd,&buf,64);
+		}
+		else
+		{
+			/* Poll timout, ECU not connected???  */
 		}
 		cmd_res[i].count = count;
 	}
@@ -145,10 +159,7 @@ void interrogate_ecu()
 		}
 	}
 
-	/* flush serial port... */
-	serial_params->newtio.c_cc[VMIN]     = tmp; /*restore original*/
 	tcflush(serial_params->fd, TCIFLUSH);
-	tcsetattr(serial_params->fd,TCSANOW,&serial_params->newtio);
 
 	for(i=0;i<tests_to_run;i++)
 	{
@@ -197,5 +208,6 @@ void interrogate_ecu()
 		}
 	}
 
+	interrogated = TRUE;
 	return;
 }

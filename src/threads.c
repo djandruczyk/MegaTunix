@@ -142,6 +142,8 @@ void *raw_reader_thread(void *params)
 	struct pollfd ufds;
 	int res = 0;
 
+	ufds.fd = serial_params->fd;
+	ufds.events = POLLIN;
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
 	pthread_cleanup_push(reset_reader_locks, NULL);
@@ -152,9 +154,7 @@ void *raw_reader_thread(void *params)
 	while(raw_reader_running == TRUE) 
 	{
 		pthread_testcancel();
-		ufds.fd = serial_params->fd;
-		ufds.events = POLLIN;
-		res = write(serial_params->fd,"A",1);
+		write(serial_params->fd,"A",1);
 		res = poll (&ufds,1,serial_params->poll_timeout);
 		if (res == 0)
 		{
