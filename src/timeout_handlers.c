@@ -136,6 +136,7 @@ void force_an_update()
 
 gboolean early_interrogation()
 {
+	update_logbar("interr_view","warning","Initiating background ECU interrogation...\n",FALSE,FALSE);
 	io_cmd(IO_INTERROGATE_ECU,NULL);
 	return FALSE;
 }

@@ -431,6 +431,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			rescale_table(obj_data);
 			break;
 		case INTERROGATE_ECU:
+			update_logbar("interr_view","warning","USER Initiated ECU interrogation...\n",FALSE,FALSE);
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
 		case START_PLAYBACK:
