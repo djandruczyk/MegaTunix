@@ -58,6 +58,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *vbox2;
 	GtkWidget *hbox;
 	GtkWidget *table;
+	GtkWidget *label;
 	GtkWidget *drawing_area;
 	GtkObject * object = NULL;
 	GdkGLConfig *gl_config;
@@ -210,6 +211,22 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			NULL);
 	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
+	table = gtk_table_new(2,2,FALSE);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
+	label = gtk_label_new("Current Edit Position");
+        gtk_table_attach (GTK_TABLE (table), label, 0, 2, 0, 1,
+	                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+	                        (GtkAttachOptions) (0), 0, 0);
+	label = gtk_label_new(NULL);
+	register_widget(g_strdup_printf("rpmcoord_label_%i",table_num),label);
+        gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+	                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+	                        (GtkAttachOptions) (0), 0, 0);
+	label = gtk_label_new(NULL);
+	register_widget(g_strdup_printf("loadcoord_label_%i",table_num),label);
+        gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+	                        (GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+	                        (GtkAttachOptions) (0), 0, 0);
 
 	button = gtk_button_new_with_label("Close Window");
 	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
@@ -264,6 +281,8 @@ gint free_ve3d_view(GtkWidget *widget)
 	winstat[ve_view->table_num] = FALSE;
 	g_object_set_data(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("ve_view_%i",ve_view->table_num)),"ve_view",NULL);
 	deregister_widget(g_strdup_printf("ve_view_%i",ve_view->table_num));
+	deregister_widget(g_strdup_printf("rpmcoord_label_%i",ve_view->table_num));
+	deregister_widget(g_strdup_printf("loadcoord_label_%i",ve_view->table_num));
 	g_free(ve_view->z_source);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
@@ -673,6 +692,7 @@ void ve3d_draw_active_indicator(void *ptr)
 	gint load_base = 0;
 	gint tbl_base = 0;
 	gfloat divider = 0.0;
+	extern GHashTable *dynamic_widgets;
 
 	dbg_func(__FILE__": ve3d_draw_active_indicator()\n",OPENGL);
 
@@ -699,6 +719,9 @@ void ve3d_draw_active_indicator(void *ptr)
 			(gfloat)(ms_data[load_page][load_base+ve_view->active_load])/ve_view->load_div,	
 			((gfloat)ms_data[tbl_page][tbl_base+(ve_view->active_load*ve_view->load_bincount)+ve_view->active_rpm]/divider)/ve_view->ve_div);
 	glEnd();	
+	/* Update labels to notify user... */
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("rpmcoord_label_%i",ve_view->table_num))),g_strdup_printf("%i RPM",100*ms_data[rpm_page][rpm_base+ve_view->active_rpm]));
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,g_strdup_printf("loadcoord_label_%i",ve_view->table_num))),g_strdup_printf("%i KPA",ms_data[load_page][load_base+ve_view->active_load]));
 }
 
 /*!
