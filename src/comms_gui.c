@@ -35,6 +35,8 @@ int build_comms(GtkWidget *parent_frame)
 	GtkWidget *button;
 	GtkWidget *entry;
 	GtkWidget *label;
+	GtkWidget *spinner;
+	GtkAdjustment *adj;
 	GSList *group;
 	char buff[10];
 
@@ -64,40 +66,24 @@ int build_comms(GtkWidget *parent_frame)
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	button = gtk_radio_button_new_with_label(NULL, "COM1");
-	gtk_box_pack_start(GTK_BOX(vbox2),button,TRUE,TRUE,0);
-	if (serial_params.comm_port == 1)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-	gtk_signal_connect(GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (set_serial_port), \
-			(gpointer)1);
+	hbox2 = gtk_hbox_new(FALSE,10);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox2,FALSE,TRUE,0);
 
-	group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
-	button = gtk_radio_button_new_with_label(group, "COM2");
-	gtk_box_pack_start(GTK_BOX(vbox2),button,TRUE,TRUE,0);
-	if (serial_params.comm_port == 2)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-	gtk_signal_connect(GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (set_serial_port), \
-			(gpointer)2);
+	label = gtk_label_new("COMM PORT");
 
-	group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
-	button = gtk_radio_button_new_with_label(group, "COM3");
-	gtk_box_pack_start(GTK_BOX(vbox2),button,TRUE,TRUE,0);
-	if (serial_params.comm_port == 3)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-	gtk_signal_connect(GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (set_serial_port), \
-			(gpointer)3);
+	gtk_box_pack_start(GTK_BOX(hbox2),label,FALSE,TRUE,0);
 
-	group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
-	button = gtk_radio_button_new_with_label(group, "COM4");
-	gtk_box_pack_start(GTK_BOX(vbox2),button,TRUE,TRUE,0);
-	if (serial_params.comm_port == 4)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
-	gtk_signal_connect(GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (set_serial_port), \
-			(gpointer)4);
+	adj = (GtkAdjustment *) gtk_adjustment_new(1,1,8,1,1,0);
+	spinner = gtk_spin_button_new(adj,0,0);
+	gtk_signal_connect (GTK_OBJECT(adj), "value_changed",
+			GTK_SIGNAL_FUNC (set_serial_port),
+			(gpointer)spinner);
+	gtk_adjustment_set_value(GTK_ADJUSTMENT(adj),serial_params.comm_port);
+
+	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
+	gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
+                                       GTK_SHADOW_OUT);
+	gtk_box_pack_start (GTK_BOX (hbox2), spinner, FALSE, TRUE, 0);
 
 	frame = gtk_frame_new("Verify ECU Communication");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
@@ -168,10 +154,9 @@ int build_comms(GtkWidget *parent_frame)
 	return(0);
 }
 
-int set_serial_port(GtkWidget *widget, gpointer port)
+int set_serial_port(GtkWidget *widget, gpointer data)
 {
-	if (GTK_TOGGLE_BUTTON(widget)->active)
-	{
+	int port = gtk_spin_button_get_value_as_int(data);
 		if(serial_params.open)
 		{
 			if (raw_reader_running)
@@ -180,6 +165,5 @@ int set_serial_port(GtkWidget *widget, gpointer port)
 		}
 		open_serial((int)port);
 		setup_serial_params();
-	}
 	return TRUE;
 }

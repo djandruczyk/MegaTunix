@@ -42,10 +42,11 @@ void leave(GtkWidget *widget, gpointer *data)
 
 void text_entry_handler(GtkWidget * widget, gpointer *data)
 {
-        gchar *entry_text;
+	gchar *entry_text;
 	gint tmp = 0;
+	gfloat tmpf = 0;
 	gchar buff[10];
-        entry_text = gtk_entry_get_text(GTK_ENTRY(widget));
+	entry_text = gtk_entry_get_text(GTK_ENTRY(widget));
 	switch ((gint)data)
 	{
 		case SER_POLL_TIMEO:
@@ -55,6 +56,8 @@ void text_entry_handler(GtkWidget * widget, gpointer *data)
 			else if (tmp > poll_max)
 				tmp = poll_max;
 			serial_params.poll_timeout = tmp;
+			sprintf(buff,"%i",tmp);
+			gtk_entry_set_text(GTK_ENTRY(widget),buff);
 			break;
 		case SER_INTERVAL_DELAY:
 			tmp = atoi(entry_text);
@@ -63,11 +66,14 @@ void text_entry_handler(GtkWidget * widget, gpointer *data)
 			else if (tmp > interval_max)
 				tmp = interval_max;
 			read_wait_time = tmp;
+			sprintf(buff,"%i",tmp);
+			gtk_entry_set_text(GTK_ENTRY(widget),buff);
 			break;
+		case INJ_OPEN_TIME:
+			tmpf = atof(entry_text);
+			printf("inj open time set to %f\n",tmpf);
 	}
 	/* update the widget in case data was out of bounds */
-	sprintf(buff,"%i",tmp);
-	gtk_entry_set_text(GTK_ENTRY(widget),buff);
 }
 
 

@@ -18,5 +18,11 @@ style 'main_buttons'
   bg[PRELIGHT] = { 1.0, 0.80, 0.80 }
 }
 
+style 'frame_fonts'
+{
+  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+}
+
 widget "main window.*GtkButton*" style "main_buttons"
 
+widget "main window.*GtkFrame*" style "frame_fonts"
