@@ -57,7 +57,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,TRUE,0);
 
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,5);
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,"   The Cranking Pulsewidth determines how many milliseconds the injectors are pulsed open ONLY during engine crank-over.  Currently the ms is hardcoded to consider cranking to be from 0-300 RPM, above that it considers the engine running and uses the VEtable entries instead.  There are two fields, the enrichment at -40deg Fahreheit (-40\302\260 C as well) and at 170deg F (76.6 deg C).  At temperatures between these extremes the MS code interpolates the value.  The priming pulse is a one time pulse upon bootup of the MS unit.  This is similar in concept to pumping the gas pedel on an old carbureted car to get the accel pump to shoot at little extra in to assist with starting though the MS only does this once at startup.  Some engines need this more than others. (rotary engines especially)  You may not need thie priming pulse...",NULL);
 	frame = gtk_frame_new("Cranking Pulsewidth (ms)");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -144,7 +144,7 @@ void build_enrichments(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	ebox = gtk_event_box_new();
-	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,5);
+	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,"   The Afterstart enrichment is a short term enrichment that increases the delivered fuel to the engine by the Enrichment percentage for a certain number of ignition cycles.  The enrichment tapers down for each cycle. (ignition pulse inputted into the MS ecu).  This can be shown on the runtime page after engine startup.  The Warmup enrichment bar tapers down during the afterstart enrichment period. (and the AS_ENRICH box is \"lit\") A max of 255 cycles can be entered for the Afterstart enrichment.",NULL);
 	frame = gtk_frame_new("Afterstart Enrich");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -219,8 +219,8 @@ void build_enrichments(GtkWidget *parent_frame)
 
 	table = gtk_table_new(3,10,FALSE);
 	gtk_box_pack_start(GTK_BOX(vbox2),table,FALSE,TRUE,5);
-	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+	gtk_container_set_border_width (GTK_CONTAINER (table), 2);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 3);
 	gtk_table_set_col_spacings (GTK_TABLE (table), 3);
 
 	/* Warmup enrichment bins */
