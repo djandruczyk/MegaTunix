@@ -255,6 +255,64 @@ gboolean check_ecu_comms(GtkWidget *widget, gpointer data)
 
 }
 
+void read_raw_memory()
+{
+	gboolean restart_reader = FALSE;
+	struct pollfd ufds;
+	int res = 0;
+	extern unsigned int ecu_caps;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+
+	g_static_mutex_lock(&mutex);
+
+	if (!connected)
+	{
+		no_ms_connection();
+		g_static_mutex_unlock(&mutex);
+		return;		/* can't do anything if not connected */
+	}
+	if (raw_reader_running)
+	{
+		restart_reader = TRUE;
+		stop_serial_thread(); /* stops realtime read */
+	}
+
+	ufds.fd = serial_params->fd;
+	ufds.events = POLLIN;
+
+	/* Flush serial port... */
+	tcflush(serial_params->fd, TCIOFLUSH);
+
+	if (!(ecu_caps & RAW_MEMORY))
+	{
+		dbg_func(__FILE__": This firmware doe NOT support RAW memory read\n",CRITICAL);
+		g_static_mutex_unlock(&mutex);
+		return;
+	}
+	res = write(serial_params->fd,"F0",2);
+	res = poll (&ufds,1,serial_params->poll_timeout);
+	if (res == 0)	/* Error */
+	{
+		dbg_func(__FILE__": failure reading RAW Memory\n",CRITICAL);
+		serial_params->errcount++;
+		connected = FALSE;
+	}
+	else		/* Data arrived */
+	{
+		connected = TRUE;
+		dbg_func(__FILE__": reading RAW_Memory-(0)\n",SERIAL_RD);
+		res = handle_ms_data(RAW_MEMORY_DUMP);
+
+	}
+	tcflush(serial_params->fd, TCIOFLUSH);
+
+	if (restart_reader)
+		start_serial_thread();
+
+	g_static_mutex_unlock(&mutex);
+	return;
+}
+
 void read_ve_const()
 {
 	gboolean restart_reader = FALSE;

@@ -13,15 +13,19 @@
 
 #include <config.h>
 #include <defines.h>
+#include <enums.h>
+#include <gui_handlers.h>
 #include <memory_gui.h>
 
 GList *raw_mem_controls = NULL;
+GArray *raw_memory = NULL;
 
 void build_memory(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *hbox;
 	GtkWidget *label;
+	GtkWidget *button;
 	GtkWidget *sep;
 	GtkWidget *table;
 	GtkWidget *table2;
@@ -54,6 +58,8 @@ void build_memory(GtkWidget *parent_frame)
 	table = gtk_table_new(rows,1,TRUE);
 	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
 
+	raw_memory = g_array_new(FALSE,TRUE,sizeof(GtkWidget*));
+
 	for (y=0;y<rows;y++)
 	{
 		frame = gtk_frame_new(NULL);
@@ -83,7 +89,9 @@ void build_memory(GtkWidget *parent_frame)
 				gtk_table_attach(GTK_TABLE(table2),ebox,x,x+1,0,1,
 						(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 						(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);
-				label = gtk_label_new(g_strdup_printf("%i,%i",x/2,y));
+				//label = gtk_label_new(g_strdup_printf("%i,%i",x/2,y));
+				label = gtk_label_new(NULL);
+				raw_memory = g_array_insert_val(raw_memory,(y*8)+(x/2),label);
 				gtk_container_add(GTK_CONTAINER(ebox),label);
 			}
 			if (y%2)
@@ -93,7 +101,18 @@ void build_memory(GtkWidget *parent_frame)
 
 		}
 	}
+	frame = gtk_frame_new("Raw Memory Settings");
+	gtk_box_pack_start(GTK_BOX(vbox),frame,TRUE,TRUE,5);
 
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	
+	button = gtk_button_new_with_label("Read RAW Memory\n");
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(std_button_handler),
+			GINT_TO_POINTER(READ_RAW_MEMORY));
+	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,TRUE,5);
+	
 
 
 	/* Not written yet */

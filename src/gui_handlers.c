@@ -429,6 +429,21 @@ gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				constants_loaded = TRUE;
 			}
 			break;
+		case READ_RAW_MEMORY:
+			if (!interrogated)
+				interrogate_ecu();
+			if (!connected)
+				check_ecu_comms(NULL,NULL);
+			if (!connected)
+				no_ms_connection();
+			else
+			{
+				paused_handlers = TRUE;
+				read_raw_memory();
+				//update_raw_memory();
+				paused_handlers = FALSE;
+			}
+			break;
 		case BURN_MS_FLASH:
 			paused_handlers = TRUE;
 			burn_flash();
