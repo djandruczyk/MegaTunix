@@ -245,23 +245,35 @@ void mem_alloc()
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
 	 */
-	interdep_vars_1 = g_hash_table_new(NULL,NULL);
-	interdep_vars_2 = g_hash_table_new(NULL,NULL);
+	if (!interdep_vars_1)
+		interdep_vars_1 = g_hash_table_new(NULL,NULL);
+	if (!interdep_vars_2)
+		interdep_vars_2 = g_hash_table_new(NULL,NULL);
 
 
-	ms_data = g_new0(gint *, firmware->total_pages);
-	ms_data_last = g_new0(gint *, firmware->total_pages);
-	ms_data_backup = g_new0(gint *, firmware->total_pages);
-	ve_widgets = g_new0(GList **, firmware->total_pages);
+	if (!ms_data)
+		ms_data = g_new0(gint *, firmware->total_pages);
+	if (!ms_data_last)
+		ms_data_last = g_new0(gint *, firmware->total_pages);
+	if (!ms_data_backup)
+		ms_data_backup = g_new0(gint *, firmware->total_pages);
+	if (!ve_widgets)
+		ve_widgets = g_new0(GList **, firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		ms_data[i] = g_new0(gint, MS_PAGE_SIZE);
-		ms_data_last[i] = g_new0(gint, MS_PAGE_SIZE);
-		ms_data_backup[i] = g_new0(gint, MS_PAGE_SIZE);
-		ve_widgets[i] = g_new0(GList *, MS_PAGE_SIZE);
-		for (j=0;j<MS_PAGE_SIZE;j++)
+		if (!ms_data[i])
+			ms_data[i] = g_new0(gint, MS_PAGE_SIZE);
+		if (!ms_data_last[i])
+			ms_data_last[i] = g_new0(gint, MS_PAGE_SIZE);
+		if (!ms_data_backup[i])
+			ms_data_backup[i] = g_new0(gint, MS_PAGE_SIZE);
+		if (!ve_widgets[i])
 		{
-			ve_widgets[i][j] = NULL;
+			ve_widgets[i] = g_new0(GList *, MS_PAGE_SIZE);
+			for (j=0;j<MS_PAGE_SIZE;j++)
+			{
+				ve_widgets[i][j] = NULL;
+			}
 		}
 	}
 
