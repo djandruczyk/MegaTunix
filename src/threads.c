@@ -47,6 +47,7 @@ void io_cmd(IoCommands cmd, gpointer data)
 {
 	struct Io_Message *message = NULL;
 	extern gint ecu_caps;
+	extern struct IoCmds *cmds;
 	gint tmp = -1;
 
 	/* This function is the bridge from the main GTK thread (gui) to
@@ -59,8 +60,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 		case IO_REALTIME_READ:
 			message = g_new0(struct Io_Message,1);
 			message->command = READ_CMD;
-			message->out_str = g_strdup("A");
-			message->out_len = 1;
+			message->out_str = g_strdup(cmds->realtime_cmd);
+			message->out_len = cmds->rt_cmd_len;
 			message->handler = REALTIME_VARS;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 			tmp = UPD_REALTIME;
@@ -95,8 +96,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 			message = g_new0(struct Io_Message,1);
 			message->command = READ_CMD;
 			message->page = 0;
-			message->out_str = g_strdup("V");
-			message->out_len = 1;
+			message->out_str = g_strdup(cmds->veconst_cmd);
+			message->out_len = cmds->ve_cmd_len;
 			message->handler = VE_AND_CONSTANTS_1;
 			message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
 			tmp = UPD_READ_CONVERSIONS;
@@ -111,8 +112,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 				message = g_new0(struct Io_Message,1);
 				message->command = READ_CMD;
 				message->page = 1;
-				message->out_str = g_strdup("V");
-				message->out_len = 1;
+				message->out_str = g_strdup(cmds->veconst_cmd);
+				message->out_len = cmds->ve_cmd_len;
 				message->handler = VE_AND_CONSTANTS_2;
 				message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 				tmp = UPD_READ_CONVERSIONS;
@@ -126,8 +127,8 @@ void io_cmd(IoCommands cmd, gpointer data)
 				message = g_new0(struct Io_Message,1);
 				message->command = READ_CMD;
 				message->page = 0;
-				message->out_str = g_strdup("I");
-				message->out_len = 1;
+				message->out_str = g_strdup(cmds->ignition_cmd);
+				message->out_len = cmds->ign_cmd_len;
 				message->handler = IGNITION_VARS;
 				message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
 				tmp = UPD_READ_CONVERSIONS;
@@ -140,9 +141,9 @@ void io_cmd(IoCommands cmd, gpointer data)
 		case IO_READ_RAW_MEMORY:
 			message = g_new0(struct Io_Message,1);
 			message->command = READ_CMD;
-			message->page = 1;
-			message->out_str = g_strdup("F");
-			message->out_len = 1;
+			message->page = 0;
+			message->out_str = g_strdup(cmds->raw_mem_cmd);
+			message->out_len = cmds->raw_mem_cmd_len;
 			message->handler = RAW_MEMORY_DUMP;
 			message->offset = (gint)data;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
@@ -217,8 +218,8 @@ void *serial_io_handler(gpointer data)
 			for (i=0;i<len;i++)
 			{
 				val = g_array_index(message->funcs,
-						Functions, i);
-				switch ((Functions)val)
+						UpdateFunctions, i);
+				switch ((UpdateFunctions)val)
 				{
 					case UPD_READ_VE_CONST:
 						io_cmd(IO_READ_VE_CONST,NULL);

@@ -244,20 +244,6 @@ typedef enum
 
 typedef enum
 {
-	CMD_A,
-	CMD_C,
-	CMD_Q,
-	CMD_V0,
-	CMD_V1,
-	CMD_S,
-	CMD_QUEST,
-	CMD_I,
-	CMD_F0,
-	CMD_F1
-}TestCmds;
-
-typedef enum
-{
 	BURN_CMD,
 	READ_CMD,
 	WRITE_CMD,
@@ -286,6 +272,6 @@ typedef enum
 	UPD_READ_VE_CONST,
 	UPD_RAW_MEMORY,
 	UPD_STORE_BLACK,
-}Functions;
+}UpdateFunctions;
 
 #endif

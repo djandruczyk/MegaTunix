@@ -55,17 +55,7 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_SIG_",GINT_TO_POINTER(SIG));
 	g_hash_table_insert(str_2_enum,"_VNUM_",GINT_TO_POINTER(VNUM));
 	g_hash_table_insert(str_2_enum,"_EXTVER_",GINT_TO_POINTER(EXTVER));
-	/* Command references.... */
-	g_hash_table_insert(str_2_enum,"_CMD_A_",GINT_TO_POINTER(CMD_A));
-	g_hash_table_insert(str_2_enum,"_CMD_C_",GINT_TO_POINTER(CMD_C));
-	g_hash_table_insert(str_2_enum,"_CMD_I_",GINT_TO_POINTER(CMD_I));
-	g_hash_table_insert(str_2_enum,"_CMD_Q_",GINT_TO_POINTER(CMD_Q));
-	g_hash_table_insert(str_2_enum,"_CMD_S_",GINT_TO_POINTER(CMD_S));
-	g_hash_table_insert(str_2_enum,"_CMD_V0_",GINT_TO_POINTER(CMD_V0));
-	g_hash_table_insert(str_2_enum,"_CMD_V1_",GINT_TO_POINTER(CMD_V1));
-	g_hash_table_insert(str_2_enum,"_CMD_F0_",GINT_TO_POINTER(CMD_F0));
-	g_hash_table_insert(str_2_enum,"_CMD_F1_",GINT_TO_POINTER(CMD_F1));
-	g_hash_table_insert(str_2_enum,"_CMD_QUEST_",GINT_TO_POINTER(CMD_QUEST));
+
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 
 }

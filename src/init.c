@@ -62,6 +62,7 @@ GtkWidget *ign_widgets[MS_PAGE_SIZE];
 
 GHashTable *interdep_vars_1 = NULL;
 GHashTable *interdep_vars_2 = NULL;
+struct IoCmds *cmds;
 
 void init()
 {
@@ -209,25 +210,18 @@ void mem_alloc()
 	interdep_vars_2 = g_hash_table_new(NULL,NULL);
 
 	/* Allocate memory blocks */
-	serial_params = g_malloc(sizeof(struct Serial_Params));
-	ms_data = g_malloc(2*MS_PAGE_SIZE);
-	ms_data_last = g_malloc(2*MS_PAGE_SIZE);
-	ms_data_backup = g_malloc(2*MS_PAGE_SIZE);
+	serial_params = g_malloc0(sizeof(struct Serial_Params));
+	ms_data = g_malloc0(2*MS_PAGE_SIZE);
+	ms_data_last = g_malloc0(2*MS_PAGE_SIZE);
+	ms_data_backup = g_malloc0(2*MS_PAGE_SIZE);
 
-	runtime = g_malloc(sizeof(struct Runtime_Common));
+	runtime = g_malloc0(sizeof(struct Runtime_Common));
 
-	std_conversions =  g_malloc(sizeof(struct Conversion_Chart));
-	ign_conversions =  g_malloc(sizeof(struct Conversion_Chart));
+	std_conversions =  g_malloc0(sizeof(struct Conversion_Chart));
+	ign_conversions =  g_malloc0(sizeof(struct Conversion_Chart));
 
-	/* Set memory blocks to known states... */
-	memset((void *)serial_params, 0, sizeof(struct Serial_Params));
-	memset((void *)ms_data, 0, 2*MS_PAGE_SIZE);
-	memset((void *)ms_data_last, 0, 2*MS_PAGE_SIZE);
-	memset((void *)ms_data_backup, 0, 2*MS_PAGE_SIZE);
+	cmds = g_malloc0(sizeof(struct IoCmds));
 
-	memset((void *)runtime, 0, sizeof(struct Runtime_Common));
-	memset((void *)std_conversions, 0, sizeof(struct Conversion_Chart));
-	memset((void *)ign_conversions, 0, sizeof(struct Conversion_Chart));
 }
 
 void mem_dealloc()

@@ -17,9 +17,6 @@
 # Fields allowed inside [test_XX} blocks:
 #
 #	raw_cmd		<-- (String) This is the ascii value sent to the ECU
-#	cmd_handle	<-- (String) This is a CODE that MegaTunix uses to map 
-#			this command to an internal routine. (It's 
-#			used for more than interrogation)
 #	cmd_desc	<-- (String) This is displayed in the interrogator 
 #			window and is a brief description of the command sent.
 #	cmd_length	<-- (Int) Length of command sent to the ECU in bytes
@@ -27,18 +24,21 @@
 #			changed to get proper data, set this to true and
 #			set the page value to the proper value
 #	page		<-- (Int) Used to change page. (DT specific hack)
+#	multipart	<-- (bool) This means that the write to the ECU has 
+#			two components, a command and an arg. (see cmd_int_arg)
+#	cmd_int_arg	<-- (int) the argument sent AFTER the command, used 
+#			only seldomly for things like RAW mem read.
 #	store_data	<-- (bool), true to save return vals or false to ignore
 #	store_type	<-- (String) Only _SIG_ , _VNUM_ , or _EXTVER_ are
 #			allowed here... 
 #	
 
 [interrogation_tests]
-total_tests=10
+total_tests=9
 
 [test_00]
 raw_cmd=A
 cmd_length=1
-cmd_handle=_CMD_A_
 cmd_desc=Runtime Vars
 page_required=FALSE
 page=0
@@ -47,7 +47,6 @@ store_data=FALSE
 [test_01]
 raw_cmd=C
 cmd_length=1
-cmd_handle=_CMD_C_
 cmd_desc=MS Clock
 page_required=FALSE
 page=0
@@ -56,7 +55,6 @@ store_data=FALSE
 [test_02]
 raw_cmd=Q
 cmd_length=1
-cmd_handle=_CMD_Q_
 cmd_desc=MS Revision
 page_required=FALSE
 page=0
@@ -66,7 +64,6 @@ store_data=TRUE
 [test_03]
 raw_cmd=V
 cmd_length=1
-cmd_handle=_CMD_V0_
 cmd_desc=VE/Constants page0
 page_required=TRUE
 page=0
@@ -75,7 +72,6 @@ store_data=FALSE
 [test_04]
 raw_cmd=V
 cmd_length=1
-cmd_handle=_CMD_V1_
 cmd_desc=VE/Constants page1
 page_required=TRUE
 page=1
@@ -84,7 +80,6 @@ store_data=FALSE
 [test_05]
 raw_cmd=S
 cmd_length=1
-cmd_handle=_CMD_S_
 cmd_desc=Signature Echo
 page_required=FALSE
 page=0
@@ -94,7 +89,6 @@ store_data=TRUE
 [test_06]
 raw_cmd=?
 cmd_length=1
-cmd_handle=_CMD_QUEST_
 cmd_desc=Extended Revision
 page_required=FALSE
 page=0
@@ -104,26 +98,17 @@ store_data=TRUE
 [test_07]
 raw_cmd=I
 cmd_length=1
-cmd_handle=_CMD_I_
 cmd_desc=Ignition Variables
 page_required=FALSE
 page=0
 store_data=FALSE
 
 [test_08]
-raw_cmd=F0
-cmd_length=2
-cmd_handle=_CMD_F0_
+raw_cmd=F
+cmd_length=1
+multipart=TRUE
+cmd_int_arg=0
 cmd_desc=Memory Readback 1st 256 bytes
-page_required=FALSE
-page=0
-store_data=FALSE
-
-[test_09]
-raw_cmd=F1
-cmd_length=2
-cmd_handle=_CMD_F1_
-cmd_desc=Memory Readback 2nd 256 bytes
 page_required=FALSE
 page=0
 store_data=FALSE

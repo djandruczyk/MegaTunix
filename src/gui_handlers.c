@@ -22,7 +22,6 @@
 #include <fileio.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <interrogate.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
 #include <ms_structures.h>

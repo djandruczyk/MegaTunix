@@ -271,7 +271,7 @@ GdkGLConfig* get_gl_config(void)
 			/* Should make a non-GL basic drawing area version 
 			   instead of dumping the user out of here, or at least 
 			   render a non-GL found text on the drawing area */
-			g_print ("*** No appropriate OpenGL-capable visual found.\n");
+			dbg_func("*** No appropriate OpenGL-capable visual found.\n",CRITICAL);
 			exit (1);
 		}
 	}
@@ -428,7 +428,7 @@ void ve_realize (GtkWidget *widget, gpointer data)
 		/* glPolygonOffset */
 		proc = gdk_gl_get_proc_address ("glPolygonOffset");
 		if (proc == NULL) {
-			g_print ("Sorry, glPolygonOffset() is not supported by this renderer.\n");
+			dbg_func("Sorry, glPolygonOffset() is not supported by this renderer.\n",CRITICAL);
 			exit (1);
 		}
 	}
@@ -947,7 +947,6 @@ void ve_load_font_metrics(void)
 	PangoFontMetrics *font_metrics;
 	gchar font_string[] = "sans 10";
 	gint font_height;
-	gchar * tmpbuf = NULL;
 
 	dbg_func(__FILE__": 3D View Load Font Metrics\n",OPENGL);
 
@@ -956,9 +955,7 @@ void ve_load_font_metrics(void)
 	font = gdk_gl_font_use_pango_font (font_desc, 0, 128, font_list_base);
 	if (font == NULL)
 	{
-		tmpbuf = g_strdup_printf(__FILE__": 3D View, Can't load font '%s'\n",font_string);
-		dbg_func(tmpbuf,CRITICAL);
-		g_free(tmpbuf);
+		dbg_func(g_strdup_printf(__FILE__": 3D View, Can't load font '%s'\n",font_string),CRITICAL);
 		exit (1);
 	}
 	font_metrics = pango_font_get_metrics (font, NULL);

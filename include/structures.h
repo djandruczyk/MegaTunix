@@ -318,6 +318,10 @@ struct Canidate
 	gint ver_num;		/* Version number to search for */
 	gchar *firmware_name;	/* Name of this firmware */
 	Capabilities capabilities;	/* Bitmask of capabilities.... */
+	gchar * rt_cmd_key;	/* string key to hashtable for RT command */
+	gchar * ve_cmd_key;	/* string key to hashtable for VE command */
+	gchar * ign_cmd_key;	/* string key to hashtable for Ign command */
+	gchar * raw_mem_cmd_key;/* string key to hashtable for RAW command */
 };
 
 struct Command
@@ -325,7 +329,8 @@ struct Command
 	gint page;		/* ms page in memory where it resides */
 	gchar *string;		/* command to get the data */
 	gchar *desc;		/* command description */
-	gchar *handle;		/* command description */
+	gboolean multipart;	/* Multipart command? (raw_memory) */
+	gint cmd_int_arg;	/* multipart arg, integer */
 	gint len;		/* Command length in chars to send */
 	gboolean store_data;	/* Store returned data */
 	StoreType store_type;	/* Store data where */
@@ -341,6 +346,18 @@ struct Io_Message
 	GArray *funcs;		/* List of functiosn to be dispatched... */
 	InputHandler handler;	/* Command handler for inbound data */
 	void *payload;		/* data passed along, arbritrary size.. */
+};
+
+struct IoCmds
+{
+	gchar *realtime_cmd;	/* Command sent to get RT vars.... */
+	gint rt_cmd_len;	/* length in bytes of rt_cmd_len */
+	gchar *veconst_cmd;	/* Command sent to get VE/Const vars.... */
+	gint ve_cmd_len;	/* length in bytes of veconst_cmd */
+	gchar *ignition_cmd;	/* Command sent to get Ignition vars.... */
+	gint ign_cmd_len;	/* length in bytes of ignition_cmd */
+	gchar *raw_mem_cmd;	/* Command sent to get raw_mem vars.... */
+	gint raw_mem_cmd_len;	/* length in bytes of raw_mem_cmd */
 };
 
 struct OutputData

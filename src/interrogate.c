@@ -63,9 +63,11 @@ void interrogate_ecu()
 	gint last_page = 0;
 	gint tests_to_run = 0;
 	gchar *string = NULL;
+	gchar * tmpbuf = NULL;
 	GArray *cmd_array = NULL;
 	unsigned char buf[size];
 	unsigned char *ptr = buf;
+	GHashTable *cmd_details = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	/* prevent multiple runs of interrogator simultaneously */
@@ -84,10 +86,12 @@ void interrogate_ecu()
 	canidate = g_malloc0(sizeof(struct Canidate));
 	canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
 
+	cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
+
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();
 	/* Load tests from config files */
-	cmd_array = validate_and_load_tests();
+	cmd_array = validate_and_load_tests(cmd_details);
 	/* how many tests.... */
 	tests_to_run = cmd_array->len;
 
@@ -113,14 +117,21 @@ void interrogate_ecu()
 
 		string = g_strdup(cmd->string);
 		res = write(serial_params->fd,string,cmd->len);
-		dbg_func(g_strdup_printf(__FILE__": interrogate_ecu() sent command \"%s\"\n",string),INTERROGATOR);
-		g_free(string);
 		if (res != cmd->len)
 			dbg_func(__FILE__": Error writing data to the ECU\n",CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": interrogate_ecu() sent command \"%s\"\n",string),INTERROGATOR);
+		if (cmd->multipart)
+		{
+			res = write(serial_params->fd,&cmd->cmd_int_arg,1);
+			if (res != 1)
+				dbg_func(__FILE__": Error writing data to the ECU\n",CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": interrogate_ecu() sent argument \"%i\"\n",cmd->cmd_int_arg),INTERROGATOR);
+		}
+		g_free(string);
 		res = poll (&ufds,1,25);
 		if (res)
 		{	
-			while (poll(&ufds,1,25))
+			while (poll(&ufds,1,50))
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
 			}
@@ -145,8 +156,10 @@ void interrogate_ecu()
 		}
 
 		/* store number of bytes received in counter variable */
-		g_hash_table_insert(canidate->bytecounts,cmd->handle,
+		tmpbuf = g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page);
+		g_hash_table_insert(canidate->bytecounts,g_strdup(tmpbuf),
 				GINT_TO_POINTER(total));
+		g_free(tmpbuf);
 	}
 	/* Reset page to 0 just to be 100% sure... */
 	set_ms_page(0);
@@ -155,19 +168,20 @@ void interrogate_ecu()
 
 	interrogated = TRUE;
 
-	determine_ecu(canidate,cmd_array);	
+	determine_ecu(canidate,cmd_array,cmd_details);	
 
 	if (canidate)
 		g_free(canidate);
 
 	free_test_commands(cmd_array);
+	g_hash_table_destroy(cmd_details);
 
 	g_static_mutex_unlock(&mutex);
 
 	return;
 }
 
-void determine_ecu(void *ptr, GArray *cmd_array)
+void determine_ecu(void *ptr, GArray *cmd_array, GHashTable *cmd_details)
 {
 	struct Canidate *canidate = (struct Canidate *)ptr;
 	struct Canidate *potential = NULL;
@@ -184,6 +198,7 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 	GError *error;
 	gchar * path;
 	gchar * filename = NULL;
+	extern struct IoCmds *cmds;
 
 	path = g_strconcat(DATA_DIR,"/",INTERROGATOR_DIR,"/Profiles/",NULL);
 	dir = g_dir_open(path,0,&error);	
@@ -198,10 +213,12 @@ void determine_ecu(void *ptr, GArray *cmd_array)
 			cmd = g_array_index(cmd_array,struct Command *, j);
 			cbytes = (gint)g_hash_table_lookup(
 					canidate->bytecounts,
-					cmd->handle);
+					g_strdup_printf("CMD_%s_%i",
+						cmd->string,cmd->page));
 			pbytes = (gint)g_hash_table_lookup(
 					potential->bytecounts,
-					cmd->handle);
+					g_strdup_printf("CMD_%s_%i",
+						cmd->string,cmd->page));
 			dbg_func(g_strdup_printf(__FILE__": determine_ecu() Test %s, canidate bytes %i, potential %i\n",cmd->string,cbytes,pbytes),INTERROGATOR);
 			if (cbytes != pbytes)
 			{
@@ -253,9 +270,8 @@ end_of_loop:
 		tmpbuf = g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",
 				cmd->string, 
 				cmd->desc, 
-				(gint) g_hash_table_lookup(
-							   canidate->bytecounts, 
-							   cmd->handle));
+				(gint) g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
+
 		// Store counts for VE/realtime readback... 
 		dbg_func(tmpbuf,INTERROGATOR);
 		gdk_threads_enter();
@@ -282,7 +298,7 @@ end_of_loop:
 			else
 				tmpbuf = g_strndup(
 						canidate->sig_str,
-						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->handle));
+						(gint)g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
 			gdk_threads_enter();
 			gtk_entry_set_text(GTK_ENTRY(entries.ecu_signature_entry),tmpbuf);
 			gdk_threads_leave();
@@ -295,7 +311,7 @@ end_of_loop:
 			else
 				tmpbuf = g_strndup(
 						canidate->quest_str,
-						(gint)g_hash_table_lookup(canidate->bytecounts, cmd->handle));
+						(gint)g_hash_table_lookup(canidate->bytecounts, g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page)));
 			gdk_threads_enter();
 			gtk_entry_set_text(GTK_ENTRY(entries.extended_revision_entry),tmpbuf);
 			gdk_threads_leave();
@@ -321,15 +337,51 @@ end_of_loop:
 
 	/* Set expected sizes for commands */
 	serial_params->table0_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"_CMD_V0_");
+			potential->bytecounts,"CMD_V_0");
 	serial_params->table1_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"_CMD_V1_");
+			potential->bytecounts,"CMD_V_1");
 	serial_params->rtvars_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"_CMD_A_");
+			potential->bytecounts,"CMD_A_0");
 	serial_params->ignvars_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"_CMD_I_");
+			potential->bytecounts,"CMD_I_0");
 	serial_params->memblock_size = (gint)g_hash_table_lookup(
-			potential->bytecounts,"_CMD_F0_");
+			potential->bytecounts,"CMD_F_0");
+
+	/* use commands defined in hte interogation profile to map the proper
+	 * command to the I/O routines...  Looks ugly but should (hopefully)
+	 * be more flexible in the long run....
+	 */
+	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->rt_cmd_key);
+	if (cmd != NULL)
+	{
+		cmds->realtime_cmd = g_strdup(cmd->string);
+		cmds->rt_cmd_len = cmd->len;
+	}
+
+	/* VE/Constants */
+	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ve_cmd_key);
+	if (cmd != NULL)
+	{
+		cmds->veconst_cmd = g_strdup(cmd->string);
+		cmds->ve_cmd_len = cmd->len;
+	}
+
+	/* Ignition vars */
+	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->ign_cmd_key);
+	if (cmd != NULL)
+	{
+		cmds->ignition_cmd = g_strdup(cmd->string);
+		cmds->ign_cmd_len = cmd->len;
+	}
+
+	/* Raw memory */
+	cmd = (struct Command *)g_hash_table_lookup(cmd_details,potential->raw_mem_cmd_key);
+	if (cmd != NULL)
+	{
+		cmds->raw_mem_cmd = g_strdup(cmd->string);
+		cmds->raw_mem_cmd_len = cmd->len;
+	}
+
 
 	/* Display firmware version in the window... */
 	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",potential->firmware_name);
@@ -362,7 +414,7 @@ freeup:
 
 }
 
-GArray * validate_and_load_tests()
+GArray * validate_and_load_tests(GHashTable *cmd_details)
 {
 	ConfigFile *cfgfile;
 	GArray * cmd_array = NULL;
@@ -383,16 +435,20 @@ GArray * validate_and_load_tests()
 		cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 		for (i=0;i<total_tests;i++)
 		{
-			cmd = (struct Command *)new_cmd_struct();
+			cmd = g_new0(struct Command, 1);
+			cmd->multipart=FALSE;
 			section = g_strdup_printf("test_%.2i",i);
 			cfg_read_string(cfgfile,section,"raw_cmd",
 					&cmd->string);
 			cfg_read_int(cfgfile,section,"cmd_length",
 					&cmd->len);
-			cfg_read_string(cfgfile,section,"cmd_handle",
-					&cmd->handle);
 			cfg_read_string(cfgfile,section,"cmd_desc",
 					&cmd->desc);
+			cfg_read_boolean(cfgfile,section,"multipart",&cmd->multipart);
+			if (cmd->multipart)
+				cfg_read_int(cfgfile,section,"cmd_int_arg",
+						&cmd->cmd_int_arg);
+					
 			cfg_read_int(cfgfile,section,"page",
 					&cmd->page);
 			cfg_read_boolean(cfgfile,section,"store_data",
@@ -407,6 +463,7 @@ GArray * validate_and_load_tests()
 
 			g_free(section);
 			g_array_insert_val(cmd_array,i,cmd);
+			g_hash_table_insert(cmd_details,g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page),cmd);
 		}
 		cfg_free(cfgfile);
 		
@@ -420,13 +477,6 @@ GArray * validate_and_load_tests()
 
 	g_free(filename);
 	return cmd_array;
-}
-
-void * new_cmd_struct()
-{
-	struct Command *cmd = NULL;
-	cmd = g_malloc0(sizeof(struct Command));
-	return cmd;
 }
 
 void free_test_commands(GArray * cmd_array)
@@ -479,14 +529,19 @@ void * load_profile(GArray * cmd_array, gchar * file)
 		dbg_func(g_strdup_printf(__FILE__": load_profile() file:\n\t%s\n\topened successfully\n",filename),INTERROGATOR);
 		canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
 		cfg_read_string(cfgfile,"interrogation_profile","name",&canidate->firmware_name);
-		cfg_read_string(cfgfile,"parameters","bytecounts",
-				&tmpbuf);
-		parse_bytecounts(cmd_array, canidate->bytecounts, tmpbuf);
-		g_free(tmpbuf);
+		parse_bytecounts(cmd_array, canidate->bytecounts, (void *)cfgfile);
 		cfg_read_string(cfgfile,"parameters","SignatureQueryString",
 				&canidate->sig_str);
 		cfg_read_string(cfgfile,"parameters","ExtVerQueryString",
 				&canidate->quest_str);
+		cfg_read_string(cfgfile,"parameters","Rt_Cmd_Key",
+				&canidate->rt_cmd_key);
+		cfg_read_string(cfgfile,"parameters","VE_Cmd_Key",
+				&canidate->ve_cmd_key);
+		cfg_read_string(cfgfile,"parameters","Ign_Cmd_Key",
+				&canidate->ign_cmd_key);
+		cfg_read_string(cfgfile,"parameters","Raw_Mem_Cmd_Key",
+				&canidate->raw_mem_cmd_key);
 		cfg_read_int(cfgfile,"parameters","VerNumber",
 				&canidate->ver_num);
 		cfg_read_string(cfgfile,"parameters","Capabilities",
@@ -503,27 +558,26 @@ void * load_profile(GArray * cmd_array, gchar * file)
 	return canidate;
 }
 
-void parse_bytecounts(GArray *cmd_array, GHashTable *hash, gchar * input)
+void parse_bytecounts(GArray *cmd_array, GHashTable *hash, void * input)
 {
-	gchar **vector;
 	struct Command *cmd = NULL;
 	gint i = 0;
-	gint count = 0;
+	gint bytecount = -2;
+	gchar * tmpbuf = NULL;
+	ConfigFile *cfgfile = (ConfigFile *) input;
 
-	vector = g_strsplit(input,",",0);
-	
-	while (vector[i++] != NULL)
-		count++;
-	if (cmd_array->len != count)
-		dbg_func(__FILE__": parse_bytecounts(), ERROR, vector length does not coincide with commands list, invalid profile\n",CRITICAL);
-
-	for (i=0;i<count;i++)
+	for (i=0;i<cmd_array->len;i++)
 	{
+		bytecount = -1;
 		cmd = g_array_index(cmd_array,struct Command *, i);
-		g_hash_table_insert(hash, cmd->handle,GINT_TO_POINTER(atoi(vector[i])));
-		dbg_func(g_strdup_printf(__FILE__": parse_bytecounts() inserting key %s, val %i\n",cmd->handle,atoi(vector[i])),INTERROGATOR);
+		tmpbuf = g_strdup_printf("CMD_%s_%i",cmd->string,cmd->page);
+		cfg_read_int(cfgfile,"bytecounts",tmpbuf,
+				&bytecount);
+		
+		g_hash_table_insert(hash, g_strdup(tmpbuf),GINT_TO_POINTER(bytecount));
+		dbg_func(g_strdup_printf(__FILE__": parse_bytecounts() inserting key %s, val %i\n",tmpbuf,bytecount),INTERROGATOR);
+		g_free(tmpbuf);
 	}	
-	g_strfreev(vector);
 
 }
 
@@ -540,10 +594,10 @@ gint translate_capabilities(gchar *string)
 	{
 		dbg_func(g_strdup_printf(__FILE__": translate_capabilities() trying to translate %s\n",vector[i]),INTERROGATOR);
 		value += translate_string(vector[i]);
+		dbg_func(g_strdup_printf(__FILE__": translate_capabilities() translated value of %s is %i\n",vector[i],value),INTERROGATOR);
 		i++;
 	}
 
 	g_strfreev(vector);
 	return value;	
-		
 }
