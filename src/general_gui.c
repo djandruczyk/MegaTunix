@@ -29,7 +29,7 @@ GtkWidget *interr_view;
 
 GtkTextBuffer *textbuffer;
 
-gboolean build_general(GtkWidget *parent_frame)
+void build_general(GtkWidget *parent_frame)
 {
 	extern GtkTooltips *tip;
 	GtkWidget *vbox;
@@ -129,7 +129,7 @@ gboolean build_general(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("ECU Revision Number");
-//	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	//	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	entry = gtk_entry_new();
@@ -200,5 +200,5 @@ gboolean build_general(GtkWidget *parent_frame)
 			"red", NULL);
 	gtk_container_add(GTK_CONTAINER(sw),view);
 
-	return TRUE;
+	return;
 }

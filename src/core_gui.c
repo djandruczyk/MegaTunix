@@ -46,23 +46,23 @@ GtkTooltips *tip;
 static struct 
 {
 	gchar *frame_name;	/* Textual name at the top of the frame */
-	GuiFramePage page;	/* identifier used when building each frame */
+	void (*Function) (GtkWidget *);	/* builder function */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
 	gboolean enabled;	/* Is the tab enabled (sensitive) or not? */
 } notebook_tabs[] = { 
-{ "About MegaTunix", ABOUT_PAGE, "_About",TRUE},
-{ "General MegaTunix Settings", GENERAL_PAGE, "_General",TRUE},
-{ "MegaSquirt Communications Parameters", COMMS_PAGE, "Co_mmunications",TRUE},
-{ "MegaSquirt Constants", CONSTANTS_PAGE, "_Constants",TRUE},
-{ "MegaSquirt Enrichments", ENRICHMENTS_PAGE, "_Enrichments",TRUE},
-{ "MegaSquirt VE Table(s)", VETABLES_PAGE, "_VE Table(s)",TRUE},
-{ "MegaSquirt Ignition Settings", IGNITION_PAGE, "_Ignition Settings",FALSE},
-{ "MegaSquirt Runtime Display", RUNTIME_PAGE, "_Runtime Disp.",TRUE},
-{ "MegaSquirt Tuning", TUNING_PAGE, "_Tuning",TRUE},
-{ "MegaSquirt Tools", TOOLS_PAGE, "T_ools",TRUE},
-{ "MegaSquirt Advanced Diagnostics", LOWLEVEL_PAGE, "_Low-Level",TRUE},
-{ "MegaSquirt DataLogging", DATALOGGING_PAGE, "_DataLogging",TRUE},
-{ "MegaSquirt Warmup Wizard", WARMWIZARD_PAGE, "_Warmup Wizard",TRUE}
+{ "About MegaTunix", build_about, "_About",TRUE},
+{ "General MegaTunix Settings", build_general, "_General",TRUE},
+{ "MegaSquirt Communications Parameters", build_comms, "Co_mmunications",TRUE},
+{ "MegaSquirt Constants", build_constants, "_Constants",TRUE},
+{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",TRUE},
+{ "MegaSquirt VE Table(s)", build_vetable, "_VE Table(s)",TRUE},
+{ "MegaSquirt Ignition Settings", build_ignition, "_Ignition Settings",FALSE},
+{ "MegaSquirt Runtime Display", build_runtime, "_Runtime Disp.",TRUE},
+{ "MegaSquirt Tuning", build_tuning, "_Tuning",TRUE},
+{ "MegaSquirt Tools", build_tools, "T_ools",TRUE},
+{ "MegaSquirt Advanced Diagnostics", build_lowlevel, "_Low-Level",FALSE},
+{ "MegaSquirt DataLogging", build_datalogging, "_DataLogging",TRUE},
+{ "MegaSquirt Warmup Wizard", build_warmwizard, "_Warmup Wizard",TRUE}
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -105,7 +105,9 @@ int setup_gui()
 		frame = gtk_frame_new (notebook_tabs[i].frame_name);
 		gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 
-		framebuild_dispatch(frame,notebook_tabs[i].page, notebook_tabs[i].enabled);
+		notebook_tabs[i].Function(frame);
+		if (notebook_tabs[i].enabled == FALSE)
+			gtk_widget_set_sensitive(frame,FALSE);
 
 		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
 		if (notebook_tabs[i].enabled == FALSE)
@@ -126,54 +128,5 @@ int setup_gui()
 
 	gtk_widget_show_all(main_window);
 
-	return TRUE;
-}
-
-gboolean framebuild_dispatch(GtkWidget *frame, GuiFramePage data, gboolean frame_enabled)
-{
-	switch (data)
-	{
-		case ABOUT_PAGE:
-			build_about(frame);
-			break;
-		case GENERAL_PAGE:
-			build_general(frame);
-			break;
-		case COMMS_PAGE:
-			build_comms(frame);
-			break;
-		case CONSTANTS_PAGE:
-			build_constants(frame);
-			break;
-		case ENRICHMENTS_PAGE:
-			build_enrichments(frame);
-			break;
-		case RUNTIME_PAGE:
-			build_runtime(frame);
-			break;
-		case VETABLES_PAGE:
-			build_vetable(frame);
-			break;
-		case TUNING_PAGE:
-			build_tuning(frame);
-			break;
-		case TOOLS_PAGE:
-			build_tools(frame);
-			break;
-		case LOWLEVEL_PAGE:
-			build_lowlevel(frame);
-			break;
-		case DATALOGGING_PAGE:
-			build_datalogging(frame);
-			break;
-		case IGNITION_PAGE:
-			build_ignition(frame);
-			break;
-		case WARMWIZARD_PAGE:
-			build_warmwizard(frame);
-			break;
-	}
-	if (frame_enabled == FALSE)
-		gtk_widget_set_sensitive(frame,FALSE);
 	return TRUE;
 }

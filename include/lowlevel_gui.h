@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean build_lowlevel(GtkWidget *);
+void build_lowlevel(GtkWidget *);
 /* Prototypes */
 
 #endif

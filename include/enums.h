@@ -14,26 +14,6 @@
 #ifndef __ENUMS_H__
 #define __ENUMS_H__
 
-/* the core_gui.c uses these to build the main gui and branch out to build
- * each of the seperate Gui frames 
- */
-typedef enum
-{
-	ABOUT_PAGE,
-	GENERAL_PAGE,
-	COMMS_PAGE,
-	CONSTANTS_PAGE,
-	RUNTIME_PAGE,
-	ENRICHMENTS_PAGE,
-	VETABLES_PAGE,
-	TUNING_PAGE,
-	TOOLS_PAGE,
-	DATALOGGING_PAGE,
-	LOWLEVEL_PAGE,
-	IGNITION_PAGE,
-	WARMWIZARD_PAGE
-}GuiFramePage;
-
 /* Serial data comes in and handled by the following possibilities.
  * dataio.c uses these to determine which course of action to take...
  */

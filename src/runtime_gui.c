@@ -38,7 +38,7 @@ extern struct DynamicLabels labels;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 gfloat map_pbar_divisor = 255.0;/* Initially assume a Turbo MAP Sensor */
 
-gboolean build_runtime(GtkWidget *parent_frame)
+void build_runtime(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *vbox2;
@@ -623,7 +623,7 @@ gboolean build_runtime(GtkWidget *parent_frame)
 		gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 	}
 
-	return TRUE;
+	return;
 }
 
 gboolean update_runtime_vars()

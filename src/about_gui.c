@@ -18,7 +18,7 @@
 #include <logo.h>
 
 
-gboolean build_about(GtkWidget *frame)
+void build_about(GtkWidget *frame)
 {
 	char *buffer;
 	GtkWidget *label;
@@ -43,6 +43,6 @@ gboolean build_about(GtkWidget *frame)
 
 	gtk_container_add (GTK_CONTAINER (alignment), image);
 
-	return(0);
+	return;
 }
 

@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean build_vetable(GtkWidget *);
+void build_vetable(GtkWidget *);
 /* Prototypes */
 
 #endif

@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean build_constants(GtkWidget *);
+void build_constants(GtkWidget *);
 /* Prototypes */
 
 #endif

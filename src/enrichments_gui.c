@@ -30,7 +30,7 @@ const gchar *C_warmup_labels[] = {"-40","-28.8",  "-17.7", "-6.6", "4.4",
 			         "15.5", "26.6","37.7","54.4","71.1"};
 const gchar *accel_labels[] = {"2V/Sec","4V/sec","8V/Sec","15V/Sec"};
 
-gboolean build_enrichments(GtkWidget *parent_frame)
+void build_enrichments(GtkWidget *parent_frame)
 {
 	gint i;
 	GtkWidget *sep;
@@ -747,5 +747,5 @@ gboolean build_enrichments(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(BURN_MS_FLASH));
 
-	return TRUE;
+	return;
 }

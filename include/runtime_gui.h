@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean build_runtime(GtkWidget *);
+void build_runtime(GtkWidget *);
 gboolean update_runtime_vars(void);
 void reset_runtime_status(void);
 /* Prototypes */

@@ -15,11 +15,9 @@
 #define __CORE_GUI_H__
 
 #include <gtk/gtk.h>
-#include <enums.h>
 
 /* Prototypes */
 int setup_gui(void);
-gboolean framebuild_dispatch(GtkWidget *, GuiFramePage, gboolean);
 /* Prototypes */
 
 #endif

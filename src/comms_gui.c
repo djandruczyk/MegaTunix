@@ -41,7 +41,7 @@ gint interval_step;
 gint interval_max;
 GdkColor white = { 0, 65535, 65535, 65535 };
 
-gboolean build_comms(GtkWidget *parent_frame)
+void build_comms(GtkWidget *parent_frame)
 {
 	extern GtkTooltips *tip;
 	GtkWidget *frame;
@@ -308,7 +308,8 @@ gboolean build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
 	gtk_widget_show_all(vbox);
-	return(0);
+
+	return;
 }
 
 gboolean reset_errcounts(GtkWidget *widget)

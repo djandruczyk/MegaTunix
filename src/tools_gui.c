@@ -27,7 +27,7 @@ extern struct DynamicEntries entries;
 struct Tools tools;
 GtkWidget *tools_view;
 
-gboolean build_tools(GtkWidget *parent_frame)
+void build_tools(GtkWidget *parent_frame)
 {
 	GtkWidget *hbox;
 	GtkWidget *vbox;
@@ -141,5 +141,5 @@ gboolean build_tools(GtkWidget *parent_frame)
 			GINT_TO_POINTER(RESTORE_ALL));
 
 
-	return TRUE;
+	return;
 }

@@ -65,7 +65,7 @@ GtkWidget *tab_delim_button;
 struct Logables logables;
 
 
-gboolean build_datalogging(GtkWidget *parent_frame)
+void build_datalogging(GtkWidget *parent_frame)
 {
 	gint i,j,k;
 	GtkWidget *vbox;
@@ -164,8 +164,8 @@ gboolean build_datalogging(GtkWidget *parent_frame)
 		button = gtk_check_button_new_with_label(logable_names[i]);
 		gtk_tooltips_set_tip(tip,button,logable_names_tips[i],NULL);
 		logables.widgets[i] = button;
-//		if ((dualtable) && (i >= STD_LOGABLES))
-//			gtk_widget_set_sensitive(button,FALSE);
+		//		if ((dualtable) && (i >= STD_LOGABLES))
+		//			gtk_widget_set_sensitive(button,FALSE);
 		g_object_set_data(G_OBJECT(button),"index",
 				GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -320,7 +320,7 @@ gboolean build_datalogging(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (std_button_handler), \
 			GINT_TO_POINTER(STOP_DATALOGGING));
-	return TRUE;
+	return;
 }
 
 void start_datalogging(void)
@@ -512,12 +512,18 @@ void write_log_header(void *ptr)
 			offset_list[j] = logging_offset_map[i];
 			size_list[j] = logging_datasizes_map[i];
 			j++;
-			pos = g_sprintf(tmpbuf, "\"%s\"",logable_names[i]);
+			if ((logging_mode == MT_CLASSIC_LOG) || (logging_mode == MT_FULL_LOG))
+				pos = g_sprintf(tmpbuf, "%s",mt_compat_names[i]);
+			else
+				pos = g_sprintf(tmpbuf, "\"%s\"",logable_names[i]);
 			g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
+			g_free(tmpbuf);
+
 			if (j < (total_logables))
 			{
 				pos = g_sprintf(tmpbuf,"%s",delim);
 				g_io_channel_write_chars(iofile->iochannel,tmpbuf,pos,&count,NULL);
+				g_free(tmpbuf);
 			}
 		}
 	}

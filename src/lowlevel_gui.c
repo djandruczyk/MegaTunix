@@ -16,7 +16,7 @@
 #include <globals.h>
 #include <lowlevel_gui.h>
 
-gboolean build_lowlevel(GtkWidget *parent_frame)
+void build_lowlevel(GtkWidget *parent_frame)
 {
 	GtkWidget *vbox;
 	GtkWidget *label;
@@ -29,5 +29,5 @@ gboolean build_lowlevel(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
 
 	/* Not written yet */
-	return TRUE;
+	return;
 }

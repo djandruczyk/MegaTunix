@@ -27,7 +27,7 @@ struct DynamicButtons buttons;
 extern struct Ve_Widgets *page0_widgets;
 extern GdkColor black;
 
-gboolean build_constants(GtkWidget *parent_frame)
+void build_constants(GtkWidget *parent_frame)
 {
 	GtkWidget *sep;
 	GtkWidget *button;
@@ -766,5 +766,5 @@ gboolean build_constants(GtkWidget *parent_frame)
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(BURN_MS_FLASH));
-	return TRUE;
+	return;
 }

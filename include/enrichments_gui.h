@@ -17,7 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean build_enrichments(GtkWidget *);
+void build_enrichments(GtkWidget *);
 /* Prototypes */
 
 #endif

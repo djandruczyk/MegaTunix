@@ -26,7 +26,7 @@ extern struct DynamicLabels labels;
 extern struct Ve_Widgets *page0_widgets;
 extern struct Ve_Widgets *page1_widgets;
 
-gboolean build_vetable(GtkWidget *parent_frame)
+void build_vetable(GtkWidget *parent_frame)
 {
 	GtkWidget *sep;
 	GtkWidget *vbox;
@@ -413,7 +413,5 @@ gboolean build_vetable(GtkWidget *parent_frame)
 			G_CALLBACK(std_button_handler),
 			GINT_TO_POINTER(BURN_MS_FLASH));
 
-
-
-	return TRUE;
+	return;
 }

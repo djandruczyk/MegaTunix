@@ -26,14 +26,26 @@
  */
 const gchar *logable_names[] = 
 {
-"HR Clock",     "MS Clock",     "RPM",          "EngineBits",   "IdleDC",
-"TPS Volts",    "MAP Volts",    "BARO Volts",   "MAT Volts",    "CLT Volts",
-"TPS Counts",   "MAP Counts",   "BARO Counts",  "MAT Counts",   "CLT Counts",
-"TPS %",        "MAP KPA",      "BARO KPA",     "MAT (Deg)",    "CLT (Deg)",
-"O2 Volts",     "O2 Counts",    "GammaE",       "BATT Volts",   "BATT Counts",
-"AIRcorr",      "BAROcorr",     "EGOcorr",      "WARMcorr",     "TPSaccel",
-"VE1",          "VE2",          "PW1",          "PW2",          "INJ-1 Dcycle",
-"INJ-2 Dcycle", "BSPOT1",       "BSPOT2",       "BSPOT3"
+"HR Clock",	"MS Clock",	"RPM",		"EngineBits",	"IdleDC",
+"TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
+"TPS Counts",	"MAP Counts",	"BARO Counts",	"MAT Counts",	"CLT Counts",
+"TPS %",	"MAP KPA",	"BARO KPA",	"MAT (Deg)",	"CLT (Deg)",
+"O2 Volts",	"O2 Counts",	"GammaE",	"BATT Volts",	"BATT Counts",
+"AIRcorr",	"BAROcorr",	"EGOcorr",	"WARMcorr",	"TPSaccel",
+"VE1",		"VE2",		"PW1",		"PW2",		"INJ-1 Dcycle",
+"INJ-2 Dcycle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
+};
+
+const gchar *mt_compat_names[] = 
+{
+"HR Clock",	"Seconds",	"RPM",		"EngineBit",	"IdleDC",
+"TPS Volts",	"MAP Volts",	"BARO Volts",	"MAT Volts",	"CLT Volts",
+"TPS Counts",	"MAP Counts",	"BARO Counts",	"MAT Counts",	"CLT Counts",
+"TPS %",	"MAP",		"BARO KPA",	"MAT (Deg)",	"CLT (Deg)",
+"O2",		"O2 Counts",	"Gammae",	"BATT Volts",	"BATT Counts",
+"Gair",		"Gbaro",	"Gego",		"Gwarm",	"TPSaccel",
+"Gve",		"VE2",		"PW1",		"PW2",		"INJ-1 Dcycle",
+"INJ-2 Dcycle",	"BSPOT1",	"BSPOT2",	"BSPOT3"
 };
 
 /* Tooltips for each of the above.... */
@@ -98,7 +110,7 @@ const gint logging_offset_map[] =
         32,75,76,77
 };
 
-/* Size of each logable vaiable in BYTES, so 4 = a 32 bit var 
+/* Size of each logable variable in BYTES, so 4 = a 32 bit var 
  * This strange array is needed only forthe fact that the datalogging
  * functions get all of their data from the Runtime_Common struct.
  * that struct has been deigned (And is necessary) to have all the 
