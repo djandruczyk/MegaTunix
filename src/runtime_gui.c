@@ -24,7 +24,7 @@
 struct v1_2_Runtime_Gui runtime_data;
 const gchar *status_msgs[] = {	"CONNECTED","CRANKING","RUNNING","WARMUP",
 				"AS_ENRICH","ACCEL","DECEL"};
-gint force_status_update=1;
+gint force_status_update=TRUE;
 extern gint connected;
 gfloat ego_pbar_divisor = 5.0;	/* Initially assume a Wideband Sensor */
 
@@ -689,9 +689,9 @@ void update_runtime_vars()
 	gtk_widget_set_sensitive(runtime_data.status[0],
 			connected);
 		
-	if ((force_status_update == 1 ) || (runtime->engine.value != runtime_last->engine.value))
+	if ((force_status_update) || (runtime->engine.value != runtime_last->engine.value))
 	{
-		force_status_update = 0;
+		force_status_update = FALSE;
 		/* Cranking */
 		gtk_widget_set_sensitive(runtime_data.status[1],
 				runtime->engine.bit.crank);

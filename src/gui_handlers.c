@@ -164,6 +164,8 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((gint)data)
 	{
 		case START_REALTIME:
+			if (!connected)
+				check_ecu_comms(NULL,NULL);
 			if (constants_loaded == FALSE)
 			{	/*Read constants first at least once */
 				paused_handlers = TRUE;
@@ -173,14 +175,12 @@ int std_button_handler(GtkWidget *widget, gpointer data)
 				paused_handlers = FALSE;
 				constants_loaded = TRUE;
 			}
-			if (!connected)
-				check_ecu_comms(NULL,NULL);
 			start_serial_thread();
 			break;
 		case STOP_REALTIME:
 			stop_serial_thread();
 			reset_runtime_status();
-			force_status_update=1;
+			force_status_update=TRUE;
 			break;
 		case REQD_FUEL_POPUP:
 			if (!req_fuel_popup)
