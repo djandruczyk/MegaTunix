@@ -46,6 +46,7 @@ void ve_normalize(float );
 void ve_draw_grid_point(float , float , float , int );
 void ve_draw_labels(void);
 void ve_draw_active_indicator(void *);
+void ve_draw_actual_indicator(void *);
 void ve_calculate_scaling(void *);
 void ve_draw_axis(void *);
 void ve_drawtext(char* text, float x, float y, float z);

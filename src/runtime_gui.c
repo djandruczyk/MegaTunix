@@ -636,14 +636,29 @@ void update_runtime_vars()
 	struct Ve_View_3D * ve_view1 = NULL;
 	extern struct Ve_Widgets *page0_widgets;
 	extern struct Ve_Widgets *page1_widgets;
-
-
+	GtkWidget *drawing_area_ptr = NULL;
+	
 	ve_view0 = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(page0_widgets->widget[0]),"data");
 	ve_view1 = (struct Ve_View_3D *)g_object_get_data(
 				G_OBJECT(page1_widgets->widget[0]),"data");
-	if (ve_view0 == NULL)
-		printf("runtime, ve_view0 undefined\n");
+
+	/* The additional NULL test is to avoid a timing-based problem
+	 * where ve_view can exist, but the window doesn't yet.
+	 * It's a small window, but I hit it several times.
+	 */
+	if ((ve_view0 != NULL) && (ve_view0->drawing_area->window != NULL)) {
+		drawing_area_ptr = ve_view0->drawing_area;
+	        gdk_window_invalidate_rect (drawing_area_ptr->window, &drawing_area_ptr->allocation, FALSE);
+		drawing_area_ptr = NULL;
+	}
+
+	if ((ve_view1 != NULL) && (ve_view1->drawing_area->window != NULL)) {
+		drawing_area_ptr = ve_view1->drawing_area;
+	        gdk_window_invalidate_rect (drawing_area_ptr->window, &drawing_area_ptr->allocation, FALSE);
+		drawing_area_ptr = NULL;
+	}
+	
 	/* test to see if data changed 
 	 * Why bother wasting CPU to update the GUI when 
 	 * you'd just print the same damn thing?

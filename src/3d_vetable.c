@@ -50,7 +50,7 @@ static gchar label[6];
 
 extern struct Ve_Const_Std *ve_const_p0;
 extern struct Ve_Const_Std *ve_const_p1;
-
+extern struct Runtime_Common *runtime;
 
 #define DEFAULT_WIDTH  475
 #define DEFAULT_HEIGHT 320                                                                                  
@@ -332,6 +332,7 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	ve_calculate_scaling(ve_view);
 	ve_draw_ve_grid(ve_view);
 	ve_draw_active_indicator(ve_view);
+	ve_draw_actual_indicator(ve_view);
 	ve_draw_axis(ve_view);
 
 	/* Swap buffers */
@@ -543,6 +544,29 @@ void ve_draw_active_indicator(void *ptr)
 	glEnd();	
 }
 
+void ve_draw_actual_indicator(void *ptr)
+{
+	struct Ve_View_3D *ve_view;
+	ve_view = (struct Ve_View_3D *)ptr;
+	unsigned char actual_ve = 0;
+
+	if (ve_view->table == 0) /* all std code derivatives..*/
+		actual_ve = runtime->vecurr1;
+	else if (ve_view->table == 1)
+		actual_ve = runtime->vecurr2;
+	else
+		fprintf(stderr,__FILE__": Problem, ve_draw_actual_indicator(), table out of range..\n");
+
+	/* Render a green dot at the active VE map position */
+	glPointSize(8.0);
+	glColor3f(0.0,1.0,0.0);
+	glBegin(GL_POINTS);
+	glVertex3f(	
+			(float)(runtime->rpm)/100/ve_view->rpm_div,
+			(float)(runtime->map)/ve_view->load_div,	
+			(float)(actual_ve)/ve_view->ve_div);
+	glEnd();
+}
 
 void ve_draw_axis(void *ptr)
 {
