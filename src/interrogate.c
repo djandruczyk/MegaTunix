@@ -61,17 +61,17 @@ void interrogate_ecu()
 	gint res = 0;
 	gint count = 0;
 	gint i = 0;
-	//gint j = 0;
+	gint j = 0;
 	gint tests_to_run = 0;
 	gint total_read = 0;
 	gint total_wanted = 0;
-//	gint read_amount = 0;
+	//gint read_amount = 0;
 	gint zerocount = 0;
 	gchar *string = NULL;
 	GArray *cmd_array = NULL;
 	guchar buf[size];
 	guchar *ptr = NULL;
-	//guchar *p = NULL;
+	guchar *p = NULL;
 	GHashTable *cmd_details = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -148,20 +148,20 @@ void interrogate_ecu()
 
 		}
 		
-		/*
+	
 		if (total_read > 0)
 		{
-			printf ("read the following from the %s command\n\"",cmd->string);
+			dbg_func(g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",cmd->string),SERIAL_RD);
 			p = buf;
 			for (j=0;j<total_read;j++)
 			{
-				printf("0x%.2x ", p[j]);
+				dbg_func(g_strdup_printf("0x%.2x ", p[j]),SERIAL_RD);
 				if (!((j+1)%8))
-					printf("\n");
+					dbg_func(g_strdup_printf("\n"),SERIAL_RD);
 			}
-			printf("\"\ndone\n");
+			dbg_func("\n\n",SERIAL_RD);
 		}
-		*/
+		
 	
 		dbg_func(g_strdup_printf("\tReceived %i bytes\n",total_read),INTERROGATOR);
 		ptr = buf;

@@ -94,6 +94,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 				state = FALSE;
 				goto jumpout;
 			}
+			dump_output(total_read,buf);
 			break;
 
 		case REALTIME_VARS:
@@ -156,6 +157,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
+			dump_output(total_read,buf);
 			process_rt_vars((void *)buf);
 			break;
 
@@ -200,6 +202,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 				ms_data[message->page][i] = buf[i];
 			memcpy(ms_data_last[message->page],ms_data[message->page],total_read*sizeof(gint));
 			ms_ve_goodread_count++;
+			dump_output(total_read,buf);
 			break;
 
 		case RAW_MEMORY_DUMP:
@@ -235,6 +238,7 @@ gboolean handle_ms_data(InputHandler handler, void * msg)
 				goto jumpout;
 			}
 			post_process_raw_memory((void *)buf, message->offset);
+			dump_output(total_read,buf);
 			break;
 		default:
 			dbg_func(__FILE__": handle_ms_data()\n\timproper case, contact author!\n",CRITICAL);
@@ -245,4 +249,25 @@ jumpout:
 
 	dbg_func("\n"__FILE__": handle_ms_data\tLEAVING...\n\n",IO_PROCESS);
 	return state;
+}
+
+void dump_output(gint total_read, guchar *buf)
+{
+	guchar *p = NULL;
+	gint j = 0;
+
+	p = buf;
+	if (total_read > 0)
+	{
+		dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, eable IO_PROCESS debug to see the cmd's sent\n"),SERIAL_RD);
+		p = buf;
+		for (j=0;j<total_read;j++)
+		{
+			dbg_func(g_strdup_printf("0x%.2x ", p[j]),SERIAL_RD);
+			if (!((j+1)%8))
+				dbg_func(g_strdup_printf("\n"),SERIAL_RD);
+		}
+		dbg_func("\n\n",SERIAL_RD);
+	}
+
 }

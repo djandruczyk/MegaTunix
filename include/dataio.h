@@ -19,6 +19,7 @@
 
 /* Prototypes */
 gboolean handle_ms_data(InputHandler, void * );
+void dump_output(gint, guchar *);
 /* Prototypes */
 
 #endif
