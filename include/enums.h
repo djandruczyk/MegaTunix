@@ -281,7 +281,8 @@ typedef enum
 typedef enum
 {
 	INT = 0x50,
-	STRING,
+	ENUM,
 	BOOL,
+	STRING,
 }DataTypes;
 #endif

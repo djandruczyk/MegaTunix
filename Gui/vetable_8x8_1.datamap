@@ -15,7 +15,7 @@
 #
 # [Section]
 # keys=key1,key2,key3
-# keytypes=_INT_,INT_,_STRING_,_STRING_
+# keytypes=_INT_,INT_,_ENUM_,_ENUM_
 # key1=10
 # key2=20
 # key3=somestring
@@ -33,13 +33,13 @@ tab_name=_VE Table(1)
 #----- Buttons ---------------------------------------------------------------
 [VE1_get_data_button]
 keys=handler,page
-key_types=_STRING_,_INT_
+key_types=_ENUM_,_INT_
 handler=_READ_VE_CONST_
 page=0
 
 [VE1_burn_button]
 keys=handler,page
-key_types=_STRING_,_INT_
+key_types=_ENUM_,_INT_
 handler=_BURN_MS_FLASH_
 page=0
 
@@ -59,7 +59,7 @@ is_spark=FALSE
 
 [VE1_load_spin_1]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=108
 conv_type=_NOTHING_
@@ -68,7 +68,7 @@ handler=_GENERIC_
 
 [VE1_load_spin_2]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=109
 conv_type=_NOTHING_
@@ -77,7 +77,7 @@ handler=_GENERIC_
 
 [VE1_load_spin_3]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=110
 conv_type=_NOTHING_
@@ -86,7 +86,7 @@ handler=_GENERIC_
 
 [VE1_load_spin_4]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=111
 conv_type=_NOTHING_
@@ -95,7 +95,7 @@ handler=_GENERIC_
 
 [VE1_load_spin_5]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=112
 conv_type=_NOTHING_
@@ -104,7 +104,7 @@ handler=_GENERIC_
 
 [VE1_load_spin_6]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=113
 conv_type=_NOTHING_
@@ -113,7 +113,7 @@ handler=_GENERIC_
 
 [VE1_load_spin_7]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=114
 conv_type=_NOTHING_
@@ -122,7 +122,7 @@ handler=_GENERIC_
 
 [VE1_load_spin_8]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=115
 conv_type=_NOTHING_
@@ -133,7 +133,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_1]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=100
 conv_factor_x100=10000
@@ -143,7 +143,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_2]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=101
 conv_factor_x100=10000
@@ -153,7 +153,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_3]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=102
 conv_factor_x100=10000
@@ -163,7 +163,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_4]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=103
 conv_factor_x100=10000
@@ -173,7 +173,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_5]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=104
 conv_factor_x100=10000
@@ -183,7 +183,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_6]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=105
 conv_factor_x100=10000
@@ -193,7 +193,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_7]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=106
 conv_factor_x100=10000
@@ -203,7 +203,7 @@ handler=_GENERIC_
 
 [VE1_rpm_spin_8]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=107
 conv_factor_x100=10000
@@ -215,7 +215,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=0
 conv_type=_NOTHING_
@@ -224,7 +224,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=1
 conv_type=_NOTHING_
@@ -233,7 +233,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=2
 conv_type=_NOTHING_
@@ -242,7 +242,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=3
 conv_type=_NOTHING_
@@ -251,7 +251,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=4
 conv_type=_NOTHING_
@@ -260,7 +260,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=5
 conv_type=_NOTHING_
@@ -269,7 +269,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=6
 conv_type=_NOTHING_
@@ -278,7 +278,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,1)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=7
 conv_type=_NOTHING_
@@ -287,7 +287,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=8
 conv_type=_NOTHING_
@@ -296,7 +296,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=9
 conv_type=_NOTHING_
@@ -305,7 +305,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=10
 conv_type=_NOTHING_
@@ -314,7 +314,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=11
 conv_type=_NOTHING_
@@ -323,7 +323,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=12
 conv_type=_NOTHING_
@@ -332,7 +332,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=13
 conv_type=_NOTHING_
@@ -341,7 +341,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=14
 conv_type=_NOTHING_
@@ -350,7 +350,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,2)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=15
 conv_type=_NOTHING_
@@ -359,7 +359,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=16
 conv_type=_NOTHING_
@@ -368,7 +368,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=17
 conv_type=_NOTHING_
@@ -377,7 +377,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=18
 conv_type=_NOTHING_
@@ -386,7 +386,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=19
 conv_type=_NOTHING_
@@ -395,7 +395,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=20
 conv_type=_NOTHING_
@@ -404,7 +404,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=21
 conv_type=_NOTHING_
@@ -413,7 +413,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=22
 conv_type=_NOTHING_
@@ -422,7 +422,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,3)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=23
 conv_type=_NOTHING_
@@ -431,7 +431,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=24
 conv_type=_NOTHING_
@@ -440,7 +440,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=25
 conv_type=_NOTHING_
@@ -449,7 +449,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=26
 conv_type=_NOTHING_
@@ -458,7 +458,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=27
 conv_type=_NOTHING_
@@ -467,7 +467,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=28
 conv_type=_NOTHING_
@@ -476,7 +476,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=29
 conv_type=_NOTHING_
@@ -485,7 +485,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=30
 conv_type=_NOTHING_
@@ -494,7 +494,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,4)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=31
 conv_type=_NOTHING_
@@ -503,7 +503,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=32
 conv_type=_NOTHING_
@@ -512,7 +512,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=33
 conv_type=_NOTHING_
@@ -521,7 +521,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=34
 conv_type=_NOTHING_
@@ -530,7 +530,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=35
 conv_type=_NOTHING_
@@ -539,7 +539,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=36
 conv_type=_NOTHING_
@@ -548,7 +548,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=37
 conv_type=_NOTHING_
@@ -557,7 +557,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=38
 conv_type=_NOTHING_
@@ -566,7 +566,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,5)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=39
 conv_type=_NOTHING_
@@ -575,7 +575,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=40
 conv_type=_NOTHING_
@@ -584,7 +584,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=41
 conv_type=_NOTHING_
@@ -593,7 +593,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=42
 conv_type=_NOTHING_
@@ -602,7 +602,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=43
 conv_type=_NOTHING_
@@ -611,7 +611,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=44
 conv_type=_NOTHING_
@@ -620,7 +620,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=45
 conv_type=_NOTHING_
@@ -629,7 +629,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=46
 conv_type=_NOTHING_
@@ -638,7 +638,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,6)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=47
 conv_type=_NOTHING_
@@ -647,7 +647,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=48
 conv_type=_NOTHING_
@@ -656,7 +656,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=49
 conv_type=_NOTHING_
@@ -665,7 +665,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=50
 conv_type=_NOTHING_
@@ -674,7 +674,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=51
 conv_type=_NOTHING_
@@ -683,7 +683,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=52
 conv_type=_NOTHING_
@@ -692,7 +692,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=53
 conv_type=_NOTHING_
@@ -701,7 +701,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=54
 conv_type=_NOTHING_
@@ -710,7 +710,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,7)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=55
 conv_type=_NOTHING_
@@ -719,7 +719,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(1,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=56
 conv_type=_NOTHING_
@@ -728,7 +728,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(2,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=57
 conv_type=_NOTHING_
@@ -737,7 +737,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(3,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=58
 conv_type=_NOTHING_
@@ -746,7 +746,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(4,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=59
 conv_type=_NOTHING_
@@ -755,7 +755,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(5,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=60
 conv_type=_NOTHING_
@@ -764,7 +764,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(6,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=61
 conv_type=_NOTHING_
@@ -773,7 +773,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(7,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=62
 conv_type=_NOTHING_
@@ -782,7 +782,7 @@ handler=_GENERIC_
 
 [VE1_vespin_(8,8)]
 keys=page,offset,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
 page=0
 offset=63
 conv_type=_NOTHING_

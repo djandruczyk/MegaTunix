@@ -62,8 +62,11 @@ gboolean load_gui_tabs()
 				g_free(tmpbuf);
 				g_hash_table_foreach(xml->priv->name_hash,bind_data,(gpointer)cfgfile);
 				g_hash_table_foreach(xml->priv->name_hash,populate_master,NULL);
+				cfg_free(cfgfile);
 			}
-			cfg_free(cfgfile);
+			else
+				dbg_func(g_strdup_printf("DATAMAP: %s NOT FOUND\n",map_file),CRITICAL);
+			
 			g_free(map_file);
 			g_free(glade_file);
 			frame = glade_xml_get_widget(xml,"topframe");
@@ -108,11 +111,9 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 	gint offset = 0;
 	gint page = 0;
 
-	//	printf("bind_data to key %s\n",(gchar *)key);	
-
-	cfg_read_string(cfgfile,section,"keys",&tmpbuf);
-	if (tmpbuf == NULL)
+	if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		return;
+
 	keys = parse_keys(tmpbuf,&num_keys);
 	dbg_func(g_strdup_printf(__FILE__": bind_data() number_keys for %s is %i\n",section,num_keys),TABLOADER);
 
@@ -149,7 +150,7 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 						GINT_TO_POINTER(tmpi));	
 				dbg_func(g_strdup_printf(__FILE__": bind_data() binding INT %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
 				break;
-			case STRING:
+			case ENUM:
 				cfg_read_string(cfgfile,section,keys[i],&tmpbuf);
 				tmpi = translate_string(tmpbuf);
 				g_free(tmpbuf);
@@ -165,6 +166,13 @@ void bind_data(gpointer widget_name, gpointer value, gpointer user_data)
 						GINT_TO_POINTER(tmpi));	
 				dbg_func(g_strdup_printf(__FILE__": bind_data() binding BOOL %s,%i to widget %s\n",keys[i],tmpi,section),TABLOADER);
 				break;
+			case STRING:
+				cfg_read_string(cfgfile,section,keys[i],&tmpbuf);
+				g_object_set_data(G_OBJECT(widget),
+						g_strdup(keys[i]),
+						g_strdup(tmpbuf));
+				break;
+		
 		}
 	}
 

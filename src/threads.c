@@ -464,7 +464,7 @@ void writeto_ecu(void *ptr)
 
 	/* Handles variants and dualtable... */
 	if (firmware->multi_page)
-		if ((ign_parm == FALSE) && (page > 0))
+		if (ign_parm == FALSE)
 			set_ms_page(page);
 
 	if (ign_parm)

@@ -269,6 +269,8 @@ void reset_temps(gpointer type)
 	extern const gchar * F_warmup_labels[];
 	extern const gchar * C_warmup_labels[];
 
+	return;
+
 	/* Better way.. :) */
 	g_list_foreach(temp_dep,convert_temps,type);
 

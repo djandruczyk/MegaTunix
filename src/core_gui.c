@@ -59,7 +59,7 @@ static struct
 { "MegaSquirt Vital Settings", build_eng_vitals, "E_ngine Vitals",STANDARD},
 { "MegaSquirt Constants", build_constants_1, "ECU _Constants",STANDARD},
 { "MegaSquirt DualTable Parameters", build_dt_params, "_DT Options",DUALTABLE},
-{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",STANDARD},
+//{ "MegaSquirt Enrichments", build_enrichments, "_Enrichments",STANDARD},
 //{ "MegaSquirt VE Table(1)", build_vetable_1, "_VE Table(1)",STANDARD},
 //{ "MegaSquirt VE Table(2)", build_vetable_2, "_VE Table(2)",DUALTABLE},
 //{ "MegaSquirtnSpark/EDIS Spark Table", build_sparktable, "_Spark Advance",S_N_SPARK | S_N_EDIS},

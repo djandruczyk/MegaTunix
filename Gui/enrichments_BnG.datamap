@@ -1,0 +1,460 @@
+# This file contains the mappings for extra data bound to widgets defined 
+# in the glade files.  Glade is used to build the Gui, this file is used to
+# bind all the necessary info to the controls so that the gui controls work 
+# as intended.  This method should be extremely flexible in the long run
+# with minimal changes to the core sourcecode once the boilerplate is completed
+#
+# Initial revision, 9/5/2004
+#
+# Format
+# Sections are defined ONLY for widgets that need data bound to them.  For
+# widgets like containers that don't need data bound to them, they are NOT 
+# listed here. The main code will just skip it and move on.
+#
+# Example
+#
+# [Section]
+# keys=key1,key2,key3
+# keytypes=_STRING_,INT_,_STRING_,_STRING_
+# key1=10
+# key2=20
+# key3=somestring
+#
+# Section matches to a widget name in the glade tree (ONLY one and they MUST 
+# be unique),  Keytypes is used so the code can call a cfg_read_string or       # cfg_read_int in the right places...
+# 
+#
+
+[global]
+description=Object data map for Std B&G Enrichments
+tab_name=_Enrichments
+
+
+#----- Buttons ---------------------------------------------------------------
+[enrich_get_data_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_READ_VE_CONST_
+page=0
+
+[enrich_burn_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_BURN_MS_FLASH_
+page=0
+
+#----- Dynamic Labels (temp dependant) ---------------------------------------
+
+[cpulse_neg40_label]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=-40 \302\260C.
+f_label=-40 \302\260F.
+temp_dep=TRUE
+
+[cpulse_pos170_label]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+c_label=77 \302\260C.
+f_label=170 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_1]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=-40 \302\260C.
+f_label=-40 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_2]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=-28.8 \302\260C.
+f_label=-20 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_3]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=-17.7 \302\260C.
+f_label=0 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_4]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=-6.6 \302\260C.
+f_label=20 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_5]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=4.4 \302\260C.
+f_label=40 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_6]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=15.5 \302\260C.
+f_label=60 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_7]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=26.6 \302\260C.
+f_label=80 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_8]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=37.7 \302\260C.
+f_label=100 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_9]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=54.4 \302\260C.
+f_label=130 \302\260F.
+temp_dep=TRUE
+
+[warmup_label_10]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=71.1 \302\260C.
+f_label=160 \302\260F.
+temp_dep=TRUE
+
+[warmup_master_label]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=Engine Temperature in \302\260C.
+f_label=Engine Temperature in \302\260F.
+temp_dep=TRUE
+
+[ego_active_temp_label]
+keys=page,c_label,f_label,temp_dep
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+page=0
+c_label=EGO Active Temp\n(\302\260C.)
+f_label=EGO Active Temp\n(\302\260F.)
+temp_dep=TRUE
+
+#----- Spin Buttons ----------------------------------------------------------
+[cpulse_neg40_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=64
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[cpulse_pos170_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=65
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[prime_pulse_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=119
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[afterstart_enrich_%_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=66
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[afterstart_enrich_numcycles_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=67
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_1]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=68
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_2]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=69
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_3]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=70
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_4]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=71
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_5]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=72
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_6]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=73
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_7]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=74
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_8]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=75
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_9]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=76
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[warmup_spin_10]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=77
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accel_tpstrigthresh_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=83
+conv_factor_x100=512
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accel_enrich_duration_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=84
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accel_cold_enrich_addon_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=82
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accel_cold_enrich_addon_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=123
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accelbins_spin_1]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=78
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accelbins_spin_2]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=79
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accelbins_spin_3]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=80
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accelbins_spin_4]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=81
+conv_factor_x100=1000
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[accel_decel_fuel_cut_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=85
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[ego_active_temp_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,temp_dep
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_BOOL_
+page=0
+offset=86
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+temp_dep=TRUE
+
+[ego_active_rpm_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=120
+conv_factor_x100=10000
+conv_type=_DIVIDE_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[ego_switching_voltage_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=122
+conv_factor_x100=5100
+conv_type=_MULTIPLY_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[ego_step_percent_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=88
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[ego_ign_events_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=87
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[ego_limit_spin]
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+page=0
+offset=89
+conv_factor_x100=100
+conv_type=_NOTHING_
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+

@@ -527,8 +527,8 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_frame_set_label_widget(GTK_FRAME(frame),GTK_WIDGET(label));
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 
-	hbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),hbox2);
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
 	/* EGO feedback parameters... */
 
@@ -539,7 +539,7 @@ void build_enrichments(GtkWidget *parent_frame)
 	gtk_table_set_row_spacing(GTK_TABLE(table),2,2);
 	gtk_table_set_row_spacing(GTK_TABLE(table),4,2);
 	gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-	gtk_box_pack_start(GTK_BOX(hbox2),table,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,0);
 
 	/* EGO Temp Activation */
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,-40.0,215.0,1.0,10.0,0);

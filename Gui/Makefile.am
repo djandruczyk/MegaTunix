@@ -4,6 +4,8 @@ gui_files = 	vetable_8x8_1.glade \
 		vetable_8x8_1.datamap \
 		vetable_8x8_2.glade \
 		vetable_8x8_2.datamap \
+		enrichments_BnG.glade \
+		enrichments_BnG.datamap \
 		sparktable_8x8_1.glade \
 		sparktable_8x8_1.datamap 
 

@@ -8,8 +8,8 @@ VerNumber=20
 Capabilities=_STANDARD_
 Rt_Cmd_Key=CMD_A_0
 VE_Cmd_Key=CMD_V_0
-#Ign_Cmd_Key=CMD_I_0
-#Raw_Mem_Cmd_Key=CMD_F_0
+Ign_Cmd_Key=CMD_I_0
+Raw_Mem_Cmd_Key=CMD_F_0
 MultiPage=FALSE
 TotalPages=1
 
@@ -25,4 +25,4 @@ CMD_I_0=0
 CMD_F_0=0
 
 [gui]
-LoadTabs=vetable_8x8_1
+LoadTabs=enrichments_BnG,vetable_8x8_1
