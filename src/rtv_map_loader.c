@@ -26,8 +26,7 @@
 #include <structures.h>
 #include <tabloader.h>
 
-GArray *raw_array = NULL;
-GHashTable *rtv_hash = NULL;
+struct RtvMap *rtv_map = NULL;
 
 gboolean load_realtime_map(void )
 {
@@ -49,6 +48,9 @@ gboolean load_realtime_map(void )
 	GObject * object = NULL;
 	GList * list = NULL;
 	void * evaluator = NULL;
+	GArray * history = NULL;
+
+	rtv_map = g_new0(struct RtvMap, 1);
 	
 	filename = g_strconcat(DATA_DIR,"/",REALTIME_MAP_DIR,"/",firmware->rtv_map_file,".rtv_map",NULL);
 	cfgfile = cfg_open_file(filename);
@@ -73,12 +75,17 @@ gboolean load_realtime_map(void )
 		if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
 			dbg_func(__FILE__": realtime_map_load(), can't find \"derived_total\" in the \"[realtime_map]\" section\n",CRITICAL);
 
-		raw_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
-		rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);
+		rtv_map->ts_array = g_array_sized_new(FALSE,TRUE,sizeof(struct GTimeVal *),50);
+		rtv_map->rtv_array = g_array_sized_new(FALSE,TRUE,sizeof(GList *),raw_total);
+		rtv_map->rtv_hash = g_hash_table_new(g_str_hash,g_str_equal);
 
+		/* Populate the array wiht NULL pointers (GList's are assumed
+		 * to be NULL when they don't exist.  This ensures that there
+		 * are no funky memory errors...
+		 */
 		list = NULL;
 		for (i=0;i<raw_total;i++)
-			g_array_insert_val(raw_array,i,list);
+			g_array_insert_val(rtv_map->rtv_array,i,list);
 
 		for (i=0;i<derived_total;i++)
 		{
@@ -116,7 +123,13 @@ gboolean load_realtime_map(void )
 				dbg_func(g_strdup_printf(__FILE__": Offset not defined for: \"%s\", CRITICAL!!!\n",section),CRITICAL);
 	
 				
+			/* Create object to hold all the data. (dynamically)*/
 			object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+			/* Create history array, last 50 values */
+			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),50);
+			/* bind hostory array to object for future retrieval */
+			g_object_set_data(object,"history",(gpointer)history);
+	
 			for (j=0;j<num_keys;j++)
 			{
 				switch((DataType)keytypes[j])
@@ -166,7 +179,7 @@ gboolean load_realtime_map(void )
 									g_strdup(keys[j]),
 									g_strdup(tmpbuf));
 							if (strstr(keys[j],"internal_name") != NULL)
-								g_hash_table_insert(rtv_hash,g_strdup(tmpbuf),(gpointer)object);
+								g_hash_table_insert(rtv_map->rtv_hash,g_strdup(tmpbuf),(gpointer)object);
 							if (strstr(keys[j],"conv_expr") != NULL)
 							{
 								evaluator = evaluator_create(g_strdup(tmpbuf));
@@ -186,9 +199,9 @@ gboolean load_realtime_map(void )
 
 				}
 			}
-			list = g_array_index(raw_array,GList *,offset);
+			list = g_array_index(rtv_map->rtv_array,GList *,offset);
 			list = g_list_append(list,(gpointer)object);
-			raw_array = g_array_insert_val(raw_array,offset,list);
+			rtv_map->rtv_array = g_array_insert_val(rtv_map->rtv_array,offset,list);
 
 			g_free(section);
 			g_free(keytypes);

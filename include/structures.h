@@ -355,4 +355,13 @@ struct OutputData
 	gint value;		/* Value to send */
 	gboolean ign_parm;	/* Ignition parameter, True or False */
 };
+
+struct RtvMap
+{
+	GArray *ts_array;	/* Timestamp array */
+	GArray *rtv_array;	/* Realtime Values array of lists.. */
+	GHashTable *rtv_hash;	/* Hashtable of rtv derived values indexed by
+				 * it's internal name */
+};
+
 #endif

@@ -76,6 +76,7 @@ gboolean load_gui_tabs()
 			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
 			gtk_widget_show_all(frame);
 			glade_xml_signal_autoconnect(xml);
+			g_free(xml);
 
 		}
 		else
