@@ -25,6 +25,7 @@ extern struct DynamicButtons buttons;
 extern struct Ve_Widgets *ve_widgets;
 extern GdkColor black;
 GList *inv_dt_widgets = NULL;
+GList *dt_widgets = NULL;
 
 void build_constants_2(GtkWidget *parent_frame)
 {
@@ -34,6 +35,7 @@ void build_constants_1(GtkWidget *parent_frame)
 {
 	GtkWidget *button;
 	GtkWidget *vbox;
+	GtkWidget *hbox;
 	GtkWidget *label;
 	GtkWidget *frame;
 	GtkWidget *table;
@@ -85,7 +87,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         1.0,10.0,0);
         spinner = gtk_spin_button_new(adj,0,0);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
-        gtk_widget_set_size_request(spinner,65,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_DISP));
@@ -112,7 +114,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	reqd_fuel->cyls_spin = spinner;
 	reqfuel_widgets = g_list_append(reqfuel_widgets,(gpointer)spinner);
 	interdep_widgets = g_list_append(interdep_widgets,(gpointer)spinner);
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(116));
@@ -142,7 +144,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	spinners.injectors_spin = spinner;
 	interdep_widgets = g_list_append(interdep_widgets,(gpointer)spinner);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(117));
@@ -174,7 +176,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	interdep_widgets = g_list_append(interdep_widgets,(gpointer)spinner);
 	reqfuel_widgets = g_list_append(reqfuel_widgets,(gpointer)spinner);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",
 			GINT_TO_POINTER(91));
@@ -191,6 +193,11 @@ void build_constants_1(GtkWidget *parent_frame)
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
 
+	sep = gtk_vseparator_new();
+        gtk_table_attach (GTK_TABLE (table), sep, 2, 3, 0, 4,
+                        (GtkAttachOptions) (GTK_FILL),
+                        (GtkAttachOptions) (GTK_FILL), 0, 0);
+	
         label = gtk_label_new("Rated Injector Flow (lbs/hr)");
         gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
         gtk_table_attach (GTK_TABLE (table), label, 3, 4, 0, 1,
@@ -203,7 +210,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         
         spinner = gtk_spin_button_new(adj,0,0);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
-        gtk_widget_set_size_request(spinner,65,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_RATED_INJ_FLOW));
@@ -224,7 +231,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         0.1,0.1,0);
         spinner = gtk_spin_button_new(adj,0,1);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
-        gtk_widget_set_size_request(spinner,65,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_RATED_PRESSURE));
@@ -246,7 +253,7 @@ void build_constants_1(GtkWidget *parent_frame)
                         0.1,0.1,0);
         spinner = gtk_spin_button_new(adj,0,1);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
-        gtk_widget_set_size_request(spinner,65,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_ACTUAL_PRESSURE));
@@ -268,7 +275,7 @@ void build_constants_1(GtkWidget *parent_frame)
 			10.0,25.5,0.1,0.1,0);
         spinner = gtk_spin_button_new(adj,0,1);
 	g_object_set_data(G_OBJECT(spinner),"data",(gpointer)reqd_fuel);
-        gtk_widget_set_size_request(spinner,65,-1);
+        gtk_widget_set_size_request(spinner,60,-1);
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
                         GINT_TO_POINTER(REQ_FUEL_AFR));
@@ -343,7 +350,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1.0,1);
 	spinners.req_fuel_total_spin = spinner;
 	interdep_widgets = g_list_append(interdep_widgets,(gpointer)spinner);
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(90));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -371,7 +378,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	interdep_widgets = g_list_append(interdep_widgets,(gpointer)spinner);
 	gtk_widget_set_sensitive(spinner,FALSE);
 	gtk_widget_modify_text(spinner,GTK_STATE_INSENSITIVE,&black);
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 6, 7,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -380,7 +387,7 @@ void build_constants_1(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
-	gtk_tooltips_set_tip(tip,ebox,"   The \"Injector Open Time\" is the amount of time that it takes your fuel injectors to open.  This is added to the MegaSquirt fuel calculations internally.  Typical values are are 1.1 ms for Hi-Z injectors and 0.9 ms for Lo-Z injectors.\n   The \"Battery Voltage Correction\" is a correction factor that increases injection pulsewidth based on lower battery voltage (which slows down injector opening). The values are in milliseconds per Volt. Thus if your battery is putting out 9 Volts during cranking, and you have this set to 0.2 ms/Volt, then your pulsewidth will be increased by 0.6 milliseconds.\n   The \"PWM Current Limit\" is used if you are using Low impedance (Lo-Z) injectors.  For Hi-Z (i.e. \"Saturated\") injectors, set this to 100% (which disables PWM as it is NOT used with Hi-Z injectors).  Lo-Z injectors are also known as Peak and Hold injectors.  P&H injectors require full battery voltage to snap them open,  but then power is reduced to a \"Hold\" value to keep it open (without burning it out or letting them close prematurely).  This value of \"PWM Current Limit\" determines the \"Hold\" value.  Unmodified V2 ECU's usually need this around 60-75%, ECU's with the flyback board and the NEWER  v2.986 firmware usually have this in the 18-30% range.  If you are driving large Lo-Z injectors, (like a Holley Pro-jection TBI setup), installing a flyback board and new firmware is recommended as those injectors can damage a Stock V2 ECU in some rare scenarios.\n   The \"PWM Time Threshold\" is the amount of time that the injector is in \"Peak\" mode. (full power), This should be set to about 1 ms for Lo-Z injectors, or 25.5 for Hi-Z injectors.",NULL);
+	gtk_tooltips_set_tip(tip,ebox,"   The \"Injector Open Time\" is the amount of time that it takes your fuel injectors to open.  This is added to the MegaSquirt fuel calculations internally.  Typical values are are 1.1 ms for Hi-Z injectors and 0.9 ms for Lo-Z injectors.\n   The \"Battery Voltage Correction\" is a correction factor that increases injection pulsewidth based on lower battery voltage (which slows down injector opening). The values are in milliseconds per Volt. Thus if your battery is putting out 9 Volts during cranking, and you have this set to 0.2 ms/Volt, then your pulsewidth will be increased by 0.6 milliseconds.\n   The \"PWM Current Limit\" is used if you are using Low impedance (Lo-Z) injectors.  For Hi-Z (i.e. \"Saturated\") injectors, set this to 100% (which disables PWM as it is NOT used with Hi-Z injectors).  Lo-Z injectors are also known as Peak and Hold injectors.  P&H injectors require full battery voltage to snap them open,  but then power is reduced to a \"Hold\" value to keep it open (without burning it out or letting them close prematurely).  This value of \"PWM Current Limit\" determines the \"Hold\" value.  Unmodified V2 ECU's usually need this around 60-75%, ECU's with the flyback board and the the v2.986 or NEWER firmware usually have this in the 18-30% range.  If you are driving large Lo-Z injectors, (like a Holley Pro-jection TBI setup), installing a flyback board and new firmware is recommended as those injectors can damage a Stock V2 ECU in some rare scenarios.\n   The \"PWM Time Threshold\" is the amount of time that the injector is in \"Peak\" mode. (full power), This should be set to about 1 ms for Lo-Z injectors, or 25.5 for Hi-Z injectors. Setting this value too high for Lo-Z injectors can cause them to overheat and fail (freeze open, or burn out), 1-1.5 ms is a pretty safe value to use.",NULL);
 
 	frame = gtk_frame_new("Injector Control Parameters");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
@@ -388,8 +395,6 @@ void build_constants_1(GtkWidget *parent_frame)
 	table = gtk_table_new(3,5,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_row_spacing(GTK_TABLE(table),1,7);
-	gtk_table_set_row_spacing(GTK_TABLE(table),2,7);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
 	gtk_container_add(GTK_CONTAINER(frame),table);
 	
@@ -403,7 +408,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,25.5,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	ve_widgets->widget[93] = spinner;
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
 			GINT_TO_POINTER(10*100));
@@ -428,7 +433,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(0.0,0.0,10.0,0.1,1,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	ve_widgets->widget[97] = spinner;
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(97));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -453,7 +458,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(50.0,0.0,100.0,1.0,10.0,0);
 	spinner = gtk_spin_button_new(adj,1,0);
 	ve_widgets->widget[95] = spinner;
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(95));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -479,7 +484,7 @@ void build_constants_1(GtkWidget *parent_frame)
 	adj =  (GtkAdjustment *) gtk_adjustment_new(1.0,0.0,25.5,0.1,1.0,0);
 	spinner = gtk_spin_button_new(adj,0,1);
 	ve_widgets->widget[96] = spinner;
-	gtk_widget_set_size_request(spinner,65,-1);
+	gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(96));
 	g_object_set_data(G_OBJECT(spinner),"conv_factor_x100",
@@ -493,6 +498,91 @@ void build_constants_1(GtkWidget *parent_frame)
 	gtk_table_attach (GTK_TABLE (table), spinner, 4, 5, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);
+
+
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
+
+	frame = gtk_frame_new("Injector to Table Mapping");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)frame);
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
+
+	table = gtk_table_new(4,3,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table), 5);
+	gtk_container_add(GTK_CONTAINER(frame),table);
+
+	label = gtk_label_new("Injector 1 mapping");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(NULL,"Not Driven");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(group,"Driven from Table 1");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(group,"Driven from Table 2");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 0, 1, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	
+	sep = gtk_vseparator_new();
+	gtk_table_attach (GTK_TABLE (table), sep, 1, 2, 0, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (GTK_FILL), 0, 0);
+
+	label = gtk_label_new("Injector 2 mapping");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)label);
+	gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(NULL,"Not Driven");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(group,"Driven from Table 1");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+        button = gtk_radio_button_new_with_label(group,"Driven from Table 2");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)button);
+        group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+	gtk_table_attach (GTK_TABLE (table), button, 2, 3, 3, 4,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+	
+	frame = gtk_frame_new("Gammae Usage");
+	dt_widgets = g_list_append(dt_widgets,(gpointer)frame);
+	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
+	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,5);
+
+	table = gtk_table_new(3,2,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
+	gtk_container_set_border_width(GTK_CONTAINER(table), 5);
+	gtk_container_add(GTK_CONTAINER(frame),table);
 
 
 	frame = gtk_frame_new("Commands");

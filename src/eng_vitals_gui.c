@@ -404,8 +404,6 @@ void build_eng_vitals(GtkWidget *parent_frame)
 			G_CALLBACK(bitmask_button_handler),
 			NULL);
 
-	sep = gtk_hseparator_new();
-	gtk_box_pack_start(GTK_BOX(vbox2),sep,FALSE,TRUE,0);
 
 	frame = gtk_frame_new("Idle Control");
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
