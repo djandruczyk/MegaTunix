@@ -25,8 +25,8 @@ gui_files = 	template.glade \
 		runtime.datamap \
 		sparktable_12x12e.glade \
 		sparktable_12x12e-Extra.datamap \
-		sparktable_12x12.glade \
-		sparktable_12x12-Extra.datamap \
+		sparktable_12x12s.glade \
+		sparktable_12x12s-Extra.datamap \
 		sparktable_8x8.glade \
 		sparktable_8x8-EDIS.datamap \
 		sparktable_8x8-Std.datamap \
