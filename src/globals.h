@@ -35,10 +35,4 @@ struct Serial_Params
 	int errcount;		/* Serial I/O errors read error count */
 } serial_params;
 
-/* constants */
-int poll_min;			/* 5 millisecond minimum poll delay */
-int poll_max;			/* 500 millisecond maximum poll delay */
-int interval_min;		/* 25 millisecond minimum interval delay */
-int interval_max;		/* 1000 millisecond maximum interval  delay */
-
 #endif

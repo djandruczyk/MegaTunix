@@ -36,6 +36,12 @@ extern int main_x_origin;
 extern int main_y_origin;
 extern int width;
 extern int height;
+extern int poll_min;
+extern int poll_step;
+extern int poll_max;
+extern int interval_min;
+extern int interval_step;
+extern int interval_max;
 extern GtkWidget *main_window;
 struct ms_ve_constants *ve_constants;
 struct ms_data_v1_and_v2 *runtime;
@@ -45,8 +51,10 @@ void init()
 {
 	/* defaults */
 	poll_min = 25;		/* 25 millisecond minimum poll delay */
+	poll_step = 5;		/* 5 ms steps */
 	poll_max = 500;		/* 500 millisecond maximum poll delay */
 	interval_min = 50;	/* 50 millisecond minimum interval delay */
+	interval_step = 10;	/* 10ms steps */
 	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
 	width = 640;		/* min window width */
 	height = 480;		/* min window height */

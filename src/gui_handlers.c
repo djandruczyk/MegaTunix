@@ -52,8 +52,6 @@ void leave(GtkWidget *widget, gpointer *data)
 int text_entry_handler(GtkWidget * widget, gpointer *data)
 {
 	gchar *entry_text;
-	gfloat tmpf = 0.0;
-	gint tmpi = 0;
 	gint offset;
 	if (paused_handlers)
 		return TRUE ;
@@ -318,7 +316,7 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 		return TRUE;
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	offset = (gint) gtk_object_get_data(G_OBJECT(widget),"offset");
-	printf("spinner value: %f ,offset %i\n",value,offset);
+	printf("spinner value: %.1f ,offset %i\n",value,offset);
 	
 	switch ((gint)data)
 	{
@@ -410,12 +408,14 @@ void update_const_ve()
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.as_num_cycles_spin),
 			ve_constants->as_num_cycles);
 
+	/* Warmup Enrichment bins */
 	for (i=0;i<10;i++)
 	{
 		g_snprintf(buff,10,"%i",ve_constants->warmup_bins[i]);
 		gtk_entry_set_text(GTK_ENTRY(constants.warmup_bins_ent[i]),
 				buff);
 	}
+	/* accel enrichments */
 	for (i=0;i<4;i++)
 	{
 		g_snprintf(buff,10,"%i",ve_constants->accel_bins[i]);
@@ -464,7 +464,7 @@ void update_const_ve()
 			buff);
 
 	/* EGO step percent */
-	g_snprintf(buff,10,"%.1f",ve_constants->ego_step/10.0);
+	g_snprintf(buff,10,"%i",ve_constants->ego_step);
 	gtk_entry_set_text(GTK_ENTRY(constants.ego_step_ent),
 			buff);
 

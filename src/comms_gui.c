@@ -31,6 +31,12 @@ extern int raw_reader_running;
 extern int ms_reset_count;
 extern int ms_goodread_count;
 extern int ms_ve_goodread_count;
+int poll_min;
+int poll_step;
+int poll_max;
+int interval_min;
+int interval_step;
+int interval_max;
 
 int build_comms(GtkWidget *parent_frame)
 {
@@ -110,7 +116,7 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
-			100,poll_min,poll_max,5,5,0);
+			100,poll_min,poll_max,poll_step,poll_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),
@@ -132,7 +138,8 @@ int build_comms(GtkWidget *parent_frame)
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	adj = (GtkAdjustment *) gtk_adjustment_new(
-			100,interval_min,interval_max,25,25,0);
+			100,interval_min,interval_max,
+			interval_step,interval_step,0);
 	spinner = gtk_spin_button_new(adj,0,0);
 	g_signal_connect (G_OBJECT(spinner), "value_changed",
 			G_CALLBACK (spinner_changed),

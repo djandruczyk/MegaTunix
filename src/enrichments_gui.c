@@ -375,7 +375,7 @@ int build_enrichments(GtkWidget *parent_frame)
 
 	entry = gtk_entry_new ();
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 7);
-	gtk_entry_set_max_length(GTK_ENTRY (entry), 3);
+	gtk_entry_set_max_length(GTK_ENTRY (entry), 5);
 	gtk_object_set_data(G_OBJECT(entry),"offset",GINT_TO_POINTER(121));
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
