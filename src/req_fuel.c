@@ -455,17 +455,17 @@ void check_req_fuel_limits()
 			if (num_cylinders_1 % num_squirts_1)
 				lim_flag = 1;
 		}
-		/* Required Fuel per SQUIRT */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,
-						     "req_fuel_per_squirt_1_spin")),
-				req_fuel_per_squirt/10.0);
+				
 
 		/* Throw warning if an issue */
 		if (lim_flag)
 			set_interdep_state(RED,1);
 		else
 		{
+			/* Required Fuel per SQUIRT */
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON
+					(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),req_fuel_per_squirt/10.0);
+
 			set_interdep_state(BLACK,1);
 
 			if (paused_handlers)
@@ -576,16 +576,15 @@ void check_req_fuel_limits()
 			if (num_cylinders_1 % num_squirts_1)
 				lim_flag = 1;
 		}
-		/* req-fuel info box  */
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON
-				(g_hash_table_lookup(dynamic_widgets,
-						     "req_fuel_per_squirt_1_spin")),
-				req_fuel_per_squirt/10.0);
 
 		if (lim_flag)
 			set_interdep_state(RED,1);
 		else
 		{
+			/* req-fuel info box  */
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(g_hash_table_lookup(dynamic_widgets,"req_fuel_per_squirt_1_spin")),
+							     
+					req_fuel_per_squirt/10.0);
 			set_interdep_state(BLACK,1);
 
 			/* All Tested succeeded, download Required fuel, 

@@ -53,7 +53,7 @@ keys themselves are not, as the string compare functions are case insensitive.
 	offset		(integer) offset from the beginning of said page that
 			this control refers to. 
 	bit_val		(integer) the value of part of a bitfield (see below)
-	bit_pos		(integer) the starting point in a bitfield for bit_val
+	bit_shift	(integer) the starting point in a bitfield for bit_val
 	bitmask		(integer) the bitmask of bitval..
 	temp_dep	(boolean) Temperature dependant widget (flag)
 	c_label		(string)  Celsius label for temp dependant widgets
@@ -93,4 +93,30 @@ keys themselves are not, as the string compare functions are case insensitive.
 			Swap from TRUE to FALSE when on-screen behavior is
 			backwards to what you want...
 
+HOW Bitfields are used:
+	Controls that associate to a bitfield can either be a button, 
+either a toggle (two choices) or radio (multiple choices)  or a spinbutton
+in which a numerical value is stored into a bitfield (num_cylinders, etc..)
+
+For buttons, in the datamap file we use bit_val, bitmask, and bit_shift.
+
+When clicking a button, what megatunix  does is retrieve the byte at the 
+page/offset set by that control, mask off the other bits in that byte with
+the bitmask. (byte & bitmask)  After this the new value is shifted by
+the "bit_shift" value and copied into the byte.
+
+When updating the button after reading the data from the ECU, we mask it and 
+then shift it.  
+	if((value%bitmask) >> bit_shift) == bit_val)
+		Set button clicked
+	else
+		set button NOT clicked
+i.e.
+IF this value EQUALS bit_val we set the buttons state to 
+TRUE (clicked), otherwsie we set it to FALSE.
+
+For spinbuttons we use "convert_after_upload" whcih checks for a simple or
+complex conversion. (bitfield embedded values are considered a complex 
+conversion due to handling the bit masking/shifting). See handle_complex_expr()
+in the sourcecode.
 

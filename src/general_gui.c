@@ -117,7 +117,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Interrogation");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(0));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(0));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<0));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -129,7 +129,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("OpenGL");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(1));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(1));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<1));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -141,7 +141,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Download Conversions");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(2));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(2));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<2));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -153,7 +153,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Upload Conversions");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(3));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(3));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<3));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -165,7 +165,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Serial Writes");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(4));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(4));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<4));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -177,7 +177,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Serial Reads");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(5));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(5));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<5));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -189,7 +189,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("General Serial");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(6));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(6));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<6));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -201,7 +201,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("I/O Processing");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(7));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(7));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<7));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -213,7 +213,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Threads");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(8));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(8));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<8));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -225,7 +225,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Reqd_Fuel Info");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(9));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(9));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<9));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -237,7 +237,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Tab-Loader");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(10));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(10));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<10));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",
@@ -249,7 +249,7 @@ void build_general(GtkWidget *parent_frame)
 
 	button = gtk_check_button_new_with_label("Critical Errors");
 	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(DEBUG_LEVEL));
-	g_object_set_data(G_OBJECT(button),"bit_pos",GINT_TO_POINTER(31));
+	g_object_set_data(G_OBJECT(button),"bit_shift",GINT_TO_POINTER(31));
 	g_object_set_data(G_OBJECT(button),"bitmask",GINT_TO_POINTER(1<<31));
 	g_object_set_data(G_OBJECT(button),"bit_val",GINT_TO_POINTER(1));
 	g_signal_connect(G_OBJECT(button),"toggled",

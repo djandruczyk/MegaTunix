@@ -39,9 +39,9 @@ void set_widget_state(gpointer widget, gpointer state)
         gtk_widget_set_sensitive(GTK_WIDGET(widget),(gboolean)state);
 }
 
-gboolean drain_hashtable(gpointer offset, gpointer value, gpointer data)
+gboolean drain_hashtable(gpointer offset, gpointer value, gpointer page)
 {
 	/* called per element from the hash table to drain and send to ECU */
-	write_ve_const((gint)data, (gint)offset,(gint)value, FALSE);
+	write_ve_const((gint)page, (gint)offset,(gint)value, FALSE);
 	return TRUE;
 }

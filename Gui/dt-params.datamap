@@ -21,110 +21,110 @@ bind_to_list=burners
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [dt_mode_checkbutton]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=0
+bit_shift=0
 bit_val=1
 bitmask=1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj1_off_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=1
+bit_shift=1
 bit_val=0
 bitmask=6
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj1_table1_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=1
+bit_shift=1
 bit_val=1
 bitmask=6
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj1_table2_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=1
+bit_shift=1
 bit_val=2
 bitmask=6
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj1_gammae_check_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=5
+bit_shift=5
 bit_val=1
 bitmask=32
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj2_off_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=3
+bit_shift=3
 bit_val=0
 bitmask=24
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj2_table1_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=3
+bit_shift=3
 bit_val=1
 bitmask=24
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj2_table2_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=3
+bit_shift=3
 bit_val=2
 bitmask=24
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [inj2_gammae_check_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=0
 offset=92
-bit_pos=6
+bit_shift=6
 bit_val=1
 bitmask=64
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [b_n_g_idle_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler,swap_label
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler,swap_label
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
-bit_pos=4
+bit_shift=4
 bit_val=0
 bitmask=16
 dl_type=_IMMEDIATE_
@@ -132,11 +132,11 @@ handler=_GENERIC_
 swap_label=fast_idle_temp_label
 
 [pwm_idle_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler,toggle_group,invert_state
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler,toggle_group,invert_state
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_
 page=0
 offset=118
-bit_pos=4
+bit_shift=4
 bit_val=1
 bitmask=16
 dl_type=_IMMEDIATE_
@@ -198,33 +198,33 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [39hz_radiobutton]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
 offset=119
-bit_pos=0
+bit_shift=0
 bit_val=1
 bitmask=3
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [19hz_radiobutton]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
 offset=119
-bit_pos=0
+bit_shift=0
 bit_val=2
 bitmask=3
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [10hz_radiobutton]
-keys=page,offset,bit_pos,bit_val,bitmask,dl_type,handler
+keys=page,offset,bit_shift,bit_val,bitmask,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
 page=1
 offset=119
-bit_pos=0
+bit_shift=0
 bit_val=3
 bitmask=3
 dl_type=_IMMEDIATE_

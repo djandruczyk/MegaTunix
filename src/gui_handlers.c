@@ -234,7 +234,7 @@ gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 
 gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
-	gint bit_pos = -1;
+	gint bit_shift = -1;
 	gint bit_val = -1;
 	gint bitmask = -1;
 	gint dload_val = -1;
@@ -262,7 +262,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 		offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 		dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
-		bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
+		bit_shift = (gint)g_object_get_data(G_OBJECT(widget),"bit_shift");
 		bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 		bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 		handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
@@ -293,7 +293,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		case GENERIC:
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
-			tmp = tmp | (bit_val << bit_pos);
+			tmp = tmp | (bit_val << bit_shift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			break;
@@ -301,7 +301,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			// Debugging selection buttons 
 			tmp32 = dbg_lvl;
 			tmp32 = tmp32 & ~bitmask;
-			tmp32 = tmp32 | (bit_val << bit_pos);
+			tmp32 = tmp32 | (bit_val << bit_shift);
 			dbg_lvl = tmp32;
 			break;
 
@@ -311,7 +311,7 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			{
 				tmp = ms_data[page][offset];
 				tmp = tmp & ~bitmask;// clears bits 
-				tmp = tmp | (bit_val << bit_pos);
+				tmp = tmp | (bit_val << bit_shift);
 				ms_data[page][offset] = tmp;
 				dload_val = tmp;
 			}
@@ -471,7 +471,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint dload_val = -1;
 	gint page = -1;
 	gint bitmask = -1;
-	gint bit_pos = -1;
+	gint bit_shift = -1;
 	gint spconfig = 0;
 	gboolean ign_parm = FALSE;
 	gboolean temp_dep = FALSE;
@@ -503,7 +503,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 		offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 		bitmask = (gint) g_object_get_data(G_OBJECT(widget),"bitmask");
-		bit_pos = (gint) g_object_get_data(G_OBJECT(widget),"bit_pos");
+		bit_shift = (gint) g_object_get_data(G_OBJECT(widget),"bit_shift");
 		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep");
 		value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	}
@@ -579,10 +579,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				ve_const->divider = 
+				dload_val = 
 					(gint)(((float)num_cylinders_1/
 						(float)num_squirts_1)+0.001);
-				dload_val = ve_const->divider;
+				ve_const->divider = dload_val;
 				g_hash_table_insert(interdep_vars_1,
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
@@ -596,19 +596,20 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_cylinders_1 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_pos);
+			tmp = tmp | ((tmpi-1) << bit_shift);
 			ms_data[page][offset] = tmp;
-			ve_const->divider = 
-				(gint)(((float)num_cylinders_1/
-					(float)num_squirts_1)+0.001);
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_1,
 					GINT_TO_POINTER(offset),
 					GINT_TO_POINTER(dload_val));
 
+			dload_val = 
+				(gint)(((float)num_cylinders_1/
+					(float)num_squirts_1)+0.001);
+			ve_const->divider = dload_val;
 			g_hash_table_insert(interdep_vars_1,
 					GINT_TO_POINTER(DIV_OFFSET_1),
-					GINT_TO_POINTER((gint)ve_const->divider));
+					GINT_TO_POINTER(dload_val));
 
 			if (num_cylinders_1 % num_squirts_1)
 			{
@@ -627,7 +628,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_injectors_1 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_pos);
+			tmp = tmp | ((tmpi-1) << bit_shift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_1,
@@ -646,10 +647,10 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				ve_const_dt2->divider = 
+				dload_val = 
 					(gint)(((float)num_cylinders_2/
 						(float)num_squirts_2)+0.001);
-				dload_val = ve_const_dt2->divider;
+				ve_const_dt2->divider = dload_val;
 				g_hash_table_insert(interdep_vars_2,
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
@@ -663,19 +664,20 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_cylinders_2 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_pos);
+			tmp = tmp | ((tmpi-1) << bit_shift);
 			ms_data[page][offset] = tmp;
-			ve_const_dt2->divider = 
-				(gint)(((float)num_cylinders_2/
-					(float)num_squirts_2)+0.001);
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_2,
 					GINT_TO_POINTER(offset),
 					GINT_TO_POINTER(dload_val));
 
+			dload_val = 
+				(gint)(((float)num_cylinders_2/
+					(float)num_squirts_2)+0.001);
+			ve_const_dt2->divider = dload_val;
 			g_hash_table_insert(interdep_vars_2,
 					GINT_TO_POINTER(DIV_OFFSET_2),
-					GINT_TO_POINTER((gint)ve_const_dt2->divider));
+					GINT_TO_POINTER(dload_val));
 
 			if (num_cylinders_2 % num_squirts_2)
 			{
@@ -694,7 +696,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			num_injectors_2 = tmpi;
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	/*clears top 4 bits */
-			tmp = tmp | ((tmpi-1) << bit_pos);
+			tmp = tmp | ((tmpi-1) << bit_shift);
 			ms_data[page][offset] = tmp;
 			dload_val = tmp;
 			g_hash_table_insert(interdep_vars_2,
@@ -845,21 +847,22 @@ void update_ve_const()
 	{
 		/*  B&G, MSnS, MSnEDIS req Fuel calc *
 		 * req-fuel 
-		 *                                        /     num_injectors     \
-		 *         	   req_fuel_per_squirt * (-------------------------)
-		 *                                        \ divider*(alternate+1) /
-		 * req_fuel_total = --------------------------------------------------
+		 *                                   /     num_injectors     \
+		 *    	   req_fuel_per_squirt * (-------------------------)
+		 *                                   \ divider*(alternate+1) /
+		 * req_fuel_total = ------------------------------------------
 		 *				10
 		 *
 		 * where divider = num_cylinders/num_squirts;
 		 *
-		 * The req_fuel_per_squirt is the part stored in the MegaSquirt ECU as 
-		 * the req_fuel variable.  Take note when doing conversions.  On screen
-		 * the value is divided by ten from what is in the MS.  
+		 * The req_fuel_per_squirt is the part stored in the MS ECU as 
+		 * the req_fuel variable.  Take note when doing conversions.  
+		 * On screen the value is divided by ten from what is 
+		 * in the MS.  
 		 * 
 		 */
-		tmp =	(float)(ve_const->config12.bit.injectors+1) /
-			(float)(ve_const->divider*(ve_const->alternate+1));
+		tmp =	(float)(ve_const->config12.bit.injectors+1.0) /
+			(float)(ve_const->divider*(ve_const->alternate+1.0));
 		tmp *= (float)ve_const->req_fuel;
 		tmp /= 10.0;
 		req_fuel_total_1 = tmp;
@@ -901,7 +904,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gint offset = -1;
 	gfloat value = 0.0;
 	gint bit_val = -1;
-	gint bit_pos = -1;
+	gint bit_shift = -1;
 	gint bitmask = -1;
 	gchar * toggle_group = NULL;
 	gboolean invert_state = FALSE;
@@ -918,8 +921,8 @@ void update_widget(gpointer object, gpointer user_data)
 				"offset");
 		bit_val = (gint)g_object_get_data(G_OBJECT(widget),
 				"bit_val");
-		bit_pos = (gint)g_object_get_data(G_OBJECT(widget),
-				"bit_pos");
+		bit_shift = (gint)g_object_get_data(G_OBJECT(widget),
+				"bit_shift");
 		bitmask = (gint)g_object_get_data(G_OBJECT(widget),
 				"bitmask");
 		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
@@ -944,11 +947,11 @@ void update_widget(gpointer object, gpointer user_data)
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 		else if (GTK_IS_CHECK_BUTTON(widget))
 		{
-			/* If value masked by bitmask, shifted right by bit_pos = bit_val
+			/* If value masked by bitmask, shifted right by bit_shift = bit_val
 			 * then set button state to on...
 			 */
 			tmpi = (gint)value;
-			if (((tmpi & bitmask) >> bit_pos) == bit_val)
+			if (((tmpi & bitmask) >> bit_shift) == bit_val)
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
 			else
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);

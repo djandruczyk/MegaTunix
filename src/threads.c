@@ -166,6 +166,7 @@ void io_cmd(IoCommand cmd, gpointer data)
 void *serial_io_handler(gpointer data)
 {
 	struct Io_Message *message = NULL;	
+	extern struct Firmware_Details * firmware;
 	gint len=0;
 	gint i=0;
 	gint val=-1;
@@ -262,6 +263,8 @@ void *serial_io_handler(gpointer data)
 					case UPD_STORE_BLACK:
 						gdk_threads_enter();
 						set_store_buttons_state(BLACK);
+						for (i=0;i<firmware->total_pages;i++)
+							set_reqfuel_state(BLACK,i);
 						gdk_threads_leave();
 						break;
 					case UPD_LOGVIEWER:
@@ -418,12 +421,6 @@ void comms_test()
 void write_ve_const(gint page, gint offset, gint value, gboolean ign_parm)
 {
 	struct OutputData *output = NULL;
-	extern guchar *ms_data[MAX_SUPPORTED_PAGES];
-
-	if (ms_data[page][offset] == value)
-		return;
-	else
-		ms_data[page][offset] = value;
 
 	output = g_new0(struct OutputData,1);
 	output->page = page;
