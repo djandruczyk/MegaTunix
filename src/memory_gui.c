@@ -31,15 +31,16 @@ gint mem_view_style[] = {HEX_VIEW,HEX_VIEW,HEX_VIEW,HEX_VIEW};
 EXPORT void finish_memviewer(void)
 {
 	GtkWidget *label = NULL;
+	GtkWidget *entry = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *table = NULL;
-	GtkWidget *table2 = NULL;
-	GtkWidget *ebox = NULL;
 	gchar *tblname = NULL;
 	gchar *name = NULL;
 	gint rows = 32;
 	gint cols = 8;
-	gint x = 0;
+	gint row = 0;
+	gint col = 0;
+	gint j = 0;
 	gint y = 0;
 	gint z = 0;
 	gint base = 0;
@@ -70,46 +71,29 @@ EXPORT void finish_memviewer(void)
 		table = g_hash_table_lookup(dynamic_widgets,tblname);
 		g_free(tblname);
 
-		y = 0;
-		x = 0;
-		for (y=0;y<rows;y++)
+		row = 0;
+		col = 0;
+		for (j=0;j<rows*cols;j++)
 		{
-			//	frame = gtk_frame_new(NULL);
-			ebox = gtk_event_box_new();
-			//	gtk_container_add(GTK_CONTAINER(frame),ebox);
+			entry = gtk_entry_new();
+			gtk_entry_set_width_chars(GTK_ENTRY(entry),4);
+                        gtk_entry_set_has_frame(GTK_ENTRY(entry),FALSE);
+                        gtk_entry_set_editable(GTK_ENTRY(entry),FALSE);
 
-			gtk_table_attach(GTK_TABLE(table),ebox,0,1,y,y+1,
-					(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL),
-					(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL), 0, 0);
+			raw_memory_widgets = g_array_insert_val(raw_memory_widgets,(z*range)+j,entry);
+			gtk_table_attach(GTK_TABLE(table),entry,col,col+1,row,row+1,(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL),(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL), 0, 0);
 
-			table2 = gtk_table_new(1,cols,TRUE);
-			gtk_container_add(GTK_CONTAINER(ebox),table2);
-			gtk_table_set_col_spacings(GTK_TABLE(table2),1);
-
-			for (x=0;x<cols;x++)
+			if (row%2)
+				gtk_widget_modify_base(entry,GTK_STATE_NORMAL,&purple);
+			else
+				gtk_widget_modify_base(entry,GTK_STATE_NORMAL,&white);
+			col++;
+			if (col >= cols)
 			{
-
-				ebox = gtk_event_box_new();
-				gtk_table_attach(GTK_TABLE(table2),ebox,x,x+1,0,1,
-						(GtkAttachOptions) (GTK_FILL|GTK_SHRINK|GTK_EXPAND),
-						(GtkAttachOptions) (GTK_FILL|GTK_SHRINK|GTK_EXPAND), 0, 0);
-				label = gtk_label_new(NULL);
-				/* (z+range)+(y*8)+x
-				 * z = block of 256 labels,
-				 * y = column in table,
-				 * x = row in table.
-				 * If it works right, the array is populated in
-				 * order with 1024 widgets assuming z=4, and 
-				 * range = 256 (number of elements per table)
-				 */
-				raw_memory_widgets = g_array_insert_val(raw_memory_widgets,(z*range)+(y*8)+(x),label);
-				gtk_container_add(GTK_CONTAINER(ebox),label);
-				if (y%2)
-					gtk_widget_modify_bg(ebox,GTK_STATE_NORMAL,&purple);
-				else
-					gtk_widget_modify_bg(ebox,GTK_STATE_NORMAL,&white);
-
+				col = 0;
+				row++;
 			}
+
 		}
 
 		if (mem_view_style[z] == HEX_VIEW)

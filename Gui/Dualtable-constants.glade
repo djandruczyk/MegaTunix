@@ -970,7 +970,7 @@
 		      <child>
 			<widget class="GtkLabel" id="table1_inj_sq_cyls_frame_title">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Table 1 Cylinders,Injectors and Squirts.</property>
+			  <property name="label" translatable="yes"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1028,7 +1028,7 @@
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 10 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:32:56 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1105,7 +1105,7 @@ Correction (ms/Volt)</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:32:45 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1147,7 +1147,7 @@ Correction (ms/Volt)</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 100 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:33:01 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1173,7 +1173,7 @@ Correction (ms/Volt)</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:33:08 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1249,7 +1249,7 @@ Threshold (ms.)</property>
 		      <child>
 			<widget class="GtkLabel" id="table1_inj_ctrl_params_frame_title">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Table 1 Injector Control Parameters</property>
+			  <property name="label" translatable="yes"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1577,7 +1577,7 @@ Threshold (ms.)</property>
 		      <child>
 			<widget class="GtkLabel" id="table2_inj_sq_cyls_frame_title">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Table 2 Cylinders,Injectors and Squirts.</property>
+			  <property name="label" translatable="yes"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1635,7 +1635,7 @@ Threshold (ms.)</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:32:45 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1662,7 +1662,7 @@ Threshold (ms.)</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 10 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:32:56 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1754,7 +1754,7 @@ Correction (ms/Volt)</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 25.5 0.1 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:33:08 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1830,7 +1830,7 @@ Threshold (ms.)</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 100 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 20 Sep 2004 01:33:01 GMT"/>
-			          <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 				</widget>
@@ -1856,7 +1856,7 @@ Threshold (ms.)</property>
 		      <child>
 			<widget class="GtkLabel" id="table2_inj_ctrl_params_frame_title">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Table 2 Injector Control Parameters</property>
+			  <property name="label" translatable="yes"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1981,7 +1981,7 @@ Threshold (ms.)</property>
       <child>
 	<widget class="GtkLabel" id="topframe_title">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">MegaSquirt ECU Dualtable Constants</property>
+	  <property name="label" translatable="yes"></property>
 	  <property name="use_underline">False</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>

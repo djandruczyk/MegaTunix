@@ -59,7 +59,7 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 {
 	extern GArray * raw_memory_widgets;
 	extern GArray * raw_memory_data;
-	GtkWidget *label = NULL;
+	GtkWidget *entry = NULL;
 	guchar value = 0;
 	extern gint mem_view_style[];
 	gint i = 0;
@@ -70,8 +70,8 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 	for (i=0;i<256;i++)
 	{
 		value = -1;
-		label = g_array_index(raw_memory_widgets, GtkWidget *, i+(256*page_offset));
-		if (label == NULL)
+		entry = g_array_index(raw_memory_widgets, GtkWidget *, i+(256*page_offset));
+		if (entry == NULL)
 			return;
 		if (raw_memory_data == NULL)
 			return;
@@ -95,7 +95,7 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 				break;
 
 		}
-		gtk_label_set_text(GTK_LABEL(label),tmpbuf);
+		gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
 		g_free(tmpbuf);
 	}
 }

@@ -2,6 +2,7 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
+<requires lib="gnome"/>
 
 <widget class="GtkWindow" id="window1">
   <property name="visible">True</property>
@@ -89,7 +90,7 @@
 				    <widget class="GtkTable" id="memviewer_tab0_data_table">
 				      <property name="visible">True</property>
 				      <property name="n_rows">32</property>
-				      <property name="n_columns">1</property>
+				      <property name="n_columns">8</property>
 				      <property name="homogeneous">True</property>
 				      <property name="row_spacing">1</property>
 				      <property name="column_spacing">0</property>
@@ -332,7 +333,7 @@
 				    <widget class="GtkTable" id="memviewer_tab1_data_table">
 				      <property name="visible">True</property>
 				      <property name="n_rows">32</property>
-				      <property name="n_columns">1</property>
+				      <property name="n_columns">8</property>
 				      <property name="homogeneous">True</property>
 				      <property name="row_spacing">1</property>
 				      <property name="column_spacing">0</property>
@@ -575,7 +576,7 @@
 				    <widget class="GtkTable" id="memviewer_tab2_data_table">
 				      <property name="visible">True</property>
 				      <property name="n_rows">32</property>
-				      <property name="n_columns">1</property>
+				      <property name="n_columns">8</property>
 				      <property name="homogeneous">True</property>
 				      <property name="row_spacing">1</property>
 				      <property name="column_spacing">0</property>
@@ -818,7 +819,7 @@
 				    <widget class="GtkTable" id="memviewer_tab3_data_table">
 				      <property name="visible">True</property>
 				      <property name="n_rows">32</property>
-				      <property name="n_columns">1</property>
+				      <property name="n_columns">8</property>
 				      <property name="homogeneous">True</property>
 				      <property name="row_spacing">1</property>
 				      <property name="column_spacing">0</property>

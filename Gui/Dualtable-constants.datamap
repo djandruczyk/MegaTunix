@@ -34,6 +34,36 @@ handler=_REQ_FUEL_POPUP_
 
 #----- Labels ----------------------------------------------------------------
 
+[topframe_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=0
+set_label=MegaSquirt ECU Dualtable Constants
+
+[table1_inj_sq_cyls_frame_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=0
+set_label=Table 1 Cylinders,Injectors and Squirts.
+
+[table2_inj_sq_cyls_frame_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=0
+set_label=Table 2 Cylinders,Injectors and Squirts.
+
+[table1_inj_ctrl_params_frame_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=0
+set_label=Table 1 Injector Control Parameters
+
+[table2_inj_ctrl_params_frame_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=0
+set_label=Table 2 Injector Control Parameters
+
 [num_injectors_1_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
