@@ -28,16 +28,6 @@
 
 struct RtvMap *rtv_map = NULL;
 
-void test_math(void);
-void test_math()
-{
-	return;
-	void *eval = NULL;
-	eval = evaluator_create("x/10");
-	assert(eval);
-	printf("x*10 == %f\n",evaluator_evaluate_x(eval,5.5));
-}
-
 gboolean load_realtime_map(void )
 {
 	ConfigFile *cfgfile;

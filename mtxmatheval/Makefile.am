@@ -23,6 +23,7 @@
 #
 
 MAINTAINERCLEANFILES = Makefile.in parser.c parser.h scanner.c
+CLEANFILES = parser.c parser.h scanner.c
 
 EXTRA_DIST = parser.h
 
