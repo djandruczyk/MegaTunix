@@ -105,7 +105,7 @@ int build_general(GtkWidget *parent_frame)
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	table = gtk_table_new(3,5,FALSE);
+	table = gtk_table_new(4,5,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),7);
 	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),5);
@@ -115,7 +115,7 @@ int build_general(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,
 			"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, so we offer the choice to select the API to use below",NULL);
 	gtk_table_attach (GTK_TABLE (table), ebox, 0, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 	button = gtk_button_new_with_label("Interrogate ECU capabilities");
 	gtk_container_add(GTK_CONTAINER(ebox),button);
@@ -123,13 +123,13 @@ int build_general(GtkWidget *parent_frame)
 			G_CALLBACK (interrogate_ecu), \
 			NULL);
 
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_table_attach (GTK_TABLE (table), hbox, 2, 5, 0, 1,
+	hbox = gtk_hbox_new(FALSE,18);
+	gtk_table_attach (GTK_TABLE (table), hbox, 3, 5, 0, 1,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("ECU Revision Number");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+//	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	entry = gtk_entry_new();
@@ -139,35 +139,39 @@ int build_general(GtkWidget *parent_frame)
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
 
-
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_table_attach (GTK_TABLE (table), hbox, 0, 1, 1, 2,
+	label = gtk_label_new("Extended Revision");
+	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
-	label = gtk_label_new("Extended Revision");
-	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+	hbox = gtk_hbox_new(FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), hbox, 1, 5, 1, 2,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
 	entries.extended_revision_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 32);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 70);
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
-	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),entry,TRUE,TRUE,0);
 
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_table_attach (GTK_TABLE (table), hbox, 2, 3, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
 
 	label = gtk_label_new("ECU Signature");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+			(GtkAttachOptions) (GTK_FILL),
+			(GtkAttachOptions) (0), 0, 0);
+
+	hbox = gtk_hbox_new(FALSE,5);
+	gtk_table_attach (GTK_TABLE (table), hbox, 1, 5, 2, 3,
+			(GtkAttachOptions) (GTK_EXPAND),
+			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
 	entries.ecu_signature_entry = entry;
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 25);
+	gtk_entry_set_width_chars (GTK_ENTRY (entry), 70);
 	gtk_widget_set_sensitive(entry,FALSE);
 	gtk_widget_modify_text(entry,GTK_STATE_INSENSITIVE,&black);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
@@ -178,7 +182,7 @@ int build_general(GtkWidget *parent_frame)
 	frame = gtk_frame_new ("ECU Output");
 	gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
-	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 2, 3,
+	gtk_table_attach (GTK_TABLE (table), ebox, 0, 5, 3, 4,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (GTK_FILL), 0, 0);
 
