@@ -183,9 +183,9 @@ int update_reqd_fuel(GtkWidget *widget, gpointer *data)
                 * ((double)(reqd_fuel.afr)) \
                 * ((double)(reqd_fuel.inj_rate));
 
-        ve_constants->req_fuel_1 = 10.0*(tmp1/tmp2);
-        gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_1_spin),
-                        ve_constants->req_fuel_1/10.0);
+        ve_constants->req_fuel = 10.0*(tmp1/tmp2);
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_spin),
+                        ve_constants->req_fuel/10.0);
 
         ve_constants->rpmk = (int)(12000.0/((double)reqd_fuel.cyls));
         write_ve_const(ve_constants->rpmk, rpmk_offset);

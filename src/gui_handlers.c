@@ -207,8 +207,8 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 			reqd_fuel.afr = value;
 			break;
 		case REQ_FUEL_1:
-			ve_constants->req_fuel_1 = tmpi_x10;
-			write_ve_const(tmpi_x10, offset);
+//			ve_constants->req_fuel = tmpi_x10;
+//			write_ve_const(tmpi_x10, offset);
 			break;
 		case INJ_OPEN_TIME:
 			/* This funny conversion is needed cause of 
@@ -311,10 +311,45 @@ int spinner_changed(GtkWidget *widget, gpointer *data)
 void update_const_ve()
 {
 	gint i;
+	gfloat tmp;
 
 	/* req-fuel  */
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_1_spin),
-			ve_constants->req_fuel_1/5.0);
+	/*				/     num_injectors     \
+	 *          req_fuel_from_MS * |-------------------------|
+	 * Result =                     \ divider*(alternate+1) /
+	 *	    -----------------------------------------------
+	 *				10
+	 *
+	 * where divider = num_cylinders/num_squirts;
+	 *
+	 */
+	tmp =	(float)(ve_constants->config12.bit.injectors + 1) /
+		(float)(ve_constants->divider*(ve_constants->alternate+1));
+	tmp *= (float)ve_constants->req_fuel;
+	tmp /= 10.0;
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_spin),
+			tmp);
+
+//	/* req-fuel info box  */
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.req_fuel_base_spin),
+			ve_constants->req_fuel/10.0);
+
+	/* Cylinders */
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.cylinders_spin),
+			ve_constants->config11.bit.cylinders+1);
+
+	/* Number of injectors */
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.injectors_spin),
+			ve_constants->config12.bit.injectors+1);
+
+	/* Injections per cycle */
+	tmp =	(float)(ve_constants->config11.bit.cylinders+1) /
+		(float)(ve_constants->divider);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(constants.inj_per_cycle_spin),
+			tmp);
 
 	/* inj_open_time */
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(constants.inj_open_time_spin),
@@ -514,15 +549,6 @@ void update_const_ve()
 		gtk_toggle_button_set_active(
 				GTK_TOGGLE_BUTTON(constants.multi_port_but),
                                 TRUE);
-
-	/* Cylinders */
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.cylinders_spin),
-			ve_constants->config11.bit.cylinders+1);
-
-	gtk_spin_button_set_value(
-			GTK_SPIN_BUTTON(constants.injectors_spin),
-			ve_constants->config12.bit.injectors+1);
 
 	if (ve_constants->alternate > 0)
 		gtk_toggle_button_set_active(

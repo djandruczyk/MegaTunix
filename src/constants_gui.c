@@ -79,7 +79,7 @@ int build_constants(GtkWidget *parent_frame)
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spinner_changed),
 			GINT_TO_POINTER(REQ_FUEL_1));
-        constants.req_fuel_1_spin = spinner;
+        constants.req_fuel_spin = spinner;
 	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 0, 1,
 			(GtkAttachOptions) (GTK_EXPAND),
@@ -89,12 +89,8 @@ int build_constants(GtkWidget *parent_frame)
 	spinner = gtk_spin_button_new(adj,1.0,1);
         gtk_widget_set_size_request(spinner,60,-1);
 	gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-        g_signal_connect (G_OBJECT(spinner), "value_changed",
-                        G_CALLBACK (spinner_changed),
-			GINT_TO_POINTER(REQ_FUEL_2));
 	gtk_widget_set_sensitive(spinner,FALSE);
-        constants.req_fuel_2_spin = spinner;
-//	g_object_set_data(G_OBJECT(spinner),"offset",GINT_TO_POINTER(91));
+        constants.req_fuel_base_spin = spinner;
 	gtk_table_attach (GTK_TABLE (table), spinner, 2, 3, 1, 2,
 			(GtkAttachOptions) (GTK_EXPAND),
 			(GtkAttachOptions) (0), 0, 0);

@@ -258,7 +258,7 @@ struct ms_ve_constants
         unsigned char   ego_events;             /* 88, ign events betw steps */
         unsigned char   ego_step;               /* 89, correction % */
         unsigned char   ego_limit;              /* 90, +/- limit */
-        unsigned char   req_fuel_1;             /* 91, require fuel */
+        unsigned char   req_fuel;		/* 91, require fuel */
         unsigned char   divider;                /* 92, IRQ / factor for pulse*/
         unsigned char   alternate;              /* 93, alternate inj drivers */
         unsigned char   inj_open_time;          /* 94, inj open time */
