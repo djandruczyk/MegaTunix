@@ -11,19 +11,19 @@ groups=load,rpm,sparktable
 #----- Groups ----------------------------------------------------------------
 
 [load]
-keys=page,dl_type,handler,base,type,lower_limit,upper_limit,ign_parm
+keys=page,dl_type,handler,base,type,raw_lower,raw_upper,ign_parm
 key_types=_INT_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_
 page=1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 base=10
 type=_INT_
-lower_limit=0
-upper_limit=255
+raw_lower=0
+raw_upper=255
 ign_parm=TRUE
 
 [rpm]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,lower_limit,upper_limit,ign_parm
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,ign_parm
 key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_
 page=1
 dl_conv_expr=x/100
@@ -32,12 +32,12 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 base=10
 type=_INT_
-lower_limit=0
-upper_limit=25500
+raw_lower=0
+raw_upper=255
 ign_parm=TRUE
 
 [sparktable]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,lower_limit,upper_limit,is_float,precision,ign_parm
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,base,type,raw_lower,raw_upper,is_float,precision,ign_parm
 key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_ENUM_,_INT_,_INT_,_BOOL_,_INT_,_BOOL_
 page=1
 dl_conv_expr=(x+10)/0.352
@@ -46,8 +46,8 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 base=10
 type=_INT_
-lower_limit=-10
-upper_limit=80
+raw_lower=0
+raw_upper=255
 is_float=TRUE
 precision=2
 ign_parm=TRUE

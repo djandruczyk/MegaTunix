@@ -27,11 +27,17 @@ gui_files = 	template.glade \
 		sparktable_12x12e-Extra.datamap \
 		sparktable_12x12s.glade \
 		sparktable_12x12s-Extra.datamap \
+		sparktable_8x8e.glade \
+		sparktable_8x8e-EDIS.datamap \
+		sparktable_8x8e-Std.datamap \
 		sparktable_8x8s.glade \
 		sparktable_8x8s-EDIS.datamap \
 		sparktable_8x8s-Std.datamap \
 		tools.glade \
 		tools.datamap \
+		vetable_8x8e.glade \
+		vetable_8x8e-BnG.datamap \
+		vetable_8x8e-DT_2.datamap \
 		vetable_8x8s.glade \
 		vetable_8x8s-BnG.datamap \
 		vetable_8x8s-DT_2.datamap \

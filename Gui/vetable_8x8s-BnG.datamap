@@ -10,23 +10,23 @@ groups=load,rpm,vetable
 #----- Groups ----------------------------------------------------------------
 
 [load]
-keys=page,base,lower_limit,upper_limit,is_float,dl_type,handler
+keys=page,base,raw_lower,raw_upper,is_float,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_
 page=0
 base=10
-lower_limit=0
-upper_limit=255
+raw_lower=0
+raw_upper=255
 is_float=FALSE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm]
-keys=page,base,lower_limit,upper_limit,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler
+keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_
 page=0
 base=10
-lower_limit=0
-upper_limit=25500
+raw_lower=0
+raw_upper=255
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 is_float=FALSE
@@ -34,12 +34,12 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [vetable]
-keys=page,base,lower_limit,upper_limit,is_float,dl_type,handler
+keys=page,base,raw_lower,raw_upper,is_float,dl_type,handler
 key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_
 page=0
 base=10
-lower_limit=0
-upper_limit=255
+raw_lower=0
+raw_upper=255
 is_float=FALSE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
