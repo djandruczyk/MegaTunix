@@ -1,0 +1,52 @@
+This README describes the contents of this dir and their file structure.
+
+Last Edited, Feb 27th 2005
+
+	Inside this dir "Interrogator", contains two files, this README
+and a "tests" file.  The tests file is laid out in .ini file format using 
+the common "section", "key","value" layout as shown below.
+
+[section]
+key=value
+
+What MegaTunix does, is that after it starts it checks to make sure an ECU
+is present by issuing a comms test. (sends a "C" and checks for a response)
+If that succeeds, Mtx then procedes to interrogate the ECU.  Before it can
+interrogate, it needs to know waht to send to the ECU.  This "tests" file
+defines those commands. See below for descriptions of the various fields 
+within the file.
+
+NOTES regarding the file:
+The value names are CaSe SeNsItIvE, so be warned.  Ironically the
+keys themselves are not, as the string compare functions are case insensitive.
+
+Sections:
+interrogation_tests
+ - Contains only 1 key,  "total_tests" which is an integer.  It's the total
+ number of tests t oload and store and use against the ECU.
+
+test_xx
+ - There is one section per test, sections are named with an integer suffix 
+ starting from 00 and going up to total_tests-1.
+
+test_xx fields:
+ raw_cmd
+  - This is a string of the command to send to the ECU. it should NOT be quoted
+ 
+ cmd_length
+  - The number of bytes this command is,  99% of the commands are 1 byte in 
+  length.
+
+ cmd_desc
+  - String displayed on screen in the General tab during interrogation to 
+  describe the command sent to the ECU.
+
+ store_data
+  - Boolean, to flag if data is to be stored for display in a seperate field.
+  Used to store the signature, extended revision and version number retrieved
+  from the ECU
+
+ store_type
+  - String represnetation of an enumeration.  Valid types are ONLY _EXTVER_,
+  _SIG_, and _VNUM_
+	
