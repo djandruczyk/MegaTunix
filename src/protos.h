@@ -122,3 +122,7 @@ int build_tools(GtkWidget *);
 /* datalogging_gui.c */
 int build_datalogging(GtkWidget *);
 /* datalogging_gui.c */
+
+/* general_gui.c */
+int build_general(GtkWidget *);
+/* general_gui.c */

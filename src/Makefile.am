@@ -25,6 +25,7 @@ megasquirt_SOURCES = \
 	vetable_gui.c \
 	tuning_gui.c \
 	tools_gui.c \
+	general_gui.c \
 	datalogging_gui.c \
 	ms_constants.c
 

@@ -145,16 +145,17 @@ struct ms_data_v1_and_v2 {
 /* Definitions */
 /* Gui frames */
 #define ABOUT_PAGE		0x01
-#define COMMS_PAGE		0x02
-#define CONSTANTS_PAGE		0x03
-#define RUNTIME_PAGE		0x04
-#define ENRICHMENTS_PAGE	0x05
-#define VETABLE_PAGE		0x06
-#define TUNING_PAGE		0x07
-#define TOOLS_PAGE		0x08
-#define DATALOGGING_PAGE	0x09
+#define GENERAL_PAGE		0x02
+#define COMMS_PAGE		0x03
+#define CONSTANTS_PAGE		0x04
+#define RUNTIME_PAGE		0x05
+#define ENRICHMENTS_PAGE	0x06
+#define VETABLE_PAGE		0x07
+#define TUNING_PAGE		0x08
+#define TOOLS_PAGE		0x09
+#define DATALOGGING_PAGE	0x0a
 
-/* Serial I/O case handling */
+/* Serial I/O READ case handling */
 #define REALTIME_VARS		0x20
 #define VE_AND_CONSTANTS	0x21
  

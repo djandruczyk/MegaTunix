@@ -82,7 +82,7 @@ INCLUDES = @GTK_CFLAGS@ -DGTK_DISABLE_COMPAT_H  -D_MAJOR_=@MEGASQUIRT_LIN_MAJOR_
 
 bin_PROGRAMS = megasquirt
 
-megasquirt_SOURCES =  	Makefile 	globals.h 	defines.h 	protos.h 	lookuptables.h 	core_gui.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	datalogging_gui.c 	ms_constants.c
+megasquirt_SOURCES =  	Makefile 	globals.h 	defines.h 	protos.h 	lookuptables.h 	core_gui.c 	gui_handlers.c 	about_gui.c 	comms_gui.c 	main.c 	serialio.c 	dataio.c 	threads.c 	configfile.c 	init.c 	constants_gui.c 	runtime_gui.c 	enrichments_gui.c 	vetable_gui.c 	tuning_gui.c 	tools_gui.c 	general_gui.c 	datalogging_gui.c 	ms_constants.c
 
 
 megasquirt_LDADD = @GTK_LIBS@ @EXTRA_LIBS@
@@ -109,7 +109,7 @@ LDFLAGS = @LDFLAGS@
 megasquirt_OBJECTS =  core_gui.o gui_handlers.o about_gui.o comms_gui.o \
 main.o serialio.o dataio.o threads.o configfile.o init.o \
 constants_gui.o runtime_gui.o enrichments_gui.o vetable_gui.o \
-tuning_gui.o tools_gui.o datalogging_gui.o ms_constants.o
+tuning_gui.o tools_gui.o general_gui.o datalogging_gui.o ms_constants.o
 megasquirt_DEPENDENCIES = 
 megasquirt_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -124,10 +124,10 @@ TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/about_gui.P .deps/comms_gui.P .deps/configfile.P \
 .deps/constants_gui.P .deps/core_gui.P .deps/dataio.P \
-.deps/datalogging_gui.P .deps/enrichments_gui.P .deps/gui_handlers.P \
-.deps/init.P .deps/main.P .deps/ms_constants.P .deps/runtime_gui.P \
-.deps/serialio.P .deps/threads.P .deps/tools_gui.P .deps/tuning_gui.P \
-.deps/vetable_gui.P
+.deps/datalogging_gui.P .deps/enrichments_gui.P .deps/general_gui.P \
+.deps/gui_handlers.P .deps/init.P .deps/main.P .deps/ms_constants.P \
+.deps/runtime_gui.P .deps/serialio.P .deps/threads.P .deps/tools_gui.P \
+.deps/tuning_gui.P .deps/vetable_gui.P
 SOURCES = $(megasquirt_SOURCES)
 OBJECTS = $(megasquirt_OBJECTS)
 

@@ -58,6 +58,16 @@ int setup_gui()
         gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	/* About Page */
 
+	/* General Page */
+	frame = gtk_frame_new ("General MegaTunix Settings");
+        gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
+
+	framebuild_dispatch(frame,GENERAL_PAGE);
+
+        label = gtk_label_new ("General");
+        gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
+	/* General Page */
+
 	/* Comms Page */
 	frame = gtk_frame_new ("MegaSquirt Communications Parameters");
         gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
@@ -155,6 +165,9 @@ int framebuild_dispatch(GtkWidget *frame, gint data)
 	{
 		case ABOUT_PAGE:
 			build_about(frame);
+			break;
+		case GENERAL_PAGE:
+			build_general(frame);
 			break;
 		case COMMS_PAGE:
 			build_comms(frame);
