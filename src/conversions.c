@@ -131,12 +131,26 @@ void convert_temps(gpointer widget, gpointer units)
 	gfloat value = 0.0;
 	GtkAdjustment * adj = NULL;
 	gchar *text = NULL;
+	gchar *alt_depend_on = NULL;
+	gboolean state = FALSE;
+	extern GHashTable *dynamic_widgets;
+
+	/* If widget has the "alt_depend_on" data bound to it (A widget name)
+	 * then get state of that widget (toggle button only so far) so that
+	 * we can use the right labels if needed...
+	 */
+	alt_depend_on = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_depend_on");
+	if (alt_depend_on)
+		state = (gboolean)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,alt_depend_on)));
 
 	if ((int)units == FAHRENHEIT)
 	{
 		if (GTK_IS_LABEL(widget))
 		{
-			text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
+			if ((alt_depend_on) && (state))	
+				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_f_label");
+			else
+				text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
 			gtk_label_set_text(GTK_LABEL(widget),g_strdup(text));
 		}
 
@@ -163,7 +177,10 @@ void convert_temps(gpointer widget, gpointer units)
 	{
 		if (GTK_IS_LABEL(widget))
 		{
-			text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");
+			if ((alt_depend_on) && (state))	
+				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_c_label");
+			else
+				text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");
 			gtk_label_set_text(GTK_LABEL(widget),g_strdup(text));
 		}
 

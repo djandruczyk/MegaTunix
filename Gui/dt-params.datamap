@@ -18,7 +18,7 @@ handler=_BURN_MS_FLASH_
 page=0
 bind_to_list=burners
 
-#----- Radio/Checkbuttons --------------------------------------------------------------
+#----- Radio/Checkbuttons ----------------------------------------------------
 
 [dt_mode_checkbutton]
 keys=page,offset,bit_pos,bit_val,bitmask,conv_type,dl_type,handler
@@ -129,8 +129,8 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [b_n_g_idle_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+keys=page,offset,bit_pos,bit_val,bitmask,conv_type,dl_type,handler,swap_label
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
 bit_pos=4
@@ -139,10 +139,11 @@ bitmask=16
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+swap_label=fast_idle_temp_label
 
 [pwm_idle_radio_button]
-keys=page,offset,bit_pos,bit_val,bitmask,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+keys=page,offset,bit_pos,bit_val,bitmask,conv_type,dl_type,handler,toggle_group
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
 bit_pos=4
@@ -151,9 +152,10 @@ bitmask=16
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+toggle_group=enh_idle
 
 
-#----- SpinButtons --------------------------------------------------------------------
+#----- SpinButtons -----------------------------------------------------------
 
 [cranking_thresh_spin]
 keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
@@ -284,14 +286,15 @@ handler=_GENERIC_
 bind_to_list=temperature
 
 [fast_idle_speed_spin]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,bind_to_list
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=125
 conv_factor_x100=1000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+bind_to_list=enh_idle
 
 [slow_idle_temp_spin]
 keys=page,offset,conv_factor_x100,conv_type,temp_dep,dl_type,handler,bind_to_list
@@ -303,33 +306,35 @@ conv_type=_ADD_
 temp_dep=TRUE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-bind_to_list=temperature
+bind_to_list=temperature,enh_idle
 
 [slow_idle_speed_spin]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,bind_to_list
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=126
 conv_factor_x100=1000
 conv_type=_DIVIDE_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+bind_to_list=enh_idle
 
 [idle_tps_threshold_spin]
-keys=page,offset,conv_factor_x100,conv_type,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_
+keys=page,offset,conv_factor_x100,conv_type,dl_type,handler,bind_to_list
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=127
 conv_factor_x100=100
 conv_type=_NOTHING_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+bind_to_list=enh_idle
 
 #----- Labels ---------------------------------------------------------------
 
 [fast_idle_temp_label]
-keys=page,c_label,f_label,alt_c_label,alt_f_label,temp_dep,bind_to_list
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_
+keys=page,c_label,f_label,alt_c_label,alt_f_label,temp_dep,bind_to_list,alt_depend_on,alt_depend_state
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_,_BOOL_
 page=0
 c_label=Fast Idle Temp (\302\260C.)
 f_label=Fast Idle Temp (\302\260F.)
@@ -337,6 +342,8 @@ alt_c_label=Fast Idle Cutoff Temp (\302\260C.)
 alt_f_label=Fast Idle Cutoff Temp (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
+alt_depend_on=b_n_g_idle_radio_button
+alt_depend_state=TRUE
 
 [slow_idle_temp_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list
@@ -345,5 +352,23 @@ page=0
 c_label=Slow Idle Temp (\302\260C.)
 f_label=Slow Idle Temp (\302\260F.)
 temp_dep=TRUE
-bind_to_list=temperature
+bind_to_list=temperature,enh_idle
+
+[fast_idle_speed_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=enh_idle
+
+[slow_idle_speed_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=enh_idle
+
+[idle_tps_threshold_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=enh_idle
 

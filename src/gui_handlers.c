@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <structures.h>
 #include <sys/time.h>
+#include <tabloader.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <vetable_gui.h>
@@ -248,6 +249,8 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
 	gint handler = 0;
+	gchar * toggle_group = NULL;
+	gchar * swap_label = NULL;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
@@ -263,19 +266,24 @@ gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+	toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
+				"toggle_group");
+	swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
+				"swap_label");
 
 	// If it's a check button then it's state is dependant on the button's state
-	if (GTK_IS_RADIO_BUTTON(widget))
+	if (!GTK_IS_RADIO_BUTTON(widget))
 	{
-		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-		{
-			// untoggle button's we don't care about for radio, as another will
-			// ALWAYS be true. thats the one we want....
-			return TRUE;
-		}
-	}
-	else if (GTK_IS_CHECK_BUTTON(widget))
 		bit_val = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	
+	}
+	/* Toggles a group ON/OFF based ona widgets state.... */
+	if (toggle_group)
+		g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	/* Swaps the label of another control based on widget state... */
+	if (swap_label)
+		switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+		
 
 //	printf("bit_val \"%i\", bit_pos \"%i\", bitmask \"%i\"\n",bit_val,bit_pos,bitmask);
 	switch ((SpinButton)handler)
@@ -530,7 +538,7 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_total_2 = value;
 			check_req_fuel_limits();
 			break;
-		case LOGVIEW_SCROLL:
+		case LOGVIEW_ZOOM:
 			lv_scroll = tmpi;
 			g_signal_emit_by_name(info,"configure_event",NULL);
 			break;
@@ -971,6 +979,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gint bit_val = -1;
 	gint bit_pos = -1;
 	gint bitmask = -1;
+	gchar * toggle_group = NULL;
+	gchar * swap_label = NULL;
 	extern unsigned char *ms_data[MAX_SUPPORTED_PAGES];
 
 	if (GTK_IS_OBJECT(widget))
@@ -979,16 +989,25 @@ void update_widget(gpointer object, gpointer user_data)
 		if (dont_update)
 			return;
 
-		dl_type = (gint)g_object_get_data(G_OBJECT(widget),"dl_type");
-		page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-		offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-		bit_val = (gint)g_object_get_data(G_OBJECT(widget),"bit_val");
-		bit_pos = (gint)g_object_get_data(G_OBJECT(widget),"bit_pos");
-		bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
-				
+		dl_type = (gint)g_object_get_data(G_OBJECT(widget),
+				"dl_type");
+		page = (gint)g_object_get_data(G_OBJECT(widget),
+				"page");
+		offset = (gint)g_object_get_data(G_OBJECT(widget),
+				"offset");
+		bit_val = (gint)g_object_get_data(G_OBJECT(widget),
+				"bit_val");
+		bit_pos = (gint)g_object_get_data(G_OBJECT(widget),
+				"bit_pos");
+		bitmask = (gint)g_object_get_data(G_OBJECT(widget),
+				"bitmask");
 		temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),
 				"temp_dep");
-				
+		toggle_group = (gchar *)g_object_get_data(G_OBJECT(widget),
+				"toggle_group");
+		swap_label = (gchar *)g_object_get_data(G_OBJECT(widget),
+				"swap_label");
+
 		if (dl_type == IMMEDIATE)
 			value = convert_after_upload(widget);  
 		else
@@ -1014,6 +1033,12 @@ void update_widget(gpointer object, gpointer user_data)
 			else
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);
 		}
+		if (toggle_group)
+			g_list_foreach(get_list(toggle_group),set_widget_state,(gpointer)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+		/* Swaps the label of another control based on widget state... */
+		if (swap_label)
+			switch_labels(swap_label,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+
 	}
 }
 
@@ -1093,4 +1118,30 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 	force_an_update();
 
 	return;
+}
+void switch_labels(gchar * widget_name,gboolean state)
+{
+	extern GHashTable *dynamic_widgets;
+	extern gint temp_units;
+	GtkWidget *widget = g_hash_table_lookup(dynamic_widgets,widget_name);
+	if (widget)
+	{
+		if ((gboolean)g_object_get_data(G_OBJECT(widget),"temp_dep") == TRUE)
+		{
+			if (state)
+			{
+				if (temp_units == FAHRENHEIT)
+					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"alt_f_label"));
+				else
+					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"alt_c_label"));
+			}
+			else
+			{
+				if (temp_units == FAHRENHEIT)
+					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"f_label"));
+				else
+					gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"c_label"));
+			}
+		}
+	}
 }

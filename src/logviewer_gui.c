@@ -195,7 +195,7 @@ void build_logviewer(GtkWidget *parent_frame)
         gtk_widget_set_size_request(spinner,45,-1);
         gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
 	g_object_set_data(G_OBJECT(spinner),"info",(gpointer)d_area);
-	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(LOGVIEW_SCROLL));
+	g_object_set_data(G_OBJECT(spinner),"handler",GINT_TO_POINTER(LOGVIEW_ZOOM));
         g_signal_connect (G_OBJECT(spinner), "value_changed",
                         G_CALLBACK (spin_button_handler),
 			NULL);
