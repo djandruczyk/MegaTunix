@@ -42,39 +42,39 @@ static struct Canidate
 	gint bytes[10];		/* byte count for each of the 9 test cmds */
 	unsigned char *v0_data;	/* V0 data */
 	unsigned char *v1_data;	/* V1 data */
-	gchar sig_str[64];	/* Signature string to search for */
-	gchar quest_str[64];	/* Ext Version string to search for */
+	gchar *sig_str;		/* Signature string to search for */
+	gchar *quest_str;	/* Ext Version string to search for */
 	gint ver_num;		/* Version number to search for */
-	gchar firmware_name[64];/* Name of this firmware */
+	gchar *firmware_name;	/* Name of this firmware */
 	gint capabilities;	/* Bitmask of capabilities.... */
 } canidates[] = 
 {
-	{ {22,0,0,125,125,0,0,0,0,0},NULL,NULL,{},{},0,
-			{"Old Bowling & Grippo 1.0\0"},0},
-	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,{},{},20,
-			{"Standard Bowling & Grippo (2.0-3.01)\0"},
-			0},
-	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,{},{},1,
-			{"Dualtable 0.90-1.0\0"},DUALTABLE},
-	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,{"v.1.01\0"},{},1,
-			{"Dualtable 1.01\0"},DUALTABLE},
-	{ {22,1,1,128,128,19,0,0,255,255},NULL,NULL,{"v.1.02\0"},{},1,
-			{"Dualtable 1.02\0"},DUALTABLE|IAC_PWM},
-	{ {22,1,1,128,128,17,0,0,0,0},NULL,NULL,"Rover IAC\0",{},30,
-			{"MS-3.0 Rover IAC (3.0.4)\0"},IAC_STEPPER},
-	{ {22,1,1,128,128,16,0,0,0,0},NULL,NULL,"Rover IAC\0",{},30,
-			{"MS-3.0 Rover IAC (3.0.5)\0"},IAC_STEPPER},
-	{ {22,1,1,125,125,0,0,83,0,0},NULL,NULL,{},{},20,
-			{"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0"},
+	{ {22,0,0,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,0,
+			"Old Bowling & Grippo 1.0\0",STD},
+	{ {22,1,1,125,125,0,0,0,0,0},NULL,NULL,NULL,NULL,20,
+			"Standard Bowling & Grippo (2.0-3.01)\0",
+			STD},
+	{ {22,1,1,128,128,0,0,0,255,255}, NULL,NULL,NULL,NULL,1,
+			"Dualtable 0.90-1.0\0",DUALTABLE},
+	{ {22,1,1,128,128,18,0,0,255,255},NULL,NULL,"v.1.01\0",NULL,1,
+			"Dualtable 1.01\0",DUALTABLE},
+	{ {22,1,1,128,128,19,0,0,255,255},NULL,NULL,"v.1.02\0",NULL,1,
+			"Dualtable 1.02\0",DUALTABLE|IAC_PWM},
+	{ {22,1,1,128,128,17,0,0,0,0},NULL,NULL,"Rover IAC\0",NULL,30,
+			"MS-3.0 Rover IAC (3.0.4)\0",IAC_STEPPER},
+	{ {22,1,1,128,128,16,0,0,0,0},NULL,NULL,"Rover IAC\0",NULL,30,
+			"MS-3.0 Rover IAC (3.0.5)\0",IAC_STEPPER},
+	{ {22,1,1,125,125,0,0,83,0,0},NULL,NULL,NULL,NULL,20,
+			"MegaSquirtnEDIS v0.108 OR SquirtnSpark 2.02\0",
 			S_N_EDIS},
-	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,{},{},30,
-			{"SquirtnSpark 3.0\0"},S_N_SPARK},
-	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,{},{"EDIS v3.005\0"},30,
-			{"MegaSquirtnEDIS 3.005\0"},S_N_EDIS},
-	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,{},{"EDIS v3.007\0"},30,
-			{"MegaSquirtnEDIS 3.007\0"},S_N_EDIS},
-	{ {22,1,1,125,125,0,0,99,255,255},NULL,NULL,{},{},13,
-			{"MegaSquirt'N'Spark Extended 3.0.1\0"},
+	{ {22,1,1,125,125,0,0,95,0,0},NULL,NULL,NULL,NULL,30,
+			"SquirtnSpark 3.0\0",S_N_SPARK},
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.005\0",30,
+			"MegaSquirtnEDIS 3.005\0",S_N_EDIS},
+	{ {22,1,1,125,125,0,32,95,0,0},NULL,NULL,NULL,"EDIS v3.007\0",30,
+			"MegaSquirtnEDIS 3.007\0",S_N_EDIS},
+	{ {22,1,1,125,125,0,0,99,255,255},NULL,NULL,NULL,NULL,13,
+			"MegaSquirt'N'Spark Extended 3.0.1\0",
 			S_N_SPARK|LAUNCH_CTRL}
 };
 
@@ -185,6 +185,7 @@ void interrogate_ecu()
 		set_ms_page(cmds[i].page);
 		string = g_strdup(cmds[i].cmd_string);
 		res = write(serial_params->fd,string,len);
+		printf("sent command \"%s\"\n",string);
 		g_free(string);
 		if (res != len)
 			g_fprintf(stderr,__FILE__": Error writing data to the ECU\n");
@@ -194,8 +195,8 @@ void interrogate_ecu()
 			while (poll(&ufds,1,25))
 			{
 				total += count = read(serial_params->fd,ptr+total,64);
-				//g_printf("count %i, total %i\n",count,total);
 			}
+			g_printf("total %i\n",total);
 
 			ptr = buf;
 			switch (i)
@@ -207,10 +208,12 @@ void interrogate_ecu()
 					canidate->v1_data = g_memdup(buf,total);
 					break;
 				case CMD_S:
-					strncpy(canidate->sig_str,buf,total);
+//					strncpy(canidate->sig_str,buf,total);
+					canidate->sig_str = g_strndup(buf,total);
 					break;
 				case CMD_QUEST:
-					strncpy(canidate->quest_str,buf,total);
+					//strncpy(canidate->quest_str,buf,total);
+					canidate->quest_str = g_strndup(buf,total);
 					break;
 				case CMD_Q:
 					memcpy(&(canidate->ver_num),buf,total);
@@ -235,6 +238,8 @@ void interrogate_ecu()
 	if (restart_reader)
 		start_serial_thread();
 	determine_ecu(canidate);	
+	if (canidate)
+//		g_free(canidate);
 
 	g_static_mutex_unlock(&mutex);
 	return;
@@ -354,12 +359,7 @@ void determine_ecu(void *ptr)
 	serial_params->table1_size = canidates[match].bytes[CMD_V1];
 	serial_params->rtvars_size = canidates[match].bytes[CMD_A];
 	serial_params->ignvars_size = canidates[match].bytes[CMD_I];
-	/* Enable Access to enhanced idle controls */
-//	if ((iac_variant) || (dualtable))
-//		gtk_widget_set_sensitive(GTK_WIDGET(buttons.pwm_idle_but),TRUE);
-//	else
-//
-//		gtk_widget_set_sensitive(GTK_WIDGET(buttons.pwm_idle_but),FALSE);
+
 	/* Display firmware version in the window... */
 	tmpbuf = g_strdup_printf("Detected Firmware: %s\n",canidates[match].firmware_name);
 
@@ -367,9 +367,10 @@ void determine_ecu(void *ptr)
 	g_free(tmpbuf);
 
 cleanup:
-	g_free(canidate->v0_data);
-	g_free(canidate->v1_data);
-	g_free(canidate);
+	if (canidate->v0_data)
+		g_free(canidate->v0_data);
+	if (canidate->v1_data)
+		g_free(canidate->v1_data);
 	return;
 
 }

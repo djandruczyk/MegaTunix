@@ -213,14 +213,16 @@ typedef enum
 
 typedef enum
 {
-	NO_DEBUG = 0,
-	UNHANDELED_CTRL,
-	OPENGL,
-	IO_ERROR,
-	DL_CONV,
-	UL_CONV,
-	DL_TRANS,
-	MAX
-}DebugLevel;
+	NO_DEBUG 	= 1<<0,
+	INTERROGATOR 	= 1<<1,
+	OPENGL		= 1<<2,
+	DL_CONV		= 1<<3,
+	UL_CONV		= 1<<4,
+	SERIAL_WR	= 1<<5,
+	SERIAL_RD	= 1<<6,
+	SERIAL_GEN	= 1<<7,
+	IO_PROCESS	= 1<<8,
+	CRITICAL	= 1<<9
+}Dbg_Class;
 
 #endif

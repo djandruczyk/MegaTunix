@@ -71,27 +71,11 @@ extern GHashTable *interdep_vars_1;
 extern GHashTable *interdep_vars_2;
 
 gboolean tips_in_use;
-gint debug_level = 0;
 gint temp_units;
 gint active_page = -1;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
-static gchar *dbg_msg[] = 
-{ 
-	"No Debug Messages",
-	"Unhandled Control Warnings",
-	"OpenGL Debugging",
-	"I/O Errors",
-	"Download Conversions",
-	"Upload Conversions",
-	"Download Transactions",
-	"Max debugging",
-	"Undefined",
-	"Undefined"
-};
-	
-
 
 /* mt_classic[] and mt_full[] are arrays laid out like the datalogging
  * screen, insert a "1" where you want the button selected for that mode
@@ -571,10 +555,6 @@ gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case LOGVIEW_SCROLL:
 			lv_scroll = tmpi;
 			g_signal_emit_by_name(info,"configure_event",NULL);
-			break;
-		case DEBUG_LEVEL:
-			debug_level = tmpi;
-			gtk_label_set_text(GTK_LABEL(info),g_strdup(dbg_msg[debug_level]));
 			break;
 
 		case NUM_SQUIRTS_1:

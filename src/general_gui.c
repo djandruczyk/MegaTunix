@@ -57,9 +57,10 @@ void build_general(GtkWidget *parent_frame)
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox2),3);
 
 	button = gtk_check_button_new_with_label("Use ToolTips");
-	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,2);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),tips_in_use);
 	g_signal_connect (G_OBJECT(button), "toggled",
 			G_CALLBACK (toggle_button_handler),
@@ -70,6 +71,7 @@ void build_general(GtkWidget *parent_frame)
 
 	table = gtk_table_new(1,5,TRUE);
 	gtk_container_add(GTK_CONTAINER(frame),table);
+	gtk_container_set_border_width(GTK_CONTAINER(table),3);
 
 	button = gtk_radio_button_new_with_label(NULL,"Fahrenheit");
 	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));

@@ -369,8 +369,6 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 	gint res = 0;
 	gint count = 0;
 	gchar * tmpbuf;
-	extern gint debug_level;
-	extern GtkWidget *debug_view;
 	char lbuff[3] = {0, 0, 0};
 	extern unsigned char *ms_data;
 	extern unsigned char *ms_data_last;
@@ -382,12 +380,11 @@ void write_ve_const(gint value, gint offset, gboolean ign_var)
 		no_ms_connection();
 		return;		/* can't write anything if disconnected */
 	}
-	if (debug_level >= DL_CONV)
-	{
-		tmpbuf = g_strdup_printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
-		update_logbar(debug_view,NULL,tmpbuf,TRUE,FALSE);
-		g_free(tmpbuf);
-	}
+
+	tmpbuf = g_strdup_printf("MS Serial Write, Value %i, Mem Offset %i\n",value,offset);
+	dbg_func(tmpbuf,SERIAL_WR);
+	g_free(tmpbuf);
+
 	/* If realtime reader thread is running shut it down... */
 	if (raw_reader_running)
 	{
@@ -474,8 +471,6 @@ void burn_flash()
 	gboolean restart_reader = FALSE;
 	extern unsigned int ecu_caps;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	extern gint debug_level;
-	extern GtkWidget *debug_view;
 
 	g_static_mutex_lock(&mutex);
 
@@ -499,11 +494,7 @@ void burn_flash()
 	if (res != 1)
 		g_fprintf(stderr,__FILE__": Burn Failure, write command failed %i\n",res);
 
-#ifdef DEBUG
-	g_fprintf(stderr,__FILE__": Burn to Flash\n");
-	if (debug_level >= DL_CONV)
-		update_logbar(debug_view,NULL,__FILE__": Burn to Flash\n",TRUE,FALSE);
-#endif
+	dbg_func(__FILE__": Burn to Flash\n",SERIAL_WR);
 
 	/* sync temp buffer with current burned settings */
 	memcpy(ms_data_last,ms_data,2*MS_PAGE_SIZE);

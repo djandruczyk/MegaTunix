@@ -15,9 +15,10 @@
 #define __DEBUG_GUI_H__
 
 #include <gtk/gtk.h>
+#include <enums.h>
 
 /* Prototypes */
-void build_debug(GtkWidget *);
+void dbg_func(gchar *, Dbg_Class);
 /* Prototypes */
 
 #endif

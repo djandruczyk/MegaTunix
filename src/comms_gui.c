@@ -105,10 +105,11 @@ void build_comms(GtkWidget *parent_frame)
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox2),3);
 
 	table = gtk_table_new(1,3,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(table),10);
-	gtk_container_set_border_width(GTK_CONTAINER(table),2);
+	gtk_container_set_border_width(GTK_CONTAINER(table),0);
 	gtk_box_pack_start(GTK_BOX(hbox2),table,FALSE,TRUE,3);
 
 
@@ -118,7 +119,6 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	//entries.comms_port = entry;
 	gtk_entry_set_width_chars (GTK_ENTRY (entry), 26);
 	gtk_entry_set_text(GTK_ENTRY(entry),serial_params->port_name);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), TRUE);
@@ -139,9 +139,9 @@ void build_comms(GtkWidget *parent_frame)
 
 	hbox2 = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox2);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox2),2);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox2),5);
 	button = gtk_button_new_with_label("   Test ECU Communication...   ");
-	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,3);
+	gtk_box_pack_start(GTK_BOX(hbox2),button,FALSE,FALSE,0);
 	g_signal_connect(G_OBJECT (button), "clicked",
 			G_CALLBACK (check_ecu_comms), \
 			NULL);
@@ -154,12 +154,11 @@ void build_comms(GtkWidget *parent_frame)
 
 	hbox = gtk_hbox_new(TRUE,0);
 	gtk_container_add(GTK_CONTAINER(frame),hbox);
+	gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
 
 	table = gtk_table_new(2,3,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),1);
-	gtk_container_set_border_width(GTK_CONTAINER(table),2);
-	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,3);
-
+	gtk_box_pack_start(GTK_BOX(hbox),table,FALSE,TRUE,0);
 
 	label = gtk_label_new("Polling Timeout (ms)");
 	gtk_misc_set_alignment (GTK_MISC (label), 0.0,0.5);
@@ -304,7 +303,7 @@ void build_comms(GtkWidget *parent_frame)
 			NULL);
 	gtk_table_attach (GTK_TABLE (table), button, 0, 4, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			(GtkAttachOptions) (0), 0, 4);
 
 	gtk_widget_show_all(vbox);
 

@@ -10,7 +10,7 @@ headers = \
         dataio.h \
         datalogging_const.h \
         datalogging_gui.h \
-        debug_gui.h \
+        debugging.h \
         defines.h \
         default_controls.h \
         default_limits.h \

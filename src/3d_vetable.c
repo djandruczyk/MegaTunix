@@ -34,8 +34,6 @@ static int grid = 8;
 static GLuint font_list_base;
 
 extern struct Runtime_Common *runtime;
-extern GtkWidget* debug_view;
-extern gint debug_level;
 
 #define DEFAULT_WIDTH  475
 #define DEFAULT_HEIGHT 320                                                                                  
@@ -288,8 +286,7 @@ gboolean ve_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointe
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Configure Event\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Configure Event\n",OPENGL);
 	
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -308,8 +305,7 @@ gboolean ve_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data
 	struct Ve_View_3D *ve_view = NULL;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Expose Event\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Expose Event\n",OPENGL);
 
 	if (!GTK_WIDGET_HAS_FOCUS(widget)){
 		gtk_widget_grab_focus(widget);
@@ -361,8 +357,7 @@ gboolean ve_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Motion Notify\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Motion Notify\n",OPENGL);
 
 	// Left Button
 	if (event->state & GDK_BUTTON1_MASK)
@@ -398,8 +393,7 @@ gboolean ve_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointe
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"data");
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Button Press Event\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Button Press Event\n",OPENGL);
 
 	gtk_widget_grab_focus (widget);
 	
@@ -419,8 +413,7 @@ void ve_realize (GtkWidget *widget, gpointer data)
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 	GdkGLProc proc = NULL;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Realization\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Realization\n",OPENGL);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -461,8 +454,7 @@ void ve_calculate_scaling(void *ptr)
 	struct Ignition_Table *ign_ptr = NULL;
 	struct Ve_View_3D *ve_view = NULL;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Calculate Scaling\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Calculate Scaling\n",OPENGL);
 
 	ve_view = (struct Ve_View_3D *)ptr;
 	if (ve_view->table == 1) /* all std code derivatives..*/
@@ -472,7 +464,7 @@ void ve_calculate_scaling(void *ptr)
 	else if (ve_view->table == 3)
 		ign_ptr = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 	else
-		update_logbar(debug_view,"warning",__FILE__":\tProblem, ve_calculate_scaling(), table out of range..\n",TRUE,FALSE);
+		dbg_func(__FILE__":\tProblem, ve_calculate_scaling(), table out of range..\n",CRITICAL);
 	
 	ve_view->rpm_max = 0;
 	ve_view->load_max = 0;
@@ -525,8 +517,7 @@ void ve_draw_ve_grid(void *ptr)
 
 	ve_view = (struct Ve_View_3D *)ptr;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Draw VE Grid \n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Draw VE Grid \n",OPENGL);
 
 	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
@@ -535,7 +526,7 @@ void ve_draw_ve_grid(void *ptr)
 	else if (ve_view->table == 3)	/* Spark code */
 		ign_ptr = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 	else
-		update_logbar(debug_view,"warning",__FILE__":\tProblem, ve_draw_ve_grid(), table out of range..\n",TRUE,FALSE);
+		dbg_func(__FILE__":\tProblem, ve_draw_ve_grid(), table out of range..\n",CRITICAL);
 	
 
 	glColor3f(1.0, 1.0, 1.0);
@@ -623,8 +614,7 @@ void ve_draw_active_indicator(void *ptr)
 	ve_view = (struct Ve_View_3D *)ptr;
 	extern unsigned char * ms_data;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Draw Active Inicator\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Draw Active Inicator\n",OPENGL);
 
 	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
@@ -633,7 +623,7 @@ void ve_draw_active_indicator(void *ptr)
 	else if (ve_view->table == 3)
 		ign_ptr = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 	else
-		update_logbar(debug_view,"warning",__FILE__":\tProblem, ve_draw_active_indicator(), table out of range..\n",TRUE,FALSE);
+		dbg_func(__FILE__":\tProblem, ve_draw_active_indicator(), table out of range..\n",CRITICAL);
 	/* Render a red dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
@@ -661,8 +651,7 @@ void ve_draw_runtime_indicator(void *ptr)
 	ve_view = (struct Ve_View_3D *)ptr;
 	unsigned char actual_ve = 0;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Draw Runtime Inicator\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Draw Runtime Inicator\n",OPENGL);
 
 	if (ve_view->table == 1) /* all std code derivatives..*/
 		actual_ve = runtime->vecurr1;
@@ -671,7 +660,7 @@ void ve_draw_runtime_indicator(void *ptr)
 	else if (ve_view->table == 3)
 		actual_ve = runtime->sparkangle;
 	else
-		update_logbar(debug_view,"warning",__FILE__":\tProblem, ve_draw_runtime_indicator(), table out of range..\n",TRUE,FALSE);
+		dbg_func(__FILE__":\tProblem, ve_draw_runtime_indicator(), table out of range..\n",CRITICAL);
 
 	/* Render a green dot at the active VE map position */
 	glPointSize(8.0);
@@ -696,8 +685,7 @@ void ve_draw_axis(void *ptr)
 	ve_view = (struct Ve_View_3D *)ptr;
 	extern unsigned char *ms_data;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Draw Axis\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Draw Axis\n",OPENGL);
 
 	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
@@ -706,7 +694,7 @@ void ve_draw_axis(void *ptr)
 	else if (ve_view->table == 3)
 		ign_ptr = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 	else
-		update_logbar(debug_view,"warning",__FILE__":\tProblem, ve_draw_axis(), table out of range..\n",TRUE,FALSE);
+		dbg_func(__FILE__":\tProblem, ve_draw_axis(), table out of range..\n",CRITICAL);
 	
 	top = ((float)(ve_view->ve_max+20))/ve_view->ve_div;
 	/* Set line thickness and color */
@@ -959,8 +947,7 @@ void ve_load_font_metrics(void)
 	gint font_height;
 	gchar * tmpbuf = NULL;
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\t3D View Load Font Metrics\n",TRUE,FALSE);
+	dbg_func(__FILE__":\t3D View Load Font Metrics\n",OPENGL);
 
 	font_list_base = glGenLists (128);
 	font_desc = pango_font_description_from_string (font_string);
@@ -968,7 +955,7 @@ void ve_load_font_metrics(void)
 	if (font == NULL)
 	{
 		tmpbuf = g_strdup_printf(__FILE__":\t3D View, Can't load font '%s'\n",font_string);
-		update_logbar(debug_view,"warning",tmpbuf,TRUE,FALSE);
+		dbg_func(tmpbuf,CRITICAL);
 		g_free(tmpbuf);
 		exit (1);
 	}
@@ -994,8 +981,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"data");
 
-	if (debug_level >= OPENGL)
-		update_logbar(debug_view,NULL,__FILE__":\tKey Press Event: ",TRUE,FALSE);
+	dbg_func(__FILE__":\tKey Press Event: ",OPENGL);
 
 	if (ve_view->table == 1) /* all std code derivatives..*/
 		ve_ptr = (struct Ve_Const_Std *) ms_data;
@@ -1004,37 +990,33 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 	else if (ve_view->table == 3)
 		ign_ptr = (struct Ignition_Table *) (ms_data+MS_PAGE_SIZE);
 	else
-		update_logbar(debug_view,NULL,__FILE__":\t3D View, Problem: ve_key_press_event(), table out of range...\n",TRUE,FALSE);
+		dbg_func(__FILE__":\t3D View, Problem: ve_key_press_event(), table out of range...\n",CRITICAL);
 
 	switch (event->keyval)
 	{
 		case GDK_Up:
-			if (debug_level >= OPENGL)
-				update_logbar(debug_view,NULL,"\"UP\"\n",FALSE,FALSE);
+			dbg_func("\"UP\"\n",OPENGL);
 
 			if (ve_view->active_load < 7)
 				ve_view->active_load += 1;
 			break;
 
 		case GDK_Down:
-			if (debug_level >= OPENGL)
-				update_logbar(debug_view,NULL,"\"DOWN\"\n",FALSE,FALSE);
+			dbg_func("\"DOWN\"\n",OPENGL);
 
 			if (ve_view->active_load > 0)
 				ve_view->active_load -= 1;
 			break;				
 
 		case GDK_Left:
-			if (debug_level >= OPENGL)
-				update_logbar(debug_view,NULL,"\"LEFT\"\n",FALSE,FALSE);
+			dbg_func("\"LEFT\"\n",OPENGL);
 
 			if (ve_view->active_rpm > 0)
 				ve_view->active_rpm -= 1;
 			break;					
 
 		case GDK_Right:
-			if (debug_level >= OPENGL)
-				update_logbar(debug_view,NULL,"\"RIGHT\"\n",FALSE,FALSE);
+			dbg_func("\"RIGHT\"\n",OPENGL);
 
 			if (ve_view->active_rpm < 7)
 				ve_view->active_rpm += 1;
@@ -1042,8 +1024,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 		case GDK_plus:
 		case GDK_KP_Add:
-			if (debug_level >= OPENGL)
-				update_logbar(debug_view,NULL,"\"PLUS\"\n",FALSE,FALSE);
+			dbg_func("\"PLUS\"\n",OPENGL);
 
 			if (ve_view->table != 3) // Std VE Table
 			{
@@ -1075,8 +1056,7 @@ gboolean ve_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer dat
 
 		case GDK_minus:
 		case GDK_KP_Subtract:
-			if (debug_level >= OPENGL)
-				update_logbar(debug_view,NULL,"\"MINUS\"\n",FALSE,FALSE);
+			dbg_func("\"MINUS\"\n",OPENGL);
 
 			if (ve_view->table != 3) // STD VE table
 			{
