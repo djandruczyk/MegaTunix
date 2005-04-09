@@ -191,10 +191,12 @@ void save_config(void)
 		gdk_window_get_position(main_window->window,&x,&y);
 		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
-		gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window, &tmp_width,&tmp_height);
+		if (g_hash_table_lookup(dynamic_widgets,"status_window"))
+			gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window, &tmp_width,&tmp_height);
 		cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
 		cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
-		gdk_window_get_position(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window,&x,&y);
+		if (g_hash_table_lookup(dynamic_widgets,"status_window"))
+			gdk_window_get_position(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window,&x,&y);
 		cfg_write_int(cfgfile, "Window", "status_x_origin", x);
 		cfg_write_int(cfgfile, "Window", "status_y_origin", y);
 	}

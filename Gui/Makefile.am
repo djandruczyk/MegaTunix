@@ -22,6 +22,17 @@ gui_files = 	README \
 		dt-params.datamap \
 		enrichments_BnG.glade \
 		enrichments_BnG.datamap \
+		enrichments_Genboard.datamap \
+		enrichments_Genboard.glade \
+		lambdatable_8x8e.glade \
+		lambdatable_8x8s.glade \
+		lambda_8x16-Genboard.datamap \
+		lambda_8x8e-Genboard.datamap \
+		lambda_8x8s-Genboard.datamap \
+		genboard_knock.datamap \
+		genboard_knock.glade \
+		ignition_8x16-Genboard.datamap \
+		ignition_8x8-Genboard.datamap \
 		Dualtable-constants.glade \
 		Dualtable-constants.datamap \
 		logviewer.glade \
@@ -56,6 +67,10 @@ gui_files = 	README \
 		sparktable_8x8s.glade \
 		sparktable_8x8s-EDIS.datamap \
 		sparktable_8x8s-Std.datamap \
+		sparktable_8x8-Genboard.datamap \
+		sparktable_8x8_CVS-Genboard.datamap \
+		sparktable_8x8e-Genboard.datamap \
+		sparktable_8x8s-Genboard.datamap \
 		tools.glade \
 		tools.datamap \
 		vetable_12x12s.glade \
@@ -78,6 +93,9 @@ gui_files = 	README \
 		vetable_8x8s.glade \
 		vetable_8x8s-BnG.datamap \
 		vetable_8x8s-DT_2.datamap \
+		vetable_8x16-Genboard.datamap \
+		vetable_8x8e-Genboard.datamap \
+		vetable_8x8s-Genboard.datamap \
 		warmupwizard.datamap \
 		warmupwizard.glade 
 

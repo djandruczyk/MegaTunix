@@ -95,6 +95,9 @@ void set_offline_mode(void)
 		firmware->rf_params[i] = g_new0(struct Req_Fuel_Params, 1);
 		firmware->table_params[i] = initialize_table_params();
 		memcpy(firmware->table_params[i],canidate->table_params[i],sizeof(struct Table_Params));
+		firmware->rf_params[i]->num_cyls=1;
+		firmware->rf_params[i]->num_squirts=1;
+		firmware->rf_params[i]->num_inj=1;
 	}
 
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);
