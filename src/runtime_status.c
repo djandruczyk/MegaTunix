@@ -58,6 +58,11 @@ void load_status(void)
 	GtkWidget * table;
 	GdkColor color;
 
+//	if (!firmware)
+//	{
+//		dbg_func(g_strdup_printf(__FILE__": firmware pointer is UNDEFINED,\n\texiting status window creation routine!!!!\n"),CRITICAL);
+//		return;
+//	}
 	if (!firmware->status_map_file)
 	{
 		dbg_func(g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"),CRITICAL);

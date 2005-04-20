@@ -50,10 +50,10 @@ void win32_setup_serial_params()
 	/* Populate struct with defaults from windows */
 	GetCommState((HANDLE) _get_osfhandle(serial_params->fd), &dcb);
 
-	if(baudrate < 9600)
+	if(baudrate < BAUDRATE)
 	{
 		dbg_func(g_strdup_printf(__FILE__": win32_setup_serial_params()\n\tBaudrate incorrectly set to %i, forcing 9600\n",baudrate),CRITICAL);
-		baudrate = 9600;
+		baudrate = BAUDRATE;
 	}
 
 

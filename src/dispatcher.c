@@ -45,7 +45,7 @@
 extern GAsyncQueue *dispatch_queue;
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
-extern gboolean interrogated;			/* valid connection with MS */
+extern gboolean interrogated;			/* valid detection with MS */
 
 
 /*!
@@ -138,7 +138,7 @@ trypop:
 					}
 					break;
 				case UPD_LOAD_RT_STATUS:
-					if (connected)
+					if ((connected) && (interrogated))
 					{
 						set_title("Loading RT Status...");
 						load_status();
