@@ -117,6 +117,7 @@ void set_offline_mode(void)
 
 	io_cmd(IO_LOAD_REALTIME_MAP,NULL);
 	io_cmd(IO_LOAD_GUI_TABS,NULL);
+	io_cmd(IO_UPDATE_VE_CONST,NULL);
 
 	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
 	if (GTK_IS_WIDGET(widget))

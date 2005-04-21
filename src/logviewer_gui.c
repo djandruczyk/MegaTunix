@@ -398,8 +398,10 @@ void reset_logviewer_state()
 			return;
 		for (i=0;i<log_info->field_count;i++)
 		{
+			object = NULL;
 			object = g_array_index(log_info->log_list,GObject *,i);
-			g_object_set_data(object,"being_viewed",GINT_TO_POINTER(FALSE));
+			if (object)
+				g_object_set_data(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
 	else
@@ -408,8 +410,10 @@ void reset_logviewer_state()
 			return;
 		for (i=0;i<rtv_map->derived_total;i++)
 		{
+			object = NULL;
 			object = g_array_index(rtv_map->rtv_list,GObject *,i);
-			g_object_set_data(object,"being_viewed",GINT_TO_POINTER(FALSE));
+			if (object)
+				g_object_set_data(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
 	populate_viewer();

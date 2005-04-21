@@ -6,6 +6,7 @@ rtmap_files = 	README \
 		MSnEDIS-3.x.rtv_map \
 		MSnS-3.0.rtv_map \
 		MSnS-Extra.rtv_map \
+		MSnS-Extra-021x.rtv_map \
 		MSnS-Extra-024x.rtv_map \
 		Genboardv3.rtv_map
 

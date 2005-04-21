@@ -131,7 +131,7 @@ trypop:
 					message->payload = NULL;
 					break;
 				case UPD_POPULATE_DLOGGER:
-					if (connected)
+					if ((connected) && (interrogated))
 					{
 						set_title("Populating Datalogger...");
 						populate_dlog_choices();
@@ -146,7 +146,7 @@ trypop:
 					}
 					break;
 				case UPD_LOAD_RT_SLIDERS:
-					if (connected)
+					if ((connected) && (interrogated))
 					{
 						set_title("Loading RT Sliders...");
 						load_sliders();
@@ -155,7 +155,7 @@ trypop:
 					}
 					break;
 				case UPD_LOAD_REALTIME_MAP:
-					if ((connected) || (offline))
+					if ((interrogated) && ((connected) || (offline)))
 					{
 						set_title("Loading RT Map...");
 						load_realtime_map();
@@ -172,7 +172,7 @@ trypop:
 					}
 					break;
 				case UPD_READ_VE_CONST:
-					if (connected)
+					if ((connected) || (offline))
 					{
 						set_title("Reading VE/Constants...");
 						io_cmd(IO_READ_VE_CONST,NULL);
@@ -186,11 +186,11 @@ trypop:
 					g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
 					break;
 				case UPD_START_REALTIME:
-					if (connected)
+					if ((connected) && (interrogated))
 						start_realtime_tickler();
 					break;
 				case UPD_REALTIME:
-					if (connected)
+					if ((connected) && (interrogated))
 						update_runtime_vars();
 					break;
 				case UPD_VE_CONST:
@@ -213,15 +213,15 @@ trypop:
 					g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
 					break;
 				case UPD_LOGVIEWER:
-					if (connected)
+					if ((connected) && (interrogated))
 						rt_update_logview_traces(FALSE);
 					break;
 				case UPD_RAW_MEMORY:
-					if (connected)
+					if ((connected) && (interrogated))
 						update_raw_memory_view(mem_view_style[message->offset],message->offset);
 					break;
 				case UPD_DATALOGGER:
-					if (connected)
+					if ((connected) && (interrogated))
 						run_datalog();
 					break;
 				case UPD_COMMS_STATUS:
