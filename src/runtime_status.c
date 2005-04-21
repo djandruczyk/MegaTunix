@@ -82,6 +82,7 @@ void load_status(void)
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 		gtk_window_move(GTK_WINDOW(window),status_x_origin,status_y_origin);
 		gtk_window_set_default_size(GTK_WINDOW(window),status_width,status_height);
+		gtk_window_resize(GTK_WINDOW(window),status_width,status_height);
 		g_signal_connect(G_OBJECT(window),"delete_event",
 				G_CALLBACK(prevent_close),NULL);
 		register_widget("status_window",window);
@@ -89,7 +90,7 @@ void load_status(void)
 		gtk_window_set_title(GTK_WINDOW(window),"ECU Status");
 		gtk_widget_realize(window);
 
-		frame = gtk_frame_new("Status");
+		frame = gtk_frame_new("ECU Status");
 		gtk_container_add(GTK_CONTAINER(window),frame);
 		gtk_container_set_border_width(GTK_CONTAINER(frame),5);
 		table = gtk_table_new(1,count,FALSE);

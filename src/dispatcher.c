@@ -70,6 +70,7 @@ gboolean dispatcher(gpointer data)
 	struct Widget_Update *w_update = NULL;
 	extern gint temp_units;
 	extern gboolean paused_handlers;
+	extern gboolean forced_update;
 	extern gint mem_view_style[];
 	extern GHashTable *dynamic_widgets;
 
@@ -242,6 +243,9 @@ trypop:
 				case UPD_JUST_BOOT:
 					if (connected)
 						io_cmd(IO_JUST_BOOT,NULL);
+					break;
+				case UPD_FORCE_UPDATE:
+					forced_update = TRUE;
 					break;
 			}
 

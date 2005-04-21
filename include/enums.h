@@ -279,6 +279,7 @@ typedef enum
 	UPD_GET_BOOT_PROMPT,
 	UPD_REBOOT_GET_ERROR,
 	UPD_JUST_BOOT,
+	UPD_FORCE_UPDATE,
 }UpdateFunction;
 
 typedef enum
