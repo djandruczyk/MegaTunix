@@ -20,10 +20,11 @@ gui_files = 	README \
 		error_status.datamap \
 		dt-params.glade \
 		dt-params.datamap \
-		enrichments_BnG.glade \
+		enrichments.glade \
 		enrichments_BnG.datamap \
 		enrichments_Genboard.datamap \
-		enrichments_Genboard.glade \
+		enrichments_021x_1.datamap \
+		enrichments_021x_2.datamap \
 		lambdatable_8x8e.glade \
 		lambdatable_8x8s.glade \
 		lambda_8x16-Genboard.datamap \
