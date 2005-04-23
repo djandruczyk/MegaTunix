@@ -113,7 +113,7 @@ CMD_UPPER_V=125
 CMD_LOWER_V=251
 
 [gui]
-LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_Genboard,vetable_8x8e,lambdatable_8x8e,sparktable_8x8e,tools,memviewer,warmupwizard,raweditor
+LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments,vetable_8x8e,lambdatable_8x8e,sparktable_8x8e,tools,memviewer,warmupwizard,raweditor
 TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_Genboard,vetable_8x8e-Genboard,lambda_8x8e-Genboard,sparktable_8x8e-Genboard,tools,memviewer,warmupwizard,raweditor
 RealtimeMapFile=Genboardv3
 StatusMapFile=std-firmware

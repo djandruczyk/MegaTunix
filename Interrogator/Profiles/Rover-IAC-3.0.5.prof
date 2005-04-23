@@ -55,7 +55,7 @@ CMD_UPPER_S=16
 RealtimeMapFile=BnG-std
 SliderMapFile=std-firmware
 StatusMapFile=std-firmware
-LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8e,tools,warmupwizard,raweditor
+LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments,vetable_8x8e,tools,warmupwizard,raweditor
 TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8e-BnG,tools,warmupwizard,raweditor
 
 [lookuptables]
