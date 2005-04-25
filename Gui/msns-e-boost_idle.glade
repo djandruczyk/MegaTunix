@@ -250,7 +250,7 @@
 			      <child>
 				<widget class="GtkLabel" id="bng_idle_cutoff_temp_label">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Fast Idle Cutoff Temp</property>
+				  <property name="label" translatable="yes">Fast Idle CLT Cutoff.</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1010,7 +1010,7 @@
 			  <child>
 			    <widget class="GtkTable" id="boost_buttons_table">
 			      <property name="visible">True</property>
-			      <property name="n_rows">9</property>
+			      <property name="n_rows">8</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">0</property>
@@ -1123,23 +1123,9 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkHSeparator" id="hseparator11">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
 				<widget class="GtkTable" id="rate_table2">
 				  <property name="visible">True</property>
-				  <property name="n_rows">1</property>
+				  <property name="n_rows">2</property>
 				  <property name="n_columns">4</property>
 				  <property name="homogeneous">False</property>
 				  <property name="row_spacing">0</property>
@@ -1232,12 +1218,25 @@
 				      <property name="x_options">expand</property>
 				    </packing>
 				  </child>
+
+				  <child>
+				    <widget class="GtkHSeparator" id="hseparator11">
+				      <property name="visible">True</property>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">0</property>
+				      <property name="right_attach">4</property>
+				      <property name="top_attach">1</property>
+				      <property name="bottom_attach">2</property>
+				      <property name="x_options">fill</property>
+				    </packing>
+				  </child>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
+				  <property name="top_attach">2</property>
+				  <property name="bottom_attach">3</property>
 				</packing>
 			      </child>
 
@@ -1258,8 +1257,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
+				  <property name="top_attach">3</property>
+				  <property name="bottom_attach">4</property>
 				  <property name="x_options">expand|shrink</property>
 				  <property name="y_options">expand|shrink|fill</property>
 				</packing>
@@ -1280,8 +1279,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">5</property>
-				  <property name="bottom_attach">6</property>
+				  <property name="top_attach">4</property>
+				  <property name="bottom_attach">5</property>
 				  <property name="x_padding">5</property>
 				</packing>
 			      </child>
@@ -1302,8 +1301,8 @@
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">5</property>
-				  <property name="bottom_attach">6</property>
+				  <property name="top_attach">4</property>
+				  <property name="bottom_attach">5</property>
 				  <property name="x_padding">5</property>
 				</packing>
 			      </child>
@@ -1315,8 +1314,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">6</property>
-				  <property name="bottom_attach">7</property>
+				  <property name="top_attach">5</property>
+				  <property name="bottom_attach">6</property>
 				  <property name="x_options">fill</property>
 				</packing>
 			      </child>
@@ -1338,8 +1337,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">7</property>
-				  <property name="bottom_attach">8</property>
+				  <property name="top_attach">6</property>
+				  <property name="bottom_attach">7</property>
 				  <property name="x_options">expand|shrink</property>
 				  <property name="y_options">expand|shrink|fill</property>
 				</packing>
@@ -1360,8 +1359,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">8</property>
-				  <property name="bottom_attach">9</property>
+				  <property name="top_attach">7</property>
+				  <property name="bottom_attach">8</property>
 				  <property name="x_padding">5</property>
 				</packing>
 			      </child>
@@ -1382,8 +1381,8 @@
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">8</property>
-				  <property name="bottom_attach">9</property>
+				  <property name="top_attach">7</property>
+				  <property name="bottom_attach">8</property>
 				  <property name="x_padding">5</property>
 				</packing>
 			      </child>
