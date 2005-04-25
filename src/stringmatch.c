@@ -173,6 +173,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(PLAYBACK_VIEW));
 
 	/* Page Identifiers */
+	g_hash_table_insert(str_2_enum,"_ENRICHMENTS_PAGE_",
+			GINT_TO_POINTER(ENRICHMENTS_PAGE));
 	g_hash_table_insert(str_2_enum,"_RUNTIME_PAGE_",
 			GINT_TO_POINTER(RUNTIME_PAGE));
 	g_hash_table_insert(str_2_enum,"_WARMUP_WIZ_PAGE_",

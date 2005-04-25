@@ -216,7 +216,20 @@ void convert_temps(gpointer widget, gpointer units)
 				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			}
 		}
+		if (GTK_IS_RANGE(widget))
+		{
+			adj = (GtkAdjustment *) gtk_range_get_adjustment(
+					GTK_RANGE(widget));
+			upper = adj->upper;
+			if (upper < 160) /* if so it was celsius, if not skip*/
+			{
+				value = adj->value;
+				adj->upper = 160.0;
+				adj->value = (value *(9.0/5.0))+32;
 
+				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
+			}
+		}
 	}
 	else // CELSIUS Temp scale
 	{
@@ -245,6 +258,20 @@ void convert_temps(gpointer widget, gpointer units)
 						GTK_SPIN_BUTTON(widget),
 						adj->value);
 				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			}
+		}
+		if (GTK_IS_RANGE(widget))
+		{
+			adj = (GtkAdjustment *) gtk_range_get_adjustment(
+					GTK_RANGE(widget));
+			upper = adj->upper;
+			if (upper > 72) /* if so it was fahren, if not skip*/
+			{
+				value = adj->value;
+				adj->upper = 71.1;
+				adj->value = (value-32)*(5.0/9.0);
+
+				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
 			}
 		}
 	}

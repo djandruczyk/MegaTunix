@@ -48,6 +48,7 @@ gboolean update_runtime_vars()
 	gint i = 0;
 	struct Ve_View_3D * ve_view = NULL;
 	extern GHashTable *rt_sliders;
+	extern GHashTable *enr_sliders;
 	extern GHashTable *ww_sliders;
 	extern GHashTable **ve3d_sliders;
 	GtkWidget * tmpwidget=NULL;
@@ -108,6 +109,8 @@ breakout:
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
 		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
+	if (active_page == ENRICHMENTS_PAGE)	/* Enrichments display is up */
+		g_hash_table_foreach(enr_sliders,rt_update_values,NULL);
 
 	if (active_page == WARMUP_WIZ_PAGE)	/* Warmup wizard is visible */
 	{
@@ -245,15 +248,24 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		percentage = (current-lower)/(upper-lower);
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
 		tmpf = tmpf >= 0.0 ? tmpf : 0.0;
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
-				(slider->pbar),
-				tmpf);
+		switch (slider->class)
+		{
+			case MTX_PROGRESS:
+				gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR
+						(slider->pbar),
+						tmpf);
+				break;
+			case MTX_RANGE:
+				gtk_range_set_value(GTK_RANGE(slider->pbar),current);
+					break;
+		}
+		
 
 		/* If changed by more than 5% or has been at least 5 
 		 * times withot an update or forced_update is set
 		 * */
 		
-		if ((abs(count-last_upd) > 3) || (forced_update))
+		if ((slider->textval) && ((abs(count-last_upd) > 3) || (forced_update)))
 		{
 			if (is_float)
 				tmpbuf = g_strdup_printf("%.2f",current);
@@ -266,7 +278,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		}
 		slider->last_percentage = percentage;
 	}
-	else if ((abs(count-last_upd)%30) == 0)
+	else if (slider->textval && ((abs(count-last_upd)%30) == 0))
 	{
 		if (is_float)
 			tmpbuf = g_strdup_printf("%.2f",current);

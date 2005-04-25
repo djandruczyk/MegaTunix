@@ -35,6 +35,38 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
 
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=page,page_ident
+key_types=_INT_,_ENUM_
+page=4
+page_ident=_ENRICHMENTS_PAGE_
+
+[clt_vscale]
+keys=page,bind_to_list,post_function_with_arg,source,page_ident
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_ENUM_
+page=4
+bind_to_list=temperature
+post_function_with_arg=register_rt_range
+source=cltdeg
+page_ident=_ENRICHMENTS_PAGE_
+
+[mat_vscale]
+keys=page,bind_to_list,post_function_with_arg,source,page_ident
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_ENUM_
+page=4
+bind_to_list=temperature
+post_function_with_arg=register_rt_range
+source=matdeg
+page_ident=_ENRICHMENTS_PAGE_
+
+[cranking_priming_fixed_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=4
+bind_to_list=fixed_crank_prime_controls
+
 #----- Buttons ----------------------------------------------------------------
 
 [enrich_get_data_button]
@@ -120,15 +152,6 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 toggle_groups=cranking_widgets,fixed_crank_prime_controls
 group_states=DISABLED,ENABLED
-
-#----- Widgets ---------------------------------------------------------------
-
-
-[cranking_priming_fixed_table]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=4
-bind_to_list=fixed_crank_prime_controls
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
@@ -352,7 +375,6 @@ keys=offset,bind_to_list
 key_types=_INT_,_STRING_
 offset=183
 group=crank
-bind_to_list=cranking_widgets
 
 [crank_spin_2]
 keys=offset

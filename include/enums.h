@@ -300,6 +300,7 @@ typedef enum
 	DT_PARAMS_PAGE,
 	IGNITON_PAGE,
 	RUNTIME_PAGE,
+	ENRICHMENTS_PAGE,
 	TUNING_PAGE,
 	TOOLS_PAGE,
 	RAW_MEM_PAGE,
@@ -335,4 +336,10 @@ typedef enum
 //	MTX_SPINBUTTON,
 	MTX_LABEL,
 }WidgetType;
+
+typedef enum
+{
+	MTX_PROGRESS=0x1c0,
+	MTX_RANGE
+}SliderType;
 #endif

@@ -23,6 +23,7 @@
 #include <widgetmgmt.h>
 
 GHashTable *rt_sliders = NULL;
+GHashTable *enr_sliders = NULL;
 GHashTable *ww_sliders = NULL;
 GHashTable **ve3d_sliders = NULL;
 static GtkSizeGroup *size_group_left = NULL;
@@ -255,6 +256,7 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	slider->tbl = tbl;
 	slider->table_num = table_num;
 	slider->row = row;
+	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) g_object_get_data(object,"dlog_gui_name");
 	slider->lower = (gint)g_object_get_data(object,"lower_limit");
 
@@ -324,6 +326,56 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	gtk_widget_show_all(slider->parent);
 
 	return slider;
+}
+
+void register_rt_range(GtkWidget * widget)
+{
+	GObject * object = NULL;
+	extern struct Rtv_Map *rtv_map;
+	struct Rt_Slider *slider = g_malloc0(sizeof(struct Rt_Slider));
+	gchar * source = (gchar *)g_object_get_data(G_OBJECT(widget),"source");
+	PageIdent ident = (PageIdent)g_object_get_data(G_OBJECT(widget),"page_ident");
+		
+	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+
+	if (!rt_sliders)
+		rt_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+	if (!ww_sliders)
+		ww_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+	if (!enr_sliders)
+		enr_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+	
+	if  (!G_IS_OBJECT(object))
+	{
+		dbg_func(g_strdup_printf(__FILE__": register_rt_range()\n\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
+		return;
+	}
+	slider->ctrl_name = glade_get_widget_name(widget);
+	slider->tbl = -1;
+	slider->table_num = -1;
+	slider->row = -1;
+	slider->class = MTX_RANGE;
+	slider->history = (GArray *) g_object_get_data(object,"history");
+	slider->object = object;
+	slider->textval = NULL;
+	slider->pbar = widget;
+
+	switch (ident)
+	{
+		case RUNTIME_PAGE:
+			g_hash_table_insert(rt_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
+			break;
+		case ENRICHMENTS_PAGE:
+			g_hash_table_insert(enr_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
+			break;
+		case WARMUP_WIZ_PAGE:
+			g_hash_table_insert(ww_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
+			break;
+		default:
+			break;
+	}
+
+
 }
 
 
