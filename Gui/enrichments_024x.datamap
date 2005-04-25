@@ -17,14 +17,13 @@ handler=_GENERIC_
 use_color=TRUE
 
 [crank]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,bind_to_list,use_color
-key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_
+keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,use_color
+key_types=_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=4
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-bind_to_list=cranking_widgets
 use_color=TRUE
 
 [ase]
@@ -150,7 +149,7 @@ bitshift=3
 bitmask=8
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-toggle_groups=cranking_widgets,fixed_crank_prime_controls
+toggle_groups=fixed_crank_prime_controls
 group_states=DISABLED,ENABLED
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
@@ -371,8 +370,8 @@ offset=181
 group=warmup
 
 [crank_spin_1]
-keys=offset,bind_to_list
-key_types=_INT_,_STRING_
+keys=offset
+key_types=_INT_
 offset=183
 group=crank
 

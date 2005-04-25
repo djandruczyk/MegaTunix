@@ -328,7 +328,7 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	return slider;
 }
 
-void register_rt_range(GtkWidget * widget)
+EXPORT void register_rt_range(GtkWidget * widget)
 {
 	GObject * object = NULL;
 	extern struct Rtv_Map *rtv_map;
