@@ -300,12 +300,42 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 				g_object_set_data(G_OBJECT(widget),g_strdup(group->keys[i]),g_strdup(g_object_get_data(group->object,group->keys[i])));
 				if (g_object_get_data(G_OBJECT(widget),"tooltip") != NULL)
 					gtk_tooltips_set_tip(tip,widget,g_strdup((gchar *)g_object_get_data(G_OBJECT(widget),"tooltip")),NULL);
+				if (g_object_get_data(G_OBJECT(group->object), "bind_to_list"))
+					bind_to_lists(widget,(gchar *)g_object_get_data(G_OBJECT(group->object), "bind_to_list"));
 				break;
 		}
 	}
 	return group->page;
 }
 
+
+/*!
+ \brief bind_to_lists() binds a widget to any number of string named lists.
+ \param widget (GtkWidget *) widget to bind to lists
+ \param lists (gchar *) command seperated string list of lists to bind this
+ widget into.
+ \returns void
+ */
+void bind_to_lists(GtkWidget * widget, gchar * lists)
+{
+	gint bind_num_keys = 0;
+	gchar **tmpvector = NULL;
+	gint i = 0;
+
+	tmpvector = parse_keys(lists,&bind_num_keys,",");
+
+	/* This looks convoluted,  but it allows for an arbritrary 
+	 * number of lists, that are indexed by a keyword.
+	 * The get_list function looks the list up in a hashtable, if
+	 * it isn't found (i.e. new list) it returns NULL which is OK
+	 * as g_list_append() uses that to create a new list,  that
+	 * returned list is used to store back into the hashtable so
+	 * that the list is always stored and up to date...
+	 */
+	for (i=0;i<bind_num_keys;i++)
+		store_list(tmpvector[i],g_list_append(get_list(tmpvector[i]),(gpointer)widget));
+	g_strfreev(tmpvector);
+}
 
 /*!
  \brief bind_data() is a recursive function that is called for every container
@@ -323,13 +353,10 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	GHashTable *groups = bindgroup->groups;
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
-	gchar ** tmpvector = NULL;
-	gint bind_num_keys = 0;
 	gchar ** keys = NULL;
 	gint * keytypes = NULL;
 	gint num_keys = 0;
 	gint num_keytypes = 0;
-	gint i = 0;
 	gint offset = 0;
 	gint page = 0;
 	extern GtkTooltips *tip;
@@ -380,19 +407,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	*/
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
 	{
-		tmpvector = parse_keys(tmpbuf,&bind_num_keys,",");
+		bind_to_lists(widget,tmpbuf);
 		g_free(tmpbuf);
-		/* This looks convoluted,  but it allows for an arbritrary 
-		 * number of lists, that are indexed by a keyword.
-		 * The get_list function looks the list up in a hashtable, if
-		 * it isn't found (i.e. new list) it returns NULL which is OK
-		 * as g_list_append() uses that to create a new list,  that
-		 * returned list is used to store back into the hashtable so
-		 * that the list is always stored and up to date...
-		 */
-		for (i=0;i<bind_num_keys;i++)
-			store_list(tmpvector[i],g_list_append(get_list(tmpvector[i]),(gpointer)widget));
-		g_strfreev(tmpvector);
 	}
 
 	/* If this widget has a "depend_on" tag we need to load the dependancy
