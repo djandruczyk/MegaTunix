@@ -4,6 +4,6 @@ comparable to what you could buy off the shelf..  Will be based on the
 gnome canvas...
 
 support for MS-II (difficult, requires parser to be designed and written to
-handler it's I/O stream (different size variabels not layed out on clean
-coundaries, makes it a bitch to deal with..)
+handle it's I/O stream (different size variabels not layed out on clean
+boundaries, makes it a bitch to deal with..)
 
