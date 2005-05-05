@@ -64,6 +64,7 @@ gboolean dispatcher(gpointer data)
 	gint j=0;
 	gint val=-1;
 	gint count = 0;
+	static gint disconnect_count = 0;
 	GtkWidget *widget = NULL;
 	struct Io_Message *message = NULL;
 	struct Text_Message *t_message = NULL;
@@ -89,10 +90,12 @@ trypop:
 	 * depend on a "connected" status.
 	 */
 	if ((!connected) && (!offline)) // Raise error window.... 
-	{
-		//printf("NOT connected, not offline\n");
+		disconnect_count++;
+	else
+		disconnect_count = 0;
+
+	if (disconnect_count > 10)
 		no_ms_connection();
-	}
 
 	if (message->funcs != NULL)
 	{
@@ -191,7 +194,7 @@ trypop:
 						start_realtime_tickler();
 					break;
 				case UPD_REALTIME:
-					if ((connected) && (interrogated))
+					if (interrogated)
 						update_runtime_vars();
 					break;
 				case UPD_VE_CONST:

@@ -324,12 +324,12 @@ void *thread_dispatcher(gpointer data)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
+		if (!connected)
+			comms_test();
 		switch ((CmdType)message->command)
 		{
 			case INTERROGATION:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n"),SERIAL_RD|SERIAL_WR|THREADS);
-				if (!connected)
-					comms_test();
 				if (connected)
 					interrogate_ecu();
 				else
@@ -346,7 +346,10 @@ void *thread_dispatcher(gpointer data)
 				if (connected)
 					readfrom_ecu(message);
 				else
-					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\treadfrom_ecu skipped, NOT Connected initiator %i!!\n",message->cmd),CRITICAL);
+				{
+					break;
+					//dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\treadfrom_ecu skipped, NOT Connected initiator %i!!\n",message->cmd),CRITICAL);
+				}
 				break;
 			case WRITE_CMD:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_command requested\n"),SERIAL_WR|THREADS);

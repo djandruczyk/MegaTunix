@@ -140,27 +140,23 @@ gboolean signal_read_rtvars()
 
 	dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"),SERIAL_RD|SERIAL_WR);
 
-	if (errcount >10)
+	if (errcount > 10)
 	{
 		stop_realtime_tickler();
 		errcount = 0;
 	}
 	if (!rtvars_loaded)
 		return TRUE;
-	if (connected)
+//	if (connected)
 		io_cmd(IO_REALTIME_READ,NULL);			
+		/*
 	else
 	{	
-		if (errcount == 1)
-		{
-			io_cmd(IO_COMMS_TEST,NULL);
-			errcount++;
-			return TRUE;
-		}
 		errcount++;
 		dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tNOT connected, not queing message to thread handler....\n"),CRITICAL);
 
 	}
+	*/
 	return TRUE;	/* Keep going.... */
 }
 

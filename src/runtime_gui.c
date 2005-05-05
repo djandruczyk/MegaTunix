@@ -71,6 +71,7 @@ gboolean update_runtime_vars()
 	{
 		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,(gpointer)connected);
 		conn_status = connected;
+		forced_update = TRUE;
 	}
 		
 	/* If OpenGL window is open, redraw it... */
@@ -183,6 +184,11 @@ void rt_update_status(gpointer key, gpointer data)
 			return;
 		history = (GArray *)g_object_get_data(object,"history");
 	}
+	if (!connected)
+	{
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+		return;
+	}
 
 	if (lookup_current_value(source,&tmpf))
 		value = (gint) tmpf;
@@ -201,10 +207,11 @@ void rt_update_status(gpointer key, gpointer data)
 	/// if the value hasn't changed, don't bother continuing 
 	if (((value & bitmask) == (previous_value & bitmask)) && (!forced_update))
 		return;	
-	if (((value & bitmask) >> bitshift) == bitval) // enable it
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-	else	// disable it..
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+	
+		if (((value & bitmask) >> bitshift) == bitval) // enable it
+			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
+		else	// disable it..
+			gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 		
 	last_source = source;
 }

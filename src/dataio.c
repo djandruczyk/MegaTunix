@@ -124,7 +124,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			}
 			if (bad_read)
 			{
-				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),CRITICAL);
+				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),IO_PROCESS);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -202,7 +202,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			}
 			if (bad_read)
 			{
-				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"),CRITICAL);
+				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"),IO_PROCESS);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -263,7 +263,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup_printf(__FILE__"handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
+				dbg_func(g_strdup_printf(__FILE__"handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),IO_PROCESS);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -306,7 +306,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n"),CRITICAL);
+				dbg_func(g_strdup(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n"),IO_PROCESS);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;

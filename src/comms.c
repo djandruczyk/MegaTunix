@@ -92,7 +92,8 @@ void comms_test()
 	{
 		// An I/O Error occurred with the MegaSquirt ECU 
 		connected = FALSE;
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"),CRITICAL);
+		gdk_beep();
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"),IO_PROCESS);
 	}
 	/* Flush the toilet again.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
@@ -314,7 +315,6 @@ void readfrom_ecu(struct Io_Message *message)
 	gint result = 0;
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
-	static gint seqerrcount = 0;
 	extern gboolean connected;
 	extern gchar *handler_types[];
 	extern gboolean offline;
@@ -355,23 +355,21 @@ void readfrom_ecu(struct Io_Message *message)
 		result = handle_ecu_data(message->handler,message);
 	else
 	{
-		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is -1, bad things, EXITING!\n"),CRITICAL);
+		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is undefined, author brainfart, EXITING!\n"),CRITICAL);
 		exit (-1);
 	}
 	if (result)
 	{
 		connected = TRUE;
-		seqerrcount=0;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tDone Reading %s\n",handler_types[message->handler]),SERIAL_RD);
 
 	}
 	else
 	{
-		seqerrcount++;
-		if (seqerrcount > 5)
-			connected = FALSE;
+		connected = FALSE;
+		gdk_beep();
 		serial_params->errcount++;
-		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),IO_PROCESS);
 	}
 }
 
