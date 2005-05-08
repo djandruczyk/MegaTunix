@@ -223,13 +223,15 @@ handler=_GENERIC_
 tooltip=GammaE is the sum of all enrichments (warmup, EGO, MAT, etc) if this is checked these enrichments are added into the pulsewidth sent to the injector. NOTE: This only applies if DT mode is set...
 
 [2nd_o2_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=2
 offset=191
 bitval=1
 bitshift=0
 bitmask=1
+toggle_groups=second_o2
+group_states=ENABLED
 bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

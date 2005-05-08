@@ -102,8 +102,8 @@ bind_to_list=spark_controls
 keys=page,c_label,f_label,temp_dep,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=0
-c_label=IAT Enable Setpoint (\302\260C.)
-f_label=IAT Enable Setpoint (\302\260F.)
+c_label=MAT Enable Setpoint (\302\260C.)
+f_label=MAT Enable Setpoint (\302\260F.)
 temp_dep=TRUE
 bind_to_list=temperature
 

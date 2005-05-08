@@ -106,7 +106,7 @@ bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=2
-bind_to_list=dt_controls
+bind_to_list=dt_controls,second_o2
 
 [fuel_inj_strat_2_label]
 keys=page,bind_to_list
@@ -296,7 +296,7 @@ offset=184
 bitshift=1
 bitval=0
 bitmask=2
-bind_to_list=dt_controls
+bind_to_list=dt_controls,second_o2
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
@@ -308,7 +308,7 @@ offset=184
 bitshift=1
 bitval=1
 bitmask=2
-bind_to_list=dt_controls
+bind_to_list=dt_controls,second_o2
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
