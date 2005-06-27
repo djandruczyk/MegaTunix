@@ -45,6 +45,7 @@ void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);
 void ve3d_load_font_metrics(void);
 void reset_3d_view(GtkWidget *);
 struct Ve_View_3D * initialize_ve3d_view();
+void update_ve3d_if_necessary(int , int );
 
 /* Prototypes */
 

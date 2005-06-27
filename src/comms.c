@@ -26,6 +26,7 @@
 #include <structures.h>
 #include <termios.h>
 #include <unistd.h>
+#include <3d_vetable.h>
 
 
 /*!
@@ -117,16 +118,16 @@ void update_write_status(struct Output_Data *data)
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 
-	if ((g_list_length(ve_widgets[data->page][data->offset]) > 1))
+	paused_handlers = TRUE;
+	for (i=0;i<g_list_length(ve_widgets[data->page][data->offset]);i++)
 	{
-		paused_handlers = TRUE;
-		for (i=0;i<g_list_length(ve_widgets[data->page][data->offset]);i++)
-		{
-			if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[data->page][data->offset],i)),"dl_type") != DEFERRED)
-				update_widget(g_list_nth_data(ve_widgets[data->page][data->offset],i),NULL);
-		}
-		paused_handlers = FALSE;
+		if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[data->page][data->offset],i)),"dl_type") != DEFERRED)
+			update_widget(g_list_nth_data(ve_widgets[data->page][data->offset],i),NULL);
 	}
+
+	update_ve3d_if_necessary(data->page,data->offset);
+
+	paused_handlers = FALSE;
 	/* We check to see if the last burn copy of the VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.
 	 * avoid unnecessary burns to the FLASH 
@@ -134,7 +135,7 @@ void update_write_status(struct Output_Data *data)
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-	
+
 		if(memcmp(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->length) != 0)
 		{
 			set_group_color(RED,"burners");

@@ -459,9 +459,9 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 
 	dbg_func(g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"),OPENGL);
 
-	if (!GTK_WIDGET_HAS_FOCUS(widget)){
-		gtk_widget_grab_focus(widget);
-	}
+//	if (!GTK_WIDGET_HAS_FOCUS(widget)){
+//		gtk_widget_grab_focus(widget);
+//	}
 
 	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
@@ -514,7 +514,6 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
  */
 gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
-	gboolean redraw = FALSE;
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
@@ -525,20 +524,17 @@ gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoi
 	{
 		ve_view->sphi += (gfloat)(event->x - ve_view->beginX) / 4.0;
 		ve_view->stheta += (gfloat)(ve_view->beginY - event->y) / 4.0;
-		redraw = TRUE;
 	}
 	// Middle button (or both buttons for two button mice)
 	if (event->state & GDK_BUTTON2_MASK)
 	{
 		ve_view->h_strafe -= (gfloat)(event->x -ve_view->beginX) / 40.0;
 		ve_view->v_strafe += (gfloat)(event->y -ve_view->beginY) / 40.0;
-		redraw = TRUE;
 	}
 	// Right Button
 	if (event->state & GDK_BUTTON3_MASK)
 	{
 		ve_view->sdepth -= ((event->y - ve_view->beginY)/(widget->allocation.height))*8;
-		redraw = TRUE;
 	}
 
 	ve_view->beginX = event->x;
@@ -561,7 +557,7 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	dbg_func(g_strdup(__FILE__": ve3d_button_press_event()\n"),OPENGL);
 
-	gtk_widget_grab_focus (widget);
+//	gtk_widget_grab_focus (widget);
 
 	if (event->button != 0)
 	{
@@ -1190,10 +1186,9 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 	}
 	if (update_widgets)
 	{
+		dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"),OPENGL);
 		write_ve_const(widget,z_page,offset,dload_val,firmware->page_params[z_page]->is_spark, TRUE);
 	}
-
-	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
 
 	return TRUE;
 }
@@ -1265,3 +1260,58 @@ struct Ve_View_3D * initialize_ve3d_view()
 	return ve_view;
 }
 
+
+/*!
+ \brief update_ve3d_if_necessary is called from update_write_status to 
+ redraw the 3D view if a variable is changed that is represented in the 3D view
+ This function scans through the table params to see if the passed page/offset
+ is part of a  table and then checks if hte table is visible if so it forces
+ a redraw of that table. (convoluted, but it works)
+ */
+void update_ve3d_if_necessary(int page, int offset)
+{
+	extern struct Firmware_Details *firmware;
+	extern GHashTable *dynamic_widgets;
+	gint total_tables = firmware->total_tables;
+	gboolean need_update = FALSE;
+	gint i = 0;
+	gchar * string = NULL;
+	GtkWidget * tmpwidget = NULL;
+	struct Ve_View_3D *ve_view = NULL;
+
+	for (i=0;i<total_tables;i++)
+	{
+		if (firmware->table_params[i]->x_page == page)
+			if ((offset >= (firmware->table_params[i]->x_base)) && (offset <= (firmware->table_params[i]->x_base + firmware->table_params[i]->x_bincount)))
+			{
+				need_update = TRUE;
+				goto update_now;
+			}
+		if (firmware->table_params[i]->y_page == page)
+			if ((offset >= (firmware->table_params[i]->y_base)) && (offset <= (firmware->table_params[i]->y_base + firmware->table_params[i]->y_bincount)))
+			{
+				need_update = TRUE;
+				goto update_now;
+			}
+		if (firmware->table_params[i]->z_page == page)
+			if ((offset >= (firmware->table_params[i]->z_base)) && (offset <= (firmware->table_params[i]->z_base + (firmware->table_params[i]->x_bincount * firmware->table_params[i]->y_bincount))))
+			{
+				need_update = TRUE;
+				goto update_now;
+			}
+	}
+	return;
+update_now:
+	string = g_strdup_printf("ve_view_%i",i);
+	tmpwidget = g_hash_table_lookup(dynamic_widgets,string);
+	g_free(string);
+	if (GTK_IS_WIDGET(tmpwidget))
+	{
+		ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(tmpwidget),"ve_view");
+		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+		{
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+		}
+
+	}
+}
