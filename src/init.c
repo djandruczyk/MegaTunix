@@ -192,13 +192,15 @@ void save_config(void)
 		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		if (g_hash_table_lookup(dynamic_widgets,"status_window"))
+		{
 			gdk_drawable_get_size(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window, &tmp_width,&tmp_height);
-		cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
-		cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
-		if (g_hash_table_lookup(dynamic_widgets,"status_window"))
+
+			cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
+			cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
 			gdk_window_get_position(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"status_window"))->window,&x,&y);
-		cfg_write_int(cfgfile, "Window", "status_x_origin", x);
-		cfg_write_int(cfgfile, "Window", "status_y_origin", y);
+			cfg_write_int(cfgfile, "Window", "status_x_origin", x);
+			cfg_write_int(cfgfile, "Window", "status_y_origin", y);
+		}
 	}
 	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
 	if (serial_params->port_name)
