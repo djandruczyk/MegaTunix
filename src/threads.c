@@ -318,19 +318,36 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *io_queue;
 	extern GAsyncQueue *dispatch_queue;
 	struct Io_Message *message = NULL;	
+	gint discon_count = 0;
 
 	/* Endless Loop, wiat for message, processs and repeat... */
 	while (1)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
-		if (!connected)
-			comms_test();
+		if ((!connected) && (!offline))
+		{
+			while ((!connected) && (!offline))
+			{
+				discon_count++;
+				thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Reconnect attempt #%i",discon_count));
+				
+				comms_test();
+				if (discon_count == 10)
+				{
+					queue_function(g_strdup("conn_warning"));
+				}
+			}
+			queue_function(g_strdup("kill_conn_warning"));
+			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Ready..."));
+			discon_count = 0;
+		}
+
 		switch ((CmdType)message->command)
 		{
 			case INTERROGATION:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n"),SERIAL_RD|SERIAL_WR|THREADS);
-				if (connected)
+				if ((connected) && (!offline))
 					interrogate_ecu();
 				else
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n"),CRITICAL);
@@ -459,6 +476,37 @@ void  thread_update_logbar(
 	return;
 }
 
+
+/*!
+ \brief queue_function() is used to run ANY global function in the context
+ of the main GUI from within any thread.  It does it by passing a message 
+ up an AsyncQueue to the gui process whcih will lookup the function name
+ and run it with no arguments (currently inflexible  and can only run "void"
+ functions (ones that take no params)
+ \param name name of function to lookup and run in the main gui context..
+ */
+void queue_function(gchar * name)
+{
+	struct Io_Message *message = NULL;
+	struct QFunction *qfunc = NULL;
+	extern GAsyncQueue *dispatch_queue;
+	gint tmp = 0;
+
+	message = initialize_io_message();
+
+	qfunc = g_new0(struct QFunction, 1);
+	qfunc->func_name = name;
+
+	message->payload = qfunc;
+	message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_RUN_FUNCTION;
+	g_array_append_val(message->funcs,tmp);
+
+	g_async_queue_ref(dispatch_queue);
+	g_async_queue_push(dispatch_queue,(gpointer)message);
+	g_async_queue_unref(dispatch_queue);
+	return;
+}
 
 
 /*!

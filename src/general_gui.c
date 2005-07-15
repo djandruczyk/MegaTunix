@@ -199,7 +199,7 @@ void build_general(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(hbox),ebox,TRUE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
-			"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, so we offer the choice to select the API to use below",NULL);
+			"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, but it works about 99.5% of hte time.  If it MIS-detects your ECU contact the developer with your firmware details.",NULL);
 	button = gtk_button_new_with_label("Interrogate ECU capabilities");
 	register_widget("interrogate_button",button);
 	gtk_container_add(GTK_CONTAINER(ebox),button);

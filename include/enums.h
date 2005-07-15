@@ -280,6 +280,7 @@ typedef enum
 	UPD_REBOOT_GET_ERROR,
 	UPD_JUST_BOOT,
 	UPD_FORCE_UPDATE,
+	UPD_RUN_FUNCTION,
 }UpdateFunction;
 
 typedef enum
@@ -333,6 +334,7 @@ typedef enum
 typedef enum
 {
 	MTX_ENTRY=0x1b0,
+	MTX_TITLE,
 //	MTX_SPINBUTTON,
 	MTX_LABEL,
 }WidgetType;

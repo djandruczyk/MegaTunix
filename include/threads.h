@@ -23,6 +23,7 @@ void *thread_dispatcher(gpointer);	/* thread that processes messages */
 void write_ve_const(GtkWidget *, gint, gint, gint, gboolean, gboolean);
 void thread_update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
 void thread_update_widget(gchar *, WidgetType, gchar *);
+void queue_function(gchar * );
 		
 /* Prototypes */
 

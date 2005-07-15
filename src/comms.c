@@ -93,7 +93,6 @@ void comms_test()
 	{
 		// An I/O Error occurred with the MegaSquirt ECU 
 		connected = FALSE;
-		gdk_beep();
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"),IO_PROCESS);
 	}
 	/* Flush the toilet again.... */
@@ -368,7 +367,6 @@ void readfrom_ecu(struct Io_Message *message)
 	else
 	{
 		connected = FALSE;
-		gdk_beep();
 		serial_params->errcount++;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),IO_PROCESS);
 	}

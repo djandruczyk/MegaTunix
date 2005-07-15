@@ -369,6 +369,18 @@ struct Text_Message
 
 
 /*
+ \brief QFunction strcture is used for a thread to pass messages up
+ a GAsyncQueue to the main gui thread for running any arbritrary function
+ by name.
+ */
+struct QFunction
+{
+	gchar *func_name;	/*! Function Name */
+	gint  dummy;		/*! filler for more shit later.. */
+};
+
+
+/*
  \brief Widget_Update strcture is used for a thread to pass a widget update
  call up a GAsyncQueue to the main gui thread for updating a widget in 
  a thread safe manner. A dispatch queue runs 5 times per second checking 

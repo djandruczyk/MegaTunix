@@ -515,6 +515,21 @@ void dealloc_textmessage(struct Text_Message * message)
 }
 
 
+
+/*!
+ \brief dealloc_qfunction() deallocates the structure used to pass a function
+ message from the thread to here..
+ \param message (struct Text_Message *) pointer to message data
+ */
+void dealloc_qfunction(struct QFunction * qfunc)
+{
+	if (qfunc->func_name)
+		g_free(qfunc->func_name);
+	g_free(qfunc);
+	qfunc = NULL;
+}
+
+
 /*!
  \brief dealloc_table_params() deallocates the structure used for firmware
  table parameters

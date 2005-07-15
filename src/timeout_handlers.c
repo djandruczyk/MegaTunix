@@ -125,7 +125,6 @@ void stop_realtime_tickler()
 gboolean signal_read_rtvars()
 {
 	gint length = 0;
-	extern gboolean connected;
 	extern GAsyncQueue *io_queue;
 	extern gboolean rtvars_loaded;
 	static gint errcount = 0;

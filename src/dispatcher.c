@@ -45,6 +45,7 @@
 extern GAsyncQueue *dispatch_queue;
 extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
+extern gboolean tabs_loaded;			/* Tabs loaded? */
 extern gboolean interrogated;			/* valid detection with MS */
 
 
@@ -64,11 +65,11 @@ gboolean dispatcher(gpointer data)
 	gint j=0;
 	gint val=-1;
 	gint count = 0;
-	static gint disconnect_count = 0;
 	GtkWidget *widget = NULL;
 	struct Io_Message *message = NULL;
 	struct Text_Message *t_message = NULL;
 	struct Widget_Update *w_update = NULL;
+	struct QFunction *qfunc = NULL;
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gboolean forced_update;
@@ -85,17 +86,6 @@ trypop:
 	//	printf("no messages waiting, returning\n");
 		return TRUE;
 	}
-
-	/* NOTE if !connected we ABORT All dispatchers as they all
-	 * depend on a "connected" status.
-	 */
-	if ((!connected) && (!offline)) // Raise error window.... 
-		disconnect_count++;
-	else
-		disconnect_count = 0;
-
-	if (disconnect_count > 10)
-		no_ms_connection();
 
 	if (message->funcs != NULL)
 	{
@@ -114,18 +104,30 @@ trypop:
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
+				case UPD_RUN_FUNCTION:
+					qfunc = (struct QFunction *)message->payload;
+					run_post_function(qfunc->func_name);
+					dealloc_qfunction(qfunc);
+					message->payload = NULL;
+					break;
+
 				case UPD_WIDGET:
 					widget = NULL;
 					w_update = (struct Widget_Update *)message->payload;
-					if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
-						break;
 					switch (w_update->type)
 					{
 						case MTX_ENTRY:
+							if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
+								break;
 							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
 							break;
 						case MTX_LABEL:
+							if (NULL == (widget = g_hash_table_lookup(dynamic_widgets,w_update->widget_name)))
+								break;
 							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
+							break;
+						case MTX_TITLE:
+							set_title(w_update->msg);
 							break;
 //						case MTX_SPINBUTTON:
 //							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
@@ -167,7 +169,7 @@ trypop:
 					}
 					break;
 				case UPD_LOAD_GUI_TABS:
-					if ((connected) || (offline))
+					if ((((connected) || (offline))) && (!tabs_loaded))
 					{
 						set_title("Loading Gui Tabs...");
 						load_gui_tabs();
@@ -184,7 +186,8 @@ trypop:
 					}
 					break;
 				case UPD_REENABLE_INTERROGATE_BUTTON:
-					gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
+					if(!offline)
+						gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
 					break;
 				case UPD_REENABLE_GET_DATA_BUTTONS:
 					g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
@@ -233,7 +236,10 @@ trypop:
 					break;
 				case UPD_WRITE_STATUS:
 					if (!offline)
-					update_write_status(message->payload);
+					{
+						printf("updating write status\n");
+						update_write_status(message->payload);
+					}
 					break;
 				case UPD_GET_BOOT_PROMPT:
 					if (connected)

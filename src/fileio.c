@@ -530,4 +530,5 @@ void restore_all_ecu_settings(gchar *filename)
 		}
 	}
 	io_cmd(IO_UPDATE_VE_CONST,NULL);
+	update_logbar("tools_view",NULL,g_strdup("Restore of ECU setting in process.  This can take several moments. \n Currently there is no feedback on restoration progress.\n On Multipage firmwares (MSnS-Extra) this can take up to 1 minute"),TRUE,FALSE);
 }

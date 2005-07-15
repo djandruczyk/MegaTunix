@@ -15,6 +15,7 @@
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>
+#include <glade/glade-xml.h>
 #include <glib.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
@@ -350,7 +351,7 @@ EXPORT void register_rt_range(GtkWidget * widget)
 		dbg_func(g_strdup_printf(__FILE__": register_rt_range()\n\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
 		return;
 	}
-	slider->ctrl_name = glade_get_widget_name(widget);
+	slider->ctrl_name = g_strdup(glade_get_widget_name(widget));
 	slider->tbl = -1;
 	slider->table_num = -1;
 	slider->row = -1;

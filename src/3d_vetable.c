@@ -44,7 +44,7 @@ static GLuint font_list_base;
 
 
 #define DEFAULT_WIDTH  475
-#define DEFAULT_HEIGHT 320                                                                                  
+#define DEFAULT_HEIGHT 350                                                                                  
 static GHashTable *winstat = NULL;
 /*!
  \brief create_ve3d_view does the initial work of creating the 3D vetable
