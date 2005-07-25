@@ -267,8 +267,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				return;
 			}
 			backup_open = TRUE;
-			close_file(iofile);
 			backup_all_ecu_settings(selected_filename);
+			close_file(iofile);
 			backup_open = FALSE;
 			break;
 		case FULL_RESTORE:
@@ -279,8 +279,8 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 				return;
 			}
 			restore_open = TRUE;
-			close_file(iofile);
 			restore_all_ecu_settings(selected_filename);
+			close_file(iofile);
 			restore_open = FALSE;
 			break;
 
@@ -516,7 +516,7 @@ void restore_all_ecu_settings(gchar *filename)
 					dload_val = atoi(keys[offset]);
 					if (dload_val != ms_data_last[page][offset])
 					{
-		//				printf("writing data for page %i, offset %i\n",page,offset);
+						//printf("writing data for page %i, offset %i\n",page,offset);
 						write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark, FALSE);
 						writecount++;
 					}
@@ -530,5 +530,5 @@ void restore_all_ecu_settings(gchar *filename)
 		}
 	}
 	io_cmd(IO_UPDATE_VE_CONST,NULL);
-	update_logbar("tools_view",NULL,g_strdup("Restore of ECU setting in process.  This can take several moments. \n Currently there is no feedback on restoration progress.\n On Multipage firmwares (MSnS-Extra) this can take up to 1 minute"),TRUE,FALSE);
+	start_restore_monitor();
 }

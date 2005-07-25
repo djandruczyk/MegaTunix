@@ -551,3 +551,44 @@ void  thread_update_widget(
 	return;
 }
 
+
+/*!
+ \brief start_restore_monitor kicks off a thread to update the tools view
+ during an ECU restore to provide user feedback since this is a time
+ consuming operation.  if uses message passing over asyncqueues to send the 
+ gui update messages.
+ */
+void start_restore_monitor(void)
+{
+	GThread * restore_update_thread = NULL;
+	restore_update_thread = g_thread_create(restore_update,
+			NULL, // Thread args
+			TRUE, // Joinable
+			NULL); //GError Pointer
+
+}
+
+void *restore_update(gpointer data)
+{
+	extern GAsyncQueue *io_queue;
+	gint max_xfers = g_async_queue_length(io_queue);
+	gint remaining_xfers = max_xfers;
+	gint last_xferd = max_xfers;
+
+	thread_update_logbar("tools_view","warning",g_strdup_printf("Need to Send %i Variables to the ECU, please be patient.\n",max_xfers),TRUE,FALSE);
+	while (remaining_xfers > 5)
+	{
+		//printf("checking queue length\n");
+		remaining_xfers = g_async_queue_length(io_queue);
+		g_usleep(10000);
+		if (remaining_xfers <= (last_xferd-100))
+		{
+			thread_update_logbar("tools_view",NULL,g_strdup_printf("%i Variables to send, please wait\n",remaining_xfers),TRUE,FALSE);
+			last_xferd = remaining_xfers;
+		}
+
+	}
+	thread_update_logbar("tools_view","warning",g_strdup_printf("Restore of %i variables to your ECU is complete\n",max_xfers),TRUE,FALSE);
+
+	return NULL;
+}
