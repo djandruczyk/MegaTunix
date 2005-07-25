@@ -236,10 +236,7 @@ trypop:
 					break;
 				case UPD_WRITE_STATUS:
 					if (!offline)
-					{
-						printf("updating write status\n");
 						update_write_status(message->payload);
-					}
 					break;
 				case UPD_GET_BOOT_PROMPT:
 					if (connected)

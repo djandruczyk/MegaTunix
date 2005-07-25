@@ -222,7 +222,10 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			 */
 			if ((lastcount - raw_runtime->secl > 1) && \
 					(lastcount - raw_runtime->secl != 255))
+			{
 				ms_reset_count++;
+				gdk_beep();
+			}
 			else
 				ms_goodread_count++;
 

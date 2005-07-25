@@ -55,11 +55,11 @@ static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
  */
 int setup_gui()
 {
-	GtkWidget *frame;
-	GtkWidget *label;
-	GtkWidget *hbox;
-	GtkWidget *vbox;
-	GtkWidget *button;
+	GtkWidget *frame = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *hbox = NULL;
+	GtkWidget *vbox = NULL;
+	GtkWidget *button = NULL;
 	gint i=0;
 
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);

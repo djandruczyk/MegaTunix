@@ -348,7 +348,11 @@ void *thread_dispatcher(gpointer data)
 			case INTERROGATION:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n"),SERIAL_RD|SERIAL_WR|THREADS);
 				if ((connected) && (!offline))
+				{
+					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Interrogating ECU..."));
 					interrogate_ecu();
+					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Interrogation Complete..."));
+				}
 				else
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n"),CRITICAL);
 				break;
