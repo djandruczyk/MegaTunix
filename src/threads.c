@@ -353,8 +353,10 @@ void *thread_dispatcher(gpointer data)
 					interrogate_ecu();
 					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Interrogation Complete..."));
 				}
+				/*
 				else
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n"),CRITICAL);
+					*/
 				break;
 			case COMMS_TEST:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tcomms_test requested \n"),SERIAL_RD|SERIAL_WR|THREADS);
