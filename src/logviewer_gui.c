@@ -521,9 +521,9 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 					GDK_GC_FOREGROUND);
 			break;
 		case FONT:
-			color.red = 60000;
-			color.green = 60000;
-			color.blue = 60000;
+			color.red = 65535;
+			color.green = 65535;
+			color.blue = 65535;
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
 			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),

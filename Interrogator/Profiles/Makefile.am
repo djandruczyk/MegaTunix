@@ -6,6 +6,7 @@ profiles = README \
 	Dualtable-0.90.prof \
 	Dualtable-1.01.prof \
 	Dualtable-1.02.prof \
+	MS-Projection-0.81.prof \
 	Rover-IAC-3.0.4.prof \
 	Rover-IAC-3.0.5.prof \
 	SquirtnEDIS-3.005.prof \
