@@ -362,6 +362,8 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
 				name=NULL;
 				break;
+			default:
+				dbg_func(g_strdup(__FILE__": load_complex_params(), expr_type is UNDEFINED, this will cause a crash!!\n"),CRITICAL);
 
 		}
 	}

@@ -352,7 +352,7 @@ gboolean warn_file_not_empty(FileIoType iotype,gchar * filename)
 
 	buff = g_strdup_printf("The %s file (%s) you selected already exists and contains data.  If you wish to overwrite this file, just hit \"Truncate\" to overwrite this file, otherwise select \"Cancel\"",filetype, filename);
 
-	dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_MODAL,
+	dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_ERROR,
 			GTK_BUTTONS_NONE,buff);
 

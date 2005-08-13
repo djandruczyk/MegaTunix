@@ -190,7 +190,7 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 {
 	extern gint **ms_data;
 	gchar **symbols = NULL;
-	gchar **expr_types = NULL;
+	gint *expr_types = NULL;
 	guchar *raw_data = incoming;
 	gint total_symbols = 0;
 	gint i = 0;
@@ -206,7 +206,7 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 
 
 	symbols = (gchar **)g_object_get_data(object,"expr_symbols");
-	expr_types = (gchar **)g_object_get_data(object,"expr_types");
+	expr_types = (gint *)g_object_get_data(object,"expr_types");
 	total_symbols = (gint)g_object_get_data(object,"total_symbols");
 
 	names = g_malloc0(total_symbols*sizeof(gchar *));
@@ -255,6 +255,10 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)raw_data[offset];
 				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]),COMPLEX_EXPR);
+				break;
+			default:
+				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"),CRITICAL);
+				break;
 		}
 
 	}
@@ -281,6 +285,12 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	}
 
 	assert(evaluator);
+	/* AMD65 debug statement,  strange segfault here...
+	printf("%s\n",evaluator_get_string(evaluator));
+	for (i=0;i<total_symbols;i++)
+		printf("symbol %s, value %f\n",names[i],values[i]);
+	printf("\n");
+	*/
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
 	for (i=0;i<total_symbols;i++)
 	{
