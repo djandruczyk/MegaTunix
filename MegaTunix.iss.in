@@ -1,0 +1,20 @@
+; -- MegaTunix.iss --
+
+
+[Setup]
+AppName=MegaTunix
+AppVerName=MegaTunix version @VERSION@
+DefaultDirName={pf}\MegaTunix
+DefaultGroupName=MegaTunix
+UninstallDisplayIcon={app}\megatunix.exe
+Compression=lzma
+SolidCompression=yes
+
+[Files]
+Source: "z:\home\dave\cvs\MegaTunix\src\megatunix.exe"; DestDir: "{app}"
+Source: "z:\home\dave\win32\libglade-2.0-0.dll"; DestDir: "{app}"
+Source: "z:\home\dave\win32\config"; DestDir: "{app}\.MegaTunix"
+Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\.MegaTunix\"; Flags: recursesubdirs
+
+[Icons]
+Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
