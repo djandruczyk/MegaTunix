@@ -302,9 +302,9 @@ void populate_viewer()
 			name = g_strdup(g_object_get_data(object,"dlog_gui_name"));
 		}
 		if (!name)
-			printf("ERROR, name is NULL\n");
+			dbg_func(g_strdup("ERROR, name is NULL\n"),CRITICAL);
 		if (!object)
-			printf("ERROR, object is NULL\n");
+			dbg_func(g_strdup("ERROR, object is NULL\n"),CRITICAL);
 
 		being_viewed = (gboolean)g_object_get_data(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/

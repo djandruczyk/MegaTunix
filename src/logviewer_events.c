@@ -216,8 +216,8 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 
 	return FALSE;
 
-	printf("button with event is %i\n",event->button);
-	printf("state of event is %i\n",state);
+	//printf("button with event is %i\n",event->button);
+	//printf("state of event is %i\n",state);
 	if (x > info_width) /* If out of bounds just return... */
 		return TRUE;
 
@@ -229,7 +229,7 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	v_value = g_list_nth_data(lv_data->tlist,tnum);
 	if (event->state & (GDK_BUTTON3_MASK))
 	{
-		printf("right button released... \n");
+		//printf("right button released... \n");
 		v_value->highlight = FALSE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,
@@ -242,7 +242,7 @@ EXPORT gboolean lv_button_event(GtkWidget *widget, GdkEventButton *event, gpoint
 	}
 	else if (event->button == 3) /* right mouse button */
 	{
-		printf("right button pushed... \n");
+		//printf("right button pushed... \n");
 		v_value->highlight = TRUE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,

@@ -286,11 +286,12 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 
 	assert(evaluator);
 	/* AMD65 debug statement,  strange segfault here...
-	 */
+	 
 	printf("%s\n",evaluator_get_string(evaluator));
 	for (i=0;i<total_symbols;i++)
 		printf("symbol %s, value %f\n",names[i],values[i]);
 	printf("\n");
+	*/
 	
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
 	for (i=0;i<total_symbols;i++)
