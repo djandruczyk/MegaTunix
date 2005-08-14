@@ -28,5 +28,9 @@ Richard Barrington <rich_b_nz at users dot sourceforge dot net>
 	Submitted bug reports,suggested tying cyls in reqd_fuel calc to
 	the cylinders spinbutton in the main gui..  Various other suggestions
 
+silverchris < unknown, via msefi.com >
+	Created the Gentoo ebuild for version 0.7.9, which was submitted to 
+	the gentoo bugzilla on 8/13/2005.
+
 YOU could be here!!  Submit patches, assistance and suggestions and you'll
 make the list, and all the prestige that comes with it... :)
