@@ -333,19 +333,25 @@ void mem_dealloc()
 			g_free(ms_data[i]);
 			g_free(ms_data_last[i]);
 			g_free(ms_data_backup[i]);
-			if (interdep_vars[i])
+			if (interdep_vars[i] != NULL)
+			{
 				g_hash_table_destroy(interdep_vars[i]);
+				interdep_vars[i] = NULL;
+			}
 		}
 		if (firmware->name)
 			g_free(firmware->name);
 		if (firmware->tab_list)
 			g_strfreev(firmware->tab_list);
 		for (i=0;i<firmware->total_pages;i++)
-			g_free(firmware->page_params[i]);
+			if (firmware->page_params[i])
+				g_free(firmware->page_params[i]);
 		for (i=0;i<firmware->total_tables;i++)
-			g_free(firmware->table_params[i]);
+			if (firmware->table_params[i])
+				g_free(firmware->table_params[i]);
 		for (i=0;i<firmware->total_tables;i++)
-			g_free(firmware->rf_params[i]);
+			if (firmware->rf_params[i])
+				g_free(firmware->rf_params[i]);
 		g_free(firmware);
 		g_free(ms_data);
 		g_free(ms_data_last);
