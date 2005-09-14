@@ -76,10 +76,11 @@ void open_serial(gchar * port_name)
 		/* FAILURE */
 		/* An Error occurred opening the port */
 		serial_params->open = FALSE;
+		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
 
-		update_logbar("comms_view","warning",g_strdup_printf("Error Opening %s Error Code: %s \n",device,err_text),TRUE,FALSE);
+		update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",device,err_text),TRUE,FALSE);
 		g_free(err_text);
 	}
 
