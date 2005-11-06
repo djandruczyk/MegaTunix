@@ -41,7 +41,7 @@ AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/
 
 dnl check paths for necessary files
 dnl pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
-pkg_modules="libglade-2.0 gtkglext-1.0 gdkglext-1.0 gtk+-2.0 gthread-2.0"
+pkg_modules="pangoft2 libglade-2.0 gtkglext-1.0 gdkglext-1.0 gtk+-2.0 gthread-2.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
