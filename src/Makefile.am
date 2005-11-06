@@ -1,4 +1,6 @@
 
+AM_CPPFLAGS = $(BINRELOC_CFLAGS)
+
 INCLUDES = \
 	-I$(top_srcdir)/include \
 	@PACKAGE_CFLAGS@ \
@@ -10,6 +12,7 @@ megatunix_SOURCES = \
 	Makefile \
 	3d_vetable.c \
 	about_gui.c \
+	binreloc.c \
 	comms.c \
 	comms_gui.c \
 	configfile.c \

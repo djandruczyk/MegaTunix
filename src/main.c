@@ -11,6 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+
+#include <binreloc.h>
 #include <comms_gui.h>
 #include <config.h>
 #include <conversions.h>
@@ -59,6 +61,7 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_init(&argc, &argv);
 	glade_init();
+	gbr_init(NULL);
 
 	gl_ability = gdk_gl_init_check(&argc, &argv);
 

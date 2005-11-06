@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <binreloc.h>
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
@@ -32,6 +33,7 @@
 gchar ** get_files(gchar *pathstub, gchar * extension)
 {
 	gchar *path = NULL;
+	gchar *parent = NULL;
 	gchar *list = NULL;
 	gchar * filename = NULL;
 	GDir *dir = NULL;
@@ -64,7 +66,9 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 	g_dir_close(dir);
 
 	syspath:
-	path = g_strconcat(DATA_DIR,"/",pathstub,NULL);
+	parent = gbr_find_data_dir(DATA_DIR);
+	path = g_strconcat(parent,"/",pathstub,NULL);
+	g_free(parent);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -108,6 +112,7 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 gchar * get_file(gchar *pathstub,gchar *extension)
 {
 	gchar * filename = NULL;
+	gchar *dir = NULL;
 	gchar *ext = NULL;
 	if (extension)
 		ext = g_strconcat(".",extension,NULL);
@@ -124,7 +129,9 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 	else 
 	{
 		g_free(filename);
-		filename = g_strconcat(DATA_DIR,"/",pathstub,ext,NULL);
+		dir = gbr_find_data_dir(DATA_DIR);
+		filename = g_strconcat(dir,"/",pathstub,ext,NULL);
+		g_free(dir);
 		g_free(ext);
 		if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 			return filename;
