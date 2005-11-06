@@ -429,7 +429,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 	gboolean tmpi = FALSE;
 	struct Command *cmd = NULL;
 
-	filename = get_file(g_strconcat(INTERROGATOR_DIR,"/","tests",NULL),NULL);
+	filename = get_file(g_build_filename(INTERROGATOR_DIR,"tests",NULL),NULL);
 	if (!filename)
 		return NULL;
 

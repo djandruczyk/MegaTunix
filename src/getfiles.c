@@ -38,7 +38,7 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 	gchar * filename = NULL;
 	GDir *dir = NULL;
 
-	path = g_strconcat(HOME(),"/.MegaTunix/",pathstub,NULL);
+	path = g_build_filename(HOME(),".MegaTunix",pathstub,NULL);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -67,7 +67,7 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 
 	syspath:
 	parent = gbr_find_data_dir(DATA_DIR);
-	path = g_strconcat(parent,"/",pathstub,NULL);
+	path = g_build_filename(parent,"MegaTunix",pathstub,NULL);
 	g_free(parent);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
@@ -111,32 +111,32 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
  */
 gchar * get_file(gchar *pathstub,gchar *extension)
 {
-	gchar * filename = NULL;
+	gchar *filename = NULL;
 	gchar *dir = NULL;
 	gchar *ext = NULL;
+	gchar *file = NULL;
 	if (extension)
 		ext = g_strconcat(".",extension,NULL);
 	else
 		ext = g_strdup("");
 
+	file = g_strconcat(pathstub,ext,NULL);
+	g_free(ext);
 
-	filename = g_strconcat(HOME(),"/.MegaTunix/",pathstub,ext,NULL);
+	filename = g_build_filename(HOME(),".MegaTunix",file,NULL);
 	if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
-	{
-		g_free(ext);
 		return filename;
-	}
 	else 
 	{
 		g_free(filename);
 		dir = gbr_find_data_dir(DATA_DIR);
-		filename = g_strconcat(dir,"/",pathstub,ext,NULL);
+		filename = g_build_filename(dir,"MegaTunix",file,NULL);
 		g_free(dir);
-		g_free(ext);
+
 		if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 			return filename;
 		else
-			return NULL;
+			g_free(filename);
 	}
 	return NULL;
 }

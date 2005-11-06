@@ -1,6 +1,4 @@
 
-AM_CPPFLAGS = $(BINRELOC_CFLAGS)
-
 INCLUDES = \
 	-I$(top_srcdir)/include \
 	@PACKAGE_CFLAGS@ \
