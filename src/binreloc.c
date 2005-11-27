@@ -15,7 +15,6 @@
 #define __BINRELOC_C__
 
 #ifdef ENABLE_BINRELOC
-#warning binreloc is enabled
 	#include <sys/types.h>
 	#include <sys/stat.h>
 	#include <unistd.h>

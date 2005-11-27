@@ -34,7 +34,7 @@
 
 
 struct Serial_Params *serial_params;
-gboolean connected;
+gboolean connected = FALSE;
        
 
 /*!
@@ -75,10 +75,12 @@ void open_serial(gchar * port_name)
 	{
 		/* FAILURE */
 		/* An Error occurred opening the port */
+		connected = FALSE;
 		serial_params->open = FALSE;
 		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
+		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"\n",device,err_text));
 
 		update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",device,err_text),TRUE,FALSE);
 		g_free(err_text);

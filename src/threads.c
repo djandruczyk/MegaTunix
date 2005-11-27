@@ -321,7 +321,7 @@ void *thread_dispatcher(gpointer data)
 	struct Io_Message *message = NULL;	
 	gint discon_count = 0;
 
-	/* Endless Loop, wiat for message, processs and repeat... */
+	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
@@ -334,15 +334,18 @@ void *thread_dispatcher(gpointer data)
 				thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Reconnect attempt #%i",discon_count));
 				
 				comms_test();
-				if (discon_count == 10)
+				if (discon_count >= 10)
 				{
 					queue_function(g_strdup("conn_warning"));
+					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Serial Connection Problem, check COMMS Settings..."));
+					goto jumppoint;
 				}
 			}
 			queue_function(g_strdup("kill_conn_warning"));
 			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Ready..."));
 			discon_count = 0;
 		}
+		jumppoint:
 
 		switch ((CmdType)message->command)
 		{
@@ -354,10 +357,13 @@ void *thread_dispatcher(gpointer data)
 					interrogate_ecu();
 					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Interrogation Complete..."));
 				}
-				/*
 				else
-					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n"),CRITICAL);
-					*/
+				{
+					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Not Connected, Check Serial Parameters..."));
+					thread_update_logbar("interr_view","warning",g_strdup("Interrogation failed due to disconnected Serial Link. Check COMMS Tab...\n"),FALSE,FALSE);
+
+					//dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu request denied, NOT Connected!!\n"),CRITICAL);
+					}
 				break;
 			case COMMS_TEST:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tcomms_test requested \n"),SERIAL_RD|SERIAL_WR|THREADS);
@@ -487,8 +493,8 @@ void  thread_update_logbar(
 /*!
  \brief queue_function() is used to run ANY global function in the context
  of the main GUI from within any thread.  It does it by passing a message 
- up an AsyncQueue to the gui process whcih will lookup the function name
- and run it with no arguments (currently inflexible  and can only run "void"
+ up an AsyncQueue to the gui process which will lookup the function name
+ and run it with no arguments (currently inflexible and can only run "void"
  functions (ones that take no params)
  \param name name of function to lookup and run in the main gui context..
  */

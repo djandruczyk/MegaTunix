@@ -163,7 +163,7 @@ void interrogate_ecu()
 			for (j=0;j<total_read;j++)
 			{
 				dbg_func(g_strdup_printf("%.2x ", p[j]),SERIAL_RD);
-				if (!((j+1)%8))
+				if (!((j+1)%8)) /* every 8 bytes give a CR */
 					dbg_func(g_strdup("\n"),SERIAL_RD);
 			}
 			dbg_func(g_strdup("\n\n"),SERIAL_RD);
@@ -177,13 +177,13 @@ void interrogate_ecu()
 		{
 			case SIG:
 				if (total_read > 0)
-					canidate->sig_str = g_strndup(buf,total_read);
+					canidate->sig_str = g_strndup((gchar *)buf,total_read);
 				else
 					canidate->sig_str = NULL;
 				break;
 			case EXTVER:
 				if (total_read > 0)
-					canidate->quest_str = g_strndup(buf,total_read);
+					canidate->quest_str = g_strndup((gchar *)buf,total_read);
 				else
 					canidate->quest_str = NULL;
 				break;

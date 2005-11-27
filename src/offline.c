@@ -177,7 +177,6 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	group = NULL;
 	while (filenames[i]) 
 	{
-		printf ("loading filename %s\n",filenames[i]);
 		potential = load_potential_match(cmd_array,filenames[i]);
 		hbox = gtk_hbox_new(FALSE,10);
 		gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
