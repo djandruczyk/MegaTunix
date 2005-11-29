@@ -52,14 +52,30 @@ void set_offline_mode(void)
 	extern gboolean interrogated;
 	gint i = 0;
 
+	offline = TRUE;
+	/* Disable interrogation button */
+	widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+
 	cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
 	cmd_array = validate_and_load_tests(cmd_details);
 
 	filename = present_firmware_choices(cmd_array,cmd_details);
 	if (!filename)
 	{
-		dbg_func(g_strdup_printf(__FILE__": set_offline_mode()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"),CRITICAL);
-		return ;
+		offline = FALSE;
+		interrogated = FALSE;
+		g_hash_table_destroy(cmd_details);
+		g_array_free(cmd_array,TRUE);
+		widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+		if (GTK_IS_WIDGET(widget))
+			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
+		widget = g_hash_table_lookup(dynamic_widgets,"offline_button");
+		if (GTK_IS_WIDGET(widget))
+			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
+		return;
+
 	}
 	canidate = load_potential_match(cmd_array,filename);
 	load_profile_details(canidate);
@@ -113,7 +129,6 @@ void set_offline_mode(void)
 	g_array_free(cmd_array,TRUE);
 
 	interrogated = TRUE;
-	offline = TRUE;
 
 	io_cmd(IO_LOAD_REALTIME_MAP,NULL);
 	io_cmd(IO_LOAD_GUI_TABS,NULL);
@@ -141,7 +156,6 @@ void set_offline_mode(void)
 gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 {
 	gchar ** filenames = NULL;
-	gint result = 0;
 	struct Canidate *potential = NULL;
 	GtkWidget *dialog_window = NULL;
 	GtkWidget *dialog = NULL;
@@ -151,6 +165,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	GtkWidget *label = NULL;
 	GSList *group = NULL;
 	gint i = 0;
+	gint result = 0;
 	extern gchar * offline_firmware_choice;
 
 
@@ -168,6 +183,8 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_STOCK_OK,
 				GTK_RESPONSE_OK,
+				GTK_STOCK_CANCEL,
+				GTK_RESPONSE_CANCEL,
 				NULL);
 
 	vbox = gtk_vbox_new(TRUE,5);
@@ -202,8 +219,16 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	gtk_widget_show_all(dialog);
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
-
 	gtk_widget_destroy(dialog);
 	gtk_widget_destroy(dialog_window);
-	return offline_firmware_choice;
+	switch (result)
+	{
+		case GTK_RESPONSE_ACCEPT:
+		case GTK_RESPONSE_OK:
+			return offline_firmware_choice;
+			break;
+		default:
+			return NULL;
+	}
+
 }
