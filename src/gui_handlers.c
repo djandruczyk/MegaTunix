@@ -564,6 +564,9 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case INTERROGATE_ECU:
 			set_title("User initiated interrogation...");
 			update_logbar("interr_view","warning",g_strdup("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
+			widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
+			if (GTK_IS_WIDGET(widget))
+				gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
 		case START_PLAYBACK:

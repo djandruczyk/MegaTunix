@@ -207,7 +207,10 @@ void interrogate_ecu()
 
 	interrogated = determine_ecu(canidate,cmd_array,cmd_details);	
 	if (interrogated)
-		set_widget_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),FALSE);
+	{
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"interrogate_button"),TRUE);
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),FALSE);
+	}
 
 	if (canidate)
 		g_free(canidate);
