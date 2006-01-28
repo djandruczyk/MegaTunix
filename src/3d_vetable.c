@@ -30,9 +30,10 @@
 #include <listmgmt.h>
 #include <../mtxmatheval/mtxmatheval.h>
 #include <notifications.h>
-#include <pango/pangoft2.h>
+#include <pango/pango-font.h>
 #include <rtv_processor.h>
 #include <runtime_sliders.h>
+#include <stdlib.h>
 #include <serialio.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -372,8 +373,8 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
 	ve_view->dt = 0.008;
-	//ve_view->sphi = 35.0; 
-	//ve_view->stheta = 75.0; 
+	/* ve_view->sphi = 35.0; 
+	ve_view->stheta = 75.0;  */
 	ve_view->sphi = 40.5; 
 	ve_view->stheta = 70.25; 
 	ve_view->sdepth = 7.667456;

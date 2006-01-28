@@ -24,7 +24,7 @@ typedef enum
 	RAW_MEMORY_DUMP,
 	C_TEST,
 	GET_ERROR,
-	NULL_HANDLER,
+	NULL_HANDLER
 }InputHandler;
 
 /* Regular Buttons */
@@ -57,7 +57,7 @@ typedef enum
 	RESTORE_ALL,
 	SELECT_PARAMS,
 	REQ_FUEL_POPUP,
-	RESCALE_TABLE,
+	RESCALE_TABLE
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -74,7 +74,7 @@ typedef enum
 	HEX_VIEW,
 	BINARY_VIEW,
 	DECIMAL_VIEW,
-	OFFLINE_FIRMWARE_CHOICE,
+	OFFLINE_FIRMWARE_CHOICE
 }ToggleButton;
 
 typedef enum
@@ -107,7 +107,7 @@ typedef enum
 	LOGVIEW_ZOOM,
 	DEBUG_LEVEL,
 	GENERIC,
-	ALT_SIMUL,
+	ALT_SIMUL
 }SpinButton;
 
 /* Runtime Status flags */
@@ -157,7 +157,7 @@ typedef enum
 	VEX_TIME,
 	VEX_RPM_RANGE,
 	VEX_LOAD_RANGE,
-	VEX_NONE,
+	VEX_NONE
 }ImportParserArg;
 
 typedef enum
@@ -165,7 +165,7 @@ typedef enum
 	FONT=0xe0,
 	TRACE,
 	GRATICULE,
-	HIGHLIGHT,
+	HIGHLIGHT
 }GcType;
 
 typedef enum
@@ -173,7 +173,7 @@ typedef enum
 	/* No capabilities == Standard B&G code with no modifications */
 	STANDARD	= 1<<0,
 	DUALTABLE	= 1<<1,
-	MSNS_E		= 1<<2,
+	MSNS_E		= 1<<2
 }Capability;
 
 typedef enum
@@ -198,7 +198,7 @@ typedef enum
 	TABLOADER	= 1<<8,
 	RTMLOADER	= 1<<9,
 	COMPLEX_EXPR	= 1<<10,
-	CRITICAL	= 1<<30,
+	CRITICAL	= 1<<30
 }Dbg_Class;
 
 typedef enum guint
@@ -214,7 +214,7 @@ typedef enum guint
 	TABLOADER_SHIFT		= 8,
 	RTMLOADER_SHIFT		= 9,
 	COMPLEX_EXPR_SHIFT	= 10,
-	CRITICAL_SHIFT		= 30,
+	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
 
 typedef enum
@@ -250,7 +250,7 @@ typedef enum
 	IO_GET_BOOT_PROMPT,
 	IO_BOOT_READ_ERROR,
 	IO_JUST_BOOT,
-	IO_CLEAN_REBOOT,
+	IO_CLEAN_REBOOT
 }Io_Command;
 
 typedef enum
@@ -280,7 +280,7 @@ typedef enum
 	UPD_REBOOT_GET_ERROR,
 	UPD_JUST_BOOT,
 	UPD_FORCE_UPDATE,
-	UPD_RUN_FUNCTION,
+	UPD_RUN_FUNCTION
 }UpdateFunction;
 
 typedef enum
@@ -288,7 +288,7 @@ typedef enum
 	MTX_INT = 0x160,
 	MTX_ENUM,
 	MTX_BOOL,
-	MTX_STRING,
+	MTX_STRING
 }DataType;
 
 typedef enum
@@ -308,35 +308,34 @@ typedef enum
 	WARMUP_WIZ_PAGE,
 	DATALOGGING_PAGE,
 	LOGVIEWER_PAGE,
-	VE3D_VIEWER_PAGE,
+	VE3D_VIEWER_PAGE
 }PageIdent;
 
 typedef enum
 {
 	VE_EMB_BIT=0x180,
 	VE_VAR,
-	RAW_VAR,
+	RAW_VAR
 }ComplexExprType;
 
 typedef enum
 {
 	UPLOAD=0x190,
 	DOWNLOAD,
-	RTV,
+	RTV
 }ConvType;
 
 typedef enum
 {
 	MTX_HEX=0x1a0,
-	MTX_DECIMAL,
+	MTX_DECIMAL
 }Base;
 
 typedef enum
 {
 	MTX_ENTRY=0x1b0,
 	MTX_TITLE,
-//	MTX_SPINBUTTON,
-	MTX_LABEL,
+	MTX_LABEL
 }WidgetType;
 
 typedef enum
