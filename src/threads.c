@@ -278,6 +278,19 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
+		case IO_READ_PAGE:
+			message = initialize_io_message();
+			message->command = READ_CMD;
+			message->page = (gint)data;
+			message->need_page_change = TRUE;
+			message->out_str = g_strdup(cmds->veconst_cmd);
+			message->out_len = cmds->ve_cmd_len;
+			message->handler = VE_BLOCK;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_TRIGMON_VIEW;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
 		case IO_BURN_MS_FLASH:
 			message = initialize_io_message();
 			message->cmd = cmd;

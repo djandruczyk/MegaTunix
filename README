@@ -7,6 +7,18 @@ modelled slightly after Bruce and Al's MegaSquirt PCC tuning software
 for Windows.  Inspiration also came from Eric Fahlgrens and Guy Hill's
 MegaTune, also for Windows.
 
+Potential build problem on Gentoo:
+	One user has noted that megatunix would fail to link at the end of
+the compile.  The problem was the user was missing the "X" USE flag in 
+/etc/make.conf.  As to WHY this was needed was not entirely known.  If you
+have this problem, check to see if the "X" flag is in your USE flags, and if
+it wasn't add it and issue "emerge --newuse -uDa world" to bring your system
+up to date.  It won't hurt to run "revdep-rebuild" afterwards to take care 
+of any libs or executables that may have broke from a library upgrade. Once
+your system is up to date, a simple "make distclean ; ./configure ; make ;
+make install (as root)" and all should be OK.a IF not contact me via my
+email address in the AUTHORS file.
+
 NOTE about fonts:
 	Some people have complained that MegaTunix comes up with abnormally
 huge fonts.  This is NOT MegaTunix's fault.  It's caused by the default font

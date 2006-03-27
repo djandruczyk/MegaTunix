@@ -11,21 +11,14 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __TIMEOUT_HANDLERS_H__
-#define __TIMEOUT_HANDLERS_H__
+#ifndef __TRIGMON_GUI_H__
+#define __TRIGMON_GUI_H__
 
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void start_realtime_tickler(void);
-void stop_realtime_tickler(void);
-void start_logviewer_playback(void);
-void stop_logviewer_playback(void);
-void start_cont_read_page(void);
-void stop_cont_read_page(void);
-gboolean signal_cont_read_page(void);
-gboolean signal_read_rtvars(void);
-gboolean early_interrogation(void);
+void finish_trigmon(void);
+void trigmon_update_view(void);
 /* Prototypes */
 
 #endif

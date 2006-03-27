@@ -51,6 +51,7 @@ headers = \
         tag_loader.h \
         threads.h \
         timeout_handlers.h \
+	trigmon.h \
         tuning_gui.h \
         unions.h \
 	user_outputs.h \

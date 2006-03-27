@@ -254,6 +254,9 @@ trypop:
 				case UPD_FORCE_UPDATE:
 					forced_update = TRUE;
 					break;
+				case UPD_TRIGMON_VIEW:
+					trigmon_update_view();
+					break;
 			}
 
 		gdk_threads_enter();

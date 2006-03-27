@@ -99,6 +99,12 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(REQ_FUEL_POPUP));
 	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
 			GINT_TO_POINTER(TRIGGER_ANGLE));
+	g_hash_table_insert(str_2_enum,"_READ_PAGE_",
+			GINT_TO_POINTER(READ_PAGE));
+	g_hash_table_insert(str_2_enum,"_CONT_READ_PAGE_",
+			GINT_TO_POINTER(CONT_READ_PAGE));
+	g_hash_table_insert(str_2_enum,"_STOP_READ_PAGE_",
+			GINT_TO_POINTER(STOP_READ_PAGE));
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",
 			GINT_TO_POINTER(READ_VE_CONST));
 	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",

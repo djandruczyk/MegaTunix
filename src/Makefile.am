@@ -54,6 +54,7 @@ megatunix_SOURCES = \
 	tag_loader.c \
 	threads.c \
 	timeout_handlers.c \
+	trigmon.c \
 	tuning_gui.c \
 	user_outputs.c \
 	vetable_gui.c \
@@ -63,10 +64,9 @@ megatunix_SOURCES = \
 	winserialio.c
 
 #megatunix_LDADD = @PACKAGE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@
+megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@ 
 
-
-megatunix_LDFLAGS =
+megatunix_LDFLAGS = 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

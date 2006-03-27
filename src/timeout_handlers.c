@@ -25,7 +25,9 @@
 
 gint realtime_id = 0;
 gint playback_id = 0;
+gint trigmon_id = 0;
 extern GStaticMutex rtv_mutex;
+GStaticMutex trigmon_mutex = G_STATIC_MUTEX_INIT;
 
 
 /*!
@@ -47,6 +49,31 @@ void start_realtime_tickler()
 	}
 	else
 		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY started\n"),TRUE,FALSE);
+	g_static_mutex_unlock(&rtv_mutex);
+}
+
+ /*!
+  * \brief start_cont_read_page() starts up a GTK+ timeout function to run
+  * read a specified VEpage as fast as possible (for trigger monitor)
+  * \see signal_read_rtvars
+  *   */
+void start_cont_read_page()
+{
+	extern struct Serial_Params *serial_params;
+
+	g_static_mutex_lock(&trigmon_mutex);
+	if (trigmon_id == 0)
+	{
+		if (realtime_id)
+		{
+			dbg_func(g_strdup(__FILE__": start_cont_read_page()\n\tRealtime reader was active, turning it OFF! \n"),CRITICAL);
+			g_source_remove(realtime_id);
+		}
+		trigmon_id = g_timeout_add(serial_params->read_wait,
+				(GtkFunction)signal_cont_read_page,NULL);
+		update_logbar("comms_view",NULL,g_strdup("Trigmon Reader started\n"),TRUE,FALSE);
+	}
+		update_logbar("comms_view","warning",g_strdup("Trigmon Reader ALREADY started\n"),TRUE,FALSE);
 	g_static_mutex_unlock(&rtv_mutex);
 }
 
@@ -115,6 +142,34 @@ void stop_realtime_tickler()
 
 
 /*!
+ \brief stop_cont_read_page() kills off the GTK+ timeout that gets the
+ msns-e trigmon variables on a periodic basis.
+ \see start_cont_read_page
+ */
+void stop_cont_read_page()
+{
+	extern GAsyncQueue *io_queue;
+	extern gint dispatcher_id;
+	extern gboolean leaving;
+
+	g_static_mutex_lock(&trigmon_mutex);
+	if (trigmon_id)
+	{
+		g_source_remove(trigmon_id);
+		trigmon_id = 0;
+		while (leaving && ((g_async_queue_length(io_queue) > 0) || (dispatcher_id != 0)))
+		{
+		//	printf("waiting for queue to finish\n");
+			g_usleep(10000);
+		}
+		update_logbar("comms_view",NULL,g_strdup("Trigmon Reader stopped\n"),TRUE,FALSE);
+	}
+
+	g_static_mutex_unlock(&trigmon_mutex);
+}
+
+
+/*!
  \brief signal_read_rtvars() is called by a GTK+ timeout on a periodic basis
  to get a new set of realtiem variables.  It does so by queing messages to
  a thread which handles I/O.  This function will check the queue depth and 
@@ -156,6 +211,43 @@ gboolean signal_read_rtvars()
 
 	}
 	*/
+	return TRUE;	/* Keep going.... */
+}
+
+
+/*!
+ \brief signal_cont_read_page() is called by a GTK+ timeout on a periodic basis
+ to get a new set of msns-extra trigmon data.  It does so by queing messages to
+ a thread which handles I/O.  This function will check the queue depth and 
+ if the queue is backed up it will skip sending a request for data, as that 
+ will only aggravate the queue roadblock.
+ \returns TRUE
+ */
+gboolean signal_cont_read_page()
+{
+	gint length = 0;
+	extern GAsyncQueue *io_queue;
+	extern gboolean rtvars_loaded;
+	static gint errcount = 0;
+	extern struct Firmware_Details *firmware;
+
+	length = g_async_queue_length(io_queue);
+	/* IF queue depth is too great we should not make the problem worse
+	 * so we skip a call as we're probably trying to go faster than the 
+	 * MS and/or serail port can go....
+	 */
+	if (length > 2)
+		return TRUE;
+
+	dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"),SERIAL_RD|SERIAL_WR);
+
+	if (errcount > 10)
+	{
+		stop_cont_read_page();
+		errcount = 0;
+	}
+	io_cmd(IO_READ_PAGE,GINT_TO_POINTER(firmware->trigmon_page));			
+
 	return TRUE;	/* Keep going.... */
 }
 
