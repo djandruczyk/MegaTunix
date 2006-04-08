@@ -12,20 +12,20 @@ id_prefix=trigmon_
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_READ_PAGE_
-page=10
+page=240
 bind_to_list=get_data_buttons
 
 [cont_read_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_CONT_READ_PAGE_
-page=10
+page=240
 bind_to_list=get_data_buttons
 
 [stop_cont_read_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_STOP_READ_PAGE_
-page=10
+page=240
 bind_to_list=get_data_buttons
 

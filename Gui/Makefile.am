@@ -27,6 +27,7 @@ gui_files = 	README \
 		enrichments_021x_2.datamap \
 		enrichments_024x.glade \
 		enrichments_024x.datamap \
+		enrichments_029x.datamap \
 		lambdatable_8x8e.glade \
 		lambdatable_8x8s.glade \
 		lambda_8x16-Genboard.datamap \
