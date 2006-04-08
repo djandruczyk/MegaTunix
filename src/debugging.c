@@ -18,7 +18,7 @@
 #include <glib/gprintf.h>
 
 
-guint dbg_lvl = 0;
+gint dbg_lvl = 0;
 
 
 /*!

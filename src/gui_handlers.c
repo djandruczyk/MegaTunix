@@ -614,21 +614,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			io_cmd(IO_READ_RAW_MEMORY,(gpointer)obj_data);
 			break;
-		case READ_PAGE:
-			if (offline)
-				break;
-			io_cmd(IO_READ_PAGE,(gpointer)obj_data);
-			break;
-		case CONT_READ_PAGE:
-			if (offline)
-				break;
-			start_cont_read_page();
-			break;
-		case STOP_READ_PAGE:
-			if (offline)
-				break;
-			stop_cont_read_page();
-			break;
 		case CHECK_ECU_COMMS:
 			if (offline)
 				break;

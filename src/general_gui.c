@@ -25,7 +25,7 @@
 extern gboolean tips_in_use;
 extern gint temp_units;
 extern GdkColor black;
-extern guint dbg_lvl;
+extern gint dbg_lvl;
 GtkWidget *ms_ecu_revision_entry;
 
 GtkTextBuffer *textbuffer;

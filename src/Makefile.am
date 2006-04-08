@@ -54,7 +54,6 @@ megatunix_SOURCES = \
 	tag_loader.c \
 	threads.c \
 	timeout_handlers.c \
-	trigmon.c \
 	tuning_gui.c \
 	user_outputs.c \
 	vetable_gui.c \

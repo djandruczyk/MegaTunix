@@ -324,7 +324,6 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->require_page = potential->require_page;
 	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
-	firmware->trigmon_page = potential->trigmon_page;
 	firmware->write_cmd = g_strdup(potential->write_cmd);
 	firmware->burn_cmd = g_strdup(potential->burn_cmd);
 	firmware->page_cmd = g_strdup(potential->page_cmd);
@@ -634,9 +633,6 @@ void load_profile_details(struct Canidate *canidate)
 		if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 					&canidate->total_pages))
 			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"TotalPages\" value not found in interrogation profile, ERROR\n"),CRITICAL);
-		if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",
-					&canidate->trigmon_page))
-			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"Trigmon_Page\" value not found in interrogation profile, ERROR\n"),CRITICAL);
 		if(!cfg_read_int(cfgfile,"parameters","TotalTables",
 					&canidate->total_tables))
 			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"),CRITICAL);

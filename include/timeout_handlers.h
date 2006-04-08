@@ -21,9 +21,6 @@ void start_realtime_tickler(void);
 void stop_realtime_tickler(void);
 void start_logviewer_playback(void);
 void stop_logviewer_playback(void);
-void start_cont_read_page(void);
-void stop_cont_read_page(void);
-gboolean signal_cont_read_page(void);
 gboolean signal_read_rtvars(void);
 gboolean early_interrogation(void);
 /* Prototypes */

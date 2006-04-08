@@ -30,7 +30,7 @@ gint minor_ver;
 gint micro_ver;
 gint preferred_delimiter;
 gint baudrate = BAUDRATE;
-extern guint dbg_lvl;
+extern gint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
 extern gint mem_view_style[];
 extern gint ms_reset_count;
