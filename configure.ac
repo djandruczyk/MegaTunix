@@ -127,6 +127,7 @@ RuntimeStatus/Makefile
 Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Gui/Makefile
+MegaTunix.iss
 ])
 
 echo "
