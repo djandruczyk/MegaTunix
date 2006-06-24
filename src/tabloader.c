@@ -140,7 +140,6 @@ gboolean load_gui_tabs(void)
 				update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
 				update_logbar("interr_view","warning",g_strdup_printf(" Could not be processed!\n"),FALSE,FALSE);
 			}
-			g_free(xml);
 			g_free(map_file);
 			g_free(glade_file);
 
