@@ -83,6 +83,7 @@ void leave(GtkWidget *widget, gpointer data)
 	extern gint realtime_id;
 	extern gint dispatcher_id;
 	extern gint statuscounts_id;
+	extern GStaticMutex rtv_mutex;
 	struct Io_File * iofile = NULL;
 
 	/* Stop timeout functions */
@@ -103,6 +104,10 @@ void leave(GtkWidget *widget, gpointer data)
 	if(playback_id)
 		stop_logviewer_playback();
 	playback_id = 0;
+
+	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait till 
+					  // runtime gui is finished updating
+	g_static_mutex_unlock(&rtv_mutex); 
 
 	if (dynamic_widgets)
 	{
@@ -562,7 +567,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			rescale_table(obj_data);
 			break;
 		case INTERROGATE_ECU:
-			set_title("User initiated interrogation...");
+			set_title(g_strdup("User initiated interrogation..."));
 			update_logbar("interr_view","warning",g_strdup("USER Initiated ECU interrogation...\n"),FALSE,FALSE);
 			widget = g_hash_table_lookup(dynamic_widgets,"interrogate_button");
 			if (GTK_IS_WIDGET(widget))
@@ -606,7 +611,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case READ_VE_CONST:
 			if (offline)
 				break;
-			set_title("Reading VE/Constants...");
+			set_title(g_strdup("Reading VE/Constants..."));
 			io_cmd(IO_READ_VE_CONST, NULL);
 			break;
 		case READ_RAW_MEMORY:
@@ -697,7 +702,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			req_fuel_change(widget);
 			break;
 		case OFFLINE_MODE:
-			set_title("Offline Mode...");
+			set_title(g_strdup("Offline Mode..."));
 			set_offline_mode();
 			break;
 		default:

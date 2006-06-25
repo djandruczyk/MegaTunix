@@ -52,16 +52,18 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
 	gboolean status = FALSE;
 	gchar * filename = NULL;
-	gchar ** tmpbuf = NULL;
+	gchar ** vector = NULL;
 	
-	tmpbuf = g_strsplit(fname,".",2);
+	vector = g_strsplit(fname,".",2);
 
-	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,"/",tmpbuf[0],NULL),tmpbuf[1]);
-	g_strfreev(tmpbuf);
+	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,"/",vector[0],NULL),g_strdup(vector[1]));
+	g_strfreev(vector);
 
 	if (filename)
-		status = load_table(table_name,filename);
-	g_free(filename);
+	{
+		status = load_table((gchar *)table_name,filename);
+		g_free(filename);
+	}
 	if (!status)
 	{
 		dbg_func(g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table_name),CRITICAL);
@@ -111,11 +113,14 @@ gboolean load_table(gchar *table_name, gchar *filename)
 				end = g_strrstr(str,"T");
 				tmp = g_strndup(str,end-str);
 				tmparray[i]=atoi(tmp);
+				g_free(tmp);
 				i++;
 			}
+			//g_free(str);
 		}
 		g_string_free(a_line,TRUE);
 	}
+	g_io_channel_shutdown(iochannel,FALSE,NULL);
 
 	array = g_memdup(&tmparray,i*sizeof(gint));
 	if (!lookuptables)

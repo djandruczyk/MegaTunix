@@ -174,7 +174,7 @@ void  update_logbar(
 	{
 		if (count) /* if TRUE, display counter, else don't */
 			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
-		gtk_text_buffer_insert(textbuffer,&iter,g_strdup(message),-1);
+		gtk_text_buffer_insert(textbuffer,&iter,message,-1);
 	}
 	else
 	{
@@ -183,7 +183,7 @@ void  update_logbar(
 					&iter,tmpbuf,-1,tagname,NULL);
 
 		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,
-				g_strdup(message),-1,tagname,NULL);
+				message,-1,tagname,NULL);
 	}
 
 	g_free(message);
@@ -385,9 +385,13 @@ gboolean warn_file_not_empty(FileIoType iotype,gchar * filename)
  give user notifications...
  \param text (gchar *) text to append, (static strings only please)
  */
-void set_title(const gchar * text)
+void set_title(gchar * text)
 {
 	extern GtkWidget *main_window;
+	gchar * tmpbuf = NULL;
+	tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
 
-	gtk_window_set_title(GTK_WINDOW(main_window),g_strconcat("MegaTunix ",VERSION,",   ",text,NULL));
+	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);
+	g_free(tmpbuf);
+	g_free(text);
 }

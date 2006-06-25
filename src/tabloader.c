@@ -50,7 +50,6 @@ gboolean load_gui_tabs(void)
 	gchar * glade_file = NULL;
 	gchar * tmpbuf = NULL;
 	GladeXML *xml = NULL;
-	GtkWidget *frame = NULL;
 	gchar * tab_name = NULL;
 	GtkWidget * label = NULL;
 	GtkWidget *topframe = NULL;
@@ -69,8 +68,8 @@ gboolean load_gui_tabs(void)
 
 	while (firmware->tab_list[i])
 	{
-		glade_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_list[i],NULL),"glade");
-		map_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_confs[i],NULL),"datamap");
+		glade_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_list[i],NULL),g_strdup("glade"));
+		map_file = get_file(g_strconcat(GUI_DIR,"/",firmware->tab_confs[i],NULL),g_strdup("datamap"));
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
@@ -89,61 +88,58 @@ gboolean load_gui_tabs(void)
 			i++;
 			continue;
 		}
-//		if ((g_file_test(glade_file,G_FILE_TEST_EXISTS)) &&
-//				(g_file_test(map_file,G_FILE_TEST_EXISTS)))
+		update_logbar("interr_view",NULL,g_strdup_printf("Load of tab: "),FALSE,FALSE);
+		update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
+		xml = glade_xml_new(glade_file,"topframe",NULL);
+		cfgfile = cfg_open_file(map_file);
+		if (cfgfile)
 		{
-			update_logbar("interr_view",NULL,g_strdup_printf("Load of tab: "),FALSE,FALSE);
-			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
-			xml = glade_xml_new(glade_file,"topframe",NULL);
-			cfgfile = cfg_open_file(map_file);
-			if (cfgfile)
+			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
+			label = gtk_label_new_with_mnemonic(tab_name);
+			topframe = glade_xml_get_widget(xml,"topframe");
+			/* bind_data() is recursive and will take 
+			 * care of all children
+			 */
+			groups = load_groups(cfgfile);
+			bindgroup->cfgfile = cfgfile;
+			bindgroup->groups = groups;
+			bind_data(topframe,(gpointer)bindgroup);
+			if (groups)
+				g_hash_table_destroy(groups);
+
+			populate_master(topframe,(gpointer)cfgfile);
+
+			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
+			g_free(tab_name);
+
+			if (topframe == NULL)
 			{
-				cfg_read_string(cfgfile,"global","tab_name",&tab_name);
-				label = gtk_label_new_with_mnemonic(g_strdup(tab_name));
-				topframe = glade_xml_get_widget(xml,"topframe");
-				/* bind_data() is recursive and will take 
-				 * care of all children
-				 */
-				groups = load_groups(cfgfile);
-				bindgroup->cfgfile = cfgfile;
-				bindgroup->groups = groups;
-				bind_data(topframe,(gpointer)bindgroup);
-				if (groups)
-					g_hash_table_destroy(groups);
-				populate_master(topframe,(gpointer)cfgfile);
-
-				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
-				g_free(tab_name);
-
-				frame = glade_xml_get_widget(xml,"topframe");
-				if (frame == NULL)
-				{
-					dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n"),CRITICAL);
-					return FALSE;
-				}
-				else
-				{
-					gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
-					glade_xml_signal_autoconnect(xml);
-					gtk_widget_show_all(frame);
-				}
-				if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
-				{
-					run_post_function(tmpbuf);
-					g_free(tmpbuf);
-				}
-				cfg_free(cfgfile);
+				dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n"),CRITICAL);
+				return FALSE;
 			}
 			else
 			{
-				update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
-				update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
-				update_logbar("interr_view","warning",g_strdup_printf(" Could not be processed!\n"),FALSE,FALSE);
+				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),topframe,label);
+				glade_xml_signal_autoconnect(xml);
+				gtk_widget_show_all(topframe);
 			}
-			g_free(map_file);
-			g_free(glade_file);
-
+			if (cfg_read_string(cfgfile,"global","post_function",&tmpbuf))
+			{
+				run_post_function(tmpbuf);
+				g_free(tmpbuf);
+			}
+			cfg_free(cfgfile);
+			g_free(cfgfile);
 		}
+		else
+		{
+			update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf(" Could not be processed!\n"),FALSE,FALSE);
+		}
+		g_free(map_file);
+		g_free(glade_file);
+
 		i++;
 
 		/* Allow gui to update as it should.... */
@@ -162,6 +158,7 @@ gboolean load_gui_tabs(void)
 }
 
 
+
 /*!
  \brief group_free() free's the data from the struct Group structure
  \param value (gpointer) pointer to the struct Group to be deallocated
@@ -173,12 +170,13 @@ void group_free(gpointer value)
 	gint i = 0;
 
 	for (i=0;i<group->num_keys;i++)
+	{
 		g_object_set_data(group->object,group->keys[i],NULL);
+	}
 	g_strfreev(group->keys);
 	g_free(group->keytypes);
 	g_free(group);
 }
-
 
 /*!
  \brief load_groups() is called from the load_gui_tabs function in order to
@@ -200,7 +198,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	gint num_groups = 0;
 	struct Group *group = NULL;
 	GHashTable *groups = NULL;
-	groups = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,group_free);
+
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
 		groupnames = parse_keys(tmpbuf,&num_groups,",");
@@ -209,6 +207,9 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	}
 	else
 		return NULL;
+
+	groups = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,group_free);
+
 	for (x=0;x<num_groups;x++)
 	{
 		/* Create structure and allocate ram for it */
@@ -293,12 +294,12 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 			case MTX_BOOL:
 			case MTX_ENUM:
 				tmpi = (gint)g_object_get_data(group->object,group->keys[i]);
-				g_object_set_data(G_OBJECT(widget),g_strdup(group->keys[i]),GINT_TO_POINTER(tmpi));
+				g_object_set_data(G_OBJECT(widget),group->keys[i],GINT_TO_POINTER(tmpi));
 				break;
 			case MTX_STRING:
-				g_object_set_data(G_OBJECT(widget),g_strdup(group->keys[i]),g_strdup(g_object_get_data(group->object,group->keys[i])));
+				g_object_set_data(G_OBJECT(widget),group->keys[i],g_strdup(g_object_get_data(group->object,group->keys[i])));
 				if (g_object_get_data(G_OBJECT(widget),"tooltip") != NULL)
-					gtk_tooltips_set_tip(tip,widget,g_strdup((gchar *)g_object_get_data(G_OBJECT(widget),"tooltip")),NULL);
+					gtk_tooltips_set_tip(tip,widget,(gchar *)g_object_get_data(G_OBJECT(widget),"tooltip"),NULL);
 				if (g_object_get_data(G_OBJECT(group->object), "bind_to_list"))
 					bind_to_lists(widget,(gchar *)g_object_get_data(G_OBJECT(group->object), "bind_to_list"));
 				break;

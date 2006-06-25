@@ -128,7 +128,7 @@ trypop:
 							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
 							break;
 						case MTX_TITLE:
-							set_title(w_update->msg);
+							set_title(g_strdup(w_update->msg));
 							break;
 //						case MTX_SPINBUTTON:
 //							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
@@ -140,50 +140,50 @@ trypop:
 				case UPD_POPULATE_DLOGGER:
 					if ((connected) && (interrogated))
 					{
-						set_title("Populating Datalogger...");
+						set_title(g_strdup("Populating Datalogger..."));
 						populate_dlog_choices();
 					}
 					break;
 				case UPD_LOAD_RT_STATUS:
 					if ((connected) && (interrogated))
 					{
-						set_title("Loading RT Status...");
+						set_title(g_strdup("Loading RT Status..."));
 						load_status();
-						set_title("RT Status Loaded...");
+						set_title(g_strdup("RT Status Loaded..."));
 					}
 					break;
 				case UPD_LOAD_RT_SLIDERS:
 					if ((connected) && (interrogated))
 					{
-						set_title("Loading RT Sliders...");
+						set_title(g_strdup("Loading RT Sliders..."));
 						load_sliders();
 						reset_temps(GINT_TO_POINTER(temp_units));
-						set_title("RT Sliders Loaded...");
+						set_title(g_strdup("RT Sliders Loaded..."));
 					}
 					break;
 				case UPD_LOAD_REALTIME_MAP:
 					if ((interrogated) && ((connected) || (offline)))
 					{
-						set_title("Loading RT Map...");
+						set_title(g_strdup("Loading RT Map..."));
 						load_realtime_map();
-						set_title("RT Map Loaded...");
+						set_title(g_strdup("RT Map Loaded..."));
 					}
 					break;
 				case UPD_LOAD_GUI_TABS:
 					if ((((connected) || (offline))) && (!tabs_loaded))
 					{
-						set_title("Loading Gui Tabs...");
+						set_title(g_strdup("Loading Gui Tabs..."));
 						load_gui_tabs();
 						reset_temps(GINT_TO_POINTER(temp_units));
-						set_title("Gui Tabs Loaded...");
+						set_title(g_strdup("Gui Tabs Loaded..."));
 					}
 					break;
 				case UPD_READ_VE_CONST:
 					if ((connected) || (offline))
 					{
-						set_title("Reading VE/Constants...");
+						set_title(g_strdup("Reading VE/Constants..."));
 						io_cmd(IO_READ_VE_CONST,NULL);
-						set_title("VE/Constants Read...");
+						set_title(g_strdup("VE/Constants Read..."));
 					}
 					break;
 				case UPD_REENABLE_INTERROGATE_BUTTON:
@@ -202,12 +202,12 @@ trypop:
 						update_runtime_vars();
 					break;
 				case UPD_VE_CONST:
-					set_title("Updating Controls...");
+					set_title(g_strdup("Updating Controls..."));
 					paused_handlers = TRUE;
 					if ((connected) || (offline))
 						update_ve_const();
 					paused_handlers = FALSE;
-					set_title("Ready...");
+					set_title(g_strdup("Ready..."));
 					break;
 				case UPD_SET_STORE_RED:
 					set_group_color(RED,"burners");

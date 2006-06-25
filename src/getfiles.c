@@ -36,10 +36,12 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 	gchar *parent = NULL;
 	gchar *list = NULL;
 	gchar * filename = NULL;
+	gchar **vector = NULL;
+	gchar * tmpbuf = NULL;
 	GDir *dir = NULL;
 
 
-	path = g_build_filename(HOME(),".MegaTunix",pathstub,NULL);
+	path = g_build_filename(g_get_home_dir(), ".MegaTunix",pathstub,NULL);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -55,10 +57,15 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 			continue;
 		}
 
+		/* Create name of file and store temporarily */
 		if (!list)
 			list = g_strdup_printf("%s%s",path,filename);
 		else
-			list = g_strconcat(list,",",path,filename,NULL);
+		{
+			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			g_free(list);
+			list = tmpbuf;
+		}
 
 		filename = (gchar *)g_dir_read_name(dir);
 		
@@ -84,22 +91,33 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 			filename = (gchar *)g_dir_read_name(dir);
 			continue;
 		}
+
+		/* Create name of file and store temporarily */
 		if (!list)
 			list = g_strdup_printf("%s%s",path,filename);
 		else
-			list = g_strconcat(list,",",path,filename,NULL);
+		{
+			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			g_free(list);
+			list = tmpbuf;
+		}
+
 		filename = (gchar *)g_dir_read_name(dir);
 	}
 	g_free(path);
 	g_dir_close(dir);
 
 	finish:
+	g_free(pathstub);
+	g_free(extension);
 	if (!list)
 	{
 		dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);
 		return NULL;
 	}
-	return (g_strsplit(list,",",0));
+	vector = g_strsplit(list,",",0);
+	g_free(list);
+	return (vector);
 }
 
 
@@ -125,20 +143,33 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 
 	g_free(ext);
 
-	filename = g_build_filename(HOME(),".MegaTunix",file,NULL);
+	filename = g_build_filename(g_get_home_dir(), ".MegaTunix",file,NULL);
 	if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+	{
+		g_free(pathstub);
+		g_free(extension);
+		g_free(file);
 		return filename;
+	}
 	else 
 	{
 		g_free(filename);
 		dir = gbr_find_data_dir(DATA_DIR);
 		filename = g_build_filename(dir,file,NULL);
+
 		g_free(dir);
+		g_free(file);
 
 		if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+		{
+			g_free(pathstub);
+			g_free(extension);
 			return filename;
+		}
 		else
 			g_free(filename);
 	}
+	g_free(pathstub);
+	g_free(extension);
 	return NULL;
 }

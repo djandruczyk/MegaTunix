@@ -24,6 +24,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <gdk/gdkglglext.h>
 #include <gdk/gdkkeysyms.h>
 #include <gui_handlers.h>
 #include <gtk/gtkgl.h>

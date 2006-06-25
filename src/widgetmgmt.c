@@ -62,9 +62,12 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if (name == NULL)
 		return;
 	if (g_strrstr((gchar *)name,"topframe"))
+	{
+		g_free(name);
 		return;
+	}
 	if(!dynamic_widgets)
-		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
+		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	fullname = g_strdup_printf("%s%s",prefix,name);
 	if (!g_hash_table_lookup(dynamic_widgets,fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
@@ -72,6 +75,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  from file %s already exists in master table\n",name,cfg->filename),CRITICAL);
 	g_free(prefix);
 	g_free(fullname);
+	g_free(name);
 }
 
 
@@ -85,7 +89,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 void register_widget(gchar *name, GtkWidget * widget)
 {
 	if(!dynamic_widgets)
-		dynamic_widgets = g_hash_table_new(g_str_hash,g_str_equal);
+		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	if (g_hash_table_lookup(dynamic_widgets,name))
 	{
 		

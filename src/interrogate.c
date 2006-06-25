@@ -87,9 +87,9 @@ void interrogate_ecu()
 
 	/* Allocate memory to store interrogation results */
 	canidate = g_malloc0(sizeof(struct Canidate));
-	canidate->bytecounts = g_hash_table_new(g_str_hash,g_str_equal);
+	canidate->bytecounts = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 
-	cmd_details = g_hash_table_new(g_str_hash,g_str_equal);
+	cmd_details = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 
 	/* Load tests from config files */
 	cmd_array = validate_and_load_tests(cmd_details);
@@ -245,7 +245,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	gchar ** filenames = NULL;
 	extern struct Io_Cmds *cmds;
 
-	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL),"prof");	
+	filenames = get_files(g_strconcat(INTERROGATOR_DIR,"/Profiles/",NULL),g_strdup("prof"));	
 	if (!filenames)
 	{
 		dbg_func(g_strdup(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"),CRITICAL);
@@ -401,6 +401,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 
 
 freeup:
+	close_profile(potential);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
@@ -482,6 +483,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			g_array_insert_val(cmd_array,i,cmd);
 		}
 		cfg_free(cfgfile);
+		g_free(cfgfile);
 	}
 
 	g_free(filename);
@@ -520,20 +522,50 @@ void close_profile(struct Canidate *canidate)
 	gint i = 0;
 
 	dbg_func(g_strdup(__FILE__": close_profile(),\n\tDeallocating memory for potential canidate match\n"),INTERROGATOR);
-	for (i=0;i<(canidate->total_pages);i++)
-		if (canidate->page_params[i])
-			g_free(canidate->page_params[i]);
-	for (i=0;i<(canidate->total_tables);i++)
-		if (canidate->table_params[i])
-			dealloc_table_params(canidate->table_params[i]);
+	if (canidate->name)
+		g_free(canidate->name);
+	if (canidate->filename)
+		g_free(canidate->filename);
+	if (canidate->bytecounts)
+		g_hash_table_destroy(canidate->bytecounts);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
 		g_free(canidate->quest_str);
-	if (canidate->name)
-		g_free(canidate->name);
-	if (canidate->bytecounts)
-		g_hash_table_destroy(canidate->bytecounts);
+	if (canidate->load_tabs)
+		g_free(canidate->load_tabs);
+	if (canidate->tab_confs)
+		g_free(canidate->tab_confs);
+	if (canidate->rtv_map_file)
+		g_free(canidate->rtv_map_file);
+	if (canidate->sliders_map_file)
+		g_free(canidate->sliders_map_file);
+	if (canidate->status_map_file)
+		g_free(canidate->status_map_file);
+	if (canidate->rt_cmd_key)
+		g_free(canidate->rt_cmd_key);
+	if (canidate->ve_cmd_key)
+		g_free(canidate->ve_cmd_key);
+	if (canidate->ign_cmd_key)
+		g_free(canidate->ign_cmd_key);
+	if (canidate->raw_mem_cmd_key)
+		g_free(canidate->raw_mem_cmd_key);
+	if (canidate->write_cmd)
+		g_free(canidate->write_cmd);
+	if (canidate->burn_cmd)
+		g_free(canidate->burn_cmd);
+	if (canidate->page_cmd)
+		g_free(canidate->page_cmd);
+	if (canidate->lookuptables)
+		g_hash_table_destroy(canidate->lookuptables);
+	for (i=0;i<(canidate->total_pages);i++)
+		if (canidate->page_params[i])
+			g_free(canidate->page_params[i]);
+	g_free(canidate->page_params);
+	for (i=0;i<(canidate->total_tables);i++)
+		if (canidate->table_params[i])
+			dealloc_table_params(canidate->table_params[i]);
+	g_free(canidate->table_params);
 	g_free(canidate);
 	dbg_func(g_strdup(__FILE__": close_profile(),\n\tDeallocation of memory for potential canidate complete\n"),INTERROGATOR);
 
@@ -570,6 +602,7 @@ struct Canidate * load_potential_match(GArray * cmd_array, gchar * filename)
 			dbg_func(g_strdup(__FILE__": load_potential_match()\n\t\"VerNumber\" NOT found in interrogation profile, ERROR\n"),CRITICAL);
 
 		cfg_free(cfgfile);
+		g_free(cfgfile);
 
 	}
 	else
@@ -777,9 +810,11 @@ void load_profile_details(struct Canidate *canidate)
 			if(!cfg_read_int(cfgfile,section,"length",&canidate->page_params[i]->length))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"length\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 			cfg_read_boolean(cfgfile,section,"is_spark",&canidate->page_params[i]->is_spark);
+			g_free(section);
 		}
 
 		cfg_free(cfgfile);
+		g_free(cfgfile);
 		g_free(filename);
 
 	}
@@ -897,6 +932,7 @@ gboolean check_for_match(GArray *cmd_array, struct Canidate *potential, struct C
 	if (potential->ver_num != canidate->ver_num)
 	{
 		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tCanidate version number \"%i\" does NOT match potential \"%i\", loading next profile\n",canidate->ver_num,potential->ver_num),INTERROGATOR);
+		close_profile(potential);
 		return FALSE;
 	}
 	else
@@ -909,6 +945,7 @@ gboolean check_for_match(GArray *cmd_array, struct Canidate *potential, struct C
 		if (strstr(canidate->quest_str,potential->quest_str) == NULL)
 		{
 			dbg_func(g_strdup(__FILE__": check_for_match()\n\tDID NOT find match on extended version\n"),INTERROGATOR);
+			close_profile(potential);
 			return FALSE;
 		}
 		else
@@ -920,6 +957,7 @@ gboolean check_for_match(GArray *cmd_array, struct Canidate *potential, struct C
 		if (strstr(canidate->sig_str,potential->sig_str) == NULL)
 		{
 			dbg_func(g_strdup(__FILE__": check_for_match()\n\tDID NOT find match on signature\n"),INTERROGATOR);
+			close_profile(potential);
 			return FALSE;
 		}
 		else

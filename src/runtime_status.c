@@ -69,7 +69,7 @@ void load_status(void)
 		return;
 	}
 
-	filename = get_file(g_strconcat(RTSTATUS_DIR,"/",firmware->status_map_file,NULL),"status_conf");
+	filename = get_file(g_strconcat(RTSTATUS_DIR,"/",firmware->status_map_file,NULL),g_strdup("status_conf"));
         cfgfile = cfg_open_file(filename);
         if (cfgfile)
 	{
@@ -139,13 +139,21 @@ void load_status(void)
 			if (!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 			else
+			{
 				keys = parse_keys(tmpbuf,&num_keys,",");
+				g_free(tmpbuf);
+			}
+
 			if (!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 			else
+			{
 				key_types = parse_keytypes(tmpbuf,&num_keytypes,",");
+				g_free(tmpbuf);
+			}
 
 			bind_keys(G_OBJECT(label),cfgfile,section,keys,key_types,num_keys);
+			g_free(key_types);
 			/* Bind widgets to lists if thy have the bind_to_list flag set...
 			 *         */
 			if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
@@ -164,10 +172,13 @@ void load_status(void)
 					store_list(tmpvector[x],g_list_append(get_list(tmpvector[x]),(gpointer)label));
 				g_strfreev(tmpvector);
 			}
+			g_free(section);
 
 
 		}
 		gtk_widget_show_all(window);
+		cfg_free(cfgfile);
+		g_free(cfgfile);
 
 	}
 	else

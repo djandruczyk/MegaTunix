@@ -265,6 +265,7 @@ void cfg_write_string(ConfigFile * cfg, gchar * section, gchar * key, gchar * va
 {
 	ConfigSection *sect;
 	ConfigLine *line;
+	gchar * tmpbuf = NULL;
 
 	sect = cfg_find_section(cfg, section);
 	if (!sect)
@@ -272,7 +273,9 @@ void cfg_write_string(ConfigFile * cfg, gchar * section, gchar * key, gchar * va
 	if ((line = cfg_find_string(sect, key)))
 	{
 		g_free(line->value);
-		line->value = g_strescape(g_strchug(g_strchomp(g_strdup(value))),NULL);
+		tmpbuf = g_strchug(g_strchomp(g_strdup(value)));
+		line->value = g_strescape(tmpbuf,NULL);
+		g_free(tmpbuf);
 	}
 	else
 		cfg_create_string(sect, key, value);

@@ -41,7 +41,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				{
 					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(object,
-							g_strdup(keys[i]),
+							keys[i],
 							GINT_TO_POINTER(tmpi));	
 				}
 				else
@@ -53,7 +53,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 					tmpi = translate_string(tmpbuf);
 					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(object,
-							g_strdup(keys[i]),
+							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					g_free(tmpbuf);
 				}
@@ -65,7 +65,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				{
 					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
 					g_object_set_data(object,
-							g_strdup(keys[i]),
+							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					if (strstr(keys[i],"ul_complex"))
 						load_complex_params(object,cfgfile,section);
@@ -78,7 +78,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				{
 					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),TABLOADER);
 					g_object_set_data(object,
-							g_strdup(keys[i]),
+							keys[i],
 							g_strdup(tmpbuf));
 					g_free(tmpbuf);
 				}

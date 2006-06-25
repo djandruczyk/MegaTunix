@@ -42,6 +42,7 @@ EXPORT void finish_raweditor(void)
 	GtkWidget *notebook = NULL;
 	GtkWidget *top = NULL;
 	GtkWidget *entry = NULL;
+	gchar * tmpstr = NULL;
 	gint row = 0;
 	gint col = 0;
 	gint i = 0;
@@ -64,8 +65,12 @@ EXPORT void finish_raweditor(void)
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		label = gtk_label_new(g_strdup_printf("Page %i",i));
-		frame = gtk_frame_new(g_strdup_printf("Page %i RAW ECU data (in HEX)",i));
+		tmpstr=g_strdup_printf("Page %i",i);
+		label = gtk_label_new(tmpstr);
+		g_free(tmpstr);
+		tmpstr = g_strdup_printf("Page %i RAW ECU data (in HEX)",i);
+		frame = gtk_frame_new(tmpstr);
+		g_free(tmpstr);
 		gtk_notebook_append_page(GTK_NOTEBOOK(notebook),frame,label);
 
 		vbox = gtk_vbox_new(FALSE,0);
@@ -128,7 +133,9 @@ EXPORT void finish_raweditor(void)
 				gtk_widget_modify_base(entry,GTK_STATE_NORMAL,&white);
 			if (col == 0)
 			{
-				label = gtk_label_new(g_strdup_printf("0x%.4X",(row*cols)));
+				tmpstr = g_strdup_printf("0x%.4X",(row*cols));
+				label = gtk_label_new(tmpstr);
+				g_free(tmpstr);
 				gtk_table_attach(GTK_TABLE(lbl_table),label,0,1,row,row+1,
 						(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL),
 						(GtkAttachOptions) (GTK_SHRINK|GTK_EXPAND|GTK_FILL), 0, 0);

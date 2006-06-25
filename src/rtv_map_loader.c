@@ -64,7 +64,7 @@ gboolean load_realtime_map(void )
 	if (!interrogated)
 		return FALSE;
 
-	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,NULL),"rtv_map");
+	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
 	if (!filename)
 	{
 		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\t File not found!!, exiting function\n"),CRITICAL);
@@ -195,7 +195,7 @@ gboolean load_realtime_map(void )
 					{
 						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),RTMLOADER);
 						g_object_set_data(object,
-								g_strdup(keys[j]),
+								keys[j],
 								GINT_TO_POINTER(tmpi));
 					}
 					else
@@ -207,7 +207,7 @@ gboolean load_realtime_map(void )
 						tmpi = translate_string(tmpbuf);
 						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),RTMLOADER);
 						g_object_set_data(object,
-								g_strdup(keys[j]),
+								keys[j],
 								GINT_TO_POINTER(tmpi));
 						g_free(tmpbuf);
 					}
@@ -219,7 +219,7 @@ gboolean load_realtime_map(void )
 					{
 						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section),RTMLOADER);
 						g_object_set_data(object,
-								g_strdup(keys[j]),
+								keys[j],
 								GINT_TO_POINTER(tmpi));
 						if (strstr(keys[j],"complex_expr") != NULL)
 							load_complex_params(object,cfgfile,section);
@@ -232,7 +232,7 @@ gboolean load_realtime_map(void )
 					{
 						dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section),RTMLOADER);
 						g_object_set_data(object,
-								g_strdup(keys[j]),
+								keys[j],
 								g_strdup(tmpbuf));
 						if (strstr(keys[j],"internal_name") != NULL)
 							g_hash_table_insert(rtv_map->rtv_hash,g_strdup(tmpbuf),(gpointer)object);
@@ -254,6 +254,8 @@ gboolean load_realtime_map(void )
 		g_free(keytypes);
 		g_strfreev(keys);
 	}
+	cfg_free(cfgfile);
+	g_free(cfgfile);
 	dbg_func(g_strdup(__FILE__": load_realtime_map()\n\t All is well, leaving...\n\n"),RTMLOADER);
 	rtvars_loaded = TRUE;
 	return TRUE;
@@ -321,22 +323,26 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
-				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
-				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
-				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_bitshift",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name),CRITICAL);
-				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
 				name=NULL;
 				break;
 			case VE_VAR:
@@ -345,12 +351,14 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name),CRITICAL);
-				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name),CRITICAL);
-				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
 				name=NULL;
 				break;
 			case RAW_VAR:
@@ -359,7 +367,8 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
 					dbg_func(g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_VAR, failure looking for:%s\n",name),CRITICAL);
-				 g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_object_set_data(object,name,GINT_TO_POINTER(tmpi));
+				g_free(name);
 				name=NULL;
 				break;
 			default:
@@ -367,5 +376,5 @@ void load_complex_params(GObject *object, ConfigFile *cfgfile, gchar * section)
 
 		}
 	}
-	
+
 }

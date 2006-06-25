@@ -25,7 +25,7 @@ void update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
 void no_ms_connection(void);
 void warn_user(gchar *);
 void warn_input_file_not_exist(FileIoType, gchar *);
-void set_title(const gchar *);
+void set_title(gchar *);
 void conn_warning(void);
 void kill_conn_warning(void);
 

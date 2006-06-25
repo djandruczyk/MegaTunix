@@ -86,7 +86,8 @@ gint main(gint argc, gchar ** argv)
 	open_serial(serial_params->port_name);
 	setup_serial_params();	/* Setup the serial port for I/O */
 	/* Startup the serial General I/O handler.... */
-	io_thread = g_thread_create(thread_dispatcher,
+	//io_thread = g_thread_create(thread_dispatcher,
+	g_thread_create(thread_dispatcher,
 			NULL, // Thread args
 			TRUE, // Joinable
 			NULL); //GError Pointer

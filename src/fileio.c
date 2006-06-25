@@ -459,6 +459,7 @@ void backup_all_ecu_settings(gchar *filename)
 	}
 	cfg_write_file(cfgfile,filename);
 	cfg_free(cfgfile);
+	g_free(cfgfile);
 
 	if (section)
 		g_free(section);
@@ -496,9 +497,10 @@ void restore_all_ecu_settings(gchar *filename)
 			if (tmpbuf)
 				g_free(tmpbuf);
 			cfg_free(cfgfile);
+			g_free(cfgfile);
 			return;
 		}
-		set_title("Restoring ECU settings from File\n");
+		set_title(g_strdup("Restoring ECU settings from File\n"));
 		for (page=0;page<firmware->total_pages;page++)
 		{
 			writecount = 0;

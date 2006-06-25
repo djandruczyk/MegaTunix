@@ -167,7 +167,7 @@ gboolean signal_read_rtvars()
  */
 gboolean early_interrogation()
 {
-	set_title("Initiating background ECU interrogation...");
+	set_title(g_strdup("Initiating background ECU interrogation..."));
 	update_logbar("interr_view","warning",g_strdup("Initiating background ECU interrogation...\n"),FALSE,FALSE);
 	io_cmd(IO_INTERROGATE_ECU,NULL);
 	return FALSE;

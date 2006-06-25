@@ -16,6 +16,8 @@
 #include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
+#include <glib.h>
+#include <glib/gstdio.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <structures.h>
@@ -105,7 +107,7 @@ gboolean read_config(void)
 {
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
-	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	filename = g_strconcat(g_get_home_dir(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -138,6 +140,7 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
 		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
+		g_free(cfgfile);
 		g_free(filename);
 		return TRUE;
 	}
@@ -165,7 +168,7 @@ void save_config(void)
 	int x,y,tmp_width,tmp_height;
 	ConfigFile *cfgfile;
 	extern gboolean ready;
-	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	extern GHashTable *dynamic_widgets;
@@ -216,7 +219,6 @@ void save_config(void)
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
-
 	g_free(cfgfile);
 	g_free(filename);
 	g_static_mutex_unlock(&mutex);
@@ -232,26 +234,26 @@ void make_megasquirt_dirs(void)
 {
 	gchar *filename = NULL;
 
-	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
-	mkdir(filename, S_IRWXU);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix", NULL);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/Gui", NULL);
-	mkdir(filename, S_IRWXU);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Gui", NULL);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator", NULL);
-	mkdir(filename, S_IRWXU);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator", NULL);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator/Profiles", NULL);
-	mkdir(filename, S_IRWXU);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator/Profiles", NULL);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/LookupTables", NULL);
-	mkdir(filename, S_IRWXU);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/LookupTables", NULL);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/RealtimeMaps", NULL);
-	mkdir(filename, S_IRWXU);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RealtimeMaps", NULL);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/RuntimeSliders", NULL);
-	mkdir(filename, S_IRWXU);
+	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RuntimeSliders", NULL);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 
 	return;
@@ -319,7 +321,6 @@ void mem_dealloc()
 {
 	gint i = 0;
 	extern struct Firmware_Details *firmware;
-	/* Allocate memory blocks */
 
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
@@ -343,23 +344,49 @@ void mem_dealloc()
 			g_free(firmware->name);
 		if (firmware->tab_list)
 			g_strfreev(firmware->tab_list);
+		if (firmware->tab_confs)
+			g_strfreev(firmware->tab_confs);
+		if (firmware->rtv_map_file)
+			g_free(firmware->rtv_map_file);
+		if (firmware->sliders_map_file)
+			g_free(firmware->sliders_map_file);
+		if (firmware->status_map_file)
+			g_free(firmware->status_map_file);
+		if (firmware->write_cmd)
+			g_free(firmware->write_cmd);
+		if (firmware->burn_cmd)
+			g_free(firmware->burn_cmd);
+		if (firmware->page_cmd)
+			g_free(firmware->page_cmd);
 		for (i=0;i<firmware->total_pages;i++)
+		{
 			if (firmware->page_params[i])
 				g_free(firmware->page_params[i]);
+		}
+		g_free(firmware->page_params);
+		firmware->page_params = NULL;
 		for (i=0;i<firmware->total_tables;i++)
+		{
 			if (firmware->table_params[i])
-				g_free(firmware->table_params[i]);
+				dealloc_table_params(firmware->table_params[i]);
+		}
+		g_free(firmware->table_params);
+		firmware->table_params = NULL;
 		for (i=0;i<firmware->total_tables;i++)
+		{
 			if (firmware->rf_params[i])
 				g_free(firmware->rf_params[i]);
+		}
+		g_free(firmware->rf_params);
+		firmware->rf_params = NULL;
 		g_free(firmware);
+		firmware = NULL;
 		g_free(ms_data);
 		g_free(ms_data_last);
 		g_free(ms_data_backup);
 	}
 	if(widget_group_states)
 		g_hash_table_destroy(widget_group_states);
-
 }
 
 
@@ -543,6 +570,7 @@ void dealloc_qfunction(struct QFunction * qfunc)
  */
 void dealloc_table_params(struct Table_Params * table_params)
 {
+	/*
 	if(table_params->x_suffix)
 		g_free(table_params->x_suffix);
 	if(table_params->y_suffix)
@@ -557,6 +585,7 @@ void dealloc_table_params(struct Table_Params * table_params)
 		g_free(table_params->z_conv_expr);
 	if(table_params->table_name)
 		g_free(table_params->table_name);
+	*/
 	table_params->x_suffix = NULL;
 	table_params->y_suffix = NULL;
 	table_params->z_suffix = NULL;
@@ -565,7 +594,6 @@ void dealloc_table_params(struct Table_Params * table_params)
 	table_params->z_conv_expr = NULL;
 	table_params->table_name = NULL;
 
-	g_free(table_params);
 	return;
 }
 
