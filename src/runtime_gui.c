@@ -65,7 +65,6 @@ gboolean update_runtime_vars()
 	if(no_update)
 		return FALSE;
 
-	g_static_mutex_lock(&rtv_mutex);
 	count++;
 	if (conn_status != connected)
 	{
@@ -134,7 +133,6 @@ breakout:
 		count = 0;
 
 	forced_update = FALSE;
-	g_static_mutex_unlock(&rtv_mutex);
 	return TRUE;
 }
 
@@ -242,10 +240,12 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 
 	current_index = (gint)g_object_get_data(slider->object,"current_index");
 	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
+	g_static_mutex_lock(&rtv_mutex);
 	current = g_array_index(slider->history, gfloat, current_index);
 	if (current_index > 0)
 		current_index-=1;
 	previous = g_array_index(slider->history, gfloat, current_index);
+	g_static_mutex_unlock(&rtv_mutex);
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;

@@ -165,9 +165,9 @@ void io_cmd(Io_Command cmd, gpointer data)
 				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_POPULATE_DLOGGER;
 				g_array_append_val(message->funcs,tmp);
-				tmp = UPD_LOAD_RT_SLIDERS;
-				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_REENABLE_INTERROGATE_BUTTON;
+				g_array_append_val(message->funcs,tmp);
+				tmp = UPD_LOAD_RT_SLIDERS;
 				g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;

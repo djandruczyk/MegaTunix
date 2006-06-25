@@ -54,8 +54,12 @@ void load_sliders()
 
 	if (!tabs_loaded)
 		return;
-	if (!rtvars_loaded)
+	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{
+		if (ww_sliders)
+			ww_sliders = NULL;
+		if (rt_sliders)
+			rt_sliders = NULL;
 		dbg_func(g_strdup(__FILE__": load_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"),CRITICAL);
 		return;
 	}
@@ -219,6 +223,8 @@ finish_off:
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 	}
+	else
+		g_free(filename);
 }
 
 
@@ -318,7 +324,7 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
-	
+
 	gtk_table_attach (GTK_TABLE (table),pbar,
 			2,3,slider->row,(slider->row)+1,
 			(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
@@ -331,6 +337,14 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	return slider;
 }
 
+
+/*!
+ \brief register_rt_Range() creates the slider from the passed data, 
+ and attaches it the the gui. This is called during gui tab loading to embed
+ sliders into regular tabs.
+ \param widget (GtkWidget *) name of widget defined in Gui datamap file. Used
+ to load al lthe necessary attributes to stick the control in the right place.
+ */
 EXPORT void register_rt_range(GtkWidget * widget)
 {
 	GObject * object = NULL;

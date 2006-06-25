@@ -31,6 +31,7 @@
 #include <threads.h>
 
 
+extern GStaticMutex rtv_mutex;
 /*!
  \brief process_rt_vars() processes incoming realtime variables. It's a pretty
  complex function so read the sourcecode.. ;)
@@ -164,9 +165,11 @@ store_it:
 			history = (GArray *)g_object_get_data(object,"history");
 			current_index = (gint)g_object_get_data(object,"current_index");
 			/* Store data in history buffer */
+			g_static_mutex_lock(&rtv_mutex);
 			g_array_append_val(history,result);
 			current_index++;
 			g_object_set_data(object,"current_index",GINT_TO_POINTER(current_index));
+			g_static_mutex_unlock(&rtv_mutex);
 
 			//printf("Result of %s is %f\n",(gchar *)g_object_get_data(object,"internal_name"),result);
 
@@ -365,8 +368,10 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	if (!object)
 		return FALSE;
 	history = (GArray *)g_object_get_data(object,"history");
+	g_static_mutex_lock(&rtv_mutex);
 	index = (gint)g_object_get_data(object,"current_index");
 	*value = g_array_index(history,gfloat,index);
+	g_static_mutex_unlock(&rtv_mutex);
 	return TRUE;
 }
 
@@ -388,11 +393,13 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
+	g_static_mutex_lock(&rtv_mutex);
 	history = (GArray *)g_object_get_data(object,"history");
 	index = (gint)g_object_get_data(object,"current_index");
 	if (index > 0)
 		index -= 1;  /* get PREVIOUS one */
 	*value = g_array_index(history,gfloat,index);
+	g_static_mutex_unlock(&rtv_mutex);
 	return TRUE;
 }
 
@@ -426,12 +433,14 @@ void flush_rt_arrays()
 		for (j=0;j<g_list_length(list);j++)
 		{
 			object=(GObject *)g_list_nth_data(list,j);
+			g_static_mutex_lock(&rtv_mutex);
 			history = (GArray *)g_object_get_data(object,"history");
 			current_index = (gint)g_object_get_data(object,"current_index");
 			g_array_free(history,TRUE);
 			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 	                g_object_set_data(object,"history",(gpointer)history);
 			g_object_set_data(object,"current_index",GINT_TO_POINTER(-1));
+			g_static_mutex_unlock(&rtv_mutex);
 	                /* bind history array to object for future retrieval */
 		}
 
