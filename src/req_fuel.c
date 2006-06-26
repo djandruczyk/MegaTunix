@@ -370,7 +370,7 @@ gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 	check_req_fuel_limits(reqd_fuel->table_num);
 
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_Page_%i",reqd_fuel->page);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)	// If it opened nicely 
@@ -603,7 +603,7 @@ struct Reqd_Fuel * initialize_reqd_fuel(gint page)
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 
 	reqd_fuel = g_new0(struct Reqd_Fuel, 1);
 	reqd_fuel->page = page;

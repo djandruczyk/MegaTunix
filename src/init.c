@@ -16,8 +16,6 @@
 #include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <structures.h>
@@ -107,7 +105,7 @@ gboolean read_config(void)
 {
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
-	filename = g_strconcat(g_get_home_dir(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -168,7 +166,7 @@ void save_config(void)
 	int x,y,tmp_width,tmp_height;
 	ConfigFile *cfgfile;
 	extern gboolean ready;
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/config", NULL);
+	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	extern GHashTable *dynamic_widgets;
@@ -234,26 +232,26 @@ void make_megasquirt_dirs(void)
 {
 	gchar *filename = NULL;
 
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix", NULL);
-	g_mkdir(filename, S_IRWXU);
+	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Gui", NULL);
-	g_mkdir(filename, S_IRWXU);
+	filename = g_strconcat(HOME(), "/.MegaTunix/Gui", NULL);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator", NULL);
-	g_mkdir(filename, S_IRWXU);
+	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator", NULL);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/Interrogator/Profiles", NULL);
-	g_mkdir(filename, S_IRWXU);
+	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator/Profiles", NULL);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/LookupTables", NULL);
-	g_mkdir(filename, S_IRWXU);
+	filename = g_strconcat(HOME(), "/.MegaTunix/LookupTables", NULL);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RealtimeMaps", NULL);
-	g_mkdir(filename, S_IRWXU);
+	filename = g_strconcat(HOME(), "/.MegaTunix/RealtimeMaps", NULL);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(g_get_home_dir(), "/.MegaTunix/RuntimeSliders", NULL);
-	g_mkdir(filename, S_IRWXU);
+	filename = g_strconcat(HOME(), "/.MegaTunix/RuntimeSliders", NULL);
+	mkdir(filename, S_IRWXU);
 	g_free(filename);
 
 	return;
