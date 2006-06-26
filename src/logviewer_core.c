@@ -109,6 +109,10 @@ void read_log_header(GIOChannel *iochannel, struct Log_Info *log_info )
 			array = NULL;
 			object = NULL;
 			object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+			// ATTEMPTED FIX FOR GLIB 2.10
+			g_object_ref(object);
+			gtk_object_sink(GTK_OBJECT(object));
+			// ATTEMPTED FIX FOR GLIB 2.10
 			array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 			g_object_set_data(G_OBJECT(object),"data_array",(gpointer)array);
 			g_object_set_data(G_OBJECT(object),"lview_name",g_strdup(g_strstrip(fields[i])));

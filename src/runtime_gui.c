@@ -235,16 +235,19 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
 	gfloat percentage = 0.0;
+	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
 	gboolean is_float = FALSE;
 
+	history = (GArray *)g_object_get_data(slider->object,"history");
 	current_index = (gint)g_object_get_data(slider->object,"current_index");
 	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
 	g_static_mutex_lock(&rtv_mutex);
-	current = g_array_index(slider->history, gfloat, current_index);
+//	printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);
+	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
 		current_index-=1;
-	previous = g_array_index(slider->history, gfloat, current_index);
+	previous = g_array_index(history, gfloat, current_index);
 	g_static_mutex_unlock(&rtv_mutex);
 
 	upper = (gfloat)slider->upper;

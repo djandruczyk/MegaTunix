@@ -174,8 +174,11 @@ gboolean load_realtime_map(void )
 		}
 		/* Create object to hold all the data. (dynamically)*/
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		/* Create history array, last 50 values */
-		//history = (gfloat *)g_malloc0(50*sizeof(gfloat));
+		// ATTEMPTED FIX FOR GLIB 2.10
+		g_object_ref(object);
+		gtk_object_sink(GTK_OBJECT(object));
+		// ATTEMPTED FIX FOR GLIB 2.10
+		// /* History Array */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		g_object_set_data(object,"current_index",GINT_TO_POINTER(-1));
 		/* bind hostory array to object for future retrieval */

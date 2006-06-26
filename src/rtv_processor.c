@@ -167,6 +167,7 @@ store_it:
 			/* Store data in history buffer */
 			g_static_mutex_lock(&rtv_mutex);
 			g_array_append_val(history,result);
+			//printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,current_index,result,g_array_index(history, gfloat, current_index+1),g_array_index(history, gfloat, current_index));
 			current_index++;
 			g_object_set_data(object,"current_index",GINT_TO_POINTER(current_index));
 			g_static_mutex_unlock(&rtv_mutex);

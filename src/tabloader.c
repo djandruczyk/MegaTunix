@@ -250,6 +250,10 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 			group->page = tmpi;
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		// ATTEMPTED FIX FOR GLIB 2.10
+		g_object_ref(group->object);
+		gtk_object_sink(GTK_OBJECT(group->object));
+		// ATTEMPTED FIX FOR GLIB 2.10
 
 		bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
 		/* Store it in the hashtable... */

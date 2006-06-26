@@ -134,6 +134,10 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	/* Bind pointer to veview to an object for retrieval elsewhere */
 	object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	// ATTEMPTED FIX FOR GLIB 2.10
+	g_object_ref(object);
+	gtk_object_sink(GTK_OBJECT(object));
+	// ATTEMPTED FIX FOR GLIB 2.10
 	g_object_set_data(G_OBJECT(object),"ve_view",(gpointer)ve_view);
 
 	register_widget(g_strdup_printf("ve_view_%i",table_num),
