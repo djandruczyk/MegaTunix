@@ -363,6 +363,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint num_keytypes = 0;
 	gint offset = 0;
 	gint page = 0;
+	GdkColor color;
 	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
 
@@ -412,6 +413,20 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
 	{
 		bind_to_lists(widget,tmpbuf);
+		g_free(tmpbuf);
+	}
+
+	/* Color selections */
+	if (cfg_read_string(cfgfile,section,"active_fg",&tmpbuf))
+	{
+		gdk_color_parse(tmpbuf,&color);
+		gtk_widget_modify_fg(widget,GTK_STATE_NORMAL,&color);
+		g_free(tmpbuf);
+	}
+	if (cfg_read_string(cfgfile,section,"inactive_fg",&tmpbuf))
+	{
+		gdk_color_parse(tmpbuf,&color);
+		gtk_widget_modify_fg(widget,GTK_STATE_INSENSITIVE,&color);
 		g_free(tmpbuf);
 	}
 
