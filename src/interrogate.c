@@ -401,13 +401,15 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 
 
 freeup:
-	close_profile(potential);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
 	if (canidate->quest_str)
 		g_free(canidate->quest_str);
 	if (match)
+	{
+		close_profile(potential);
 		return TRUE;
+	}
 	else
 		return FALSE;
 
