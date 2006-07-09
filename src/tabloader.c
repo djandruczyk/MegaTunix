@@ -366,6 +366,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	GdkColor color;
 	extern GtkTooltips *tip;
 	extern GList ***ve_widgets;
+	extern struct Firmware_Details *firmware;
 
 
 	if (GTK_IS_CONTAINER(widget))
@@ -471,9 +472,23 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		 * offset, thus we can have multiple on screen controls bound
 		 * to single data offset in the ECU
 		 */
-		ve_widgets[page][offset] = g_list_append(
-				ve_widgets[page][offset],
-				(gpointer)widget);
+		if (page < firmware->total_pages)
+		{
+			if (offset > firmware->page_params[page]->length)
+			{
+				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  ther eis a bug with this datamap widgt %s, at offset %i...\n\n",section,offset),CRITICAL);
+				sleep(5);
+				exit (-1);
+			}
+			else
+				ve_widgets[page][offset] = g_list_append(
+						ve_widgets[page][offset],
+						(gpointer)widget);
+		}
+		else
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset),CRITICAL);
+
+
 	}
 	/* If there is a "group" key in a section it means that it gets the
 	 * rest of it's setting from the groupname listed.  This reduces

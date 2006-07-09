@@ -274,23 +274,15 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint tmp = 0;
 	gint tmp32 = 0;
 	gint offset = -1;
-	gint i = 0;
 	gboolean ign_parm = FALSE;
 	gint dl_type = -1;
 	gint handler = 0;
 	gint table_num = -1;
-	gint num_groups = -1;
-	gchar ** groups = NULL;
-	gchar * toggle_groups = NULL;
-	gchar * group_states = NULL;
 	gchar * swap_labels = NULL;
-	gboolean state = FALSE;
-	gboolean tmp_state = FALSE;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
-	extern GHashTable *widget_group_states;
 	extern struct Firmware_Details *firmware;
 
 	if ((paused_handlers) || (!ready))
@@ -307,8 +299,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
-	toggle_groups = (gchar *)g_object_get_data(G_OBJECT(widget),"toggle_groups");
-	group_states = (gchar *)g_object_get_data(G_OBJECT(widget),"group_states");
 	swap_labels = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_labels");
 
 	// If it's a check button then it's state is dependant on the button's state
@@ -371,20 +361,6 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 	}
 
-	/* Toggles a group ON/OFF based on a widgets state.... */
-	if (toggle_groups)
-	{
-		i = 0;
-		groups = parse_keys(toggle_groups,&num_groups,",");
-		for (i=0;i<num_groups;i++)
-		{
-			tmp_state = get_state(group_states,i);
-			state = tmp_state == TRUE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-			g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
-			g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
-		}
-		g_strfreev(groups);
-	}
 	/* Swaps the label of another control based on widget state... */
 	if (swap_labels)
 		switch_labels(swap_labels,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
@@ -1130,7 +1106,9 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar ** groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * group_states = NULL;
+	gboolean cur_state = FALSE;
 	gboolean tmp_state = FALSE;
+	gboolean new_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_labels = NULL;
 	gchar * tmpbuf = NULL;
@@ -1238,11 +1216,45 @@ void update_widget(gpointer object, gpointer user_data)
 		/* If value masked by bitmask, shifted right by bitshift = bitval
 		 * then set button state to on...
 		 */
+		cur_state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		tmpi = (gint)value;
+		/* Avoid unnecessary widget setting and signal propogation 
+		 * First if.  If current bit is SET but button is NOT, set it
+		 * Second if, If currrent bit is NOT set but button IS  then
+		 * un-set it.
+		 */
+		/*
+		if ((((tmpi & bitmask) >> bitshift) == bitval) && (!cur_state))
+			new_state = TRUE;
+		else if ((((tmpi & bitmask) >> bitshift) != bitval) && (cur_state))
+			new_state = FALSE;
+			*/
 		if (((tmpi & bitmask) >> bitshift) == bitval)
-			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
-		else
-			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),FALSE);
+			new_state = TRUE;
+		else if (((tmpi & bitmask) >> bitshift) != bitval)
+			new_state = FALSE;
+
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),new_state);
+		if (toggle_groups)
+		{
+			groups = parse_keys(toggle_groups,&num_groups,",");
+			//printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);
+
+			for (i=0;i<num_groups;i++)
+			{
+				//printf("UW: This widget has %i groups, checking state of (%s)\n", num_groups, groups[i]);
+				tmp_state = get_state(group_states,i);
+				//printf("If this ctrl is active we want state to be %i\n",tmp_state);
+				state = tmp_state == TRUE ? new_state:!new_state;
+				//printf("Current state of button is %i\n",new_state),
+				//printf("new group state is %i\n",state);
+				g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
+				//printf("setting all widgets in that group to state %i\n\n",state);
+				g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
+			}
+			//printf ("DONE!\n\n\n");
+			g_strfreev(groups);
+		}
 	}
 	else if (GTK_IS_SCROLLED_WINDOW(widget))
 	{
@@ -1254,19 +1266,6 @@ void update_widget(gpointer object, gpointer user_data)
 		 * window's child widget)
 		 */
 		update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
-	}
-	if (toggle_groups)
-	{
-		groups = parse_keys(toggle_groups,&num_groups,",");
-
-		for (i=0;i<num_groups;i++)
-		{
-			tmp_state = get_state(group_states,i);
-			state = tmp_state == TRUE ? gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)):!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-			g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
-			g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
-		}
-		g_strfreev(groups);
 	}
 	/* Swaps the label of another control based on widget state... */
 	if (swap_labels)

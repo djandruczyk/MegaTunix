@@ -51,9 +51,11 @@ gui_files = 	README \
 		msns-e-boost_idle.datamap \
 		msns-e-features.glade \
 		msns-e-features.datamap \
+		msns-e-features-029x.datamap \
 		msns-e-fuelconstants.glade \
 		msns-e-fuelconstants.datamap \
 		msns-e-fuelconstants-021x.datamap \
+		msns-e-fuelconstants-029x.datamap \
 		msns-e-water_nos.glade \
 		msns-e-water_nos.datamap \
 		projection.glade \
