@@ -111,3 +111,5 @@ gui_files = 	README \
 gui_DATA = $(gui_files)
 
 EXTRA_DIST = $(gui_DATA)
+
+CLEANFILES = *.gladep
