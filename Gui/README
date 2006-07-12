@@ -83,6 +83,10 @@ keys themselves are not, as the string compare functions are case insensitive.
 			another widget is at a specific state (see depend_on)
 	alt_f_label	(string)  Celsius label for temp dependant widget when
 			another widget is at a specific state (see depend_on)
+	is_float	(boolean) Does this display in Floating point?
+	precision	(integer) number of decimal places to show
+	reverse_keys	(boolean) Reverses the action of the +/- PgDn/PgUp 
+			logic, for controls that use weird conversions.
 	depend_on	(string) Name used to prepend the following vars (*)
 	*_type		(enum) Types of vars to depend on
 	*_page		(integer) Page in ve_vars

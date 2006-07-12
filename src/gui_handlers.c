@@ -1290,8 +1290,9 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint lower = 0;
 	gint upper = 0;
 	gint dload_val = 0;
-	gboolean ign_parm = 0;
+	gboolean ign_parm = FALSE;
 	gboolean retval = FALSE;
+	gboolean reverse_keys = FALSE;
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
@@ -1300,6 +1301,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	ign_parm = (gboolean) g_object_get_data(G_OBJECT(widget),"ign_parm");
+	reverse_keys = (gboolean) g_object_get_data(G_OBJECT(widget),"reverse_keys");
 
 	value = ms_data[page][offset];
 	if (event->keyval == GDK_Shift_L)
@@ -1317,12 +1319,22 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	switch (event->keyval)
 	{
 		case GDK_Page_Up:
-			if (value < (upper-10))
+			if (reverse_keys)
+			{
+				if (value > (lower+10))
+					dload_val = ms_data[page][offset] - 10;
+			}
+			else if (value < (upper-10))
 				dload_val = ms_data[page][offset] + 10;
 			retval = TRUE;
 			break;
 		case GDK_Page_Down:
-			if (value > (lower+10))
+			if (reverse_keys)
+			{
+				if (value < (upper-10))
+					dload_val = ms_data[page][offset] + 10;
+			}
+			else if (value > (lower+10))
 				dload_val = ms_data[page][offset] - 10;
 			retval = TRUE;
 			break;
@@ -1330,13 +1342,23 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_KP_Add:
 		case GDK_KP_Equal:
 		case GDK_equal:
-			if (value < (upper-1))
+			if (reverse_keys)
+			{
+				if (value > (lower+1))
+					dload_val = ms_data[page][offset] - 1;
+			}
+			else if (value < (upper-1))
 				dload_val = ms_data[page][offset] + 1;
 			retval = TRUE;
 			break;
 		case GDK_minus:
 		case GDK_KP_Subtract:
-			if (value > (lower+1))
+			if (reverse_keys)
+			{
+				if (value < (upper-1))
+					dload_val = ms_data[page][offset] + 1;
+			}
+			else if (value > (lower+1))
 				dload_val = ms_data[page][offset] - 1;
 			retval = TRUE;
 			break;

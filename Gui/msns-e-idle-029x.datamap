@@ -236,20 +236,22 @@ handler=_GENERIC_
 tooltip=This is the DutyCycle the PWM Idle valve will be run at at the High (hot) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
 [idle_frequency_entry]
-keys=page,offset,base,raw_lower,raw_upper,is_float,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,base,raw_lower,raw_upper,precision,reverse_keys,is_float,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_BOOL_,_BOOL_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=11
 base=10
 raw_lower=0
 raw_upper=255
+precision=1
 is_float=TRUE
+reverse_keys=TRUE
 dl_conv_expr=10000/x
 ul_conv_expr=10000/x
 bind_to_list=pwm_idle_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=This is the frequency in hertz that the ECU willdrive the PWM idle valve. Range of 39hz to 10khz. Control will jump to nearest point.
+tooltip=This is the frequency in hertz that the ECU will drive the PWM idle valve. Range of 39hz to 10khz. PgUp/PgDown/+/- can be used to navigate.  Control will jump to nearest point.
 
 [idle_crankdc_spin]
 keys=page,offset,bind_to_list,dl_type,handler,tooltip
