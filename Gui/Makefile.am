@@ -62,6 +62,7 @@ gui_files = 	README \
 		msns-e-idle-029x.datamap \
 		msns-e-water_nos.glade \
 		msns-e-water_nos.datamap \
+		msns-e-water_nos-029x.datamap \
 		projection.glade \
 		projection.datamap \
 		raweditor.glade \
@@ -116,4 +117,4 @@ gui_DATA = $(gui_files)
 
 EXTRA_DIST = $(gui_DATA)
 
-CLEANFILES = *.gladep
+CLEANFILES = *.gladep *.bak
