@@ -235,11 +235,15 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the DutyCycle the PWM Idle valve will be run at at the High (hot) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
-[idle_frequency_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[idle_frequency_entry]
+keys=page,offset,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=11
+base=10
+raw_lower=39
+raw_upper=10000
+is_float=TRUE
 dl_conv_expr=10000/x
 ul_conv_expr=10000/x
 bind_to_list=pwm_idle_controls
@@ -362,10 +366,12 @@ handler=_GENERIC_
 tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time.  This doesn't make much sense,  but james's docs suck.
 
 [closure_speed_spin]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=10
+dl_conv_expr=x*100
+ul_conv_expr=x/100
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

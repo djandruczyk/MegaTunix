@@ -860,21 +860,22 @@
 			      <property name="right_padding">0</property>
 
 			      <child>
-				<widget class="GtkSpinButton" id="idle_frequency_spin">
-				  <property name="width_request">70</property>
+				<widget class="GtkEntry" id="idle_frequency_entry">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">39.216999054 39.216999054 1000 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+				  <property name="editable">True</property>
+				  <property name="visibility">True</property>
+				  <property name="max_length">6</property>
+				  <property name="text" translatable="yes"></property>
+				  <property name="has_frame">True</property>
+				  <property name="invisible_char">*</property>
+				  <property name="activates_default">False</property>
+				  <property name="width_chars">6</property>
+				  <signal name="activate" handler="std_entry_handler" last_modification_time="Wed, 12 Jul 2006 01:54:14 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Wed, 12 Jul 2006 01:54:32 GMT"/>
+				  <signal name="button_press_event" handler="widget_grab" last_modification_time="Wed, 12 Jul 2006 01:54:47 GMT"/>
+				  <signal name="key_press_event" handler="key_event" last_modification_time="Wed, 12 Jul 2006 01:55:01 GMT"/>
+				  <signal name="key_release_event" handler="key_event" last_modification_time="Wed, 12 Jul 2006 01:55:09 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -884,8 +885,7 @@
 			      <property name="top_attach">0</property>
 			      <property name="bottom_attach">1</property>
 			      <property name="x_padding">5</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options"></property>
+			      <property name="y_options">shrink</property>
 			    </packing>
 			  </child>
 			</widget>
@@ -976,11 +976,11 @@
 			    <widget class="GtkSpinButton" id="idle_restore_rpm_spin">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
+			      <property name="climb_rate">10</property>
 			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 2550 10 100 100</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
@@ -1130,13 +1130,13 @@
 			    <widget class="GtkSpinButton" id="deadband_range_spin">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
+			      <property name="climb_rate">10</property>
 			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 0 2550 1 100 100</property>
+			      <property name="adjustment">0 0 2550 10 100 100</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
 			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
 			      <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
@@ -1470,11 +1470,11 @@
 			      <property name="width_request">54</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
+			      <property name="climb_rate">10</property>
 			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 2550 10 100 100</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
@@ -1498,11 +1498,11 @@
 			      <property name="width_request">54</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
+			      <property name="climb_rate">10</property>
 			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 2550 10 100 100</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
@@ -1576,11 +1576,11 @@
 			      <property name="width_request">54</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
+			      <property name="climb_rate">10</property>
 			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 2550 10 100 100</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
@@ -1604,11 +1604,11 @@
 			      <property name="width_request">54</property>
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
+			      <property name="climb_rate">10</property>
 			      <property name="digits">0</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
 			      <property name="adjustment">0 0 2550 10 100 100</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
