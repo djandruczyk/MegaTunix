@@ -49,6 +49,8 @@ gui_files = 	README \
 		msns-3.0_ignition.datamap \
 		msns-e-boost_idle.glade \
 		msns-e-boost_idle.datamap \
+		msns-e-boost-knock.glade \
+		msns-e-boost-knock-029x.datamap \
 		msns-e-features.glade \
 		msns-e-features.datamap \
 		msns-e-features-029x.datamap \
