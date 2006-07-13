@@ -92,6 +92,18 @@ tooltip=Variable Launch control uses an external input for the user to set the h
 
 #----- Labels ----------------------------------------------------------------
 
+[nitrous_frame_title]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=nos_features
+
+[water_inj_frame_title]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=water_features
+
 [nos_spark_retard_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_

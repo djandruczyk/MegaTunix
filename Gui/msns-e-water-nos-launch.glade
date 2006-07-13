@@ -160,6 +160,7 @@
 			  <child>
 			    <widget class="GtkTable" id="water_inj_params_table">
 			      <property name="visible">True</property>
+			      <property name="sensitive">False</property>
 			      <property name="n_rows">3</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
@@ -334,6 +335,7 @@
 		      <child>
 			<widget class="GtkLabel" id="water_inj_frame_title">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">Water Injection</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -482,6 +484,7 @@
 			  <child>
 			    <widget class="GtkTable" id="launch_params_table">
 			      <property name="visible">True</property>
+			      <property name="sensitive">False</property>
 			      <property name="n_rows">11</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
@@ -1210,7 +1213,8 @@
 			  <child>
 			    <widget class="GtkTable" id="nos_params_table">
 			      <property name="visible">True</property>
-			      <property name="n_rows">12</property>
+			      <property name="sensitive">False</property>
+			      <property name="n_rows">13</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">0</property>
@@ -1639,8 +1643,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">11</property>
-				  <property name="bottom_attach">12</property>
+				  <property name="top_attach">12</property>
+				  <property name="bottom_attach">13</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
 				</packing>
@@ -1715,8 +1719,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">9</property>
-				  <property name="bottom_attach">10</property>
+				  <property name="top_attach">10</property>
+				  <property name="bottom_attach">11</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
@@ -1742,8 +1746,8 @@
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">9</property>
-				  <property name="bottom_attach">10</property>
+				  <property name="top_attach">10</property>
+				  <property name="bottom_attach">11</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">shrink|fill</property>
 				  <property name="y_options">shrink</property>
@@ -1769,8 +1773,8 @@
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">10</property>
-				  <property name="bottom_attach">11</property>
+				  <property name="top_attach">11</property>
+				  <property name="bottom_attach">12</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">shrink|fill</property>
 				  <property name="y_options">shrink</property>
@@ -1794,11 +1798,24 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">10</property>
-				  <property name="bottom_attach">11</property>
+				  <property name="top_attach">11</property>
+				  <property name="bottom_attach">12</property>
 				  <property name="x_padding">5</property>
 				  <property name="x_options">expand|shrink|fill</property>
 				  <property name="y_options">expand|shrink|fill</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHSeparator" id="hseparator30">
+				  <property name="visible">True</property>
+				</widget>
+				<packing>
+				  <property name="left_attach">0</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">9</property>
+				  <property name="bottom_attach">10</property>
+				  <property name="x_options">fill</property>
 				</packing>
 			      </child>
 			    </widget>
@@ -1812,6 +1829,7 @@
 			  <child>
 			    <widget class="GtkTable" id="nos_antilag_feature_table">
 			      <property name="visible">True</property>
+			      <property name="sensitive">False</property>
 			      <property name="n_rows">4</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
@@ -2042,6 +2060,7 @@ NOS Antilag</property>
 		      <child>
 			<widget class="GtkLabel" id="nitrous_frame_title">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="label" translatable="yes">Nitrous Oxide System</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
