@@ -157,6 +157,7 @@
 			  <child>
 			    <widget class="GtkTable" id="boost_buttons_table">
 			      <property name="visible">True</property>
+			      <property name="sensitive">False</property>
 			      <property name="n_rows">8</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
@@ -557,6 +558,7 @@
 			  <child>
 			    <widget class="GtkTable" id="boost_spinners_table">
 			      <property name="visible">True</property>
+			      <property name="sensitive">False</property>
 			      <property name="n_rows">10</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
@@ -1139,7 +1141,7 @@ to begin boost reduction</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">boost_enabled_radio_button</property>
+				  <property name="group">knock_enabled_radio_button</property>
 				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
 				</widget>
 				<packing>
@@ -1161,6 +1163,7 @@ to begin boost reduction</property>
 			  <child>
 			    <widget class="GtkTable" id="knock_params_table">
 			      <property name="visible">True</property>
+			      <property name="sensitive">False</property>
 			      <property name="n_rows">16</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>

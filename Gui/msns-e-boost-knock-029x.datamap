@@ -36,7 +36,55 @@ key_types=_INT_,_STRING_
 page=0
 bind_to_list=boost_controls
 
+[knock_params_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls
+
 #----- Labels ----------------------------------------------------------------
+
+[knock_boost_params_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls,boost_controls
+
+[first_knock_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls,spark_controls
+
+[subsequent_knock_retard_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls,spark_controls
+
+[knock_max_retard_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls,spark_controls
+
+[advance_when_no_knock_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls,spark_controls
+
+[knock_wait_time_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls,spark_controls
+
+[knock_ignition_retard_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controls,spark_controls
 
 [bc_to_remove_when_knocking_label]
 keys=page,bind_to_list
@@ -106,7 +154,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The knock controller feature will attempt to alter ignition timing and/or boost in order to limit detonation.
 
-[boost_disabled_radio_button]
+[knock_disabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
@@ -417,7 +465,7 @@ page=0
 offset=56
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
-bind_to_list=knock_controls
+bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When knock is first detected, retard timnig by this many degrees.
@@ -429,7 +477,7 @@ page=0
 offset=57
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
-bind_to_list=knock_controls
+bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When knock is sustained, retard timing by this many degrees for each knock input.
@@ -441,7 +489,7 @@ page=0
 offset=59
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
-bind_to_list=knock_controls
+bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The maximum amount of timing to pull out when knocking is detected.
@@ -453,7 +501,7 @@ page=0
 offset=58
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
-bind_to_list=knock_controls
+bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Amount of timing to try and put back in when knocking has ceased.  The controller will wait a small interval between trying to re-add timing back in. Having this set to high can lead to oscillation, too low can cause timing to be pulled out and take a LONG time for it to return to normal.
@@ -463,7 +511,7 @@ keys=page,offset,bind_to_list,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=60
-bind_to_list=knock_controls
+bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This wait time ties to the above control.  After knocking has ceased thecontrol will attempt to advance timing backby the amount above in steps separated by this time interval in seconds.
