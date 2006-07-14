@@ -51,6 +51,8 @@ gui_files = 	README \
 		msns-e-boost_idle.datamap \
 		msns-e-boost-knock.glade \
 		msns-e-boost-knock-029x.datamap \
+		msns-e-ego.glade \
+		msns-e-ego-029x.datamap \
 		msns-e-features.glade \
 		msns-e-features.datamap \
 		msns-e-features-029x.datamap \
