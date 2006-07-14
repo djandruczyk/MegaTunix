@@ -11,6 +11,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkFrame" id="topframe">
@@ -131,7 +136,8 @@
 			  <property name="label" translatable="yes">Multi-Port</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:34 GMT"/>
@@ -152,7 +158,8 @@
 			  <property name="label" translatable="yes">Speed Density</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:15 GMT"/>
@@ -173,6 +180,7 @@
 			  <property name="label" translatable="yes">Alpha-N</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -195,6 +203,7 @@
 			  <property name="label" translatable="yes">TBI</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -217,7 +226,8 @@
 			  <property name="label" translatable="yes">Alternating</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 27 Feb 2005 21:31:11 GMT"/>
@@ -238,6 +248,7 @@
 			  <property name="label" translatable="yes">Simultaneous</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -322,7 +333,8 @@
 			  <property name="label" translatable="yes">Narrow Band</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:16:49 GMT"/>
@@ -343,6 +355,7 @@
 			  <property name="label" translatable="yes">Wide Band</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -485,7 +498,8 @@
 			  <property name="label" translatable="yes">Speed Density</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:22 GMT"/>
@@ -506,7 +520,8 @@
 			  <property name="label" translatable="yes">Enabled</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:37 GMT"/>
@@ -527,6 +542,7 @@
 			  <property name="label" translatable="yes">Alpha-N</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -549,6 +565,7 @@
 			  <property name="label" translatable="yes">Disabled</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -585,7 +602,8 @@
 			  <property name="label" translatable="yes">Narrow Band</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:16:49 GMT"/>
@@ -654,7 +672,8 @@
 			  <property name="label" translatable="yes">Four Stroke</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">True</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:51 GMT"/>
@@ -675,6 +694,7 @@
 			  <property name="label" translatable="yes">Two Stroke</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -698,6 +718,7 @@
 			  <property name="label" translatable="yes">Wide Band</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -744,7 +765,7 @@
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
+	      <property name="expand">False</property>
 	      <property name="fill">True</property>
 	    </packing>
 	  </child>
@@ -1035,6 +1056,7 @@
 			      <property name="label" translatable="yes">Calculate Required Fuel</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 27 Sep 2004 00:19:50 GMT"/>
 			    </widget>
 			    <packing>
@@ -1071,7 +1093,7 @@
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -1642,6 +1664,7 @@ Threshold (ms.)</property>
 			      <property name="label" translatable="yes">Calculate Required Fuel</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 27 Sep 2004 00:19:58 GMT"/>
 			    </widget>
 			    <packing>
@@ -1678,7 +1701,7 @@ Threshold (ms.)</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
-		      <property name="expand">True</property>
+		      <property name="expand">False</property>
 		      <property name="fill">True</property>
 		    </packing>
 		  </child>
@@ -2000,6 +2023,7 @@ Threshold (ms.)</property>
 		      <property name="label" translatable="yes">Permanently Store Data in ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
 		    </widget>
 		    <packing>
@@ -2019,6 +2043,7 @@ Threshold (ms.)</property>
 		      <property name="label" translatable="yes">Get Data from ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:47:47 GMT"/>
 		    </widget>
 		    <packing>

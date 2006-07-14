@@ -433,32 +433,6 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
 
-[pwm_idle_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=1
-bitshift=3
-bitmask=8
-toggle_groups=pwm_idle
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires the addition of a power transistor to the ECU board to handle this actuator.  See http://megasquirt.sf.net/extra for more information.
-
-[bng_idle_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=12
-bitval=0
-bitshift=3
-bitmask=8
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=The BnG (Bowling and Grippo) idle mode is the simpler On/Off mode, eihter it's on and you have a high idle or it's off and idle is controlled by the throttle stop.  It's a very simple setup, but works for many vehicles.
-
 [water_inj_enabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
@@ -512,32 +486,6 @@ bitmask=64
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Knock detection will require an additional circuit to feed in a signal to the ECU when knock is occurring,  the ECU will retard the spark advance as needed to alleviate the knocking. Thsi feature is ONLY enabled when using a spark personality.
-
-[target_afr_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=1
-bitshift=7
-bitmask=128
-toggle_groups=afrtables
-group_states=ENABLED
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Target AFR makes use of the AFR Tables to automatically keep the mixture set to the points as defined by the table.  This allows complete mixture control across the entire powerband.
-
-[target_afr_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
-page=0
-offset=46
-bitval=0
-bitshift=7
-bitmask=128
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
-tooltip=Target AFR makes use of the AFR Tables to automatically keep the mixture set to the points as defined by the table.  This allows complete mixture control across the entire powerband.
 
 [traction_ctrl_enabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip

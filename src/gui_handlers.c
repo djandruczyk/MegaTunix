@@ -420,6 +420,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gboolean ign_parm = FALSE;
 	extern gint **ms_data;
 
+	printf("Std_entry_handler\n");
 
 	if ((paused_handlers) || (!ready))
 	{
@@ -942,7 +943,13 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 	}
 	if (dl_type == IMMEDIATE) 
-		write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
+	{
+		/* If data has NOT changed,  don't bother updating 
+		 * and wasting time.
+		 */
+		if (dload_val != ms_data[page][offset])
+			write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
+	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	return TRUE;
 
@@ -1288,7 +1295,7 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gint offset = 0;
 	gint value = 0;
 	gint lower = 0;
-	gint upper = 0;
+	gint upper = 255;
 	gint dload_val = 0;
 	gboolean ign_parm = FALSE;
 	gboolean retval = FALSE;
@@ -1296,8 +1303,10 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
-	lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
-	upper = (gint) g_object_get_data(G_OBJECT(widget),"raw_upper");
+	if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
+		lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
+	if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)
+		upper = (gint) g_object_get_data(G_OBJECT(widget),"raw_upper");
 	page = (gint) g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint) g_object_get_data(G_OBJECT(widget),"offset");
 	ign_parm = (gboolean) g_object_get_data(G_OBJECT(widget),"ign_parm");
@@ -1323,9 +1332,16 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			{
 				if (value > (lower+10))
 					dload_val = ms_data[page][offset] - 10;
+				else
+					return FALSE;
 			}
-			else if (value < (upper-10))
-				dload_val = ms_data[page][offset] + 10;
+			else 
+			{
+				if (value < (upper-10))
+					dload_val = ms_data[page][offset] + 10;
+				else
+					return FALSE;
+			}
 			retval = TRUE;
 			break;
 		case GDK_Page_Down:
@@ -1333,22 +1349,34 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			{
 				if (value < (upper-10))
 					dload_val = ms_data[page][offset] + 10;
+				else
+					return FALSE;
 			}
-			else if (value > (lower+10))
-				dload_val = ms_data[page][offset] - 10;
+			else 
+			{
+				if (value > (lower+10))
+					dload_val = ms_data[page][offset] - 10;
+				else
+					return FALSE;
+			}
 			retval = TRUE;
 			break;
 		case GDK_plus:
 		case GDK_KP_Add:
-		case GDK_KP_Equal:
-		case GDK_equal:
 			if (reverse_keys)
 			{
 				if (value > (lower+1))
 					dload_val = ms_data[page][offset] - 1;
+				else
+					return FALSE;
 			}
-			else if (value < (upper-1))
-				dload_val = ms_data[page][offset] + 1;
+			else 
+			{
+				if (value < (upper-1))
+					dload_val = (ms_data[page][offset]) + 1;
+				else
+					return FALSE;
+			}
 			retval = TRUE;
 			break;
 		case GDK_minus:
@@ -1357,9 +1385,16 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			{
 				if (value < (upper-1))
 					dload_val = ms_data[page][offset] + 1;
+				else
+					return FALSE;
 			}
-			else if (value > (lower+1))
-				dload_val = ms_data[page][offset] - 1;
+			else 
+			{
+				if (value > (lower+1))
+					dload_val = ms_data[page][offset] - 1;
+				else
+					return FALSE;
+			}
 			retval = TRUE;
 			break;
 		case GDK_Escape:
