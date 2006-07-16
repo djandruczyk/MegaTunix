@@ -1,8 +1,10 @@
 
+MSnS-Extra-029q2 data info
+
 Control groups:
 
 ----------------------------------------------------------------------------
-IDLE CONTROL
+IDLE CONTROL  100% DONE
 ----------------------------------------------------------------------------
 
 Params: start on msns-extra-ini page9 (not necessary firmware page 9)
@@ -37,7 +39,7 @@ FASTIDLEbg	186 BG_IDLE TEMP_DEP, val -40, -40-215 range
 
 
 ----------------------------------------------------------------------------
-BOOST CONTROL
+BOOST CONTROL  100% DONE
 ----------------------------------------------------------------------------
 
 freqDiv		014 BOOST, bitfield 3 bits 0-2, INVAL, 39, 19.5, 13, 9.8, 7.8, 6.5, 5.6 
@@ -55,7 +57,7 @@ KnockBoost	107 BOOST, knock_ctrl, PSI, x0.147,  0-20 ctrl range
 BoostMaxKn	108 BOOST, knock_ctrl, PSI, x0.147,  0-20 ctrl range
 
 ----------------------------------------------------------------------------
-KNOCK CONTROL
+KNOCK CONTROL  100% DONE
 ----------------------------------------------------------------------------
 
 KnockOn		046 KNOCK, bitfield [6:6] "Off, "On"
@@ -71,7 +73,7 @@ KnockBoost	107 BOOST, KNOCK, PSI, x0.147,  0-20 ctrl range
 BoostMaxKn	108 BOOST, KNOCK, PSI, x0.147,  0-20 ctrl range
 
 ----------------------------------------------------------------------------
-WATER INJECTION
+WATER INJECTION  100% DONE
 ----------------------------------------------------------------------------
 
 WaterInj	046 WATER_INJ, bitfield [3:3] "Off" "On"	
@@ -80,7 +82,7 @@ WaterIRpm	063 WATER_INJ, "RPM", x100 conv 0-12000 span
 WaterIIat	061 WATER_INJ, temp_dep, -10 120 range
 
 ----------------------------------------------------------------------------
-LAUNCH CONTROL
+LAUNCH CONTROL  100% DONE
 ----------------------------------------------------------------------------
 
 launchUse	012 LAUNCH, bitfield [2:2] "Off", "On"
@@ -95,7 +97,7 @@ LC_f_limangle	141 LAUNCH, "Deg" x0.352 - 28.4 -10<->45 deg range
 LC_flatlim	128 LAUNCH, "RPM" x100 conv, 3000-6000 range
 
 ----------------------------------------------------------------------------
-NOS CONTROL (Nitrous Oxide)
+NOS CONTROL (Nitrous Oxide)  100% DONE
 ----------------------------------------------------------------------------
 
 nitrousUse	011 NOS, bitfield [7:7] "Off", "On"
@@ -113,6 +115,9 @@ N2Odel_flat	158 NOS "sec" 0.01 covm 0-2.55 span
 N2Oholdon	159 NOS "sec" 0.01 covm 0-2.55 span <-- NOT implemented yet
 NosLowKpa	085 NOS, "kPa" no conv, 0-255 span
 NosHiKpa	086 NOS, "kPa" no conv, 0-255 span
+
+The following are apparently disabled, the vars exist but are disabled 
+in megatune.
 n2ostage2	hmm,  commented out weird
 Nos2Rpm		160 NOS2, "RPM" x100 conv, 1000-25500 span
 Nos2RpmMax	161 NOS2, "RPM" x100 conv, 1000-25500 span
@@ -121,3 +126,66 @@ Nos2angle	163 NOS2, "Deg", 0.352 conv, 0-30 span
 Nos2PWLo	164 NOS2, "mSec", 0.1 conv, 0-25.5
 Nos2PWHi	165 NOS2, "mSec", 0.1 conv, 0-25.5
 
+
+----------------------------------------------------------------------------
+EGO Control  100% DONE
+----------------------------------------------------------------------------
+
+egoType1	pg1 184, bitfield [1:1] "NB", "WB"	
+egoSwitch1	pg1 187, "volts" *0.0196, 0-5 span
+egoCount1	pg1 145, no conv, 0-255 span
+egoDelta1	pg1 146, "%", no conv, 0-255 span
+egoLimit1	pg1 147, "%", no conv, 0-255 span
+egoTemp1	pg1 144, temp_dep,-40 conv  -40-215 span
+egoRPM1		pg1 185, "RPM" x100 conv, 0-25500 span
+egoIgnCount 	pg1 188, bitfield [0:0], "mSec", "Ign Pulses"
+TwoLambda 	pg2 188, bitfield [0:0], "None", "Fitted, DT Only"
+egoType2	pg2 184, bitfield [1:1], "NB", "WB"
+egoSwitch2	pg2 187, "volts" *0.0196, 0-5 span
+egoDelta2	pg2 146, "%", no conv, 0-255 span
+egoLimit2	pg2 147, "%", no conv, 0-255 span
+egoTemp2	pg2 144, temp_dep,-40 conv  -40-215 span
+egoRPM2		pg2 185, "RPM" x100 conv, 0-25500 span
+
+EgoLimKPa	pg0 039, "KPa", no conv, 0-255 span
+EgoLim2		pg0 040, "+/-", no conv, 0-100 span
+AfrTar		pg0 046, bitfield [7:7], "Off", "On"
+AfrTar2		pg0 092, bitfield [1:1], "Off", "On"
+KpaTPSTar	pg0 109, bitfield [4:4]. "Speed Density", "Alpha-N"
+TPSTar		pg0 109, bitfield [5:5], "Always", "Above TPS Threshold"
+TPSAFRPoint	pg0 121, "Raw ADC", no conv, 0-255 span
+
+OLoopEgo	pg0 046, bitfield [0:0], "TPS", "KPa"
+TpsOn		pg0 065, "Raw ADC", no conv, 0-255 span
+KPaOn		pg0 064, "KPa", no conv, 0-255
+
+----------------------------------------------------------------------------
+Cranking/ASE 95% complete
+----------------------------------------------------------------------------
+
+The logic of these first two is fucked up!
+AlwaysPrime	pg8 042, [0:0] bitfield "Prime Pulse>0" "Always"
+PrimeLAte	pg8 042, [1:2] bitfield "Power up", "INVALID","Twice", "After 2 secs"
+PrimeTBox	pg8 042, [3:3] bitfield, "Priming Table", "Std Fixed prime"
+PrimePulse	pg8 045, "mS", x0.1 0-25.5 span
+crankpwip	pg8 042, [4:5] bitfield "INVALID", "CLT ONLY", "MAT ONLY", "AVG of both"
+CrankPWT1-10	pg8 032-041, "mS" x0.1 0-25.5 span
+CrankRPM	pg8 043, "RPM", x100 conv, 100-1000 span
+tpsflood	pg8 044, "RAW ADC", no conv, 0-255 span
+
+NEED to do these two.
+ExFuelCrank	pg8 042, [6:6] "Off", "On"
+ExtraFMult	pg8 046, "%" 0-255 range
+
+
+aseIgnCount	pg5 179, [0:0] bitfield "Cycles" "Seconds"
+ASETime		pg5 178 "Sec?" no conv, 0-255 span
+ASEFixDe	pg5 179, [1:1] bitfield "Decay", "Fixed THEN decay"
+VEFixASE	pg5 179, [2:2] bitfield "Normal MAP", "Fixed MAP"
+ASEFixTemp	pg5 181, TEMP_DEP, 040 conv, -10-120 span
+ASEFixTim	pg5 180, "Sec?", no conv 0-255 span
+VEFixValue	pg5 182, "kPa", x.965 + 9 conv (weird), 0-255 span
+ASETable1-10	pg5, 168-177, "%", no conv 0-255 span
+
+WARMUP WIZ fields are missing, need to find by hand in asm code :(
+Warmup table	pg8 22-31, "%", no conv 0-255 span
