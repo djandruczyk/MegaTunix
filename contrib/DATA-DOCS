@@ -117,12 +117,12 @@ NosHiKpa	086 NOS, "kPa" no conv, 0-255 span
 The following are apparently disabled, the vars exist but are disabled 
 in megatune.
 n2ostage2	hmm,  commented out weird
-Nos2Rpm		160 NOS2, "RPM" x100 conv, 1000-25500 span
-Nos2RpmMax	161 NOS2, "RPM" x100 conv, 1000-25500 span
-Nos2delay	162 NOS2, "sec" 0.01 conv, 0-2.55 span
-Nos2angle	163 NOS2, "Deg", 0.352 conv, 0-30 span
-Nos2PWLo	164 NOS2, "mSec", 0.1 conv, 0-25.5
-Nos2PWHi	165 NOS2, "mSec", 0.1 conv, 0-25.5
+Nos2Rpm		160 NOS2, "RPM" x/100 conv, 1000-25500 span
+Nos2RpmMax	161 NOS2, "RPM" x/100 conv, 1000-25500 span
+Nos2delay	162 NOS2, "sec" x*100 conv, 0-2.55 span
+Nos2angle	163 NOS2, "Deg", x/0.352 conv, 0-30 span
+Nos2PWLo	164 NOS2, "mSec", x*10 conv, 0-25.5
+Nos2PWHi	165 NOS2, "mSec", x*10 conv, 0-25.5
 
 
 ----------------------------------------------------------------------------
@@ -130,20 +130,20 @@ EGO Control  100% DONE
 ----------------------------------------------------------------------------
 
 egoType1	pg1 184, bitfield [1:1] "NB", "WB"	
-egoSwitch1	pg1 187, "volts" *0.0196, 0-5 span
+egoSwitch1	pg1 187, "volts" x/0.0196, 0-5 span
 egoCount1	pg1 145, no conv, 0-255 span
 egoDelta1	pg1 146, "%", no conv, 0-255 span
 egoLimit1	pg1 147, "%", no conv, 0-255 span
 egoTemp1	pg1 144, temp_dep,-40 conv  -40-215 span
-egoRPM1		pg1 185, "RPM" x100 conv, 0-25500 span
+egoRPM1		pg1 185, "RPM" x/100 conv, 0-25500 span
 egoIgnCount 	pg1 188, bitfield [0:0], "mSec", "Ign Pulses"
 TwoLambda 	pg2 188, bitfield [0:0], "None", "Fitted, DT Only"
 egoType2	pg2 184, bitfield [1:1], "NB", "WB"
-egoSwitch2	pg2 187, "volts" *0.0196, 0-5 span
+egoSwitch2	pg2 187, "volts" x/0.0196, 0-5 span
 egoDelta2	pg2 146, "%", no conv, 0-255 span
 egoLimit2	pg2 147, "%", no conv, 0-255 span
 egoTemp2	pg2 144, temp_dep,-40 conv  -40-215 span
-egoRPM2		pg2 185, "RPM" x100 conv, 0-25500 span
+egoRPM2		pg2 185, "RPM" x/100 conv, 0-25500 span
 
 EgoLimKPa	pg0 039, "KPa", no conv, 0-255 span
 EgoLim2		pg0 040, "+/-", no conv, 0-100 span
@@ -166,10 +166,10 @@ The logic of these first two is fucked up!
 AlwaysPrime	pg8 042, [0:0] bitfield "Prime Pulse>0" "Always"
 PrimeLAte	pg8 042, [1:2] bitfield "Power up", "INVALID","Twice", "After 2 secs"
 PrimeTBox	pg8 042, [3:3] bitfield, "Priming Table", "Std Fixed prime"
-PrimePulse	pg8 045, "mS", x0.1 0-25.5 span
+PrimePulse	pg8 045, "mS", x*10 0-25.5 span
 crankpwip	pg8 042, [4:5] bitfield "INVALID", "CLT ONLY", "MAT ONLY", "AVG of both"
-CrankPWT1-10	pg8 032-041, "mS" x0.1 0-25.5 span
-CrankRPM	pg8 043, "RPM", x100 conv, 100-1000 span
+CrankPWT1-10	pg8 032-041, "mS" x*10 0-25.5 span
+CrankRPM	pg8 043, "RPM", x/100 conv, 100-1000 span
 tpsflood	pg8 044, "RAW ADC", no conv, 0-255 span
 ExFuelCrank	pg8 042, [6:6] "Off", "On"
 ExtraFMult	pg8 046, "%" 0-255 range
@@ -180,9 +180,9 @@ aseIgnCount	pg5 179, [0:0] bitfield "Cycles" "Seconds"
 ASETime		pg5 178 "Sec?" no conv, 0-255 span
 ASEFixDe	pg5 179, [1:1] bitfield "Decay", "Fixed THEN decay"
 VEFixASE	pg5 179, [2:2] bitfield "Normal MAP", "Fixed MAP"
-ASEFixTemp	pg5 181, TEMP_DEP, 040 conv, -10-120 span
+ASEFixTemp	pg5 181, TEMP_DEP, -40 conv, -10-120 span
 ASEFixTim	pg5 180, "Sec?", no conv 0-255 span
-VEFixValue	pg5 182, "kPa", x.965 + 9 conv (weird), 0-255 span
+VEFixValue	pg5 182, "kPa", x*.965 + 9 conv (weird), 0-255 span
 ASETable1-10	pg5, 168-177, "%", no conv 0-255 span
 
 Warmup table	pg8 22-31, "%", no conv 0-255 span
@@ -216,7 +216,7 @@ out3sparkd	pg0 012 [4:4] bitfield "Output 3" "Spark Output D"
 spkeop		pg0 116 [3:3] bitfield "Shiftlight" "Spark Output E"
 spkfop		pg0 116 [4:4] bitfield "Knock INPUT", "Spark Output F"
 
-out1src		pg0 008 [0:4], "Off*", "INVALID", "INVALID", "INVALID", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
+out1src		pg0 008 [0:4], bitfield "Off*", "INVALID", "INVALID", "INVALID", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
 
 out1lim		pg0 007, "raw byte of degF+40" (eww!!!), 0-255 span (need something nicer)
 out1Hysis	pg0 126 "raw byte or degF" 0-255 span
@@ -231,15 +231,15 @@ InvOut2		pg0 066 [2:2] bitfield "Normal" "Inverted"
 Out3_Out1	pg0 116 [7:7] bitfield "Source" "output1+Source"
 out3src		pg0 132 [0:4] bitfield "Off*", "INVALID", "DECEL", "ACCEL", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
 out3lim		pg0 133 "raw byte of degF +40" 0-255 span
-out3Tmer	pg0 134 "Sec" x*0.1, 0-25.5 span
+out3Tmer	pg0 134 "Sec" x*10, 0-25.5 span
 out4src		pg0 138 [0:4] bitfield "Off*", "INVALID", "DECEL", "ACCEL", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
 out4lim		pg0 139 "raw byte of degF +40" 0-255 span
 out4FAN		pg0 001 [6:6] bitfield "Source" "Fan Control"
 shiftUse	pg0 012 [1:1] "Off" "On"
 ShiftLower	pg0 018 "RPM" x*100 conv, 100-25500 span
 ShiftUpper	pg0 019 "RPM" x*100 conv, 100-25500 span
-efanontemp	pg0 074 TEMP_DEP -40-215 span
-efanofftemp	pg0 075 TEMP_DEP -40-215 span
+efanontemp	pg0 074 TEMP_DEP -40 conv, -40-215 span
+efanofftemp	pg0 075 TEMP_DEP -40 conv, -40-215 span
 
 
 ----------------------------------------------------------------------------
@@ -269,35 +269,35 @@ wheel_old	pg0 092 [3:3] "025 Style", "024s9 style"
 ODDFIRE, highly experimental
 
 outaoffs	pg6 166 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
-outaoffsv	pg6 167 "deg" x*0.352 conv, 0-45 span
+outaoffsv	pg6 167 "deg" x/0.352 conv, 0-45 span
 outboffs	pg6 168 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
-outboffsv	pg6 169 "deg" x*0.352 conv, 0-45 span
+outboffsv	pg6 169 "deg" x/0.352 conv, 0-45 span
 outcoffs	pg6 170 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
-outcoffsv	pg6 171 "deg" x*0.352 conv, 0-45 span
+outcoffsv	pg6 171 "deg" x/0.352 conv, 0-45 span
 outdoffs	pg6 172 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
-outdoffsv	pg6 173 "deg" x*0.352 conv, 0-45 span
+outdoffsv	pg6 173 "deg" x/0.352 conv, 0-45 span
 outeoffs	pg6 174 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
-outeoffsv	pg6 175 "deg" x*0.352 conv, 0-45 span
+outeoffsv	pg6 175 "deg" x/0.352 conv, 0-45 span
 outfoffs	pg6 176 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
-outfoffsv	pg6 177 "deg" x*0.352 conv, 0-45 span
+outfoffsv	pg6 177 "deg" x/0.352 conv, 0-45 span
 
 Trigger stuff
-TrigAng		pg1 168 "deg" *0.352 conv, 0-90 span
+TrigAng		pg1 168 "deg" x/0.352 conv, 0-90 span
 Trig_plus	pg1 173 [0:1] "0", "+22.5", "INVAL", "+45"  !oddfire
 TrigCrank	pg1 173 [2:2] "Trigger Return", "Time Based"	!edis
-CrankAng	pg1 171 "deg" (x*0.352)-28.4 conv, -10-80 span	
+CrankAng	pg1 171 "deg" (x/0.352)+28.4 conv, -10-80 span	
 IgHold		pg1 172 "", no conv, 0-100 span
 IgInv		pg1 173 [3:3] "No", "Yes"
 oddfir		pg1 173 [4:4] "No", "Yes" enables ODDFIRE
-FixAng		pg1 169 "deg" (x*0.352)-28.4 conv, -10-80 span	 
-Trim		pg1 170 "deg" x*0.352 conv -45 to 45 range (conversion is invalid)
+FixAng		pg1 169 "deg" (x/0.352)+28.4 conv, -10-80 span	 
+Trim		pg1 170 "deg" x/0.352 conv -45 to 45 range (conversion is invalid)
 
 Dwell Control
 
 dwellcont	pg0 109 [1:1] "Fixed Duty" "Dwell Control"
 dwellduty50	pg0 012 [5:6] "75% DC", "min for HEI4", "50% DC", "INVAL"
-dwellcrank	pg0 110 "ms" x*0.1 conv, 0-25.5 span
-dwellrun	pg0 111 "ms" x*0.1 conv, 0-25.5 span
-mindischg	pg0 143 "ms" x*0.1 conv, 0-1.5 span
+dwellcrank	pg0 110 "ms" x*10 conv, 0-25.5 span
+dwellrun	pg0 111 "ms" x*10 conv, 0-25.5 span
+mindischg	pg0 143 "ms" x*10 conv, 0-1.5 span
 
 
