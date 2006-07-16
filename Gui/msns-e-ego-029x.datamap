@@ -55,6 +55,34 @@ f_label=Active Temp \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
+[ego1_ign_events_label]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=1
+alt_label=mSec Between Steps
+label=Ign Pulses Btwn Steps
+depend_on=step_ctr
+step_ctr_type=_VE_EMB_BIT_
+step_ctr_page=1
+step_ctr_offset=188
+step_ctr_bitval=0
+step_ctr_bitshift=0
+step_ctr_bitmask=1
+
+[ego2_ign_events_label]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=1
+alt_label=mSec Between Steps
+label=Ign Pulses Btwn Steps
+depend_on=step_ctr
+step_ctr_type=_VE_EMB_BIT_
+step_ctr_page=1
+step_ctr_offset=188
+step_ctr_bitval=0
+step_ctr_bitshift=0
+step_ctr_bitmask=1
+
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [ego1_nb02_radio_button]
@@ -134,13 +162,14 @@ handler=_GENERIC_
 tooltip=Sets the number of O<sub>2</sub> sensors to 2.
 
 [egocorr_msec_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,swap_labels,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=1
 offset=188
 bitval=0
 bitshift=0
 bitmask=1
+swap_labels=ego_ego1_ign_events_label,ego_ego2_ign_events_label
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the O<sub>2</sub> signal convergence time units to be in milliseconds instead of engine cycles. (after X milliseconds the ecu will try to trim in the fuel)
@@ -162,7 +191,7 @@ keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=46
-bitval=0
+bitval=1
 bitshift=7
 bitmask=128
 dl_type=_IMMEDIATE_
@@ -174,7 +203,7 @@ keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=46
-bitval=1
+bitval=0
 bitshift=7
 bitmask=128
 dl_type=_IMMEDIATE_
@@ -186,7 +215,7 @@ keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
-bitval=0
+bitval=1
 bitshift=1
 bitmask=2
 dl_type=_IMMEDIATE_
@@ -198,7 +227,7 @@ keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
-bitval=1
+bitval=0
 bitshift=1
 bitmask=2
 dl_type=_IMMEDIATE_
