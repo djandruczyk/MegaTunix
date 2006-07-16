@@ -218,6 +218,32 @@ out3sparkd	pg0 012 [4:4] bitfield "Output 3" "Spark Output D"
 spkeop		pg0 116 [3:3] bitfield "Shiftlight" "Spark Output E"
 spkfop		pg0 116 [4:4] bitfield "Knock INPUT", "Spark Output F"
 
+out1src		pg0 008 [0:4], "Off*", "INVALID", "INVALID", "INVALID", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
+
+out1lim		pg0 007, "raw byte of degF+40" (eww!!!), 0-255 span (need something nicer)
+out1Hysis	pg0 126 "raw byte or degF" 0-255 span
+Out1UpLim	pg0 088 "raw byte or degF +40), 0-255 span
+InvOut1		pg0 066 [1:1] bitfield "Normal" "Inverted"
+out2src		pg0 010 [0:4] bitfield "Off*", "INVALID", "INVALID", "INVALID", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
+out2lim		pg0 009, "raw byte of degF+40" (eww!!!), 0-255 span (need someth
+ing nicer)
+out2Hysis	pg0 127 "raw byte or degF" 0-255 span
+Out2UpLim	pg0 089 "raw byte or degF +40), 0-255 span
+InvOut2		pg0 066 [2:2] bitfield "Normal" "Inverted"
+Out3_Out1	pg0 116 [7:7] bitfield "Source" "output1+Source"
+out3src		pg0 132 [0:4] bitfield "Off*", "INVALID", "DECEL", "ACCEL", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
+out3lim		pg0 133 "raw byte of degF +40" 0-255 span
+out3Tmer	pg0 134 "Sec" x*0.1, 0-25.5 span
+out4src		pg0 138 [0:4] bitfield "Off*", "INVALID", "DECEL", "ACCEL", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
+out4lim		pg0 139 "raw byte of degF +40" 0-255 span
+out4FAN		pg0 001 [6:6] bitfield "Source" "Fan Control"
+shiftUse	pg0 012 [1:1] "Off" "On"
+ShiftLower	pg0 018 "RPM" x*100 conv, 100-25500 span
+ShiftUpper	pg0 019 "RPM" x*100 conv, 100-25500 span
+efanontemp	pg0 074 TEMP_DEP -40-215 span
+efanofftemp	pg0 075 TEMP_DEP -40-215 span
+
+
 ----------------------------------------------------------------------------
 WHEEL DECODER
 ----------------------------------------------------------------------------
