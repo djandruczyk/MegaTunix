@@ -23,11 +23,6 @@ gui_files = 	README \
 		enrichments.glade \
 		enrichments_BnG.datamap \
 		enrichments_Genboard.datamap \
-		enrichments_021x_1.datamap \
-		enrichments_021x_2.datamap \
-		enrichments_024x.glade \
-		enrichments_024x.datamap \
-		enrichments_029x.datamap \
 		lambdatable_8x8e.glade \
 		lambdatable_8x8s.glade \
 		lambda_8x16-Genboard.datamap \
@@ -51,6 +46,10 @@ gui_files = 	README \
 		msns-e-boost_idle.datamap \
 		msns-e-boost-knock.glade \
 		msns-e-boost-knock-029x.datamap \
+		msns-e-crank-ase-024x.glade \
+		msns-e-crank-ase.glade \
+		msns-e-crank-ase-024x.datamap \
+		msns-e-crank-ase-029x.datamap \
 		msns-e-ego.glade \
 		msns-e-ego-029x.datamap \
 		msns-e-features.glade \
