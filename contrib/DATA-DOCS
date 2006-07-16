@@ -10,32 +10,30 @@ IDLE CONTROL  100% DONE
 Params: start on msns-extra-ini page9 (not necessary firmware page 9)
 PArams are on firmware page 8 (start count at 0)
 VARNAME  OFFSET,  GROUP DESCRIPTION
-idle_dc_lo	000 PWMIDLE WU_IDLE 0-255 span, no conversion
-idle_dc_hi	006 PWMIDLE WU_IDLE 0-255, no conversion
-idleperiod	001 PWMIDLE disp 0.01sec, 0-255 span (this needs adjustment to be friendlier
-idlecrankdc	002 PWMIDLE 0-255 span, no conversion, cranking idle dutycycle
-idledelayclock	003 PWMIDLE CL_IDLE disp 0.01sec, 0-255 span (this needs adjustment to be friendlier
-idledashdc	004 PWMIDLE CL_IDLE0-255, no conversion
-idlemindc	005 PWMIDLE CL_IDLE 0-255, no conversion
-ictlrpm1	007 PWMIDLE "low rpm", divide by 10, 0-2550
-ictlrpm2	008 PWMIDLE "high rpm", divide by 10, 0-2550
-Ideadbnd	009 PWMIDLE "+/- RPM", divide by 10, 0-2550
-Idashdelay	010 PWMIDLE  CL_IDLE " x 0.01sec)  no conversion 0-255 span
-idlefreq	011 PWMIDLE "10000/x = freq" noconv 0-255 span (needs a friendlier method)
-idlestartclk	012 PWMIDLE CL_IDLE "x 0.01sec" noconv 0-255 span, (needs a friendlier method)
-idlePeriod2	013 PWMIDLE "x 0.01sec" noconv 0-255 span, (needs a friendlier method)
-irestorerpm	014 PWMIDLE CL_IDLE "RPM" divide by 10, 100-6000 span
-idleclosedc	015 PWMIDLE CL_IDLE "dc" 0-255
-pwmidle		016 Turns on PWMIDLE or BG_IDLE groups BITFIELD, B&G or PWM
-pwmidlewhen	016 PWMIDLE  Turns on WU_IDLE or CL_IDLE groups BITFIELD, INVAL, warmup only, Closed Loop only, INVALID
-fastIdleTemp	017 PWMIDLE TEMP_DEP, val -40,   -40-215 control range (F scale)
-slowIdleTemp	018 PWMIDLE TEMP_DEP, val -40,   -40-215 control range (F scale)
-fastIdleRPM	019 PWMIDLE CL_IDLE RPM divide by 10, 0-2550 range
-slowIdleRPM	020 PWMIDLE CL_IDLE RPM divide by 10, 0-2550 range
-idlethresh	021 PWMIDLE CL_IDLE TPS ADC counts, 0-255 range
-
-Page 1
-FASTIDLEbg	186 BG_IDLE TEMP_DEP, val -40, -40-215 range  
+idle_dc_lo	pg8 000 PWMIDLE WU_IDLE 0-255 span, no conversion
+idle_dc_hi	pg8 006 PWMIDLE WU_IDLE 0-255, no conversion
+idleperiod	pg8 001 PWMIDLE x*100 conv, 0-2.55 span
+idlecrankdc	pg8 002 PWMIDLE no conv, 0-255 span
+idledelayclock	pg8 003 PWMIDLE CL_IDLE x*100 conv, 0-2.55 span 
+idledashdc	pg8 004 PWMIDLE CL_IDLE no conv 0-255 span
+idlemindc	pg8 005 PWMIDLE CL_IDLE no conv 0-255 span
+ictlrpm1	pg8 007 PWMIDLE "low rpm", x/10 conv, 0-2550 span
+ictlrpm2	pg8 008 PWMIDLE "high rpm", x/10, 0-2550 span
+Ideadbnd	pg8 009 PWMIDLE "+/- RPM", x/10, 0-2550 span
+Idashdelay	pg8 010 PWMIDLE  CL_IDLE " x*100 conv 0-2.55 span
+idlefreq	pg8 011 PWMIDLE 10000/x conv 39-10000 span 
+idlestartclk	pg8 012 PWMIDLE CL_IDLE x*100 conv 0-2.55 span
+idlePeriod2	pg8 013 PWMIDLE x*100 conv 0-255 span
+irestorerpm	pg8 014 PWMIDLE CL_IDLE x/10, 100-6000 span
+idleclosedc	pg8 015 PWMIDLE CL_IDLE "dc" noconv 0-255 span
+pwmidle		pg8 016 [0:0] "BnG" "PWM" Turns on PWMIDLE or BG_IDLE groups 
+pwmidlewhen	pg8 016 [1:2] "INVALID", "Warmup Only" "Closed Loop Only" INVALID" Turns on WU_IDLE or CL_IDLE groups
+fastIdleTemp	pg8 017 PWMIDLE TEMP_DEP, -40 conv -40-215 span
+slowIdleTemp	pg8 018 PWMIDLE TEMP_DEP, -40 conv -40-215 span
+fastIdleRPM	pg8 019 PWMIDLE CL_IDLE RPM x/10 conv, 0-2550 span
+slowIdleRPM	pg8 020 PWMIDLE CL_IDLE RPM c/10 conv, 0-2550 span
+idlethresh	pg8 021 PWMIDLE CL_IDLE TPS ADC counts, noconv, 0-255 span
+FASTIDLEbg	pg1  BG_IDLE TEMP_DEP, -40 conv, -40-215 span  
 
 
 ----------------------------------------------------------------------------
@@ -44,33 +42,33 @@ BOOST CONTROL  100% DONE
 
 freqDiv		014 BOOST, [0:2] bitfield, INVAL, 39, 19.5, 13, 9.8, 7.8, 6.5, 5.6 
 bcUpdateRate	015 BOOST, "ms" 10-255 span
-pGain		016 BOOST, "%" 0.3922 conv, 0-100 ctrl range
-dGain		017 BOOST, "%" 0.3922 conv, 0-100 ctrl range
+pGain		016 BOOST, "%" x/0.3922 conv, 0-100 ctrl range
+dGain		017 BOOST, "%" x/0.3922 conv, 0-100 ctrl range
 BoostDir	092 BOOST, bitfield, [6:6] "Increase" or "Decrease"
 BooTbl2Use	116 BOOST, bitfield [2:2] "Don't switch", "Targets 2"
 bc_max_diff	125 BOOST, "kpa" 0-255 NOTE: baro/map sensor dependant
 Pambient	185 BOOST,!barocorr1 , "kPa" 0-255 NOTE: baro/map sensor dependant
-IATBoostSt	135 BOOST, temp_dep, -40-215
-IATBoost	136 BOOST, temp_dep, -40-215
+IATBoostSt	135 BOOST, temp_dep, -40 conv, -40-215 span
+IATBoost	136 BOOST, temp_dep, -40 conv, -40-215 span
 TPSBooIAT	137 BOOST, raw_ADC, 0-255 span
-KnockBoost	107 BOOST, knock_ctrl, PSI, x0.147,  0-20 ctrl range
-BoostMaxKn	108 BOOST, knock_ctrl, PSI, x0.147,  0-20 ctrl range
+KnockBoost	107 BOOST, knock_ctrl, PSI, x/0.147 conv,  0-20 ctrl span
+BoostMaxKn	108 BOOST, knock_ctrl, PSI, x/0.147 conv,  0-20 ctrl span
 
 ----------------------------------------------------------------------------
 KNOCK CONTROL  100% DONE
 ----------------------------------------------------------------------------
 
 KnockOn		046 KNOCK, bitfield [6:6] "Off, "On"
-KnockRpm	053 KNOCK, RPM x100 conv 0-12000 range
-KnockKpa	055 KNOCK, kPa, 0-255 range
-KnockRpmL	054 KNOCK, RPM, x100 conv, 0-12000 range
-KnockRet	056 KNOCK, Deg 0.352 conv 0-10 range ?(seems too low)
-KnockSb		057 KNOCK, Deg, 0.352 conv, 0-10 range ? (seems low)
-KnockMax	059 KNOCK, Deg, 0,352 conv, 1-30 range
-KnockAdv	058 KNOCK, Deg, 0.352 conv, 0-20 range
+KnockRpm	053 KNOCK, RPM x/100 conv 0-12000 range
+KnockKpa	055 KNOCK, kPa, noconv 0-255 range
+KnockRpmL	054 KNOCK, RPM, x/100 conv, 0-12000 range
+KnockRet	056 KNOCK, Deg, x/0.352 conv 0-10 range ?(seems too low)
+KnockSb		057 KNOCK, Deg, x/0.352 conv, 0-10 range ? (seems low)
+KnockMax	059 KNOCK, Deg, x/0,352 conv, 1-30 range
+KnockAdv	058 KNOCK, Deg, x/0.352 conv, 0-20 range
 KnockTim	060 KNOCK, Seconds, no  conv 1-10
-KnockBoost	107 BOOST, KNOCK, PSI, x0.147,  0-20 ctrl range
-BoostMaxKn	108 BOOST, KNOCK, PSI, x0.147,  0-20 ctrl range
+KnockBoost	107 BOOST, KNOCK, PSI, x/0.147,  0-20 ctrl range
+BoostMaxKn	108 BOOST, KNOCK, PSI, x/0.147,  0-20 ctrl range
 
 ----------------------------------------------------------------------------
 WATER INJECTION  100% DONE
@@ -78,41 +76,41 @@ WATER INJECTION  100% DONE
 
 WaterInj	046 WATER_INJ, bitfield [3:3] "Off" "On"	
 StartWIKPa	062 WATER_INJ, "kPa" no conv 0-255 span
-WaterIRpm	063 WATER_INJ, "RPM", x100 conv 0-12000 span
-WaterIIat	061 WATER_INJ, temp_dep, -10 120 range
+WaterIRpm	063 WATER_INJ, "RPM", x/100 conv 0-12000 span
+WaterIIat	061 WATER_INJ, temp_dep, -40 conv,  -10-120 range
 
 ----------------------------------------------------------------------------
 LAUNCH CONTROL  100% DONE
 ----------------------------------------------------------------------------
 
 launchUse	012 LAUNCH, bitfield [2:2] "Off", "On"
-LachRpm		043 LAUNCH, "RPM" x100 conv 0-6000 limit
-LachDeg		042 LAUNCH, "Deg" x0.352 - 28.4 -10<->45 deg range
+LachRpm		043 LAUNCH, "RPM" x/100 conv 0-6000 limit
+LachDeg		042 LAUNCH, "Deg" (x/0.352) + 28.4 conv  -10<->45 deg range
 LachTps		041 LAUNCH, "RAW ADC" no conv, 0-255
-LaunchLim	020 LAUNCH, "RPM" x100, 0-25500 range
+LaunchLim	020 LAUNCH, "RPM" x/100, 0-25500 range
 VLaunch		046 LAUNCH, bitfield [1:1] "Off", "On"
-LC_flatsel	124 LAUNCH, "RPM" x100 conv, 0-25500 range
-LC_f_slim	140 LAUNCH, "RPM" x100 conv, 3000-6000 range
-LC_f_limangle	141 LAUNCH, "Deg" x0.352 - 28.4 -10<->45 deg range
-LC_flatlim	128 LAUNCH, "RPM" x100 conv, 3000-6000 range
+LC_flatsel	124 LAUNCH, "RPM" x/100 conv, 0-25500 range
+LC_f_slim	140 LAUNCH, "RPM" x/100 conv, 3000-6000 range
+LC_f_limangle	141 LAUNCH, "Deg" (x/0.352) + 28.4 conv -10<->45 deg range
+LC_flatlim	128 LAUNCH, "RPM" x/100 conv, 3000-6000 range
 
 ----------------------------------------------------------------------------
 NOS CONTROL (Nitrous Oxide)  100% DONE
 ----------------------------------------------------------------------------
 
 nitrousUse	011 NOS, bitfield [7:7] "Off", "On"
-NosRpm		023 NOS, "RPM", x100 conv, 1000-25500 range
+NosRpm		023 NOS, "RPM", x/100 conv, 1000-25500 range
 NosClt		022 NOS, TEMP_DEP, -40 conv, -10-120 span
 NosTps		067 NOS, RAW ADC, no conv, 0-255 span
-NosPWLo		069 NOS, "mSec" x 0.1 conv, 0-25.5 span
-NosPWHi		070 NOS, "mSec" x 0.1 conv, 0-25.5 span
-NosRpmMax	024 NOS, "RPM" x100 conv, 3000-25500 span
-NosAngle	068 NOS, "deg" x0.352, 0-30 span
+NosPWLo		069 NOS, "mSec" x*10 conv, 0-25.5 span
+NosPWHi		070 NOS, "mSec" x*10 conv, 0-25.5 span
+NosRpmMax	024 NOS, "RPM" x/100 conv, 3000-25500 span
+NosAngle	068 NOS, "deg" x/0.352, 0-30 span
 DtNos		066 bitfield [5:5] "Bank1", "Bank2"
 NosLagSystem	066 bitfield [6:6] "Off", "On"
-N2Odel_launch	157 NOS "sec" 0.01 covm 0-2.55 span
-N2Odel_flat	158 NOS "sec" 0.01 covm 0-2.55 span
-N2Oholdon	159 NOS "sec" 0.01 covm 0-2.55 span <-- NOT implemented yet
+N2Odel_launch	157 NOS "sec" x*100 conv 0-2.55 span
+N2Odel_flat	158 NOS "sec" x*100 conv 0-2.55 span
+N2Oholdon	159 NOS "sec" x*100 conv 0-2.55 span <-- NOT implemented yet
 NosLowKpa	085 NOS, "kPa" no conv, 0-255 span
 NosHiKpa	086 NOS, "kPa" no conv, 0-255 span
 
