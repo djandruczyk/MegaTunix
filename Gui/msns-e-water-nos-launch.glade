@@ -279,7 +279,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -40 215 1 10 10</property>
+				  <property name="adjustment">0 -10 120 1 10 10</property>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 14 Mar 2005 21:02:31 GMT"/>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 14 Mar 2005 21:22:00 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 14 Mar 2005 21:02:51 GMT"/>
@@ -977,7 +977,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 25500 100 1000 1000</property>
+				  <property name="adjustment">0 0 6000 100 1000 1000</property>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 14 Mar 2005 21:02:31 GMT"/>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 14 Mar 2005 21:22:00 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 14 Mar 2005 21:02:51 GMT"/>
@@ -1223,7 +1223,7 @@
 			      <child>
 				<widget class="GtkLabel" id="nos_min_clt_temp_label">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">MinCoolant Temp</property>
+				  <property name="label" translatable="yes">Min Coolant Temp</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1280,7 +1280,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 25500 100 1000 1000</property>
+				  <property name="adjustment">0 1000 25500 100 1000 1000</property>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 14 Mar 2005 21:02:31 GMT"/>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 14 Mar 2005 21:21:45 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 14 Mar 2005 21:02:51 GMT"/>
@@ -1359,7 +1359,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 25500 100 1000 1000</property>
+				  <property name="adjustment">0 3000 25500 100 1000 1000</property>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 14 Mar 2005 21:02:31 GMT"/>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 14 Mar 2005 21:21:45 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 14 Mar 2005 21:02:51 GMT"/>
@@ -1515,7 +1515,7 @@
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 89 0.351999998093 3.51999998093 3.51999998093</property>
+				  <property name="adjustment">0 0 30 0.351999998093 3.51999998093 3.51999998093</property>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 14 Mar 2005 21:02:31 GMT"/>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Mon, 14 Mar 2005 21:22:00 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 14 Mar 2005 21:02:51 GMT"/>

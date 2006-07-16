@@ -984,7 +984,7 @@
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">True</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 0 2550 10 100 100</property>
+			      <property name="adjustment">0 0 6000 10 100 100</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
 			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
 			      <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>

@@ -292,12 +292,14 @@ handler=_GENERIC_
 tooltip=The Throttle has to be set at this value OR BELOW for idle control to become active.  This value is in ADC counts for the TPS input.
 
 [idle_restore_rpm_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=14
 dl_conv_expr=x/10
 ul_conv_expr=x*10
+raw_lower=1
+raw_upper=60
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

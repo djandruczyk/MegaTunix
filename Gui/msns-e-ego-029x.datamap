@@ -442,10 +442,11 @@ handler=_GENERIC_
 tooltip=When the Manifold pressure exceeds this value change the EGO +/- Limit to what the following control is set to. 
 
 [alt_ego_lim_spin]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=40
+raw_upper=100
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the override EGO +/- Limit when the manifold pressure exceeds the above setpoint.

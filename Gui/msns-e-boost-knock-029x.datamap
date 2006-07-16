@@ -313,10 +313,11 @@ tooltip=When selected Boost Table 3 will NOT be used at all
 
 #----- Spinbuttons ----------------------------------------------------------
 [bc_update_rate_spin]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_lower,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=15
+raw_lower=10
 bind_to_list=boost_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -401,48 +402,52 @@ handler=_GENERIC_
 tooltip=If the throttle position is higher than this value (measured in RAW ADC counts) then the boost_iat controls take effect.  If TPS is below this threshold those controls have NO EFFECT.
 
 [bc_remove_when_knock_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=107
 dl_conv_expr=x/0.147
 ul_conv_expr=x*0.147
+raw_upper=136
 bind_to_list=boost_controls,knock_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When the knock controller is enabled and knock is detected, boost will be reduced by this amount in psi
 
 [bc_max_remove_when_knock_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=108
 dl_conv_expr=x/0.147
 ul_conv_expr=x*0.147
+raw_upper=136
 bind_to_list=boost_controls,knock_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When knock is sustained, the controller will pull out this much boost at most in PSI.
 
 [ignore_knocks_above_rpm_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=53
 dl_conv_expr=x/100
 ul_conv_expr=x*100
+raw_upper=120
 bind_to_list=knock_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When RPM is ABOVE this threshold Knock detection is disabled
 
 [ignore_knocks_below_rpm_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=54
 dl_conv_expr=x/100
 ul_conv_expr=x*100
+raw_upper=120
 bind_to_list=knock_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -459,58 +464,64 @@ handler=_GENERIC_
 tooltip=When MAP is ABOVE this threshold Knock detection is disabled
 
 [first_knock_retard_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=56
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+raw_upper=28
 bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When knock is first detected, retard timnig by this many degrees.
 
 [subsequent_knock_retard_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=57
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+raw_upper=28
 bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When knock is sustained, retard timing by this many degrees for each knock input.
 
 [max_retard_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=59
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+raw_upper=85
 bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The maximum amount of timing to pull out when knocking is detected.
 
 [advance_when_no_knock_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=58
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+raw_upper=56
 bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Amount of timing to try and put back in when knocking has ceased.  The controller will wait a small interval between trying to re-add timing back in. Having this set to high can lead to oscillation, too low can cause timing to be pulled out and take a LONG time for it to return to normal.
 
 [knock_wait_time_spin]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=60
+raw_lower=1
+raw_upper=10
 bind_to_list=knock_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_

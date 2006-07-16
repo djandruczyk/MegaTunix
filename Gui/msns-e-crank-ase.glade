@@ -467,7 +467,7 @@ on power up</property>
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">True</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">0 0 900 100 100 100</property>
+				      <property name="adjustment">0 100 1000 100 100 100</property>
 				      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sat, 11 Sep 2004 04:19:58 GMT"/>
 				      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
@@ -2663,7 +2663,7 @@ when CLT below</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -40 215 1 10 10</property>
+				  <property name="adjustment">0 -10 120 1 10 10</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sat, 11 Sep 2004 04:19:58 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>

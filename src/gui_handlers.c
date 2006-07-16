@@ -1328,14 +1328,14 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_Page_Up:
 			if (reverse_keys)
 			{
-				if (value > (lower+10))
+				if (value >= (lower+10))
 					dload_val = ms_data[page][offset] - 10;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value < (upper-10))
+				if (value <= (upper-10))
 					dload_val = ms_data[page][offset] + 10;
 				else
 					return FALSE;
@@ -1345,14 +1345,14 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_Page_Down:
 			if (reverse_keys)
 			{
-				if (value < (upper-10))
+				if (value <= (upper-10))
 					dload_val = ms_data[page][offset] + 10;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value > (lower+10))
+				if (value >= (lower+10))
 					dload_val = ms_data[page][offset] - 10;
 				else
 					return FALSE;
@@ -1363,14 +1363,14 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_KP_Add:
 			if (reverse_keys)
 			{
-				if (value > (lower+1))
+				if (value >= (lower+1))
 					dload_val = ms_data[page][offset] - 1;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value < (upper-1))
+				if (value <= (upper-1))
 					dload_val = (ms_data[page][offset]) + 1;
 				else
 					return FALSE;
@@ -1381,14 +1381,14 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 		case GDK_KP_Subtract:
 			if (reverse_keys)
 			{
-				if (value < (upper-1))
+				if (value <= (upper-1))
 					dload_val = ms_data[page][offset] + 1;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value > (lower+1))
+				if (value >= (lower+1))
 					dload_val = ms_data[page][offset] - 1;
 				else
 					return FALSE;

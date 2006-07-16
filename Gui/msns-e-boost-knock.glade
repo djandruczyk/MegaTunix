@@ -934,7 +934,7 @@ to begin boost reduction</property>
 				<widget class="GtkSpinButton" id="bc_pgain_spin">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.3922</property>
+				  <property name="climb_rate">0.392199993134</property>
 				  <property name="digits">1</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
@@ -961,7 +961,7 @@ to begin boost reduction</property>
 				<widget class="GtkSpinButton" id="bc_dgain_spin">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.3922</property>
+				  <property name="climb_rate">0.392199993134</property>
 				  <property name="digits">1</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
@@ -1351,7 +1351,7 @@ to begin boost reduction</property>
 				<widget class="GtkSpinButton" id="advance_when_no_knock_spin">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.352</property>
+				  <property name="climb_rate">0.351999998093</property>
 				  <property name="digits">1</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
@@ -1378,7 +1378,7 @@ to begin boost reduction</property>
 				<widget class="GtkSpinButton" id="max_retard_spin">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.352</property>
+				  <property name="climb_rate">0.351999998093</property>
 				  <property name="digits">1</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
@@ -1405,7 +1405,7 @@ to begin boost reduction</property>
 				<widget class="GtkSpinButton" id="first_knock_retard_spin">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.352</property>
+				  <property name="climb_rate">0.351999998093</property>
 				  <property name="digits">1</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
@@ -1459,7 +1459,7 @@ to begin boost reduction</property>
 				<widget class="GtkSpinButton" id="subsequent_knock_retard_spin">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.352</property>
+				  <property name="climb_rate">0.351999998093</property>
 				  <property name="digits">1</property>
 				  <property name="numeric">True</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
@@ -1694,7 +1694,7 @@ knock detected (PSI)</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 22.75 0.146999999881 1 1</property>
+				  <property name="adjustment">0 0 20 0.146999999881 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
@@ -1721,7 +1721,7 @@ knock detected (PSI)</property>
 				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				  <property name="snap_to_ticks">False</property>
 				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 22.75 0.146999999881 1 1</property>
+				  <property name="adjustment">0 0 20 0.146999999881 1 1</property>
 				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
 				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
 				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
