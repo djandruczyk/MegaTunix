@@ -268,6 +268,32 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Due to the rapidly changing MAP signal at engine startup (jumping from near 100 to the idle value) we can choose to leave this as is, or OVERRIDE the VEtable fro a set time with a fixed MAP value in order to stabilize the engine somewhat.  This is helpful for engines with lopey idle MAP signals from hot cams.
 
+[extra_cranking_off_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=8
+offset=42
+bitval=0
+bitshift=6
+bitmask=64
+toggle_groups=xtra_crank
+group_states=DISABLED
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This reuiqres you to pump the gas 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the FloodClear level (in ADC counts) for the three pumps before you crank for this to take effect.  IT thin multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have hte multiplier set t0 150%, then when active the cranking pulsewidth will be 15ms.
+
+[extra_cranking_on_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=8
+offset=42
+bitval=1
+bitshift=6
+bitmask=64
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This reuiqres you to pump the gas 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the FloodClear level (in ADC counts) for the three pumps before you crank for this to take effect.  IT thin multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have hte multiplier set t0 150%, then when active the cranking pulsewidth will be 15ms.
+
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
 [main_frame_title]
@@ -447,6 +473,16 @@ bind_to_list=fixed_map
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the Fixed MAP Value to use during ASE decay hold.
+
+[extra_fuel_mult_spin]
+keys=page,offset,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=8
+offset=46
+bind_to_list=xtra_crank
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Increases the cranking fuel by the following percentage.  i.e if cranking PW is 10 ms and you set the control to 150%, the the cranking pulsewidth becomes 15ms.
 
 [warmup_spin_1]
 keys=offset

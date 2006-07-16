@@ -420,8 +420,6 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gboolean ign_parm = FALSE;
 	extern gint **ms_data;
 
-	printf("Std_entry_handler\n");
-
 	if ((paused_handlers) || (!ready))
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
