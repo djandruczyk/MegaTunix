@@ -42,7 +42,7 @@ FASTIDLEbg	186 BG_IDLE TEMP_DEP, val -40, -40-215 range
 BOOST CONTROL  100% DONE
 ----------------------------------------------------------------------------
 
-freqDiv		014 BOOST, bitfield 3 bits 0-2, INVAL, 39, 19.5, 13, 9.8, 7.8, 6.5, 5.6 
+freqDiv		014 BOOST, [0:2] bitfield, INVAL, 39, 19.5, 13, 9.8, 7.8, 6.5, 5.6 
 bcUpdateRate	015 BOOST, "ms" 10-255 span
 pGain		016 BOOST, "%" 0.3922 conv, 0-100 ctrl range
 dGain		017 BOOST, "%" 0.3922 conv, 0-100 ctrl range
@@ -187,5 +187,93 @@ ASEFixTim	pg5 180, "Sec?", no conv 0-255 span
 VEFixValue	pg5 182, "kPa", x.965 + 9 conv (weird), 0-255 span
 ASETable1-10	pg5, 168-177, "%", no conv 0-255 span
 
-WARMUP WIZ fields are missing, need to find by hand in asm code :(
 Warmup table	pg8 22-31, "%", no conv 0-255 span
+
+----------------------------------------------------------------------------
+ECU PERSONA  100% done
+----------------------------------------------------------------------------
+
+msnsCyl		pg0 000, [0:0] bitfield, "Off", "MSnS"
+msnsCyl		pg0 000, [1:1] bitfield, "Off", "Neon/420A"
+msnsCyl		pg0 000, [2:2] bitfield, "Off", "Generic Wheel"
+msnsCyl		pg0 000, [3:3] bitfield, "-1", "-2"
+msnsCyl		pg0 000, [4:5] bitfield, "Off", "EDIS" "INVAL" "dual EDIS"
+msnsCyl		pg0 000, [6:6] bitfield, "Off", "Ford TFI"
+msnsCyl		pg0 000, [7:7] bitfield, "Off", "GM 7pin HEI"
+
+----------------------------------------------------------------------------
+OUTPUTS TO USE
+----------------------------------------------------------------------------
+
+fidleUse	pg0 001 [0:0] bitfield "Idle Ctrl", "Spark out A"
+led17Use	pg0 001 [1:1] bitfield "Squirt indicator", "Spark Out A"
+led18Use	pg0 001 [2:3] bitfield "Warmup indicator", "IRQ Trigger", "Output 4", "Spark Output C"
+led18_2Use	pg0 001 [3:3]  bitfield UNUSED, see previous
+led19Use	pg0 001 [4:4] bitfield "Accell indicator", "Spark Output B"
+toy_dli		pg0 001 [7:7] bitfield "Normal", "Toyota DLI Multiplex"
+x2use		pg0 001 [5:5] bitfield TOGGLES WATER GROUP "Water Injection", "Fan Control"
+SPECIAL		pg0 001 [6:6] bitfield, this control is only valid if bits [2:3] set to 2=1 and 3=0, then led18 is "Output 4" or "Fan Control"
+boostUse	pg0 012 [0:0] bitfield "Output 1" "Boost Control"
+out3sparkd	pg0 012 [4:4] bitfield "Output 3" "Spark Output D"
+spkeop		pg0 116 [3:3] bitfield "Shiftlight" "Spark Output E"
+spkfop		pg0 116 [4:4] bitfield "Knock INPUT", "Spark Output F"
+
+----------------------------------------------------------------------------
+WHEEL DECODER
+----------------------------------------------------------------------------
+
+numteeth	pg0 090, no conv, 0-255 span
+wd_2trig	pg0 011 [0:0] bitfield "Off", "2nd Trigger"
+trig2fall	pg0 033 [0:0] "rising", "falling (like IRQ)" depends on wd_2trig
+miss2nd		pg0 066 [0:0] "no missing", "missing" depends on wd_2trig
+onetwo		pg0 000, [3:3] bitfield, "-1", "-2" depends on !wd_2trig || (wd_2trig && miss2nd)
+trig1		pg0 025, no conv 0-255 span
+trig1ret	pg0 029, no conv 0-255 span
+trig2		pg0 026, no conv 0-255 span
+trig2ret	pg0 030, no conv 0-255 span
+trig3		pg0 027, no conv 0-255 span
+trig3ret	pg0 031, no conv 0-255 span
+trig4		pg0 028, no conv 0-255 span
+trig5ret	pg0 032, no conv 0-255 span
+trig5		pg0 145, no conv 0-255 span
+trig5ret	pg0 147, no conv 0-255 span
+trig6		pg0 146, no conv 0-255 span
+trig6ret	pg0 148, no conv 0-255 span
+dualdizzy	pg0 092 [4:4] "Normal" "Dual Dizzy"
+wheel_old	pg0 092 [3:3] "025 Style", "024s9 style"
+
+ODDFIRE, highly experimental
+
+outaoffs	pg6 166 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
+outaoffsv	pg6 167 "deg" x*0.352 conv, 0-45 span
+outboffs	pg6 168 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
+outboffsv	pg6 169 "deg" x*0.352 conv, 0-45 span
+outcoffs	pg6 170 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
+outcoffsv	pg6 171 "deg" x*0.352 conv, 0-45 span
+outdoffs	pg6 172 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
+outdoffsv	pg6 173 "deg" x*0.352 conv, 0-45 span
+outeoffs	pg6 174 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
+outeoffsv	pg6 175 "deg" x*0.352 conv, 0-45 span
+outfoffs	pg6 176 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
+outfoffsv	pg6 177 "deg" x*0.352 conv, 0-45 span
+
+Trigger stuff
+TrigAng		pg1 168 "deg" *0.352 conv, 0-90 span
+Trig_plus	pg1 173 [0:1] "0", "+22.5", "INVAL", "+45"  !oddfire
+TrigCrank	pg1 173 [2:2] "Trigger Return", "Time Based"	!edis
+CrankAng	pg1 171 "deg" (x*0.352)-28.4 conv, -10-80 span	
+IgHold		pg1 172 "", no conv, 0-100 span
+IgInv		pg1 173 [3:3] "No", "Yes"
+oddfir		pg1 173 [4:4] "No", "Yes" enables ODDFIRE
+FixAng		pg1 169 "deg" (x*0.352)-28.4 conv, -10-80 span	 
+Trim		pg1 170 "deg" x*0.352 conv -45 to 45 range (conversion is invalid)
+
+Dwell Control
+
+dwellcont	pg0 109 [1:1] "Fixed Duty" "Dwell Control"
+dwellduty50	pg0 012 [5:6] "75% DC", "min for HEI4", "50% DC", "INVAL"
+dwellcrank	pg0 110 "ms" x*0.1 conv, 0-25.5 span
+dwellrun	pg0 111 "ms" x*0.1 conv, 0-25.5 span
+mindischg	pg0 143 "ms" x*0.1 conv, 0-1.5 span
+
+
