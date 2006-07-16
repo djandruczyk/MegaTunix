@@ -57,7 +57,6 @@ gui_files = 	README \
 		msns-e-features-029x.datamap \
 		msns-e-fuelconstants.glade \
 		msns-e-fuelconstants.datamap \
-		msns-e-fuelconstants-021x.datamap \
 		msns-e-fuelconstants-029x.datamap \
 		msns-e-idle.glade \
 		msns-e-idle-029x.datamap \
@@ -88,15 +87,11 @@ gui_files = 	README \
 		tools.glade \
 		tools.datamap \
 		vetable_12x12s.glade \
-		vetable_12x12s-021E_1.datamap \
-		vetable_12x12s-021E_2.datamap \
 		vetable_12x12s-E_3.datamap \
 		vetable_12x12s-022E_1.datamap \
 		vetable_12x12s-022E_2.datamap \
 		vetable_12x12s-023E_2.datamap \
 		vetable_12x12e.glade \
-		vetable_12x12e-021E_1.datamap \
-		vetable_12x12e-021E_2.datamap \
 		vetable_12x12e-E_3.datamap \
 		vetable_12x12e-022E_1.datamap \
 		vetable_12x12e-022E_2.datamap \
