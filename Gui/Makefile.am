@@ -60,6 +60,8 @@ gui_files = 	README \
 		msns-e-fuelconstants-029x.datamap \
 		msns-e-idle.glade \
 		msns-e-idle-029x.datamap \
+		msns-e-outputs-sel.glade \
+		msns-e-outputs-sel-029x.datamap \
 		msns-e-water-nos-launch.glade \
 		msns-e-water-nos-launch-029x.datamap \
 		projection.glade \

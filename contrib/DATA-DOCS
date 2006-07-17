@@ -216,6 +216,7 @@ out3sparkd	pg0 012 [4:4] bitfield "Output 3" "Spark Output D"
 spkeop		pg0 116 [3:3] bitfield "Shiftlight" "Spark Output E"
 spkfop		pg0 116 [4:4] bitfield "Knock INPUT", "Spark Output F"
 
+
 out1src		pg0 008 [0:4], bitfield "Off*", "INVALID", "INVALID", "INVALID", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
 
 out1lim		pg0 007, "raw byte of degF+40" (eww!!!), 0-255 span (need something nicer)

@@ -258,7 +258,7 @@ void cell_edited(GtkCellRendererText *cell,
 	gint * lookup = NULL;
 	gint result = 0;
 	gint page = 0;
-	gboolean ign_parm = TRUE;
+	gboolean ign_parm = FALSE;
 	gboolean state = FALSE;
 	gboolean is_float = FALSE;
 	extern GHashTable *lookuptables;
@@ -293,20 +293,6 @@ void cell_edited(GtkCellRendererText *cell,
 		gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
 				g_strdup_printf("%i",(gint)new), -1);
 
-	if (column == COL_HYS)
-	{
-		printf("edited hysteresis column for var offset %i\n",rt_offset);
-		write_ve_const(NULL, page, hys_offset, new, ign_parm, TRUE);
-		update_model_from_view((GtkWidget *)view);
-		return;
-	}
-	if (column == COL_ULIMIT)
-	{
-		printf("edited upper limit column for var offset %i\n",rt_offset);
-		write_ve_const(NULL, page, ulimit_offset, new, ign_parm, TRUE);
-		update_model_from_view((GtkWidget *)view);
-		return;
-	}
 	if (!evaluator)
 	{
 		evaluator = evaluator_create(g_object_get_data(G_OBJECT(object),"dl_conv_expr"));
@@ -345,9 +331,21 @@ void cell_edited(GtkCellRendererText *cell,
 	else
 		result = (gint)tmpf;
 
-	write_ve_const(NULL, page, src_offset, rt_offset, ign_parm, TRUE);
-	write_ve_const(NULL, page, lim_offset, result, ign_parm, TRUE);
-	update_model_from_view((GtkWidget *)view);
+	switch (column)
+	{
+		case COL_HYS:
+			write_ve_const(NULL, page, hys_offset, result, ign_parm, TRUE);
+			break;
+		case COL_ULIMIT:
+			write_ve_const(NULL, page, ulimit_offset, result, ign_parm, TRUE);
+			break;
+		case COL_ENTRY:
+			write_ve_const(NULL, page, src_offset, rt_offset, ign_parm, TRUE);
+			write_ve_const(NULL, page, lim_offset, result, ign_parm, TRUE);
+			break;
+	}
+	return;
+	//update_model_from_view((GtkWidget *)view);
 
 }
 
@@ -370,6 +368,8 @@ void update_model_from_view(GtkWidget * widget)
 	gint page = 0;
 	gint offset = 0;
 	gint cur_val = 0;
+	gint hys_val = 0;
+	gint ulimit_val = 0;
 	gint x = 0;
 	gfloat tmpf = 0.0;
 	gfloat result = 0.0;
@@ -389,8 +389,11 @@ void update_model_from_view(GtkWidget * widget)
 	hys_offset = (gint)g_object_get_data(G_OBJECT(model),"hys_offset");
 	ulimit_offset = (gint)g_object_get_data(G_OBJECT(model),"ulimit_offset");
 	page = (gint)g_object_get_data(G_OBJECT(model),"page");
+
 	offset = ms_data[page][src_offset];
 	cur_val = ms_data[page][lim_offset];
+	hys_val = ms_data[page][hys_offset];
+	ulimit_val = ms_data[page][ulimit_offset];
 
 	looptest = TRUE;
 	while (looptest)
@@ -419,6 +422,7 @@ void update_model_from_view(GtkWidget * widget)
 			else
 				assert(evaluator);
 
+			/* TEXT ENTRY part */
 			if (g_object_get_data(object,"lookuptable"))
 				x = lookup_data(object,cur_val);
 			else
@@ -439,10 +443,54 @@ void update_model_from_view(GtkWidget * widget)
 			else
 				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%i",(gint)result), -1);
 
-			if (hys_offset >= 0)
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup_printf("%i",(gint)ms_data[page][hys_offset]), -1);
-			if (ulimit_offset >= 0)
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%i",(gint)ms_data[page][ulimit_offset]), -1);
+			/* HYSTERESIS VALUE */
+			if (g_object_get_data(G_OBJECT(model),"hys_offset") != NULL)
+			{
+				if (g_object_get_data(object,"lookuptable"))
+					x = lookup_data(object,hys_val);
+				else
+					x = hys_val;
+				tmpf = evaluator_evaluate_x(evaluator,x);
+				if (temp_dep)
+				{
+					if (temp_units == CELSIUS)
+						result = (tmpf-32)*(5.0/9.0);
+					else
+						result = tmpf;
+				}
+				else
+					result = tmpf;
+
+				if (is_float)
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup_printf("%.2f",result), -1);
+				else
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup_printf("%i",(gint)result), -1);
+
+			}
+			/* UPPER LIMIT VALUE */
+			if (g_object_get_data(G_OBJECT(model),"ulimit_offset") != NULL)
+			{
+			if (g_object_get_data(object,"lookuptable"))
+				x = lookup_data(object,ulimit_val);
+			else
+				x = ulimit_val;
+			tmpf = evaluator_evaluate_x(evaluator,x);
+			if (temp_dep)
+			{
+				if (temp_units == CELSIUS)
+					result = (tmpf-32)*(5.0/9.0);
+				else
+					result = tmpf;
+			}
+			else
+				result = tmpf;
+
+			if (is_float)
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%.2f",result), -1);
+			else
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%i",(gint)result), -1);
+			}
+
 
 
 //			printf("offset matched for object %s\n",(gchar *)g_object_get_data(object,"dlog_gui_name"));
