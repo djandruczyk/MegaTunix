@@ -33,6 +33,8 @@ enum
 	COL_NAME,
 	COL_RANGE,
 	COL_ENTRY,
+	COL_HYS,
+	COL_ULIMIT,
 	COL_EDITABLE,
 	NUM_COLS
 } ;
@@ -61,8 +63,9 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 
 	g_object_set_data(G_OBJECT(model),"lim_offset",g_object_get_data(G_OBJECT(widget),"lim_offset"));
 	g_object_set_data(G_OBJECT(model),"src_offset",g_object_get_data(G_OBJECT(widget),"src_offset"));
+	g_object_set_data(G_OBJECT(model),"hys_offset",g_object_get_data(G_OBJECT(widget),"hys_offset"));
+	g_object_set_data(G_OBJECT(model),"ulimit_offset",g_object_get_data(G_OBJECT(widget),"ulimit_offset"));
 	g_object_set_data(G_OBJECT(model),"page",g_object_get_data(G_OBJECT(widget),"page"));
-	g_object_set_data(G_OBJECT(model),"ign_parm",g_object_get_data(G_OBJECT(widget),"ign_parm"));
 
 	view = gtk_tree_view_new_with_model(model);
 	g_object_set_data(G_OBJECT(model),"view",(gpointer)view);
@@ -70,7 +73,8 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 	g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
-	add_columns(GTK_TREE_VIEW(view), (gint)g_object_get_data(G_OBJECT(widget),"output_num"));
+	add_columns(GTK_TREE_VIEW(view), widget);
+
 	update_model_from_view((GtkWidget *)view);
 
 }
@@ -93,7 +97,7 @@ GtkTreeModel * create_model(void)
 	GObject * object = NULL;
 	extern struct Rtv_Map *rtv_map;
 
-	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
 	/* Append a row and fill in some data */
 	while ((data = rtv_map->raw_list[i])!= NULL)
@@ -117,6 +121,8 @@ GtkTreeModel * create_model(void)
 				COL_NAME, name,
 				COL_RANGE, range,
 				COL_ENTRY, g_strdup(""),
+				COL_HYS, g_strdup(""),
+				COL_ULIMIT, g_strdup(""),
 				COL_EDITABLE,TRUE,
 				-1);
 		g_free(range);
@@ -130,17 +136,19 @@ GtkTreeModel * create_model(void)
  \param view (GtkTreeView *) pointer to the Treeview
  \param output (gint) a number passed used for in a colum title
  */
-void add_columns(GtkTreeView *view, gint output)
+void add_columns(GtkTreeView *view, GtkWidget *widget)
 {
 	GtkCellRenderer     *renderer;
 	GtkTreeViewColumn *col;
 	GtkTreeModel        *model = gtk_tree_view_get_model (view);
+	gint output = -1;
 
+	output = (gint)g_object_get_data(G_OBJECT(widget),"output_num");
 	/* --- Column #1, name --- */
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_NAME);
 	col = gtk_tree_view_column_new_with_attributes (
-			g_strdup_printf("Out %i Variable",output),  
+			g_strdup_printf("Output %i Var.",output),  
 			renderer,
 			"markup", COL_NAME,
 			NULL);
@@ -173,6 +181,41 @@ void add_columns(GtkTreeView *view, gint output)
 			NULL);
 	gtk_tree_view_append_column (view, col);
 
+	/* --- Column #4 , Hystereiss value --- */
+
+	renderer = gtk_cell_renderer_text_new ();
+	g_signal_connect(renderer, "edited",
+			G_CALLBACK(cell_edited),model);
+	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_HYS);
+	col = gtk_tree_view_column_new_with_attributes (
+			"Hystereis",  
+			renderer,
+			"text", COL_HYS,
+			"editable",COL_EDITABLE,
+			NULL);
+	gtk_tree_view_append_column (view, col);
+	/* If no hysteresis params, this column should NOT show */
+	if (g_object_get_data(G_OBJECT(widget),"hys_offset") == NULL)
+		gtk_tree_view_column_set_visible(col,FALSE);
+
+
+	/* --- Column #5, user choice --- */
+
+	renderer = gtk_cell_renderer_text_new ();
+	g_signal_connect(renderer, "edited",
+			G_CALLBACK(cell_edited),model);
+	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_ULIMIT);
+	col = gtk_tree_view_column_new_with_attributes (
+			"Upper Limit",  
+			renderer,
+			"text", COL_ULIMIT,
+			"editable",COL_EDITABLE,
+			NULL);
+	gtk_tree_view_append_column (view, col);
+	/* If no upperlimit params, this column should NOT show */
+	if (g_object_get_data(G_OBJECT(widget),"ulimit_offset") == NULL)
+		gtk_tree_view_column_set_visible(col,FALSE);
+
 }
 
 
@@ -204,6 +247,8 @@ void cell_edited(GtkCellRendererText *cell,
 	gint src_offset = -1;
 	gint lim_offset = -1;
 	gint rt_offset = -1;
+	gint hys_offset = -1;
+	gint ulimit_offset = -1;
 	gfloat x = 0.0;
 	gfloat tmpf = 0.0;
 	void * evaluator = NULL;
@@ -220,9 +265,10 @@ void cell_edited(GtkCellRendererText *cell,
 
 	column = (gint) g_object_get_data (G_OBJECT (cell), "column");
 	page = (gint) g_object_get_data(G_OBJECT(model),"page");
-	ign_parm = (gboolean) g_object_get_data(G_OBJECT(model),"ign_parm");
 	src_offset = (gint) g_object_get_data(G_OBJECT(model),"src_offset");
 	lim_offset = (gint) g_object_get_data(G_OBJECT(model),"lim_offset");
+	hys_offset = (gint) g_object_get_data(G_OBJECT(model),"hys_offset");
+	ulimit_offset = (gint) g_object_get_data(G_OBJECT(model),"ulimit_offset");
 
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
@@ -247,6 +293,20 @@ void cell_edited(GtkCellRendererText *cell,
 		gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
 				g_strdup_printf("%i",(gint)new), -1);
 
+	if (column == COL_HYS)
+	{
+		printf("edited hysteresis column for var offset %i\n",rt_offset);
+		write_ve_const(NULL, page, hys_offset, new, ign_parm, TRUE);
+		update_model_from_view((GtkWidget *)view);
+		return;
+	}
+	if (column == COL_ULIMIT)
+	{
+		printf("edited upper limit column for var offset %i\n",rt_offset);
+		write_ve_const(NULL, page, ulimit_offset, new, ign_parm, TRUE);
+		update_model_from_view((GtkWidget *)view);
+		return;
+	}
 	if (!evaluator)
 	{
 		evaluator = evaluator_create(g_object_get_data(G_OBJECT(object),"dl_conv_expr"));
@@ -305,6 +365,8 @@ void update_model_from_view(GtkWidget * widget)
 	GObject *object = NULL;
 	gint src_offset = 0;
 	gint lim_offset = 0;
+	gint hys_offset = -1;
+	gint ulimit_offset = -1;
 	gint page = 0;
 	gint offset = 0;
 	gint cur_val = 0;
@@ -324,6 +386,8 @@ void update_model_from_view(GtkWidget * widget)
 		return;
 	src_offset = (gint)g_object_get_data(G_OBJECT(model),"src_offset");
 	lim_offset = (gint)g_object_get_data(G_OBJECT(model),"lim_offset");
+	hys_offset = (gint)g_object_get_data(G_OBJECT(model),"hys_offset");
+	ulimit_offset = (gint)g_object_get_data(G_OBJECT(model),"ulimit_offset");
 	page = (gint)g_object_get_data(G_OBJECT(model),"page");
 	offset = ms_data[page][src_offset];
 	cur_val = ms_data[page][lim_offset];
@@ -375,11 +439,21 @@ void update_model_from_view(GtkWidget * widget)
 			else
 				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%i",(gint)result), -1);
 
+			if (hys_offset >= 0)
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup_printf("%i",(gint)ms_data[page][hys_offset]), -1);
+			if (ulimit_offset >= 0)
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%i",(gint)ms_data[page][ulimit_offset]), -1);
+
+
 //			printf("offset matched for object %s\n",(gchar *)g_object_get_data(object,"dlog_gui_name"));
 
 		}
 		else
+		{
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup(""), -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup(""), -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup(""), -1);
+		}
 		looptest = gtk_tree_model_iter_next(model,&iter);
 	}
 }

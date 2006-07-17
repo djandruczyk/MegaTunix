@@ -19,7 +19,7 @@
 /* Prototypes */
 void build_model_and_view(GtkWidget *);
 GtkTreeModel * create_model(void);
-void add_columns (GtkTreeView *, gint);
+void add_columns (GtkTreeView *, GtkWidget *);
 void update_model_from_view(GtkWidget * );
 void cell_edited(GtkCellRendererText *, const gchar * ,const gchar * ,gpointer );
 
