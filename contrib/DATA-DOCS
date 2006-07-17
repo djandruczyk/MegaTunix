@@ -301,3 +301,34 @@ dwellrun	pg0 111 "ms" x*10 conv, 0-25.5 span
 mindischg	pg0 143 "ms" x*10 conv, 0-1.5 span
 
 
+----------------------------------------------------------------------------
+ANTI-REV
+----------------------------------------------------------------------------
+
+TractionOn 	pg0 092 [5:5], "Off*^", "On"
+RPMThresh	pg0 098 "RPM/Sec", (x * 1000) conv, (1000 - 25000) span
+RPM1S		pg0 094 "3000RPM/Sec or 5%Slip",(x * 0.1) conv, (0 - 20) span
+RPM2S		pg0 095 "4000RPM/Sec or 15%Slip",(x * 0.1) conv, (0 - 20) span
+RPM3S		pg0 096 "6000RPM/Sec or 30%Slip",(x * 0.1) conv, (0 - 20) span
+RPM4S		pg0 097 "10000RPM/Sec or 70%Slip",(x * 0.1) conv, (0 - 20) span
+TractRet1	pg0 099 "3000RPM/Sec or 5%Slip", (x * 0.352) conv, (0 - 30) span
+TractRet2	pg0 100 "4000RPM/Sec or 15%Slip", (x * 0.352) conv, (0 - 30) span
+TractRet3	pg0 101 "6000RPM/Sec or 30%Slip", (x * 0.352) conv, (0 - 30) span
+TractRet4	pg0 102 "10000RPM/Sec or 70%Slip", (x * 0.352) conv, (0 - 30) span
+TractSC1	pg0 103 "3000RPM/Sec or 5%Slip", no conv, (0 - 2) span
+TractSC2	pg0 104 "4000RPM/Sec or 15%Slip",  no conv, (0 - 2) span
+TractSC3	pg0 105 "6000RPM/Sec or 30%Slip",  no conv, (0 - 2) span
+TractSC4	pg0 106 "10000RPM/Sec or 70%Slip",  no conv, (0 - 2) span
+TractNOS	pg0 109 [0:0], "No", "Yes"
+TractCyc1	pg0 112 "3000RPM/Sec or 5%Slip", no conv, (1 - 255) span
+TractCyc2	pg0 113 "4000RPM/Sec or 15%Slip", no conv, (1 - 255) span
+TractCyc3	pg0 114 "6000RPM/Sec or 30%Slip", no conv, (1 - 255) span
+TractCyc4	pg0 115 "10000RPM/Sec or 70%Slip", no conv, (1 - 255) span
+TractCySec	pg0 109 [2:2], "RPM stable for 0.1S", "Cycle count only"
+TractScale	pg0 119 "%", (x * 0.39216) conv, (0 - 100) span
+TractSlip	pg0 120 "%", (x * 0.39216) conv, (0 - 100) span
+TractSlipH	pg0 123 "%", (x * 0.39216) conv, (0 - 100) span
+TractVSSMax	pg0 118 "V", (x * 0.0196) conv, (0 - 5) span
+TractVSSMin	pg0 117 "V", (x * 0.0196) conv, (0 - 5) span
+TractMode	pg0 109 [3:3], "RPM Based", "Vehicle Speed Sensors"
+
