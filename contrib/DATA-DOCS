@@ -336,7 +336,7 @@ TractMode	pg0 109 [3:3], "RPM Based", "Vehicle Speed Sensors"
 STAGED-INJECTION
 ----------------------------------------------------------------------------
 
-IStagedMode	pg0 076 [2:3] bitsfield, "Off*^","RPM-Based","MAP-Based","TPS-Based"
+IStagedMode	pg0 076 [2:3] bitfield, "Off*^","RPM-Based","MAP-Based","TPS-Based"
 ScaleFac	pg0 079 "", no conv, (0 - 255) span
 StgTrans	pg0 080 "", no conv, (0 - 255) span
 StgDelta	pg0 081 "", no conv, (0 - 255) span
@@ -346,3 +346,18 @@ StgCycles 	pg3 179 "cycles", no conv, (0 - 255) span
 Stg2ndParmKPA 	pg3 180 "kPa", no conv, (0 - 255) span
 Stg2ndParmDlt 	pg3 181 "kPa", no conv, (0 - 255) span
 
+----------------------------------------------------------------------------
+REV_LIMITER
+----------------------------------------------------------------------------
+
+HCutType	pg0 046 [4:5] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
+HCutSpark       pg0 045 "Sparks", no conv, (0 - 20) span
+HCutLCType      pg0 076 [0:1] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
+HCutLCSpark     pg0 077 "Sparks", no conv, (0 - 20) span
+SparkCutBase    pg0 078 "Sparks", (x - 1) conv, (5 - 20) span
+OvrBCutType     pg0 076 [4:5] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
+SparkCutBNum    pg0 084 "Sparks", no conv, (0 - 20) span
+SoftRevLim    	pg0 002 "rpm", (x/100) conv, (100 - 25500) span
+SoftLimRetard 	pg0 003 "deg", ((x*0.352)+28.4) conv (-10 - 80) span
+SoftLimMax    	pg0 004 "s", (x/0.1) conv, (0 - 25.5) span
+HardRevLim    	pg0 006 "rpm", (x/100) conv, (100 - 25500) span
