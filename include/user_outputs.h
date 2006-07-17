@@ -22,6 +22,7 @@ GtkTreeModel * create_model(void);
 void add_columns (GtkTreeView *, GtkWidget *);
 void update_model_from_view(GtkWidget * );
 void cell_edited(GtkCellRendererText *, const gchar * ,const gchar * ,gpointer );
+gboolean deferred_model_update(GtkWidget * );
 
 
 		

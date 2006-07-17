@@ -181,14 +181,14 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 			NULL);
 	gtk_tree_view_append_column (view, col);
 
-	/* --- Column #4 , Hystereiss value --- */
+	/* --- Column #4 , Hysteresis value --- */
 
 	renderer = gtk_cell_renderer_text_new ();
 	g_signal_connect(renderer, "edited",
 			G_CALLBACK(cell_edited),model);
 	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_HYS);
 	col = gtk_tree_view_column_new_with_attributes (
-			"Hystereis",  
+			"Hysteresis",  
 			renderer,
 			"text", COL_HYS,
 			"editable",COL_EDITABLE,
@@ -344,8 +344,8 @@ void cell_edited(GtkCellRendererText *cell,
 			write_ve_const(NULL, page, lim_offset, result, ign_parm, TRUE);
 			break;
 	}
+	g_timeout_add(500,(GtkFunction)deferred_model_update,(GtkWidget *)view);
 	return;
-	//update_model_from_view((GtkWidget *)view);
 
 }
 
@@ -508,4 +508,10 @@ void update_model_from_view(GtkWidget * widget)
 		}
 		looptest = gtk_tree_model_iter_next(model,&iter);
 	}
+}
+
+gboolean deferred_model_update(GtkWidget * widget)
+{
+	update_model_from_view(widget);
+	return FALSE;
 }
