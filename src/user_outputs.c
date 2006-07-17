@@ -361,6 +361,7 @@ void update_model_from_view(GtkWidget * widget)
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(widget));
 	GtkTreeIter    iter;
 	GObject *object = NULL;
+	GtkTreePath *treepath = NULL;
 	gint src_offset = 0;
 	gint lim_offset = 0;
 	gint hys_offset = -1;
@@ -470,27 +471,30 @@ void update_model_from_view(GtkWidget * widget)
 			/* UPPER LIMIT VALUE */
 			if (g_object_get_data(G_OBJECT(model),"ulimit_offset") != NULL)
 			{
-			if (g_object_get_data(object,"lookuptable"))
-				x = lookup_data(object,ulimit_val);
-			else
-				x = ulimit_val;
-			tmpf = evaluator_evaluate_x(evaluator,x);
-			if (temp_dep)
-			{
-				if (temp_units == CELSIUS)
-					result = (tmpf-32)*(5.0/9.0);
+				if (g_object_get_data(object,"lookuptable"))
+					x = lookup_data(object,ulimit_val);
+				else
+					x = ulimit_val;
+				tmpf = evaluator_evaluate_x(evaluator,x);
+				if (temp_dep)
+				{
+					if (temp_units == CELSIUS)
+						result = (tmpf-32)*(5.0/9.0);
+					else
+						result = tmpf;
+				}
 				else
 					result = tmpf;
-			}
-			else
-				result = tmpf;
 
-			if (is_float)
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%.2f",result), -1);
-			else
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%i",(gint)result), -1);
+				if (is_float)
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%.2f",result), -1);
+				else
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%i",(gint)result), -1);
 			}
 
+			/* Scroll the treeview s othe current one is in view */
+			treepath = gtk_tree_model_get_path (GTK_TREE_MODEL(model),&iter);
+			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(widget),treepath,NULL,TRUE,1.0,0.0);
 
 
 //			printf("offset matched for object %s\n",(gchar *)g_object_get_data(object,"dlog_gui_name"));
