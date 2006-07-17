@@ -332,3 +332,17 @@ TractVSSMax	pg0 118 "V", (x * 0.0196) conv, (0 - 5) span
 TractVSSMin	pg0 117 "V", (x * 0.0196) conv, (0 - 5) span
 TractMode	pg0 109 [3:3], "RPM Based", "Vehicle Speed Sensors"
 
+----------------------------------------------------------------------------
+STAGED-INJECTION
+----------------------------------------------------------------------------
+
+IStagedMode	pg0 076 [2:3] bitsfield, "Off*^","RPM-Based","MAP-Based","TPS-Based"
+ScaleFac	pg0 079 "", no conv, (0 - 255) span
+StgTrans	pg0 080 "", no conv, (0 - 255) span
+StgDelta	pg0 081 "", no conv, (0 - 255) span
+StagedMAP2nd	pg0 109 [6:6], "Off*^", "MAP-Based"
+StagedAnd	pg0 109 [7:7], "One condition", "Both Conditions"
+StgCycles 	pg3 179 "cycles", no conv, (0 - 255) span
+Stg2ndParmKPA 	pg3 180 "kPa", no conv, (0 - 255) span
+Stg2ndParmDlt 	pg3 181 "kPa", no conv, (0 - 255) span
+
