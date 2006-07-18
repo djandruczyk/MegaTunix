@@ -1063,7 +1063,7 @@ to begin boost reduction</property>
 		  <property name="spacing">0</property>
 
 		  <child>
-		    <widget class="GtkFrame" id="frame1">
+		    <widget class="GtkFrame" id="knock_control_frame">
 		      <property name="visible">True</property>
 		      <property name="label_xalign">0</property>
 		      <property name="label_yalign">0.5</property>

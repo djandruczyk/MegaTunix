@@ -24,6 +24,18 @@ bind_to_list=burners
 
 #----- Widgets ----------------------------------------------------------------
 
+[boost_control_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=boost_controller
+
+[knock_control_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=knock_controller
+
 [boost_buttons_table]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_

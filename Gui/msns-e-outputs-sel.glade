@@ -51,6 +51,7 @@
 		    <widget class="GtkScrolledWindow" id="output1_swin">
 		      <property name="border_width">5</property>
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -99,6 +100,7 @@
 		    <widget class="GtkScrolledWindow" id="output3_swin">
 		      <property name="border_width">5</property>
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -123,6 +125,7 @@
 		    <widget class="GtkScrolledWindow" id="output4_swin">
 		      <property name="border_width">5</property>
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -146,6 +149,7 @@
 		  <child>
 		    <widget class="GtkTable" id="output4_source_choice_table">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="n_rows">3</property>
 		      <property name="n_columns">1</property>
 		      <property name="homogeneous">False</property>
@@ -236,6 +240,7 @@
 		  <child>
 		    <widget class="GtkTable" id="output3_source_choice_table">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="n_rows">3</property>
 		      <property name="n_columns">1</property>
 		      <property name="homogeneous">False</property>
@@ -416,6 +421,7 @@
 		  <child>
 		    <widget class="GtkTable" id="output1_invert_choice_table">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="n_rows">3</property>
 		      <property name="n_columns">1</property>
 		      <property name="homogeneous">False</property>

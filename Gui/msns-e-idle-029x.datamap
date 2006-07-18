@@ -23,6 +23,12 @@ bind_to_list=burners
 
 #----- Widgets ----------------------------------------------------------------
 
+[main_vbox1]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=idle_control
+
 [closed_loop_idle_params_table]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
