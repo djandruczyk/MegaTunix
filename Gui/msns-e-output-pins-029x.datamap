@@ -24,27 +24,45 @@ bind_to_list=burners
 #------ Labels --------------------------------------------------------------
 [shiftlight_label]
 keys=page,bind_to_list
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=0
 bind_to_list=shiftlight_controller
 
 [shift_low_label]
 keys=page,bind_to_list
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=0
 bind_to_list=shiftlight_controller,shift_controls
 
 [shift_high_label]
 keys=page,bind_to_list
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=0
 bind_to_list=shiftlight_controller,shift_controls
 
 [tach_output_rate_label]
 keys=page,bind_to_list
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=0
 bind_to_list=tachout_params
+
+[efan_on_temp_label]
+keys=page,bind_to_list,temp_dep,c_label,f_label
+key_types=_INT_,_STRING_,_BOOL_,_STRING_,_STRING_
+page=0
+temp_dep=TRUE
+c_label=Fan On Temp \302\260C.
+f_label=Fan On Temp \302\260F.
+bind_to_list=fan_controls,temperature
+
+[efan_off_temp_label]
+keys=page,bind_to_list,temp_dep,c_label,f_label
+key_types=_INT_,_STRING_,_BOOL_,_STRING_,_STRING_
+page=0
+temp_dep=TRUE
+c_label=Fan Off Temp \302\260C.
+f_label=Fan Off Temp \302\260F.
+bind_to_list=fan_controls,temperature
 
 #------ Radio Buttons --------------------------------------------------------
 
@@ -151,14 +169,13 @@ handler=_GENERIC_
 tooltip=This sets the LED 18 port to be used for User Output 4.
 
 [led18_fan_ctrl_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=1
 bitval=18
 bitshift=2
 bitmask=76
-bind_to_list=led18_ctrls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This sets the LED 18 port to be used for Fan Control.
@@ -197,23 +214,22 @@ offset=1
 bitval=0
 bitshift=5
 bitmask=32
-toggle_groups=water_injection,nitrous_controls,fan_controls
-group_states=ENABLED,ENABLED,DISABLED
+toggle_groups=water_injection,nitrous_controls
+group_states=ENABLED,ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This sets the X2 port for Water Injection or Nitrous Oxide functionality. NOTE: This disables Fan control.
 
 [x2_fan_ctrl_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=1
 bitval=1
 bitshift=5
 bitmask=32
-bind_to_list=fan_control
-toggle_groups=x2_pin,fan_controls
-group_states=DISABLED,ENABLED
+toggle_groups=tach_x2_pin
+group_states=DISABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This sets the X2 port for Fan control (external relay required) and disables Nitrous (NOS) and Water Injection.
@@ -280,8 +296,8 @@ offset=116
 bitval=0
 bitshift=3
 bitmask=8
-toggle_groups=shiftlight,spark_e
-group_states=ENABLED,DISABLED
+toggle_groups=shiftlight_controller,shift_controls,spark_e
+group_states=ENABLED,ENABLED,DISABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the PTC4 (pin11) to be setup for shiftlight functionality.  This disables Spark Output E. 
@@ -391,16 +407,14 @@ handler=_GENERIC_
 tooltip=Disables the Tach output signal.
 
 [tach_x2_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=144
 bitval=1
 bitshift=0
 bitmask=7
-bind_to_list=x2_pin
-toggle_groups=fan_control
-group_states=DISABLED
+bind_to_list=tach_x2_pin
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Enables the Tach Output signal on X2. If Fan control is enabled these signals will conflict.
@@ -449,8 +463,8 @@ handler=_GENERIC_
 tooltip=Enables the Tach Output signal on X5. This is shared with output 2, so make sure that is set so it never activates so they don't fight over each other.
 
 [tach_output3_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=144
 bitval=5
@@ -502,27 +516,29 @@ handler=_GENERIC_
 tooltip=Sets the Tach output to be 1/2 the same as the engine firing speed
 
 [shiftlight_off_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitval=0
 bitshift=1
 bitmask=2
-toggle_groups=shift_controls,spark_e
-group_states=DISABLED,ENABLED
+bind_to_list=shiftlight_controller
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Disables Shiftlight functionality
 
 [shiftlight_on_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitval=1
 bitshift=1
 bitmask=2
+bind_to_list=shiftlight_controller
+toggle_groups=shift_controls,spark_e
+group_states=DISABLED,ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Disables Shiftlight functionality

@@ -627,7 +627,7 @@
 			<widget class="GtkLabel" id="knock_spark_f_label">
 			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">JS10, JP1/5
-Knock Input or Spark F</property>
+Knock In or Spark F</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1626,7 +1626,6 @@ Knock Input or Spark F</property>
 			  <child>
 			    <widget class="GtkLabel" id="efan_on_temp_label">
 			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
 			      <property name="label" translatable="yes">Fan On Temp</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
@@ -1651,7 +1650,6 @@ Knock Input or Spark F</property>
 			  <child>
 			    <widget class="GtkLabel" id="efan_off_temp_label">
 			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
 			      <property name="label" translatable="yes">Fan Off Temp</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
@@ -1676,7 +1674,6 @@ Knock Input or Spark F</property>
 			  <child>
 			    <widget class="GtkSpinButton" id="efan_offtemp_spin">
 			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">100</property>
 			      <property name="digits">0</property>
@@ -1718,7 +1715,6 @@ Knock Input or Spark F</property>
 			  <child>
 			    <widget class="GtkSpinButton" id="efan_ontemp_spin">
 			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">100</property>
 			      <property name="digits">0</property>
