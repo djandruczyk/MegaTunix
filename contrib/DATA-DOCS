@@ -54,6 +54,8 @@ TPSBooIAT	137 BOOST, raw_ADC, 0-255 span
 KnockBoost	107 BOOST, knock_ctrl, PSI, x/0.147 conv,  0-20 ctrl span
 BoostMaxKn	108 BOOST, knock_ctrl, PSI, x/0.147 conv,  0-20 ctrl span
 
+OvrBKpa         pg0 044 "KPa", no conv, (100 - 255) span
+
 ----------------------------------------------------------------------------
 KNOCK CONTROL  100% DONE
 ----------------------------------------------------------------------------
@@ -246,8 +248,6 @@ out4lim		pg0 139 "raw byte of degF +40" 0-255 span
 out4FAN		pg0 001 [6:6] bitfield "Source" "Fan Control"
 
 
-
-
 ----------------------------------------------------------------------------
 WHEEL DECODER
 ----------------------------------------------------------------------------
@@ -367,3 +367,37 @@ SoftRevLim    	pg0 002 "rpm", (x/100) conv, (100 - 25500) span
 SoftLimRetard 	pg0 003 "deg", ((x*0.352)+28.4) conv (-10 - 80) span
 SoftLimMax    	pg0 004 "s", (x/0.1) conv, (0 - 25.5) span
 HardRevLim    	pg0 006 "rpm", (x/100) conv, (100 - 25500) span
+
+----------------------------------------------------------------------------
+ADVANCED OPTIONS
+----------------------------------------------------------------------------
+
+hybridAN        pg0 011 [5:5], "Off*^", "On"
+AFMUse          pg0 184 [5:5],  "No AFM *^", "AFM on X7"
+AirCorAFM       pg0 184 [6:6],  "Use IAT", "Built into AFM"
+edismulti       pg0 066 [3:3],  "Off*^", "On"
+edismultirpm    pg0 021 "rpm", (x * 100) conv, (100 - 2500) span
+falsetrig_dis   pg0 092 [2:2], "Enabled*", "Disabled"
+
+
+----------------------------------------------------------------------------
+IDLE ADVANCE
+----------------------------------------------------------------------------
+
+IdleAdv    	pg3 174 "Deg", ((x * 0.352) - 28.4) conv. (-10 - 80) span
+IdleAdvTPS 	pg3 175 "ADC", no conv, (0 - 255) span
+IdleAdvRPM 	pg3 176 "RPM", (x * 100) conv, (0 - 1200) span
+IdleAdvCLT 	pg3 177 "F", (x - 40) conv, (-40 - 215) span
+IdleDelayTime 	pg3 178 "sec", no conv, (0 -  5) span
+
+----------------------------------------------------------------------------
+IAT/CLT RELATED IGNTION
+----------------------------------------------------------------------------
+
+CltAdv          pg0 046 [2:2], "Off", "On"
+IgAdvDeg        pg0 048 "F", no conv, (0 - 120) span
+IgAdvTemp       pg0 047 "F", (x - 40) conv, (-10 - 120) span
+IgRetDeg        pg0 050 "F", no conv, (0 - 120) span
+IgRetTemp       pg0 052 "F", (x - 40) conv, (-10 - 120) span
+MaxIatAdv       pg0 049 "Deg", (x * 0.352) conv, (0 - 15) span
+IatAdvKpa       pg0 051 "KPa", (x - 40) conv, (0 - 255) span
