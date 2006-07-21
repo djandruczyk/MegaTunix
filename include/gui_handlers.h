@@ -30,7 +30,8 @@ gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
 void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 void update_ve_const(void);
 void update_widget(gpointer, gpointer );
-void switch_labels(gchar * ,gboolean );
+void switch_labels(gpointer , gpointer );
+void swap_labels(gchar *, gboolean );
 /* Prototypes */
 
 #endif

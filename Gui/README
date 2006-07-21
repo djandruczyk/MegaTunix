@@ -94,8 +94,10 @@ keys themselves are not, as the string compare functions are case insensitive.
 	*_bitmask	(integer) bitmask to mask value at page,offset
 	*_bitshift	(integer) how many bits to shift by before testing
 	*_bitval	(integer) value to match against for above 4 params
-	swap_labels	(comma seperated string list). List of widget names to
+	swap_labels	(comma seperated string list). List of widget names OR
+			GROUPNAMES (created with bind_to_list) to
 			swap the labels based on the state of this widget. 
+			Widget names and groups can be intermixed
 			Currently applies to BITFIELD widgets ONLY. The target
 			widget IF IT IS NOT TEMP DEPENDANT should have "label"
 			and "alt_label" defined, otherwise it needs 4 keys

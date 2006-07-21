@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean swap_base(GtkWidget *, GdkEvent *, gpointer );
 void finish_raweditor(void);
 /* Prototypes */
 

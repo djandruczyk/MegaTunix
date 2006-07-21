@@ -202,7 +202,7 @@ msnsCyl		pg0 000, [6:6] bitfield, "Off", "Ford TFI"
 msnsCyl		pg0 000, [7:7] bitfield, "Off", "GM 7pin HEI"
 
 ----------------------------------------------------------------------------
-OUTPUTS TO USE 98% complete shift/fan remaining
+OUTPUTS TO USE 100% complete in two tabs
 ----------------------------------------------------------------------------
 
 fidleUse	pg0 001 [0:0] bitfield "Idle Ctrl", "Spark out A"
@@ -224,10 +224,6 @@ ShiftLower	pg0 018 "RPM" x*100 conv, 100-25500 span
 ShiftUpper	pg0 019 "RPM" x*100 conv, 100-25500 span
 efanontemp	pg0 074 TEMP_DEP -40 conv, -40-215 span
 efanofftemp	pg0 075 TEMP_DEP -40 conv, -40-215 span
-
-
-
-
 out1src		pg0 008 [0:4], bitfield "Off*", "INVALID", "INVALID", "INVALID", "MAP", "MAT", "CLT", "TPS", "BATT", "EGO", "egocorr", "AirCorr", "WarmCorr", "RPM", "PW1", "TPSAccel", "BaroCorr", "GammaE","VECurr1", "PW2","VECurr2", "IdleDC","CTimeH", "CTimeL","SparkAngle", "AFRTarget","X7ADC", "X6ADC","CltIATAngle", "KnockAngle","EggoCorr2", "Traction Active"
 out1lim		pg0 007, "raw byte of degF+40" (eww!!!), 0-255 span (need something nicer)
 out1Hysis	pg0 126 "raw byte or degF" 0-255 span
@@ -308,35 +304,44 @@ mindischg	pg0 143 "ms" x*10 conv, 0-1.5 span
 
 
 ----------------------------------------------------------------------------
-ANTI-REV
+TRACTION
 ----------------------------------------------------------------------------
 
 TractionOn 	pg0 092 [5:5], "Off*^", "On"
-RPMThresh	pg0 098 "RPM/Sec", (x * 1000) conv, (1000 - 25000) span
-RPM1S		pg0 094 "3000RPM/Sec or 5%Slip",(x * 0.1) conv, (0 - 20) span
-RPM2S		pg0 095 "4000RPM/Sec or 15%Slip",(x * 0.1) conv, (0 - 20) span
-RPM3S		pg0 096 "6000RPM/Sec or 30%Slip",(x * 0.1) conv, (0 - 20) span
-RPM4S		pg0 097 "10000RPM/Sec or 70%Slip",(x * 0.1) conv, (0 - 20) span
-TractRet1	pg0 099 "3000RPM/Sec or 5%Slip", (x * 0.352) conv, (0 - 30) span
-TractRet2	pg0 100 "4000RPM/Sec or 15%Slip", (x * 0.352) conv, (0 - 30) span
-TractRet3	pg0 101 "6000RPM/Sec or 30%Slip", (x * 0.352) conv, (0 - 30) span
-TractRet4	pg0 102 "10000RPM/Sec or 70%Slip", (x * 0.352) conv, (0 - 30) span
-TractSC1	pg0 103 "3000RPM/Sec or 5%Slip", no conv, (0 - 2) span
-TractSC2	pg0 104 "4000RPM/Sec or 15%Slip",  no conv, (0 - 2) span
-TractSC3	pg0 105 "6000RPM/Sec or 30%Slip",  no conv, (0 - 2) span
-TractSC4	pg0 106 "10000RPM/Sec or 70%Slip",  no conv, (0 - 2) span
-TractNOS	pg0 109 [0:0], "No", "Yes"
-TractCyc1	pg0 112 "3000RPM/Sec or 5%Slip", no conv, (1 - 255) span
-TractCyc2	pg0 113 "4000RPM/Sec or 15%Slip", no conv, (1 - 255) span
-TractCyc3	pg0 114 "6000RPM/Sec or 30%Slip", no conv, (1 - 255) span
-TractCyc4	pg0 115 "10000RPM/Sec or 70%Slip", no conv, (1 - 255) span
-TractCySec	pg0 109 [2:2], "RPM stable for 0.1S", "Cycle count only"
+TractMode	pg0 109 [3:3], "RPM Based", "Vehicle Speed Sensors"
+   VSS TRaction params
 TractScale	pg0 119 "%", (x * 0.39216) conv, (0 - 100) span
 TractSlip	pg0 120 "%", (x * 0.39216) conv, (0 - 100) span
 TractSlipH	pg0 123 "%", (x * 0.39216) conv, (0 - 100) span
 TractVSSMax	pg0 118 "V", (x * 0.0196) conv, (0 - 5) span
 TractVSSMin	pg0 117 "V", (x * 0.0196) conv, (0 - 5) span
-TractMode	pg0 109 [3:3], "RPM Based", "Vehicle Speed Sensors"
+   RPM Based params
+RPMThresh	pg0 098 "RPM/Sec", (x * 1000) conv, (1000 - 25000) span
+   Global traction params
+ Enrichments
+RPM1S		pg0 094 "3000RPM/Sec or 5%Slip",(x * 0.1) conv, (0 - 20) span
+RPM2S		pg0 095 "4000RPM/Sec or 15%Slip",(x * 0.1) conv, (0 - 20) span
+RPM3S		pg0 096 "6000RPM/Sec or 30%Slip",(x * 0.1) conv, (0 - 20) span
+RPM4S		pg0 097 "10000RPM/Sec or 70%Slip",(x * 0.1) conv, (0 - 20) span
+ Ign retard (spark modes only)
+TractRet1	pg0 099 "3000RPM/Sec or 5%Slip", (x * 0.352) conv, (0 - 30) span
+TractRet2	pg0 100 "4000RPM/Sec or 15%Slip", (x * 0.352) conv, (0 - 30) span
+TractRet3	pg0 101 "6000RPM/Sec or 30%Slip", (x * 0.352) conv, (0 - 30) span
+TractRet4	pg0 102 "10000RPM/Sec or 70%Slip", (x * 0.352) conv, (0 - 30) span
+ Spark cut from base (spark, NON-EDIS modes only)
+TractSC1	pg0 103 "3000RPM/Sec or 5%Slip", no conv, (0 - 2) span
+TractSC2	pg0 104 "4000RPM/Sec or 15%Slip",  no conv, (0 - 2) span
+TractSC3	pg0 105 "6000RPM/Sec or 30%Slip",  no conv, (0 - 2) span
+TractSC4	pg0 106 "10000RPM/Sec or 70%Slip",  no conv, (0 - 2) span
+ Turn off NOS during tractio ncontrol?
+TractNOS	pg0 109 [0:0], "No", "Yes"
+ Retard, enrich+ spark cut for XX cycles
+TractCyc1	pg0 112 "3000RPM/Sec or 5%Slip", no conv, (1 - 255) span
+TractCyc2	pg0 113 "4000RPM/Sec or 15%Slip", no conv, (1 - 255) span
+TractCyc3	pg0 114 "6000RPM/Sec or 30%Slip", no conv, (1 - 255) span
+TractCyc4	pg0 115 "10000RPM/Sec or 70%Slip", no conv, (1 - 255) span
+ OR
+TractCySec	pg0 109 [2:2], "RPM stable for 0.1S", "Cycle count only"
 
 ----------------------------------------------------------------------------
 STAGED-INJECTION

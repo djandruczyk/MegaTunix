@@ -326,6 +326,7 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 	gchar **tmpvector = NULL;
 	gint i = 0;
 
+	//printf("Widget %s is being bount to lists \"%s\"\n",(gchar *)glade_get_widget_name(widget),lists);
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
 	/* This looks convoluted,  but it allows for an arbritrary 
@@ -411,6 +412,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	/* Bind widgets to lists if thy have the bind_to_list flag set...
 	*/
+	tmpbuf = NULL;
 	if (cfg_read_string(cfgfile,section,"bind_to_list",&tmpbuf))
 	{
 		bind_to_lists(widget,tmpbuf);

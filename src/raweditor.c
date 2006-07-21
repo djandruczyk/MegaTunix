@@ -20,7 +20,6 @@
 #include <structures.h>
 
 GArray *raw_editor_widgets = NULL;
-gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data);
 
 
 /*!
@@ -91,7 +90,7 @@ EXPORT void finish_raweditor(void)
 		g_object_set_data(G_OBJECT(lbl_table),"format",GINT_TO_POINTER(MTX_HEX));
 		gtk_container_add(GTK_CONTAINER(ebox),lbl_table);
 		g_signal_connect(G_OBJECT(ebox),"button_press_event",
-				G_CALLBACK(swap_labels),NULL);
+				G_CALLBACK(swap_base),NULL);
 
 		table = gtk_table_new((firmware->page_params[i]->length)/cols,cols,TRUE);
 		gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,5);
@@ -158,13 +157,13 @@ EXPORT void finish_raweditor(void)
 
 
 /*!
- \brief swap_labels() swaps the address labels between hex or decimal
+ \brief swap_base() swaps the address labels between hex or decimal
  base on a mouse click in the table.
  \param widget (GtkWidget *) the eventbox we click in
  \param event (GdkEvent *) the event type
  \param data (gpointer) unused
  */
-gboolean swap_labels(GtkWidget *widget, GdkEvent *event, gpointer data)
+gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	gint format = 0;
 	gint i = 0;
