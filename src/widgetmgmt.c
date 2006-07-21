@@ -58,6 +58,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 		prefix = g_strdup("");
 
 	name = (char *)glade_get_widget_name(widget);
+	//printf("name of widget stored is %s\n",name);
 
 	if (name == NULL)
 		return;
