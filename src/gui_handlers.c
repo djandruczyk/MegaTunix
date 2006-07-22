@@ -1250,7 +1250,7 @@ void update_widget(gpointer object, gpointer user_data)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),new_state);
 		if (toggle_groups)
 		{
-			printf("toggling groups\n");
+			//printf("toggling groups\n");
 			groups = parse_keys(toggle_groups,&num_groups,",");
 			//printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);
 
