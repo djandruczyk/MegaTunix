@@ -14,7 +14,7 @@ handler=_READ_VE_CONST_
 page=1
 bind_to_list=get_data_buttons
 
-[burn_button]
+[burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_

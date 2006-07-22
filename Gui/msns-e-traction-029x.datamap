@@ -14,7 +14,7 @@ handler=_READ_VE_CONST_
 page=0
 bind_to_list=get_data_buttons
 
-[burn_button]
+[burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_
@@ -41,7 +41,31 @@ key_types=_INT_,_STRING_
 page=0
 bind_to_list=global_traction
 
+[traction_nos_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=global_traction,nos_params
+
 #----- Dynamic Labels (temp dependant) ---------------------------------------
+
+[traction_retard_by_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=global_traction,spark_controls
+
+[spark_cut_traction_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=global_traction,spark_controls,nonedis_controls
+
+[traction_mode_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=global_traction
 
 [traction_rpm1s_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -116,7 +140,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls
 
 [traction_retard2_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -131,7 +155,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls
 
 [traction_retard3_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -146,7 +170,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls
 
 [traction_retard4_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -161,7 +185,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls
 
 [traction_sp_cut1_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -176,7 +200,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut2_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -191,7 +215,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut3_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -206,7 +230,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut4_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -221,7 +245,7 @@ tract_mode_offset=109
 tract_mode_bitval=0
 tract_mode_bitshift=3
 tract_mode_bitmask=8
-bind_to_list=traction_labels
+bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_cyc1_label]
 keys=page,label,alt_label,depend_on,bind_to_list
@@ -293,8 +317,8 @@ offset=95
 bitval=1
 bitshift=5
 bitmask=32
-toggle_groups=vss_traction,rpmdot_traction,global_traction
-group_states=ENABLED,ENABLED,ENABLED
+toggle_groups=vss_traction,rpmdot_traction,global_traction,traction_labels
+group_states=ENABLED,ENABLED,ENABLED,ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Enables Traction Control 
@@ -328,14 +352,15 @@ handler=_GENERIC_
 tooltip=Sets the traction mode to be dependant on RPM rate of change (RPMdot). This doesn't require any additional sensors
 
 [traction_mode_vss_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,swap_labels,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,swap_labels,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=109
 bitval=1
 bitshift=3
 bitmask=8
 swap_labels=traction_labels
+bind_to_list=global_traction
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the traction mode to utilize VSS sensors inputs on Analog input 6 and 7.  This can conflict with second EGO input and EGT input.
@@ -348,7 +373,7 @@ offset=109
 bitval=0
 bitshift=0
 bitmask=1
-bind_to_list=nos_traction,nos_features
+bind_to_list=global_traction,nos_params
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Tells the ECU to NOT turn off NOS during traction control (dangerous)
@@ -361,7 +386,7 @@ offset=109
 bitval=1
 bitshift=0
 bitmask=1
-bind_to_list=nos_traction,nos_features
+bind_to_list=global_traction,nos_params
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Tells the ECU to turn off NOS during traction control (safer)
@@ -437,45 +462,49 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_retard1_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=99
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+bind_to_list=spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard2_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=100
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+bind_to_list=spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard3_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=101
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+bind_to_list=spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard4_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=102
 dl_conv_expr=x/0.352
 ul_conv_expr=x*0.352
+bind_to_list=spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
@@ -487,7 +516,7 @@ page=0
 offset=103
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-bind_to_list=spark_controls,nonedis_control
+bind_to_list=spark_controls,nonedis_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
@@ -499,7 +528,7 @@ page=0
 offset=104
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-bind_to_list=spark_controls,nonedis_control
+bind_to_list=spark_controls,nonedis_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
@@ -511,7 +540,7 @@ page=0
 offset=105
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-bind_to_list=spark_controls,nonedis_control
+bind_to_list=spark_controls,nonedis_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS),  then drop this many sparks from the Base Value (See the Revlimiter Tab).
@@ -523,7 +552,7 @@ page=0
 offset=106
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-bind_to_list=spark_controls,nonedis_control
+bind_to_list=spark_controls,nonedis_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).

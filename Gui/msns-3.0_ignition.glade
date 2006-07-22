@@ -796,7 +796,7 @@
 		  <property name="column_spacing">5</property>
 
 		  <child>
-		    <widget class="GtkButton" id="ign_burn_button">
+		    <widget class="GtkButton" id="ign_burn_data_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Permanently Store Data in ECU</property>

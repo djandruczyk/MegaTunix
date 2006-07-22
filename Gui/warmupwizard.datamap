@@ -32,7 +32,7 @@ key_types=_ENUM_,_INT_
 handler=_STOP_REALTIME_
 page=0
 
-[ww_burn_button]
+[ww_burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_

@@ -1222,10 +1222,14 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 	else if (GTK_IS_CHECK_BUTTON(widget))
 	{
+		/* Swaps the label of another control based on widget state... */
 		/* If value masked by bitmask, shifted right by bitshift = bitval
 		 * then set button state to on...
 		 */
 		cur_state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		if (swap_list)
+			swap_labels(swap_list,cur_state);
+
 		tmpi = (gint)value;
 		/* Avoid unnecessary widget setting and signal propogation 
 		 * First if.  If current bit is SET but button is NOT, set it
@@ -1246,6 +1250,7 @@ void update_widget(gpointer object, gpointer user_data)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),new_state);
 		if (toggle_groups)
 		{
+			printf("toggling groups\n");
 			groups = parse_keys(toggle_groups,&num_groups,",");
 			//printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);
 
@@ -1276,9 +1281,6 @@ void update_widget(gpointer object, gpointer user_data)
 		 */
 		update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
 	}
-	/* Swaps the label of another control based on widget state... */
-	if (swap_list)
-		swap_labels(swap_list,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
 
 }

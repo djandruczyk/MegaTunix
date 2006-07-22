@@ -1359,7 +1359,7 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="ww_burn_button">
+		    <widget class="GtkButton" id="ww_burn_data_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Burn to ECU</property>

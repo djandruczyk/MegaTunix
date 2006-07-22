@@ -77,7 +77,7 @@ page=4
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
-[burn_button]
+[burn_data_button]
 keys=handler,page,bind_to_list,tooltip
 key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_

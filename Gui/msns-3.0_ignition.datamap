@@ -13,7 +13,7 @@ handler=_READ_VE_CONST_
 page=0
 bind_to_list=get_data_buttons
 
-[ign_burn_button]
+[ign_burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_

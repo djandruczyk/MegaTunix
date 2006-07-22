@@ -14,7 +14,7 @@ handler=_READ_VE_CONST_
 page=0
 bind_to_list=get_data_buttons
 
-[burn_button]
+[burn_data_button]
 keys=handler,page,bind_to_list
 key_types=_ENUM_,_INT_,_STRING_
 handler=_BURN_MS_FLASH_
@@ -124,13 +124,15 @@ handler=_GENERIC_
 tooltip=This mode is for general trigger wheels following the "x-2" style. Wheels that fall into this class are the bosche 60-2 wheel.  All wheel decoding is done in software. (i.e. no external decoder box needed)
 
 [single_edis_persona]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=0
 bitval=1
 bitshift=4
 bitmask=255
+toggle_groups=edis_controls,nonedis_controls
+group_states=ENABLED,DISABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This mode is for using an external EDIS4/6/8 unit, coilpack(s), VR sensor and 36-1 trigger wheel.  The EDIS module takes care of signal consitioning and coil driving and feeds a PIP pulse to the ECU (used for tach input) and the ECU sends a SAW (Spark Angle Word) back to the EDIS module to tell it what spark advance to run.  See http://megasquirt.sourceforge.net/extra/setup-edis.html
