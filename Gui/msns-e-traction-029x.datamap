@@ -27,15 +27,15 @@ bind_to_list=burners
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=vss_traction
+bind_to_list=vss_traction,global_traction
 
 [rpm_traction_params_table]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=rpmdot_traction
+bind_to_list=rpmdot_traction,global_traction
 
-[traction_params_table]
+[traction_params_frame]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
@@ -313,12 +313,12 @@ bind_to_list=traction_labels
 keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
-offset=95
+offset=92
 bitval=1
 bitshift=5
 bitmask=32
-toggle_groups=vss_traction,rpmdot_traction,global_traction,traction_labels
-group_states=ENABLED,ENABLED,ENABLED,ENABLED
+toggle_groups=global_traction,traction_labels
+group_states=ENABLED,ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Enables Traction Control 
@@ -327,7 +327,7 @@ tooltip=Enables Traction Control
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
-offset=95
+offset=92
 bitval=0
 bitshift=5
 bitmask=32
@@ -638,7 +638,7 @@ tooltip=Sets the half slip threshold (I'm not too sure on this one)
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
-offset=128
+offset=118
 dl_conv_expr=x/0.0196
 ul_conv_expr=x*0.0196
 dl_type=_IMMEDIATE_
