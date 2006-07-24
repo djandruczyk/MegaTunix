@@ -91,6 +91,8 @@ void interrogate_ecu()
 
 	cmd_details = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 
+	dbg_func(g_strdup("\n"__FILE__": interrogate_ecu() canidates and bytecounts hash's allocated\n\n"),INTERROGATOR);
+	
 	/* Load tests from config files */
 	cmd_array = validate_and_load_tests(cmd_details);
 	if (!cmd_array)

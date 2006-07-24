@@ -40,6 +40,11 @@ EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, 
 	gint h = 0;
 
 	/* Get pointer to backing pixmap ... */
+	if (!lv_data)
+	{
+		lv_data = g_new0(struct Logview_Data,1);
+		lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
+	}
 	pixmap = lv_data->pixmap;
 	pmap = lv_data->pmap;
 			

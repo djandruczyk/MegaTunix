@@ -85,10 +85,11 @@ void leave(GtkWidget *widget, gpointer data)
 	extern gint statuscounts_id;
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
+	extern gboolean interrogated;
 	struct Io_File * iofile = NULL;
 
 	/* Commits any pending data to ECU flash */
-	if (connected)
+	if ((connected) && (interrogated))
 		io_cmd(IO_BURN_MS_FLASH,NULL);
 	/* Stop timeout functions */
 	leaving = TRUE;

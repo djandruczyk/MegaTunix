@@ -1231,6 +1231,9 @@ EXPORT void finish_logviewer(void)
 	GtkWidget * widget = NULL;
 	extern GHashTable *dynamic_widgets;
 
+	lv_data = g_new0(struct Logview_Data,1);
+	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
+
 	if (playback_mode)
 		set_playback_mode();
 	else
