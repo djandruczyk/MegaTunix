@@ -160,7 +160,7 @@ TpsOn		pg0 065, "Raw ADC", no conv, 0-255 span
 KPaOn		pg0 064, "KPa", no conv, 0-255
 
 ----------------------------------------------------------------------------
-Cranking/ASE 95% complete
+Cranking/ASE 100% complete
 ----------------------------------------------------------------------------
 
 Cranking
@@ -200,6 +200,8 @@ msnsCyl		pg0 000, [3:3] bitfield, "-1", "-2"
 msnsCyl		pg0 000, [4:5] bitfield, "Off", "EDIS" "INVAL" "dual EDIS"
 msnsCyl		pg0 000, [6:6] bitfield, "Off", "Ford TFI"
 msnsCyl		pg0 000, [7:7] bitfield, "Off", "GM 7pin HEI"
+edismulti	pg0 066, [3:3] bitfield, "Off", "On"
+edismultirpm	pg0 021, "RPM", x/100 conv, 0-2500 span
 
 ----------------------------------------------------------------------------
 OUTPUTS TO USE 100% complete in two tabs
@@ -304,7 +306,7 @@ mindischg	pg0 143 "ms" x*10 conv, 0-1.5 span
 
 
 ----------------------------------------------------------------------------
-TRACTION
+TRACTION 100% Complete
 ----------------------------------------------------------------------------
 
 TractionOn 	pg0 092 [5:5], "Off*^", "On"
@@ -406,3 +408,49 @@ IgRetDeg        pg0 050 "F", no conv, (0 - 120) span
 IgRetTemp       pg0 052 "F", (x - 40) conv, (-10 - 120) span
 MaxIatAdv       pg0 049 "Deg", (x * 0.352) conv, (0 - 15) span
 IatAdvKpa       pg0 051 "KPa", (x - 40) conv, (0 - 255) span
+
+----------------------------------------------------------------------------
+FUEL TABLE SELECTION
+----------------------------------------------------------------------------
+
+inj1g 		pg0 033 [5:5], "off", "on*^"
+inj2t         	pg0 033 [4:4], "1*^", "2 (DT)"
+inj2g         	pg0 033 [6:6], "off", "on*^"
+inj2cr        	pg0 011 [6:6], "Off",  "On*^"
+UseVE3       	pg0 092 [0:0], "Dont switch*^(DT)", "Switch to Table3"
+VE3Delay     	pg0 093 "Sec", (x * 0.1) conv, (0 - 25) span
+
+----------------------------------------------------------------------------
+SPARK TABLE SELECTION
+----------------------------------------------------------------------------
+
+STTable2On   	pg0 076 [7:7], "Spark Table1^", "Spark Table2"
+ST2Delay     	pg0 087 "Sec", (x * 0.1) conv, (0 - 25) span
+
+----------------------------------------------------------------------------
+STIM FOR WHEEL
+----------------------------------------------------------------------------
+
+whlsim  	pg0 011 [2:2], "off",  "on"
+whlsimcnt     	pg0 013 "", no conv, (1 - 6) span
+
+----------------------------------------------------------------------------
+OVER RUN FUEL CUT
+----------------------------------------------------------------------------
+
+OvrRunC    	pg0 066 [6:6],   "Off","On"
+OvrRunRpm       pg0 071 "RPM", (x * 100) conv, (1000 - 6000) span
+OvrRunClt       pg0 182 "F", (x - 40), (-40 - 215) span
+OvrRunKpa       pg0 072 "KPa", no conv, (0 - 255) span
+OvrRunTps       pg0 073 "Raw ADC", no conv, (0 - 255) span
+OvrRunTimr      pg0 130 "Sec", no conv, (0 - 255) span
+
+----------------------------------------------------------------------------
+BAROMETRIC CORRECTION
+----------------------------------------------------------------------------
+
+BarroHi    	pg0 082 "KPa", ((x * 0.433) + 10) conv,(10 - 255) span
+BarroLow    	pg0 083 "KPa", ((x * 0.433) + 10) conv,(10 - 255) span
+AlphBaroCor 	pg0 184 [3:3],  "No", "Yes"
+ConsBarCor  	pg0 184 [7:7],  "Not Fitted*^", "Extra MAP fitted to X7"
+
