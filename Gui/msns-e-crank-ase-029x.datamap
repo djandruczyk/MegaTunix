@@ -167,10 +167,10 @@ handler=_GENERIC_
 tooltip=Uses the Coolant Temp (CLT) as the axis for the cranking table to determine the cranking pulsewidths.
 
 [mat_crank_source_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
-offset=43
+offset=42
 bitval=2
 bitshift=4
 bitmask=48
@@ -280,7 +280,7 @@ toggle_groups=xtra_crank
 group_states=DISABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This reuiqres you to pump the gas 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the FloodClear level (in ADC counts) for the three pumps before you crank for this to take effect.  IT thin multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have hte multiplier set t0 150%, then when active the cranking pulsewidth will be 15ms.
+tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This requires you to pump the acclerator pedal 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the Flood Clear level (in ADC counts) for the three pumps before you crank for this to take effect.  The ECU then multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have the multiplier set to 150%, then when active the cranking pulsewidth will be 15ms.
 
 [extra_cranking_on_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
@@ -292,7 +292,7 @@ bitshift=6
 bitmask=64
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This reuiqres you to pump the gas 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the FloodClear level (in ADC counts) for the three pumps before you crank for this to take effect.  IT thin multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have hte multiplier set t0 150%, then when active the cranking pulsewidth will be 15ms.
+tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This requires you to pump the acclerator pedal 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the Flood Clear level (in ADC counts) for the three pumps before you crank for this to take effect.  The ECU then multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have the multiplier set to 150%, then when active the cranking pulsewidth will be 15ms.
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 

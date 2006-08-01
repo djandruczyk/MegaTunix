@@ -64,9 +64,9 @@ void load_sliders()
 		return;
 	}
 	if (!rt_sliders)
-		rt_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
-		ww_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 
 	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
 	cfgfile = cfg_open_file(filename);
@@ -179,7 +179,7 @@ void load_ve3d_sliders(gint table_num)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
 
 	if (!ve3d_sliders[table_num])
-		ve3d_sliders[table_num] = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 
 	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
 	cfgfile = cfg_open_file(filename);
@@ -356,11 +356,11 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 
 	if (!rt_sliders)
-		rt_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!ww_sliders)
-		ww_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!enr_sliders)
-		enr_sliders = g_hash_table_new_full(NULL,NULL,g_free,g_free);
+		enr_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	
 	if  (!G_IS_OBJECT(object))
 	{

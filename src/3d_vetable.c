@@ -80,7 +80,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
 
 	if (winstat == NULL)
-		winstat = g_hash_table_new(NULL,NULL);
+		winstat = g_hash_table_new(g_int_hash,g_int_equal);
 
 	if ((gboolean)g_hash_table_lookup(winstat,(gpointer)table_num) == TRUE)
 		return TRUE;

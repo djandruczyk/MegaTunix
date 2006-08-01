@@ -64,6 +64,7 @@ void update_comms_status(void)
 void comms_test()
 {
 	gboolean result = FALSE;
+	gint count = 0;
 	extern struct Serial_Params *serial_params;
 	extern gboolean connected;
 
@@ -76,10 +77,17 @@ void comms_test()
 
 	/* Flush the toilet.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);	
-	while (write(serial_params->fd,"C",1) != 1)
+	while ((write(serial_params->fd,"C",1) != 1) && (count < 10 ))
 	{
 		g_usleep(10000);
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n"),CRITICAL);
+		count++;
+	}
+	if (count >= 10)
+	{
+		connected = FALSE;
+		flush_serial(serial_params->fd, TCIOFLUSH);
+		return;
 	}
 	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
 	result = handle_ecu_data(C_TEST,NULL);

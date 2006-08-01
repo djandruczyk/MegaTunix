@@ -71,7 +71,7 @@ keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_DLOG_DUMP_INTERNAL_
 page=0
-tooltip="Write internal log to disk" is a new feature.  By default megatunix will record ALL variables read while hte Realtime reader is running, even if you do NOT have datalogging enabled.  This button dumps thatto disk as a std logfile of ALL variables.  It can be loaded in megatunix's logviewer for playback if desired... 
+tooltip="Write internal log to disk" is a new feature.  By default megatunix will record ALL variables read while the Realtime reader is running, even if you do NOT have datalogging enabled.  This button dumps that to disk as a std logfile of ALL variables.  It can be loaded in megatunix's logviewer for playback if desired... 
 
 #----- Textview ----------------------------------------------------
 

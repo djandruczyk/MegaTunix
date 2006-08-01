@@ -328,6 +328,7 @@ void *thread_dispatcher(gpointer data)
 		message = g_async_queue_pop(io_queue);
 		if ((!connected) && (!offline) && (serial_params->open))
 		{
+			discon_count = 0;
 			while ((!connected) && (!offline))
 			{
 				discon_count++;

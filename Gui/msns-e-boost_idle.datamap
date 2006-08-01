@@ -354,7 +354,7 @@ temp_dep=TRUE
 bind_to_list=temperature
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=This is the temp at which if hte engine is below, the fast idle output is active, and if the engien temp is above thie fast idle output is shutoff.
+tooltip=This is the temp at which if the engine is below, the fast idle output is active, and if the engine temp is above thie fast idle output is shutoff.
 
 [fast_idle_temp_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip

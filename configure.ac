@@ -118,6 +118,7 @@ Makefile
 mtxmatheval/Makefile
 src/Makefile
 include/Makefile
+widgets/Makefile
 LookupTables/Makefile
 RealtimeMaps/Makefile
 RuntimeSliders/Makefile
