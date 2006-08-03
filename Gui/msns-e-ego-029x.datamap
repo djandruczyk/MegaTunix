@@ -189,13 +189,15 @@ handler=_GENERIC_
 tooltip=Sets the O<sub>2</sub> signal convergence time units to be in units of ignition pulses. (after X pulses the ecu will try to trim in the fuel).
 
 [ve1_tafr_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=46
 bitval=1
 bitshift=7
 bitmask=128
+toggle_groups=afr1
+group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Enables Target AFR functionality for VETable 1.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
@@ -213,13 +215,15 @@ handler=_GENERIC_
 tooltip=Disables Target AFR functionality for VETable 1.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [ve3_tafr_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitval=1
 bitshift=1
 bitmask=2
+toggle_groups=afr3
+group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Enables Target AFR functionality for VETable 3.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.

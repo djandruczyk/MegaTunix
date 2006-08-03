@@ -76,7 +76,7 @@ set_label=AFR Table 2
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=6
-bind_to_list=afrtables
+bind_to_list=afr3,dt_controls
 
 #----- Buttons ---------------------------------------------------------------
 
