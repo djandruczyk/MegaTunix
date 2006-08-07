@@ -253,8 +253,8 @@ handler=_GENERIC_
 tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N). This mode is for Speed Density
 
 [an_control_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,swap_labels,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=0
 offset=109
 bitval=1
@@ -262,6 +262,7 @@ bitshift=4
 bitmask=16
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+swap_labels=AFR1_load_tbl_lab,AFR1_load_tbl_units,AFR2_load_tbl_lab,AFR2_load_tbl_units
 tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N). This mode is for Alpha-N
 
 [tafr_always_radio_button]

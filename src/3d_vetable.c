@@ -78,14 +78,15 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+	printf ("creating 3d view for table number %i\n",table_num);
 
 	if (winstat == NULL)
-		winstat = g_hash_table_new(g_int_hash,g_int_equal);
+		winstat = g_hash_table_new(NULL,NULL);
 
-	if ((gboolean)g_hash_table_lookup(winstat,(gpointer)table_num) == TRUE)
+	if ((gboolean)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num)) == TRUE)
 		return TRUE;
 	else
-		g_hash_table_insert(winstat,(gpointer)table_num, (gpointer)TRUE);
+		g_hash_table_insert(winstat,GINT_TO_POINTER(table_num), GINT_TO_POINTER(TRUE));
 
 	ve_view = initialize_ve3d_view();
 	ve_view->x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"x_source"));
@@ -345,7 +346,7 @@ gint free_ve3d_view(GtkWidget *widget)
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	store_list("burners",g_list_remove(
 			get_list("burners"),(gpointer)ve_view->burn_but));
-	g_hash_table_remove(winstat,(gpointer)ve_view->table_num);
+	g_hash_table_remove(winstat,GINT_TO_POINTER(ve_view->table_num));
 	tmpbuf = g_strdup_printf("ve_view_%i",ve_view->table_num);
 	g_object_set_data(g_hash_table_lookup(dynamic_widgets,tmpbuf),"ve_view",NULL);
 	g_free(tmpbuf);
@@ -1116,6 +1117,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 
 			if (ve_view->active_y < (y_bincount-1))
 				ve_view->active_y += 1;
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			break;
 
 		case GDK_Down:
@@ -1123,6 +1125,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 
 			if (ve_view->active_y > 0)
 				ve_view->active_y -= 1;
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			break;				
 
 		case GDK_Left:
@@ -1130,6 +1133,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 
 			if (ve_view->active_x > 0)
 				ve_view->active_x -= 1;
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			break;					
 
 		case GDK_Right:
@@ -1137,6 +1141,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 
 			if (ve_view->active_x < (x_bincount-1))
 				ve_view->active_x += 1;
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			break;				
 
 		case GDK_Page_Up:

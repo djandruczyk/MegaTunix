@@ -11,6 +11,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkFrame" id="topframe">
@@ -94,7 +99,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -121,7 +126,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -148,7 +153,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -175,7 +180,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -202,7 +207,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -229,7 +234,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -256,7 +261,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -283,7 +288,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">5</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:53:12 GMT"/>
@@ -383,7 +388,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -412,7 +417,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -441,7 +446,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -470,7 +475,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -499,7 +504,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -528,7 +533,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -557,7 +562,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -586,7 +591,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -615,7 +620,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -644,7 +649,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -673,7 +678,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -702,7 +707,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -731,7 +736,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -760,7 +765,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -789,7 +794,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -818,7 +823,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -847,7 +852,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -876,7 +881,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -905,7 +910,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -934,7 +939,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -963,7 +968,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -992,7 +997,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1021,7 +1026,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1050,7 +1055,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1079,7 +1084,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1108,7 +1113,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1137,7 +1142,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1166,7 +1171,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1195,7 +1200,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1224,7 +1229,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1253,7 +1258,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1282,7 +1287,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1311,7 +1316,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1340,7 +1345,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1369,7 +1374,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1398,7 +1403,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1427,7 +1432,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1456,7 +1461,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1485,7 +1490,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1514,7 +1519,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1543,7 +1548,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1572,7 +1577,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1601,7 +1606,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1630,7 +1635,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1659,7 +1664,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1688,7 +1693,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1717,7 +1722,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1746,7 +1751,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1775,7 +1780,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1804,7 +1809,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1833,7 +1838,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1862,7 +1867,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1891,7 +1896,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1920,7 +1925,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1949,7 +1954,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -1978,7 +1983,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2007,7 +2012,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2036,7 +2041,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2065,7 +2070,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2094,7 +2099,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2123,7 +2128,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2152,7 +2157,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2181,7 +2186,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2210,7 +2215,7 @@
 				  <property name="max_length">5</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
@@ -2262,11 +2267,12 @@
 		      <child>
 			<widget class="GtkButton" id="3d_view_button">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">3D View</property>
-		  	  <property name="sensitive">False</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="create_ve3d_view" last_modification_time="Mon, 30 Aug 2004 18:44:05 GMT"/>
 			</widget>
 			<packing>
@@ -2308,7 +2314,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2335,7 +2341,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2362,7 +2368,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2389,7 +2395,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2416,7 +2422,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2443,7 +2449,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2470,7 +2476,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2497,7 +2503,7 @@
 				  <property name="max_length">3</property>
 				  <property name="text" translatable="yes">0</property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <property name="width_chars">4</property>
 				  <signal name="activate" handler="std_entry_handler" last_modification_time="Mon, 30 Aug 2004 18:37:03 GMT"/>
@@ -2517,7 +2523,7 @@
 			      <child>
 				<widget class="GtkLabel" id="load_tbl_units">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Kpa</property>
+				  <property name="label" translatable="yes"></property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2543,7 +2549,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="load_tbl_lab">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">MAP Bins</property>
+			      <property name="label" translatable="yes"></property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2614,6 +2620,7 @@
 		      <property name="label" translatable="yes">Permanently Store Data in ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
 		    </widget>
 		    <packing>
@@ -2633,6 +2640,7 @@
 		      <property name="label" translatable="yes">Get Data from ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:47:47 GMT"/>
 		    </widget>
 		    <packing>
@@ -2756,6 +2764,7 @@ by what percentage?</property>
 			  <property name="label" translatable="yes">Recalculate</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="std_button_handler" last_modification_time="Fri, 31 Dec 2004 20:13:04 GMT"/>
 			</widget>
 			<packing>

@@ -1189,7 +1189,7 @@ void update_widget(gpointer object, gpointer user_data)
 			if (is_float)
 			{
 				tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
-				if (!g_strrstr(widget_text,tmpbuf))
+				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 				else
 					update_color = FALSE;
@@ -1198,7 +1198,7 @@ void update_widget(gpointer object, gpointer user_data)
 			else
 			{
 				tmpbuf = g_strdup_printf("%i",(gint)value);
-				if (!g_strrstr(widget_text,tmpbuf))
+				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 				else
 					update_color = FALSE;
@@ -1208,7 +1208,7 @@ void update_widget(gpointer object, gpointer user_data)
 		else if (base == 16)
 		{
 			tmpbuf = g_strdup_printf("%.2X",(gint)value);
-			if (!g_strrstr(widget_text,tmpbuf))
+			if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			else
 				update_color = FALSE;
@@ -1245,9 +1245,6 @@ void update_widget(gpointer object, gpointer user_data)
 		 * then set button state to on...
 		 */
 		cur_state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		if (swap_list)
-			swap_labels(swap_list,cur_state);
-
 		tmpi = (gint)value;
 		/* Avoid unnecessary widget setting and signal propogation 
 		 * First if.  If current bit is SET but button is NOT, set it
@@ -1266,6 +1263,9 @@ void update_widget(gpointer object, gpointer user_data)
 			new_state = FALSE;
 
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),new_state);
+		if (swap_list)
+			swap_labels(swap_list,new_state);
+
 		if (toggle_groups)
 		{
 			//printf("toggling groups\n");
@@ -1554,7 +1554,6 @@ void swap_labels(gchar * input, gboolean state)
 		GtkWidget *widget = g_hash_table_lookup(dynamic_widgets,fields[i]);
 		if (GTK_IS_WIDGET(widget))
 			switch_labels((gpointer)widget,(gpointer)state);
-
 		else if ((list = get_list(fields[i])) != NULL)
 			g_list_foreach(list,switch_labels,GINT_TO_POINTER(state));
 	}

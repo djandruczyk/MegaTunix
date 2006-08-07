@@ -70,6 +70,34 @@ key_types=_INT_,_STRING_
 page=6
 set_label=AFR Table 2
 
+[load_tbl_lab]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=0
+label=MAP Bins
+alt_label=TPS Bins
+depend_on=an_ego_button
+an_ego_button_type=_VE_EMB_BIT_
+an_ego_button_page=0
+an_ego_button_offset=109
+an_ego_button_bitval=1
+an_ego_button_bitshift=4
+an_ego_button_bitmask=16
+
+[load_tbl_units]
+keys=page,label,alt_label,depend_on
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=0
+label=KPa
+alt_label=TPS %
+depend_on=an_ego_button
+an_ego_button_type=_VE_EMB_BIT_
+an_ego_button_page=0
+an_ego_button_offset=109
+an_ego_button_bitval=1
+an_ego_button_bitshift=4
+an_ego_button_bitmask=16
+
 #----- widgets ---------------------------------------------------------------
 
 [topframe]

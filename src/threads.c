@@ -246,8 +246,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 						message->out_len = cmds->ve_cmd_len;
 					}
 					message->handler = VE_BLOCK;
+					g_async_queue_push(io_queue,(gpointer)message);
 				}
-				g_async_queue_push(io_queue,(gpointer)message);
 			}
 			message = initialize_io_message();
 			message->command = NULL_CMD;
