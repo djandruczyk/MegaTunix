@@ -72,16 +72,14 @@ void comms_test()
 	gboolean restore_runtime = FALSE;
 	gchar *port = NULL;
 
-	printf ("ENTRING COMMS TEST\n");
+	/* If serial control struct exists, 
+	 * but we don't have connected status, try to reset connection */
+	
 	if ((serial_params) && (!connected))
 	{
-		/* TRY closing/reopening port*/
-		if (serial_params->open)
-			printf("port is listed as open, closing and re-opening\n");
-		else
-			printf("port is listed as closed, retrying close/open\n");
+		// TRY closing/reopening port
 		port = g_strdup(serial_params->port_name);
-		if (realtime_id) /* runtime vars running */
+		if (realtime_id) // runtime vars running 
 		{
 			stop_realtime_tickler();
 			restore_runtime = TRUE;
@@ -97,6 +95,7 @@ void comms_test()
 		g_free(port);
 
 	}
+	
 	if (!serial_params->open)
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);

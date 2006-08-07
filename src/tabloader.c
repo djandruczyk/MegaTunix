@@ -151,6 +151,7 @@ gboolean load_gui_tabs(void)
 		update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 
 	}
+	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete! "),FALSE,FALSE);
 	tabs_loaded = TRUE;
 	dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n"),TABLOADER);
 	g_free(bindgroup);
