@@ -323,7 +323,6 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
 	firmware->status_map_file = g_strdup(potential->status_map_file);
 	firmware->multi_page = potential->multi_page;
-	firmware->require_page = potential->require_page;
 	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
 	firmware->write_cmd = g_strdup(potential->write_cmd);
@@ -658,10 +657,7 @@ void load_profile_details(struct Canidate *canidate)
 		if(!cfg_read_boolean(cfgfile,"parameters","MultiPage",
 					&canidate->multi_page))
 			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-		if(!cfg_read_boolean(cfgfile,"parameters","RequirePageChange",
-					&canidate->require_page))
-			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"MultiPage\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-		if ((canidate->multi_page) && (canidate->require_page))
+		if (canidate->multi_page)
 		{
 			if(!cfg_read_string(cfgfile,"parameters","Page_Cmd",
 						&canidate->page_cmd))

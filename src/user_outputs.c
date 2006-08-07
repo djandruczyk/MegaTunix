@@ -381,6 +381,7 @@ void update_model_from_view(GtkWidget * widget)
 	void * evaluator = NULL;
 	extern gint ** ms_data;
 	extern gint temp_units;
+	gchar * tmpbuf = NULL;
 
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
@@ -438,11 +439,13 @@ void update_model_from_view(GtkWidget * widget)
 			}
 			else
 				result = tmpf;
-
 			if (is_float)
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%.2f",result), -1);
+				tmpbuf =  g_strdup_printf("%.2f",result);
 			else
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup_printf("%i",(gint)result), -1);
+				tmpbuf =  g_strdup_printf("%i",(gint)result);
+
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
+			g_free(tmpbuf);
 
 			/* HYSTERESIS VALUE */
 			if (g_object_get_data(G_OBJECT(model),"hys_offset") != NULL)

@@ -589,8 +589,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				start_realtime_tickler();
 			break;
 		case READ_VE_CONST:
-			if (offline)
-				break;
 			set_title(g_strdup("Reading VE/Constants..."));
 			io_cmd(IO_READ_VE_CONST, NULL);
 			break;

@@ -12,7 +12,6 @@ Ign_Cmd_Key=CMD_UPPER_I
 Write_Cmd=W
 Burn_Cmd=B
 MultiPage=TRUE
-RequirePageChange=FALSE
 Page_Cmd=P
 TotalTables=2
 TotalPages=2

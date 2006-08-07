@@ -15,7 +15,6 @@ Write_Cmd=w
 Burn_Cmd=B
 Page_Cmd=p
 MultiPage=TRUE
-RequirePageChange=TRUE
 TotalPages=7
 TotalTables=3
 

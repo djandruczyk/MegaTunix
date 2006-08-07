@@ -11,7 +11,6 @@ VE_Cmd_Key=CMD_UPPER_V
 Write_Cmd=W
 Burn_Cmd=B
 MultiPage=TRUE
-RequirePageChange=TRUE
 Page_Cmd=P
 TotalTables=10
 # Fuel1, Fuel2, Fuel3, Spark1, Spark2, AFR1, AFR2, Boost1, Boost2, Boost3

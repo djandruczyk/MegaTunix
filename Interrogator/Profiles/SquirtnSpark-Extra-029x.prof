@@ -11,7 +11,6 @@ VE_Cmd_Key=CMD_UPPER_V
 Write_Cmd=W
 Burn_Cmd=B
 MultiPage=TRUE
-RequirePageChange=TRUE
 Page_Cmd=P
 TotalTables=10
 TrigmonPage=7

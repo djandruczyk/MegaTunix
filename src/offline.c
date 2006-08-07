@@ -94,7 +94,6 @@ void set_offline_mode(void)
 	firmware->sliders_map_file = g_strdup(canidate->sliders_map_file);
 	firmware->status_map_file = g_strdup(canidate->status_map_file);
 	firmware->multi_page = canidate->multi_page;
-	firmware->require_page = canidate->require_page;
 	firmware->total_tables = canidate->total_tables;
 	firmware->total_pages = canidate->total_pages;
 	firmware->write_cmd = g_strdup(canidate->write_cmd);

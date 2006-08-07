@@ -60,8 +60,7 @@ struct Firmware_Details
         gint rtvars_size;       /*! Size of Realtime vars datablock */
         gint ignvars_size;      /*! Size of Realtime vars datablock */
         gint memblock_size;     /*! Size of Raw_Memory datablock */
-	gboolean multi_page;	/*! Multi-page firmware? */
-	gboolean require_page;	/*! Require page changing ??? */
+	gboolean multi_page;	/*! Multi-page firmware */
 	gint total_pages;	/*! How many pages do we handle? */
 	gint total_tables;	/*! How many tables do we handle? */
 	gint trigmon_page;	/*! Trigger monitor data page */
@@ -278,8 +277,7 @@ struct Canidate
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gchar *page_cmd;	/*! Command to send to change pages... */
-	gboolean multi_page;	/*! Multi-page firmware ??? */
-	gboolean require_page;	/*! Require page changing ??? */
+	gboolean multi_page;	/*! Multi-page firmware */
 	gint trigmon_page;	/*! Trigger monitor Page */
 	gint total_pages;	/*! how many pages do we handle? */
 	gint total_tables;	/*! how many tables do we handle? */

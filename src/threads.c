@@ -226,43 +226,47 @@ void io_cmd(Io_Command cmd, gpointer data)
 			if (!firmware)
 				break;
 			g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-			for (i=0;i<firmware->total_pages;i++)
+			if (!offline)
 			{
-				message = initialize_io_message();
-				message->command = READ_CMD;
-				message->page = i;
-				message->need_page_change = TRUE;
-				if (firmware->page_params[i]->is_spark)
+				for (i=0;i<firmware->total_pages;i++)
 				{
-					message->out_str = g_strdup(cmds->ignition_cmd);
-					message->out_len = cmds->ign_cmd_len;
-				}
-				else
-				{
-					message->out_str = g_strdup(cmds->veconst_cmd);
-					message->out_len = cmds->ve_cmd_len;
-				}
-				message->handler = VE_BLOCK;
-				message->funcs = g_array_new(TRUE,TRUE,sizeof(gint));
-				if (i == (firmware->total_pages-1))
-				{
-					tmp = UPD_VE_CONST;
-					g_array_append_val(message->funcs,tmp);
-					tmp = UPD_ENABLE_THREE_D_BUTTONS;
-					g_array_append_val(message->funcs,tmp);
-					tmp = UPD_SET_STORE_BLACK;
-					g_array_append_val(message->funcs,tmp);
-					tmp = UPD_REENABLE_GET_DATA_BUTTONS;
-					g_array_append_val(message->funcs,tmp);
-					if (just_starting)
+					message = initialize_io_message();
+					message->command = READ_CMD;
+					message->page = i;
+					if (firmware->page_params[i]->is_spark)
 					{
-						tmp = UPD_START_REALTIME;
-						g_array_append_val(message->funcs,tmp);
-						just_starting = FALSE;
+						message->need_page_change = FALSE;
+						message->out_str = g_strdup(cmds->ignition_cmd);
+						message->out_len = cmds->ign_cmd_len;
 					}
+					else
+					{
+						message->need_page_change = TRUE;
+						message->out_str = g_strdup(cmds->veconst_cmd);
+						message->out_len = cmds->ve_cmd_len;
+					}
+					message->handler = VE_BLOCK;
 				}
 				g_async_queue_push(io_queue,(gpointer)message);
 			}
+			message = initialize_io_message();
+			message->command = NULL_CMD;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_VE_CONST;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_ENABLE_THREE_D_BUTTONS;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_SET_STORE_BLACK;
+			g_array_append_val(message->funcs,tmp);
+			tmp = UPD_REENABLE_GET_DATA_BUTTONS;
+			g_array_append_val(message->funcs,tmp);
+			if (just_starting)
+			{
+				tmp = UPD_START_REALTIME;
+				g_array_append_val(message->funcs,tmp);
+				just_starting = FALSE;
+			}
+			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 		case IO_READ_RAW_MEMORY:
 			message = initialize_io_message();
@@ -319,7 +323,6 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *dispatch_queue;
 	extern struct Serial_Params *serial_params;
 	struct Io_Message *message = NULL;	
-	gint discon_count = 0;
 
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
@@ -328,25 +331,19 @@ void *thread_dispatcher(gpointer data)
 		message = g_async_queue_pop(io_queue);
 		if ((!connected) && (!offline) && (serial_params->open))
 		{
-			discon_count = 0;
-			while ((!connected) && (!offline))
+			comms_test();
+			if ((!connected) && (!offline))
 			{
-				discon_count++;
-				thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Reconnect attempt #%i",discon_count));
-				
-				comms_test();
-				if (discon_count >= 10)
-				{
-					queue_function(g_strdup("conn_warning"));
-					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Serial Connection Problem, check COMMS Settings..."));
-					goto jumppoint;
-				}
+				thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
+
+				queue_function(g_strdup("conn_warning"));
 			}
-			queue_function(g_strdup("kill_conn_warning"));
-			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Ready..."));
-			discon_count = 0;
+			else
+			{
+				queue_function(g_strdup("kill_conn_warning"));
+				thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Ready..."));
+			}
 		}
-		jumppoint:
 
 		switch ((CmdType)message->command)
 		{
@@ -376,11 +373,6 @@ void *thread_dispatcher(gpointer data)
 				dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD|THREADS);
 				if (connected)
 					readfrom_ecu(message);
-				else
-				{
-					break;
-					//dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\treadfrom_ecu skipped, NOT Connected initiator %i!!\n",message->cmd),CRITICAL);
-				}
 				break;
 			case WRITE_CMD:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_command requested\n"),SERIAL_WR|THREADS);

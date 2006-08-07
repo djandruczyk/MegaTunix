@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <structures.h>
+#include <timeout_handlers.h>
 #include <termios.h>
 #include <unistd.h>
 #include <3d_vetable.h>
@@ -67,10 +68,37 @@ void comms_test()
 	gint count = 0;
 	extern struct Serial_Params *serial_params;
 	extern gboolean connected;
+	extern gint realtime_id;
+	gboolean restore_runtime = FALSE;
+	gchar *port = NULL;
 
-	if (serial_params->open == FALSE)
+	printf ("ENTRING COMMS TEST\n");
+	if ((serial_params) && (!connected))
 	{
-		connected = FALSE;
+		/* TRY closing/reopening port*/
+		if (serial_params->open)
+			printf("port is listed as open, closing and re-opening\n");
+		else
+			printf("port is listed as closed, retrying close/open\n");
+		port = g_strdup(serial_params->port_name);
+		if (realtime_id) /* runtime vars running */
+		{
+			stop_realtime_tickler();
+			restore_runtime = TRUE;
+		}
+		close_serial();
+		if (g_file_test(port,G_FILE_TEST_EXISTS))
+		{
+			open_serial(port);
+			setup_serial_params();
+			if (restore_runtime)
+				start_realtime_tickler();
+		}
+		g_free(port);
+
+	}
+	if (!serial_params->open)
+	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		return;
 	}
@@ -87,6 +115,7 @@ void comms_test()
 	{
 		connected = FALSE;
 		flush_serial(serial_params->fd, TCIOFLUSH);
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tTen attempts made to talk to ECU, no response received\n"),CRITICAL);
 		return;
 	}
 	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
@@ -217,7 +246,7 @@ void writeto_ecu(struct Io_Message *message)
 		return;
 	}
 
-	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change)) 
+	if ((firmware->multi_page ) && (message->need_page_change)) 
 		set_ms_page(page);
 
 	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
@@ -336,7 +365,7 @@ void readfrom_ecu(struct Io_Message *message)
 	/* Flush serial port... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	if ((firmware->multi_page ) && (firmware->require_page) && (message->need_page_change)) 
+	if ((firmware->multi_page ) && (message->need_page_change)) 
 		set_ms_page(message->page);
 
 	result = write(serial_params->fd,
