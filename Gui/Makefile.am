@@ -92,6 +92,8 @@ gui_files = 	README \
 		sparktable_8x8s-Genboard.datamap \
 		tools.glade \
 		tools.datamap \
+		vetable_12x12x3-029x.datamap \
+		vetable_12x12x3.glade \
 		vetable_12x12s.glade \
 		vetable_12x12s-E_3.datamap \
 		vetable_12x12s-022E_1.datamap \

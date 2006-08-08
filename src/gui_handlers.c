@@ -423,6 +423,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gfloat real_value = 0.0;
 	gboolean is_float = FALSE;
 	gboolean ign_parm = FALSE;
+	gboolean use_color = FALSE;
+	GdkColor color;
 	extern gint **ms_data;
 
 	if ((paused_handlers) || (!ready))
@@ -441,6 +443,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	precision = (gint)g_object_get_data(G_OBJECT(widget),"precision");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(widget),"is_float");
+	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),"use_color");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (gint)strtol(text,NULL,base);
@@ -505,6 +508,12 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 	write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+
+	if (use_color)
+	{
+		color = get_colors_from_hue(((gfloat)dload_val/255.0)*360.0,0.33, 1.0);
+		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+	}
 
 	return TRUE;
 }
