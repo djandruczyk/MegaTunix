@@ -78,7 +78,6 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
-	printf ("creating 3d view for table number %i\n",table_num);
 
 	if (winstat == NULL)
 		winstat = g_hash_table_new(NULL,NULL);
