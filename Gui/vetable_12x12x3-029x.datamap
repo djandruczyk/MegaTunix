@@ -252,7 +252,7 @@ keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
 page=1
 handler=_RESCALE_TABLE_
-data=VE1_rescale_spinner
+data=VE_VE1_rescale_spinner
 
 [VE2_3d_view_button]
 keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
@@ -270,7 +270,7 @@ keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
 page=2
 handler=_RESCALE_TABLE_
-data=VE2_rescale_spinner
+data=VE_VE2_rescale_spinner
 
 [VE3_3d_view_button]
 keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
@@ -288,7 +288,7 @@ keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
 page=5
 handler=_RESCALE_TABLE_
-data=VE3_rescale_spinner
+data=VE_VE3_rescale_spinner
 
 #----- Rescale Entries ------------------------------------------------------
 
@@ -316,19 +316,19 @@ table_num=2
 keys=page,rescaler_frame
 key_types=_INT_,_STRING_
 page=1
-rescaler_frame=VE1_rescale_frame
+rescaler_frame=VE_VE1_rescale_frame
 
 [VE2_main_vetable]
 keys=page,rescaler_frame
 key_types=_INT_,_STRING_
 page=2
-rescaler_frame=VE2_rescale_frame
+rescaler_frame=VE_VE2_rescale_frame
 
 [VE3_main_vetable]
 keys=page,rescaler_frame
 key_types=_INT_,_STRING_
 page=5
-rescaler_frame=VE3_rescale_frame
+rescaler_frame=VE_VE3_rescale_frame
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------
 

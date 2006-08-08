@@ -74,6 +74,8 @@ gui_files = 	README \
 		raweditor.datamap \
 		runtime.glade \
 		runtime.datamap \
+		sparktable_12x12x2-029x.datamap \
+		sparktable_12x12x2.glade \
 		sparktable_12x12e.glade \
 		sparktable_12x12e-E_1.datamap \
 		sparktable_12x12e-E_2.datamap \
