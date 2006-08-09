@@ -8,8 +8,7 @@ rtmap_files = 	README \
 		MSnS-Extra.rtv_map \
 		MSnS-Extra-021x.rtv_map \
 		MSnS-Extra-024x.rtv_map \
-		MSnS-Extra-029x.rtv_map \
-		Genboardv3.rtv_map
+		MSnS-Extra-029x.rtv_map 
 
 rtmap_DATA = $(rtmap_files)
 
