@@ -13,10 +13,13 @@
 
 #include <3d_vetable.h>
 #include <config.h>
+#include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
+#include <gui_handlers.h>
+#include <logviewer_gui.h>
 #include <structures.h>
 #include <threads.h>
 #include <vetable_gui.h>
@@ -39,17 +42,25 @@ void rescale_table(gchar * widget_name)
 	gint z_page = -1;
 	gint x_bins = -1;
 	gint y_bins = -1;
+	gint old = 0;
 	gint page = 0;
 	gint offset = 0;
 	gboolean ign_parm = FALSE;
 	extern gint **ms_data;
 	GtkWidget *scaler = NULL;
 	GtkWidget *widget = NULL;
+	gchar * tmpbuf = NULL;
 	GList *list = NULL;
 	gfloat percentage = 0.0;
 	gint i = 0;
 	gint j = 0;
+	gint raw_lower = 0;
+	gint raw_upper = 255;
 	gfloat value = 0.0;
+	gfloat real_value = 0.0;
+	GdkColor color;
+	extern GdkColor black;
+	gboolean use_color = FALSE;
 
 	scaler = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
@@ -73,17 +84,48 @@ void rescale_table(gchar * widget_name)
 					ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 					page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 					offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
+					use_color = (gint)g_object_get_data(G_OBJECT(widget),"use_color");
+					if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)
+						raw_upper = (gint)g_object_get_data(G_OBJECT(widget),"raw_upper");
+					if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
+						raw_lower = (gint)g_object_get_data(G_OBJECT(widget),"raw_lower");
 					value = ms_data[page][offset];
 					value = (value*percentage)/100.0;
+					if (value < raw_lower)
+						value = raw_lower;
+					if (value > raw_upper)
+						value = raw_upper;
+
+					/* What we are doing is doing the 
+					 * forware/reverse conversion which
+					 * will give us an exact value if the 
+					 * user inputs something in
+					 * between,  thus we can reset the 
+					 * display to a sane value...
+					 */
+					old = ms_data[page][offset];
+					ms_data[page][offset] = value;
+
+					real_value = convert_after_upload(widget);
+					ms_data[page][offset] = old;
+
+					tmpbuf = g_strdup_printf("%i",(gint)real_value);
+					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					g_free(tmpbuf);
+
 					write_ve_const(widget, page, offset, (gint)value, ign_parm, TRUE);
+					gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 					widget_grab(widget,NULL,GINT_TO_POINTER(TRUE));
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(scaler),100.0);
+					if (use_color)
+					{
+						color = get_colors_from_hue(((gfloat)value/256.0)*360.0,0.33, 1.0);
+						gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+					}
+
 
 				}
 			}
 		}
 	}
-
-
-
 }

@@ -73,7 +73,8 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if (!g_hash_table_lookup(dynamic_widgets,fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
-		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  from file %s already exists in master table\n",name,cfg->filename),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename),CRITICAL);
+
 	g_free(prefix);
 	g_free(fullname);
 	g_free(name);

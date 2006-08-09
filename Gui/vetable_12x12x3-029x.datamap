@@ -128,6 +128,12 @@ tooltip=The VE Entries control how much fuel is injected into the engine. They r
 
 #----- Labels ----------------------------------------------------------------
 
+[VE2_notebook_tab_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=1
+bind_to_list=dt_controls
+
 [topframe_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
@@ -289,6 +295,14 @@ key_types=_INT_,_ENUM_,_STRING_
 page=5
 handler=_RESCALE_TABLE_
 data=VE_VE3_rescale_spinner
+
+#----- Widgets --------------------------------------------------------------
+
+[VE2_vbox1]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=2
+bind_to_list=dt_controls
 
 #----- Rescale Entries ------------------------------------------------------
 

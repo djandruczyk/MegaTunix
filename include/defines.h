@@ -23,8 +23,7 @@
 #define EXPORT __declspec (dllexport)
 #define DEFAULT_PORT "COM1"
 #define PSEP "\\"
-//#define HOME g_get_current_dir
-#define HOME "C:\\program\ files\\megatunix\\"
+#define HOME g_get_current_dir
 #else
 #define EXPORT 
 #define DEFAULT_PORT "/dev/ttyS0"

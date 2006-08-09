@@ -5404,7 +5404,7 @@ by what percentage ?</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="ve1_notebook_tab_label">
+		<widget class="GtkLabel" id="VE1_notebook_tab_label">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">VE-Table 1</property>
 		  <property name="use_underline">False</property>
@@ -10786,7 +10786,7 @@ by what percentage ?</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="ve2_notebook_tab_label">
+		<widget class="GtkLabel" id="VE2_notebook_tab_label">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Vetable 2(DT)</property>
 		  <property name="use_underline">False</property>
@@ -16168,7 +16168,7 @@ by what percentage ?</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="ve3_notebook_tab_label">
+		<widget class="GtkLabel" id="VE3_notebook_tab_label">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">VE-Table 3</property>
 		  <property name="use_underline">False</property>

@@ -95,7 +95,7 @@ void build_general(GtkWidget *parent_frame)
 			G_CALLBACK (toggle_button_handler),
 			NULL);
 
-	frame = gtk_frame_new("Fahrenheit or Celsius Temp scales.");
+	frame = gtk_frame_new("Temperature Scale");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,TRUE,0);
 
 	table = gtk_table_new(1,5,TRUE);
