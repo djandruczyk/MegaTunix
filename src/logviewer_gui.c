@@ -1203,7 +1203,7 @@ void set_playback_mode(void)
 void set_realtime_mode(void)
 {
 	extern GHashTable *dynamic_widgets;
-	GtkWidget *widget;
+	GtkWidget *widget = NULL;
 
 	stop_logviewer_playback();
 	reset_logviewer_state();

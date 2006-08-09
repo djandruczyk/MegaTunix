@@ -61,10 +61,14 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	//printf("name of widget stored is %s\n",name);
 
 	if (name == NULL)
+	{
+		g_free(prefix);
 		return;
+	}
 	if (g_strrstr((gchar *)name,"topframe"))
 	{
-		g_free(name);
+		//g_free(name);
+		g_free(prefix);
 		return;
 	}
 	if(!dynamic_widgets)
@@ -77,7 +81,7 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 
 	g_free(prefix);
 	g_free(fullname);
-	g_free(name);
+//	g_free(name);
 }
 
 
@@ -128,12 +132,15 @@ gboolean get_state(gchar *string, gint index)
 {
 	gchar **tmpbuf = NULL;
 	gboolean state = FALSE;
+	gchar *tmpstr = NULL;
 
 	tmpbuf = g_strsplit(string,",",0);
-	if (g_ascii_strcasecmp(g_ascii_strup(tmpbuf[index],-1),"ENABLED") == 0)
+	tmpstr = g_ascii_strup(tmpbuf[index],-1);
+	if (g_ascii_strcasecmp(tmpstr,"ENABLED") == 0)
 		state = TRUE;
-	if (g_ascii_strcasecmp(g_ascii_strup(tmpbuf[index],-1),"DISABLED") == 0)
+	if (g_ascii_strcasecmp(tmpstr,"DISABLED") == 0)
 		state =  FALSE;
+	g_free(tmpstr);
 	g_strfreev(tmpbuf);
 	return state;
 }

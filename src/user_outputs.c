@@ -141,17 +141,20 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 	GtkCellRenderer     *renderer;
 	GtkTreeViewColumn *col;
 	GtkTreeModel        *model = gtk_tree_view_get_model (view);
+	gchar * tmpbuf = NULL;
 	gint output = -1;
 
 	output = (gint)g_object_get_data(G_OBJECT(widget),"output_num");
 	/* --- Column #1, name --- */
 	renderer = gtk_cell_renderer_text_new ();
 	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_NAME);
+	tmpbuf = g_strdup_printf("Output %i Var.",output);
 	col = gtk_tree_view_column_new_with_attributes (
-			g_strdup_printf("Output %i Var.",output),  
+			tmpbuf,  
 			renderer,
 			"markup", COL_NAME,
 			NULL);
+	g_free(tmpbuf);
 
 	gtk_tree_view_column_set_sort_column_id (col, COL_NAME);
 	gtk_tree_view_append_column (view, col);
@@ -466,9 +469,11 @@ void update_model_from_view(GtkWidget * widget)
 					result = tmpf;
 
 				if (is_float)
-					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup_printf("%.2f",result), -1);
+					tmpbuf = g_strdup_printf("%.2f",result);
 				else
-					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup_printf("%i",(gint)result), -1);
+					tmpbuf = g_strdup_printf("%i",(gint)result);
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
+				g_free(tmpbuf);
 
 			}
 			/* UPPER LIMIT VALUE */
@@ -490,9 +495,11 @@ void update_model_from_view(GtkWidget * widget)
 					result = tmpf;
 
 				if (is_float)
-					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%.2f",result), -1);
+					tmpbuf = g_strdup_printf("%.2f",result);
 				else
-					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup_printf("%i",(gint)result), -1);
+					tmpbuf = g_strdup_printf("%i",(gint)result);
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
+				g_free(tmpbuf);
 			}
 
 			/* Scroll the treeview s othe current one is in view */
@@ -505,9 +512,11 @@ void update_model_from_view(GtkWidget * widget)
 		}
 		else
 		{
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,g_strdup(""), -1);
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,g_strdup(""), -1);
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,g_strdup(""), -1);
+			tmpbuf = g_strdup("");
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
+			g_free(tmpbuf);
 		}
 		looptest = gtk_tree_model_iter_next(model,&iter);
 	}

@@ -1334,8 +1334,6 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
-	printf("key_event\n");
-
 	if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
 		lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
 	if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)
@@ -1349,21 +1347,14 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	if (event->keyval == GDK_Shift_L)
 	{
 		if (event->type == GDK_KEY_PRESS)
-		{
-			printf("grab allowed\n");
 			grab_allowed = TRUE;
-		}
 		else
-		{
-			printf("grab NOT allowed\n");
 			grab_allowed = FALSE;
-		}
 		return FALSE;
 	}
 
 	if (event->type == GDK_KEY_RELEASE)
 	{
-		printf("grab NOT allowed\n");
 		grab_allowed = FALSE;
 		return FALSE;
 	}

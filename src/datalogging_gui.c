@@ -120,6 +120,7 @@ void populate_dlog_choices()
 		tooltip = g_strdup(g_object_get_data(object,"tooltip"));
 		if (tooltip)
 			gtk_tooltips_set_tip(tip,button,tooltip,NULL);
+		g_free(tooltip);
 
 		// Bind button to the object, Done so that we can set the state
 		// of the buttons from elsewhere... 

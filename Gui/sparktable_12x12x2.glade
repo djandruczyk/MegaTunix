@@ -5301,7 +5301,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="load_tbl_units">
+				    <widget class="GtkLabel" id="SP1_load_tbl_units">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Kpa</property>
 				      <property name="use_underline">False</property>
@@ -5393,7 +5393,7 @@
 			      <property name="column_spacing">0</property>
 
 			      <child>
-				<widget class="GtkLabel" id="trim_label">
+				<widget class="GtkLabel" id="SP1_trim_label">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Trim Angle</property>
 				  <property name="use_underline">False</property>
@@ -5417,7 +5417,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="fixed_label">
+				<widget class="GtkLabel" id="SP1_fixed_label">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Fixed Angle</property>
 				  <property name="use_underline">False</property>
@@ -5441,7 +5441,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="trimangle_entry">
+				<widget class="GtkEntry" id="SP1_trimangle_entry">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
@@ -5469,7 +5469,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="fixedangle_entry">
+				<widget class="GtkEntry" id="SP1_fixedangle_entry">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
@@ -10832,7 +10832,7 @@ by what %</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="load_tbl_units">
+				    <widget class="GtkLabel" id="SP2_load_tbl_units">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Kpa</property>
 				      <property name="use_underline">False</property>
@@ -10924,7 +10924,7 @@ by what %</property>
 			      <property name="column_spacing">0</property>
 
 			      <child>
-				<widget class="GtkLabel" id="trim_label">
+				<widget class="GtkLabel" id="SP2_trim_label">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Trim Angle</property>
 				  <property name="use_underline">False</property>
@@ -10948,7 +10948,7 @@ by what %</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="fixed_label">
+				<widget class="GtkLabel" id="SP2_fixed_label">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Fixed Angle</property>
 				  <property name="use_underline">False</property>
@@ -10972,7 +10972,7 @@ by what %</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="trimangle_entry">
+				<widget class="GtkEntry" id="SP2_trimangle_entry">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
@@ -11000,7 +11000,7 @@ by what %</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="fixedangle_entry">
+				<widget class="GtkEntry" id="SP2_fixedangle_entry">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
