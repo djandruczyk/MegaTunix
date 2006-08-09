@@ -71,7 +71,7 @@ void rescale_table(gchar * widget_name)
 	z_page = firmware->table_params[table_num]->z_page;
 
 	percentage = gtk_spin_button_get_value(GTK_SPIN_BUTTON(scaler));
-	for (i=z_base;i<(x_bins*y_bins);i++)
+	for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
 	{
 		if (NULL != (list = ve_widgets[z_page][i]))
 		{

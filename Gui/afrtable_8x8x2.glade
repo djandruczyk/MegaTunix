@@ -2775,7 +2775,7 @@ by what percentage?</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="AF1_rescale_frame_title">
+			    <widget class="GtkLabel" id="AFR1_rescale_frame_title">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Rescale Subset of Table</property>
 			      <property name="use_underline">False</property>
@@ -5567,7 +5567,7 @@ by what percentage?</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="AF2_rescale_frame_title">
+			    <widget class="GtkLabel" id="AFR2_rescale_frame_title">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Rescale Subset of Table</property>
 			      <property name="use_underline">False</property>
