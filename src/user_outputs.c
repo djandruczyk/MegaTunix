@@ -505,6 +505,7 @@ void update_model_from_view(GtkWidget * widget)
 			/* Scroll the treeview s othe current one is in view */
 			treepath = gtk_tree_model_get_path (GTK_TREE_MODEL(model),&iter);
 			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(widget),treepath,NULL,TRUE,1.0,0.0);
+			gtk_tree_path_free(treepath);
 
 
 //			printf("offset matched for object %s\n",(gchar *)g_object_get_data(object,"dlog_gui_name"));

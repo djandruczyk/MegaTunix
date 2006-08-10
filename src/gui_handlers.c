@@ -86,13 +86,19 @@ void leave(GtkWidget *widget, gpointer data)
 	extern GStaticMutex rtv_mutex;
 	extern gboolean connected;
 	extern gboolean interrogated;
+	extern GAsyncQueue *dispatch_queue;
 	struct Io_File * iofile = NULL;
+
+	/* Stop timeout functions */
+	leaving = TRUE;
 
 	/* Commits any pending data to ECU flash */
 	if ((connected) && (interrogated))
 		io_cmd(IO_BURN_MS_FLASH,NULL);
-	/* Stop timeout functions */
-	leaving = TRUE;
+
+	/* This makes us wait until the dispatch queue finishes */
+	while (g_async_queue_length(dispatch_queue) > 0)
+		gtk_main_iteration();
 
 	if (statuscounts_id)
 		gtk_timeout_remove(statuscounts_id);
