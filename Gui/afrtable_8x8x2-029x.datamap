@@ -60,6 +60,24 @@ key_types=_INT_,_STRING_
 page=6
 set_label=MegaSquirtnSpark-Extra AFR-Table 1
 
+[AFR1_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=6
+set_label=Air Fuel Ratio Table for VE-Tables 1/3
+
+[AFR2_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=6
+set_label=Air Fuel Ratio Table for VE-Table 2 (DT)
+
+[topframe_title]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=6
+set_label=MegaSquirtnSpark-Extra AFR-Table 1
+
 [AFR1_load_tbl_lab]
 keys=page,label,alt_label,depend_on
 key_types=_INT_,_STRING_,_STRING_,_STRING_
@@ -128,7 +146,7 @@ bind_to_list=afr1
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=6
-bind_to_list=afr3,dt_controls
+bind_to_list=afr2,dt_controls
 
 #----- Buttons ---------------------------------------------------------------
 

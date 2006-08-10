@@ -104,7 +104,7 @@ an_ego_button_bitmask=16
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=6
-bind_to_list=afr3,dt_controls
+bind_to_list=afr2,dt_controls
 
 #----- Buttons ---------------------------------------------------------------
 

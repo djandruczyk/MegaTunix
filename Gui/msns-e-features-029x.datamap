@@ -53,19 +53,25 @@ bind_to_list=nos_subfeatures
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=dt_controls,nos_subfeatures
+bind_to_list=dt_controls,nos_subfeatures,x2_nitrous_control,x3_nitrous_control
 
 [nos_feature_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=nos_features
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 
 [water_inj_feature_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=water_features
+bind_to_list=water_features,x2_water_injection,x3_water_injection
+
+[boost_ctrl_feature_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=boost_controller
 
 #------ Radio Buttons --------------------------------------------------------
 
@@ -295,9 +301,9 @@ offset=11
 bitval=1
 bitshift=7
 bitmask=128
-toggle_groups=nos_subfeatures,nos_params,water_features,x2_pin,x3_pin
+toggle_groups=nos_subfeatures,nos_params,water_features,x2_tach_pin,x3_tach_pin
 group_states=ENABLED,ENABLED,DISABLED,DISABLED,DISABLED
-bind_to_list=nos_features
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
@@ -310,28 +316,29 @@ offset=11
 bitval=0
 bitshift=7
 bitmask=128
-bind_to_list=nos_features
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
 
 [boost_enabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitval=1
 bitshift=0
 bitmask=1
-toggle_groups=boost_controls,x4_pin
+toggle_groups=boost_controls,x4_tach_pin
 group_states=ENABLED,DISABLED
+bind_to_list=boost_controller
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
 
 [boost_disabled_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=12
 bitval=0
@@ -339,6 +346,7 @@ bitshift=0
 bitmask=1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+bind_to_list=boost_controller
 tooltip=The boost controller feature will use one of the three boost tables to actuate an external boost controller in a PWM method.  See the Boost Tab for configuration variables..
 
 [shift_light_enabled_radio_button]
@@ -426,7 +434,7 @@ offset=76
 bitval=1
 bitshift=6
 bitmask=64
-bind_to_list=nos_subfeatures
+bind_to_list=nos_subfeatures,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
@@ -439,7 +447,7 @@ offset=76
 bitval=0
 bitshift=6
 bitmask=64
-bind_to_list=nos_subfeatures
+bind_to_list=nos_subfeatures,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
@@ -452,9 +460,9 @@ offset=46
 bitval=1
 bitshift=3
 bitmask=8
-toggle_groups=nos_features,water_controls,water_params,x2_pin,x3_pin
+toggle_groups=nos_features,water_controls,water_params,x2_tach_pin,x3_tach_pin
 group_states=DISABLED,ENABLED,ENABLED,DISABLED,DISABLED
-bind_to_list=water_features
+bind_to_list=water_features,x2_water_injection,x3_water_injection
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
@@ -467,7 +475,7 @@ offset=46
 bitval=0
 bitshift=3
 bitmask=8
-bind_to_list=water_features
+bind_to_list=water_features,x2_water_injection,x3_water_injection
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.

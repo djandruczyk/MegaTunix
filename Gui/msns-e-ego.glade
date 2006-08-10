@@ -1622,7 +1622,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="ve3_tafr_enabled_radio_button">
+			    <widget class="GtkRadioButton" id="ve2_tafr_enabled_radio_button">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Enabled</property>
@@ -1646,7 +1646,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkRadioButton" id="ve3_tafr_disabled_radio_button">
+			    <widget class="GtkRadioButton" id="ve2_tafr_disabled_radio_button">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Disabled</property>
@@ -1656,7 +1656,7 @@
 			      <property name="active">True</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-			      <property name="group">ve3_tafr_enabled_radio_button</property>
+			      <property name="group">ve2_tafr_enabled_radio_button</property>
 			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 16 Jul 2006 01:15:04 GMT"/>
 			    </widget>
 			    <packing>

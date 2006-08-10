@@ -1,4 +1,4 @@
-# MSnS-E Water/NOS/Launch datamap
+
 
 [global]
 description=Object data map for WaterInj/NOS/LaunchCtrl for msns-E
@@ -28,13 +28,13 @@ bind_to_list=burners
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=nitrous_controls
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 
 [water_inj_frame]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=water_injection
+bind_to_list=x2_water_injection,x3_water_injection
 
 [water_inj_params_table]
 keys=page,bind_to_list
@@ -108,19 +108,31 @@ tooltip=Variable Launch control uses an external input for the user to set the h
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=nos_features
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 
 [water_inj_frame_title]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=water_features
+bind_to_list=water_features,x2_water_injection,x3_water_injection
 
 [nos_spark_retard_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=spark_controls
+bind_to_list=spark_controls,x2_nitrous_control,x3_nitrous_control
+
+[nos_delay_after_launch_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_controls,nos_params
+
+[nos_delay_after_flat_shift_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_controls,nos_params
 
 [water_iat_setpoint_label]
 keys=page,c_label,f_label,temp_dep,bind_to_list
@@ -138,7 +150,7 @@ page=0
 c_label=Min Coolant Temp (\302\260C.)
 f_label=Min Coolant Temp (\302\260F.)
 temp_dep=TRUE
-bind_to_list=temperature
+bind_to_list=temperature,x2_nitrous_control,x3_nitrous_control
 
 #----- Radio/Checkbuttons ----------------------------------------------------
 
@@ -150,9 +162,9 @@ offset=46
 bitval=1
 bitshift=3
 bitmask=8
-toggle_groups=nos_features,water_controls,x2_pin,x3_pin
+toggle_groups=nos_features,water_controls,x2_tach_pin,x3_tach_pin
 group_states=DISABLED,ENABLED,ENABLED,DISABLED,DISABLED
-bind_to_list=water_features
+bind_to_list=water_features,x2_water_injection,x3_water_injection
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
@@ -165,7 +177,7 @@ offset=46
 bitval=0
 bitshift=3
 bitmask=8
-bind_to_list=water_features
+bind_to_list=water_features,x2_water_injection,x3_water_injection
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Water Injection is used to aid in detonation control under high load or boosted applications.  This feature can ONLY be enabled if fan control is NOT used as they share the same output pin.
@@ -204,7 +216,7 @@ offset=11
 bitval=1
 bitshift=7
 bitmask=128
-toggle_groups=nos_subfeatures,nos_params,water_features,x2_pin,x3_pin
+toggle_groups=nos_subfeatures,nos_params,water_features,x2_tach_pin,x3_tach_pin
 group_states=ENABLED,ENABLED,DISABLED,DISABLED,DISABLED
 bind_to_list=nos_features
 dl_type=_IMMEDIATE_
@@ -219,7 +231,7 @@ offset=11
 bitval=0
 bitshift=7
 bitmask=128
-bind_to_list=nos_features
+bind_to_list=nos_features,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Nitrous system adds additional fuel at an RPM based rate on top of the current pulsewidth when the nitrous input is active.  This is designed to work with a dry nitrous type system to add additioanl fuel through the main injectors.  Make sure your injectors are rated to flow enough to accomodate the needed fuel with Nitrous is active, or you risk a lean condition and severe engine damage.
@@ -234,7 +246,7 @@ bitshift=6
 bitmask=64
 toggle_groups=antilag_controls
 group_states=ENABLED
-bind_to_list=nos_params
+bind_to_list=nos_params,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)
@@ -247,7 +259,7 @@ offset=66
 bitval=0
 bitshift=6
 bitmask=64
-bind_to_list=nos_params
+bind_to_list=nos_params,x2_nitrous_control,x3_nitrous_control
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The NOS Antilag system is used to fire the NOS output between certain ranges of manifold pressure in order to spool the turbo (shifting)

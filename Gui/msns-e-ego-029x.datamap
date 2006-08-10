@@ -200,7 +200,7 @@ toggle_groups=afr1
 group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Enables Target AFR functionality for VETable 1.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
+tooltip=Enables Target AFR functionality for VETable(s) 1/3.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [ve1_tafr_disabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
@@ -212,9 +212,9 @@ bitshift=7
 bitmask=128
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Disables Target AFR functionality for VETable 1.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
+tooltip=Disables Target AFR functionality for VETable(s) 1/3.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
-[ve3_tafr_enabled_radio_button]
+[ve2_tafr_enabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
@@ -222,13 +222,13 @@ offset=92
 bitval=1
 bitshift=1
 bitmask=2
-toggle_groups=afr3
+toggle_groups=afr2
 group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Enables Target AFR functionality for VETable 3.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
+tooltip=Enables Target AFR functionality for VETable 2, DT mode only. NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
-[ve3_tafr_disabled_radio_button]
+[ve2_tafr_disabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
@@ -238,7 +238,7 @@ bitshift=1
 bitmask=2
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Disables Target AFR functionality for VETable 3.  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
+tooltip=Disables Target AFR functionality for VETable 2, DT mode only..  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [sd_control_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
