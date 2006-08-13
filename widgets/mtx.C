@@ -1,5 +1,4 @@
-// Copyright (C) Christopher Mire, 2006
-// Authors: Christopher Mire
+// Christopher Mire, 2006
 
 #include <gtk/gtk.h>
 #include <glib-object.h>

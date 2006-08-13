@@ -1,5 +1,5 @@
-// Copyright (C) Christopher Mire, 2006
-// Authors: Christopher Mire
+// Christopher Mire, 2006
+
 
 #ifndef MTX_GAUGE_FACE_H
 #define MTX_GAUGE_FACE_H
