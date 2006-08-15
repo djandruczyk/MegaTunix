@@ -19,13 +19,10 @@ main (int argc, char **argv)
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);
 
-	g_signal_connect (gauge, "data-changed",
-			G_CALLBACK (data_changed_cb), NULL);
-
 	gtk_widget_show_all (window);
 
-	mtx_gauge_face_set_value (MTX_GAUGE_FACE (data), 0.5);
-	float value = mtx_gauge_face_get_value (MTX_GAUGE_FACE (data));
+	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.5);
+	float value = mtx_gauge_face_get_value (MTX_GAUGE_FACE (gauge));
 	printf ("UD is %f\n", value);
 
 
