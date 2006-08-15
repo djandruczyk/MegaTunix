@@ -1,7 +1,7 @@
 // Christopher Mire, 2006
 
 #include <gtk/gtk.h>
-#include "mtx.H"
+#include <gauge.h>
 
 int
 main (int argc, char **argv)

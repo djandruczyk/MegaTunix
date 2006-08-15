@@ -3,11 +3,10 @@
 #include <gtk/gtk.h>
 #include <glib-object.h>
 #include <math.h>
+#include <string.h>
 #include <time.h>
-#include "mtx.H"
-#include "queue_generator.H"
+#include <gauge.h>
 
-using namespace cajun;
 ////////////////////////////////////////////////////////////////////////////////
 #define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
 
@@ -111,11 +110,11 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 		cairo_save (cr); /* stack-pen-size */
 		if (i % 3 == 0)
 		{
-			inset = int (0.2 * radius);
+			inset = (int) (0.2 * radius);
 		}
 		else
 		{
-			inset = int (0.1 * radius);
+			inset = (int) (0.1 * radius);
 			cairo_set_line_width (cr, 0.5 *
 					      cairo_get_line_width (cr));
 		}
