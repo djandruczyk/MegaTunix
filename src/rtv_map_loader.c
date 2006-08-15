@@ -249,7 +249,7 @@ gboolean load_realtime_map(void )
 		}
 		list = g_array_index(rtv_map->rtv_array,GList *,offset);
 		rtv_map->rtv_array = g_array_remove_index(rtv_map->rtv_array,offset);
-		list = g_list_append(list,(gpointer)object);
+		list = g_list_prepend(list,(gpointer)object);
 		g_array_insert_val(rtv_map->rtv_array,offset,list);
 		g_array_append_val(rtv_map->rtv_list,object);
 

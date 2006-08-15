@@ -325,21 +325,28 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 {
 	gint bind_num_keys = 0;
 	gchar **tmpvector = NULL;
+	GList *dest_list = NULL;
+	GList *tmp_list = NULL;
 	gint i = 0;
 
-	//printf("Widget %s is being bount to lists \"%s\"\n",(gchar *)glade_get_widget_name(widget),lists);
+	//printf("Widget %s is being bound to lists \"%s\"\n",(gchar *)glade_get_widget_name(widget),lists);
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
 	/* This looks convoluted,  but it allows for an arbritrary 
 	 * number of lists, that are indexed by a keyword.
 	 * The get_list function looks the list up in a hashtable, if
 	 * it isn't found (i.e. new list) it returns NULL which is OK
-	 * as g_list_append() uses that to create a new list,  that
+	 * as g_list_prepend() uses that to create a new list,  that
 	 * returned list is used to store back into the hashtable so
 	 * that the list is always stored and up to date...
 	 */
 	for (i=0;i<bind_num_keys;i++)
-		store_list(tmpvector[i],g_list_append(get_list(tmpvector[i]),(gpointer)widget));
+	{
+		dest_list = get_list(tmpvector[i]);
+		tmp_list = g_list_prepend(dest_list,(gpointer)widget);
+
+		store_list(tmpvector[i],tmp_list);
+	}
 	g_strfreev(tmpvector);
 }
 
@@ -483,7 +490,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  ther eis a bug with this datamap widgt %s, at offset %i...\n\n",section,offset),CRITICAL);
 			}
 			else
-				ve_widgets[page][offset] = g_list_append(
+				ve_widgets[page][offset] = g_list_prepend(
 						ve_widgets[page][offset],
 						(gpointer)widget);
 		}

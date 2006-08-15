@@ -132,34 +132,40 @@ key_types=_INT_
 offset=25
 group=triggers
 
+
 [trigger_spin_2]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=26
+bind_to_list=spark_b_ctrls
 group=triggers
 
 [trigger_spin_3]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=27
+bind_to_list=spark_c_ctrls
 group=triggers
 
 [trigger_spin_4]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=28
+bind_to_list=spark_d_ctrls
 group=triggers
 
 [trigger_spin_5]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=145
+bind_to_list=spark_e_ctrls
 group=triggers
 
 [trigger_spin_6]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=146
+bind_to_list=spark_f_ctrls
 group=triggers
 
 [return_spin_1]
@@ -169,75 +175,85 @@ offset=29
 group=trig_ret
 
 [return_spin_2]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=30
+bind_to_list=spark_b_ctrls
 group=trig_ret
 
 [return_spin_3]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=31
+bind_to_list=spark_c_ctrls
 group=trig_ret
 
 [return_spin_4]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=32
+bind_to_list=spark_d_ctrls
 group=trig_ret
 
 [return_spin_5]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=147
+bind_to_list=spark_e_ctrls
 group=trig_ret
 
 [return_spin_6]
-keys=offset
-key_types=_INT_
+keys=offset,bind_to_list
+key_types=_INT_,_STRING_
 offset=148
+bind_to_list=spark_f_ctrls
 group=trig_ret
 
 [oddfire_offset_spin_1]
 keys=offset,oddfire_bit_offset
 key_types=_INT_,_INT_
-offset=29
+offset=167
 group=oddfire
 oddfire_bit_offset=166
 
 [oddfire_offset_spin_2]
-keys=offset,oddfire_bit_offset
-key_types=_INT_,_INT_
-offset=30
+keys=offset,bind_to_list,oddfire_bit_offset
+key_types=_INT_,_STRING_,_INT_
+offset=169
 group=oddfire
+bind_to_list=spark_b_ctrls
 oddfire_bit_offset=168
 
 [oddfire_offset_spin_3]
-keys=offset,oddfire_bit_offset
-key_types=_INT_,_INT_
-offset=31
+keys=offset,bind_to_list,oddfire_bit_offset
+key_types=_INT_,_STRING_,_INT_
+offset=171
 group=oddfire
+bind_to_list=spark_c_ctrls
 oddfire_bit_offset=170
 
 [oddfire_offset_spin_4]
-keys=offset,oddfire_bit_offset
-key_types=_INT_,_INT_
-offset=32
+keys=offset,bind_to_list,oddfire_bit_offset
+key_types=_INT_,_STRING_,_INT_
+offset=173
 group=oddfire
+bind_to_list=spark_d_ctrls
 oddfire_bit_offset=172
 
 [oddfire_offset_spin_5]
-keys=offset,oddfire_bit_offset
-key_types=_INT_,_INT_
-offset=147
+keys=offset,bind_to_list,oddfire_bit_offset
+key_types=_INT_,_STRING_,_INT_
+offset=175
 group=oddfire
+bind_to_list=spark_e_ctrls
 oddfire_bit_offset=174
 
 [oddfire_offset_spin_6]
-keys=offset,oddfire_bit_offset
-key_types=_INT_,_INT_
-offset=148
+keys=offset,bind_to_list,oddfire_bit_offset
+key_types=_INT_,_STRING_,_INT_
+offset=177
 group=oddfire
+bind_to_list=spark_f_ctrls
 oddfire_bit_offset=176
 
 [num_teeth_spin]

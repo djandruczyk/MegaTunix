@@ -164,12 +164,12 @@ void load_status(void)
 				 * number of lists, that are indexed by a keyword.
 				 * The get_list function looks the list up in a hashtable, if
 				 * it isn't found (i.e. new list) it returns NULL which is OK
-				 * as g_list_append() uses that to create a new list,  that
+				 * as g_list_prepend() uses that to create a new list,  that
 				 * returned list is used to store back into the hashtable so
 				 * that the list is always stored and up to date...
 				 */
 				for (x=0;x<tmpi;x++)
-					store_list(tmpvector[x],g_list_append(get_list(tmpvector[x]),(gpointer)label));
+					store_list(tmpvector[x],g_list_prepend(get_list(tmpvector[x]),(gpointer)label));
 				g_strfreev(tmpvector);
 			}
 			g_free(section);

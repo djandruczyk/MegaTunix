@@ -153,7 +153,7 @@ void present_viewer_choices(void)
 		label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label),name);
 		gtk_container_add(GTK_CONTAINER(button),label);
-		store_list("viewables",g_list_append(
+		store_list("viewables",g_list_prepend(
 					get_list("viewables"),(gpointer)button));
 
 		if (tooltip)
@@ -318,7 +318,7 @@ void populate_viewer()
 				g_hash_table_insert(lv_data->traces,
 						g_strdup(name),
 						(gpointer)v_value);
-				lv_data->tlist = g_list_append(lv_data->tlist,(gpointer)v_value);
+				lv_data->tlist = g_list_prepend(lv_data->tlist,(gpointer)v_value);
 			}
 		}
 		else

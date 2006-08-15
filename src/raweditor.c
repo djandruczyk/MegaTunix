@@ -107,7 +107,7 @@ EXPORT void finish_raweditor(void)
 			if (firmware->page_params[i]->is_spark)
 				g_object_set_data(G_OBJECT(entry),"ign_parm",GINT_TO_POINTER(TRUE));
 
-			ve_widgets[i][j] = g_list_append(ve_widgets[i][j],(gpointer)entry);
+			ve_widgets[i][j] = g_list_prepend(ve_widgets[i][j],(gpointer)entry);
 			g_object_set_data(G_OBJECT(entry),"handler",
 					GINT_TO_POINTER(GENERIC));
 			g_signal_connect (G_OBJECT(entry), "changed",

@@ -227,7 +227,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK(std_button_handler),
 			NULL);
 	ve_view->burn_but = button;
-	store_list("burners",g_list_append(
+	store_list("burners",g_list_prepend(
 				get_list("burners"),(gpointer)button));
 
 	gtk_tooltips_set_tip(tip,button,

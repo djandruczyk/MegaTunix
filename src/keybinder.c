@@ -31,6 +31,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 	gint i = 0;
 	gint tmpi = 0;
 	gchar * tmpbuf = NULL;
+	gchar * tmpstr = NULL;
 
 	for (i=0;i<num_keys;i++)
 	{
@@ -77,9 +78,21 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
 					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),TABLOADER);
-					g_object_set_data(object,
-							keys[i],
-							g_strdup(tmpbuf));
+					tmpstr = g_object_get_data(object,keys[i]);
+					/* If data already on widget, append
+					 * new data and store */
+					if ((tmpstr) && (g_strrstr(keys[i],"bind_to_list")!= NULL))
+					{
+						tmpstr = g_strconcat(tmpstr,",",tmpbuf,NULL);
+						g_object_set_data(object,
+								keys[i],
+								g_strdup(tmpstr));
+						g_free(tmpstr);
+					}
+					else
+						g_object_set_data(object,
+								keys[i],
+								g_strdup(tmpbuf));
 					g_free(tmpbuf);
 				}
 				else

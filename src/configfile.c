@@ -420,7 +420,7 @@ static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
 
 	section = g_malloc0(sizeof (ConfigSection));
 	section->name = g_strdup(name);
-	cfg->sections = g_list_append(cfg->sections, section);
+	cfg->sections = g_list_prepend(cfg->sections, section);
 
 	return section;
 }
@@ -440,7 +440,7 @@ static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar
 	line = g_malloc0(sizeof (ConfigLine));
 	line->key = g_strchug(g_strchomp(g_strdup(key)));
 	line->value = g_strchug(g_strchomp(g_strdup(value)));
-	section->lines = g_list_append(section->lines, line);
+	section->lines = g_list_prepend(section->lines, line);
 
 	return line;
 }

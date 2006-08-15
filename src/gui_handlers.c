@@ -968,14 +968,13 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~0x7; /*clears lower 3 bits */
 				tmp = tmp | (1 << 1);	/* Set +45 */
 				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
-				value -= 45;
+				value -= 45.0;
 				dload_val = convert_before_download(widget,value);
 			}
 			else	// value <= 45 degrees, 
 			{
 				tmp = ms_data[page][oddfire_bit_offset];
 				tmp = tmp & ~0x7; /*clears lower 3 bits */
-				tmp = tmp | (1 << 0);	/* Set +45 */
 				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
 				dload_val = convert_before_download(widget,value);
 			}
@@ -1165,6 +1164,8 @@ void update_widget(gpointer object, gpointer user_data)
 	gint base = -1;
 	gint precision = -1;
 	gint num_groups = 0;
+	gint spconfig_offset = 0;
+	gint oddfire_bit_offset = 0;
 	gchar ** groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * group_states = NULL;
@@ -1281,14 +1282,59 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
 	{
-		spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-		if (value != spin_value)
+		if ((int)g_object_get_data(G_OBJECT(widget),"handler") == ODDFIRE_ANGLE)
 		{
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
-			if (use_color)
+			oddfire_bit_offset = (gint)g_object_get_data(G_OBJECT(widget),"oddfire_bit_offset");
+			if (oddfire_bit_offset == 0)
+				return;
+			switch (ms_data[page][oddfire_bit_offset])
 			{
-				color = get_colors_from_hue(((gfloat)ms_data[page][offset]/256.0)*360.0,0.33, 1.0);
-				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+				case 4:
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value+90);
+					break;
+				case 2:
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value+45);
+					break;
+				case 0:
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+					break;
+				default:
+					dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ms_data[%i][%i], ERROR\n",page,oddfire_bit_offset),CRITICAL);
+
+
+			}
+		}
+		else if ((int)g_object_get_data(G_OBJECT(widget),"handler") == TRIGGER_ANGLE)
+		{
+			spconfig_offset = (gint)g_object_get_data(G_OBJECT(widget),"spconfig_offset");
+			switch (ms_data[page][spconfig_offset] & 0x03)
+			{
+				case 2:
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value+45);
+					break;
+				case 1:
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value+22.5);
+					break;
+				case 0:
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+					break;
+				default:
+					dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ms_data[%i][%i], ERROR\n",page,spconfig_offset),CRITICAL);
+
+
+			}
+		}
+		else
+		{
+			spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+			if (value != spin_value)
+			{
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+				if (use_color)
+				{
+					color = get_colors_from_hue(((gfloat)ms_data[page][offset]/256.0)*360.0,0.33, 1.0);
+					gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+				}
 			}
 		}
 	}
@@ -1322,23 +1368,23 @@ void update_widget(gpointer object, gpointer user_data)
 
 		if (toggle_groups)
 		{
-			//printf("toggling groups\n");
+		//	printf("toggling groups\n");
 			groups = parse_keys(toggle_groups,&num_groups,",");
-			//printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);
+		//	printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);
 
 			for (i=0;i<num_groups;i++)
 			{
-				//printf("UW: This widget has %i groups, checking state of (%s)\n", num_groups, groups[i]);
+		//		printf("UW: This widget has %i groups, checking state of (%s)\n", num_groups, groups[i]);
 				tmp_state = get_state(group_states,i);
-				//printf("If this ctrl is active we want state to be %i\n",tmp_state);
+		//		printf("If this ctrl is active we want state to be %i\n",tmp_state);
 				state = tmp_state == TRUE ? new_state:!new_state;
-				//printf("Current state of button is %i\n",new_state),
-				//printf("new group state is %i\n",state);
+		//		printf("Current state of button is %i\n",new_state),
+		//		printf("new group state is %i\n",state);
 				g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
-				//printf("setting all widgets in that group to state %i\n\n",state);
+		//		printf("setting all widgets in that group to state %i\n\n",state);
 				g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 			}
-			//printf ("DONE!\n\n\n");
+		//	printf ("DONE!\n\n\n");
 			g_strfreev(groups);
 		}
 	}
