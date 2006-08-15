@@ -71,6 +71,12 @@ keys themselves are not, as the string compare functions are case insensitive.
 			This is ONLY used for interdependant controls that
 			have special handlers (required_fuel and all the things
 			that depend onf it, like cyls, injs, squirts, etc..)
+	spconfig_offset	(integer) Offset of the corresponding spark trigger 
+			config bitfield (linked to the control that uses this
+			parameter)
+	oddfire_bit_offset	(integer) Offset of the corresponding oddfire
+			config bitfield (linked to the control that uses this
+			parameter)
 	bitval		(integer) the value of part of a bitfield (see below)
 	bitshift	(integer) the starting point in a bitfield for bitval
 	bitmask		(integer) the bitmask of bitval..

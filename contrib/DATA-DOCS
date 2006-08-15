@@ -286,15 +286,15 @@ outfoffs	pg6 176 [0:2] "O", "INVAL", "+45", "INVAL", "+90", INVAL, INVAL,INVAL
 outfoffsv	pg6 177 "deg" x/0.352 conv, 0-45 span
 
 Trigger stuff
-TrigAng		pg1 168 "deg" x/0.352 conv, 0-90 span
-Trig_plus	pg1 173 [0:1] "0", "+22.5", "INVAL", "+45"  !oddfire
-TrigCrank	pg1 173 [2:2] "Trigger Return", "Time Based"	!edis
-CrankAng	pg1 171 "deg" (x/0.352)+28.4 conv, -10-80 span	
-IgHold		pg1 172 "", no conv, 0-100 span
-IgInv		pg1 173 [3:3] "No", "Yes"
-oddfir		pg1 173 [4:4] "No", "Yes" enables ODDFIRE
-FixAng		pg1 169 "deg" (x/0.352)+28.4 conv, -10-80 span	 
-Trim		pg1 170 "deg" x/0.352 conv -45 to 45 range (conversion is invalid)
+TrigAng		pg3 168 "deg" x/0.352 conv, 0-90 span
+Trig_plus	pg3 173 [0:1] "0", "+22.5", "INVAL", "+45"  !oddfire
+TrigCrank	pg3 173 [2:2] "Trigger Return", "Time Based"	!edis
+CrankAng	pg3 171 "deg" (x/0.352)+28.4 conv, -10-80 span	
+IgHold		pg3 172 "", no conv, 0-100 span
+IgInv		pg3 173 [3:3] "No", "Yes"
+oddfir		pg3 173 [4:4] "No", "Yes" enables ODDFIRE
+FixAng		pg3 169 "deg" (x/0.352)+28.4 conv, -10-80 span	 
+Trim		pg3 170 "deg" x/0.352 conv -45 to 45 range (conversion is invalid)
 
 Dwell Control
 

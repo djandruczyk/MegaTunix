@@ -79,6 +79,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(GENERIC));
 	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
 			GINT_TO_POINTER(TRIGGER_ANGLE));
+	g_hash_table_insert(str_2_enum,"_ODDFIRE_ANGLE_",
+			GINT_TO_POINTER(ODDFIRE_ANGLE));
 	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_1_",
 			GINT_TO_POINTER(NUM_SQUIRTS_1));
 	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_2_",

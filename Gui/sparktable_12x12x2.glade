@@ -5541,7 +5541,7 @@
 			      <child>
 				<widget class="GtkLabel" id="SP1_rescale_label0">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Rescale  Advance
+				  <property name="label" translatable="yes">Rescale
 by what %</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
@@ -11072,7 +11072,7 @@ by what %</property>
 			      <child>
 				<widget class="GtkLabel" id="SP2_rescale_label0">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Rescale  Advance
+				  <property name="label" translatable="yes">Rescale
 by what %</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>

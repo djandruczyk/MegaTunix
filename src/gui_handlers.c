@@ -726,6 +726,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint bitmask = -1;
 	gint bitshift = -1;
 	gint spconfig_offset = 0;
+	gint oddfire_bit_offset = 0;
 	gboolean ign_parm = FALSE;
 	gboolean temp_dep = FALSE;
 	gint tmpi = 0;
@@ -907,7 +908,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			spconfig_offset = (gint)g_object_get_data(G_OBJECT(widget),"spconfig_offset");
 			if (spconfig_offset == 0)
 			{
-				dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Triggler Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
+				dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Trigger Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
 				dl_type = 0;  
 				break;
 
@@ -938,6 +939,44 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~0x3; /*clears lower 2 bits */
 				//ms_data[page][spconfig_offset] = tmp;
 				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm, TRUE);
+				dload_val = convert_before_download(widget,value);
+			}
+
+			break;
+
+		case ODDFIRE_ANGLE:
+			oddfire_bit_offset = (gint)g_object_get_data(G_OBJECT(widget),"oddfire_bit_offset");
+			if (oddfire_bit_offset == 0)
+			{
+				dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
+				dl_type = 0;  
+				break;
+
+			}
+			if (value > 90)	/*  */	
+			{
+				tmp = ms_data[page][oddfire_bit_offset];
+				tmp = tmp & ~0x7; /*clears lower 3 bits */
+				tmp = tmp | (1 << 2);	/* Set +90 */
+				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
+				value -= 90.0;
+				dload_val = convert_before_download(widget,value);
+			}
+			else if (value > 45) /* */
+			{
+				tmp = ms_data[page][oddfire_bit_offset];
+				tmp = tmp & ~0x7; /*clears lower 3 bits */
+				tmp = tmp | (1 << 1);	/* Set +45 */
+				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
+				value -= 45;
+				dload_val = convert_before_download(widget,value);
+			}
+			else	// value <= 45 degrees, 
+			{
+				tmp = ms_data[page][oddfire_bit_offset];
+				tmp = tmp & ~0x7; /*clears lower 3 bits */
+				tmp = tmp | (1 << 0);	/* Set +45 */
+				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
 				dload_val = convert_before_download(widget,value);
 			}
 
