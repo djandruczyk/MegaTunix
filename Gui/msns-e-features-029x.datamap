@@ -73,6 +73,12 @@ key_types=_INT_,_STRING_
 page=0
 bind_to_list=boost_controller
 
+[edis_multi_rpm_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=multispark
+
 #------ Radio Buttons --------------------------------------------------------
 
 [ms_persona]
@@ -194,14 +200,16 @@ handler=_GENERIC_
 tooltip=This is an EXPERIMENTAL mode is for using dual external FORD EDIS units (4/6) a singal VR sensor and 36-1 trigger wheel.  The EDIS module takes care of signal conditioning and coil driving.  In this case the VR signal is wired to BOTH EDIS units, but only one of the PIP outputs is wired to the ECU.  The ECU sends TWO SAW (Spark Angle Words), one for each EDIS module. The signals are sent 180deg of crankshaft rotation out of phase to meet EDIS input requirements.  This is used to allow two EDIS 4 units to run a V8, or a pair of EDIS6 units to run a V12 engine.  See http://megasquirt.sourceforge.net/extra/setup-edis.html
 
 [edis_multispark_check_button]
-keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=66
 bitval=1
 bitshift=3
 bitmask=8
 bind_to_list=edis_controls
+toggle_groups=multispark
+group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This enabled EDIS Multispark mode up to the RPM threshold set to the right of this control.
@@ -554,7 +562,7 @@ offset=21
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_upper=25
-bind_to_list=edis_controls
+bind_to_list=edis_controls,multispark
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multispark helps improve combustion and emissions at low RPM's.

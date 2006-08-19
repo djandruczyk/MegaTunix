@@ -100,6 +100,14 @@ precision=1
 use_color=TRUE
 tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
+#----- Widgets ---------------------------------------------------------------
+
+[spark_notebook]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=3
+bind_to_list=spark_controls
+
 #----- Labels ----------------------------------------------------------------
 
 [topframe_title]

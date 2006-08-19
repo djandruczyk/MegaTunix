@@ -75,35 +75,14 @@ void comms_test()
 	/* If serial control struct exists, 
 	 * but we don't have connected status, try to reset connection */
 	
-	if ((serial_params) && (!connected))
-	{
-		// TRY closing/reopening port
-		port = g_strdup(serial_params->port_name);
-		if (realtime_id) // runtime vars running 
-		{
-			stop_realtime_tickler();
-			restore_runtime = TRUE;
-		}
-		close_serial();
-		if (g_file_test(port,G_FILE_TEST_EXISTS))
-		{
-			open_serial(port);
-			setup_serial_params();
-			if (restore_runtime)
-				start_realtime_tickler();
-		}
-		g_free(port);
-
-	}
-	
 	if (!serial_params->open)
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		return;
 	}
-
 	/* Flush the toilet.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);	
+
 	while ((write(serial_params->fd,"C",1) != 1) && (count < 10 ))
 	{
 		g_usleep(10000);
@@ -124,11 +103,16 @@ void comms_test()
 		// COMMS test succeeded 
 		connected = TRUE;
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"),SERIAL_RD);
+		queue_function(g_strdup("kill_conn_warning"));
+		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("ECU Connected..."));
+
 	}
 	else
 	{
 		// An I/O Error occurred with the MegaSquirt ECU 
 		connected = FALSE;
+		queue_function(g_strdup("conn_warning"));
+		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"),IO_PROCESS);
 	}
 	/* Flush the toilet again.... */

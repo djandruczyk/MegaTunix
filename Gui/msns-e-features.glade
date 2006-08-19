@@ -290,6 +290,7 @@
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
+				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Fri, 18 Aug 2006 18:14:29 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
@@ -336,6 +337,10 @@
 				  <property name="snap_to_ticks">True</property>
 				  <property name="wrap">False</property>
 				  <property name="adjustment">0 0 2500 100 1000 1000</property>
+				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Fri, 18 Aug 2006 18:14:44 GMT"/>
+				  <signal name="key_press_event" handler="key_event" last_modification_time="Fri, 18 Aug 2006 18:15:00 GMT"/>
+				  <signal name="key_release_event" handler="key_event" last_modification_time="Fri, 18 Aug 2006 18:15:16 GMT"/>
+				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Fri, 18 Aug 2006 18:16:12 GMT"/>
 				</widget>
 				<packing>
 				  <property name="left_attach">2</property>
@@ -391,6 +396,7 @@
 			      <child>
 				<widget class="GtkRadioButton" id="wheel-1_persona">
 				  <property name="visible">True</property>
+				  <property name="sensitive">False</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">-1 </property>
 				  <property name="use_underline">True</property>
@@ -413,6 +419,7 @@
 			      <child>
 				<widget class="GtkRadioButton" id="wheel-2_persona">
 				  <property name="visible">True</property>
+				  <property name="sensitive">False</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes"> -2 </property>
 				  <property name="use_underline">True</property>

@@ -329,21 +329,14 @@ void *thread_dispatcher(gpointer data)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
-		if ((!connected) && (!offline) && (serial_params->open))
+		if (!(serial_params->open)) 
 		{
-			comms_test();
-			if ((!connected) && (!offline))
-			{
-				thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
+			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMM PORT not open!!! Check COMMS tab"));
+			queue_function(g_strdup("conn_warning"));
 
-				queue_function(g_strdup("conn_warning"));
-			}
-			else
-			{
-				queue_function(g_strdup("kill_conn_warning"));
-				thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Ready..."));
-			}
 		}
+		if ((serial_params->open) && (!connected) && (!offline))
+			comms_test();
 
 		switch ((CmdType)message->command)
 		{
