@@ -51,18 +51,19 @@ void open_serial(gchar * port_name)
 	gint fd = -1;
 	gchar *device = NULL;	/* temporary unix name of the serial port */
 	gchar * err_text = NULL;
-	g_static_mutex_lock(&comms_mutex);
 	serial_params->port_name = g_strdup(port_name); 
 
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY in nonblock mode */
 	//fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
 	/* Blocking mode... */
+	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
 	fd = open(device, O_RDWR | O_NOCTTY | O_BINARY );
 #else
 	fd = open(device, O_RDWR | O_NOCTTY);
 #endif
+	g_static_mutex_unlock(&comms_mutex);
 	if (fd > 0)
 	{
 		/* SUCCESS */
@@ -88,7 +89,6 @@ void open_serial(gchar * port_name)
 	}
 
 	g_free(device);
-	g_static_mutex_unlock(&comms_mutex);
 	return;
 }
 	
@@ -223,14 +223,16 @@ void close_serial()
 {
 	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = NULL;
-	g_static_mutex_lock(&comms_mutex);
 
 	if (serial_params->open == FALSE)
 		return;
+
+	g_static_mutex_lock(&comms_mutex);
 #ifndef __WIN32__
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
 #endif
 	close(serial_params->fd);
+	g_static_mutex_unlock(&comms_mutex);
 	serial_params->fd = -1;
 	serial_params->open = FALSE;
 	connected = FALSE;
@@ -242,7 +244,6 @@ void close_serial()
 	/* An Closing the comm port */
 	dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"),SERIAL_RD|SERIAL_WR);
 	update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
-	g_static_mutex_unlock(&comms_mutex);
 	return;
 }
 
@@ -271,10 +272,12 @@ void set_ms_page(gint ms_page)
 
 	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
 	
+	g_static_mutex_lock(&comms_mutex);
 	res = write(serial_params->fd,firmware->page_cmd,1);
 	if (res != 1)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU \n",firmware->page_cmd),CRITICAL);
 	res = write(serial_params->fd,&ms_page,1);
+	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i\n",ms_page),CRITICAL);
 

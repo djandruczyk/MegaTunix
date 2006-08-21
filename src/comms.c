@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <3d_vetable.h>
 
+extern GStaticMutex comms_mutex;
 
 /*!
  \brief update_comms_status updates the Gui with the results of the comms
@@ -82,6 +83,7 @@ void comms_test()
 	//toggle_serial_control_lines();
 
 	/* Flush the toilet.... */
+	g_static_mutex_lock(&comms_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);	
 
 	while ((write(serial_params->fd,"C",1) != 1) && (count < 4 ))
@@ -98,6 +100,7 @@ void comms_test()
 		return;
 	}
 	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
+	g_static_mutex_unlock(&comms_mutex);
 	result = handle_ecu_data(C_TEST,NULL);
 	if (result)	// Success
 	{
@@ -255,23 +258,28 @@ void writeto_ecu(struct Io_Message *message)
 		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n"),SERIAL_WR);
 	}
 
+	g_static_mutex_lock(&comms_mutex);
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	if (res != 1 )
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED!!!\n",write_cmd),CRITICAL);
 	else
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd),SERIAL_WR);
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
+	g_static_mutex_unlock(&comms_mutex);
 	if (res != count )
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n"),CRITICAL);
 	else
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
 
 	ms_data[page][offset] = value;
-	g_usleep(5000);
 
 	g_free(write_cmd);
 
 	g_static_mutex_unlock(&mutex);
+
+	/*is this reall needed??? */
+	g_usleep(5000);
+
 	return;
 }
 
@@ -302,9 +310,11 @@ void burn_ecu_flash()
 		dbg_func(g_strdup(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n"),CRITICAL);
 		return;
 	}
+	g_static_mutex_lock(&comms_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
 	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
+	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
 	{
 		dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
@@ -346,15 +356,17 @@ void readfrom_ecu(struct Io_Message *message)
 	if (offline)
 		return;
 
-	/* Flush serial port... */
-	flush_serial(serial_params->fd, TCIOFLUSH);
 
 	if ((firmware->multi_page ) && (message->need_page_change)) 
 		set_ms_page(message->page);
 
+	/* Flush serial port... */
+	g_static_mutex_lock(&comms_mutex);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 	result = write(serial_params->fd,
 			message->out_str,
 			message->out_len);
+	g_static_mutex_unlock(&comms_mutex);
 	if (result != message->out_len)	
 		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite command to ECU failed\n"),CRITICAL);
 
@@ -363,7 +375,9 @@ void readfrom_ecu(struct Io_Message *message)
 
 	if (message->handler == RAW_MEMORY_DUMP)
 	{
+		g_static_mutex_lock(&comms_mutex);
 		result = write(serial_params->fd,&message->offset,1);
+		g_static_mutex_unlock(&comms_mutex);
 		if (result == -1)
 			dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n"),CRITICAL);
 		else if (result != 1)	
