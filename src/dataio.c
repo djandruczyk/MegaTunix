@@ -85,7 +85,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  /* 3 bad reads, abort */
+				if (zerocount >= 2)  /* 3 bad reads, abort */
 				{
 					bad_read = TRUE;
 					break;
@@ -103,7 +103,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = 1;
 			zerocount = 0;
 
-			while (total_read < total_wanted )
+			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tC_TEST requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
@@ -116,7 +116,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  /* 3 bad reads, abort */
+				if (zerocount >= 2)  /* 3 bad reads, abort */
 				{
 					bad_read = TRUE;
 					break;
@@ -140,7 +140,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_read=0;
 			total_wanted=1024;
 			zerocount=0;
-			while (total_read < total_wanted )
+			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tGET_ERROR requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
@@ -153,7 +153,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tGET_ERROR read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  // 3 bad reads, abort
+				if (zerocount >= 2)  // 3 bad reads, abort
 				{
 					break;
 				}
@@ -181,7 +181,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->rtvars_size;
 			zerocount = 0;
 
-			while (total_read < total_wanted )
+			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tRT_VARS requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
@@ -194,7 +194,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tRT_VARS read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  // 3 bad reads, abort
+				if (zerocount >= 2)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;
@@ -244,7 +244,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->page_params[message->page]->length;
 			zerocount = 0;
 
-			while (total_read < total_wanted )
+			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tVE_BLOCK, page %i, requesting %i bytes\n",message->page,total_wanted-total_read),IO_PROCESS);
 
@@ -257,7 +257,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  // 3 bad reads, abort
+				if (zerocount >= 2)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;
@@ -288,7 +288,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->memblock_size;
 			zerocount = 0;
 
-			while (total_read < total_wanted )
+			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tRAW_MEMORY_DUMP requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 				total_read += res = read(serial_params->fd,
@@ -300,7 +300,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tread %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 5)  // 3 bad reads, abort
+				if (zerocount >= 2)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;

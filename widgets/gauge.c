@@ -1,5 +1,6 @@
 // Christopher Mire, 2006
 
+#include <cairo/cairo.h>
 #include <gtk/gtk.h>
 #include <glib-object.h>
 #include <math.h>

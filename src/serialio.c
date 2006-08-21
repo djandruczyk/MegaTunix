@@ -110,6 +110,34 @@ void flush_serial(gint fd, gint type)
 
 
 /*!
+ \brief toggle_serial_control_lines() is another wrapper that calls the 
+ appropriate calls to toggle the hardware control lines.  This is an 
+ experimental attempt to see if it resolves a serial over bluetooth connection
+ loss problem
+ */
+void toggle_serial_control_lines()
+{
+#ifdef __WIN32__
+	win32_toggle_serial_control_lines();
+#else
+	struct termios oldtio;
+	struct termios temptio;
+
+	/* Save current port settings */
+	tcgetattr(serial_params->fd,&oldtio);
+	memcpy(&temptio, &oldtio, sizeof(struct termios)); 
+
+	serial_params->newtio.c_cflag &= ~(CLOCAL);
+	serial_params->newtio.c_cflag |= (CRTSCTS);
+	tcsetattr(serial_params->fd,TCSAFLUSH,&temptio);
+	usleep (100000); /* Wait 100 ms */
+	//Set back
+	tcsetattr(serial_params->fd,TCSAFLUSH,&oldtio);
+
+#endif
+}
+
+/*!
  \brief setup_serial_params() is another wrapper that calls the appropriate
  calls to initialize the serial port to the proper speed, bits, flow, parity
  etc..
@@ -148,13 +176,14 @@ void setup_serial_params()
 	cfsetispeed(&serial_params->newtio, baudrate);
 	cfsetospeed(&serial_params->newtio, baudrate);
 
-	/* Set additional flags, note |= syntax.. */
-	serial_params->newtio.c_cflag |= CLOCAL | CREAD;
 	/* Mask and set to 8N1 mode... */
-	serial_params->newtio.c_cflag &= ~(PARENB | CSTOPB | CSIZE);
-	serial_params->newtio.c_cflag |= CS8;
+	serial_params->newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
+	/* Set additional flags, note |= syntax.. */
+	/* Enable receiver, ignore modem ctrls lines, use 8 bits */
+	serial_params->newtio.c_cflag |= CLOCAL | CREAD | CS8;
 
 	/* RAW Input */
+	/* Ignore signals, enable canonical, etc */
 	serial_params->newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
 	/* Disable software flow control */

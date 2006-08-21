@@ -21,6 +21,7 @@
 void open_serial(gchar *);
 void close_serial(void);
 void setup_serial_params(void);
+void toggle_serial_control_lines(void );
 void set_ms_page(gint);
 void flush_serial(gint,gint);
 /* Prototypes */

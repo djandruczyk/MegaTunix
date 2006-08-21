@@ -16,6 +16,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
+#include <glib.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <structures.h>

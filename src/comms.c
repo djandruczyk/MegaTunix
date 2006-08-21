@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <structures.h>
+#include <threads.h>
 #include <timeout_handlers.h>
 #include <termios.h>
 #include <unistd.h>
@@ -68,9 +69,6 @@ void comms_test()
 	gint count = 0;
 	extern struct Serial_Params *serial_params;
 	extern gboolean connected;
-	extern gint realtime_id;
-	gboolean restore_runtime = FALSE;
-	gchar *port = NULL;
 
 	/* If serial control struct exists, 
 	 * but we don't have connected status, try to reset connection */
@@ -80,20 +78,23 @@ void comms_test()
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		return;
 	}
+	/* Try toggling the control lines */
+	toggle_serial_control_lines();
+
 	/* Flush the toilet.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);	
 
-	while ((write(serial_params->fd,"C",1) != 1) && (count < 10 ))
+	while ((write(serial_params->fd,"C",1) != 1) && (count < 4 ))
 	{
-		g_usleep(10000);
+		g_usleep(1000);
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n"),CRITICAL);
 		count++;
 	}
-	if (count >= 10)
+	if (count >= 4)
 	{
 		connected = FALSE;
 		flush_serial(serial_params->fd, TCIOFLUSH);
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tTen attempts made to talk to ECU, no response received\n"),CRITICAL);
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tFour attempts made to talk to ECU, no response received\n"),CRITICAL);
 		return;
 	}
 	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
@@ -308,7 +309,7 @@ void burn_ecu_flash()
 	{
 		dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
 	}
-	g_usleep(500000);
+	g_usleep(100000);
 
 	dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"),SERIAL_WR);
 

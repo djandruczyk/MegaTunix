@@ -15,6 +15,7 @@
 #define __WINSERIALIO_H__
 
 /* Prototypes */
+void win32_toggle_serial_control_lines(void);
 void win32_setup_serial_params(void);
 void win32_flush_serial(int, int);
 /* Prototypes */

@@ -556,7 +556,7 @@ log_by_default=TRUE
 keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
 internal_name=dcycle1
-dlog_gui_name=Dutycycle 1
+dlog_gui_name=DC 1
 dlog_field_name=DutyCycle1
 offset=14
 lower_limit=0
@@ -578,14 +578,14 @@ cyls_bitshift=4
 divider_page=0
 divider_offset=91
 is_float=TRUE
-tooltip="Dutycycle 1\" is the injector Duty cycle for injectors connected to injector channel 1.
+tooltip="DC 1\" is the injector Duty cycle for injectors connected to injector channel 1.
 log_by_default=TRUE
 
 [derived_35]
 keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
 internal_name=dcycle2
-dlog_gui_name=Dutycycle 2
+dlog_gui_name=DC 2
 dlog_field_name=DutyCycle2
 offset=19
 lower_limit=0
@@ -607,7 +607,7 @@ cyls_bitshift=4
 divider_page=1
 divider_offset=91
 is_float=TRUE
-tooltip="Dutycycle 2\" is the injector Duty cycle for injectors connected to injector channel 2.
+tooltip="DC 2\" is the injector Duty cycle for injectors connected to injector channel 2.
 log_by_default=TRUE
 
 [derived_36]

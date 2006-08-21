@@ -93,6 +93,71 @@ void win32_setup_serial_params()
 #endif
 }
 
+/*!
+ \brief win32_toggle_serial_control_lines() is an experimental function that
+ tries to toggle the hardware control lines for users of Bluetooth devices 
+ when the loose a link.  This function is subject to removal.
+ */
+void win32_toggle_serial_control_lines()
+{
+#ifdef __WIN32__
+	DCB olddcb;
+	DCB dcb;
+	COMMTIMEOUTS timeouts;
+	extern gint baudrate;
+
+	if (serial_params->open == FALSE)
+		return;
+
+	ZeroMemory(&olddcb, sizeof(dcb));
+	ZeroMemory(&dcb, sizeof(dcb));
+	olddcb.DCBlength = sizeof(dcb);
+	dcb.DCBlength = sizeof(dcb);
+
+	/* Populate struct with defaults from windows */
+	GetCommState((HANDLE) _get_osfhandle(serial_params->fd), &olddcb);
+	memcpy (&dcb, &olddcb, sizeof(dcb));
+
+	dcb.BaudRate = baudrate;
+	dcb.ByteSize = 8;
+	dcb.Parity   = NOPARITY;        // NOPARITY and friends are
+	dcb.StopBits = ONESTOPBIT;      // #defined in windows.h
+
+	dcb.fBinary = TRUE;		// Enable binary mode
+	dcb.fParity = FALSE;		// Disabled
+	dcb.fOutxCtsFlow = FALSE;	// don't monitor CTS line
+	dcb.fOutxDsrFlow = FALSE;	// don't monitor DSR line
+	dcb.fDsrSensitivity = FALSE;	// ignore Dsr line
+	dcb.fDtrControl = DTR_CONTROL_ENABLE;  // Enable DTR line
+	dcb.fRtsControl = RTS_CONTROL_ENABLE;	// Enable RTS line
+	dcb.fOutX = FALSE;		// Disable Xoff
+	dcb.fInX  = FALSE;		// Disable Xin
+	dcb.fErrorChar = FALSE;		// Don't replcae bad chars
+	dcb.fNull = FALSE;		// don't drop NULL bytes
+	dcb.fAbortOnError = FALSE;	// Don't abort
+	dcb.wReserved = FALSE;		// as per msdn
+
+	// Set the port properties to toggle the HW control lines 
+	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&dcb) == 0)
+		dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"),CRITICAL);
+
+	/* Set timeout params in a fashion that mimics linux behavior */
+	timeouts.ReadIntervalTimeout         = 0;
+	timeouts.ReadTotalTimeoutConstant    = 100;
+	timeouts.ReadTotalTimeoutMultiplier  = 0;
+	timeouts.WriteTotalTimeoutMultiplier = 0;
+	timeouts.WriteTotalTimeoutConstant   = 0;
+	SetCommTimeouts((HANDLE) _get_osfhandle (serial_params->fd) ,&timeouts);
+
+	Sleep (100);
+	// Set the port properties back to megatunix defaults
+	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&olddcb) == 0)
+		dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"),CRITICAL);
+
+	return;
+#endif
+}
+
 
 /*!
  \brief win32_fluch_serial() is used to flush the serial port.  It effectively
