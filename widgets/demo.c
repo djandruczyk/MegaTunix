@@ -3,8 +3,7 @@
 #include <gtk/gtk.h>
 #include <gauge.h>
 
-int
-main (int argc, char **argv)
+int main (int argc, char **argv)
 {
 	GtkWidget *window;
 	GtkWidget *gauge;
@@ -20,15 +19,12 @@ main (int argc, char **argv)
 			G_CALLBACK (gtk_main_quit), NULL);
 
 	gtk_widget_show_all (window);
-
-	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.5);
+	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), -13.0, 20.0);
+	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 19.0);
 	float value = mtx_gauge_face_get_value (MTX_GAUGE_FACE (gauge));
 	printf ("UD is %f\n", value);
 
 
 	gtk_main ();
+	return 0;
 }
-
-
-
-GtkWidget *window;

@@ -20,6 +20,12 @@ struct _MtxGaugeFace
 {//public data
 	GtkDrawingArea parent;
 	gfloat value;//very basic now, a single float value to display
+	gfloat lbound;
+	gfloat ubound;
+	gfloat range;
+	gfloat start_radian;
+	gfloat stop_radian;
+	gint num_ticks;
 };
 
 struct _MtxGaugeFaceClass
@@ -31,6 +37,7 @@ GType mtx_gauge_face_get_type (void) G_GNUC_CONST;
 GtkWidget* mtx_gauge_face_new ();
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2);
 //should also have functions to set scale, maybe autoscale
 
 G_END_DECLS

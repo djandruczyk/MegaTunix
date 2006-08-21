@@ -51,6 +51,15 @@ float mtx_gauge_face_get_value (MtxGaugeFace *gauge)
 	return gauge->value;
 }
 
+void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	gauge->lbound = value1;
+	gauge->ubound = value2;
+	gauge->range = gauge->ubound -gauge->lbound;
+	printf ("range is %f\n", gauge->range);
+}
+
 static void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 {
 	printf ("class init called \n");
@@ -78,6 +87,13 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 			       | GDK_POINTER_MOTION_MASK);
 
 	gauge->value = 0.0;
+	gauge->lbound = -1.0;
+	gauge->ubound = 1.0;
+	gauge->start_radian = 0.75 * M_PI;
+	gauge->stop_radian = 0.25 * M_PI;
+	gauge->num_ticks = 24;
+	gauge->range = gauge->ubound -gauge->lbound;
+	printf ("range is %f\n", gauge->range);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
@@ -94,7 +110,9 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 		      gauge->allocation.height / 2) - 5;
 
 	/* gauge back */
-	cairo_arc (cr, x, y, radius, 0.75 * M_PI, 0.25 * M_PI);
+ 	cairo_arc (cr, x, y, radius, MTX_GAUGE_FACE (gauge)->start_radian,
+ 		   MTX_GAUGE_FACE (gauge)->stop_radian);
+
 	cairo_set_source_rgba (cr, 1, 1, 1, 1.0);//white
 	cairo_fill_preserve (cr);
 	cairo_set_source_rgba (cr, 0, 0, 0, 1.0);
@@ -104,6 +122,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	printf ("oringal x is is %f\n", x);
 	printf ("oringal y is is %f\n", y);
 	/* gauge ticks */
+	gint left_tick = (MTX_GAUGE_FACE (gauge)->num_ticks * 2);
 	for (i = 12; i <= 36; i++)
 	{
 		int inset;
@@ -152,8 +171,13 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	cairo_save (cr);
 	cairo_set_line_width (cr, 2.5 * cairo_get_line_width (cr));
 	cairo_move_to (cr, x, y);
- 	cairo_line_to (cr, x + radius * sin(M_PI / 1.25 * current_value),
- 			   y + radius * -cos(M_PI / 1.25 * current_value));
+/*  	cairo_line_to (cr, x + radius * sin (M_PI /  (MTX_GAUGE_FACE (gauge)->range * 1.33) * current_value), */
+/*  			   y + radius * -cos (M_PI / (MTX_GAUGE_FACE (gauge)->range * 1.33) * current_value)); */
+
+  	cairo_line_to (cr, x + radius * sin ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (4.71) /
+					     MTX_GAUGE_FACE (gauge)->range + (-2.355)),
+  			   y + radius * -cos ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (4.71) /
+					      MTX_GAUGE_FACE (gauge)->range + (-2.355)));
 
 	cairo_set_font_size (cr, radius / 5);
 	snprintf (message, sizeof (message) - 1, "%f", current_value);
