@@ -31,6 +31,7 @@ gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
+extern GStaticMutex comms_mutex;
 
 
 /*!
@@ -57,6 +58,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 
+	g_static_mutex_lock(&comms_mutex);
 	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n"),IO_PROCESS);
 
 	/* different cases whether we're doing 
@@ -81,7 +83,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 						total_wanted-total_read);
 
 				/* Increment bad read counter.... */
-				if (res == 0)
+				if (res <= 0)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
@@ -112,7 +114,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 						total_wanted-total_read);
 
 				/* Increment bad read counter.... */
-				if (res == 0)
+				if (res <= 0)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
@@ -149,7 +151,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res == 0)
+				if (res <= 0)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tGET_ERROR read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
@@ -190,7 +192,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res == 0)
+				if (res <= 0)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tRT_VARS read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
@@ -253,7 +255,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res == 0)
+				if (res <= 0)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
@@ -296,7 +298,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res == 0)
+				if (res <= 0)
 					zerocount++;
 
 				dbg_func(g_strdup_printf("\tread %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
@@ -326,6 +328,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 jumpout:
 
 	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n"),IO_PROCESS);
+	g_static_mutex_unlock(&comms_mutex);
 	return state;
 }
 

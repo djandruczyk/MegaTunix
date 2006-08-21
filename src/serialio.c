@@ -35,7 +35,7 @@
 
 struct Serial_Params *serial_params;
 gboolean connected = FALSE;
-       
+GStaticMutex comms_mutex = G_STATIC_MUTEX_INIT;
 
 /*!
  \brief open_serial() called to open the serial port, updates textviews on the
@@ -51,6 +51,7 @@ void open_serial(gchar * port_name)
 	gint fd = -1;
 	gchar *device = NULL;	/* temporary unix name of the serial port */
 	gchar * err_text = NULL;
+	g_static_mutex_lock(&comms_mutex);
 	serial_params->port_name = g_strdup(port_name); 
 
 	device = g_strdup(port_name);
@@ -87,6 +88,7 @@ void open_serial(gchar * port_name)
 	}
 
 	g_free(device);
+	g_static_mutex_unlock(&comms_mutex);
 	return;
 }
 	
@@ -221,6 +223,7 @@ void close_serial()
 {
 	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = NULL;
+	g_static_mutex_lock(&comms_mutex);
 
 	if (serial_params->open == FALSE)
 		return;
@@ -239,6 +242,7 @@ void close_serial()
 	/* An Closing the comm port */
 	dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"),SERIAL_RD|SERIAL_WR);
 	update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
+	g_static_mutex_unlock(&comms_mutex);
 	return;
 }
 

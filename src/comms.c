@@ -79,7 +79,7 @@ void comms_test()
 		return;
 	}
 	/* Try toggling the control lines */
-	toggle_serial_control_lines();
+	//toggle_serial_control_lines();
 
 	/* Flush the toilet.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);	

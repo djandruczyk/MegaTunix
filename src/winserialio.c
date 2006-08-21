@@ -149,11 +149,12 @@ void win32_toggle_serial_control_lines()
 	timeouts.WriteTotalTimeoutConstant   = 0;
 	SetCommTimeouts((HANDLE) _get_osfhandle (serial_params->fd) ,&timeouts);
 
-	Sleep (100);
+	Sleep (500); /* wait half second */
 	// Set the port properties back to megatunix defaults
 	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&olddcb) == 0)
 		dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"),CRITICAL);
 
+	Sleep (10000); /* wait 5 seconds for device to relink */
 	return;
 #endif
 }
