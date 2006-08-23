@@ -51,7 +51,7 @@ AC_SUBST(CFLAGS)
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 if test $cross_compiling = yes; then
-	EXTRA_LIBS=" -lgw32c -luuid -lole32"
+	EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32"
 else
 	EXTRA_LIBS=""
 fi

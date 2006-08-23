@@ -32,1060 +32,2081 @@
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkHBox" id="main_hbox1">
+	    <widget class="GtkScrolledWindow" id="scrolledwindow2">
 	      <property name="visible">True</property>
-	      <property name="homogeneous">True</property>
-	      <property name="spacing">5</property>
+	      <property name="can_focus">True</property>
+	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	      <property name="shadow_type">GTK_SHADOW_IN</property>
+	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkVBox" id="left_vbox1">
+		<widget class="GtkViewport" id="viewport1">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
+		  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		  <child>
-		    <widget class="GtkFrame" id="boost_control_frame">
+		    <widget class="GtkHBox" id="main_hbox1">
 		      <property name="visible">True</property>
-		      <property name="label_xalign">0</property>
-		      <property name="label_yalign">0.5</property>
-		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+		      <property name="homogeneous">True</property>
+		      <property name="spacing">5</property>
 
 		      <child>
-			<widget class="GtkVBox" id="boost_control_vbox1">
+			<widget class="GtkVBox" id="left_vbox1">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkTable" id="boost_feature_table">
+			    <widget class="GtkFrame" id="boost_control_frame">
 			      <property name="visible">True</property>
-			      <property name="n_rows">3</property>
-			      <property name="n_columns">2</property>
-			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">0</property>
-			      <property name="column_spacing">0</property>
+			      <property name="label_xalign">0</property>
+			      <property name="label_yalign">0.5</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkLabel" id="boost_control_feature_label">
+				<widget class="GtkVBox" id="boost_control_vbox1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Boost Controller</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="x_options">expand|shrink</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="boost_enabled_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Enabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_padding">5</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="boost_disabled_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Disabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <property name="group">boost_enabled_radio_button</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_padding">5</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHSeparator" id="hseparator10">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
-				  <property name="y_padding">1</property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">True</property>
-			      <property name="fill">True</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkTable" id="boost_buttons_table">
-			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
-			      <property name="n_rows">8</property>
-			      <property name="n_columns">2</property>
-			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">0</property>
-			      <property name="column_spacing">0</property>
-
-			      <child>
-				<widget class="GtkLabel" id="boost_solenoid_rate_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Boost Solenoid PWM rate</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="x_options">expand|shrink</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkTable" id="rate_table1">
-				  <property name="visible">True</property>
-				  <property name="n_rows">1</property>
-				  <property name="n_columns">3</property>
 				  <property name="homogeneous">False</property>
-				  <property name="row_spacing">0</property>
-				  <property name="column_spacing">0</property>
+				  <property name="spacing">0</property>
 
 				  <child>
-				    <widget class="GtkRadioButton" id="13hz_radio_button">
+				    <widget class="GtkTable" id="boost_feature_table">
 				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">13Hz</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+				      <property name="n_rows">3</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">0</property>
+
+				      <child>
+					<widget class="GtkLabel" id="boost_control_feature_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Boost Controller</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">expand|shrink</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="boost_enabled_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">Enabled</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="boost_disabled_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">Disabled</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <property name="group">boost_enabled_radio_button</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator10">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="y_padding">1</property>
+					</packing>
+				      </child>
 				    </widget>
 				    <packing>
-				      <property name="left_attach">2</property>
-				      <property name="right_attach">3</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
+				      <property name="padding">0</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
 				    </packing>
 				  </child>
 
 				  <child>
-				    <widget class="GtkRadioButton" id="19.5hz_radio_button">
+				    <widget class="GtkTable" id="boost_buttons_table">
 				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">19.5Hz</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <property name="group">13hz_radio_button</property>
-				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+				      <property name="sensitive">False</property>
+				      <property name="n_rows">8</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">0</property>
+
+				      <child>
+					<widget class="GtkLabel" id="boost_solenoid_rate_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Boost Solenoid PWM rate</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">expand|shrink</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkTable" id="rate_table1">
+					  <property name="visible">True</property>
+					  <property name="n_rows">1</property>
+					  <property name="n_columns">3</property>
+					  <property name="homogeneous">False</property>
+					  <property name="row_spacing">0</property>
+					  <property name="column_spacing">0</property>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="13hz_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">13Hz</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">2</property>
+					      <property name="right_attach">3</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="19.5hz_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">19.5Hz</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">13hz_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="39hz_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">39Hz</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">13hz_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					    </packing>
+					  </child>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkTable" id="rate_table2">
+					  <property name="visible">True</property>
+					  <property name="n_rows">2</property>
+					  <property name="n_columns">4</property>
+					  <property name="homogeneous">False</property>
+					  <property name="row_spacing">0</property>
+					  <property name="column_spacing">0</property>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="9.8hz_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">9.8Hz</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">13hz_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="7.8hz_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">7.8Hz</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">13hz_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="6.5hz_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">6.5Hz</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">13hz_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">2</property>
+					      <property name="right_attach">3</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="5.6hz_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">5.6Hz</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">13hz_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">3</property>
+					      <property name="right_attach">4</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkHSeparator" id="hseparator11">
+					      <property name="visible">True</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">4</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="y_padding">1</property>
+					      <property name="x_options">fill</property>
+					    </packing>
+					  </child>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="boost_actuator_polarity_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Increase in boost ctrlr output gives:</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">3</property>
+					  <property name="bottom_attach">4</property>
+					  <property name="x_options">expand|shrink</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="more_boost_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">More Boost</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="less_boost_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">Less Boost</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <property name="group">more_boost_radio_button</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="use_boost_table3_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Use Boost Table3 based on input</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">6</property>
+					  <property name="bottom_attach">7</property>
+					  <property name="x_options">expand|shrink</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="use_table3_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">Yes</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">7</property>
+					  <property name="bottom_attach">8</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="dont_use_table3_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">No</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <property name="group">use_table3_radio_button</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">7</property>
+					  <property name="bottom_attach">8</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator12">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">5</property>
+					  <property name="bottom_attach">6</property>
+					  <property name="y_padding">1</property>
+					  <property name="x_options">fill</property>
+					</packing>
+				      </child>
 				    </widget>
 				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
+				      <property name="padding">0</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
 				    </packing>
 				  </child>
 
 				  <child>
-				    <widget class="GtkRadioButton" id="39hz_radio_button">
+				    <widget class="GtkTable" id="boost_spinners_table">
+				      <property name="border_width">5</property>
 				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">39Hz</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <property name="group">13hz_radio_button</property>
-				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">0</property>
-				      <property name="right_attach">1</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				</packing>
-			      </child>
+				      <property name="sensitive">False</property>
+				      <property name="n_rows">16</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">0</property>
 
-			      <child>
-				<widget class="GtkTable" id="rate_table2">
-				  <property name="visible">True</property>
-				  <property name="n_rows">2</property>
-				  <property name="n_columns">4</property>
-				  <property name="homogeneous">False</property>
-				  <property name="row_spacing">0</property>
-				  <property name="column_spacing">0</property>
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator13">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="y_padding">1</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-				  <child>
-				    <widget class="GtkRadioButton" id="9.8hz_radio_button">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">9.8Hz</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <property name="group">13hz_radio_button</property>
-				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">0</property>
-				      <property name="right_attach">1</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				    </packing>
-				  </child>
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator19">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">12</property>
+					  <property name="bottom_attach">13</property>
+					  <property name="y_padding">1</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-				  <child>
-				    <widget class="GtkRadioButton" id="7.8hz_radio_button">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">7.8Hz</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <property name="group">13hz_radio_button</property>
-				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				    </packing>
-				  </child>
+				      <child>
+					<widget class="GtkLabel" id="bc_ambient_pressue_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Typ. Ambient Pressure (kPa)</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">5</property>
+					  <property name="bottom_attach">6</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">shrink|fill</property>
+					</packing>
+				      </child>
 
-				  <child>
-				    <widget class="GtkRadioButton" id="6.5hz_radio_button">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">6.5Hz</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <property name="group">13hz_radio_button</property>
-				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">2</property>
-				      <property name="right_attach">3</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				    </packing>
-				  </child>
+				      <child>
+					<widget class="GtkLabel" id="bc_cl_to_ol_transition_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Closed Loop kPa Limit</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-				  <child>
-				    <widget class="GtkRadioButton" id="5.6hz_radio_button">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="label" translatable="yes">5.6Hz</property>
-				      <property name="use_underline">True</property>
-				      <property name="relief">GTK_RELIEF_NORMAL</property>
-				      <property name="focus_on_click">True</property>
-				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
-				      <property name="draw_indicator">True</property>
-				      <property name="group">13hz_radio_button</property>
-				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">3</property>
-				      <property name="right_attach">4</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				    </packing>
-				  </child>
+				      <child>
+					<widget class="GtkLabel" id="bc_dgain_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Differential Gain</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">3</property>
+					  <property name="bottom_attach">4</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-				  <child>
-				    <widget class="GtkHSeparator" id="hseparator11">
-				      <property name="visible">True</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">0</property>
-				      <property name="right_attach">4</property>
-				      <property name="top_attach">1</property>
-				      <property name="bottom_attach">2</property>
-				      <property name="y_padding">1</property>
-				      <property name="x_options">fill</property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
-				</packing>
-			      </child>
+				      <child>
+					<widget class="GtkLabel" id="bc_pgain_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Proportional Gain</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-			      <child>
-				<widget class="GtkLabel" id="boost_actuator_polarity_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Increase in boost ctrlr output gives:</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
-				  <property name="x_options">expand|shrink</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
+				      <child>
+					<widget class="GtkLabel" id="bc_update_rate_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Update rate in ms.</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-			      <child>
-				<widget class="GtkRadioButton" id="more_boost_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">More Boost</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
-				  <property name="x_padding">5</property>
-				</packing>
-			      </child>
+				      <child>
+					<widget class="GtkLabel" id="iat_start_reduce_temp_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">IAT to start reducing @</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">13</property>
+					  <property name="bottom_attach">14</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-			      <child>
-				<widget class="GtkRadioButton" id="less_boost_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Less Boost</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <property name="group">more_boost_radio_button</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
-				  <property name="x_padding">5</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="use_boost_table3_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Use Boost Table3 based on input</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">6</property>
-				  <property name="bottom_attach">7</property>
-				  <property name="x_options">expand|shrink</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="use_table3_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Yes</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">7</property>
-				  <property name="bottom_attach">8</property>
-				  <property name="x_padding">5</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="dont_use_table3_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">No</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <property name="group">use_table3_radio_button</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">7</property>
-				  <property name="bottom_attach">8</property>
-				  <property name="x_padding">5</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHSeparator" id="hseparator12">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">5</property>
-				  <property name="bottom_attach">6</property>
-				  <property name="y_padding">1</property>
-				  <property name="x_options">fill</property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">True</property>
-			      <property name="fill">True</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkTable" id="boost_spinners_table">
-			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
-			      <property name="n_rows">10</property>
-			      <property name="n_columns">2</property>
-			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">0</property>
-			      <property name="column_spacing">0</property>
-
-			      <child>
-				<widget class="GtkLabel" id="bc_update_rate_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Update rate in ms.</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="bc_pgain_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Proportional Gain</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="bc_dgain_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Differential Gain</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="iat_temp_per_psi_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Reduce boost by 1 PSI
+				      <child>
+					<widget class="GtkLabel" id="iat_temp_per_psi_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Reduce boost by 1 PSI
 for every X deg F. over.</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">8</property>
-				  <property name="bottom_attach">9</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">14</property>
+					  <property name="bottom_attach">15</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
 
-			      <child>
-				<widget class="GtkLabel" id="iat_start_reduce_temp_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">IAT to start reducing
-boost at:</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">7</property>
-				  <property name="bottom_attach">8</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="bc_cl_to_ol_transition_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Closed Loop kPa Limit</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="tps_boost_reduction_point_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">TPS  value in raw ADC
+				      <child>
+					<widget class="GtkLabel" id="tps_boost_reduction_point_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">TPS  value in raw ADC
 to begin boost reduction</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">15</property>
+					  <property name="bottom_attach">16</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_update_rate_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">10 10 255 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_pgain_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.392199993134</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 100 0.392199993134 3.92199993134 3.92199993134</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_dgain_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.392199993134</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 100 0.392199993134 3.92199993134 3.92199993134</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">3</property>
+					  <property name="bottom_attach">4</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_closed_loop_limit_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 255 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_ambient_pressure_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 255 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">5</property>
+					  <property name="bottom_attach">6</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_iat_start_temp_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 -40 215 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">13</property>
+					  <property name="bottom_attach">14</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_temp_per_1psi_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 255 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">14</property>
+					  <property name="bottom_attach">15</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_tps_to_reduce_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 255 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">15</property>
+					  <property name="bottom_attach">16</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="overboost_kpa_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">OverBoost cutoff (kPa)</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">6</property>
+					  <property name="bottom_attach">7</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="overboost_cutoff_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 100 255 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">6</property>
+					  <property name="bottom_attach">7</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkTable" id="table1">
+					  <property name="visible">True</property>
+					  <property name="n_rows">2</property>
+					  <property name="n_columns">3</property>
+					  <property name="homogeneous">False</property>
+					  <property name="row_spacing">0</property>
+					  <property name="column_spacing">0</property>
+
+					  <child>
+					    <widget class="GtkLabel" id="obp_style_label">
+					      <property name="visible">True</property>
+					      <property name="label" translatable="yes">OverBoost Protection Style</property>
+					      <property name="use_underline">False</property>
+					      <property name="use_markup">False</property>
+					      <property name="justify">GTK_JUSTIFY_LEFT</property>
+					      <property name="wrap">False</property>
+					      <property name="selectable">False</property>
+					      <property name="xalign">0</property>
+					      <property name="yalign">0.5</property>
+					      <property name="xpad">0</property>
+					      <property name="ypad">0</property>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">3</property>
+					      <property name="top_attach">0</property>
+					      <property name="bottom_attach">1</property>
+					      <property name="x_options">expand</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="obp_spark_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">Spark</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="obp_fuel_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">Fuel</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">obp_spark_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">1</property>
+					      <property name="right_attach">2</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkRadioButton" id="obp_fuel_spark_radio_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">Fuel &amp; Spark</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">False</property>
+					      <property name="draw_indicator">True</property>
+					      <property name="group">obp_spark_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">2</property>
+					      <property name="right_attach">3</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options"></property>
+					    </packing>
+					  </child>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">8</property>
+					  <property name="bottom_attach">9</property>
+					  <property name="x_options">fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="obp_spark_base_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Base Sparks</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">10</property>
+					  <property name="bottom_attach">11</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="obp_cut_sparks_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Cut Sparks</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">11</property>
+					  <property name="bottom_attach">12</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="obp_base_sparks_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 5 20 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">10</property>
+					  <property name="bottom_attach">11</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="obp_cut_sparks_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 20 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">11</property>
+					  <property name="bottom_attach">12</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator27">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">7</property>
+					  <property name="bottom_attach">8</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options">fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator28">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">9</property>
+					  <property name="bottom_attach">10</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options">fill</property>
+					</packing>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
+				    </packing>
+				  </child>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="boost_control_frame_title">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Boost Control</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
 				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
+				  <property name="xalign">0.5</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
 				</widget>
 				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">9</property>
-				  <property name="bottom_attach">10</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_tps_to_reduce_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 255 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">9</property>
-				  <property name="bottom_attach">10</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_temp_per_1psi_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 255 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">8</property>
-				  <property name="bottom_attach">9</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_iat_start_temp_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 -40 215 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">7</property>
-				  <property name="bottom_attach">8</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_closed_loop_limit_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 255 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_update_rate_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">10 10 255 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="bc_ambient_pressue_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Typ. Ambient Pressure (kPa)</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">5</property>
-				  <property name="bottom_attach">6</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_ambient_pressure_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 255 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">5</property>
-				  <property name="bottom_attach">6</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_pgain_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.392199993134</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 100 0.3922 3.922 3.922</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_dgain_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.392199993134</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 100 0.3922 3.922 3.922</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHSeparator" id="hseparator13">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="y_padding">1</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHSeparator" id="hseparator19">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">6</property>
-				  <property name="bottom_attach">7</property>
-				  <property name="y_padding">1</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
+				  <property name="type">label_item</property>
 				</packing>
 			      </child>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
-			      <property name="expand">True</property>
-			      <property name="fill">True</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
 			    </packing>
 			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="boost_control_frame_title">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Boost Control</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
 			</widget>
 			<packing>
-			  <property name="type">label_item</property>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
 			</packing>
 		      </child>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">False</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkVBox" id="right_vbox">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">False</property>
-		  <property name="spacing">0</property>
-
-		  <child>
-		    <widget class="GtkFrame" id="knock_control_frame">
-		      <property name="visible">True</property>
-		      <property name="label_xalign">0</property>
-		      <property name="label_yalign">0.5</property>
-		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		      <child>
-			<widget class="GtkVBox" id="knock_control_vbox1">
+			<widget class="GtkVBox" id="right_vbox">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkTable" id="knock_control_feature_table">
+			    <widget class="GtkFrame" id="knock_control_frame">
 			      <property name="visible">True</property>
-			      <property name="n_rows">2</property>
-			      <property name="n_columns">2</property>
-			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">0</property>
-			      <property name="column_spacing">0</property>
+			      <property name="label_xalign">0</property>
+			      <property name="label_yalign">0.5</property>
+			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkLabel" id="knock_feature_control_label">
+				<widget class="GtkVBox" id="knock_control_vbox1">
+				  <property name="visible">True</property>
+				  <property name="homogeneous">False</property>
+				  <property name="spacing">0</property>
+
+				  <child>
+				    <widget class="GtkTable" id="knock_control_feature_table">
+				      <property name="visible">True</property>
+				      <property name="n_rows">2</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">0</property>
+
+				      <child>
+					<widget class="GtkLabel" id="knock_feature_control_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Knock Control</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="x_options">expand|shrink</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="knock_enabled_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">Enabled</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkRadioButton" id="knock_disabled_radio_button">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="label" translatable="yes">Disabled</property>
+					  <property name="use_underline">True</property>
+					  <property name="relief">GTK_RELIEF_NORMAL</property>
+					  <property name="focus_on_click">True</property>
+					  <property name="active">False</property>
+					  <property name="inconsistent">False</property>
+					  <property name="draw_indicator">True</property>
+					  <property name="group">knock_enabled_radio_button</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_padding">5</property>
+					</packing>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">True</property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkTable" id="knock_params_table">
+				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
+				      <property name="n_rows">16</property>
+				      <property name="n_columns">2</property>
+				      <property name="homogeneous">False</property>
+				      <property name="row_spacing">0</property>
+				      <property name="column_spacing">0</property>
+
+				      <child>
+					<widget class="GtkLabel" id="ignore_knocks_above_rpm_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Above x RPM</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="ignore_knocks_below_rpm_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Below x RPM</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">3</property>
+					  <property name="bottom_attach">4</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="ignore_knocks_map_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">When MAP above x kPa</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="advance_when_no_knock_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Advance when no knock</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">10</property>
+					  <property name="bottom_attach">11</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="knock_max_retard_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Max Retard Allowed</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">9</property>
+					  <property name="bottom_attach">10</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="knock_wait_time_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Wait time between steps</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">11</property>
+					  <property name="bottom_attach">12</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="knock_wait_time_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 10 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">11</property>
+					  <property name="bottom_attach">12</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="advance_when_no_knock_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.351999998093</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 20 0.352 3.52 3.52</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">10</property>
+					  <property name="bottom_attach">11</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="max_retard_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.351999998093</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 30 0.352 3.52 3.52</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">9</property>
+					  <property name="bottom_attach">10</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="first_knock_retard_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.351999998093</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 10 0.352 3.52 3.52</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">7</property>
+					  <property name="bottom_attach">8</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="ignore_knocks_above_rpm_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">100</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 12000 100 1000 1000</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">2</property>
+					  <property name="bottom_attach">3</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="subsequent_knock_retard_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.351999998093</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 10 0.352 3.52 3.52</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">8</property>
+					  <property name="bottom_attach">9</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="ignore_knocks_below_rpm_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">100</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 12000 100 1000 1000</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">3</property>
+					  <property name="bottom_attach">4</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="ignore_knocks_above_map_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">1</property>
+					  <property name="digits">0</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">True</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 255 1 10 10</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">4</property>
+					  <property name="bottom_attach">5</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="ignore_knocks_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">&lt;i&gt;Knock Ignore Params&lt;/i&gt;</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">True</property>
+					  <property name="justify">GTK_JUSTIFY_CENTER</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">expand|shrink</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="subsequent_knock_retard_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Subsequent retard (deg)</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">8</property>
+					  <property name="bottom_attach">9</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="first_knock_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">First knock, retard by (deg)</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">7</property>
+					  <property name="bottom_attach">8</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="knock_ignition_retard_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">&lt;i&gt;Knock Ignition Retard Settings&lt;/i&gt;</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">True</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">6</property>
+					  <property name="bottom_attach">7</property>
+					  <property name="x_options">expand|shrink</property>
+					  <property name="y_options">expand</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="knock_boost_params_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">&lt;i&gt;Boost Related Knock controls&lt;/i&gt;</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">True</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">13</property>
+					  <property name="bottom_attach">14</property>
+					  <property name="x_options"></property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="bc_to_remove_when_knocking_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">MIN Boost to remove when
+knock detected (PSI)</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">14</property>
+					  <property name="bottom_attach">15</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_remove_when_knock_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.146999999881</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 20 0.146999999881 1 1</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">14</property>
+					  <property name="bottom_attach">15</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkSpinButton" id="bc_max_remove_when_knock_spin">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="climb_rate">0.146999999881</property>
+					  <property name="digits">1</property>
+					  <property name="numeric">True</property>
+					  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+					  <property name="snap_to_ticks">False</property>
+					  <property name="wrap">False</property>
+					  <property name="adjustment">0 0 20 0.146999999881 1 1</property>
+					  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">1</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">15</property>
+					  <property name="bottom_attach">16</property>
+					  <property name="x_padding">5</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">shrink</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="bc_max_to_remove_when_knocking_label">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">MAX Boost to remove 
+when knocking  (PSI)</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">1</property>
+					  <property name="top_attach">15</property>
+					  <property name="bottom_attach">16</property>
+					  <property name="x_padding">5</property>
+					  <property name="y_padding">2</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator23">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">12</property>
+					  <property name="bottom_attach">13</property>
+					  <property name="y_padding">2</property>
+					  <property name="x_options">expand|shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator26">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">5</property>
+					  <property name="bottom_attach">6</property>
+					  <property name="y_padding">2</property>
+					  <property name="x_options">fill</property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkHSeparator" id="hseparator25">
+					  <property name="visible">True</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">0</property>
+					  <property name="right_attach">2</property>
+					  <property name="top_attach">0</property>
+					  <property name="bottom_attach">1</property>
+					  <property name="y_padding">1</property>
+					  <property name="x_options">shrink|fill</property>
+					  <property name="y_options">expand|shrink|fill</property>
+					</packing>
+				      </child>
+				    </widget>
+				    <packing>
+				      <property name="padding">0</property>
+				      <property name="expand">False</property>
+				      <property name="fill">True</property>
+				    </packing>
+				  </child>
+				</widget>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="knock_control_frame_title">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Knock Control</property>
 				  <property name="use_underline">False</property>
@@ -1093,63 +2114,13 @@ to begin boost reduction</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
 				  <property name="wrap">False</property>
 				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
+				  <property name="xalign">0.5</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
 				</widget>
 				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="x_options">expand|shrink</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="knock_enabled_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Enabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_padding">5</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="knock_disabled_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Disabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <property name="group">knock_enabled_radio_button</property>
-				  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Thu, 10 Mar 2005 00:58:15 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_padding">5</property>
+				  <property name="type">label_item</property>
 				</packing>
 			      </child>
 			    </widget>
@@ -1159,696 +2130,16 @@ to begin boost reduction</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
-
-			  <child>
-			    <widget class="GtkTable" id="knock_params_table">
-			      <property name="visible">True</property>
-			      <property name="sensitive">False</property>
-			      <property name="n_rows">16</property>
-			      <property name="n_columns">2</property>
-			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">0</property>
-			      <property name="column_spacing">0</property>
-
-			      <child>
-				<widget class="GtkLabel" id="ignore_knocks_above_rpm_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Above x RPM</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="ignore_knocks_below_rpm_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Below x RPM</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="ignore_knocks_map_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">When MAP above x kPa</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="advance_when_no_knock_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Advance when no knock</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">10</property>
-				  <property name="bottom_attach">11</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="knock_max_retard_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Max Retard Allowed</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">9</property>
-				  <property name="bottom_attach">10</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="knock_wait_time_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Wait time between steps</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">11</property>
-				  <property name="bottom_attach">12</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="knock_wait_time_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 10 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">11</property>
-				  <property name="bottom_attach">12</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="advance_when_no_knock_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.351999998093</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 20 0.352 3.52 3.52</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">10</property>
-				  <property name="bottom_attach">11</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="max_retard_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.351999998093</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 30 0.352 3.52 3.52</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">9</property>
-				  <property name="bottom_attach">10</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="first_knock_retard_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.351999998093</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 10 0.352 3.52 3.52</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">7</property>
-				  <property name="bottom_attach">8</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="ignore_knocks_above_rpm_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">100</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 12000 100 1000 1000</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="subsequent_knock_retard_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.351999998093</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 10 0.352 3.52 3.52</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">8</property>
-				  <property name="bottom_attach">9</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="ignore_knocks_below_rpm_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">100</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 12000 100 1000 1000</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="ignore_knocks_above_map_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">1</property>
-				  <property name="digits">0</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">True</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 255 1 10 10</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="ignore_knocks_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">&lt;i&gt;Knock Ignore Params&lt;/i&gt;</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">True</property>
-				  <property name="justify">GTK_JUSTIFY_CENTER</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_options">expand|shrink</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="subsequent_knock_retard_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Subsequent retard (deg)</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">8</property>
-				  <property name="bottom_attach">9</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="first_knock_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">First knock, retard by (deg)</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">7</property>
-				  <property name="bottom_attach">8</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="knock_ignition_retard_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">&lt;i&gt;Knock Ignition Retard Settings&lt;/i&gt;</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">True</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">6</property>
-				  <property name="bottom_attach">7</property>
-				  <property name="x_options">expand|shrink</property>
-				  <property name="y_options">expand</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="knock_boost_params_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">&lt;i&gt;Boost Related Knock controls&lt;/i&gt;</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">True</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">13</property>
-				  <property name="bottom_attach">14</property>
-				  <property name="x_options"></property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="bc_to_remove_when_knocking_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">MIN Boost to remove when
-knock detected (PSI)</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">14</property>
-				  <property name="bottom_attach">15</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_remove_when_knock_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.146999999881</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 20 0.146999999881 1 1</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">14</property>
-				  <property name="bottom_attach">15</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkSpinButton" id="bc_max_remove_when_knock_spin">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="climb_rate">0.146999999881</property>
-				  <property name="digits">1</property>
-				  <property name="numeric">True</property>
-				  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				  <property name="snap_to_ticks">False</property>
-				  <property name="wrap">False</property>
-				  <property name="adjustment">0 0 20 0.146999999881 1 1</property>
-				  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 09 Mar 2005 23:59:08 GMT"/>
-				  <signal name="changed" handler="entry_changed_handler" last_modification_time="Thu, 10 Mar 2005 00:00:26 GMT"/>
-				  <signal name="key_press_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:00:51 GMT"/>
-				  <signal name="key_release_event" handler="key_event" last_modification_time="Thu, 10 Mar 2005 00:01:03 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">15</property>
-				  <property name="bottom_attach">16</property>
-				  <property name="x_padding">5</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">shrink</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="bc_max_to_remove_when_knocking_label">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">MAX Boost to remove 
-when knocking  (PSI)</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">15</property>
-				  <property name="bottom_attach">16</property>
-				  <property name="x_padding">5</property>
-				  <property name="y_padding">2</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHSeparator" id="hseparator23">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">12</property>
-				  <property name="bottom_attach">13</property>
-				  <property name="y_padding">2</property>
-				  <property name="x_options">expand|shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHSeparator" id="hseparator26">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">5</property>
-				  <property name="bottom_attach">6</property>
-				  <property name="y_padding">2</property>
-				  <property name="x_options">fill</property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkHSeparator" id="hseparator25">
-				  <property name="visible">True</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="y_padding">1</property>
-				  <property name="x_options">shrink|fill</property>
-				  <property name="y_options">expand|shrink|fill</property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="padding">0</property>
-			      <property name="expand">False</property>
-			      <property name="fill">True</property>
-			    </packing>
-			  </child>
-			</widget>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="knock_control_frame_title">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Knock Control</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
 			</widget>
 			<packing>
-			  <property name="type">label_item</property>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
 			</packing>
 		      </child>
 		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
 		  </child>
 		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">True</property>
-		</packing>
 	      </child>
 	    </widget>
 	    <packing>

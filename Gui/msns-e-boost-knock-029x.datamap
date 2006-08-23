@@ -125,6 +125,18 @@ key_types=_INT_,_STRING_
 page=0
 set_label=Reduce boost by 1 PSI\nfor every X \302\260F. over.
 
+[obp_spark_base_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=obp_spark_ctrls,spark_controls,nonedis_controls,boost_controls
+
+[obp_cut_sparks_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=obp_spark_ctrls,spark_controls,nonedis_controls,boost_controls
+
 #----- Radio/Checkbuttons ----------------------------------------------------
 [boost_enabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
@@ -323,7 +335,49 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=When selected Boost Table 3 will NOT be used at all
 
+[obp_fuel_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=2
+bitshift=4
+bitmask=48
+toggle_groups=obp_spark_ctrls
+group_states=DISABLED
+bind_to_list=boost_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Sets the overboost protection revlimiter style to be fuel drop only.
+
+[obp_spark_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=1
+bitshift=4
+bitmask=48
+bind_to_list=boost_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Sets the overboost protection revlimiter style to be of the spark drop only variety.
+
+[obp_fuel_spark_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=3
+bitshift=4
+bitmask=48
+bind_to_list=boost_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Sets the overboost protection revlimiter style to be of the fuel AND spark drop only variety.
+
 #----- Spinbuttons ----------------------------------------------------------
+
 [bc_update_rate_spin]
 keys=page,offset,raw_lower,bind_to_list,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
@@ -378,6 +432,16 @@ bind_to_list=boost_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Typical ambient pressure for your location.  Used by boost control to accurate calculate boost levels.
+
+[overboost_cutoff_spin]
+keys=page,offset,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=44
+bind_to_list=boost_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=OverBoost cutoff at which point fuel is shutdown completely to avoid engine destruction.
 
 [bc_iat_start_temp_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
@@ -539,4 +603,29 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This wait time ties to the above control.  After knocking has ceased thecontrol will attempt to advance timing backby the amount above in steps separated by this time interval in seconds.
 
+[obp_base_sparks_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=78
+dl_conv_expr=x-1
+ul_conv_expr=x+1
+raw_upper=20
+bind_to_list=obp_spark_ctrls,boost_controls,spark_controls,nonedis_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When overboost protection is triggered, this and the next value are used to determine how much sparkdrop to do.
+
+[obp_cut_sparks_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=84
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+raw_upper=20
+bind_to_list=obp_spark_ctrls,boost_controls,spark_controls,nonedis_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When overboost protction is triggered, this and the previous value control how many sparks to drop.  See the Staging/Revlimiter/MISC tab for more info.
 

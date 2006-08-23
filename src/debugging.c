@@ -17,7 +17,6 @@
 #include <enums.h>
 #include <glib.h>
 #include <glib/gprintf.h>
-#include <glib/gstdio.h>
 #include <time.h>
 
 
@@ -38,7 +37,7 @@ void open_debugfile()
 	if(!dbgfile)
 	{
 		filename = g_strconcat(g_get_current_dir(), PSEP, "MTXlog.txt",NULL);
-		dbgfile = g_fopen(filename,"a");
+		dbgfile = fopen(filename,"a");
 		g_free(filename);
 		if (dbgfile)
 		{

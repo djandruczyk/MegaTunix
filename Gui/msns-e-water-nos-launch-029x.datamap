@@ -108,13 +108,13 @@ tooltip=Variable Launch control uses an external input for the user to set the h
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=launch_controls,lc_spark_ctrls
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
 
 [lc_sparkbase_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
-bind_to_list=launch_controls,lc_spark_ctrls
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
 
 [nitrous_frame_title]
 keys=page,bind_to_list
@@ -556,7 +556,7 @@ page=0
 offset=78
 dl_conv_expr=x-1
 ul_conv_expr=x+1
-bind_to_list=launch_controls,lc_spark_ctrls
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This control Sets the base number of sparks used by the round robin spark drop routine.  AFAIK This should be set to 1 higher than your number of cylinders (i.e, set to 5 for a 4 cyl)
@@ -568,7 +568,7 @@ page=0
 offset=77
 dl_conv_expr=x*1
 ul_conv_expr=x*1
-bind_to_list=launch_controls,lc_spark_ctrls
+bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This control Sets the number of sparks to drop for each iteration through the sparkbase control above. Thus if you have a 4 cyl , with base-sparks set to 5 and sparkdrop to 1 it'll drop 1 out of 5 ignition events and this will rotate across all cylinders, so that they are all equally dropped.  Use higher numbers for more RPM limiting.
