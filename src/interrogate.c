@@ -92,7 +92,7 @@ void interrogate_ecu()
 	cmd_details = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 
 	dbg_func(g_strdup("\n"__FILE__": interrogate_ecu() canidates and bytecounts hash's allocated\n\n"),INTERROGATOR);
-	
+
 	/* Load tests from config files */
 	cmd_array = validate_and_load_tests(cmd_details);
 	if (!cmd_array)
@@ -104,6 +104,9 @@ void interrogate_ecu()
 	/* how many tests.... */
 	tests_to_run = cmd_array->len;
 
+	/* Force page to zero,  non page firmware should ignore this */
+	write(serial_params->fd,"P",1);
+	write(serial_params->fd,&i,1);
 	for (i=0;i<tests_to_run;i++)
 	{
 		flush_serial(serial_params->fd,TCIOFLUSH);
@@ -193,7 +196,7 @@ void interrogate_ecu()
 				if (total_read > 0)
 				{
 					canidate->ver_num = buf[0];
-				//	memcpy(&(canidate->ver_num),buf,total_read);
+					//	memcpy(&(canidate->ver_num),buf,total_read);
 				}
 				else 
 					canidate->ver_num = 0;
@@ -210,7 +213,7 @@ void interrogate_ecu()
 	interrogated = determine_ecu(canidate,cmd_array,cmd_details);	
 	if (interrogated)
 	{
-		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"interrogate_button"),TRUE);
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"interrogate_button"),FALSE);
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"offline_button"),FALSE);
 	}
 
@@ -325,6 +328,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->multi_page = potential->multi_page;
 	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
+	firmware->debug_above = potential->debug_above;
 	firmware->write_cmd = g_strdup(potential->write_cmd);
 	firmware->burn_cmd = g_strdup(potential->burn_cmd);
 	firmware->page_cmd = g_strdup(potential->page_cmd);
@@ -748,6 +752,8 @@ void load_profile_details(struct Canidate *canidate)
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 					if(!cfg_read_int(cfgfile,section,"dtmode_page",&canidate->table_params[i]->dtmode_page))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+					if(!cfg_read_int(cfgfile,"parameters","DebugAbove",&canidate->debug_above))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"DebugAbove\" value not found in interrogation profile, ERROR\n"),CRITICAL);
 				}
 			}
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))
@@ -807,6 +813,8 @@ void load_profile_details(struct Canidate *canidate)
 			canidate->page_params[i] = initialize_page_params();
 			section = g_strdup_printf("page_%i",i);
 
+			if(!cfg_read_int(cfgfile,section,"truepgnum",&canidate->page_params[i]->truepgnum))
+				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"truepgnum\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"length",&canidate->page_params[i]->length))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"length\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 			cfg_read_boolean(cfgfile,section,"is_spark",&canidate->page_params[i]->is_spark);

@@ -67,7 +67,6 @@ void update_comms_status(void)
 void comms_test()
 {
 	gboolean result = FALSE;
-	gint count = 0;
 	extern struct Serial_Params *serial_params;
 	extern gboolean connected;
 
@@ -86,25 +85,19 @@ void comms_test()
 	g_static_mutex_lock(&comms_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);	
 
-	while ((write(serial_params->fd,"C",1) != 1) && (count < 4 ))
+	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
+	if (write(serial_params->fd,"C",1) != 1)
 	{
-		g_usleep(1000);
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n"),CRITICAL);
-		count++;
-	}
-	if (count >= 4)
-	{
 		connected = FALSE;
 		flush_serial(serial_params->fd, TCIOFLUSH);
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tFour attempts made to talk to ECU, no response received\n"),CRITICAL);
+		g_static_mutex_unlock(&comms_mutex);
 		return;
 	}
-	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
 	g_static_mutex_unlock(&comms_mutex);
 	result = handle_ecu_data(C_TEST,NULL);
 	if (result)	// Success
 	{
-		// COMMS test succeeded 
 		connected = TRUE;
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"),SERIAL_RD);
 		queue_function(g_strdup("kill_conn_warning"));
@@ -182,6 +175,7 @@ void writeto_ecu(struct Io_Message *message)
 	struct Output_Data *data = message->payload;
 
 	gint page = data->page;
+	gint truepgnum = message->truepgnum;
 	gint offset = data->offset;
 	gint value = data->value;
 	gboolean ign_parm = data->ign_parm;
@@ -234,7 +228,7 @@ void writeto_ecu(struct Io_Message *message)
 	}
 
 	if ((firmware->multi_page ) && (message->need_page_change)) 
-		set_ms_page(page);
+		set_ms_page(truepgnum);
 
 	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
 
@@ -358,7 +352,7 @@ void readfrom_ecu(struct Io_Message *message)
 
 
 	if ((firmware->multi_page ) && (message->need_page_change)) 
-		set_ms_page(message->page);
+		set_ms_page(message->truepgnum);
 
 	/* Flush serial port... */
 	g_static_mutex_lock(&comms_mutex);

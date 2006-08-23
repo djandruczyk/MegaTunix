@@ -179,6 +179,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message->cmd = cmd;
 			message->command = COMMS_TEST;
 			message->page = 0;
+			message->truepgnum = 0;
 			message->need_page_change = FALSE;
 			message->out_str = g_strdup("Q");
 			message->out_len = 1;
@@ -232,6 +233,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 				{
 					message = initialize_io_message();
 					message->command = READ_CMD;
+					message->truepgnum = firmware->page_params[i]->truepgnum;
 					message->page = i;
 					if (firmware->page_params[i]->is_spark)
 					{
@@ -296,6 +298,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message = initialize_io_message();
 			message->cmd = cmd;
 			message->command = WRITE_CMD;
+			message->page=((struct Output_Data *)data)->page;
+			message->truepgnum=firmware->page_params[((struct Output_Data *)data)->page]->truepgnum;
 			message->payload = data;
 			message->need_page_change = TRUE;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
@@ -342,7 +346,7 @@ void *thread_dispatcher(gpointer data)
 		{
 			case INTERROGATION:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n"),SERIAL_RD|SERIAL_WR|THREADS);
-				if ((!connected) && (~offline))
+				if ((!connected) && (!offline))
 					comms_test();
 				if ((connected) && (!offline))
 				{

@@ -15,11 +15,47 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <glib.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
+#include <time.h>
 
 
 gint dbg_lvl = 0;
 
+static FILE * dbgfile = NULL;
+
+/*!
+ \brief open_debugfile() opens the file that holds debugging information.
+ The path defaults to the current working directory.
+ */
+void open_debugfile()
+{
+	gchar * filename = NULL;
+	struct tm *tm = NULL;
+	time_t *t = NULL;
+
+	if(!dbgfile)
+	{
+		filename = g_strconcat(g_get_current_dir(), PSEP, "MTXlog.txt",NULL);
+		dbgfile = g_fopen(filename,"a");
+		g_free(filename);
+		if (dbgfile)
+		{
+			t = g_malloc(sizeof(time_t));
+			time(t);
+			tm = localtime(t);
+			g_free(t);
+			g_fprintf(dbgfile,"Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
+		}
+	}
+}
+
+
+void close_debugfile()
+{
+	fclose(dbgfile);
+}
 
 /*!
  \brief dbg_func() writes debugggin output to the console based on if the
@@ -31,8 +67,7 @@ void dbg_func(gchar *str, Dbg_Class class)
 {
 	if ((dbg_lvl & class))
 	{
-		g_fprintf(stderr,str);
+		g_fprintf(dbgfile,str);
 	}
 	g_free(str);
-
 }

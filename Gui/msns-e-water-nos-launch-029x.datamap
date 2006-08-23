@@ -104,6 +104,18 @@ tooltip=Variable Launch control uses an external input for the user to set the h
 
 #----- Labels ----------------------------------------------------------------
 
+[lc_sparkdrop_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_controls,lc_spark_ctrls
+
+[lc_sparkbase_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=launch_controls,lc_spark_ctrls
+
 [nitrous_frame_title]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -314,6 +326,45 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Variable Launch uses an external input triggered by the user to set the hard launch limit. It works by the user revving the engine to the limit point and hitting a button and the ECU will record that RPM and use that as the laucnh limit when laucnh control is active (when the tps is above the setpoint)
 
+[lc_fuel_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=2
+bitshift=0
+bitmask=3
+toggle_groups=lc_spark_ctrls
+group_states=DISABLED
+bind_to_list=launch_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Sets the launch control revlimiter style to be fuel drop only. 
+
+[lc_spark_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=1
+bitshift=0
+bitmask=3
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Sets the launch control revlimiter style to be of the spark drop only variety.
+
+[lc_fuel_spark_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=3
+bitshift=0
+bitmask=3
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Sets the launch control revlimiter style to be of the fuel AND spark drop only variety.
+
 #----- Spinbuttons ----------------------------------------------------------
 
 [water_inj_iat_setpoint_spin]
@@ -497,6 +548,30 @@ bind_to_list=launch_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the launch limiter.
+
+[lc_sparkbase_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=78
+dl_conv_expr=x-1
+ul_conv_expr=x+1
+bind_to_list=launch_controls,lc_spark_ctrls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control Sets the base number of sparks used by the round robin spark drop routine.  AFAIK This should be set to 1 higher than your number of cylinders (i.e, set to 5 for a 4 cyl)
+
+[lc_sparkdrop_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=77
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+bind_to_list=launch_controls,lc_spark_ctrls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This control Sets the number of sparks to drop for each iteration through the sparkbase control above. Thus if you have a 4 cyl , with base-sparks set to 5 and sparkdrop to 1 it'll drop 1 out of 5 ignition events and this will rotate across all cylinders, so that they are all equally dropped.  Use higher numbers for more RPM limiting.
 
 [launch_min_tps_spin]
 keys=page,offset,bind_to_list,dl_type,handler,tooltip

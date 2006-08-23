@@ -125,6 +125,7 @@ gboolean vetable_export(struct Io_File *iofile)
 		output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
 		output = g_string_append(output, g_strdup_printf("Page %i\n",z_page));
 		output = g_string_append(output, g_strdup_printf("VE Table RPM Range              [%2i]\n",x_bincount));
+		g_free(tm);
 
 		for (i=0;i<x_bincount;i++)
 			output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ms_data[x_page][x_base+i]));

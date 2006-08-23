@@ -18,6 +18,7 @@
 #include <conversions.h>
 #include <core_gui.h>
 #include <defines.h>
+#include <debugging.h>
 #include <dispatcher.h>
 #include <enums.h>
 #include <gdk/gdkgl.h>
@@ -72,6 +73,7 @@ gint main(gint argc, gchar ** argv)
 	cmds = g_malloc0(sizeof(struct Io_Cmds));
 
 	init();			/* Initialize global vars */
+	open_debugfile();	/* Open debug log */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();

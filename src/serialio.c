@@ -265,10 +265,13 @@ void set_ms_page(gint ms_page)
 
 	//printf("fed_page %i, last_page %i\n",ms_page,last_page);
 
+	if ((ms_page > firmware->debug_above) || (last_page > firmware->debug_above))
+		goto skipburn;
 	if ((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0))))
 	{
 		burn_ecu_flash();
 	}
+skipburn:
 
 	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
 	

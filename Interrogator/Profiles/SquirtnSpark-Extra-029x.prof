@@ -13,7 +13,8 @@ Burn_Cmd=B
 MultiPage=TRUE
 Page_Cmd=P
 TotalTables=10
-TrigmonPage=7
+#TrigmonPage=
+DebugAbove=9
 # Fuel1, Fuel2, Fuel3, Spark1, Spark2, AFR1, AFR2, Boost1, Boost2, Boost3
 TotalPages=13
 
@@ -246,42 +247,55 @@ z_conv_expr=x*1
 z_disp_float=FALSE
 
 [page_0]
+truepgnum=0
 length=189
 
 [page_1]
+truepgnum=1
 length=189
 
 [page_2]
+truepgnum=2
 length=189
 
 [page_3]
+truepgnum=3
 length=189
 
 [page_4]
+truepgnum=4
 length=189
 
 [page_5]
+truepgnum=5
 length=189
 
 [page_6]
+truepgnum=6
 length=189
 
 [page_7]
+truepgnum=7
 length=189
 
 [page_8]
+truepgnum=8
 length=189
 
 [page_9]
+truepgnum=240
 length=189
 
 [page_10]
+truepgnum=241
 length=189
 
 [page_11]
+truepgnum=242
 length=256
 
 [page_12]
+truepgnum=243
 length=256
 
 [bytecounts]

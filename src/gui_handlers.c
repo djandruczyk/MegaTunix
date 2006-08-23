@@ -133,6 +133,7 @@ void leave(GtkWidget *widget, gpointer data)
 		close_file(iofile);
 	/* Free all buffers */
 	mem_dealloc();
+	close_debugfile();
 	gtk_main_quit();
 	return;
 }
