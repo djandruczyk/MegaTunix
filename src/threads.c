@@ -348,6 +348,7 @@ void *thread_dispatcher(gpointer data)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
+
 		if (!link_up)
 			failurecount++;
 

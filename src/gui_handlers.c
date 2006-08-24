@@ -92,11 +92,13 @@ void leave(GtkWidget *widget, gpointer data)
 	struct Io_File * iofile = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"),CRITICAL);
+	if (leaving)
+		return;
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"),CRITICAL);
 	g_static_mutex_lock(&mutex);
 	/* Stop timeout functions */
 	leaving = TRUE;
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
 
 	if (dynamic_widgets)
 	{
@@ -106,39 +108,39 @@ void leave(GtkWidget *widget, gpointer data)
 
 	if (iofile)	
 		close_file(iofile);
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after iofile\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after iofile\n"),CRITICAL);
 
 	stop_datalogging();
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"),CRITICAL);
 
 	if(realtime_id)
 		stop_realtime_tickler();
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtiem\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtiem\n"),CRITICAL);
 	realtime_id = 0;
 
 	if(playback_id)
 		stop_logviewer_playback();
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_playback\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_playback\n"),CRITICAL);
 	playback_id = 0;
 
 	/* Commits any pending data to ECU flash */
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() before burn\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() before burn\n"),CRITICAL);
 	if ((connected) && (interrogated))
 		io_cmd(IO_BURN_MS_FLASH,NULL);
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after burn\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after burn\n"),CRITICAL);
 
 	io_cmd(IO_CLOSE_SERIAL,NULL);
-	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after close_serial\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after close_serial\n"),CRITICAL);
 
 	/* This makes us wait until the dispatch queue finishes */
 	while (g_async_queue_length(io_queue) > 0)
 	{
-		//dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)),CRITICAL);
 		gtk_main_iteration();
 	}
 	while (g_async_queue_length(dispatch_queue) > 0)
 	{
-		//dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(dispatch_queue)),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining Dispatch Queue,  current length %i\n",g_async_queue_length(dispatch_queue)),CRITICAL);
 		gtk_main_iteration();
 	}
 
@@ -151,7 +153,7 @@ void leave(GtkWidget *widget, gpointer data)
 	dispatcher_id = 0;
 
 	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait till 
-					  // runtime gui is finished updating
+	// runtime gui is finished updating
 	g_static_mutex_unlock(&rtv_mutex); 
 
 	close_debugfile();
@@ -175,6 +177,7 @@ gboolean comm_port_change(GtkEditable *editable)
 {
 	gchar *port;
 	gboolean result;
+	extern gboolean interrogated;
 
 	port = gtk_editable_get_chars(editable,0,-1);
 	gtk_widget_modify_text(GTK_WIDGET(editable),GTK_STATE_NORMAL,&black);
@@ -189,6 +192,9 @@ gboolean comm_port_change(GtkEditable *editable)
 			g_free(serial_port_name);
 		serial_port_name = g_strdup(port);
 		io_cmd(IO_OPEN_SERIAL,g_strdup(port));
+		io_cmd(IO_COMMS_TEST,NULL);
+		if (!interrogated)
+			io_cmd(IO_INTERROGATE_ECU,NULL);
 	}
 	else
 	{
