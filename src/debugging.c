@@ -37,7 +37,7 @@ void open_debugfile()
 	if(!dbgfile)
 	{
 		filename = g_strconcat(g_get_current_dir(), PSEP, "MTXlog.txt",NULL);
-		dbgfile = fopen(filename,"a");
+		dbgfile = fopen(filename,"w");
 		g_free(filename);
 		if (dbgfile)
 		{

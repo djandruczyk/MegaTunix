@@ -352,8 +352,10 @@ void *thread_dispatcher(gpointer data)
 			failurecount++;
 		if (failurecount > 20)
 		{
+			queue_function(g_strdup("conn_warning"));
 			if (serial_params->port_name)
 				last_name = g_strdup(serial_params->port_name);
+//			printf ("queing port close/reopen\n");
 			io_cmd(IO_CLOSE_SERIAL,NULL);
 			io_cmd(IO_OPEN_SERIAL,g_strdup(last_name));
 			failurecount = 0;

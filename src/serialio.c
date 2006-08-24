@@ -53,6 +53,7 @@ gboolean open_serial(gchar * port_name)
 	gchar *device = NULL;	/* temporary unix name of the serial port */
 	gchar * err_text = NULL;
 
+	//printf("Opening serial port %s\n",port_name);
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
@@ -71,6 +72,7 @@ gboolean open_serial(gchar * port_name)
 		serial_params->open = TRUE;
 		link_up = TRUE;
 		serial_params->fd = fd;
+		//printf("success opening\n");
 		dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
 		thread_update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 	}
@@ -226,6 +228,7 @@ void close_serial()
 	if (serial_params->open == FALSE)
 		return;
 
+	//printf("Closing serial port\n");
 	g_static_mutex_lock(&comms_mutex);
 #ifndef __WIN32__
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
@@ -234,6 +237,9 @@ void close_serial()
 	g_static_mutex_unlock(&comms_mutex);
 	serial_params->fd = -1;
 	serial_params->open = FALSE;
+	if (serial_params->port_name)
+		g_free(serial_params->port_name);
+	serial_params->port_name = NULL;
 	connected = FALSE;
 	link_up = FALSE;
 

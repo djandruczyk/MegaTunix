@@ -103,7 +103,7 @@ void comms_test()
 	{
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",g_strdup(err_text)),CRITICAL);
-	//	printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",g_strdup(err_text));
+		//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",g_strdup(err_text));
 		flush_serial(serial_params->fd, TCIOFLUSH);
 		g_static_mutex_unlock(&comms_mutex);
 		connected = FALSE;
