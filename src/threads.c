@@ -337,9 +337,10 @@ void *thread_dispatcher(gpointer data)
 {
 	extern GAsyncQueue *io_queue;
 	extern GAsyncQueue *dispatch_queue;
-	extern struct Serial_Params *serial_params;
 	extern gboolean link_up;
-	static gchar * last_name = NULL;
+	extern gchar * serial_port_name;
+	extern gint realtime_id;
+	static gboolean restart_realtime = FALSE;
 	struct Io_Message *message = NULL;	
 
 	/* Endless Loop, wait for message, processs and repeat... */
@@ -347,21 +348,19 @@ void *thread_dispatcher(gpointer data)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
-
 		if (!link_up)
 			failurecount++;
+
 		if (failurecount > 20)
 		{
 			queue_function(g_strdup("conn_warning"));
-			if (serial_params->port_name)
-				last_name = g_strdup(serial_params->port_name);
-//			printf ("queing port close/reopen\n");
 			io_cmd(IO_CLOSE_SERIAL,NULL);
-			io_cmd(IO_OPEN_SERIAL,g_strdup(last_name));
+			io_cmd(IO_OPEN_SERIAL,g_strdup(serial_port_name));
 			failurecount = 0;
 		}
 		if ((!connected) && (link_up) && (!offline))
 			comms_test();
+
 
 		switch ((CmdType)message->command)
 		{
@@ -369,15 +368,8 @@ void *thread_dispatcher(gpointer data)
 				if (link_up)
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tOpen Serial called but port is already OPEN, ERROR!\n"),SERIAL_RD|SERIAL_WR|THREADS);
 				else
-				{
 					if (open_serial((gchar *)message->payload))
-					{
 						setup_serial_params();
-						link_up = TRUE;
-					}
-					else
-						link_up = FALSE;
-				}
 				break;
 			case CLOSE_SERIAL:
 				if (!link_up)

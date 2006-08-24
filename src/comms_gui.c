@@ -44,6 +44,7 @@ GdkColor white = { 0, 65535, 65535, 65535 };
 void build_comms(GtkWidget *parent_frame)
 {
 	extern GtkTooltips *tip;
+	extern gchar * serial_port_name;
 	GtkWidget *frame;
 	GtkWidget *hbox;
 	GtkWidget *hbox2;
@@ -121,8 +122,9 @@ void build_comms(GtkWidget *parent_frame)
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	if (serial_params->port_name)
-		gtk_entry_set_text(GTK_ENTRY(entry),serial_params->port_name);
+	register_widget("comms_serial_port_entry",entry);
+	if (serial_port_name)
+		gtk_entry_set_text(GTK_ENTRY(entry),serial_port_name);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), TRUE);
 	g_signal_connect (G_OBJECT(entry), "changed",
 			G_CALLBACK (entry_changed_handler),

@@ -60,7 +60,6 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
 
-	g_static_mutex_lock(&comms_mutex);
 	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n"),IO_PROCESS);
 
 	/* different cases whether we're doing 
@@ -76,6 +75,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_read = 0;
 			total_wanted = 1024;
 			zerocount = 0;
+			g_static_mutex_lock(&comms_mutex);
 			while (total_read < total_wanted )
 			{
 				dbg_func(g_strdup_printf("\tNULL_HANDLER requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
@@ -99,6 +99,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 				}
 			}
+			g_static_mutex_unlock(&comms_mutex);
 			flush_serial(serial_params->fd, TCIOFLUSH);
 			break;
 		case C_TEST:
@@ -111,6 +112,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = 1;
 			zerocount = 0;
 
+			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tC_TEST requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
@@ -134,6 +136,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 				}
 			}
+			g_static_mutex_unlock(&comms_mutex);
 			if (bad_read)
 			{
 				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),IO_PROCESS);
@@ -153,6 +156,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_read=0;
 			total_wanted=1024;
 			zerocount=0;
+			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tGET_ERROR requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
@@ -175,6 +179,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 				}
 			}
+			g_static_mutex_unlock(&comms_mutex);
 			dump_output(total_read,buf);
 			flush_serial(serial_params->fd, TCIOFLUSH);
 			if (total_read <= 1)
@@ -198,6 +203,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->rtvars_size;
 			zerocount = 0;
 
+			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tRT_VARS requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
@@ -221,6 +227,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 				}
 			}
+			g_static_mutex_unlock(&comms_mutex);
 			if (bad_read)
 			{
 				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"),IO_PROCESS);
@@ -266,6 +273,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->page_params[message->page]->length;
 			zerocount = 0;
 
+			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tVE_BLOCK, page %i, requesting %i bytes\n",message->page,total_wanted-total_read),IO_PROCESS);
@@ -289,6 +297,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 				}
 			}
+			g_static_mutex_unlock(&comms_mutex);
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
@@ -315,6 +324,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->memblock_size;
 			zerocount = 0;
 
+			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
 				dbg_func(g_strdup_printf("\tRAW_MEMORY_DUMP requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
@@ -337,6 +347,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 				}
 			}
+			g_static_mutex_unlock(&comms_mutex);
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
@@ -358,7 +369,6 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 jumpout:
 
 	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n"),IO_PROCESS);
-	g_static_mutex_unlock(&comms_mutex);
 	return state;
 }
 

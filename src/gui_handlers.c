@@ -57,6 +57,7 @@ extern gint ready;
 extern GtkTooltips *tip;
 extern GList ***ve_widgets;
 extern struct Serial_Params *serial_params;
+extern gchar * serial_port_name;
 
 gboolean tips_in_use;
 gint temp_units;
@@ -88,7 +89,11 @@ void leave(GtkWidget *widget, gpointer data)
 	extern gboolean interrogated;
 	extern GAsyncQueue *dispatch_queue;
 	struct Io_File * iofile = NULL;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	if (leaving)
+		return;
+	g_static_mutex_lock(&mutex);
 	/* Stop timeout functions */
 	leaving = TRUE;
 
@@ -135,6 +140,7 @@ void leave(GtkWidget *widget, gpointer data)
 	/* Free all buffers */
 	mem_dealloc();
 	close_debugfile();
+	g_static_mutex_unlock(&mutex);
 	gtk_main_quit();
 	return;
 }
@@ -160,7 +166,12 @@ gboolean comm_port_change(GtkEditable *editable)
 	}
 	result = g_file_test(port,G_FILE_TEST_EXISTS);
 	if (result)
+	{
+		if (serial_port_name)
+			g_free(serial_port_name);
+		serial_port_name = g_strdup(port);
 		io_cmd(IO_OPEN_SERIAL,g_strdup(port));
+	}
 	else
 	{
 		update_logbar("comms_view","warning",g_strdup_printf("\"%s\" File not found\n",port),TRUE,FALSE);

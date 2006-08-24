@@ -813,8 +813,9 @@ void load_profile_details(struct Canidate *canidate)
 			canidate->page_params[i] = initialize_page_params();
 			section = g_strdup_printf("page_%i",i);
 
-			if(!cfg_read_int(cfgfile,section,"truepgnum",&canidate->page_params[i]->truepgnum))
-				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"truepgnum\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+			if (canidate->multi_page)
+				if(!cfg_read_int(cfgfile,section,"truepgnum",&canidate->page_params[i]->truepgnum))
+					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"truepgnum\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 			if(!cfg_read_int(cfgfile,section,"length",&canidate->page_params[i]->length))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"length\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 			cfg_read_boolean(cfgfile,section,"is_spark",&canidate->page_params[i]->is_spark);

@@ -72,9 +72,9 @@ gboolean open_serial(gchar * port_name)
 		serial_params->open = TRUE;
 		link_up = TRUE;
 		serial_params->fd = fd;
-		//printf("success opening\n");
 		dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
 		thread_update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
+		thread_update_widget(g_strdup("comms_serial_port_entry"),MTX_ENTRY,g_strdup(port_name));
 	}
 	else
 	{
@@ -86,14 +86,15 @@ gboolean open_serial(gchar * port_name)
 		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
 		//printf("Error Opening \"%s\", Error Code: \"%s\"\n",device,g_strdup(err_text));
-		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,g_strdup(err_text)),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"\n",device,err_text));
 
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",device,err_text),TRUE,FALSE);
 	}
 
 	g_free(device);
-	return serial_params->open;
+	//printf("open_serial returning\n");
+	return link_up;
 }
 	
 
@@ -107,11 +108,13 @@ gboolean open_serial(gchar * port_name)
  */
 void flush_serial(gint fd, gint type)
 {
+	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
 	win32_flush_serial(fd, type);
 #else
 	tcflush(serial_params->fd, type);
 #endif	
+	g_static_mutex_unlock(&comms_mutex);
 }
 
 
@@ -123,6 +126,7 @@ void flush_serial(gint fd, gint type)
  */
 void toggle_serial_control_lines()
 {
+	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
 	win32_toggle_serial_control_lines();
 #else
@@ -139,8 +143,8 @@ void toggle_serial_control_lines()
 	usleep (100000); /* Wait 100 ms */
 	//Set back
 	tcsetattr(serial_params->fd,TCSAFLUSH,&oldtio);
-
 #endif
+	g_static_mutex_unlock(&comms_mutex);
 }
 
 /*!
@@ -150,16 +154,20 @@ void toggle_serial_control_lines()
  */
 void setup_serial_params()
 {
+	if (serial_params->open == FALSE)
+		return;
+	//printf("setup_serial_params entered\n");
+	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
 	win32_setup_serial_params();
 #else
 	extern gint baudrate;
-	if (serial_params->open == FALSE)
-		return;
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
+	g_static_mutex_unlock(&comms_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);
+	g_static_mutex_lock(&comms_mutex);
 
 	/* Sets up serial port for the modes we want to use. 
 	 * NOTE: Original serial tio params are stored and restored 
@@ -215,6 +223,7 @@ void setup_serial_params()
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 
 #endif
+	g_static_mutex_unlock(&comms_mutex);
 	return;
 }
 

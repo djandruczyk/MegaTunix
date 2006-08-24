@@ -66,9 +66,11 @@ z_suffix=VE %
 z_conv_expr=x*1
 
 [page_0]
+truepgnum=0
 length=128
 
 [page_1]
+truepgnum=1
 length=128
 
 [bytecounts]

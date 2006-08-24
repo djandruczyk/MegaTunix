@@ -27,6 +27,7 @@ extern gint temp_units;
 extern GdkColor black;
 extern gint dbg_lvl;
 GtkWidget *ms_ecu_revision_entry;
+gboolean use_timestamps = FALSE;
 
 GtkTextBuffer *textbuffer;
 

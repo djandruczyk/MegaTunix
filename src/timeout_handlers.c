@@ -122,35 +122,21 @@ gboolean signal_read_rtvars()
 	gint length = 0;
 	extern GAsyncQueue *io_queue;
 	extern gboolean rtvars_loaded;
-	static gint errcount = 0;
 
 	length = g_async_queue_length(io_queue);
+
 	/* IF queue depth is too great we should not make the problem worse
 	 * so we skip a call as we're probably trying to go faster than the 
 	 * MS and/or serail port can go....
 	 */
-	if (length > 2)
+	if (length > 1)
 		return TRUE;
 
 	dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"),SERIAL_RD|SERIAL_WR);
 
-	if (errcount > 10)
-	{
-		stop_realtime_tickler();
-		errcount = 0;
-	}
 	if (!rtvars_loaded)
 		return TRUE;
-//	if (connected)
-		io_cmd(IO_REALTIME_READ,NULL);			
-		/*
-	else
-	{	
-		errcount++;
-		dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tNOT connected, not queing message to thread handler....\n"),CRITICAL);
-
-	}
-	*/
+	io_cmd(IO_REALTIME_READ,NULL);			
 	return TRUE;	/* Keep going.... */
 }
 

@@ -59,9 +59,11 @@ z_suffix=Deg
 z_conv_expr=(x*0.352)-10
 
 [page_0]
+truepgnum=0
 length=125
 
 [page_1]
+truepgnum=1
 length=95
 is_spark=TRUE
 

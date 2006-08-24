@@ -45,6 +45,7 @@ EXPORT void finish_memviewer(void)
 	gint z = 0;
 	gint base = 0;
 	gint range = 0;
+	gchar * tmpbuf = NULL;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
 	extern GHashTable *dynamic_widgets;
@@ -60,7 +61,9 @@ EXPORT void finish_memviewer(void)
 
 		for (y=0;y<rows;y++)
 		{
-			label = gtk_label_new(g_strdup_printf("0x%.4X",(z*256)+(y*cols)));
+			tmpbuf = g_strdup_printf("0x%.4X",(z*256)+(y*cols));
+			label = gtk_label_new(tmpbuf);
+			g_free(tmpbuf);
 			gtk_table_attach(GTK_TABLE(table),label,0,1,y,y+1,
 					(GtkAttachOptions) (GTK_FILL),
 					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL), 0, 0);

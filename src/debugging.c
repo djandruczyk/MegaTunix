@@ -53,7 +53,8 @@ void open_debugfile()
 
 void close_debugfile()
 {
-	fclose(dbgfile);
+	if (dbgfile)
+		fclose(dbgfile);
 }
 
 /*!
@@ -64,17 +65,23 @@ void close_debugfile()
  */
 void dbg_func(gchar *str, Dbg_Class class)
 {
+	extern gboolean use_timestamps;
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
 
-	if (!t)
-		t = g_malloc(sizeof(time_t));
 
 	if ((dbg_lvl & class))
 	{
-		time(t);
-		tm = localtime(t);
-		g_fprintf(dbgfile,"%.2i:%.2i:%.2i  %s",tm->tm_hour,tm->tm_min,tm->tm_sec,str);
+		if (use_timestamps)
+		{
+			if (!t)
+				t = g_malloc(sizeof(time_t));
+			time(t);
+			tm = localtime(t);
+			g_fprintf(dbgfile,"%.2i:%.2i:%.2i  %s",tm->tm_hour,tm->tm_min,tm->tm_sec,str);
+		}
+		else
+			g_fprintf(dbgfile,str);
 	}
 	g_free(str);
 }

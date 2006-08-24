@@ -31,6 +31,7 @@ gint minor_ver;
 gint micro_ver;
 gint preferred_delimiter;
 gint baudrate = BAUDRATE;
+gchar * serial_port_name = NULL;
 extern gint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
 extern gint mem_view_style[];
@@ -79,7 +80,13 @@ void init(void)
 	main_y_origin = 120;	/* offset from top edge of screen */
 
 	/* initialize all global variables to known states */
+#ifdef __WIN32__
+	serial_port_name = g_strdup("COM1");
+#else
+	serial_port_name = g_strdup("/dev/ttyS0");
+#endif
 	serial_params->fd = 0; /* serial port file-descriptor */
+
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS V 1.x and 2.x */
 	serial_params->read_wait = 100;	/* delay between reads in milliseconds */
@@ -130,7 +137,7 @@ gboolean read_config(void)
 		cfg_read_int(cfgfile, "Window", "main_y_origin", 
 				&main_y_origin);
 		cfg_read_string(cfgfile, "Serial", "port_name", 
-				&serial_params->port_name);
+				&serial_port_name);
 		cfg_read_int(cfgfile, "Serial", "read_delay", 
 				&serial_params->read_wait);
 		cfg_read_int(cfgfile, "Logviewer", "zoom", &lv_zoom);
