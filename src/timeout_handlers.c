@@ -96,16 +96,12 @@ void stop_realtime_tickler()
 		g_source_remove(realtime_id);
 		update_logbar("comms_view",NULL,g_strdup("Realtime Reader stopped\n"),TRUE,FALSE);
 		realtime_id = 0;
-		while (leaving && ((g_async_queue_length(io_queue) > 0) || (dispatcher_id != 0)))
-		{
-		//	printf("waiting for queue to finish\n");
-			g_usleep(10000);
-		}
 	}
 	else
 		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY stopped\n"),TRUE,FALSE);
 
-	reset_runtime_status();
+	if (!leaving)
+		reset_runtime_status();
 }
 
 

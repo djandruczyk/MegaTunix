@@ -88,24 +88,59 @@ void leave(GtkWidget *widget, gpointer data)
 	extern gboolean connected;
 	extern gboolean interrogated;
 	extern GAsyncQueue *dispatch_queue;
+	extern GAsyncQueue *io_queue;
 	struct Io_File * iofile = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
-	if (leaving)
-		return;
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"),CRITICAL);
 	g_static_mutex_lock(&mutex);
 	/* Stop timeout functions */
 	leaving = TRUE;
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
+
+	if (dynamic_widgets)
+	{
+		if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
+			iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
+	}
+
+	if (iofile)	
+		close_file(iofile);
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after iofile\n"),CRITICAL);
+
+	stop_datalogging();
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"),CRITICAL);
+
+	if(realtime_id)
+		stop_realtime_tickler();
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtiem\n"),CRITICAL);
+	realtime_id = 0;
+
+	if(playback_id)
+		stop_logviewer_playback();
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_playback\n"),CRITICAL);
+	playback_id = 0;
 
 	/* Commits any pending data to ECU flash */
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() before burn\n"),CRITICAL);
 	if ((connected) && (interrogated))
 		io_cmd(IO_BURN_MS_FLASH,NULL);
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after burn\n"),CRITICAL);
 
 	io_cmd(IO_CLOSE_SERIAL,NULL);
+	//dbg_func(g_strdup_printf(__FILE__": LEAVE() after close_serial\n"),CRITICAL);
 
 	/* This makes us wait until the dispatch queue finishes */
-	while (g_async_queue_length(dispatch_queue) > 0)
+	while (g_async_queue_length(io_queue) > 0)
+	{
+		//dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)),CRITICAL);
 		gtk_main_iteration();
+	}
+	while (g_async_queue_length(dispatch_queue) > 0)
+	{
+		//dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(dispatch_queue)),CRITICAL);
+		gtk_main_iteration();
+	}
 
 	if (statuscounts_id)
 		gtk_timeout_remove(statuscounts_id);
@@ -115,31 +150,14 @@ void leave(GtkWidget *widget, gpointer data)
 		gtk_timeout_remove(dispatcher_id);
 	dispatcher_id = 0;
 
-	if(realtime_id)
-		stop_realtime_tickler();
-	realtime_id = 0;
-
-	if(playback_id)
-		stop_logviewer_playback();
-	playback_id = 0;
-
 	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait till 
 					  // runtime gui is finished updating
 	g_static_mutex_unlock(&rtv_mutex); 
 
-	if (dynamic_widgets)
-	{
-		if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
-			iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
-	}
-
-	stop_datalogging();
+	close_debugfile();
 	save_config();
-	if (iofile)	
-		close_file(iofile);
 	/* Free all buffers */
 	mem_dealloc();
-	close_debugfile();
 	g_static_mutex_unlock(&mutex);
 	gtk_main_quit();
 	return;

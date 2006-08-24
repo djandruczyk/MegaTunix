@@ -83,5 +83,6 @@ void dbg_func(gchar *str, Dbg_Class class)
 		else
 			g_fprintf(dbgfile,str);
 	}
+	fflush(dbgfile);
 	g_free(str);
 }
