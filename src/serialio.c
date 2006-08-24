@@ -42,7 +42,7 @@ GStaticMutex comms_mutex = G_STATIC_MUTEX_INIT;
  comms page on success/failure
  \param port_name (gchar *) name of the port to open
  */
-void open_serial(gchar * port_name)
+gboolean open_serial(gchar * port_name)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
@@ -54,8 +54,7 @@ void open_serial(gchar * port_name)
 	serial_params->port_name = g_strdup(port_name); 
 
 	device = g_strdup(port_name);
-	/* Open Read/Write and NOT as the controlling TTY in nonblock mode */
-	//fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
 	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
@@ -89,7 +88,7 @@ void open_serial(gchar * port_name)
 	}
 
 	g_free(device);
-	return;
+	return serial_params->open;
 }
 	
 
@@ -247,47 +246,3 @@ void close_serial()
 	return;
 }
 
-
-/*!
- \brief set_ms_page() is called to change the current page being accessed in
- the firmware. set_ms_page will check to see if any outstanding data has 
- been sent to the current page, but NOT burned to flash befpre changing pages
- in that case it will burn the flash before changing the page. 
- \param ms_page (gint) the page to set to
- */
-void set_ms_page(gint ms_page)
-{
-	extern struct Firmware_Details *firmware;
-	extern gint **ms_data;
-	extern gint **ms_data_last;
-	static gint last_page = 0;
-	gint res = 0;
-
-	//printf("fed_page %i, last_page %i\n",ms_page,last_page);
-
-	if ((ms_page > firmware->debug_above) || (last_page > firmware->debug_above))
-		goto skipburn;
-	if ((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0))))
-	{
-		burn_ecu_flash();
-	}
-skipburn:
-
-	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
-	
-	g_static_mutex_lock(&comms_mutex);
-	res = write(serial_params->fd,firmware->page_cmd,1);
-	if (res != 1)
-		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU \n",firmware->page_cmd),CRITICAL);
-	res = write(serial_params->fd,&ms_page,1);
-	g_static_mutex_unlock(&comms_mutex);
-	if (res != 1)
-		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i\n",ms_page),CRITICAL);
-
-	last_page = ms_page;
-	g_usleep(5000);
-
-
-	return;
-
-}

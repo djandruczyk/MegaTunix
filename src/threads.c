@@ -333,7 +333,7 @@ void *thread_dispatcher(gpointer data)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
-		if (!(serial_params->open)) 
+		if ((!(serial_params->open)) && (!offline))
 		{
 			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMM PORT not open!!! Check COMMS tab"));
 			queue_function(g_strdup("conn_warning"));

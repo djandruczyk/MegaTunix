@@ -64,6 +64,9 @@ void close_debugfile()
  */
 void dbg_func(gchar *str, Dbg_Class class)
 {
+//	struct tm *tm = NULL;
+//	time_t *t = NULL;
+
 	if ((dbg_lvl & class))
 	{
 		g_fprintf(dbgfile,str);

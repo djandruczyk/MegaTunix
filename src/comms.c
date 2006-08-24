@@ -67,17 +67,60 @@ void update_comms_status(void)
 void comms_test()
 {
 	gboolean result = FALSE;
+	gchar * err_text = NULL;
 	extern struct Serial_Params *serial_params;
 	extern gboolean connected;
+	extern gboolean offline;
+	//extern gboolean interrogated;
 
+	dbg_func(g_strdup(__FILE__": comms_test()\n\tCOMMS_TEST\n\n"),CRITICAL);
+	
+	if (offline)
+	{
+		queue_function(g_strdup("kill_conn_warning"));
+		connected = FALSE;
+		return;
+	}
+
+
+	/*
+	if ((!connected) && (serial_params->open) && (interrogated))
+	{
+		// Port open but nobody home? 
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tPORT OPEN, NOT Connected, closing serial port!!!\n"),CRITICAL);
+		close_serial();
+		if (!(g_file_test(serial_params->port_name,G_FILE_TEST_EXISTS)))
+		{
+			dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tSerial Port %s NO LONGER exists!!!\n",serial_params->port_name),CRITICAL);
+			return;
+		}
+		else
+		{
+			dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tAttempting to open Port %s\n",serial_params->port_name),CRITICAL);
+			open_serial(serial_params->port_name);
+			setup_serial_params();
+		}
+	}
+	if ((!connected) && (!(serial_params->open)) && (interrogated))
+	{
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tNOT Connected, serial NOT OPEN !!!\n"),CRITICAL);
+		if (g_file_test(serial_params->port_name,G_FILE_TEST_EXISTS))
+		{
+			dbg_func(g_strdup(__FILE__": comms_test()\n\tPort RE-appeared attempting connection!!!\n"),CRITICAL);
+			if (open_serial(serial_params->port_name))
+				setup_serial_params();
+		}
+
+	}
+	*/
 	/* If serial control struct exists, 
 	 * but we don't have connected status, try to reset connection */
-	
 	if (!serial_params->open)
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		return;
 	}
+
 	/* Try toggling the control lines */
 	//toggle_serial_control_lines();
 
@@ -88,7 +131,8 @@ void comms_test()
 	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
 	if (write(serial_params->fd,"C",1) != 1)
 	{
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tError writing \"C\" to the ecu in comms_test()\n"),CRITICAL);
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",g_strdup(err_text)),CRITICAL);
 		connected = FALSE;
 		flush_serial(serial_params->fd, TCIOFLUSH);
 		g_static_mutex_unlock(&comms_mutex);
@@ -184,6 +228,7 @@ void writeto_ecu(struct Io_Message *message)
 	gboolean twopart = 0;
 	gint res = 0;
 	gint count = 0;
+	gchar * err_text = NULL;
 	char lbuff[3] = {0, 0, 0};
 	gchar * write_cmd = NULL;
 	extern struct Firmware_Details *firmware;
@@ -255,13 +300,19 @@ void writeto_ecu(struct Io_Message *message)
 	g_static_mutex_lock(&comms_mutex);
 	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
 	if (res != 1 )
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED!!!\n",write_cmd),CRITICAL);
+	{
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED, ERROR \"%s\"!!!\n",write_cmd,g_strdup(err_text)),CRITICAL);
+	}
 	else
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd),SERIAL_WR);
 	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 	g_static_mutex_unlock(&comms_mutex);
 	if (res != count )
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED!!!\n"),CRITICAL);
+	{
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED, ERROR \"%s\"!!!\n",g_strdup(err_text)),CRITICAL);
+	}
 	else
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
 
@@ -288,6 +339,7 @@ void burn_ecu_flash()
 	extern gint **ms_data_last;
 	gint res = 0;
 	gint i = 0;
+	gchar * err_text = NULL;
 	extern struct Firmware_Details * firmware;
 	extern struct Serial_Params *serial_params;
 	extern gboolean offline;
@@ -311,9 +363,10 @@ void burn_ecu_flash()
 	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
 	{
-		dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, write command failed!!%i\n",res),CRITICAL);
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, ERROR \"%s\"\n",g_strdup(err_text)),CRITICAL);
 	}
-	g_usleep(100000);
+	g_usleep(10000);
 
 	dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"),SERIAL_WR);
 
@@ -342,6 +395,7 @@ void readfrom_ecu(struct Io_Message *message)
 	extern struct Firmware_Details *firmware;
 	extern gboolean connected;
 	extern gchar *handler_types[];
+	gchar *err_text = NULL;
 	extern gboolean offline;
 
 	if(serial_params->open == FALSE)
@@ -362,7 +416,10 @@ void readfrom_ecu(struct Io_Message *message)
 			message->out_len);
 	g_static_mutex_unlock(&comms_mutex);
 	if (result != message->out_len)	
-		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite command to ECU failed\n"),CRITICAL);
+	{
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite command to ECU failed, ERROR \"%s\"\n",g_strdup(err_text)),CRITICAL);
+	}
 
 	else
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str),SERIAL_WR);
@@ -372,10 +429,11 @@ void readfrom_ecu(struct Io_Message *message)
 		g_static_mutex_lock(&comms_mutex);
 		result = write(serial_params->fd,&message->offset,1);
 		g_static_mutex_unlock(&comms_mutex);
-		if (result == -1)
-			dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n"),CRITICAL);
-		else if (result != 1)	
-			dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed\n"),CRITICAL);
+		if (result < 1)
+		{
+			err_text = (gchar *)g_strerror(errno);
+			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed, ERROR \"%s\"\n",g_strdup(err_text)),CRITICAL);
+		}
 		else
 			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset of \"%i\" for raw mem cmd succeeded\n",message->offset),SERIAL_WR);
 	}
@@ -401,3 +459,55 @@ void readfrom_ecu(struct Io_Message *message)
 	}
 }
 
+
+/*!
+ \brief set_ms_page() is called to change the current page being accessed in
+ the firmware. set_ms_page will check to see if any outstanding data has 
+ been sent to the current page, but NOT burned to flash befpre changing pages
+ in that case it will burn the flash before changing the page. 
+ \param ms_page (gint) the page to set to
+ */
+void set_ms_page(gint ms_page)
+{
+	extern struct Firmware_Details *firmware;
+	extern struct Serial_Params *serial_params;
+	extern gint **ms_data;
+	extern gint **ms_data_last;
+	static gint last_page = 0;
+	gint res = 0;
+	gchar * err_text = NULL;
+
+	//printf("fed_page %i, last_page %i\n",ms_page,last_page);
+
+	if ((ms_page > firmware->debug_above) || (last_page > firmware->debug_above))
+		goto skipburn;
+	if ((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0))))
+	{
+		burn_ecu_flash();
+	}
+skipburn:
+
+	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
+	
+	g_static_mutex_lock(&comms_mutex);
+	res = write(serial_params->fd,firmware->page_cmd,1);
+	if (res != 1)
+	{
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU, ERROR \"%s\" \n",firmware->page_cmd,g_strdup(err_text)),CRITICAL);
+	}
+	res = write(serial_params->fd,&ms_page,1);
+	g_static_mutex_unlock(&comms_mutex);
+	if (res != 1)
+	{
+		err_text = (gchar *)g_strerror(errno);
+		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i, ERROR \"%s\"\n",ms_page,g_strdup(err_text)),CRITICAL);
+	}
+
+	last_page = ms_page;
+	g_usleep(5000);
+
+
+	return;
+
+}
