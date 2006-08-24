@@ -64,12 +64,17 @@ void close_debugfile()
  */
 void dbg_func(gchar *str, Dbg_Class class)
 {
-//	struct tm *tm = NULL;
-//	time_t *t = NULL;
+	static struct tm *tm = NULL;
+	static time_t *t = NULL;
+
+	if (!t)
+		t = g_malloc(sizeof(time_t));
 
 	if ((dbg_lvl & class))
 	{
-		g_fprintf(dbgfile,str);
+		time(t);
+		tm = localtime(t);
+		g_fprintf(dbgfile,"%.2i:%.2i:%.2i  %s",tm->tm_hour,tm->tm_min,tm->tm_sec,str);
 	}
 	g_free(str);
 }

@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <gui_handlers.h>
 #include <notifications.h>
 #include <serialio.h>
@@ -71,9 +72,9 @@ void comms_test()
 	extern struct Serial_Params *serial_params;
 	extern gboolean connected;
 	extern gboolean offline;
-	//extern gboolean interrogated;
+	extern gint failurecount;
 
-	dbg_func(g_strdup(__FILE__": comms_test()\n\tCOMMS_TEST\n\n"),CRITICAL);
+	//printf("comms_test\n");
 	
 	if (offline)
 	{
@@ -82,37 +83,6 @@ void comms_test()
 		return;
 	}
 
-
-	/*
-	if ((!connected) && (serial_params->open) && (interrogated))
-	{
-		// Port open but nobody home? 
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tPORT OPEN, NOT Connected, closing serial port!!!\n"),CRITICAL);
-		close_serial();
-		if (!(g_file_test(serial_params->port_name,G_FILE_TEST_EXISTS)))
-		{
-			dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tSerial Port %s NO LONGER exists!!!\n",serial_params->port_name),CRITICAL);
-			return;
-		}
-		else
-		{
-			dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tAttempting to open Port %s\n",serial_params->port_name),CRITICAL);
-			open_serial(serial_params->port_name);
-			setup_serial_params();
-		}
-	}
-	if ((!connected) && (!(serial_params->open)) && (interrogated))
-	{
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tNOT Connected, serial NOT OPEN !!!\n"),CRITICAL);
-		if (g_file_test(serial_params->port_name,G_FILE_TEST_EXISTS))
-		{
-			dbg_func(g_strdup(__FILE__": comms_test()\n\tPort RE-appeared attempting connection!!!\n"),CRITICAL);
-			if (open_serial(serial_params->port_name))
-				setup_serial_params();
-		}
-
-	}
-	*/
 	/* If serial control struct exists, 
 	 * but we don't have connected status, try to reset connection */
 	if (!serial_params->open)
@@ -133,11 +103,14 @@ void comms_test()
 	{
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",g_strdup(err_text)),CRITICAL);
-		connected = FALSE;
+	//	printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",g_strdup(err_text));
 		flush_serial(serial_params->fd, TCIOFLUSH);
 		g_static_mutex_unlock(&comms_mutex);
+		connected = FALSE;
+		failurecount++;
 		return;
 	}
+	
 	g_static_mutex_unlock(&comms_mutex);
 	result = handle_ecu_data(C_TEST,NULL);
 	if (result)	// Success

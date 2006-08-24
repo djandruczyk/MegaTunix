@@ -85,8 +85,6 @@ gint main(gint argc, gchar ** argv)
 	read_config();
 	setup_gui();		
 
-	open_serial(serial_params->port_name);
-	setup_serial_params();	/* Setup the serial port for I/O */
 	/* Startup the serial General I/O handler.... */
 	//io_thread = g_thread_create(thread_dispatcher,
 	g_thread_create(thread_dispatcher,
@@ -95,6 +93,9 @@ gint main(gint argc, gchar ** argv)
 			NULL); //GError Pointer
 
 	dispatcher_id = gtk_timeout_add(10,(GtkFunction)dispatcher,NULL);
+
+	io_cmd(IO_OPEN_SERIAL,(gpointer)serial_params->port_name);
+
 	/* Kickoff fast interrogation */
 	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
 

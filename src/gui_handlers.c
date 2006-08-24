@@ -96,6 +96,8 @@ void leave(GtkWidget *widget, gpointer data)
 	if ((connected) && (interrogated))
 		io_cmd(IO_BURN_MS_FLASH,NULL);
 
+	io_cmd(IO_CLOSE_SERIAL,NULL);
+
 	/* This makes us wait until the dispatch queue finishes */
 	while (g_async_queue_length(dispatch_queue) > 0)
 		gtk_main_iteration();
@@ -128,7 +130,6 @@ void leave(GtkWidget *widget, gpointer data)
 
 	stop_datalogging();
 	save_config();
-	close_serial();
 	if (iofile)	
 		close_file(iofile);
 	/* Free all buffers */
@@ -155,14 +156,11 @@ gboolean comm_port_change(GtkEditable *editable)
 	gtk_widget_modify_text(GTK_WIDGET(editable),GTK_STATE_NORMAL,&black);
 	if(serial_params->open)
 	{
-		close_serial();
+		io_cmd(IO_CLOSE_SERIAL,NULL);
 	}
 	result = g_file_test(port,G_FILE_TEST_EXISTS);
 	if (result)
-	{
-		open_serial(port);
-		setup_serial_params();
-	}
+		io_cmd(IO_OPEN_SERIAL,g_strdup(port));
 	else
 	{
 		update_logbar("comms_view","warning",g_strdup_printf("\"%s\" File not found\n",port),TRUE,FALSE);

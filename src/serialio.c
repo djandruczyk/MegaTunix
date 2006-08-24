@@ -35,6 +35,7 @@
 
 struct Serial_Params *serial_params;
 gboolean connected = FALSE;
+gboolean link_up = FALSE;
 GStaticMutex comms_mutex = G_STATIC_MUTEX_INIT;
 
 /*!
@@ -51,7 +52,6 @@ gboolean open_serial(gchar * port_name)
 	gint fd = -1;
 	gchar *device = NULL;	/* temporary unix name of the serial port */
 	gchar * err_text = NULL;
-	serial_params->port_name = g_strdup(port_name); 
 
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY */
@@ -67,24 +67,27 @@ gboolean open_serial(gchar * port_name)
 	{
 		/* SUCCESS */
 		/* NO Errors occurred opening the port */
+		serial_params->port_name = g_strdup(port_name); 
 		serial_params->open = TRUE;
+		link_up = TRUE;
 		serial_params->fd = fd;
 		dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
-		update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
+		thread_update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 	}
 	else
 	{
 		/* FAILURE */
 		/* An Error occurred opening the port */
-		connected = FALSE;
+		link_up = FALSE;
+		serial_params->port_name = NULL;
 		serial_params->open = FALSE;
 		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
+		//printf("Error Opening \"%s\", Error Code: \"%s\"\n",device,g_strdup(err_text));
 		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,g_strdup(err_text)),CRITICAL);
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"\n",device,err_text));
 
-		update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",device,err_text),TRUE,FALSE);
-		//g_free(err_text);
+		thread_update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",device,err_text),TRUE,FALSE);
 	}
 
 	g_free(device);
@@ -220,9 +223,6 @@ void setup_serial_params()
  */
 void close_serial()
 {
-	extern GHashTable *dynamic_widgets;
-	GtkWidget *widget = NULL;
-
 	if (serial_params->open == FALSE)
 		return;
 
@@ -235,14 +235,11 @@ void close_serial()
 	serial_params->fd = -1;
 	serial_params->open = FALSE;
 	connected = FALSE;
-	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_connected_label")))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
-	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ww_connected_label")))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+	link_up = FALSE;
 
 	/* An Closing the comm port */
 	dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"),SERIAL_RD|SERIAL_WR);
-	update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
+	thread_update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
 	return;
 }
 

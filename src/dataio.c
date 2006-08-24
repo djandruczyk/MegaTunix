@@ -16,6 +16,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
+#include <errno.h>
 #include <ms_structures.h>
 #include <post_process.h>
 #include <rtv_processor.h>
@@ -52,6 +53,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	gboolean bad_read = FALSE;
 	guchar buf[2048];
 	guchar *ptr = buf;
+	gchar *err_text = NULL;
 	struct Raw_Runtime_Std *raw_runtime = NULL;
 	extern gint **ms_data;
 	extern gint **ms_data_last;
@@ -84,7 +86,11 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 
 				/* Increment bad read counter.... */
 				if (res <= 0)
+				{
+					err_text = (gchar *)g_strerror(errno);
+					dbg_func(g_strdup_printf("\tNULL_HANDLER I/O ERROR: \"%s\"\n",err_text),CRITICAL);
 					zerocount++;
+				}
 
 				dbg_func(g_strdup_printf("\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 2)  /* 3 bad reads, abort */
@@ -115,7 +121,11 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 
 				/* Increment bad read counter.... */
 				if (res <= 0)
+				{
+					err_text = (gchar *)g_strerror(errno);
+					dbg_func(g_strdup_printf("\tC_TEST I/O ERROR: \"%s\"\n",err_text),CRITICAL);
 					zerocount++;
+				}
 
 				dbg_func(g_strdup_printf("\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 2)  /* 3 bad reads, abort */
@@ -153,7 +163,11 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 
 				// Increment bad read counter....
 				if (res <= 0)
+				{
+					err_text = (gchar *)g_strerror(errno);
+					dbg_func(g_strdup_printf("\tGET_ERROR I/O ERROR: \"%s\"\n",err_text),CRITICAL);
 					zerocount++;
+				}
 
 				dbg_func(g_strdup_printf("\tGET_ERROR read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 2)  // 3 bad reads, abort
@@ -194,7 +208,11 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 
 				// Increment bad read counter....
 				if (res <= 0)
+				{
+					err_text = (gchar *)g_strerror(errno);
+					dbg_func(g_strdup_printf("\tRT_VARS I/O ERROR: \"%s\"\n",err_text),CRITICAL);
 					zerocount++;
+				}
 
 				dbg_func(g_strdup_printf("\tRT_VARS read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 2)  // 3 bad reads, abort
@@ -258,7 +276,11 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 
 				// Increment bad read counter....
 				if (res <= 0)
+				{
+					err_text = (gchar *)g_strerror(errno);
+					dbg_func(g_strdup_printf("\tVE_BLOCK I/O ERROR: \"%s\"\n",err_text),CRITICAL);
 					zerocount++;
+				}
 
 				dbg_func(g_strdup_printf("\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 2)  // 3 bad reads, abort
@@ -302,7 +324,11 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 
 				// Increment bad read counter....
 				if (res <= 0)
+				{
+					err_text = (gchar *)g_strerror(errno);
+					dbg_func(g_strdup_printf("\tRAW_MEMORY_DUMP I/O ERROR: \"%s\"\n",err_text),CRITICAL);
 					zerocount++;
+				}
 
 				dbg_func(g_strdup_printf("\tread %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
 				if (zerocount >= 2)  // 3 bad reads, abort

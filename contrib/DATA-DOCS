@@ -55,6 +55,9 @@ KnockBoost	107 BOOST, knock_ctrl, PSI, x/0.147 conv,  0-20 ctrl span
 BoostMaxKn	108 BOOST, knock_ctrl, PSI, x/0.147 conv,  0-20 ctrl span
 
 OvrBKpa         pg0 044 "KPa", no conv, (100 - 255) span
+SparkCutBase    pg0 078 "Sparks", (x - 1) conv, (5 - 20) span
+OvrBCutType     pg0 076 [4:5] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
+SparkCutBNum    pg0 084 "Sparks", no conv, (0 - 20) span
 
 ----------------------------------------------------------------------------
 KNOCK CONTROL  100% DONE
@@ -91,6 +94,8 @@ LachDeg		042 LAUNCH, "Deg" (x/0.352) + 28.4 conv  -10<->45 deg range
 LachTps		041 LAUNCH, "RAW ADC" no conv, 0-255
 LaunchLim	020 LAUNCH, "RPM" x/100, 0-25500 range
 VLaunch		046 LAUNCH, bitfield [1:1] "Off", "On"
+HCutLCType      pg0 076 [0:1] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
+HCutLCSpark     pg0 077 "Sparks", no conv, (0 - 20) span
 LC_flatsel	124 LAUNCH, "RPM" x/100 conv, 0-25500 range
 LC_f_slim	140 LAUNCH, "RPM" x/100 conv, 3000-6000 range
 LC_f_limangle	141 LAUNCH, "Deg" (x/0.352) + 28.4 conv -10<->45 deg range
@@ -363,13 +368,10 @@ Stg2ndParmDlt 	pg3 181 "kPa", no conv, (0 - 255) span
 REV_LIMITER
 ----------------------------------------------------------------------------
 
+Hard Cut type settings apply to REvlimiter, launchctrl and OVer boost protect
 HCutType	pg0 046 [4:5] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
 HCutSpark       pg0 045 "Sparks", no conv, (0 - 20) span
-HCutLCType      pg0 076 [0:1] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
-HCutLCSpark     pg0 077 "Sparks", no conv, (0 - 20) span
 SparkCutBase    pg0 078 "Sparks", (x - 1) conv, (5 - 20) span
-OvrBCutType     pg0 076 [4:5] bitfield, "INVALID", "Spark Cut Only", "Fuel Only", "Fuel & Spark"
-SparkCutBNum    pg0 084 "Sparks", no conv, (0 - 20) span
 SoftRevLim    	pg0 002 "rpm", (x/100) conv, (100 - 25500) span
 SoftLimRetard 	pg0 003 "deg", ((x*0.352)+28.4) conv (-10 - 80) span
 SoftLimMax    	pg0 004 "s", (x/0.1) conv, (0 - 25.5) span

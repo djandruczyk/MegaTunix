@@ -42,6 +42,7 @@ extern gboolean offline;			/* ofline mode with MS */
 extern gboolean interrogated;			/* valid connection with MS */
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 
+gint failurecount = 0;
 
 /*!
  \brief io_cmd() is called from all over the gui to kick off a threaded I/O
@@ -74,6 +75,17 @@ void io_cmd(Io_Command cmd, gpointer data)
 	 */
 	switch (cmd)
 	{
+		case IO_OPEN_SERIAL:
+			message = initialize_io_message();
+			message->payload = data;
+			message->command = OPEN_SERIAL;
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_CLOSE_SERIAL:
+			message = initialize_io_message();
+			message->command = CLOSE_SERIAL;
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
 		case IO_REALTIME_READ:
 			message = initialize_io_message();
 			message->cmd = cmd;
@@ -326,6 +338,8 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *io_queue;
 	extern GAsyncQueue *dispatch_queue;
 	extern struct Serial_Params *serial_params;
+	extern gboolean link_up;
+	static gchar * last_name = NULL;
 	struct Io_Message *message = NULL;	
 
 	/* Endless Loop, wait for message, processs and repeat... */
@@ -333,21 +347,49 @@ void *thread_dispatcher(gpointer data)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
-		if ((!(serial_params->open)) && (!offline))
-		{
-			thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMM PORT not open!!! Check COMMS tab"));
-			queue_function(g_strdup("conn_warning"));
 
+		if (!link_up)
+			failurecount++;
+		if (failurecount > 20)
+		{
+			if (serial_params->port_name)
+				last_name = g_strdup(serial_params->port_name);
+			io_cmd(IO_CLOSE_SERIAL,NULL);
+			io_cmd(IO_OPEN_SERIAL,g_strdup(last_name));
+			failurecount = 0;
 		}
-		if ((serial_params->open) && (!connected) && (!offline))
+		if ((!connected) && (link_up) && (!offline))
 			comms_test();
 
 		switch ((CmdType)message->command)
 		{
+			case OPEN_SERIAL:
+				if (link_up)
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tOpen Serial called but port is already OPEN, ERROR!\n"),SERIAL_RD|SERIAL_WR|THREADS);
+				else
+				{
+					if (open_serial((gchar *)message->payload))
+					{
+						setup_serial_params();
+						link_up = TRUE;
+					}
+					else
+						link_up = FALSE;
+				}
+				break;
+			case CLOSE_SERIAL:
+				if (!link_up)
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tClose Serial called but port is already closed, ERROR!\n"),SERIAL_RD|SERIAL_WR|THREADS);
+				else
+					close_serial();
+				break;
 			case INTERROGATION:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n"),SERIAL_RD|SERIAL_WR|THREADS);
-				if ((!connected) && (!offline))
-					comms_test();
+				if (!link_up)
+				{
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Interrogate_ecu requested, aborting call\n"),CRITICAL);
+					break;
+				}
 				if ((connected) && (!offline))
 				{
 					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Interrogating ECU..."));
@@ -368,11 +410,21 @@ void *thread_dispatcher(gpointer data)
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tComms Test failed, NOT Connected!!\n"),CRITICAL);
 				break;
 			case READ_CMD:
+				if (!link_up)
+				{
+					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tLINK DOWN, read_command requested, call aborted \n"),CRITICAL);
+					break;
+				}
 				dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD|THREADS);
 				if (connected)
 					readfrom_ecu(message);
 				break;
 			case WRITE_CMD:
+				if (!link_up)
+				{
+					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tLINK DOWN, write_command requested, call aborted \n"),CRITICAL);
+					break;
+				}
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_command requested\n"),SERIAL_WR|THREADS);
 				if ((connected) || (offline))
 					writeto_ecu(message);
@@ -380,6 +432,11 @@ void *thread_dispatcher(gpointer data)
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twriteto_ecu skipped, NOT Connected!!\n"),CRITICAL);
 				break;
 			case BURN_CMD:
+				if (!link_up)
+				{
+					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tLINK DOWN, burn_command requested, call aborted \n"),CRITICAL);
+					break;
+				}
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_command requested\n"),SERIAL_WR|THREADS);
 				if ((connected) || (offline))
 					burn_ecu_flash();
