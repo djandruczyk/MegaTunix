@@ -99,9 +99,9 @@ trypop:
 			{
 				case UPD_LOGBAR:
 					t_message = (struct Text_Message *)message->payload;
-					gdk_threads_enter();
+					//gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
-					gdk_threads_leave();
+					//gdk_threads_leave();
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;

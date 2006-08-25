@@ -91,6 +91,7 @@ void leave(GtkWidget *widget, gpointer data)
 	extern GAsyncQueue *io_queue;
 	struct Io_File * iofile = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	gint count = 0;
 
 	if (leaving)
 		return;
@@ -132,21 +133,25 @@ void leave(GtkWidget *widget, gpointer data)
 	io_cmd(IO_CLOSE_SERIAL,NULL);
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after close_serial\n"),CRITICAL);
 
-	/* This makes us wait until the dispatch queue finishes */
-	while (g_async_queue_length(io_queue) > 0)
-	{
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)),CRITICAL);
-		gtk_main_iteration();
-	}
-	while (g_async_queue_length(dispatch_queue) > 0)
-	{
-		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining Dispatch Queue,  current length %i\n",g_async_queue_length(dispatch_queue)),CRITICAL);
-		gtk_main_iteration();
-	}
-
 	if (statuscounts_id)
 		gtk_timeout_remove(statuscounts_id);
 	statuscounts_id = 0;
+
+	/* This makes us wait until the dispatch queue finishes */
+	while ((g_async_queue_length(io_queue) > 0) && (count < 10))
+	{
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)),CRITICAL);
+		gtk_main_iteration();
+		count++;
+	}
+	count = 0;
+	while ((g_async_queue_length(dispatch_queue) > 0) && (count < 10))
+	{
+		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining Dispatch Queue,  current length %i\n",g_async_queue_length(dispatch_queue)),CRITICAL);
+		gtk_main_iteration();
+		count++;
+	}
+
 
 	if (dispatcher_id)
 		gtk_timeout_remove(dispatcher_id);

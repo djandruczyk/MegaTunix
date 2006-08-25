@@ -74,8 +74,8 @@ void init(void)
 	interval_min = 5;	/* 5 millisecond minimum interval delay */
 	interval_step = 5;	/* 5 ms steps */
 	interval_max = 1000;	/* 1000 millisecond maximum interval delay */
-	width = 717;		/* window width */
-	height = 579;		/* window height */
+	width = 640;		/* window width */
+	height = 480;		/* window height */
 	main_x_origin = 160;	/* offset from left edge of screen */
 	main_y_origin = 120;	/* offset from top edge of screen */
 
