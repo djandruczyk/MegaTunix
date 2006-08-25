@@ -44,11 +44,6 @@ void update_comms_status(void)
 	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = NULL;
 
-	if (connected)
-		update_logbar("comms_view",NULL,g_strdup("ECU Comms Test Successfull\n"),TRUE,FALSE);
-	else
-		update_logbar("comms_view","warning",g_strdup("I/O with ECU Timeout\n"),TRUE,FALSE);
-
 	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"runtime_connected_label")))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
 	if (NULL != (widget = g_hash_table_lookup(dynamic_widgets,"ww_connected_label")))
@@ -88,6 +83,8 @@ void comms_test()
 	if (!serial_params->open)
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
+		thread_update_logbar("comms_view","warning",g_strdup("Serial Port is NOT opened can NOT check ecu comms...\n"),TRUE,FALSE);
+
 		return;
 	}
 
@@ -104,6 +101,7 @@ void comms_test()
 		g_static_mutex_unlock(&comms_mutex);
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),CRITICAL);
+		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),TRUE,FALSE);
 		//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text);
 		flush_serial(serial_params->fd, TCIOFLUSH);
 		connected = FALSE;
@@ -119,6 +117,7 @@ void comms_test()
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"),SERIAL_RD);
 		queue_function(g_strdup("kill_conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("ECU Connected..."));
+		thread_update_logbar("comms_view",NULL,g_strdup_printf("ECU Comms Test Successfull\n"),TRUE,FALSE);
 
 	}
 	else
@@ -128,6 +127,7 @@ void comms_test()
 		queue_function(g_strdup("conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"),IO_PROCESS);
+		thread_update_logbar("comms_view","warning",g_strdup_printf("I/O with ECU Timeout\n"),TRUE,FALSE);
 	}
 	/* Flush the toilet again.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);

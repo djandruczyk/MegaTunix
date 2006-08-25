@@ -87,8 +87,6 @@ void stop_logviewer_playback()
  */
 void stop_realtime_tickler()
 {
-	extern GAsyncQueue *io_queue;
-	extern gint dispatcher_id;
 	extern gboolean leaving;
 
 	if (realtime_id)

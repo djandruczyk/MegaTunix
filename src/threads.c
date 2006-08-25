@@ -339,8 +339,6 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *dispatch_queue;
 	extern gboolean link_up;
 	extern gchar * serial_port_name;
-	extern gint realtime_id;
-	static gboolean restart_realtime = FALSE;
 	struct Io_Message *message = NULL;	
 
 	/* Endless Loop, wait for message, processs and repeat... */

@@ -1341,7 +1341,7 @@ void update_widget(gpointer object, gpointer user_data)
 		else if ((int)g_object_get_data(G_OBJECT(widget),"handler") == TRIGGER_ANGLE)
 		{
 			spconfig_offset = (gint)g_object_get_data(G_OBJECT(widget),"spconfig_offset");
-			switch (ms_data[page][spconfig_offset] & 0x03)
+			switch ((ms_data[page][spconfig_offset] & 0x03))
 			{
 				case 2:
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value+45);
