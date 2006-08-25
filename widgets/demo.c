@@ -19,8 +19,8 @@ int main (int argc, char **argv)
 			G_CALLBACK (gtk_main_quit), NULL);
 
 	gtk_widget_show_all (window);
-	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), -13.0, 20.0);
-	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 19.0);
+	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), -13.0, 21.0);
+	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), -5.0);
 	float value = mtx_gauge_face_get_value (MTX_GAUGE_FACE (gauge));
 	printf ("UD is %f\n", value);
 
