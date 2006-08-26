@@ -15,7 +15,7 @@ G_DEFINE_TYPE (MtxGaugeFace, mtx_gauge_face, GTK_TYPE_DRAWING_AREA);
 
 typedef struct
 {
-	gboolean dragging;
+	gint dragging;
 }
 MtxGaugeFacePrivate;
 
@@ -27,8 +27,6 @@ static gboolean mtx_gauge_face_expose (GtkWidget *gauge, GdkEventExpose *event);
 static gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
 					     GdkEventButton *event);
 static void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge);
-static gboolean mtx_gauge_face_motion_notify (GtkWidget *gauge,
-					      GdkEventMotion *event);
 static gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 					       GdkEventButton *event);
 
@@ -38,6 +36,7 @@ static void mtx_gauge_face_set_value_internal (MtxGaugeFace *gauge, float value)
 	mtx_gauge_face_redraw_canvas (gauge);//show new value
 }
 
+/* Changes value stored in widget, and gets widget redrawn to show change */
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -46,24 +45,53 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value)
 	g_object_thaw_notify (G_OBJECT (gauge));
 }
 
+/* Returns value that needle currently points to */
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->value;
 }
 
+/* Changes the lower and upper value bounds */
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
 	gauge->lbound = value1;
 	gauge->ubound = value2;
 	gauge->range = gauge->ubound -gauge->lbound;
-	printf ("range is %f\n", gauge->range);
+	g_object_thaw_notify (G_OBJECT (gauge));
+}
+
+/* Set number of ticks to be shown in the range of the drawn gauge */
+void mtx_gauge_face_set_resolution (MtxGaugeFace *gauge, int ticks)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->num_ticks = ticks;
+	g_object_thaw_notify (G_OBJECT (gauge));
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+int mtx_gauge_face_get_resolution (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->num_ticks;
+}
+
+/* Changes the span of the gauge, specified in radians the start and stop position. */
+/* Right is 0 going clockwise to M_PI (180 Degrees) back to 0 (2 * M_PI) */
+void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float stop_radian)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->start_radian = start_radian;
+	gauge->stop_radian = stop_radian;
+	g_object_thaw_notify (G_OBJECT (gauge));
 }
 
 static void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 {
-	printf ("class init called \n");
 	GObjectClass *obj_class;
 	GtkWidgetClass *widget_class;
 
@@ -74,36 +102,31 @@ static void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class->expose_event = mtx_gauge_face_expose;
 	widget_class->button_press_event = mtx_gauge_face_button_press;
 	widget_class->button_release_event = mtx_gauge_face_button_release;
-	widget_class->motion_notify_event = mtx_gauge_face_motion_notify;
 
-	/* MtxGaugeFace signals */
 	g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
 }
 
 static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 {
-	printf ("instance init called \n");
+	//which events widget receives
 	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
-			       | GDK_BUTTON_RELEASE_MASK
-			       | GDK_POINTER_MOTION_MASK);
+			       | GDK_BUTTON_RELEASE_MASK);
 
-	gauge->value = 0.0;
+	gauge->value = 0.0;//default values
 	gauge->lbound = -1.0;
 	gauge->ubound = 1.0;
-	gauge->start_radian = 1.5 * M_PI;//M_PI is left, 0 is right
-	gauge->stop_radian = 3 * M_PI;
-	gauge->num_ticks = 36;
+	gauge->start_radian = 0.75 * M_PI;//M_PI is left, 0 is right
+	gauge->stop_radian = 2.25 * M_PI;
+	gauge->num_ticks = 24;
 	gauge->range = gauge->ubound -gauge->lbound;
-	printf ("range is %f\n", gauge->range);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 static void draw (GtkWidget *gauge, cairo_t *cr)
 {
-	double x, y;
-	double radius;
-	int i;
-	float current_value;
+	gdouble x, y;
+	gdouble radius;
+	gfloat current_value;
 
 	x = gauge->allocation.width / 2;
 	y = gauge->allocation.height / 2;
@@ -119,45 +142,40 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	cairo_set_source_rgba (cr, 0, 0, 0, 1.0);
 	cairo_stroke (cr);
 
-	printf ("radius is %f\n", radius);
-	printf ("oringal x is is %f\n", x);
-	printf ("oringal y is is %f\n", y);
 	/* gauge ticks */
-	float arc = (MTX_GAUGE_FACE (gauge)->stop_radian - MTX_GAUGE_FACE (gauge)->start_radian) / (2 * M_PI);
-	printf ("arc is %f\n", arc);
-	int total_ticks = MTX_GAUGE_FACE (gauge)->num_ticks / arc;//amount of ticks if entire gauge was used
-	printf ("total ticks is %d\n", total_ticks);
-	int left_tick = total_ticks * (MTX_GAUGE_FACE (gauge)->start_radian / (2 * M_PI));//start tick
-	int right_tick = total_ticks * (MTX_GAUGE_FACE (gauge)->stop_radian / (2 * M_PI));//end tick
+	gfloat arc = (MTX_GAUGE_FACE (gauge)->stop_radian - MTX_GAUGE_FACE (gauge)->start_radian) / (2 * M_PI);
+	gint total_ticks = MTX_GAUGE_FACE (gauge)->num_ticks / arc;//amount of ticks if entire gauge was used
+	gint left_tick = total_ticks * (MTX_GAUGE_FACE (gauge)->start_radian / (2 * M_PI));//start tick
+	gint right_tick = total_ticks * (MTX_GAUGE_FACE (gauge)->stop_radian / (2 * M_PI));//end tick
 
-	printf ("left is %d\tright is %d\n", left_tick, right_tick);
-	for (i = left_tick ; i <= right_tick; i++)
+	gint counter;
+	for (counter = left_tick ; counter <= right_tick; counter++)
 	{
-		int inset;
+		gint inset;
 		cairo_save (cr); /* stack-pen-size */
-		if (i % 3 == 0)
+		if (counter % 3 == 0)
 		{
-			inset = (int) (0.2 * radius);
+			inset = (gint) (0.2 * radius);
 		}
 		else
 		{
-			inset = (int) (0.1 * radius);
+			inset = (gint) (0.1 * radius);
 			cairo_set_line_width (cr, 0.5 *
 					      cairo_get_line_width (cr));
 		}
 		cairo_move_to (cr,
-			       x + (radius - inset) * cos (i * M_PI / (total_ticks / 2)),
-			       y + (radius - inset) * sin (i * M_PI / (total_ticks / 2)));
+			       x + (radius - inset) * cos (counter * M_PI / (total_ticks / 2)),
+			       y + (radius - inset) * sin (counter * M_PI / (total_ticks / 2)));
 		cairo_line_to (cr,
-			       x + (radius * cos (i * (M_PI / (total_ticks / 2)))),
-			       y + (radius * sin (i * (M_PI / (total_ticks / 2)))));
+			       x + (radius * cos (counter * (M_PI / (total_ticks / 2)))),
+			       y + (radius * sin (counter * (M_PI / (total_ticks / 2)))));
 		cairo_stroke (cr);
 		cairo_restore (cr); /* stack-pen-size */
 	}
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
                                CAIRO_FONT_WEIGHT_BOLD);
 	cairo_set_font_size (cr, radius / 10);
-	char message[30];
+	gchar message[30];
 
 /* 	strncpy (message, "left", sizeof (message) - 1); */
 /* 	cairo_move_to (cr, (x / 3) - (strnlen (message, sizeof(message) - 1) * */
@@ -171,7 +189,6 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 
 	/* gauge hands */
 	current_value = MTX_GAUGE_FACE (gauge)->value;
-	printf ("value is %f\n", current_value);
 	cairo_save (cr);
 	cairo_set_line_width (cr, 2.5 * cairo_get_line_width (cr));
 	cairo_move_to (cr, x, y);
@@ -179,10 +196,10 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	gfloat arc_rad = (2 * M_PI) * arc;//angle in radians of total arc
   	cairo_line_to (cr, x + radius * sin ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (arc_rad) /
 					     MTX_GAUGE_FACE (gauge)->range +//needle neutral is 1.5 M_PI
-					     ((1.5 * M_PI) - MTX_GAUGE_FACE (gauge)->start_radian)),
+					     (MTX_GAUGE_FACE (gauge)->start_radian) - (1.5 * M_PI)),
 		       y + radius * -cos ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (arc_rad) /
 					  MTX_GAUGE_FACE (gauge)->range +//needle neutral is 1.5 M_PI
-					  ((1.5 * M_PI) - MTX_GAUGE_FACE (gauge)->start_radian)));
+					  (MTX_GAUGE_FACE (gauge)->start_radian) - (1.5 * M_PI)));
 
 	cairo_set_font_size (cr, radius / 5);
 	snprintf (message, sizeof (message) - 1, "%f", current_value);
@@ -204,7 +221,6 @@ static gboolean mtx_gauge_face_expose (GtkWidget *gauge, GdkEventExpose *event)
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
 	cairo_clip (cr);
-	printf ("expose called\n");
 	draw (gauge, cr);
 
 	cairo_destroy (cr);
@@ -238,15 +254,6 @@ static void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 	gdk_region_destroy (region);
 }
 
-static gboolean mtx_gauge_face_motion_notify (GtkWidget *gauge,
-					      GdkEventMotion *event)
-{
-	MtxGaugeFacePrivate *priv;
-	printf ("notify\n");
-	priv = MTX_GAUGE_FACE_GET_PRIVATE (gauge);
-	return FALSE;
-}
-
 static gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 					       GdkEventButton *event)
 {
@@ -256,8 +263,7 @@ static gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 	return FALSE;
 }
 
-GtkWidget *mtx_gauge_face_new (void)
+GtkWidget *mtx_gauge_face_new ()
 {
-	printf ("new face gauge\n");
 	return GTK_WIDGET (g_object_new (MTX_TYPE_GAUGE_FACE, NULL));
 }
