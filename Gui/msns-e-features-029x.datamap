@@ -31,7 +31,25 @@ bind_to_list=edis_controls
 
 #------ Labels --------------------------------------------------------------
 
+[fuel_transition_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=ve_switch
+
+[spark_transition_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=spark_switch
+
 [2nd_o2_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=dt_controls
+
+[inj2_cranking_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=0
@@ -246,8 +264,8 @@ offset=33
 bitval=1
 bitshift=4
 bitmask=16
-toggle_groups=dt_controls,alt_simul
-group_states=ENABLED,DISABLED
+toggle_groups=dt_controls,alt_simul,nondt_controls
+group_states=ENABLED,DISABLED,DISABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Dual Table mode is used to have independant fueling tables for each of the two injector outputs.  When enabled, Fuel table 2 drives injector two and fuel tables 1 OR 3 drive injector channel 1.  Table three is switched in based on an external input (nitrous, or other).
@@ -316,6 +334,84 @@ bind_to_list=dt_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Disable the use of ADC6 as a secondary EGO input for DT mode ONLY
+
+[inj2_cr_disabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitval=0
+bitshift=6
+bitmask=64
+bind_to_list=dt_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Disables the firing of injector channel two during cranking.
+
+[inj2_cr_enabled_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitval=1
+bitshift=6
+bitmask=64
+bind_to_list=dt_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Enables the firing of injector channel two during cranking.
+
+[switch_ve_no_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=92
+bitval=0
+bitshift=0
+bitmask=1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Never switches VEtables even if NOS is active, or pin6 goes low.
+
+[switch_ve_yes_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=92
+bitval=1
+bitshift=0
+bitmask=1
+toggle_groups=ve_switch
+group_states=ENABLED
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Switching the VEtables to VE3 from VE1 when NOS system is active OR pin 6 input is LOW.
+
+[switch_sp_no_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=0
+bitshift=7
+bitmask=128
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Never switches Spark Tables even if NOS is active, or pin6 goes low.
+
+[switch_sp_yes_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=76
+bitval=1
+bitshift=7
+bitmask=128
+toggle_groups=spark_switch
+group_states=ENABLED
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Switching the Spark tables to SP2 from SP1 when NOS system is active OR pin 6 input is LOW.
 
 [nos_enabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,bind_to_list,dl_type,handler,tooltip
@@ -566,3 +662,29 @@ bind_to_list=edis_controls,multispark
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multispark helps improve combustion and emissions at low RPM's.
+
+[fuel_switch_delay_spin]
+keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=93
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=250
+bind_to_list=ve_switch
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the fuel tables are transitioned from VE1 to VE3.
+
+[spark_switch_delay_spin]
+keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=87
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+raw_upper=250
+bind_to_list=spark_switch
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the spark tables are transitioned from SP1 to SP2.

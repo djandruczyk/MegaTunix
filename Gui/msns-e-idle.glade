@@ -1391,7 +1391,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="idle_tps_thresh_label">
+				    <widget class="GtkLabel" id="idle_adc_tps_thresh_label">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">TPS Threshold (ADC)</property>
 				      <property name="use_underline">False</property>

@@ -56,6 +56,7 @@ gboolean load_gui_tabs(void)
 	GHashTable *groups = NULL;
 	struct BindGroup *bindgroup = NULL;
 	extern GtkWidget * notebook;
+	extern gboolean leaving;
 
 	if (!firmware)
 		return FALSE;
@@ -130,10 +131,11 @@ gboolean load_gui_tabs(void)
 			}
 			cfg_free(cfgfile);
 			g_free(cfgfile);
+			update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 		}
 		else
 		{
-			update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup_printf("\nDatamap File: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf(" Could not be processed!\n"),FALSE,FALSE);
 		}
@@ -143,12 +145,13 @@ gboolean load_gui_tabs(void)
 		i++;
 
 		/* Allow gui to update as it should.... */
+		if (leaving)
+			return FALSE;
 		gdk_threads_enter();
 		while (gtk_events_pending())
 			gtk_main_iteration();
 		gdk_threads_leave();
 
-		update_logbar("interr_view",NULL,g_strdup_printf(" completed.\n"),FALSE,FALSE);
 
 	}
 	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete! "),FALSE,FALSE);

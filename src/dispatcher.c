@@ -99,9 +99,7 @@ trypop:
 			{
 				case UPD_LOGBAR:
 					t_message = (struct Text_Message *)message->payload;
-					//gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear);
-					//gdk_threads_leave();
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
@@ -130,9 +128,9 @@ trypop:
 						case MTX_TITLE:
 							set_title(g_strdup(w_update->msg));
 							break;
-//						case MTX_SPINBUTTON:
-//							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
-//							break;
+							//						case MTX_SPINBUTTON:
+							//							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
+							//							break;
 					}
 					dealloc_w_update(w_update);
 					message->payload = NULL;
@@ -256,10 +254,10 @@ trypop:
 					break;
 			}
 
-		gdk_threads_enter();
-		while (gtk_events_pending())
-			gtk_main_iteration();
-		gdk_threads_leave();
+			gdk_threads_enter();
+			while (gtk_events_pending())
+				gtk_main_iteration();
+			gdk_threads_leave();
 		}
 	}
 	dealloc_message(message);

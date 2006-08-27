@@ -97,23 +97,9 @@ void leave(GtkWidget *widget, gpointer data)
 		return;
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"),CRITICAL);
 	g_static_mutex_lock(&mutex);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
 	/* Stop timeout functions */
 	leaving = TRUE;
-	dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
-
-	if (dynamic_widgets)
-	{
-		if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
-			iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
-	}
-
-	if (iofile)	
-		close_file(iofile);
-	dbg_func(g_strdup_printf(__FILE__": LEAVE() after iofile\n"),CRITICAL);
-
-	stop_datalogging();
-	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"),CRITICAL);
-
 	if(realtime_id)
 		stop_realtime_tickler();
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtiem\n"),CRITICAL);
@@ -124,6 +110,23 @@ void leave(GtkWidget *widget, gpointer data)
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_playback\n"),CRITICAL);
 	playback_id = 0;
 
+	if (statuscounts_id)
+		gtk_timeout_remove(statuscounts_id);
+	statuscounts_id = 0;
+
+	stop_datalogging();
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"),CRITICAL);
+	if (dynamic_widgets)
+	{
+		if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
+			iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
+	}
+
+	if (iofile)	
+		close_file(iofile);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after iofile\n"),CRITICAL);
+
+
 	/* Commits any pending data to ECU flash */
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() before burn\n"),CRITICAL);
 	if ((connected) && (interrogated))
@@ -133,12 +136,8 @@ void leave(GtkWidget *widget, gpointer data)
 	io_cmd(IO_CLOSE_SERIAL,NULL);
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after close_serial\n"),CRITICAL);
 
-	if (statuscounts_id)
-		gtk_timeout_remove(statuscounts_id);
-	statuscounts_id = 0;
-
 	/* This makes us wait until the dispatch queue finishes */
-	while ((g_async_queue_length(io_queue) > 0) && (count < 10))
+	while ((g_async_queue_length(io_queue) > 0) && (count < 30))
 	{
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)),CRITICAL);
 		gtk_main_iteration();
@@ -148,10 +147,10 @@ void leave(GtkWidget *widget, gpointer data)
 	while ((g_async_queue_length(dispatch_queue) > 0) && (count < 10))
 	{
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining Dispatch Queue,  current length %i\n",g_async_queue_length(dispatch_queue)),CRITICAL);
+		g_async_queue_try_pop(dispatch_queue);
 		gtk_main_iteration();
 		count++;
 	}
-
 
 	if (dispatcher_id)
 		gtk_timeout_remove(dispatcher_id);
@@ -161,10 +160,11 @@ void leave(GtkWidget *widget, gpointer data)
 	// runtime gui is finished updating
 	g_static_mutex_unlock(&rtv_mutex); 
 
-	close_debugfile();
 	save_config();
 	/* Free all buffers */
 	mem_dealloc();
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() config saved, mem deallocated, closing log and exiting\n"),CRITICAL);
+	close_debugfile();
 	g_static_mutex_unlock(&mutex);
 	gtk_main_quit();
 	return;
@@ -329,6 +329,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = 0;
 	gint table_num = -1;
 	gchar * swap_list = NULL;
+	gchar * set_labels = NULL;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
@@ -350,6 +351,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	swap_list = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_labels");
+	set_labels = (gchar *)g_object_get_data(G_OBJECT(widget),"set_widgets_label");
 
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
@@ -412,6 +414,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	}
 
 	/* Swaps the label of another control based on widget state... */
+	if ((set_labels) && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+		set_widget_labels(set_labels);
 	if (swap_list)
 		swap_labels(swap_list,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
@@ -1169,6 +1173,8 @@ void update_ve_const()
 	{
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
 		{
+			if (leaving)
+				return;
 			if (ve_widgets[page][offset] != NULL)
 				g_list_foreach(ve_widgets[page][offset],
 						update_widget,NULL);
@@ -1213,6 +1219,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean new_state = FALSE;
 	gboolean state = FALSE;
 	gchar * swap_list = NULL;
+	gchar * set_labels = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * widget_text = NULL;
 	gdouble spin_value = 0.0; 
@@ -1220,6 +1227,9 @@ void update_widget(gpointer object, gpointer user_data)
 	GdkColor color;
 	extern gint ** ms_data;
 	extern GHashTable *widget_group_states;
+	
+	if (leaving)
+		return;
 
 	upd_count++;
 	if ((upd_count%64) == 0)
@@ -1264,6 +1274,8 @@ void update_widget(gpointer object, gpointer user_data)
 			"use_color");
 	swap_list = (gchar *)g_object_get_data(G_OBJECT(widget),
 			"swap_labels");
+	set_labels = (gchar *)g_object_get_data(G_OBJECT(widget),
+			"set_widgets_label");
 
 	value = convert_after_upload(widget);  
 
@@ -1402,6 +1414,8 @@ void update_widget(gpointer object, gpointer user_data)
 			new_state = FALSE;
 
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),new_state);
+		if ((set_labels) && (new_state))
+			set_widget_labels(set_labels);
 		if (swap_list)
 			swap_labels(swap_list,new_state);
 

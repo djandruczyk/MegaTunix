@@ -23,6 +23,7 @@
 gint dbg_lvl = 0;
 
 static FILE * dbgfile = NULL;
+static GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 
 /*!
  \brief open_debugfile() opens the file that holds debugging information.
@@ -34,6 +35,7 @@ void open_debugfile()
 	struct tm *tm = NULL;
 	time_t *t = NULL;
 
+	g_static_mutex_lock(&dbg_mutex);
 	if(!dbgfile)
 	{
 		filename = g_strconcat(g_get_current_dir(), PSEP, "MTXlog.txt",NULL);
@@ -48,13 +50,16 @@ void open_debugfile()
 			g_fprintf(dbgfile,"Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
 		}
 	}
+	g_static_mutex_unlock(&dbg_mutex);
 }
 
 
 void close_debugfile()
 {
+	g_static_mutex_lock(&dbg_mutex);
 	if (dbgfile)
 		fclose(dbgfile);
+	g_static_mutex_unlock(&dbg_mutex);
 }
 
 /*!
@@ -69,6 +74,14 @@ void dbg_func(gchar *str, Dbg_Class class)
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
 
+	g_static_mutex_lock(&dbg_mutex);
+
+	if (!dbgfile)
+	{
+		g_free(str);
+		g_static_mutex_unlock(&dbg_mutex);
+		return;
+	}
 
 	if ((dbg_lvl & class))
 	{
@@ -85,4 +98,5 @@ void dbg_func(gchar *str, Dbg_Class class)
 	}
 	fflush(dbgfile);
 	g_free(str);
+	g_static_mutex_unlock(&dbg_mutex);
 }
