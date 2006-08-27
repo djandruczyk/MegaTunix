@@ -390,7 +390,7 @@ falsetrig_dis   pg0 092 [2:2], "Enabled*", "Disabled"
 
 
 ----------------------------------------------------------------------------
-IDLE ADVANCE
+IDLE ADVANCE 100% done (on IDLE Tab)
 ----------------------------------------------------------------------------
 
 IdleAdv    	pg3 174 "Deg", ((x * 0.352) - 28.4) conv. (-10 - 80) span
@@ -430,7 +430,7 @@ STTable2On   	pg0 076 [7:7], "Spark Table1^", "Spark Table2"
 ST2Delay     	pg0 087 "Sec", (x * 0.1) conv, (0 - 25) span
 
 ----------------------------------------------------------------------------
-STIM FOR WHEEL
+STIM FOR WHEEL 100% done on wheel decoder tab
 ----------------------------------------------------------------------------
 
 whlsim  	pg0 011 [2:2], "off",  "on"

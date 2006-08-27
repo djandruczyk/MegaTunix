@@ -49,6 +49,12 @@ tooltip=The Oddfire bins are HIGHLY EXPERIMENTAL and likely to be buggy. These a
 
 #----- Labels ----------------------------------------------------------------
 
+[sfw_cnt_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=7
+bind_to_list=s4w_controls
+
 [return_tooth_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -80,6 +86,12 @@ page=7
 bind_to_list=2nd_trigger
 
 #----- Widgets ---------------------------------------------------------------
+
+[s4w_eventbox]
+keys=page,tooltip
+key_types=_INT_,_STRING_
+page=0
+tooltip=Stim for wheel is ONLY FOR USE on the stimulator. DO NOT USE THIS MODE on the car.  This option is for toothed wheel users to test their Megasquirt on the bench using the stimulator where the correct input signal is unavailable. DO NOT use on the real engine or you will flood the engine with fuel.
 
 [fixed_dwell_table]
 keys=page,bind_to_list
@@ -366,6 +378,32 @@ handler=_GENERIC_
 tooltip=This is the time allowed between ignition events for the plug to fire before the coil is allowed to recharge. This can limit dwell at high RPM's.
 
 #----- Radio Buttons ----------------------------------------------------------
+
+[s4w_off_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitshift=2
+bitval=0
+bitmask=4
+toggle_groups=s4w_controls
+group_states=DISBLED
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Disables Stim 4 Wheel mode.
+
+[s4w_on_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitshift=2
+bitval=1
+bitmask=4
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Enabled Stim 4 Wheel mode.
 
 [oddfire_no_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
@@ -656,4 +694,18 @@ bitmask=96
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the spark output dwell to 50% DC.
+
+[s4w_num_steps_spin]
+keys=page,offset,bitshift,bitval,bitmask,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=12
+bitshift=5
+bitval=2
+bitmask=96
+raw_upper=6
+bind_to_list=s4w_controls
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Number of steps/outputs. (Not too sure on this one....)
 

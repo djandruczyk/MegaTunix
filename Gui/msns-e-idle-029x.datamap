@@ -23,6 +23,12 @@ bind_to_list=burners
 
 #----- Widgets ----------------------------------------------------------------
 
+[idle_timing_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=idle_control,spark_controls
+
 [main_vbox1]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -460,3 +466,58 @@ bind_to_list=cloop_idle_controls,pwm_idle_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=DutyCycle at which point the PWM valve can be considered closed. Odds are due to print pressure inside the valve it make take DC values of 20% or more to lift the valve off it's seat.
+
+[idle_advance_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=3
+offset=174
+dl_conv_expr=(x+10)/0.352
+ul_conv_expr=(x*0.352)-10
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The Timing advance to use at idle if the next 3 conditions match. Set to -10 to disable this function and use the sparkmap entirely. Useful to keep a stable timing at idle to minimize hunting.
+
+[idle_tps_spin]
+keys=page,offset,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=3
+offset=175
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The TPS threshold that can NOT be exceeded to enable Idle timing advance override. Set to this to a value to slighly higher than the TPS value at idle.
+
+[idle_rpm_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=3
+offset=176
+dl_conv_expr=x/100
+ul_conv_expr=x*100
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The RPM Value which the engine needs to be BELOW to enable fixed idle timing.
+
+[idle_clt_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=3
+offset=177
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+temp_dep=true
+bind_to_list=temperature
+tooltip=The CLT Value which the engine needs to be ABOVE to enable fixed idle timing.
+
+[idle_idle_wait_spin]
+keys=page,offset,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=3
+offset=178
+raw_upper=5
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The TPS threshold that can NOT be exceeded to enable Idle timing advance override. Set to this to a value to slighly higher than the TPS value at idle.
+
