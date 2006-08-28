@@ -351,7 +351,7 @@ TractCyc4	pg0 115 "10000RPM/Sec or 70%Slip", no conv, (1 - 255) span
 TractCySec	pg0 109 [2:2], "RPM stable for 0.1S", "Cycle count only"
 
 ----------------------------------------------------------------------------
-STAGED-INJECTION
+STAGED-INJECTION 100% Complete
 ----------------------------------------------------------------------------
 
 IStagedMode	pg0 076 [2:3] bitfield, "Off*^","RPM-Based","MAP-Based","TPS-Based"
@@ -365,7 +365,7 @@ Stg2ndParmKPA 	pg3 180 "kPa", no conv, (0 - 255) span
 Stg2ndParmDlt 	pg3 181 "kPa", no conv, (0 - 255) span
 
 ----------------------------------------------------------------------------
-REV_LIMITER
+REV_LIMITER 100% Complete
 ----------------------------------------------------------------------------
 
 Hard Cut type settings apply to REvlimiter, launchctrl and OVer boost protect
@@ -378,7 +378,7 @@ SoftLimMax    	pg0 004 "s", (x/0.1) conv, (0 - 25.5) span
 HardRevLim    	pg0 006 "rpm", (x/100) conv, (100 - 25500) span
 
 ----------------------------------------------------------------------------
-ADVANCED OPTIONS
+ADVANCED OPTIONS 100% Complete
 ----------------------------------------------------------------------------
 
 hybridAN        pg0 011 [5:5], "Off*^", "On"
@@ -412,7 +412,7 @@ MaxIatAdv       pg0 049 "Deg", (x * 0.352) conv, (0 - 15) span
 IatAdvKpa       pg0 051 "KPa", (x - 40) conv, (0 - 255) span
 
 ----------------------------------------------------------------------------
-FUEL TABLE SELECTION
+FUEL TABLE SELECTION 100% Complete
 ----------------------------------------------------------------------------
 
 inj1g 		pg0 033 [5:5], "off", "on*^"
@@ -423,7 +423,7 @@ UseVE3       	pg0 092 [0:0], "Dont switch*^(DT)", "Switch to Table3"
 VE3Delay     	pg0 093 "Sec", (x * 0.1) conv, (0 - 25) span
 
 ----------------------------------------------------------------------------
-SPARK TABLE SELECTION
+SPARK TABLE SELECTION 100% Complete
 ----------------------------------------------------------------------------
 
 STTable2On   	pg0 076 [7:7], "Spark Table1^", "Spark Table2"
@@ -437,7 +437,7 @@ whlsim  	pg0 011 [2:2], "off",  "on"
 whlsimcnt     	pg0 013 "", no conv, (1 - 6) span
 
 ----------------------------------------------------------------------------
-OVER RUN FUEL CUT
+OVER RUN FUEL CUT 100% Complete
 ----------------------------------------------------------------------------
 
 OvrRunC    	pg0 066 [6:6],   "Off","On"
