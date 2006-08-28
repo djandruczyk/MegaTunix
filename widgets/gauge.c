@@ -7,6 +7,7 @@
 #include <string.h>
 #include <time.h>
 #include <gauge.h>
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 #define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
@@ -203,7 +204,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 
 	cairo_set_font_size (cr, radius / 5);
 	snprintf (message, sizeof (message) - 1, "%f", current_value);
-	cairo_move_to (cr, x - (strnlen (message, sizeof(message) - 1) *
+	cairo_move_to (cr, x - (strlen (message) *
 				(radius / (total_ticks))), 1.2 * y);
 	cairo_show_text (cr, message);
 	cairo_stroke (cr);
