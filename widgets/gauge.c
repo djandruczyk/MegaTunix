@@ -64,6 +64,14 @@ void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2)
 	g_object_thaw_notify (G_OBJECT (gauge));
 }
 
+/* returns the lower and upper value bounds */
+gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, float *value1, float *value2)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	*value1 = gauge->lbound;
+	*value2 = gauge->ubound;
+	return TRUE;
+}
 /* Set number of ticks to be shown in the range of the drawn gauge */
 void mtx_gauge_face_set_resolution (MtxGaugeFace *gauge, int ticks)
 {

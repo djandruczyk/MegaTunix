@@ -37,6 +37,7 @@ GtkWidget* mtx_gauge_face_new ();
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2);
+gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, float *value1, float *value2);
 void mtx_gauge_face_set_resolution (MtxGaugeFace *gauge, int ticks);
 int mtx_gauge_face_get_resolution (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float stop_radian);
