@@ -3,11 +3,11 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/main.c)
 
 MTX_MAJOR_VERSION=0
-MTX_MINOR_VERSION=7
-MTX_MICRO_VERSION=14
+MTX_MINOR_VERSION=8
+MTX_MICRO_VERSION=0
 
 AC_CONFIG_SUBDIRS(src/main.c)
-AM_INIT_AUTOMAKE(megatunix, 0.7.14)
+AM_INIT_AUTOMAKE(megatunix, 0.8.0)
 #AC_CONFIG_HEADERS(config.h)
 AM_CONFIG_HEADER(config.h)
 
