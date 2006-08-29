@@ -488,14 +488,16 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		 */
 		if (page < firmware->total_pages)
 		{
-			if (offset > firmware->page_params[page]->length)
+			if (offset >= firmware->page_params[page]->length)
 			{
 				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  ther eis a bug with this datamap widgt %s, at offset %i...\n\n",section,offset),CRITICAL);
 			}
 			else
+			{
 				ve_widgets[page][offset] = g_list_prepend(
 						ve_widgets[page][offset],
 						(gpointer)widget);
+			}
 		}
 		else
 			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset),CRITICAL);
