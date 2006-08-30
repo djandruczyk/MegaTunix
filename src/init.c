@@ -297,7 +297,7 @@ void mem_alloc()
 		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		interdep_vars[i] = g_hash_table_new(g_int_hash,g_int_equal);
+		interdep_vars[i] = g_hash_table_new(NULL,NULL);
 
 		if (!ms_data[i])
 			ms_data[i] = g_new0(gint, firmware->page_params[i]->length);

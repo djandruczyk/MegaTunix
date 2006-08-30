@@ -339,7 +339,7 @@ void burn_ecu_flash()
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, ERROR \"%s\"\n",err_text),CRITICAL);
 	}
-	g_usleep(10000);
+	g_usleep(100000);
 
 	dbg_func(g_strdup(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"),SERIAL_WR);
 
@@ -454,11 +454,19 @@ void set_ms_page(gint ms_page)
 
 	if ((ms_page > firmware->debug_above) || (last_page > firmware->debug_above))
 		goto skipburn;
+//	printf("last page %i, ms_page %i, memcpy results for last page %i, memcmp results for current page %i\n",last_page, ms_page, memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length),memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length));
+
 	if ((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0))))
 	{
+	//	printf("burning flash\n");
 		burn_ecu_flash();
 	}
 skipburn:
+	if (ms_page == last_page)
+	{
+	//	printf("no need to change the page again as it's already %i\n",ms_page);
+		return;
+	}
 
 	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
 	
@@ -478,7 +486,7 @@ skipburn:
 	}
 
 	last_page = ms_page;
-	g_usleep(5000);
+	g_usleep(100000);
 
 
 	return;
