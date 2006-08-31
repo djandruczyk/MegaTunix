@@ -6,11 +6,11 @@ subdirs = mtxmatheval src include Interrogator Gui LookupTables RealtimeMaps Run
 
 SUBDIRS = $(subdirs) 
 
-DIST_SUBDIRS = $(subdirs)
+DIST_SUBDIRS = $(subdirs) widgets
 
 DEPDIR = ${subdirs}/.deps
 
 CLEANFILES = *~ core -rf autom4te.cache
 
-EXTRA_DIST = widgets configure CREDITS AUTHORS TODO README INSTALL megatunix.spec
+EXTRA_DIST = configure CREDITS AUTHORS TODO README INSTALL megatunix.spec
 

@@ -369,6 +369,8 @@ void *thread_dispatcher(gpointer data)
 				else
 					if (open_serial((gchar *)message->payload))
 						setup_serial_params();
+					else
+						queue_function(g_strdup("conn_warning"));
 				break;
 			case CLOSE_SERIAL:
 				if (!link_up)
