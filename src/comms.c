@@ -152,7 +152,7 @@ void update_write_status(struct Output_Data *data)
 	extern gboolean paused_handlers;
 
 	paused_handlers = TRUE;
-	printf ("page %i, offset %i\n",data->page,data->offset);
+	//printf ("page %i, offset %i\n",data->page,data->offset);
 	for (i=0;i<g_list_length(ve_widgets[data->page][data->offset]);i++)
 	{
 		if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[data->page][data->offset],i)),"dl_type") != DEFERRED)

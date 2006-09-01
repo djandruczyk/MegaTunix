@@ -26,6 +26,7 @@
 
       <child>
 	<widget class="GtkVBox" id="main_vbox1">
+	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
@@ -16213,7 +16214,6 @@ by what percentage ?</property>
 
 	  <child>
 	    <widget class="GtkFrame" id="Cmd_Frame">
-	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="label_xalign">0</property>
 	      <property name="label_yalign">0.5</property>

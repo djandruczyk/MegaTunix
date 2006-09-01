@@ -154,7 +154,7 @@ toggle_groups=alpha-n_controls
 group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-swap_labels=VE1_load_tbl_lab,VE1_load_tbl_units,VE3_load_tbl_lab,VE3_load_tbl_units
+swap_labels=VE_VE1_load_tbl_lab,VE_VE1_load_tbl_units,VE_VE2_load_tbl_lab,VE_VE2_load_tbl_units,VE_VE3_load_tbl_lab,VE_VE3_load_tbl_units,SP_SP1_load_tbl_lab,SP_SP1_load_tbl_units,SP_SP2_load_tbl_lab,SP_SP2_load_tbl_units
 tooltip=Sets the Fueling mode to be Alpha-N (primary inputs are RPM (the "N") and Throttle Position (the "Alpha"))
 
 [multi_port_radio_button]
