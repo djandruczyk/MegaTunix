@@ -2530,7 +2530,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="ae_decel_params_frame">
+			    <widget class="GtkLabel" id="ae_decel_params_frame_title">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">Decel Parameters</property>
 			      <property name="use_underline">False</property>

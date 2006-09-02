@@ -896,7 +896,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
 			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
-			printf("table num %i\n",table_num);
+			//printf("table num %i\n",table_num);
 			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_divider = ms_data[page][divider_offset];
 			firmware->rf_params[table_num]->last_num_cyls = firmware->rf_params[table_num]->num_cyls;
@@ -913,7 +913,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 				tmp = tmp & ~bitmask;	/*clears top 4 bits */
 				tmp = tmp | ((tmpi-1) << bitshift);
 				dload_val = tmp;
-				printf("new num_cyls is %i, new data is %i\n",tmpi,tmp);
+				//printf("new num_cyls is %i, new data is %i\n",tmpi,tmp);
 				g_hash_table_insert(interdep_vars[page],
 						GINT_TO_POINTER(offset),
 						GINT_TO_POINTER(dload_val));
