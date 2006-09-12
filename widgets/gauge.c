@@ -134,16 +134,18 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 static void draw (GtkWidget *gauge, cairo_t *cr)
 {
 	gdouble x, y;
+	gdouble xc, yc;
 	gdouble radius;
 	gfloat current_value;
+	cairo_text_extents_t extents;
 
-	x = gauge->allocation.width / 2;
-	y = gauge->allocation.height / 2;
+	xc = gauge->allocation.width / 2;
+	yc = gauge->allocation.height / 2;
 	radius = MIN (gauge->allocation.width / 2,
 		      gauge->allocation.height / 2) - 5;
 
 	/* gauge back */
- 	cairo_arc (cr, x, y, radius, MTX_GAUGE_FACE (gauge)->start_radian,
+ 	cairo_arc (cr, xc, yc, radius, MTX_GAUGE_FACE (gauge)->start_radian,
  		   MTX_GAUGE_FACE (gauge)->stop_radian);
 
 	cairo_set_source_rgba (cr, 1, 1, 1, 1.0);//white
@@ -173,11 +175,11 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 					      cairo_get_line_width (cr));
 		}
 		cairo_move_to (cr,
-			       x + (radius - inset) * cos (counter * M_PI / (total_ticks / 2)),
-			       y + (radius - inset) * sin (counter * M_PI / (total_ticks / 2)));
+			       xc + (radius - inset) * cos (counter * M_PI / (total_ticks / 2)),
+			       yc + (radius - inset) * sin (counter * M_PI / (total_ticks / 2)));
 		cairo_line_to (cr,
-			       x + (radius * cos (counter * (M_PI / (total_ticks / 2)))),
-			       y + (radius * sin (counter * (M_PI / (total_ticks / 2)))));
+			       xc + (radius * cos (counter * (M_PI / (total_ticks / 2)))),
+			       yc + (radius * sin (counter * (M_PI / (total_ticks / 2)))));
 		cairo_stroke (cr);
 		cairo_restore (cr); /* stack-pen-size */
 	}
@@ -200,21 +202,26 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	current_value = MTX_GAUGE_FACE (gauge)->value;
 	cairo_save (cr);
 	cairo_set_line_width (cr, 2.5 * cairo_get_line_width (cr));
-	cairo_move_to (cr, x, y);
+	cairo_move_to (cr, xc, yc);
 
 	gfloat arc_rad = (2 * M_PI) * arc;//angle in radians of total arc
-  	cairo_line_to (cr, x + radius * sin ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (arc_rad) /
+  	cairo_line_to (cr, xc + radius * sin ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (arc_rad) /
 					     MTX_GAUGE_FACE (gauge)->range +//needle neutral is 1.5 M_PI
 					     (MTX_GAUGE_FACE (gauge)->start_radian) - (1.5 * M_PI)),
-		       y + radius * -cos ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (arc_rad) /
+		       yc + radius * -cos ((current_value - MTX_GAUGE_FACE (gauge)->lbound) * (arc_rad) /
 					  MTX_GAUGE_FACE (gauge)->range +//needle neutral is 1.5 M_PI
 					  (MTX_GAUGE_FACE (gauge)->start_radian) - (1.5 * M_PI)));
 
 	cairo_set_font_size (cr, radius / 5);
 	snprintf (message, sizeof (message) - 1, "%.2f", current_value);
-	cairo_move_to (cr, x - (strlen (message) *
-				(radius / (total_ticks))), 1.2 * y);
+
+	cairo_text_extents (cr, message, &extents);
+	x = 0.5-(extents.width/2 + extents.x_bearing);
+	y = 0.5-(extents.height/2 + extents.y_bearing);
+
+	cairo_move_to (cr, xc+x, (1.2*yc)+y);
 	cairo_show_text (cr, message);
+
 	cairo_stroke (cr);
 	cairo_restore (cr);
 }
