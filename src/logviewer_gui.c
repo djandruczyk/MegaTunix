@@ -583,6 +583,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	GdkColor color;
+	color.pixel=0;
 	gfloat tmp = 0.0;	
 	gint i = 0;
 	gfloat fract = 0.0;
