@@ -299,7 +299,6 @@ truepgnum=243
 length=256
 
 [bytecounts]
-CMD_UPPER_C=1
 CMD_UPPER_A=22
 CMD_UPPER_R=39
 CMD_UPPER_Q=1

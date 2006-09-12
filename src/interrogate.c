@@ -107,6 +107,7 @@ void interrogate_ecu()
 	/* Force page to zero,  non page firmware should ignore this */
 	write(serial_params->fd,"P",1);
 	write(serial_params->fd,&i,1);
+	g_usleep(100000);
 	for (i=0;i<tests_to_run;i++)
 	{
 		flush_serial(serial_params->fd,TCIOFLUSH);
@@ -455,8 +456,12 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			cmd = g_new0(struct Command, 1);
 			cmd->multipart=FALSE;
 			section = g_strdup_printf("test_%.2i",i);
-			cfg_read_string(cfgfile,section,"raw_cmd",
-					&cmd->string);
+			if (!cfg_read_string(cfgfile,section,"raw_cmd",&cmd->string))
+			{
+				dbg_func(g_strdup(__FILE__": validate_and_load_tests(),\n\tCMD_STRING is NULL\n"),INTERROGATOR);
+				break;
+			}
+
 			cfg_read_int(cfgfile,section,"cmd_length",
 					&cmd->len);
 			cfg_read_string(cfgfile,section,"cmd_desc",

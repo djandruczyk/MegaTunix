@@ -2377,7 +2377,7 @@ Missing Teeth:</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkSpinButton" id="min_dischrge_spin">
+					    <widget class="GtkSpinButton" id="min_discharge_spin">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
 					      <property name="climb_rate">0.10000000149</property>
