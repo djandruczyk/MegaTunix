@@ -188,8 +188,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				break;
 			}
 
-			if (g_utf8_validate(buf+1,total_read-1,NULL))
-				thread_update_logbar("error_status_view",NULL,g_strndup(buf+1,total_read-1),FALSE,FALSE);
+			if (g_utf8_validate(((gchar *)buf)+1,total_read-1,NULL))
+				thread_update_logbar("error_status_view",NULL,g_strndup(((gchar *)buf)+1,total_read-1),FALSE,FALSE);
 			else
 				thread_update_logbar("error_status_view",NULL,g_strdup("The data that came back was jibberish, try rebooting again.\n"),FALSE,FALSE);
 			break;

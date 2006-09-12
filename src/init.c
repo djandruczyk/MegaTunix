@@ -17,6 +17,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <structures.h>
@@ -241,25 +242,25 @@ void make_megasquirt_dirs(void)
 	gchar *filename = NULL;
 
 	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
-	mkdir(filename, S_IRWXU);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/Gui", NULL);
-	mkdir(filename, S_IRWXU);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator", NULL);
-	mkdir(filename, S_IRWXU);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator/Profiles", NULL);
-	mkdir(filename, S_IRWXU);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/LookupTables", NULL);
-	mkdir(filename, S_IRWXU);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/RealtimeMaps", NULL);
-	mkdir(filename, S_IRWXU);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/RuntimeSliders", NULL);
-	mkdir(filename, S_IRWXU);
+	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 
 	return;
