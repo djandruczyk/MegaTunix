@@ -25,6 +25,7 @@ struct _MtxGaugeFace
 	gfloat range;
 	gfloat start_radian;
 	gfloat stop_radian;
+	gboolean antialias;
 	gint num_ticks;
 };
 
@@ -35,6 +36,8 @@ struct _MtxGaugeFaceClass
 
 GType mtx_gauge_face_get_type (void) G_GNUC_CONST;
 GtkWidget* mtx_gauge_face_new ();
+void mtx_gauge_face_set_antialias (MtxGaugeFace *gauge, gboolean value);
+gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);

@@ -55,6 +55,13 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value)
 	g_object_thaw_notify (G_OBJECT (gauge));
 }
 
+/* Sets antialias mode */
+void mtx_gauge_face_set_antialias(MtxGaugeFace *gauge, gboolean state)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	gauge->antialias = state;
+}
+
 /* Changes value stored in widget, and gets widget redrawn to show change */
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * units_str)
 {
@@ -69,6 +76,13 @@ float mtx_gauge_face_get_value (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->value;
+}
+
+/* Returns antialias status */
+gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
+	return gauge->antialias;
 }
 
 /* Returns value that needle currently points to */
@@ -152,6 +166,7 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->start_radian = 0.75 * M_PI;//M_PI is left, 0 is right
 	gauge->stop_radian = 2.25 * M_PI;
 	gauge->num_ticks = 24;
+	gauge->antialias = FALSE;
 	gauge->range = gauge->ubound -gauge->lbound;
 	mtx_gauge_face_redraw_canvas (gauge);
 }
@@ -256,18 +271,23 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	cairo_restore (cr);
 }
 
-static gboolean mtx_gauge_face_expose (GtkWidget *gauge, GdkEventExpose *event)
+static gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	cairo_t *cr;
+	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
 
 	/* get a cairo_t */
-	cr = gdk_cairo_create (gauge->window);
+	cr = gdk_cairo_create (widget->window);
 
 	cairo_rectangle (cr,
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
 	cairo_clip (cr);
-	draw (gauge, cr);
+	if (gauge->antialias)
+		cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
+	else
+		cairo_set_antialias(cr,CAIRO_ANTIALIAS_NONE);
+	draw (widget, cr);
 
 	cairo_destroy (cr);
 
