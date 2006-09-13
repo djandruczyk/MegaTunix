@@ -234,6 +234,8 @@ void setup_serial_params()
  */
 void close_serial()
 {
+	if (serial_params == NULL)
+		return;
 	if (serial_params->open == FALSE)
 		return;
 
