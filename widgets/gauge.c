@@ -38,6 +38,14 @@ static void mtx_gauge_face_set_value_internal (MtxGaugeFace *gauge, float value)
 	mtx_gauge_face_redraw_canvas (gauge);//show new value
 }
 
+static void mtx_gauge_face_set_units_str_internal (MtxGaugeFace *gauge, gchar * units_str)
+{
+	if (gauge->units_str)
+		g_free(gauge->units_str);
+	gauge->units_str = g_strdup(units_str);;
+	mtx_gauge_face_redraw_canvas (gauge);//show new value
+}
+
 /* Changes value stored in widget, and gets widget redrawn to show change */
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value)
 {
@@ -47,11 +55,27 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value)
 	g_object_thaw_notify (G_OBJECT (gauge));
 }
 
+/* Changes value stored in widget, and gets widget redrawn to show change */
+void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * units_str)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	mtx_gauge_face_set_units_str_internal (gauge, units_str);
+	g_object_thaw_notify (G_OBJECT (gauge));
+}
+
 /* Returns value that needle currently points to */
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->value;
+}
+
+/* Returns value that needle currently points to */
+gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	return gauge->units_str;
 }
 
 /* Changes the lower and upper value bounds */
@@ -137,6 +161,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	gdouble x, y;
 	gdouble xc, yc;
 	gdouble radius;
+	gint last_height;
 	gchar * message = NULL;
 	gfloat current_value;
 	cairo_text_extents_t extents;
@@ -185,19 +210,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 		cairo_stroke (cr);
 		cairo_restore (cr); /* stack-pen-size */
 	}
-	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
-                               CAIRO_FONT_WEIGHT_BOLD);
-	cairo_set_font_size (cr, radius / 10);
 
-/* 	strncpy (message, "left", sizeof (message) - 1); */
-/* 	cairo_move_to (cr, (x / 3) - (strnlen (message, sizeof(message) - 1) * */
-/* 				      (radius / 32)), 1.8 * y); */
-/* 	cairo_show_text (cr, message); */
-
-/* 	strncpy (message, "right", sizeof (message) - 1); */
-/* 	cairo_move_to (cr, ((2 * x) - (x / 3)) - (strnlen (message, */
-/* 			   sizeof (message) - 1) * (radius / 32)), 1.8 * y); */
-/* 	cairo_show_text (cr, message); */
 
 	/* gauge hands */
 	current_value = MTX_GAUGE_FACE (gauge)->value;
@@ -213,6 +226,9 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 					  MTX_GAUGE_FACE (gauge)->range +//needle neutral is 1.5 M_PI
 					  (MTX_GAUGE_FACE (gauge)->start_radian) - (1.5 * M_PI)));
 
+	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
+                               CAIRO_FONT_WEIGHT_BOLD);
+
 	cairo_set_font_size (cr, radius / 5);
 	message = g_strdup_printf("%.2f", current_value);
 
@@ -223,7 +239,19 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	cairo_move_to (cr, xc+x, (1.2*yc)+y);
 	cairo_show_text (cr, message);
 	g_free(message);
+	last_height = extents.height;
 
+	if (MTX_GAUGE_FACE(gauge)->units_str)
+	{
+		cairo_set_font_size (cr, radius / 8);
+
+		cairo_text_extents (cr, MTX_GAUGE_FACE(gauge)->units_str, &extents);
+		x = 0.5-(extents.width/2 + extents.x_bearing);
+		y = 0.5-(extents.height/2 + extents.y_bearing);
+
+		cairo_move_to (cr, xc+x, (1.2*yc)+last_height+y);
+		cairo_show_text (cr, MTX_GAUGE_FACE(gauge)->units_str);
+	}
 	cairo_stroke (cr);
 	cairo_restore (cr);
 }

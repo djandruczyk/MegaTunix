@@ -19,6 +19,7 @@ struct _MtxGaugeFace
 {//public data
 	GtkDrawingArea parent;
 	gfloat value;//very basic now, a single float value to display
+	gchar * units_str;
 	gfloat lbound;
 	gfloat ubound;
 	gfloat range;
@@ -36,6 +37,8 @@ GType mtx_gauge_face_get_type (void) G_GNUC_CONST;
 GtkWidget* mtx_gauge_face_new ();
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);
+gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2);
 gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, float *value1, float *value2);
 void mtx_gauge_face_set_resolution (MtxGaugeFace *gauge, int ticks);
