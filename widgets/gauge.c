@@ -2,6 +2,7 @@
 
 #include <cairo/cairo.h>
 #include <gtk/gtk.h>
+#include <glib/gprintf.h>
 #include <glib-object.h>
 #include <math.h>
 #include <string.h>
@@ -136,6 +137,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	gdouble x, y;
 	gdouble xc, yc;
 	gdouble radius;
+	gchar * message = NULL;
 	gfloat current_value;
 	cairo_text_extents_t extents;
 
@@ -186,7 +188,6 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
                                CAIRO_FONT_WEIGHT_BOLD);
 	cairo_set_font_size (cr, radius / 10);
-	gchar message[30];
 
 /* 	strncpy (message, "left", sizeof (message) - 1); */
 /* 	cairo_move_to (cr, (x / 3) - (strnlen (message, sizeof(message) - 1) * */
@@ -213,7 +214,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 					  (MTX_GAUGE_FACE (gauge)->start_radian) - (1.5 * M_PI)));
 
 	cairo_set_font_size (cr, radius / 5);
-	snprintf (message, sizeof (message) - 1, "%.2f", current_value);
+	message = g_strdup_printf("%.2f", current_value);
 
 	cairo_text_extents (cr, message, &extents);
 	x = 0.5-(extents.width/2 + extents.x_bearing);
@@ -221,6 +222,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 
 	cairo_move_to (cr, xc+x, (1.2*yc)+y);
 	cairo_show_text (cr, message);
+	g_free(message);
 
 	cairo_stroke (cr);
 	cairo_restore (cr);
