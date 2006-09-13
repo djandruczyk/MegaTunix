@@ -331,8 +331,10 @@ void mem_dealloc()
 
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
+	serial_params->port_name = NULL;
 	if (serial_params)
 		g_free(serial_params);
+	serial_params = NULL;
 
 	/* Firmware datastructure.... */
 	if (firmware)
