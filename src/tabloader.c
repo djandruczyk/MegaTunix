@@ -152,6 +152,8 @@ gboolean load_gui_tabs(void)
 			gtk_main_iteration();
 		gdk_threads_leave();
 
+		if (!firmware)
+			break;
 
 	}
 	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete! "),FALSE,FALSE);
