@@ -107,6 +107,7 @@ void interrogate_ecu()
 	/* Force page to zero,  non page firmware should ignore this */
 	write(serial_params->fd,"P",1);
 	write(serial_params->fd,&i,1);
+	flush_serial(serial_params->fd,TCIOFLUSH);
 	g_usleep(100000);
 	for (i=0;i<tests_to_run;i++)
 	{
@@ -141,7 +142,6 @@ void interrogate_ecu()
 		while ((total_read < total_wanted ) && (total_wanted-total_read) > 0 )
 		{
 			dbg_func(g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",cmd->string,total_wanted-total_read),INTERROGATOR);
-			//			read_amount = (total_wanted-total_read) > 8? 8:total_wanted-total_read;
 			total_read += res = read(serial_params->fd,
 					ptr+total_read,
 				   	total_wanted-total_read);
