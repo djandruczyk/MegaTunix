@@ -170,11 +170,13 @@ gfloat convert_after_upload(GtkWidget * widget)
 void convert_temps(gpointer widget, gpointer units)
 {
 	gfloat upper = 0.0;
+	gfloat lower = 0.0;
 	gfloat value = 0.0;
 	GtkAdjustment * adj = NULL;
 	gchar *text = NULL;
 	gchar *depend_on = NULL;
 	gboolean state = FALSE;
+	gint widget_temp = -1;
 	extern GdkColor black;
 
 	/* If this widgt depends on anything call check_dependancy which will
@@ -182,10 +184,12 @@ void convert_temps(gpointer widget, gpointer units)
 	 * state, FALSE otherwise...
 	 */
 	depend_on = (gchar *)g_object_get_data(G_OBJECT(widget),"depend_on");
+	widget_temp = (gint)g_object_get_data(G_OBJECT(widget),"widget_temp");
 	if (depend_on)
 		state = check_dependancies(G_OBJECT(widget));
 
-	if ((int)units == FAHRENHEIT)
+
+	if ((int)units == FAHRENHEIT) 
 	{
 		if (GTK_IS_LABEL(widget))
 		{
@@ -195,43 +199,46 @@ void convert_temps(gpointer widget, gpointer units)
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
 			gtk_label_set_text(GTK_LABEL(widget),text);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 
 		}
 
-		if (GTK_IS_SPIN_BUTTON(widget))
+		if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp == CELSIUS))
 		{
+
+			printf("fahrenheit mode,  spinner was previously celsius,  adjusting\n");
 			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
 					GTK_SPIN_BUTTON(widget));
 			upper = adj->upper;
-			if (upper < 215) /* if so it was celsius, if not skip*/
-			{
-				value = adj->value;
-				adj->upper = 215.0;
-				adj->value = (value *(9.0/5.0))+32;
+			value = adj->value;
+			lower = adj->lower;
+			adj->value = (value *(9.0/5.0))+32;
+			adj->upper = (upper *(9.0/5.0))+32;
+			adj->lower = (lower *(9.0/5.0))+32;
 
-				gtk_adjustment_changed(adj);
-				gtk_spin_button_set_value(
-						GTK_SPIN_BUTTON(widget),
-						adj->value);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-			}
+			gtk_adjustment_changed(adj);
+			gtk_spin_button_set_value(
+					GTK_SPIN_BUTTON(widget),
+					adj->value);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
-		if (GTK_IS_RANGE(widget))
+		if ((GTK_IS_RANGE(widget)) && (widget_temp == CELSIUS))
 		{
 			adj = (GtkAdjustment *) gtk_range_get_adjustment(
 					GTK_RANGE(widget));
 			upper = adj->upper;
-			if (upper < 160) /* if so it was celsius, if not skip*/
-			{
-				value = adj->value;
-				adj->upper = 160.0;
-				adj->value = (value *(9.0/5.0))+32;
+			lower = adj->lower;
+			value = adj->value;
+			adj->value = (value *(9.0/5.0))+32;
+			adj->lower = (lower *(9.0/5.0))+32;
+			adj->upper = (upper *(9.0/5.0))+32;
 
-				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
-			}
+			gtk_range_set_adjustment(GTK_RANGE(widget),adj);
+			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
 	}
-	else // CELSIUS Temp scale
+	else
 	{
 		if (GTK_IS_LABEL(widget))
 		{
@@ -241,38 +248,39 @@ void convert_temps(gpointer widget, gpointer units)
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");
 			gtk_label_set_text(GTK_LABEL(widget),text);
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
 
-		if (GTK_IS_SPIN_BUTTON(widget))
+		if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp == FAHRENHEIT))
 		{
 			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
 					GTK_SPIN_BUTTON(widget));
 			upper = adj->upper;
-			if (upper > 102) // if so it was fahren, if not skip
-			{	
-				value = adj->value;
-				adj->upper = 101.6;
-				adj->value = (value-32)*(5.0/9.0);
-				gtk_adjustment_changed(adj);
-				gtk_spin_button_set_value(
-						GTK_SPIN_BUTTON(widget),
-						adj->value);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-			}
+			lower = adj->lower;
+			value = adj->value;
+			adj->value = (value-32)*(5.0/9.0);
+			adj->lower = (lower-32)*(5.0/9.0);
+			adj->upper = (upper-32)*(5.0/9.0);
+			gtk_adjustment_changed(adj);
+			gtk_spin_button_set_value(
+					GTK_SPIN_BUTTON(widget),
+					adj->value);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
-		if (GTK_IS_RANGE(widget))
+		if ((GTK_IS_RANGE(widget)) && (widget_temp == FAHRENHEIT))
 		{
 			adj = (GtkAdjustment *) gtk_range_get_adjustment(
 					GTK_RANGE(widget));
 			upper = adj->upper;
-			if (upper > 72) /* if so it was fahren, if not skip*/
-			{
-				value = adj->value;
-				adj->upper = 71.1;
-				adj->value = (value-32)*(5.0/9.0);
+			lower = adj->lower;
+			value = adj->value;
+			adj->value = (value-32)*(5.0/9.0);
+			adj->lower = (lower-32)*(5.0/9.0);
+			adj->upper = (upper-32)*(5.0/9.0);
 
-				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
-			}
+			gtk_range_set_adjustment(GTK_RANGE(widget),adj);
+			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
 	}
 

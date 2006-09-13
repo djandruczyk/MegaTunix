@@ -43,20 +43,34 @@ key_types=_INT_,_ENUM_
 page=4
 page_ident=_ENRICHMENTS_PAGE_
 
+[clt_iat_params_hbox]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=clt_iat_controls
+
+[iat_clt_ignition_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=spark_controls
+
 [clt_vscale]
-keys=page,bind_to_list,post_function_with_arg,source,page_ident
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_ENUM_
+keys=page,bind_to_list,temp_dep,post_function_with_arg,source,page_ident
+key_types=_INT_,_STRING_,_BOOL_,_STRING_,_STRING_,_ENUM_
 page=8
 bind_to_list=temperature
+temp_dep=TRUE
 post_function_with_arg=register_rt_range
 source=cltdeg
 page_ident=_ENRICHMENTS_PAGE_
 
 [mat_vscale]
-keys=page,bind_to_list,post_function_with_arg,source,page_ident
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_ENUM_
+keys=page,bind_to_list,temp_dep,post_function_with_arg,source,page_ident
+key_types=_INT_,_STRING_,_BOOL_,_STRING_,_STRING_,_ENUM_
 page=8
 bind_to_list=temperature
+temp_dep=TRUE
 post_function_with_arg=register_rt_range
 source=matdeg
 page_ident=_ENRICHMENTS_PAGE_
@@ -294,6 +308,32 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=First Start enrichment is used to give extra cranking enrichment for theFIRST start of the day. This requires you to pump the acclerator pedal 3 times with the ignition on, BEFORE cranking to trigger this feature into action. The TPS value must exceed the Flood Clear level (in ADC counts) for the three pumps before you crank for this to take effect.  The ECU then multiplies the normal cranking amount by the percentage below, so if normal cranking PW is 10ms, and you have the multiplier set to 150%, then when active the cranking pulsewidth will be 15ms.
 
+[clt_iat_on_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,toggle_groups,group_states,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_
+page=0
+offset=46
+bitval=1
+bitshift=2
+bitmask=4
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+toggle_groups=clt_iat_controls
+group_states=ENABLED
+tooltip=Enables the CLT/IAT Ignition Advance/Retard controls.  These allow global adjustements to the timing tables based on conditions such as over/under temp thresholds (CLT/IAT), to prevent engine damage under high load and aid in performance in cold temps.
+
+[clt_iat_off_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=46
+bitval=0
+bitshift=2
+bitmask=4
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=Diaables the CLT/IAT Ignition Advance/Retard controls.  These allow global adjustements to the timing tables based on conditions such as over/under temp thresholds (CLT/IAT), to prevent engine damage under high load and aid in performance in cold temps.
+
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
 [main_frame_title]
@@ -301,10 +341,6 @@ keys=page,set_label
 key_types=_INT_,_STRING_
 page=4
 set_label=MSnS-Extra 029 Cranking/Warmup Enrichments
-
-f_label=\302\260F.
-temp_dep=TRUE
-bind_to_list=temperature
 
 [ase_label_1]
 keys=page,c_label,f_label,temp_dep,bind_to_list
@@ -393,6 +429,36 @@ key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
 page=4
 c_label=71.1
 f_label=160
+temp_dep=TRUE
+bind_to_list=temperature
+
+[iat_adv_per_temp_label]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=4
+set_label=Advance 1 deg. every \302\260F.
+
+[iat_ret_per_temp_label]
+keys=page,set_label
+key_types=_INT_,_STRING_
+page=4
+set_label=Retard 1 deg every \302\260F.
+
+[iat_adv_clt_label]
+keys=page,c_label,f_label,temp_dep,bind_to_list
+key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
+page=4
+c_label=when below CLT setpoint \302\260C.
+f_label=when below CLT setpoint \302\260F.
+temp_dep=TRUE
+bind_to_list=temperature
+
+[iat_ret_temp_label]
+keys=page,c_label,f_label,temp_dep,bind_to_list
+key_types=_INT_,_STRING_,_STRING_,_BOOL_,_STRING_
+page=4
+c_label=and IAT above \302\260C.
+f_label=and IAT above \302\260F.
 temp_dep=TRUE
 bind_to_list=temperature
 
@@ -487,6 +553,76 @@ bind_to_list=xtra_crank
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Increases the cranking fuel by the following percentage.  i.e if cranking PW is 10 ms and you set the control to 150%, the the cranking pulsewidth becomes 15ms.
+
+[iat_ign_adv_temp_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=48
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When below the cooltant setpoint the ignition timing will be advanced 1 degree for each amount below this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 60 deg, the timing will be advanced by 4 degrees.
+
+[iat_ret_temp_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=50
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When above the Intake Air Temp (IAT) setpoint the ignition timing will be retarded 1 degree for each amount above this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 160 deg, the timing will be retarded by 6 degrees.
+
+[iat_ign_adv_clt_temp_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=47
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+bind_to_list=temperature
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the coolant temp setpoint for CLT Based advanced. CLT Advance won't take effect unless the coolant temp is BELOW this setpoint by at least the amount of the "Add 1 deg adv every...." control above.
+
+[iat_temp_thresh_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=52
+dl_conv_expr=x+40
+ul_conv_expr=x-40
+temp_dep=TRUE
+bind_to_list=temperature
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the Intake Air temp setpoint for IAT Based ignition retard. IAT Retard won't take effect unless the Intake air temp is above the this threshold by the amount above AND the Manifold (MAP) pressure exceeeds the setpoint above.
+
+[iat_max_adv_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=49
+dl_conv_expr=x/0.352
+ul_conv_expr=x*0.352
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the Maximum allowed additional timing advance to be added on by the clt based advance.
+
+[iat_ret_map_setpoint_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=51
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=This is the MAP setpoint which must be exceeded along with the Intake Air temp value before IAT based retard will become active.
 
 [warmup_spin_1]
 keys=offset

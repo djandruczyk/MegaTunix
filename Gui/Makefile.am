@@ -42,9 +42,7 @@ gui_files = 	README \
 		msns-e-boost_idle.datamap \
 		msns-e-boost-knock.glade \
 		msns-e-boost-knock-029x.datamap \
-		msns-e-crank-ase-024x.glade \
 		msns-e-crank-ase.glade \
-		msns-e-crank-ase-024x.datamap \
 		msns-e-crank-ase-029x.datamap \
 		msns-e-ego.glade \
 		msns-e-ego-029x.datamap \

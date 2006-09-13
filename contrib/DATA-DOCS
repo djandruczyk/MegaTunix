@@ -400,7 +400,7 @@ IdleAdvCLT 	pg3 177 "F", (x - 40) conv, (-40 - 215) span
 IdleDelayTime 	pg3 178 "sec", no conv, (0 -  5) span
 
 ----------------------------------------------------------------------------
-IAT/CLT RELATED IGNTION
+IAT/CLT RELATED IGNTION 100% Complete (Crank/ASE) tab
 ----------------------------------------------------------------------------
 
 CltAdv          pg0 046 [2:2], "Off", "On"
@@ -409,7 +409,7 @@ IgAdvTemp       pg0 047 "F", (x - 40) conv, (-10 - 120) span
 IgRetDeg        pg0 050 "F", no conv, (0 - 120) span
 IgRetTemp       pg0 052 "F", (x - 40) conv, (-10 - 120) span
 MaxIatAdv       pg0 049 "Deg", (x * 0.352) conv, (0 - 15) span
-IatAdvKpa       pg0 051 "KPa", (x - 40) conv, (0 - 255) span
+IatAdvKpa       pg0 051 "KPa", no conv, (0 - 255) span
 
 ----------------------------------------------------------------------------
 FUEL TABLE SELECTION 100% Complete
@@ -448,7 +448,7 @@ OvrRunTps       pg0 073 "Raw ADC", no conv, (0 - 255) span
 OvrRunTimr      pg0 130 "Sec", no conv, (0 - 255) span
 
 ----------------------------------------------------------------------------
-BAROMETRIC CORRECTION
+BAROMETRIC CORRECTION 100% Complete
 ----------------------------------------------------------------------------
 
 BarroHi    	pg0 082 "KPa", ((x * 0.433) + 10) conv,(10 - 255) span

@@ -478,6 +478,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
+	/* If this widget is temp dependant, set the curren units on it 
+	*/
+	if (cfg_read_string(cfgfile,section,"temp_dep",&tmpbuf))
+	{
+		g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(FAHRENHEIT));
+		g_free(tmpbuf);
+	}
+
 	offset = -1;
 	cfg_read_int(cfgfile,section,"offset",&offset);
 	if (offset >= 0)
