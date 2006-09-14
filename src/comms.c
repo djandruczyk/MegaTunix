@@ -80,6 +80,8 @@ void comms_test()
 
 	/* If serial control struct exists, 
 	 * but we don't have connected status, try to reset connection */
+	if (!serial_params)
+		return;
 	if (!serial_params->open)
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);

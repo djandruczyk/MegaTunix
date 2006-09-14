@@ -108,7 +108,7 @@ void interrogate_ecu()
 	write(serial_params->fd,"P",1);
 	write(serial_params->fd,&i,1);
 	flush_serial(serial_params->fd,TCIOFLUSH);
-	g_usleep(100000);
+	//g_usleep(100000);
 	for (i=0;i<tests_to_run;i++)
 	{
 		flush_serial(serial_params->fd,TCIOFLUSH);
