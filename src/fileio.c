@@ -18,6 +18,7 @@
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
+#include <firmware.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
 #include <keyparser.h>
@@ -87,6 +88,9 @@ void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 		case DATALOG_IMPORT:
 			title = g_strdup("Select a file to load your MS Datalog from...");
 			break;
+		case FIRMWARE_LOAD:
+			title = g_strdup("Select a .s19 Firmware file to load into your ECU...");
+			break;
 		default:
 			title = g_strdup("Title not set BUG!! contact author\n");
 			break;
@@ -104,6 +108,9 @@ void present_filesavebox(FileIoType iotype,gpointer dest_widget)
 	gtk_file_selection_set_select_multiple(
 			GTK_FILE_SELECTION(file_selector),
 			FALSE);
+	if (iotype == FIRMWARE_LOAD)
+		gtk_file_selection_complete(GTK_FILE_SELECTION(file_selector),
+			"*.s19");
 
 	/* Call handler on OK */
 	g_signal_connect (GTK_OBJECT
@@ -175,7 +182,7 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 		new_file = TRUE;
 
 	/* If it's a new file, but we want to read, throw a warning... */
-	if ((new_file) && ((iotype == FULL_RESTORE) || (iotype == VE_IMPORT)))
+	if ((new_file) && ((iotype == FULL_RESTORE) || (iotype == FIRMWARE_LOAD ) || (iotype == VE_IMPORT)))
 	{
 		warn_input_file_not_exist(iotype, selected_filename);
 		return;
@@ -314,6 +321,11 @@ void check_filename (GtkWidget *widget, GtkFileSelection *file_selector)
 			vetable_import(iofile);
 			close_file (iofile);
 			break;
+		case FIRMWARE_LOAD:
+			load_firmware_file(iofile);
+			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"multitherm_table")),TRUE);
+                        gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"download_fw_button")),TRUE);
+			close_file(iofile);
 		default:
 			dbg_func(g_strdup(__FILE__": ERROR in check_filename()\n"),CRITICAL);
 			break;

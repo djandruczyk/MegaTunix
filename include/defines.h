@@ -40,5 +40,19 @@
 /* For datalogging and Logviewer */
 #define TABLE_COLS 5
 
+/* Multitherm */
+#define IAT 0
+#define CLT 1
+
+#define ASCII_LOWER_CAPS_DIFF 32
+
+#define DEFAULT_BIAS 2490
+
+#define TEMP_C_100_DENSITY 21.1111
+#define TEMP_K_100_DENSITY 294.2611
+
+#define C_TO_K 273
+
+
 
 #endif

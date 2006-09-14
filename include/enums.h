@@ -42,6 +42,9 @@ typedef enum
 	OFFLINE_MODE,
 	SELECT_DLOG_EXP,
 	SELECT_DLOG_IMP,
+	SELECT_FIRMWARE_LOAD,
+	ENTER_SENSOR_INFO,
+	DOWNLOAD_FIRMWARE,
 	DLOG_SELECT_DEFAULTS,
 	DLOG_SELECT_ALL,
 	DLOG_DESELECT_ALL,
@@ -63,12 +66,14 @@ typedef enum
 /* Toggle/Radio buttons */
 typedef enum
 {
-	TOOLTIPS_STATE=0x40,
+	TOOLTIPS_STATE=0x50,
         FAHRENHEIT,
         CELSIUS,
 	COMMA,
 	TAB,
 	SPACE,
+	USE_ALT_IAT,
+	USE_ALT_CLT,
 	REALTIME_VIEW,
 	PLAYBACK_VIEW,
 	HEX_VIEW,
@@ -79,7 +84,7 @@ typedef enum
 
 typedef enum
 {
-	MT_CLASSIC_LOG=0x50,
+	MT_CLASSIC_LOG=0x70,
 	MT_FULL_LOG,
 	CUSTOM_LOG
 }LoggingMode;
@@ -87,7 +92,7 @@ typedef enum
 /* spinbuttons... */
 typedef enum
 {
-	REQ_FUEL_DISP=0x60,
+	REQ_FUEL_DISP=0x80,
 	REQ_FUEL_CYLS,
 	REQ_FUEL_RATED_INJ_FLOW,
 	REQ_FUEL_RATED_PRESSURE,
@@ -125,11 +130,12 @@ typedef enum
 
 typedef enum
 {
-	VE_EXPORT = 0xa0,
+	VE_EXPORT = 0xb0,
 	VE_IMPORT,
 	DATALOG_INT_DUMP,
 	DATALOG_EXPORT,
 	DATALOG_IMPORT,
+	FIRMWARE_LOAD,
 	FULL_BACKUP,
 	FULL_RESTORE
 }FileIoType;
@@ -137,13 +143,13 @@ typedef enum
 
 typedef enum
 {	
-	RED=0xb0,
+	RED=0xc0,
 	BLACK
 }GuiColor;
 
 typedef enum
 {
-	HEADER=0xc0,
+	HEADER=0xd0,
 	PAGE,
 	RANGE,
 	TABLE
@@ -151,7 +157,7 @@ typedef enum
 
 typedef enum
 {
-	VEX_EVEME=0xd0,
+	VEX_EVEME=0xe0,
 	VEX_USER_REV,
 	VEX_USER_COMMENT,
 	VEX_DATE,
@@ -163,7 +169,7 @@ typedef enum
 
 typedef enum
 {
-	FONT=0xe0,
+	FONT=0x100,
 	TRACE,
 	GRATICULE,
 	HIGHLIGHT
@@ -179,7 +185,7 @@ typedef enum
 
 typedef enum
 {
-	MTX=0x100,
+	MTX=0x110,
 	MT_CLASSIC,
 	MT_FULL,
 	MT_RAW
@@ -220,14 +226,14 @@ typedef enum guint
 
 typedef enum
 {
-        VNUM = 0x110,
+        VNUM = 0x120,
         EXTVER,
         SIG
 }StoreType;
 
 typedef enum
 {
-	BURN_CMD = 0x120,
+	BURN_CMD = 0x130,
 	READ_CMD,
 	WRITE_CMD,
 	NULL_CMD,
@@ -239,7 +245,7 @@ typedef enum
 
 typedef enum
 {
-	IO_REALTIME_READ=0x130,
+	IO_REALTIME_READ=0x140,
 	IO_INTERROGATE_ECU,
 	IO_COMMS_TEST,
 	IO_READ_VE_CONST,
@@ -260,7 +266,7 @@ typedef enum
 
 typedef enum
 {
-	UPD_REALTIME = 0x140,
+	UPD_REALTIME = 0x160,
 	UPD_LOGBAR,
 	UPD_LOGVIEWER,
 	UPD_WIDGET,
@@ -290,7 +296,7 @@ typedef enum
 
 typedef enum
 {
-	MTX_INT = 0x160,
+	MTX_INT = 0x190,
 	MTX_ENUM,
 	MTX_BOOL,
 	MTX_STRING
@@ -298,7 +304,7 @@ typedef enum
 
 typedef enum
 {
-	ABOUT_PAGE=0x170,
+	ABOUT_PAGE=0x1a0,
 	GENERAL_PAGE,
 	COMMS_PAGE,
 	ENG_VITALS_PAGE,
@@ -318,34 +324,34 @@ typedef enum
 
 typedef enum
 {
-	VE_EMB_BIT=0x180,
+	VE_EMB_BIT=0x1b0,
 	VE_VAR,
 	RAW_VAR
 }ComplexExprType;
 
 typedef enum
 {
-	UPLOAD=0x190,
+	UPLOAD=0x1c0,
 	DOWNLOAD,
 	RTV
 }ConvType;
 
 typedef enum
 {
-	MTX_HEX=0x1a0,
+	MTX_HEX=0x1d0,
 	MTX_DECIMAL
 }Base;
 
 typedef enum
 {
-	MTX_ENTRY=0x1b0,
+	MTX_ENTRY=0x1e0,
 	MTX_TITLE,
 	MTX_LABEL
 }WidgetType;
 
 typedef enum
 {
-	MTX_PROGRESS=0x1c0,
+	MTX_PROGRESS=0x200,
 	MTX_RANGE
 }SliderType;
 #endif

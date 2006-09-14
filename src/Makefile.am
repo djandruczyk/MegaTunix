@@ -23,6 +23,7 @@ megatunix_SOURCES = \
 	dep_processor.c \
 	dispatcher.c \
 	fileio.c \
+	firmware.c \
 	general_gui.c \
 	getfiles.c \
 	gui_handlers.c \
@@ -53,6 +54,7 @@ megatunix_SOURCES = \
 	tabloader.c \
 	tag_loader.c \
 	threads.c \
+	thermistor.cpp \
 	timeout_handlers.c \
 	tuning_gui.c \
 	user_outputs.c \

@@ -41,6 +41,49 @@ handler=_RESTORE_ALL_
 page=0
 tooltip=Restore All ECU settings prompts you for a filename and reads it, validates it for the currently running firmware and writes all settings to the ECU and burns flash when complete.  NOTE: This will ONLY accept MegaTunix ECU backup files,  MSQ files are NOT SUPPORTED, as they are binary, closed source, and there are not cross platform compatible.
 
+[load_firmware_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_SELECT_FIRMWARE_LOAD_
+page=0
+tooltip=Prompts you for a .s19 file to load to the ECU also providing the option to change thje CLT/IAT lookuptables as needed.
+
+[download_fw_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_DOWNLOAD_FIRMWARE_
+page=0
+tooltip=Sends the newly loaded (and modified if request) firmware to the ECU
+
+[enter_iat_sensor_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_ENTER_SENSOR_INFO_
+page=0
+tooltip=Prompts you with a window requeting the temp/resistance pairs for your sensor.
+
+[enter_clt_sensor_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_ENTER_SENSOR_INFO_
+page=0
+tooltip=Prompts you with a window requeting the temp/resistance pairs for your sensor.
+
+[use_alt_iat_check_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_USE_ALT_IAT_
+page=0
+tooltip=Enables the entering of new parameters for the IAT sensor
+
+[use_alt_clt_check_button]
+keys=handler,page
+key_types=_ENUM_,_INT_
+handler=_USE_ALT_CLT_
+page=0
+tooltip=Enables the entering of new parameters for the CLT sensor
+
+
 #----- Textview ----------------------------------------------------
 
 [tools_view]

@@ -17,6 +17,7 @@ headers = \
 	dispatcher.h \
 	enums.h \
 	fileio.h \
+	firmware.h \
 	general_gui.h \
 	getfiles.h \
         gui_handlers.h \
@@ -49,6 +50,7 @@ headers = \
         structures.h \
         tabloader.h \
         tag_loader.h \
+        thermistor.h \
         threads.h \
         timeout_handlers.h \
         tuning_gui.h \

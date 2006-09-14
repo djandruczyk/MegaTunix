@@ -28,6 +28,7 @@
 #include <logviewer_core.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
+//#include <multitherm.h>
 #include <offline.h>
 #include <mode_select.h>
 #include <notifications.h>
@@ -225,6 +226,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	extern gint preferred_delimiter;
 	extern gchar *offline_firmware_choice;
 	extern gboolean forced_update;
+	extern GHashTable *dynamic_widgets;
 
 	if (GTK_IS_OBJECT(widget))
 	{
@@ -254,6 +256,14 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				temp_units = CELSIUS;
 				reset_temps(GINT_TO_POINTER(temp_units));
 				forced_update = TRUE;
+				break;
+			case USE_ALT_IAT:
+				//use_alt_iat = TRUE;
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"enter_iat_sensor_button")),TRUE);
+				break;
+			case USE_ALT_CLT:
+				//use_alt_clt = TRUE;
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"enter_clt_sensor_button")),TRUE);
 				break;
 			case COMMA:
 				preferred_delimiter = COMMA;
@@ -297,6 +307,15 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_tooltips_disable(tip);
 				tips_in_use = FALSE;
 				break;
+			case USE_ALT_IAT:
+				//use_alt_iat = FALSE;
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"enter_iat_sensor_button")),FALSE);
+				break;
+			case USE_ALT_CLT:
+				//use_alt_clt = FALSE;
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"enter_clt_sensor_button")),FALSE);
+				break;
+				
 			default:
 				break;
 		}
@@ -686,6 +705,21 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			reset_logviewer_state();
 			free_log_info();
 			present_filesavebox(DATALOG_IMPORT,(gpointer)widget);
+			break;
+		case SELECT_FIRMWARE_LOAD:
+			present_filesavebox(FIRMWARE_LOAD,(gpointer)widget);
+			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"multitherm_table")),TRUE);
+			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"download_fw_button")),TRUE);
+			break;
+		case DOWNLOAD_FIRMWARE:
+			printf("not implemented yet\n");
+			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"multitherm_table")),FALSE);
+			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"enter_iat_sensor_button")),FALSE);
+			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"enter_clt_sensor_button")),FALSE);
+			break;
+		case ENTER_SENSOR_INFO:
+			printf("not implemented yet\n");
+			//multitherm_request_info((gpointer)widget);
 			break;
 		case CLOSE_LOGFILE:
 			if (offline)
