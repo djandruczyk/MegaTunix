@@ -326,7 +326,7 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->multi_page = potential->multi_page;
 	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
-	firmware->debug_above = potential->debug_above;
+	firmware->ro_above = potential->ro_above;
 	firmware->write_cmd = g_strdup(potential->write_cmd);
 	firmware->burn_cmd = g_strdup(potential->burn_cmd);
 	firmware->page_cmd = g_strdup(potential->page_cmd);
@@ -754,8 +754,8 @@ void load_profile_details(struct Canidate *canidate)
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 					if(!cfg_read_int(cfgfile,section,"dtmode_page",&canidate->table_params[i]->dtmode_page))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-					if(!cfg_read_int(cfgfile,"parameters","DebugAbove",&canidate->debug_above))
-						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"DebugAbove\" value not found in interrogation profile, ERROR\n"),CRITICAL);
+					if(!cfg_read_int(cfgfile,"parameters","ReadOnlyAbove",&canidate->ro_above))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"ReadOnlyAbove\" value not found in interrogation profile, ERROR\n"),CRITICAL);
 				}
 			}
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))

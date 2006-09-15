@@ -64,7 +64,7 @@ struct Firmware_Details
 	gint total_pages;	/*! How many pages do we handle? */
 	gint total_tables;	/*! How many tables do we handle? */
 	gint trigmon_page;	/*! Trigger monitor data page */
-	gint debug_above;	/*! Debug pages above this one */
+	gint ro_above;		/*! Read Only debug pages above this one */
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gchar *page_cmd;	/*! Command to send to change pages ... */
@@ -281,7 +281,7 @@ struct Canidate
 	gchar *page_cmd;	/*! Command to send to change pages... */
 	gboolean multi_page;	/*! Multi-page firmware */
 	gint trigmon_page;	/*! Trigger monitor Page */
-	gint debug_above;	/*! Debug pages above this one */
+	gint ro_above;		/*! Debug pages above this one */
 	gint total_pages;	/*! how many pages do we handle? */
 	gint total_tables;	/*! how many tables do we handle? */
 	GHashTable *lookuptables;/*! Lookuptables hashtable... */

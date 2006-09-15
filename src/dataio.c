@@ -78,26 +78,21 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf("\tNULL_HANDLER requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__"\tNULL_HANDLER requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
 
 				/* Increment bad read counter.... */
-				if (res <= 0)
-				{
-					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf("\tNULL_HANDLER I/O ERROR: \"%s\"\n",err_text),CRITICAL);
-					zerocount++;
-				}
-
-				dbg_func(g_strdup_printf("\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 2)  /* 3 bad reads, abort */
-				{
-					bad_read = TRUE;
+				if (res < 0) /* ERROR condition */
 					break;
-				}
+				if (res == 0) /* No data condition */
+					zerocount++;
+
+				dbg_func(g_strdup_printf(__FILE__"\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (zerocount > 1)  /* 2 bad reads, abort */
+					break;
 			}
 			g_static_mutex_unlock(&comms_mutex);
 			flush_serial(serial_params->fd, TCIOFLUSH);
@@ -115,22 +110,25 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf("\tC_TEST requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__"\tC_TEST requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
 
 				/* Increment bad read counter.... */
-				if (res <= 0)
+				if (res < 0) /* I/O Error */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf("\tC_TEST I/O ERROR: \"%s\"\n",err_text),CRITICAL);
-					zerocount++;
+					dbg_func(g_strdup_printf(__FILE__"\tC_TEST I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					bad_read = TRUE;
+					break;
 				}
+				if (res == 0)
+					zerocount++;
 
-				dbg_func(g_strdup_printf("\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 2)  /* 3 bad reads, abort */
+				dbg_func(g_strdup_printf(__FILE__"\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (zerocount > 2)  /* 2 bad reads, abort */
 				{
 					bad_read = TRUE;
 					break;
@@ -139,7 +137,6 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_unlock(&comms_mutex);
 			if (bad_read)
 			{
-				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),IO_PROCESS);
 				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
@@ -159,25 +156,25 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf("\tGET_ERROR requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res <= 0)
+				if (res < 0) /* ERROR */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf("\tGET_ERROR I/O ERROR: \"%s\"\n",err_text),CRITICAL);
-					zerocount++;
-				}
-
-				dbg_func(g_strdup_printf("\tGET_ERROR read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 2)  // 3 bad reads, abort
-				{
+					dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR I/O ERROR: \"%s\"\n",err_text),CRITICAL);
 					break;
 				}
+				if (res == 0) /* No Data avail */
+					zerocount++;
+
+				dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (zerocount > 1)  // 2 bad reads, abort
+					break;
 			}
 			g_static_mutex_unlock(&comms_mutex);
 			dump_output(total_read,buf);
@@ -206,22 +203,25 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf("\tRT_VARS requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__"\tRT_VARS requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res <= 0)
+				if (res < 0) /* ERROR */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf("\tRT_VARS I/O ERROR: \"%s\"\n",err_text),CRITICAL);
-					zerocount++;
+					dbg_func(g_strdup_printf(__FILE__"\tRT_VARS I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					bad_read = TRUE;
+					break;
 				}
+				if (res == 0) /* No Data avail */
+					zerocount++;
 
-				dbg_func(g_strdup_printf("\tRT_VARS read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 2)  // 3 bad reads, abort
+				dbg_func(g_strdup_printf(__FILE__"\tRT_VARS read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (zerocount > 1)  // 2 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;
@@ -276,22 +276,25 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf("\tVE_BLOCK, page %i, requesting %i bytes\n",message->page,total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK, page %i, requesting %i bytes\n",message->page,total_wanted-total_read),IO_PROCESS);
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res <= 0)
+				if (res < 0) /* ERROR */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf("\tVE_BLOCK I/O ERROR: \"%s\"\n",err_text),CRITICAL);
-					zerocount++;
+					dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					bad_read = TRUE;
+					break;
 				}
+				if (res == 0) /* NO data avail */
+					zerocount++;
 
-				dbg_func(g_strdup_printf("\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 2)  // 3 bad reads, abort
+				dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
+				if (zerocount > 1)  // 2 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;
@@ -301,8 +304,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup_printf(__FILE__"handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),IO_PROCESS);
-				dbg_func(g_strdup_printf(__FILE__"handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
+				dbg_func(g_strdup_printf(__FILE__": handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__": handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -327,21 +330,24 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf("\tRAW_MEMORY_DUMP requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__"\tRAW_MEMORY_DUMP requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
 
 				// Increment bad read counter....
-				if (res <= 0)
+				if (res < 0) /* ERROR condition */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf("\tRAW_MEMORY_DUMP I/O ERROR: \"%s\"\n",err_text),CRITICAL);
-					zerocount++;
+					dbg_func(g_strdup_printf(__FILE__"\tRAW_MEMORY_DUMP I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					bad_read = TRUE;
+					break;
 				}
+				if (res == 0) /* NO data condition */
+					zerocount++;
 
-				dbg_func(g_strdup_printf("\tread %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
-				if (zerocount >= 2)  // 3 bad reads, abort
+				dbg_func(g_strdup_printf(__FILE__"\tread %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
+				if (zerocount > 2)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
 					break;

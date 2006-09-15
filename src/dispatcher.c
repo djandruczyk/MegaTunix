@@ -203,7 +203,10 @@ trypop:
 					set_title(g_strdup("Updating Controls..."));
 					paused_handlers = TRUE;
 					if ((connected) || (offline))
+					{
 						update_ve_const();
+						trigger_shit();
+					}
 					paused_handlers = FALSE;
 					set_title(g_strdup("Ready..."));
 					break;

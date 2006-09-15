@@ -455,7 +455,7 @@ void set_ms_page(gint ms_page)
 
 	//printf("fed_page %i, last_page %i\n",ms_page,last_page);
 
-	if ((ms_page > firmware->debug_above) || (last_page > firmware->debug_above))
+	if ((ms_page > firmware->ro_above) || (last_page > firmware->ro_above))
 		goto skipburn;
 //	printf("last page %i, ms_page %i, memcpy results for last page %i, memcmp results for current page %i\n",last_page, ms_page, memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length),memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length));
 
