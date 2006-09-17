@@ -63,7 +63,6 @@ gboolean open_serial(gchar * port_name)
 #else
 	fd = open(device, O_RDWR | O_NOCTTY);
 #endif
-	g_static_mutex_unlock(&comms_mutex);
 	if (fd > 0)
 	{
 		/* SUCCESS */
@@ -94,6 +93,7 @@ gboolean open_serial(gchar * port_name)
 
 	g_free(device);
 	//printf("open_serial returning\n");
+	g_static_mutex_unlock(&comms_mutex);
 	return link_up;
 }
 	
@@ -245,7 +245,6 @@ void close_serial()
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
 #endif
 	close(serial_params->fd);
-	g_static_mutex_unlock(&comms_mutex);
 	serial_params->fd = -1;
 	serial_params->open = FALSE;
 	if (serial_params->port_name)
@@ -257,6 +256,7 @@ void close_serial()
 	/* An Closing the comm port */
 	dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"),SERIAL_RD|SERIAL_WR);
 	thread_update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
+	g_static_mutex_unlock(&comms_mutex);
 	return;
 }
 

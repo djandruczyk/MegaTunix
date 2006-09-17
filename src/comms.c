@@ -68,24 +68,28 @@ void comms_test()
 	extern gboolean connected;
 	extern gboolean offline;
 	extern gint failurecount;
+	static GStaticMutex comm_test_mutex = G_STATIC_MUTEX_INIT;
 
 	//printf("comms_test\n");
+	if (!serial_params)
+		return;
+	g_static_mutex_lock(&comm_test_mutex);
 	
 	if (offline)
 	{
 		queue_function(g_strdup("kill_conn_warning"));
 		connected = FALSE;
+		g_static_mutex_unlock(&comm_test_mutex);
 		return;
 	}
 
 	/* If serial control struct exists, 
 	 * but we don't have connected status, try to reset connection */
-	if (!serial_params)
-		return;
 	if (!serial_params->open)
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		thread_update_logbar("comms_view","warning",g_strdup("Serial Port is NOT opened can NOT check ecu comms...\n"),TRUE,FALSE);
+		g_static_mutex_unlock(&comm_test_mutex);
 
 		return;
 	}
@@ -108,9 +112,9 @@ void comms_test()
 		flush_serial(serial_params->fd, TCIOFLUSH);
 		connected = FALSE;
 		failurecount++;
+		g_static_mutex_unlock(&comm_test_mutex);
 		return;
 	}
-	
 	g_static_mutex_unlock(&comms_mutex);
 	result = handle_ecu_data(C_TEST,NULL);
 	if (result)	// Success
@@ -133,6 +137,7 @@ void comms_test()
 	}
 	/* Flush the toilet again.... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
+	g_static_mutex_unlock(&comm_test_mutex);
 	return;
 }
 
@@ -330,6 +335,7 @@ void burn_ecu_flash()
 	if (!connected)
 	{
 		dbg_func(g_strdup(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n"),CRITICAL);
+		g_static_mutex_unlock(&mutex);
 		return;
 	}
 	flush_serial(serial_params->fd, TCIOFLUSH);
@@ -373,6 +379,7 @@ void readfrom_ecu(struct Io_Message *message)
 	extern gchar *handler_types[];
 	gchar *err_text = NULL;
 	extern gboolean offline;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	if(serial_params->open == FALSE)
 		return;
@@ -383,6 +390,8 @@ void readfrom_ecu(struct Io_Message *message)
 
 	if ((firmware->multi_page ) && (message->need_page_change)) 
 		set_ms_page(message->truepgnum);
+
+	g_static_mutex_lock(&mutex);
 
 	/* Flush serial port... */
 	flush_serial(serial_params->fd, TCIOFLUSH);
@@ -433,6 +442,7 @@ void readfrom_ecu(struct Io_Message *message)
 		serial_params->errcount++;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),IO_PROCESS);
 	}
+	g_static_mutex_unlock(&mutex);
 }
 
 
@@ -452,8 +462,10 @@ void set_ms_page(gint ms_page)
 	static gint last_page = 0;
 	gint res = 0;
 	gchar * err_text = NULL;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	//printf("fed_page %i, last_page %i\n",ms_page,last_page);
+	g_static_mutex_lock(&mutex);
 
 	if ((ms_page > firmware->ro_above) || (last_page > firmware->ro_above))
 		goto skipburn;
@@ -468,6 +480,8 @@ skipburn:
 	if (ms_page == last_page)
 	{
 	//	printf("no need to change the page again as it's already %i\n",ms_page);
+		g_static_mutex_unlock(&mutex);
+
 		return;
 	}
 
@@ -492,6 +506,7 @@ skipburn:
 	g_usleep(100000);
 
 
+	g_static_mutex_unlock(&mutex);
 	return;
 
 }

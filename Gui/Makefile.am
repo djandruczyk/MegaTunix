@@ -47,10 +47,8 @@ gui_files = 	README \
 		msns-e-ego.glade \
 		msns-e-ego-029x.datamap \
 		msns-e-features.glade \
-		msns-e-features.datamap \
 		msns-e-features-029x.datamap \
 		msns-e-fuelconstants.glade \
-		msns-e-fuelconstants.datamap \
 		msns-e-fuelconstants-029x.datamap \
 		msns-e-idle.glade \
 		msns-e-idle-029x.datamap \

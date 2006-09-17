@@ -59,7 +59,9 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	extern gint **ms_data_last;
 	extern struct Serial_Params *serial_params;
 	extern struct Firmware_Details *firmware;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	g_static_mutex_lock(&mutex);
 	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n"),IO_PROCESS);
 
 	/* different cases whether we're doing 
@@ -375,6 +377,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 jumpout:
 
 	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n"),IO_PROCESS);
+	g_static_mutex_unlock(&mutex);
 	return state;
 }
 
