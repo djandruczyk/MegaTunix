@@ -243,6 +243,7 @@
 					      <property name="active">False</property>
 					      <property name="inconsistent">False</property>
 					      <property name="draw_indicator">True</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 17 Sep 2006 03:04:55 GMT"/>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">2</property>
@@ -268,6 +269,7 @@
 					      <property name="inconsistent">False</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">dual_edis_radio_button</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 17 Sep 2006 03:04:46 GMT"/>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>
