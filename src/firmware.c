@@ -18,7 +18,7 @@
 
 #define CTR 187
 #define UNITS 188
-#define PG 10
+#define PG 9
 
 /*!
  \brief load_firmware_file loads the .s19 file into memory
