@@ -95,4 +95,4 @@ gui_DATA = $(gui_files)
 
 EXTRA_DIST = $(gui_DATA)
 
-CLEANFILES = *.gladep *.bak
+CLEANFILES = *.gladep *.bak gmon.out
