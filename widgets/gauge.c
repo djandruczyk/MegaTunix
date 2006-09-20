@@ -251,7 +251,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 	x = 0.5-(extents.width/2 + extents.x_bearing);
 	y = 0.5-(extents.height/2 + extents.y_bearing);
 
-	cairo_move_to (cr, xc+x, (1.2*yc)+y);
+	cairo_move_to (cr, xc+x, yc+(2.5*y));
 	cairo_show_text (cr, message);
 	g_free(message);
 	last_height = extents.height;
@@ -264,7 +264,7 @@ static void draw (GtkWidget *gauge, cairo_t *cr)
 		x = 0.5-(extents.width/2 + extents.x_bearing);
 		y = 0.5-(extents.height/2 + extents.y_bearing);
 
-		cairo_move_to (cr, xc+x, (1.2*yc)+last_height+y);
+		cairo_move_to (cr, xc+x, yc+last_height+(3*y));
 		cairo_show_text (cr, MTX_GAUGE_FACE(gauge)->units_str);
 	}
 	cairo_stroke (cr);
