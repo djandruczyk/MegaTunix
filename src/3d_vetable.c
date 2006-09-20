@@ -806,7 +806,9 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gfloat z_val = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
+	gfloat bottom = 0.0;
 	extern GHashTable *dynamic_widgets;
+	extern gint ** ms_data;
 
 	dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"),OPENGL);
 
@@ -820,6 +822,7 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	lookup_current_value(ve_view->y_source,&y_val);
 	lookup_current_value(ve_view->z_source,&z_val);
 
+	bottom = (ve_view->z_min-10)/ve_view->z_div;
 	/* Render a green dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(0.0,1.0,0.0);
@@ -829,6 +832,18 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 			y_val/ve_view->y_div,	
 			(z_val/ve_view->z_div)-ve_view->z_offset);
 	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	glVertex3f(x_val/ve_view->x_div,y_val/ve_view->y_div,(z_val/ve_view->z_div)-ve_view->z_offset);
+	glVertex3f(x_val/ve_view->x_div,y_val/ve_view->y_div,bottom - ve_view->z_offset);
+	glVertex3f((ms_data[ve_view->x_page][ve_view->x_base])/ve_view->x_div,y_val/ve_view->y_div,bottom - ve_view->z_offset);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex3f(x_val/ve_view->x_div,y_val/ve_view->y_div,bottom - ve_view->z_offset);
+	glVertex3f(x_val/ve_view->x_div,(ms_data[ve_view->y_page][ve_view->y_base])/ve_view->y_div,bottom - ve_view->z_offset);
+	glEnd();
+			                        
 
 	tmpbuf = g_strdup_printf("x_runtime_label_%i",ve_view->table_num);
 	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->x_eval,x_val),ve_view->x_precision,ve_view->x_suffix);
