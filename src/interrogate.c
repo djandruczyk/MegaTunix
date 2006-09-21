@@ -455,7 +455,7 @@ GArray * validate_and_load_tests(GHashTable *cmd_details)
 			section = g_strdup_printf("test_%.2i",i);
 			if (!cfg_read_string(cfgfile,section,"raw_cmd",&cmd->string))
 			{
-				dbg_func(g_strdup(__FILE__": validate_and_load_tests(),\n\tCMD_STRING is NULL\n"),INTERROGATOR);
+				dbg_func(g_strdup_printf(__FILE__": validate_and_load_tests(),\n\tCMD_STRING  for %s is NULL\n",section),CRITICAL);
 				break;
 			}
 
@@ -856,7 +856,7 @@ void load_bytecounts(GArray *cmd_array, GHashTable *hash, ConfigFile *cfgfile)
 		cmd = g_array_index(cmd_array,struct Command *, i);
 
 		if(!cfg_read_int(cfgfile,"bytecounts",cmd->key,&bytecount))
-			bytecount = 0;
+			bytecount = -1;
 		g_hash_table_insert(hash, g_strdup(cmd->key),GINT_TO_POINTER(bytecount));
 		dbg_func(g_strdup_printf(__FILE__": load_bytecounts()\n\tInserting key %s, val %i\n",cmd->key,bytecount),INTERROGATOR);
 
@@ -926,6 +926,8 @@ gboolean check_for_match(GArray *cmd_array, struct Canidate *potential, struct C
 		pbytes = (gint)g_hash_table_lookup(
 				potential->bytecounts,
 				cmd->key);
+		if (pbytes == -1)
+			continue;
 		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTest(%s) %s, canidate bytes %i, potential %i\n",cmd->key,cmd->string,cbytes,pbytes),INTERROGATOR);
 		if (cbytes != pbytes)
 		{
