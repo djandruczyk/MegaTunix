@@ -24,6 +24,7 @@ void setup_logger_display(GtkWidget *);
 gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 void update_trigtooth_display(gint);
+void get_display_ready(GtkWidget *);
 
 
 /* Prototypes */

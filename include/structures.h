@@ -625,6 +625,9 @@ struct TTMon_Data
 	GArray *current;	/*! Current block of times */
 	GArray *last;		/*! Last block of times */
 	gint wrap_pt;		/*! Wrap point */
+	gint vdivisor;		/*! Vertical scaling divisor */
+	gfloat peak;		/*! Normalized Vertical Peak Value */
+	gfloat vpeak;		/*! Normalized Vertical Peak Scale marker */
 //	Ttm_Units units;	/*! Units enuermation */
 
 };

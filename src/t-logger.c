@@ -12,8 +12,11 @@
  */
 
 #include <config.h>
+#include <enums.h>
 #include <glib.h>
+#include <math.h>
 #include <t-logger.h>
+#include <logviewer_gui.h>
 #include <structures.h>
 
 
@@ -70,6 +73,7 @@ EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigur
 		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
 
 	}
+	get_display_ready(widget);
 	update_trigtooth_display(ttm_data->page);
 	return TRUE;
 }
@@ -100,15 +104,17 @@ void update_trigtooth_display(gint page)
 	
 	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
 	if (!ttm_data)
-		printf("could NOT find ttm_Data in hashtable,  BIG ASS PROBLEM!\n");
+		printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
 	gint position = ms_data[page][CTR];
 	gint count = 0;
 
+	/*
 	printf("Counter position on page %i is %i\n",page,position);
 	if (position > 0)
 		printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
 	else
 		printf("data block from position 0 to 185 (93 words)\n");
+		*/
 
 	count=0;
 	for (i=position;i<185;i+=2)
@@ -144,8 +150,6 @@ void update_trigtooth_display(gint page)
 	}
 
 	min = 65535;
-//	min_index = -1;
-//	max_index = -1;
 	max = 0;
 	for (i=0;i<93;i++)
 	{
@@ -157,5 +161,77 @@ void update_trigtooth_display(gint page)
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
 	printf ("Minimum tooth time: %i, max tooth time %i\n",min,max);
+
+	/* vertical scale calcs:
+	 * Should end up with peak being a floating point number between 0-10
+	 *  for values of 0-100000
+	 */
+	if (ttm_data->max_time > 10000)
+	{
+		ttm_data->vdivisor = 10000;
+		ttm_data->peak = ttm_data->max_time/10000.0;
+	}
+	else if (ttm_data->max_time > 1000)
+	{
+		ttm_data->vdivisor = 1000;
+		ttm_data->peak = ttm_data->max_time/1000.0;
+	}
+	else if (ttm_data->max_time > 100)
+	{
+		ttm_data->vdivisor = 100;
+		ttm_data->peak = ttm_data->max_time/100.0;
+	}
+	ttm_data->vpeak = round(ttm_data->peak*1.25);
+
+}
+
+
+void get_display_ready(GtkWidget * widget)
+{
+	gint w = 0;
+	gint h = 0;
+	gfloat x = 0.0;
+	gfloat y = 0.0;
+	gint i = 0;
+	gfloat ctr = 0.0;
+	gfloat cur_pos = 0.0;
+	gint lvborder = 0;
+	gint lhborder = 0;
+	gint vmax = 0;
+	gint hmax = 0;
+	gchar * message = NULL;
+	static GdkGC * axis_gc = NULL;
+	static GdkGC * trace_gc = NULL;
+	cairo_t *cr;
+	cairo_text_extents_t extents;
+	struct TTMon_Data *ttm_data = NULL;
+
+	ttm_data = (struct TTMon_Data *)g_object_get_data(G_OBJECT(widget),"ttmon_data");
+
+	if (!axis_gc)
+		axis_gc=initialize_gc(ttm_data->pixmap,TTMON_AXIS);
+	if (!trace_gc)
+		axis_gc=initialize_gc(ttm_data->pixmap,TTMON_TRACE);
+
+	w=widget->allocation.width;
+	h=widget->allocation.height;
+
+	//cr = gdk_cairo_create(widget->window);
+	cr = gdk_cairo_create(ttm_data->pixmap);
+	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+	cairo_set_font_size(cr,h/16);
+	printf("vpeak %f, divisor, %i\n",ttm_data->vpeak, ttm_data->vdivisor);
+	for (ctr=0.0;ctr < ttm_data->vpeak;ctr+=0.5)
+	{
+		message = g_strdup_printf("%i",(gint)(ctr*ttm_data->vdivisor));
+		printf("marker %s\n",message);
+		cairo_text_extents (cr, message, &extents);
+		y = 0.5-(extents.height/2 + extents.y_bearing);
+		cur_pos = (1.0-(ctr/ttm_data->vpeak))*h;
+		cairo_move_to(cr,0,cur_pos);
+		cairo_show_text(cr,message);
+		g_free(message);
+	}
+			                               
 
 }

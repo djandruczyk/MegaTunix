@@ -176,7 +176,9 @@ typedef enum
 	FONT=0x100,
 	TRACE,
 	GRATICULE,
-	HIGHLIGHT
+	HIGHLIGHT,
+	TTMON_AXIS,
+	TTMON_TRACE,
 }GcType;
 
 typedef enum
