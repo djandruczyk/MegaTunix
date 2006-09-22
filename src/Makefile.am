@@ -56,6 +56,7 @@ megatunix_SOURCES = \
 	threads.c \
 	thermistor.cpp \
 	timeout_handlers.c \
+	t-logger.c \
 	tuning_gui.c \
 	user_outputs.c \
 	vetable_gui.c \

@@ -56,6 +56,8 @@ gui_files = 	README \
 		msns-e-output-pins-029x.datamap \
 		msns-e-outputs-sel.glade \
 		msns-e-outputs-sel-029x.datamap \
+		msns-e-toothtrigger.glade \
+		msns-e-toothtrigger-029x.datamap \
 		msns-e-traction.glade \
 		msns-e-traction-029x.datamap \
 		msns-e-water-nos-launch.glade \

@@ -63,8 +63,9 @@ struct Firmware_Details
 	gboolean multi_page;	/*! Multi-page firmware */
 	gint total_pages;	/*! How many pages do we handle? */
 	gint total_tables;	/*! How many tables do we handle? */
-	gint trigmon_page;	/*! Trigger monitor data page */
 	gint ro_above;		/*! Read Only debug pages above this one */
+	gint trigmon_page;	/*! Trigger Monitor RO Page */
+	gint toothmon_page;	/*! Tooth Monitor RO Page */
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gchar *page_cmd;	/*! Command to send to change pages ... */
@@ -280,8 +281,9 @@ struct Canidate
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gchar *page_cmd;	/*! Command to send to change pages... */
 	gboolean multi_page;	/*! Multi-page firmware */
-	gint trigmon_page;	/*! Trigger monitor Page */
 	gint ro_above;		/*! Debug pages above this one */
+	gint trigmon_page;	/*! Trigger Monitor RO Page */
+	gint toothmon_page;	/*! Tooth Monitor RO Page */
 	gint total_pages;	/*! how many pages do we handle? */
 	gint total_tables;	/*! how many tables do we handle? */
 	GHashTable *lookuptables;/*! Lookuptables hashtable... */
@@ -604,6 +606,27 @@ struct Logview_Data
 	gint spread;		/*! Pixel spread between trace info blocks */
 	gint tselect;		/*! Trace that is currently selected */
 	PangoFontDescription *font_desc; /*! Font used for text... */
+};
+
+/*!
+ * \brief TrigToothMon_Data struct is a container used to hold private data
+ * for the Trigger and Tooth Loggers (MSnS-E only)
+ */
+struct TTMon_Data
+{
+	gint page;		/*! page used to discern them apart */
+	GdkPixmap *pixmap;	/*! Pixmap */
+	GtkWidget *darea;	/*! Pointer to drawing area */
+	gint min_time;		/*! Minimum, trigger/tooth time */
+	gint num_maxes;		/*! Hot many long pips per block */
+	gint mins_inbetween;	/*! How many normal teeth */
+	gint max_time;		/*! Maximum, trigger/tooth time */
+	gint est_teeth;		/*! Estimated number of teeth */
+	GArray *current;	/*! Current block of times */
+	GArray *last;		/*! Last block of times */
+	gint wrap_pt;		/*! Wrap point */
+//	Ttm_Units units;	/*! Units enuermation */
+
 };
 
 #endif

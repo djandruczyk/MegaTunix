@@ -103,6 +103,36 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
+		case IO_READ_TRIGMON_PAGE:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->need_page_change = TRUE;
+			message->page = firmware->trigmon_page;
+			message->truepgnum = firmware->page_params[firmware->trigmon_page]->truepgnum;
+			message->command = READ_CMD;
+			message->out_str = g_strdup(cmds->veconst_cmd);
+			message->out_len = cmds->ve_cmd_len;
+			message->handler = VE_BLOCK;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_TRIGTOOTHMON;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
+		case IO_READ_TOOTHMON_PAGE:
+			message = initialize_io_message();
+			message->cmd = cmd;
+			message->need_page_change = TRUE;
+			message->page = firmware->toothmon_page;
+			message->truepgnum = firmware->page_params[firmware->trigmon_page]->truepgnum;
+			message->command = READ_CMD;
+			message->out_str = g_strdup(cmds->veconst_cmd);
+			message->out_len = cmds->ve_cmd_len;
+			message->handler = VE_BLOCK;
+			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_TRIGTOOTHMON;
+			g_array_append_val(message->funcs,tmp);
+			g_async_queue_push(io_queue,(gpointer)message);
+			break;
 		case IO_CLEAN_REBOOT:
 			message = initialize_io_message();
 			message->command = NULL_CMD;
@@ -241,7 +271,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 			if (!offline)
 			{
-				for (i=0;i<firmware->total_pages;i++)
+				for (i=0;i<firmware->ro_above;i++)
 				{
 					message = initialize_io_message();
 					message->command = READ_CMD;

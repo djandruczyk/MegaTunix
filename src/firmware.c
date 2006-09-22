@@ -16,105 +16,10 @@
 #include <structures.h>
 
 
-#define CTR 187
-#define UNITS 188
-
 /*!
  \brief load_firmware_file loads the .s19 file into memory
  */
 void load_firmware_file(struct Io_File *iofile)
 {
 	printf("load_firmware_file() not implemented yet\n");
-}
-
-void trigger_shit()
-{
-	extern gint ** ms_data;
-	gint i = 0;
-	gint pg = 9;
-	gint position = ms_data[pg][CTR];
-	gint count = 0;
-
-	pg=10;
-	printf("Counter position on page %i is %i\n",pg,position);
-	if (position > 0)
-		printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
-	else
-		printf("data block from position 0 to 185 (93 words)\n");
-	count=0;
-	for (i=0;i<185;i+=2)
-	{
-		printf("%i ",(ms_data[pg][i]*256)+ms_data[pg][i+1]);
-		if (((count+1)%12)==0)
-			printf("\n");
-		count++;
-	}
-	printf("\n");
-	if (ms_data[pg][UNITS] == 1)
-		printf("0.1 ms units\n");
-	else
-		printf("1uS units\n");
-	/*
-	for (i=position;i<185;i+=2)
-	{
-		printf("%i ",(ms_data[pg][i]*256)+ms_data[pg][i+1]);
-		if (((count+1)%12)==0)
-			printf("\n");
-		count++;
-	}
-	if (position != 0)
-	{
-		for (i=0;i<position;i+=2)
-		{
-			printf("%i ",(ms_data[pg][i]*256)+ms_data[pg][i+1]);
-			if (((count+1)%12)==0)
-				printf("\n");
-			count++;
-		}
-	}
-	printf("\n");
-
-	if (ms_data[pg][UNITS] == 1)
-		printf("0.1 ms units\n");
-	else
-		printf("1uS units\n");
-
-
-	pg=10;
-	position = ms_data[pg][CTR];
-	count = 0;
-
-	printf("Counter position on page %i is %i\n",pg,position);
-	if (position > 0)
-		printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
-	else
-		printf("data block from position 0 to 185 (93 words)\n");
-	count=0;
-	for (i=position;i<185;i+=2)
-	{
-		printf("%i ",(ms_data[pg][i]*256)+ms_data[pg][i+1]);
-		if (((count+1)%12)==0)
-			printf("\n");
-		count++;
-	}
-	if (position != 0)
-	{
-		for (i=0;i<position;i+=2)
-		{
-			printf("%i ",(ms_data[pg][i]*256)+ms_data[pg][i+1]);
-			if (((count+1)%12)==0)
-				printf("\n");
-			count++;
-		}
-	}
-	printf("\n");
-	if (ms_data[pg][UNITS] == 1)
-		printf("0.1 ms units\n");
-	else
-		printf("1uS units\n");
-
-	*/
-
-
-
 }

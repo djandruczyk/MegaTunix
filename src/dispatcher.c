@@ -39,6 +39,7 @@
 #include <tabloader.h>
 #include <timeout_handlers.h>
 #include <threads.h>
+#include <t-logger.h>
 #include <unistd.h>
 
 
@@ -203,12 +204,13 @@ trypop:
 					set_title(g_strdup("Updating Controls..."));
 					paused_handlers = TRUE;
 					if ((connected) || (offline))
-					{
 						update_ve_const();
-						trigger_shit();
-					}
+
 					paused_handlers = FALSE;
 					set_title(g_strdup("Ready..."));
+					break;
+				case UPD_TRIGTOOTHMON:
+					update_trigtooth_display(message->page);
 					break;
 				case UPD_SET_STORE_RED:
 					set_group_color(RED,"burners");

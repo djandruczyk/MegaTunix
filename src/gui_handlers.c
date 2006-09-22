@@ -631,6 +631,12 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
+		case START_TOOTHMON_LOGGER:
+			io_cmd(IO_READ_TOOTHMON_PAGE,NULL);
+			break;
+		case START_TRIGMON_LOGGER:
+			io_cmd(IO_READ_TRIGMON_PAGE,NULL);
+			break;
 		case START_PLAYBACK:
 			start_logviewer_playback();
 			break;

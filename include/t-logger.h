@@ -11,14 +11,20 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __FIRMWARE_H__
-#define __FIRMWARE_H__
+#ifndef __T_LOGGER_H__
+#define __T_LOGGER_H__
 
 #include <gtk/gtk.h>
 #include <structures.h>
 
 /* Prototypes */
-void load_firmware_file(struct Io_File *);
+void update_trigmon_display(void);
+void update_toothmon_display(void);
+void setup_logger_display(GtkWidget *);
+gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+void update_trigtooth_display(gint);
+
 
 /* Prototypes */
 

@@ -327,6 +327,8 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
 	firmware->ro_above = potential->ro_above;
+	firmware->trigmon_page = potential->trigmon_page;
+	firmware->toothmon_page = potential->toothmon_page;
 	firmware->write_cmd = g_strdup(potential->write_cmd);
 	firmware->burn_cmd = g_strdup(potential->burn_cmd);
 	firmware->page_cmd = g_strdup(potential->page_cmd);
@@ -756,6 +758,10 @@ void load_profile_details(struct Canidate *canidate)
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 					if(!cfg_read_int(cfgfile,"parameters","ReadOnlyAbove",&canidate->ro_above))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"ReadOnlyAbove\" value not found in interrogation profile, ERROR\n"),CRITICAL);
+					if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&canidate->trigmon_page))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"),CRITICAL);
+					if(!cfg_read_int(cfgfile,"parameters","ToothmonPage",&canidate->toothmon_page))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"ToothmonPage\" value not found in interrogation profile, ERROR\n"),CRITICAL);
 				}
 			}
 			if(!cfg_read_int(cfgfile,section,"x_page",&canidate->table_params[i]->x_page))
