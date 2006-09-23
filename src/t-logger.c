@@ -292,7 +292,6 @@ void update_trigtooth_display(gint page)
 	if (!ttm_data->darea->window) 
 		return;
 
-	printf("getting region to redraw\n");
 	region = gdk_drawable_get_clip_region (ttm_data->darea->window);
 	/* redraw the cairo canvas completely by exposing it */
 	gdk_window_invalidate_region (ttm_data->darea->window, region, TRUE);
