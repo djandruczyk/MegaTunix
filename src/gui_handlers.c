@@ -81,8 +81,6 @@ gboolean leaving = FALSE;
 void leave(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dynamic_widgets;
-	extern gint playback_id;
-	extern gint realtime_id;
 	extern gint dispatcher_id;
 	extern gint statuscounts_id;
 	extern GStaticMutex rtv_mutex;
@@ -101,15 +99,15 @@ void leave(GtkWidget *widget, gpointer data)
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
 	/* Stop timeout functions */
 	leaving = TRUE;
-	if(realtime_id)
-		stop_realtime_tickler();
-	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtiem\n"),CRITICAL);
-	realtime_id = 0;
 
-	if(playback_id)
-		stop_logviewer_playback();
-	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_playback\n"),CRITICAL);
-	playback_id = 0;
+	stop_tickler(RTV_TICKLER);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"),CRITICAL);
+	stop_tickler(TOOTHMON_TICKLER);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_toothmon\n"),CRITICAL);
+	stop_tickler(TRIGMON_TICKLER);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_trigmon\n"),CRITICAL);
+	stop_tickler(LV_PLAYBACK_TICKLER);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_lv_playback\n"),CRITICAL);
 
 	if (statuscounts_id)
 		gtk_timeout_remove(statuscounts_id);
@@ -297,6 +295,14 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case BINARY_VIEW:
 				update_raw_memory_view((ToggleButton)handler,(gint)obj_data);
 				break;	
+			case START_TOOTHMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"trigger_logger_buttons_table")),FALSE);
+				start_tickler(TOOTHMON_TICKLER);
+				break;
+			case START_TRIGMON_LOGGER:
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"tooth_logger_buttons_table")),FALSE);
+				start_tickler(TRIGMON_TICKLER);
+				break;
 		}
 	}
 	else
@@ -315,7 +321,15 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				//use_alt_clt = FALSE;
 				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"enter_clt_sensor_button")),FALSE);
 				break;
-				
+			case START_TOOTHMON_LOGGER:
+				stop_tickler(TOOTHMON_TICKLER);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"trigger_logger_buttons_table")),TRUE);
+				break;
+			case START_TRIGMON_LOGGER:
+				stop_tickler(TRIGMON_TICKLER);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"tooth_logger_buttons_table")),TRUE);
+				break;
+
 			default:
 				break;
 		}
@@ -631,17 +645,11 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 			io_cmd(IO_INTERROGATE_ECU, NULL);
 			break;
-		case START_TOOTHMON_LOGGER:
-			io_cmd(IO_READ_TOOTHMON_PAGE,NULL);
-			break;
-		case START_TRIGMON_LOGGER:
-			io_cmd(IO_READ_TRIGMON_PAGE,NULL);
-			break;
 		case START_PLAYBACK:
-			start_logviewer_playback();
+			start_tickler(LV_PLAYBACK_TICKLER);
 			break;
 		case STOP_PLAYBACK:
-			stop_logviewer_playback();
+			stop_tickler(LV_PLAYBACK_TICKLER);
 			break;
 
 		case START_REALTIME:
@@ -650,13 +658,13 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			no_update = FALSE;
 			if (!interrogated)
 				io_cmd(IO_INTERROGATE_ECU, NULL);
-			start_realtime_tickler();
+			start_tickler(RTV_TICKLER);
 			forced_update = TRUE;
 			break;
 		case STOP_REALTIME:
 			if (offline)
 				break;
-			stop_realtime_tickler();
+			stop_tickler(RTV_TICKLER);
 			no_update = TRUE;
 			break;
 		case REBOOT_GETERR:
@@ -664,12 +672,12 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			if (realtime_id > 0)
 			{
-				stop_realtime_tickler();
+				stop_tickler(RTV_TICKLER);
 				restart = TRUE;
 			}
 			io_cmd(IO_REBOOT_GET_ERROR,NULL);
 			if (restart)
-				start_realtime_tickler();
+				start_tickler(RTV_TICKLER);
 			break;
 		case READ_VE_CONST:
 			set_title(g_strdup("Reading VE/Constants..."));
@@ -861,8 +869,8 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			serial_params->read_wait = (gint)value;
 			if (realtime_id > 0)
 			{
-				stop_realtime_tickler();
-				start_realtime_tickler();
+				stop_tickler(RTV_TICKLER);
+				start_tickler(RTV_TICKLER);
 				forced_update=TRUE;
 			}
 			break;

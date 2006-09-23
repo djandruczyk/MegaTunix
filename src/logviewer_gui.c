@@ -567,26 +567,6 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 					&values,
 					GDK_GC_FOREGROUND);
 			break;
-		case TTMON_AXIS:
-			color.red = 10000;
-			color.green = 10000;
-			color.blue = 10000;
-			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
-			values.foreground = color;
-			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
-					&values,
-					GDK_GC_FOREGROUND);
-			break;
-		case TTMON_TRACE:
-			color.red = 2048;
-			color.green = 2048;
-			color.blue = 32768;
-			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
-			values.foreground = color;
-			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
-					&values,
-					GDK_GC_FOREGROUND);
-			break;
 	}	
 	return gc;	
 }
@@ -985,7 +965,7 @@ void trace_update(gboolean redraw_all)
 				g_object_set_data(G_OBJECT(lv_data->darea),"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
 				adj_scale = FALSE;
 				if (newpos >= 100)
-					stop_logviewer_playback();
+					stop_tickler(LV_PLAYBACK_TICKLER);
 				//	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));
 			}
 			if (v_value->highlight)
@@ -1189,7 +1169,7 @@ EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 	lv_configure_event(darea,NULL,NULL);
 	scroll_logviewer_traces();
 	if ((val >= 100.0) && (playback_mode))
-		stop_logviewer_playback();
+		stop_tickler(LV_PLAYBACK_TICKLER);
 	return TRUE;
 }
 
@@ -1226,7 +1206,7 @@ void set_realtime_mode(void)
 	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = NULL;
 
-	stop_logviewer_playback();
+	stop_tickler(LV_PLAYBACK_TICKLER);
 	reset_logviewer_state();
 	free_log_info();
 	playback_mode = FALSE;

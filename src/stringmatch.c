@@ -121,10 +121,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(START_TOOTHMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
 			GINT_TO_POINTER(START_TRIGMON_LOGGER));
-	g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
-			GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
-	g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
-			GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 	g_hash_table_insert(str_2_enum,"_DLOG_SELECT_ALL_",
 			GINT_TO_POINTER(DLOG_SELECT_ALL));
 	g_hash_table_insert(str_2_enum,"_DLOG_DESELECT_ALL_",

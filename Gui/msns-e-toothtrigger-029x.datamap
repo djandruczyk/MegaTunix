@@ -6,33 +6,33 @@ tab_name=Trigger _Monitor
 
 #----- Buttons ---------------------------------------------------------------
 
-[tooth_logger_enable_button]
+[tooth_logger_enabled_radio_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
-page=0
+page=9
 tooltip=
 
-[trigger_logger_enable_button]
+[trigger_logger_enabled_radio_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_START_TRIGMON_LOGGER_
-page=0
+page=10
 tooltip=
 
-[tooth_logger_disable_button]
-keys=handler,page,tooltip
-key_types=_ENUM_,_INT_,_STRING_
-handler=_STOP_TOOTHMON_LOGGER_
-page=0
-tooltip=
-
-[trigger_logger_disable_button]
-keys=handler,page,tooltip
-key_types=_ENUM_,_INT_,_STRING_
-handler=_STOP_TRIGMON_LOGGER_
-page=0
-tooltip=
+#[tooth_logger_disable_button]
+#keys=handler,page,tooltip
+#key_types=_ENUM_,_INT_,_STRING_
+#handler=_START_TOOTHMON_LOGGER_
+#page=0
+#tooltip=
+#
+#[trigger_logger_disable_button]
+#keys=handler,page,tooltip
+#key_types=_ENUM_,_INT_,_STRING_
+#handler=_START_TRIGMON_LOGGER_
+#page=0
+#tooltip=
 
 #----- Widgets ---------------------------------------------------------------
 
@@ -47,6 +47,18 @@ keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=10
 bind_to_list=spark_controls
+
+[tooth_logger_buttons_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=9
+bind_to_list=toothmon_buttons
+
+[trigger_logger_buttons_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=10
+bind_to_list=trigmon_buttons
 
 
 #----- DrawingAreas ----------------------------------------------------------

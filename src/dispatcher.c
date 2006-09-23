@@ -194,7 +194,7 @@ trypop:
 					break;
 				case UPD_START_REALTIME:
 					if ((connected) && (interrogated))
-						start_realtime_tickler();
+						start_tickler(RTV_TICKLER);
 					break;
 				case UPD_REALTIME:
 					if (interrogated)
@@ -210,6 +210,7 @@ trypop:
 					set_title(g_strdup("Ready..."));
 					break;
 				case UPD_TRIGTOOTHMON:
+					crunch_trigtooth_data(message->page);
 					update_trigtooth_display(message->page);
 					break;
 				case UPD_SET_STORE_RED:

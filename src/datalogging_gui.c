@@ -175,7 +175,7 @@ void start_datalogging(void)
 	update_logbar("dlog_view",NULL,g_strdup("DataLogging Started...\n"),TRUE,FALSE);
 
 	if (!offline)
-		start_realtime_tickler();
+		start_tickler(RTV_TICKLER);
 	forced_update=TRUE;
 	return;
 }
@@ -427,7 +427,7 @@ void dump_log_to_disk(struct Io_File *iofile)
 	gboolean *is_floats;
 	gfloat value = 0.0;
 
-	stop_realtime_tickler();
+	stop_tickler(RTV_TICKLER);
 
 	output = g_string_sized_new(1024); 
 
@@ -467,7 +467,7 @@ void dump_log_to_disk(struct Io_File *iofile)
 	g_free(is_floats);
 	g_free(histories);
 	g_string_free(output,TRUE);
-	start_realtime_tickler();
+	start_tickler(RTV_TICKLER);
 	close_file(iofile);
 
 }

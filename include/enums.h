@@ -24,7 +24,7 @@ typedef enum
 	RAW_MEMORY_DUMP,
 	C_TEST,
 	GET_ERROR,
-	NULL_HANDLER
+	NULL_HANDLER,
 }InputHandler;
 
 /* Regular Buttons */
@@ -60,11 +60,7 @@ typedef enum
 	RESTORE_ALL,
 	SELECT_PARAMS,
 	REQ_FUEL_POPUP,
-	START_TOOTHMON_LOGGER,
-	START_TRIGMON_LOGGER,
-	STOP_TOOTHMON_LOGGER,
-	STOP_TRIGMON_LOGGER,
-	RESCALE_TABLE
+	RESCALE_TABLE,
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -83,14 +79,16 @@ typedef enum
 	HEX_VIEW,
 	BINARY_VIEW,
 	DECIMAL_VIEW,
-	OFFLINE_FIRMWARE_CHOICE
+	OFFLINE_FIRMWARE_CHOICE,
+	START_TOOTHMON_LOGGER,
+	START_TRIGMON_LOGGER,
 }ToggleButton;
 
 typedef enum
 {
 	MT_CLASSIC_LOG=0x70,
 	MT_FULL_LOG,
-	CUSTOM_LOG
+	CUSTOM_LOG,
 }LoggingMode;
 	
 /* spinbuttons... */
@@ -117,7 +115,7 @@ typedef enum
 	LOGVIEW_ZOOM,
 	DEBUG_LEVEL,
 	GENERIC,
-	ALT_SIMUL
+	ALT_SIMUL,
 }SpinButton;
 
 /* Runtime Status flags */
@@ -129,7 +127,7 @@ typedef enum
         STAT_WARMUP, 
         STAT_AS_ENRICH, 
         STAT_ACCEL, 
-        STAT_DECEL
+        STAT_DECEL,
 }RuntimeStatus;
 
 typedef enum
@@ -141,14 +139,14 @@ typedef enum
 	DATALOG_IMPORT,
 	FIRMWARE_LOAD,
 	FULL_BACKUP,
-	FULL_RESTORE
+	FULL_RESTORE,
 }FileIoType;
 
 
 typedef enum
 {	
 	RED=0xc0,
-	BLACK
+	BLACK,
 }GuiColor;
 
 typedef enum
@@ -156,7 +154,7 @@ typedef enum
 	HEADER=0xd0,
 	PAGE,
 	RANGE,
-	TABLE
+	TABLE,
 }ImportParserFunc;
 
 typedef enum
@@ -168,7 +166,7 @@ typedef enum
 	VEX_TIME,
 	VEX_RPM_RANGE,
 	VEX_LOAD_RANGE,
-	VEX_NONE
+	VEX_NONE,
 }ImportParserArg;
 
 typedef enum
@@ -177,8 +175,6 @@ typedef enum
 	TRACE,
 	GRATICULE,
 	HIGHLIGHT,
-	TTMON_AXIS,
-	TTMON_TRACE,
 }GcType;
 
 typedef enum
@@ -186,7 +182,7 @@ typedef enum
 	/* No capabilities == Standard B&G code with no modifications */
 	STANDARD	= 1<<0,
 	DUALTABLE	= 1<<1,
-	MSNS_E		= 1<<2
+	MSNS_E		= 1<<2,
 }Capability;
 
 typedef enum
@@ -194,7 +190,7 @@ typedef enum
 	MTX=0x110,
 	MT_CLASSIC,
 	MT_FULL,
-	MT_RAW
+	MT_RAW,
 }LogType;
 
 typedef enum
@@ -211,7 +207,7 @@ typedef enum
 	TABLOADER	= 1<<8,
 	RTMLOADER	= 1<<9,
 	COMPLEX_EXPR	= 1<<10,
-	CRITICAL	= 1<<30
+	CRITICAL	= 1<<30,
 }Dbg_Class;
 
 typedef enum guint
@@ -227,14 +223,14 @@ typedef enum guint
 	TABLOADER_SHIFT		= 8,
 	RTMLOADER_SHIFT		= 9,
 	COMPLEX_EXPR_SHIFT	= 10,
-	CRITICAL_SHIFT		= 30
+	CRITICAL_SHIFT		= 30,
 }Dbg_Shift;
 
 typedef enum
 {
         VNUM = 0x120,
         EXTVER,
-        SIG
+        SIG,
 }StoreType;
 
 typedef enum
@@ -269,7 +265,7 @@ typedef enum
 	IO_OPEN_SERIAL,
 	IO_CLOSE_SERIAL,
 	IO_READ_TRIGMON_PAGE,
-	IO_READ_TOOTHMON_PAGE
+	IO_READ_TOOTHMON_PAGE,
 }Io_Command;
 
 typedef enum
@@ -308,7 +304,7 @@ typedef enum
 	MTX_INT = 0x190,
 	MTX_ENUM,
 	MTX_BOOL,
-	MTX_STRING
+	MTX_STRING,
 }DataType;
 
 typedef enum
@@ -328,39 +324,50 @@ typedef enum
 	WARMUP_WIZ_PAGE,
 	DATALOGGING_PAGE,
 	LOGVIEWER_PAGE,
-	VE3D_VIEWER_PAGE
+	VE3D_VIEWER_PAGE,
 }PageIdent;
 
 typedef enum
 {
 	VE_EMB_BIT=0x1b0,
 	VE_VAR,
-	RAW_VAR
+	RAW_VAR,
 }ComplexExprType;
 
 typedef enum
 {
 	UPLOAD=0x1c0,
 	DOWNLOAD,
-	RTV
+	RTV,
+	GAUGE,
 }ConvType;
 
 typedef enum
 {
 	MTX_HEX=0x1d0,
-	MTX_DECIMAL
+	MTX_DECIMAL,
 }Base;
 
 typedef enum
 {
 	MTX_ENTRY=0x1e0,
 	MTX_TITLE,
-	MTX_LABEL
+	MTX_LABEL,
 }WidgetType;
 
 typedef enum
 {
 	MTX_PROGRESS=0x200,
-	MTX_RANGE
+	MTX_RANGE,
 }SliderType;
+
+
+typedef enum
+{
+	RTV_TICKLER=0x210,
+	LV_PLAYBACK_TICKLER,
+	TOOTHMON_TICKLER,
+	TRIGMON_TICKLER,
+}TicklerType;
+
 #endif

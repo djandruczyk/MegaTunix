@@ -25,81 +25,105 @@
 
 gint realtime_id = 0;
 gint playback_id = 0;
+gint toothmon_id = 0;
+gint trigmon_id = 0;
 
 
 /*!
- \brief start_realtime_tickler() starts up a GTK+ timeout function to run
- the signal_read_rtvars function on a periodic time schedule
+ \brief start_tickler() starts up a GTK+ timeout function based on the
+ enum passed to it.
+ \params TicklerType is na enum passing used to know which timeout to fire up.
  \see signal_read_rtvars
  */
-void start_realtime_tickler()
+void start_tickler(TicklerType type)
 {
 	extern struct Serial_Params *serial_params;
-
-	if (realtime_id == 0)
+	switch (type)
 	{
-		flush_rt_arrays();
-		realtime_id = g_timeout_add(serial_params->read_wait,
-				(GtkFunction)signal_read_rtvars,NULL);
-		update_logbar("comms_view",NULL,g_strdup("Realtime Reader started\n"),TRUE,FALSE);
-	}
-	else
-		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY started\n"),TRUE,FALSE);
-}
+		case RTV_TICKLER:
+			if (realtime_id == 0)
+			{
+				flush_rt_arrays();
+				realtime_id = g_timeout_add(serial_params->read_wait,(GtkFunction)signal_read_rtvars,NULL);
+				update_logbar("comms_view",NULL,g_strdup("Realtime Reader started\n"),TRUE,FALSE);
+			}
+			else
+				update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY started\n"),TRUE,FALSE);
+			break;
+		case LV_PLAYBACK_TICKLER:
+			if (playback_id == 0)
+				playback_id = g_timeout_add(24,(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+			else
+				dbg_func(g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"),CRITICAL);
+			break;
+		case TOOTHMON_TICKLER:
+			if (toothmon_id == 0)
+				toothmon_id = g_timeout_add(1000,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+			else
+				dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"),CRITICAL);
+			break;
+		case TRIGMON_TICKLER:
+			if (trigmon_id == 0)
+				trigmon_id = g_timeout_add(1000,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
+			else
+				dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"),CRITICAL);
+			break;
 
-
-/*!
- \brief start_logviewer_playback() kicks off a GTK+ timeout to update the
- logviewer display on a periodic basis.
- \see update_logview_traces
- \see stop_logviewer_playback
- */
-void start_logviewer_playback()
-{
-
-	if (playback_id == 0)
-		playback_id = g_timeout_add(33,(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
-	else
-		dbg_func(g_strdup(__FILE__": start_logviewer_playback()\n\tPlayback already running \n"),CRITICAL);
-}
-
-
-/*!
- \brief stop_logviewer_playback() kills off the GTK+ timeout that updates the
- logviewer display on a periodic basis.
- \see update_logview_traces
- \see start_logviewer_playback
- */
-void stop_logviewer_playback()
-{
-	if (playback_id)
-	{
-		g_source_remove(playback_id);
-		playback_id = 0;
 	}
 }
 
 
 /*!
- \brief stop_realtime_tickler() kills off the GTK+ timeout that gets the
- realtime variables on a periodic basis.
- \see start_realtime_tickler
+ \brief stop_tickler() kills off the GTK+ timeout for the specified handler 
+ passed across in the ENUM
+ /param TicklerType an enumeration used to determine which handler to stop.
+ \see start_tickler
  */
-void stop_realtime_tickler()
+void stop_tickler(TicklerType type)
 {
+	extern struct Serial_Params *serial_params;
 	extern gboolean leaving;
-
-	if (realtime_id)
+	switch (type)
 	{
-		g_source_remove(realtime_id);
-		update_logbar("comms_view",NULL,g_strdup("Realtime Reader stopped\n"),TRUE,FALSE);
-		realtime_id = 0;
-	}
-	else
-		update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY stopped\n"),TRUE,FALSE);
+		case RTV_TICKLER:
+			if (realtime_id)
+			{
+				g_source_remove(realtime_id);
+				update_logbar("comms_view",NULL,g_strdup("Realtime Reader stopped\n"),TRUE,FALSE);
+				realtime_id = 0;
+			}
+			else
+				update_logbar("comms_view","warning",g_strdup("Realtime Reader ALREADY stopped\n"),TRUE,FALSE);
 
-	if (!leaving)
-		reset_runtime_status();
+			if (!leaving)
+				reset_runtime_status();
+			break;
+
+		case LV_PLAYBACK_TICKLER:
+			if (playback_id)
+			{
+				g_source_remove(playback_id);
+				playback_id = 0;
+			}
+			break;
+		case TOOTHMON_TICKLER:
+			if (toothmon_id)
+			{
+				g_source_remove(toothmon_id);
+				toothmon_id = 0;
+			}
+			break;
+		case TRIGMON_TICKLER:
+			if (trigmon_id)
+			{
+				g_source_remove(trigmon_id);
+				trigmon_id = 0;
+			}
+			break;
+
+	}
+
+
 }
 
 
@@ -131,6 +155,31 @@ gboolean signal_read_rtvars()
 	if (!rtvars_loaded)
 		return TRUE;
 	io_cmd(IO_REALTIME_READ,NULL);			
+	return TRUE;	/* Keep going.... */
+}
+
+
+/*!
+ \brief signal_toothtrig_read() is called by a GTK+ timeout on a periodic basis
+ to get a new set of toother or ignition trigger data.  It does so by queing 
+ messages to a thread which handles I/O.  
+ \returns TRUE
+ */
+gboolean signal_toothtrig_read(TicklerType type)
+{
+	dbg_func(g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"),SERIAL_RD|SERIAL_WR);
+
+	switch (type)
+	{
+		case TOOTHMON_TICKLER:
+			io_cmd(IO_READ_TOOTHMON_PAGE,NULL);
+			break;
+		case TRIGMON_TICKLER:
+			io_cmd(IO_READ_TRIGMON_PAGE,NULL);
+			break;
+		default:
+			break;
+	}
 	return TRUE;	/* Keep going.... */
 }
 

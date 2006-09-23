@@ -14,13 +14,13 @@
 #ifndef __TIMEOUT_HANDLERS_H__
 #define __TIMEOUT_HANDLERS_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void start_realtime_tickler(void);
-void stop_realtime_tickler(void);
-void start_logviewer_playback(void);
-void stop_logviewer_playback(void);
+void start_tickler(TicklerType);
+void stop_tickler(TicklerType);
+gboolean signal_toothtrig_read(TicklerType);
 gboolean signal_read_rtvars(void);
 gboolean early_interrogation(void);
 /* Prototypes */

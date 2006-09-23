@@ -622,12 +622,13 @@ struct TTMon_Data
 	gint mins_inbetween;	/*! How many normal teeth */
 	gint max_time;		/*! Maximum, trigger/tooth time */
 	gint est_teeth;		/*! Estimated number of teeth */
+	gfloat usable_begin;	/*! Usable begin point for bars */
+	gfloat font_height;	/*! Font height needed for some calcs */
 	GArray *current;	/*! Current block of times */
 	GArray *last;		/*! Last block of times */
 	gint wrap_pt;		/*! Wrap point */
 	gint vdivisor;		/*! Vertical scaling divisor */
-	gfloat peak;		/*! Normalized Vertical Peak Value */
-	gfloat vpeak;		/*! Normalized Vertical Peak Scale marker */
+	gfloat peak;		/*! Vertical Peak Value */
 //	Ttm_Units units;	/*! Units enuermation */
 
 };
