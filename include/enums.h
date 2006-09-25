@@ -175,6 +175,8 @@ typedef enum
 	TRACE,
 	GRATICULE,
 	HIGHLIGHT,
+	TTM_AXIS,
+	TTM_TRACE,
 }GcType;
 
 typedef enum

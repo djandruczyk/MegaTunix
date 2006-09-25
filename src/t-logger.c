@@ -44,6 +44,7 @@ EXPORT void setup_logger_display(GtkWidget * src_widget)
 	ttm_data->usable_begin = 0;
 	ttm_data->current = g_array_sized_new(FALSE,TRUE,sizeof (gushort),93);
 	ttm_data->last = g_array_sized_new(FALSE,TRUE,sizeof (gushort),93);
+	ttm_data->font_desc = pango_font_description_from_string("courier");
 
 	g_object_set_data(G_OBJECT(src_widget),"ttmon_data",(gpointer)ttm_data);
 	if (!trigtooth_hash)
@@ -74,10 +75,13 @@ EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigur
 				TRUE, 0,0,
 				w,h);
 		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
+		ttm_data->axis_gc = initialize_gc(ttm_data->pixmap,TTM_AXIS);
+		ttm_data->trace_gc = initialize_gc(ttm_data->pixmap,TTM_TRACE);
 
 	}
 	crunch_trigtooth_data(ttm_data->page);
-	update_trigtooth_display(ttm_data->page);
+	if (ttm_data->peak > 0)
+		update_trigtooth_display(ttm_data->page);
 	return TRUE;
 }
 
@@ -195,10 +199,18 @@ void crunch_trigtooth_data(gint page)
 
 void update_trigtooth_display(gint page)
 {
+#ifdef HAVE_CAIRO
+	cairo_update_trigtooth_display(page);
+#else
+	gdk_update_trigtooth_display(page);
+#endif
+}
+
+void cairo_update_trigtooth_display(gint page)
+{
 	gint w = 0;
 	gint h = 0;
 	gint i = 0;
-	gfloat y = 0.0;
 	gfloat tmpx = 0.0;
 	gfloat ctr = 0.0;
 	gfloat cur_pos = 0.0;
@@ -244,7 +256,6 @@ void update_trigtooth_display(gint page)
 		message = g_strdup_printf("%i",(gint)ctr);
 //		printf("marker \"%s\"\n",message);
 		cairo_text_extents (cr, message, &extents);
-		y = 0.5-(extents.height/2 + extents.y_bearing);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+y_shift;
 //		printf("drawing at %f\n",cur_pos);
 		//cairo_move_to(cr,0,cur_pos);
@@ -279,12 +290,127 @@ void update_trigtooth_display(gint page)
 		//		printf("moved to %f %i\n",ttm_data->usable_begin+(i*w/93.0),0);
 		cairo_move_to(cr,ttm_data->usable_begin+(i*w/93.0),h-(y_shift/2));
 		val = g_array_index(ttm_data->current,gushort,i);
-		//		printf("val %i\n",val);
 		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
 		cairo_line_to(cr,ttm_data->usable_begin+(i*w/93.0),cur_pos);
 	}
 	cairo_stroke(cr);
 	cairo_destroy(cr);
+
+	/* Trigger redraw to main screen */
+	if (!ttm_data->darea->window) 
+		return;
+
+	region = gdk_drawable_get_clip_region (ttm_data->darea->window);
+	/* redraw the cairo canvas completely by exposing it */
+	gdk_window_invalidate_region (ttm_data->darea->window, region, TRUE);
+	gdk_window_process_updates (ttm_data->darea->window, TRUE);
+
+	gdk_region_destroy (region);
+
+}
+
+void gdk_update_trigtooth_display(gint page)
+{
+	gint w = 0;
+	gint h = 0;
+	gint i = 0;
+	gint lwidth = 0;
+	gint line_width = 0;
+	gint x_pos = 0;
+	gfloat tmpx = 0.0;
+	gfloat ctr = 0.0;
+	gfloat cur_pos = 0.0;
+	gfloat y_shift = 0.0;
+	gfloat frag = 0.0;
+	gfloat fragcount  = 0.0;
+	gfloat count  = 0.0;
+	gushort val = 0;
+	gchar * message = NULL;
+	PangoLayout * layout = NULL;
+	PangoRectangle ink_rect;
+	PangoRectangle logical_rect;
+	GdkRegion *region = NULL;
+	struct TTMon_Data *ttm_data = NULL;
+
+	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
+	if (!ttm_data)
+		printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
+
+	w=ttm_data->darea->allocation.width;
+	h=ttm_data->darea->allocation.height;
+
+	gdk_draw_rectangle(ttm_data->pixmap,
+			ttm_data->darea->style->white_gc,
+			TRUE, 0,0,
+			w,h);
+
+
+	/* get our font */
+	layout = gtk_widget_create_pango_layout(ttm_data->darea,g_strdup_printf("%i",(gint)ttm_data->peak));
+	pango_layout_set_font_description(layout,ttm_data->font_desc);
+	pango_layout_get_pixel_extents(layout,&ink_rect,&logical_rect);
+
+	tmpx = logical_rect.width;
+	y_shift = logical_rect.height;
+	ttm_data->font_height=logical_rect.height;
+
+	/* Draw left side axis scale */
+	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
+	{
+		message = g_strdup_printf("%i",(gint)ctr);
+		layout = gtk_widget_create_pango_layout(ttm_data->darea,message);
+		pango_layout_set_font_description(layout,ttm_data->font_desc);
+		pango_layout_get_pixel_extents(layout,&ink_rect,&logical_rect);
+		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak)); 
+
+		gdk_draw_layout(ttm_data->pixmap,ttm_data->trace_gc,tmpx-logical_rect.width,cur_pos,layout);
+		g_free(message);
+	}
+	/* Horizontal Axis lines */
+
+	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
+	{
+		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+(y_shift/2);
+		gdk_draw_line(ttm_data->pixmap,ttm_data->axis_gc,tmpx+4,cur_pos,w,cur_pos);
+	}
+	ttm_data->usable_begin=tmpx+9;
+	/* Left Side vertical axis line */
+	gdk_draw_line(ttm_data->pixmap,ttm_data->axis_gc,tmpx+7,0,tmpx+7,h);
+
+	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
+	h = ttm_data->darea->allocation.height;
+	y_shift=ttm_data->font_height;
+
+	/* Code from eXtace's 2D eq for nice even spacing algorithm using a
+	 * balanced interpolation scheme
+	 * */
+
+	x_pos = ttm_data->usable_begin;
+	lwidth = (w-ttm_data->usable_begin)/186;
+	frag = ((gfloat)(w-ttm_data->usable_begin)/186.0) - (gfloat)lwidth;
+	if (frag == 0)
+		frag += 0.00001;
+
+	for (i=0;i<93;i++)
+	{
+		count = count + 2*frag;
+		if (count > 1.0 )
+		{
+			count -= 1.0;
+			line_width = lwidth+1;
+			fragcount++;
+		}
+		else
+			line_width = lwidth;
+
+		val = g_array_index(ttm_data->current,gushort,i);
+		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
+		gdk_draw_rectangle(ttm_data->pixmap,ttm_data->trace_gc,TRUE,
+				x_pos,(gint)cur_pos,
+				line_width,h-(y_shift/2)-cur_pos);
+
+		x_pos += 2*line_width;
+	}
 
 	/* Trigger redraw to main screen */
 	if (!ttm_data->darea->window) 

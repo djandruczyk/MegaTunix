@@ -567,6 +567,26 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 					&values,
 					GDK_GC_FOREGROUND);
 			break;
+		case TTM_AXIS:
+			color.red = 32768;
+			color.green = 32768;
+			color.blue = 32768;
+			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
+			values.foreground = color;
+			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
+					&values,
+					GDK_GC_FOREGROUND);
+			break;
+		case TTM_TRACE:
+			color.red = 0;
+			color.green = 0;
+			color.blue = 0;
+			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
+			values.foreground = color;
+			gc = gdk_gc_new_with_values(GDK_DRAWABLE(drawable),
+					&values,
+					GDK_GC_FOREGROUND);
+			break;
 	}	
 	return gc;	
 }

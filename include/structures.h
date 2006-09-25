@@ -629,7 +629,10 @@ struct TTMon_Data
 	gint wrap_pt;		/*! Wrap point */
 	gint vdivisor;		/*! Vertical scaling divisor */
 	gfloat peak;		/*! Vertical Peak Value */
-//	Ttm_Units units;	/*! Units enuermation */
+	PangoFontDescription *font_desc;	/*! Pango Font Descr */
+	PangoLayout *layout;	/*! Pango Layout */
+	GdkGC *axis_gc;		/*! axis graphics context */
+	GdkGC *trace_gc;		/*! axis graphics context */
 
 };
 
