@@ -105,12 +105,12 @@ void crunch_trigtooth_data(gint page)
 	gint max = -1;
 	gushort total = 0;
 	struct TTMon_Data *ttm_data = NULL;
+	gint position = ms_data[page][CTR];
+	gint count = 0;
 	
 	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
 	if (!ttm_data)
 		printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
-	gint position = ms_data[page][CTR];
-	gint count = 0;
 
 	/*
 	printf("Counter position on page %i is %i\n",page,position);
@@ -121,13 +121,14 @@ void crunch_trigtooth_data(gint page)
 		*/
 
 	count=0;
+	for (i=0;i<93;i++)
+	{
+		g_array_insert_val(ttm_data->last,i,g_array_index(ttm_data->current,gushort,i));
+	}
 	for (i=position;i<185;i+=2)
 	{
 		total = (ms_data[page][i]*256)+ms_data[page][i+1];
-//		printf("%i ",total);
 		g_array_insert_val(ttm_data->current,count,total);
-		if (((count+1)%12)==0)
-//			printf("\n");
 		count++;
 	}
 	if (position != 0)
@@ -135,10 +136,7 @@ void crunch_trigtooth_data(gint page)
 		for (i=0;i<position;i+=2)
 		{
 			total = (ms_data[page][i]*256)+ms_data[page][i+1];
-//			printf("%i ",total);
 			g_array_insert_val(ttm_data->current,count,total);
-			if (((count+1)%12)==0)
-//				printf("\n");
 			count++;
 		}
 	}

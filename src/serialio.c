@@ -134,14 +134,14 @@ void toggle_serial_control_lines()
 	struct termios oldtio;
 	struct termios temptio;
 
-	/* Save current port settings */
+	// Save current port settings //
 	tcgetattr(serial_params->fd,&oldtio);
 	memcpy(&temptio, &oldtio, sizeof(struct termios)); 
 
 	serial_params->newtio.c_cflag &= ~(CLOCAL);
 	serial_params->newtio.c_cflag |= (CRTSCTS);
 	tcsetattr(serial_params->fd,TCSAFLUSH,&temptio);
-	usleep (100000); /* Wait 100 ms */
+	usleep (100000); // Wait 100 ms //
 	//Set back
 	tcsetattr(serial_params->fd,TCSAFLUSH,&oldtio);
 #endif

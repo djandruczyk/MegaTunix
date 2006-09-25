@@ -58,13 +58,13 @@ void start_tickler(TicklerType type)
 			break;
 		case TOOTHMON_TICKLER:
 			if (toothmon_id == 0)
-				toothmon_id = g_timeout_add(1000,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+				toothmon_id = g_timeout_add(500,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			else
 				dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"),CRITICAL);
 			break;
 		case TRIGMON_TICKLER:
 			if (trigmon_id == 0)
-				trigmon_id = g_timeout_add(1000,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
+				trigmon_id = g_timeout_add(500,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
 			else
 				dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"),CRITICAL);
 			break;
