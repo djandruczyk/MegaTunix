@@ -40,11 +40,38 @@ dnl AC_HEADER_STDC
 AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
 
 dnl check paths for necessary files
+
+AC_DEFUN(PKG_CHECK_GTK, 
+[
+	GTK_VER=0
+	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
+	[ 
+		GTK_VER=28
+		AC_DEFINE(HAVE_CAIRO)
+	],
+	[
+		PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.4.0 gthread-2.0])
+		GTK_VER=24
+	])
+	AC_SUBST(GTK_VER)
+	AC_SUBST(GTK_CFLAGS)
+	AC_SUBST(GTK_LIBS)
+])
+
+PKG_CHECK_GTK()
+
+PKG_CHECK_MODULES(GLEXT, [gtkglext-1.0 gdkglext-1.0])
+AC_SUBST(GLEXT_CFLAGS)
+AC_SUBST(GLEXT_LIBS)
+PKG_CHECK_MODULES(LIBGLADE,libglade-2.0 )
+AC_SUBST(LIBGLADE_CFLAGS)
+AC_SUBST(LIBGLADE_LIBS)
+
 dnl pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
-pkg_modules="cairo pango libglade-2.0 gtkglext-1.0 gdkglext-1.0 gtk+-2.0 gthread-2.0"
-PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
-AC_SUBST(PACKAGE_CFLAGS)
-AC_SUBST(PACKAGE_LIBS)
+dnl pkg_modules="cairo pango libglade-2.0 gtkglext-1.0 gdkglext-1.0 gtk+-2.0 gthread-2.0"
+dnl PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
+dnl AC_SUBST(PACKAGE_CFLAGS)
+dnl AC_SUBST(PACKAGE_LIBS)
 
 dnl optimizations
 CFLAGS="-O2"

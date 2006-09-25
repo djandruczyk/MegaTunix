@@ -1,7 +1,9 @@
 
 INCLUDES = \
 	-I$(top_srcdir)/include \
-	@PACKAGE_CFLAGS@ \
+	@GTK_CFLAGS@ \
+	@GLEXT_CFLAGS@ \
+	@LIBGLADE_CFLAGS@ \
 	@MEGATUNIX_DEFINES@
 
 bin_PROGRAMS = megatunix
@@ -65,8 +67,8 @@ megatunix_SOURCES = \
 	widgetmgmt.c \
 	winserialio.c
 
-#megatunix_LDADD = @PACKAGE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @PACKAGE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@ 
+#megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
+megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@ 
 
 megatunix_LDFLAGS = 
 
