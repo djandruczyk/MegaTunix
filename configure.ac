@@ -38,40 +38,35 @@ AC_PROG_INSTALL
 dnl Checks for header files.
 dnl AC_HEADER_STDC
 AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
-
 dnl check paths for necessary files
 
+dnl MACRO definition to determine if running GTK> 2.8 or not for use of cairo
 AC_DEFUN(PKG_CHECK_GTK, 
 [
-	GTK_VER=0
 	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
 	[ 
-		GTK_VER=28
-		AC_DEFINE(HAVE_CAIRO)
+		AC_DEFINE(HAVE_CAIRO,1,["We have the cairo library to use"])
 	],
 	[
 		PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.4.0 gthread-2.0])
-		GTK_VER=24
+		AC_DEFINE(HAVE_CAIRO,0,["We DO NOT have the cairo library to use"])
 	])
-	AC_SUBST(GTK_VER)
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
 ])
 
+dnl Check for GTK+ being 2.8 or newer cairo enabled) or not.
 PKG_CHECK_GTK()
 
+dnl check for gtkglext library
 PKG_CHECK_MODULES(GLEXT, [gtkglext-1.0 gdkglext-1.0])
 AC_SUBST(GLEXT_CFLAGS)
 AC_SUBST(GLEXT_LIBS)
+dnl check for glade-2.x library
 PKG_CHECK_MODULES(LIBGLADE,libglade-2.0 )
 AC_SUBST(LIBGLADE_CFLAGS)
 AC_SUBST(LIBGLADE_LIBS)
 
-dnl pkg_modules="gtk+-2.0 gthread-2.0 libgnomecanvas-2.0 gtkglext-1.0"
-dnl pkg_modules="cairo pango libglade-2.0 gtkglext-1.0 gdkglext-1.0 gtk+-2.0 gthread-2.0"
-dnl PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
-dnl AC_SUBST(PACKAGE_CFLAGS)
-dnl AC_SUBST(PACKAGE_LIBS)
 
 dnl optimizations
 CFLAGS="-O2"
