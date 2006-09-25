@@ -124,6 +124,7 @@ void flush_serial(gint fd, gint type)
  experimental attempt to see if it resolves a serial over bluetooth connection
  loss problem
  */
+/*
 void toggle_serial_control_lines()
 {
 	g_static_mutex_lock(&comms_mutex);
@@ -146,6 +147,7 @@ void toggle_serial_control_lines()
 #endif
 	g_static_mutex_unlock(&comms_mutex);
 }
+*/
 
 /*!
  \brief setup_serial_params() is another wrapper that calls the appropriate
