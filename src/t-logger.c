@@ -14,6 +14,7 @@
 #include <config.h>
 #include <enums.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <math.h>
 #include <t-logger.h>
 #include <logviewer_gui.h>
@@ -114,14 +115,14 @@ void crunch_trigtooth_data(gint page)
 	
 	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
 	if (!ttm_data)
-		printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
+		g_printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
 
 	/*
-	printf("Counter position on page %i is %i\n",page,position);
+	g_printf("Counter position on page %i is %i\n",page,position);
 	if (position > 0)
-		printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
+		g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
 	else
-		printf("data block from position 0 to 185 (93 words)\n");
+		g_printf("data block from position 0 to 185 (93 words)\n");
 		*/
 
 	count=0;
@@ -144,15 +145,15 @@ void crunch_trigtooth_data(gint page)
 			count++;
 		}
 	}
-//	printf("\n");
+//	g_printf("\n");
 
 	if (ms_data[page][UNITS] == 1)
 	{
-	//	printf("0.1 ms units\n");
+	//	g_printf("0.1 ms units\n");
 	}
 	else
 	{
-	//	printf("1uS units\n");
+	//	g_printf("1uS units\n");
 	}
 
 	min = 65535;
@@ -166,7 +167,7 @@ void crunch_trigtooth_data(gint page)
 	}
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
-	//printf ("Minimum tooth time: %i, max tooth time %i\n",min,max);
+	//g_printf ("Minimum tooth time: %i, max tooth time %i\n",min,max);
 
 	/* vertical scale calcs:
 	 * PROBLEM:  max_time can be anywhere from 0-65535, need to 
@@ -206,6 +207,7 @@ void update_trigtooth_display(gint page)
 #endif
 }
 
+#ifdef HAVE_CAIRO
 void cairo_update_trigtooth_display(gint page)
 {
 	gint w = 0;
@@ -224,7 +226,7 @@ void cairo_update_trigtooth_display(gint page)
 
 	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
 	if (!ttm_data)
-		printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
+		g_printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -240,7 +242,7 @@ void cairo_update_trigtooth_display(gint page)
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr,h/16);
 
-//	printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
+	//	g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	/* Get width of largest value and save it */
 	message = g_strdup_printf("%i",(gint)ttm_data->peak);
 	cairo_text_extents (cr, message, &extents);
@@ -254,10 +256,10 @@ void cairo_update_trigtooth_display(gint page)
 	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
 	{
 		message = g_strdup_printf("%i",(gint)ctr);
-//		printf("marker \"%s\"\n",message);
+		//		g_printf("marker \"%s\"\n",message);
 		cairo_text_extents (cr, message, &extents);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+y_shift;
-//		printf("drawing at %f\n",cur_pos);
+		//		g_printf("drawing at %f\n",cur_pos);
 		//cairo_move_to(cr,0,cur_pos);
 		cairo_move_to(cr,tmpx-extents.x_advance,cur_pos);
 		cairo_show_text(cr,message);
@@ -283,11 +285,11 @@ void cairo_update_trigtooth_display(gint page)
 	h = ttm_data->darea->allocation.height;
 	y_shift=ttm_data->font_height;
 	cairo_set_line_width(cr,w/186.0);
-	//printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);
+	//g_printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);
 	/* Draw the bars, left to right */
 	for (i=0;i<93;i++)
 	{
-		//		printf("moved to %f %i\n",ttm_data->usable_begin+(i*w/93.0),0);
+		//		g_printf("moved to %f %i\n",ttm_data->usable_begin+(i*w/93.0),0);
 		cairo_move_to(cr,ttm_data->usable_begin+(i*w/93.0),h-(y_shift/2));
 		val = g_array_index(ttm_data->current,gushort,i);
 		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
@@ -308,7 +310,7 @@ void cairo_update_trigtooth_display(gint page)
 	gdk_region_destroy (region);
 
 }
-
+#else
 void gdk_update_trigtooth_display(gint page)
 {
 	gint w = 0;
@@ -334,7 +336,7 @@ void gdk_update_trigtooth_display(gint page)
 
 	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
 	if (!ttm_data)
-		printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
+		g_printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -424,3 +426,4 @@ void gdk_update_trigtooth_display(gint page)
 	gdk_region_destroy (region);
 
 }
+#endif

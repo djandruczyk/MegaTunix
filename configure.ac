@@ -45,11 +45,10 @@ AC_DEFUN(PKG_CHECK_GTK,
 [
 	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
 	[ 
-		AC_DEFINE(HAVE_CAIRO,1,["We have the cairo library to use"])
+		AC_DEFINE(HAVE_CAIRO,,["We have the cairo library to use"])
 	],
 	[
 		PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.4.0 gthread-2.0])
-		AC_DEFINE(HAVE_CAIRO,0,["We DO NOT have the cairo library to use"])
 	])
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
