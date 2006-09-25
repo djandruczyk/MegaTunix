@@ -26,8 +26,8 @@ int main (int argc, char **argv)
 	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 4.0);
 	//mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge), 1.5 * M_PI, 3 * M_PI);
 	mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
-	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
-	mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "Some Variable");
+	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), FALSE);
+	mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "RPM x100");
 	mtx_gauge_face_set_resolution (MTX_GAUGE_FACE (gauge), 37);
 	gtk_timeout_add(33,(GtkFunction)update_gauge,(gpointer)gauge);
 

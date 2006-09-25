@@ -18,15 +18,24 @@ typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 struct _MtxGaugeFace
 {//public data
 	GtkDrawingArea parent;
+	GdkPixmap *pixmap;
+	GdkPixmap *bg_pixmap;
+	cairo_t *cr;
 	gfloat value;//very basic now, a single float value to display
 	gchar * units_str;
 	gfloat lbound;
 	gfloat ubound;
 	gfloat range;
+	gdouble xc;
+	gdouble yc;
+	gdouble radius;
 	gfloat start_radian;
 	gfloat stop_radian;
 	gboolean antialias;
 	gint num_ticks;
+	GdkGC * axis_gc;
+	GdkGC * font_gc;
+	GdkGC * needle_gc;
 };
 
 struct _MtxGaugeFaceClass
