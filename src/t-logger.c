@@ -12,6 +12,9 @@
  */
 
 #include <config.h>
+#ifdef HAVE_CAIRO
+#include <cairo/cairo.h>
+#endif
 #include <enums.h>
 #include <glib.h>
 #include <glib/gprintf.h>
