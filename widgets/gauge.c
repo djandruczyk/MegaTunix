@@ -461,14 +461,14 @@ static void gdk_generate_gauge_background(GtkWidget *widget)
 	/* gauge back */
 	/* Filled arc in white */
 	gdk_draw_arc(gauge->bg_pixmap,widget->style->white_gc,TRUE,
-			gauge->xc,gauge->yc,
-			gauge->radius,gauge->radius,
+			0,0,
+			w,h,
 			gauge->start_deg,gauge->stop_deg);
 
 	/* Ouside border line, NOT filled */
 	gdk_draw_arc(gauge->bg_pixmap,widget->style->black_gc,FALSE,
-			gauge->xc,gauge->yc,
-			gauge->radius,gauge->radius,
+			0,0,
+			w,h,
 			gauge->start_deg,gauge->stop_deg);
 
 
