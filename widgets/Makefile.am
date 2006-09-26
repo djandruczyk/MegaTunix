@@ -6,7 +6,7 @@ INCLUDES = \
 
 demo_SOURCES = gauge.c gauge.h demo.c
 
-bin_PROGRAMS=demo
+noinst_PROGRAMS=demo
 
 demo_LDADD = @GTK_LIBS@ @EXTRA_LIBS@
 
