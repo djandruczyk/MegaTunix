@@ -11,6 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#ifndef CRTSCTS
+#define CRTSCTS 0
+#endif
 
 #include <comms_gui.h>
 #include <config.h>

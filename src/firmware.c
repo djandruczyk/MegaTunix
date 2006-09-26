@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <firmware.h>
+#include <glib/gprintf.h>
 #include <structures.h>
 
 
@@ -21,5 +22,5 @@
  */
 void load_firmware_file(struct Io_File *iofile)
 {
-	printf("load_firmware_file() not implemented yet\n");
+	g_printf("load_firmware_file() not implemented yet\n");
 }
