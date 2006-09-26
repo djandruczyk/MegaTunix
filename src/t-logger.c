@@ -244,7 +244,7 @@ void cairo_update_trigtooth_display(gint page)
 
 	//	g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	/* Get width of largest value and save it */
-	message = g_strdup_printf("%i",(gint)ttm_data->peak);
+	message = g_strdup_printf("%i",(gint)(ttm_data->peak-ttm_data->vdivisor));
 	cairo_text_extents (cr, message, &extents);
 	tmpx = extents.x_advance;
 	y_shift = extents.height;
@@ -271,7 +271,7 @@ void cairo_update_trigtooth_display(gint page)
 	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
 	{
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+(y_shift/2);
-		cairo_move_to(cr,extents.x_advance+4,cur_pos);
+		cairo_move_to(cr,extents.x_advance+3,cur_pos);
 		cairo_line_to(cr,w,cur_pos);
 	}
 	ttm_data->usable_begin=extents.x_advance+9;

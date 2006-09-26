@@ -29,7 +29,7 @@ int main (int argc, char **argv)
 	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), FALSE);
 	mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "RPM x100");
 	mtx_gauge_face_set_resolution (MTX_GAUGE_FACE (gauge), 37);
-	gtk_timeout_add(33,(GtkFunction)update_gauge,(gpointer)gauge);
+	gtk_timeout_add(50,(GtkFunction)update_gauge,(gpointer)gauge);
 
 
 	gfloat value = mtx_gauge_face_get_value (MTX_GAUGE_FACE (gauge));
