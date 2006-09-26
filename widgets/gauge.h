@@ -21,13 +21,10 @@ struct _MtxGaugeFace
 	GtkDrawingArea parent;
 	GdkPixmap *pixmap;
 	GdkPixmap *bg_pixmap;
-//#ifdef HAVE_CAIRO
+#ifdef HAVE_CAIRO
 	cairo_t *cr;
-//#else
-	GdkScreen *screen;
-	PangoContext *context;
+#else
 	PangoLayout *layout;
-	PangoRenderer *renderer;
 	PangoFontDescription *font_desc;
 	GdkGC * axis_gc;
 	GdkGC * font_gc;
@@ -35,7 +32,7 @@ struct _MtxGaugeFace
 	GdkColormap *colormap;
 	gfloat start_deg; // GDK vs cairo use different units/direction!!!
 	gfloat stop_deg; // GDK vs cairo use different units/direction!!!
-//#endif
+#endif
 	gfloat value;//very basic now, a single float value to display
 	gchar * units_str;
 	gfloat lbound;
