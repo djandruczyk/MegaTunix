@@ -45,7 +45,13 @@ AC_DEFUN(PKG_CHECK_GTK,
 [
 	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
 	[ 
-		AC_DEFINE(HAVE_CAIRO,,["We have the cairo library to use"])
+		AC_ARG_ENABLE(cairo,
+		[  --disable-cairo	enable cairo ],disable_cairo=yes, disable_cairo=no)
+		if test "$disable_cairo" = no; then
+			AC_DEFINE(HAVE_CAIRO,,["We have the cairo library to use"])
+		else
+			echo "We found cairo, but it was DISABLED by the user"
+fi
 	],
 	[
 		PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.4.0 gthread-2.0])
