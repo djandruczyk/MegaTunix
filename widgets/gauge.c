@@ -147,7 +147,6 @@ int mtx_gauge_face_get_resolution (MtxGaugeFace *gauge)
 /* Right is 0 going clockwise to M_PI (180 Degrees) back to 0 (2 * M_PI) */
 void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float stop_radian)
 {
-	gint float tmp;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
 	gauge->start_radian = start_radian;
@@ -157,9 +156,10 @@ void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float sto
 	 * doe it clockwise in radians. At least they start at the same place
 	 * "3 O'clock" 
 	 * */
-	tmp = (start_radian/M_PI) *180
-	
+	gauge->start_deg = -((start_radian/M_PI) *180.0) *64.0;
+	gauge->stop_deg = -(((stop_radian-start_radian)/M_PI) *180.0) *64.0;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	mtx_gauge_face_redraw_canvas (gauge);//show new value
 }
 
 static void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
@@ -190,6 +190,8 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->ubound = 1.0;
 	gauge->start_radian = 0.75 * M_PI;//M_PI is left, 0 is right
 	gauge->stop_radian = 2.25 * M_PI;
+	gauge->start_deg = 225*64;
+	gauge->stop_deg = -270*64;
 	gauge->num_ticks = 24;
 	gauge->antialias = FALSE;
 	gauge->xc = 0.0;
@@ -197,12 +199,12 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->radius = 0.0;
 	gauge->cr = NULL;
 	gauge->range = gauge->ubound - gauge->lbound;
-#ifndef HAVE_CAIRO
+//#ifndef HAVE_CAIRO
 	gauge->colormap = gdk_colormap_get_system();
 	gauge->axis_gc = NULL;	
 	gauge->needle_gc = NULL;
 	gauge->font_gc = NULL;
-#endif
+//#endif
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
@@ -326,14 +328,14 @@ static gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *
 				w,h);
 
 		gdk_window_set_back_pixmap(widget->window,gauge->pixmap,0);
-#ifndef HAVE_CAIRO
+//#ifndef HAVE_CAIRO
 		gauge->axis_gc = gdk_gc_new(gauge->bg_pixmap);
 		gauge->needle_gc = gdk_gc_new(gauge->pixmap);
 		gauge->font_gc = gdk_gc_new(gauge->pixmap);
 		gdk_gc_set_colormap(gauge->axis_gc,gauge->colormap);
 		gdk_gc_set_colormap(gauge->needle_gc,gauge->colormap);
 		gdk_gc_set_colormap(gauge->font_gc,gauge->colormap);
-#endif
+//#endif
 		gauge->xc = w / 2;
 		gauge->yc = h / 2;
 		gauge->radius = MIN (w/2, h/2) - 5;
@@ -441,6 +443,7 @@ static void gdk_generate_gauge_background(GtkWidget *widget)
 {
 	gint w = 0;
 	gint h = 0;
+	gint lwidth = 0;
 	gfloat arc = 0.0;
 	gint total_ticks = 0;
 	gint left_tick = 0;
@@ -452,27 +455,38 @@ static void gdk_generate_gauge_background(GtkWidget *widget)
 	w = widget->allocation.width;
 	h = widget->allocation.height;
 
+	lwidth = MIN (w/2, h/2)/40 < 1 ? 1: MIN (w/2, h/2)/40;
+		
+	gdk_gc_set_line_attributes(gauge->axis_gc,lwidth,
+			GDK_LINE_SOLID,
+			GDK_CAP_ROUND,
+			GDK_JOIN_ROUND);
 	/* Wipe the display */
 	gdk_draw_rectangle(gauge->bg_pixmap,
-			widget->style->black_gc,
+			widget->style->white_gc,
 			TRUE, 0,0,
 			w,h);
 
 	/* gauge back */
 	/* Filled arc in white */
 	gdk_draw_arc(gauge->bg_pixmap,widget->style->white_gc,TRUE,
-			0,0,
-			w,h,
+			gauge->xc-gauge->radius,gauge->yc-gauge->radius,
+			gauge->radius*2,gauge->radius*2,
 			gauge->start_deg,gauge->stop_deg);
 
 	/* Ouside border line, NOT filled */
-	gdk_draw_arc(gauge->bg_pixmap,widget->style->black_gc,FALSE,
-			0,0,
-			w,h,
+	gdk_draw_arc(gauge->bg_pixmap,gauge->axis_gc,FALSE,
+			gauge->xc-gauge->radius,gauge->yc-gauge->radius,
+			gauge->radius*2,gauge->radius*2,
 			gauge->start_deg,gauge->stop_deg);
 
 
 	/* gauge ticks */
+	lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
+	gdk_gc_set_line_attributes(gauge->axis_gc,lwidth,
+			GDK_LINE_SOLID,
+			GDK_CAP_BUTT,
+			GDK_JOIN_BEVEL);
 	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
 	total_ticks = gauge->num_ticks / arc;//amount of ticks if entire gauge was used
 	left_tick = total_ticks * (gauge->start_radian / (2 * M_PI));//start tick
@@ -488,21 +502,15 @@ static void gdk_generate_gauge_background(GtkWidget *widget)
 		else
 		{
 			inset = (gint) (0.1 * gauge->radius);
-//			cairo_set_line_width (cr, 0.5 *
-//					cairo_get_line_width (cr));
 		}
-/*		cairo_move_to (cr,
+		gdk_draw_line(gauge->bg_pixmap,gauge->axis_gc,
+
 				gauge->xc + (gauge->radius - inset) * cos (counter * M_PI / (total_ticks / 2)),
-				gauge->yc + (gauge->radius - inset) * sin (counter * M_PI / (total_ticks / 2)));
-		cairo_line_to (cr,
+				gauge->yc + (gauge->radius - inset) * sin (counter * M_PI / (total_ticks / 2)),
 				gauge->xc + (gauge->radius * cos (counter * (M_PI / (total_ticks / 2)))),
 				gauge->yc + (gauge->radius * sin (counter * (M_PI / (total_ticks / 2)))));
-		cairo_stroke (cr);
-		cairo_restore (cr); // stack-pen-size 
-*/
 	}
 
-//	cairo_destroy (cr);
 }
 
 static gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
