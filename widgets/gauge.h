@@ -1,5 +1,6 @@
 // Christopher Mire, 2006
 
+#include <config.h>
 #ifndef MTX_GAUGE_FACE_H
 #define MTX_GAUGE_FACE_H
 
@@ -20,7 +21,16 @@ struct _MtxGaugeFace
 	GtkDrawingArea parent;
 	GdkPixmap *pixmap;
 	GdkPixmap *bg_pixmap;
+//#ifdef HAVE_CAIRO
 	cairo_t *cr;
+//#else
+	GdkGC * axis_gc;
+	GdkGC * font_gc;
+	GdkGC * needle_gc;
+	GdkColormap *colormap;
+	gfloat start_deg; // GDK vs cairo use different units/direction!!!
+	gfloat stop_deg; // GDK vs cairo use different units/direction!!!
+//#endif
 	gfloat value;//very basic now, a single float value to display
 	gchar * units_str;
 	gfloat lbound;
@@ -33,9 +43,6 @@ struct _MtxGaugeFace
 	gfloat stop_radian;
 	gboolean antialias;
 	gint num_ticks;
-	GdkGC * axis_gc;
-	GdkGC * font_gc;
-	GdkGC * needle_gc;
 };
 
 struct _MtxGaugeFaceClass
