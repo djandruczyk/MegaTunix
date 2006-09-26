@@ -24,6 +24,11 @@ struct _MtxGaugeFace
 //#ifdef HAVE_CAIRO
 	cairo_t *cr;
 //#else
+	GdkScreen *screen;
+	PangoContext *context;
+	PangoLayout *layout;
+	PangoRenderer *renderer;
+	PangoFontDescription *font_desc;
 	GdkGC * axis_gc;
 	GdkGC * font_gc;
 	GdkGC * needle_gc;

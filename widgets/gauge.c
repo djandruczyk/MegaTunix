@@ -291,8 +291,8 @@ static void cairo_update_gauge_position (GtkWidget *widget)
 
 static void gdk_update_gauge_position (GtkWidget *widget)
 {
-	gfloat x = 0.0;
-	gfloat y = 0.0;
+	gint x = 0.0;
+	gint y = 0.0;
 	gint lwidth = 0;
 	gint w = 0;
 	gint h = 0;
@@ -301,7 +301,10 @@ static void gdk_update_gauge_position (GtkWidget *widget)
 	gint last_height = 0.0;
 	gchar * message = NULL;
 	gfloat current_value = 0.0;
+	PangoRectangle ink_rect;
+	PangoRectangle logical_rect;
 	GdkPoint pt[4];
+	GdkColor color;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
@@ -335,42 +338,59 @@ static void gdk_update_gauge_position (GtkWidget *widget)
 	pt[3].x =  gauge->xc - (gauge->radius/20) * cos ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
 	pt[3].y =  gauge->yc - (gauge->radius/20) * sin ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
 
+	/* Draw the needle */
 	gdk_draw_polygon(gauge->pixmap,
 				widget->style->black_gc,
-			TRUE,&pt,4);
+			TRUE,pt,4);
 
-
-	/*
-	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
-			CAIRO_FONT_WEIGHT_BOLD);
-
-	cairo_set_font_size (cr, gauge->radius / 5);
 	message = g_strdup_printf("%.2f", current_value);
-
-	cairo_text_extents (cr, message, &extents);
-	x = 0.5-(extents.width/2 + extents.x_bearing);
-	y = 0.5-(extents.height/2 + extents.y_bearing);
-
-	cairo_move_to (cr, gauge->xc+x, gauge->yc+(2.5*y));
-	cairo_show_text (cr, message);
+/*
+	color.red=32768;
+	color.green=32768;
+	color.blue=32768;
+	gdk_pango_renderer_set_override_color (GDK_PANGO_RENDERER (gauge->renderer),
+					PANGO_RENDER_PART_FOREGROUND, &color);
+					*/
+	        
+	gauge->font_desc = pango_font_description_from_string("Sans Bold 12");
+	pango_layout_set_font_description(gauge->layout,gauge->font_desc);
+	pango_layout_get_pixel_extents(gauge->layout,&ink_rect,&logical_rect);
+	pango_layout_set_text(gauge->layout,message,-1);
 	g_free(message);
-	last_height = extents.height;
+
+	x = (logical_rect.width/2);
+	y = (logical_rect.height/2);
+
+//	gdk_draw_text(gauge->pixmap,gauge->font_gc,
+//			gauge->xc-x,
+//			gauge->yc+(2.5*y),gauge->layout);
+	pango_renderer_draw_layout(gauge->renderer,gauge->layout,
+			gauge->xc-x,
+			gauge->yc+(2.5*y));
+	printf("center %f, %f\n",gauge->xc,gauge->yc);
+	printf("drawing text at %i, %i\n",(gint)gauge->xc-x,
+			                        (gint)gauge->yc+(gint)(2.5*y));
+
+
+	last_height = logical_rect.height;
 
 	if (gauge->units_str)
 	{
-		cairo_set_font_size (cr, gauge->radius / 8);
+		pango_layout_set_text(gauge->layout,gauge->units_str,-1);
+		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
+		pango_layout_get_pixel_extents(gauge->layout,&ink_rect,&logical_rect);
 
-		cairo_text_extents (cr, gauge->units_str, &extents);
-		x = 0.5-(extents.width/2 + extents.x_bearing);
-		y = 0.5-(extents.height/2 + extents.y_bearing);
+		x = (logical_rect.width/2);
+		y = (logical_rect.height/2);
 
-		cairo_move_to (cr, gauge->xc+x, gauge->yc+last_height+(4*y));
-		cairo_show_text (cr, gauge->units_str);
+		//	gdk_draw_text(gauge->pixmap,gauge->font_gc,
+		//			gauge->xc-x,
+		//			gauge->yc+last_height+(4*y),gauge->layout);
+		pango_renderer_draw_layout(gauge->renderer,gauge->layout,
+				gauge->xc-x,
+				gauge->yc+last_height+(4*y));
 	}
 
-	cairo_stroke (cr);
-	cairo_destroy(cr);
-	*/
 }
 
 static gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
@@ -413,9 +433,15 @@ static gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *
 
 		gdk_window_set_back_pixmap(widget->window,gauge->pixmap,0);
 //#ifndef HAVE_CAIRO
+		gauge->screen = gdk_drawable_get_screen (gauge->pixmap);
+		gauge->renderer = gdk_pango_renderer_get_default (gauge->screen);
+		gdk_pango_renderer_set_drawable(GDK_PANGO_RENDERER(gauge->renderer),gauge->pixmap);
 		gauge->axis_gc = gdk_gc_new(gauge->bg_pixmap);
 		gauge->needle_gc = gdk_gc_new(gauge->pixmap);
 		gauge->font_gc = gdk_gc_new(gauge->pixmap);
+		gdk_pango_renderer_set_gc(GDK_PANGO_RENDERER (gauge->renderer), gauge->font_gc);
+		gauge->context = gdk_pango_context_get();
+		gauge->layout = pango_layout_new(gauge->context);
 		gdk_gc_set_colormap(gauge->axis_gc,gauge->colormap);
 		gdk_gc_set_colormap(gauge->needle_gc,gauge->colormap);
 		gdk_gc_set_colormap(gauge->font_gc,gauge->colormap);
