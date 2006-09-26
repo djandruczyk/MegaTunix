@@ -212,7 +212,7 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 static void update_gauge_position(GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
-	cairo_update_gauge_position (widget);
+	gdk_update_gauge_position (widget);
 #else
 	gdk_update_gauge_position (widget);
 #endif
@@ -284,9 +284,93 @@ static void cairo_update_gauge_position (GtkWidget *widget)
 		cairo_move_to (cr, gauge->xc+x, gauge->yc+last_height+(4*y));
 		cairo_show_text (cr, gauge->units_str);
 	}
-	
+
 	cairo_stroke (cr);
 	cairo_destroy(cr);
+}
+
+static void gdk_update_gauge_position (GtkWidget *widget)
+{
+	gfloat x = 0.0;
+	gfloat y = 0.0;
+	gint lwidth = 0;
+	gint w = 0;
+	gint h = 0;
+	gfloat arc = 0.0;
+	gfloat arc_rad = 0.0;
+	gint last_height = 0.0;
+	gchar * message = NULL;
+	gfloat current_value = 0.0;
+	GdkPoint pt[4];
+
+	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
+
+	/* Copy bacground pixmap to intermediaary for final rendering */
+	gdk_draw_drawable(gauge->pixmap,
+			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			gauge->bg_pixmap,
+			0,0,
+			0,0,
+			widget->allocation.width,widget->allocation.height);
+
+//	lwidth = MIN (w/2, h/2)/100 < 1 ? 1: MIN (w/2, h/2)/100;
+	gdk_gc_set_line_attributes(gauge->axis_gc,1,
+			GDK_LINE_SOLID,
+			GDK_CAP_ROUND,
+			GDK_JOIN_ROUND);
+
+	/* gauge hands */
+	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
+
+	current_value = gauge->value;
+
+	arc_rad = (2 * M_PI) * arc;//angle in radians of total arc
+	/* Four POINT needle,  point 0 is the tip (easiest to find) */
+	pt[0].x = gauge->xc + gauge->radius * sin ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+	pt[0].y = gauge->yc + gauge->radius * -cos ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+	pt[1].x = gauge->xc + (gauge->radius/20) *cos((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+	pt[1].y = gauge->yc + (gauge->radius/20) *sin((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+	pt[2].x =  gauge->xc + (gauge->radius/12) * -sin ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+	pt[2].y =  gauge->yc + (gauge->radius/12) * cos ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+	pt[3].x =  gauge->xc - (gauge->radius/20) * cos ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+	pt[3].y =  gauge->yc - (gauge->radius/20) * sin ((current_value - gauge->lbound) * (arc_rad) /gauge->range + (gauge->start_radian) - (1.5 * M_PI));
+
+	gdk_draw_polygon(gauge->pixmap,
+				widget->style->black_gc,
+			TRUE,&pt,4);
+
+
+	/*
+	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
+			CAIRO_FONT_WEIGHT_BOLD);
+
+	cairo_set_font_size (cr, gauge->radius / 5);
+	message = g_strdup_printf("%.2f", current_value);
+
+	cairo_text_extents (cr, message, &extents);
+	x = 0.5-(extents.width/2 + extents.x_bearing);
+	y = 0.5-(extents.height/2 + extents.y_bearing);
+
+	cairo_move_to (cr, gauge->xc+x, gauge->yc+(2.5*y));
+	cairo_show_text (cr, message);
+	g_free(message);
+	last_height = extents.height;
+
+	if (gauge->units_str)
+	{
+		cairo_set_font_size (cr, gauge->radius / 8);
+
+		cairo_text_extents (cr, gauge->units_str, &extents);
+		x = 0.5-(extents.width/2 + extents.x_bearing);
+		y = 0.5-(extents.height/2 + extents.y_bearing);
+
+		cairo_move_to (cr, gauge->xc+x, gauge->yc+last_height+(4*y));
+		cairo_show_text (cr, gauge->units_str);
+	}
+
+	cairo_stroke (cr);
+	cairo_destroy(cr);
+	*/
 }
 
 static gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
