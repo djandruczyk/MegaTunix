@@ -200,9 +200,10 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->xc = 0.0;
 	gauge->yc = 0.0;
 	gauge->radius = 0.0;
-	gauge->cr = NULL;
 	gauge->range = gauge->ubound - gauge->lbound;
-#ifndef HAVE_CAIRO
+#ifdef HAVE_CAIRO
+	gauge->cr = NULL;
+#else
 	gauge->start_deg = 225*64;
 	gauge->stop_deg = -270*64;
 	gauge->colormap = gdk_colormap_get_system();

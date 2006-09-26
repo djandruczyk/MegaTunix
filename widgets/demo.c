@@ -1,6 +1,7 @@
 // Christopher Mire, 2006
 
 #include <gtk/gtk.h>
+#include <glib/gprintf.h>
 #include <gauge.h>
 #include <math.h>
 
@@ -33,7 +34,7 @@ int main (int argc, char **argv)
 
 
 	gfloat value = mtx_gauge_face_get_value (MTX_GAUGE_FACE (gauge));
-	printf ("current value is %f\n", value);
+	g_printf ("current value is %f\n", value);
 
 	gtk_main ();
 	return 0;
