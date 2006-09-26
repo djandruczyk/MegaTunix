@@ -415,6 +415,8 @@ static gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *
 			g_object_unref(gauge->needle_gc);
 		if (gauge->font_gc)
 			g_object_unref(gauge->font_gc);
+		if (gauge->layout)
+			g_object_unref(gauge->layout);
 #endif
 		/* Backing pixmap (copy of window) */
 		if (gauge->pixmap)

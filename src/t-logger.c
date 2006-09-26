@@ -24,7 +24,7 @@
 #include <structures.h>
 
 
-static GHashTable *trigtooth_hash = NULL;
+struct TTMon_Data *ttm_data;
 
 #define CTR 187
 #define UNITS 188
@@ -33,11 +33,15 @@ static GHashTable *trigtooth_hash = NULL;
  \brief 
  */
 
+void bind_ttm_to_page(gint page)
+{
+	ttm_data->page = page;
+}
+
 EXPORT void setup_logger_display(GtkWidget * src_widget)
 {
-	struct TTMon_Data *ttm_data = g_new0(struct TTMon_Data, 1);
-
-	ttm_data->page = (gint)g_object_get_data(G_OBJECT(src_widget),"page");
+	ttm_data = g_new0(struct TTMon_Data,1);
+	ttm_data->page = -1;
 	ttm_data->pixmap = NULL;
 	ttm_data->darea = src_widget;
 	ttm_data->min_time = 65535;
@@ -48,26 +52,27 @@ EXPORT void setup_logger_display(GtkWidget * src_widget)
 	ttm_data->usable_begin = 0;
 	ttm_data->current = g_array_sized_new(FALSE,TRUE,sizeof (gushort),93);
 	ttm_data->last = g_array_sized_new(FALSE,TRUE,sizeof (gushort),93);
-	ttm_data->font_desc = pango_font_description_from_string("courier");
+	ttm_data->font_desc = NULL;
 
 	g_object_set_data(G_OBJECT(src_widget),"ttmon_data",(gpointer)ttm_data);
-	if (!trigtooth_hash)
-		trigtooth_hash = g_hash_table_new(g_direct_hash,g_direct_equal);
-	g_hash_table_replace(trigtooth_hash,GINT_TO_POINTER(ttm_data->page),ttm_data);
 	return;
 }
 
 EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
-	struct TTMon_Data *ttm_data = NULL;
 	gint w = 0;
 	gint h = 0;
 
-	ttm_data = (struct TTMon_Data *)g_object_get_data(G_OBJECT(widget),"ttmon_data");
 	if(widget->window)
 	{
 		w=widget->allocation.width;
 		h=widget->allocation.height;
+		if (ttm_data->layout)
+			g_object_unref(ttm_data->layout);
+		if (ttm_data->axis_gc)
+			g_object_unref(ttm_data->axis_gc);
+		if (ttm_data->trace_gc)
+			g_object_unref(ttm_data->trace_gc);
 
 		if (ttm_data->pixmap)
 			g_object_unref(ttm_data->pixmap);
@@ -81,8 +86,13 @@ EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigur
 		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
 		ttm_data->axis_gc = initialize_gc(ttm_data->pixmap,TTM_AXIS);
 		ttm_data->trace_gc = initialize_gc(ttm_data->pixmap,TTM_TRACE);
+		ttm_data->layout = gtk_widget_create_pango_layout(ttm_data->darea,NULL);
 
 	}
+	/* Don't try to update if the page isn't bound YET */
+	if (ttm_data->page < 0)
+		return TRUE;
+
 	crunch_trigtooth_data(ttm_data->page);
 	if (ttm_data->peak > 0)
 		update_trigtooth_display(ttm_data->page);
@@ -91,8 +101,6 @@ EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigur
 
 EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
-	struct TTMon_Data *ttm_data = NULL;
-	ttm_data = (struct TTMon_Data *)g_object_get_data(G_OBJECT(widget),"ttmon_data");
 	gdk_draw_drawable(widget->window,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			ttm_data->pixmap,
@@ -112,27 +120,23 @@ void crunch_trigtooth_data(gint page)
 	gint min = -1;
 	gint max = -1;
 	gushort total = 0;
-	struct TTMon_Data *ttm_data = NULL;
 	gint position = ms_data[page][CTR];
 	gint count = 0;
-	
-	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
-	if (!ttm_data)
-		g_printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
+
 
 	/*
-	g_printf("Counter position on page %i is %i\n",page,position);
-	if (position > 0)
-		g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
-	else
-		g_printf("data block from position 0 to 185 (93 words)\n");
-		*/
+	   g_printf("Counter position on page %i is %i\n",page,position);
+	   if (position > 0)
+	   g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
+	   else
+	   g_printf("data block from position 0 to 185 (93 words)\n");
+	   */
 
 	count=0;
 	for (i=0;i<93;i++)
-	{
 		g_array_insert_val(ttm_data->last,i,g_array_index(ttm_data->current,gushort,i));
-	}
+
+
 	for (i=position;i<185;i+=2)
 	{
 		total = (ms_data[page][i]*256)+ms_data[page][i+1];
@@ -148,15 +152,15 @@ void crunch_trigtooth_data(gint page)
 			count++;
 		}
 	}
-//	g_printf("\n");
+	//	g_printf("\n");
 
 	if (ms_data[page][UNITS] == 1)
 	{
-	//	g_printf("0.1 ms units\n");
+		//	g_printf("0.1 ms units\n");
 	}
 	else
 	{
-	//	g_printf("1uS units\n");
+		//	g_printf("1uS units\n");
 	}
 
 	min = 65535;
@@ -225,11 +229,6 @@ void cairo_update_trigtooth_display(gint page)
 	cairo_t *cr;
 	cairo_text_extents_t extents;
 	GdkRegion *region = NULL;
-	struct TTMon_Data *ttm_data = NULL;
-
-	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
-	if (!ttm_data)
-		g_printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -243,7 +242,7 @@ void cairo_update_trigtooth_display(gint page)
 
 	/* get our font */
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
-	cairo_set_font_size(cr,h/16);
+	cairo_set_font_size(cr,h/20);
 
 	//	g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	/* Get width of largest value and save it */
@@ -320,26 +319,20 @@ void gdk_update_trigtooth_display(gint page)
 	gint h = 0;
 	gint i = 0;
 	gint lwidth = 0;
-	gint line_width = 0;
 	gint x_pos = 0;
 	gfloat tmpx = 0.0;
 	gfloat ctr = 0.0;
 	gfloat cur_pos = 0.0;
 	gfloat y_shift = 0.0;
 	gfloat frag = 0.0;
-	gfloat fragcount  = 0.0;
+	gint increment = 0;
 	gfloat count  = 0.0;
 	gushort val = 0;
 	gchar * message = NULL;
-	PangoLayout * layout = NULL;
+	gchar * tmpbuf = NULL;
 	PangoRectangle ink_rect;
 	PangoRectangle logical_rect;
 	GdkRegion *region = NULL;
-	struct TTMon_Data *ttm_data = NULL;
-
-	ttm_data = g_hash_table_lookup(trigtooth_hash,GINT_TO_POINTER(page));
-	if (!ttm_data)
-		g_printf("could NOT find ttm_data in hashtable,  BIG ASS PROBLEM!\n");
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -351,9 +344,15 @@ void gdk_update_trigtooth_display(gint page)
 
 
 	/* get our font */
-	layout = gtk_widget_create_pango_layout(ttm_data->darea,g_strdup_printf("%i",(gint)ttm_data->peak));
-	pango_layout_set_font_description(layout,ttm_data->font_desc);
-	pango_layout_get_pixel_extents(layout,&ink_rect,&logical_rect);
+	tmpbuf = g_strdup_printf("Sans %i",(gint)(h/20.0));
+	ttm_data->font_desc = pango_font_description_from_string(tmpbuf);
+	g_free(tmpbuf);
+
+	pango_layout_set_font_description(ttm_data->layout,ttm_data->font_desc);
+	message = g_strdup_printf("%i",(gint)(ttm_data->peak-ttm_data->vdivisor));
+	pango_layout_set_text(ttm_data->layout,message,-1);
+	pango_layout_get_pixel_extents(ttm_data->layout,&ink_rect,&logical_rect);
+	g_free(message);
 
 	tmpx = logical_rect.width;
 	y_shift = logical_rect.height;
@@ -363,12 +362,11 @@ void gdk_update_trigtooth_display(gint page)
 	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
 	{
 		message = g_strdup_printf("%i",(gint)ctr);
-		layout = gtk_widget_create_pango_layout(ttm_data->darea,message);
-		pango_layout_set_font_description(layout,ttm_data->font_desc);
-		pango_layout_get_pixel_extents(layout,&ink_rect,&logical_rect);
+		pango_layout_set_text(ttm_data->layout,message,-1);
+		pango_layout_get_pixel_extents(ttm_data->layout,&ink_rect,&logical_rect);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak)); 
 
-		gdk_draw_layout(ttm_data->pixmap,ttm_data->trace_gc,tmpx-logical_rect.width,cur_pos,layout);
+		gdk_draw_layout(ttm_data->pixmap,ttm_data->trace_gc,tmpx-logical_rect.width,cur_pos,ttm_data->layout);
 		g_free(message);
 	}
 	/* Horizontal Axis lines */
@@ -382,8 +380,6 @@ void gdk_update_trigtooth_display(gint page)
 	/* Left Side vertical axis line */
 	gdk_draw_line(ttm_data->pixmap,ttm_data->axis_gc,tmpx+7,0,tmpx+7,h);
 
-	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
-	h = ttm_data->darea->allocation.height;
 	y_shift=ttm_data->font_height;
 
 	/* Code from eXtace's 2D eq for nice even spacing algorithm using a
@@ -391,31 +387,35 @@ void gdk_update_trigtooth_display(gint page)
 	 * */
 
 	x_pos = ttm_data->usable_begin;
-	lwidth = (w-ttm_data->usable_begin)/186;
-	frag = ((gfloat)(w-ttm_data->usable_begin)/186.0) - (gfloat)lwidth;
+//	printf("width %i, usable_begin %f\n",w,ttm_data->usable_begin);
+	lwidth = (gint)((gfloat)(w-ttm_data->usable_begin)/186.0);
+	frag = 2*(((gfloat)(w-ttm_data->usable_begin)/186.0) - (gfloat)lwidth);
 	if (frag == 0)
 		frag += 0.00001;
+//	printf("usable area %i, line width %i frag %f\n",w-x_pos,lwidth,frag);
 
 	for (i=0;i<93;i++)
 	{
-		count = count + 2*frag;
-		if (count > 1.0 )
+		count += frag;
+		if (count > 1.0)
 		{
-			count -= 1.0;
-			line_width = lwidth+1;
-			fragcount++;
+			//count -= 1.0;
+			count = 0.0;
+		//	printf("incrementing at %i\n",i);
+			increment = 1;
 		}
 		else
-			line_width = lwidth;
+			increment = 0;
 
 		val = g_array_index(ttm_data->current,gushort,i);
 		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
 		gdk_draw_rectangle(ttm_data->pixmap,ttm_data->trace_gc,TRUE,
 				x_pos,(gint)cur_pos,
-				line_width,h-(y_shift/2)-cur_pos);
+				lwidth+increment,h-(y_shift/2)-(gint)cur_pos);
 
-		x_pos += 2*line_width;
+		x_pos += 2*lwidth+increment;
 	}
+//	printf("ending x position %i\n",x_pos);
 
 	/* Trigger redraw to main screen */
 	if (!ttm_data->darea->window) 

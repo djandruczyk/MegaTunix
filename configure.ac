@@ -49,8 +49,10 @@ AC_DEFUN(PKG_CHECK_GTK,
 		[  --disable-cairo	enable cairo ],disable_cairo=yes, disable_cairo=no)
 		if test "$disable_cairo" = no; then
 			AC_DEFINE(HAVE_CAIRO,,["We have the cairo library to use"])
+			using_cairo=yes
 		else
 			echo "We found cairo, but it was DISABLED by the user"
+			using_cairo=no
 fi
 	],
 	[
@@ -161,6 +163,7 @@ echo "
 Configuration:
 
     Install Path:                       ${prefix}
+    Using Cairo:                        ${using_cairo}
     General Debugging:                  ${enable_debug}
     Profiling:                          ${enable_profiling}
 "

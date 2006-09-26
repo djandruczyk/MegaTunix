@@ -6,14 +6,14 @@ tab_name=Trigger _Monitor
 
 #----- Buttons ---------------------------------------------------------------
 
-[tooth_logger_enabled_radio_button]
+[toothlogger_enable_radio_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
 page=9
 tooltip=
 
-[trigger_logger_enabled_radio_button]
+[triggerlogger_enable_radio_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_START_TRIGMON_LOGGER_
@@ -36,25 +36,19 @@ tooltip=
 
 #----- Widgets ---------------------------------------------------------------
 
-[tooth_logger_frame]
+[ttm_logger_frame]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=9
 bind_to_list=spark_controls
 
-[trigger_logger_frame]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
-page=10
-bind_to_list=spark_controls
-
-[tooth_logger_buttons_table]
+[toothlogger_buttons_table]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=9
 bind_to_list=toothmon_buttons
 
-[trigger_logger_buttons_table]
+[triggerlogger_buttons_frame]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=10
@@ -63,14 +57,8 @@ bind_to_list=trigmon_buttons
 
 #----- DrawingAreas ----------------------------------------------------------
 
-[toothmon_darea]
-keys=page,post_function_with_arg
-key_types=_INT_,_STRING_
-page=9
+[ttm_darea]
+keys=post_function_with_arg
+key_types=_STRING_
 post_function_with_arg=setup_logger_display
 
-[trigmon_darea]
-keys=page,post_function_with_arg
-key_types=_INT_,_STRING_
-page=10
-post_function_with_arg=setup_logger_display

@@ -38,7 +38,7 @@
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkFrame" id="tooth_logger_frame">
+		<widget class="GtkFrame" id="ttm_logger_frame">
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
@@ -52,20 +52,6 @@
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">0</property>
 		      <property name="column_spacing">0</property>
-
-		      <child>
-			<widget class="GtkDrawingArea" id="toothmon_darea">
-			  <property name="visible">True</property>
-			  <signal name="configure_event" handler="logger_display_config_event" last_modification_time="Fri, 22 Sep 2006 16:57:10 GMT"/>
-			  <signal name="expose_event" handler="logger_display_expose_event" last_modification_time="Fri, 22 Sep 2006 16:57:47 GMT"/>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">0</property>
-			  <property name="bottom_attach">1</property>
-			</packing>
-		      </child>
 
 		      <child>
 			<widget class="GtkTable" id="tooth_logger_subtable">
@@ -104,54 +90,186 @@
 			  <child>
 			    <widget class="GtkTable" id="tooth_logger_buttons_table">
 			      <property name="visible">True</property>
-			      <property name="n_rows">1</property>
+			      <property name="n_rows">2</property>
 			      <property name="n_columns">4</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">0</property>
 			      <property name="column_spacing">0</property>
 
 			      <child>
-				<widget class="GtkRadioButton" id="tooth_logger_disabled_radio_button">
+				<widget class="GtkTable" id="toothlogger_buttons_table">
 				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Disabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">False</property>
-				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Sat, 23 Sep 2006 20:14:25 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
+				  <property name="n_rows">2</property>
+				  <property name="n_columns">2</property>
+				  <property name="homogeneous">False</property>
+				  <property name="row_spacing">0</property>
+				  <property name="column_spacing">0</property>
 
-			      <child>
-				<widget class="GtkRadioButton" id="tooth_logger_enabled_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Enabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">True</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">False</property>
-				  <property name="group">tooth_logger_disabled_radio_button</property>
-				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Sat, 23 Sep 2006 20:14:15 GMT"/>
+				  <child>
+				    <widget class="GtkLabel" id="tooth_logger_label">
+				      <property name="visible">True</property>
+				      <property name="label" translatable="yes">Tooth Logger</property>
+				      <property name="use_underline">False</property>
+				      <property name="use_markup">False</property>
+				      <property name="justify">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap">False</property>
+				      <property name="selectable">False</property>
+				      <property name="xalign">0</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">0</property>
+				      <property name="right_attach">2</property>
+				      <property name="top_attach">0</property>
+				      <property name="bottom_attach">1</property>
+				      <property name="x_options">expand</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="toothlogger_enable_radio_button">
+				      <property name="visible">True</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Enabled</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">False</property>
+				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:21 GMT"/>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">0</property>
+				      <property name="right_attach">1</property>
+				      <property name="top_attach">1</property>
+				      <property name="bottom_attach">2</property>
+				      <property name="x_options">fill</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="toothlogger_disable_radio_button">
+				      <property name="visible">True</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Disabled</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">True</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">False</property>
+				      <property name="group">toothlogger_enable_radio_button</property>
+				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:26 GMT"/>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">1</property>
+				      <property name="right_attach">2</property>
+				      <property name="top_attach">1</property>
+				      <property name="bottom_attach">2</property>
+				      <property name="x_options">fill</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
 				</widget>
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
 				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="y_options"></property>
+				  <property name="bottom_attach">2</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkTable" id="triggerlogger_buttons_table">
+				  <property name="visible">True</property>
+				  <property name="n_rows">2</property>
+				  <property name="n_columns">2</property>
+				  <property name="homogeneous">False</property>
+				  <property name="row_spacing">0</property>
+				  <property name="column_spacing">0</property>
+
+				  <child>
+				    <widget class="GtkLabel" id="trigger_logger_label">
+				      <property name="visible">True</property>
+				      <property name="label" translatable="yes">Trigger Logger</property>
+				      <property name="use_underline">False</property>
+				      <property name="use_markup">False</property>
+				      <property name="justify">GTK_JUSTIFY_LEFT</property>
+				      <property name="wrap">False</property>
+				      <property name="selectable">False</property>
+				      <property name="xalign">0</property>
+				      <property name="yalign">0.5</property>
+				      <property name="xpad">0</property>
+				      <property name="ypad">0</property>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">0</property>
+				      <property name="right_attach">2</property>
+				      <property name="top_attach">0</property>
+				      <property name="bottom_attach">1</property>
+				      <property name="x_options">expand</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="triggerlogger_enable_radio_button">
+				      <property name="visible">True</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Enabled</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">False</property>
+				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:32 GMT"/>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">0</property>
+				      <property name="right_attach">1</property>
+				      <property name="top_attach">1</property>
+				      <property name="bottom_attach">2</property>
+				      <property name="x_options">fill</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkRadioButton" id="triggerlogger_disable_radio_button">
+				      <property name="visible">True</property>
+				      <property name="can_focus">True</property>
+				      <property name="label" translatable="yes">Disabled</property>
+				      <property name="use_underline">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <property name="active">True</property>
+				      <property name="inconsistent">False</property>
+				      <property name="draw_indicator">False</property>
+				      <property name="group">triggerlogger_enable_radio_button</property>
+				      <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 26 Sep 2006 20:17:41 GMT"/>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">1</property>
+				      <property name="right_attach">2</property>
+				      <property name="top_attach">1</property>
+				      <property name="bottom_attach">2</property>
+				      <property name="x_options">fill</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="left_attach">1</property>
+				  <property name="right_attach">2</property>
+				  <property name="top_attach">0</property>
+				  <property name="bottom_attach">2</property>
+				  <property name="y_options">fill</property>
 				</packing>
 			      </child>
 			    </widget>
@@ -172,56 +290,12 @@
 			  <property name="y_options"></property>
 			</packing>
 		      </child>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkLabel" id="tooth_logger_frame_title">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Tooth Logger (wheel/Neon modes only)</property>
-		      <property name="use_underline">False</property>
-		      <property name="use_markup">True</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		    </widget>
-		    <packing>
-		      <property name="type">label_item</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkFrame" id="trigger_logger_frame">
-		  <property name="visible">True</property>
-		  <property name="label_xalign">0</property>
-		  <property name="label_yalign">0.5</property>
-		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
-
-		  <child>
-		    <widget class="GtkTable" id="trigger_monitor_table">
-		      <property name="visible">True</property>
-		      <property name="n_rows">2</property>
-		      <property name="n_columns">2</property>
-		      <property name="homogeneous">False</property>
-		      <property name="row_spacing">0</property>
-		      <property name="column_spacing">0</property>
 
 		      <child>
-			<widget class="GtkDrawingArea" id="trigmon_darea">
+			<widget class="GtkDrawingArea" id="ttm_darea">
 			  <property name="visible">True</property>
-			  <signal name="configure_event" handler="logger_display_config_event" last_modification_time="Fri, 22 Sep 2006 16:57:23 GMT"/>
-			  <signal name="expose_event" handler="logger_display_expose_event" last_modification_time="Fri, 22 Sep 2006 16:57:40 GMT"/>
+			  <signal name="configure_event" handler="logger_display_config_event" last_modification_time="Fri, 22 Sep 2006 16:57:10 GMT"/>
+			  <signal name="expose_event" handler="logger_display_expose_event" last_modification_time="Fri, 22 Sep 2006 16:57:47 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -230,120 +304,13 @@
 			  <property name="bottom_attach">1</property>
 			</packing>
 		      </child>
-
-		      <child>
-			<widget class="GtkTable" id="trigger_monitor_subtable">
-			  <property name="border_width">5</property>
-			  <property name="visible">True</property>
-			  <property name="n_rows">2</property>
-			  <property name="n_columns">2</property>
-			  <property name="homogeneous">False</property>
-			  <property name="row_spacing">5</property>
-			  <property name="column_spacing">0</property>
-
-			  <child>
-			    <widget class="GtkLabel" id="trigger_logger_info_label">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">The above display shows the ignition input trigger times, and will show the time in usec. or 0.1msec. units. This graphically shows the quality of the ignition input signal.</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_FILL</property>
-			      <property name="wrap">True</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
-			      <property name="x_options">expand</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkTable" id="trigger_logger_buttons_table">
-			      <property name="visible">True</property>
-			      <property name="n_rows">1</property>
-			      <property name="n_columns">4</property>
-			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">0</property>
-			      <property name="column_spacing">0</property>
-
-			      <child>
-				<widget class="GtkRadioButton" id="trigger_logger_disabled_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Disabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">False</property>
-				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Sat, 23 Sep 2006 20:14:33 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkRadioButton" id="trigger_logger_enabled_radio_button">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">Enabled</property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">True</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">False</property>
-				  <property name="group">trigger_logger_disabled_radio_button</property>
-				  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Sat, 23 Sep 2006 20:14:41 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_options">fill</property>
-			    </packing>
-			  </child>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">2</property>
-			  <property name="top_attach">1</property>
-			  <property name="bottom_attach">2</property>
-			  <property name="x_options">fill</property>
-			  <property name="y_options"></property>
-			</packing>
-		      </child>
 		    </widget>
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="trigger_logger_frame_title">
+		    <widget class="GtkLabel" id="ttm_frame_title">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Trigger Logger (any spark mode)</property>
+		      <property name="label" translatable="yes">Trigger/Tooth Logger</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>

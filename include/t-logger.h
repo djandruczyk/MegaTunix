@@ -25,6 +25,7 @@ void crunch_trigtooth_data(gint);
 void update_trigtooth_display(gint);
 void gdk_update_trigtooth_display(gint);
 void cairo_update_trigtooth_display(gint);
+void bind_ttm_to_page(gint page);
 
 /* Prototypes */
 

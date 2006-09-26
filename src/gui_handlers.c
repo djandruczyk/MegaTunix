@@ -40,6 +40,7 @@
 #include <stdlib.h>
 #include <structures.h>
 #include <tabloader.h>
+#include <t-logger.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <user_outputs.h>
@@ -296,11 +297,13 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				update_raw_memory_view((ToggleButton)handler,(gint)obj_data);
 				break;	
 			case START_TOOTHMON_LOGGER:
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"trigger_logger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)g_object_get_data(G_OBJECT(widget),"page"));
 				start_tickler(TOOTHMON_TICKLER);
 				break;
 			case START_TRIGMON_LOGGER:
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"tooth_logger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),FALSE);
+				bind_ttm_to_page((gint)g_object_get_data(G_OBJECT(widget),"page"));
 				start_tickler(TRIGMON_TICKLER);
 				break;
 		}
@@ -323,11 +326,13 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case START_TOOTHMON_LOGGER:
 				stop_tickler(TOOTHMON_TICKLER);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"trigger_logger_buttons_table")),TRUE);
+				//bind_ttm_to_page(-1);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"triggerlogger_buttons_table")),TRUE);
 				break;
 			case START_TRIGMON_LOGGER:
 				stop_tickler(TRIGMON_TICKLER);
-				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"tooth_logger_buttons_table")),TRUE);
+				//bind_ttm_to_page(-1);
+				gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"toothlogger_buttons_table")),TRUE);
 				break;
 
 			default:
