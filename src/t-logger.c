@@ -318,7 +318,7 @@ void cairo_update_trigtooth_display(gint page)
 		message = g_strdup("Trigger times in msec.");
 
 	cairo_text_extents (cr, message, &extents);
-	cairo_move_to(cr,ttm_data->usable_begin+((w-ttm_data->usable_begin)/2)-(extents.width/2),20);
+	cairo_move_to(cr,ttm_data->usable_begin+((w)/2)-(extents.width/2),20);
 	cairo_show_text(cr,message);
 	g_free(message);
 

@@ -83,10 +83,17 @@ void read_log_header(GIOChannel *iochannel, struct Log_Info *log_info )
 	gint i = 0;
 	extern GHashTable *dynamic_widgets;
 
+read_again:
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
 
 	if (status == G_IO_STATUS_NORMAL) /* good read */
 	{
+		/* Nasty hack to detect a " at the beginning and skip over it
+		 * I rally should do this better,  but this works, so...
+		 */
+		if (g_strrstr(a_line->str,"\"") != NULL)
+			goto read_again;
+
 		if (g_strrstr(a_line->str,",") != NULL)
 			delimiter = g_strdup(",");
 		else if (g_strrstr(a_line->str,"\t") != NULL)
