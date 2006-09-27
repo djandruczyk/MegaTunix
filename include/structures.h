@@ -622,6 +622,7 @@ struct TTMon_Data
 	gint mins_inbetween;	/*! How many normal teeth */
 	gint max_time;		/*! Maximum, trigger/tooth time */
 	gint est_teeth;		/*! Estimated number of teeth */
+	gint units;		/*! Units multiplier */
 	gfloat usable_begin;	/*! Usable begin point for bars */
 	gfloat font_height;	/*! Font height needed for some calcs */
 	GArray *current;	/*! Current block of times */

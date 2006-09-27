@@ -157,10 +157,12 @@ void crunch_trigtooth_data(gint page)
 	if (ms_data[page][UNITS] == 1)
 	{
 		//	g_printf("0.1 ms units\n");
+		ttm_data->units=100;
 	}
 	else
 	{
 		//	g_printf("1uS units\n");
+		ttm_data->units=1;
 	}
 
 	min = 65535;
@@ -182,7 +184,7 @@ void crunch_trigtooth_data(gint page)
 	 * know what the values are
 	 *  for values of 0-100000
 	 */
-	ttm_data->peak = ttm_data->max_time *1.1; // Add 10% padding 
+	ttm_data->peak = ttm_data->max_time *1.25; // Add 25% padding 
 	tmp = ttm_data->peak;
 
 	if (tmp < 750)
@@ -246,7 +248,10 @@ void cairo_update_trigtooth_display(gint page)
 
 	//	g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);
 	/* Get width of largest value and save it */
-	message = g_strdup_printf("%i",(gint)(ttm_data->peak-ttm_data->vdivisor));
+	if (ttm_data->units == 1)
+		message = g_strdup_printf("%i",(gint)(ttm_data->peak));
+	else
+		message = g_strdup_printf("%i",(gint)((ttm_data->peak)/10.0));
 	cairo_text_extents (cr, message, &extents);
 	tmpx = extents.x_advance;
 	y_shift = extents.height;
@@ -257,7 +262,10 @@ void cairo_update_trigtooth_display(gint page)
 	/* Draw left side axis scale */
 	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
 	{
-		message = g_strdup_printf("%i",(gint)ctr);
+		if (ttm_data->units == 1)
+			message = g_strdup_printf("%i",(gint)ctr);
+		else
+			message = g_strdup_printf("%i",(gint)(ctr/10.0));
 		//		g_printf("marker \"%s\"\n",message);
 		cairo_text_extents (cr, message, &extents);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+y_shift;
@@ -297,6 +305,23 @@ void cairo_update_trigtooth_display(gint page)
 		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
 		cairo_line_to(cr,ttm_data->usable_begin+(i*w/93.0),cur_pos);
 	}
+	cairo_set_font_size(cr,20);
+	if (ttm_data->units == 1)
+		if (ttm_data->page == 9)
+		message = g_strdup("Tooth times in usec.");
+		else
+		message = g_strdup("Trigger times in usec.");
+	else
+		if (ttm_data->page == 9)
+		message = g_strdup("Tooth times in msec.");
+		else
+		message = g_strdup("Trigger times in msec.");
+
+	cairo_text_extents (cr, message, &extents);
+	cairo_move_to(cr,ttm_data->usable_begin+((w-ttm_data->usable_begin)/2)-(extents.width/2),20);
+	cairo_show_text(cr,message);
+	g_free(message);
+
 	cairo_stroke(cr);
 	cairo_destroy(cr);
 
@@ -320,6 +345,7 @@ void gdk_update_trigtooth_display(gint page)
 	gint i = 0;
 	gint lwidth = 0;
 	gint x_pos = 0;
+	gint gap = 0;
 	gfloat tmpx = 0.0;
 	gfloat ctr = 0.0;
 	gfloat cur_pos = 0.0;
@@ -349,7 +375,10 @@ void gdk_update_trigtooth_display(gint page)
 	g_free(tmpbuf);
 
 	pango_layout_set_font_description(ttm_data->layout,ttm_data->font_desc);
-	message = g_strdup_printf("%i",(gint)(ttm_data->peak-ttm_data->vdivisor));
+	if (ttm_data->units == 1)
+		message = g_strdup_printf("%i",(gint)(ttm_data->peak));
+	else
+		message = g_strdup_printf("%i",(gint)((ttm_data->peak)/10.0));
 	pango_layout_set_text(ttm_data->layout,message,-1);
 	pango_layout_get_pixel_extents(ttm_data->layout,&ink_rect,&logical_rect);
 	g_free(message);
@@ -387,21 +416,19 @@ void gdk_update_trigtooth_display(gint page)
 	 * */
 
 	x_pos = ttm_data->usable_begin;
-//	printf("width %i, usable_begin %f\n",w,ttm_data->usable_begin);
 	lwidth = (gint)((gfloat)(w-ttm_data->usable_begin)/186.0);
-	frag = 2*(((gfloat)(w-ttm_data->usable_begin)/186.0) - (gfloat)lwidth);
+	gap = (gint)((w-(gint)ttm_data->usable_begin)-(lwidth*93))/93.0;
+	frag = (((w-(gint)ttm_data->usable_begin)-(lwidth*93))/93.0)-(gint)(((w-(gint)ttm_data->usable_begin)-(lwidth*93))/93.0);
+
 	if (frag == 0)
 		frag += 0.00001;
-//	printf("usable area %i, line width %i frag %f\n",w-x_pos,lwidth,frag);
 
 	for (i=0;i<93;i++)
 	{
 		count += frag;
 		if (count > 1.0)
 		{
-			//count -= 1.0;
-			count = 0.0;
-		//	printf("incrementing at %i\n",i);
+			count -= 1.0;
 			increment = 1;
 		}
 		else
@@ -411,11 +438,31 @@ void gdk_update_trigtooth_display(gint page)
 		cur_pos = (h-y_shift)*(1.0-(val/ttm_data->peak))+(y_shift/2);
 		gdk_draw_rectangle(ttm_data->pixmap,ttm_data->trace_gc,TRUE,
 				x_pos,(gint)cur_pos,
-				lwidth+increment,h-(y_shift/2)-(gint)cur_pos);
+				lwidth,h-(y_shift/2)-(gint)cur_pos);
 
-		x_pos += 2*lwidth+increment;
+		x_pos += lwidth+gap+increment;
 	}
-//	printf("ending x position %i\n",x_pos);
+	ttm_data->font_desc = pango_font_description_from_string("Sans 20");
+	pango_layout_set_font_description(ttm_data->layout,ttm_data->font_desc);
+
+	if (ttm_data->units == 1)
+		if (ttm_data->page == 9)
+		message = g_strdup("Tooth times in usec.");
+		else
+		message = g_strdup("Trigger times in usec.");
+	else
+		if (ttm_data->page == 9)
+		message = g_strdup("Tooth times in msec.");
+		else
+		message = g_strdup("Trigger times in msec.");
+
+	pango_layout_set_text(ttm_data->layout,message,-1);
+	pango_layout_get_pixel_extents(ttm_data->layout,&ink_rect,&logical_rect);
+	cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak)); 
+
+	gdk_draw_layout(ttm_data->pixmap,ttm_data->trace_gc,ttm_data->usable_begin+((w-ttm_data->usable_begin)/2)-(logical_rect.width/2),logical_rect.height/2,ttm_data->layout);
+	g_free(message);
+
 
 	/* Trigger redraw to main screen */
 	if (!ttm_data->darea->window) 

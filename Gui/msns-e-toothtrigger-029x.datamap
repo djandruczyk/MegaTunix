@@ -11,28 +11,28 @@ keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_START_TOOTHMON_LOGGER_
 page=9
-tooltip=
+tooltip=Enables Tooth Logger display
 
 [triggerlogger_enable_radio_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
 handler=_START_TRIGMON_LOGGER_
 page=10
-tooltip=
+tooltip=Enables Trigger Logger display
 
-#[tooth_logger_disable_button]
-#keys=handler,page,tooltip
-#key_types=_ENUM_,_INT_,_STRING_
-#handler=_START_TOOTHMON_LOGGER_
-#page=0
-#tooltip=
-#
-#[trigger_logger_disable_button]
-#keys=handler,page,tooltip
-#key_types=_ENUM_,_INT_,_STRING_
-#handler=_START_TRIGMON_LOGGER_
-#page=0
-#tooltip=
+[toothlogger_enable_radio_button]
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
+handler=_START_TOOTHMON_LOGGER_
+page=9
+tooltip=Disables Tooth Logger display
+
+[triggerlogger_enable_radio_button]
+keys=handler,page,tooltip
+key_types=_ENUM_,_INT_,_STRING_
+handler=_START_TRIGMON_LOGGER_
+page=10
+tooltip=Disables Trigger Logger display
 
 #----- Widgets ---------------------------------------------------------------
 
