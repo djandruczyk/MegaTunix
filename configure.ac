@@ -57,6 +57,7 @@ fi
 	],
 	[
 		PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.4.0 gthread-2.0])
+		using_cairo=no
 	])
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
