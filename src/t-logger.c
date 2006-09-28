@@ -176,6 +176,12 @@ void crunch_trigtooth_data(gint page)
 	}
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
+	if (page == 9) /* TOOTH logger, we should searh for min/max's */
+	{
+
+
+	}
+
 	//g_printf ("Minimum tooth time: %i, max tooth time %i\n",min,max);
 
 	/* vertical scale calcs:

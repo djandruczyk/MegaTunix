@@ -621,6 +621,7 @@ struct TTMon_Data
 	gint num_maxes;		/*! Hot many long pips per block */
 	gint mins_inbetween;	/*! How many normal teeth */
 	gint max_time;		/*! Maximum, trigger/tooth time */
+	gint midpoint_time;	/*! avg between min and max */
 	gint est_teeth;		/*! Estimated number of teeth */
 	gint units;		/*! Units multiplier */
 	gfloat usable_begin;	/*! Usable begin point for bars */
