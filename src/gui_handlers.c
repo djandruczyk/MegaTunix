@@ -1282,7 +1282,7 @@ void update_widget(gpointer object, gpointer user_data)
 	GdkColor color;
 	extern gint ** ms_data;
 	extern GHashTable *widget_group_states;
-	
+
 	if (leaving)
 		return;
 
@@ -1458,11 +1458,11 @@ void update_widget(gpointer object, gpointer user_data)
 		 * un-set it.
 		 */
 		/*
-		if ((((tmpi & bitmask) >> bitshift) == bitval) && (!cur_state))
-			new_state = TRUE;
-		else if ((((tmpi & bitmask) >> bitshift) != bitval) && (cur_state))
-			new_state = FALSE;
-			*/
+		   if ((((tmpi & bitmask) >> bitshift) == bitval) && (!cur_state))
+		   new_state = TRUE;
+		   else if ((((tmpi & bitmask) >> bitshift) != bitval) && (cur_state))
+		   new_state = FALSE;
+		   */
 		if (((tmpi & bitmask) >> bitshift) == bitval)
 			new_state = TRUE;
 		else if (((tmpi & bitmask) >> bitshift) != bitval)
@@ -1476,23 +1476,23 @@ void update_widget(gpointer object, gpointer user_data)
 
 		if (toggle_groups)
 		{
-		//	printf("toggling groups\n");
+			//	printf("toggling groups\n");
 			groups = parse_keys(toggle_groups,&num_groups,",");
-		//	printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);
+			//	printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);
 
 			for (i=0;i<num_groups;i++)
 			{
-		//		printf("UW: This widget has %i groups, checking state of (%s)\n", num_groups, groups[i]);
+				//		printf("UW: This widget has %i groups, checking state of (%s)\n", num_groups, groups[i]);
 				tmp_state = get_state(group_states,i);
-		//		printf("If this ctrl is active we want state to be %i\n",tmp_state);
+				//		printf("If this ctrl is active we want state to be %i\n",tmp_state);
 				state = tmp_state == TRUE ? new_state:!new_state;
-		//		printf("Current state of button is %i\n",new_state),
-		//		printf("new group state is %i\n",state);
+				//		printf("Current state of button is %i\n",new_state),
+				//		printf("new group state is %i\n",state);
 				g_hash_table_insert(widget_group_states,g_strdup(groups[i]),(gpointer)state);
-		//		printf("setting all widgets in that group to state %i\n\n",state);
+				//		printf("setting all widgets in that group to state %i\n\n",state);
 				g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
 			}
-		//	printf ("DONE!\n\n\n");
+			//	printf ("DONE!\n\n\n");
 			g_strfreev(groups);
 		}
 	}
