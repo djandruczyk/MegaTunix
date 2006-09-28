@@ -19,32 +19,46 @@ typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 struct _MtxGaugeFace
 {//public data
 	GtkDrawingArea parent;
-	GdkPixmap *pixmap;
-	GdkPixmap *bg_pixmap;
+	GdkPixmap *pixmap;	/*! Update/backing pixmap */
+	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
+	gint w;			/*! width */
+	gint h;			/*! height */
+	gdouble xc;		/*! X Center */
+	gdouble yc;		/*! Y Center */
+	gdouble radius;		/*! Radius of display */
 #ifdef HAVE_CAIRO
-	cairo_t *cr;
-#else
-	PangoLayout *layout;
-	PangoFontDescription *font_desc;
-	GdkGC * axis_gc;
-	GdkGC * font_gc;
-	GdkGC * needle_gc;
-	GdkColormap *colormap;
-	gfloat start_deg; // GDK vs cairo use different units/direction!!!
-	gfloat stop_deg; // GDK vs cairo use different units/direction!!!
+	cairo_t *cr;		/*! Cairo context,  not sure if this is good
+				   too hold onto or not */
 #endif
-	gfloat value;//very basic now, a single float value to display
-	gchar * units_str;
-	gfloat lbound;
-	gfloat ubound;
-	gfloat range;
-	gdouble xc;
-	gdouble yc;
-	gdouble radius;
-	gfloat start_radian;
-	gfloat stop_radian;
-	gboolean antialias;
-	gint num_ticks;
+	PangoLayout *layout;	/*! Pango TextLayout object */
+	PangoFontDescription *font_desc;/*! Pango Font description */
+	GdkGC * axis_gc;	/*! Axis Graphics Context, needed??? */
+	GdkGC * font_gc;	/*! Font Graphics Context, needed??? */
+	GdkGC * needle_gc;	/*! Needle Graphics Context, needed??? */
+	GdkColormap *colormap;	/*! Colormap for GC's */
+	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
+	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
+	gfloat start_radian;	/*! CAIRO Start angle in radians (CW) */
+	gfloat stop_radian;	/*! CAIRO Stop Angle in radians (CW) */
+	gfloat value;		/*! Value represneting needle position */
+	gfloat lbound;		/*! Lower Bound to clamp at */
+	gfloat ubound;		/*! Upper Bound to Clamp at */
+	gfloat range;		/*! Range from lbound to ubound */
+	gchar * units_font;	/*! Units Textual font name */
+	gchar * units_str;	/*! Units Text String */
+	gfloat units_font_scale;/*! Units Font scale, % of 2xradius */
+	gchar * value_font;	/*! Value Textual font name */
+	gchar * value_str;	/*! Value Text String */
+	gfloat value_font_scale;/*! Value Font scale, % of 2xradius */
+	gchar * name_font;	/*! Name Textual font name */
+	gchar * name_str;	/*! Name Text String */
+	gfloat name_font_scale;	/*! Name Font scale, % of 2xradius */
+	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
+	gint num_ticks;		/*! Total Number of Ticks */
+	gint majtick_divisor;	/*! Number of min ticks before major */
+	gfloat tick_inset;	/*! Percentage of radius to start tickmark @ */
+	gfloat major_tick_len;	/*! Major Tick length (% of radius 0-1.0) */
+	gfloat minor_tick_len;	/*! Minor tick length (% of radius 0-1.0) */
 };
 
 struct _MtxGaugeFaceClass
