@@ -36,6 +36,13 @@ Albert Fletcher < unknown >
 	Most generously donated a Apple G4 Mac Mini to be used for 
 	megatunix on PPC testing and improvement.
 	
+Christopher Mire <cnm3332 at louisiana dot edu> 
+	Wrote the first gauge widget for megatnuix of which I built upon
+        and wrote GDK routines for low end boxes, and then added more on 
+	with an additional contribution from  Ari, below.
+
+Ari Karhu <ari at ultimatevw.com>
+	Provided a gauge widget that I used a large amount of code from
 
 YOU could be here!!  Submit patches, dontate applicable hardware, provide 
 assistance and suggestions and you'll make the list, with all the prestige 

@@ -5,8 +5,9 @@
  *  tweak it to my needs for MegaTunix.  Added in rendering ability using
  *  cairo and raw GDK callls for those less fortunate (OS-X)
  *
- *  Was offered a fine contribution by AriK fromthe msefi.com forum.
- *  His contribution made hte gauges look, ohh so much nicer than I could 
+ *  Was offered a fine contribution by Ari Karhu 
+ *  "ari <at> ultimatevw <dot> com" from the msefi.com forums.
+ *  His contribution made the gauges look, ohh so much nicer than I could 
  *  have come up with!
  */
 
