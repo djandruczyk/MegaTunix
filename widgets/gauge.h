@@ -36,6 +36,7 @@ struct _MtxGaugeFace
 	GdkGC * font_gc;	/*! Font Graphics Context, needed??? */
 	GdkGC * needle_gc;	/*! Needle Graphics Context, needed??? */
 	GdkColormap *colormap;	/*! Colormap for GC's */
+	gint precision;		/*! number of decimal places for val */
 	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
 	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
 	gfloat start_radian;	/*! CAIRO Start angle in radians (CW) */
@@ -59,6 +60,11 @@ struct _MtxGaugeFace
 	gfloat tick_inset;	/*! Percentage of radius to start tickmark @ */
 	gfloat major_tick_len;	/*! Major Tick length (% of radius 0-1.0) */
 	gfloat minor_tick_len;	/*! Minor tick length (% of radius 0-1.0) */
+	gfloat needle_width;	/*! % of radius Needle width @ spin axis */
+	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
+	gint needle_polygon_points;
+	GdkPoint needle_coords[4];	/*! 4 point needle for now */
+	GdkPoint last_needle_coords[4];	/*! 4 point needle for now */
 };
 
 struct _MtxGaugeFaceClass
@@ -72,13 +78,20 @@ void mtx_gauge_face_set_antialias (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);
+void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);
+gint mtx_gauge_face_get_precision(MtxGaugeFace *gauge);
 gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2);
 gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, float *value1, float *value2);
 void mtx_gauge_face_set_resolution (MtxGaugeFace *gauge, int ticks);
 int mtx_gauge_face_get_resolution (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float stop_radian);
+void cairo_generate_gauge_background(GtkWidget *);
+void cairo_update_gauge_position (GtkWidget *);
+void gdk_generate_gauge_background(GtkWidget *);
+void gdk_update_gauge_position (GtkWidget *);
 //should also have functions to set scale, maybe autoscale
 
 G_END_DECLS

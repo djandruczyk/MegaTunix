@@ -23,19 +23,19 @@ int main (int argc, char **argv)
 			G_CALLBACK (gtk_main_quit), NULL);
 
 	gtk_widget_show_all (window);
-	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), -13.0, 21.0);
-	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 4.0);
-	//mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge), 1.5 * M_PI, 3 * M_PI);
-	mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
+	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), 0.0, 8000.0);
+	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.0);
+	mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),0 , 1.5 * M_PI);
+	//mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
 	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
 	mtx_gauge_face_set_name_str (MTX_GAUGE_FACE (gauge), "RPM");
-	mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "x100");
+	mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "");
 	mtx_gauge_face_set_resolution (MTX_GAUGE_FACE (gauge), 37);
-	gtk_timeout_add(50,(GtkFunction)update_gauge,(gpointer)gauge);
+	mtx_gauge_face_set_precision (MTX_GAUGE_FACE (gauge), 0);
+	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
+	gtk_widget_set_size_request(window,500,500);
 
-	gfloat value = mtx_gauge_face_get_value (MTX_GAUGE_FACE (gauge));
-	g_printf ("current value is %f\n", value);
 
 	gtk_main ();
 	return 0;
