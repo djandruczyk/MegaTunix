@@ -191,9 +191,8 @@ void highlight_tinfo(gint tnum, gboolean state)
 
 	rect.width+=1;
 	rect.height+=1;
-	gdk_window_invalidate_rect(lv_data->darea->window,
-				&rect,
-				TRUE);
+
+	gdk_window_clear(lv_data->darea->window);
 
 	return;
 

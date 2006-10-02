@@ -236,7 +236,6 @@ void cairo_update_trigtooth_display(gint page)
 	gchar * message = NULL;
 	cairo_t *cr;
 	cairo_text_extents_t extents;
-	GdkRegion *region = NULL;
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -334,13 +333,7 @@ void cairo_update_trigtooth_display(gint page)
 	/* Trigger redraw to main screen */
 	if (!ttm_data->darea->window) 
 		return;
-
-	region = gdk_drawable_get_clip_region (ttm_data->darea->window);
-	/* redraw the cairo canvas completely by exposing it */
-	gdk_window_invalidate_region (ttm_data->darea->window, region, TRUE);
-	gdk_window_process_updates (ttm_data->darea->window, TRUE);
-
-	gdk_region_destroy (region);
+	gdk_window_clear(ttm_data->darea->window);
 
 }
 #else
@@ -364,7 +357,6 @@ void gdk_update_trigtooth_display(gint page)
 	gchar * tmpbuf = NULL;
 	PangoRectangle ink_rect;
 	PangoRectangle logical_rect;
-	GdkRegion *region = NULL;
 
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
@@ -473,13 +465,7 @@ void gdk_update_trigtooth_display(gint page)
 	/* Trigger redraw to main screen */
 	if (!ttm_data->darea->window) 
 		return;
-
-	region = gdk_drawable_get_clip_region (ttm_data->darea->window);
-	/* redraw the cairo canvas completely by exposing it */
-	gdk_window_invalidate_region (ttm_data->darea->window, region, TRUE);
-	gdk_window_process_updates (ttm_data->darea->window, TRUE);
-
-	gdk_region_destroy (region);
+	gdk_window_clear(ttm_data->darea->window);
 
 }
 #endif
