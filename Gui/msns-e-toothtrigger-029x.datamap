@@ -58,11 +58,9 @@ bind_to_list=trigmon_buttons
 #----- DrawingAreas ----------------------------------------------------------
 
 [ttm_darea]
-keys=post_function_with_arg
-key_types=_STRING_
-#keys=page,post_function_with_arg
-#key_types=_INT_,_STRING_
-#page=0
+keys=page,post_function_with_arg
+key_types=_INT_,_STRING_
+page=0
 post_function_with_arg=setup_logger_display
 
 
