@@ -271,7 +271,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 			if (!offline)
 			{
-				for (i=0;i<firmware->ro_above;i++)
+				for (i=0;i<=firmware->ro_above;i++)
 				{
 					message = initialize_io_message();
 					message->command = READ_CMD;
