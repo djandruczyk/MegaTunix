@@ -374,7 +374,6 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	cairo_fill_preserve (cr);
 	cairo_stroke (cr);
 
-	cairo_stroke (cr);
 	cairo_destroy(cr);
 #endif
 }
