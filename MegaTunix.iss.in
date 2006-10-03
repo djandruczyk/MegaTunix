@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=MegaTunix
-AppVerName=MegaTunix v. @VERSION@
+AppVerName=MegaTunix v. @VERSION@@WIN32_SUBRELEASE@
 DefaultDirName={pf}\MegaTunix
 DefaultGroupName=MegaTunix
 UninstallDisplayIcon={app}\megatunix.exe
