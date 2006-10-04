@@ -62,7 +62,7 @@ static struct
  There is a major problem with this in that the currect VEX 1.0 spec 
  doesn't allow for multiple tables per page, so import is likely to be 
  a problem.
- \param, iofile (struct Io_File *) a pointer to the output file 
+ \param iofile (struct Io_File *) a pointer to the output file 
  to write the data to.
  \see vetable_import
  \returns TRUE on success, FALSE on failure
@@ -405,7 +405,6 @@ GIOStatus process_page(struct Vex_Import *vex, gchar *string)
  \brief process_table() extracts the table_number out of the comment field
  stores it in the Vex_Import Structure for this table.
  \param vex (struct Vex_Import *) Pointer to the Vex_Import structure
- \param string (gchar *) unused in this function
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
 GIOStatus process_table(struct Vex_Import *vex)

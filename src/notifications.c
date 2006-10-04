@@ -44,7 +44,8 @@ void set_group_color(GuiColor color, gchar *group)
  \brief set_reqfuel_color() sets all the widgets in the reqfuel group as 
  defined by the page number passed to the color passed.
  \param color (GuiColor enumeration) the color to set the widgets to
- \param page (gint) the page number ofthe group to switch colors of.
+ \param table_num (gint) the table number to determien the right group of 
+ controls to change the color on
  \see set_widget_color
  */
 void set_reqfuel_color(GuiColor color, gint table_num)

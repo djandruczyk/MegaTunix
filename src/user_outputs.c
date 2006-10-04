@@ -134,7 +134,7 @@ GtkTreeModel * create_model(void)
 /*!
  \brief add_columns() creates the column fields for a treeview.
  \param view (GtkTreeView *) pointer to the Treeview
- \param output (gint) a number passed used for in a colum title
+ \param widget (Gtkwidget) Widget passed to extract the needed info from
  */
 void add_columns(GtkTreeView *view, GtkWidget *widget)
 {

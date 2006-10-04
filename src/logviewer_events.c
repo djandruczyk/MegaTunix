@@ -162,10 +162,11 @@ EXPORT gboolean lv_motion_event(GtkWidget *widget, GdkEventMotion *event, gpoint
 
 
 /*!
- \brief higlight_tinfo() highlights the trace info box on the left side 
+ \brief highlight_tinfo() highlights the trace info box on the left side 
  of the logviewer when the mouse goes in there..
  \param tnum (gint) trace number starting from 0
- \returns void
+ \param state (gboolean) if set we highlight the target trace info box
+ \returns void 
  */
 void highlight_tinfo(gint tnum, gboolean state)
 {

@@ -94,7 +94,7 @@ void            symbol_table_clear_flags(SymbolTable * symbol_table);
 int             symbol_table_get_flagged_count(SymbolTable * symbol_table);
 
 /*! 
- \breif Fill given array with pointers to records from given symbol table
+ \brief Fill given array with pointers to records from given symbol table
  that have flag set.  Further arguments are array to store pointers
  and array capacity.  Number of records that are actually put into
  array is returned.
@@ -102,7 +102,7 @@ int             symbol_table_get_flagged_count(SymbolTable * symbol_table);
 int             symbol_table_get_flagged(SymbolTable * symbol_table, Record **records, int length);
 
 /*!
- \breif Return symbol table pointer to be assigned to variable.  This function
+ \brief Return symbol table pointer to be assigned to variable.  This function
  should be used instead of simple pointer assignement for proper reference
  counting.  Users willing to manage reference counts by themselves are free
  to ignore this function.

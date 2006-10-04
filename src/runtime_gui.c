@@ -219,7 +219,8 @@ void rt_update_status(gpointer key, gpointer data)
  \brief rt_update_values() is called for each runtime slider to update
  it's position and label (label is periodic and not every time due to pango
  speed problems)
- \param key (gpointer) pointer to widget
+ \param key (gpointer) unused
+ \param value (gpointer) pointer to Rt_Slider
  \param data (gpointer) unused
  */
 void rt_update_values(gpointer key, gpointer value, gpointer data)

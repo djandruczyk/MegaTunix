@@ -595,7 +595,7 @@ GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 /*!
  \brief get_colors_from_hue(gets a color back from an angle passed in degrees.
  The degrees represent the arc aroudn a color circle.
- \param hue_(gfloat) degrees around the color circle
+ \param hue (gfloat) degrees around the color circle
  \param sat (gfloat) col_sat from 0-1.0
  \param val (gfloat) col_val from 0-1.0
  \returns a GdkColor at the hue angle requested
@@ -849,9 +849,7 @@ gboolean pb_update_logview_traces(gboolean force_redraw)
 /*!
  \brief trace_update() updates a trace onscreen,  this is run for EACH 
  individual trace (yeah, not very optimized)
- \param key (gpointer) unused
- \param value (gpointer) pointer to the Viewable_Value struct for this trace
- \param redraw_All (gpointer) flag to redraw all or jsut recent data
+ \param redraw_all (gpointer) flag to redraw all or just recent data
  */
 void trace_update(gboolean redraw_all)
 {

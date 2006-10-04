@@ -562,7 +562,7 @@ void dealloc_textmessage(struct Text_Message * message)
 /*!
  \brief dealloc_qfunction() deallocates the structure used to pass a function
  message from the thread to here..
- \param message (struct Text_Message *) pointer to message data
+ \param qfunc (struct QFunction *) Queded Function structure to deallocate
  */
 void dealloc_qfunction(struct QFunction * qfunc)
 {

@@ -30,7 +30,7 @@ struct Log_Info *log_info = NULL;
 
 /*! 
  \brief load_logviewer_file() loads a datalog file for playback
- \param ptr (void *) pointer to an Io_File
+ \param iofile (struct Io_File *) The Io_File representing the datastream
  */
 void load_logviewer_file(struct Io_File *iofile)
 {
@@ -49,7 +49,7 @@ void load_logviewer_file(struct Io_File *iofile)
 
 
 /*!
- \brielf initialixe_log_info() alocates, and sets to sane defaults the fields
+ \brief initialixe_log_info() alocates, and sets to sane defaults the fields
  of the log_info struture
  \returns a pointer to an allocated Log_Info structure
  */
@@ -69,7 +69,7 @@ struct Log_Info * initialize_log_info(void)
  we need to read one dataline because the variable names can be space 
  delimited and we need to figure out how to discern thespace inthe name with the space in between variable names
  \param iochannel (GIOChannel *) iochannel that represents the input file
- \param ptr (void *) pointer to the Log_Info structure
+ \param log_info (struct Log_Info *)the Log_Info structure
  */
 void read_log_header(GIOChannel *iochannel, struct Log_Info *log_info )
 {

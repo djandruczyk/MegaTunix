@@ -1244,7 +1244,8 @@ void update_ve_const()
  conversions and where the raw value is stored is embedded within the widget 
  itself.
  \param object (gpointer) pointer to the widget object
- \user_data (gpointer) pointerto a widget to compare against to prevent a race
+ \param user_data (gpointer) pointer to a widget to compare against to 
+ prevent a race
  */
 void update_widget(gpointer object, gpointer user_data)
 {
@@ -1774,8 +1775,9 @@ void swap_labels(gchar * input, gboolean state)
 /*!
  \brief switch_labels() swaps labels that depend on the state of another 
  control. Handles temp dependant labels as well..
- \param widget (GtkWidget *) widget pointer to manipulate
- \param state (gboolean) if TRUE we use the alternate label, if FALSE we use
+ \param key (gpointer) gpointer encapsulation of the widget
+ \param data (gpointer)  gpointer encapsulation of the target state if TRUE 
+ we use the alternate label, if FALSE we use
  the default label
  */
 void switch_labels(gpointer key, gpointer data)

@@ -428,10 +428,10 @@ static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
 
 /*!
  \brief cfg_create_string() creates a string in a section
- \param cfg (ConfigFile *) cfg to create the section in
+ \param section (ConfigSection *) section pointer
  \param key (gchar *) key to create
  \param value (gchar *) value to set the key to
- \returns the ConfigLine *
+ \returns a ConfigLine *
  */
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value)
 {
