@@ -32,8 +32,8 @@ gint trigmon_id = 0;
 /*!
  \brief start_tickler() starts up a GTK+ timeout function based on the
  enum passed to it.
- \param TicklerType is an enum passed which is used to know which timeout 
- to fire up.
+ \param type (TicklerType enum) is an enum passed which is used to know 
+ which timeout to fire up.
  \see signal_read_rtvars
  */
 void start_tickler(TicklerType type)
