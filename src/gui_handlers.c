@@ -1744,7 +1744,7 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 /*!
  \brief swap_labels() is a utility function that extracts the list passed to 
  it, and kicks off a subfunction to do the swapping on each widget in the list
- \param listname (gchar *) name of list to enumeration and run the subfunction
+ \param input (gchar *) name of list to enumeration and run the subfunction
  on.
  \param state (gboolean) passed on to subfunction
  the default label
