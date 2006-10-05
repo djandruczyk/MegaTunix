@@ -4,7 +4,7 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-demo_SOURCES = gauge.c gauge.h demo.c
+demo_SOURCES = gauge.c gauge.h gauge-private.h demo.c
 
 noinst_PROGRAMS=demo
 

@@ -17,47 +17,23 @@
 #ifdef HAVE_CAIRO
 #include <cairo/cairo.h>
 #endif
+#include <gauge-private.h>
 #include <gtk/gtk.h>
 #include <glib/gprintf.h>
 #include <glib-object.h>
 #include <math.h>
 #include <string.h>
 #include <time.h>
-#include <gauge.h>
 #include <string.h>
 
-////////////////////////////////////////////////////////////////////////////////
-#define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
 
-G_DEFINE_TYPE (MtxGaugeFace, mtx_gauge_face, GTK_TYPE_DRAWING_AREA);
-
-typedef struct
-{
-	gint dragging;
-}
-MtxGaugeFacePrivate;
-
-static void mtx_gauge_face_set_value_internal (MtxGaugeFace *, float );
-static void mtx_gauge_face_class_init (MtxGaugeFaceClass *);
-static void mtx_gauge_face_init (MtxGaugeFace *);
-static void generate_gauge_background(GtkWidget *);
-static void update_gauge_position (GtkWidget *);
-static gboolean mtx_gauge_face_configure (GtkWidget *, GdkEventConfigure *);
-static gboolean mtx_gauge_face_expose (GtkWidget *, GdkEventExpose *);
-static gboolean mtx_gauge_face_button_press (GtkWidget *,GdkEventButton *);
-static void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
-static gboolean mtx_gauge_face_button_release (GtkWidget *,GdkEventButton *);
-static void mtx_gauge_face_set_name_str_internal (MtxGaugeFace *, gchar *);
-static void mtx_gauge_face_set_units_str_internal (MtxGaugeFace *, gchar *);
-					       
-
-static void mtx_gauge_face_set_value_internal (MtxGaugeFace *gauge, float value)
+void mtx_gauge_face_set_value_internal (MtxGaugeFace *gauge, float value)
 {
 	gauge->value = value;
 	mtx_gauge_face_redraw_canvas (gauge);//show new value
 }
 
-static void mtx_gauge_face_set_units_str_internal (MtxGaugeFace *gauge, gchar * units_str)
+void mtx_gauge_face_set_units_str_internal (MtxGaugeFace *gauge, gchar * units_str)
 {
 	if (gauge->units_str)
 		g_free(gauge->units_str);
@@ -68,7 +44,7 @@ static void mtx_gauge_face_set_units_str_internal (MtxGaugeFace *gauge, gchar * 
 }
 
 
-static void mtx_gauge_face_set_name_str_internal (MtxGaugeFace *gauge, gchar * name_str)
+void mtx_gauge_face_set_name_str_internal (MtxGaugeFace *gauge, gchar * name_str)
 {
 	if (gauge->name_str)
 		g_free(gauge->name_str);
@@ -216,7 +192,7 @@ void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float sto
 	mtx_gauge_face_redraw_canvas (gauge);//show new value
 }
 
-static void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
+void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 {
 	GObjectClass *obj_class;
 	GtkWidgetClass *widget_class;
@@ -233,7 +209,7 @@ static void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
 }
 
-static void mtx_gauge_face_init (MtxGaugeFace *gauge)
+void mtx_gauge_face_init (MtxGaugeFace *gauge)
 {
 	//which events widget receives
 	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
@@ -281,7 +257,7 @@ static void mtx_gauge_face_init (MtxGaugeFace *gauge)
 }
 
 
-static void update_gauge_position(GtkWidget *widget)
+void update_gauge_position(GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
 	cairo_update_gauge_position (widget);
@@ -462,7 +438,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 
 }
 
-static gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
+gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	GdkColor color;
 	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
@@ -526,7 +502,7 @@ static gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *
 }
 
 
-static gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
+gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
 
@@ -541,7 +517,7 @@ static gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 }
 
 
-static void generate_gauge_background(GtkWidget *widget)
+void generate_gauge_background(GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
 	cairo_generate_gauge_background(widget);
@@ -849,7 +825,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 }
 
-static gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
+gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
 					     GdkEventButton *event)
 {
 	MtxGaugeFacePrivate *priv;
@@ -858,7 +834,7 @@ static gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
 	return FALSE;
 }
 
-static void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
+void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 {
 	GtkWidget *widget;
 
@@ -870,7 +846,7 @@ static void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 	gdk_window_clear(widget->window);
 }
 
-static gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
+gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 					       GdkEventButton *event)
 {
 	MtxGaugeFacePrivate *priv;
