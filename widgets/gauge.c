@@ -531,17 +531,22 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 #ifdef HAVE_CAIRO
 	cairo_t *cr = NULL;
 	gfloat arc = 0.0;
+	gint w = 0;
+	gint h = 0;
 	gint total_ticks = 0;
 	gint left_tick = 0;
 	gint right_tick = 0;
 	gint counter = 0;
 	gint inset = 0;
 	gint insetfrom = 0;
+	gfloat lwidth = 0.0;
 	cairo_pattern_t *gradient = NULL;
 	cairo_text_extents_t extents;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
+	w = widget->allocation.width;
+	h = widget->allocation.height;
 	/* get a cairo_t */
 	cr = gdk_cairo_create (gauge->bg_pixmap);
 	/* Background set to black */
@@ -591,12 +596,14 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		if (counter % 3 == 0)
 		{
 			inset = (gint) (gauge->major_tick_len * gauge->radius);
+			lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
+			cairo_set_line_width (cr, lwidth);
 		}
 		else
 		{
 			inset = (gint) (gauge->minor_tick_len * gauge->radius);
-			cairo_set_line_width (cr, 0.5 *
-					cairo_get_line_width (cr));
+			lwidth = MIN (w/2, h/2)/160 < 1 ? 1: MIN (w/2, h/2)/160;
+			cairo_set_line_width (cr, lwidth);
 		}
 		cairo_move_to (cr,
 				gauge->xc + (gauge->radius - insetfrom) * cos (counter * M_PI / (total_ticks / 2)),
@@ -804,7 +811,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 		gdk_draw_layout(gauge->bg_pixmap,gauge->axis_gc,
 				gauge->xc-(logical_rect.width/2),
-				gauge->yc+(0.75 * gauge->radius),gauge->layout);
+				gauge->yc+(0.75 * gauge->radius)+logical_rect.height,gauge->layout);
 	}
 
 	if (gauge->name_str)
@@ -819,7 +826,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 		gdk_draw_layout(gauge->bg_pixmap,gauge->axis_gc,
 				gauge->xc-(logical_rect.width/2),
-				gauge->yc-(0.35 * gauge->radius),gauge->layout);
+				gauge->yc-(0.35 * gauge->radius)-logical_rect.height,gauge->layout);
 	}
 
 
