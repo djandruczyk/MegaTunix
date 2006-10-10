@@ -95,6 +95,8 @@ void leave(GtkWidget *widget, gpointer data)
 
 	if (leaving)
 		return;
+	save_config();
+
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"),CRITICAL);
 	g_static_mutex_lock(&mutex);
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
@@ -160,7 +162,6 @@ void leave(GtkWidget *widget, gpointer data)
 	// runtime gui is finished updating
 	g_static_mutex_unlock(&rtv_mutex); 
 
-	save_config();
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() config saved, mem deallocated, closing log and exiting\n"),CRITICAL);
