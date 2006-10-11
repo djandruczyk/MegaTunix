@@ -99,6 +99,7 @@ void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * name_str)
 	g_object_thaw_notify (G_OBJECT (gauge));
 }
 
+
 /* Returns value that needle currently points to */
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge)
 {
@@ -133,6 +134,14 @@ gchar * mtx_gauge_face_get_name_str (MtxGaugeFace *gauge)
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return gauge->name_str;
 }
+
+
+/* Sets a limit color span dynamically */
+void mtx_gauge_face_set_limits(MtxGaugeFace *gauge, gdouble lower, gdouble upper, GdkColor color)
+{
+//	if (gauge->)
+}
+
 
 /* Changes the lower and upper value bounds */
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2)
