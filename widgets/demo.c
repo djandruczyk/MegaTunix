@@ -25,11 +25,11 @@ int main (int argc, char **argv)
 	gtk_widget_show_all (window);
 	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), 0.0, 8000.0);
 	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.0);
-	mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),0 , 1.5 * M_PI);
-	//mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
+	//mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),0 , 1.5 * M_PI);
+	mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
 	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
 	GdkColor color = { 0, 50000,50000,0};
-	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 7000, color);;
+	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 8000, color);;
 	color.red = 50000;
 	color.green = 0;
 	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 7000, 8000, color);;

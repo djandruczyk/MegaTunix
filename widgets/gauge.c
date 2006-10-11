@@ -202,8 +202,8 @@ void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float sto
 	 * "3 O'clock" 
 	 * */
 #ifndef HAVE_CAIRO
-	gauge->start_deg = -((start_radian/M_PI) *180.0) *64.0;
-	gauge->stop_deg = -(((stop_radian-start_radian)/M_PI) *180.0) *64.0;
+	gauge->start_deg = -((start_radian/M_PI) *180.0);
+	gauge->stop_deg = -(((stop_radian-start_radian)/M_PI) *180.0);
 #endif
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
@@ -265,8 +265,8 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 #ifdef HAVE_CAIRO
 	gauge->cr = NULL;
 #endif
-	gauge->start_deg = 225*64;
-	gauge->stop_deg = -270*64;
+	gauge->start_deg = 225;
+	gauge->stop_deg = -270;
 	gauge->colormap = gdk_colormap_get_system();
 	gauge->axis_gc = NULL;	
 	gauge->needle_gc = NULL;
@@ -699,6 +699,9 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gint insetfrom = 0;
 	gint counter = 0;
 	gchar * tmpbuf = NULL;
+	gfloat angle1 = 0.0;
+	gfloat angle2 = 0.0;
+	MtxColorRange *range = NULL;
 	GdkColor color;
 	PangoRectangle logical_rect;
 
@@ -797,6 +800,30 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			2*(gauge->radius*0.880),
 			2*(gauge->radius*0.880),
 			0,360*64);
+
+	/* The warning color ranges */
+	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
+	for (i=0;i<gauge->ranges->len;i++)
+	{
+		range = g_array_index(gauge->ranges,MtxColorRange *, i);
+		gdk_gc_set_rgb_fg_color(gauge->axis_gc,&range->color);
+		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
+		angle1 = (range->lowpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
+		angle2= (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
+		lwidth = MIN (w/2, h/2)/20 < 1 ? 1: MIN (w/2, h/2)/20;
+		gdk_gc_set_line_attributes(gauge->axis_gc,lwidth,
+				GDK_LINE_SOLID,
+				GDK_CAP_BUTT,
+				GDK_JOIN_BEVEL);
+		gdk_draw_arc(gauge->bg_pixmap,gauge->axis_gc,FALSE, 
+				gauge->xc-gauge->radius*0.775, 
+				gauge->yc-gauge->radius*0.775,
+				2*(gauge->radius*0.775),
+				2*(gauge->radius*0.775),
+				((gauge->start_deg+gauge->stop_deg)*angle2)*64,
+				((angle2-angle1)*(-gauge->stop_deg))*64);
+	}
+
 
 	/* gauge ticks */
 	lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
