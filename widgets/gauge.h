@@ -64,8 +64,8 @@ struct _MtxGaugeFace
 	gchar * name_str;	/*! Name Text String */
 	gfloat name_font_scale;	/*! Name Font scale, % of 2xradius */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
-	gint num_ticks;		/*! Total Number of Ticks */
-	gint majtick_divisor;	/*! Number of min ticks before major */
+	gint major_ticks;	/*! Number of MAJOR ticks */
+	gint minor_ticks;	/*! Number of MINOR ticks PER pair of major's*/
 	gfloat tick_inset;	/*! Percentage of radius to start tickmark @ */
 	gfloat major_tick_len;	/*! Major Tick length (% of radius 0-1.0) */
 	gfloat minor_tick_len;	/*! Minor tick length (% of radius 0-1.0) */
@@ -97,8 +97,10 @@ gint mtx_gauge_face_get_precision(MtxGaugeFace *gauge);
 gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2);
 gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, float *value1, float *value2);
-void mtx_gauge_face_set_resolution (MtxGaugeFace *gauge, int ticks);
-int mtx_gauge_face_get_resolution (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks);
+int mtx_gauge_face_get_major_ticks (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks);
+int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float stop_radian);
 void cairo_generate_gauge_background(GtkWidget *);
 void cairo_update_gauge_position (GtkWidget *);

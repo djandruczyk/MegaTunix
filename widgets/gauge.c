@@ -172,20 +172,37 @@ gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, float *value1, float *va
 	return TRUE;
 }
 /* Set number of ticks to be shown in the span of the drawn gauge */
-void mtx_gauge_face_set_resolution (MtxGaugeFace *gauge, int ticks)
+void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->num_ticks = ticks;
+	gauge->major_ticks = ticks;
 	generate_gauge_background(GTK_WIDGET(gauge));
 	g_object_thaw_notify (G_OBJECT (gauge));
 }
 
 /* Returns current number of ticks drawn in span of gauge */
-int mtx_gauge_face_get_resolution (MtxGaugeFace *gauge)
+int mtx_gauge_face_get_major_ticks (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->num_ticks;
+	return gauge->major_ticks;
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->minor_ticks = ticks;
+	generate_gauge_background(GTK_WIDGET(gauge));
+	g_object_thaw_notify (G_OBJECT (gauge));
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->minor_ticks;
 }
 
 /* Changes the span of the gauge, specified in radians the start and stop position. */
@@ -244,8 +261,8 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->precision = 2;
 	gauge->start_radian = 0.75 * M_PI;//M_PI is left, 0 is right
 	gauge->stop_radian = 2.25 * M_PI;
-	gauge->num_ticks = 25;
-	gauge->majtick_divisor = 3;  /* B S S S B S S S B  tick style */
+	gauge->major_ticks = 9;
+	gauge->minor_ticks = 0;  /* B S S S B S S S B  tick style */
 	gauge->tick_inset = 0.15;    /* how much in from gauge radius fortick */
 	gauge->major_tick_len = 0.1; /* 1 = 100% of radius, so 0.1 = 10% */
 	gauge->minor_tick_len = 0.05;/* 1 = 100% of radius, so 0.1 = 10% */
@@ -289,11 +306,11 @@ void update_gauge_position(GtkWidget *widget)
 void cairo_update_gauge_position (GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
-	gfloat arc = 0.0;
-	gfloat arc_rad = 0.0;
+	gfloat radian_span = 0.0;
+	gfloat tmpf = 0.0;
+	gfloat needle_pos = 0.0;
 	gchar * message = NULL;
 	gint i = 0;
-	gfloat current_value = 0.0;
 	gfloat n_width = 0.0;
 	gfloat n_tail = 0.0;
 	gfloat n_tip = 0.0;
@@ -315,28 +332,13 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 	cr = gdk_cairo_create (gauge->pixmap);
 	/* gauge hands */
-	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
-
-	current_value = gauge->value;
-	/* Update the VALUE text */
-	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
-	cairo_select_font_face (cr, gauge->value_font, CAIRO_FONT_SLANT_NORMAL,
-			CAIRO_FONT_WEIGHT_NORMAL);
-
-	cairo_set_font_size (cr, (gauge->radius * gauge->value_font_scale));
-
-	message = g_strdup_printf("%.*f", gauge->precision,current_value);
-
-	cairo_text_extents (cr, message, &extents);
-
-	cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.55 * gauge->radius));
-	cairo_show_text (cr, message);
-	g_free(message);
+	radian_span = (gauge->stop_radian - gauge->start_radian);
+	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
+	needle_pos = gauge->start_radian+(tmpf*radian_span)+M_PI/2.0;
 
 	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 	cairo_set_line_width (cr, 1);
 
-	arc_rad = (2 * M_PI) * arc;//angle in radians of total arc
 	n_width = gauge->needle_width * gauge->radius;
 	n_tail = gauge->needle_tail * gauge->radius;
 	n_tip = gauge->radius * 0.850;
@@ -350,16 +352,16 @@ void cairo_update_gauge_position (GtkWidget *widget)
 		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
 		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
 	}
-	gauge->needle_coords[0].x = xc + (n_tip) * sin ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[0].y = yc + (n_tip) * -cos ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
+	gauge->needle_coords[0].x = xc + (n_tip) * sin (needle_pos);
+	gauge->needle_coords[0].y = yc + (n_tip) * -cos (needle_pos);
 
-	gauge->needle_coords[1].x = xc + (n_width) *cos((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[1].y = yc + (n_width) *sin((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
+	gauge->needle_coords[1].x = xc + (n_width) *cos(needle_pos);
+	gauge->needle_coords[1].y = yc + (n_width) *sin(needle_pos);
 
-	gauge->needle_coords[2].x = xc + (n_tail) * -sin ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[2].y = yc + (n_tail) * cos ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[3].x = xc - (n_width) * cos ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[3].y = yc - (n_width) * sin ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
+	gauge->needle_coords[2].x = xc + (n_tail) * -sin (needle_pos);
+	gauge->needle_coords[2].y = yc + (n_tail) * cos (needle_pos);
+	gauge->needle_coords[3].x = xc - (n_width) * cos (needle_pos);
+	gauge->needle_coords[3].y = yc - (n_width) * sin (needle_pos);
 	gauge->needle_polygon_points = 4;
 
 	cairo_move_to (cr, gauge->needle_coords[0].x,gauge->needle_coords[0].y);
@@ -367,6 +369,22 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	cairo_line_to (cr, gauge->needle_coords[2].x,gauge->needle_coords[2].y);
 	cairo_line_to (cr, gauge->needle_coords[3].x,gauge->needle_coords[3].y);
 	cairo_fill_preserve (cr);
+
+	/* Update the VALUE text */
+	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
+	cairo_select_font_face (cr, gauge->value_font, CAIRO_FONT_SLANT_NORMAL,
+			CAIRO_FONT_WEIGHT_NORMAL);
+
+	cairo_set_font_size (cr, (gauge->radius * gauge->value_font_scale));
+
+	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
+
+	cairo_text_extents (cr, message, &extents);
+
+	cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.55 * gauge->radius));
+	cairo_show_text (cr, message);
+	g_free(message);
+
 	cairo_stroke (cr);
 
 	cairo_destroy(cr);
@@ -378,14 +396,14 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	gint i= 0;
 	gfloat xc = 0.0;
 	gfloat yc = 0.0;
+	gfloat tmpf = 0.0;
+	gfloat radian_span = 0.0;
+	gfloat needle_pos = 0.0;
 	gint n_width = 0;
 	gint n_tail = 0;
 	gint n_tip = 0;
-	gfloat arc = 0.0;
-	gfloat arc_rad = 0.0;
 	gchar * message = NULL;
 	gchar * tmpbuf = NULL;
-	gfloat current_value = 0.0;
 	PangoRectangle logical_rect;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
@@ -405,11 +423,12 @@ void gdk_update_gauge_position (GtkWidget *widget)
 			GDK_JOIN_ROUND);
 
 	/* gauge hands */
-	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
+	radian_span = (gauge->stop_radian - gauge->start_radian);
+	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
+	needle_pos = gauge->start_radian+(tmpf*radian_span)+M_PI/2.0;
+//	printf("start_rad %f, stop_rad %f\n",gauge->start_radian, gauge->stop_radian);
+//	printf("tmpf %f, radian span %f, position, %f\n",tmpf,radian_span,needle_pos);
 
-	current_value = gauge->value;
-
-	arc_rad = (2 * M_PI) * arc;//angle in radians of total arc
 	xc= gauge->xc;
 	yc= gauge->yc;
 	n_width = gauge->needle_width * gauge->radius;
@@ -422,25 +441,24 @@ void gdk_update_gauge_position (GtkWidget *widget)
 		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
 		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
 	}
-	gauge->needle_coords[0].x = xc + (n_tip) * sin ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[0].y = yc + (n_tip) * -cos ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
+	gauge->needle_coords[0].x = xc + (n_tip) * sin (needle_pos);
+	gauge->needle_coords[0].y = yc + (n_tip) * -cos (needle_pos);
 
-	gauge->needle_coords[1].x = xc + (n_width) *cos((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[1].y = yc + (n_width) *sin((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
+	gauge->needle_coords[1].x = xc + (n_width) *cos(needle_pos);
+	gauge->needle_coords[1].y = yc + (n_width) *sin(needle_pos);
 
-	gauge->needle_coords[2].x = xc + (n_tail) * -sin ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[2].y = yc + (n_tail) * cos ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[3].x = xc - (n_width) * cos ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
-	gauge->needle_coords[3].y = yc - (n_width) * sin ((current_value - gauge->lbound) * (arc_rad) /gauge->span + (gauge->start_radian) - (1.5 * M_PI));
+	gauge->needle_coords[2].x = xc + (n_tail) * -sin (needle_pos);
+	gauge->needle_coords[2].y = yc + (n_tail) * cos (needle_pos);
+	gauge->needle_coords[3].x = xc - (n_width) * cos (needle_pos);
+	gauge->needle_coords[3].y = yc - (n_width) * sin (needle_pos);
 	gauge->needle_polygon_points = 4;
-
 
 	/* Draw the needle */
 	gdk_draw_polygon(gauge->pixmap,
 			widget->style->white_gc,
 			TRUE,gauge->needle_coords,4);
 
-	message = g_strdup_printf("%.*f", gauge->precision,current_value);
+	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
 
 	tmpbuf = g_strdup_printf("%s %i",gauge->value_font,(gint)(gauge->radius *gauge->value_font_scale));
 	gauge->font_desc = pango_font_description_from_string(tmpbuf);
@@ -550,13 +568,14 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 #ifdef HAVE_CAIRO
 	cairo_t *cr = NULL;
 	gfloat arc = 0.0;
+	gfloat radians_per_major_tick = 0.0;
+	gfloat radians_per_minor_tick = 0.0;
 	gint w = 0;
 	gint h = 0;
 	gint i = 0;
-	gint total_ticks = 0;
-	gint left_tick = 0;
-	gint right_tick = 0;
-	gint counter = 0;
+	gint j = 0;
+	gfloat counter = 0;
+	gfloat subcounter = 0;
 	gint inset = 0;
 	gint insetfrom = 0;
 	gfloat lwidth = 0.0;
@@ -626,37 +645,47 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	/* gauge ticks */
 	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
-	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
-	total_ticks = gauge->num_ticks / arc;//amount of ticks if entire gauge was used
-	left_tick = total_ticks * (gauge->start_radian / (2 * M_PI));//start tick
-	right_tick = total_ticks * (gauge->stop_radian / (2 * M_PI));//end tick
+	radians_per_major_tick = (gauge->stop_radian - gauge->start_radian)/(float)(gauge->major_ticks-1);
+	radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
+	/* Major ticks first */
 	insetfrom = gauge->radius * gauge->tick_inset;
 
-	for (counter = left_tick ; counter <= right_tick; counter++)
+	counter = gauge->start_radian;
+	for (i=0;i<gauge->major_ticks;i++)
 	{
-		cairo_save (cr); /* stack-pen-size */
-		if (counter % 3 == 0)
+		inset = (gint) (gauge->major_tick_len * gauge->radius);
+		lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
+		cairo_set_line_width (cr, lwidth);
+		cairo_move_to (cr,
+				gauge->xc + (gauge->radius - insetfrom) * cos (counter),
+				gauge->yc + (gauge->radius - insetfrom) * sin (counter));
+		cairo_line_to (cr,
+				gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter),
+				gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter));
+		cairo_stroke (cr);
+		/* minor ticks */
+		if ((gauge->minor_ticks > 0) && (i < (gauge->major_ticks-1)))
 		{
-			inset = (gint) (gauge->major_tick_len * gauge->radius);
-			lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
-			cairo_set_line_width (cr, lwidth);
-		}
-		else
-		{
+			//cairo_save (cr); /* stack-pen-size */
 			inset = (gint) (gauge->minor_tick_len * gauge->radius);
 			lwidth = MIN (w/2, h/2)/160 < 1 ? 1: MIN (w/2, h/2)/160;
 			cairo_set_line_width (cr, lwidth);
+			for (j=1;j<=gauge->minor_ticks;j++)
+			{
+				subcounter = j*radians_per_minor_tick;
+				cairo_move_to (cr,
+						gauge->xc + (gauge->radius - insetfrom) * cos (counter+subcounter),
+						gauge->yc + (gauge->radius - insetfrom) * sin (counter+subcounter));
+				cairo_line_to (cr,
+						gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter+subcounter),
+						gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter+subcounter));
+				cairo_stroke (cr);
+			}
+			//cairo_restore (cr); /* stack-pen-size */
 		}
-		cairo_move_to (cr,
-				gauge->xc + (gauge->radius - insetfrom) * cos (counter * M_PI / (total_ticks / 2)),
-				gauge->yc + (gauge->radius - insetfrom) * sin (counter * M_PI / (total_ticks / 2)));
-		cairo_line_to (cr,
-				gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter * (M_PI / (total_ticks / 2))),
-				gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter * (M_PI / (total_ticks / 2))));
-		cairo_stroke (cr);
-		cairo_restore (cr); /* stack-pen-size */
+		counter += radians_per_major_tick;
 	}
-
+	
 	/* The units string */
 	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
 	if (gauge->units_str)
@@ -687,20 +716,25 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 void gdk_generate_gauge_background(GtkWidget *widget)
 {
+	gfloat radians_per_major_tick = 0.0;
+	gfloat radians_per_minor_tick = 0.0;
 	gint w = 0;
 	gint h = 0;
 	gint i = 0;
+	gint j = 0;
 	gint lwidth = 0;
 	gfloat arc = 0.0;
-	gint total_ticks = 0;
-	gint left_tick = 0;
-	gint right_tick = 0;
 	gint inset = 0;
 	gint insetfrom = 0;
-	gint counter = 0;
+	gfloat counter = 0.0;
+	gfloat subcounter = 0.0;
 	gchar * tmpbuf = NULL;
 	gfloat angle1 = 0.0;
 	gfloat angle2 = 0.0;
+	gfloat start_pos = 0.0;
+	gfloat stop_pos = 0.0;
+	gfloat start_angle = 0.0;
+	gfloat span = 0.0;
 	MtxColorRange *range = NULL;
 	GdkColor color;
 	PangoRectangle logical_rect;
@@ -808,8 +842,17 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		range = g_array_index(gauge->ranges,MtxColorRange *, i);
 		gdk_gc_set_rgb_fg_color(gauge->axis_gc,&range->color);
 		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
-		angle1 = (range->lowpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
-		angle2= (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
+		span = gauge->stop_radian - gauge->start_radian;
+		angle1 = (range->lowpoint-gauge->lbound)/(gauge->span);
+		angle2 = (range->highpoint-gauge->lbound)/(gauge->span);
+
+		/* positions of the range in radians */
+		start_pos = gauge->start_radian+(angle1*span);
+		stop_pos = gauge->start_radian+(angle2*span);
+		/* Converted to funky GDK units */
+		start_angle = -start_pos*(180/M_PI)*64;
+		span = - (stop_pos-start_pos)*(180/M_PI)*64;
+
 		lwidth = MIN (w/2, h/2)/20 < 1 ? 1: MIN (w/2, h/2)/20;
 		gdk_gc_set_line_attributes(gauge->axis_gc,lwidth,
 				GDK_LINE_SOLID,
@@ -820,8 +863,8 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->yc-gauge->radius*0.775,
 				2*(gauge->radius*0.775),
 				2*(gauge->radius*0.775),
-				((gauge->start_deg+gauge->stop_deg)*angle2)*64,
-				((angle2-angle1)*(-gauge->stop_deg))*64);
+				start_angle,
+				span);
 	}
 
 
@@ -835,24 +878,30 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			GDK_LINE_SOLID,
 			GDK_CAP_BUTT,
 			GDK_JOIN_BEVEL);
-	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
-	total_ticks = gauge->num_ticks / arc;//amount of ticks if entire gauge was used
-	left_tick = total_ticks * (gauge->start_radian / (2 * M_PI));//start tick
-	right_tick = total_ticks * (gauge->stop_radian / (2 * M_PI));//end tick
-	insetfrom = gauge->radius * gauge->tick_inset;
 
-	for (counter = left_tick ; counter <= right_tick; counter++)
+	radians_per_major_tick = (gauge->stop_radian - gauge->start_radian)/(float)(gauge->major_ticks-1);
+        radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
+        /* Major ticks first */
+        insetfrom = gauge->radius * gauge->tick_inset;
+
+	counter = gauge->start_radian;
+        for (i=0;i<gauge->major_ticks;i++)
 	{
-		if (counter % gauge->majtick_divisor == 0)
-		{
-			inset = (gint) (gauge->major_tick_len * gauge->radius);
-			lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
-			gdk_gc_set_line_attributes(gauge->axis_gc,lwidth,
-					GDK_LINE_SOLID,
-					GDK_CAP_BUTT,
-					GDK_JOIN_BEVEL);
-		}
-		else
+		inset = (gint) (gauge->major_tick_len * gauge->radius);
+		lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
+		gdk_gc_set_line_attributes(gauge->axis_gc,lwidth,
+				GDK_LINE_SOLID,
+				GDK_CAP_BUTT,
+				GDK_JOIN_BEVEL);
+
+		gdk_draw_line(gauge->bg_pixmap,gauge->axis_gc,
+
+				gauge->xc + (gauge->radius - insetfrom) * cos (counter),
+				gauge->yc + (gauge->radius - insetfrom) * sin (counter),
+				gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter)),
+				gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter)));
+		/* Now the minor ticks... */
+		if ((gauge->minor_ticks > 0) && (i < (gauge->major_ticks-1)))
 		{
 			inset = (gint) (gauge->minor_tick_len * gauge->radius);
 			lwidth = MIN (w/2, h/2)/160 < 1 ? 1: MIN (w/2, h/2)/160;
@@ -860,15 +909,24 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 					GDK_LINE_SOLID,
 					GDK_CAP_BUTT,
 					GDK_JOIN_BEVEL);
-		}
-		gdk_draw_line(gauge->bg_pixmap,gauge->axis_gc,
+			for (j=1;j<=gauge->minor_ticks;j++)
+			{
+				subcounter = j*radians_per_minor_tick;
+				gdk_draw_line(gauge->bg_pixmap,gauge->axis_gc,
 
-				gauge->xc + (gauge->radius - insetfrom) * cos (counter * M_PI / (total_ticks / 2)),
-				gauge->yc + (gauge->radius - insetfrom) * sin (counter * M_PI / (total_ticks / 2)),
-				gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter * (M_PI / (total_ticks / 2)))),
-				gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter * (M_PI / (total_ticks / 2)))));
+						gauge->xc + (gauge->radius - insetfrom) * cos (counter+subcounter),
+						gauge->yc + (gauge->radius - insetfrom) * sin (counter+subcounter),
+						gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter+subcounter)),
+						gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter+subcounter)));
+
+			}
+
+		}
+		counter += radians_per_major_tick;
+
 	}
 
+	/* Units String */
 	if (gauge->units_str)
 	{
 		tmpbuf = g_strdup_printf("%s %i",gauge->units_font,(gint)(gauge->radius*gauge->units_font_scale));
@@ -883,6 +941,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->yc+(0.75 * gauge->radius)+logical_rect.height,gauge->layout);
 	}
 
+	/* Name String */
 	if (gauge->name_str)
 	{
 		tmpbuf = g_strdup_printf("%s %i",gauge->name_font,(gint)(gauge->radius*gauge->name_font_scale));
