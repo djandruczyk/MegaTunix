@@ -94,18 +94,28 @@ void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);
 gint mtx_gauge_face_get_precision(MtxGaugeFace *gauge);
-gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge);
+gchar * mtx_gauge_face_get_units_string (MtxGaugeFace *gauge);
+gchar * mtx_gauge_face_get_name_string (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2);
+void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, float );
+void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, float );
 gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, float *value1, float *value2);
+void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat );
+gfloat mtx_gauge_face_get_major_tick_len (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat );
+gfloat mtx_gauge_face_get_minor_tick_len (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks);
 int mtx_gauge_face_get_major_ticks (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks);
 int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_span (MtxGaugeFace *gauge, float start_radian, float stop_radian);
-void cairo_generate_gauge_background(GtkWidget *);
-void cairo_update_gauge_position (GtkWidget *);
-void gdk_generate_gauge_background(GtkWidget *);
-void gdk_update_gauge_position (GtkWidget *);
+gboolean mtx_gauge_face_get_span_rad (MtxGaugeFace *gauge, float *start_radian, float *stop_radian);
+gboolean mtx_gauge_face_get_span_deg (MtxGaugeFace *gauge, float *start_deg, float *stop_deg);
+void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, float start_radian, float stop_radian);
+void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, float start_deg, float stop_deg);
+void mtx_gauge_face_set_lspan_rad (MtxGaugeFace *gauge, float start_radian);
+void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, float start_deg);
+void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, float stop_radian);
+void mtx_gauge_face_set_uspan_deg (MtxGaugeFace *gauge, float stop_deg);
 //should also have functions to set scale, maybe autoscale
 
 G_END_DECLS

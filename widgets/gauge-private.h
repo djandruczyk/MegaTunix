@@ -38,5 +38,9 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
 gboolean mtx_gauge_face_button_release (GtkWidget *,GdkEventButton *);
 void mtx_gauge_face_set_name_str_internal (MtxGaugeFace *, gchar *);
 void mtx_gauge_face_set_units_str_internal (MtxGaugeFace *, gchar *);
+void cairo_generate_gauge_background(GtkWidget *);
+void cairo_update_gauge_position (GtkWidget *);
+void gdk_generate_gauge_background(GtkWidget *);
+void gdk_update_gauge_position (GtkWidget *);
 
 #endif
