@@ -28,6 +28,11 @@ int main (int argc, char **argv)
 	mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),0 , 1.5 * M_PI);
 	//mtx_gauge_face_set_span (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
 	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
+	GdkColor color = { 0, 50000,50000,0};
+	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 7000, color);;
+	color.red = 50000;
+	color.green = 0;
+	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 7000, 8000, color);;
 	mtx_gauge_face_set_name_str (MTX_GAUGE_FACE (gauge), "RPM");
 	mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "");
 	mtx_gauge_face_set_resolution (MTX_GAUGE_FACE (gauge), 37);

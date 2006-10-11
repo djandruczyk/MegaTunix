@@ -16,20 +16,14 @@ G_BEGIN_DECLS
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
-typedef struct _MtxColorRanges		MtxColorRanges;
 
 struct _MtxColorRange
 {
-	gdouble lowpoint;
-	gdouble highpoint;
+	gfloat lowpoint;
+	gfloat highpoint;
 	GdkColor color;
 };
 
-struct _MtxColorRanges
-{
-	gint total_ranges;
-	GHashTable *range_hash;
-};
 
 struct _MtxGaugeFace
 {//public data
@@ -59,7 +53,7 @@ struct _MtxGaugeFace
 	gfloat value;		/*! Value represneting needle position */
 	gfloat lbound;		/*! Lower Bound to clamp at */
 	gfloat ubound;		/*! Upper Bound to Clamp at */
-	gfloat range;		/*! Range from lbound to ubound */
+	gfloat span;		/*! Span from lbound to ubound */
 	gchar * units_font;	/*! Units Textual font name */
 	gchar * units_str;	/*! Units Text String */
 	gfloat units_font_scale;/*! Units Font scale, % of 2xradius */
@@ -80,7 +74,7 @@ struct _MtxGaugeFace
 	gint needle_polygon_points;
 	GdkPoint needle_coords[4];	/*! 4 point needle for now */
 	GdkPoint last_needle_coords[4];	/*! 4 point needle for now */
-	MtxColorRanges *ranges;	/*! Array of color limits structures */
+	GArray *ranges;		/*! Array to contain the ranges */
 };
 
 struct _MtxGaugeFaceClass
@@ -94,8 +88,8 @@ void mtx_gauge_face_set_antialias (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
-MtxColorRange * mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gdouble, gdouble, GdkColor);
-MtxColorRanges * mtx_gauge_face_get_ranges(MtxGaugeFace *gauge);
+void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor);
+GArray * mtx_gauge_face_get_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);
