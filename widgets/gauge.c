@@ -27,7 +27,7 @@
 #include <string.h>
 
 
-void mtx_gauge_face_set_value_internal (MtxGaugeFace *gauge, float value)
+void mtx_gauge_face_set_value_internal (MtxGaugeFace *gauge, gfloat value)
 {
 	gauge->value = value;
 	mtx_gauge_face_redraw_canvas (gauge);//show new value
@@ -55,7 +55,7 @@ void mtx_gauge_face_set_name_str_internal (MtxGaugeFace *gauge, gchar * name_str
 
 
 /* Changes value stored in widget, and gets widget redrawn to show change */
-void mtx_gauge_face_set_value (MtxGaugeFace *gauge, float value)
+void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -107,7 +107,7 @@ void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * name_str)
 
 
 /* Returns value that needle currently points to */
-float mtx_gauge_face_get_value (MtxGaugeFace *gauge)
+gfloat mtx_gauge_face_get_value (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->value;
@@ -159,7 +159,7 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat up
 
 
 /* Changes the lower and upper value bounds */
-void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2)
+void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value2)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -172,14 +172,14 @@ void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, float value1, float value2)
 }
 
 /* Changes the lower bounds */
-void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, float value)
+void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_bounds(gauge,value, gauge->ubound);
 }
 
 /* Changes the upper bounds */
-void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, float value)
+void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_bounds(gauge,gauge->lbound,value);
@@ -187,7 +187,7 @@ void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, float value)
 
 
 /* returns the lower and upper value bounds */
-gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, float *value1, float *value2)
+gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	*value1 = gauge->lbound;
@@ -196,7 +196,7 @@ gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, float *value1, float *va
 }
 
 /* returns the lower and upper angular spans */
-gboolean mtx_gauge_face_get_span_rad(MtxGaugeFace *gauge, float *value1, float *value2)
+gboolean mtx_gauge_face_get_span_rad(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	*value1 = gauge->start_radian;
@@ -205,7 +205,7 @@ gboolean mtx_gauge_face_get_span_rad(MtxGaugeFace *gauge, float *value1, float *
 }
 
 /* returns the lower and upper angular spans */
-gboolean mtx_gauge_face_get_span_deg(MtxGaugeFace *gauge, float *value1, float *value2)
+gboolean mtx_gauge_face_get_span_deg(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	*value1 = gauge->start_deg;
@@ -235,6 +235,69 @@ void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat len)
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);//show new value
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gfloat mtx_gauge_face_get_tick_inset (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->tick_inset;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gfloat mtx_gauge_face_get_needle_width (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->needle_width;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->needle_tail;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gchar * mtx_gauge_face_get_units_font (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	return gauge->units_font;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gchar * mtx_gauge_face_get_name_font (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	return gauge->name_font;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	return gauge->value_font;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gfloat mtx_gauge_face_get_units_font_scale (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->units_font_scale;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gfloat mtx_gauge_face_get_name_font_scale (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->name_font_scale;
+}
+
+/* Returns current number of ticks drawn in span of gauge */
+gfloat mtx_gauge_face_get_value_font_scale (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->value_font_scale;
 }
 
 /* Returns current number of ticks drawn in span of gauge */
@@ -279,8 +342,108 @@ void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat len)
 	generate_gauge_background(GTK_WIDGET(gauge));
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_tick_inset (MtxGaugeFace *gauge, gfloat inset)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->tick_inset = inset;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_needle_width (MtxGaugeFace *gauge, gfloat width)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->needle_width = width;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat len)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->needle_tail = len;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_units_font (MtxGaugeFace *gauge, gchar * name)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->units_font = g_strdup(name);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_name_font (MtxGaugeFace *gauge, gchar * name)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->name_font = g_strdup(name);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * name)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->value_font = g_strdup(name);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_units_font_scale (MtxGaugeFace *gauge, gfloat scale)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->units_font_scale = scale;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_name_font_scale (MtxGaugeFace *gauge, gfloat scale)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->name_font_scale = scale;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+/* Set number of ticks to be shown in the span of the drawn gauge */
+void mtx_gauge_face_set_value_font_scale (MtxGaugeFace *gauge, gfloat scale)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->value_font_scale = scale;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
 /* Returns current number of ticks drawn in span of gauge */
 int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge)
 {
@@ -290,7 +453,7 @@ int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge)
 
 /* Changes the span of the gauge, specified in radians the start and stop position. */
 /* Right is 0 going clockwise to M_PI (180 Degrees) back to 0 (2 * M_PI) */
-void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, float start_radian, float stop_radian)
+void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, gfloat start_radian, gfloat stop_radian)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -311,13 +474,13 @@ void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, float start_radian, float
 }
 
 
-void mtx_gauge_face_set_lspan_rad (MtxGaugeFace *gauge, float start_radian)
+void mtx_gauge_face_set_lspan_rad (MtxGaugeFace *gauge, gfloat start_radian)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_rad (gauge, start_radian, gauge->stop_radian);
 }
 
-void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, float stop_radian)
+void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, gfloat stop_radian)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_rad (gauge, gauge->start_radian, stop_radian);
@@ -325,7 +488,7 @@ void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, float stop_radian)
 
 /* Changes the span of the gauge, specified in deg the start and stop position. */
 /* Right is 0 going ccw to M_PI (180 Degrees) back to 0 (2 * M_PI) */
-void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, float start_deg, float stop_deg)
+void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, gfloat start_deg, gfloat stop_deg)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -346,13 +509,13 @@ void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, float start_deg, float st
 }
 
 
-void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, float start_deg)
+void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, gfloat start_deg)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_deg (gauge, start_deg, gauge->stop_deg);
 }
 
-void mtx_gauge_face_set_uspan_deg (MtxGaugeFace *gauge, float stop_deg)
+void mtx_gauge_face_set_uspan_deg (MtxGaugeFace *gauge, gfloat stop_deg)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_deg (gauge, gauge->start_deg, stop_deg);
