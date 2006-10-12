@@ -10,8 +10,7 @@ gaugedesigner_SOURCES = main.c events.c events.h ../widgets/gauge.h
 
 noinst_PROGRAMS = gaugedesigner
 
-gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la @EXTRA_LIBS@ 
-gaugedesigner_LDFLAGS =  -Wl,-bind_at_load
+gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la @EXTRA_LIBS@ @GLEXT_LIBS@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
