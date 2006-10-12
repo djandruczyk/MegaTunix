@@ -508,13 +508,14 @@ void restore_all_ecu_settings(gchar *filename)
 		if (g_strcasecmp(tmpbuf,firmware->name) != 0)
 		{
 			dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),CRITICAL);
+			update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),TRUE,FALSE);
 			if (tmpbuf)
 				g_free(tmpbuf);
 			cfg_free(cfgfile);
 			g_free(cfgfile);
 			return;
 		}
-		set_title(g_strdup("Restoring ECU settings from File\n"));
+		set_title(g_strdup("Restoring ECU settings from File"));
 		for (page=0;page<firmware->total_pages;page++)
 		{
 			if ((firmware->ro_above > 0 ) && (page > firmware->ro_above))
@@ -547,7 +548,7 @@ void restore_all_ecu_settings(gchar *filename)
 			if (writecount > 0)
 				io_cmd(IO_BURN_MS_FLASH,NULL);
 		}
+		start_restore_monitor();
 	}
 	io_cmd(IO_UPDATE_VE_CONST,NULL);
-	start_restore_monitor();
 }

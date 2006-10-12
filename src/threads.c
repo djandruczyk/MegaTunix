@@ -657,20 +657,19 @@ void *restore_update(gpointer data)
 	gint remaining_xfers = max_xfers;
 	gint last_xferd = max_xfers;
 
-	thread_update_logbar("tools_view","warning",g_strdup_printf("Need to Send %i Variables to the ECU, please be patient.\n",max_xfers),TRUE,FALSE);
+	thread_update_logbar("tools_view","warning",g_strdup_printf("Need to Send %i Variables to the ECU, please be patient.\n",max_xfers/2),TRUE,FALSE);
 	while (remaining_xfers > 5)
 	{
-		//printf("checking queue length\n");
 		remaining_xfers = g_async_queue_length(io_queue);
-		g_usleep(10000);
+		g_usleep(5000);
 		if (remaining_xfers <= (last_xferd-100))
 		{
-			thread_update_logbar("tools_view",NULL,g_strdup_printf("%i Variables to send, please wait\n",remaining_xfers),TRUE,FALSE);
+			thread_update_logbar("tools_view",NULL,g_strdup_printf("Approximately %i Variables to send, please wait\n",remaining_xfers/2),TRUE,FALSE);
 			last_xferd = remaining_xfers;
 		}
 
 	}
-	thread_update_logbar("tools_view","warning",g_strdup_printf("Restore of %i variables to your ECU is complete\n",max_xfers),TRUE,FALSE);
+	thread_update_logbar("tools_view","warning",g_strdup_printf("Restore of approximately %i variables to your ECU is complete\n",max_xfers/2),TRUE,FALSE);
 
 	return NULL;
 }

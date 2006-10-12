@@ -222,6 +222,7 @@ void writeto_ecu(struct Io_Message *message)
 
 	if (offline)
 	{
+		//printf ("OFFLINE writing value at %i,%i [%i]\n",page,offset,value);
 		ms_data[page][offset] = value;
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if offline */

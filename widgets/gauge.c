@@ -4,6 +4,8 @@
  *  Hacked and slashed to hell by David J. Andruczyk in order to bend and
  *  tweak it to my needs for MegaTunix.  Added in rendering ability using
  *  cairo and raw GDK callls for those less fortunate (OS-X)
+ *  Added a HUGE number of functions to get/set every gauge attribute
+ *
  *
  *  Was offered a fine contribution by Ari Karhu 
  *  "ari <at> ultimatevw <dot> com" from the msefi.com forums.
@@ -27,43 +29,62 @@
 #include <string.h>
 
 
-void mtx_gauge_face_set_value_internal (MtxGaugeFace *gauge, gfloat value)
-{
-	gauge->value = value;
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
-}
 
-void mtx_gauge_face_set_units_str_internal (MtxGaugeFace *gauge, gchar * units_str)
+/*!
+ \brief sets the units string for the gauge and kicks off a full redraw
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param units_str (gchar *) new units text string to use
+ */
+void mtx_gauge_face_set_units_str(MtxGaugeFace *gauge, gchar * units_str)
 {
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
 	if (gauge->units_str)
 		g_free(gauge->units_str);
 	gauge->units_str = g_strdup(units_str);;
-	
+	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
-void mtx_gauge_face_set_name_str_internal (MtxGaugeFace *gauge, gchar * name_str)
+/*!
+ \brief sets the name string for the gauge and kicks off a full redraw
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param name_str (gchar *) new name text string to use
+ */
+void mtx_gauge_face_set_name_str(MtxGaugeFace *gauge, gchar * name_str)
 {
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
 	if (gauge->name_str)
 		g_free(gauge->name_str);
 	gauge->name_str = g_strdup(name_str);;
+	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
-/* Changes value stored in widget, and gets widget redrawn to show change */
+/*!
+ \brief sets the current value 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) new value
+ */
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	mtx_gauge_face_set_value_internal (gauge, value);
+	gauge->value = value;
 	g_object_thaw_notify (G_OBJECT (gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Changes widget precision */
+/*!
+ \brief sets the current display precision 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param precision (gint) new precision (# of decimal places to show)
+ */
 void mtx_gauge_face_set_precision (MtxGaugeFace *gauge, gint precision)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -71,77 +92,92 @@ void mtx_gauge_face_set_precision (MtxGaugeFace *gauge, gint precision)
 	gauge->precision = precision;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Sets antialias mode */
+/*!
+ \brief sets antialias mode
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param state (gboolean) new precision (# of decimal places to show)
+ */
 void mtx_gauge_face_set_antialias(MtxGaugeFace *gauge, gboolean state)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	gauge->antialias = state;
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
-}
-
-/* Changes value stored in widget, and gets widget redrawn to show change */
-void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * units_str)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	mtx_gauge_face_set_units_str_internal (gauge, units_str);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
-}
-
-/* Changes value stored in widget, and gets widget redrawn to show change */
-void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * name_str)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	mtx_gauge_face_set_name_str_internal (gauge, name_str);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
-/* Returns value that needle currently points to */
+/*!
+ \brief returns the current gauge value
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) the gauge value
+ */
 gfloat mtx_gauge_face_get_value (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->value;
 }
 
-/* Returns numerical precision */
+
+/*!
+ \brief returns the current precision
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) the precision
+ */
 gint mtx_gauge_face_get_precision (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->precision;
 }
 
-/* Returns antialias status */
+
+/*!
+ \brief returns the antialias flag
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) the antialias flag
+ */
 gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
 	return gauge->antialias;
 }
 
-/* Returns the units string */
+
+/*!
+ \brief returns the units string
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) the units string
+ */
 gchar * mtx_gauge_face_get_units_string (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return gauge->units_str;
 }
 
-/* Returns the name string */
+
+/*!
+ \brief returns the name string
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) the name string
+ */
 gchar * mtx_gauge_face_get_name_string (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return gauge->name_str;
 }
 
-/* Sets a range color span dynamically */
+
+/*!
+ \brief adds a new color range between the limits specified
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param lower (gfloat) lower limit for hte range in real world units 
+ corresponding to the gauge span
+ \param upper (gfloat) upper limit for hte range in real world units 
+ corresponding to the gauge span
+ \param color (GdkColor) a color struct passed defining the color of the range
+ */
 void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat upper, GdkColor color)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -154,11 +190,16 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat up
 	g_array_append_val(gauge->ranges,range);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
-/* Changes the lower and upper value bounds */
+/*!
+ \brief sets the guage bounds (real worl units)
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value1 (gfloat) lower bound
+ \param value1 (gfloat) upper bound
+ */
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value2)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -168,17 +209,27 @@ void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value
 	gauge->span = gauge->ubound -gauge->lbound;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Changes the lower bounds */
+
+/*!
+ \brief sets the lower bound only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) lower end of span
+ */
 void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_bounds(gauge,value, gauge->ubound);
 }
 
-/* Changes the upper bounds */
+
+/*!
+ \brief sets the upper bound only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) upper end of span
+ */
 void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -186,7 +237,13 @@ void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat value)
 }
 
 
-/* returns the lower and upper value bounds */
+/*!
+ \brief retreives the bound by passing in pointers to two gfloats
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value1 (gfloat) pointer to a gfloat to store the lower value into
+ \param value2 (gfloat) pointer to a gfloat to store the upper value into
+ \returns TRUE always
+ */
 gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
@@ -195,7 +252,14 @@ gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, gfloat *value1, gfloat *
 	return TRUE;
 }
 
-/* returns the lower and upper angular spans */
+
+/*!
+ \brief retreives the angular span in radians by passing in pointers to two gfloats
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value1 (gfloat) pointer to a gfloat to store the lower point angle
+ \param value2 (gfloat) pointer to a gfloat to store the upper point angle
+ \returns TRUE always
+ */
 gboolean mtx_gauge_face_get_span_rad(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
@@ -204,7 +268,14 @@ gboolean mtx_gauge_face_get_span_rad(MtxGaugeFace *gauge, gfloat *value1, gfloat
 	return TRUE;
 }
 
-/* returns the lower and upper angular spans */
+
+/*!
+ \brief retreives the angular span in degrees by passing in pointers to two gfloats
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value1 (gfloat) pointer to a gfloat to store the lower point angle
+ \param value2 (gfloat) pointer to a gfloat to store the upper point angle
+ \returns TRUE always
+ */
 gboolean mtx_gauge_face_get_span_deg(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
@@ -213,7 +284,12 @@ gboolean mtx_gauge_face_get_span_deg(MtxGaugeFace *gauge, gfloat *value1, gfloat
 	return TRUE;
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief Sets the total number of major ticks for a gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param ticks (gint) number of ticks to use i nthe gauge
+ */
 void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -222,10 +298,15 @@ void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks)
 	generate_gauge_background(GTK_WIDGET(gauge));
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+/*!
+ \brief Sets the length of the major ticks as a percentage of the radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param len (gfloat) value (0-1.0) multiple by the gauge radius to determine
+ the major tick length (fully scalable solution)
+ */
 void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat len)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -234,87 +315,148 @@ void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat len)
 	generate_gauge_background(GTK_WIDGET(gauge));
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+/*!
+ \brief returns the tick inset percentage
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns the value for the tick inset as a percentage of the gauge radius
+ */
 gfloat mtx_gauge_face_get_tick_inset (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->tick_inset;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current needle width 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) the needle width as a percentage of gauge radius
+ */
 gfloat mtx_gauge_face_get_needle_width (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->needle_width;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current needle tail length 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) the needle tail length as a percentage of gauge radius
+ */
 gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->needle_tail;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current units font name
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gchar *) units font textual name
+ */
 gchar * mtx_gauge_face_get_units_font (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return gauge->units_font;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current gauge name font name
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gchar *) gauge name font textual name
+ */
 gchar * mtx_gauge_face_get_name_font (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return gauge->name_font;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current value font name
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gchar *) value font textual name
+ */
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return gauge->value_font;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current unit font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) unit font scale as a percentage of radius
+ */
 gfloat mtx_gauge_face_get_units_font_scale (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->units_font_scale;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current name font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) name font scale as a percentage of radius
+ */
 gfloat mtx_gauge_face_get_name_font_scale (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->name_font_scale;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current value font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) value  font scale as a percentage of radius
+ */
 gfloat mtx_gauge_face_get_value_font_scale (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->value_font_scale;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current number of major tickmarks
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gint) number of major tickmarks
+ */
 int mtx_gauge_face_get_major_ticks (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->major_ticks;
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current major tick length as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) major tick length as a percentage of radius
+ */
 gfloat mtx_gauge_face_get_major_tick_len (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->major_tick_len;
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the number of minor ticks.  This number is the number of baby 
+ ticks IN BETWEEN any two major ticks,  NOT the TOTAL number of minor ticks
+ for the entire gauge.
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param ticks (int) number of minor ticks between any two major ticks.
+ */
 void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -323,17 +465,38 @@ void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks)
 	generate_gauge_background(GTK_WIDGET(gauge));
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Returns current number of ticks drawn in span of gauge */
+
+/*!
+ \brief returns the current number of minor tickmarks
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gint) number of minor tickmarks
+ */
+int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->minor_ticks;
+}
+
+/*!
+ \brief returns the current minor tick length as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) minor tick length as a percentage of radius
+ */
 gfloat mtx_gauge_face_get_minor_tick_len (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->minor_tick_len;
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the minor tick length as a percentage of the gauge radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param len (gfloat) length of minor ticks as a percentage of gauge radius
+ */
 void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat len)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -345,7 +508,12 @@ void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat len)
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the tick inset as a percentage of the gauge radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param inset (gfloat) tick inset as a percentage of gauge radius
+ */
 void mtx_gauge_face_set_tick_inset (MtxGaugeFace *gauge, gfloat inset)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -356,7 +524,12 @@ void mtx_gauge_face_set_tick_inset (MtxGaugeFace *gauge, gfloat inset)
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the needle width as a percentage of the gauge radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param width (gfloat) needle width as a percentage of gauge radius
+ */
 void mtx_gauge_face_set_needle_width (MtxGaugeFace *gauge, gfloat width)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -367,7 +540,12 @@ void mtx_gauge_face_set_needle_width (MtxGaugeFace *gauge, gfloat width)
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the needle tail length as a percentage of the gauge radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param width (gfloat) needle tail length as a percentage of gauge radius
+ */
 void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat len)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -378,40 +556,66 @@ void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat len)
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the gauge units font
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param name (gchar *) units font name as a textual string
+ */
 void mtx_gauge_face_set_units_font (MtxGaugeFace *gauge, gchar * name)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
+	if (gauge->units_font)
+		g_free(gauge->units_font);
 	gauge->units_font = g_strdup(name);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the gauge name font
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param name (gchar *) name font name as a textual string
+ */
 void mtx_gauge_face_set_name_font (MtxGaugeFace *gauge, gchar * name)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
+	if (gauge->name_font)
+		g_free(gauge->name_font);
 	gauge->name_font = g_strdup(name);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the gauge value font
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param name (gchar *) value font name as a textual string
+ */
 void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * name)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
+	if (gauge->value_font)
+		g_free(gauge->value_font);
 	gauge->value_font = g_strdup(name);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the gauge units font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param scale (gdfloat) units font scale as a percentage of radius
+ */
 void mtx_gauge_face_set_units_font_scale (MtxGaugeFace *gauge, gfloat scale)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -422,7 +626,12 @@ void mtx_gauge_face_set_units_font_scale (MtxGaugeFace *gauge, gfloat scale)
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the gauge name font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param scale (gdfloat) name font scale as a percentage of radius
+ */
 void mtx_gauge_face_set_name_font_scale (MtxGaugeFace *gauge, gfloat scale)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -433,7 +642,12 @@ void mtx_gauge_face_set_name_font_scale (MtxGaugeFace *gauge, gfloat scale)
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Set number of ticks to be shown in the span of the drawn gauge */
+
+/*!
+ \brief sets the gauge value font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param scale (gdfloat) value font scale as a percentage of radius
+ */
 void mtx_gauge_face_set_value_font_scale (MtxGaugeFace *gauge, gfloat scale)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -444,15 +658,15 @@ void mtx_gauge_face_set_value_font_scale (MtxGaugeFace *gauge, gfloat scale)
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
-/* Returns current number of ticks drawn in span of gauge */
-int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->minor_ticks;
-}
 
-/* Changes the span of the gauge, specified in radians the start and stop position. */
-/* Right is 0 going clockwise to M_PI (180 Degrees) back to 0 (2 * M_PI) */
+/*!
+ \brief Changes the angular span of the gauge in CAIRO STYLE units (CW 
+ inscreaing, units in radians,  0 deg is at 3 o'clock position) Right now all
+ gauges are assumed to have clockwise rotation with increasing value
+ \param gauge (MtxGaugeFace *) pointer to the gauge
+ \param start_radian (gfloat) start angle in radians
+ \param stop_radian (gfloat) stop angle in radians
+ */
 void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, gfloat start_radian, gfloat stop_radian)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -470,24 +684,45 @@ void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, gfloat start_radian, gflo
 #endif
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
+/*!
+ \brief Changes the angular span of the gauge in CAIRO STYLE units (CW 
+ inscreaing, units in radians,  0 deg is at 3 o'clock position) Right now all
+ gauges are assumed to have clockwise rotation with increasing value
+ \param gauge (MtxGaugeFace *) pointer to the gauge
+ \param start_radian (gfloat) start angle in radians
+ */
 void mtx_gauge_face_set_lspan_rad (MtxGaugeFace *gauge, gfloat start_radian)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_rad (gauge, start_radian, gauge->stop_radian);
 }
 
+
+/*!
+ \brief Changes the angular span of the gauge in CAIRO STYLE units (CW 
+ inscreaing, units in radians,  0 deg is at 3 o'clock position) Right now all
+ gauges are assumed to have clockwise rotation with increasing value
+ \param gauge (MtxGaugeFace *) pointer to the gauge
+ \param stop_radian (gfloat) stop angle in radians
+ */
 void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, gfloat stop_radian)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_rad (gauge, gauge->start_radian, stop_radian);
 }
 
-/* Changes the span of the gauge, specified in deg the start and stop position. */
-/* Right is 0 going ccw to M_PI (180 Degrees) back to 0 (2 * M_PI) */
+/*!
+ \brief Changes the angular span of the gauge in GDK STYLE units (CCW 
+ inscreaing, units in degrees,  0 deg is at 3 o'clock position) Right now all
+ gauges are assumed to have clockwise rotation with increasing value
+ \param gauge (MtxGaugeFace *) pointer to the gauge
+ \param start_deg (gfloat) start angle in degrees
+ \param stop_deg (gfloat) stop angle in degrees
+ */
 void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, gfloat start_deg, gfloat stop_deg)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -505,22 +740,43 @@ void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, gfloat start_deg, gfloat 
 #endif
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);//show new value
+	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
+/*!
+ \brief Changes the angular span of the gauge in GDK STYLE units (CCW 
+ inscreaing, units in degrees,  0 deg is at 3 o'clock position) Right now all
+ gauges are assumed to have clockwise rotation with increasing value
+ \param gauge (MtxGaugeFace *) pointer to the gauge
+ \param start_deg (gfloat) start angle in degrees
+ */
 void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, gfloat start_deg)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_deg (gauge, start_deg, gauge->stop_deg);
 }
 
+
+/*!
+ \brief Changes the angular span of the gauge in GDK STYLE units (CCW 
+ inscreaing, units in degrees,  0 deg is at 3 o'clock position) Right now all
+ gauges are assumed to have clockwise rotation with increasing value
+ \param gauge (MtxGaugeFace *) pointer to the gauge
+ \param stop_deg (gfloat) stop angle in degrees
+ */
 void mtx_gauge_face_set_uspan_deg (MtxGaugeFace *gauge, gfloat stop_deg)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_span_deg (gauge, gauge->start_deg, stop_deg);
 }
 
+
+/*!
+ \brief Initializesthe mtx gauge face class and links in the primary
+ signal handlers for config event, expose event, and button press/release
+ \param class_name (MtxGaugeFaceClass *) pointer to the class
+ */
 void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 {
 	GObjectClass *obj_class;
@@ -538,6 +794,11 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
 }
 
+
+/*!
+ \brief Initializes the gauge attributes to sane defaults
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
 void mtx_gauge_face_init (MtxGaugeFace *gauge)
 {
 	//which events widget receives
@@ -589,6 +850,11 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 }
 
 
+/*!
+ \brief updates the gauge position,  This is a wrapper function conditionally
+ compiled to call a corresponsing GDK or cairo function.
+ \param widget (GtkWidget *) pointer to the gauge object
+ */
 void update_gauge_position(GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
@@ -599,6 +865,11 @@ void update_gauge_position(GtkWidget *widget)
 }
 
 
+/*!
+ \brief updates the gauge position,  This is the CAIRO implementation that
+ looks a bit nicer, though is a little bit slower
+ \param widget (GtkWidget *) pointer to the gauge object
+ */
 void cairo_update_gauge_position (GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
@@ -687,6 +958,12 @@ void cairo_update_gauge_position (GtkWidget *widget)
 #endif
 }
 
+
+/*!
+ \brief updates the gauge position,  This is the GDK implementation that
+ looks doesn't do antialiasing,  but is the fastest one.
+ \param widget (GtkWidget *) pointer to the gauge object
+ */
 void gdk_update_gauge_position (GtkWidget *widget)
 {
 	gint i= 0;
@@ -722,8 +999,8 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	radian_span = (gauge->stop_radian - gauge->start_radian);
 	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
 	needle_pos = gauge->start_radian+(tmpf*radian_span)+M_PI/2.0;
-//	printf("start_rad %f, stop_rad %f\n",gauge->start_radian, gauge->stop_radian);
-//	printf("tmpf %f, radian span %f, position, %f\n",tmpf,radian_span,needle_pos);
+	//	printf("start_rad %f, stop_rad %f\n",gauge->start_radian, gauge->stop_radian);
+	//	printf("tmpf %f, radian span %f, position, %f\n",tmpf,radian_span,needle_pos);
 
 	xc= gauge->xc;
 	yc= gauge->yc;
@@ -771,6 +1048,16 @@ void gdk_update_gauge_position (GtkWidget *widget)
 
 }
 
+
+/*!
+ \brief handles configure events whe nthe gauge gets created or resized.
+ Takes care of creating/destroying graphics contexts, backing pixmaps (two 
+ levels are used to split the rendering for speed reasons) colormaps are 
+ also created here as well
+ \param widget (GtkWidget *) pointer to the gauge object
+ \param event (GdkEventConfigure *) pointer to GDK event datastructure that
+ encodes important info like window dimensions and depth.
+ */
 gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	GdkColor color;
@@ -835,6 +1122,13 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 }
 
 
+/*!
+ \brief handles exposure events when the screen is covered and then 
+ exposed. Works by copying from a backing pixmap to screen,
+ \param widget (GtkWidget *) pointer to the gauge object
+ \param event (GdkEventExpose *) pointer to GDK event datastructure that
+ encodes important info like window dimensions and depth.
+ */
 gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
@@ -850,6 +1144,11 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 }
 
 
+/*!
+ \brief generates the gauge background, This is a wrapper function 
+ conditionally compiled to call a corresponsing GDK or cairo function.
+ \param widget (GtkWidget *) pointer to the gauge object
+ */
 void generate_gauge_background(GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
@@ -859,6 +1158,13 @@ void generate_gauge_background(GtkWidget *widget)
 #endif
 }
 
+
+/*!
+ \brief draws the static elements of the gauge (only on resize), This includes
+ the border, units and name strings,  tick marks and warning regions
+ This is the cairo version.
+ \param widget (GtkWidget *) pointer to the gauge object
+ */
 void cairo_generate_gauge_background(GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
@@ -914,7 +1220,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	cairo_arc(cr, gauge->xc, gauge->yc, (0.934 * gauge->radius), 0, 2 * M_PI);
 	cairo_set_source(cr, gradient);
 	cairo_fill(cr);
-		    	
+
 	cairo_arc(cr, gauge->xc, gauge->yc, (0.880 * gauge->radius), 0, 2 * M_PI);
 	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_fill(cr);
@@ -981,7 +1287,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		}
 		counter += radians_per_major_tick;
 	}
-	
+
 	/* The units string */
 	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
 	if (gauge->units_str)
@@ -1010,6 +1316,12 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 }
 
 
+/*!
+ \brief draws the static elements of the gauge (only on resize), This includes
+ the border, units and name strings,  tick marks and warning regions
+ This is the gdk version.
+ \param widget (GtkWidget *) pointer to the gauge object
+ */
 void gdk_generate_gauge_background(GtkWidget *widget)
 {
 	gfloat radians_per_major_tick = 0.0;
@@ -1047,7 +1359,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 	/* The main grey (will have a thin overlay on top of it) 
 	 * This is a FILLED circle */
-	
+
 	color.red=(gint)(0.53 * 65535);
 	color.green=(gint)(0.53 * 65535);
 	color.blue=(gint)(0.53 * 65535);
@@ -1114,7 +1426,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				2*(gauge->radius*0.903),
 				(225+(i*5))*64,5*64);
 	}
-	
+
 
 
 	/* Create the INNER filled black arc to draw the ticks and everything
@@ -1176,12 +1488,12 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			GDK_JOIN_BEVEL);
 
 	radians_per_major_tick = (gauge->stop_radian - gauge->start_radian)/(float)(gauge->major_ticks-1);
-        radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
-        /* Major ticks first */
-        insetfrom = gauge->radius * gauge->tick_inset;
+	radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
+	/* Major ticks first */
+	insetfrom = gauge->radius * gauge->tick_inset;
 
 	counter = gauge->start_radian;
-        for (i=0;i<gauge->major_ticks;i++)
+	for (i=0;i<gauge->major_ticks;i++)
 	{
 		inset = (gint) (gauge->major_tick_len * gauge->radius);
 		lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
@@ -1256,6 +1568,13 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 }
 
+/*!
+ \brief handler called when a button is pressed,  currently unused 
+ \param gauge (GtkWidget *) pointer to the gauge widget
+ \param event (GdkEventButton *) struct containing details on the button(s) 
+ pressed
+ \returns FALSE
+ */
 gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
 					     GdkEventButton *event)
 {
@@ -1265,6 +1584,11 @@ gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
 	return FALSE;
 }
 
+
+/*!
+ \brief gets called to redraw the entire display manually
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 {
 	GtkWidget *widget;
@@ -1277,6 +1601,14 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 	gdk_window_clear(widget->window);
 }
 
+
+/*!
+ \brief handler called when a button is released,  currently unused 
+ \param gauge (GtkWidget *) pointer to the gauge widget
+ \param event (GdkEventButton *) struct containing details on the button(s) 
+ released
+ \returns FALSE
+ */
 gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 					       GdkEventButton *event)
 {
@@ -1285,6 +1617,11 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 	return FALSE;
 }
 
+
+/*!
+ \brief gets called when  a user wants a new gauge
+ \returns a pointer to a newly created gauge widget
+ */
 GtkWidget *mtx_gauge_face_new ()
 {
 	return GTK_WIDGET (g_object_new (MTX_TYPE_GAUGE_FACE, NULL));
