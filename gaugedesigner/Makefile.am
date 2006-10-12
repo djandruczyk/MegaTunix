@@ -11,7 +11,8 @@ gaugedesigner_SOURCES = main.c events.c events.h ../widgets/gauge.h
 noinst_PROGRAMS = gaugedesigner
 
 gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la @EXTRA_LIBS@ 
-gaugedesigner_LDFLAGS =  -Wl,-export-dynamic
+#gaugedesigner_LDFLAGS =  -Wl,-export-dynamic
+gaugedesigner_LDFLAGS =
 
 #gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ @EXTRA_LIBS@
 
