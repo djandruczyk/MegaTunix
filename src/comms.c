@@ -453,7 +453,7 @@ void readfrom_ecu(struct Io_Message *message)
  in that case it will burn the flash before changing the page. 
  \param ms_page (gint) the page to set to
  */
-void set_ms_page(gint ms_page)
+void set_ms_page(guint8 ms_page)
 {
 	extern struct Firmware_Details *firmware;
 	extern struct Serial_Params *serial_params;
