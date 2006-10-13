@@ -1,4 +1,16 @@
-/* Christopher Mire, 2006
+/*
+ * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * and Christopher Mire, 2006
+ *
+ * Megasquirt gauge widget
+ * 
+ * 
+ * This software comes under the GPL (GNU Public License)
+ * You may freely copy,distribute etc. this as long as the source code
+ * is made available for FREE.
+ * 
+ * No warranty is made or implied. You use this program at your own risk.
+ *  
  *
  * -------------------------------------------------------------------------
  *  Hacked and slashed to hell by David J. Andruczyk in order to bend and
@@ -12,7 +24,6 @@
  *  His contribution made the gauges look, ohh so much nicer than I could 
  *  have come up with!
  */
-
 
 
 #include <config.h>
@@ -898,6 +909,24 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 
 	cr = gdk_cairo_create (gauge->pixmap);
+
+	/* Update the VALUE text */
+	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
+	cairo_select_font_face (cr, gauge->value_font, CAIRO_FONT_SLANT_NORMAL,
+			CAIRO_FONT_WEIGHT_NORMAL);
+
+	cairo_set_font_size (cr, (gauge->radius * gauge->value_font_scale));
+
+	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
+
+	cairo_text_extents (cr, message, &extents);
+
+	cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.55 * gauge->radius));
+	cairo_show_text (cr, message);
+	g_free(message);
+
+	cairo_stroke (cr);
+
 	/* gauge hands */
 	radian_span = (gauge->stop_radian - gauge->start_radian);
 	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
@@ -936,24 +965,6 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	cairo_line_to (cr, gauge->needle_coords[2].x,gauge->needle_coords[2].y);
 	cairo_line_to (cr, gauge->needle_coords[3].x,gauge->needle_coords[3].y);
 	cairo_fill_preserve (cr);
-
-	/* Update the VALUE text */
-	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
-	cairo_select_font_face (cr, gauge->value_font, CAIRO_FONT_SLANT_NORMAL,
-			CAIRO_FONT_WEIGHT_NORMAL);
-
-	cairo_set_font_size (cr, (gauge->radius * gauge->value_font_scale));
-
-	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
-
-	cairo_text_extents (cr, message, &extents);
-
-	cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.55 * gauge->radius));
-	cairo_show_text (cr, message);
-	g_free(message);
-
-	cairo_stroke (cr);
-
 	cairo_destroy(cr);
 #endif
 }
@@ -988,6 +999,23 @@ void gdk_update_gauge_position (GtkWidget *widget)
 			0,0,
 			0,0,
 			widget->allocation.width,widget->allocation.height);
+
+
+	/* the text */
+	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
+
+	tmpbuf = g_strdup_printf("%s %i",gauge->value_font,(gint)(gauge->radius *gauge->value_font_scale));
+	gauge->font_desc = pango_font_description_from_string(tmpbuf);
+	g_free(tmpbuf);
+	pango_layout_set_font_description(gauge->layout,gauge->font_desc);
+	pango_layout_set_text(gauge->layout,message,-1);
+	pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
+	g_free(message);
+
+
+	gdk_draw_layout(gauge->pixmap,gauge->font_gc,
+			gauge->xc-(logical_rect.width/2),
+			gauge->yc+(0.55 * gauge->radius)-logical_rect.height,gauge->layout);
 
 	//	lwidth = MIN (w/2, h/2)/100 < 1 ? 1: MIN (w/2, h/2)/100;
 	gdk_gc_set_line_attributes(gauge->axis_gc,1,
@@ -1030,21 +1058,6 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	gdk_draw_polygon(gauge->pixmap,
 			widget->style->white_gc,
 			TRUE,gauge->needle_coords,4);
-
-	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
-
-	tmpbuf = g_strdup_printf("%s %i",gauge->value_font,(gint)(gauge->radius *gauge->value_font_scale));
-	gauge->font_desc = pango_font_description_from_string(tmpbuf);
-	g_free(tmpbuf);
-	pango_layout_set_font_description(gauge->layout,gauge->font_desc);
-	pango_layout_set_text(gauge->layout,message,-1);
-	pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
-	g_free(message);
-
-
-	gdk_draw_layout(gauge->pixmap,gauge->font_gc,
-			gauge->xc-(logical_rect.width/2),
-			gauge->yc+(0.55 * gauge->radius)-logical_rect.height,gauge->layout);
 
 }
 

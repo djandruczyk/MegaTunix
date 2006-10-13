@@ -1,3 +1,11 @@
-Custom designed gauge widget made by Chris (czb83).
+Custom designed gauge widget initially designed by Christopher Mire (czb83).
+Design was enhanced by David Andruczyk and then incorporated code from Arik
+(msgauge) and greatly enhanced in terms of look, feel and overall performance
+Currently has a rich api and attribute set allowing some very attractive 
+gauges to be created.
 
+credits:
+Chrisopher Mire
+David Andruczyk
+Arik
 

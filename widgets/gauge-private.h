@@ -1,8 +1,16 @@
-/* Originally designed by Christopher Mire, 2006
+/*
+ * Copyright (C) 2006 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * and Christopher Mire (czb)
  *
- * Modded and rewritten to a large extent by David Andruczy with help from 
- * Chris, and Arik (msefi.com forums) for better, looks and performance.
- * This is a hte PRIVATE implementation header file for INTERNAL functions
+ * Megasquirt gauge widget
+ * 
+ * 
+ * This software comes under the GPL (GNU Public License)
+ * You may freely copy,distribute etc. this as long as the source code
+ * is made available for FREE.
+ * 
+ * No warranty is made or implied. You use this program at your own risk.
+ * This is a the PRIVATE implementation header file for INTERNAL functions
  * of the widget.  Public functions as well the the gauge structure are 
  * defined in the gauge.h header file
  *
