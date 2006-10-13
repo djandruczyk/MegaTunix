@@ -1559,7 +1559,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 		gdk_draw_layout(gauge->bg_pixmap,gauge->axis_gc,
 				gauge->xc-(logical_rect.width/2),
-				gauge->yc+(0.75 * gauge->radius)+logical_rect.height,gauge->layout);
+				gauge->yc+(0.75 * gauge->radius)-logical_rect.height,gauge->layout);
 	}
 
 	/* Name String */

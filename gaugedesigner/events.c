@@ -82,6 +82,30 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			mtx_gauge_face_set_precision(g,tmpf);
 			printf("precision change\n");
 			break;
+		case TICK_INSET:
+			mtx_gauge_face_set_tick_inset(g,tmpf);
+			printf("tick inset change\n");
+			break;
+		case NEEDLE_WIDTH:
+			mtx_gauge_face_set_needle_width(g,tmpf);
+			printf("needle width change\n");
+			break;
+		case NEEDLE_TAIL:
+			mtx_gauge_face_set_needle_tail(g,tmpf);
+			printf("needle tail change\n");
+			break;
+		case NAME_SCALE:
+			mtx_gauge_face_set_name_font_scale(g,tmpf);
+			printf("name font scale change\n");
+			break;
+		case UNITS_SCALE:
+			mtx_gauge_face_set_units_font_scale(g,tmpf);
+			printf("units font scale change\n");
+			break;
+		case VALUE_SCALE:
+			mtx_gauge_face_set_value_font_scale(g,tmpf);
+			printf("value font scale change\n");
+			break;
 	}
 	return (TRUE);
 }
@@ -103,6 +127,18 @@ void update_attributes(GladeXML * xml)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_major_tick_len(g));
 	widget = glade_xml_get_widget(xml,"minor_tick_len_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_minor_tick_len(g));
+	widget = glade_xml_get_widget(xml,"tick_inset_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_tick_inset(g));
+	widget = glade_xml_get_widget(xml,"needle_width_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_needle_width(g));
+	widget = glade_xml_get_widget(xml,"needle_tail_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_needle_tail(g));
+	widget = glade_xml_get_widget(xml,"name_font_scale_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_name_font_scale(g));
+	widget = glade_xml_get_widget(xml,"units_font_scale_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_units_font_scale(g));
+	widget = glade_xml_get_widget(xml,"value_font_scale_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_value_font_scale(g));
 	mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"start_angle_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
@@ -119,6 +155,12 @@ void update_attributes(GladeXML * xml)
 	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_name_string(g));
 	widget = glade_xml_get_widget(xml,"units_string_entry");
 	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_units_string(g));
+	widget = glade_xml_get_widget(xml,"name_font_entry");
+	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_name_font(g));
+	widget = glade_xml_get_widget(xml,"units_font_entry");
+	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_units_font(g));
+	widget = glade_xml_get_widget(xml,"value_font_entry");
+	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_value_font(g));
 	widget = glade_xml_get_widget(xml,"antialiased_check");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_antialias(g));
 	hold_handlers = FALSE;
@@ -144,6 +186,18 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 		case UNITS_STR:
 			mtx_gauge_face_set_units_str(g,tmpbuf);
 			printf("set units str\n");
+			break;
+		case NAME_FONT:
+			mtx_gauge_face_set_name_font(g,tmpbuf);
+			printf("set name font \n");
+			break;
+		case VALUE_FONT:
+			mtx_gauge_face_set_value_font(g,tmpbuf);
+			printf("set value font \n");
+			break;
+		case UNITS_FONT:
+			mtx_gauge_face_set_name_font(g,tmpbuf);
+			printf("set units font \n");
 			break;
 	}
 	return (TRUE);
