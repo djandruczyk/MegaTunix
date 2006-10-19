@@ -37,6 +37,18 @@ struct _MtxColorRange
 	GdkColor color;
 };
 
+enum 
+{
+	COL_BG = 0,
+	COL_NEEDLE,
+	COL_MAJ_TICK,
+	COL_MIN_TICK,
+	COL_UNIT_FONT,
+	COL_NAME_FONT,
+	COL_VALUE_FONT,
+	NUM_COLORS
+}ColorIndex;
+
 
 struct _MtxGaugeFace
 {//public data
@@ -54,10 +66,10 @@ struct _MtxGaugeFace
 #endif
 	PangoLayout *layout;	/*! Pango TextLayout object */
 	PangoFontDescription *font_desc;/*! Pango Font description */
-	GdkGC * axis_gc;	/*! Axis Graphics Context, needed??? */
-	GdkGC * font_gc;	/*! Font Graphics Context, needed??? */
-	GdkGC * needle_gc;	/*! Needle Graphics Context, needed??? */
+	GdkGC * gc;		/*! Graphics Context for drawing */
 	GdkColormap *colormap;	/*! Colormap for GC's */
+	GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
+					     parts of a gauge object */
 	gint precision;		/*! number of decimal places for val */
 	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
 	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
@@ -147,6 +159,8 @@ void mtx_gauge_face_set_name_font_scale (MtxGaugeFace *gauge, gfloat scale);
 gfloat mtx_gauge_face_get_name_font_scale (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value_font_scale (MtxGaugeFace *gauge, gfloat scale);
 gfloat mtx_gauge_face_get_value_font_scale (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_color (MtxGaugeFace *gauge, gint index, GdkColor color);
+GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, gint index);
 
 G_END_DECLS
 

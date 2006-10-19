@@ -163,6 +163,20 @@ void update_attributes(GladeXML * xml)
 	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_value_font(g));
 	widget = glade_xml_get_widget(xml,"antialiased_check");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_antialias(g));
+	widget = glade_xml_get_widget(xml,"name_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_NAME_FONT));
+	widget = glade_xml_get_widget(xml,"units_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_UNIT_FONT));
+	widget = glade_xml_get_widget(xml,"value_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_VALUE_FONT));
+	widget = glade_xml_get_widget(xml,"background_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_BG));
+	widget = glade_xml_get_widget(xml,"needle_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_NEEDLE));
+	widget = glade_xml_get_widget(xml,"major_tick_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_MAJ_TICK));
+	widget = glade_xml_get_widget(xml,"minor_tick_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_MIN_TICK));
 	hold_handlers = FALSE;
 }
 
@@ -177,7 +191,7 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	if (hold_handlers)
 		return TRUE;
 
-	switch (handler)
+	switch ((func)handler)
 	{
 		case NAME_STR:
 			mtx_gauge_face_set_name_str(g,tmpbuf);
@@ -199,6 +213,8 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 			mtx_gauge_face_set_name_font(g,tmpbuf);
 			printf("set units font \n");
 			break;
+		default:
+			break;
 	}
 	return (TRUE);
 
@@ -214,3 +230,18 @@ EXPORT gboolean set_antialiased_mode(GtkWidget *widget, gpointer data)
 
 	return TRUE;
 }
+
+EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
+{
+	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+
+	if (hold_handlers)
+		return TRUE;
+	GdkColor color;
+
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
+	mtx_gauge_face_set_color(MTX_GAUGE_FACE(gauge),handler,color);
+
+	return TRUE;
+}
+

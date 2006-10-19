@@ -47,5 +47,6 @@ void cairo_generate_gauge_background(GtkWidget *);
 void cairo_update_gauge_position (GtkWidget *);
 void gdk_generate_gauge_background(GtkWidget *);
 void gdk_update_gauge_position (GtkWidget *);
+void mtx_gauge_face_init_colors(MtxGaugeFace *);
 
 #endif

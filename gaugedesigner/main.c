@@ -1,4 +1,5 @@
 #include "events.h"
+#include "../widgets/gauge.h"
 #include <stdio.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
@@ -46,6 +47,13 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_font_scale_spin")),"handler",GINT_TO_POINTER(NAME_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_font_scale_spin")),"handler",GINT_TO_POINTER(UNITS_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_font_scale_spin")),"handler",GINT_TO_POINTER(VALUE_SCALE));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_color_button")),"handler",GINT_TO_POINTER(COL_NAME_FONT));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_color_button")),"handler",GINT_TO_POINTER(COL_UNIT_FONT));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_color_button")),"handler",GINT_TO_POINTER(COL_VALUE_FONT));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"background_color_button")),"handler",GINT_TO_POINTER(COL_BG));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_color_button")),"handler",GINT_TO_POINTER(COL_NEEDLE));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_tick_color_button")),"handler",GINT_TO_POINTER(COL_MIN_TICK));
 
 	gtk_container_add(GTK_CONTAINER(window),toptable);
 

@@ -1,12 +1,13 @@
 INCLUDES = \
 	-I/usr/include \
         -I$(top_srcdir)/include \
+	-I../widgets \
         @GTK_CFLAGS@ \
         @LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
-gaugedesigner_SOURCES = main.c events.c events.h ../widgets/gauge.h
+gaugedesigner_SOURCES = main.c events.c events.h gauge.h
 
 noinst_PROGRAMS = gaugedesigner
 
