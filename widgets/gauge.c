@@ -223,8 +223,10 @@ gchar * mtx_gauge_face_get_name_string (MtxGaugeFace *gauge)
  \param upper (gfloat) upper limit for hte range in real world units 
  corresponding to the gauge span
  \param color (GdkColor) a color struct passed defining the color of the range
+ \param lwidth (gfloat) percentage of radius that determines the width of the range line
+ \param inset (gfloat) percentage of radius that determines the inset from the edge
  */
-void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat upper, GdkColor color)
+void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat upper, GdkColor color, gfloat lwidth, gfloat inset)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 
@@ -233,6 +235,8 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat up
 	range->lowpoint = lower;
 	range->highpoint = upper;
 	range->color = color;
+	range->lwidth = lwidth;
+	range->inset = inset;
 	g_array_append_val(gauge->ranges,range);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
@@ -240,6 +244,26 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat up
 }
 
 
+/*!
+ \brief adds a new color range between the limits specified in the struct passed
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param range (MtxColorRange*) pointer to color range struct to copy
+ \returns index of where this range is stored...
+ */
+gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *range)
+{
+	GArray * array;
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),-1);
+
+	g_object_freeze_notify (G_OBJECT (gauge));
+	MtxColorRange * newrange = g_new0(MtxColorRange, 1);
+	newrange = g_memdup(range,sizeof(MtxColorRange)); 
+	array = g_array_append_val(gauge->ranges,newrange);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return array->len-1;
+}
 /*!
  \brief sets the guage bounds (real worl units)
  \param gauge (MtxGaugeFace *) pointer to gauge
@@ -923,14 +947,14 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	/*! Units Font*/
 	gauge->colors[COL_UNIT_FONT].red=0.8*65535;
 	gauge->colors[COL_UNIT_FONT].green=0.8*65535;
-	gauge->colors[COL_UNIT_FONT].blue=0*65535;
+	gauge->colors[COL_UNIT_FONT].blue=0.8*65535;
 	/*! Name Font */
-	gauge->colors[COL_NAME_FONT].red=0*65535;
+	gauge->colors[COL_NAME_FONT].red=0.8*65535;
 	gauge->colors[COL_NAME_FONT].green=0.8*65535;
 	gauge->colors[COL_NAME_FONT].blue=0.8*65535;
 	/*! Value Font */
 	gauge->colors[COL_VALUE_FONT].red=0.8*65535;
-	gauge->colors[COL_VALUE_FONT].green=0*65535;
+	gauge->colors[COL_VALUE_FONT].green=0.8*65535;
 	gauge->colors[COL_VALUE_FONT].blue=0.8*65535;
 
 }
@@ -1097,7 +1121,6 @@ void gdk_update_gauge_position (GtkWidget *widget)
 			gauge->xc-(logical_rect.width/2),
 			gauge->yc+(0.55 * gauge->radius)-logical_rect.height,gauge->layout);
 
-	//	lwidth = MIN (w/2, h/2)/100 < 1 ? 1: MIN (w/2, h/2)/100;
 	gdk_gc_set_line_attributes(gauge->gc,1,
 			GDK_LINE_SOLID,
 			GDK_CAP_ROUND,
@@ -1320,9 +1343,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		angle1 = (range->lowpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
 		angle2= (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
 		//printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);
-		lwidth = MIN (w/2, h/2)/20 < 1 ? 1: MIN (w/2, h/2)/20;
+		lwidth = gauge->radius*range->lwidth < 1 ? 1: gauge->radius*range->lwidth;
 		cairo_set_line_width (cr, lwidth);
-		cairo_arc(cr, gauge->xc, gauge->yc, (0.775 * gauge->radius),gauge->start_radian+(angle1*(gauge->stop_radian-gauge->start_radian)), gauge->start_radian+(angle2*(gauge->stop_radian-gauge->start_radian)));
+		cairo_arc(cr, gauge->xc, gauge->yc, (range->inset * gauge->radius),gauge->start_radian+(angle1*(gauge->stop_radian-gauge->start_radian)), gauge->start_radian+(angle2*(gauge->stop_radian-gauge->start_radian)));
 
 		cairo_stroke(cr);
 
@@ -1341,7 +1364,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	for (i=0;i<gauge->major_ticks;i++)
 	{
 		inset = (gint) (gauge->major_tick_len * gauge->radius);
-		lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
+		lwidth = gauge->radius/80 < 1 ? 1: gauge->radius/80;
 		cairo_set_line_width (cr, lwidth);
 		cairo_move_to (cr,
 				gauge->xc + (gauge->radius - insetfrom) * cos (counter),
@@ -1359,7 +1382,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 					gauge->colors[COL_MIN_TICK].green/65535.0,
 					gauge->colors[COL_MIN_TICK].blue/65535.0);
 				inset = (gint) (gauge->minor_tick_len * gauge->radius);
-			lwidth = MIN (w/2, h/2)/160 < 1 ? 1: MIN (w/2, h/2)/160;
+			lwidth = gauge->radius/160 < 1 ? 1: gauge->radius/160;
 			cairo_set_line_width (cr, lwidth);
 			for (j=1;j<=gauge->minor_ticks;j++)
 			{
@@ -1469,7 +1492,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			0,360*64);
 
 	/* Outermost thin "ring" NOTE!! not filled */
-	lwidth = MIN (w/2, h/2)/120 < 1 ? 1: MIN (w/2, h/2)/120;
+	lwidth = gauge->radius/120 < 1 ? 1: gauge->radius/120;
 	gdk_gc_set_line_attributes(gauge->gc,lwidth,
 			GDK_LINE_SOLID,
 			GDK_CAP_BUTT,
@@ -1559,16 +1582,16 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		start_angle = -start_pos*(180/M_PI)*64;
 		span = - (stop_pos-start_pos)*(180/M_PI)*64;
 
-		lwidth = MIN (w/2, h/2)/20 < 1 ? 1: MIN (w/2, h/2)/20;
+		lwidth = gauge->radius*range->lwidth < 1 ? 1: gauge->radius*range->lwidth;
 		gdk_gc_set_line_attributes(gauge->gc,lwidth,
 				GDK_LINE_SOLID,
 				GDK_CAP_BUTT,
 				GDK_JOIN_BEVEL);
 		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE, 
-				gauge->xc-gauge->radius*0.775, 
-				gauge->yc-gauge->radius*0.775,
-				2*(gauge->radius*0.775),
-				2*(gauge->radius*0.775),
+				gauge->xc-gauge->radius*range->inset, 
+				gauge->yc-gauge->radius*range->inset,
+				2*(gauge->radius*range->inset),
+				2*(gauge->radius*range->inset),
 				start_angle,
 				span);
 	}
@@ -1584,7 +1607,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	for (i=0;i<gauge->major_ticks;i++)
 	{
 		inset = (gint) (gauge->major_tick_len * gauge->radius);
-		lwidth = MIN (w/2, h/2)/80 < 1 ? 1: MIN (w/2, h/2)/80;
+		lwidth = gauge->radius/80 < 1 ? 1: gauge->radius/80;
 		gdk_gc_set_line_attributes(gauge->gc,lwidth,
 				GDK_LINE_SOLID,
 				GDK_CAP_BUTT,
@@ -1602,7 +1625,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		{
 			gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MIN_TICK]);
 			inset = (gint) (gauge->minor_tick_len * gauge->radius);
-			lwidth = MIN (w/2, h/2)/160 < 1 ? 1: MIN (w/2, h/2)/160;
+			lwidth = gauge->radius/160 < 1 ? 1: gauge->radius/160;
 			gdk_gc_set_line_attributes(gauge->gc,lwidth,
 					GDK_LINE_SOLID,
 					GDK_CAP_BUTT,

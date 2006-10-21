@@ -35,6 +35,8 @@ struct _MtxColorRange
 	gfloat lowpoint;
 	gfloat highpoint;
 	GdkColor color;
+	gfloat lwidth;
+	gfloat inset;
 };
 
 enum 
@@ -113,7 +115,8 @@ void mtx_gauge_face_set_antialias (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor);
+void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
+gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
 GArray * mtx_gauge_face_get_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);

@@ -48,10 +48,10 @@ int main (int argc, char **argv)
 	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.0*M_PI,  .25*M_PI);
 	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
 	GdkColor color = { 0, 50000,50000,0};
-	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 7000, color);;
+	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 7000, color, 0.06, 0.785);;
 	color.red = 50000;
 	color.green = 0;
-	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 7000, 8000, color);;
+	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 7000, 8000, color, 0.06, 0.785);;
 	mtx_gauge_face_set_name_str (MTX_GAUGE_FACE (gauge), "RPM");
 	mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "");
 	mtx_gauge_face_set_major_ticks (MTX_GAUGE_FACE (gauge), 9);

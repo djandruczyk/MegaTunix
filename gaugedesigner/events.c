@@ -27,8 +27,47 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 
 EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 {
-	printf("create_color_span");
-	printf("On widget %s\n",(char *)glade_get_widget_name(widget));
+	GtkWidget *dialog = NULL;
+	GtkWidget *spinner = NULL;
+	MtxColorRange *range = NULL;
+	gfloat lbound = 0.0;
+	gfloat ubound = 0.0;
+	GladeXML *xml = glade_xml_new("gaugedesigner.glade", "range_dialog", NULL);
+	printf("create_color_span\n");
+	dialog = glade_xml_get_widget(xml,"range_dialog");
+	if (!GTK_IS_WIDGET(dialog))
+	{
+		printf("dialog is fucked!\n");
+		return FALSE;
+	}
+
+	/* Set the controls to sane ranges corresponding to the gauge */
+	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE(gauge),&lbound,&ubound);
+	spinner = glade_xml_get_widget(xml,"range_lowpoint_spin");
+	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+	spinner = glade_xml_get_widget(xml,"range_highpoint_spin");
+	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
+
+	gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+	switch (result)
+	{
+		case GTK_RESPONSE_APPLY:
+			range = g_new0(MtxColorRange, 1);
+			range->lowpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lowpoint_spin")));
+			range->highpoint = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_highpoint_spin")));
+			range->inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_inset_spin")));
+			range->lwidth = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"range_lwidth_spin")));
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"range_colorbutton")),&range->color);
+			mtx_gauge_face_set_color_range_struct(MTX_GAUGE_FACE(gauge),range);
+			g_free(range);
+
+			break;
+		default:
+			printf("abort\n");
+			break;
+	}
+	gtk_widget_destroy(dialog);
+
 	return (FALSE);
 }
 
