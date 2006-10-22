@@ -214,6 +214,7 @@
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		      <signal name="activate" handler="entry_changed_handler" last_modification_time="Wed, 11 Oct 2006 21:13:23 GMT"/>
+		      <signal name="changed" handler="entry_changed_handler" last_modification_time="Sun, 22 Oct 2006 18:46:14 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -237,6 +238,7 @@
 		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		      <signal name="activate" handler="entry_changed_handler" last_modification_time="Wed, 11 Oct 2006 21:13:32 GMT"/>
+		      <signal name="changed" handler="entry_changed_handler" last_modification_time="Sun, 22 Oct 2006 18:46:28 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -258,31 +260,9 @@
 		      <property name="column_spacing">12</property>
 
 		      <child>
-			<widget class="GtkEntry" id="name_font_entry">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
-			  <property name="visibility">True</property>
-			  <property name="max_length">0</property>
-			  <property name="text" translatable="yes"></property>
-			  <property name="has_frame">True</property>
-			  <property name="invisible_char">*</property>
-			  <property name="activates_default">False</property>
-			  <signal name="activate" handler="entry_changed_handler" last_modification_time="Wed, 11 Oct 2006 21:13:23 GMT"/>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">1</property>
-			  <property name="top_attach">2</property>
-			  <property name="bottom_attach">3</property>
-			  <property name="y_options"></property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkLabel" id="label18">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Scaling Factor</property>
+			  <property name="label" translatable="yes">Scale Factor</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -306,7 +286,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label17">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Gauge &lt;i&gt;NAME&lt;/i&gt; Font</property>
+			  <property name="label" translatable="yes">&lt;i&gt;NAME&lt;/i&gt; Font</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">True</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -416,6 +396,27 @@
 			  <property name="y_options"></property>
 			</packing>
 		      </child>
+
+		      <child>
+			<widget class="GtkFontButton" id="name_font_button">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="show_style">True</property>
+			  <property name="show_size">False</property>
+			  <property name="use_font">False</property>
+			  <property name="use_size">False</property>
+			  <property name="focus_on_click">True</property>
+			  <signal name="font_set" handler="change_font" last_modification_time="Sun, 22 Oct 2006 19:01:58 GMT"/>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
+			  <property name="top_attach">2</property>
+			  <property name="bottom_attach">3</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -449,31 +450,9 @@
 		      <property name="column_spacing">12</property>
 
 		      <child>
-			<widget class="GtkEntry" id="units_font_entry">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
-			  <property name="visibility">True</property>
-			  <property name="max_length">0</property>
-			  <property name="text" translatable="yes"></property>
-			  <property name="has_frame">True</property>
-			  <property name="invisible_char">*</property>
-			  <property name="activates_default">False</property>
-			  <signal name="activate" handler="entry_changed_handler" last_modification_time="Wed, 11 Oct 2006 21:13:23 GMT"/>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">1</property>
-			  <property name="top_attach">2</property>
-			  <property name="bottom_attach">3</property>
-			  <property name="y_options"></property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkLabel" id="label19">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Scaling Factor</property>
+			  <property name="label" translatable="yes">Scale Factor</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -497,7 +476,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label21">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Gauge &lt;i&gt;UNITS&lt;/i&gt; Font</property>
+			  <property name="label" translatable="yes">&lt;i&gt;UNITS&lt;/i&gt; Font</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">True</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -607,6 +586,27 @@
 			  <property name="y_options"></property>
 			</packing>
 		      </child>
+
+		      <child>
+			<widget class="GtkFontButton" id="units_font_button">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="show_style">True</property>
+			  <property name="show_size">False</property>
+			  <property name="use_font">False</property>
+			  <property name="use_size">False</property>
+			  <property name="focus_on_click">True</property>
+			  <signal name="font_set" handler="change_font" last_modification_time="Sun, 22 Oct 2006 19:01:49 GMT"/>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
+			  <property name="top_attach">2</property>
+			  <property name="bottom_attach">3</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -667,31 +667,9 @@
 		      <property name="column_spacing">12</property>
 
 		      <child>
-			<widget class="GtkEntry" id="value_font_entry">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="editable">True</property>
-			  <property name="visibility">True</property>
-			  <property name="max_length">0</property>
-			  <property name="text" translatable="yes"></property>
-			  <property name="has_frame">True</property>
-			  <property name="invisible_char">*</property>
-			  <property name="activates_default">False</property>
-			  <signal name="activate" handler="entry_changed_handler" last_modification_time="Wed, 11 Oct 2006 21:13:23 GMT"/>
-			</widget>
-			<packing>
-			  <property name="left_attach">0</property>
-			  <property name="right_attach">1</property>
-			  <property name="top_attach">2</property>
-			  <property name="bottom_attach">3</property>
-			  <property name="y_options"></property>
-			</packing>
-		      </child>
-
-		      <child>
 			<widget class="GtkLabel" id="label22">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Scaling Factor</property>
+			  <property name="label" translatable="yes">Scale Factor</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -715,7 +693,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label24">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Gauge &lt;i&gt;VALUE&lt;/i&gt; Font</property>
+			  <property name="label" translatable="yes">&lt;i&gt;VALUE&lt;/i&gt; Font</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">True</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -819,6 +797,27 @@
 			<packing>
 			  <property name="left_attach">2</property>
 			  <property name="right_attach">3</property>
+			  <property name="top_attach">2</property>
+			  <property name="bottom_attach">3</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkFontButton" id="value_font_button">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="show_style">True</property>
+			  <property name="show_size">False</property>
+			  <property name="use_font">False</property>
+			  <property name="use_size">False</property>
+			  <property name="focus_on_click">True</property>
+			  <signal name="font_set" handler="change_font" last_modification_time="Sun, 22 Oct 2006 19:01:39 GMT"/>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
 			  <property name="top_attach">2</property>
 			  <property name="bottom_attach">3</property>
 			  <property name="x_options">fill</property>
@@ -1882,7 +1881,6 @@
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
 	      <property name="adjustment">0 -100000 100000 1 10 10</property>
-	      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:31 GMT"/>
 	      <signal name="value_changed" handler="link_range_spinners" last_modification_time="Sun, 22 Oct 2006 17:53:06 GMT"/>
 	    </widget>
 	    <packing>
@@ -1906,7 +1904,6 @@
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
 	      <property name="adjustment">1 0 100000 1 10 10</property>
-	      <signal name="value_changed" handler="spin_button_handler" object="range_highpoint_spin" last_modification_time="Wed, 11 Oct 2006 18:31:42 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -1929,7 +1926,6 @@
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
 	      <property name="adjustment">0.774999976158 0 1 0.0010000000475 0.10000000149 0.10000000149</property>
-	      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:06 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -1952,7 +1948,6 @@
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
 	      <property name="adjustment">0.0799999982119 0 1 0.0010000000475 0.10000000149 0.10000000149</property>
-	      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:06 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>

@@ -96,63 +96,48 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	{
 		case MAJ_TICKS:
 			mtx_gauge_face_set_major_ticks(g,tmpi);
-			printf("major tick change\n");
 			break;
 		case MIN_TICKS:
 			mtx_gauge_face_set_minor_ticks(g,tmpi);
-			printf("minor tick change\n");
 			break;
 		case MAJ_TICK_LEN:
 			mtx_gauge_face_set_major_tick_len(g,tmpf);
-			printf("major tick LEN change\n");
 			break;
 		case MIN_TICK_LEN:
 			mtx_gauge_face_set_minor_tick_len(g,tmpf);
-			printf("minor tick LEN change\n");
 			break;
 		case START_ANGLE:
 			mtx_gauge_face_set_lspan_rad(g,tmpf);
-			printf("lspan change\n");
 			break;
 		case STOP_ANGLE:
 			mtx_gauge_face_set_uspan_rad(g,tmpf);
-			printf("uspan change\n");
 			break;
 		case LBOUND:
 			mtx_gauge_face_set_lbound(g,tmpf);
-			printf("lbound change\n");
 			break;
 		case UBOUND:
 			mtx_gauge_face_set_ubound(g,tmpf);
-			printf("ubound change\n");
 			break;
 		case PRECISION:
 			mtx_gauge_face_set_precision(g,tmpf);
-			printf("precision change\n");
 			break;
 		case TICK_INSET:
 			mtx_gauge_face_set_tick_inset(g,tmpf);
-			printf("tick inset change\n");
 			break;
 		case NEEDLE_WIDTH:
 			mtx_gauge_face_set_needle_width(g,tmpf);
-			printf("needle width change\n");
 			break;
 		case NEEDLE_TAIL:
 			mtx_gauge_face_set_needle_tail(g,tmpf);
-			printf("needle tail change\n");
 			break;
 		case NAME_SCALE:
 			mtx_gauge_face_set_name_font_scale(g,tmpf);
-			printf("name font scale change\n");
 			break;
 		case UNITS_SCALE:
 			mtx_gauge_face_set_units_font_scale(g,tmpf);
-			printf("units font scale change\n");
 			break;
 		case VALUE_SCALE:
 			mtx_gauge_face_set_value_font_scale(g,tmpf);
-			printf("value font scale change\n");
 			break;
 
 	}
@@ -204,12 +189,12 @@ void update_attributes(GladeXML * xml)
 	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_name_string(g));
 	widget = glade_xml_get_widget(xml,"units_string_entry");
 	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_units_string(g));
-	widget = glade_xml_get_widget(xml,"name_font_entry");
-	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_name_font(g));
-	widget = glade_xml_get_widget(xml,"units_font_entry");
-	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_units_font(g));
-	widget = glade_xml_get_widget(xml,"value_font_entry");
-	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_value_font(g));
+	widget = glade_xml_get_widget(xml,"name_font_button");
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup_printf("%s 13",mtx_gauge_face_get_name_font(g)));
+	widget = glade_xml_get_widget(xml,"units_font_button");
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup_printf("%s 13",mtx_gauge_face_get_units_font(g)));
+	widget = glade_xml_get_widget(xml,"value_font_button");
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup_printf("%s 13",mtx_gauge_face_get_value_font(g)));
 	widget = glade_xml_get_widget(xml,"antialiased_check");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_antialias(g));
 	widget = glade_xml_get_widget(xml,"name_color_button");
@@ -244,23 +229,9 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	{
 		case NAME_STR:
 			mtx_gauge_face_set_name_str(g,tmpbuf);
-			printf("set name string\n");
 			break;
 		case UNITS_STR:
 			mtx_gauge_face_set_units_str(g,tmpbuf);
-			printf("set units str\n");
-			break;
-		case NAME_FONT:
-			mtx_gauge_face_set_name_font(g,tmpbuf);
-			printf("set name font \n");
-			break;
-		case VALUE_FONT:
-			mtx_gauge_face_set_value_font(g,tmpbuf);
-			printf("set value font \n");
-			break;
-		case UNITS_FONT:
-			mtx_gauge_face_set_name_font(g,tmpbuf);
-			printf("set units font \n");
 			break;
 		default:
 			break;
@@ -268,6 +239,38 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	return (TRUE);
 
 }
+
+EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
+{
+	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+	gchar * tmpbuf = NULL;
+	tmpbuf = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(widget));
+	/* Strip out the font size as the gauge lib uses a different scaling
+	 * method that scales with the size of the gauge
+	 */
+	tmpbuf = g_strchomp(g_strdelimit(tmpbuf,"0123456789",' '));
+	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
+
+	if (hold_handlers)
+		return TRUE;
+
+	switch ((func)handler)
+	{
+		case NAME_FONT:
+			mtx_gauge_face_set_name_font(g,tmpbuf);
+			break;
+		case VALUE_FONT:
+			mtx_gauge_face_set_value_font(g,tmpbuf);
+			break;
+		case UNITS_FONT:
+			mtx_gauge_face_set_units_font(g,tmpbuf);
+			break;
+		default:
+			break;
+	}
+	return TRUE;
+}
+
 
 EXPORT gboolean set_antialiased_mode(GtkWidget *widget, gpointer data)
 {
