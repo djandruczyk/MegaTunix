@@ -264,6 +264,38 @@ gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *r
 	mtx_gauge_face_redraw_canvas (gauge);
 	return array->len-1;
 }
+
+
+/*!
+ \brief returns the array of ranges to the requestor
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \returns GArray * or the ranges,  DO NOT FREE THIS.
+ */
+GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
+	return gauge->ranges;
+}
+
+
+void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
+{
+	MtxColorRange *range = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if ((index <= gauge->ranges->len) && (index >= 0 ))
+	{
+		range = g_array_index(gauge->ranges,MtxColorRange *, index);
+		gauge->ranges = g_array_remove_index(gauge->ranges,index);
+		g_free(range);
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+
+}
+
 /*!
  \brief sets the guage bounds (real worl units)
  \param gauge (MtxGaugeFace *) pointer to gauge

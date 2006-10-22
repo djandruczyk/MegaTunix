@@ -49,6 +49,8 @@ EXPORT gboolean create_color_span(GtkWidget *, gpointer );
 EXPORT gboolean entry_changed_handler(GtkWidget *, gpointer );
 EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
 void update_attributes(GladeXML * );
+void update_onscreen_ranges(GtkWidget *);
+gboolean remove_range(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif
