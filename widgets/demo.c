@@ -16,6 +16,7 @@
 #include <gtk/gtk.h>
 #include <glib/gprintf.h>
 #include <gauge.h>
+#include <gauge-xml.h>
 #include <math.h>
 
 gboolean update_gauge(gpointer );
@@ -59,6 +60,8 @@ int main (int argc, char **argv)
 	mtx_gauge_face_set_precision (MTX_GAUGE_FACE (gauge), 0);
 	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
+	testload();
+	output_xml(MTX_GAUGE_FACE(gauge));
 	//gtk_widget_set_size_request(window,500,500);
 
 

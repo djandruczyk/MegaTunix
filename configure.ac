@@ -75,11 +75,16 @@ dnl check for gtkglext library
 PKG_CHECK_MODULES(GLEXT, [gtkglext-1.0 gdkglext-1.0])
 AC_SUBST(GLEXT_CFLAGS)
 AC_SUBST(GLEXT_LIBS)
+
 dnl check for glade-2.x library
 PKG_CHECK_MODULES(LIBGLADE,libglade-2.0 )
 AC_SUBST(LIBGLADE_CFLAGS)
 AC_SUBST(LIBGLADE_LIBS)
 
+dnl check for libxml-2.x library
+PKG_CHECK_MODULES(LIBXML2,libxml-2.0 )
+AC_SUBST(LIBXML2_CFLAGS)
+AC_SUBST(LIBXML2_LIBS)
 
 dnl optimizations
 CFLAGS="-O2"

@@ -14,6 +14,7 @@
 
 
 #include <config.h>
+#include <gtk/gtk.h>
 #ifndef MTX_GAUGE_FACE_H
 #define MTX_GAUGE_FACE_H
 
