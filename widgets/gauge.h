@@ -12,11 +12,14 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#ifndef MTX_GAUGE_FACE_H
+#define MTX_GAUGE_FACE_H
 
 #include <config.h>
 #include <gtk/gtk.h>
-#ifndef MTX_GAUGE_FACE_H
-#define MTX_GAUGE_FACE_H
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+
 
 G_BEGIN_DECLS
 
@@ -30,14 +33,38 @@ G_BEGIN_DECLS
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
+typedef struct _MtxXMLFuncs		MtxXMLFuncs;
 
+/*! \struct MtxColorRange
+ * \brief
+ * MtxColorRange is a container struct that holds all the information needed
+ * for a color range span on a gauge. Any gauge can have an arbritrary number
+ * of these structs as they are stored in a dynamic array and redraw on
+ * gauge background generation
+ */
 struct _MtxColorRange
 {
-	gfloat lowpoint;
-	gfloat highpoint;
-	GdkColor color;
-	gfloat lwidth;
-	gfloat inset;
+	gfloat lowpoint;	///< where the range starts from
+	gfloat highpoint; 	///< where the range ends at
+	GdkColor color;		///< The color to use
+	gfloat lwidth;		///< % of radius to determine the line width
+	gfloat inset;		///< % of radius to inset the line
+};
+
+/*! \struct _MtxXMLFuncs
+ * \brief This small container struct is used to store a set of import and 
+ * export functions use by the XML code to export or import gauge settings
+ * The import function takes two args,  one is the text string from the XML
+ * to be parsed, the other is the pointer to the destination variable that
+ * the import function should put the parsed data. The export function takes 
+ * a pointer to the destination variable and returns an xmlChar * valid to
+ * stick directly into the XML file.
+ */
+struct _MtxXMLFuncs
+{
+	void (*import_func) (gchar *, gpointer);
+	xmlChar *(*export_func) (gpointer);
+	gpointer dest_var;
 };
 
 enum 
@@ -58,6 +85,8 @@ struct _MtxGaugeFace
 	GtkDrawingArea parent;
 	GdkPixmap *pixmap;	/*! Update/backing pixmap */
 	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
+	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
+				   *  parsing functions */
 	gint w;			/*! width */
 	gint h;			/*! height */
 	gdouble xc;		/*! X Center */

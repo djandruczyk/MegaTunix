@@ -23,8 +23,15 @@
 #include <libxml/tree.h>
 
 /* Prototypes */
-void testload();
-void output_xml(MtxGaugeFace * );
-
+void testload(GtkWidget *);
+void output_xml(GtkWidget * );
+xmlChar * mtx_gauge_color_export(gpointer );
+xmlChar * mtx_gauge_gfloat_export(gpointer );
+xmlChar * mtx_gauge_gint_export(gpointer );
+xmlChar * mtx_gauge_gchar_export(gpointer );
+void mtx_gauge_color_import(gchar *, gpointer );
+void mtx_gauge_gfloat_import(gchar *, gpointer );
+void mtx_gauge_gint_import(gchar *, gpointer );
+void mtx_gauge_gchar_import(gchar *, gpointer );
 
 #endif

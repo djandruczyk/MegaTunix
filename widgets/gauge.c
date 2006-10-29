@@ -40,6 +40,49 @@
 #include <string.h>
 
 
+static struct
+{
+	void (*import_func) (gchar *, gpointer);
+	xmlChar *(*export_func) (gpointer);
+	gchar * varname;
+} xml_functions[] = {
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"bg_color"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"needle_color"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_tail"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_width"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"majtick_color"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"mintick_color"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"unit_font_color"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"name_font_color"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"precision"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"width"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"height"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"start_deg"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"stop_deg"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"start_radian"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"stop_radian"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"lbound"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"ubound"},
+	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"units_font"},
+	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"units_str"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"units_font_scale"},
+	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"name_font"},
+	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"name_str"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"name_font_scale"},
+	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"value_font"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_font_scale"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"antialias"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"major_ticks"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"minor_ticks"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"tick_inset"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"major_tick_len"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_len"}
+};
+
+static gint num_xml_funcs = sizeof(xml_functions) / sizeof(xml_functions[0]);
+	
+
 
 /*!
  \brief sets the units string for the gauge and kicks off a full redraw
@@ -947,13 +990,70 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->gc = NULL;
 	gauge->ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
 	mtx_gauge_face_init_colors(gauge);
+	mtx_gauge_face_init_name_bindings(gauge);
+	mtx_gauge_face_init_xml_hash(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
+void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
+{
+	g_object_set_data(G_OBJECT(gauge),"bg_color", &gauge->colors[COL_BG]);
+	g_object_set_data(G_OBJECT(gauge),"needle_color", &gauge->colors[COL_NEEDLE]);
+	g_object_set_data(G_OBJECT(gauge),"majtick_color", &gauge->colors[COL_MAJ_TICK]);
+	g_object_set_data(G_OBJECT(gauge),"mintick_color", &gauge->colors[COL_MIN_TICK]);
+	g_object_set_data(G_OBJECT(gauge),"unit_font_color", &gauge->colors[COL_UNIT_FONT]);
+	g_object_set_data(G_OBJECT(gauge),"name_font_color", &gauge->colors[COL_NAME_FONT]);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color", &gauge->colors[COL_VALUE_FONT]);
+	g_object_set_data(G_OBJECT(gauge),"needle_width", &gauge->needle_width);
+	g_object_set_data(G_OBJECT(gauge),"needle_tail", &gauge->needle_tail);
+	g_object_set_data(G_OBJECT(gauge),"precision", &gauge->precision);
+	g_object_set_data(G_OBJECT(gauge),"width", &gauge->w);
+	g_object_set_data(G_OBJECT(gauge),"height", &gauge->h);
+	g_object_set_data(G_OBJECT(gauge),"start_deg", &gauge->start_deg);
+	g_object_set_data(G_OBJECT(gauge),"stop_deg", &gauge->stop_deg);
+	g_object_set_data(G_OBJECT(gauge),"start_radian", &gauge->start_radian);
+	g_object_set_data(G_OBJECT(gauge),"stop_radian", &gauge->stop_radian);
+	g_object_set_data(G_OBJECT(gauge),"lbound", &gauge->lbound);
+	g_object_set_data(G_OBJECT(gauge),"ubound", &gauge->ubound);
+	g_object_set_data(G_OBJECT(gauge),"units_font", gauge->units_font);
+	g_object_set_data(G_OBJECT(gauge),"name_font", gauge->name_font);
+	g_object_set_data(G_OBJECT(gauge),"value_font", gauge->value_font);
+	g_object_set_data(G_OBJECT(gauge),"units_font_scale", &gauge->units_font_scale);
+	g_object_set_data(G_OBJECT(gauge),"name_font_scale", &gauge->name_font_scale);
+	g_object_set_data(G_OBJECT(gauge),"value_font_scale", &gauge->value_font_scale);
+	g_object_set_data(G_OBJECT(gauge),"units_str", gauge->units_str);
+	g_object_set_data(G_OBJECT(gauge),"name_str", gauge->name_str);
+	g_object_set_data(G_OBJECT(gauge),"antialias", &gauge->antialias);
+	g_object_set_data(G_OBJECT(gauge),"major_ticks", &gauge->major_ticks);
+	g_object_set_data(G_OBJECT(gauge),"minor_ticks", &gauge->minor_ticks);
+	g_object_set_data(G_OBJECT(gauge),"tick_inset", &gauge->tick_inset);
+	g_object_set_data(G_OBJECT(gauge),"major_tick_len", &gauge->major_tick_len);
+	g_object_set_data(G_OBJECT(gauge),"minor_tick_len", &gauge->minor_tick_len);
+}
+
 /*!
- \brief updates the gauge position,  This is a wrapper function conditionally
- compiled to call a corresponsing GDK or cairo function.
+ * \brief  initializes and populates the xml_functions hashtable 
+ */
+void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
+{
+	g_object_set_data(G_OBJECT(gauge),"bg_color", &gauge->colors[COL_BG]);
+	gint i = 0;
+	MtxXMLFuncs * funcs = NULL;
+	gauge->xmlfunc_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	for (i=0;i<num_xml_funcs;i++)
+	{
+		funcs = g_new0(MtxXMLFuncs, 1);
+		funcs->import_func = xml_functions[i].import_func;
+		funcs->export_func = xml_functions[i].export_func;;
+		funcs->dest_var = (gpointer)g_object_get_data(G_OBJECT(gauge),xml_functions[i].varname);
+		g_hash_table_insert (gauge->xmlfunc_hash,g_strdup(xml_functions[i].varname),funcs);
+	}
+
+}
+
+/*!
+ \brief Allocates the default colors for a gauge with no options 
  \param widget (GtkWidget *) pointer to the gauge object
  */
 void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)

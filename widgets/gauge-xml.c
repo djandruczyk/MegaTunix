@@ -13,6 +13,7 @@
 
 
 #include <gauge.h>
+//#include <gauge-private.h>
 #include <stdio.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -20,24 +21,55 @@
 #if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
 
 /**
- * print_element_names:
+ * load_elements:
  * @a_node: the initial xml node to consider.
  *
  * Prints the names of the all the xml elements
  * that are siblings or children of a given xml node.
  */
 static void
-print_element_names(xmlNode * a_node)
+load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 {
 	xmlNode *cur_node = NULL;
+	MtxXMLFuncs *xml_funcs = NULL;
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next) 
 	{
-		if (cur_node->type == XML_ELEMENT_NODE) {
-			printf("node type: Element, name: %s\n", cur_node->name);
+		if (cur_node->type == XML_ELEMENT_NODE) 
+		{
+			printf("node type: Element, name: \"%s\"\n", cur_node->name);
+			xml_funcs = NULL;
+			xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,cur_node->name);
+			/* If current element name has a set of function 
+			 * handlers AND this element has a child AND  the
+			 * child of this elements is a text field. THEN
+			 * call the import function handler passing in the text
+			 * from the child and a pointer to the destination 
+			 * variable to store that value into
+			 */ 
+			if (xml_funcs) 
+			{
+				if ((cur_node->children) && (cur_node->children->type == XML_TEXT_NODE))
+				{
+					xml_funcs->import_func((gchar *)cur_node->children->content,xml_funcs->dest_var);
+				}
+				else /** In this case the child is null*/
+					xml_funcs->import_func(NULL,xml_funcs->dest_var);
+			}
+
+/*			if (!cur_node->children)
+				printf("NO children\n");
+			else if (cur_node->children->next == NULL)
+				printf("one child\n");
+			else
+				printf("More than one child\n");
+				*/
+
+//			if ((cur_node->children) && (cur_node->children->type == XML_TEXT_NODE))
+//				printf("node type: Text, Element child: \"%s\"\n", cur_node->children->content);
 		}
 
-		print_element_names(cur_node->children);
+		load_elements(gauge,cur_node->children);
 	}
 }
 
@@ -47,10 +79,11 @@ print_element_names(xmlNode * a_node)
  * walk down the DOM, and print the name of the 
  * xml elements nodes.
  */
-void testload()
+void testload(GtkWidget *widget)
 {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
+	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 
 	/*
 	 * this initialize the library and check potential ABI mismatches
@@ -69,7 +102,12 @@ void testload()
 	/*Get the root element node */
 	root_element = xmlDocGetRootElement(doc);
 
-	print_element_names(root_element);
+	g_object_freeze_notify(G_OBJECT(gauge));
+	load_elements(gauge, root_element);
+	g_object_thaw_notify(G_OBJECT(gauge));
+	gtk_window_resize((GtkWindow *)widget->parent,gauge->w,gauge->h);
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
 
 	/*free the document */
 	xmlFreeDoc(doc);
@@ -82,13 +120,14 @@ void testload()
 
 }
 
-void output_xml(MtxGaugeFace * gauge)
+void output_xml(GtkWidget * widget)
 {
 	gchar * tmpbuf;
 	xmlDocPtr doc = NULL;       /* document pointer */
 	xmlNodePtr root_node = NULL;/* node pointers */
 	xmlNodePtr node = NULL;/* node pointers */
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
+	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 	MtxColorRange *range = NULL;
 	int i;
 
@@ -313,7 +352,7 @@ void output_xml(MtxGaugeFace * gauge)
 	}
 
 
-	xmlSaveFormatFileEnc("output.xml", doc, "UTF-8", 1);
+	xmlSaveFormatFileEnc("output.xml", doc, "utf-8", 1);
 
 	/*free the document */
 	xmlFreeDoc(doc);
@@ -329,5 +368,68 @@ void output_xml(MtxGaugeFace * gauge)
 	 */
 	xmlMemoryDump();
 }
+
+
+void mtx_gauge_color_import(gchar *xml_data, gpointer dest)
+{
+	gchar ** vector = NULL;
+	GdkColor *color = NULL;
+	if (xml_data == NULL)
+		return;
+	vector = g_strsplit(xml_data," ", 0);
+	color = dest;
+	color->red = (guint16)g_ascii_strtod(vector[0],NULL);
+	color->green = (guint16)g_ascii_strtod(vector[1],NULL);
+	color->blue = (guint16)g_ascii_strtod(vector[2],NULL);
+	g_strfreev(vector);
+}
+
+void mtx_gauge_gfloat_import(gchar *xml_data, gpointer dest)
+{
+	gfloat * var = NULL;
+	var = dest;
+	*var = g_ascii_strtod(xml_data,NULL);
+}
+
+void mtx_gauge_gint_import(gchar *xml_data, gpointer dest)
+{
+	gint * var = NULL;
+	var = dest;
+	*var = (gint)g_ascii_strtod(xml_data,NULL);
+}
+
+void mtx_gauge_gchar_import(gchar *xml_data, gpointer dest)
+{
+	gchar * var  = dest;
+	if (var != NULL)
+		g_free(var);
+	var = g_strdup(xml_data);
+}
+
+xmlChar * mtx_gauge_color_export(gpointer src)
+{
+	printf("gauge_color_export, src %p\n",src);
+	return NULL;
+}
+
+xmlChar * mtx_gauge_gfloat_export(gpointer src)
+{
+	printf("gauge_gfloat_export, src %p\n",src);
+	return NULL;
+}
+
+xmlChar * mtx_gauge_gint_export(gpointer src)
+{
+	printf("gauge_gint_export, src %p\n",src);
+	return NULL;
+}
+
+xmlChar * mtx_gauge_gchar_export(gpointer src)
+{
+	printf("gauge_gchar_export, src %p\n",src);
+	return NULL;
+}
+
+
 
 #endif
