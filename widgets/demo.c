@@ -16,7 +16,6 @@
 #include <gtk/gtk.h>
 #include <glib/gprintf.h>
 #include <gauge.h>
-#include <gauge-xml.h>
 #include <math.h>
 
 gboolean update_gauge(gpointer );

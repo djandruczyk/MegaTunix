@@ -11,7 +11,7 @@ noinst_PROGRAMS=demo
 
 noinst_LTLIBRARIES = libmtxgauge.la
 
-libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.h
+libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c gauge-private.h
 
 libmtxgauge_la_LDFLAGS = @GTK_LIBS@ @LIBXML2_CFLAGS@ @EXTRA_LIBS@
 

@@ -24,21 +24,7 @@
 
 
 
-#define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
 
-G_DEFINE_TYPE (MtxGaugeFace, mtx_gauge_face, GTK_TYPE_DRAWING_AREA);
-
-typedef struct
-{
-	gint dragging;
-}
-MtxGaugeFacePrivate;
-
-
-void mtx_gauge_face_class_init (MtxGaugeFaceClass *);
-void mtx_gauge_face_init (MtxGaugeFace *);
-void generate_gauge_background(GtkWidget *);
-void update_gauge_position (GtkWidget *);
 gboolean mtx_gauge_face_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_gauge_face_expose (GtkWidget *, GdkEventExpose *);
 gboolean mtx_gauge_face_button_press (GtkWidget *,GdkEventButton *);

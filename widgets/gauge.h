@@ -16,9 +16,11 @@
 #define MTX_GAUGE_FACE_H
 
 #include <config.h>
+#include <gauge-xml.h>
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+
 
 
 G_BEGIN_DECLS
@@ -29,6 +31,9 @@ G_BEGIN_DECLS
 #define MTX_IS_GAUGE_FACE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), MTX_TYPE_GAUGE_FACE))
 #define MTX_IS_GAUGE_FACE_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), MTX_TYPE_GAUGE_FACE))
 #define MTX_GAUGE_FACE_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFaceClass))
+//#define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
+
+
 
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
@@ -140,6 +145,8 @@ struct _MtxGaugeFaceClass
 };
 
 GType mtx_gauge_face_get_type (void) G_GNUC_CONST;
+void generate_gauge_background(GtkWidget *);
+void update_gauge_position (GtkWidget *);
 GtkWidget* mtx_gauge_face_new ();
 void mtx_gauge_face_set_antialias (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge);

@@ -13,7 +13,7 @@
 
 
 #include <gauge.h>
-//#include <gauge-private.h>
+#include <gauge-private.h>
 #include <stdio.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -37,7 +37,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE) 
 		{
-			printf("node type: Element, name: \"%s\"\n", cur_node->name);
+//			printf("node type: Element, name: \"%s\"\n", cur_node->name);
 			xml_funcs = NULL;
 			xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,cur_node->name);
 			/* If current element name has a set of function 

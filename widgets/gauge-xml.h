@@ -18,7 +18,7 @@
 #ifndef __GAUGE_XML_H__
 #define  __GAUGE_XML_H__
 
-#include <gauge.h>
+#include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
