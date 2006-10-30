@@ -279,6 +279,35 @@ GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge)
 }
 
 
+/*!
+ \brief clears all color ranges from the gauge
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ */
+void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge)
+{
+	gint i = 0;
+	MtxColorRange *range = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	for (i=0;i<gauge->ranges->len;i++)
+	{
+		range = g_array_index(gauge->ranges,MtxColorRange *, i);
+		gauge->ranges = g_array_remove_index(gauge->ranges,i);
+		g_free(range);
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+}
+
+
+
+/*!
+ \brief clears a specific color range based on index passed
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \param index gint index of the one we want to remove.
+ */
 void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
 {
 	MtxColorRange *range = NULL;

@@ -16,7 +16,6 @@
 #define MTX_GAUGE_FACE_H
 
 #include <config.h>
-#include <gauge-xml.h>
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -39,6 +38,17 @@ typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
 typedef struct _MtxXMLFuncs		MtxXMLFuncs;
+typedef struct _MtxDispatchHelper	MtxDispatchHelper;
+
+
+struct _MtxDispatchHelper
+{
+	gchar * element_name;
+	gpointer src;
+	xmlNodePtr root_node;
+	MtxGaugeFace * gauge;
+};
+
 
 /*! \struct MtxColorRange
  * \brief
@@ -67,8 +77,9 @@ struct _MtxColorRange
  */
 struct _MtxXMLFuncs
 {
-	void (*import_func) (gchar *, gpointer);
-	xmlChar *(*export_func) (gpointer);
+	void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer);
+	void (*export_func) (MtxDispatchHelper *);
+	gchar * varname;
 	gpointer dest_var;
 };
 
@@ -90,6 +101,7 @@ struct _MtxGaugeFace
 	GtkDrawingArea parent;
 	GdkPixmap *pixmap;	/*! Update/backing pixmap */
 	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
+	GArray * xmlfunc_array; /*! Array list mapping varnames to xml */
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
 				   *  parsing functions */
 	gint w;			/*! width */
@@ -156,6 +168,7 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColo
 gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
 GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);

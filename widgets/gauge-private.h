@@ -23,8 +23,6 @@
 #include <gauge.h>
 
 
-
-
 gboolean mtx_gauge_face_configure (GtkWidget *, GdkEventConfigure *);
 gboolean mtx_gauge_face_expose (GtkWidget *, GdkEventExpose *);
 gboolean mtx_gauge_face_button_press (GtkWidget *,GdkEventButton *);
@@ -37,14 +35,6 @@ void gdk_update_gauge_position (GtkWidget *);
 void mtx_gauge_face_init_colors(MtxGaugeFace *);
 void mtx_gauge_face_init_name_bindings(MtxGaugeFace *);
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *);
-void mtx_gauge_color_import(gchar *, gpointer);
-void mtx_gauge_gint_import(gchar *, gpointer);
-void mtx_gauge_gfloat_import(gchar *, gpointer);
-void mtx_gauge_gchar_import(gchar *, gpointer);
-xmlChar * mtx_gauge_color_export(gpointer);
-xmlChar * mtx_gauge_gint_export(gpointer);
-xmlChar * mtx_gauge_gfloat_export(gpointer);
-xmlChar * mtx_gauge_gchar_export(gpointer);
 
 
 #endif

@@ -60,7 +60,7 @@ int main (int argc, char **argv)
 	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
 	testload(gauge);
-	//output_xml(gauge);
+	output_xml(gauge);
 	//gtk_widget_set_size_request(window,500,500);
 
 

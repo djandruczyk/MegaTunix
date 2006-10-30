@@ -32,6 +32,7 @@
 #endif
 #include <gauge.h>
 #include <gauge-private.h>
+#include <gauge-xml.h>
 #include <gtk/gtk.h>
 #include <glib/gprintf.h>
 #include <glib-object.h>
@@ -42,49 +43,6 @@
 
 
 G_DEFINE_TYPE (MtxGaugeFace, mtx_gauge_face, GTK_TYPE_DRAWING_AREA);
-
-static struct
-{
-	void (*import_func) (gchar *, gpointer);
-	xmlChar *(*export_func) (gpointer);
-	gchar * varname;
-} xml_functions[] = {
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"bg_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"needle_color"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_tail"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_width"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"majtick_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"mintick_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"unit_font_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"name_font_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color"},
-	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"precision"},
-	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"width"},
-	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"height"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"start_deg"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"stop_deg"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"start_radian"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"stop_radian"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"lbound"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"ubound"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"units_font"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"units_str"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"units_font_scale"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"name_font"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"name_str"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"name_font_scale"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"value_font"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_font_scale"},
-	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"antialias"},
-	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"major_ticks"},
-	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"minor_ticks"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"tick_inset"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"major_tick_len"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_len"}
-};
-
-static gint num_xml_funcs = sizeof(xml_functions) / sizeof(xml_functions[0]);
-	
 
 
 /*!
@@ -211,13 +169,19 @@ void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 	gint i = 0;
 	MtxXMLFuncs * funcs = NULL;
 	gauge->xmlfunc_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	 gint num_xml_funcs = sizeof(xml_functions) / sizeof(xml_functions[0]);
+
+	gauge->xmlfunc_array = g_array_sized_new(FALSE,TRUE,sizeof (MtxXMLFuncs *),num_xml_funcs);
+
 	for (i=0;i<num_xml_funcs;i++)
 	{
 		funcs = g_new0(MtxXMLFuncs, 1);
 		funcs->import_func = xml_functions[i].import_func;
 		funcs->export_func = xml_functions[i].export_func;;
+		funcs->varname = xml_functions[i].varname;
 		funcs->dest_var = (gpointer)g_object_get_data(G_OBJECT(gauge),xml_functions[i].varname);
 		g_hash_table_insert (gauge->xmlfunc_hash,g_strdup(xml_functions[i].varname),funcs);
+		g_array_append_val(gauge->xmlfunc_array,funcs);
 	}
 
 }
