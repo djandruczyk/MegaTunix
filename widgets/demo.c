@@ -59,10 +59,8 @@ int main (int argc, char **argv)
 	mtx_gauge_face_set_precision (MTX_GAUGE_FACE (gauge), 0);
 	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
-	testload(gauge);
-	output_xml(gauge);
-	//gtk_widget_set_size_request(window,500,500);
-
+//	testload(gauge);
+//	output_xml(gauge);
 
 	gtk_main ();
 	return 0;

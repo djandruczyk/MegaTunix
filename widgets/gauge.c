@@ -289,7 +289,7 @@ void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge)
 	MtxColorRange *range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	for (i=0;i<gauge->ranges->len;i++)
+	for (i=gauge->ranges->len-1;i>=0;i--)
 	{
 		range = g_array_index(gauge->ranges,MtxColorRange *, i);
 		gauge->ranges = g_array_remove_index(gauge->ranges,i);
