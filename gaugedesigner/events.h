@@ -43,12 +43,19 @@ typedef enum
 	AA,
 }func;
 
+typedef enum
+{
+	IMPORT_XML = 0xAA,
+	EXPORT_XML
+}StdButton;
+
 /* Prototypes */
 EXPORT gboolean create_new_gauge(GtkWidget *, gpointer );
 EXPORT gboolean create_color_span(GtkWidget *, gpointer );
 EXPORT gboolean entry_changed_handler(GtkWidget *, gpointer );
 EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
 EXPORT gboolean change_font(GtkWidget *, gpointer );
+EXPORT gboolean std_button_handler(GtkWidget *, gpointer );
 void update_attributes(GladeXML * );
 void update_onscreen_ranges(GtkWidget *);
 gboolean remove_range(GtkWidget *, gpointer );

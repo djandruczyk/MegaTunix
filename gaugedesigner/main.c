@@ -54,6 +54,8 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_color_button")),"handler",GINT_TO_POINTER(COL_NEEDLE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_tick_color_button")),"handler",GINT_TO_POINTER(COL_MIN_TICK));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"import_button")),"handler",GINT_TO_POINTER(IMPORT_XML));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"export_button")),"handler",GINT_TO_POINTER(EXPORT_XML));
 
 	gtk_container_add(GTK_CONTAINER(window),toptable);
 

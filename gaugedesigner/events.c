@@ -31,6 +31,9 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	tmp = glade_xml_get_widget(xml,"color_ranges_frame");
 	gtk_widget_set_sensitive(tmp,TRUE);
 
+	tmp = glade_xml_get_widget(xml,"import_export_frame");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
 	update_attributes(xml);
 	return (TRUE);
 }
@@ -149,6 +152,7 @@ void update_attributes(GladeXML * xml)
 {
 	gfloat tmp1 = 0.0;
 	gfloat tmp2 = 0.0;
+	gchar *tmpbuf = NULL;
 	GtkWidget * widget = NULL;
 	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
 
@@ -186,15 +190,23 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"precision_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_precision(g));
 	widget = glade_xml_get_widget(xml,"name_string_entry");
-	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_name_string(g));
+	printf("Name String: %s \n",mtx_gauge_face_get_name_str(g));
+	printf("Units string: %s \n",mtx_gauge_face_get_units_str(g));
+	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_name_str(g));
 	widget = glade_xml_get_widget(xml,"units_string_entry");
-	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_units_string(g));
+	gtk_entry_set_text(GTK_ENTRY(widget),mtx_gauge_face_get_units_str(g));
 	widget = glade_xml_get_widget(xml,"name_font_button");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup_printf("%s 13",mtx_gauge_face_get_name_font(g)));
+	tmpbuf = g_strdup_printf("%s 13",mtx_gauge_face_get_name_font(g));
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
+	g_free(tmpbuf);
 	widget = glade_xml_get_widget(xml,"units_font_button");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup_printf("%s 13",mtx_gauge_face_get_units_font(g)));
+	tmpbuf = g_strdup_printf("%s 13",mtx_gauge_face_get_units_font(g));
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
+	g_free(tmpbuf);
 	widget = glade_xml_get_widget(xml,"value_font_button");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup_printf("%s 13",mtx_gauge_face_get_value_font(g)));
+	tmpbuf = g_strdup_printf("%s 13",mtx_gauge_face_get_value_font(g));
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
+	g_free(tmpbuf);
 	widget = glade_xml_get_widget(xml,"antialiased_check");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_antialias(g));
 	widget = glade_xml_get_widget(xml,"name_color_button");
@@ -219,6 +231,8 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	gchar * tmpbuf = NULL;
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
+	if (tmpbuf == NULL)
+		tmpbuf = g_strdup("");
 
 	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
 
@@ -228,9 +242,11 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	switch ((func)handler)
 	{
 		case NAME_STR:
+			printf("changed name\n");
 			mtx_gauge_face_set_name_str(g,tmpbuf);
 			break;
 		case UNITS_STR:
+			printf("changed units\n");
 			mtx_gauge_face_set_units_str(g,tmpbuf);
 			break;
 		default:
@@ -391,4 +407,57 @@ EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 	gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(upper_spin),adj);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(upper_spin),adj->value);
 	return FALSE;
+}
+
+EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
+{
+	int handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+	GladeXML *xml = glade_get_widget_tree(widget);
+	gchar * name = NULL;
+	GtkWidget *dialog = NULL;
+	if (hold_handlers)
+		return TRUE;
+
+
+	switch ((StdButton)handler)
+	{
+		case IMPORT_XML:
+			dialog = gtk_file_chooser_dialog_new ("Open File",
+					NULL,
+					GTK_FILE_CHOOSER_ACTION_OPEN,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					NULL);
+			break;
+		case EXPORT_XML:
+			dialog = gtk_file_chooser_dialog_new ("Save File",
+					NULL,
+					GTK_FILE_CHOOSER_ACTION_SAVE,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+					NULL);
+			gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+			name = g_strdup_printf("%s_Gauge.xml",mtx_gauge_face_get_name_str(MTX_GAUGE_FACE(gauge)));
+			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), name);
+			g_free(name);
+			break;
+	}
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		char *filename;
+
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		if (handler == IMPORT_XML)
+		{
+			mtx_gauge_face_import_xml(gauge,filename);
+			update_attributes(xml);
+		}
+		if (handler == EXPORT_XML)
+			mtx_gauge_face_export_xml(gauge,filename);
+
+		g_free (filename);
+	}
+	gtk_widget_destroy (dialog);
+	return TRUE;
+
 }

@@ -173,8 +173,8 @@ void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);
 void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);
 gint mtx_gauge_face_get_precision(MtxGaugeFace *gauge);
-gchar * mtx_gauge_face_get_units_string (MtxGaugeFace *gauge);
-gchar * mtx_gauge_face_get_name_string (MtxGaugeFace *gauge);
+gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge);
+gchar * mtx_gauge_face_get_name_str (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
 void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat );
 void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat );
@@ -215,6 +215,8 @@ void mtx_gauge_face_set_value_font_scale (MtxGaugeFace *gauge, gfloat scale);
 gfloat mtx_gauge_face_get_value_font_scale (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_color (MtxGaugeFace *gauge, gint index, GdkColor color);
 GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_import_xml(GtkWidget *, gchar *);
+void mtx_gauge_face_export_xml(GtkWidget *, gchar *);
 
 G_END_DECLS
 

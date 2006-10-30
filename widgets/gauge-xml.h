@@ -33,11 +33,11 @@ void mtx_gauge_color_export(MtxDispatchHelper *);
 void mtx_gauge_gfloat_export(MtxDispatchHelper *);
 void mtx_gauge_gint_export(MtxDispatchHelper *);
 void mtx_gauge_gchar_export(MtxDispatchHelper *);
-void mtx_gauge_color_range_import(MtxGaugeFace *, xmlNode *, gpointer );
-void mtx_gauge_color_import(MtxGaugeFace *, xmlNode *, gpointer );
-void mtx_gauge_gfloat_import(MtxGaugeFace *, xmlNode *, gpointer );
-void mtx_gauge_gint_import(MtxGaugeFace *, xmlNode *, gpointer );
-void mtx_gauge_gchar_import(MtxGaugeFace *, xmlNode *, gpointer );
+void mtx_gauge_color_range_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_color_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_gfloat_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_gint_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_gchar_import(MtxGaugeFace *, xmlNode *, gpointer);
 
 /** Structure used to streamline the xml import/export */
 static const struct
