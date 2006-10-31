@@ -21,3 +21,4 @@ Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\.MegaTunix\"; Flags:
 
 [Icons]
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
+Name: "{group}\MtxGaugeDesigner"; Filename: "{app}\gaugedesigner.exe"; WorkingDir: "{app}"

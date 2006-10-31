@@ -834,10 +834,8 @@ void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, gfloat start_radian, gflo
 	 * doe it clockwise in radians. At least they start at the same place
 	 * "3 O'clock" 
 	 * */
-#ifndef HAVE_CAIRO
 	gauge->start_deg = -((start_radian/M_PI) *180.0);
 	gauge->stop_deg = -(((stop_radian-start_radian)/M_PI) *180.0);
-#endif
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -890,10 +888,8 @@ void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, gfloat start_deg, gfloat 
 	 * doe it clockwise in radians. At least they start at the same place
 	 * "3 O'clock" 
 	 * */
-#ifdef HAVE_CAIRO
 	gauge->start_radian = -start_deg*M_PI/180.0;
 	gauge->stop_radian = -stop_deg*M_PI/180.0;
-#endif
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);

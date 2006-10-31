@@ -935,6 +935,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
 	priv = MTX_GAUGE_FACE_GET_PRIVATE (gauge);
 
 */
+	printf("button press\n");
 	return FALSE;
 }
 
@@ -970,6 +971,7 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 	MtxGaugeFacePrivate *priv;
 	priv = MTX_GAUGE_FACE_GET_PRIVATE (gauge);
 	*/
+	printf("button release\n");
 	return FALSE;
 }
 
