@@ -226,36 +226,34 @@ void mtx_gauge_gint_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 
 void mtx_gauge_gchar_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 {
-	gchar * var = dest;
+	gchar ** var = (gchar **)dest;
 	MtxXMLFuncs *xml_funcs = NULL;
+	//printf("gchar import, node name \"%s\"\n",(gchar *) node->name);
+	//printf("current value/address %s, %p %p\n",*var,*var,var);
 	if (!node->children) /* EMPTY node,  thus we clear the var on the gauge */
 	{
-		printf("node %s is empty, has not kids\n",(gchar *)node->name);
-		if (var)
-		{
-			g_free(var);
-			var = g_strdup("");
-			dest = (gpointer)var;
+		//printf("node %s has no children\n",(gchar *)node->name);
+		*var = g_strdup("");
 			
-			printf("var existed, erasing and reset\n");
-			xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,node->name);
-			xml_funcs->dest_var = var;
-			g_object_set_data(G_OBJECT(gauge),(gchar *)node->name,(gpointer)var);
-		}
+		xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,node->name);
+		xml_funcs->dest_var = var;
+		g_object_set_data(G_OBJECT(gauge),(gchar *)node->name,(gpointer)var);
 		return;
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
+	{
+		//printf("child is NOT a text object!! RETURNING\n");
 		return;
-	if (var)
-		g_free(var);
+	}
+//	if (var)
+//		g_free(var);
 	if (node->children->content)
-		var = g_strdup((gchar*)node->children->content);
+		*var = g_strdup((gchar*)node->children->content);
 	else
-		var = g_strdup("");
+		*var = g_strdup("");
 
-	dest = (gpointer)var;
-	printf("node->name is %s\n",(gchar *)node->name);
-	printf("set value of %s to %s\n",(gchar *) node->name, (gchar *)node->children->content);
+	//printf("AFTER importing %s, to address %p\n",(gchar *) node->children->content, *var);
+	//printf("set value of %s to %s\n",(gchar *) node->name, *var);
 	xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,node->name);
 	xml_funcs->dest_var = var;
 	g_object_set_data(G_OBJECT(gauge),(gchar *)node->name,(gpointer)var);
@@ -367,8 +365,10 @@ void mtx_gauge_gint_export(MtxDispatchHelper * helper)
 }
 void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 {
+	//printf("exporting %s, addy %p\n",helper->element_name, *(gchar **)(helper->src));
+	//printf("double value \"%s\"\n",*(gchar **)helper->src);
 	xmlNewChild(helper->root_node, NULL, BAD_CAST helper->element_name,
-			BAD_CAST (gchar *)helper->src);
+			BAD_CAST *(gchar **)(helper->src));
 }
 
 

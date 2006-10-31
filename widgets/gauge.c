@@ -49,7 +49,7 @@
  */
 void mtx_gauge_face_set_units_str(MtxGaugeFace *gauge, gchar * units_str)
 {
-	printf("units string reset\n");
+	//printf("units string reset\n");
 	MtxXMLFuncs *xml_funcs = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -57,8 +57,9 @@ void mtx_gauge_face_set_units_str(MtxGaugeFace *gauge, gchar * units_str)
 		g_free(gauge->units_str);
 	gauge->units_str = g_strdup(units_str);
 	xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,"units_str");
-	xml_funcs->dest_var = gauge->units_str;
-	g_object_set_data(G_OBJECT(gauge),"units_str",(gpointer)gauge->units_str);
+	xml_funcs->dest_var = &gauge->units_str;
+	g_object_set_data(G_OBJECT(gauge),"units_str",(gpointer)&gauge->units_str);
+	//printf("NEW address of units_str %p\n",gauge->units_str);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -91,7 +92,7 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, gint index, GdkColor color)
  inside of gauge.h
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param index (gint) index of color to set.
- \returns a pointer to the internal GdkColor struct
+ \returns a pointer to the internal GdkColor struct WHICH MUST NOT be FREED!!
  */
 GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, gint index)
 {
@@ -107,7 +108,6 @@ GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, gint index)
  */
 void mtx_gauge_face_set_name_str(MtxGaugeFace *gauge, gchar * name_str)
 {
-	printf("name string reset\n");
 	MtxXMLFuncs *xml_funcs = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -115,8 +115,8 @@ void mtx_gauge_face_set_name_str(MtxGaugeFace *gauge, gchar * name_str)
 		g_free(gauge->name_str);
 	gauge->name_str = g_strdup(name_str);;
 	xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,"name_str");
-	xml_funcs->dest_var = gauge->name_str;
-	g_object_set_data(G_OBJECT(gauge),"name_str",(gpointer)gauge->name_str);
+	xml_funcs->dest_var = &gauge->name_str;
+	g_object_set_data(G_OBJECT(gauge),"name_str",(gpointer)&gauge->name_str);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -205,24 +205,24 @@ gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge)
 /*!
  \brief returns the units string
  \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) the units string
+ \returns  COPY of the units string which MUST be freed when done with it.
  */
 gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return gauge->units_str;
+	return g_strdup(gauge->units_str);
 }
 
 
 /*!
  \brief returns the name string
  \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) the name string
+ \returns a copy of the name string which MUST be freed when done with it.
  */
 gchar * mtx_gauge_face_get_name_str (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return gauge->name_str;
+	return g_strdup(gauge->name_str);
 }
 
 
@@ -499,36 +499,36 @@ gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge)
 /*!
  \brief returns the current units font name
  \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gchar *) units font textual name
+ \returns a copy of the units font textual name, FREE when done with it
  */
 gchar * mtx_gauge_face_get_units_font (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return gauge->units_font;
+	return g_strdup(gauge->units_font);
 }
 
 
 /*!
  \brief returns the current gauge name font name
  \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gchar *) gauge name font textual name
+ \returns a copy of the gauge name font textual name, FREE it when done
  */
 gchar * mtx_gauge_face_get_name_font (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return gauge->name_font;
+	return g_strdup(gauge->name_font);
 }
 
 
 /*!
  \brief returns the current value font name
  \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gchar *) value font textual name
+ \returns a copy of value font textual name, FREE it when done
  */
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return gauge->value_font;
+	return g_strdup(gauge->value_font);
 }
 
 
@@ -713,8 +713,8 @@ void mtx_gauge_face_set_units_font (MtxGaugeFace *gauge, gchar * name)
 		g_free(gauge->units_font);
 	gauge->units_font = g_strdup(name);
 	xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,"units_font");
-	xml_funcs->dest_var = gauge->units_font;
-	g_object_set_data(G_OBJECT(gauge),"units_font",(gpointer)gauge->units_font);
+	xml_funcs->dest_var = (gpointer)&gauge->units_font;
+	g_object_set_data(G_OBJECT(gauge),"units_font",(gpointer)&gauge->units_font);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -731,12 +731,14 @@ void mtx_gauge_face_set_name_font (MtxGaugeFace *gauge, gchar * name)
 	MtxXMLFuncs *xml_funcs = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
+	//printf("gauge->name_font address %p\n",gauge->name_font);
 	if (gauge->name_font)
 		g_free(gauge->name_font);
 	gauge->name_font = g_strdup(name);
+	//printf("gauge->name_font address %p\n",gauge->name_font);
 	xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,"name_font");
-	xml_funcs->dest_var = gauge->name_font;
-	g_object_set_data(G_OBJECT(gauge),"name_font",(gpointer)gauge->name_font);
+	xml_funcs->dest_var = &gauge->name_font;
+	g_object_set_data(G_OBJECT(gauge),"name_font",(gpointer)&gauge->name_font);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -757,8 +759,8 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * name)
 		g_free(gauge->value_font);
 	gauge->value_font = g_strdup(name);
 	xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,"value_font");
-	xml_funcs->dest_var = gauge->value_font;
-	g_object_set_data(G_OBJECT(gauge),"value_font",(gpointer)gauge->value_font);
+	xml_funcs->dest_var = &gauge->value_font;
+	g_object_set_data(G_OBJECT(gauge),"value_font",(gpointer)&gauge->value_font);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
