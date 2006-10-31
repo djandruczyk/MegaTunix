@@ -7,7 +7,7 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-gaugedesigner_SOURCES = main.c events.c events.h gauge.h
+gaugedesigner_SOURCES = main.c events.c events.h ../widgets/gauge.h
 
 noinst_PROGRAMS = gaugedesigner
 

@@ -1225,6 +1225,7 @@ void update_ve_const()
 
 	/* Update all on screen controls (except bitfields (done above)*/
 	upd_count = 0;
+
 	for (page=0;page<firmware->total_pages;page++)
 	{
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
@@ -1236,6 +1237,7 @@ void update_ve_const()
 						update_widget,NULL);
 		}
 	}
+	
 
 }
 
