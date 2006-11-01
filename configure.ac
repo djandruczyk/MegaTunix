@@ -5,6 +5,9 @@ AC_INIT(src/main.c)
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=8
 MTX_MICRO_VERSION=6
+AC_SUBST(MTX_MAJOR_VERSION)
+AC_SUBST(MTX_MINOR_VERSION)
+AC_SUBST(MTX_MICRO_VERSION)
 
 AC_CONFIG_SUBDIRS(src/main.c)
 AM_INIT_AUTOMAKE(megatunix, 0.8.6)
@@ -92,11 +95,14 @@ AC_SUBST(CFLAGS)
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 if test $cross_compiling = yes; then
+	AC_CHECK_TOOL(WINDRES, windres)
+	WIN32_RESOURCES="resources.o "
 	EXTRA_LIBS=" -mwindows -lgw32c -luuid -lole32"
 else
 	EXTRA_LIBS=""
 fi
 
+AC_SUBST(WIN32_RESOURCES)
 AC_SUBST(EXTRA_LIBS)
 
 
@@ -158,6 +164,7 @@ megatunix.spec
 Makefile 
 mtxmatheval/Makefile
 src/Makefile
+src/resources.rc
 include/Makefile
 widgets/Makefile
 gaugedesigner/Makefile

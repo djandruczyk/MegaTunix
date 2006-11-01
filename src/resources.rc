@@ -1,0 +1,23 @@
+100 ICON "mtx.ico"
+1 VERSIONINFO
+FILEVERSION 0, 8, 6, 0
+PRODUCTVERSION 0, 8, 6, 0
+FILEFLAGSMASK 0
+FILEOS 0x40000
+FILETYPE 1
+{
+	BLOCK "StringFileInfo"
+	{
+		BLOCK "040904E4"
+		{
+			VALUE "CompanyName", "N/A"
+				VALUE "FileDescription", "MegaTunix Tuning Software"
+				VALUE "FileVersion", "0.8.6"
+				VALUE "InternalName", "MegaTunix"
+				VALUE "LegalCopyright", "GNU Public License v2"
+				VALUE "OriginalFilename", "Lots of em..."
+				VALUE "ProductName", "MegaTunix"
+				VALUE "ProductVersion", "0.8.6"
+		}
+	}
+}

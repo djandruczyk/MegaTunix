@@ -2,7 +2,7 @@
 # directories and type `make'.
 AUTOMAKE_OPTIONS = foreign
 
-subdirs = mtxmatheval src include widgets gaugedesigner Interrogator Gui LookupTables RealtimeMaps RuntimeSliders RuntimeStatus 
+subdirs = mtxmatheval include widgets src gaugedesigner Interrogator Gui LookupTables RealtimeMaps RuntimeSliders RuntimeStatus 
 
 SUBDIRS = $(subdirs) 
 

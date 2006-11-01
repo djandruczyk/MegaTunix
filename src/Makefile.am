@@ -67,8 +67,13 @@ megatunix_SOURCES = \
 	widgetmgmt.c \
 	winserialio.c
 
+megatunix_DEPENDENCIES = @WIN32_RESOURCES@
+
+resources.o:
+	$(WINDRES) -i resources.rc -o resources.o
+
 #megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@ 
+megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@ @WIN32_RESOURCES@
 
 megatunix_LDFLAGS = 
 
