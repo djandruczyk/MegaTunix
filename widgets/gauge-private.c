@@ -938,20 +938,15 @@ void gdk_generate_gauge_background(GtkWidget *widget)
  pressed
  \returns FALSE
  */
-gboolean mtx_gauge_face_button_press (GtkWidget *gauge,
+gboolean mtx_gauge_face_button_press (GtkWidget *widget,
 					     GdkEventButton *event)
 {
-	/*
-	   MtxGaugeFacePrivate *priv;
-	   priv = MTX_GAUGE_FACE_GET_PRIVATE (gauge);
-
-*/
 	if (event->type == GDK_BUTTON_PRESS)
 	{
 		switch (event->button)
 		{
 			case 1: /* left button */
-				gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(gauge)),
+				gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 						event->button,
 						event->x_root,
 						event->y_root,
