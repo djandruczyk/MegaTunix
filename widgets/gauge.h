@@ -99,8 +99,9 @@ enum
 struct _MtxGaugeFace
 {//public data
 	GtkDrawingArea parent;
-	GdkPixmap *pixmap;	/*! Update/backing pixmap */
-	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
+	GdkDrawable *bitmap;	/*! for shape_combine stuff */
+	GdkDrawable *pixmap;	/*! Update/backing pixmap */
+	GdkDrawable *bg_pixmap;	/*! Static rarely changing pixmap */
 	GArray * xmlfunc_array; /*! Array list mapping varnames to xml */
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
 				   *  parsing functions */
@@ -115,6 +116,7 @@ struct _MtxGaugeFace
 #endif
 	PangoLayout *layout;	/*! Pango TextLayout object */
 	PangoFontDescription *font_desc;/*! Pango Font description */
+	GdkGC * bm_gc;		/*! Graphics Context for bitmap */
 	GdkGC * gc;		/*! Graphics Context for drawing */
 	GdkColormap *colormap;	/*! Colormap for GC's */
 	GdkColor colors[NUM_COLORS]; /*! Array of colors for specific

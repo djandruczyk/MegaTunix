@@ -27,10 +27,13 @@ int main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	window = gtk_window_new (GTK_WINDOW_POPUP);
 
 	gauge = mtx_gauge_face_new ();
 	gtk_container_add (GTK_CONTAINER (window), gauge);
+	gtk_widget_show(gauge);
+	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
+	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);

@@ -437,11 +437,17 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		if (gauge->gc)
 			g_object_unref(gauge->gc);
+		if (gauge->bm_gc)
+			g_object_unref(gauge->bm_gc);
 		if (gauge->layout)
 			g_object_unref(gauge->layout);
 		/* Backing pixmap (copy of window) */
 		if (gauge->pixmap)
 			g_object_unref(gauge->pixmap);
+		if (gauge->bitmap)
+			g_object_unref(gauge->bitmap);
+		gauge->bitmap=gdk_pixmap_new(NULL,gauge->w,gauge->h,1);
+				
 		gauge->pixmap=gdk_pixmap_new(widget->window,
 				gauge->w,gauge->h,
 				gtk_widget_get_visual(widget)->depth);
@@ -462,8 +468,10 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		gdk_window_set_back_pixmap(widget->window,gauge->pixmap,0);
 		gauge->layout = gtk_widget_create_pango_layout(GTK_WIDGET(&gauge->parent),NULL);	
+		gauge->bm_gc = gdk_gc_new(gauge->bitmap);
 		gauge->gc = gdk_gc_new(gauge->bg_pixmap);
 		gdk_gc_set_colormap(gauge->gc,gauge->colormap);
+		gdk_gc_set_colormap(gauge->bm_gc,gauge->colormap);
 
 		gauge->xc = gauge->w / 2;
 		gauge->yc = gauge->h / 2;
@@ -529,6 +537,23 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	w = widget->allocation.width;
 	h = widget->allocation.height;
+
+	cr = gdk_cairo_create (gauge->bitmap);
+
+	  // fill window_shape_bitmap with black
+	  cairo_save (cr);
+	  cairo_rectangle (cr, 0, 0, w, h);
+	  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+	  cairo_fill (cr);
+	  cairo_restore (cr);
+	  
+	 // draw white filled circle into window_shape_bitmap
+	 cairo_arc (cr, w/2, h/2, gauge->radius, 0, 2 * M_PI);
+	 cairo_set_source_rgb (cr, 1, 1, 1);
+	 cairo_fill (cr);
+	cairo_destroy (cr);
+	 
+
 	/* get a cairo_t */
 	cr = gdk_cairo_create (gauge->bg_pixmap);
 	/* Background set to black */
@@ -700,11 +725,38 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gfloat span = 0.0;
 	MtxColorRange *range = NULL;
 	GdkColor color;
+	GdkColor black;
+	GdkColor white;
+	GdkGC *gc = NULL;
 	PangoRectangle logical_rect;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 	w = widget->allocation.width;
 	h = widget->allocation.height;
+
+	/* The shape bitmap stuff */
+	gdk_color_parse ("black", & black);
+	gdk_color_parse ("white", & white);
+
+	gc = gdk_gc_new (gauge->bitmap);
+	gdk_gc_set_foreground (gc, & black);
+	gdk_gc_set_background (gc, & white);
+
+	gdk_draw_rectangle(gauge->bitmap,
+			gc,
+			TRUE, 0,0,
+			w,h);
+	gdk_gc_set_foreground (gc, & white);
+	gdk_gc_set_background (gc, & black);
+
+	gdk_draw_arc(gauge->bitmap,gc,TRUE,
+			gauge->xc-gauge->radius*0.985,
+			gauge->yc-gauge->radius*0.985,
+			2*(gauge->radius*0.985),
+			2*(gauge->radius*0.985),
+			0,360*64);
+	/* End shape bitmap */
+
 
 	/* Wipe the display, black */
 	gdk_draw_rectangle(gauge->bg_pixmap,
@@ -915,6 +967,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->xc-(logical_rect.width/2),
 				gauge->yc-(0.35 * gauge->radius)-logical_rect.height,gauge->layout);
 	}
+
 
 
 }
