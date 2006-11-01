@@ -83,7 +83,7 @@ struct _MtxXMLFuncs
 	gpointer dest_var;
 };
 
-enum 
+enum  ColorIndex
 {
 	COL_BG = 0,
 	COL_NEEDLE,
@@ -93,15 +93,15 @@ enum
 	COL_NAME_FONT,
 	COL_VALUE_FONT,
 	NUM_COLORS
-}ColorIndex;
+};
 
 
 struct _MtxGaugeFace
 {//public data
 	GtkDrawingArea parent;
-	GdkDrawable *bitmap;	/*! for shape_combine stuff */
-	GdkDrawable *pixmap;	/*! Update/backing pixmap */
-	GdkDrawable *bg_pixmap;	/*! Static rarely changing pixmap */
+	GdkBitmap *bitmap;	/*! for shape_combine stuff */
+	GdkPixmap *pixmap;	/*! Update/backing pixmap */
+	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
 	GArray * xmlfunc_array; /*! Array list mapping varnames to xml */
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
 				   *  parsing functions */

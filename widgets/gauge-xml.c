@@ -93,6 +93,9 @@ void mtx_gauge_face_import_xml(GtkWidget *widget, gchar * filename)
 		g_object_freeze_notify(G_OBJECT(gauge));
 		mtx_gauge_face_remove_all_color_ranges(gauge);
 		load_elements(gauge, root_element);
+		gauge->xc = gauge->w / 2;
+		gauge->yc = gauge->h / 2;
+		gauge->radius = MIN (gauge->w/2, gauge->h/2) - 5;
 		g_object_thaw_notify(G_OBJECT(gauge));
 		gtk_window_resize((GtkWindow *)widget->parent,gauge->w,gauge->h);
 		generate_gauge_background(GTK_WIDGET(gauge));

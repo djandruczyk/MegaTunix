@@ -267,28 +267,29 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	gchar * tmpbuf = NULL;
+
+	if (hold_handlers)
+		return TRUE;
+
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	if (tmpbuf == NULL)
 		tmpbuf = g_strdup("");
 
 	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
 
-	if (hold_handlers)
-		return TRUE;
 
 	switch ((func)handler)
 	{
 		case NAME_STR:
-			printf("changed name\n");
 			mtx_gauge_face_set_name_str(g,tmpbuf);
 			break;
 		case UNITS_STR:
-			printf("changed units\n");
 			mtx_gauge_face_set_units_str(g,tmpbuf);
 			break;
 		default:
 			break;
 	}
+	g_free(tmpbuf);
 	return (TRUE);
 
 }

@@ -22,23 +22,19 @@ gboolean update_gauge(gpointer );
 
 int main (int argc, char **argv)
 {
-	GtkWidget *window;
-	GtkWidget *gauge;
+	GtkWidget *window = NULL;
+	GtkWidget *gauge = NULL;
+	GdkBitmap *bitmap = NULL;
 
 	gtk_init (&argc, &argv);
 
-	window = gtk_window_new (GTK_WINDOW_POPUP);
+	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
 	gauge = mtx_gauge_face_new ();
 	gtk_container_add (GTK_CONTAINER (window), gauge);
-	gtk_widget_show(gauge);
-	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
-	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
-
-	g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
-
+	gtk_widget_realize(gauge);
 	gtk_widget_show_all (window);
+
 	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), 0.0, 8000.0);
 	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.0);
 	/* the nest two are the same thing in different units.  NOTE the
@@ -60,13 +56,64 @@ int main (int argc, char **argv)
 	mtx_gauge_face_set_major_ticks (MTX_GAUGE_FACE (gauge), 9);
 	mtx_gauge_face_set_minor_ticks (MTX_GAUGE_FACE (gauge), 3);
 	mtx_gauge_face_set_precision (MTX_GAUGE_FACE (gauge), 0);
+
 	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
+
 	mtx_gauge_face_import_xml(gauge,"output.xml");
-	mtx_gauge_face_export_xml(gauge,"output2.xml");
+	//mtx_gauge_face_export_xml(gauge,"output2.xml");
+
+
+	bitmap = gdk_pixmap_new(NULL,MTX_GAUGE_FACE(gauge)->w,MTX_GAUGE_FACE(gauge)->h,1);
+	draw_mask(gauge,bitmap);
+	gtk_widget_shape_combine_mask(window,bitmap,0,0);
+	gtk_window_set_decorated(GTK_WINDOW(window),TRUE);
+
+	g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_main_quit), NULL);
 
 	gtk_main ();
 	return 0;
+}
+
+void draw_mask(GtkWidget *widget, GdkBitmap *bitmap)
+{
+	GdkColormap *colormap;
+	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
+	GdkColor black;
+	GdkColor white;
+	GdkGC *gc;
+
+	colormap = gdk_colormap_get_system ();
+	gdk_color_parse ("black", & black);
+	gdk_color_parse ("white", & white);
+
+	gc = gdk_gc_new (bitmap);
+	gdk_gc_set_background (gc, & black);
+	gdk_gc_set_foreground (gc, & white);
+
+	// fill window_shape_bitmap with black
+	gdk_draw_rectangle (bitmap,
+			gc,
+			TRUE,  // filled
+			0,     // x
+			0,     // y
+			gauge->w,
+			gauge->h);
+
+	gdk_gc_set_background (gc, & white);
+	gdk_gc_set_foreground (gc, & black);
+
+	// draw white filled circle into window_shape_bitmap
+	gdk_draw_arc (bitmap,
+			gc,
+			TRUE,     // filled
+			gauge->xc-gauge->radius*0.995,
+			gauge->yc-gauge->radius*0.995,
+			2*(gauge->radius*0.995),
+			2*(gauge->radius*0.995),
+			0,        // angle 1
+			360*64);  // angle 2: full ci
 }
 
 gboolean update_gauge(gpointer data)
@@ -92,6 +139,6 @@ gboolean update_gauge(gpointer data)
 		cur_val-=interval;
 
 	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge),cur_val);
-
 	return TRUE;
+
 }
