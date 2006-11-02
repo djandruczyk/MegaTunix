@@ -97,11 +97,13 @@ void draw_mask(GtkWidget *widget, GdkBitmap *bitmap)
 
 	colormap = gdk_colormap_get_system ();
 	gdk_color_parse ("black", & black);
+	gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
 	gdk_color_parse ("white", & white);
+	gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
 
 	gc = gdk_gc_new (bitmap);
-	gdk_gc_set_background (gc, & black);
-	gdk_gc_set_foreground (gc, & white);
+	gdk_gc_set_foreground (gc, &black);
+//	gdk_gc_set_background (gc, & white);
 
 	// fill window_shape_bitmap with black
 	gdk_draw_rectangle (bitmap,
@@ -112,8 +114,8 @@ void draw_mask(GtkWidget *widget, GdkBitmap *bitmap)
 			gauge->w,
 			gauge->h);
 
-	gdk_gc_set_background (gc, & white);
-	gdk_gc_set_foreground (gc, & black);
+	gdk_gc_set_foreground (gc, & white);
+//	gdk_gc_set_foreground (gc, & black);
 
 	// draw white filled circle into window_shape_bitmap
 	gdk_draw_arc (bitmap,
