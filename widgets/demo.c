@@ -19,6 +19,7 @@
 #include <math.h>
 
 gboolean update_gauge(gpointer );
+void draw_mask(GtkWidget *, GdkBitmap *);
 
 int main (int argc, char **argv)
 {
@@ -60,7 +61,17 @@ int main (int argc, char **argv)
 	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
 
-	mtx_gauge_face_import_xml(gauge,"output.xml");
+	if (argc < 2)
+	{
+		printf("Attempting to load default \"output.xml\"\n");
+		mtx_gauge_face_import_xml(gauge,"output.xml");
+	}
+	else
+	{
+		printf("Attempting to load user specified \"%s\"\n",argv[1]);
+		mtx_gauge_face_import_xml(gauge,argv[1]);
+	}
+
 	//mtx_gauge_face_export_xml(gauge,"output2.xml");
 
 

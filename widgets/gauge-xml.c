@@ -97,7 +97,8 @@ void mtx_gauge_face_import_xml(GtkWidget *widget, gchar * filename)
 		gauge->yc = gauge->h / 2;
 		gauge->radius = MIN (gauge->w/2, gauge->h/2) - 5;
 		g_object_thaw_notify(G_OBJECT(gauge));
-		gtk_window_resize((GtkWindow *)widget->parent,gauge->w,gauge->h);
+		if (GTK_IS_WINDOW(widget->parent))
+			gtk_window_resize((GtkWindow *)widget->parent,gauge->w,gauge->h);
 		generate_gauge_background(GTK_WIDGET(gauge));
 		mtx_gauge_face_redraw_canvas (gauge);
 	}

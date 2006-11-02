@@ -7,7 +7,9 @@
 
 int main (int argc, char ** argv )
 {
+	extern GtkWidget *gauge;
 	GtkWidget *window;
+	GtkWidget *widget;
 	GtkWidget *toptable;
 	GladeXML *xml = NULL;
 
@@ -60,6 +62,15 @@ int main (int argc, char ** argv )
 	gtk_container_add(GTK_CONTAINER(window),toptable);
 
 	gtk_widget_show_all(window);
+	if (argc > 1)  /* User specified xml file */
+	{
+		widget = glade_xml_get_widget(xml,"import_button");
+		create_new_gauge(widget,NULL);
+		mtx_gauge_face_import_xml(gauge,argv[1]);
+		update_attributes(xml);
+		update_onscreen_ranges(widget);
+		gtk_widget_set_sensitive(widget,TRUE);
+	}
 
 	gtk_main();
 	return (0);
