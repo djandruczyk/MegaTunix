@@ -47,6 +47,7 @@ int main (int argc, char **argv)
 	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
 	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.0*M_PI,  .25*M_PI);
 	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
+	mtx_gauge_face_set_show_value (MTX_GAUGE_FACE (gauge), FALSE);
 	//mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "Units");
 	GdkColor color = { 0, 50000,50000,0};
 	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 7000, color, 0.06, 0.785);;
@@ -72,13 +73,13 @@ int main (int argc, char **argv)
 		mtx_gauge_face_import_xml(gauge,argv[1]);
 	}
 
-	//mtx_gauge_face_export_xml(gauge,"output2.xml");
+	mtx_gauge_face_export_xml(gauge,"output2.xml");
 
 
 	bitmap = gdk_pixmap_new(NULL,MTX_GAUGE_FACE(gauge)->w,MTX_GAUGE_FACE(gauge)->h,1);
 	draw_mask(gauge,bitmap);
-	gtk_widget_shape_combine_mask(window,bitmap,0,0);
-	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
+//	gtk_widget_shape_combine_mask(window,bitmap,0,0);
+//	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);

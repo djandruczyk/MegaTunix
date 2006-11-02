@@ -30,6 +30,8 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_ticks_spin")),"handler",GINT_TO_POINTER(MIN_TICKS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_len_spin")),"handler",GINT_TO_POINTER(MAJ_TICK_LEN));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_tick_len_spin")),"handler",GINT_TO_POINTER(MIN_TICK_LEN));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_width_spin")),"handler",GINT_TO_POINTER(MAJ_TICK_WIDTH));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_tick_width_spin")),"handler",GINT_TO_POINTER(MIN_TICK_WIDTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tick_inset_spin")),"handler",GINT_TO_POINTER(TICK_INSET));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_tail_spin")),"handler",GINT_TO_POINTER(NEEDLE_TAIL));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_WIDTH));
@@ -58,6 +60,8 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_tick_color_button")),"handler",GINT_TO_POINTER(COL_MIN_TICK));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"import_button")),"handler",GINT_TO_POINTER(IMPORT_XML));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"export_button")),"handler",GINT_TO_POINTER(EXPORT_XML));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(ANTIALIAS));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"show_value_check")),"handler",GINT_TO_POINTER(SHOW_VALUE));
 
 	gtk_container_add(GTK_CONTAINER(window),toptable);
 

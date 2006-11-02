@@ -140,11 +140,14 @@ struct _MtxGaugeFace
 	gchar * name_str;	/*! Name Text String */
 	gfloat name_font_scale;	/*! Name Font scale, % of 2xradius */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
+	gboolean show_value;	/*! Show the Valueon screen or not */
 	gint major_ticks;	/*! Number of MAJOR ticks */
-	gint minor_ticks;	/*! Number of MINOR ticks PER pair of major's*/
-	gfloat tick_inset;	/*! Percentage of radius to start tickmark @ */
 	gfloat major_tick_len;	/*! Major Tick length (% of radius 0-1.0) */
+	gfloat major_tick_width;/*! Maj tick width as (1/10 percent of radius */
+	gint minor_ticks;	/*! Number of MINOR ticks PER pair of major's*/
 	gfloat minor_tick_len;	/*! Minor tick length (% of radius 0-1.0) */
+	gfloat minor_tick_width;/*! Maj tick width as (1/10 percent of radius */
+	gfloat tick_inset;	/*! Percentage of radius to start tickmark @ */
 	gfloat needle_width;	/*! % of radius Needle width @ spin axis */
 	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
 	gint needle_polygon_points;
@@ -164,6 +167,8 @@ void update_gauge_position (GtkWidget *);
 GtkWidget* mtx_gauge_face_new ();
 void mtx_gauge_face_set_antialias (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_show_value (MtxGaugeFace *gauge, gboolean value);
+gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
@@ -183,8 +188,12 @@ void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat );
 gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
 void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat );
 gfloat mtx_gauge_face_get_major_tick_len (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_major_tick_width (MtxGaugeFace *gauge, gfloat );
+gfloat mtx_gauge_face_get_major_tick_width (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat );
 gfloat mtx_gauge_face_get_minor_tick_len (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_minor_tick_width (MtxGaugeFace *gauge, gfloat );
+gfloat mtx_gauge_face_get_minor_tick_width (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks);
 int mtx_gauge_face_get_major_ticks (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks);

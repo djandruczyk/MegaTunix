@@ -109,6 +109,12 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case MIN_TICK_LEN:
 			mtx_gauge_face_set_minor_tick_len(g,tmpf);
 			break;
+		case MAJ_TICK_WIDTH:
+			mtx_gauge_face_set_major_tick_width(g,tmpf);
+			break;
+		case MIN_TICK_WIDTH:
+			mtx_gauge_face_set_minor_tick_width(g,tmpf);
+			break;
 		case START_ANGLE:
 			mtx_gauge_face_set_lspan_rad(g,tmpf);
 			break;
@@ -167,8 +173,14 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"major_tick_len_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_major_tick_len(g));
 	
+	widget = glade_xml_get_widget(xml,"major_tick_width_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_major_tick_width(g));
+	
 	widget = glade_xml_get_widget(xml,"minor_tick_len_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_minor_tick_len(g));
+
+	widget = glade_xml_get_widget(xml,"minor_tick_width_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_minor_tick_width(g));
 
 	widget = glade_xml_get_widget(xml,"tick_inset_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_tick_inset(g));
@@ -238,6 +250,9 @@ void update_attributes(GladeXML * xml)
 
 	widget = glade_xml_get_widget(xml,"antialiased_check");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_antialias(g));
+
+	widget = glade_xml_get_widget(xml,"show_value_check");
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_show_value(g));
 
 	widget = glade_xml_get_widget(xml,"name_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_NAME_FONT));
@@ -326,13 +341,24 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean set_antialiased_mode(GtkWidget *widget, gpointer data)
+EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 {
+	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
 	if (hold_handlers)
 		return TRUE;
 
-	mtx_gauge_face_set_antialias(g,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	switch (handler)
+	{
+		case ANTIALIAS:
+			mtx_gauge_face_set_antialias(g,state);
+			break;
+		case SHOW_VALUE:
+			mtx_gauge_face_set_show_value(g,state);
+			break;
+
+	}
 
 	return TRUE;
 }

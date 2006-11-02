@@ -94,6 +94,8 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->tick_inset = 0.15;    /* how much in from gauge radius fortick */
 	gauge->major_tick_len = 0.1; /* 1 = 100% of radius, so 0.1 = 10% */
 	gauge->minor_tick_len = 0.05;/* 1 = 100% of radius, so 0.1 = 10% */
+	gauge->major_tick_width = 0.175; /* 1 = 10% of radius, so 0.1 = 1% */
+	gauge->minor_tick_width = 0.1;/* 1 = 10% of radius, so 0.1 = 1% */
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tail = 0.083;  /* % of radius */
 	gauge->name_font = g_strdup("Bitstream Vera Sans");
@@ -112,6 +114,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 #else
 	gauge->antialias = FALSE;
 #endif
+	gauge->show_value = TRUE;
 	gauge->start_deg = -((gauge->start_radian/M_PI) *180.0);
 	gauge->stop_deg = -(((gauge->stop_radian-gauge->start_radian)/M_PI) *180.0);
 	gauge->colormap = gdk_colormap_get_system();
@@ -153,11 +156,14 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"units_str", &gauge->units_str);
 	g_object_set_data(G_OBJECT(gauge),"name_str", &gauge->name_str);
 	g_object_set_data(G_OBJECT(gauge),"antialias", &gauge->antialias);
+	g_object_set_data(G_OBJECT(gauge),"show_value", &gauge->show_value);
 	g_object_set_data(G_OBJECT(gauge),"major_ticks", &gauge->major_ticks);
 	g_object_set_data(G_OBJECT(gauge),"minor_ticks", &gauge->minor_ticks);
 	g_object_set_data(G_OBJECT(gauge),"tick_inset", &gauge->tick_inset);
 	g_object_set_data(G_OBJECT(gauge),"major_tick_len", &gauge->major_tick_len);
 	g_object_set_data(G_OBJECT(gauge),"minor_tick_len", &gauge->minor_tick_len);
+	g_object_set_data(G_OBJECT(gauge),"major_tick_width", &gauge->major_tick_width);
+	g_object_set_data(G_OBJECT(gauge),"minor_tick_width", &gauge->minor_tick_width);
 }
 
 /*!
@@ -261,23 +267,26 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	cr = gdk_cairo_create (gauge->pixmap);
 
 	/* Update the VALUE text */
-	cairo_set_source_rgb (cr, gauge->colors[COL_VALUE_FONT].red/65535.0,
+	if (gauge->show_value)
+	{
+		cairo_set_source_rgb (cr, gauge->colors[COL_VALUE_FONT].red/65535.0,
 				gauge->colors[COL_VALUE_FONT].green/65535.0,
 				gauge->colors[COL_VALUE_FONT].blue/65535.0);
-	cairo_select_font_face (cr, gauge->value_font, CAIRO_FONT_SLANT_NORMAL,
-			CAIRO_FONT_WEIGHT_NORMAL);
+		cairo_select_font_face (cr, gauge->value_font, CAIRO_FONT_SLANT_NORMAL,
+				CAIRO_FONT_WEIGHT_NORMAL);
 
-	cairo_set_font_size (cr, (gauge->radius * gauge->value_font_scale));
+		cairo_set_font_size (cr, (gauge->radius * gauge->value_font_scale));
 
-	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
+		message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
 
-	cairo_text_extents (cr, message, &extents);
+		cairo_text_extents (cr, message, &extents);
 
-	cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.55 * gauge->radius));
-	cairo_show_text (cr, message);
-	g_free(message);
+		cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.55 * gauge->radius));
+		cairo_show_text (cr, message);
+		g_free(message);
 
-	cairo_stroke (cr);
+		cairo_stroke (cr);
+	}
 
 	/* gauge hands */
 	radian_span = (gauge->stop_radian - gauge->start_radian);
@@ -356,21 +365,23 @@ void gdk_update_gauge_position (GtkWidget *widget)
 
 
 	/* the text */
-	gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_VALUE_FONT]);
-	message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
+	if (gauge->show_value)
+	{
+		gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_VALUE_FONT]);
+		message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
 
-	tmpbuf = g_strdup_printf("%s %i",gauge->value_font,(gint)(gauge->radius *gauge->value_font_scale));
-	gauge->font_desc = pango_font_description_from_string(tmpbuf);
-	g_free(tmpbuf);
-	pango_layout_set_font_description(gauge->layout,gauge->font_desc);
-	pango_layout_set_text(gauge->layout,message,-1);
-	pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
-	g_free(message);
+		tmpbuf = g_strdup_printf("%s %i",gauge->value_font,(gint)(gauge->radius *gauge->value_font_scale));
+		gauge->font_desc = pango_font_description_from_string(tmpbuf);
+		g_free(tmpbuf);
+		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
+		pango_layout_set_text(gauge->layout,message,-1);
+		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
+		g_free(message);
 
-
-	gdk_draw_layout(gauge->pixmap,gauge->gc,
-			gauge->xc-(logical_rect.width/2),
-			gauge->yc+(0.55 * gauge->radius)-logical_rect.height,gauge->layout);
+		gdk_draw_layout(gauge->pixmap,gauge->gc,
+				gauge->xc-(logical_rect.width/2),
+				gauge->yc+(0.55 * gauge->radius)-logical_rect.height,gauge->layout);
+	}
 
 	gdk_gc_set_line_attributes(gauge->gc,1,
 			GDK_LINE_SOLID,
@@ -609,7 +620,8 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	for (i=0;i<gauge->major_ticks;i++)
 	{
 		inset = (gint) (gauge->major_tick_len * gauge->radius);
-		lwidth = gauge->radius/80 < 1 ? 1: gauge->radius/80;
+
+		lwidth = (gauge->radius/10)*gauge->major_tick_width < 1 ? 1: (gauge->radius/10)*gauge->major_tick_width;
 		cairo_set_line_width (cr, lwidth);
 		cairo_move_to (cr,
 				gauge->xc + (gauge->radius - insetfrom) * cos (counter),
@@ -627,7 +639,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 					gauge->colors[COL_MIN_TICK].green/65535.0,
 					gauge->colors[COL_MIN_TICK].blue/65535.0);
 			inset = (gint) (gauge->minor_tick_len * gauge->radius);
-			lwidth = gauge->radius/160 < 1 ? 1: gauge->radius/160;
+			lwidth = (gauge->radius/10)*gauge->minor_tick_width < 1 ? 1: (gauge->radius/10)*gauge->minor_tick_width;
 			cairo_set_line_width (cr, lwidth);
 			for (j=1;j<=gauge->minor_ticks;j++)
 			{
@@ -853,7 +865,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	for (i=0;i<gauge->major_ticks;i++)
 	{
 		inset = (gint) (gauge->major_tick_len * gauge->radius);
-		lwidth = gauge->radius/80 < 1 ? 1: gauge->radius/80;
+		lwidth = (gauge->radius/10)*gauge->major_tick_width < 1 ? 1: (gauge->radius/10)*gauge->major_tick_width;
 		gdk_gc_set_line_attributes(gauge->gc,lwidth,
 				GDK_LINE_SOLID,
 				GDK_CAP_BUTT,
@@ -871,7 +883,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		{
 			gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MIN_TICK]);
 			inset = (gint) (gauge->minor_tick_len * gauge->radius);
-			lwidth = gauge->radius/160 < 1 ? 1: gauge->radius/160;
+			lwidth = (gauge->radius/10)*gauge->minor_tick_width < 1 ? 1: (gauge->radius/10)*gauge->minor_tick_width;
 			gdk_gc_set_line_attributes(gauge->gc,lwidth,
 					GDK_LINE_SOLID,
 					GDK_CAP_BUTT,

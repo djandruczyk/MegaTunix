@@ -24,6 +24,8 @@ typedef enum
 	MIN_TICKS,
 	MAJ_TICK_LEN,
 	MIN_TICK_LEN,
+	MAJ_TICK_WIDTH,
+	MIN_TICK_WIDTH,
 	TICK_INSET,
 	START_ANGLE,
 	STOP_ANGLE,
@@ -48,6 +50,12 @@ typedef enum
 	IMPORT_XML = 0xAA,
 	EXPORT_XML
 }StdButton;
+
+typedef enum
+{
+	ANTIALIAS = 0xBB,
+	SHOW_VALUE,
+}CheckButton;
 
 /* Prototypes */
 EXPORT gboolean create_new_gauge(GtkWidget *, gpointer );

@@ -73,11 +73,14 @@ static const struct
 	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"value_font"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_font_scale"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"antialias"},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"show_value"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"major_ticks"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"minor_ticks"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"tick_inset"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"major_tick_len"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_len"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"major_tick_width"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_width"},
 	{ mtx_gauge_color_range_import, mtx_gauge_color_range_export,"color_range"}
 };
 
