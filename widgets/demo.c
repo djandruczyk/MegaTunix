@@ -47,7 +47,7 @@ int main (int argc, char **argv)
 	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
 	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.0*M_PI,  .25*M_PI);
 	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
-	mtx_gauge_face_set_show_value (MTX_GAUGE_FACE (gauge), FALSE);
+	//mtx_gauge_face_set_show_value (MTX_GAUGE_FACE (gauge), FALSE);
 	//mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "Units");
 	GdkColor color = { 0, 50000,50000,0};
 	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 7000, color, 0.06, 0.785);;

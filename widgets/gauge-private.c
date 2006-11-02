@@ -281,7 +281,7 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 		cairo_text_extents (cr, message, &extents);
 
-		cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.55 * gauge->radius));
+		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(extents.height/2 + extents.y_bearing)+(0.40 * gauge->radius));
 		cairo_show_text (cr, message);
 		g_free(message);
 
@@ -380,7 +380,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 
 		gdk_draw_layout(gauge->pixmap,gauge->gc,
 				gauge->xc-(logical_rect.width/2),
-				gauge->yc+(0.55 * gauge->radius)-logical_rect.height,gauge->layout);
+				gauge->yc-(logical_rect.height/2)+(0.40 * gauge->radius),gauge->layout);
 	}
 
 	gdk_gc_set_line_attributes(gauge->gc,1,
@@ -668,7 +668,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 		cairo_set_font_size (cr, (gauge->radius * gauge->units_font_scale));
 		cairo_text_extents (cr, gauge->units_str, &extents);
-		cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc+(0.75 * gauge->radius));
+//		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc+(0.75 * gauge->radius));
+		//cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc+(extents.height/2 - extents.y_bearing)+(0.75 * gauge->radius));
+		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(extents.height/2 + extents.y_bearing)+(0.65 * gauge->radius));
 		cairo_show_text (cr, gauge->units_str);
 	}
 
@@ -683,7 +685,8 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 		cairo_set_font_size (cr, (gauge->radius * gauge->name_font_scale));
 		cairo_text_extents (cr, gauge->name_str, &extents);
-		cairo_move_to (cr, gauge->xc-(extents.width/2), gauge->yc-(0.35 * gauge->radius));
+		//cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(0.35 * gauge->radius));
+		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(extents.height/2 + extents.y_bearing)-(0.35 * gauge->radius));
 		cairo_show_text (cr, gauge->name_str);
 	}
 
@@ -918,7 +921,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
 				gauge->xc-(logical_rect.width/2),
-				gauge->yc+(0.75 * gauge->radius)-logical_rect.height,gauge->layout);
+				gauge->yc-(logical_rect.height/2)+(0.65 * gauge->radius),gauge->layout);
 	}
 
 	/* Name String */
@@ -932,10 +935,9 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		pango_layout_set_text(gauge->layout,gauge->name_str,-1);
 		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
 
-
 		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
 				gauge->xc-(logical_rect.width/2),
-				gauge->yc-(0.35 * gauge->radius)-logical_rect.height,gauge->layout);
+				gauge->yc-(logical_rect.height/2)-(0.35 * gauge->radius),gauge->layout);
 	}
 
 
