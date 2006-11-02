@@ -387,6 +387,63 @@ void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value
 
 
 /*!
+ \brief sets the gauge name_str placement  in offset from center, so values
+ of zero make the text centered in the gauge
+ \param gauge MtxGaugeFace * pointer to gauge
+ \param x_pos,  gfloat x_pos offset from center
+ \param y_pos,  gfloat y_pos offset from center
+ */
+void mtx_gauge_face_set_name_str_pos (MtxGaugeFace *gauge, gfloat x_pos, gfloat y_pos)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->name_str_xpos = x_pos;
+	gauge->name_str_ypos = y_pos;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief sets the gauge units_str placement  in offset from center, so values
+ of zero make the text centered in the gauge
+ \param gauge MtxGaugeFace * pointer to gauge
+ \param x_pos,  gfloat x_pos offset from center
+ \param y_pos,  gfloat y_pos offset from center
+ */
+void mtx_gauge_face_set_units_str_pos (MtxGaugeFace *gauge, gfloat x_pos, gfloat y_pos)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->units_str_xpos = x_pos;
+	gauge->units_str_ypos = y_pos;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief sets the gauge value_str placement  in offset from center, so values
+ of zero make the text centered in the gauge
+ \param gauge MtxGaugeFace * pointer to gauge
+ \param x_pos,  gfloat x_pos offset from center
+ \param y_pos,  gfloat y_pos offset from center
+ */
+void mtx_gauge_face_set_value_str_pos (MtxGaugeFace *gauge, gfloat x_pos, gfloat y_pos)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->value_str_xpos = x_pos;
+	gauge->value_str_ypos = y_pos;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
  \brief sets the lower bound only of the gauge
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param value (gfloat) lower end of span
@@ -395,6 +452,78 @@ void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_bounds(gauge,value, gauge->ubound);
+}
+
+
+/*!
+ \brief sets the name x_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) lower end of span
+ */
+void mtx_gauge_face_set_name_str_xpos (MtxGaugeFace *gauge, gfloat value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	mtx_gauge_face_set_name_str_pos(gauge,value, gauge->name_str_ypos);
+}
+
+
+/*!
+ \brief sets the name y_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) lower end of span
+ */
+void mtx_gauge_face_set_name_str_ypos (MtxGaugeFace *gauge, gfloat value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	mtx_gauge_face_set_name_str_pos(gauge,gauge->name_str_xpos,value);
+}
+
+
+/*!
+ \brief sets the units x_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) lower end of span
+ */
+void mtx_gauge_face_set_units_str_xpos (MtxGaugeFace *gauge, gfloat value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	mtx_gauge_face_set_units_str_pos(gauge,value, gauge->name_str_ypos);
+}
+
+
+/*!
+ \brief sets the name y_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) lower end of span
+ */
+void mtx_gauge_face_set_units_str_ypos (MtxGaugeFace *gauge, gfloat value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	mtx_gauge_face_set_units_str_pos(gauge,gauge->name_str_xpos,value);
+}
+
+
+/*!
+ \brief sets the value x_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) lower end of span
+ */
+void mtx_gauge_face_set_value_str_xpos (MtxGaugeFace *gauge, gfloat value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	mtx_gauge_face_set_value_str_pos(gauge,value, gauge->name_str_ypos);
+}
+
+
+/*!
+ \brief sets the value y_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) lower end of span
+ */
+void mtx_gauge_face_set_value_str_ypos (MtxGaugeFace *gauge, gfloat value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	mtx_gauge_face_set_value_str_pos(gauge,gauge->name_str_xpos,value);
 }
 
 
@@ -427,7 +556,56 @@ gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, gfloat *value1, gfloat *
 
 
 /*!
- \brief retreives the angular span in radians by passing in pointers to two gfloats
+ \brief retreives the x/y position offsets for the name_string
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value1 (gfloat) pointer to a gfloat to store the x_pos value into
+ \param value2 (gfloat) pointer to a gfloat to store the y_pos value into
+ \returns TRUE always
+ */
+gboolean mtx_gauge_face_get_name_str_pos(MtxGaugeFace *gauge, gfloat *x_pos, gfloat *y_pos)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	*x_pos = gauge->name_str_xpos;
+	*y_pos = gauge->name_str_ypos;
+	return TRUE;
+}
+
+
+/*!
+ \brief retreives the x/y position offsets for the units_string
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value1 (gfloat) pointer to a gfloat to store the x_pos value into
+ \param value2 (gfloat) pointer to a gfloat to store the y_pos value into
+ \returns TRUE always
+ */
+gboolean mtx_gauge_face_get_units_str_pos(MtxGaugeFace *gauge, gfloat *x_pos, gfloat *y_pos)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	*x_pos = gauge->units_str_xpos;
+	*y_pos = gauge->units_str_ypos;
+	return TRUE;
+}
+
+
+/*!
+ \brief retreives the x/y position offsets for the value_string
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value1 (gfloat) pointer to a gfloat to store the x_pos value into
+ \param value2 (gfloat) pointer to a gfloat to store the y_pos value into
+ \returns TRUE always
+ */
+gboolean mtx_gauge_face_get_value_str_pos(MtxGaugeFace *gauge, gfloat *x_pos, gfloat *y_pos)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	*x_pos = gauge->value_str_xpos;
+	*y_pos = gauge->value_str_ypos;
+	return TRUE;
+}
+
+
+/*!
+ \brief retreives the angular span in radians by passing in pointers to 
+ two gfloats
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param value1 (gfloat) pointer to a gfloat to store the lower point angle
  \param value2 (gfloat) pointer to a gfloat to store the upper point angle

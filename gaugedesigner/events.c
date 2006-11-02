@@ -115,6 +115,24 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case MIN_TICK_WIDTH:
 			mtx_gauge_face_set_minor_tick_width(g,tmpf);
 			break;
+		case NAME_XPOS:
+			mtx_gauge_face_set_name_str_xpos(g,tmpf);
+			break;
+		case NAME_YPOS:
+			mtx_gauge_face_set_name_str_ypos(g,tmpf);
+			break;
+		case UNITS_XPOS:
+			mtx_gauge_face_set_units_str_xpos(g,tmpf);
+			break;
+		case UNITS_YPOS:
+			mtx_gauge_face_set_units_str_ypos(g,tmpf);
+			break;
+		case VALUE_XPOS:
+			mtx_gauge_face_set_value_str_xpos(g,tmpf);
+			break;
+		case VALUE_YPOS:
+			mtx_gauge_face_set_value_str_ypos(g,tmpf);
+			break;
 		case START_ANGLE:
 			mtx_gauge_face_set_lspan_rad(g,tmpf);
 			break;
@@ -210,8 +228,25 @@ void update_attributes(GladeXML * xml)
 	mtx_gauge_face_get_bounds(g,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"lbound_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
-
 	widget = glade_xml_get_widget(xml,"ubound_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
+
+	mtx_gauge_face_get_name_str_pos(g,&tmp1,&tmp2);
+	widget = glade_xml_get_widget(xml,"name_xpos_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+	widget = glade_xml_get_widget(xml,"name_ypos_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
+
+	mtx_gauge_face_get_units_str_pos(g,&tmp1,&tmp2);
+	widget = glade_xml_get_widget(xml,"units_xpos_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+	widget = glade_xml_get_widget(xml,"units_ypos_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
+
+	mtx_gauge_face_get_value_str_pos(g,&tmp1,&tmp2);
+	widget = glade_xml_get_widget(xml,"value_xpos_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+	widget = glade_xml_get_widget(xml,"value_ypos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
 	widget = glade_xml_get_widget(xml,"precision_spin");

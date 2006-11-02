@@ -40,7 +40,11 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"lbound_spin")),"handler",GINT_TO_POINTER(LBOUND));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"ubound_spin")),"handler",GINT_TO_POINTER(UBOUND));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_string_entry")),"handler",GINT_TO_POINTER(NAME_STR));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_xpos_spin")),"handler",GINT_TO_POINTER(NAME_XPOS));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_ypos_spin")),"handler",GINT_TO_POINTER(NAME_YPOS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_string_entry")),"handler",GINT_TO_POINTER(UNITS_STR));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_xpos_spin")),"handler",GINT_TO_POINTER(UNITS_XPOS));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_ypos_spin")),"handler",GINT_TO_POINTER(UNITS_YPOS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"precision_spin")),"handler",GINT_TO_POINTER(PRECISION));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(AA));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_string_entry")),"handler",GINT_TO_POINTER(NAME_STR));
@@ -48,6 +52,8 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_font_button")),"handler",GINT_TO_POINTER(NAME_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_font_button")),"handler",GINT_TO_POINTER(UNITS_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_font_button")),"handler",GINT_TO_POINTER(VALUE_FONT));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_xpos_spin")),"handler",GINT_TO_POINTER(VALUE_XPOS));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_ypos_spin")),"handler",GINT_TO_POINTER(VALUE_YPOS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_font_scale_spin")),"handler",GINT_TO_POINTER(NAME_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_font_scale_spin")),"handler",GINT_TO_POINTER(UNITS_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_font_scale_spin")),"handler",GINT_TO_POINTER(VALUE_SCALE));

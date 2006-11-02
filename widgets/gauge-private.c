@@ -100,12 +100,18 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->needle_tail = 0.083;  /* % of radius */
 	gauge->name_font = g_strdup("Bitstream Vera Sans");
 	gauge->name_str = g_strdup("No name");
+	gauge->name_str_xpos = 0.0;
+	gauge->name_str_ypos = -0.35;
 	gauge->name_font_scale = 0.15;
 	gauge->units_font = g_strdup("Bitstream Vera Sans");
 	gauge->units_str = g_strdup("No units");
+	gauge->units_str_xpos = 0.0;
+	gauge->units_str_ypos = 0.65;
 	gauge->units_font_scale = 0.1;
 	gauge->value_font = g_strdup("Bitstream Vera Sans");
 	gauge->value_str = g_strdup("000");
+	gauge->value_str_xpos = 0.0;
+	gauge->value_str_ypos = 0.40;
 	gauge->value_font_scale = 0.2;
 	gauge->span = gauge->ubound - gauge->lbound;
 #ifdef HAVE_CAIRO
@@ -153,8 +159,14 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"units_font_scale", &gauge->units_font_scale);
 	g_object_set_data(G_OBJECT(gauge),"name_font_scale", &gauge->name_font_scale);
 	g_object_set_data(G_OBJECT(gauge),"value_font_scale", &gauge->value_font_scale);
+	g_object_set_data(G_OBJECT(gauge),"value_str_xpos", &gauge->value_str_xpos);
+	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", &gauge->value_str_ypos);
 	g_object_set_data(G_OBJECT(gauge),"units_str", &gauge->units_str);
+	g_object_set_data(G_OBJECT(gauge),"units_str_xpos", &gauge->units_str_xpos);
+	g_object_set_data(G_OBJECT(gauge),"units_str_ypos", &gauge->units_str_ypos);
 	g_object_set_data(G_OBJECT(gauge),"name_str", &gauge->name_str);
+	g_object_set_data(G_OBJECT(gauge),"name_str_xpos", &gauge->name_str_xpos);
+	g_object_set_data(G_OBJECT(gauge),"name_str_ypos", &gauge->name_str_ypos);
 	g_object_set_data(G_OBJECT(gauge),"antialias", &gauge->antialias);
 	g_object_set_data(G_OBJECT(gauge),"show_value", &gauge->show_value);
 	g_object_set_data(G_OBJECT(gauge),"major_ticks", &gauge->major_ticks);
@@ -281,7 +293,9 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 		cairo_text_extents (cr, message, &extents);
 
-		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(extents.height/2 + extents.y_bearing)+(0.40 * gauge->radius));
+		cairo_move_to (cr, 
+				gauge->xc-(extents.width/2 + extents.x_bearing)+(gauge->value_str_xpos*gauge->radius),
+			       	gauge->yc-(extents.height/2 + extents.y_bearing)+(gauge->value_str_ypos*gauge->radius));
 		cairo_show_text (cr, message);
 		g_free(message);
 
@@ -379,8 +393,8 @@ void gdk_update_gauge_position (GtkWidget *widget)
 		g_free(message);
 
 		gdk_draw_layout(gauge->pixmap,gauge->gc,
-				gauge->xc-(logical_rect.width/2),
-				gauge->yc-(logical_rect.height/2)+(0.40 * gauge->radius),gauge->layout);
+				gauge->xc-(logical_rect.width/2)+(gauge->value_str_xpos*gauge->radius),
+				gauge->yc-(logical_rect.height/2)+(gauge->value_str_ypos*gauge->radius),gauge->layout);
 	}
 
 	gdk_gc_set_line_attributes(gauge->gc,1,
@@ -668,9 +682,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 		cairo_set_font_size (cr, (gauge->radius * gauge->units_font_scale));
 		cairo_text_extents (cr, gauge->units_str, &extents);
-//		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc+(0.75 * gauge->radius));
-		//cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc+(extents.height/2 - extents.y_bearing)+(0.75 * gauge->radius));
-		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(extents.height/2 + extents.y_bearing)+(0.65 * gauge->radius));
+		cairo_move_to (cr, 
+				gauge->xc-(extents.width/2 + extents.x_bearing)+ (gauge->units_str_xpos*gauge->radius),
+			       	gauge->yc-(extents.height/2 + extents.y_bearing)+ (gauge->units_str_ypos*gauge->radius));
 		cairo_show_text (cr, gauge->units_str);
 	}
 
@@ -685,8 +699,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 		cairo_set_font_size (cr, (gauge->radius * gauge->name_font_scale));
 		cairo_text_extents (cr, gauge->name_str, &extents);
-		//cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(0.35 * gauge->radius));
-		cairo_move_to (cr, gauge->xc-(extents.width/2 + extents.x_bearing), gauge->yc-(extents.height/2 + extents.y_bearing)-(0.35 * gauge->radius));
+		cairo_move_to (cr, 
+				gauge->xc-(extents.width/2 + extents.x_bearing)+(gauge->name_str_xpos*gauge->radius),
+			       	gauge->yc-(extents.height/2 + extents.y_bearing)+(gauge->name_str_ypos*gauge->radius));
 		cairo_show_text (cr, gauge->name_str);
 	}
 
@@ -920,8 +935,8 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
 
 		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
-				gauge->xc-(logical_rect.width/2),
-				gauge->yc-(logical_rect.height/2)+(0.65 * gauge->radius),gauge->layout);
+				gauge->xc-(logical_rect.width/2)+(gauge->units_str_xpos*gauge->radius),
+				gauge->yc-(logical_rect.height/2)+(gauge->units_str_ypos*gauge->radius),gauge->layout);
 	}
 
 	/* Name String */
@@ -936,8 +951,8 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
 
 		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
-				gauge->xc-(logical_rect.width/2),
-				gauge->yc-(logical_rect.height/2)-(0.35 * gauge->radius),gauge->layout);
+				gauge->xc-(logical_rect.width/2)+(gauge->name_str_xpos*gauge->radius),
+				gauge->yc-(logical_rect.height/2)+(gauge->name_str_ypos*gauge->radius),gauge->layout);
 	}
 
 

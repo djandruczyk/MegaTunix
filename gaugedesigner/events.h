@@ -20,12 +20,18 @@
 
 typedef enum
 {
-	MAJ_TICKS=0x55,
+	MAJ_TICKS=0x10,
 	MIN_TICKS,
 	MAJ_TICK_LEN,
 	MIN_TICK_LEN,
 	MAJ_TICK_WIDTH,
 	MIN_TICK_WIDTH,
+	NAME_XPOS,
+	NAME_YPOS,
+	UNITS_XPOS,
+	UNITS_YPOS,
+	VALUE_XPOS,
+	VALUE_YPOS,
 	TICK_INSET,
 	START_ANGLE,
 	STOP_ANGLE,
@@ -47,13 +53,13 @@ typedef enum
 
 typedef enum
 {
-	IMPORT_XML = 0xAA,
+	IMPORT_XML = 0x1AA,
 	EXPORT_XML
 }StdButton;
 
 typedef enum
 {
-	ANTIALIAS = 0xBB,
+	ANTIALIAS = 0x1BB,
 	SHOW_VALUE,
 }CheckButton;
 

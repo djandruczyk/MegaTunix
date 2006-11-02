@@ -132,12 +132,18 @@ struct _MtxGaugeFace
 	gfloat span;		/*! Span from lbound to ubound */
 	gchar * units_font;	/*! Units Textual font name */
 	gchar * units_str;	/*! Units Text String */
+	gfloat units_str_xpos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
+	gfloat units_str_ypos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
 	gfloat units_font_scale;/*! Units Font scale, % of 2xradius */
 	gchar * value_font;	/*! Value Textual font name */
 	gchar * value_str;	/*! Value Text String */
+	gfloat value_str_xpos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
+	gfloat value_str_ypos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
 	gfloat value_font_scale;/*! Value Font scale, % of 2xradius */
 	gchar * name_font;	/*! Name Textual font name */
 	gchar * name_str;	/*! Name Text String */
+	gfloat name_str_xpos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
+	gfloat name_str_ypos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
 	gfloat name_font_scale;	/*! Name Font scale, % of 2xradius */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
 	gboolean show_value;	/*! Show the Valueon screen or not */
@@ -182,10 +188,22 @@ void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);
 gint mtx_gauge_face_get_precision(MtxGaugeFace *gauge);
 gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge);
 gchar * mtx_gauge_face_get_name_str (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_name_str_pos (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
+void mtx_gauge_face_set_name_str_xpos (MtxGaugeFace *gauge, gfloat );
+void mtx_gauge_face_set_name_str_ypos (MtxGaugeFace *gauge, gfloat );
+gboolean mtx_gauge_face_get_name_str_pos (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
+void mtx_gauge_face_set_units_str_pos (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
+void mtx_gauge_face_set_units_str_xpos (MtxGaugeFace *gauge, gfloat );
+void mtx_gauge_face_set_units_str_ypos (MtxGaugeFace *gauge, gfloat );
+gboolean mtx_gauge_face_get_units_str_pos (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
+void mtx_gauge_face_set_value_str_pos (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
+void mtx_gauge_face_set_value_str_xpos (MtxGaugeFace *gauge, gfloat );
+void mtx_gauge_face_set_value_str_ypos (MtxGaugeFace *gauge, gfloat );
+gboolean mtx_gauge_face_get_value_str_pos (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
+gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
 void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat );
 void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat );
-gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
 void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat );
 gfloat mtx_gauge_face_get_major_tick_len (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_major_tick_width (MtxGaugeFace *gauge, gfloat );
