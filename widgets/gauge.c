@@ -66,6 +66,93 @@ void mtx_gauge_face_set_major_tick_str(MtxGaugeFace *gauge, gchar * string)
 
 
 /*!
+ \brief sets the gauge major_tick font
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param name (gchar *) major tick font name as a textual string
+ */
+void mtx_gauge_face_set_major_tick_font (MtxGaugeFace *gauge, gchar * name)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if (gauge->major_tick_text_font)
+		g_free(gauge->major_tick_text_font);
+	gauge->major_tick_text_font = g_strdup(name);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief returns the current major tick font name
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns a copy of the major tick font textual name, FREE when done with it
+ */
+gchar * mtx_gauge_face_get_major_tick_font (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	return g_strdup(gauge->major_tick_text_font);
+}
+
+
+/*!
+ \brief sets the gauge major tick font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param scale (gdfloat) major tick font scale as a percentage of radius
+ */
+void mtx_gauge_face_set_major_tick_font_scale (MtxGaugeFace *gauge, gfloat scale)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->major_tick_text_scale = scale;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief returns the current major tick font scale as a percentage of radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns (gfloat) major tick font scale as a percentage of radius
+ */
+gfloat mtx_gauge_face_get_major_tick_font_scale (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->major_tick_text_scale;
+}
+
+
+/*!
+ \brief sets the major tick tet inset as a percentage of the gauge radius
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param inset (gfloat) major tick text inset as a percentage of gauge radius
+ */
+void mtx_gauge_face_set_major_tick_text_inset (MtxGaugeFace *gauge, gfloat inset)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->major_tick_text_inset = inset;
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief returns the major tick text inset percentage
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns the value for the major tick text inset as a percentage of the 
+ gauge radius
+ */
+gfloat mtx_gauge_face_get_major_tick_text_inset (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
+	return gauge->major_tick_text_inset;
+}
+
+
+/*!
  \brief sets the units string for the gauge and kicks off a full redraw
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param units_str (gchar *) new units text string to use

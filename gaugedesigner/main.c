@@ -33,6 +33,7 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_width_spin")),"handler",GINT_TO_POINTER(MAJ_TICK_WIDTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_tick_width_spin")),"handler",GINT_TO_POINTER(MIN_TICK_WIDTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tick_inset_spin")),"handler",GINT_TO_POINTER(TICK_INSET));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_text_inset_spin")),"handler",GINT_TO_POINTER(MAJOR_TICK_TEXT_INSET));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_tail_spin")),"handler",GINT_TO_POINTER(NEEDLE_TAIL));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_WIDTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"start_angle_spin")),"handler",GINT_TO_POINTER(START_ANGLE));
@@ -45,6 +46,7 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_string_entry")),"handler",GINT_TO_POINTER(UNITS_STR));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_xpos_spin")),"handler",GINT_TO_POINTER(UNITS_XPOS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_ypos_spin")),"handler",GINT_TO_POINTER(UNITS_YPOS));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_string_entry")),"handler",GINT_TO_POINTER(MAJ_TICK_STR));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"precision_spin")),"handler",GINT_TO_POINTER(PRECISION));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(AA));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_string_entry")),"handler",GINT_TO_POINTER(NAME_STR));
@@ -52,14 +54,17 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_font_button")),"handler",GINT_TO_POINTER(NAME_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_font_button")),"handler",GINT_TO_POINTER(UNITS_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_font_button")),"handler",GINT_TO_POINTER(VALUE_FONT));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_font_button")),"handler",GINT_TO_POINTER(MAJ_TICK_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_xpos_spin")),"handler",GINT_TO_POINTER(VALUE_XPOS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_ypos_spin")),"handler",GINT_TO_POINTER(VALUE_YPOS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_font_scale_spin")),"handler",GINT_TO_POINTER(NAME_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_font_scale_spin")),"handler",GINT_TO_POINTER(UNITS_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_font_scale_spin")),"handler",GINT_TO_POINTER(VALUE_SCALE));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_font_scale_spin")),"handler",GINT_TO_POINTER(MAJ_TICK_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_color_button")),"handler",GINT_TO_POINTER(COL_NAME_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_color_button")),"handler",GINT_TO_POINTER(COL_UNIT_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_color_button")),"handler",GINT_TO_POINTER(COL_VALUE_FONT));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK_TEXT_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"background_color_button")),"handler",GINT_TO_POINTER(COL_BG));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_color_button")),"handler",GINT_TO_POINTER(COL_NEEDLE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK));
@@ -68,6 +73,7 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"export_button")),"handler",GINT_TO_POINTER(EXPORT_XML));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(ANTIALIAS));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"show_value_check")),"handler",GINT_TO_POINTER(SHOW_VALUE));
+
 
 	gtk_container_add(GTK_CONTAINER(window),toptable);
 

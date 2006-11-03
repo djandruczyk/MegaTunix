@@ -366,7 +366,6 @@ void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 		xmlNewChild(helper->root_node, NULL, BAD_CAST helper->element_name,BAD_CAST *(gchar **)(helper->src));
 	else
 		return;
-		//xmlNewChild(helper->root_node, NULL, BAD_CAST helper->element_name,BAD_CAST "");
 }
 
 

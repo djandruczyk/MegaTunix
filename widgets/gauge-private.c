@@ -561,6 +561,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	gint h = 0;
 	gint i = 0;
 	gint j = 0;
+	gint count = 0;
 	gfloat counter = 0;
 	gfloat rad = 0.0;
 	gfloat subcounter = 0;
@@ -650,6 +651,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	if (gauge->major_tick_text)
 	{
 		vector = g_strsplit(gauge->major_tick_text,",",-1);
+		while (vector[i])
+			i++;
+		count=i;
 		cairo_select_font_face (cr, gauge->major_tick_text_font, CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
 	}
 
@@ -667,7 +671,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter),
 				gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter));
 		cairo_stroke (cr);
-		if ((vector) && (vector[i])) /* If not null */
+		if ((vector) && (i < count)) /* If not null */
 		{
 			cairo_save(cr);
 			cairo_set_source_rgb (cr, 

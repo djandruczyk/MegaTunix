@@ -11,6 +11,9 @@
 
 GtkWidget * gauge = NULL;
 static gboolean hold_handlers = FALSE;
+GdkColor red = { 0, 65535, 0, 0};
+GdkColor black = { 0, 0, 0, 0};
+
 
 
 EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
@@ -151,6 +154,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case TICK_INSET:
 			mtx_gauge_face_set_tick_inset(g,tmpf);
 			break;
+		case MAJOR_TICK_TEXT_INSET:
+			mtx_gauge_face_set_major_tick_text_inset(g,tmpf);
+			break;
 		case NEEDLE_WIDTH:
 			mtx_gauge_face_set_needle_width(g,tmpf);
 			break;
@@ -165,6 +171,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case VALUE_SCALE:
 			mtx_gauge_face_set_value_font_scale(g,tmpf);
+			break;
+		case MAJ_TICK_SCALE:
+			mtx_gauge_face_set_major_tick_font_scale(g,tmpf);
 			break;
 
 	}
@@ -203,6 +212,9 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"tick_inset_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_tick_inset(g));
 
+	widget = glade_xml_get_widget(xml,"major_tick_text_inset_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_major_tick_text_inset(g));
+
 	widget = glade_xml_get_widget(xml,"needle_width_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_needle_width(g));
 
@@ -217,6 +229,9 @@ void update_attributes(GladeXML * xml)
 
 	widget = glade_xml_get_widget(xml,"value_font_scale_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_value_font_scale(g));
+
+	widget = glade_xml_get_widget(xml,"major_tick_font_scale_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_major_tick_font_scale(g));
 
 	mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"start_angle_spin");
@@ -262,6 +277,12 @@ void update_attributes(GladeXML * xml)
 	gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
+	widget = glade_xml_get_widget(xml,"major_tick_string_entry");
+	tmpbuf = mtx_gauge_face_get_major_tick_str(g);
+	if (tmpbuf)
+		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+	g_free(tmpbuf);
+
 	widget = glade_xml_get_widget(xml,"name_font_button");
 	tmpbuf0 = mtx_gauge_face_get_name_font(g);
 	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
@@ -283,6 +304,13 @@ void update_attributes(GladeXML * xml)
 	g_free(tmpbuf0);
 	g_free(tmpbuf);
 
+	widget = glade_xml_get_widget(xml,"major_tick_font_button");
+	tmpbuf0 = mtx_gauge_face_get_major_tick_font(g);
+	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
+	g_free(tmpbuf0);
+	g_free(tmpbuf);
+
 	widget = glade_xml_get_widget(xml,"antialiased_check");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_antialias(g));
 
@@ -297,6 +325,9 @@ void update_attributes(GladeXML * xml)
 
 	widget = glade_xml_get_widget(xml,"value_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_VALUE_FONT));
+
+	widget = glade_xml_get_widget(xml,"major_tick_text_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_MAJ_TICK_TEXT_FONT));
 
 	widget = glade_xml_get_widget(xml,"background_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_BG));
@@ -313,6 +344,12 @@ void update_attributes(GladeXML * xml)
 	hold_handlers = FALSE;
 }
 
+EXPORT gboolean entry_change_color(GtkWidget * widget, gpointer data)
+{
+        gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+	return TRUE;
+
+}
 EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
@@ -320,6 +357,8 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 
 	if (hold_handlers)
 		return TRUE;
+
+        gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	if (tmpbuf == NULL)
@@ -335,6 +374,9 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 			break;
 		case UNITS_STR:
 			mtx_gauge_face_set_units_str(g,tmpbuf);
+			break;
+		case MAJ_TICK_STR:
+			mtx_gauge_face_set_major_tick_str(g,tmpbuf);
 			break;
 		default:
 			break;
@@ -368,6 +410,9 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 			break;
 		case UNITS_FONT:
 			mtx_gauge_face_set_units_font(g,tmpbuf);
+			break;
+		case MAJ_TICK_FONT:
+			mtx_gauge_face_set_major_tick_font(g,tmpbuf);
 			break;
 		default:
 			break;
