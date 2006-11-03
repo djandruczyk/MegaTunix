@@ -198,7 +198,7 @@ void convert_temps(gpointer widget, gpointer units)
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
 			gtk_label_set_text(GTK_LABEL(widget),text);
-			//gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 
 		}
@@ -220,7 +220,7 @@ void convert_temps(gpointer widget, gpointer units)
 			gtk_spin_button_set_value(
 					GTK_SPIN_BUTTON(widget),
 					adj->value);
-//			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == CELSIUS))
@@ -247,7 +247,7 @@ void convert_temps(gpointer widget, gpointer units)
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");
 			gtk_label_set_text(GTK_LABEL(widget),text);
-//			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
 
@@ -266,7 +266,7 @@ void convert_temps(gpointer widget, gpointer units)
 			gtk_spin_button_set_value(
 					GTK_SPIN_BUTTON(widget),
 					adj->value);
-//			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			g_object_set_data(G_OBJECT(widget),"widget_temp",GINT_TO_POINTER(units));
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == FAHRENHEIT))
