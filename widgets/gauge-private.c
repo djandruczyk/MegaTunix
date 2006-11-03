@@ -594,6 +594,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	cairo_arc(cr, gauge->xc, gauge->yc, (0.934 * gauge->radius), 0, 2 * M_PI);
 	cairo_set_source(cr, gradient);
 	cairo_fill(cr);
+	cairo_pattern_destroy(gradient);
 
 	cairo_arc(cr, gauge->xc, gauge->yc, (0.880 * gauge->radius), 0, 2 * M_PI);
 	cairo_set_source_rgb (cr, gauge->colors[COL_BG].red/65535.0,

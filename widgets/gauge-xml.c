@@ -231,36 +231,22 @@ void mtx_gauge_gint_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 void mtx_gauge_gchar_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 {
 	gchar ** var = (gchar **)dest;
-	MtxXMLFuncs *xml_funcs = NULL;
-	//printf("gchar import, node name \"%s\"\n",(gchar *) node->name);
-	//printf("current value/address %s, %p %p\n",*var,*var,var);
 	if (!node->children) /* EMPTY node,  thus we clear the var on the gauge */
 	{
-		//printf("node %s has no children\n",(gchar *)node->name);
+		if (*var)
+			g_free(*var);
 		*var = g_strdup("");
-			
-		xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,node->name);
-		xml_funcs->dest_var = var;
-		g_object_set_data(G_OBJECT(gauge),(gchar *)node->name,(gpointer)var);
 		return;
 	}
 	if (!(node->children->type == XML_TEXT_NODE))
-	{
-		//printf("child is NOT a text object!! RETURNING\n");
 		return;
-	}
-//	if (var)
-//		g_free(var);
+
+	if (*var)
+		g_free(*var);
 	if (node->children->content)
 		*var = g_strdup((gchar*)node->children->content);
 	else
 		*var = g_strdup("");
-
-	//printf("AFTER importing %s, to address %p\n",(gchar *) node->children->content, *var);
-	//printf("set value of %s to %s\n",(gchar *) node->name, *var);
-	xml_funcs = g_hash_table_lookup(gauge->xmlfunc_hash,node->name);
-	xml_funcs->dest_var = var;
-	g_object_set_data(G_OBJECT(gauge),(gchar *)node->name,(gpointer)var);
 
 }
 
@@ -306,8 +292,8 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 	for (i=0;i<helper->gauge->ranges->len;i++)
 	{
 		range = g_array_index(helper->gauge->ranges,MtxColorRange *, i);
-		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",
-				NULL );
+		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",NULL );
+				
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);
 		xmlNewChild(node, NULL, BAD_CAST "lowpoint",
 				BAD_CAST tmpbuf);
