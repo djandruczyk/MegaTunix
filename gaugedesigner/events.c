@@ -536,7 +536,9 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 					NULL);
+#if GTK_MINOR_VERSION >= 8
 			gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+#endif
 			tmpbuf = mtx_gauge_face_get_name_str(MTX_GAUGE_FACE(gauge));
 			name = g_strdup_printf("%s_Gauge.xml",tmpbuf);
 			g_free(tmpbuf);

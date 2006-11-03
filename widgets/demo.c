@@ -78,8 +78,8 @@ int main (int argc, char **argv)
 
 	bitmap = gdk_pixmap_new(NULL,MTX_GAUGE_FACE(gauge)->w,MTX_GAUGE_FACE(gauge)->h,1);
 	draw_mask(gauge,bitmap);
-//	gtk_widget_shape_combine_mask(window,bitmap,0,0);
-//	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
+	gtk_widget_shape_combine_mask(window,bitmap,0,0);
+	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);
