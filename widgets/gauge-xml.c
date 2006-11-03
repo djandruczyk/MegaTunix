@@ -236,7 +236,7 @@ void mtx_gauge_gint_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 void mtx_gauge_gchar_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 {
 	gchar ** var = (gchar **)dest;
-	if (!node->children) /* EMPTY node,  thus we clear the var on the gauge */
+	if (!node->children) /* EMPTY node, thus, clear the var on the gauge */
 	{
 		if (*var)
 			g_free(*var);
@@ -360,10 +360,13 @@ void mtx_gauge_gint_export(MtxDispatchHelper * helper)
 }
 void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 {
-	//printf("exporting %s, addy %p\n",helper->element_name, *(gchar **)(helper->src));
-	//printf("double value \"%s\"\n",*(gchar **)helper->src);
-	xmlNewChild(helper->root_node, NULL, BAD_CAST helper->element_name,
-			BAD_CAST *(gchar **)(helper->src));
+	/* If the dat t oexport is NOT null export it otherwise export and
+	 * empty var */
+	if (*(gchar **)(helper->src))
+		xmlNewChild(helper->root_node, NULL, BAD_CAST helper->element_name,BAD_CAST *(gchar **)(helper->src));
+	else
+		return;
+		//xmlNewChild(helper->root_node, NULL, BAD_CAST helper->element_name,BAD_CAST "");
 }
 
 

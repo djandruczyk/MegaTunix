@@ -43,6 +43,29 @@
 
 
 /*!
+ \brief sets the major_ticks text string for the gauge and kicks off a 
+ full redraw
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param string (gchar *) Comma separated list of chars to display for 
+ each gauge major tick,  the comma delimits the test string per tick. If there
+ are more text than ticks the rest are unused,  if there are not enough,  
+ nothing will be displayed for those ticks. To skip  text for a tick just use
+ a double comma (null text for that entry).
+ */
+void mtx_gauge_face_set_major_tick_str(MtxGaugeFace *gauge, gchar * string)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if (gauge->major_tick_text)
+		g_free(gauge->major_tick_text);
+	gauge->major_tick_text = g_strdup(string);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
  \brief sets the units string for the gauge and kicks off a full redraw
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param units_str (gchar *) new units text string to use
@@ -232,6 +255,18 @@ gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
 	return g_strdup(gauge->units_str);
+}
+
+
+/*!
+ \brief returns the major_tick text string
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \returns  COPY of the major ticks string which MUST be freed when done with it.
+ */
+gchar * mtx_gauge_face_get_major_tick_str (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	return g_strdup(gauge->major_tick_text);
 }
 
 
