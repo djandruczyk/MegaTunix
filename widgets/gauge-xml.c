@@ -138,18 +138,23 @@ void mtx_gauge_face_export_xml(GtkWidget * widget, gchar * filename)
 	 */
 	dtd = xmlCreateIntSubset(doc, BAD_CAST "gauge", NULL, BAD_CAST "mtxgauge.dtd");
 
-	/* 
-	 * xmlNewChild() creates a new node, which is "attached" as child node
-	 * of root_node node. 
+	/* Create a helper struct o bind data to for to 
+	 * trim up the XML export functions.
 	 */
 	helper = g_new0(MtxDispatchHelper, 1);
 	helper->gauge = gauge;
 	helper->root_node = root_node;
+	/** For each element,  get the varname, the pointer to the memory 
+	 * where hte data is stored in the current gauge structure, and call
+	 * the export function defined in the xml_funcs struct passing in the
+	 * helper struct so that the generic export functions can get the 
+	 * key names right and the memory addresses right.  It looks confusing
+	 * but it works great.  See gauge-xml.h for the static struct binding
+	 * keynames to import/export generic handler functions */
 	for (i=0;i<gauge->xmlfunc_array->len;i++)
 	{
 		xml_funcs = g_array_index(gauge->xmlfunc_array,MtxXMLFuncs *, i);
 		helper->element_name = xml_funcs->varname;
-//		helper->src = xml_funcs->dest_var;
 		helper->src = (gpointer)g_object_get_data(G_OBJECT(gauge),xml_funcs->varname);
 		xml_funcs->export_func(helper);
 	}
