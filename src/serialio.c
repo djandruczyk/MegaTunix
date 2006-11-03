@@ -239,13 +239,19 @@ void setup_serial_params()
  */
 void close_serial()
 {
-	if (serial_params == NULL)
+	g_static_mutex_lock(&comms_mutex);
+	if (!serial_params)
+	{
+		g_static_mutex_unlock(&comms_mutex);
 		return;
+	}
 	if (serial_params->open == FALSE)
+	{
+		g_static_mutex_unlock(&comms_mutex);
 		return;
+	}
 
 	//printf("Closing serial port\n");
-	g_static_mutex_lock(&comms_mutex);
 #ifndef __WIN32__
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
 #endif

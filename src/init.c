@@ -35,6 +35,7 @@ gint baudrate = BAUDRATE;
 gchar * serial_port_name = NULL;
 extern gint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
+extern GStaticMutex comms_mutex;
 extern gint mem_view_style[];
 extern gint ms_reset_count;
 extern gint ms_goodread_count;
@@ -329,12 +330,14 @@ void mem_dealloc()
 	gint i = 0;
 	extern struct Firmware_Details *firmware;
 
+	g_static_mutex_lock(&comms_mutex);
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
 	serial_params->port_name = NULL;
 	if (serial_params)
 		g_free(serial_params);
 	serial_params = NULL;
+	g_static_mutex_unlock(&comms_mutex);
 
 	/* Firmware datastructure.... */
 	if (firmware)
