@@ -94,7 +94,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->major_tick_text_scale = 0.135;
 	gauge->minor_ticks = 3;  /* B S S S B S S S B  tick style */
 	gauge->tick_inset = 0.15;    /* how much in from gauge radius fortick */
-	gauge->major_tick_text_inset = 0.035;    /* how much in from gauge radius for tick text */
+	gauge->major_tick_text_inset = 0.030;    /* how much in from gauge radius for tick text */
 	gauge->major_tick_len = 0.1; /* 1 = 100% of radius, so 0.1 = 10% */
 	gauge->minor_tick_len = 0.05;/* 1 = 100% of radius, so 0.1 = 10% */
 	gauge->major_tick_width = 0.175; /* 1 = 10% of radius, so 0.1 = 1% */
@@ -655,9 +655,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 			i++;
 		count=i;
 		cairo_select_font_face (cr, gauge->major_tick_text_font, CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+		cairo_set_font_size (cr, (gauge->radius * gauge->major_tick_text_scale));
 	}
 
-	cairo_set_font_size (cr, (gauge->radius * gauge->major_tick_text_scale));
 	for (i=0;i<gauge->major_ticks;i++)
 	{
 		inset = (gint) (gauge->major_tick_len * gauge->radius);
@@ -769,6 +769,9 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gint h = 0;
 	gint i = 0;
 	gint j = 0;
+	gint count = 0;
+	gfloat rad = 0.0;
+	gchar **vector = NULL;
 	gint lwidth = 0;
 	gfloat arc = 0.0;
 	gint inset = 0;
@@ -923,9 +926,20 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
 	/* Major ticks first */
 	insetfrom = gauge->radius * gauge->tick_inset;
+	if (gauge->major_tick_text)
+	{
+		vector = g_strsplit(gauge->major_tick_text,",",-1);
+		while (vector[i])
+			i++;
+		count=i;
+		tmpbuf = g_strdup_printf("%s %i",gauge->major_tick_text_font,(gint)(gauge->radius*gauge->major_tick_text_scale));
+		gauge->font_desc = pango_font_description_from_string(tmpbuf);
+		g_free(tmpbuf);
+		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
+	}
+
 
 	counter = gauge->start_radian;
-	printf("Tick text is %s\n",gauge->major_tick_text);
 	for (i=0;i<gauge->major_ticks;i++)
 	{
 		inset = (gint) (gauge->major_tick_len * gauge->radius);
@@ -942,6 +956,23 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->yc + (gauge->radius - insetfrom) * sin (counter),
 				gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter)),
 				gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter)));
+		if ((vector) && (i < count)) /* If not null */
+		{
+			gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MAJ_TICK_TEXT_FONT]);
+			pango_layout_set_text(gauge->layout,vector[i],-1);
+			pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
+
+			rad = sqrt(pow(logical_rect.width,2)+pow(logical_rect.height,2))/2.0;
+			/* Fudge factor due to differenced ins pango vs
+			 * cairo font extents/rectangles
+			 */
+			rad*=0.55;
+
+			gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
+					gauge->xc + (gauge->radius - insetfrom - inset - gauge->major_tick_text_inset*gauge->radius - rad) * cos (counter) - (logical_rect.width/2),
+					gauge->yc + (gauge->radius - insetfrom - inset -  gauge->major_tick_text_inset*gauge->radius - rad) * sin (counter) - (logical_rect.height/2),gauge->layout);
+		}
+
 		/* Now the minor ticks... */
 		if ((gauge->minor_ticks > 0) && (i < (gauge->major_ticks-1)))
 		{
