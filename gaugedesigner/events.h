@@ -73,10 +73,12 @@ EXPORT gboolean create_color_span(GtkWidget *, gpointer );
 EXPORT gboolean entry_changed_handler(GtkWidget *, gpointer );
 EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
 EXPORT gboolean change_font(GtkWidget *, gpointer );
-EXPORT gboolean std_button_handler(GtkWidget *, gpointer );
+EXPORT gboolean xml_button_handler(GtkWidget *, gpointer );
+EXPORT gboolean animate_gauge(GtkWidget *, gpointer );
 void update_attributes(GladeXML * );
 void update_onscreen_ranges(GtkWidget *);
 gboolean remove_range(GtkWidget *, gpointer );
+gboolean sweep_gauge(gpointer data);
 /* Prototypes */
 
 #endif

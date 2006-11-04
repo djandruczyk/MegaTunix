@@ -37,6 +37,9 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	tmp = glade_xml_get_widget(xml,"import_export_frame");
 	gtk_widget_set_sensitive(tmp,TRUE);
 
+	tmp = glade_xml_get_widget(xml,"animate_frame");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
 	update_attributes(xml);
 	return (TRUE);
 }
@@ -553,7 +556,7 @@ EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 	return FALSE;
 }
 
-EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
+EXPORT gboolean xml_button_handler(GtkWidget *widget, gpointer data)
 {
 	gchar *tmpbuf = NULL;
 	int handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
@@ -609,5 +612,53 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	}
 	gtk_widget_destroy (dialog);
 	return TRUE;
+
+}
+
+EXPORT gboolean animate_gauge(GtkWidget *widget, gpointer data)
+{
+	gtk_widget_set_sensitive(widget,FALSE);
+	gtk_timeout_add(20,(GtkFunction)sweep_gauge, (gpointer)gauge);
+	return TRUE;
+}
+
+gboolean sweep_gauge(gpointer data)
+{
+	static gfloat lower = 0.0;
+	static gfloat upper = 0.0;
+	gfloat interval = 0.0;
+	gfloat cur_val = 0.0;
+	GladeXML *xml = NULL;
+	GtkWidget *button = NULL;
+	static gboolean rising = TRUE;
+
+	GtkWidget * gauge = data;
+	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE (gauge),&lower,&upper);
+	interval = (upper-lower)/100.0;
+	cur_val = mtx_gauge_face_get_value(MTX_GAUGE_FACE (gauge));
+	if (cur_val >= upper)
+		rising = FALSE;
+	if (cur_val <= lower)
+		rising = TRUE;
+
+	if (rising)
+		cur_val+=interval;
+	else
+		cur_val-=interval;
+
+	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge),cur_val);
+	if (cur_val <= lower)
+	{
+		/* This cancels the timeout once one full complete sweep
+		 * of the gauge
+		 */
+		xml = glade_get_widget_tree(gauge->parent);
+		button = glade_xml_get_widget(xml,"animate_button");
+		gtk_widget_set_sensitive(button,TRUE);
+		mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge),lower);
+		return FALSE;
+	}
+	else
+		return TRUE;
 
 }
