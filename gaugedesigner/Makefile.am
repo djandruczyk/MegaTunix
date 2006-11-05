@@ -23,8 +23,9 @@ bin_PROGRAMS = gaugedesigner
 
 glade_files = gaugedesigner.glade
 
-xml_files = VDO-tach-800.xml
+#xml_files = 
 
-gauge_DATA = $(glade_files) $(xml_files)
+#gauge_DATA = $(glade_files) $(xml_files)
+gauge_DATA = $(glade_files)
 
 EXTRA_DIST = README $(gauge_DATA)
