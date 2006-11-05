@@ -15,7 +15,7 @@ Source: "z:\home\dave\cvs\MegaTunix\src\megatunix.exe"; DestDir: "{app}"
 Source: "z:\home\dave\cvs\MegaTunix\widgets\demo.exe"; DestDir: "{app}"
 Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.exe"; DestDir: "{app}"
 Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.glade"; DestDir: "{app}"
-Source: "z:\home\dave\win32\libglade-2.0-0.dll"; DestDir: "{app}"
+;Source: "z:\home\dave\win32\libglade-2.0-0.dll"; DestDir: "{app}"
 Source: "z:\home\dave\win32\config"; DestDir: "{app}\.MegaTunix"
 Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\.MegaTunix\"; Flags: recursesubdirs
 

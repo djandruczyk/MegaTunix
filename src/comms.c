@@ -495,7 +495,6 @@ skipburn:
 		err_text = (gchar *)g_strerror(errno);
 		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU, ERROR \"%s\" \n",firmware->page_cmd,err_text),CRITICAL);
 	}
-printf("page sent %i\n",ms_page);
 	res = write(serial_params->fd,&ms_page,1);
 	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
