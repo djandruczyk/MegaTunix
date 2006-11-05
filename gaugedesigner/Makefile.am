@@ -1,3 +1,5 @@
+gaugedir = $(datadir)/MegaTunix/$(GAUGE_DATA_DIR)
+
 INCLUDES = \
 	-I/usr/include \
         -I$(top_srcdir)/include \
@@ -5,11 +7,6 @@ INCLUDES = \
         @GTK_CFLAGS@ \
         @LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
-
-
-gaugedesigner_SOURCES = main.c events.c events.h ../widgets/gauge.h
-
-noinst_PROGRAMS = gaugedesigner
 
 gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la @EXTRA_LIBS@ @GLEXT_LIBS@
 
@@ -19,7 +16,15 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
+gaugedesigner_SOURCES = main.c events.c events.h getfiles.c getfiles.h binreloc.c binreloc.h
 
-EXTRA_DIST = README
 
+bin_PROGRAMS = gaugedesigner
 
+glade_files = gaugedesigner.glade
+
+xml_files = VDO-tach-800.xml
+
+gauge_DATA = $(glade_files) $(xml_files)
+
+EXTRA_DIST = README $(gauge_DATA)

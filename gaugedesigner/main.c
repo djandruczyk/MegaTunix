@@ -1,5 +1,7 @@
 #include "events.h"
 #include "../widgets/gauge.h"
+#include <getfiles.h>
+#include <glib.h>
 #include <stdio.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
@@ -12,6 +14,7 @@ int main (int argc, char ** argv )
 	GtkWidget *widget;
 	GtkWidget *toptable;
 	GladeXML *xml = NULL;
+	gchar *filename = NULL;
 
 	gtk_init (&argc, &argv);
 
@@ -22,7 +25,16 @@ int main (int argc, char ** argv )
 			G_CALLBACK(gtk_main_quit),NULL);
 
 
-	xml = glade_xml_new("gaugedesigner.glade", "toptable", NULL);
+	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+		xml = glade_xml_new(filename, "toptable", NULL);
+	else
+	{
+		printf("Can't locate primary glade file!!!!\n");
+		exit(-1);
+	}
+	g_free(filename);
+	
 	glade_xml_signal_autoconnect(xml);
 	toptable = glade_xml_get_widget(xml, "toptable");
 	/* Bind the appropriate handlers */
