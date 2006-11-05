@@ -466,6 +466,11 @@ void gdk_update_gauge_position (GtkWidget *widget)
  */
 gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
+	GdkColormap *colormap;
+	GdkColor black;
+	GdkColor white;
+	GdkGC *gc;
+
 	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
 
 	if(widget->window)
@@ -506,14 +511,41 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		gdk_window_set_back_pixmap(widget->window,gauge->pixmap,0);
 		gauge->layout = gtk_widget_create_pango_layout(GTK_WIDGET(&gauge->parent),NULL);	
-		gauge->bm_gc = gdk_gc_new(gauge->bitmap);
 		gauge->gc = gdk_gc_new(gauge->bg_pixmap);
 		gdk_gc_set_colormap(gauge->gc,gauge->colormap);
-		gdk_gc_set_colormap(gauge->bm_gc,gauge->colormap);
 
 		gauge->xc = gauge->w / 2;
 		gauge->yc = gauge->h / 2;
 		gauge->radius = MIN (gauge->w/2, gauge->h/2) - 5;
+
+
+		/* Shape combine mask bitmap */
+		colormap = gdk_colormap_get_system ();
+		gdk_color_parse ("black", & black);
+		gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
+		gdk_color_parse ("white", & white);
+		gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
+		gc = gdk_gc_new (gauge->bitmap);
+		gdk_gc_set_foreground (gc, &black);
+		gdk_draw_rectangle (gauge->bitmap,
+				gc,
+				TRUE,  // filled
+				0,     // x
+				0,     // y
+				gauge->w,
+				gauge->h);
+
+		gdk_gc_set_foreground (gc, & white);
+		gdk_draw_arc (gauge->bitmap,
+				gc,
+				TRUE,     // filled
+				gauge->xc-gauge->radius*0.995,
+				gauge->yc-gauge->radius*0.995,
+				2*(gauge->radius*0.995),
+				2*(gauge->radius*0.995),
+				0,        // angle 1
+				360*64);  // angle 2: full ci
+
 	}
 	generate_gauge_background(widget);
 	update_gauge_position(widget);
@@ -539,6 +571,10 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 			event->area.x, event->area.y,
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
+
+	if (GTK_IS_WINDOW(widget->parent))
+		gtk_widget_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
+
 
 	return FALSE;
 }
@@ -1047,6 +1083,37 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 gboolean mtx_gauge_face_button_press (GtkWidget *widget,
 					     GdkEventButton *event)
 {
+	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
+	GdkWindowEdge edge = -1;
+	/* Right side of window */
+	if (event->x > (0.55*gauge->w))
+	{
+		/* Upper portion */
+		if (event->y < (0.45*gauge->h))
+			edge = GDK_WINDOW_EDGE_NORTH_EAST;
+		/* Lower portion */
+		else if (event->y > (0.55*gauge->h))
+			edge = GDK_WINDOW_EDGE_SOUTH_EAST;
+		else 
+			edge = -1;
+	}
+	/* Left Side of window */
+	else if (event->x < (0.45*gauge->w))
+	{
+		/* If it's in the middle portion */
+		/* Upper portion */
+		if (event->y < (0.45*gauge->h))
+			edge = GDK_WINDOW_EDGE_NORTH_WEST;
+		/* Lower portion */
+		else if (event->y > (0.55*gauge->h))
+			edge = GDK_WINDOW_EDGE_SOUTH_WEST;
+		else 
+			edge = -1;
+	}
+	else
+		edge = -1;
+
+
 	if (event->type == GDK_BUTTON_PRESS)
 	{
 		switch (event->button)
@@ -1058,8 +1125,20 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,
 						event->y_root,
 						event->time);
 				break;
+			case 2: /* Middle button,  RESIZE */
+				if (edge != -1)
+				{
+					gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+							edge,
+							event->button,
+							event->x_root,
+							event->y_root,
+							event->time);
+				}
+				break;
 			case 3: /* right button */
-				gtk_main_quit();
+				if (GTK_IS_WINDOW(widget->parent))
+					gtk_main_quit();
 				break;
 		}
 	}
@@ -1098,7 +1177,7 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 	MtxGaugeFacePrivate *priv;
 	priv = MTX_GAUGE_FACE_GET_PRIVATE (gauge);
 	*/
-	printf("button release\n");
+//	printf("button release\n");
 	return FALSE;
 }
 

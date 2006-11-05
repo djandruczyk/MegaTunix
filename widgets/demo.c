@@ -25,7 +25,6 @@ int main (int argc, char **argv)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *gauge = NULL;
-	GdkBitmap *bitmap = NULL;
 
 	gtk_init (&argc, &argv);
 
@@ -76,9 +75,7 @@ int main (int argc, char **argv)
 	mtx_gauge_face_export_xml(gauge,"output2.xml");
 
 
-	bitmap = gdk_pixmap_new(NULL,MTX_GAUGE_FACE(gauge)->w,MTX_GAUGE_FACE(gauge)->h,1);
-	draw_mask(gauge,bitmap);
-	gtk_widget_shape_combine_mask(window,bitmap,0,0);
+	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
 	g_signal_connect (window, "destroy",
