@@ -64,7 +64,7 @@ int main (int argc, char ** argv )
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"name_color_button")),"handler",GINT_TO_POINTER(COL_NAME_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"units_color_button")),"handler",GINT_TO_POINTER(COL_UNIT_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_color_button")),"handler",GINT_TO_POINTER(COL_VALUE_FONT));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK_TEXT_FONT));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_text_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK_TEXT_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"background_color_button")),"handler",GINT_TO_POINTER(COL_BG));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_color_button")),"handler",GINT_TO_POINTER(COL_NEEDLE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK));

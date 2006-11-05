@@ -687,6 +687,8 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	insetfrom = gauge->radius * gauge->tick_inset;
 
 	counter = gauge->start_radian;
+	count = 0;
+	i = 0;
 	if (gauge->major_tick_text)
 	{
 		vector = g_strsplit(gauge->major_tick_text,",",-1);
@@ -710,7 +712,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter),
 				gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter));
 		cairo_stroke (cr);
-		if ((vector) && (i < count)) /* If not null */
+		if ((vector) && (i < count) && (vector[i])) /* If not null */
 		{
 			cairo_save(cr);
 			cairo_set_source_rgb (cr, 
@@ -971,6 +973,8 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
 	/* Major ticks first */
 	insetfrom = gauge->radius * gauge->tick_inset;
+	count = 0;
+	i=0;
 	if (gauge->major_tick_text)
 	{
 		vector = g_strsplit(gauge->major_tick_text,",",-1);
@@ -1001,7 +1005,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->yc + (gauge->radius - insetfrom) * sin (counter),
 				gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter)),
 				gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter)));
-		if ((vector) && (i < count)) /* If not null */
+		if ((vector) && (i < count) && (vector[i])) /* If not null */
 		{
 			gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MAJ_TICK_TEXT_FONT]);
 			pango_layout_set_text(gauge->layout,vector[i],-1);
