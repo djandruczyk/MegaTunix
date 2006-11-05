@@ -344,6 +344,12 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"minor_tick_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_MIN_TICK));
 
+	widget = glade_xml_get_widget(xml,"gradient_begin_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_GRADIENT_BEGIN));
+
+	widget = glade_xml_get_widget(xml,"gradient_end_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_GRADIENT_END));
+
 	hold_handlers = FALSE;
 }
 
