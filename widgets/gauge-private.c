@@ -516,7 +516,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		gauge->xc = gauge->w / 2;
 		gauge->yc = gauge->h / 2;
-		gauge->radius = MIN (gauge->w/2, gauge->h/2) - 5;
+		gauge->radius = MIN (gauge->w/2, gauge->h/2); // - 5;
 
 
 		/* Shape combine mask bitmap */
@@ -539,10 +539,10 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		gdk_draw_arc (gauge->bitmap,
 				gc,
 				TRUE,     // filled
-				gauge->xc-gauge->radius*0.995,
-				gauge->yc-gauge->radius*0.995,
-				2*(gauge->radius*0.995),
-				2*(gauge->radius*0.995),
+				gauge->xc-gauge->radius,
+				gauge->yc-gauge->radius,
+				2*(gauge->radius),
+				2*(gauge->radius),
 				0,        // angle 1
 				360*64);  // angle 2: full ci
 
@@ -629,29 +629,32 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	else
 		cairo_set_antialias(cr,CAIRO_ANTIALIAS_NONE);
 
-	/* Create that cool gradient that gives the shadow illusion */
-	gradient = cairo_pattern_create_linear(0,gauge->w,gauge->w,0);
-	cairo_pattern_add_color_stop_rgb(gradient, 0, 1, 1, 1);
-	cairo_pattern_add_color_stop_rgb(gradient, gauge->radius, 0, 0, 0);
 
 	/* Filled Arcs */
-	cairo_arc(cr, gauge->xc, gauge->yc, (0.985 * gauge->radius), 0, 2*M_PI);
-	cairo_set_source_rgb(cr, 0.53, 0.53, 0.53);
-	cairo_fill(cr);
 
-	cairo_arc(cr, gauge->xc, gauge->yc, (0.985 * gauge->radius), 0, 2 * M_PI);
-	cairo_set_source_rgb(cr, 0.8, 0.8, 0.8);
-	cairo_stroke(cr);
-
-	cairo_arc(cr, gauge->xc, gauge->yc, (0.934 * gauge->radius), 0, 2 * M_PI);
+	/* Outside gradient ring */
+	gradient = cairo_pattern_create_linear(2*gauge->xc,0,0,2*gauge->xc);
+	cairo_pattern_add_color_stop_rgb(gradient, 0, 1, 1, 1);
+	cairo_pattern_add_color_stop_rgb(gradient, gauge->radius, 0, 0, 0);
 	cairo_set_source(cr, gradient);
+	cairo_arc(cr, gauge->xc, gauge->yc, gauge->radius, 0, 2 * M_PI);
 	cairo_fill(cr);
 	cairo_pattern_destroy(gradient);
 
-	cairo_arc(cr, gauge->xc, gauge->yc, (0.880 * gauge->radius), 0, 2 * M_PI);
+	/* Inside gradient ring */
+	gradient = cairo_pattern_create_linear(0,gauge->w,gauge->w,0);
+	cairo_pattern_add_color_stop_rgb(gradient, 0, 1, 1, 1);
+	cairo_pattern_add_color_stop_rgb(gradient, gauge->radius, 0, 0, 0);
+	cairo_set_source(cr, gradient);
+	cairo_arc(cr, gauge->xc, gauge->yc, (0.950 * gauge->radius), 0, 2 * M_PI);
+	cairo_fill(cr);
+	cairo_pattern_destroy(gradient);
+
+	/* Gauge background inside the bezel */
 	cairo_set_source_rgb (cr, gauge->colors[COL_BG].red/65535.0,
 			gauge->colors[COL_BG].green/65535.0,
 			gauge->colors[COL_BG].blue/65535.0);
+	cairo_arc(cr, gauge->xc, gauge->yc, (0.900 * gauge->radius), 0, 2 * M_PI);
 	cairo_fill(cr);
 
 	/* The warning color ranges */
@@ -812,6 +815,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gfloat arc = 0.0;
 	gint inset = 0;
 	gint insetfrom = 0;
+	gfloat tmpf = 0.0;
 	gfloat counter = 0.0;
 	gfloat subcounter = 0.0;
 	gchar * tmpbuf = NULL;
@@ -839,35 +843,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	/* The main grey (will have a thin overlay on top of it) 
 	 * This is a FILLED circle */
 
-	color.red=(gint)(0.53 * 65535);
-	color.green=(gint)(0.53 * 65535);
-	color.blue=(gint)(0.53 * 65535);
-	gdk_gc_set_rgb_fg_color(gauge->gc,&color);
-	/* Create the border stuff */
-	gdk_draw_arc(gauge->bg_pixmap,gauge->gc,TRUE,
-			gauge->xc-gauge->radius*0.985,
-			gauge->yc-gauge->radius*0.985,
-			2*(gauge->radius*0.985),
-			2*(gauge->radius*0.985),
-			0,360*64);
-
-	/* Outermost thin "ring" NOTE!! not filled */
-	lwidth = gauge->radius/120 < 1 ? 1: gauge->radius/120;
-	gdk_gc_set_line_attributes(gauge->gc,lwidth,
-			GDK_LINE_SOLID,
-			GDK_CAP_BUTT,
-			GDK_JOIN_BEVEL);
-	color.red=(gint)(0.8 * 65535);
-	color.green=(gint)(0.8 * 65535);
-	color.blue=(gint)(0.8 * 65535);
-	gdk_gc_set_rgb_fg_color(gauge->gc,&color);
-
-	gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
-			gauge->xc-gauge->radius*0.985,
-			gauge->yc-gauge->radius*0.985,
-			2*(gauge->radius*0.985),
-			2*(gauge->radius*0.985),
-			0,360*64);
+	/* Gradients */
 
 	lwidth = MIN (gauge->xc,gauge->yc)/20 < 1 ? 1: MIN (gauge->xc,gauge->yc)/20;
 	gdk_gc_set_line_attributes(gauge->gc,lwidth,
@@ -875,8 +851,10 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			GDK_CAP_BUTT,
 			GDK_JOIN_BEVEL);
 
-
+	tmpf = (gfloat)lwidth/(gfloat)(2*gauge->radius);
+	tmpf = (1.0-(tmpf));
 	/* Funky hack to get a pretty gradient sorta like the cairo version*/
+	/* Outer Gradient */
 	for(i=0;i<36;i++)
 	{
 		color.red=(gint)(((i+6)/48.0) * 65535);
@@ -885,10 +863,41 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
 
 		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
-				gauge->xc-gauge->radius*0.903,
-				gauge->yc-gauge->radius*0.903,
-				2*(gauge->radius*0.903),
-				2*(gauge->radius*0.903),
+				gauge->xc-gauge->radius*tmpf,
+				gauge->yc-gauge->radius*tmpf,
+				2*(gauge->radius*tmpf),
+				2*(gauge->radius*tmpf),
+				(225+(i*5))*64,5*64);
+	}
+	for(i=0;i<36;i++)
+	{
+		color.red=(gint)(((42-i)/48.0) * 65535);
+		color.green=(gint)(((42-i)/48.0) * 65535);
+		color.blue=(gint)(((42-i)/48.0) * 65535);
+		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
+
+		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
+				gauge->xc-gauge->radius*tmpf,
+				gauge->yc-gauge->radius*tmpf,
+				2*(gauge->radius*tmpf),
+				2*(gauge->radius*tmpf),
+				(45+(i*5))*64,5*64);
+	}
+	/* Inner Gradient */
+	tmpf = (gfloat)lwidth/(gfloat)(2*gauge->radius);
+	tmpf = (1.0-(3*tmpf));
+	for(i=0;i<36;i++)
+	{
+		color.red=(gint)(((i+6)/48.0) * 65535);
+		color.green=(gint)(((i+6)/48.0) * 65535);
+		color.blue=(gint)(((i+6)/48.0) * 65535);
+		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
+
+		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
+				gauge->xc-gauge->radius*tmpf,
+				gauge->yc-gauge->radius*tmpf,
+				2*(gauge->radius*tmpf),
+				2*(gauge->radius*tmpf),
 				(45+(i*5))*64,5*64);
 	}
 	for(i=0;i<36;i++)
@@ -899,18 +908,18 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
 
 		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
-				gauge->xc-gauge->radius*0.903,
-				gauge->yc-gauge->radius*0.903,
-				2*(gauge->radius*0.903),
-				2*(gauge->radius*0.903),
+				gauge->xc-gauge->radius*tmpf,
+				gauge->yc-gauge->radius*tmpf,
+				2*(gauge->radius*tmpf),
+				2*(gauge->radius*tmpf),
 				(225+(i*5))*64,5*64);
 	}
-
-
 
 	/* Create the INNER filled black arc to draw the ticks and everything
 	 * else onto
 	 */
+	tmpf = (gfloat)lwidth/(gfloat)(2*gauge->radius);
+	tmpf = (1.0-(4*tmpf));
 	gdk_gc_set_line_attributes(gauge->gc,1,
 			GDK_LINE_SOLID,
 			GDK_CAP_BUTT,
@@ -918,10 +927,10 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_BG]);
 
 	gdk_draw_arc(gauge->bg_pixmap,gauge->gc,TRUE,
-			gauge->xc-gauge->radius*0.880,
-			gauge->yc-gauge->radius*0.880,
-			2*(gauge->radius*0.880),
-			2*(gauge->radius*0.880),
+			gauge->xc-gauge->radius*tmpf,
+			gauge->yc-gauge->radius*tmpf,
+			2*(gauge->radius*tmpf),
+			2*(gauge->radius*tmpf),
 			0,360*64);
 
 	/* The warning color ranges */

@@ -75,8 +75,8 @@ int main (int argc, char **argv)
 	mtx_gauge_face_export_xml(gauge,"output2.xml");
 
 
-	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
-	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
+//	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
+//	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);
