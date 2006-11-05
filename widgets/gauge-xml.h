@@ -56,6 +56,8 @@ static const struct
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"name_font_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"major_tick_text_color"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_begin_color"},
+	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_end_color"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"precision"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"width"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"height"},

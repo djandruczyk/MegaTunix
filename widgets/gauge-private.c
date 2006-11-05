@@ -146,6 +146,8 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"name_font_color", &gauge->colors[COL_NAME_FONT]);
 	g_object_set_data(G_OBJECT(gauge),"value_font_color", &gauge->colors[COL_VALUE_FONT]);
 	g_object_set_data(G_OBJECT(gauge),"major_tick_text_color", &gauge->colors[COL_MAJ_TICK_TEXT_FONT]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", &gauge->colors[COL_GRADIENT_BEGIN]);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color", &gauge->colors[COL_GRADIENT_END]);
 	g_object_set_data(G_OBJECT(gauge),"needle_width", &gauge->needle_width);
 	g_object_set_data(G_OBJECT(gauge),"needle_tail", &gauge->needle_tail);
 	g_object_set_data(G_OBJECT(gauge),"precision", &gauge->precision);
@@ -192,7 +194,6 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
  */
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 {
-	g_object_set_data(G_OBJECT(gauge),"bg_color", &gauge->colors[COL_BG]);
 	gint i = 0;
 	MtxXMLFuncs * funcs = NULL;
 	gauge->xmlfunc_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
@@ -253,6 +254,14 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	gauge->colors[COL_MAJ_TICK_TEXT_FONT].red=0.85*65535;
 	gauge->colors[COL_MAJ_TICK_TEXT_FONT].green=0.85*65535;
 	gauge->colors[COL_MAJ_TICK_TEXT_FONT].blue=0.85*65535;
+	/*! Gradient Color Begin */
+	gauge->colors[COL_GRADIENT_BEGIN].red=1*65535;
+	gauge->colors[COL_GRADIENT_BEGIN].green=1*65535;
+	gauge->colors[COL_GRADIENT_BEGIN].blue=1*65535;
+	/*! Gradient Color End */
+	gauge->colors[COL_GRADIENT_END].red=0;
+	gauge->colors[COL_GRADIENT_END].green=0;
+	gauge->colors[COL_GRADIENT_END].blue=0;
 
 }
 
@@ -633,18 +642,36 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	/* Filled Arcs */
 
 	/* Outside gradient ring */
-	gradient = cairo_pattern_create_linear(2*gauge->xc,0,0,2*gauge->xc);
-	cairo_pattern_add_color_stop_rgb(gradient, 0, 1, 1, 1);
-	cairo_pattern_add_color_stop_rgb(gradient, gauge->radius, 0, 0, 0);
+	gradient = cairo_pattern_create_linear(gauge->xc+(0.707*gauge->xc),
+		 	gauge->yc-(0.707*gauge->yc),
+			gauge->xc-(0.707*gauge->xc),
+			gauge->yc+(0.707*gauge->yc));
+	cairo_pattern_add_color_stop_rgb(gradient, 0, 
+			gauge->colors[COL_GRADIENT_BEGIN].red, 
+			gauge->colors[COL_GRADIENT_BEGIN].green, 
+			gauge->colors[COL_GRADIENT_BEGIN].blue);
+	cairo_pattern_add_color_stop_rgb(gradient, gauge->radius, 
+			gauge->colors[COL_GRADIENT_END].red, 
+			gauge->colors[COL_GRADIENT_END].green, 
+			gauge->colors[COL_GRADIENT_END].blue);
 	cairo_set_source(cr, gradient);
 	cairo_arc(cr, gauge->xc, gauge->yc, gauge->radius, 0, 2 * M_PI);
 	cairo_fill(cr);
 	cairo_pattern_destroy(gradient);
 
 	/* Inside gradient ring */
-	gradient = cairo_pattern_create_linear(0,gauge->w,gauge->w,0);
-	cairo_pattern_add_color_stop_rgb(gradient, 0, 1, 1, 1);
-	cairo_pattern_add_color_stop_rgb(gradient, gauge->radius, 0, 0, 0);
+	gradient = cairo_pattern_create_linear(gauge->xc-(0.707*gauge->xc),
+		 	gauge->yc+(0.707*gauge->yc),
+			gauge->xc+(0.707*gauge->xc),
+			gauge->yc-(0.707*gauge->yc));
+	cairo_pattern_add_color_stop_rgb(gradient, 0, 
+			gauge->colors[COL_GRADIENT_BEGIN].red, 
+			gauge->colors[COL_GRADIENT_BEGIN].green, 
+			gauge->colors[COL_GRADIENT_BEGIN].blue);
+	cairo_pattern_add_color_stop_rgb(gradient, gauge->radius, 
+			gauge->colors[COL_GRADIENT_END].red, 
+			gauge->colors[COL_GRADIENT_END].green, 
+			gauge->colors[COL_GRADIENT_END].blue);
 	cairo_set_source(cr, gradient);
 	cairo_arc(cr, gauge->xc, gauge->yc, (0.950 * gauge->radius), 0, 2 * M_PI);
 	cairo_fill(cr);
@@ -821,6 +848,9 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gfloat counter = 0.0;
 	gfloat subcounter = 0.0;
 	gchar * tmpbuf = NULL;
+	gint redstep = 0;
+	gint greenstep = 0;
+	gint bluestep = 0;
 	gfloat angle1 = 0.0;
 	gfloat angle2 = 0.0;
 	gfloat start_pos = 0.0;
@@ -857,11 +887,14 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	tmpf = (1.0-(tmpf));
 	/* Funky hack to get a pretty gradient sorta like the cairo version*/
 	/* Outer Gradient */
-	for(i=0;i<36;i++)
+	redstep = abs(gauge->colors[COL_GRADIENT_BEGIN].red-gauge->colors[COL_GRADIENT_END].red)/36;
+	greenstep = abs(gauge->colors[COL_GRADIENT_BEGIN].green-gauge->colors[COL_GRADIENT_END].green)/36;
+	bluestep = abs(gauge->colors[COL_GRADIENT_BEGIN].blue-gauge->colors[COL_GRADIENT_END].blue)/36;
+	for(i=1;i<=36;i++)
 	{
-		color.red=(gint)(((i+6)/48.0) * 65535);
-		color.green=(gint)(((i+6)/48.0) * 65535);
-		color.blue=(gint)(((i+6)/48.0) * 65535);
+		color.red=gauge->colors[COL_GRADIENT_BEGIN].red + (i*redstep);
+		color.green=gauge->colors[COL_GRADIENT_BEGIN].green + (i*greenstep);
+		color.blue=gauge->colors[COL_GRADIENT_BEGIN].blue + (i*bluestep);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
 
 		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
@@ -871,11 +904,11 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				2*(gauge->radius*tmpf),
 				(225+(i*5))*64,5*64);
 	}
-	for(i=0;i<36;i++)
+	for(i=1;i<=36;i++)
 	{
-		color.red=(gint)(((42-i)/48.0) * 65535);
-		color.green=(gint)(((42-i)/48.0) * 65535);
-		color.blue=(gint)(((42-i)/48.0) * 65535);
+		color.red=gauge->colors[COL_GRADIENT_END].red - (i*redstep);
+		color.green=gauge->colors[COL_GRADIENT_END].green - (i*greenstep);
+		color.blue=gauge->colors[COL_GRADIENT_END].blue - (i*bluestep);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
 
 		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
@@ -888,11 +921,11 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	/* Inner Gradient */
 	tmpf = (gfloat)lwidth/(gfloat)(2*gauge->radius);
 	tmpf = (1.0-(3*tmpf));
-	for(i=0;i<36;i++)
+	for(i=1;i<=36;i++)
 	{
-		color.red=(gint)(((i+6)/48.0) * 65535);
-		color.green=(gint)(((i+6)/48.0) * 65535);
-		color.blue=(gint)(((i+6)/48.0) * 65535);
+		color.red=gauge->colors[COL_GRADIENT_BEGIN].red + (i*redstep);
+		color.green=gauge->colors[COL_GRADIENT_BEGIN].green + (i*greenstep);
+		color.blue=gauge->colors[COL_GRADIENT_BEGIN].blue + (i*bluestep);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
 
 		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
@@ -902,11 +935,11 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				2*(gauge->radius*tmpf),
 				(45+(i*5))*64,5*64);
 	}
-	for(i=0;i<36;i++)
+	for(i=1;i<=36;i++)
 	{
-		color.red=(gint)(((42-i)/48.0) * 65535);
-		color.green=(gint)(((42-i)/48.0) * 65535);
-		color.blue=(gint)(((42-i)/48.0) * 65535);
+		color.red=gauge->colors[COL_GRADIENT_END].red - (i*redstep);
+		color.green=gauge->colors[COL_GRADIENT_END].green - (i*greenstep);
+		color.blue=gauge->colors[COL_GRADIENT_END].blue - (i*bluestep);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&color);
 
 		gdk_draw_arc(gauge->bg_pixmap,gauge->gc,FALSE,
