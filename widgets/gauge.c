@@ -43,22 +43,20 @@
 
 
 /*!
- \brief sets the major_ticks text string for the gauge and kicks off a 
- full redraw
+ \brief sets the text string for the passed in index. Index is an enumeration
+ \see TextIndex
  \param gauge (MtxGaugeFace *) pointer to gauge
- \param string (gchar *) Comma separated list of chars to display for 
- each gauge major tick,  the comma delimits the test string per tick. If there
- are more text than ticks the rest are unused,  if there are not enough,  
- nothing will be displayed for those ticks. To skip  text for a tick just use
- a double comma (null text for that entry).
+ \param TextIndex  enumeration to know where to store the new string
+ \param string (gchar *) string to store
  */
-void mtx_gauge_face_set_major_tick_str(MtxGaugeFace *gauge, gchar * string)
+void mtx_gauge_face_set_text(MtxGaugeFace *gauge, TextIndex index, gchar * str)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (index < NUM_TEXTS);
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->major_tick_text)
-		g_free(gauge->major_tick_text);
-	gauge->major_tick_text = g_strdup(string);
+	if (gauge->txt_str[index])
+		g_free(gauge->txt_str[index]);
+	gauge->txt_str[index] = g_strdup(str);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -66,32 +64,54 @@ void mtx_gauge_face_set_major_tick_str(MtxGaugeFace *gauge, gchar * string)
 
 
 /*!
- \brief sets the gauge major_tick font
+ \brief gets the text string for the passed in index. Index is an enumeration
+ \see TextIndex
  \param gauge (MtxGaugeFace *) pointer to gauge
- \param name (gchar *) major tick font name as a textual string
+ \param TextIndex  enumeration to know where to store the new string
+ \returns a copy of the string,  free it when done.
  */
-void mtx_gauge_face_set_major_tick_font (MtxGaugeFace *gauge, gchar * name)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->major_tick_text_font)
-		g_free(gauge->major_tick_text_font);
-	gauge->major_tick_text_font = g_strdup(name);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief returns the current major tick font name
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns a copy of the major tick font textual name, FREE when done with it
- */
-gchar * mtx_gauge_face_get_major_tick_font (MtxGaugeFace *gauge)
+gchar * mtx_gauge_face_get_text (MtxGaugeFace *gauge,TextIndex index)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->major_tick_text_font);
+	g_return_val_if_fail (index < NUM_TEXTS,NULL);
+	return g_strdup(gauge->txt_str[index]);
+}
+
+
+/*!
+ \brief sets the font text string for the passed in index. 
+ Index is an enumeration
+ \see TextIndex
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param TextIndex  enumeration to know where to store the new string
+ \param string (gchar *) string to store
+ */
+void mtx_gauge_face_set_font (MtxGaugeFace *gauge, TextIndex index, gchar * str)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (index < NUM_TEXTS);
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if (gauge->font_str[index])
+		g_free(gauge->font_str[index]);
+	gauge->font_str[index] = g_strdup(str);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
+ \brief returns the current font for the passed index
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param index an enuermation to determine which one to send back
+ \returns a copy of the font requested, free it when done
+ */
+gchar * mtx_gauge_face_get_font (MtxGaugeFace *gauge, TextIndex index)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	g_return_val_if_fail (index < NUM_TEXTS, NULL);
+	g_return_val_if_fail (gauge->font_str[index], NULL);
+	return g_strdup(gauge->font_str[index]);
 }
 
 
@@ -100,11 +120,12 @@ gchar * mtx_gauge_face_get_major_tick_font (MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param scale (gdfloat) major tick font scale as a percentage of radius
  */
-void mtx_gauge_face_set_major_tick_font_scale (MtxGaugeFace *gauge, gfloat scale)
+void mtx_gauge_face_set_font_scale (MtxGaugeFace *gauge, TextIndex index, gfloat scale)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (index < NUM_TEXTS);
 	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->major_tick_text_scale = scale;
+	gauge->font_scale[index] = scale;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -116,10 +137,11 @@ void mtx_gauge_face_set_major_tick_font_scale (MtxGaugeFace *gauge, gfloat scale
  \param gauge (MtxGaugeFace *) pointer to gauge
  \returns (gfloat) major tick font scale as a percentage of radius
  */
-gfloat mtx_gauge_face_get_major_tick_font_scale (MtxGaugeFace *gauge)
+gfloat mtx_gauge_face_get_font_scale (MtxGaugeFace *gauge, TextIndex index)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->major_tick_text_scale;
+	g_return_val_if_fail (index < NUM_TEXTS, -1);
+	return gauge->font_scale[index];
 }
 
 
@@ -153,31 +175,13 @@ gfloat mtx_gauge_face_get_major_tick_text_inset (MtxGaugeFace *gauge)
 
 
 /*!
- \brief sets the units string for the gauge and kicks off a full redraw
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param units_str (gchar *) new units text string to use
- */
-void mtx_gauge_face_set_units_str(MtxGaugeFace *gauge, gchar * units_str)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->units_str)
-		g_free(gauge->units_str);
-	gauge->units_str = g_strdup(units_str);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
  \brief sets the color for the index passed.  The index to use used is an opaque enum
  inside of gauge.h
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param index (gint) index of color to set.
  \param color (GdkColor) new color to use for the specified index
  */
-void mtx_gauge_face_set_color (MtxGaugeFace *gauge, gint index, GdkColor color)
+void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -198,28 +202,10 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, gint index, GdkColor color)
  \param index (gint) index of color to set.
  \returns a pointer to the internal GdkColor struct WHICH MUST NOT be FREED!!
  */
-GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, gint index)
+GdkColor* mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
 	return (&gauge->colors[index]);
-}
-
-
-/*!
- \brief sets the name string for the gauge and kicks off a full redraw
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param name_str (gchar *) new name text string to use
- */
-void mtx_gauge_face_set_name_str(MtxGaugeFace *gauge, gchar * name_str)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->name_str)
-		g_free(gauge->name_str);
-	gauge->name_str = g_strdup(name_str);;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 
@@ -330,42 +316,6 @@ gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
 	return gauge->show_value;
-}
-
-
-/*!
- \brief returns the units string
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns  COPY of the units string which MUST be freed when done with it.
- */
-gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->units_str);
-}
-
-
-/*!
- \brief returns the major_tick text string
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns  COPY of the major ticks string which MUST be freed when done with it.
- */
-gchar * mtx_gauge_face_get_major_tick_str (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->major_tick_text);
-}
-
-
-/*!
- \brief returns the name string
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns a copy of the name string which MUST be freed when done with it.
- */
-gchar * mtx_gauge_face_get_name_str (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->name_str);
 }
 
 
@@ -499,18 +449,37 @@ void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value
 
 
 /*!
+ \brief retreives the x/y position offsets for the string index passed
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param TextIndex enum to determine which one to send back..
+ \param value1 (gfloat) pointer to a gfloat to store the x_pos value into
+ \param value2 (gfloat) pointer to a gfloat to store the y_pos value into
+ \returns TRUE always
+ */
+gboolean mtx_gauge_face_get_str_pos(MtxGaugeFace *gauge, TextIndex index, gfloat *x_pos, gfloat *y_pos)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (index < NUM_TEXTS,FALSE);
+	*x_pos = gauge->text_xpos[index];
+	*y_pos = gauge->text_ypos[index];
+	return TRUE;
+}
+
+
+/*!
  \brief sets the gauge name_str placement  in offset from center, so values
  of zero make the text centered in the gauge
  \param gauge MtxGaugeFace * pointer to gauge
  \param x_pos,  gfloat x_pos offset from center
  \param y_pos,  gfloat y_pos offset from center
  */
-void mtx_gauge_face_set_name_str_pos (MtxGaugeFace *gauge, gfloat x_pos, gfloat y_pos)
+void mtx_gauge_face_set_str_pos (MtxGaugeFace *gauge, TextIndex index, gfloat x_pos, gfloat y_pos)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (index < NUM_TEXTS);
 	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->name_str_xpos = x_pos;
-	gauge->name_str_ypos = y_pos;
+	gauge->text_xpos[index] = x_pos;
+	gauge->text_ypos[index] = y_pos;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -518,40 +487,29 @@ void mtx_gauge_face_set_name_str_pos (MtxGaugeFace *gauge, gfloat x_pos, gfloat 
 
 
 /*!
- \brief sets the gauge units_str placement  in offset from center, so values
- of zero make the text centered in the gauge
- \param gauge MtxGaugeFace * pointer to gauge
- \param x_pos,  gfloat x_pos offset from center
- \param y_pos,  gfloat y_pos offset from center
+ \brief sets the name x_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) x value to change
  */
-void mtx_gauge_face_set_units_str_pos (MtxGaugeFace *gauge, gfloat x_pos, gfloat y_pos)
+void mtx_gauge_face_set_str_xpos (MtxGaugeFace *gauge, TextIndex index, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->units_str_xpos = x_pos;
-	gauge->units_str_ypos = y_pos;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
+	g_return_if_fail (index < NUM_TEXTS);
+	mtx_gauge_face_set_str_pos(gauge, index, value, gauge->text_ypos[index]);
 }
 
 
 /*!
- \brief sets the gauge value_str placement  in offset from center, so values
- of zero make the text centered in the gauge
- \param gauge MtxGaugeFace * pointer to gauge
- \param x_pos,  gfloat x_pos offset from center
- \param y_pos,  gfloat y_pos offset from center
+ \brief sets the text y_position only of the gauge
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param index TextIndex enumeration to know which one we are changing
+ \param value (gfloat) y value to change
  */
-void mtx_gauge_face_set_value_str_pos (MtxGaugeFace *gauge, gfloat x_pos, gfloat y_pos)
+void mtx_gauge_face_set_str_ypos (MtxGaugeFace *gauge, TextIndex index, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->value_str_xpos = x_pos;
-	gauge->value_str_ypos = y_pos;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
+	g_return_if_fail (index < NUM_TEXTS);
+	mtx_gauge_face_set_str_pos(gauge, index, gauge->text_xpos[index], value);
 }
 
 
@@ -564,78 +522,6 @@ void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	mtx_gauge_face_set_bounds(gauge,value, gauge->ubound);
-}
-
-
-/*!
- \brief sets the name x_position only of the gauge
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value (gfloat) lower end of span
- */
-void mtx_gauge_face_set_name_str_xpos (MtxGaugeFace *gauge, gfloat value)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_name_str_pos(gauge,value, gauge->name_str_ypos);
-}
-
-
-/*!
- \brief sets the name y_position only of the gauge
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value (gfloat) lower end of span
- */
-void mtx_gauge_face_set_name_str_ypos (MtxGaugeFace *gauge, gfloat value)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_name_str_pos(gauge,gauge->name_str_xpos,value);
-}
-
-
-/*!
- \brief sets the units x_position only of the gauge
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value (gfloat) lower end of span
- */
-void mtx_gauge_face_set_units_str_xpos (MtxGaugeFace *gauge, gfloat value)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_units_str_pos(gauge,value, gauge->units_str_ypos);
-}
-
-
-/*!
- \brief sets the name y_position only of the gauge
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value (gfloat) lower end of span
- */
-void mtx_gauge_face_set_units_str_ypos (MtxGaugeFace *gauge, gfloat value)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_units_str_pos(gauge,gauge->units_str_xpos,value);
-}
-
-
-/*!
- \brief sets the value x_position only of the gauge
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value (gfloat) lower end of span
- */
-void mtx_gauge_face_set_value_str_xpos (MtxGaugeFace *gauge, gfloat value)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_value_str_pos(gauge,value, gauge->value_str_ypos);
-}
-
-
-/*!
- \brief sets the value y_position only of the gauge
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value (gfloat) lower end of span
- */
-void mtx_gauge_face_set_value_str_ypos (MtxGaugeFace *gauge, gfloat value)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_value_str_pos(gauge,gauge->value_str_xpos,value);
 }
 
 
@@ -663,54 +549,6 @@ gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, gfloat *value1, gfloat *
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	*value1 = gauge->lbound;
 	*value2 = gauge->ubound;
-	return TRUE;
-}
-
-
-/*!
- \brief retreives the x/y position offsets for the name_string
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value1 (gfloat) pointer to a gfloat to store the x_pos value into
- \param value2 (gfloat) pointer to a gfloat to store the y_pos value into
- \returns TRUE always
- */
-gboolean mtx_gauge_face_get_name_str_pos(MtxGaugeFace *gauge, gfloat *x_pos, gfloat *y_pos)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
-	*x_pos = gauge->name_str_xpos;
-	*y_pos = gauge->name_str_ypos;
-	return TRUE;
-}
-
-
-/*!
- \brief retreives the x/y position offsets for the units_string
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value1 (gfloat) pointer to a gfloat to store the x_pos value into
- \param value2 (gfloat) pointer to a gfloat to store the y_pos value into
- \returns TRUE always
- */
-gboolean mtx_gauge_face_get_units_str_pos(MtxGaugeFace *gauge, gfloat *x_pos, gfloat *y_pos)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
-	*x_pos = gauge->units_str_xpos;
-	*y_pos = gauge->units_str_ypos;
-	return TRUE;
-}
-
-
-/*!
- \brief retreives the x/y position offsets for the value_string
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value1 (gfloat) pointer to a gfloat to store the x_pos value into
- \param value2 (gfloat) pointer to a gfloat to store the y_pos value into
- \returns TRUE always
- */
-gboolean mtx_gauge_face_get_value_str_pos(MtxGaugeFace *gauge, gfloat *x_pos, gfloat *y_pos)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
-	*x_pos = gauge->value_str_xpos;
-	*y_pos = gauge->value_str_ypos;
 	return TRUE;
 }
 
@@ -836,77 +674,6 @@ gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge)
 	return gauge->needle_tail;
 }
 
-
-/*!
- \brief returns the current units font name
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns a copy of the units font textual name, FREE when done with it
- */
-gchar * mtx_gauge_face_get_units_font (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->units_font);
-}
-
-
-/*!
- \brief returns the current gauge name font name
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns a copy of the gauge name font textual name, FREE it when done
- */
-gchar * mtx_gauge_face_get_name_font (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->name_font);
-}
-
-
-/*!
- \brief returns the current value font name
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns a copy of value font textual name, FREE it when done
- */
-gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	return g_strdup(gauge->value_font);
-}
-
-
-/*!
- \brief returns the current unit font scale as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) unit font scale as a percentage of radius
- */
-gfloat mtx_gauge_face_get_units_font_scale (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->units_font_scale;
-}
-
-
-/*!
- \brief returns the current name font scale as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) name font scale as a percentage of radius
- */
-gfloat mtx_gauge_face_get_name_font_scale (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->name_font_scale;
-}
-
-
-/*!
- \brief returns the current value font scale as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) value  font scale as a percentage of radius
- */
-gfloat mtx_gauge_face_get_value_font_scale (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->value_font_scale;
-}
 
 
 /*!
@@ -1076,108 +843,6 @@ void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat len)
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
 	gauge->needle_tail = len;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief sets the gauge units font
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param name (gchar *) units font name as a textual string
- */
-void mtx_gauge_face_set_units_font (MtxGaugeFace *gauge, gchar * name)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->units_font)
-		g_free(gauge->units_font);
-	gauge->units_font = g_strdup(name);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief sets the gauge name font
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param name (gchar *) name font name as a textual string
- */
-void mtx_gauge_face_set_name_font (MtxGaugeFace *gauge, gchar * name)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->name_font)
-		g_free(gauge->name_font);
-	gauge->name_font = g_strdup(name);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief sets the gauge value font
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param name (gchar *) value font name as a textual string
- */
-void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * name)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->value_font)
-		g_free(gauge->value_font);
-	gauge->value_font = g_strdup(name);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief sets the gauge units font scale as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param scale (gdfloat) units font scale as a percentage of radius
- */
-void mtx_gauge_face_set_units_font_scale (MtxGaugeFace *gauge, gfloat scale)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->units_font_scale = scale;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief sets the gauge name font scale as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param scale (gdfloat) name font scale as a percentage of radius
- */
-void mtx_gauge_face_set_name_font_scale (MtxGaugeFace *gauge, gfloat scale)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->name_font_scale = scale;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief sets the gauge value font scale as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param scale (gdfloat) value font scale as a percentage of radius
- */
-void mtx_gauge_face_set_value_font_scale (MtxGaugeFace *gauge, gfloat scale)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->value_font_scale = scale;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);

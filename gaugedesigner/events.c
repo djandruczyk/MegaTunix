@@ -122,22 +122,22 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			mtx_gauge_face_set_minor_tick_width(g,tmpf);
 			break;
 		case NAME_XPOS:
-			mtx_gauge_face_set_name_str_xpos(g,tmpf);
+			mtx_gauge_face_set_str_xpos(g, NAME, tmpf);
 			break;
 		case NAME_YPOS:
-			mtx_gauge_face_set_name_str_ypos(g,tmpf);
+			mtx_gauge_face_set_str_ypos(g, NAME, tmpf);
 			break;
 		case UNITS_XPOS:
-			mtx_gauge_face_set_units_str_xpos(g,tmpf);
+			mtx_gauge_face_set_str_xpos(g, UNITS, tmpf);
 			break;
 		case UNITS_YPOS:
-			mtx_gauge_face_set_units_str_ypos(g,tmpf);
+			mtx_gauge_face_set_str_ypos(g, UNITS, tmpf);
 			break;
 		case VALUE_XPOS:
-			mtx_gauge_face_set_value_str_xpos(g,tmpf);
+			mtx_gauge_face_set_str_xpos(g, VALUE, tmpf);
 			break;
 		case VALUE_YPOS:
-			mtx_gauge_face_set_value_str_ypos(g,tmpf);
+			mtx_gauge_face_set_str_ypos(g, VALUE, tmpf);
 			break;
 		case START_ANGLE:
 			mtx_gauge_face_set_lspan_rad(g,tmpf);
@@ -167,16 +167,16 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			mtx_gauge_face_set_needle_tail(g,tmpf);
 			break;
 		case NAME_SCALE:
-			mtx_gauge_face_set_name_font_scale(g,tmpf);
+			mtx_gauge_face_set_font_scale(g, NAME, tmpf);
 			break;
 		case UNITS_SCALE:
-			mtx_gauge_face_set_units_font_scale(g,tmpf);
+			mtx_gauge_face_set_font_scale(g, UNITS, tmpf);
 			break;
 		case VALUE_SCALE:
-			mtx_gauge_face_set_value_font_scale(g,tmpf);
+			mtx_gauge_face_set_font_scale(g, VALUE, tmpf);
 			break;
 		case MAJ_TICK_SCALE:
-			mtx_gauge_face_set_major_tick_font_scale(g,tmpf);
+			mtx_gauge_face_set_font_scale(g, MAJ_TICK, tmpf);
 			break;
 
 	}
@@ -225,16 +225,16 @@ void update_attributes(GladeXML * xml)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_needle_tail(g));
 
 	widget = glade_xml_get_widget(xml,"name_font_scale_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_name_font_scale(g));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_font_scale(g, NAME));
 
 	widget = glade_xml_get_widget(xml,"units_font_scale_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_units_font_scale(g));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_font_scale(g, UNITS));
 
 	widget = glade_xml_get_widget(xml,"value_font_scale_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_value_font_scale(g));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_font_scale(g, VALUE));
 
 	widget = glade_xml_get_widget(xml,"major_tick_font_scale_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_major_tick_font_scale(g));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_font_scale(g, MAJ_TICK));
 
 	mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"start_angle_spin");
@@ -249,19 +249,19 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"ubound_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
-	mtx_gauge_face_get_name_str_pos(g,&tmp1,&tmp2);
+	mtx_gauge_face_get_str_pos(g,NAME, &tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"name_xpos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 	widget = glade_xml_get_widget(xml,"name_ypos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
-	mtx_gauge_face_get_units_str_pos(g,&tmp1,&tmp2);
+	mtx_gauge_face_get_str_pos(g,UNITS,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"units_xpos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 	widget = glade_xml_get_widget(xml,"units_ypos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
-	mtx_gauge_face_get_value_str_pos(g,&tmp1,&tmp2);
+	mtx_gauge_face_get_str_pos(g,VALUE,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"value_xpos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 	widget = glade_xml_get_widget(xml,"value_ypos_spin");
@@ -271,44 +271,44 @@ void update_attributes(GladeXML * xml)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_precision(g));
 
 	widget = glade_xml_get_widget(xml,"name_string_entry");
-	tmpbuf = mtx_gauge_face_get_name_str(g);
+	tmpbuf = mtx_gauge_face_get_text(g, NAME);
 	gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	widget = glade_xml_get_widget(xml,"units_string_entry");
-	tmpbuf = mtx_gauge_face_get_units_str(g);
+	tmpbuf = mtx_gauge_face_get_text(g, UNITS);
 	gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	widget = glade_xml_get_widget(xml,"major_tick_string_entry");
-	tmpbuf = mtx_gauge_face_get_major_tick_str(g);
+	tmpbuf = mtx_gauge_face_get_text(g, MAJ_TICK);
 	if (tmpbuf)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
 	widget = glade_xml_get_widget(xml,"name_font_button");
-	tmpbuf0 = mtx_gauge_face_get_name_font(g);
+	tmpbuf0 = mtx_gauge_face_get_font(g,NAME);
 	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
 	g_free(tmpbuf0);
 	g_free(tmpbuf);
 
 	widget = glade_xml_get_widget(xml,"units_font_button");
-	tmpbuf0 = mtx_gauge_face_get_units_font(g);
+	tmpbuf0 = mtx_gauge_face_get_font(g,UNITS);
 	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
 	g_free(tmpbuf0);
 	g_free(tmpbuf);
 
 	widget = glade_xml_get_widget(xml,"value_font_button");
-	tmpbuf0 = mtx_gauge_face_get_value_font(g);
+	tmpbuf0 = mtx_gauge_face_get_font(g,VALUE);
 	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
 	g_free(tmpbuf0);
 	g_free(tmpbuf);
 
 	widget = glade_xml_get_widget(xml,"major_tick_font_button");
-	tmpbuf0 = mtx_gauge_face_get_major_tick_font(g);
+	tmpbuf0 = mtx_gauge_face_get_font(g,MAJ_TICK);
 	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
 	g_free(tmpbuf0);
@@ -379,13 +379,13 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	switch ((func)handler)
 	{
 		case NAME_STR:
-			mtx_gauge_face_set_name_str(g,tmpbuf);
+			mtx_gauge_face_set_text(g, NAME, tmpbuf);
 			break;
 		case UNITS_STR:
-			mtx_gauge_face_set_units_str(g,tmpbuf);
+			mtx_gauge_face_set_text(g, UNITS, tmpbuf);
 			break;
 		case MAJ_TICK_STR:
-			mtx_gauge_face_set_major_tick_str(g,tmpbuf);
+			mtx_gauge_face_set_text(g, MAJ_TICK, tmpbuf);
 			break;
 		default:
 			break;
@@ -412,16 +412,16 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 	switch ((func)handler)
 	{
 		case NAME_FONT:
-			mtx_gauge_face_set_name_font(g,tmpbuf);
+			mtx_gauge_face_set_font(g, NAME, tmpbuf);
 			break;
 		case VALUE_FONT:
-			mtx_gauge_face_set_value_font(g,tmpbuf);
+			mtx_gauge_face_set_font(g, VALUE, tmpbuf);
 			break;
 		case UNITS_FONT:
-			mtx_gauge_face_set_units_font(g,tmpbuf);
+			mtx_gauge_face_set_font(g, UNITS, tmpbuf);
 			break;
 		case MAJ_TICK_FONT:
-			mtx_gauge_face_set_major_tick_font(g,tmpbuf);
+			mtx_gauge_face_set_font(g, MAJ_TICK, tmpbuf);
 			break;
 		default:
 			break;
@@ -593,7 +593,7 @@ EXPORT gboolean xml_button_handler(GtkWidget *widget, gpointer data)
 #if GTK_MINOR_VERSION >= 8
 			gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 #endif
-			tmpbuf = mtx_gauge_face_get_name_str(MTX_GAUGE_FACE(gauge));
+			tmpbuf = mtx_gauge_face_get_text(MTX_GAUGE_FACE(gauge), NAME);
 			name = g_strdup_printf("%s_Gauge.xml",tmpbuf);
 			g_free(tmpbuf);
 			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), name);

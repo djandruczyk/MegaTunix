@@ -53,7 +53,7 @@ int main (int argc, char **argv)
 	color.red = 50000;
 	color.green = 0;
 	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 7000, 8000, color, 0.06, 0.785);;
-	mtx_gauge_face_set_name_str (MTX_GAUGE_FACE (gauge), "NAME");
+	mtx_gauge_face_set_text(MTX_GAUGE_FACE (gauge), NAME, "NAME");
 	mtx_gauge_face_set_major_ticks (MTX_GAUGE_FACE (gauge), 9);
 	mtx_gauge_face_set_minor_ticks (MTX_GAUGE_FACE (gauge), 3);
 	mtx_gauge_face_set_precision (MTX_GAUGE_FACE (gauge), 0);

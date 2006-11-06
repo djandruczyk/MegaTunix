@@ -83,7 +83,7 @@ struct _MtxXMLFuncs
 	gpointer dest_var;
 };
 
-enum  ColorIndex
+typedef enum  
 {
 	COL_BG = 0,
 	COL_NEEDLE,
@@ -96,7 +96,16 @@ enum  ColorIndex
 	COL_GRADIENT_BEGIN,
 	COL_GRADIENT_END,
 	NUM_COLORS
-};
+}ColorIndex;
+
+typedef enum	
+{
+	NAME = 0,
+	UNITS,
+	VALUE,
+	MAJ_TICK,
+	NUM_TEXTS
+}TextIndex;
 
 
 struct _MtxGaugeFace
@@ -124,6 +133,11 @@ struct _MtxGaugeFace
 	GdkColormap *colormap;	/*! Colormap for GC's */
 	GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
 					     parts of a gauge object */
+	gchar *txt_str[NUM_TEXTS];	/* Array of Text strings */
+	gchar *font_str[NUM_TEXTS];	/* Array of Font name strings */
+	gfloat font_scale[NUM_TEXTS];/* Array of font scales */
+	gfloat text_xpos[NUM_TEXTS];/* Array of X offsets for strings */
+	gfloat text_ypos[NUM_TEXTS];/* Array of X offsets for strings */
 	gint precision;		/*! number of decimal places for val */
 	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
 	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
@@ -133,27 +147,9 @@ struct _MtxGaugeFace
 	gfloat lbound;		/*! Lower Bound to clamp at */
 	gfloat ubound;		/*! Upper Bound to Clamp at */
 	gfloat span;		/*! Span from lbound to ubound */
-	gchar * units_font;	/*! Units Textual font name */
-	gchar * units_str;	/*! Units Text String */
-	gfloat units_str_xpos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
-	gfloat units_str_ypos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
-	gfloat units_font_scale;/*! Units Font scale, % of 2xradius */
-	gchar * value_font;	/*! Value Textual font name */
-	gchar * value_str;	/*! Value Text String */
-	gfloat value_str_xpos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
-	gfloat value_str_ypos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
-	gfloat value_font_scale;/*! Value Font scale, % of 2xradius */
-	gchar * name_font;	/*! Name Textual font name */
-	gchar * name_str;	/*! Name Text String */
-	gfloat name_str_xpos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
-	gfloat name_str_ypos;	/*! Name str X pos, 0<->1 range, 0.5 = center*/
-	gfloat name_font_scale;	/*! Name Font scale, % of 2xradius */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
 	gboolean show_value;	/*! Show the Valueon screen or not */
 	gint major_ticks;	/*! Number of MAJOR ticks */
-	gchar * major_tick_text_font;	/*! Major Ticks Textual font name */
-	gfloat major_tick_text_scale; /* Font scale in % of radius */
-	gchar * major_tick_text; /*! MAjor tick text, CSV format */
 	gfloat major_tick_text_inset;	/*! Major Tick text_inset % of rad */
 	gfloat major_tick_len;	/*! Major Tick length (% of radius 0-1.0) */
 	gfloat major_tick_width;/*! Maj tick width as (1/10 percent of radius */
@@ -189,22 +185,12 @@ gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *)
 GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
-void mtx_gauge_face_set_name_str (MtxGaugeFace *gauge, gchar * str);
-gchar * mtx_gauge_face_get_name_str (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_name_str_pos (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
-void mtx_gauge_face_set_name_str_xpos (MtxGaugeFace *gauge, gfloat );
-void mtx_gauge_face_set_name_str_ypos (MtxGaugeFace *gauge, gfloat );
-gboolean mtx_gauge_face_get_name_str_pos (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
-void mtx_gauge_face_set_units_str (MtxGaugeFace *gauge, gchar * str);
-gchar * mtx_gauge_face_get_units_str (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_units_str_pos (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
-void mtx_gauge_face_set_units_str_xpos (MtxGaugeFace *gauge, gfloat );
-void mtx_gauge_face_set_units_str_ypos (MtxGaugeFace *gauge, gfloat );
-gboolean mtx_gauge_face_get_units_str_pos (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
-void mtx_gauge_face_set_value_str_pos (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
-void mtx_gauge_face_set_value_str_xpos (MtxGaugeFace *gauge, gfloat );
-void mtx_gauge_face_set_value_str_ypos (MtxGaugeFace *gauge, gfloat );
-gboolean mtx_gauge_face_get_value_str_pos (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
+void mtx_gauge_face_set_text (MtxGaugeFace *gauge, TextIndex index, gchar * str);
+gchar * mtx_gauge_face_get_text (MtxGaugeFace *gauge, TextIndex index);
+void mtx_gauge_face_set_str_pos (MtxGaugeFace *gauge, TextIndex index, gfloat value1, gfloat value2);
+void mtx_gauge_face_set_str_xpos (MtxGaugeFace *gauge, TextIndex index, gfloat );
+void mtx_gauge_face_set_str_ypos (MtxGaugeFace *gauge, TextIndex index, gfloat );
+gboolean mtx_gauge_face_get_str_pos (MtxGaugeFace *gauge, TextIndex index, gfloat *value1, gfloat *value2);
 void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);
 gint mtx_gauge_face_get_precision(MtxGaugeFace *gauge);
 void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
@@ -219,10 +205,11 @@ void mtx_gauge_face_set_major_tick_width (MtxGaugeFace *gauge, gfloat );
 gfloat mtx_gauge_face_get_major_tick_width (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_major_tick_str (MtxGaugeFace *gauge, gchar * str);
 gchar * mtx_gauge_face_get_major_tick_str (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_major_tick_font (MtxGaugeFace *gauge, gchar * font_name);
-gchar * mtx_gauge_face_get_major_tick_font (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_major_tick_font_scale (MtxGaugeFace *gauge, gfloat scale);
-gfloat mtx_gauge_face_get_major_tick_font_scale (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_font(MtxGaugeFace *gauge, TextIndex index, gchar * font_name);
+gchar * mtx_gauge_face_get_font(MtxGaugeFace *gauge, TextIndex index);
+
+void mtx_gauge_face_set_font_scale (MtxGaugeFace *gauge, TextIndex, gfloat scale);
+gfloat mtx_gauge_face_get_font_scale (MtxGaugeFace *gauge, TextIndex);
 void mtx_gauge_face_set_major_tick_text_inset (MtxGaugeFace *gauge, gfloat inset);
 gfloat mtx_gauge_face_get_major_tick_text_inset (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat );
@@ -245,20 +232,8 @@ void mtx_gauge_face_set_needle_width (MtxGaugeFace *gauge, gfloat width);
 gfloat mtx_gauge_face_get_needle_width (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat width);
 gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_units_font (MtxGaugeFace *gauge, gchar * font_name);
-gchar * mtx_gauge_face_get_units_font (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * font_name);
-gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_name_font (MtxGaugeFace *gauge, gchar * font_name);
-gchar * mtx_gauge_face_get_name_font (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_units_font_scale (MtxGaugeFace *gauge, gfloat scale);
-gfloat mtx_gauge_face_get_units_font_scale (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_name_font_scale (MtxGaugeFace *gauge, gfloat scale);
-gfloat mtx_gauge_face_get_name_font_scale (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_value_font_scale (MtxGaugeFace *gauge, gfloat scale);
-gfloat mtx_gauge_face_get_value_font_scale (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_color (MtxGaugeFace *gauge, gint index, GdkColor color);
-GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color);
+GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index);
 void mtx_gauge_face_import_xml(GtkWidget *, gchar *);
 void mtx_gauge_face_export_xml(GtkWidget *, gchar *);
 
