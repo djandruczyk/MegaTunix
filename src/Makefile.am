@@ -12,7 +12,6 @@ megatunix_SOURCES = \
 	Makefile \
 	3d_vetable.c \
 	about_gui.c \
-	binreloc.c \
 	comms.c \
 	comms_gui.c \
 	configfile.c \
@@ -27,7 +26,6 @@ megatunix_SOURCES = \
 	fileio.c \
 	firmware.c \
 	general_gui.c \
-	getfiles.c \
 	gui_handlers.c \
 	init.c \
 	interrogate.c \
@@ -73,7 +71,7 @@ resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
 
 #megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl  @EXTRA_LIBS@ @WIN32_RESOURCES@
+megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@
 
 megatunix_LDFLAGS = 
 

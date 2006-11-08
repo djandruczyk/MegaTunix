@@ -8,7 +8,7 @@ INCLUDES = \
         @LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
-gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la @EXTRA_LIBS@ @GLEXT_LIBS@
+gaugedesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GLEXT_LIBS@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
@@ -16,12 +16,14 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-gaugedesigner_SOURCES = main.c events.c events.h getfiles.c getfiles.h binreloc.c binreloc.h
+gaugedesigner_SOURCES = main.c events.c events.h
 
 
-bin_PROGRAMS = gaugedesigner
+bin_PROGRAMS = \
+	       gaugedesigner
 
-glade_files = gaugedesigner.glade
+glade_files = \
+	      gaugedesigner.glade
 
 #xml_files = 
 
