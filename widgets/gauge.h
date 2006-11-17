@@ -37,6 +37,7 @@ G_BEGIN_DECLS
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
+typedef struct _MtxTextBlock		MtxTextBlock;
 typedef struct _MtxXMLFuncs		MtxXMLFuncs;
 typedef struct _MtxDispatchHelper	MtxDispatchHelper;
 
@@ -50,9 +51,9 @@ struct _MtxDispatchHelper
 };
 
 
-/*! \struct MtxColorRange
+/*! \struct _MtxColorRange
  * \brief
- * MtxColorRange is a container struct that holds all the information needed
+ * _MtxColorRange is a container struct that holds all the information needed
  * for a color range span on a gauge. Any gauge can have an arbritrary number
  * of these structs as they are stored in a dynamic array and redraw on
  * gauge background generation
@@ -65,6 +66,25 @@ struct _MtxColorRange
 	gfloat lwidth;		///< % of radius to determine the line width
 	gfloat inset;		///< % of radius to inset the line
 };
+
+
+/*! \struct _MtxTextBlock
+ * \brief
+ * _MtxTextBlock is a container struct that holds information for a text
+ * block to be placed somplace on a gauge.  A dynamic array holds the pointers
+ * to these structs so that any number of them can be created.
+ */
+struct _MtxTextBlock
+{
+	gchar * font;
+	gchar * text;
+	GdkColor color;
+	gfloat font_scale;
+	gfloat x_pos;
+	gfloat y_pos;
+};
+
+
 
 /*! \struct _MtxXMLFuncs
  * \brief This small container struct is used to store a set of import and 
@@ -89,8 +109,6 @@ typedef enum
 	COL_NEEDLE,
 	COL_MAJ_TICK,
 	COL_MIN_TICK,
-	COL_UNIT_FONT,
-	COL_NAME_FONT,
 	COL_VALUE_FONT,
 	COL_MAJ_TICK_TEXT_FONT,
 	COL_GRADIENT_BEGIN,
@@ -100,9 +118,7 @@ typedef enum
 
 typedef enum	
 {
-	NAME = 0,
-	UNITS,
-	VALUE,
+	VALUE = 0,
 	MAJ_TICK,
 	NUM_TEXTS
 }TextIndex;
@@ -138,6 +154,7 @@ struct _MtxGaugeFace
 	gfloat font_scale[NUM_TEXTS];/* Array of font scales */
 	gfloat text_xpos[NUM_TEXTS];/* Array of X offsets for strings */
 	gfloat text_ypos[NUM_TEXTS];/* Array of X offsets for strings */
+	GArray *t_blocks;	/* Array of MtxTextBlock structs */
 	gint precision;		/*! number of decimal places for val */
 	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
 	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
@@ -180,10 +197,15 @@ void mtx_gauge_face_set_show_value (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
+void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *, gchar *, gfloat,GdkColor, gfloat, gfloat);
+gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
 void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
 gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
+GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
 GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
+void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge);
 void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_set_text (MtxGaugeFace *gauge, TextIndex index, gchar * str);
 gchar * mtx_gauge_face_get_text (MtxGaugeFace *gauge, TextIndex index);

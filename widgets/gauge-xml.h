@@ -30,10 +30,12 @@ void testload(GtkWidget *);
 void output_xml(GtkWidget * );
 void mtx_gauge_color_range_export(MtxDispatchHelper *);
 void mtx_gauge_color_export(MtxDispatchHelper *);
+void mtx_gauge_text_block_export(MtxDispatchHelper *);
 void mtx_gauge_gfloat_export(MtxDispatchHelper *);
 void mtx_gauge_gint_export(MtxDispatchHelper *);
 void mtx_gauge_gchar_export(MtxDispatchHelper *);
 void mtx_gauge_color_range_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_text_block_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_color_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_gfloat_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_gint_import(MtxGaugeFace *, xmlNode *, gpointer);
@@ -52,8 +54,6 @@ static const struct
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_width"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"majtick_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"mintick_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"unit_font_color"},
-	{ mtx_gauge_color_import, mtx_gauge_color_export,"name_font_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"major_tick_text_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_begin_color"},
@@ -67,16 +67,6 @@ static const struct
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"stop_radian"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"lbound"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"ubound"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"units_font"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"units_str"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"units_str_xpos"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"units_str_ypos"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"units_font_scale"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"name_font"},
-	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"name_str"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"name_str_xpos"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"name_str_ypos"},
-	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"name_font_scale"},
 	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"value_font"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_font_scale"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_str_xpos"},
@@ -94,7 +84,8 @@ static const struct
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"minor_ticks"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_len"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_width"},
-	{ mtx_gauge_color_range_import, mtx_gauge_color_range_export,"color_range"}
+	{ mtx_gauge_text_block_import, mtx_gauge_text_block_export,"text_block"},
+	{ mtx_gauge_color_range_import, mtx_gauge_color_range_export,"color_range"},
 };
 
 

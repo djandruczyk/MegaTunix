@@ -102,16 +102,6 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->minor_tick_width = 0.1;/* 1 = 10% of radius, so 0.1 = 1% */
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tail = 0.083;  /* % of radius */
-	gauge->font_str[NAME] = g_strdup("Bitstream Vera Sans");
-	gauge->txt_str[NAME] = g_strdup("No name");
-	gauge->text_xpos[NAME] = 0.0;
-	gauge->text_ypos[NAME] = -0.35;
-	gauge->font_scale[NAME] = 0.15;
-	gauge->font_str[UNITS] = g_strdup("Bitstream Vera Sans");
-	gauge->txt_str[UNITS] = g_strdup("No units");
-	gauge->text_xpos[UNITS] = 0.0;
-	gauge->text_ypos[UNITS] = 0.65;
-	gauge->font_scale[UNITS] = 0.1;
 	gauge->font_str[VALUE] = g_strdup("Bitstream Vera Sans");
 	gauge->txt_str[VALUE] = g_strdup("000");
 	gauge->text_xpos[VALUE] = 0.0;
@@ -130,6 +120,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->colormap = gdk_colormap_get_system();
 	gauge->gc = NULL;
 	gauge->ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
+	gauge->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	mtx_gauge_face_init_colors(gauge);
 	mtx_gauge_face_init_name_bindings(gauge);
 	mtx_gauge_face_init_xml_hash(gauge);
@@ -143,8 +134,6 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"needle_color", &gauge->colors[COL_NEEDLE]);
 	g_object_set_data(G_OBJECT(gauge),"majtick_color", &gauge->colors[COL_MAJ_TICK]);
 	g_object_set_data(G_OBJECT(gauge),"mintick_color", &gauge->colors[COL_MIN_TICK]);
-	g_object_set_data(G_OBJECT(gauge),"unit_font_color", &gauge->colors[COL_UNIT_FONT]);
-	g_object_set_data(G_OBJECT(gauge),"name_font_color", &gauge->colors[COL_NAME_FONT]);
 	g_object_set_data(G_OBJECT(gauge),"value_font_color", &gauge->colors[COL_VALUE_FONT]);
 	g_object_set_data(G_OBJECT(gauge),"major_tick_text_color", &gauge->colors[COL_MAJ_TICK_TEXT_FONT]);
 	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", &gauge->colors[COL_GRADIENT_BEGIN]);
@@ -160,20 +149,10 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"stop_radian", &gauge->stop_radian);
 	g_object_set_data(G_OBJECT(gauge),"lbound", &gauge->lbound);
 	g_object_set_data(G_OBJECT(gauge),"ubound", &gauge->ubound);
-	g_object_set_data(G_OBJECT(gauge),"units_font", &gauge->font_str[UNITS]);
-	g_object_set_data(G_OBJECT(gauge),"name_font", &gauge->font_str[NAME]);
 	g_object_set_data(G_OBJECT(gauge),"value_font", &gauge->font_str[VALUE]);
-	g_object_set_data(G_OBJECT(gauge),"name_font_scale", &gauge->font_scale[NAME]);
-	g_object_set_data(G_OBJECT(gauge),"units_font_scale", &gauge->font_scale[UNITS]);
 	g_object_set_data(G_OBJECT(gauge),"value_font_scale", &gauge->font_scale[VALUE]);
 	g_object_set_data(G_OBJECT(gauge),"value_str_xpos", &gauge->text_xpos[VALUE]);
 	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", &gauge->text_ypos[VALUE]);
-	g_object_set_data(G_OBJECT(gauge),"units_str", &gauge->txt_str[UNITS]);
-	g_object_set_data(G_OBJECT(gauge),"units_str_xpos", &gauge->text_xpos[UNITS]);
-	g_object_set_data(G_OBJECT(gauge),"units_str_ypos", &gauge->text_ypos[UNITS]);
-	g_object_set_data(G_OBJECT(gauge),"name_str", &gauge->txt_str[NAME]);
-	g_object_set_data(G_OBJECT(gauge),"name_str_xpos", &gauge->text_xpos[NAME]);
-	g_object_set_data(G_OBJECT(gauge),"name_str_ypos", &gauge->text_ypos[NAME]);
 	g_object_set_data(G_OBJECT(gauge),"antialias", &gauge->antialias);
 	g_object_set_data(G_OBJECT(gauge),"show_value", &gauge->show_value);
 	g_object_set_data(G_OBJECT(gauge),"tick_inset", &gauge->tick_inset);
@@ -240,14 +219,6 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	gauge->colors[COL_MIN_TICK].green=0.8*65535;
 	gauge->colors[COL_MIN_TICK].blue=0.8*65535;
 	/*! Units Font*/
-	gauge->colors[COL_UNIT_FONT].red=0.8*65535;
-	gauge->colors[COL_UNIT_FONT].green=0.8*65535;
-	gauge->colors[COL_UNIT_FONT].blue=0.8*65535;
-	/*! Name Font */
-	gauge->colors[COL_NAME_FONT].red=0.8*65535;
-	gauge->colors[COL_NAME_FONT].green=0.8*65535;
-	gauge->colors[COL_NAME_FONT].blue=0.8*65535;
-	/*! Value Font */
 	gauge->colors[COL_VALUE_FONT].red=0.8*65535;
 	gauge->colors[COL_VALUE_FONT].green=0.8*65535;
 	gauge->colors[COL_VALUE_FONT].blue=0.8*65535;
@@ -619,6 +590,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	cairo_pattern_t *gradient = NULL;
 	cairo_text_extents_t extents;
 	MtxColorRange *range = NULL;
+	MtxTextBlock *tblock = NULL;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
@@ -785,38 +757,23 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	}
 	g_strfreev(vector);
 
-	/* The units string */
-	if (gauge->txt_str[UNITS])
+	/* Render all the text blocks */
+	for (i=0;i<gauge->t_blocks->len;i++)
 	{
+		tblock = g_array_index(gauge->t_blocks,MtxTextBlock *, i);
 		cairo_set_source_rgb (cr, 
-				gauge->colors[COL_UNIT_FONT].red/65535.0,
-				gauge->colors[COL_UNIT_FONT].green/65535.0,
-				gauge->colors[COL_UNIT_FONT].blue/65535.0);
-		cairo_select_font_face (cr, gauge->font_str[UNITS], CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+				tblock->color.red/65535.0,
+				tblock->color.green/65535.0,
+				tblock->color.blue/65535.0);
 
-		cairo_set_font_size (cr, (gauge->radius * gauge->font_scale[UNITS]));
-		cairo_text_extents (cr, gauge->txt_str[UNITS], &extents);
+		cairo_select_font_face (cr, tblock->font, CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+
+		cairo_set_font_size (cr, (gauge->radius * tblock->font_scale));
+		cairo_text_extents (cr, tblock->text, &extents);
 		cairo_move_to (cr, 
-				gauge->xc-(extents.width/2 + extents.x_bearing)+ (gauge->text_xpos[UNITS]*gauge->radius),
-			       	gauge->yc-(extents.height/2 + extents.y_bearing)+ (gauge->text_ypos[UNITS]*gauge->radius));
-		cairo_show_text (cr, gauge->txt_str[UNITS]);
-	}
-
-	/* The name string */
-	if (gauge->txt_str[NAME])
-	{
-		cairo_set_source_rgb (cr, 
-				gauge->colors[COL_NAME_FONT].red/65535.0,
-				gauge->colors[COL_NAME_FONT].green/65535.0,
-				gauge->colors[COL_NAME_FONT].blue/65535.0);
-		cairo_select_font_face (cr, gauge->font_str[NAME], CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
-
-		cairo_set_font_size (cr, (gauge->radius * gauge->font_scale[NAME]));
-		cairo_text_extents (cr, gauge->txt_str[NAME], &extents);
-		cairo_move_to (cr, 
-				gauge->xc-(extents.width/2 + extents.x_bearing)+(gauge->text_xpos[NAME]*gauge->radius),
-			       	gauge->yc-(extents.height/2 + extents.y_bearing)+(gauge->text_ypos[NAME]*gauge->radius));
-		cairo_show_text (cr, gauge->txt_str[NAME]);
+				gauge->xc-(extents.width/2 + extents.x_bearing)+(tblock->x_pos*gauge->radius),
+			       	gauge->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*gauge->radius));
+		cairo_show_text (cr, tblock->text);
 	}
 
 	cairo_destroy (cr);
@@ -862,6 +819,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gint g_sign = 0;
 	gint b_sign = 0;
 	MtxColorRange *range = NULL;
+	MtxTextBlock *tblock = NULL;
 	GdkColor color;
 	GdkColor *b_color;
 	GdkColor *e_color;
@@ -1145,39 +1103,22 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 	}
 
-	/* Units String */
-	if (gauge->txt_str[UNITS])
+	/* text Blocks */
+	for (i=0;i<gauge->t_blocks->len;i++)
 	{
-		gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_UNIT_FONT]);
-		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[UNITS],(gint)(gauge->radius*gauge->font_scale[UNITS]));
+		tblock = g_array_index(gauge->t_blocks,MtxTextBlock *, i);
+		gdk_gc_set_rgb_fg_color(gauge->gc,&tblock->color);
+		tmpbuf = g_strdup_printf("%s %i",tblock->font,(gint)(gauge->radius*tblock->font_scale));
 		gauge->font_desc = pango_font_description_from_string(tmpbuf);
 		g_free(tmpbuf);
 		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
-		pango_layout_set_text(gauge->layout,gauge->txt_str[UNITS],-1);
+		pango_layout_set_text(gauge->layout,tblock->text,-1);
 		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
 
 		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
-				gauge->xc-(logical_rect.width/2)+(gauge->text_xpos[UNITS]*gauge->radius),
-				gauge->yc-(logical_rect.height/2)+(gauge->text_ypos[UNITS]*gauge->radius),gauge->layout);
+				gauge->xc-(logical_rect.width/2)+(tblock->x_pos*gauge->radius),
+				gauge->yc-(logical_rect.height/2)+(tblock->y_pos*gauge->radius),gauge->layout);
 	}
-
-	/* Name String */
-	if (gauge->txt_str[NAME])
-	{
-		gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_NAME_FONT]);
-		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[NAME],(gint)(gauge->radius*gauge->font_scale[NAME]));
-		gauge->font_desc = pango_font_description_from_string(tmpbuf);
-		g_free(tmpbuf);
-		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
-		pango_layout_set_text(gauge->layout,gauge->txt_str[NAME],-1);
-		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
-
-		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
-				gauge->xc-(logical_rect.width/2)+(gauge->text_xpos[NAME]*gauge->radius),
-				gauge->yc-(logical_rect.height/2)+(gauge->text_ypos[NAME]*gauge->radius),gauge->layout);
-	}
-
-
 
 }
 

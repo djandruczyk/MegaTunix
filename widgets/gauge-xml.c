@@ -91,6 +91,7 @@ void mtx_gauge_face_import_xml(GtkWidget *widget, gchar * filename)
 		root_element = xmlDocGetRootElement(doc);
 
 		g_object_freeze_notify(G_OBJECT(gauge));
+		mtx_gauge_face_remove_all_text_blocks(gauge);
 		mtx_gauge_face_remove_all_color_ranges(gauge);
 		load_elements(gauge, root_element);
 		gauge->xc = gauge->w / 2;
@@ -255,6 +256,7 @@ void mtx_gauge_gchar_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 
 }
 
+
 void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 {
 	if (!node->children)
@@ -286,6 +288,44 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 	}
 	g_array_append_val(gauge->ranges,range);
 }
+
+
+void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
+{
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_text_block_import, xml node is empty!!\n");
+		return;
+	}
+	xmlNode *cur_node = NULL;
+	MtxTextBlock *tblock = NULL;
+
+	tblock = g_new0(MtxTextBlock, 1);
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"font") == 0)
+				mtx_gauge_gchar_import(gauge, cur_node,&tblock->font);
+			if (g_strcasecmp((gchar *)cur_node->name,"text") == 0)
+				mtx_gauge_gchar_import(gauge, cur_node,&tblock->text);
+			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tblock->color);
+			if (g_strcasecmp((gchar *)cur_node->name,"font_scale") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tblock->font_scale);
+			if (g_strcasecmp((gchar *)cur_node->name,"x_pos") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tblock->x_pos);
+			if (g_strcasecmp((gchar *)cur_node->name,"y_pos") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tblock->y_pos);
+		}
+		cur_node = cur_node->next;
+	}
+	g_array_append_val(gauge->t_blocks,tblock);
+}
+
+
+
 
 void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 {
@@ -325,6 +365,53 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 
 	}
 }
+
+
+void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
+{
+	gint i = 0;
+	gchar * tmpbuf = NULL;
+	MtxTextBlock *tblock = NULL;
+	xmlNodePtr node = NULL;
+
+	for (i=0;i<helper->gauge->t_blocks->len;i++)
+	{
+		tblock = g_array_index(helper->gauge->t_blocks,MtxTextBlock *, i);
+		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "text_block",NULL );
+				
+		tmpbuf = g_strdup_printf("%s",tblock->font);
+		xmlNewChild(node, NULL, BAD_CAST "font",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%s",tblock->text);
+		xmlNewChild(node, NULL, BAD_CAST "text",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",tblock->font_scale);
+		xmlNewChild(node, NULL, BAD_CAST "font_scale",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",tblock->x_pos);
+		xmlNewChild(node, NULL, BAD_CAST "x_pos",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",tblock->y_pos);
+		xmlNewChild(node, NULL, BAD_CAST "y_pos",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%i %i %i", 
+				tblock->color.red, 
+				tblock->color.green, 
+				tblock->color.blue); 
+		xmlNewChild(node, NULL, BAD_CAST "color",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+
+	}
+}
+
+
+
 
 void mtx_gauge_color_export(MtxDispatchHelper * helper)
 {
