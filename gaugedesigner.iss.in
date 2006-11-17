@@ -1,0 +1,20 @@
+; -- MegaTunix.iss --
+
+
+[Setup]
+AppName=MegaTunix Gaugedesigner
+AppVerName=MegaTunix Gaugedesigner v. @VERSION@@WIN32_SUBRELEASE@
+DefaultDirName={pf}\MegaTunix
+DefaultGroupName=MegaTunix
+UninstallDisplayIcon={app}\gaugedesigner.exe
+Compression=lzma
+SolidCompression=yes
+
+[Files]
+Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.exe"; DestDir: "{app}"
+Source: "z:\home\dave\cvs\MegaTunix\widgets\demo.exe"; DestDir: "{app}"
+Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.glade"; DestDir: "{app}"
+Source: "z:\usr\local\share\MegaTunix\gaugedesigner\*.*"; DestDir: "{app}\.MegaTunix\gaugedesigner"; Flags: recursesubdirs
+
+[Icons]
+Name: "{group}\MtxGaugeDesigner"; Filename: "{app}\gaugedesigner.exe"; WorkingDir: "{app}"
