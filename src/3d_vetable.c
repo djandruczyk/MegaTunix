@@ -23,6 +23,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_processor.h>
 #include <enums.h>
 #include <gdk/gdkglglext.h>
 #include <gdk/gdkkeysyms.h>
@@ -66,6 +67,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *drawing_area;
 	GtkObject * object = NULL;
 	GdkGLConfig *gl_config;
+	gchar * tmpbuf = NULL;
 	struct Ve_View_3D *ve_view;
 	extern GtkTooltips *tip;
 	extern struct Firmware_Details *firmware;
@@ -91,6 +93,9 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"x_source"));
 	ve_view->y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"y_source"));
 	ve_view->z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"z_source"));
+	ve_view->alt_x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"alt_x_source"));
+	ve_view->alt_y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"alt_y_source"));
+	ve_view->alt_z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"alt_z_source"));
 	ve_view->x_suffix = g_strdup(firmware->table_params[table_num]->x_suffix);
 	ve_view->y_suffix = g_strdup(firmware->table_params[table_num]->y_suffix);
 	ve_view->z_suffix = g_strdup(firmware->table_params[table_num]->z_suffix);
@@ -104,26 +109,28 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	assert(ve_view->x_eval);
 	assert(ve_view->y_eval);
 	assert(ve_view->z_eval);
-	
+
 	ve_view->z_page = firmware->table_params[table_num]->z_page;
 	ve_view->z_base = firmware->table_params[table_num]->z_base;
 	ve_view->z_disp_float = firmware->table_params[table_num]->z_disp_float;
-        ve_view->z_precision = firmware->table_params[table_num]->z_disp_precision;
+	ve_view->z_precision = firmware->table_params[table_num]->z_disp_precision;
 
 	ve_view->x_page = firmware->table_params[table_num]->x_page;
 	ve_view->x_base = firmware->table_params[table_num]->x_base;
 	ve_view->x_bincount = firmware->table_params[table_num]->x_bincount;
 	ve_view->x_disp_float = firmware->table_params[table_num]->x_disp_float;
-        ve_view->x_precision = firmware->table_params[table_num]->x_disp_precision;
+	ve_view->x_precision = firmware->table_params[table_num]->x_disp_precision;
 
 	ve_view->y_page = firmware->table_params[table_num]->y_page;
 	ve_view->y_base = firmware->table_params[table_num]->y_base;
 	ve_view->y_bincount = firmware->table_params[table_num]->y_bincount; 
 	ve_view->y_disp_float = firmware->table_params[table_num]->y_disp_float;
-        ve_view->y_precision = firmware->table_params[table_num]->y_disp_precision;
+	ve_view->y_precision = firmware->table_params[table_num]->y_disp_precision;
 
 	ve_view->table_name = g_strdup(firmware->table_params[table_num]->table_name);
 	ve_view->table_num = table_num;
+	
+	ve_view->dep_obj = g_object_get_data(G_OBJECT(widget),"dep_object");
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), ve_view->table_name);
@@ -140,195 +147,196 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	// ATTEMPTED FIX FOR GLIB 2.10
 	g_object_set_data(G_OBJECT(object),"ve_view",(gpointer)ve_view);
 
-	register_widget(g_strdup_printf("ve_view_%i",table_num),
-			(gpointer)object);
+	tmpbuf = g_strdup_printf("ve_view_%i",table_num);
+			register_widget(tmpbuf,(gpointer)object);
+			g_free(tmpbuf);
 
-	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(free_ve3d_sliders),
-			GINT_TO_POINTER(table_num));
-	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(free_ve3d_view),
-			(gpointer) window);
-	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(gtk_widget_destroy),
-			(gpointer) window);
+			g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+				G_CALLBACK(free_ve3d_sliders),
+				GINT_TO_POINTER(table_num));
+			g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+				G_CALLBACK(free_ve3d_view),
+				(gpointer) window);
+			g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+				G_CALLBACK(gtk_widget_destroy),
+				(gpointer) window);
 
-	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
-	gtk_container_add(GTK_CONTAINER(window),vbox);
+			vbox = gtk_vbox_new(FALSE,0);
+			gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+			gtk_container_add(GTK_CONTAINER(window),vbox);
 
-	hbox = gtk_hbox_new(FALSE,5);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
+			hbox = gtk_hbox_new(FALSE,5);
+			gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 
-	frame = gtk_frame_new("VE/Spark Table 3D display");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
+			frame = gtk_frame_new("VE/Spark Table 3D display");
+			gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
-	drawing_area = gtk_drawing_area_new();
-	g_object_set_data(G_OBJECT(drawing_area),"ve_view",(gpointer)ve_view);
-	ve_view->drawing_area = drawing_area;
-	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
+			drawing_area = gtk_drawing_area_new();
+			g_object_set_data(G_OBJECT(drawing_area),"ve_view",(gpointer)ve_view);
+			ve_view->drawing_area = drawing_area;
+			gtk_container_add(GTK_CONTAINER(frame),drawing_area);
 
-	gl_config = get_gl_config();
-	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
-			TRUE, GDK_GL_RGBA_TYPE);
+			gl_config = get_gl_config();
+			gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
+					TRUE, GDK_GL_RGBA_TYPE);
 
-	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
+			GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
 
-	gtk_widget_add_events (drawing_area,
-			GDK_BUTTON1_MOTION_MASK	|
-			GDK_BUTTON2_MOTION_MASK	|
-			GDK_BUTTON3_MOTION_MASK	|
-			GDK_BUTTON_PRESS_MASK	|
-			GDK_KEY_PRESS_MASK	|
-			GDK_KEY_RELEASE_MASK	|
-			GDK_FOCUS_CHANGE_MASK	|
-			GDK_VISIBILITY_NOTIFY_MASK);
+			gtk_widget_add_events (drawing_area,
+					GDK_BUTTON1_MOTION_MASK	|
+					GDK_BUTTON2_MOTION_MASK	|
+					GDK_BUTTON3_MOTION_MASK	|
+					GDK_BUTTON_PRESS_MASK	|
+					GDK_KEY_PRESS_MASK	|
+					GDK_KEY_RELEASE_MASK	|
+					GDK_FOCUS_CHANGE_MASK	|
+					GDK_VISIBILITY_NOTIFY_MASK);
 
-	/* Connect signal handlers to the drawing area */
-	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
-			G_CALLBACK (ve3d_realize), NULL);
-	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
-			G_CALLBACK (ve3d_configure_event), NULL);
-	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
-			G_CALLBACK (ve3d_expose_event), NULL);
-	g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
-			G_CALLBACK (ve3d_motion_notify_event), NULL);
-	g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
-			G_CALLBACK (ve3d_button_press_event), NULL);
-	g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
-			G_CALLBACK (ve3d_key_press_event), NULL);
+			/* Connect signal handlers to the drawing area */
+			g_signal_connect_after(G_OBJECT (drawing_area), "realize",
+					G_CALLBACK (ve3d_realize), NULL);
+			g_signal_connect(G_OBJECT (drawing_area), "configure_event",
+					G_CALLBACK (ve3d_configure_event), NULL);
+			g_signal_connect(G_OBJECT (drawing_area), "expose_event",
+					G_CALLBACK (ve3d_expose_event), NULL);
+			g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
+					G_CALLBACK (ve3d_motion_notify_event), NULL);
+			g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
+					G_CALLBACK (ve3d_button_press_event), NULL);
+			g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
+					G_CALLBACK (ve3d_key_press_event), NULL);
 
-	/* End of GL window, Now controls for it.... */
-	frame = gtk_frame_new("3D Display Controls");
-	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
+			/* End of GL window, Now controls for it.... */
+			frame = gtk_frame_new("3D Display Controls");
+			gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
 
-	vbox2 = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+			vbox2 = gtk_vbox_new(FALSE,0);
+			gtk_container_add(GTK_CONTAINER(frame),vbox2);
 
-	button = gtk_button_new_with_label("Reset Display");
-	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-	g_object_set_data(G_OBJECT(button),"ve_view",(gpointer)ve_view);
-	g_signal_connect_swapped(G_OBJECT (button), "clicked",
-			G_CALLBACK (reset_3d_view), (gpointer)button);
+			button = gtk_button_new_with_label("Reset Display");
+			gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+			g_object_set_data(G_OBJECT(button),"ve_view",(gpointer)ve_view);
+			g_signal_connect_swapped(G_OBJECT (button), "clicked",
+					G_CALLBACK (reset_3d_view), (gpointer)button);
 
-	button = gtk_button_new_with_label("Get Data from ECU");
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_VE_CONST));
-	g_signal_connect(G_OBJECT(button), "clicked",
-			G_CALLBACK(std_button_handler),
-			NULL);
-	gtk_tooltips_set_tip(tip,button,
-			"Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
-	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-
-
-	button = gtk_button_new_with_label("Burn to ECU");
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-	g_signal_connect(G_OBJECT(button), "clicked",
-			G_CALLBACK(std_button_handler),
-			NULL);
-	ve_view->burn_but = button;
-	store_list("burners",g_list_prepend(
-				get_list("burners"),(gpointer)button));
-
-	gtk_tooltips_set_tip(tip,button,
-			"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
-	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-
-	button = gtk_button_new_with_label("Start Reading RT Vars");
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), 
-			NULL);
-	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-
-	button = gtk_button_new_with_label("Stop Reading RT vars");
-	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
-	g_signal_connect(G_OBJECT (button), "clicked",
-			G_CALLBACK (std_button_handler), 
-			NULL);
-	gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-
-	table = gtk_table_new(4,2,FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table),2);
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
-
-	label = gtk_label_new("Edit\nPosition");
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	label = gtk_label_new(NULL);
-	register_widget(g_strdup_printf("x_active_label_%i",table_num),label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	label = gtk_label_new(NULL);
-	register_widget(g_strdup_printf("y_active_label_%i",table_num),label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	label = gtk_label_new(NULL);
-	register_widget(g_strdup_printf("z_active_label_%i",table_num),label);
-	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-
-	label = gtk_label_new("Runtime\nPosition");
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
-			(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	label = gtk_label_new(NULL);
-	register_widget(g_strdup_printf("x_runtime_label_%i",table_num),label);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	label = gtk_label_new(NULL);
-	register_widget(g_strdup_printf("y_runtime_label_%i",table_num),label);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
-	label = gtk_label_new(NULL);
-	register_widget(g_strdup_printf("z_runtime_label_%i",table_num),label);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (0), 0, 0);
+			button = gtk_button_new_with_label("Get Data from ECU");
+			g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(READ_VE_CONST));
+			g_signal_connect(G_OBJECT(button), "clicked",
+					G_CALLBACK(std_button_handler),
+					NULL);
+			gtk_tooltips_set_tip(tip,button,
+					"Reads in the Constants and VEtable from the MegaSquirt ECU and populates the GUI",NULL);
+			gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
 
 
-	button = gtk_button_new_with_label("Close Window");
-	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(free_ve3d_sliders),
-			GINT_TO_POINTER(table_num));
-	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(free_ve3d_view),
-			(gpointer) window);
-	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(gtk_widget_destroy),
-			(gpointer) window);
+			button = gtk_button_new_with_label("Burn to ECU");
+			g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+			g_signal_connect(G_OBJECT(button), "clicked",
+					G_CALLBACK(std_button_handler),
+					NULL);
+			ve_view->burn_but = button;
+			store_list("burners",g_list_prepend(
+						get_list("burners"),(gpointer)button));
+
+			gtk_tooltips_set_tip(tip,button,
+					"Even though MegaTunix writes data to the MS as soon as its changed, it has only written it to the MegaSquirt's RAM, thus you need to select this to burn all variables to flash so on next power up things are as you set them.  We don't want to burn to flash with every variable change as there is the possibility of exceeding the max number of write cycles to the flash memory.", NULL);
+			gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+
+			button = gtk_button_new_with_label("Start Reading RT Vars");
+			g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
+			g_signal_connect(G_OBJECT (button), "clicked",
+					G_CALLBACK (std_button_handler), 
+					NULL);
+			gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+
+			button = gtk_button_new_with_label("Stop Reading RT vars");
+			g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
+			g_signal_connect(G_OBJECT (button), "clicked",
+					G_CALLBACK (std_button_handler), 
+					NULL);
+			gtk_box_pack_start(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+
+			table = gtk_table_new(4,2,FALSE);
+			gtk_table_set_row_spacings(GTK_TABLE(table),2);
+			gtk_table_set_col_spacings(GTK_TABLE(table),5);
+			gtk_box_pack_start(GTK_BOX(vbox2),table,TRUE,TRUE,5);
+
+			label = gtk_label_new("Edit\nPosition");
+			gtk_table_attach (GTK_TABLE (table), label, 0, 1, 0, 1,
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+			label = gtk_label_new(NULL);
+			register_widget(g_strdup_printf("x_active_label_%i",table_num),label);
+			gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+			label = gtk_label_new(NULL);
+			register_widget(g_strdup_printf("y_active_label_%i",table_num),label);
+			gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+			label = gtk_label_new(NULL);
+			register_widget(g_strdup_printf("z_active_label_%i",table_num),label);
+			gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+
+			label = gtk_label_new("Runtime\nPosition");
+			gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+			label = gtk_label_new(NULL);
+			register_widget(g_strdup_printf("x_runtime_label_%i",table_num),label);
+			gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+			label = gtk_label_new(NULL);
+			register_widget(g_strdup_printf("y_runtime_label_%i",table_num),label);
+			gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
+			label = gtk_label_new(NULL);
+			register_widget(g_strdup_printf("z_runtime_label_%i",table_num),label);
+			gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
+					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (0), 0, 0);
 
 
-	frame = gtk_frame_new("Real-Time Variables");
-	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(frame),0);
+			button = gtk_button_new_with_label("Close Window");
+			gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+			g_signal_connect_swapped(G_OBJECT(button), "clicked",
+					G_CALLBACK(free_ve3d_sliders),
+					GINT_TO_POINTER(table_num));
+			g_signal_connect_swapped(G_OBJECT(button), "clicked",
+					G_CALLBACK(free_ve3d_view),
+					(gpointer) window);
+			g_signal_connect_swapped(G_OBJECT(button), "clicked",
+					G_CALLBACK(gtk_widget_destroy),
+					(gpointer) window);
 
-	hbox = gtk_hbox_new(TRUE,5);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-	table = gtk_table_new(2,2,FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
-	register_widget(g_strdup_printf("ve3d_rt_table0_%i",table_num),table);
+			frame = gtk_frame_new("Real-Time Variables");
+			gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
+			gtk_container_set_border_width(GTK_CONTAINER(frame),0);
 
-	table = gtk_table_new(2,2,FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table),5);
-	gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
-	register_widget(g_strdup_printf("ve3d_rt_table1_%i",table_num),table);
+			hbox = gtk_hbox_new(TRUE,5);
+			gtk_container_add(GTK_CONTAINER(frame),hbox);
 
-	load_ve3d_sliders(table_num);
+			table = gtk_table_new(2,2,FALSE);
+			gtk_table_set_col_spacings(GTK_TABLE(table),5);
+			gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+			register_widget(g_strdup_printf("ve3d_rt_table0_%i",table_num),table);
 
-	gtk_widget_show_all(window);
+			table = gtk_table_new(2,2,FALSE);
+			gtk_table_set_col_spacings(GTK_TABLE(table),5);
+			gtk_box_pack_start(GTK_BOX(hbox),table,TRUE,TRUE,0);
+			register_widget(g_strdup_printf("ve3d_rt_table1_%i",table_num),table);
 
-	return TRUE;
+			load_ve3d_sliders(table_num);
+
+			gtk_widget_show_all(window);
+
+			return TRUE;
 }
 
 /*!
@@ -359,6 +367,11 @@ gint free_ve3d_view(GtkWidget *widget)
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
+	g_free(ve_view->alt_x_source);
+	g_free(ve_view->alt_y_source);
+	g_free(ve_view->alt_z_source);
+	if(ve_view->dep_obj)
+		g_object_unref(ve_view->dep_obj);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 
@@ -807,6 +820,7 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
 	gfloat bottom = 0.0;
+	gboolean state = FALSE;
 	extern GHashTable *dynamic_widgets;
 	extern gint ** ms_data;
 
@@ -818,9 +832,22 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 		return;
 	}
 
-	lookup_current_value(ve_view->x_source,&x_val);
-	lookup_current_value(ve_view->y_source,&y_val);
-	lookup_current_value(ve_view->z_source,&z_val);
+	if (ve_view->dep_obj)
+		state = check_dependancies(ve_view->dep_obj);
+
+	if (state && ve_view->alt_x_source)
+		lookup_current_value(ve_view->alt_x_source,&x_val);
+	else
+		lookup_current_value(ve_view->x_source,&x_val);
+	
+	if (state && ve_view->alt_y_source)
+		lookup_current_value(ve_view->alt_y_source,&y_val);
+	else
+		lookup_current_value(ve_view->y_source,&y_val);
+	if (state && ve_view->alt_z_source)
+		lookup_current_value(ve_view->alt_z_source,&z_val);
+	else
+		lookup_current_value(ve_view->z_source,&z_val);
 
 	bottom = (ve_view->z_min-10)/ve_view->z_div;
 	/* Render a green dot at the active VE map position */
@@ -1231,6 +1258,9 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
+	ve_view->alt_x_source = NULL;
+	ve_view->alt_y_source = NULL;
+	ve_view->alt_z_source = NULL;
 	ve_view->x_suffix = NULL;
 	ve_view->y_suffix = NULL;
 	ve_view->z_suffix = NULL;
@@ -1282,6 +1312,7 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->x_bincount = 0;
 	ve_view->y_bincount = 0;
 	ve_view->table_name = NULL;
+	ve_view->dep_obj = NULL;
 	return ve_view;
 }
 

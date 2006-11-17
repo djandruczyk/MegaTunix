@@ -9,7 +9,7 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-dashdesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GLEXT_LIBS@
+dashdesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
@@ -17,8 +17,12 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-dashdesigner_SOURCES = dashdesigner.c
+dashdesigner_SOURCES = dashdesigner.c events.c events.h editor.c editor.h
 
+dashdesigner_DEPENDENCIES = @WIN32_RESOURCES@
+
+resources.o:
+	$(WINDRES) -i resources.rc -o resources.o
 
 bin_PROGRAMS = dashdesigner 
 

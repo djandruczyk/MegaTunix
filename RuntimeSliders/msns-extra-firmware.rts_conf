@@ -17,10 +17,10 @@ row=1
 source=battvolt
 
 [rt_slider_2]
-slider_name=o2_volts
+slider_name=afr
 table=0
 row=2
-source=o2volt
+source=afr
 
 [rt_slider_3]
 slider_name=rpm

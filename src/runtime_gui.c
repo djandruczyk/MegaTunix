@@ -16,6 +16,7 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_processor.h>
 #include <enums.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
@@ -61,6 +62,7 @@ gboolean update_runtime_vars()
 	gchar * string = NULL;
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
+	gboolean state = FALSE;
 
 	if(no_update)
 		return FALSE;
@@ -85,16 +87,44 @@ gboolean update_runtime_vars()
 					G_OBJECT(tmpwidget),"ve_view");
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 			{
-				lookup_current_value(ve_view->x_source,&x);
-				lookup_previous_value(ve_view->x_source,&xl);
+				state = FALSE;
+				if (ve_view->dep_obj)
+					state = check_dependancies(ve_view->dep_obj);
+				if (state && ve_view->alt_x_source)
+				{
+					lookup_current_value(ve_view->alt_x_source,&x);
+					lookup_previous_value(ve_view->alt_x_source,&xl);
+				}
+				else
+				{
+					lookup_current_value(ve_view->x_source,&x);
+					lookup_previous_value(ve_view->x_source,&xl);
+				}
 				if (x != xl)
 					goto redraw;
-				lookup_current_value(ve_view->y_source,&y);
-				lookup_previous_value(ve_view->y_source,&yl);
+				if (state && ve_view->alt_y_source)
+				{
+					lookup_current_value(ve_view->alt_y_source,&y);
+					lookup_previous_value(ve_view->alt_y_source,&yl);
+				}
+				else
+				{
+					lookup_current_value(ve_view->y_source,&y);
+					lookup_previous_value(ve_view->y_source,&yl);
+				}
 				if (y != yl)
 					goto redraw;
-				lookup_current_value(ve_view->z_source,&z);
-				lookup_previous_value(ve_view->z_source,&zl);
+
+				if (state && ve_view->alt_z_source)
+				{
+					lookup_current_value(ve_view->alt_z_source,&z);
+					lookup_previous_value(ve_view->alt_z_source,&zl);
+				}
+				else
+				{
+					lookup_current_value(ve_view->z_source,&z);
+					lookup_previous_value(ve_view->z_source,&zl);
+				}
 				if (z != zl)
 					goto redraw;
 				goto breakout;

@@ -169,12 +169,13 @@ gfloat convert_after_upload(GtkWidget * widget)
  */
 void convert_temps(gpointer widget, gpointer units)
 {
+	GObject *dep_obj = NULL;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gfloat value = 0.0;
 	GtkAdjustment * adj = NULL;
 	gchar *text = NULL;
-	gchar *depend_on = NULL;
+//	gchar *depend_on = NULL;
 	gboolean state = FALSE;
 	gint widget_temp = -1;
 	extern GdkColor black;
@@ -183,17 +184,18 @@ void convert_temps(gpointer widget, gpointer units)
 	 * return TRUE/FALSE.  True if what it depends on is in the matching
 	 * state, FALSE otherwise...
 	 */
-	depend_on = (gchar *)g_object_get_data(G_OBJECT(widget),"depend_on");
+//	depend_on = (gchar *)g_object_get_data(G_OBJECT(widget),"depend_on");
+	dep_obj = (GObject *)g_object_get_data(G_OBJECT(widget),"dep_object");
 	widget_temp = (gint)g_object_get_data(G_OBJECT(widget),"widget_temp");
-	if (depend_on)
-		state = check_dependancies(G_OBJECT(widget));
+	if (dep_obj)
+		state = check_dependancies(G_OBJECT(dep_obj));
 
 
 	if ((int)units == FAHRENHEIT) 
 	{
 		if (GTK_IS_LABEL(widget))
 		{
-			if ((depend_on) && (state))	
+			if ((dep_obj) && (state))	
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_f_label");
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"f_label");
@@ -242,7 +244,7 @@ void convert_temps(gpointer widget, gpointer units)
 	{
 		if (GTK_IS_LABEL(widget))
 		{
-			if ((depend_on) && (state))	
+			if ((dep_obj) && (state))	
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"alt_c_label");
 			else
 				text = (gchar *)g_object_get_data(G_OBJECT(widget),"c_label");

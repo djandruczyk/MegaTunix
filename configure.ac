@@ -169,6 +169,8 @@ Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
+dashdesigner/resources.rc
+gaugedesigner/resources.rc
 src/resources.rc
 include/Makefile
 widgets/Makefile
@@ -182,6 +184,7 @@ Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Gui/Makefile
 MegaTunix.iss
+gaugedesigner.iss
 ])
 
 echo "

@@ -532,6 +532,9 @@ struct Ve_View_3D
 	gchar *x_source;
 	gchar *y_source;
 	gchar *z_source;
+	gchar *alt_x_source;
+	gchar *alt_y_source;
+	gchar *alt_z_source;
 	gchar *x_suffix;
 	gchar *y_suffix;
 	gchar *z_suffix;
@@ -544,6 +547,7 @@ struct Ve_View_3D
 	GtkWidget *drawing_area;
 	GtkWidget *window;
 	GtkWidget *burn_but;
+	GObject *dep_obj;
 	gint y_base;
 	gint y_page;
 	gint y_bincount;

@@ -1,6 +1,7 @@
 #include "../include/defines.h"
 #include <events.h>
 #include "../widgets/gauge.h"
+#include <getfiles.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
@@ -51,7 +52,18 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 	MtxColorRange *range = NULL;
 	gfloat lbound = 0.0;
 	gfloat ubound = 0.0;
-	GladeXML *xml = glade_xml_new("gaugedesigner.glade", "range_dialog", NULL);
+	GladeXML *xml = NULL;
+	gchar * filename = NULL;
+
+	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+		xml = glade_xml_new(filename, "range_dialog", NULL);
+	else
+	{
+		printf("Can't locate primary glade file!!!!\n");
+		exit(-1);
+	}
+
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"range_dialog");
 	if (!GTK_IS_WIDGET(dialog))

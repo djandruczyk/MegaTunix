@@ -242,6 +242,7 @@ void cell_edited(GtkCellRendererText *cell,
 	GtkTreeIter iter;
 	gboolean temp_dep;
 	extern gint temp_units;
+	GObject *dep_obj = NULL;
 	gint lower = 0;
 	gint upper = 0;
 	gfloat new = 0;
@@ -322,8 +323,9 @@ void cell_edited(GtkCellRendererText *cell,
 
 		table = (gchar *)g_object_get_data(G_OBJECT(object),"lookuptable");
 		alt_table = (gchar *)g_object_get_data(G_OBJECT(object),"alt_lookuptable");
-		if (g_object_get_data(object,"depend_on"))
-			state = check_dependancies(object);
+		dep_obj = (GObject *)g_object_get_data(object,"dep_object");
+		if (dep_obj)
+			state = check_dependancies(dep_obj);
 		if (state)
 			lookup = (gint *)g_hash_table_lookup(lookuptables,alt_table);
 		else

@@ -63,6 +63,7 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class->expose_event = mtx_gauge_face_expose;
 	widget_class->button_press_event = mtx_gauge_face_button_press;
 	widget_class->button_release_event = mtx_gauge_face_button_release;
+	widget_class->size_request = mtx_gauge_face_size_request;
 
 	//g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
 }
@@ -255,13 +256,13 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	gauge->colors[COL_MAJ_TICK_TEXT_FONT].green=0.85*65535;
 	gauge->colors[COL_MAJ_TICK_TEXT_FONT].blue=0.85*65535;
 	/*! Gradient Color Begin */
-	gauge->colors[COL_GRADIENT_BEGIN].red=1*65535;
-	gauge->colors[COL_GRADIENT_BEGIN].green=1*65535;
-	gauge->colors[COL_GRADIENT_BEGIN].blue=1*65535;
+	gauge->colors[COL_GRADIENT_BEGIN].red=0.85*65535;
+	gauge->colors[COL_GRADIENT_BEGIN].green=0.85*65535;
+	gauge->colors[COL_GRADIENT_BEGIN].blue=0.85*65535;
 	/*! Gradient Color End */
-	gauge->colors[COL_GRADIENT_END].red=0;
-	gauge->colors[COL_GRADIENT_END].green=0;
-	gauge->colors[COL_GRADIENT_END].blue=0;
+	gauge->colors[COL_GRADIENT_END].red=0.15*65535;
+	gauge->colors[COL_GRADIENT_END].green=0.15*65535;
+	gauge->colors[COL_GRADIENT_END].blue=0.15*65535;
 
 }
 
@@ -1191,6 +1192,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 gboolean mtx_gauge_face_button_press (GtkWidget *widget,
 					     GdkEventButton *event)
 {
+	printf("mtx_gauge_button_press\n");
 	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 	GdkWindowEdge edge = -1;
 	/* Right side of window */
@@ -1227,21 +1229,28 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,
 		switch (event->button)
 		{
 			case 1: /* left button */
-				gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
-						event->button,
-						event->x_root,
-						event->y_root,
-						event->time);
+				if (GTK_IS_WINDOW(widget->parent))
+				{
+					gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+							event->button,
+							event->x_root,
+							event->y_root,
+							event->time);
+				}
 				break;
 			case 2: /* Middle button,  RESIZE */
 				if (edge != -1)
 				{
+					if (GTK_IS_WINDOW(widget->parent))
+					{
+
 					gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 							edge,
 							event->button,
 							event->x_root,
 							event->y_root,
 							event->time);
+					}
 				}
 				break;
 			case 3: /* right button */
@@ -1289,3 +1298,16 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 	return FALSE;
 }
 
+
+/*!
+ \brief sets the INITIAL sizeof the widget
+ \param gauge (GtkWidget *) pointer to the gauge widget
+ \param requisition (GdkRequisition *) struct to set the vars within
+ \returns void
+ */
+gboolean mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition, gpointer data)
+{
+	requisition->width = 100;
+	requisition->height = 100;
+	return TRUE;
+}

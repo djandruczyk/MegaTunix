@@ -169,6 +169,7 @@ gint reverse_lookup(gint value, gint *table)
 gfloat lookup_data(GObject *object, gint offset)
 {
 	extern GHashTable *lookuptables;
+	GObject *dep_obj = NULL;
 	gint *lookuptable = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
@@ -176,8 +177,9 @@ gfloat lookup_data(GObject *object, gint offset)
 
 	table = (gchar *)g_object_get_data(object,"lookuptable");
 	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
-	if (g_object_get_data(object,"depend_on"))
-		state = check_dependancies(object);
+	dep_obj = (GObject *)g_object_get_data(object,"dep_object");
+	if (dep_obj)
+		state = check_dependancies(dep_obj);
 	if (state)
 		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
 	else

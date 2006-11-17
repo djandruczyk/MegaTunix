@@ -1,6 +1,7 @@
 INCLUDES = \
         -I$(top_srcdir)/include \
         @GTK_CFLAGS@ \
+	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 noinst_LTLIBRARIES = libmtxcommon.la

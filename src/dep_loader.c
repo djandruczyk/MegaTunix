@@ -37,6 +37,7 @@
  */
 void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 {
+	GObject *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
 	gchar * key = NULL;
 	gchar ** deps = NULL;
@@ -56,8 +57,12 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 		g_free(tmpbuf);
 	}
 	/* Store list of deps.... */
-	g_object_set_data(object,"deps",deps);
-	g_object_set_data(object,"num_deps",GINT_TO_POINTER(num_deps));
+	dep_obj = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	g_object_ref(G_OBJECT(dep_obj));
+	gtk_object_sink(GTK_OBJECT(dep_obj));
+
+	g_object_set_data(dep_obj,"deps",deps);
+	g_object_set_data(dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
 
 	for (i=0;i<num_deps;i++)
 	{
@@ -71,7 +76,7 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 		{
 			type = translate_string(tmpbuf);
 			g_free(tmpbuf);
-			g_object_set_data(object,key,GINT_TO_POINTER(type));
+			g_object_set_data(dep_obj,key,GINT_TO_POINTER(type));
 		}
 		g_free(key);
 		if (type == VE_EMB_BIT)
@@ -80,31 +85,31 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
 				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
 			else
-				g_object_set_data(object,key,GINT_TO_POINTER(tmpi));
+				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_offset",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
 				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
 			else
-				g_object_set_data(object,key,GINT_TO_POINTER(tmpi));
+				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitshift",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
 				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
 			else
-				g_object_set_data(object,key,GINT_TO_POINTER(tmpi));
+				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitmask",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
 				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
 			else
-				g_object_set_data(object,key,GINT_TO_POINTER(tmpi));
+				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitval",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
 				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
 			else
-				g_object_set_data(object,key,GINT_TO_POINTER(tmpi));
+				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 
 		}
@@ -114,16 +119,17 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
 				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
 			else
-				g_object_set_data(object,key,GINT_TO_POINTER(tmpi));
+				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_offset",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
 				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
 			else
-				g_object_set_data(object,key,GINT_TO_POINTER(tmpi));
+				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 		}
 			
 	}
+	g_object_set_data(object,"dep_object",(gpointer)dep_obj);
 
 }

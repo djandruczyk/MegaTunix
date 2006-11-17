@@ -39,12 +39,13 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="add_gauge1">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Add a new gauge to the Dash</property>
 		      <property name="label" translatable="yes">_Add Gauge</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="add_gauge" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image25">
+			<widget class="GtkImage" id="image28">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -66,7 +67,7 @@
 		      <signal name="activate" handler="import_dash_xml" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image26">
+			<widget class="GtkImage" id="image29">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -88,7 +89,7 @@
 		      <signal name="activate" handler="export_dash_xml_default" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image27">
+			<widget class="GtkImage" id="image30">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -110,7 +111,7 @@
 		      <signal name="activate" handler="export_dash_xml_as" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image28">
+			<widget class="GtkImage" id="image31">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save-as</property>
 			  <property name="icon_size">1</property>
@@ -172,11 +173,20 @@
       </child>
 
       <child>
-	<widget class="GtkFixed" id="fixed1">
-	  <property name="width_request">640</property>
-	  <property name="height_request">480</property>
+	<widget class="GtkEventBox" id="eventbox1">
 	  <property name="visible">True</property>
-	  <signal name="button_press_event" handler="button_press_event" last_modification_time="Wed, 08 Nov 2006 20:55:48 GMT"/>
+	  <property name="visible_window">True</property>
+	  <property name="above_child">True</property>
+	  <signal name="motion_notify_event" handler="motion_event" last_modification_time="Thu, 09 Nov 2006 18:14:19 GMT"/>
+	  <signal name="event" handler="editor_on_event" last_modification_time="Fri, 10 Nov 2006 03:46:04 GMT"/>
+
+	  <child>
+	    <widget class="GtkFixed" id="dashboard">
+	      <property name="width_request">640</property>
+	      <property name="height_request">480</property>
+	      <property name="visible">True</property>
+	    </widget>
+	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
