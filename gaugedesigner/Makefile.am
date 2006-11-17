@@ -18,7 +18,7 @@ CLEANFILES = *~ core gmon.out nohup.out
 
 gaugedesigner_SOURCES = main.c events.c events.h
 
-gaugedesigner_DEPENDENCIES = @WIN32_RESOURCES@
+gaugedesigner_DEPENDENCIES = @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la
 
 resources.o:
 	$(WINDRES) -i resources.rc -o resources.o

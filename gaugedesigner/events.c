@@ -35,6 +35,9 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	tmp = glade_xml_get_widget(xml,"color_ranges_frame");
 	gtk_widget_set_sensitive(tmp,TRUE);
 
+	tmp = glade_xml_get_widget(xml,"tblocks_frame");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
 	tmp = glade_xml_get_widget(xml,"import_export_frame");
 	gtk_widget_set_sensitive(tmp,TRUE);
 
@@ -44,6 +47,7 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	update_attributes(xml);
 	return (TRUE);
 }
+
 
 EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 {
@@ -57,7 +61,10 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 
 	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
+	{
 		xml = glade_xml_new(filename, "range_dialog", NULL);
+		g_free(filename);
+	}
 	else
 	{
 		printf("Can't locate primary glade file!!!!\n");
@@ -101,6 +108,65 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 	return (FALSE);
 }
 
+EXPORT gboolean create_text_block(GtkWidget * widget, gpointer data)
+{
+	GtkWidget *dialog = NULL;
+	MtxTextBlock *tblock = NULL;
+	GladeXML *xml = NULL;
+	gchar * filename = NULL;
+
+	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+	{
+		xml = glade_xml_new(filename, "tblock_dialog", NULL);
+		g_free(filename);
+	}
+	else
+	{
+		printf("Can't locate primary glade file!!!!\n");
+		exit(-1);
+	}
+
+	glade_xml_signal_autoconnect(xml);
+	dialog = glade_xml_get_widget(xml,"tblock_dialog");
+	if (!GTK_IS_WIDGET(dialog))
+	{
+		return FALSE;
+	}
+
+	gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+	switch (result)
+	{
+		case GTK_RESPONSE_APPLY:
+			tblock = g_new0(MtxTextBlock, 1);
+			tblock->font_scale = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_font_scale_spin")));
+			tblock->x_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_xpos_spin")));
+			tblock->y_pos = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tblock_ypos_spin")));
+			tblock->text = gtk_editable_get_chars(GTK_EDITABLE(glade_xml_get_widget(xml,"tblock_text_entry")),0,-1);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_colorbutton")),&tblock->color);
+			tblock->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(glade_xml_get_widget(xml,"tblock_fontbutton")));
+			tblock->font = g_strchomp(g_strdelimit(tblock->font,"0123456789",' '));
+			printf("data sending to widget\n");
+			printf("Font: %s\n",tblock->font);
+			printf("Text: %s\n",tblock->text);
+			printf("font Scale: %f\n",tblock->font_scale);
+			printf("xpos: %f\n",tblock->x_pos);
+			printf("ypos: %f\n",tblock->y_pos);
+			mtx_gauge_face_set_text_block_struct(MTX_GAUGE_FACE(gauge),tblock);
+			g_free(tblock->text);
+			g_free(tblock);
+			update_onscreen_tblocks(widget);
+
+			break;
+		default:
+			break;
+	}
+	gtk_widget_destroy(dialog);
+
+	return (FALSE);
+}
+
+
 EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint tmpi;
@@ -132,18 +198,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case MIN_TICK_WIDTH:
 			mtx_gauge_face_set_minor_tick_width(g,tmpf);
-			break;
-		case NAME_XPOS:
-			mtx_gauge_face_set_str_xpos(g, NAME, tmpf);
-			break;
-		case NAME_YPOS:
-			mtx_gauge_face_set_str_ypos(g, NAME, tmpf);
-			break;
-		case UNITS_XPOS:
-			mtx_gauge_face_set_str_xpos(g, UNITS, tmpf);
-			break;
-		case UNITS_YPOS:
-			mtx_gauge_face_set_str_ypos(g, UNITS, tmpf);
 			break;
 		case VALUE_XPOS:
 			mtx_gauge_face_set_str_xpos(g, VALUE, tmpf);
@@ -177,12 +231,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case NEEDLE_TAIL:
 			mtx_gauge_face_set_needle_tail(g,tmpf);
-			break;
-		case NAME_SCALE:
-			mtx_gauge_face_set_font_scale(g, NAME, tmpf);
-			break;
-		case UNITS_SCALE:
-			mtx_gauge_face_set_font_scale(g, UNITS, tmpf);
 			break;
 		case VALUE_SCALE:
 			mtx_gauge_face_set_font_scale(g, VALUE, tmpf);
@@ -236,12 +284,6 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"needle_tail_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_needle_tail(g));
 
-	widget = glade_xml_get_widget(xml,"name_font_scale_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_font_scale(g, NAME));
-
-	widget = glade_xml_get_widget(xml,"units_font_scale_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_font_scale(g, UNITS));
-
 	widget = glade_xml_get_widget(xml,"value_font_scale_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_font_scale(g, VALUE));
 
@@ -261,18 +303,6 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"ubound_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
-	mtx_gauge_face_get_str_pos(g,NAME, &tmp1,&tmp2);
-	widget = glade_xml_get_widget(xml,"name_xpos_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
-	widget = glade_xml_get_widget(xml,"name_ypos_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
-
-	mtx_gauge_face_get_str_pos(g,UNITS,&tmp1,&tmp2);
-	widget = glade_xml_get_widget(xml,"units_xpos_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
-	widget = glade_xml_get_widget(xml,"units_ypos_spin");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
-
 	mtx_gauge_face_get_str_pos(g,VALUE,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(xml,"value_xpos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
@@ -282,34 +312,10 @@ void update_attributes(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"precision_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_precision(g));
 
-	widget = glade_xml_get_widget(xml,"name_string_entry");
-	tmpbuf = mtx_gauge_face_get_text(g, NAME);
-	gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	g_free(tmpbuf);
-
-	widget = glade_xml_get_widget(xml,"units_string_entry");
-	tmpbuf = mtx_gauge_face_get_text(g, UNITS);
-	gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	g_free(tmpbuf);
-
 	widget = glade_xml_get_widget(xml,"major_tick_string_entry");
 	tmpbuf = mtx_gauge_face_get_text(g, MAJ_TICK);
 	if (tmpbuf)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	g_free(tmpbuf);
-
-	widget = glade_xml_get_widget(xml,"name_font_button");
-	tmpbuf0 = mtx_gauge_face_get_font(g,NAME);
-	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
-	g_free(tmpbuf0);
-	g_free(tmpbuf);
-
-	widget = glade_xml_get_widget(xml,"units_font_button");
-	tmpbuf0 = mtx_gauge_face_get_font(g,UNITS);
-	tmpbuf = g_strdup_printf("%s 13",tmpbuf0);
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),tmpbuf);
-	g_free(tmpbuf0);
 	g_free(tmpbuf);
 
 	widget = glade_xml_get_widget(xml,"value_font_button");
@@ -331,12 +337,6 @@ void update_attributes(GladeXML * xml)
 
 	widget = glade_xml_get_widget(xml,"show_value_check");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),mtx_gauge_face_get_show_value(g));
-
-	widget = glade_xml_get_widget(xml,"name_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_NAME_FONT));
-
-	widget = glade_xml_get_widget(xml,"units_color_button");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_UNIT_FONT));
 
 	widget = glade_xml_get_widget(xml,"value_color_button");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),mtx_gauge_face_get_color(g,COL_VALUE_FONT));
@@ -390,12 +390,6 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 
 	switch ((func)handler)
 	{
-		case NAME_STR:
-			mtx_gauge_face_set_text(g, NAME, tmpbuf);
-			break;
-		case UNITS_STR:
-			mtx_gauge_face_set_text(g, UNITS, tmpbuf);
-			break;
 		case MAJ_TICK_STR:
 			mtx_gauge_face_set_text(g, MAJ_TICK, tmpbuf);
 			break;
@@ -423,14 +417,8 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 
 	switch ((func)handler)
 	{
-		case NAME_FONT:
-			mtx_gauge_face_set_font(g, NAME, tmpbuf);
-			break;
 		case VALUE_FONT:
 			mtx_gauge_face_set_font(g, VALUE, tmpbuf);
-			break;
-		case UNITS_FONT:
-			mtx_gauge_face_set_font(g, UNITS, tmpbuf);
 			break;
 		case MAJ_TICK_FONT:
 			mtx_gauge_face_set_font(g, MAJ_TICK, tmpbuf);
@@ -481,9 +469,10 @@ EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
 void update_onscreen_ranges(GtkWidget *widget)
 {
 	GtkWidget *toptable = NULL;
-	GtkWidget *table = NULL;
+	static GtkWidget *table = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
+	gchar * tmpbuf = NULL;
 	gint i = 0;
 	gint y = 1;
 	MtxColorRange *range = NULL;
@@ -498,13 +487,11 @@ void update_onscreen_ranges(GtkWidget *widget)
 		return;
 	}
 	y=1;
-	if (g_object_get_data(G_OBJECT(toptable),"subtable") != NULL)
-	{
-		gtk_widget_destroy(g_object_get_data(G_OBJECT(toptable),"subtable"));
-	}
+	if (table != NULL)
+		gtk_widget_destroy(table);
+
 	table = gtk_table_new(2,6,FALSE);
 	gtk_table_attach(GTK_TABLE(toptable),table,0,1,1,2,GTK_FILL,GTK_FILL,0,0);
-	g_object_set_data(G_OBJECT(toptable),"subtable",table);
 	if (array->len > 0)
 	{
 		/* Create headers */
@@ -528,25 +515,30 @@ void update_onscreen_ranges(GtkWidget *widget)
 		g_object_set_data(G_OBJECT(button),"table_ptr",toptable);
 		g_signal_connect(G_OBJECT(button),"toggled", G_CALLBACK(remove_range),NULL);
 		gtk_table_attach(GTK_TABLE(table),button,0,1,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
-		label = gtk_label_new(g_strdup_printf("%.3f",range->lowpoint));
-		g_object_set_data(G_OBJECT(button),"lowpt_ptr",label);
+		tmpbuf = g_strdup_printf("%.3f",range->lowpoint);
+		label = gtk_label_new(tmpbuf);
+		g_free(tmpbuf);
 		gtk_table_attach(GTK_TABLE(table),label,1,2,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
-		label = gtk_label_new(g_strdup_printf("%.3f",range->highpoint));
-		g_object_set_data(G_OBJECT(button),"highpt_ptr",label);
+		tmpbuf = g_strdup_printf("%.3f",range->highpoint);
+		label = gtk_label_new(tmpbuf);
+		g_free(tmpbuf);
+
 		gtk_table_attach(GTK_TABLE(table),label,2,3,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
-		label = gtk_label_new(g_strdup_printf("%.3f",range->inset));
-		g_object_set_data(G_OBJECT(button),"inset_ptr",label);
+		tmpbuf = g_strdup_printf("%.3f",range->inset);
+		label = gtk_label_new(tmpbuf);
+		g_free(tmpbuf);
 		gtk_table_attach(GTK_TABLE(table),label,3,4,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
-		label = gtk_label_new(g_strdup_printf("%.3f",range->lwidth));
-		g_object_set_data(G_OBJECT(button),"lwidth_ptr",label);
+		tmpbuf = g_strdup_printf("%.3f",range->lwidth);
+		label = gtk_label_new(tmpbuf);
+		g_free(tmpbuf);
 		gtk_table_attach(GTK_TABLE(table),label,4,5,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		label = gtk_color_button_new_with_color(&range->color);
-		g_object_set_data(G_OBJECT(button),"color_ptr",label);
 		gtk_table_attach(GTK_TABLE(table),label,5,6,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
 		y++;
 	}
 	gtk_widget_show_all(toptable);
 }
+
 
 gboolean remove_range(GtkWidget * widget, gpointer data)
 {
@@ -574,12 +566,13 @@ EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 	return FALSE;
 }
 
+
+
+
 EXPORT gboolean xml_button_handler(GtkWidget *widget, gpointer data)
 {
-	gchar *tmpbuf = NULL;
 	int handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	GladeXML *xml = glade_get_widget_tree(widget);
-	gchar * name = NULL;
 	GtkWidget *dialog = NULL;
 	if (hold_handlers)
 		return TRUE;
@@ -605,22 +598,19 @@ EXPORT gboolean xml_button_handler(GtkWidget *widget, gpointer data)
 #if GTK_MINOR_VERSION >= 8
 			gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 #endif
-			tmpbuf = mtx_gauge_face_get_text(MTX_GAUGE_FACE(gauge), NAME);
-			name = g_strdup_printf("%s_Gauge.xml",tmpbuf);
-			g_free(tmpbuf);
-			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), name);
-			g_free(name);
+			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "_Gauge.xml");
 			break;
 	}
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		char *filename;
+		gchar *filename;
 
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if (handler == IMPORT_XML)
 		{
 			mtx_gauge_face_import_xml(gauge,filename);
 			update_attributes(xml);
+			update_onscreen_tblocks(widget);
 			update_onscreen_ranges(widget);
 		}
 		if (handler == EXPORT_XML)
@@ -680,3 +670,136 @@ gboolean sweep_gauge(gpointer data)
 		return TRUE;
 
 }
+
+
+void update_onscreen_tblocks(GtkWidget *widget)
+{
+	GtkWidget *toptable = NULL;
+	static GtkWidget *table = NULL;
+	GtkWidget *button = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *spin = NULL;
+	gchar * tmpbuf = NULL;
+	gint i = 0;
+	gint y = 1;
+	MtxTextBlock *tblock = NULL;
+	GArray * array = NULL;
+
+	GladeXML *xml = glade_get_widget_tree(widget);
+	array = mtx_gauge_face_get_text_blocks(MTX_GAUGE_FACE(gauge));
+	toptable = glade_xml_get_widget(xml,"text_blocks_layout_table");
+	if (!GTK_IS_WIDGET(toptable))
+		return;
+
+	if (table)
+		gtk_widget_destroy(table);
+
+	table = gtk_table_new(2,7,FALSE);
+	gtk_table_attach(GTK_TABLE(toptable),table,0,1,1,2,GTK_FILL,GTK_FILL,0,0);
+
+	if (array->len > 0)
+	{
+		/* Create headers */
+		label = gtk_label_new("Font");
+		gtk_table_attach(GTK_TABLE(table),label,1,2,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Text");
+		gtk_table_attach(GTK_TABLE(table),label,2,3,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Font Scale");
+		gtk_table_attach(GTK_TABLE(table),label,3,4,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Xpos");
+		gtk_table_attach(GTK_TABLE(table),label,4,5,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Ypos");
+		gtk_table_attach(GTK_TABLE(table),label,5,6,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+		label = gtk_label_new("Color");
+		gtk_table_attach(GTK_TABLE(table),label,6,7,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
+	}
+	/* Repopulate the table with the current tblocks... */
+	y=1;
+	for (i=0;i<array->len; i++)
+	{
+		tblock = g_array_index(array,MtxTextBlock *, i);
+		button = gtk_check_button_new();
+		g_object_set_data(G_OBJECT(button),"tblock_index",GINT_TO_POINTER(i));
+		g_object_set_data(G_OBJECT(button),"table_ptr",toptable);
+		g_signal_connect(G_OBJECT(button),"toggled", G_CALLBACK(remove_tblock),NULL);
+		gtk_table_attach(GTK_TABLE(table),button,0,1,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+		tmpbuf = g_strdup_printf("%s",tblock->font);
+		label = gtk_label_new(tmpbuf);
+		g_free(tmpbuf);
+		gtk_table_attach(GTK_TABLE(table),label,1,2,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+		tmpbuf = g_strdup_printf("%s",tblock->text);
+		label = gtk_label_new(tmpbuf);
+		g_free(tmpbuf);
+		gtk_table_attach(GTK_TABLE(table),label,2,3,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+		spin = gtk_spin_button_new_with_range(0,1,0.001);
+		g_object_set_data(G_OBJECT(spin),"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin),tblock->font_scale);
+		g_signal_connect(G_OBJECT(spin),"value_changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_FONT_SCALE));
+		gtk_table_attach(GTK_TABLE(table),spin,3,4,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+		spin = gtk_spin_button_new_with_range(-1,1,0.001);
+		g_object_set_data(G_OBJECT(spin),"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin),tblock->x_pos);
+		g_signal_connect(G_OBJECT(spin),"value_changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_X_POS));
+		gtk_table_attach(GTK_TABLE(table),spin,4,5,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+
+		spin = gtk_spin_button_new_with_range(-1,1,0.001);
+		g_object_set_data(G_OBJECT(spin),"index",GINT_TO_POINTER(i));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(spin),tblock->y_pos);
+		g_signal_connect(G_OBJECT(spin),"value_changed", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_Y_POS));
+		gtk_table_attach(GTK_TABLE(table),spin,5,6,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+
+
+		label = gtk_color_button_new_with_color(&tblock->color);
+		g_signal_connect(G_OBJECT(label),"color_set", G_CALLBACK(alter_tblock_data),GINT_TO_POINTER(TB_COLOR));
+		gtk_table_attach(GTK_TABLE(table),label,6,7,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
+		y++;
+	}
+	gtk_widget_show_all(toptable);
+}
+
+
+gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
+{
+	gint index = (gint)g_object_get_data(G_OBJECT(widget),"index");
+	gfloat value = 0.0;
+	GdkColor color;
+	TbField field = (TbField)data;
+
+	switch (field)
+	{
+		case TB_FONT_SCALE:
+		case TB_X_POS:
+		case TB_Y_POS:
+			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+			mtx_gauge_face_alter_text_block(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
+			break;
+		case TB_COLOR:
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
+			mtx_gauge_face_alter_text_block(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
+			break;
+		case TB_FONT:
+		case TB_TEXT:
+		default:
+			/* Not implemented */
+			break;
+
+	}
+	return TRUE;
+}
+
+
+gboolean remove_tblock(GtkWidget * widget, gpointer data)
+{
+	gint index = -1;
+
+	index = (gint)g_object_get_data(G_OBJECT(widget),"tblock_index");
+	printf("attempting to remove text block at index %i\n",index);
+	mtx_gauge_face_remove_text_block(MTX_GAUGE_FACE(gauge),index);
+	update_onscreen_tblocks(g_object_get_data(G_OBJECT(widget),"table_ptr"));
+
+	return TRUE;
+}
+

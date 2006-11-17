@@ -103,7 +103,6 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tail = 0.083;  /* % of radius */
 	gauge->font_str[VALUE] = g_strdup("Bitstream Vera Sans");
-	gauge->txt_str[VALUE] = g_strdup("000");
 	gauge->text_xpos[VALUE] = 0.0;
 	gauge->text_ypos[VALUE] = 0.40;
 	gauge->font_scale[VALUE] = 0.2;

@@ -123,6 +123,17 @@ typedef enum
 	NUM_TEXTS
 }TextIndex;
 
+typedef enum
+{
+	TB_FONT_SCALE = 0,
+	TB_X_POS,
+	TB_Y_POS,
+	TB_COLOR,
+	TB_FONT,
+	TB_TEXT,
+	TB_NUM_FIELDS,
+}TbField;
+
 
 struct _MtxGaugeFace
 {//public data
@@ -198,6 +209,7 @@ gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *, gchar *, gfloat,GdkColor, gfloat, gfloat);
+void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
 void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
 gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
