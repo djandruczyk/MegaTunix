@@ -12,6 +12,7 @@
 
 EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 {
+#if GTK_MINOR_VERSION >= 8
 	gchar *authors[] = {"David Andruczyk",NULL};
 	gchar *artists[] = {"Dale Anderson",NULL};
 	gtk_show_about_dialog(NULL,
@@ -25,6 +26,7 @@ EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 			"artists",artists,
 			"documenters",authors,
 			NULL);
+#endif
 	return TRUE;
 }
 

@@ -17,7 +17,7 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-dashdesigner_SOURCES = dashdesigner.c events.c events.h editor.c editor.h
+dashdesigner_SOURCES = dashdesigner.c events.c events.h 
 
 dashdesigner_DEPENDENCIES = @WIN32_RESOURCES@
 
