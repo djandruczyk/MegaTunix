@@ -44,7 +44,7 @@ AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/
 dnl check paths for necessary files
 
 dnl MACRO definition to determine if running GTK> 2.8 or not for use of cairo
-AC_DEFUN(PKG_CHECK_GTK, 
+AC_DEFUN([PKG_CHECK_GTK], 
 [
 	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.8.0 gthread-2.0],
 	[ 
