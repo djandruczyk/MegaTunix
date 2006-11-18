@@ -85,6 +85,7 @@ int main (int argc, char ** argv )
 		mtx_gauge_face_import_xml(gauge,argv[1]);
 		update_attributes(xml);
 		update_onscreen_ranges(widget);
+		update_onscreen_tblocks(widget);
 		gtk_widget_set_sensitive(widget,TRUE);
 	}
 
