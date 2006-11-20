@@ -19,7 +19,6 @@
 #include <math.h>
 
 gboolean update_gauge(gpointer );
-void draw_mask(GtkWidget *, GdkBitmap *);
 
 int main (int argc, char **argv)
 {
@@ -75,7 +74,7 @@ int main (int argc, char **argv)
 	mtx_gauge_face_export_xml(gauge,"output2.xml");
 
 
-	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
+//	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
 	g_signal_connect (window, "destroy",
@@ -83,48 +82,6 @@ int main (int argc, char **argv)
 
 	gtk_main ();
 	return 0;
-}
-
-void draw_mask(GtkWidget *widget, GdkBitmap *bitmap)
-{
-	GdkColormap *colormap;
-	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
-	GdkColor black;
-	GdkColor white;
-	GdkGC *gc;
-
-	colormap = gdk_colormap_get_system ();
-	gdk_color_parse ("black", & black);
-	gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
-	gdk_color_parse ("white", & white);
-	gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
-
-	gc = gdk_gc_new (bitmap);
-	gdk_gc_set_foreground (gc, &black);
-//	gdk_gc_set_background (gc, & white);
-
-	// fill window_shape_bitmap with black
-	gdk_draw_rectangle (bitmap,
-			gc,
-			TRUE,  // filled
-			0,     // x
-			0,     // y
-			gauge->w,
-			gauge->h);
-
-	gdk_gc_set_foreground (gc, & white);
-//	gdk_gc_set_foreground (gc, & black);
-
-	// draw white filled circle into window_shape_bitmap
-	gdk_draw_arc (bitmap,
-			gc,
-			TRUE,     // filled
-			gauge->xc-gauge->radius*0.995,
-			gauge->yc-gauge->radius*0.995,
-			2*(gauge->radius*0.995),
-			2*(gauge->radius*0.995),
-			0,        // angle 1
-			360*64);  // angle 2: full ci
 }
 
 gboolean update_gauge(gpointer data)

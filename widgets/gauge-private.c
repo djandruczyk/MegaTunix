@@ -524,7 +524,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				2*(gauge->radius),
 				2*(gauge->radius),
 				0,        // angle 1
-				360*64);  // angle 2: full ci
+				360*64);  // angle 2: full circle
 
 	}
 	generate_gauge_background(widget);
@@ -1132,7 +1132,6 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 gboolean mtx_gauge_face_button_press (GtkWidget *widget,
 					     GdkEventButton *event)
 {
-	printf("mtx_gauge_button_press\n");
 	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 	GdkWindowEdge edge = -1;
 	/* Right side of window */
@@ -1245,9 +1244,8 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
  \param requisition (GdkRequisition *) struct to set the vars within
  \returns void
  */
-gboolean mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition, gpointer data)
+void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
-	requisition->width = 100;
-	requisition->height = 100;
-	return TRUE;
+	requisition->width = 80;
+	requisition->height = 80;
 }
