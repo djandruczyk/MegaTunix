@@ -3,7 +3,7 @@ dashdir = $(datadir)/MegaTunix/$(DASH_DATA_DIR)
 INCLUDES = \
 	-I/usr/include \
         -I$(top_srcdir)/include \
-	-I../widgets \
+	-I$(top_srcdir)/widgets \
         @GTK_CFLAGS@ \
         @LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
@@ -19,7 +19,7 @@ CLEANFILES = *~ core gmon.out nohup.out
 
 dashdesigner_SOURCES = dashdesigner.c events.c events.h 
 
-dashdesigner_DEPENDENCIES = @WIN32_RESOURCES@
+dashdesigner_DEPENDENCIES = @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la
 
 resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
@@ -30,4 +30,4 @@ glade_files = dashdesigner.glade
 
 dash_DATA = $(glade_files)
 
-EXTRA_DIST = README $(dash_DATA)
+EXTRA_DIST = $(dash_DATA)

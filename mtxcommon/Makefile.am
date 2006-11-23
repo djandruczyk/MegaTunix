@@ -6,7 +6,7 @@ INCLUDES = \
 
 noinst_LTLIBRARIES = libmtxcommon.la
 
-libmtxcommon_la_SOURCES = getfiles.c getfiles.h binreloc.c binreloc.h
+libmtxcommon_la_SOURCES = getfiles.c binreloc.c 
 
 libmtxcommon_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@
 
@@ -16,6 +16,6 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-EXTRA_DIST = README
+EXTRA_DIST = 
 
 

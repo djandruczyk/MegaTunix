@@ -63,6 +63,7 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class->expose_event = mtx_gauge_face_expose;
 	widget_class->button_press_event = mtx_gauge_face_button_press;
 	widget_class->button_release_event = mtx_gauge_face_button_release;
+	widget_class->motion_notify_event = mtx_gauge_face_motion_event;
 	widget_class->size_request = mtx_gauge_face_size_request;
 
 	//g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
@@ -77,7 +78,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 {
 	//which events widget receives
 	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
-			       | GDK_BUTTON_RELEASE_MASK);
+			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
 
 	gauge->w = 0;
 	gauge->h = 0;
@@ -1129,11 +1130,12 @@ void gdk_generate_gauge_background(GtkWidget *widget)
  pressed
  \returns FALSE
  */
-gboolean mtx_gauge_face_button_press (GtkWidget *widget,
-					     GdkEventButton *event)
+gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
+					     
 {
 	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 	GdkWindowEdge edge = -1;
+	printf("gauge button event\n");
 	/* Right side of window */
 	if (event->x > (0.55*gauge->w))
 	{
@@ -1198,6 +1200,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,
 				break;
 		}
 	}
+	printf("gauge button event ENDING\n");
 	return FALSE;
 }
 
@@ -1226,8 +1229,8 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
  released
  \returns FALSE
  */
-gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
-					       GdkEventButton *event)
+gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
+					       
 {
 	/*
 	MtxGaugeFacePrivate *priv;
@@ -1236,6 +1239,15 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,
 //	printf("button release\n");
 	return FALSE;
 }
+
+
+gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
+{
+	/* We don't care, but return FALSE to propogate properly */
+	printf("motion in gauge, returning false\n");
+	return FALSE;
+}
+					       
 
 
 /*!

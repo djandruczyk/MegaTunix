@@ -27,6 +27,8 @@ EXPORT gboolean add_gauge(GtkWidget *, gpointer );
 EXPORT gboolean dashdesigner_quit(GtkWidget *, gpointer );
 EXPORT gboolean export_dash_xml_default(GtkWidget *, gpointer );
 EXPORT gboolean export_dash_xml_as(GtkWidget *, gpointer );
+EXPORT gboolean motion_event(GtkWidget *, GdkEventMotion *,gpointer );
+EXPORT gboolean button_event(GtkWidget *, GdkEventButton *,gpointer );
 			 
 /* Prototypes */
 
