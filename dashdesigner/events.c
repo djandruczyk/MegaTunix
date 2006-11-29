@@ -12,6 +12,8 @@
 static gint child_x = 0;
 static gint child_y = 0;
 static gboolean grabbed = FALSE;
+static gboolean resizing = FALSE;
+static gboolean moving = FALSE;
 static GtkWidget *dragged_widget = NULL;
 
 EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
@@ -57,7 +59,7 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 	mtx_gauge_face_import_xml(gauge,"test.xml");
 	gtk_widget_show_all(dash);
 
-	printf("Add Gauge to dash\n");
+	//printf("Add Gauge to dash\n");
 	return TRUE;
 }
 
@@ -92,11 +94,16 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
-	printf("motion event\n");
+	//printf("motion event\n");
 	if (grabbed)
 	{
-		printf("event occurred at EVENT %i,%i, REL %i,%i, ABS %i,%i\n",(gint)event->x, (gint)event->y,x_cur,y_cur,(gint)event->x_root,(gint)event->y_root);
-		gtk_fixed_move(GTK_FIXED(dragged_widget->parent),dragged_widget,x_cur-child_x,y_cur-child_y);
+//		printf("event occurred at EVENT %i,%i, REL %i,%i, ABS %i,%i child %i,%i\n",(gint)event->x, (gint)event->y,x_cur,y_cur,(gint)event->x_root,(gint)event->y_root,child_x,child_y);
+		if (moving)
+			gtk_fixed_move(GTK_FIXED(dragged_widget->parent),dragged_widget,x_cur-child_x,y_cur-child_y);
+		if (resizing)
+		{
+			gtk_widget_set_size_request(dragged_widget,MAX(event->x,event->y),MAX(event->x,event->y));
+		}
 	}
 
 	return TRUE;
@@ -112,10 +119,6 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 	gint origin_x = 0;
 	gint origin_y = 0;
 	gboolean found_one = FALSE;
-	static gint x_last = 0;
-	static gint y_last = 0;
-	gint x = 0;
-	gint y = 0;
 	gint x_cur = 0;
 	gint y_cur = 0;
 	gint child_x_origin = 0;
@@ -128,7 +131,9 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 	if (event->state & GDK_BUTTON1_MASK)
 	{
 		grabbed = FALSE;
-		printf("button1 released, unlocking\n");
+		moving = FALSE;
+		resizing = FALSE;
+		//printf("button1 released, unlocking\n");
 		return TRUE;
 	}
 
@@ -149,16 +154,16 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 			child_width = fchild->widget->allocation.width;
 			child_height = fchild->widget->allocation.height;
 
-					printf("Gauge %i is at %i,%i, w/h %i,%i\n",i, child_x_origin,child_y_origin, child_width,child_height);
+					//printf("Gauge %i is at %i,%i, w/h %i,%i\n",i, child_x_origin,child_y_origin, child_width,child_height);
 			if ((x_cur > child_x_origin) && (x_cur < (child_x_origin+child_width)) && (y_cur > child_y_origin) && (y_cur < (child_y_origin+child_height))) 
 			{
-				printf("clicked in a gauge\n");
+				//printf("clicked in a gauge\n");
 				found_one = TRUE;
 				break;
 			}
 			else
 			{
-				printf("clicked elsewhere\n");
+				//printf("clicked elsewhere\n");
 				found_one = FALSE;
 			}
 		}
@@ -166,16 +171,26 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 		{
 			if (event->button == 1)
 			{
-				printf("grabbed it \n");
+				//printf("grabbed it \n");
 				grabbed = TRUE;
 				dragged_widget = fchild->widget;
 				child_x = (gint)event->x;
 				child_y = (gint)event->y;
+				if ((x_cur > (child_x_origin+7)) && (x_cur < (child_x_origin+child_width-7)) && (y_cur > (child_y_origin+7)) && (y_cur < (child_y_origin+child_height-7)))
+					moving = TRUE;
+				else
+				{
+					resizing = TRUE;
+				}
+
+
 			}
 			else
 			{
-				printf("didn't grab squat\n");
+				//printf("didn't grab squat\n");
 				grabbed = FALSE;
+				moving = FALSE;
+				resizing = FALSE;
 			}
 		}
 	}
@@ -183,7 +198,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 
 
 	
-	printf("\n\n");
+	//printf("\n\n");
 
 	return TRUE;
 
