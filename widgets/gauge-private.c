@@ -1135,7 +1135,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 {
 	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 	GdkWindowEdge edge = -1;
-	printf("gauge button event\n");
+//	printf("gauge button event\n");
 	/* Right side of window */
 	if (event->x > (0.55*gauge->w))
 	{
@@ -1200,7 +1200,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 				break;
 		}
 	}
-	printf("gauge button event ENDING\n");
+//	printf("gauge button event ENDING\n");
 	return FALSE;
 }
 
@@ -1244,7 +1244,7 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
-	printf("motion in gauge, returning false\n");
+//	printf("motion in gauge, returning false\n");
 	return FALSE;
 }
 					       
