@@ -63,15 +63,15 @@ int main (int argc, char **argv)
 	if (argc < 2)
 	{
 		printf("Attempting to load default \"output.xml\"\n");
-		mtx_gauge_face_import_xml(gauge,"output.xml");
+		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),"output.xml");
 	}
 	else
 	{
 		printf("Attempting to load user specified \"%s\"\n",argv[1]);
-		mtx_gauge_face_import_xml(gauge,argv[1]);
+		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
 	}
 
-	mtx_gauge_face_export_xml(gauge,"output2.xml");
+	mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),"output2.xml");
 
 
 //	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);

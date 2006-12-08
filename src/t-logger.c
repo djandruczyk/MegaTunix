@@ -313,14 +313,14 @@ void cairo_update_trigtooth_display(gint page)
 	cairo_set_font_size(cr,20);
 	if (ttm_data->units == 1)
 		if (ttm_data->page == 9)
-		message = g_strdup("Tooth times in usec.");
+			message = g_strdup("Tooth times in usec.");
 		else
-		message = g_strdup("Trigger times in usec.");
+			message = g_strdup("Trigger times in usec.");
 	else
 		if (ttm_data->page == 9)
-		message = g_strdup("Tooth times in msec.");
+			message = g_strdup("Tooth times in msec.");
 		else
-		message = g_strdup("Trigger times in msec.");
+			message = g_strdup("Trigger times in msec.");
 
 	cairo_text_extents (cr, message, &extents);
 	cairo_move_to(cr,ttm_data->usable_begin+((w)/2)-(extents.width/2),20);

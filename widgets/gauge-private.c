@@ -63,7 +63,8 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class->expose_event = mtx_gauge_face_expose;
 	widget_class->button_press_event = mtx_gauge_face_button_press;
 	widget_class->button_release_event = mtx_gauge_face_button_release;
-	widget_class->motion_notify_event = mtx_gauge_face_motion_event;
+	/* Motion event not needed, as unused currently */
+//	widget_class->motion_notify_event = mtx_gauge_face_motion_event;
 	widget_class->size_request = mtx_gauge_face_size_request;
 
 	//g_type_class_add_private (obj_class, sizeof (MtxGaugeFacePrivate));
@@ -76,7 +77,11 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
  */
 void mtx_gauge_face_init (MtxGaugeFace *gauge)
 {
-	//which events widget receives
+	/* The events the gauge receives
+	* Need events for button press/release AND motion EVEN THOUGH
+	* we don't have a motion handler defined.  It's required for the 
+	* dash designer to do drag and move placement 
+	*/ 
 	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
 			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
 

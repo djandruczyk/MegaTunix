@@ -144,6 +144,7 @@ struct _MtxGaugeFace
 	GArray * xmlfunc_array; /*! Array list mapping varnames to xml */
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
 				   *  parsing functions */
+	gchar * xml_filename;	/*! Filename of XML for this gauge  */
 	gint w;			/*! width */
 	gint h;			/*! height */
 	gdouble xc;		/*! X Center */
@@ -268,8 +269,9 @@ void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat width);
 gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color);
 GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index);
-void mtx_gauge_face_import_xml(GtkWidget *, gchar *);
-void mtx_gauge_face_export_xml(GtkWidget *, gchar *);
+void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);
+void mtx_gauge_face_export_xml(MtxGaugeFace *, gchar *);
+gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
 
 G_END_DECLS
 

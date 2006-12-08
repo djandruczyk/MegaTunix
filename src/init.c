@@ -248,6 +248,12 @@ void make_megasquirt_dirs(void)
 	filename = g_strconcat(HOME(), "/.MegaTunix/Gui", NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
+	filename = g_strconcat(HOME(), "/.MegaTunix/Gauges", NULL);
+	g_mkdir(filename, S_IRWXU);
+	g_free(filename);
+	filename = g_strconcat(HOME(), "/.MegaTunix/DashBoards", NULL);
+	g_mkdir(filename, S_IRWXU);
+	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator", NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);

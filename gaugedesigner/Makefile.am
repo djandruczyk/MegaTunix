@@ -1,5 +1,7 @@
 gaugedir = $(datadir)/MegaTunix/$(GAUGE_DATA_DIR)
 
+SUBDIRS = gauges
+
 INCLUDES = \
 	-I/usr/include \
         -I$(top_srcdir)/include \
@@ -16,7 +18,7 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-gaugedesigner_SOURCES = main.c events.c events.h
+gaugedesigner_SOURCES = main.c events.c loadsave.c events.h loadsave.h handlers.c handlers.h
 
 gaugedesigner_DEPENDENCIES = @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la
 

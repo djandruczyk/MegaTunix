@@ -9,12 +9,28 @@
 #define M_PI 3.1415926535897932384626433832795 
 #endif
 
-static gint child_x = 0;
-static gint child_y = 0;
 static gboolean grabbed = FALSE;
 static gboolean resizing = FALSE;
 static gboolean moving = FALSE;
+static gint corner = -1;
 static GtkWidget *dragged_widget = NULL;
+static struct T
+{
+	gint child_x_origin;
+	gint child_y_origin;
+	gint child_width;
+	gint child_height;
+	gint rel_grab_x;
+	gint rel_grab_y;
+}tt = {0,0,0,0};
+
+typedef enum 
+{
+	LL = 10,
+	LR,
+	UL,
+	UR,
+}CornerType;
 
 EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 {
@@ -56,7 +72,7 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 	gtk_fixed_put(GTK_FIXED(dash),gauge,x,y);
 	x+=125;
 	y+=125;
-	mtx_gauge_face_import_xml(gauge,"test.xml");
+	mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),"test.xml");
 	gtk_widget_show_all(dash);
 
 	//printf("Add Gauge to dash\n");
@@ -95,14 +111,49 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 	y_cur = (gint)event->y_root-origin_y;
 
 	//printf("motion event\n");
+//	printf("rel movement point %i,%i\n",x_cur,y_cur);
 	if (grabbed)
 	{
-//		printf("event occurred at EVENT %i,%i, REL %i,%i, ABS %i,%i child %i,%i\n",(gint)event->x, (gint)event->y,x_cur,y_cur,(gint)event->x_root,(gint)event->y_root,child_x,child_y);
 		if (moving)
-			gtk_fixed_move(GTK_FIXED(dragged_widget->parent),dragged_widget,x_cur-child_x,y_cur-child_y);
+			gtk_fixed_move(GTK_FIXED(dragged_widget->parent),dragged_widget,
+					x_cur-tt.rel_grab_x+tt.child_x_origin,
+					y_cur-tt.rel_grab_y+tt.child_y_origin);
 		if (resizing)
 		{
-			gtk_widget_set_size_request(dragged_widget,MAX(event->x,event->y),MAX(event->x,event->y));
+			if (corner == LR)
+				gtk_widget_set_size_request(dragged_widget,event->x,event->y);
+			else if (corner == UR)
+			{
+				gtk_widget_set_size_request(dragged_widget,
+						x_cur-tt.child_x_origin,
+						(tt.child_y_origin+tt.child_height)-y_cur);
+
+				gtk_fixed_move(GTK_FIXED(dragged_widget->parent),
+						dragged_widget,
+						tt.child_x_origin,
+						y_cur);
+			}
+			else if (corner == UL)
+			{
+				gtk_widget_set_size_request(dragged_widget,
+						(tt.child_x_origin+tt.child_width)-x_cur,
+						(tt.child_y_origin+tt.child_height)-y_cur);
+
+				gtk_fixed_move(GTK_FIXED(dragged_widget->parent),
+						dragged_widget,
+						x_cur,
+						y_cur);
+			}
+			else if (corner == LL)
+			{
+				gtk_widget_set_size_request(dragged_widget,
+						(tt.child_x_origin+tt.child_width)-x_cur,event->y);
+
+				gtk_fixed_move(GTK_FIXED(dragged_widget->parent),
+						dragged_widget,
+						x_cur,
+						tt.child_y_origin);
+			}
 		}
 	}
 
@@ -121,10 +172,6 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 	gboolean found_one = FALSE;
 	gint x_cur = 0;
 	gint y_cur = 0;
-	gint child_x_origin = 0;
-	gint child_y_origin = 0;
-	gint child_width = 0;
-	gint child_height = 0;
 	GtkFixedChild * fchild = NULL;
 	gint len = g_list_length(GTK_FIXED(fixed)->children);
 
@@ -133,6 +180,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 		grabbed = FALSE;
 		moving = FALSE;
 		resizing = FALSE;
+		corner = -1;
 		//printf("button1 released, unlocking\n");
 		return TRUE;
 	}
@@ -149,13 +197,12 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 		{
 			fchild = (GtkFixedChild *)  g_list_nth_data(list,i);
 
-			child_x_origin = fchild->widget->allocation.x;
-			child_y_origin = fchild->widget->allocation.y;
-			child_width = fchild->widget->allocation.width;
-			child_height = fchild->widget->allocation.height;
+			tt.child_x_origin = fchild->widget->allocation.x;
+			tt.child_y_origin = fchild->widget->allocation.y;
+			tt.child_width = fchild->widget->allocation.width;
+			tt.child_height = fchild->widget->allocation.height;
 
-					//printf("Gauge %i is at %i,%i, w/h %i,%i\n",i, child_x_origin,child_y_origin, child_width,child_height);
-			if ((x_cur > child_x_origin) && (x_cur < (child_x_origin+child_width)) && (y_cur > child_y_origin) && (y_cur < (child_y_origin+child_height))) 
+			if ((x_cur > tt.child_x_origin) && (x_cur < (tt.child_x_origin+tt.child_width)) && (y_cur > tt.child_y_origin) && (y_cur < (tt.child_y_origin+tt.child_height))) 
 			{
 				//printf("clicked in a gauge\n");
 				found_one = TRUE;
@@ -174,13 +221,54 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 				//printf("grabbed it \n");
 				grabbed = TRUE;
 				dragged_widget = fchild->widget;
-				child_x = (gint)event->x;
-				child_y = (gint)event->y;
-				if ((x_cur > (child_x_origin+7)) && (x_cur < (child_x_origin+child_width-7)) && (y_cur > (child_y_origin+7)) && (y_cur < (child_y_origin+child_height-7)))
+				tt.rel_grab_x=x_cur;
+				tt.rel_grab_y=y_cur;
+
+				if ((x_cur > (tt.child_x_origin+7)) && (x_cur < (tt.child_x_origin+tt.child_width-7)) && (y_cur > (tt.child_y_origin+7)) && (y_cur < (tt.child_y_origin+tt.child_height-7)))
 					moving = TRUE;
 				else
 				{
 					resizing = TRUE;
+					/* Left border */
+					if (x_cur < (tt.child_x_origin+7))
+					{
+						if (y_cur < (tt.child_y_origin+(0.33*tt.child_height)))
+							corner = UL;
+						else if (y_cur > (tt.child_y_origin+(0.66*tt.child_height)))
+							corner = LL;
+						else corner = -1;
+						
+					}
+					/* Right border */
+					else if (x_cur > (tt.child_x_origin+tt.child_width-7))
+					{
+						if (y_cur < (tt.child_y_origin+(0.33*tt.child_height)))
+							corner = UR;
+						else if (y_cur > (tt.child_y_origin+(0.66*tt.child_height)))
+							corner = LR;
+						else
+							corner = -1;
+					}
+					/* Top border */
+					if (y_cur < (tt.child_y_origin+7))
+					{
+						if (x_cur < (tt.child_x_origin+(0.33*tt.child_width)))
+							corner = UL;
+						else if (x_cur > (tt.child_x_origin+(0.66*tt.child_width)))
+							corner = UR;
+						else
+							corner = -1;
+					}
+					/* Bottom border */
+					else if (y_cur > (tt.child_y_origin+tt.child_height-7))
+					{
+						if (x_cur < (tt.child_x_origin+(0.33*tt.child_width)))
+							corner = LL;
+						else if (x_cur > (tt.child_x_origin+(0.66*tt.child_width)))
+							corner = LR;
+						else 
+							corner = -1;
+					}
 				}
 
 
@@ -197,9 +285,18 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 
 
 
+	/*
+	if (moving)
+		printf ("MOVING!\n");
+	if (resizing)
+		printf ("RESIZING\n");
+	if (grabbed)
+	{
+		printf("grabbed TRUE\n");
+		printf("child base %i,%i, rel click point %i,%i\n",tt.child_x_origin,tt.child_y_origin,tt.rel_grab_x,tt.rel_grab_y);
+	}
+	*/
 	
-	//printf("\n\n");
-
 	return TRUE;
 
 }

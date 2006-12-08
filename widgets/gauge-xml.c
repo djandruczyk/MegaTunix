@@ -65,11 +65,10 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
  * walk down the DOM, and print the name of the 
  * xml elements nodes.
  */
-void mtx_gauge_face_import_xml(GtkWidget *widget, gchar * filename)
+void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 
 	/*
 	 * this initialize the library and check potential ABI mismatches
@@ -98,10 +97,11 @@ void mtx_gauge_face_import_xml(GtkWidget *widget, gchar * filename)
 		gauge->yc = gauge->h / 2;
 		gauge->radius = MIN (gauge->w/2, gauge->h/2) - 5;
 		g_object_thaw_notify(G_OBJECT(gauge));
-		if (GTK_IS_WINDOW(widget->parent))
-			gtk_window_resize((GtkWindow *)widget->parent,gauge->w,gauge->h);
+		if (GTK_IS_WINDOW(GTK_WIDGET(gauge)->parent))
+			gtk_window_resize(((GtkWidget *)gauge)->parent,gauge->w,gauge->h);
 		generate_gauge_background(GTK_WIDGET(gauge));
 		mtx_gauge_face_redraw_canvas (gauge);
+		gauge->xml_filename = g_strdup(filename);
 	}
 
 	/*free the document */
@@ -115,13 +115,12 @@ void mtx_gauge_face_import_xml(GtkWidget *widget, gchar * filename)
 
 }
 
-void mtx_gauge_face_export_xml(GtkWidget * widget, gchar * filename)
+void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 {
 	gint i = 0;
 	xmlDocPtr doc = NULL;       /* document pointer */
 	xmlNodePtr root_node = NULL;/* node pointers */
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
-	MtxGaugeFace *gauge = MTX_GAUGE_FACE(widget);
 	MtxDispatchHelper *helper = NULL;
 	MtxXMLFuncs * xml_funcs = NULL;
 
@@ -455,5 +454,9 @@ void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 		return;
 }
 
-
+gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+	return g_strdup(gauge->xml_filename);
+}
 #endif
