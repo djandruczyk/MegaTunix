@@ -2,7 +2,7 @@
 name=MegaSquirtnSpark-Extra Highres 029x
 
 [parameters]
-SignatureQueryString=extra format 029q
+SignatureQueryString=extra format hr
 ExtVerQueryString=
 VerNumber=
 Capabilities=_MSNS_E_

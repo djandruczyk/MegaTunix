@@ -1,5 +1,6 @@
 #include <defines.h>
 #include <events.h>
+#include <getfiles.h>
 #include <gauge.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
@@ -60,23 +61,108 @@ EXPORT gboolean import_dash_xml(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 {
+#define COLS 2
 	static gint x=0;
 	static gint y=0;
 	GtkWidget * gauge = NULL;
-	GtkWidget * dash = NULL;
+	GtkWidget * preview = NULL;
+	GtkWidget * table = NULL;
+	gchar ** files = NULL;
+	gchar * filename = NULL;
+	gint i = 0;
+	gint row = 0;
+	gint col = 0;
 	GladeXML *xml = glade_get_widget_tree(widget);
-	dash =  glade_xml_get_widget(xml,"dashboard");
-	gauge = mtx_gauge_face_new();
-	g_object_set_data (G_OBJECT (gauge), "GB_WIDGET_DATA", "True");
-	//gtk_widget_set_size_request(gauge,100,100);
-	gtk_fixed_put(GTK_FIXED(dash),gauge,x,y);
-	x+=125;
-	y+=125;
-	mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),"test.xml");
-	gtk_widget_show_all(dash);
+	GladeXML *preview_xml = NULL;
 
-	//printf("Add Gauge to dash\n");
+	preview_xml = glade_xml_new(xml->filename, "preview_window", NULL);
+
+	glade_xml_signal_autoconnect(preview_xml);
+
+	table = glade_xml_get_widget(preview_xml,"gauge_preview_table");
+	files = get_files(g_strconcat(GAUGES_DIR,PSEP,NULL),g_strdup("xml"));
+	if (files)
+	{
+		while (files[i])
+		{
+			gauge = mtx_gauge_face_new();
+			gtk_table_attach_defaults(GTK_TABLE(table),gauge,col,col+1,row,row+1);
+			gtk_widget_realize(gauge);
+			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
+			gtk_widget_set_size_request(GTK_WIDGET(gauge),100,100);
+			col++;
+			if (col >= COLS)
+			{
+				col = 0;
+				row++;
+			}
+			i++;
+		}
+		gtk_widget_show_all(table);
+		g_strfreev(files);
+	}
 	return TRUE;
+
+}
+
+EXPORT gboolean gauge_choice_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+{
+	GtkWidget *table = NULL;
+	gint x_cur = 0;
+	gint y_cur = 0;
+	gint width = 0;
+	gint height = 0;
+	gint origin_x = 0;
+	gint origin_y = 0;
+	gint total_gauges = 0;
+	gint rows = 0;
+	gint row = 0;
+	gint col = 0;
+	gint num = 0;
+
+	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
+	gdk_drawable_get_size(widget->window,&width,&height);
+	
+	/* Current cursor locatio nrelatuive to upper left corner */
+	x_cur = (gint)event->x_root-origin_x;
+	y_cur = (gint)event->y_root-origin_y;
+
+	table = gtk_bin_get_child(GTK_BIN(widget));
+	if(GTK_IS_TABLE(table))
+		total_gauges = g_list_length(GTK_TABLE(table)->children);
+
+	rows = (total_gauges%2 > 0) ? (total_gauges+1)/2:total_gauges/2;
+
+	row = (gint)(((float)y_cur/(float)height)*(float)rows);
+	if (x_cur > (width/2))
+		col = 2;
+	else
+		col = 1;
+	printf("row %i, col %i\n",row,col);
+	num = (row *2)+col;
+
+	printf("you are on gauge %i\n",num);
+
+	printf("motion event in gauge choice window at %i,%i\n",x_cur,y_cur);
+	return TRUE;
+
+}
+
+EXPORT gboolean gauge_choice_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	gint x_cur;
+	gint y_cur;
+	gint origin_x;
+	gint origin_y;
+
+	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
+	/* Current cursor locatio nrelatuive to upper left corner */
+	x_cur = (gint)event->x_root-origin_x;
+	y_cur = (gint)event->y_root-origin_y;
+
+	printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);
+	return TRUE;
+
 }
 
 EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)

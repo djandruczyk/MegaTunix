@@ -1160,3 +1160,4 @@ GtkWidget *mtx_gauge_face_new ()
 {
 	return GTK_WIDGET (g_object_new (MTX_TYPE_GAUGE_FACE, NULL));
 }
+

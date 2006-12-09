@@ -24,7 +24,7 @@ int main (int argc, char ** argv )
 
 	filename = get_file(g_build_filename(DASH_DATA_DIR,"dashdesigner.glade",NULL),NULL);
 	if (filename)
-		xml = glade_xml_new(filename, "vbox1", NULL);
+		xml = glade_xml_new(filename, "main_vbox", NULL);
 	else
 	{
 		printf("Can't locate primary glade file!!!!\n");
@@ -33,10 +33,10 @@ int main (int argc, char ** argv )
 	g_free(filename);
 	
 	glade_xml_signal_autoconnect(xml);
-	vbox = glade_xml_get_widget(xml, "vbox1");
+	vbox = glade_xml_get_widget(xml, "main_vbox");
 
 	/* Bind the appropriate handlers */
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"dashboard")),"GB_WIDGET_DATA","True");
+//	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"dashboard")),"GB_WIDGET_DATA","True");
 
 	gtk_container_add(GTK_CONTAINER(window),vbox);
 

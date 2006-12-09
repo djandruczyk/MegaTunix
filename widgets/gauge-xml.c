@@ -98,7 +98,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		gauge->radius = MIN (gauge->w/2, gauge->h/2) - 5;
 		g_object_thaw_notify(G_OBJECT(gauge));
 		if (GTK_IS_WINDOW(GTK_WIDGET(gauge)->parent))
-			gtk_window_resize(((GtkWidget *)gauge)->parent,gauge->w,gauge->h);
+			gtk_window_resize((GtkWindow *)(((GtkWidget *)gauge)->parent),gauge->w,gauge->h);
 		generate_gauge_background(GTK_WIDGET(gauge));
 		mtx_gauge_face_redraw_canvas (gauge);
 		gauge->xml_filename = g_strdup(filename);
