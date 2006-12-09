@@ -61,17 +61,22 @@ EXPORT gboolean import_dash_xml(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 {
-	static gint x=0;
-	static gint y=0;
+	static gboolean created = FALSE;
+	static GladeXML *preview_xml = NULL;
 	GtkWidget * gauge = NULL;
-	GtkWidget * preview = NULL;
 	GtkWidget * table = NULL;
+	GtkWidget * window = NULL;
 	gchar ** files = NULL;
-	gchar * filename = NULL;
 	gint i = 0;
 	GladeXML *xml = glade_get_widget_tree(widget);
-	GladeXML *preview_xml = NULL;
-
+	if (created)
+	{
+		window = glade_xml_get_widget(preview_xml,"preview_window");
+		if (GTK_IS_WIDGET(window))
+			gtk_widget_show_all(window);
+		return TRUE;
+	}
+			
 	preview_xml = glade_xml_new(xml->filename, "preview_window", NULL);
 
 	glade_xml_signal_autoconnect(preview_xml);
@@ -92,11 +97,12 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 		gtk_widget_show_all(table);
 		g_strfreev(files);
 	}
+	created = TRUE;
 	return TRUE;
 
 }
 
-EXPORT gboolean gauge_choice_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	GtkWidget *table = NULL;
 	gint x_cur = 0;
@@ -121,29 +127,16 @@ EXPORT gboolean gauge_choice_motion_event(GtkWidget *widget, GdkEventMotion *eve
 
 	row = (gint)(((float)y_cur/(float)height)*(float)total_gauges)+1;
 
-	printf("you are on gauge %i\n",row);
-
-	printf("motion event in gauge choice window at %i,%i\n",x_cur,y_cur);
-	return TRUE;
-
-}
-
-EXPORT gboolean gauge_choice_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
-{
-	gint x_cur;
-	gint y_cur;
-	gint origin_x;
-	gint origin_y;
-
-	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
-	/* Current cursor locatio nrelatuive to upper left corner */
-	x_cur = (gint)event->x_root-origin_x;
-	y_cur = (gint)event->y_root-origin_y;
+	if (event->button == 1)
+	{
+		printf("you clicked on gauge %i\n",row);
+	}
 
 	printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);
 	return TRUE;
 
 }
+
 
 EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
 {
