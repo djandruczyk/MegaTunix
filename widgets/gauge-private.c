@@ -560,6 +560,8 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 
 	if (GTK_IS_WINDOW(widget->parent))
 		gtk_widget_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
+	else
+		gdk_window_shape_combine_mask(widget->window,gauge->bitmap,0,0);
 
 
 	return FALSE;
