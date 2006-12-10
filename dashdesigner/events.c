@@ -61,14 +61,15 @@ EXPORT gboolean import_dash_xml(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 {
+
 	static gboolean created = FALSE;
 	static GladeXML *preview_xml = NULL;
 	GtkWidget * gauge = NULL;
 	GtkWidget * table = NULL;
 	GtkWidget * window = NULL;
 	gchar ** files = NULL;
+	extern GladeXML *main_xml;
 	gint i = 0;
-	GladeXML *xml = glade_get_widget_tree(widget);
 	if (created)
 	{
 		window = glade_xml_get_widget(preview_xml,"preview_window");
@@ -76,8 +77,8 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 			gtk_widget_show_all(window);
 		return TRUE;
 	}
-			
-	preview_xml = glade_xml_new(xml->filename, "preview_window", NULL);
+
+	preview_xml = glade_xml_new(main_xml->filename, "preview_window", NULL);
 
 	glade_xml_signal_autoconnect(preview_xml);
 
@@ -105,6 +106,7 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	GtkWidget *table = NULL;
+	gint i = 0;
 	gint x_cur = 0;
 	gint y_cur = 0;
 	gint width = 0;
@@ -112,12 +114,17 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 	gint origin_x = 0;
 	gint origin_y = 0;
 	gint total_gauges = 0;
+	GtkWidget * dash = NULL;
+	GtkWidget * gauge = NULL;
+	GtkTableChild *child = NULL;
+	gchar * filename = NULL;
 	gint row = 0;
+	extern GladeXML *main_xml;
 
 	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
 	gdk_drawable_get_size(widget->window,&width,&height);
 	
-	/* Current cursor locatio nrelatuive to upper left corner */
+	/* Current cursor location relatuive to upper left corner */
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
@@ -125,14 +132,25 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 	if(GTK_IS_TABLE(table))
 		total_gauges = g_list_length(GTK_TABLE(table)->children);
 
-	row = (gint)(((float)y_cur/(float)height)*(float)total_gauges)+1;
+	row = (gint)(((float)y_cur/(float)height)*(float)total_gauges);
 
 	if (event->button == 1)
 	{
-		printf("you clicked on gauge %i\n",row);
+		for (i=0;i<total_gauges;i++)
+		{
+			child = (GtkTableChild *) g_list_nth_data(GTK_TABLE(table)->children,i);
+			if (row == child->top_attach)
+				filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget));
+		}
+		dash =  glade_xml_get_widget(main_xml,"dashboard");
+		gauge = mtx_gauge_face_new();
+		gtk_fixed_put(GTK_FIXED(dash),gauge,30,30);
+		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
+		gtk_widget_show_all(dash);
+		g_free(filename);
 	}
 
-	printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);
+//	printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);
 	return TRUE;
 
 }
@@ -249,7 +267,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
-	if (event->button == 1)
+	if ((event->button == 1) || (event->button == 3))
 	{
 		list = g_list_first(GTK_FIXED(fixed)->children);
 		for (i=0;i<len;i++)
@@ -275,6 +293,10 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 		}
 		if (found_one)
 		{
+			if (event->button == 3)
+			{
+				gtk_widget_destroy(fchild->widget);
+			}
 			if (event->button == 1)
 			{
 				//printf("grabbed it \n");
