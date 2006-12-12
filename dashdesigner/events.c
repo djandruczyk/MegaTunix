@@ -283,6 +283,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 			{
 				//printf("clicked in a gauge\n");
 				found_one = TRUE;
+				raise_fixed_child(fchild->widget);
 				break;
 			}
 			else
@@ -381,3 +382,37 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 	return TRUE;
 
 }
+
+void raise_fixed_child (GtkWidget * widget)
+{
+	GtkFixed *fixed;
+
+	g_return_if_fail (GTK_IS_FIXED (widget->parent));
+	fixed = GTK_FIXED (widget->parent);
+	/* If widget hasn't got a window, move it to the back of the parent fixed's
+	 *      children. If it has got a window, raise it. */
+	/* Note: this is slightly naughty as it changes the GtkFixed's GList of
+	 *      children, but it's better than removing the widget and adding it again. */
+	if (GTK_WIDGET_NO_WINDOW (widget))
+	{
+		GList *child;
+		GtkFixedChild *data;
+		child = fixed->children;
+		while (child)
+		{
+			data = child->data;
+			if (data->widget == widget)
+			{
+				fixed->children = g_list_remove (fixed->children, data);
+				fixed->children = g_list_append (fixed->children, data);
+				break;
+			}
+			child = child->next;
+		}
+	}
+	else
+	{
+		gdk_window_raise (widget->window);
+	}
+}
+
