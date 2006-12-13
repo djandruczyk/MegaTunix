@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 //#define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
 
 
+#define DRAG_BORDER 7
 
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
@@ -145,6 +146,7 @@ struct _MtxGaugeFace
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
 				   *  parsing functions */
 	gchar * xml_filename;	/*! Filename of XML for this gauge  */
+	gboolean show_drag_border;	/*! Show drag border flag */
 	gint w;			/*! width */
 	gint h;			/*! height */
 	gdouble xc;		/*! X Center */
@@ -272,6 +274,8 @@ GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index);
 void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);
 void mtx_gauge_face_export_xml(MtxGaugeFace *, gchar *);
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
+void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *, gboolean);
+gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *);
 
 G_END_DECLS
 

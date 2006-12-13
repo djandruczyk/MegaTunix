@@ -1161,3 +1161,30 @@ GtkWidget *mtx_gauge_face_new ()
 	return GTK_WIDGET (g_object_new (MTX_TYPE_GAUGE_FACE, NULL));
 }
 
+
+/*!
+ \brief enables showing the drag border boxes 
+ \param gauge, pointer to gauge
+ \param state, state to set it to
+ */
+void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	gauge->show_drag_border = state;
+}
+
+
+/*!
+ \brief gets the state of the drag border
+ \param gauge, pointer to gauge
+ \returns the state of whether the gauge shows the drag border
+ */
+gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
+	return gauge->show_drag_border;
+}

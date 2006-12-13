@@ -522,6 +522,37 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				gauge->h);
 
 		gdk_gc_set_foreground (gc, & white);
+		if (gauge->show_drag_border)
+		{
+			gdk_draw_rectangle (gauge->bitmap,
+					gc,
+					TRUE,  // filled
+					0,     // x
+					0,     // y
+					DRAG_BORDER,
+					DRAG_BORDER);
+			gdk_draw_rectangle (gauge->bitmap,
+					gc,
+					TRUE,  // filled
+					gauge->w-DRAG_BORDER,     // x
+					0,     // y
+					DRAG_BORDER,
+					DRAG_BORDER);
+			gdk_draw_rectangle (gauge->bitmap,
+					gc,
+					TRUE,  // filled
+					gauge->w-DRAG_BORDER,     // x
+					gauge->h-DRAG_BORDER,     // y
+					DRAG_BORDER,
+					DRAG_BORDER);
+			gdk_draw_rectangle (gauge->bitmap,
+					gc,
+					TRUE,  // filled
+					0,     // x
+					gauge->h-DRAG_BORDER,     // y
+					DRAG_BORDER,
+					DRAG_BORDER);
+		}
 		gdk_draw_arc (gauge->bitmap,
 				gc,
 				TRUE,     // filled
@@ -607,9 +638,22 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	/* get a cairo_t */
 	cr = gdk_cairo_create (gauge->bg_pixmap);
 	/* Background set to black */
-	cairo_rectangle (cr,
-			0,0,
-			w, h);
+	if (gauge->show_drag_border)
+	{
+		cairo_rectangle (cr,
+				0,0,
+				DRAG_BORDER, DRAG_BORDER);
+		cairo_rectangle (cr,
+				gauge->w-DRAG_BORDER,0,
+				DRAG_BORDER, DRAG_BORDER);
+		cairo_rectangle (cr,
+				0,gauge->h-DRAG_BORDER,
+				DRAG_BORDER, DRAG_BORDER);
+		cairo_rectangle (cr,
+				gauge->w-DRAG_BORDER,gauge->h-DRAG_BORDER,
+				DRAG_BORDER, DRAG_BORDER);
+	}
+	cairo_arc(cr, gauge->xc, gauge->yc, gauge->radius, 0, 2 * M_PI);
 	cairo_set_source_rgb (cr, 0,0,0);
 
 	cairo_fill(cr);
