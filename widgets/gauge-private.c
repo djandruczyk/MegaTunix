@@ -266,7 +266,7 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
-	/* Copy bacground pixmap to intermediaary for final rendering */
+	/* Copy background pixmap to intermediary for final rendering */
 	gdk_draw_drawable(gauge->pixmap,
 			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
 			gauge->bg_pixmap,
@@ -522,6 +522,8 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				gauge->h);
 
 		gdk_gc_set_foreground (gc, & white);
+		/* Drag border boxes... */
+
 		if (gauge->show_drag_border)
 		{
 			gdk_draw_rectangle (gauge->bitmap,
@@ -590,9 +592,15 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 			event->area.width, event->area.height);
 
 	if (GTK_IS_WINDOW(widget->parent))
+	{
+		gtk_widget_input_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
 		gtk_widget_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
+	}
 	else
+	{
+		gdk_window_input_shape_combine_mask(widget->window,gauge->bitmap,0,0);
 		gdk_window_shape_combine_mask(widget->window,gauge->bitmap,0,0);
+	}
 
 
 	return FALSE;
@@ -885,7 +893,33 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gdk_draw_rectangle(gauge->bg_pixmap,
 			widget->style->black_gc,
 			TRUE, 0,0,
-			w,h);
+			DRAG_BORDER,
+			DRAG_BORDER);
+	/* Wipe the display, black */
+	gdk_draw_rectangle(gauge->bg_pixmap,
+			widget->style->black_gc,
+			TRUE, gauge->w-DRAG_BORDER,0,
+			DRAG_BORDER,
+			DRAG_BORDER);
+	/* Wipe the display, black */
+	gdk_draw_rectangle(gauge->bg_pixmap,
+			widget->style->black_gc,
+			TRUE, 0,gauge->h-DRAG_BORDER,
+			DRAG_BORDER,
+			DRAG_BORDER);
+	/* Wipe the display, black */
+	gdk_draw_rectangle(gauge->bg_pixmap,
+			widget->style->black_gc,
+			TRUE, gauge->w-DRAG_BORDER,gauge->h-DRAG_BORDER,
+			DRAG_BORDER,
+			DRAG_BORDER);
+	gdk_draw_arc(gauge->bg_pixmap,widget->style->black_gc,TRUE,
+			gauge->xc-gauge->radius,
+			gauge->yc-gauge->radius,
+			2*(gauge->radius),
+			2*(gauge->radius),
+			0,360*64);
+
 
 	/* The main grey (will have a thin overlay on top of it) 
 	 * This is a FILLED circle */

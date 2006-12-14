@@ -2057,6 +2057,7 @@
 		      <property name="use_font">False</property>
 		      <property name="use_size">False</property>
 		      <property name="focus_on_click">True</property>
+		      <signal name="font_set" handler="change_font" last_modification_time="Wed, 13 Dec 2006 21:37:46 GMT"/>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -2088,6 +2089,7 @@
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 13 Dec 2006 21:39:02 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">3</property>
@@ -2156,6 +2158,7 @@
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 13 Dec 2006 21:38:45 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -2990,6 +2993,7 @@
 </widget>
 
 <widget class="GtkWindow" id="warning_ranges_window">
+  <property name="width_request">340</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Gauge Warning Color Ranges</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -3011,6 +3015,7 @@
 
       <child>
 	<widget class="GtkFrame" id="color_ranges_frame">
+	  <property name="border_width">5</property>
 	  <property name="height_request">160</property>
 	  <property name="visible">True</property>
 	  <property name="label_xalign">0</property>

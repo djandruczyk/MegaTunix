@@ -92,7 +92,7 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 			gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
 			gtk_widget_realize(gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
-			gtk_widget_set_size_request(GTK_WIDGET(gauge),150,150);
+			gtk_widget_set_usize(GTK_WIDGET(gauge),150,150);
 			i++;
 		}
 		gtk_widget_show_all(table);
@@ -144,7 +144,7 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		}
 		dash =  glade_xml_get_widget(main_xml,"dashboard");
 		gauge = mtx_gauge_face_new();
-		gtk_fixed_put(GTK_FIXED(dash),gauge,30,30);
+		gtk_fixed_put(GTK_FIXED(dash),gauge,130,130);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_show_all(dash);
 		g_free(filename);
@@ -192,16 +192,20 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 	if (grabbed)
 	{
 		if (moving)
+		{
 			gtk_fixed_move(GTK_FIXED(dragged_widget->parent),dragged_widget,
 					x_cur-tt.rel_grab_x+tt.child_x_origin,
 					y_cur-tt.rel_grab_y+tt.child_y_origin);
+		}
 		if (resizing)
 		{
 			if (corner == LR)
-				gtk_widget_set_size_request(dragged_widget,event->x,event->y);
+			{
+				gtk_widget_set_usize(dragged_widget,event->x,event->y);
+			}
 			else if (corner == UR)
 			{
-				gtk_widget_set_size_request(dragged_widget,
+				gtk_widget_set_usize(dragged_widget,
 						x_cur-tt.child_x_origin,
 						(tt.child_y_origin+tt.child_height)-y_cur);
 
@@ -212,7 +216,7 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 			}
 			else if (corner == UL)
 			{
-				gtk_widget_set_size_request(dragged_widget,
+				gtk_widget_set_usize(dragged_widget,
 						(tt.child_x_origin+tt.child_width)-x_cur,
 						(tt.child_y_origin+tt.child_height)-y_cur);
 
@@ -223,7 +227,7 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 			}
 			else if (corner == LL)
 			{
-				gtk_widget_set_size_request(dragged_widget,
+				gtk_widget_set_usize(dragged_widget,
 						(tt.child_x_origin+tt.child_width)-x_cur,event->y);
 
 				gtk_fixed_move(GTK_FIXED(dragged_widget->parent),
@@ -281,15 +285,15 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 
 			if ((x_cur > tt.child_x_origin) && (x_cur < (tt.child_x_origin+tt.child_width)) && (y_cur > tt.child_y_origin) && (y_cur < (tt.child_y_origin+tt.child_height))) 
 			{
-				//printf("clicked in a gauge\n");
 				found_one = TRUE;
 				raise_fixed_child(fchild->widget);
+				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),found_one);
 				break;
 			}
 			else
 			{
-				//printf("clicked elsewhere\n");
 				found_one = FALSE;
+				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),found_one);
 			}
 		}
 		if (found_one)
@@ -303,12 +307,11 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 				//printf("grabbed it \n");
 				grabbed = TRUE;
 				dragged_widget = fchild->widget;
+				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),found_one);
 				tt.rel_grab_x=x_cur;
 				tt.rel_grab_y=y_cur;
 
-				if ((x_cur > (tt.child_x_origin+7)) && (x_cur < (tt.child_x_origin+tt.child_width-7)) && (y_cur > (tt.child_y_origin+7)) && (y_cur < (tt.child_y_origin+tt.child_height-7)))
-					moving = TRUE;
-				else
+				if (((x_cur < (tt.child_x_origin+DRAG_BORDER)) && ((y_cur < tt.child_y_origin+DRAG_BORDER) || (y_cur > tt.child_y_origin+tt.child_height-DRAG_BORDER))) || ((x_cur > (tt.child_x_origin+tt.child_width-DRAG_BORDER)) && ((y_cur < tt.child_y_origin+DRAG_BORDER) || (y_cur > tt.child_y_origin+tt.child_height-DRAG_BORDER))))
 				{
 					resizing = TRUE;
 					/* Left border */
@@ -352,6 +355,8 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 							corner = -1;
 					}
 				}
+				else
+					moving = TRUE;
 
 
 			}

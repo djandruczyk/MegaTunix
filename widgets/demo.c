@@ -76,6 +76,7 @@ int main (int argc, char **argv)
 
 //	gtk_widget_shape_combine_mask(window,MTX_GAUGE_FACE(gauge)->bitmap,0,0);
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
+	mtx_gauge_face_set_show_drag_border (MTX_GAUGE_FACE (gauge), TRUE);
 
 	g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);

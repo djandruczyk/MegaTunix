@@ -43,9 +43,10 @@
 		      <property name="label" translatable="yes">_Add Gauge</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="add_gauge" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image28">
+			<widget class="GtkImage" id="image34">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -65,9 +66,10 @@
 		      <property name="label" translatable="yes">_Import Dash</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="import_dash_xml" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <accelerator key="I" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image29">
+			<widget class="GtkImage" id="image35">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -89,7 +91,7 @@
 		      <signal name="activate" handler="export_dash_xml_default" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image30">
+			<widget class="GtkImage" id="image36">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -111,7 +113,7 @@
 		      <signal name="activate" handler="export_dash_xml_as" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image31">
+			<widget class="GtkImage" id="image37">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save-as</property>
 			  <property name="icon_size">1</property>

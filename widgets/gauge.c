@@ -777,10 +777,10 @@ void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat len)
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
 	gauge->major_tick_len = len;
-	generate_gauge_background(GTK_WIDGET(gauge));
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
+	gdk_window_clear(GTK_WIDGET(gauge)->window);
 }
 
 
@@ -1169,12 +1169,16 @@ GtkWidget *mtx_gauge_face_new ()
  */
 void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 {
+	GdkRegion *region;
+	GdkRectangle rect;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
+	gauge->show_drag_border = state;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
-	gauge->show_drag_border = state;
+	mtx_gauge_face_configure(GTK_WIDGET(gauge),NULL);
+	gdk_window_clear_area_e(GTK_WIDGET(gauge)->window,0,0,gauge->w, gauge->h);
 }
 
 
