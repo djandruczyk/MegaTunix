@@ -14,7 +14,7 @@ static gboolean grabbed = FALSE;
 static gboolean resizing = FALSE;
 static gboolean moving = FALSE;
 static gint corner = -1;
-static GtkWidget *dragged_widget = NULL;
+static GtkWidget *grabbed_widget = NULL;
 static struct T
 {
 	gint child_x_origin;
@@ -187,13 +187,14 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
+
 	//printf("motion event\n");
 //	printf("rel movement point %i,%i\n",x_cur,y_cur);
 	if (grabbed)
 	{
 		if (moving)
 		{
-			gtk_fixed_move(GTK_FIXED(dragged_widget->parent),dragged_widget,
+			gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),grabbed_widget,
 					x_cur-tt.rel_grab_x+tt.child_x_origin,
 					y_cur-tt.rel_grab_y+tt.child_y_origin);
 		}
@@ -201,37 +202,37 @@ EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer 
 		{
 			if (corner == LR)
 			{
-				gtk_widget_set_usize(dragged_widget,event->x,event->y);
+				gtk_widget_set_usize(grabbed_widget,event->x,event->y);
 			}
 			else if (corner == UR)
 			{
-				gtk_widget_set_usize(dragged_widget,
+				gtk_widget_set_usize(grabbed_widget,
 						x_cur-tt.child_x_origin,
 						(tt.child_y_origin+tt.child_height)-y_cur);
 
-				gtk_fixed_move(GTK_FIXED(dragged_widget->parent),
-						dragged_widget,
+				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
+						grabbed_widget,
 						tt.child_x_origin,
 						y_cur);
 			}
 			else if (corner == UL)
 			{
-				gtk_widget_set_usize(dragged_widget,
+				gtk_widget_set_usize(grabbed_widget,
 						(tt.child_x_origin+tt.child_width)-x_cur,
 						(tt.child_y_origin+tt.child_height)-y_cur);
 
-				gtk_fixed_move(GTK_FIXED(dragged_widget->parent),
-						dragged_widget,
+				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
+						grabbed_widget,
 						x_cur,
 						y_cur);
 			}
 			else if (corner == LL)
 			{
-				gtk_widget_set_usize(dragged_widget,
+				gtk_widget_set_usize(grabbed_widget,
 						(tt.child_x_origin+tt.child_width)-x_cur,event->y);
 
-				gtk_fixed_move(GTK_FIXED(dragged_widget->parent),
-						dragged_widget,
+				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
+						grabbed_widget,
 						x_cur,
 						tt.child_y_origin);
 			}
@@ -254,6 +255,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 	gint x_cur = 0;
 	gint y_cur = 0;
 	GtkFixedChild * fchild = NULL;
+	GdkWindow *win = NULL;
 	gint len = g_list_length(GTK_FIXED(fixed)->children);
 
 	if (event->state & GDK_BUTTON1_MASK)
@@ -273,41 +275,39 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 
 	if ((event->button == 1) || (event->button == 3))
 	{
+		win = gdk_window_at_pointer(NULL,NULL);
 		list = g_list_first(GTK_FIXED(fixed)->children);
+		found_one = FALSE;
 		for (i=0;i<len;i++)
 		{
 			fchild = (GtkFixedChild *)  g_list_nth_data(list,i);
 
-			tt.child_x_origin = fchild->widget->allocation.x;
-			tt.child_y_origin = fchild->widget->allocation.y;
-			tt.child_width = fchild->widget->allocation.width;
-			tt.child_height = fchild->widget->allocation.height;
-
-			if ((x_cur > tt.child_x_origin) && (x_cur < (tt.child_x_origin+tt.child_width)) && (y_cur > tt.child_y_origin) && (y_cur < (tt.child_y_origin+tt.child_height))) 
+			if (win == fchild->widget->window)
 			{
-				found_one = TRUE;
+				tt.child_x_origin = fchild->widget->allocation.x;
+				tt.child_y_origin = fchild->widget->allocation.y;
+				tt.child_width = fchild->widget->allocation.width;
+				tt.child_height = fchild->widget->allocation.height;
+
 				raise_fixed_child(fchild->widget);
-				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),found_one);
-				break;
+				found_one = TRUE;
+				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),TRUE);
+				grabbed_widget = fchild->widget;
+
 			}
 			else
 			{
-				found_one = FALSE;
-				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),found_one);
+				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),FALSE);
 			}
 		}
 		if (found_one)
 		{
 			if (event->button == 3)
-			{
 				gtk_widget_destroy(fchild->widget);
-			}
 			if (event->button == 1)
 			{
 				//printf("grabbed it \n");
 				grabbed = TRUE;
-				dragged_widget = fchild->widget;
-				mtx_gauge_face_set_show_drag_border(MTX_GAUGE_FACE(fchild->widget),found_one);
 				tt.rel_grab_x=x_cur;
 				tt.rel_grab_y=y_cur;
 
