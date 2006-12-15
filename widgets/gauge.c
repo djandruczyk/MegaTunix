@@ -340,7 +340,7 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat up
 	range->color = color;
 	range->lwidth = lwidth;
 	range->inset = inset;
-	g_array_append_val(gauge->ranges,range);
+	g_array_append_val(gauge->c_ranges,range);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -390,11 +390,11 @@ gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *r
 	g_object_freeze_notify (G_OBJECT (gauge));
 	MtxColorRange * newrange = g_new0(MtxColorRange, 1);
 	newrange = g_memdup(range,sizeof(MtxColorRange)); 
-	g_array_append_val(gauge->ranges,newrange);
+	g_array_append_val(gauge->c_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
-	return gauge->ranges->len-1;
+	return gauge->c_ranges->len-1;
 }
 
 
@@ -432,7 +432,7 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
 GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
-	return gauge->ranges;
+	return gauge->c_ranges;
 }
 
 
@@ -447,6 +447,15 @@ GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge)
 	return gauge->t_blocks;
 }
 
+
+/*!
+ \brief changes a text blcok field by passing in an index 
+ to the test block and the field name to change
+ \param gauge  pointer to gauge object
+ \param index, index of the textblock
+ \param field,  enumeration of the field to change
+ \param value, new value
+ */
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -489,20 +498,64 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 
 
 /*!
+ \brief changes a color range field by passing in an index 
+ to the test block and the field name to change
+ \param gauge  pointer to gauge object
+ \param index, index of the textblock
+ \param field,  enumeration of the field to change
+ \param value, new value
+ */
+void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField field, void * value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (index < CR_NUM_FIELDS);
+	g_return_if_fail (index >= 0);
+	g_object_freeze_notify (G_OBJECT (gauge));
+
+	MtxColorRange *c_range = NULL;
+	c_range = g_array_index(gauge->c_ranges,MtxColorRange *,index);
+	switch (field)
+	{
+		case CR_LOWPOINT:
+			c_range->lowpoint = *(gfloat *)value;
+			break;
+		case CR_HIGHPOINT:
+			c_range->highpoint = *(gfloat *)value;
+			break;
+		case CR_INSET:
+			c_range->inset = *(gfloat *)value;
+			break;
+		case CR_LWIDTH:
+			c_range->lwidth = *(gfloat *)value;
+			break;
+		case CR_COLOR:
+			c_range->color = *(GdkColor *)value;
+			break;
+		default:
+			break;
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+}
+
+
+/*!
  \brief clears all color ranges from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
 void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge)
 {
 	gint i = 0;
-	MtxColorRange *range = NULL;
+	MtxColorRange *c_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	for (i=gauge->ranges->len-1;i>=0;i--)
+	for (i=gauge->c_ranges->len-1;i>=0;i--)
 	{
-		range = g_array_index(gauge->ranges,MtxColorRange *, i);
-		gauge->ranges = g_array_remove_index(gauge->ranges,i);
-		g_free(range);
+		c_range = g_array_index(gauge->c_ranges,MtxColorRange *, i);
+		gauge->c_ranges = g_array_remove_index(gauge->c_ranges,i);
+		g_free(c_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
@@ -544,15 +597,15 @@ void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge)
  */
 void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index)
 {
-	MtxColorRange *range = NULL;
+	MtxColorRange *c_range = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	if ((index <= gauge->ranges->len) && (index >= 0 ))
+	if ((index <= gauge->c_ranges->len) && (index >= 0 ))
 	{
-		range = g_array_index(gauge->ranges,MtxColorRange *, index);
-		g_array_remove_index(gauge->ranges,index);
-		if (range)
-			g_free(range);
+		c_range = g_array_index(gauge->c_ranges,MtxColorRange *, index);
+		g_array_remove_index(gauge->c_ranges,index);
+		if (c_range)
+			g_free(c_range);
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
@@ -1169,8 +1222,6 @@ GtkWidget *mtx_gauge_face_new ()
  */
 void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 {
-	GdkRegion *region;
-	GdkRectangle rect;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
 	gauge->show_drag_border = state;

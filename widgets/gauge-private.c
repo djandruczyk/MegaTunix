@@ -124,7 +124,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->stop_deg = -(((gauge->stop_radian-gauge->start_radian)/M_PI) *180.0);
 	gauge->colormap = gdk_colormap_get_system();
 	gauge->gc = NULL;
-	gauge->ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
+	gauge->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
 	gauge->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	mtx_gauge_face_init_colors(gauge);
 	mtx_gauge_face_init_name_bindings(gauge);
@@ -718,9 +718,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	/* The warning color ranges */
 	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
-	for (i=0;i<gauge->ranges->len;i++)
+	for (i=0;i<gauge->c_ranges->len;i++)
 	{
-		range = g_array_index(gauge->ranges,MtxColorRange *, i);
+		range = g_array_index(gauge->c_ranges,MtxColorRange *, i);
 		cairo_set_source_rgb(cr,range->color.red/65535.0,
 				range->color.green/65535.0,
 				range->color.blue/65535.0);
@@ -1076,9 +1076,9 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 
 	/* The warning color ranges */
 	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
-	for (i=0;i<gauge->ranges->len;i++)
+	for (i=0;i<gauge->c_ranges->len;i++)
 	{
-		range = g_array_index(gauge->ranges,MtxColorRange *, i);
+		range = g_array_index(gauge->c_ranges,MtxColorRange *, i);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&range->color);
 		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
 		span = gauge->stop_radian - gauge->start_radian;

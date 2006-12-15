@@ -285,7 +285,7 @@ void mtx_gauge_color_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 		}
 		cur_node = cur_node->next;
 	}
-	g_array_append_val(gauge->ranges,range);
+	g_array_append_val(gauge->c_ranges,range);
 }
 
 
@@ -333,9 +333,9 @@ void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 	MtxColorRange *range = NULL;
 	xmlNodePtr node = NULL;
 
-	for (i=0;i<helper->gauge->ranges->len;i++)
+	for (i=0;i<helper->gauge->c_ranges->len;i++)
 	{
-		range = g_array_index(helper->gauge->ranges,MtxColorRange *, i);
+		range = g_array_index(helper->gauge->c_ranges,MtxColorRange *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "color_range",NULL );
 				
 		tmpbuf = g_strdup_printf("%f",range->lowpoint);

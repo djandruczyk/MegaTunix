@@ -124,6 +124,7 @@ typedef enum
 	NUM_TEXTS
 }TextIndex;
 
+/* Text Block enumeration for the individula fields */
 typedef enum
 {
 	TB_FONT_SCALE = 0,
@@ -135,6 +136,16 @@ typedef enum
 	TB_NUM_FIELDS,
 }TbField;
 
+/* Color Range enumeration for the individula fields */
+typedef enum
+{
+	CR_LOWPOINT = 0,
+	CR_HIGHPOINT,
+	CR_COLOR,
+	CR_LWIDTH,
+	CR_INSET,
+	CR_NUM_FIELDS,
+}CrField;
 
 struct _MtxGaugeFace
 {//public data
@@ -169,6 +180,7 @@ struct _MtxGaugeFace
 	gfloat text_xpos[NUM_TEXTS];/* Array of X offsets for strings */
 	gfloat text_ypos[NUM_TEXTS];/* Array of X offsets for strings */
 	GArray *t_blocks;	/* Array of MtxTextBlock structs */
+	GArray *c_ranges;	/* Array of MtxColorRange structs */
 	gint precision;		/*! number of decimal places for val */
 	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
 	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
@@ -214,6 +226,8 @@ float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *, gchar *, gfloat,GdkColor, gfloat, gfloat);
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
+
+void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField field, void * value);
 void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
 gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
 GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
