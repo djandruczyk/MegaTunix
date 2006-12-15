@@ -81,7 +81,8 @@ void update_attributes();
 void update_onscreen_ranges();
 void update_onscreen_tblocks();
 gboolean alter_tblock_data(GtkWidget *, gpointer );
-gboolean remove_range(GtkWidget *, gpointer );
+gboolean alter_crange_data(GtkWidget *, gpointer );
+gboolean remove_crange(GtkWidget *, gpointer );
 gboolean remove_tblock(GtkWidget *, gpointer );
 gboolean sweep_gauge(gpointer data);
 /* Prototypes */
