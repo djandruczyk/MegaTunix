@@ -53,11 +53,6 @@ EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT gboolean import_dash_xml(GtkWidget *widget, gpointer data)
-{
-	printf("Import Dash XML\n");
-	return TRUE;
-}
 
 EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 {
@@ -163,17 +158,6 @@ EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
 }
 
 
-EXPORT gboolean export_dash_xml_default(GtkWidget *widget, gpointer data)
-{
-	printf("Export Dash XML default\n");
-	return TRUE;
-}
-
-EXPORT gboolean export_dash_xml_as(GtkWidget *widget, gpointer data)
-{
-	printf("Export Dash XML as...\n");
-	return TRUE;
-}
 
 EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
@@ -273,7 +257,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
-	if ((event->button == 1) || (event->button == 3))
+	if ((event->button))
 	{
 		win = gdk_window_at_pointer(NULL,NULL);
 		list = g_list_first(GTK_FIXED(fixed)->children);
@@ -303,7 +287,7 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 		if (found_one)
 		{
 			if (event->button == 3)
-				gtk_widget_destroy(fchild->widget);
+				gtk_widget_destroy(grabbed_widget);
 			if (event->button == 1)
 			{
 				//printf("grabbed it \n");

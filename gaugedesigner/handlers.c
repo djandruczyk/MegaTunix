@@ -18,6 +18,7 @@ EXPORT gboolean tick_attributes_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
+	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
 	if (created)
@@ -59,6 +60,7 @@ EXPORT gboolean tick_attributes_handler(GtkWidget * widget, gpointer data)
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_font_scale_spin")),"handler",GINT_TO_POINTER(MAJ_TICK_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"major_tick_color_button")),"handler",GINT_TO_POINTER(COL_MAJ_TICK));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"minor_tick_color_button")),"handler",GINT_TO_POINTER(COL_MIN_TICK));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"major_tick_text_color_button")),&white);
 
 	tick_xml = xml;
 	created = TRUE;
@@ -135,6 +137,7 @@ EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
+	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
 	if (created)
@@ -170,6 +173,7 @@ EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_font_scale_spin")),"handler",GINT_TO_POINTER(VALUE_SCALE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"value_color_button")),"handler",GINT_TO_POINTER(COL_VALUE_FONT));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"show_value_check")),"handler",GINT_TO_POINTER(SHOW_VALUE));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"value_color_button")),&white);
 
 	text_xml = xml;
 	created = TRUE;
@@ -227,6 +231,7 @@ EXPORT gboolean general_attributes_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
+	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
 	if (created)

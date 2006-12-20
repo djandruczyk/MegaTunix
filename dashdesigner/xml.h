@@ -11,8 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __DASH_EVENTS_H__
-#define __DASH_EVENTS_H__
+#ifndef __DASH_XML_H__
+#define __DASH_XML_H__
 
 #include <defines.h>
 #include <glade/glade.h>
@@ -21,11 +21,9 @@
 
 /* Prototypes */
 
-EXPORT gboolean dashdesigner_about(GtkWidget *, gpointer );
-EXPORT gboolean add_gauge(GtkWidget *, gpointer );
-EXPORT gboolean dashdesigner_quit(GtkWidget *, gpointer );
-EXPORT gboolean gauge_choice_button_event(GtkWidget *, GdkEventButton *,gpointer );
-void raise_fixed_child (GtkWidget * );
+EXPORT gboolean import_dash_xml(GtkWidget *, gpointer );
+EXPORT gboolean export_dash_xml_default(GtkWidget *, gpointer );
+EXPORT gboolean export_dash_xml_as(GtkWidget *, gpointer );
 			 
 /* Prototypes */
 

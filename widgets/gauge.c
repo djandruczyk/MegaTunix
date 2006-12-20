@@ -218,7 +218,12 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->value = value;
+	if (value > gauge->ubound)
+		gauge->value = gauge->ubound;
+	else if (value < gauge->lbound)
+		gauge->value = gauge->lbound;
+	else
+		gauge->value = value;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
 }

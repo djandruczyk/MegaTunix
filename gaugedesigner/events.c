@@ -15,6 +15,7 @@ GtkWidget * gauge = NULL;
 gboolean hold_handlers = FALSE;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
+GdkColor white = { 0, 65535, 65535, 65535};
 
 
 
@@ -40,6 +41,7 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *spinner = NULL;
+	GtkWidget *cbutton = NULL;
 	MtxColorRange *range = NULL;
 	gfloat lbound = 0.0;
 	gfloat ubound = 0.0;
@@ -60,6 +62,8 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"range_dialog");
+	cbutton = glade_xml_get_widget(xml,"range_colorbutton");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(cbutton),&white);
 	if (!GTK_IS_WIDGET(dialog))
 	{
 		return FALSE;
@@ -116,6 +120,7 @@ EXPORT gboolean create_text_block(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"tblock_dialog");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tblock_colorbutton")),&white);
 	if (!GTK_IS_WIDGET(dialog))
 	{
 		return FALSE;

@@ -14,7 +14,6 @@ megatunix_SOURCES = \
 	about_gui.c \
 	comms.c \
 	comms_gui.c \
-	configfile.c \
 	conversions.c \
 	core_gui.c \
 	dataio.c \
