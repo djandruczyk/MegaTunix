@@ -5,6 +5,7 @@
 #include <glade/glade.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <rtv_parser.h>
 
 GladeXML *main_xml = NULL;
 int main (int argc, char ** argv )
@@ -40,6 +41,7 @@ int main (int argc, char ** argv )
 	gtk_container_add(GTK_CONTAINER(window),vbox);
 
 	gtk_widget_show_all(window);
+	retrieve_rt_vars();
 
 	gtk_main();
 	return (0);
