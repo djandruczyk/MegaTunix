@@ -64,7 +64,7 @@ gboolean load_realtime_map(void )
 	if (!interrogated)
 		return FALSE;
 
-	filename = get_file(g_strconcat(REALTIME_MAP_DIR,"/",firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
+	filename = get_file(g_strconcat(REALTIME_MAP_DIR,PSEP,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
 	if (!filename)
 	{
 		dbg_func(g_strdup_printf(__FILE__": load_realtime_map()\n\t File not found!!, exiting function\n"),CRITICAL);

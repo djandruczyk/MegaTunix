@@ -68,7 +68,7 @@ void load_sliders()
 	if (!ww_sliders)
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 
-	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
+	filename = get_file(g_strconcat(RTSLIDERS_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -181,7 +181,7 @@ void load_ve3d_sliders(gint table_num)
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 
-	filename = get_file(g_strconcat(RTSLIDERS_DIR,"/",firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
+	filename = get_file(g_strconcat(RTSLIDERS_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("rts_conf"));
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{

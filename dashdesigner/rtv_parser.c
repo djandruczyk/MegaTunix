@@ -20,8 +20,8 @@ void retrieve_rt_vars(void)
 		i++;
 	rtv_data = g_new0(struct Rtv_Data, 1);
 	rtv_data->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+	rtv_data->int_ext_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	rtv_data->total_files = i;
-	printf("total files %i\n",i);
 	load_rtvars(files,rtv_data);
 
 }
@@ -34,6 +34,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	gpointer value = NULL;
 	gchar * tmpbuf = NULL;
 	gchar *vname = NULL;
+	gchar *iname = NULL;
 	gint tmpi = 0;
 	gint i = 0;
 	gint j = 0;
@@ -47,6 +48,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 			{
 				tmpbuf = g_strdup_printf("derived_%i",j);
 				cfg_read_string(cfgfile,tmpbuf,"dlog_gui_name",&vname);
+				cfg_read_string(cfgfile,tmpbuf,"internal_name",&iname);
 				if (g_hash_table_lookup_extended(rtv_data->rtv_hash,vname,&orig,&value))
 				{
 					tmpi = (gint)value + 1;
@@ -57,21 +59,30 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 				{
 					//printf("inserting var %s with value %i\n",vname,1);
 					g_hash_table_insert(rtv_data->rtv_hash,g_strdup(vname),GINT_TO_POINTER(1));
+					g_hash_table_insert(rtv_data->int_ext_hash,g_strdup(vname),g_strdup(iname));
 				}
+				g_free(tmpbuf);
+				g_free(vname);
+				g_free(iname);
 			}
 		}
 		cfg_free(cfgfile);
 		g_free(cfgfile);
 		i++;
 	}
+	/*
 	g_hash_table_foreach(rtv_data->rtv_hash,update_common,GINT_TO_POINTER(i));
+	g_hash_table_foreach(rtv_data->int_ext_hash,dump_hash,NULL);
+	*/
 }
 
 void update_common(gpointer key, gpointer value, gpointer user_data)
 {
 	//printf("key %s, value %i,user_data %i\n",(gchar *)key,(gint) value,(gint) user_data);
-	if ((gint)value == (gint)user_data)
+/*	if ((gint)value == (gint)user_data)
 		printf("%s is a common variable\n",(gchar *)key);
 	else
 		printf("%s is a firmware SPECIFIC variable\n",(gchar *)key);
+		*/
 }
+

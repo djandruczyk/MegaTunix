@@ -19,6 +19,13 @@
 #include <gtk/gtk.h>
 
 
+/* Enums */
+typedef enum 
+{
+	GAUGE_ADD=1,
+	GAUGE_REMOVE
+}Choice;
+
 /* Prototypes */
 
 EXPORT gboolean dashdesigner_about(GtkWidget *, gpointer );
@@ -26,6 +33,7 @@ EXPORT gboolean add_gauge(GtkWidget *, gpointer );
 EXPORT gboolean dashdesigner_quit(GtkWidget *, gpointer );
 EXPORT gboolean gauge_choice_button_event(GtkWidget *, GdkEventButton *,gpointer );
 void raise_fixed_child (GtkWidget * );
+void update_properties(GtkWidget *,Choice);
 			 
 /* Prototypes */
 

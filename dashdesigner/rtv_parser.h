@@ -24,6 +24,7 @@ struct Rtv_Data
 {
 	GList *rtv_list;
 	GHashTable *rtv_hash;
+	GHashTable *int_ext_hash;
 	gint total_files;
 };
 
@@ -32,6 +33,7 @@ struct Rtv_Data
 void retrieve_rt_vars(void);
 void load_rtvars(gchar **, struct Rtv_Data *);
 void update_common(gpointer , gpointer , gpointer );
+void dump_hash(gpointer , gpointer , gpointer );
 			 
 /* Prototypes */
 

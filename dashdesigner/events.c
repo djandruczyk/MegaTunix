@@ -14,6 +14,7 @@ static gboolean grabbed = FALSE;
 static gboolean resizing = FALSE;
 static gboolean moving = FALSE;
 static gint corner = -1;
+static GladeXML *prop_xml = NULL;
 static GtkWidget *grabbed_widget = NULL;
 static struct T
 {
@@ -58,6 +59,7 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 {
 
 	static gboolean created = FALSE;
+	static gboolean prop_created = FALSE;
 	static GladeXML *preview_xml = NULL;
 	GtkWidget * gauge = NULL;
 	GtkWidget * table = NULL;
@@ -70,12 +72,30 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 		window = glade_xml_get_widget(preview_xml,"preview_window");
 		if (GTK_IS_WIDGET(window))
 			gtk_widget_show_all(window);
-		return TRUE;
+	}
+	else
+	{
+		preview_xml = glade_xml_new(main_xml->filename, "preview_window", NULL);
+		glade_xml_signal_autoconnect(preview_xml);
 	}
 
-	preview_xml = glade_xml_new(main_xml->filename, "preview_window", NULL);
+	if (prop_created)
+	{
+		printf("window created, tring to show it\n");
+		window = glade_xml_get_widget(prop_xml,"property_editor_window");
+		if (GTK_IS_WIDGET(window))
+			gtk_widget_show_all(window);
+		else
+			printf("widget clobbered\n");
+	}
+	else
+	{
+		prop_xml = glade_xml_new(main_xml->filename, "property_editor_window", NULL);
+		glade_xml_signal_autoconnect(prop_xml);
+	}
+	if (created && prop_created)
+		return TRUE;
 
-	glade_xml_signal_autoconnect(preview_xml);
 
 	table = glade_xml_get_widget(preview_xml,"gauge_preview_table");
 	files = get_files(g_strconcat(GAUGES_DIR,PSEP,NULL),g_strdup("xml"));
@@ -94,6 +114,7 @@ EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
 		g_strfreev(files);
 	}
 	created = TRUE;
+	prop_created = TRUE;
 	return TRUE;
 
 }
@@ -143,6 +164,7 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_show_all(dash);
 		g_free(filename);
+		update_properties(gauge,GAUGE_ADD);
 	}
 
 //	printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);
@@ -287,7 +309,10 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 		if (found_one)
 		{
 			if (event->button == 3)
+			{
 				gtk_widget_destroy(grabbed_widget);
+				update_properties(grabbed_widget,GAUGE_REMOVE);
+			}
 			if (event->button == 1)
 			{
 				//printf("grabbed it \n");
@@ -403,5 +428,11 @@ void raise_fixed_child (GtkWidget * widget)
 	{
 		gdk_window_raise (widget->window);
 	}
+}
+
+
+void update_properties(GtkWidget * widget, Choice choice)
+{
+	printf("update_properties\n");
 }
 
