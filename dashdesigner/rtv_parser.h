@@ -34,6 +34,8 @@ void retrieve_rt_vars(void);
 void load_rtvars(gchar **, struct Rtv_Data *);
 void update_common(gpointer , gpointer , gpointer );
 void dump_hash(gpointer , gpointer , gpointer );
+void dump_list(gpointer , gpointer );
+gint sort(gconstpointer , gconstpointer );
 			 
 /* Prototypes */
 

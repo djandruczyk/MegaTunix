@@ -1,11 +1,13 @@
 #include <configfile.h>
 #include <defines.h>
+#include <dirent.h>
 #include <getfiles.h>
 #include <gauge.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <rtv_parser.h>
+#include <string.h>
 
 void retrieve_rt_vars(void)
 {
@@ -21,6 +23,7 @@ void retrieve_rt_vars(void)
 	rtv_data = g_new0(struct Rtv_Data, 1);
 	rtv_data->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	rtv_data->int_ext_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+	rtv_data->rtv_list = NULL;
 	rtv_data->total_files = i;
 	load_rtvars(files,rtv_data);
 
@@ -60,6 +63,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 					//printf("inserting var %s with value %i\n",vname,1);
 					g_hash_table_insert(rtv_data->rtv_hash,g_strdup(vname),GINT_TO_POINTER(1));
 					g_hash_table_insert(rtv_data->int_ext_hash,g_strdup(vname),g_strdup(iname));
+					rtv_data->rtv_list = g_list_prepend(rtv_data->rtv_list,g_strdup(vname));
 				}
 				g_free(tmpbuf);
 				g_free(vname);
@@ -70,10 +74,18 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 		g_free(cfgfile);
 		i++;
 	}
+
+	rtv_data->rtv_list = g_list_sort(rtv_data->rtv_list,sort);
+	g_list_foreach(rtv_data->rtv_list,dump_list,NULL);
 	/*
 	g_hash_table_foreach(rtv_data->rtv_hash,update_common,GINT_TO_POINTER(i));
 	g_hash_table_foreach(rtv_data->int_ext_hash,dump_hash,NULL);
 	*/
+}
+
+gint sort(gconstpointer a, gconstpointer b)
+{
+	return strcmp((gchar *)a, (gchar *)b);
 }
 
 void update_common(gpointer key, gpointer value, gpointer user_data)
@@ -86,3 +98,7 @@ void update_common(gpointer key, gpointer value, gpointer user_data)
 		*/
 }
 
+void dump_list(gpointer data, gpointer user_data)
+{
+	printf ("%s\n",(gchar *) data);
+}
