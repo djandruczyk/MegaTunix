@@ -444,6 +444,7 @@ void mtx_gauge_gint_export(MtxDispatchHelper * helper)
 			BAD_CAST tmpbuf);
 	g_free(tmpbuf);
 }
+
 void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 {
 	/* If the dat t oexport is NOT null export it otherwise export and
@@ -453,6 +454,7 @@ void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 	else
 		return;
 }
+
 
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge)
 {

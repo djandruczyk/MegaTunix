@@ -442,12 +442,14 @@ void update_properties(GtkWidget * widget, Choice choice)
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
 	GtkWidget *entry = NULL;
+	GtkWidget *sep = NULL;
 	gint len = 0;
 
 	if (choice == GAUGE_ADD)
 	{
 		printf ("gauge add\n");
-		table = gtk_table_new(2,2,FALSE);
+		table = gtk_table_new(3,2,FALSE);
+		gtk_container_set_border_width(GTK_CONTAINER(table),5);
 		entry = gtk_entry_new();
 		tmpbuf = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(widget));
 		vector = g_strsplit(tmpbuf,PSEP,-1);
@@ -460,10 +462,14 @@ void update_properties(GtkWidget * widget, Choice choice)
 	
 		gtk_entry_set_text(GTK_ENTRY(entry),vector[0]);
 		g_strfreev(vector);
-		gtk_table_attach_defaults(GTK_TABLE(table),entry,0,1,0,1);
+		gtk_table_attach(GTK_TABLE(table),entry,0,1,0,1,GTK_FILL|GTK_EXPAND,GTK_FILL,0,0);
 
 		combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
-		gtk_table_attach_defaults(GTK_TABLE(table),combo_box,0,2,1,2);
+		gtk_table_attach(GTK_TABLE(table),combo_box,0,2,1,2,GTK_FILL|GTK_EXPAND,GTK_FILL,0,0);
+		g_object_set_data(G_OBJECT(widget),"combo",combo_box);
+
+		sep = gtk_hseparator_new();
+		gtk_table_attach(GTK_TABLE(table),sep,0,2,1,2,GTK_FILL|GTK_EXPAND,GTK_FILL,0,5);
 
 		renderer = gtk_cell_renderer_text_new();
 		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
@@ -473,7 +479,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",1,NULL);
 		vbox = glade_xml_get_widget(prop_xml,"prop_top_vbox");
 		g_object_set_data(G_OBJECT(widget),"prop_table",table);
-		gtk_box_pack_end(GTK_BOX(vbox),table,TRUE,TRUE,0);
+		gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,TRUE,0);
 		gtk_widget_show_all(vbox);
 	}
 	else if (choice == GAUGE_REMOVE)
