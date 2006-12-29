@@ -9,6 +9,7 @@
 #include <rtv_parser.h>
 #include <string.h>
 
+GtkListStore *store = NULL;
 void retrieve_rt_vars(void)
 {
 	gchar **files = NULL;
@@ -31,6 +32,7 @@ void retrieve_rt_vars(void)
 
 void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 {
+	GtkTreeIter iter;
 	ConfigFile *cfgfile;
 	gint total = 0;
 	gpointer orig = NULL;
@@ -38,6 +40,9 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	gchar * tmpbuf = NULL;
 	gchar *vname = NULL;
 	gchar *iname = NULL;
+	gchar *element = NULL;
+	gint icount = 0;
+	gint len = 0;
 	gint tmpi = 0;
 	gint i = 0;
 	gint j = 0;
@@ -76,11 +81,22 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	}
 
 	rtv_data->rtv_list = g_list_sort(rtv_data->rtv_list,sort);
-	g_list_foreach(rtv_data->rtv_list,dump_list,NULL);
-	/*
-	g_hash_table_foreach(rtv_data->rtv_hash,update_common,GINT_TO_POINTER(i));
-	g_hash_table_foreach(rtv_data->int_ext_hash,dump_hash,NULL);
-	*/
+	store = gtk_list_store_new(3,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
+	len = g_list_length(rtv_data->rtv_list);
+//	printf("list length is %i\n",len);
+	for (i=0;i<len;i++)
+	{
+		element = g_list_nth_data(rtv_data->rtv_list,i);
+//		printf("element %s\n",element);
+		iname = g_hash_table_lookup(rtv_data->int_ext_hash,element);
+		icount = (gint)g_hash_table_lookup(rtv_data->rtv_hash,element);
+//		printf("int name %s\n",iname);
+		gtk_list_store_append(store,&iter);
+		if (icount == rtv_data->total_files)
+			gtk_list_store_set(store,&iter,0,g_strdup(element),1,"  (common)",2,g_strdup(iname),-1);
+		else
+			gtk_list_store_set(store,&iter,0,g_strdup(element),1,"  (FW Specific)", 2,g_strdup(iname),-1);
+	}
 }
 
 gint sort(gconstpointer a, gconstpointer b)
@@ -88,17 +104,3 @@ gint sort(gconstpointer a, gconstpointer b)
 	return strcmp((gchar *)a, (gchar *)b);
 }
 
-void update_common(gpointer key, gpointer value, gpointer user_data)
-{
-	//printf("key %s, value %i,user_data %i\n",(gchar *)key,(gint) value,(gint) user_data);
-/*	if ((gint)value == (gint)user_data)
-		printf("%s is a common variable\n",(gchar *)key);
-	else
-		printf("%s is a firmware SPECIFIC variable\n",(gchar *)key);
-		*/
-}
-
-void dump_list(gpointer data, gpointer user_data)
-{
-	printf ("%s\n",(gchar *) data);
-}

@@ -310,8 +310,8 @@ EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer 
 		{
 			if (event->button == 3)
 			{
-				gtk_widget_destroy(grabbed_widget);
 				update_properties(grabbed_widget,GAUGE_REMOVE);
+				gtk_widget_destroy(grabbed_widget);
 			}
 			if (event->button == 1)
 			{
@@ -433,6 +433,56 @@ void raise_fixed_child (GtkWidget * widget)
 
 void update_properties(GtkWidget * widget, Choice choice)
 {
+	extern GtkListStore *store;
+	GtkCellRenderer *renderer;
+	extern GladeXML *prop_xml;
+	GtkWidget * combo_box = NULL;
+	GtkWidget *vbox = NULL;
+	GtkWidget *table = NULL;
+	gchar *tmpbuf = NULL;
+	gchar **vector = NULL;
+	GtkWidget *entry = NULL;
+	gint len = 0;
+
+	if (choice == GAUGE_ADD)
+	{
+		printf ("gauge add\n");
+		table = gtk_table_new(2,2,FALSE);
+		entry = gtk_entry_new();
+		tmpbuf = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(widget));
+		vector = g_strsplit(tmpbuf,PSEP,-1);
+		len = g_strv_length(vector);
+		g_free(tmpbuf);
+		tmpbuf = g_strdelimit(g_strdup(vector[len-1]),"_",' ');
+		g_strfreev(vector);
+		vector = g_strsplit(tmpbuf,".",-1);
+		g_free(tmpbuf);
+	
+		gtk_entry_set_text(GTK_ENTRY(entry),vector[0]);
+		g_strfreev(vector);
+		gtk_table_attach_defaults(GTK_TABLE(table),entry,0,1,0,1);
+
+		combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+		gtk_table_attach_defaults(GTK_TABLE(table),combo_box,0,2,1,2);
+
+		renderer = gtk_cell_renderer_text_new();
+		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
+		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"markup",0,NULL);
+		renderer = gtk_cell_renderer_text_new();
+		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
+		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",1,NULL);
+		vbox = glade_xml_get_widget(prop_xml,"prop_top_vbox");
+		g_object_set_data(G_OBJECT(widget),"prop_table",table);
+		gtk_box_pack_end(GTK_BOX(vbox),table,TRUE,TRUE,0);
+		gtk_widget_show_all(vbox);
+	}
+	else if (choice == GAUGE_REMOVE)
+	{
+		printf ("gauge removal\n");
+		table = g_object_get_data(G_OBJECT(widget),"prop_table");
+		gtk_widget_destroy(table);
+	}
+
 	printf("update_properties\n");
 }
 
