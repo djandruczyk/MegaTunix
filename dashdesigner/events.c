@@ -55,7 +55,7 @@ EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean add_gauge(GtkWidget *widget, gpointer data)
+EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 {
 
 	static gboolean created = FALSE;
@@ -134,6 +134,7 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 	GtkWidget * gauge = NULL;
 	GtkTableChild *child = NULL;
 	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
 	gint row = 0;
 	extern GladeXML *main_xml;
 
@@ -156,11 +157,13 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			child = (GtkTableChild *) g_list_nth_data(GTK_TABLE(table)->children,i);
 			if (row == child->top_attach)
-				filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget));
+				tmpbuf = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget));
 		}
 		dash =  glade_xml_get_widget(main_xml,"dashboard");
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,130,130);
+		filename = get_file(g_strconcat(GAUGES_DIR,PSEP,tmpbuf,NULL),NULL);
+		g_free(tmpbuf);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_show_all(dash);
 		g_free(filename);

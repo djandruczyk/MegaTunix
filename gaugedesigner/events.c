@@ -27,9 +27,20 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	gauge = mtx_gauge_face_new();
 	gtk_container_add(GTK_CONTAINER(parent),gauge);
 	gtk_widget_show_all(parent);
-	gtk_widget_set_sensitive(widget,FALSE);
 
 	tmp = glade_xml_get_widget(xml,"animate_frame");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
+	tmp = glade_xml_get_widget(xml,"new_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,FALSE);
+
+	tmp = glade_xml_get_widget(xml,"load_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,FALSE);
+
+	tmp = glade_xml_get_widget(xml,"save_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
+	tmp = glade_xml_get_widget(xml,"save_as_menuitem");
 	gtk_widget_set_sensitive(tmp,TRUE);
 
 	update_attributes(xml);

@@ -37,12 +37,12 @@
 		<widget class="GtkMenu" id="menuitem1_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="add_gauge1">
+		    <widget class="GtkImageMenuItem" id="create_preview_list">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Add a new gauge to the Dash</property>
 		      <property name="label" translatable="yes">_Add Gauge</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="add_gauge" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <signal name="activate" handler="create_preview_list" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
 		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">

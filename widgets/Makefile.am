@@ -15,7 +15,7 @@ libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c
 
 libmtxgauge_la_LDFLAGS = @GTK_LIBS@ @LIBXML2_LIBS@ @EXTRA_LIBS@
 
-demo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@ @EXTRA_LIBS@ libmtxgauge.la
+demo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@ @EXTRA_LIBS@ libmtxgauge.la ../mtxcommon/libmtxcommon.la
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

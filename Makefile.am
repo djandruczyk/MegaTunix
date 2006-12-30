@@ -2,7 +2,7 @@
 # directories and type `make'.
 AUTOMAKE_OPTIONS = foreign
 
-subdirs = mtxmatheval include mtxcommon widgets gaugedesigner dashdesigner src Interrogator Gui LookupTables RealtimeMaps RuntimeSliders RuntimeStatus 
+subdirs = include mtxmatheval mtxcommon widgets gaugedesigner dashdesigner src Interrogator Gui LookupTables RealtimeMaps RuntimeSliders RuntimeStatus 
 
 SUBDIRS = $(subdirs) 
 
@@ -12,5 +12,5 @@ DEPDIR = ${subdirs}/.deps
 
 CLEANFILES = *~ core -rf autom4te.cache gmon.out
 
-EXTRA_DIST =  configure CREDITS AUTHORS TODO README INSTALL megatunix.spec
+EXTRA_DIST =  configure CREDITS AUTHORS TODO README INSTALL LICENSE megatunix.spec
 

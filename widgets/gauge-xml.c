@@ -12,8 +12,10 @@
  */
 
 
+#include <defines.h>
 #include <gauge.h>
 #include <gauge-xml.h>
+#include <getfiles.h>
 #include <gauge-private.h>
 #include <stdio.h>
 #include <libxml/parser.h>
@@ -64,11 +66,15 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
  * Simple example to parse a file called "file.xml", 
  * walk down the DOM, and print the name of the 
  * xml elements nodes.
+ * FILENAME passed is a SHORTname,  this function will use get_file to
+ * get a full path on the system.
  */
 void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
+	gchar *tmpbuf = NULL;
+	gchar **vector = NULL;
 
 	/*
 	 * this initialize the library and check potential ABI mismatches
@@ -77,8 +83,8 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	 */
 	LIBXML_TEST_VERSION
 
-		/*parse the file and get the DOM */
-		doc = xmlReadFile(filename, NULL, 0);
+	/*parse the file and get the DOM */
+	doc = xmlReadFile(filename, NULL, 0);
 
 	if (doc == NULL) {
 		printf("error: could not parse file %s\n",filename);
@@ -101,8 +107,12 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 			gtk_window_resize((GtkWindow *)(((GtkWidget *)gauge)->parent),gauge->w,gauge->h);
 		generate_gauge_background(GTK_WIDGET(gauge));
 		mtx_gauge_face_redraw_canvas (gauge);
-		gauge->xml_filename = g_strdup(filename);
+
+		vector = g_strsplit(filename,PSEP,-1);
+		gauge->xml_filename = g_strdup(vector[g_strv_length(vector)-1]);
+		g_free(vector);
 	}
+	g_free(tmpbuf);
 
 	/*free the document */
 	xmlFreeDoc(doc);

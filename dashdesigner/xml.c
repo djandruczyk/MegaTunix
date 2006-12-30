@@ -32,6 +32,10 @@ EXPORT gboolean export_dash_xml_default(GtkWidget *widget, gpointer data)
 	xmlNodePtr node = NULL;/* node pointers */
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
 	gchar * filename = "testdash.xml";
+	GtkTreeIter iter;
+	GtkTreeModel *model = NULL;
+	gboolean state = FALSE;
+	gchar * iname = NULL;
 
 
 	printf("Export Dash XML default\n");
@@ -74,6 +78,10 @@ EXPORT gboolean export_dash_xml_default(GtkWidget *widget, gpointer data)
 		tmpbuf = g_strdup_printf("%s",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget)));
 		xmlNewChild(node, NULL, BAD_CAST "gauge_xml_name", BAD_CAST tmpbuf);
 		g_free(tmpbuf);
+		state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(g_object_get_data(G_OBJECT(child->widget),"combo")),&iter);
+		model = gtk_combo_box_get_model(GTK_COMBO_BOX(g_object_get_data(G_OBJECT(child->widget),"combo")));
+		gtk_tree_model_get(model,&iter,2,&iname,-1);
+		xmlNewChild(node, NULL, BAD_CAST "datasource", BAD_CAST iname);
 		printf("child %i\n",i);
 	}
 	xmlSaveFormatFileEnc(filename, doc, "utf-8", 1);

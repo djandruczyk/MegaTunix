@@ -766,14 +766,15 @@
 		<widget class="GtkMenu" id="menuitem1_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="new_gauge_button">
+		    <widget class="GtkImageMenuItem" id="new_gauge_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_New Gauge</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="create_new_gauge" last_modification_time="Thu, 07 Dec 2006 19:26:44 GMT"/>
+		      <accelerator key="N" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image86">
+			<widget class="GtkImage" id="image100">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -792,9 +793,10 @@
 		      <property name="label" translatable="yes">_Load Gauge</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="load_handler" last_modification_time="Thu, 07 Dec 2006 19:55:08 GMT"/>
+		      <accelerator key="L" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image87">
+			<widget class="GtkImage" id="image101">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -813,9 +815,10 @@
 		      <property name="label" translatable="yes">_Save Gauge</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="save_handler" last_modification_time="Thu, 07 Dec 2006 19:55:08 GMT"/>
+		      <accelerator key="S" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image88">
+			<widget class="GtkImage" id="image102">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -834,9 +837,10 @@
 		      <property name="label" translatable="yes">S_ave Gauge As</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="save_as_handler" last_modification_time="Thu, 07 Dec 2006 19:55:08 GMT"/>
+		      <accelerator key="A" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image89">
+			<widget class="GtkImage" id="image103">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save-as</property>
 			  <property name="icon_size">1</property>
@@ -883,9 +887,10 @@
 		      <property name="label" translatable="yes">_General Attributes</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="general_attributes_handler" last_modification_time="Thu, 07 Dec 2006 22:57:34 GMT"/>
+		      <accelerator key="G" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image90">
+			<widget class="GtkImage" id="image104">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-color-picker</property>
 			  <property name="icon_size">1</property>
@@ -904,9 +909,10 @@
 		      <property name="label" translatable="yes">Te_xt Attributes</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="text_attributes_handler" last_modification_time="Thu, 07 Dec 2006 20:38:15 GMT"/>
+		      <accelerator key="X" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image91">
+			<widget class="GtkImage" id="image105">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-italic</property>
 			  <property name="icon_size">1</property>
@@ -925,9 +931,10 @@
 		      <property name="label" translatable="yes">_Tickmark Attributes</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="tick_attributes_handler" last_modification_time="Thu, 07 Dec 2006 22:57:34 GMT"/>
+		      <accelerator key="T" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image92">
+			<widget class="GtkImage" id="image106">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-remove</property>
 			  <property name="icon_size">1</property>
@@ -946,9 +953,10 @@
 		      <property name="label" translatable="yes">_Warning Ranges</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="warning_ranges_handler" last_modification_time="Thu, 07 Dec 2006 20:39:46 GMT"/>
+		      <accelerator key="W" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image93">
+			<widget class="GtkImage" id="image107">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
