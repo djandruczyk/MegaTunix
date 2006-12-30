@@ -302,7 +302,8 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 
 	label = gtk_label_new(NULL);
 #if GTK_MINOR_VERSION >= 6
-	gtk_label_set_width_chars(GTK_LABEL(label),6);
+	if (gtk_minor_version >= 6)
+		gtk_label_set_width_chars(GTK_LABEL(label),6);
 #endif
 	slider->textval = label;
 	gtk_misc_set_alignment(GTK_MISC(label),1,0.5);

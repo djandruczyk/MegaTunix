@@ -119,7 +119,8 @@ EXPORT void finish_raweditor(void)
 
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),4);
 #if GTK_MINOR_VERSION >= 4
-			gtk_entry_set_alignment(GTK_ENTRY(entry),0.5);
+			if (gtk_minor_version >= 4)
+				gtk_entry_set_alignment(GTK_ENTRY(entry),0.5);
 #endif
 			gtk_entry_set_has_frame(GTK_ENTRY(entry),TRUE);
 			gtk_table_attach(GTK_TABLE(table),entry,col,col+1,row,row+1,

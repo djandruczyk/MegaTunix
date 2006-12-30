@@ -75,6 +75,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	xmlNode *root_element = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
+	//gint i = 0;
 
 	/*
 	 * this initialize the library and check potential ABI mismatches
@@ -109,7 +110,13 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		mtx_gauge_face_redraw_canvas (gauge);
 
 		vector = g_strsplit(filename,PSEP,-1);
+		/*
+		printf("filename: %s\n",filename);
+		for (i=0;i<g_strv_length(vector);i++)
+			printf("vector[%i] == %s\n",i,vector[i]);
+			*/
 		gauge->xml_filename = g_strdup(vector[g_strv_length(vector)-1]);
+		//printf("gauge->filename is %s\n",gauge->xml_filename);
 		g_free(vector);
 	}
 	g_free(tmpbuf);

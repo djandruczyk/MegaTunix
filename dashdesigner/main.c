@@ -39,9 +39,10 @@ int main (int argc, char ** argv )
 	/* Bind the appropriate handlers */
 
 	gtk_container_add(GTK_CONTAINER(window),vbox);
+	gtk_widget_show_all(vbox);
 
-	gtk_widget_show_all(window);
 	retrieve_rt_vars();
+	gtk_widget_show_all(window);
 
 	gtk_main();
 	return (0);

@@ -371,19 +371,22 @@ EXPORT gboolean warning_ranges_handler(GtkWidget * widget, gpointer data)
 EXPORT gboolean about_handler(GtkWidget *widget, gpointer data)
 {
 #if GTK_MINOR_VERSION >= 8
-	gchar *authors[] = {"David Andruczyk",NULL};
-	gchar *artists[] = {"Dale Anderson",NULL};
-	gtk_show_about_dialog(NULL,
-			"name","MegaTunix Gauge Designer",
-			"version",VERSION,
-			"copyright","David J. Andruczyk(2006)",
-			"comments","MegaTunix Gauge Designer is a tool to design custom Gauges for the MegaTunix MegaSquirt tuning software",
-			"license","GNU GPL v2",
-			"website","http://megatunix.sourceforge.net",
-			"authors",authors,
-			"artists",artists,
-			"documenters",authors,
-			NULL);
+	if (gtk_minor_version >= 8)
+	{
+		gchar *authors[] = {"David Andruczyk",NULL};
+		gchar *artists[] = {"Dale Anderson",NULL};
+		gtk_show_about_dialog(NULL,
+				"name","MegaTunix Gauge Designer",
+				"version",VERSION,
+				"copyright","David J. Andruczyk(2006)",
+				"comments","MegaTunix Gauge Designer is a tool to design custom Gauges for the MegaTunix MegaSquirt tuning software",
+				"license","GNU GPL v2",
+				"website","http://megatunix.sourceforge.net",
+				"authors",authors,
+				"artists",artists,
+				"documenters",authors,
+				NULL);
+	}
 #endif
 	return TRUE;
 }

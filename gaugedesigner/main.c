@@ -27,7 +27,6 @@ int main (int argc, char ** argv )
 	}
 	glade_xml_signal_autoconnect(xml);
 	window = glade_xml_get_widget(xml,"main_window");
-	gtk_widget_show_all(window);
 
 	tmp = glade_xml_get_widget(xml,"save_gauge_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
@@ -36,6 +35,7 @@ int main (int argc, char ** argv )
 	gtk_widget_set_sensitive(tmp,FALSE);
 
 	g_free(filename);
+	gtk_widget_show_all(window);
 	gtk_main();
 	return (0);
 }
