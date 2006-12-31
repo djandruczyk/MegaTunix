@@ -8,21 +8,22 @@
 #include <rtv_parser.h>
 
 GladeXML *main_xml = NULL;
+GtkWidget *main_window = NULL;
 int main (int argc, char ** argv )
 {
-	GtkWidget *window;
 	GtkWidget *vbox;
 	gchar *filename = NULL;
 
 	gtk_init (&argc, &argv);
 
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	g_signal_connect(G_OBJECT(window),"destroy_event",
+	main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	g_signal_connect(G_OBJECT(main_window),"destroy_event",
 			G_CALLBACK(gtk_main_quit),NULL);
-	g_signal_connect(G_OBJECT(window),"delete_event",
+	g_signal_connect(G_OBJECT(main_window),"delete_event",
 			G_CALLBACK(gtk_main_quit),NULL);
 
 
+	gtk_widget_set_size_request(main_window,320,240);
 	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"dashdesigner.glade",NULL),NULL);
 	if (filename)
 		main_xml = glade_xml_new(filename, "main_vbox", NULL);
@@ -38,11 +39,11 @@ int main (int argc, char ** argv )
 
 	/* Bind the appropriate handlers */
 
-	gtk_container_add(GTK_CONTAINER(window),vbox);
+	gtk_container_add(GTK_CONTAINER(main_window),vbox);
 	gtk_widget_show_all(vbox);
 
 	retrieve_rt_vars();
-	gtk_widget_show_all(window);
+	gtk_widget_show_all(main_window);
 
 	gtk_main();
 	return (0);

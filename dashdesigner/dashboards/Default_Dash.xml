@@ -2,8 +2,8 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>640</width>
-    <height>490</height>
+    <width>481</width>
+    <height>513</height>
   </dash_geometry>
   <gauge>
     <width>156</width>
