@@ -1,4 +1,4 @@
-rtmapdir = $(datadir)/MegaTunix/$(REALTIME_MAP_DATA_DIR)
+rtmapdir = $(datadir)/MegaTunix/$(REALTIME_MAPS_DATA_DIR)
 
 rtmap_files = 	README \
 		BnG-std.rtv_map \

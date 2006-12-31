@@ -101,7 +101,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 
 
 	table = glade_xml_get_widget(preview_xml,"gauge_preview_table");
-	files = get_files(g_strconcat(GAUGES_DIR,PSEP,NULL),g_strdup("xml"));
+	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,NULL),g_strdup("xml"));
 	if (files)
 	{
 		while (files[i])
@@ -165,7 +165,7 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		dash =  glade_xml_get_widget(main_xml,"dashboard");
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,130,130);
-		filename = get_file(g_strconcat(GAUGES_DIR,PSEP,tmpbuf,NULL),NULL);
+		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
 		g_free(tmpbuf);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_show_all(dash);

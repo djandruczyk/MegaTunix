@@ -1,4 +1,4 @@
-dashdir = $(datadir)/MegaTunix/$(DASH_DATA_DIR)
+dashdir = $(datadir)/MegaTunix/$(DASHDESIGNER_GLADE_DIR)
 
 SUBDIRS = dashboards
 

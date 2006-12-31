@@ -69,7 +69,7 @@ void load_status(void)
 		return;
 	}
 
-	filename = get_file(g_strconcat(RTSTATUS_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
+	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("status_conf"));
         cfgfile = cfg_open_file(filename);
         if (cfgfile)
 	{

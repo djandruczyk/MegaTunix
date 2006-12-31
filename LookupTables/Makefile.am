@@ -1,4 +1,4 @@
-lookuptablesdir = $(datadir)/MegaTunix/$(LOOKUPTABLE_DATA_DIR)
+lookuptablesdir = $(datadir)/MegaTunix/$(LOOKUPTABLES_DATA_DIR)
 
 lookuptables =	cltfactor.inc \
 		matfactor.inc \

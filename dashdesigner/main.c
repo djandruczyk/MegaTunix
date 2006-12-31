@@ -23,7 +23,7 @@ int main (int argc, char ** argv )
 			G_CALLBACK(gtk_main_quit),NULL);
 
 
-	filename = get_file(g_build_filename(DASH_DATA_DIR,"dashdesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"dashdesigner.glade",NULL),NULL);
 	if (filename)
 		main_xml = glade_xml_new(filename, "main_vbox", NULL);
 	else

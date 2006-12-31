@@ -3,22 +3,54 @@
 <dashboard>
   <dash_geometry>
     <width>640</width>
-    <height>240</height>
+    <height>490</height>
   </dash_geometry>
   <gauge>
-    <width>80</width>
-    <height>80</height>
-    <x_offset>36</x_offset>
-    <y_offset>41</y_offset>
+    <width>156</width>
+    <height>156</height>
+    <x_offset>319</x_offset>
+    <y_offset>299</y_offset>
     <gauge_xml_name>AM_SportComp_AFR_Gauge.xml</gauge_xml_name>
     <datasource>afr</datasource>
   </gauge>
   <gauge>
-    <width>163</width>
-    <height>154</height>
-    <x_offset>145</x_offset>
-    <y_offset>33</y_offset>
+    <width>312</width>
+    <height>321</height>
+    <x_offset>2</x_offset>
+    <y_offset>171</y_offset>
     <gauge_xml_name>AM_SportComp_RPM_Gauge.xml</gauge_xml_name>
     <datasource>rpm</datasource>
+  </gauge>
+  <gauge>
+    <width>138</width>
+    <height>158</height>
+    <x_offset>287</x_offset>
+    <y_offset>-11</y_offset>
+    <gauge_xml_name>AM_SportComp_Advance_Gauge.xml</gauge_xml_name>
+    <datasource>sparkangle</datasource>
+  </gauge>
+  <gauge>
+    <width>132</width>
+    <height>136</height>
+    <x_offset>303</x_offset>
+    <y_offset>140</y_offset>
+    <gauge_xml_name>AM_SportComp_CLT_Gauge.xml</gauge_xml_name>
+    <datasource>cltdeg</datasource>
+  </gauge>
+  <gauge>
+    <width>127</width>
+    <height>141</height>
+    <x_offset>156</x_offset>
+    <y_offset>33</y_offset>
+    <gauge_xml_name>AM_SportComp_MAT_Gauge.xml</gauge_xml_name>
+    <datasource>matdeg</datasource>
+  </gauge>
+  <gauge>
+    <width>149</width>
+    <height>144</height>
+    <x_offset>-4</x_offset>
+    <y_offset>45</y_offset>
+    <gauge_xml_name>AM_SportComp_MAP_Gauge.xml</gauge_xml_name>
+    <datasource>mapkpa</datasource>
   </gauge>
 </dashboard>

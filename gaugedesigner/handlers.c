@@ -32,7 +32,7 @@ EXPORT gboolean tick_attributes_handler(GtkWidget * widget, gpointer data)
 
 		return TRUE;
 	}
-	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 	{
 		xml = glade_xml_new(filename, "tick_settings_window", NULL);
@@ -152,7 +152,7 @@ EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 		}
 
 	}
-	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 	{
 		xml = glade_xml_new(filename, "text_settings_window", NULL);
@@ -246,7 +246,7 @@ EXPORT gboolean general_attributes_handler(GtkWidget * widget, gpointer data)
 		}
 
 	}
-	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 	{
 		xml = glade_xml_new(filename, "general_settings_window", NULL);
@@ -348,7 +348,7 @@ EXPORT gboolean warning_ranges_handler(GtkWidget * widget, gpointer data)
 		}
 
 	}
-	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 	{
 		xml = glade_xml_new(filename, "warning_ranges_window", NULL);

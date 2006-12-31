@@ -23,10 +23,10 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 			NULL);
-	p_dir = g_strconcat(HOME(),PSEP,".MegaTunix",PSEP,DASHES_DIR,NULL);
+	p_dir = g_strconcat(HOME(),PSEP,".MegaTunix",PSEP,DASHES_DATA_DIR,NULL);
 #ifndef __WIN32__
 	/* System wide dir */
-	tmpbuf = g_strconcat(DATA_DIR,PSEP,DASHES_DIR,NULL);
+	tmpbuf = g_strconcat(DATA_DIR,PSEP,DASHES_DATA_DIR,NULL);
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
 	g_free(tmpbuf);
 #else
@@ -65,7 +65,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
 
-	defdir = g_strconcat(HOME(),PSEP, ".MegaTunix",PSEP,DASHES_DIR, NULL);
+	defdir = g_strconcat(HOME(),PSEP, ".MegaTunix",PSEP,DASHES_DATA_DIR, NULL);
 
 	dialog = gtk_file_chooser_dialog_new ("Save File",
 			NULL,

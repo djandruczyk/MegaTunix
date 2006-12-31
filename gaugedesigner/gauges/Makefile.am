@@ -1,4 +1,4 @@
-gaugesdir = $(datadir)/MegaTunix/$(GAUGES_DIR)
+gaugesdir = $(datadir)/MegaTunix/$(GAUGES_DATA_DIR)
 
 gauges_files = 	\
 		AM_SportComp_AFR_Gauge.xml \

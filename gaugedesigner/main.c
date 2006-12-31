@@ -17,7 +17,7 @@ int main (int argc, char ** argv )
 
 	gtk_init (&argc, &argv);
 
-	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 		xml = glade_xml_new(filename, "main_window", NULL);
 	else

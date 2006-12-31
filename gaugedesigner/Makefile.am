@@ -1,4 +1,4 @@
-gaugedir = $(datadir)/MegaTunix/$(GAUGE_DATA_DIR)
+gaugedir = $(datadir)/MegaTunix/$(GAUGEDESIGNER_GLADE_DIR)
 
 SUBDIRS = gauges
 

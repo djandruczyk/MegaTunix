@@ -56,7 +56,7 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 	
 	vector = g_strsplit(fname,".",2);
 
-	filename = get_file(g_strconcat(LOOKUPTABLE_DIR,PSEP,vector[0],NULL),g_strdup(vector[1]));
+	filename = get_file(g_strconcat(LOOKUPTABLES_DATA_DIR,PSEP,vector[0],NULL),g_strdup(vector[1]));
 	g_strfreev(vector);
 
 	if (filename)

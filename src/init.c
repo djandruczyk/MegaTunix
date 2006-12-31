@@ -241,33 +241,36 @@ void save_config(void)
 void make_megasquirt_dirs(void)
 {
 	gchar *filename = NULL;
-	const gchar * mtx = ".Megatunix";
+	const gchar *mtx = ".MegaTunix";
 
 	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/Gui", NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GUI_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/Gauges", NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GAUGES_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), PSEP,".MegaTunix/",PSEP,DASHES_DIR, NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,DASHES_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator", NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator/Profiles", NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/LookupTables", NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,LOOKUPTABLES_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/RealtimeMaps", NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,REALTIME_MAPS_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/RuntimeSliders", NULL);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSLIDERS_DATA_DIR, NULL);
+	g_mkdir(filename, S_IRWXU);
+	g_free(filename);
+	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSTATUS_DATA_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 

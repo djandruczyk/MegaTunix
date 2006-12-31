@@ -59,7 +59,7 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 
-	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 	{
 		xml = glade_xml_new(filename, "range_dialog", NULL);
@@ -117,7 +117,7 @@ EXPORT gboolean create_text_block(GtkWidget * widget, gpointer data)
 	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 
-	filename = get_file(g_build_filename(GAUGE_DATA_DIR,"gaugedesigner.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
 	{
 		xml = glade_xml_new(filename, "tblock_dialog", NULL);

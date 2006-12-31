@@ -1,4 +1,4 @@
-dashesdir = $(datadir)/MegaTunix/$(DASHES_DIR)
+dashesdir = $(datadir)/MegaTunix/$(DASHES_DATA_DIR)
 
 dashes_files = 	\
 		Default_Dash.xml 

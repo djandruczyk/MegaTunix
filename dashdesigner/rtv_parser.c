@@ -16,7 +16,7 @@ void retrieve_rt_vars(void)
 	struct Rtv_Data *rtv_data = NULL;
 	gint i = 0;
 //	printf("retrieve rt_vars from mtx realtime maps\n");
-	files = get_files(g_strconcat(REALTIME_MAP_DIR,PSEP,NULL),g_strdup("rtv_map"));
+	files = get_files(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,NULL),g_strdup("rtv_map"));
 	if (!files)
 		return;
 	while(files[i])
