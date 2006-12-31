@@ -599,6 +599,9 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 #endif
 		gtk_widget_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
 #if GTK_MINOR_VERSION >= 10
+	}
+	else
+	{
 		if (gtk_minor_version >= 10)
 			gdk_window_input_shape_combine_mask(widget->window,gauge->bitmap,0,0);
 #endif

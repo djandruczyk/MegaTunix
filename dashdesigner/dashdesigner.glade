@@ -43,10 +43,10 @@
 		      <property name="label" translatable="yes">_Add Gauge</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="create_preview_list" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
-		      <accelerator key="A" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+		      <accelerator key="A" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image34">
+			<widget class="GtkImage" id="image46">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -60,16 +60,16 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="import_dash1">
+		    <widget class="GtkImageMenuItem" id="load_dash_menuitem">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Import Dashboard</property>
-		      <property name="label" translatable="yes">_Import Dash</property>
+		      <property name="label" translatable="yes">_Load Dash</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="import_dash_xml" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
-		      <accelerator key="I" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+		      <signal name="activate" handler="load_handler" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <accelerator key="L" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image35">
+			<widget class="GtkImage" id="image47">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -83,15 +83,16 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="export_dash1">
+		    <widget class="GtkImageMenuItem" id="save_dash_menuitem">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Export Current Dashboard config to file</property>
-		      <property name="label" translatable="yes">_Export Dash</property>
+		      <property name="label" translatable="yes">_Save Dash</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="export_dash_xml_default" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <signal name="activate" handler="save_handler" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <accelerator key="S" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image36">
+			<widget class="GtkImage" id="image48">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -105,15 +106,16 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="export_dash_as_1">
+		    <widget class="GtkImageMenuItem" id="save_dash_as_menuitem">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Save the dashboard with a new name</property>
-		      <property name="label" translatable="yes">Export Dash as </property>
+		      <property name="label" translatable="yes">S_ave Dash as </property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="export_dash_xml_as" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <signal name="activate" handler="save_as_handler" last_modification_time="Wed, 08 Nov 2006 20:54:45 GMT"/>
+		      <accelerator key="A" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image37">
+			<widget class="GtkImage" id="image49">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save-as</property>
 			  <property name="icon_size">1</property>

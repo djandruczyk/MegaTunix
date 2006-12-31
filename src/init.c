@@ -241,6 +241,7 @@ void save_config(void)
 void make_megasquirt_dirs(void)
 {
 	gchar *filename = NULL;
+	const gchar * mtx = ".Megatunix";
 
 	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
 	g_mkdir(filename, S_IRWXU);
@@ -251,7 +252,7 @@ void make_megasquirt_dirs(void)
 	filename = g_strconcat(HOME(), "/.MegaTunix/Gauges", NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
-	filename = g_strconcat(HOME(), "/.MegaTunix/DashBoards", NULL);
+	filename = g_strconcat(HOME(), PSEP,".MegaTunix/",PSEP,DASHES_DIR, NULL);
 	g_mkdir(filename, S_IRWXU);
 	g_free(filename);
 	filename = g_strconcat(HOME(), "/.MegaTunix/Interrogator", NULL);

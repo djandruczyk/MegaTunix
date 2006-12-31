@@ -72,9 +72,7 @@ EXPORT gboolean save_as_handler(GtkWidget *widget, gpointer data)
 EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
-#ifdef __WIN32__
 	gchar * tmpbuf = NULL;
-#endif
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
 

@@ -1,5 +1,7 @@
 dashdir = $(datadir)/MegaTunix/$(DASH_DATA_DIR)
 
+SUBDIRS = dashboards
+
 INCLUDES = \
 	-I/usr/include \
         -I$(top_srcdir)/include \
@@ -18,7 +20,7 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall
 CLEANFILES = *~ core gmon.out nohup.out 
 DISTCLEANFILES = *~ core gmon.out nohup.out  *.bak *.gladep
 
-dashdesigner_SOURCES = main.c events.c events.h xml.c xml.h rtv_parser.c rtv_parser.h
+dashdesigner_SOURCES = main.c events.c events.h xml.c xml.h rtv_parser.c rtv_parser.h loadsave.c loadsave.h
 
 dashdesigner_DEPENDENCIES = @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la
 

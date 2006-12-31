@@ -208,7 +208,6 @@ void convert_temps(gpointer widget, gpointer units)
 		if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp == CELSIUS))
 		{
 
-			printf("fahrenheit mode,  spinner was previously celsius,  adjusting\n");
 			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
 					GTK_SPIN_BUTTON(widget));
 			upper = adj->upper;
@@ -255,7 +254,6 @@ void convert_temps(gpointer widget, gpointer units)
 
 		if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp == FAHRENHEIT))
 		{
-			printf("celsius mode,  spinner was previously fahrenheit,  adjusting\n");
 			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
 					GTK_SPIN_BUTTON(widget));
 			upper = adj->upper;

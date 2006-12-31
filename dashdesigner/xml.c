@@ -12,14 +12,13 @@
 #if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
 
 
-EXPORT gboolean import_dash_xml(GtkWidget *widget, gpointer data)
+void import_dash_xml(gchar * filename)
 {
 	printf("Import Dash XML\n");
-	return TRUE;
+	return ;
 }
 
-
-EXPORT gboolean export_dash_xml_default(GtkWidget *widget, gpointer data)
+void export_dash_xml(gchar * filename)
 {
 	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
@@ -31,7 +30,6 @@ EXPORT gboolean export_dash_xml_default(GtkWidget *widget, gpointer data)
 	xmlNodePtr root_node = NULL;/* node pointers */
 	xmlNodePtr node = NULL;/* node pointers */
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
-	gchar * filename = "testdash.xml";
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
@@ -100,14 +98,8 @@ EXPORT gboolean export_dash_xml_default(GtkWidget *widget, gpointer data)
 	 */
 	xmlMemoryDump();
 
-	return TRUE;
+	return ;
 }
 
-
-EXPORT gboolean export_dash_xml_as(GtkWidget *widget, gpointer data)
-{
-	printf("Export Dash XML as...\n");
-	return TRUE;
-}
 
 #endif

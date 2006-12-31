@@ -21,9 +21,8 @@
 
 /* Prototypes */
 
-EXPORT gboolean import_dash_xml(GtkWidget *, gpointer );
-EXPORT gboolean export_dash_xml_default(GtkWidget *, gpointer );
-EXPORT gboolean export_dash_xml_as(GtkWidget *, gpointer );
+void import_dash_xml(gchar *);
+void export_dash_xml(gchar *);
 			 
 /* Prototypes */
 

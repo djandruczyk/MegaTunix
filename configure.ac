@@ -145,6 +145,7 @@ GUI_DATA_DIR=Gui
 GAUGE_DATA_DIR=gaugedesigner
 GAUGES_DIR=Gauges
 DASH_DATA_DIR=dashdesigner
+DASHES_DIR=Dashboards
 INTERROGATOR_DATA_DIR=Interrogator
 LOOKUPTABLE_DATA_DIR=LookupTables
 REALTIME_MAP_DATA_DIR=RealtimeMaps
@@ -155,30 +156,33 @@ AC_SUBST(GUI_DATA_DIR)
 AC_SUBST(DASH_DATA_DIR)
 AC_SUBST(GAUGE_DATA_DIR)
 AC_SUBST(GAUGES_DIR)
+AC_SUBST(DASHES_DIR)
 AC_SUBST(INTERROGATOR_DATA_DIR)
 AC_SUBST(LOOKUPTABLE_DATA_DIR)
 AC_SUBST(REALTIME_MAP_DATA_DIR)
 AC_SUBST(RTSLIDERS_DATA_DIR)
 AC_SUBST(RTSTATUS_DATA_DIR)
 
-MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$datadir/MegaTunix\\\" -DLOOKUPTABLE_DIR=\\\"$LOOKUPTABLE_DATA_DIR\\\" -DINTERROGATOR_DIR=\\\"$INTERROGATOR_DATA_DIR\\\"  -DGUI_DIR=\\\"$GUI_DATA_DIR\\\" -DGAUGES_DIR=\\\"$GAUGES_DIR\\\"  -DGAUGE_DATA_DIR=\\\"$GAUGE_DATA_DIR\\\" -DDASH_DATA_DIR=\\\"$DASH_DATA_DIR\\\" -DREALTIME_MAP_DIR=\\\"$REALTIME_MAP_DATA_DIR\\\" -DRTSLIDERS_DIR=\\\"$RTSLIDERS_DATA_DIR\\\" -DRTSTATUS_DIR=\\\"$RTSTATUS_DATA_DIR\\\" -DGTK_DISABLE_COMPAT_H -DGDK_DISABLE_DEPRECATED -D_MAJOR_=$MTX_MAJOR_VERSION -D_MINOR_=$MTX_MINOR_VERSION -D_MICRO_=$MTX_MICRO_VERSION "
+MEGATUNIX_DEFINES="$CFLAGS -DDATA_DIR=\\\"$datadir/MegaTunix\\\" -DLOOKUPTABLE_DIR=\\\"$LOOKUPTABLE_DATA_DIR\\\" -DINTERROGATOR_DIR=\\\"$INTERROGATOR_DATA_DIR\\\"  -DGUI_DIR=\\\"$GUI_DATA_DIR\\\" -DGAUGES_DIR=\\\"$GAUGES_DIR\\\" -DDASHES_DIR=\\\"$DASHES_DIR\\\" -DGAUGE_DATA_DIR=\\\"$GAUGE_DATA_DIR\\\" -DDASH_DATA_DIR=\\\"$DASH_DATA_DIR\\\" -DREALTIME_MAP_DIR=\\\"$REALTIME_MAP_DATA_DIR\\\" -DRTSLIDERS_DIR=\\\"$RTSLIDERS_DATA_DIR\\\" -DRTSTATUS_DIR=\\\"$RTSTATUS_DATA_DIR\\\" -DGTK_DISABLE_COMPAT_H -DGDK_DISABLE_DEPRECATED -D_MAJOR_=$MTX_MAJOR_VERSION -D_MINOR_=$MTX_MINOR_VERSION -D_MICRO_=$MTX_MICRO_VERSION "
 
 AC_SUBST(MEGATUNIX_DEFINES)
 
 AC_OUTPUT([
 megatunix.spec
 Makefile 
+include/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
-dashdesigner/resources.rc
+gaugedesigner.iss
 gaugedesigner/resources.rc
+gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
 src/resources.rc
-include/Makefile
 widgets/Makefile
-gaugedesigner/Makefile
 dashdesigner/Makefile
+dashdesigner/dashboards/Makefile
+dashdesigner/resources.rc
 LookupTables/Makefile
 RealtimeMaps/Makefile
 RuntimeSliders/Makefile
@@ -187,7 +191,6 @@ Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Gui/Makefile
 MegaTunix.iss
-gaugedesigner.iss
 ])
 
 echo "
