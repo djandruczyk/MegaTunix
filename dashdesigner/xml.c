@@ -103,7 +103,6 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 
 	}
 	gtk_window_resize(GTK_WINDOW(main_window),width,height);
-	printf("%i,%i\n",width,height);
 
 }
 

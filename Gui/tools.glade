@@ -55,7 +55,7 @@
 			<widget class="GtkButton" id="tools_import_vex_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Import VE/Spark Table(s)</property>
+			  <property name="label" translatable="yes">Import VE/Spark Tbls</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -72,7 +72,7 @@
 			<widget class="GtkButton" id="tools_export_vex_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Export VE/Spark Table(s)</property>
+			  <property name="label" translatable="yes">Export VE/Spark Tbls</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -286,6 +286,7 @@
 	  <child>
 	    <widget class="GtkFrame" id="firmware_loader_tab">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="label_xalign">0</property>
 	      <property name="label_yalign">0.5</property>
 	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
@@ -339,7 +340,8 @@
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Enter IAT Sensor Info</property>
+			  <property name="label" translatable="yes">Enter IAT 
+Sensor Info</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -360,7 +362,8 @@
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Enter CLT Sensor Info</property>
+			  <property name="label" translatable="yes">Enter CLT
+Sensor Info</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -380,7 +383,8 @@
 			<widget class="GtkCheckButton" id="use_alt_iat_check_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Use Alternative IAT Sensor</property>
+			  <property name="label" translatable="yes">Use Alternative
+IAT Sensor</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -403,7 +407,8 @@
 			<widget class="GtkCheckButton" id="use_alt_clt_check_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Use Alternative CLT Sensor</property>
+			  <property name="label" translatable="yes">Use Alternative
+CLT Sensor</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -433,7 +438,6 @@
 		  <child>
 		    <widget class="GtkButton" id="download_fw_button">
 		      <property name="visible">True</property>
-		      <property name="sensitive">False</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Download New Firmware to ECU and Reboot</property>
 		      <property name="use_underline">True</property>
@@ -454,7 +458,8 @@
 		    <widget class="GtkButton" id="load_firmware_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Select Firmware to modify/load</property>
+		      <property name="label" translatable="yes">Select Firmware
+to modify/load</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>

@@ -131,6 +131,16 @@ void build_general(GtkWidget *parent_frame)
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
 	gtk_tooltips_set_tip(tip,ebox,
+			"This box provides your choice for the active dashboard to be used",NULL);
+
+	frame = gtk_frame_new("Dashboard Selection");
+	gtk_container_add(GTK_CONTAINER(ebox),frame);
+	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+
+	ebox = gtk_event_box_new();
+	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);
+	gtk_tooltips_set_tip(tip,ebox,
 			"This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will appear on the console that MegaTunix was started from...",NULL);
 
 	frame = gtk_frame_new("MegaTunix Debugging");

@@ -319,8 +319,8 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 
 	gtk_table_attach (GTK_TABLE (table),hbox,
 			0,2,slider->row,(slider->row)+1,
-			(GtkAttachOptions) (GTK_FILL),
-			(GtkAttachOptions) (GTK_FILL), 0, 0);
+			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
+			(GtkAttachOptions) (GTK_FILL|GTK_SHRINK), 0, 0);
 
 	pbar = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),

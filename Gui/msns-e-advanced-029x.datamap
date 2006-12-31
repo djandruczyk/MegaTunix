@@ -41,6 +41,19 @@ key_types=_INT_,_STRING_
 page=0
 bind_to_list=map_second_staging,staging_ctrls
 
+[orfc_params_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=orfc_params
+
+[barocorr_params_table]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=barocorr_params
+
+
 #----- Labels ----------------------------------------------------------------
 
 [orfc_clt_label]
@@ -265,8 +278,8 @@ key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=184
 bitval=0
-bitshift=5
-bitmask=32
+bitshift=6
+bitmask=64
 bind_to_list=maf_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -278,8 +291,8 @@ key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=184
 bitval=1
-bitshift=5
-bitmask=32
+bitshift=6
+bitmask=64
 bind_to_list=maf_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -386,6 +399,28 @@ handler=_GENERIC_
 tooltip=Enables the use of constant Baro correction. NOTE: THIS REQUIRES the fitting of an additional MAP sensor to the X7input with approprite circuitry.
 
 #----- Spinbuttons ----------------------------------------------------------
+
+[barocorr_max_kpa_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=82
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The upper limit for the barocorrection factor in KPa. useful to prevent bad running in case of ECU hiccup/reset.
+
+[barocorr_min_kpa_spin]
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=83
+dl_conv_expr=x*1
+ul_conv_expr=x*1
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=The lower limit for the barocorrection factor in KPa. useful to prevent bad running in case of ECU hiccup/reset.
 
 [soft_revlimit_rpm_spin]
 keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
@@ -579,4 +614,28 @@ raw_upper=255
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in seconds
+
+[barocorr_yes_radio_button]
+keys=page,offset,toggle_groups,group_states,bitshift,bitval,bitmask,dl_type,handler
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+page=1
+offset=184
+bitshift=3
+bitval=1
+bitmask=8
+toggle_groups=barocorr_params
+group_states=ENABLED
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[barocorr_no_radio_button]
+keys=page,offset,bitshift,bitval,bitmask,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+page=1
+offset=184
+bitshift=3
+bitval=0
+bitmask=8
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
 
