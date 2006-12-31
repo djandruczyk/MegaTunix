@@ -8,6 +8,7 @@ headers = \
         configfile.h \
         conversions.h \
         core_gui.h \
+        dashboard.h \
         dataio.h \
         datalogging_gui.h \
         debugging.h \

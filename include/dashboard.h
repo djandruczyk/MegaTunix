@@ -11,27 +11,22 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __DASH_XML_H__
-#define __DASH_XML_H__
+#ifndef __DASHBOARD_H__
+#define __DASHBOARD_H__
 
-#include <defines.h>
-#include <glade/glade.h>
-#include <gtk/gtk.h>
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
 
-
 /* Prototypes */
-
-void import_dash_xml(gchar *);
-void export_dash_xml(gchar *);
-void clear_dashboard(GtkWidget *);
+void load_dashboard(GtkFileChooser *, gpointer);
 void load_elements(GtkWidget *, xmlNode * );
 void load_geometry(GtkWidget *, xmlNode *);
 void load_gauge(GtkWidget *, xmlNode *);
 void load_integer_from_xml(xmlNode *, gint *);
 void load_string_from_xml(xmlNode *, gchar **);
+
+/* Prototypes */
 
 #endif

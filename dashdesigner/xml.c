@@ -23,7 +23,6 @@ void import_dash_xml(gchar * filename)
 	xmlNode *root_element = NULL;
 	gint result = 0;
 	dash = glade_xml_get_widget(main_xml,"dashboard");
-	dash = glade_xml_get_widget(main_xml,"dashboard");
 
 	children = GTK_FIXED(dash)->children;
 	if (g_list_length(children) > 0)
@@ -83,7 +82,6 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 	xmlNode *cur_node = NULL;
 	gint width = 0;
 	gint height = 0;
-	extern GtkWidget *main_window;
 	if (!node->children)
 	{
 		printf("ERROR, load_geometry, xml node is empty!!\n");
@@ -102,7 +100,7 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 		cur_node = cur_node->next;
 
 	}
-	gtk_window_resize(GTK_WINDOW(main_window),width,height);
+	gtk_window_resize(GTK_WINDOW(gtk_widget_get_toplevel(dash)),width,height);
 
 }
 

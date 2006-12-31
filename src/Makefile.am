@@ -1,6 +1,7 @@
 
 INCLUDES = \
 	-I$(top_srcdir)/include \
+	-I$(top_srcdir)/widgets \
 	@GTK_CFLAGS@ \
 	@GLEXT_CFLAGS@ \
 	@LIBGLADE_CFLAGS@ \
@@ -16,6 +17,7 @@ megatunix_SOURCES = \
 	comms_gui.c \
 	conversions.c \
 	core_gui.c \
+	dashboard.c \
 	dataio.c \
 	datalogging_gui.c \
 	debugging.c \
@@ -70,7 +72,7 @@ resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
 
 #megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @WIN32_RESOURCES@
+megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxgauge.la @EXTRA_LIBS@ @WIN32_RESOURCES@
 
 megatunix_LDFLAGS = 
 

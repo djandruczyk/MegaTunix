@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <dashboard.h>
 #include <defines.h>
 #include <enums.h>
 #include <general_gui.h>
@@ -56,22 +57,23 @@ static struct DebugLevel dbglevels[] = {
 void build_general(GtkWidget *parent_frame)
 {
 	extern GtkTooltips *tip;
-	GtkWidget *vbox;
-	GtkWidget *vbox2;
-	GtkWidget *sw;
-	GtkWidget *view;
-	GtkWidget *frame;
-	GtkWidget *hbox;
-	GtkWidget *hbox2;
-	GtkWidget *button;
-	GtkWidget *table;
-	GtkWidget *label;
-	GtkWidget *entry;
-	GtkWidget *ebox;
+	GtkWidget *vbox = NULL;
+	GtkWidget *vbox2 = NULL;
+	GtkWidget *sw = NULL;
+	GtkWidget *view = NULL;
+	GtkWidget *frame = NULL;
+	GtkWidget *hbox = NULL;
+	GtkWidget *hbox2 = NULL;
+	GtkWidget *button = NULL;
+	GtkWidget *table = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *entry = NULL;
+	GtkWidget *ebox = NULL;
+	gchar * tmpbuf = NULL;
 	gint i,j,k;
 	gint shift = 0;
 	gint mask = 0;
-	GSList *group;
+	GSList *group = NULL;
 	gint num_levels = sizeof(dbglevels)/sizeof(dbglevels[0]);
 
 	vbox = gtk_vbox_new(FALSE,0);
@@ -136,7 +138,25 @@ void build_general(GtkWidget *parent_frame)
 	frame = gtk_frame_new("Dashboard Selection");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 	vbox2 = gtk_vbox_new(FALSE,0);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox2),5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+	button = gtk_file_chooser_button_new("Choose a Dashboard File",
+			GTK_FILE_CHOOSER_ACTION_OPEN);
+	g_signal_connect(G_OBJECT(button),"current-folder-changed",
+			G_CALLBACK(load_dashboard),
+			NULL);
+	register_widget("dash_chooser_button",button);
+	tmpbuf = g_build_path(PSEP,DATA_DIR,DASHES_DATA_DIR,NULL);
+	printf("cwd set to %s\n",tmpbuf);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),
+			tmpbuf);
+	g_free(tmpbuf);
+	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
+	printf("shortcut set to %s\n",tmpbuf);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
+	g_free(tmpbuf);
+	gtk_box_pack_start(GTK_BOX(vbox2),button,TRUE,TRUE,0);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);

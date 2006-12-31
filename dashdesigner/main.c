@@ -8,11 +8,11 @@
 #include <rtv_parser.h>
 
 GladeXML *main_xml = NULL;
-GtkWidget *main_window = NULL;
 int main (int argc, char ** argv )
 {
 	GtkWidget *vbox;
 	gchar *filename = NULL;
+	GtkWidget *main_window = NULL;
 
 	gtk_init (&argc, &argv);
 
