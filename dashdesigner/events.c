@@ -5,6 +5,7 @@
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
+#include <rtv_parser.h>
 
 #ifndef M_PI 
 #define M_PI 3.1415926535897932384626433832795 
@@ -84,7 +85,6 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 
 	if (prop_created)
 	{
-		printf("window created, tring to show it\n");
 		window = glade_xml_get_widget(prop_xml,"property_editor_window");
 		if (GTK_IS_WIDGET(window))
 			gtk_widget_show_all(window);
@@ -453,7 +453,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 
 	if (choice == GAUGE_ADD)
 	{
-		printf ("gauge add\n");
+//		printf ("gauge add\n");
 		table = gtk_table_new(3,2,FALSE);
 		gtk_container_set_border_width(GTK_CONTAINER(table),5);
 		entry = gtk_entry_new();
@@ -483,6 +483,9 @@ void update_properties(GtkWidget * widget, Choice choice)
 		renderer = gtk_cell_renderer_text_new();
 		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
 		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",1,NULL);
+		if (g_object_get_data(G_OBJECT(widget),"datasource"))
+			set_combo_to_source(combo_box,g_object_get_data(G_OBJECT(widget),"datasource"));
+
 		vbox = glade_xml_get_widget(prop_xml,"prop_top_vbox");
 		g_object_set_data(G_OBJECT(widget),"prop_table",table);
 		gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,TRUE,0);
@@ -490,11 +493,34 @@ void update_properties(GtkWidget * widget, Choice choice)
 	}
 	else if (choice == GAUGE_REMOVE)
 	{
-		printf ("gauge removal\n");
+//		printf ("gauge removal\n");
 		table = g_object_get_data(G_OBJECT(widget),"prop_table");
 		gtk_widget_destroy(table);
 	}
 
-	printf("update_properties\n");
+//	printf("update_properties\n");
 }
 
+
+void set_combo_to_source(GtkWidget *combo, gchar * source)
+{
+	GtkTreeModel *model = NULL;
+	GtkTreeIter iter;
+	gboolean valid = FALSE;
+	gboolean found = FALSE;
+	gchar * potential;
+
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
+	valid = gtk_tree_model_get_iter_first (model, &iter);
+	while ((valid) && (!found))
+	{
+		gtk_tree_model_get(model,&iter,DATASOURCE_COL,&potential,-1);
+		if (g_strcasecmp(potential,source) == 0)
+		{
+			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo),&iter);
+			found = TRUE;
+		}
+		valid = gtk_tree_model_iter_next (model, &iter);
+
+	}
+}

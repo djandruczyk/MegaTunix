@@ -17,13 +17,26 @@
 #include <defines.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
+#include <gtk/gtk.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+
 
 
 /* Prototypes */
 
 void import_dash_xml(gchar *);
 void export_dash_xml(gchar *);
+void clear_dashboard(GtkWidget *);
+void load_elements(GtkWidget *, xmlNode * );
+void load_geometry(GtkWidget *, xmlNode *);
+void load_gauge(GtkWidget *, xmlNode *);
+void load_integer_from_xml(xmlNode *, gint *);
+void load_string_from_xml(xmlNode *, gchar **);
+void dash_int_import(GtkWidget *, xmlNode *, gpointer);
+void dash_gauge_import(GtkWidget *, xmlNode *, gpointer);
+void dash_string_import(GtkWidget *, xmlNode *, gpointer);
+void dash_geometry_import(GtkWidget *, xmlNode *, gpointer);
 			 
-/* Prototypes */
 
 #endif

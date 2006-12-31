@@ -15,7 +15,7 @@ void retrieve_rt_vars(void)
 	gchar **files = NULL;
 	struct Rtv_Data *rtv_data = NULL;
 	gint i = 0;
-	printf("retrieve rt_vars from mtx realtime maps\n");
+//	printf("retrieve rt_vars from mtx realtime maps\n");
 	files = get_files(g_strconcat(REALTIME_MAP_DIR,PSEP,NULL),g_strdup("rtv_map"));
 	if (!files)
 		return;
@@ -81,7 +81,7 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	}
 
 	rtv_data->rtv_list = g_list_sort(rtv_data->rtv_list,sort);
-	store = gtk_list_store_new(3,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
+	store = gtk_list_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
 	len = g_list_length(rtv_data->rtv_list);
 //	printf("list length is %i\n",len);
 	for (i=0;i<len;i++)
@@ -93,9 +93,9 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 //		printf("int name %s\n",iname);
 		gtk_list_store_append(store,&iter);
 		if (icount == rtv_data->total_files)
-			gtk_list_store_set(store,&iter,0,g_strdup(element),1,"  (common)",2,g_strdup(iname),-1);
+			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (common)",DATASOURCE_COL,g_strdup(iname),-1);
 		else
-			gtk_list_store_set(store,&iter,0,g_strdup(element),1,"  (FW Specific)", 2,g_strdup(iname),-1);
+			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (FW Specific)", DATASOURCE_COL,g_strdup(iname),-1);
 	}
 }
 

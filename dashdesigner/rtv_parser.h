@@ -28,6 +28,14 @@ struct Rtv_Data
 	gint total_files;
 };
 
+enum
+{
+	VARNAME_COL,
+	TYPE_COL,
+	DATASOURCE_COL,
+	NUM_COLS,
+};
+
 /* Prototypes */
 
 void retrieve_rt_vars(void);
