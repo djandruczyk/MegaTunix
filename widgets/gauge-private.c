@@ -591,6 +591,8 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 			event->area.x, event->area.y,
 			event->area.width, event->area.height);
 
+	/* Win32 doesn't like this... */
+#ifndef __WIN32__
 	if (GTK_IS_WINDOW(widget->parent))
 	{
 #if GTK_MINOR_VERSION >= 10
@@ -598,15 +600,28 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 			gtk_widget_input_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
 #endif
 		gtk_widget_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
-#if GTK_MINOR_VERSION >= 10
 	}
 	else
 	{
+#if GTK_MINOR_VERSION >= 10
 		if (gtk_minor_version >= 10)
 			gdk_window_input_shape_combine_mask(widget->window,gauge->bitmap,0,0);
 #endif
 		gdk_window_shape_combine_mask(widget->window,gauge->bitmap,0,0);
 	}
+#else /* win32 specific way */
+
+#if GTK_MINOR_VERSION >= 10
+	if (gtk_minor_version >= 10)
+		gtk_widget_input_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
+#endif
+	gtk_widget_shape_combine_mask(widget->parent,gauge->bitmap,0,0);
+#if GTK_MINOR_VERSION >= 10
+	if (gtk_minor_version >= 10)
+		gdk_window_input_shape_combine_mask(widget->window,gauge->bitmap,0,0);
+#endif
+	gdk_window_shape_combine_mask(widget->window,gauge->bitmap,0,0);
+#endif
 
 
 	return FALSE;
