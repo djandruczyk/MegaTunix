@@ -3,9 +3,8 @@ gaugedir = $(datadir)/MegaTunix/$(GAUGEDESIGNER_GLADE_DIR)
 SUBDIRS = gauges
 
 INCLUDES = \
-	-I/usr/include \
         -I$(top_srcdir)/include \
-	-I../widgets \
+	-I$(top_srcdir)/widgets \
         @GTK_CFLAGS@ \
         @LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@

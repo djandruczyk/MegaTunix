@@ -26,7 +26,6 @@ void load_geometry(GtkWidget *, xmlNode *);
 void load_gauge(GtkWidget *, xmlNode *);
 void load_integer_from_xml(xmlNode *, gint *);
 void load_string_from_xml(xmlNode *, gchar **);
-
 /* Prototypes */
 
 #endif

@@ -184,11 +184,11 @@ void interrogate_ecu()
 				else
 					canidate->sig_str = NULL;
 				break;
-			case EXTVER:
+			case TEXTVER:
 				if (total_read > 0)
-					canidate->quest_str = g_strndup((gchar *)buf,total_read);
+					canidate->text_version_str = g_strndup((gchar *)buf,total_read);
 				else
-					canidate->quest_str = NULL;
+					canidate->text_version_str = NULL;
 				break;
 			case VNUM:
 				if (total_read > 0)
@@ -290,12 +290,12 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 				thread_update_widget(g_strdup("ecu_signature_entry"),MTX_ENTRY,g_strndup(canidate->sig_str,(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key)));
 
 		}
-		if (cmd->store_type == EXTVER)
+		if (cmd->store_type == TEXTVER)
 		{
-			if (canidate->quest_str == NULL)
-				thread_update_widget(g_strdup("ext_revision_entry"),MTX_ENTRY,g_strdup(""));
+			if (canidate->text_version_str == NULL)
+				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strdup(""));
 			else
-				thread_update_widget(g_strdup("ext_revision_entry"),MTX_ENTRY,g_strndup(canidate->quest_str,(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key)));
+				thread_update_widget(g_strdup("text_version_entry"),MTX_ENTRY,g_strndup(canidate->text_version_str,(gint)g_hash_table_lookup(canidate->bytecounts, cmd->key)));
 
 
 		}
@@ -408,8 +408,8 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 freeup:
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
-	if (canidate->quest_str)
-		g_free(canidate->quest_str);
+	if (canidate->text_version_str)
+		g_free(canidate->text_version_str);
 	if (match)
 	{
 		close_profile(potential);
@@ -541,8 +541,8 @@ void close_profile(struct Canidate *canidate)
 		g_hash_table_destroy(canidate->bytecounts);
 	if (canidate->sig_str)
 		g_free(canidate->sig_str);
-	if (canidate->quest_str)
-		g_free(canidate->quest_str);
+	if (canidate->text_version_str)
+		g_free(canidate->text_version_str);
 	if (canidate->load_tabs)
 		g_free(canidate->load_tabs);
 	if (canidate->tab_confs)
@@ -607,7 +607,7 @@ struct Canidate * load_potential_match(GArray * cmd_array, gchar * filename)
 		load_bytecounts(cmd_array, canidate->bytecounts, cfgfile);
 		if (!cfg_read_string(cfgfile,"parameters","SignatureQueryString",&canidate->sig_str))
 			dbg_func(g_strdup(__FILE__": load_potential_match()\n\t\"SignatureQueryString\" NOT found in interrogation profile, ERROR\n"),CRITICAL);
-		if(!cfg_read_string(cfgfile,"parameters","ExtVerQueryString",&canidate->quest_str))
+		if(!cfg_read_string(cfgfile,"parameters","ExtVerQueryString",&canidate->text_version_str))
 			dbg_func(g_strdup(__FILE__": load_potential_match()\n\t\"ExtVerQueryString\" NOT found in interrogation profile, ERROR\n"),CRITICAL);
 		if(!cfg_read_int(cfgfile,"parameters","VerNumber",&canidate->ver_num))
 			dbg_func(g_strdup(__FILE__": load_potential_match()\n\t\"VerNumber\" NOT found in interrogation profile, ERROR\n"),CRITICAL);
@@ -958,10 +958,10 @@ gboolean check_for_match(GArray *cmd_array, struct Canidate *potential, struct C
 		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tCanidate version number \"%i\" Matches potential \"%i\", continuing tests...\n",canidate->ver_num,potential->ver_num),INTERROGATOR);
 
 	
-	if ((potential->quest_str != NULL) && (canidate->quest_str != NULL))
+	if ((potential->text_version_str != NULL) && (canidate->text_version_str != NULL))
 	{
-		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTesting ext version, canidate \"%s\", potential \"%s\"\n",canidate->quest_str,potential->quest_str),INTERROGATOR);
-		if (strstr(canidate->quest_str,potential->quest_str) == NULL)
+		dbg_func(g_strdup_printf(__FILE__": check_for_match()\n\tTesting ext version, canidate \"%s\", potential \"%s\"\n",canidate->text_version_str,potential->text_version_str),INTERROGATOR);
+		if (strstr(canidate->text_version_str,potential->text_version_str) == NULL)
 		{
 			dbg_func(g_strdup(__FILE__": check_for_match()\n\tDID NOT find match on extended version\n"),INTERROGATOR);
 			close_profile(potential);

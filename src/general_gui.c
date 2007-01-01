@@ -146,14 +146,19 @@ void build_general(GtkWidget *parent_frame)
 			G_CALLBACK(load_dashboard),
 			NULL);
 	register_widget("dash_chooser_button",button);
-	tmpbuf = g_build_path(PSEP,DATA_DIR,DASHES_DATA_DIR,NULL);
-	printf("cwd set to %s\n",tmpbuf);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
+	/* Windows specific paths */
+#ifdef __WIN32__
+	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),
 			tmpbuf);
 	g_free(tmpbuf);
+#else
+	tmpbuf = g_build_path(PSEP,DATA_DIR,DASHES_DATA_DIR,NULL);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
+	g_free(tmpbuf);
+#endif
+	/* Common to all OS's */
 	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
-	printf("shortcut set to %s\n",tmpbuf);
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
 	g_free(tmpbuf);
 	gtk_box_pack_start(GTK_BOX(vbox2),button,TRUE,TRUE,0);
@@ -268,14 +273,14 @@ void build_general(GtkWidget *parent_frame)
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox),entry,FALSE,FALSE,0);
 
-	label = gtk_label_new("Extended Revision");
+	label = gtk_label_new("Text Version");
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
 			(GtkAttachOptions) (GTK_FILL),
 			(GtkAttachOptions) (0), 0, 0);
 
 	entry = gtk_entry_new();
-	register_widget("ext_revision_entry",entry);
+	register_widget("text_version_entry",entry);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), FALSE);
 	gtk_table_attach (GTK_TABLE (table), entry, 1, 2, 2, 3,
 			(GtkAttachOptions) (GTK_SHRINK|GTK_FILL|GTK_EXPAND),
@@ -296,7 +301,7 @@ void build_general(GtkWidget *parent_frame)
 
 	ebox = gtk_event_box_new();
 	gtk_tooltips_set_tip(tip,ebox,
-			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100\% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"R\", which returns the extended runtime variables (only supported by a subset of firmwares, like MSnS-Extra \n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"?\" command (Extended version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU (DT Firmwares only).",NULL);
+			"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100\% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"R\", which returns the extended runtime variables (only supported by a subset of firmwares, like MSnS-Extra \n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"T\" command (Text version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU (DT Firmwares only).",NULL);
 
 	gtk_table_attach (GTK_TABLE (table), ebox, 0, 2, 4, 5,
 			(GtkAttachOptions) (GTK_EXPAND|GTK_SHRINK|GTK_FILL),

@@ -501,7 +501,7 @@ struct Canidate * initialize_canidate(void)
 	canidate->filename = NULL;
 	canidate->bytecounts = NULL;
 	canidate->sig_str = NULL;
-	canidate->quest_str = NULL;
+	canidate->text_version_str = NULL;
 	canidate->ver_num = -1;
 	canidate->load_tabs = NULL;
 	canidate->tab_confs = NULL;

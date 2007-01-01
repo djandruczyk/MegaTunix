@@ -25,7 +25,7 @@
 #	cmd_int_arg	<-- (int) the argument sent AFTER the command, used 
 #			only seldomly for things like RAW mem read.
 #	store_data	<-- (bool), true to save return vals or false to ignore
-#	store_type	<-- (String) Only _SIG_ , _VNUM_ , or _EXTVER_ are
+#	store_type	<-- (String) Only _SIG_ , _VNUM_ , or _TEXTVER_ are
 #			allowed here... 
 #	
 
@@ -89,10 +89,10 @@ store_type=_SIG_
 store_data=TRUE
 
 [test_09]
-raw_cmd=?
+raw_cmd=T
 cmd_length=1
-cmd_desc=Extended Revision
-store_type=_EXTVER_
+cmd_desc=Text Version
+store_type=_TEXTVER_
 store_data=TRUE
 
 [test_10]
@@ -106,3 +106,4 @@ raw_cmd=F0
 cmd_length=2
 cmd_desc=Raw Memory Readback
 store_data=FALSE
+

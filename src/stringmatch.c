@@ -42,8 +42,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(SIG));
 	g_hash_table_insert(str_2_enum,"_VNUM_",
 			GINT_TO_POINTER(VNUM));
-	g_hash_table_insert(str_2_enum,"_EXTVER_",
-			GINT_TO_POINTER(EXTVER));
+	g_hash_table_insert(str_2_enum,"_TEXTVER_",
+			GINT_TO_POINTER(TEXTVER));
 
 	/* Data Types for glade data binder.... */
 	g_hash_table_insert(str_2_enum,"_INT_",

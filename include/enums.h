@@ -231,7 +231,7 @@ typedef enum guint
 typedef enum
 {
         VNUM = 0x120,
-        EXTVER,
+        TEXTVER,
         SIG,
 }StoreType;
 

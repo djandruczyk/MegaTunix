@@ -47,6 +47,6 @@ test_xx fields:
   from the ECU
 
  store_type
-  - String represnetation of an enumeration.  Valid types are ONLY _EXTVER_,
+  - String represnetation of an enumeration.  Valid types are ONLY _TEXTVER_,
   _SIG_, and _VNUM_
 	

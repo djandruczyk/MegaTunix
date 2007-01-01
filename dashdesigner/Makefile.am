@@ -3,7 +3,6 @@ dashdir = $(datadir)/MegaTunix/$(DASHDESIGNER_GLADE_DIR)
 SUBDIRS = dashboards
 
 INCLUDES = \
-	-I/usr/include \
         -I$(top_srcdir)/include \
 	-I$(top_srcdir)/widgets \
         @GTK_CFLAGS@ \

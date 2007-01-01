@@ -265,7 +265,7 @@ struct Canidate
 	gchar *filename;	/*! absolute path to this canidate profile */
 	GHashTable *bytecounts;	/*! byte count for each of the 10 test cmds */
 	gchar *sig_str;		/*! Signature string to search for */
-	gchar *quest_str;	/*! Ext Version string to search for */
+	gchar *text_version_str;/*! Ext Version string to search for */
 	gint ver_num;		/*! Version number to search for */
 	gchar *load_tabs;	/*! list of tabs to load into the gui */
 	gchar *tab_confs;	/*! Tab configuration files */
