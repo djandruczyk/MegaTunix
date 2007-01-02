@@ -159,7 +159,10 @@ void build_general(GtkWidget *parent_frame)
 		label = gtk_label_new("Choose a Dashboard File");
 	g_object_set_data(G_OBJECT(button),"label",label);
 	g_object_set_data(G_OBJECT(cbutton),"label",label);
-	gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+#if GTK_MINOR_VERSION >= 6
+	if (gtk_minor_version >= 6)
+		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+#endif
 	gtk_container_add(GTK_CONTAINER(button),label);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(present_dash_filechooser),
@@ -181,7 +184,10 @@ void build_general(GtkWidget *parent_frame)
 		label = gtk_label_new("Choose a Dashboard File");
 	g_object_set_data(G_OBJECT(button),"label",label);
 	g_object_set_data(G_OBJECT(cbutton),"label",label);
-	gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+#if GTK_MINOR_VERSION >= 6
+	if (gtk_minor_version >= 6)
+		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+#endif
 	gtk_container_add(GTK_CONTAINER(button),label);
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(present_dash_filechooser),
