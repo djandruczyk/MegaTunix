@@ -33,6 +33,7 @@ EXPORT gboolean add_gauge(GtkWidget *, gpointer );
 EXPORT gboolean dashdesigner_quit(GtkWidget *, gpointer );
 EXPORT gboolean create_preview_list(GtkWidget *, gpointer );
 EXPORT gboolean gauge_choice_button_event(GtkWidget *, GdkEventButton *,gpointer );
+EXPORT gboolean create_new_dash(GtkWidget *, gchar * );
 void raise_fixed_child (GtkWidget * );
 void update_properties(GtkWidget *,Choice);
 void set_combo_to_source(GtkWidget *, gchar * );

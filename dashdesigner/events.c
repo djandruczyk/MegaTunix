@@ -6,6 +6,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <rtv_parser.h>
+#include <xml.h>
 
 #ifndef M_PI 
 #define M_PI 3.1415926535897932384626433832795 
@@ -523,4 +524,32 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 		valid = gtk_tree_model_iter_next (model, &iter);
 
 	}
+}
+
+
+EXPORT gboolean create_new_dash(GtkWidget *widget, gchar * source)
+{
+	extern GladeXML *main_xml;
+	GtkWidget *dash = NULL;
+	GList *children = NULL;
+	GtkWidget * dialog = NULL;
+	gint result = 0;
+	dash = glade_xml_get_widget(main_xml,"dashboard");
+
+	children = GTK_FIXED(dash)->children;
+	if (g_list_length(children) > 0)
+	{
+		dialog = gtk_message_dialog_new(NULL,GTK_DIALOG_MODAL,
+				GTK_MESSAGE_QUESTION,
+				GTK_BUTTONS_YES_NO,
+				"Dashboard already contains %i gauges, destroy it?",g_list_length(children));
+		result = gtk_dialog_run (GTK_DIALOG (dialog));
+		gtk_widget_destroy(dialog);
+		if (result == GTK_RESPONSE_YES)
+			clear_dashboard(dash);
+		else
+			return TRUE;
+
+	}
+	return TRUE;
 }

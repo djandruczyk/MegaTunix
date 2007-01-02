@@ -65,6 +65,8 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	GtkWidget *dialog = NULL;
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
+	gchar *tmpbuf = NULL;
+	gchar **vector = NULL;
 	gboolean result = FALSE;
 
 	dash = glade_xml_get_widget(main_xml,"dashboard");
@@ -89,14 +91,31 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	filename = g_object_get_data(G_OBJECT(dash),"dash_xml_filename");
 	if ((filename != NULL) && ((gint)data == FALSE)) /* Saving PRE-existin*/
 	{
+#ifdef __WIN32__
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
+#else
+		/* Check to see if file is a SYSTEM file,  if so we can't 
+		 * write there so jump to suers personal stash instead....
+		 */
+		if (g_strrstr(filename,DATA_DIR) != NULL)
+		{
+			vector = g_strsplit(filename,PSEP,-1);
+			tmpbuf = g_strconcat(defdir,PSEP,vector[g_strv_length(vector)-1],NULL);
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
+			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
+			g_strfreev(vector);
+			g_free(tmpbuf);
+
+		}
+		else
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
+#endif
 	}
 	else	/* NEW Document (Save As) */
 	{
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
 		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "NEW_DASH_NAME.xml");
 	}
-//	g_free(filename);
 	g_free(defdir);
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
