@@ -34,6 +34,7 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 	/* System wide dir */
 	tmpbuf = g_strconcat(DATA_DIR,PSEP,GAUGES_DATA_DIR,NULL);
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),tmpbuf);
 	g_free(tmpbuf);
 #else
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),p_dir);
