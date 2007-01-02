@@ -440,6 +440,7 @@ gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	gint response = 0;
+	extern GHashTable *dash_gauges;
 
 	dialog = gtk_file_chooser_dialog_new("Open Dashboard",
 			NULL,
@@ -478,6 +479,8 @@ gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 	{
 
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		if (dash_gauges)
+			g_hash_table_foreach_remove(dash_gauges,remove_dashcluster,data);
 		label = g_object_get_data(G_OBJECT(widget),"label");
 		gtk_label_set_text(GTK_LABEL(label),filename);
 		load_dashboard(filename,data);
