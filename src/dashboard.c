@@ -36,6 +36,8 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gchar * filename = NULL;
+	gint w = 0;
+	gint h = 0;
 
 	filename = gtk_file_chooser_get_filename(chooser);
 	if (filename == NULL)
@@ -61,6 +63,9 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 	load_elements(dash,root_element);
 
 	link_dash_datasources(dash);
+
+	dash_shape_combine(dash);
+	
 
 	gtk_widget_show_all(window);
 }
@@ -270,4 +275,84 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	if ((current != previous) || (forced_update))
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
 
+}
+
+
+void dash_shape_combine(GtkWidget *dash)
+{
+	GtkFixedChild *child = NULL;
+	gint x = 0;
+	gint y = 0;
+	gint w = 0;
+	gint h = 0;
+	gint xc = 0;
+	gint yc = 0;
+	gint radius = 0;
+	gint i = 0;
+	GList *children = NULL;
+	GdkGC *gc = NULL;
+	GdkColormap *colormap = NULL;
+	GdkColor black;
+	GdkColor white;
+	GdkBitmap *bitmap = NULL;
+	GtkRequisition req;
+
+	gtk_widget_size_request(dash,&req);
+
+	bitmap = gdk_pixmap_new(NULL,req.width,req.height,1);
+
+	colormap = gdk_colormap_get_system ();
+	gdk_color_parse ("black", & black);
+	gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
+	gdk_color_parse ("white", & white);
+	gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
+	gc = gdk_gc_new (bitmap);
+	gdk_gc_set_foreground (gc, &black);
+
+	gdk_draw_rectangle(bitmap,gc,TRUE,0,0,req.width,req.height);
+			
+
+	children = GTK_FIXED(dash)->children;
+	gdk_gc_set_foreground (gc, &white);
+
+	for (i=0;i<g_list_length(children);i++)
+	{
+		child = g_list_nth_data(children,i);
+		x = child->x;
+		y = child->y;
+		gtk_widget_size_request(child->widget,&req);
+		w = req.width;
+		h = req.height;
+		radius = MIN(w,h)/2;
+		xc = x+w/2;
+		yc = y+h/2;
+		gdk_draw_arc (bitmap,
+				gc,
+				TRUE,     // filled
+				xc-radius,
+				yc-radius,
+				2*radius,
+				2*radius,
+				0,        // angle 1
+				360*64);  // angle 2: full circle
+
+	}
+	if (GTK_IS_WINDOW(dash->parent))
+	{
+#if GTK_MINOR_VERSION >= 10
+		if (gtk_minor_version >= 10)
+			gtk_widget_input_shape_combine_mask(dash->parent,bitmap,0,0);
+#endif
+		gtk_widget_shape_combine_mask(dash->parent,bitmap,0,0);
+	}
+	else
+	{
+#if GTK_MINOR_VERSION >= 10
+		if (gtk_minor_version >= 10)
+			gdk_window_input_shape_combine_mask(dash->window,bitmap,0,0);
+#endif
+		gdk_window_shape_combine_mask(dash->window,bitmap,0,0);
+	}
+
+	return;
 }
