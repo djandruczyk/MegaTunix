@@ -435,7 +435,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	/* Draw the needle */
 	gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_NEEDLE]);
 	gdk_draw_polygon(gauge->pixmap,
-			widget->style->white_gc,
+			gauge->gc,
 			TRUE,gauge->needle_coords,4);
 
 }
@@ -1088,8 +1088,8 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		gdk_gc_set_rgb_fg_color(gauge->gc,&range->color);
 		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
 		span = gauge->stop_radian - gauge->start_radian;
-		angle1 = (range->lowpoint-gauge->lbound)/(gauge->span);
-		angle2 = (range->highpoint-gauge->lbound)/(gauge->span);
+		angle1 = (range->lowpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
+		angle2 = (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
 
 		/* positions of the range in radians */
 		start_pos = gauge->start_radian+(angle1*span);

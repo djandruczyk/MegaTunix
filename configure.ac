@@ -152,11 +152,8 @@ REALTIME_MAPS_DATA_DIR=RealtimeMaps
 RTSLIDERS_DATA_DIR=RuntimeSliders
 RTSTATUS_DATA_DIR=RuntimeStatus
 if test "$datarootdir" != ""; then
-	echo "using datarootdir"
 	DATA_DIR=$datarootdir/MegaTunix
 else
-	echo "using datadir"
-	DATA_DIR=$datarootdir/MegaTunix
 	DATA_DIR=$datadir/MegaTunix
 fi
 
