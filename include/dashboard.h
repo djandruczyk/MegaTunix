@@ -35,6 +35,7 @@ gboolean dash_button_event(GtkWidget *, GdkEventButton *, gpointer );
 void initialize_dashboards(void);
 gboolean present_dash_filechooser(GtkWidget *, gpointer );
 gboolean remove_dashcluster(gpointer, gpointer , gpointer );
+gboolean dummy(GtkWidget *,gpointer );
 /* Prototypes */
 
 #endif

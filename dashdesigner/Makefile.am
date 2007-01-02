@@ -10,7 +10,7 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-dashdesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@
+dashdesigner_LDADD = @GTK_LIBS@ @LIBGLADE_LIBS@ @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

@@ -38,7 +38,10 @@ void load_dashboard(gchar *filename, gpointer data)
 	xmlNode *root_element = NULL;
 	extern gchar * cluster_1_name;
 	extern gchar * cluster_2_name;
+	extern gboolean interrogated;
 
+	if (!interrogated)
+		return;
 	if (filename == NULL)
 	{
 		return;
@@ -55,6 +58,10 @@ void load_dashboard(gchar *filename, gpointer data)
 		return;
 	}
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	g_signal_connect (G_OBJECT (window), "delete_event",
+			G_CALLBACK (dummy), NULL);
+	g_signal_connect (G_OBJECT (window), "destroy_event",
+			G_CALLBACK (dummy), NULL);
 	//	ebox = gtk_event_box_new();
 	//	gtk_container_add(GTK_CONTAINER(window),ebox);
 	if ((gint)data == 1)
@@ -80,9 +87,8 @@ void load_dashboard(gchar *filename, gpointer data)
 
 
 	gtk_container_add(GTK_CONTAINER(window),dash);
-	//	gtk_container_add(GTK_CONTAINER(ebox),dash);
-	gtk_widget_show_all(window);
 
+	gtk_widget_show_all(window);
 	/*Get the root element node */
 	root_element = xmlDocGetRootElement(doc);
 	load_elements(dash,root_element);
@@ -260,6 +266,10 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 		if (!source)
 			continue;
 
+		if (!rtv_map)
+			return;
+		if (!(rtv_map->rtv_hash))
+			return;
 		rtv_obj = g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!G_IS_OBJECT(rtv_obj))
 		{
@@ -549,4 +559,9 @@ gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 		g_free(tmpbuf);
 
 	return FALSE;
+}
+
+gboolean dummy(GtkWidget *widget,gpointer data)
+{
+	return TRUE;
 }

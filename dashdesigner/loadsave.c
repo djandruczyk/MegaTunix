@@ -63,7 +63,6 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	extern GladeXML *main_xml;
 	GtkWidget *dash;
 	GtkWidget *dialog = NULL;
-	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
 	gboolean result = FALSE;

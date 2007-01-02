@@ -137,7 +137,7 @@ void build_general(GtkWidget *parent_frame)
 	gtk_tooltips_set_tip(tip,ebox,
 			"This box provides your choice for the active dashboard to be used",NULL);
 
-	frame = gtk_frame_new("Dashboard Selection");
+	frame = gtk_frame_new("Dashboard(s) Selection");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
 	vbox2 = gtk_vbox_new(FALSE,5);
 	gtk_container_add(GTK_CONTAINER(frame),vbox2);
@@ -156,7 +156,7 @@ void build_general(GtkWidget *parent_frame)
 	if ((cluster_1_name) && (g_ascii_strcasecmp(cluster_1_name,"") !=0))
 		label = gtk_label_new(cluster_1_name);
 	else
-		label = gtk_label_new("Choose a Dash File");
+		label = gtk_label_new("Choose a Dashboard File");
 	g_object_set_data(G_OBJECT(button),"label",label);
 	g_object_set_data(G_OBJECT(cbutton),"label",label);
 	gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
@@ -178,7 +178,7 @@ void build_general(GtkWidget *parent_frame)
 	if ((cluster_2_name) && (g_ascii_strcasecmp(cluster_2_name,"") !=0))
 		label = gtk_label_new(cluster_2_name);
 	else
-		label = gtk_label_new("Choose a Dash File");
+		label = gtk_label_new("Choose a Dashboard File");
 	g_object_set_data(G_OBJECT(button),"label",label);
 	g_object_set_data(G_OBJECT(cbutton),"label",label);
 	gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
