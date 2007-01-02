@@ -20,7 +20,8 @@
 
 
 /* Prototypes */
-void load_dashboard(GtkFileChooser *, gpointer);
+void load_dashboard(gchar *, gpointer);
+gboolean remove_dashboard(GtkWidget *, gpointer );
 void load_elements(GtkWidget *, xmlNode * );
 void load_geometry(GtkWidget *, xmlNode *);
 void load_gauge(GtkWidget *, xmlNode *);
@@ -31,6 +32,9 @@ void link_dash_datasources(GtkWidget *,gpointer);
 void dash_shape_combine(GtkWidget *);
 gboolean dash_motion_event(GtkWidget *, GdkEventMotion *, gpointer );
 gboolean dash_button_event(GtkWidget *, GdkEventButton *, gpointer );
+void initialize_dashboards(void);
+gboolean present_dash_filechooser(GtkWidget *, gpointer );
+gboolean remove_dashcluster(gpointer, gpointer , gpointer );
 /* Prototypes */
 
 #endif

@@ -299,6 +299,7 @@ typedef enum
 	UPD_FORCE_UPDATE,
 	UPD_RUN_FUNCTION,
 	UPD_TRIGTOOTHMON,
+	UPD_INITIALIZE_DASH,
 }UpdateFunction;
 
 typedef enum

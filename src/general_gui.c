@@ -65,17 +65,18 @@ void build_general(GtkWidget *parent_frame)
 	GtkWidget *hbox = NULL;
 	GtkWidget *hbox2 = NULL;
 	GtkWidget *button = NULL;
-	GtkWidget *button2 = NULL;
+	GtkWidget *cbutton = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *entry = NULL;
 	GtkWidget *ebox = NULL;
-	gchar * tmpbuf = NULL;
 	gint i,j,k;
 	gint shift = 0;
 	gint mask = 0;
 	GSList *group = NULL;
 	gint num_levels = sizeof(dbglevels)/sizeof(dbglevels[0]);
+	extern gchar * cluster_1_name;
+	extern gchar * cluster_2_name;
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
@@ -138,46 +139,55 @@ void build_general(GtkWidget *parent_frame)
 
 	frame = gtk_frame_new("Dashboard Selection");
 	gtk_container_add(GTK_CONTAINER(ebox),frame);
-	hbox = gtk_hbox_new(FALSE,5);
+	vbox2 = gtk_vbox_new(FALSE,5);
+	gtk_container_add(GTK_CONTAINER(frame),vbox2);
+	hbox = gtk_hbox_new(TRUE,5);
 	gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
-	gtk_container_add(GTK_CONTAINER(frame),hbox);
-	button = gtk_file_chooser_button_new("Choose a Dashboard File",
-			GTK_FILE_CHOOSER_ACTION_OPEN);
-	g_signal_connect(G_OBJECT(button),"current-folder-changed",
-			G_CALLBACK(load_dashboard),
-			(gpointer)"Cluster_1");
-	gtk_box_pack_start(GTK_BOX(hbox),button,TRUE,TRUE,0);
-	register_widget("dash_cluster_1_button",button);
-	button2 = gtk_file_chooser_button_new("Choose a Dashboard File",
-			GTK_FILE_CHOOSER_ACTION_OPEN);
-	g_signal_connect(G_OBJECT(button2),"current-folder-changed",
-			G_CALLBACK(load_dashboard),
-			(gpointer)"Cluster_2");
-	gtk_box_pack_start(GTK_BOX(hbox),button2,TRUE,TRUE,0);
-	register_widget("dash_cluster_2_button",button2);
-	/* Windows specific paths */
-#ifdef __WIN32__
-	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),
-			tmpbuf);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button2),
-			tmpbuf);
-	g_free(tmpbuf);
-#else
-	tmpbuf = g_build_path(PSEP,DATA_DIR,DASHES_DATA_DIR,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),
-			tmpbuf);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button2),tmpbuf,NULL);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button2),
-			tmpbuf);
-	g_free(tmpbuf);
-#endif
-	/* Common to all OS's */
-	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button2),tmpbuf,NULL);
-	g_free(tmpbuf);
+	gtk_box_pack_start(GTK_BOX(vbox2),hbox,FALSE,TRUE,0);
+
+	hbox2 = gtk_hbox_new(FALSE,5);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,TRUE,TRUE,0);
+	cbutton = gtk_check_button_new_with_label(NULL);
+	g_signal_connect(G_OBJECT(cbutton),"toggled",
+			G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
+	gtk_box_pack_start(GTK_BOX(hbox2),cbutton,FALSE,TRUE,0);
+
+	button = gtk_button_new();
+	if ((cluster_1_name) && (g_ascii_strcasecmp(cluster_1_name,"") !=0))
+		label = gtk_label_new(cluster_1_name);
+	else
+		label = gtk_label_new("Choose a Dash File");
+	g_object_set_data(G_OBJECT(button),"label",label);
+	g_object_set_data(G_OBJECT(cbutton),"label",label);
+	gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+	gtk_container_add(GTK_CONTAINER(button),label);
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(present_dash_filechooser),
+			GINT_TO_POINTER(1));
+	gtk_box_pack_start(GTK_BOX(hbox2),button,TRUE,TRUE,0);
+	register_widget("dash_cluster_1_label",label);
+
+	hbox2 = gtk_hbox_new(FALSE,5);
+	gtk_box_pack_start(GTK_BOX(hbox),hbox2,TRUE,TRUE,0);
+	cbutton = gtk_check_button_new_with_label(NULL);
+	g_signal_connect(G_OBJECT(cbutton),"toggled",
+			G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
+	gtk_box_pack_start(GTK_BOX(hbox2),cbutton,FALSE,TRUE,0);
+
+	button = gtk_button_new();
+	if ((cluster_2_name) && (g_ascii_strcasecmp(cluster_2_name,"") !=0))
+		label = gtk_label_new(cluster_2_name);
+	else
+		label = gtk_label_new("Choose a Dash File");
+	g_object_set_data(G_OBJECT(button),"label",label);
+	g_object_set_data(G_OBJECT(cbutton),"label",label);
+	gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+	gtk_container_add(GTK_CONTAINER(button),label);
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(present_dash_filechooser),
+			GINT_TO_POINTER(2));
+	gtk_box_pack_start(GTK_BOX(hbox2),button,TRUE,TRUE,0);
+	register_widget("dash_cluster_2_label",label);
 
 	ebox = gtk_event_box_new();
 	gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,TRUE,0);

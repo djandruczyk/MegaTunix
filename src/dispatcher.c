@@ -14,6 +14,7 @@
 #include <comms.h>
 #include <config.h>
 #include <conversions.h>
+#include <dashboard.h>
 #include <dataio.h>
 #include <datalogging_gui.h>
 #include <defines.h>
@@ -257,6 +258,9 @@ trypop:
 					break;
 				case UPD_FORCE_UPDATE:
 					forced_update = TRUE;
+					break;
+				case UPD_INITIALIZE_DASH:
+					initialize_dashboards();
 					break;
 			}
 

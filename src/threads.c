@@ -201,6 +201,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 			{
 				tmp = UPD_LOAD_REALTIME_MAP;
 				g_array_append_val(message->funcs,tmp);
+				tmp = UPD_INITIALIZE_DASH;
+				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_LOAD_RT_STATUS;
 				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_LOAD_GUI_TABS;

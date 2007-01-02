@@ -33,6 +33,8 @@ gint micro_ver;
 gint preferred_delimiter;
 gint baudrate = BAUDRATE;
 gchar * serial_port_name = NULL;
+gchar * cluster_1_name = NULL;
+gchar * cluster_2_name = NULL;
 extern gint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
 extern GStaticMutex comms_mutex;
@@ -125,6 +127,10 @@ gboolean read_config(void)
 		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
 		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
+		cfg_read_string(cfgfile, "Global", "dash_cluster_1", 
+				&cluster_1_name);
+		cfg_read_string(cfgfile, "Global", "dash_cluster_2", 
+				&cluster_2_name);
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		cfg_read_int(cfgfile, "Window", "status_width", &status_width);
 		cfg_read_int(cfgfile, "Window", "status_height", &status_height);
@@ -193,6 +199,15 @@ void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "Tooltips", tips_in_use);
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", temp_units);
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
+	if (cluster_1_name)
+		cfg_write_string(cfgfile, "Global", "dash_cluster_1", cluster_1_name);
+	else
+		cfg_remove_key(cfgfile, "Global", "dash_cluster_1");
+	if (cluster_2_name)
+		cfg_write_string(cfgfile, "Global", "dash_cluster_2", cluster_2_name);
+	else
+		cfg_remove_key(cfgfile, "Global", "dash_cluster_2");
+				
 
 	if (ready)
 	{

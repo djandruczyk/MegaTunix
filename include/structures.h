@@ -144,9 +144,10 @@ struct Viewable_Value
 
 struct Dash_Gauge
 {
-	GObject *object;
-	gchar * source;
-	GtkWidget *gauge;
+	GObject *object;		/* Data stroage object for RT vars */
+	gchar * source;			/* Source name (unused) */
+	GtkWidget *gauge;		/* pointer to gaugeitself */
+	GtkWidget *dash;		/* pointer to gauge parent */
 };
 
 /*! 

@@ -29,18 +29,20 @@
  \param  chooser, the fileshooser that triggered the signal
  \param data, user date
  */
-void load_dashboard(GtkFileChooser *chooser, gpointer data)
+void load_dashboard(gchar *filename, gpointer data)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *dash = NULL;
 	//	GtkWidget *ebox = NULL;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	gchar * filename = NULL;
+	extern gchar * cluster_1_name;
+	extern gchar * cluster_2_name;
 
-	filename = gtk_file_chooser_get_filename(chooser);
 	if (filename == NULL)
+	{
 		return;
+	}
 
 	LIBXML_TEST_VERSION
 
@@ -55,6 +57,19 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	//	ebox = gtk_event_box_new();
 	//	gtk_container_add(GTK_CONTAINER(window),ebox);
+	if ((gint)data == 1)
+	{
+		if (cluster_1_name)
+			g_free(cluster_1_name);
+		cluster_1_name = g_strdup(filename);
+	}
+	if ((gint)data == 2)
+	{
+		if (cluster_2_name)
+			g_free(cluster_2_name);
+		cluster_2_name = g_strdup(filename);
+	}
+
 	dash = gtk_fixed_new();
 	gtk_widget_add_events(GTK_WIDGET(dash),GDK_POINTER_MOTION_MASK|
 			GDK_BUTTON_PRESS_MASK |GDK_BUTTON_RELEASE_MASK);
@@ -78,6 +93,7 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 
 
 	gtk_widget_show_all(window);
+	g_free(filename);
 }
 
 void load_elements(GtkWidget *dash, xmlNode *a_node)
@@ -254,7 +270,8 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 		d_gauge->object = rtv_obj;
 		d_gauge->source = source;
 		d_gauge->gauge = child->widget;
-		g_hash_table_insert(dash_gauges,g_strdup_printf("dash_%s_gauge_%i",(gchar *)data,i),(gpointer)d_gauge);
+		d_gauge->dash = dash;
+		g_hash_table_insert(dash_gauges,g_strdup_printf("dash_cluster_%i_gauge_%i",(gint)data,i),(gpointer)d_gauge);
 
 	}
 }
@@ -389,4 +406,144 @@ gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer da
 		 }
 	 }
 	 return FALSE;
+}
+
+void initialize_dashboards()
+{
+	GtkWidget * label = NULL;
+	extern gchar * cluster_1_name;
+	extern gchar * cluster_2_name;
+	extern GHashTable *dynamic_widgets;
+
+	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_1_label");
+	if ((GTK_IS_LABEL(label)) && (cluster_1_name != NULL) && (g_ascii_strcasecmp(cluster_1_name,"") != 0))
+	{
+		//printf("cluster_1_name is \"%s\"\n",cluster_1_name);
+		gtk_label_set_text(GTK_LABEL(label),g_strdup(cluster_1_name));
+		load_dashboard(g_strdup(cluster_1_name),GINT_TO_POINTER(1));
+	}
+
+	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_2_label");
+	if ((GTK_IS_LABEL(label)) && (cluster_2_name != NULL) && (g_ascii_strcasecmp(cluster_2_name,"") != 0))
+	{
+		//printf("cluster_2_name is \"%s\"\n",cluster_2_name);
+		gtk_label_set_text(GTK_LABEL(label),g_strdup(cluster_2_name));
+		load_dashboard(g_strdup(cluster_2_name),GINT_TO_POINTER(2));
+	}
+}
+
+
+gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *dialog = NULL;
+	GtkWidget *label = NULL;
+	gchar * tmpbuf = NULL;
+	gchar * filename = NULL;
+	gint response = 0;
+
+	dialog = gtk_file_chooser_dialog_new("Open Dashboard",
+			NULL,
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			NULL);
+#ifdef __WIN32__
+	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
+			tmpbuf);
+	g_free(tmpbuf);
+#else
+	tmpbuf = g_build_path(PSEP,DATA_DIR,DASHES_DATA_DIR,NULL);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
+			tmpbuf);
+	g_free(tmpbuf);
+#endif
+	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
+	g_free(tmpbuf);
+	GtkFileFilter * filter = NULL;
+	filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),"*.*");
+	gtk_file_filter_set_name(GTK_FILE_FILTER(filter),"All Files");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
+	filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),"*.xml");
+	gtk_file_filter_set_name(GTK_FILE_FILTER(filter),"XML Files");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
+	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),filter);
+
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		label = g_object_get_data(G_OBJECT(widget),"label");
+		gtk_label_set_text(GTK_LABEL(label),filename);
+		load_dashboard(filename,data);
+	}
+
+	gtk_widget_destroy (dialog);
+
+	return TRUE;
+}
+
+
+
+gboolean remove_dashboard(GtkWidget *widget, gpointer data)
+{
+	extern GHashTable *dash_gauges;
+	GtkWidget *label = NULL;
+	extern gchar * cluster_1_name;
+	extern gchar * cluster_2_name;
+
+	if(!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+		return FALSE;
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),FALSE);
+	label = g_object_get_data(G_OBJECT(widget),"label");
+	if (GTK_IS_WIDGET(label))
+	{
+		gtk_label_set_text(GTK_LABEL(label),"Choose a Dash File");
+		if ((gint)data == 1)
+		{
+			if (cluster_1_name)
+			{
+				g_free(cluster_1_name);
+				cluster_1_name = NULL;
+			}
+		}
+		if ((gint)data == 2)
+		{
+			if (cluster_2_name)
+			{
+				g_free(cluster_2_name);
+				cluster_2_name = NULL;
+			}
+		}
+	}
+	if (dash_gauges)
+		g_hash_table_foreach_remove(dash_gauges,remove_dashcluster,data);
+	return TRUE;
+}
+
+gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
+{
+	gchar *tmpbuf = NULL;
+	struct Dash_Gauge *d_gauge = NULL;
+
+	tmpbuf = g_strdup_printf("dash_cluster_%i",(gint)user_data);
+	if (g_strrstr((gchar *)key,tmpbuf) != NULL)
+	{
+		g_free(tmpbuf);
+		/* Foudn gauge in soon to be destroyed dash */
+		d_gauge = (struct Dash_Gauge *)value;
+		g_free(d_gauge->source);
+		if (GTK_IS_WIDGET(d_gauge->dash))
+			gtk_widget_destroy(gtk_widget_get_toplevel(d_gauge->dash));
+		return TRUE;
+	}
+	else
+		g_free(tmpbuf);
+
+	return FALSE;
 }
