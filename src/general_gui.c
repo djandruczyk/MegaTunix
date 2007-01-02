@@ -155,6 +155,8 @@ void build_general(GtkWidget *parent_frame)
 #else
 	tmpbuf = g_build_path(PSEP,DATA_DIR,DASHES_DATA_DIR,NULL);
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),tmpbuf,NULL);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),
+			tmpbuf);
 	g_free(tmpbuf);
 #endif
 	/* Common to all OS's */
