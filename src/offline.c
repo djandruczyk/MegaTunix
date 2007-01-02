@@ -170,7 +170,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	extern gchar * offline_firmware_choice;
 
 
-	filenames = get_files(g_build_path(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"));
+	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"));
 	if (!filenames)
 	{
 		dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"),CRITICAL);
@@ -193,9 +193,16 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
 
 	group = NULL;
+	i = 0;
 	while (filenames[i]) 
 	{
 		potential = load_potential_match(cmd_array,filenames[i]);
+		if (!potential)
+		{
+			dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"),CRITICAL);
+			i++;
+			continue;
+		}
 		hbox = gtk_hbox_new(FALSE,10);
 		gtk_box_pack_start(GTK_BOX(vbox),hbox,TRUE,TRUE,0);
 		label = gtk_label_new(g_strdup(potential->name));
