@@ -28,6 +28,7 @@ void load_integer_from_xml(xmlNode *, gint *);
 void load_string_from_xml(xmlNode *, gchar **);
 void update_dash_gauge(gpointer , gpointer , gpointer );
 void link_dash_datasources(GtkWidget *);
+void dash_shape_combine(GtkWidget *);
 /* Prototypes */
 
 #endif
