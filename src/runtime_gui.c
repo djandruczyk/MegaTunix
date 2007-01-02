@@ -14,6 +14,7 @@
 #include <3d_vetable.h>
 #include <comms_gui.h>
 #include <config.h>
+#include <dashboard.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dep_processor.h>
@@ -34,6 +35,7 @@ extern gboolean forced_update;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
+GHashTable *dash_gauges = NULL;
 
 gboolean forced_update = TRUE;
 gboolean no_update = FALSE;
@@ -135,6 +137,9 @@ breakout:
 			g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}
 	}
+
+	if (dash_gauges)
+		g_hash_table_foreach(dash_gauges,update_dash_gauge,NULL);
 
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */

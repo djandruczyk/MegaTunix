@@ -142,6 +142,13 @@ struct Viewable_Value
 };
 	
 
+struct Dash_Gauge
+{
+	GObject *object;
+	gchar * source;
+	GtkWidget *gauge;
+};
+
 /*! 
  \brief The Rt_Slider struct contains info on the runtime display tab sliders
  as they are now stored in the config file and adjustable in position

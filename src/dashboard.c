@@ -13,12 +13,14 @@
 
 #include <config.h>
 #include <dashboard.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <getfiles.h>
 #include <gauge.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <structures.h>
 
 
 /*!
@@ -39,7 +41,6 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 	if (filename == NULL)
 		return;
 
-	printf("file chosen %s\n",filename);
 	LIBXML_TEST_VERSION
 
 		/*parse the file and get the DOM */
@@ -58,6 +59,8 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 	/*Get the root element node */
 	root_element = xmlDocGetRootElement(doc);
 	load_elements(dash,root_element);
+
+	link_dash_datasources(dash);
 
 	gtk_widget_show_all(window);
 }
@@ -197,3 +200,74 @@ void load_string_from_xml(xmlNode *node, gchar **dest)
 
 }
 
+
+void link_dash_datasources(GtkWidget *dash)
+{
+	struct Dash_Gauge *d_gauge = NULL;
+	GtkFixedChild *child;
+	GList *children = NULL;
+	gint len = 0;
+	gint i = 0;
+	GObject * rtv_obj = NULL;
+	gchar * source = NULL;
+	extern GHashTable *dash_gauges;
+	extern struct Rtv_Map *rtv_map;
+
+	if(!GTK_IS_FIXED(dash))
+		return;
+	
+	if (!dash_gauges);
+		dash_gauges = g_hash_table_new(g_str_hash,g_str_equal);
+
+	children = GTK_FIXED(dash)->children;
+	len = g_list_length(children);
+
+	for (i=0;i<len;i++)
+	{
+		child = g_list_nth_data(children,i);
+		source = (gchar *)g_object_get_data(G_OBJECT(child->widget),"datasource");
+		if (!source)
+			continue;
+
+		rtv_obj = g_hash_table_lookup(rtv_map->rtv_hash,source);
+		if (!G_IS_OBJECT(rtv_obj))
+		{
+			dbg_func(g_strdup_printf(__FILE__": link_dash_datasourcesn\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
+			continue ;
+		}
+		d_gauge = g_new0(struct Dash_Gauge, 1);
+		d_gauge->object = rtv_obj;
+		d_gauge->source = source;
+		d_gauge->gauge = child->widget;
+		g_hash_table_insert(dash_gauges,g_strdup_printf("gauge_%i",i),(gpointer)d_gauge);
+
+	}
+}
+
+void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
+{
+	struct Dash_Gauge *d_gauge = (struct Dash_Gauge *)value;
+	extern GStaticMutex rtv_mutex;
+	GArray *history;
+	gint current_index = 0;
+	gfloat current = 0.0;
+	gfloat previous = 0.0;
+	extern gboolean forced_update;
+
+	GtkWidget *gauge = NULL;
+	
+	gauge = d_gauge->gauge;
+
+	history = (GArray *)g_object_get_data(d_gauge->object,"history");
+	current_index = (gint)g_object_get_data(d_gauge->object,"current_index");
+	g_static_mutex_lock(&rtv_mutex);
+	current = g_array_index(history, gfloat, current_index);
+	if (current_index > 0)
+		current_index-=1;
+	previous = g_array_index(history, gfloat, current_index);
+	g_static_mutex_unlock(&rtv_mutex);
+
+	if ((current != previous) || (forced_update))
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
+
+}

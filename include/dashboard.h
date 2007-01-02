@@ -26,6 +26,8 @@ void load_geometry(GtkWidget *, xmlNode *);
 void load_gauge(GtkWidget *, xmlNode *);
 void load_integer_from_xml(xmlNode *, gint *);
 void load_string_from_xml(xmlNode *, gchar **);
+void update_dash_gauge(gpointer , gpointer , gpointer );
+void link_dash_datasources(GtkWidget *);
 /* Prototypes */
 
 #endif
