@@ -27,8 +27,10 @@ void load_gauge(GtkWidget *, xmlNode *);
 void load_integer_from_xml(xmlNode *, gint *);
 void load_string_from_xml(xmlNode *, gchar **);
 void update_dash_gauge(gpointer , gpointer , gpointer );
-void link_dash_datasources(GtkWidget *);
+void link_dash_datasources(GtkWidget *,gpointer);
 void dash_shape_combine(GtkWidget *);
+gboolean dash_motion_event(GtkWidget *, GdkEventMotion *, gpointer );
+gboolean dash_button_event(GtkWidget *, GdkEventButton *, gpointer );
 /* Prototypes */
 
 #endif

@@ -33,11 +33,10 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *dash = NULL;
+	//	GtkWidget *ebox = NULL;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gchar * filename = NULL;
-	gint w = 0;
-	gint h = 0;
 
 	filename = gtk_file_chooser_get_filename(chooser);
 	if (filename == NULL)
@@ -54,18 +53,29 @@ void load_dashboard(GtkFileChooser *chooser, gpointer data)
 		return;
 	}
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	//	ebox = gtk_event_box_new();
+	//	gtk_container_add(GTK_CONTAINER(window),ebox);
 	dash = gtk_fixed_new();
+	gtk_widget_add_events(GTK_WIDGET(dash),GDK_POINTER_MOTION_MASK|
+			GDK_BUTTON_PRESS_MASK |GDK_BUTTON_RELEASE_MASK);
+	g_signal_connect (G_OBJECT (dash), "motion_notify_event",
+			G_CALLBACK (dash_motion_event), NULL);
+	g_signal_connect (G_OBJECT (dash), "button_press_event",
+			G_CALLBACK (dash_button_event), NULL);
+
+
 	gtk_container_add(GTK_CONTAINER(window),dash);
+	//	gtk_container_add(GTK_CONTAINER(ebox),dash);
 	gtk_widget_show_all(window);
 
 	/*Get the root element node */
 	root_element = xmlDocGetRootElement(doc);
 	load_elements(dash,root_element);
 
-	link_dash_datasources(dash);
+	link_dash_datasources(dash,data);
 
 	dash_shape_combine(dash);
-	
+
 
 	gtk_widget_show_all(window);
 }
@@ -206,7 +216,7 @@ void load_string_from_xml(xmlNode *node, gchar **dest)
 }
 
 
-void link_dash_datasources(GtkWidget *dash)
+void link_dash_datasources(GtkWidget *dash,gpointer data)
 {
 	struct Dash_Gauge *d_gauge = NULL;
 	GtkFixedChild *child;
@@ -221,7 +231,7 @@ void link_dash_datasources(GtkWidget *dash)
 	if(!GTK_IS_FIXED(dash))
 		return;
 	
-	if (!dash_gauges);
+	if (!dash_gauges)
 		dash_gauges = g_hash_table_new(g_str_hash,g_str_equal);
 
 	children = GTK_FIXED(dash)->children;
@@ -244,7 +254,7 @@ void link_dash_datasources(GtkWidget *dash)
 		d_gauge->object = rtv_obj;
 		d_gauge->source = source;
 		d_gauge->gauge = child->widget;
-		g_hash_table_insert(dash_gauges,g_strdup_printf("gauge_%i",i),(gpointer)d_gauge);
+		g_hash_table_insert(dash_gauges,g_strdup_printf("dash_%s_gauge_%i",(gchar *)data,i),(gpointer)d_gauge);
 
 	}
 }
@@ -262,6 +272,7 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 	GtkWidget *gauge = NULL;
 	
 	gauge = d_gauge->gauge;
+//	printf("updating gauge %s\n",(gchar *)key);
 
 	history = (GArray *)g_object_get_data(d_gauge->object,"history");
 	current_index = (gint)g_object_get_data(d_gauge->object,"current_index");
@@ -355,4 +366,27 @@ void dash_shape_combine(GtkWidget *dash)
 	}
 
 	return;
+}
+
+gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+{
+	return FALSE;
+}
+
+
+gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	 if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1))
+	 {
+		 if (GTK_IS_WINDOW(widget->parent))
+		 {
+			 gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
+					 event->button,
+					 event->x_root,
+					 event->y_root,
+					 event->time);
+			 return TRUE;
+		 }
+	 }
+	 return FALSE;
 }
