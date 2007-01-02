@@ -52,7 +52,7 @@ void import_dash_xml(gchar * filename)
 	root_element = xmlDocGetRootElement(doc);
 	load_elements(dash,root_element);
 
-
+	g_object_set_data(G_OBJECT(dash),"dash_xml_filename",g_strdup(filename));
 	return ;
 }
 
