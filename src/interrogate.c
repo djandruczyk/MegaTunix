@@ -122,6 +122,7 @@ void interrogate_ecu()
 
 		string = g_strdup(cmd->string);
 		res = write(serial_params->fd,string,cmd->len);
+
 		if (res != cmd->len)
 			dbg_func(g_strdup(__FILE__": interrogate_ecu()\n\tError writing data to the ECU\n"),CRITICAL);
 		else
