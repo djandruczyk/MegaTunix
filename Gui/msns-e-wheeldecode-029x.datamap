@@ -65,7 +65,7 @@ bind_to_list=trigger_return
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
 page=7
-bind_to_list=wheel_decode
+bind_to_list=nonedis_controls,spark_controls
 
 [oddfire_offset]
 keys=page,bind_to_list
@@ -231,7 +231,7 @@ bitval=0
 bitmask=4
 toggle_groups=trigger_return,time_based
 group_states=ENABLED,DISBLED
-bind_to_list=nonedis_controls,wheel_decode
+bind_to_list=nonedis_controls,spark_controls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Sets the cranking timing control to use Trigger Return (second column of Trigger points table above) instead of time based timing (which can be error prone if the engine doesn't have a stable and consistent cranking RPM)
@@ -246,7 +246,7 @@ bitval=1
 bitmask=4
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-bind_to_list=nonedis_controls,wheel_decode
+bind_to_list=nonedis_controls,spark_controls
 tooltip=Sets the ignition Output to Inverted Polarity.
 
 [2nd_trig_no_radio_button]
@@ -599,8 +599,8 @@ spconfig_offset=173
 tooltip=This the amount of degree's BTDC that the triggers come at. i.e. to allow the maxiumum timing advance you want the trigger to arrive before your maximum spark advance plus a cushion of 10-20 deg. So if you max advance is 40 deg, a trigger angle of 60deg is safe.  NOTE: this differs somewhat from megatune which has only a 0-90 deg angle range of this control and an additional bitfield.  MegaTunix handles this cleanly with one control with a 0-135 deg range.
 
 [crank_angle_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=171
 dl_conv_expr=(x/0.352)+28.4
@@ -608,7 +608,6 @@ ul_conv_expr=(x-28.4)*0.352
 dl_type=_IMMEDIATE_
 ign_parm=TRUE
 handler=_GENERIC_
-bind_to_list=time_based
 tooltip=This is the Crank Timing (when not using trigger return)
 
 [fixed_angle_spin]
