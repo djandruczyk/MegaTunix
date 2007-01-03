@@ -11,6 +11,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkFrame" id="topframe">
@@ -86,8 +91,9 @@
 			      <property name="label" translatable="yes">Disabled</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
+			      <property name="inconsistent">True</property>
 			      <property name="draw_indicator">True</property>
 			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 19 Sep 2004 19:55:41 GMT"/>
 			    </widget>
@@ -109,8 +115,9 @@
 			      <property name="label" translatable="yes">Enabled</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
+			      <property name="inconsistent">True</property>
 			      <property name="draw_indicator">True</property>
 			      <property name="group">multi_spark_disabled_radio_button</property>
 			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 19 Sep 2004 19:55:35 GMT"/>
@@ -174,8 +181,9 @@
 			      <property name="label" translatable="yes">Disabled</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
+			      <property name="inconsistent">True</property>
 			      <property name="draw_indicator">True</property>
 			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 19 Sep 2004 19:56:03 GMT"/>
 			    </widget>
@@ -197,8 +205,9 @@
 			      <property name="label" translatable="yes">Enabled</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
+			      <property name="inconsistent">True</property>
 			      <property name="draw_indicator">True</property>
 			      <property name="group">boost_retard_disabled_radio_button</property>
 			      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 19 Sep 2004 19:55:49 GMT"/>
@@ -802,6 +811,7 @@
 		      <property name="label" translatable="yes">Permanently Store Data in ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
 		    </widget>
 		    <packing>
@@ -821,6 +831,7 @@
 		      <property name="label" translatable="yes">Get Data from ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:47:47 GMT"/>
 		    </widget>
 		    <packing>

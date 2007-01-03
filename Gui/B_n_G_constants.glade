@@ -11,6 +11,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkFrame" id="topframe">
@@ -64,6 +69,7 @@
 Required Fuel</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 20 Sep 2004 00:26:04 GMT"/>
 			    </widget>
 			    <packing>
@@ -92,7 +98,6 @@ Required Fuel</property>
 			      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
 			      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 			      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -601,8 +606,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Alpha-N</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:27 GMT"/>
 			</widget>
@@ -622,8 +628,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Speed Density</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">alpha_n_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:15 GMT"/>
@@ -658,8 +665,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Throttle-Body</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:42 GMT"/>
 			</widget>
@@ -679,8 +687,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Multi-Port</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">tbi_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:34 GMT"/>
@@ -761,8 +770,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Four Stroke</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:51 GMT"/>
 			</widget>
@@ -782,8 +792,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Two Stroke</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">four_stroke_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:57 GMT"/>
@@ -841,8 +852,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Odd Fire</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:15 GMT"/>
 			</widget>
@@ -862,8 +874,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Even Fire</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">odd_fire_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:07 GMT"/>
@@ -921,8 +934,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">250 kPa</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:29 GMT"/>
 			</widget>
@@ -942,8 +956,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">115 kPa</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">250kpa_map_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:22 GMT"/>
@@ -1001,8 +1016,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Enabled</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:37 GMT"/>
 			</widget>
@@ -1022,8 +1038,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Disabled</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">baro_enabled_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:45 GMT"/>
@@ -1067,8 +1084,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Alternate</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:59 GMT"/>
 			</widget>
@@ -1088,8 +1106,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Simultaneous</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">alternate_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:51 GMT"/>
@@ -1138,8 +1157,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Narrow Band</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:16:49 GMT"/>
 			</widget>
@@ -1159,8 +1179,9 @@ Limit (%)</property>
 			  <property name="label" translatable="yes">Wide Band</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
+			  <property name="inconsistent">True</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">nbo2_radio_button</property>
 			  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:17:00 GMT"/>
@@ -1452,6 +1473,7 @@ Limit (%)</property>
 		      <property name="label" translatable="yes">Permanently Store Data in ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
 		    </widget>
 		    <packing>
@@ -1471,6 +1493,7 @@ Limit (%)</property>
 		      <property name="label" translatable="yes">Get Data from ECU</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:47:47 GMT"/>
 		    </widget>
 		    <packing>

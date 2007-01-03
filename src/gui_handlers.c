@@ -233,6 +233,8 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		obj_data = (void *)g_object_get_data(G_OBJECT(widget),"data");
 		handler = (ToggleButton)g_object_get_data(G_OBJECT(widget),"handler");
 	}
+	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
+		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
@@ -380,6 +382,9 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
+
+	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
+		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
 
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
@@ -1450,6 +1455,8 @@ void update_widget(gpointer object, gpointer user_data)
 	}
 	else if (GTK_IS_CHECK_BUTTON(widget))
 	{
+		if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
+			gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
 		/* Swaps the label of another control based on widget state... */
 		/* If value masked by bitmask, shifted right by bitshift = bitval
 		 * then set button state to on...

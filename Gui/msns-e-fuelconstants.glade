@@ -240,8 +240,8 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
-				      <property name="inconsistent">False</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:15 GMT"/>
 				    </widget>
@@ -261,8 +261,8 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
-				      <property name="inconsistent">False</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 27 Feb 2005 21:31:11 GMT"/>
 				    </widget>
@@ -282,8 +282,8 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
-				      <property name="inconsistent">False</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:16:49 GMT"/>
 				    </widget>
@@ -304,7 +304,7 @@
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
 				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">nbo2_1_radio_button</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:17:00 GMT"/>
@@ -326,7 +326,7 @@
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
 				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">alt_radio_button</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 27 Feb 2005 21:31:22 GMT"/>
@@ -348,7 +348,7 @@
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
 				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">speed_density_1_radio_button</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:27 GMT"/>
@@ -581,7 +581,7 @@
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
 				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:29 GMT"/>
 				    </widget>
@@ -602,7 +602,7 @@
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
 				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:45 GMT"/>
 				    </widget>
@@ -623,7 +623,7 @@
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
 				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:57 GMT"/>
 				    </widget>
@@ -644,7 +644,7 @@
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
 				      <property name="active">False</property>
-				      <property name="inconsistent">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:17:00 GMT"/>
 				    </widget>
@@ -664,8 +664,8 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
-				      <property name="inconsistent">False</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">wbo2_2_radio_button</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 02:16:49 GMT"/>
@@ -686,8 +686,8 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
-				      <property name="inconsistent">False</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">two_stroke_radio_button</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:28:51 GMT"/>
@@ -708,8 +708,8 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
-				      <property name="inconsistent">False</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">baro_disabled_radio_button</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:37 GMT"/>
@@ -730,8 +730,8 @@
 				      <property name="use_underline">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <property name="active">True</property>
-				      <property name="inconsistent">False</property>
+				      <property name="active">False</property>
+				      <property name="inconsistent">True</property>
 				      <property name="draw_indicator">True</property>
 				      <property name="group">alpha_n_2_radio_button</property>
 				      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Mon, 20 Sep 2004 00:29:22 GMT"/>

@@ -118,7 +118,6 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 
 		tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),tmp);
-		printf("exporting to %s\n",tmp);
 
 		g_free (tmp);
 	}

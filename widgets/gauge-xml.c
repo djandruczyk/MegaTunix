@@ -110,14 +110,8 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		mtx_gauge_face_redraw_canvas (gauge);
 
 		vector = g_strsplit(filename,PSEP,-1);
-		/*
-		printf("filename: %s\n",filename);
-		for (i=0;i<g_strv_length(vector);i++)
-			printf("vector[%i] == %s\n",i,vector[i]);
-			*/
 		gauge->xml_filename = g_strdup(vector[g_strv_length(vector)-1]);
-		//printf("gauge->filename is %s\n",gauge->xml_filename);
-		g_free(vector);
+		g_strfreev(vector);
 	}
 	g_free(tmpbuf);
 
@@ -140,6 +134,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
 	MtxDispatchHelper *helper = NULL;
 	MtxXMLFuncs * xml_funcs = NULL;
+	gchar **vector = NULL;
 
 	LIBXML_TEST_VERSION;
 
@@ -196,6 +191,12 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	 * this is to debug memory for regression tests
 	 */
 	xmlMemoryDump();
+	if (gauge->xml_filename)
+		g_free(gauge->xml_filename);
+
+	vector = g_strsplit(filename,PSEP,-1);
+	gauge->xml_filename = g_strdup(vector[g_strv_length(vector)-1]);
+	g_strfreev(vector);
 }
 
 

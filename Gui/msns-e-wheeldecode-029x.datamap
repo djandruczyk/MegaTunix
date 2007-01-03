@@ -88,9 +88,10 @@ bind_to_list=2nd_trigger
 #----- Widgets ---------------------------------------------------------------
 
 [s4w_eventbox]
-keys=page,tooltip
-key_types=_INT_,_STRING_
+keys=page,tooltip,bind_to_list
+key_types=_INT_,_STRING_,_STRING_
 page=0
+bind_to_list=wheel_decode
 tooltip=Stim for wheel is ONLY FOR USE on the stimulator. DO NOT USE THIS MODE on the car.  This option is for toothed wheel users to test their Megasquirt on the bench using the stimulator where the correct input signal is unavailable. DO NOT use on the real engine or you will flood the engine with fuel.
 
 [fixed_dwell_table]
@@ -657,12 +658,13 @@ handler=_GENERIC_
 tooltip=This is the ignition dwell during cranking. 
 
 [rundwell_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=111
 dl_conv_expr=x*10
 ul_conv_expr=x/10
+raw_upper=80
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the ignition dwell during normal engine running. 

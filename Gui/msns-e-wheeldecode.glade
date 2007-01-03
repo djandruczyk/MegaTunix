@@ -1106,7 +1106,7 @@
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:22 GMT"/>
 					    </widget>
@@ -1129,7 +1129,7 @@
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">invert_ignition_yes_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:15 GMT"/>
@@ -1153,7 +1153,7 @@
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:28 GMT"/>
 					    </widget>
@@ -1176,7 +1176,7 @@
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">trig_ret_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:59 GMT"/>
@@ -1299,7 +1299,7 @@ Style</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:27:56 GMT"/>
 					    </widget>
@@ -1322,7 +1322,7 @@ Style</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">dual_dizzy_no_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:04 GMT"/>
@@ -1509,7 +1509,7 @@ Style</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:45 GMT"/>
 					    </widget>
@@ -1613,7 +1613,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:11 GMT"/>
 					    </widget>
@@ -1637,7 +1637,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">2nd_trig_rising_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:17 GMT"/>
@@ -1662,7 +1662,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:22 GMT"/>
 					    </widget>
@@ -1686,7 +1686,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">2nd_trig_no_missing_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:27 GMT"/>
@@ -1710,7 +1710,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">2nd_trig_no_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:05 GMT"/>
@@ -1734,7 +1734,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:45 GMT"/>
 					    </widget>
@@ -1757,7 +1757,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">025_style_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:51 GMT"/>
@@ -1850,12 +1850,12 @@ Missing Teeth:</property>
 					    <widget class="GtkRadioButton" id="minus_1_radio_button">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">-/+ 1</property>
+					      <property name="label" translatable="yes">- 1</property>
 					      <property name="use_underline">True</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:33 GMT"/>
 					    </widget>
@@ -1873,12 +1873,12 @@ Missing Teeth:</property>
 					    <widget class="GtkRadioButton" id="minus_2_radio_button">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">-/+ 2</property>
+					      <property name="label" translatable="yes">- 2</property>
 					      <property name="use_underline">True</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">minus_1_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:38 GMT"/>
@@ -1941,7 +1941,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:57 GMT"/>
 					    </widget>
@@ -1964,7 +1964,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">oddfire_no_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:29:57 GMT"/>
@@ -2066,7 +2066,7 @@ Missing Teeth:</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
 					  <property name="active">False</property>
-					  <property name="inconsistent">False</property>
+					  <property name="inconsistent">True</property>
 					  <property name="draw_indicator">True</property>
 					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:30:08 GMT"/>
 					</widget>
@@ -2089,7 +2089,7 @@ Missing Teeth:</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
 					  <property name="active">False</property>
-					  <property name="inconsistent">False</property>
+					  <property name="inconsistent">True</property>
 					  <property name="draw_indicator">True</property>
 					  <property name="group">fixed_duty_radio_button</property>
 					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:30:14 GMT"/>
@@ -2174,7 +2174,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:30:20 GMT"/>
 					    </widget>
@@ -2197,7 +2197,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">75_percent_duty_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:30:25 GMT"/>
@@ -2221,7 +2221,7 @@ Missing Teeth:</property>
 					      <property name="relief">GTK_RELIEF_NORMAL</property>
 					      <property name="focus_on_click">True</property>
 					      <property name="active">False</property>
-					      <property name="inconsistent">False</property>
+					      <property name="inconsistent">True</property>
 					      <property name="draw_indicator">True</property>
 					      <property name="group">75_percent_duty_radio_button</property>
 					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:30:31 GMT"/>
@@ -2360,7 +2360,7 @@ Missing Teeth:</property>
 					      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 					      <property name="snap_to_ticks">False</property>
 					      <property name="wrap">False</property>
-					      <property name="adjustment">0 0 25.5 0.10000000149 1 1</property>
+					      <property name="adjustment">0 0 80.5 0.10000000149 1 1</property>
 					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Tue, 15 Aug 2006 14:29:13 GMT"/>
 					      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Tue, 15 Aug 2006 14:29:33 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Tue, 15 Aug 2006 14:30:07 GMT"/>
@@ -2515,7 +2515,7 @@ Missing Teeth:</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
 					  <property name="active">False</property>
-					  <property name="inconsistent">False</property>
+					  <property name="inconsistent">True</property>
 					  <property name="draw_indicator">True</property>
 					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:15 GMT"/>
 					</widget>
@@ -2538,7 +2538,7 @@ Missing Teeth:</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
 					  <property name="active">False</property>
-					  <property name="inconsistent">False</property>
+					  <property name="inconsistent">True</property>
 					  <property name="draw_indicator">True</property>
 					  <property name="group">s4w_off_radio_button</property>
 					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Tue, 15 Aug 2006 17:28:22 GMT"/>
