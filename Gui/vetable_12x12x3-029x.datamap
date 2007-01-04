@@ -182,7 +182,7 @@ label=MAP Bins
 alt_label=TPS Bins
 depend_on=alpha_n_button
 alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=1
+alpha_n_button_page=2
 alpha_n_button_offset=184
 alpha_n_button_bitshift=2
 alpha_n_button_bitmask=4
@@ -196,7 +196,7 @@ label=Kpa
 alt_label=TPS %
 depend_on=alpha_n_button
 alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=1
+alpha_n_button_page=2
 alpha_n_button_offset=184
 alpha_n_button_bitshift=2
 alpha_n_button_bitmask=4
@@ -249,21 +249,14 @@ bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [VE1_3d_view_button]
-keys=page,table_num,depend_on,x_source,y_source,alt_y_source,z_source,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,table_num,x_source,y_source,an_y_source,z_source,tooltip,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 x_source=raw_rpm
 y_source=mapkpa
-alt_y_source=tpspercent
+an_y_source=tpspercent
 z_source=vecurr1
-depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=1
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
@@ -275,21 +268,14 @@ handler=_RESCALE_TABLE_
 data=VE_VE1_rescale_spinner
 
 [VE2_3d_view_button]
-keys=page,table_num,depend_on,x_source,y_source,alt_y_source,z_source,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,table_num,x_source,y_source,an_y_source,z_source,tooltip,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=2
 table_num=1
 x_source=raw_rpm
 y_source=mapkpa
-alt_y_source=tpspercent
+an_y_source=tpspercent
 z_source=vecurr2
-depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=1
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
@@ -301,21 +287,14 @@ handler=_RESCALE_TABLE_
 data=VE_VE2_rescale_spinner
 
 [VE3_3d_view_button]
-keys=page,table_num,depend_on,alt_y_source,x_source,y_source,z_source,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,table_num,an_y_source,x_source,y_source,z_source,tooltip,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=5
 table_num=2
 x_source=raw_rpm
 y_source=mapkpa
-alt_y_source=tpspercent
+an_y_source=tpspercent
 z_source=vecurr1
-depend_on=alpha_n_button
-alpha_n_button_type=_VE_EMB_BIT_
-alpha_n_button_page=1
-alpha_n_button_offset=184
-alpha_n_button_bitshift=2
-alpha_n_button_bitmask=4
-alpha_n_button_bitval=1
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 

@@ -783,10 +783,19 @@ void load_profile_details(struct Canidate *canidate)
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_bincount\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
 			if(!cfg_read_string(cfgfile,section,"x_suffix",&canidate->table_params[i]->x_suffix))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_suffix\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
+			/* NOT required, optional key */
+			cfg_read_string(cfgfile,section,"an_x_suffix",&canidate->table_params[i]->an_x_suffix);
+
 			if(!cfg_read_string(cfgfile,section,"y_suffix",&canidate->table_params[i]->y_suffix))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_suffix\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
+			/* NOT required, optional key */
+			cfg_read_string(cfgfile,section,"an_y_suffix",&canidate->table_params[i]->an_y_suffix);
+
 			if(!cfg_read_string(cfgfile,section,"z_suffix",&canidate->table_params[i]->z_suffix))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_suffix\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
+			/* NOT required, optional key */
+			cfg_read_string(cfgfile,section,"an_z_suffix",&canidate->table_params[i]->an_z_suffix);
+
 			if(!cfg_read_string(cfgfile,section,"x_conv_expr",&canidate->table_params[i]->x_conv_expr))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_conv_expr\" variable not found in interrogation profile, ERROR\n"),CRITICAL);
 			if(!cfg_read_string(cfgfile,section,"y_conv_expr",&canidate->table_params[i]->y_conv_expr))

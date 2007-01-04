@@ -196,6 +196,20 @@ void build_string_2_enum_table()
 	g_hash_table_insert(str_2_enum,"_WARMUP_WIZ_PAGE_",
 			GINT_TO_POINTER(WARMUP_WIZ_PAGE));
 
+	/* Algorithm */
+	g_hash_table_insert(str_2_enum,"_SPEED_DENSITY_",
+			GINT_TO_POINTER(SPEED_DENSITY));
+	g_hash_table_insert(str_2_enum,"_ALPHA_N_",
+			GINT_TO_POINTER(ALPHA_N));
+	g_hash_table_insert(str_2_enum,"_MAF_",
+			GINT_TO_POINTER(MAF));
+	g_hash_table_insert(str_2_enum,"_SD_AN_HYBRID_",
+			GINT_TO_POINTER(SD_AN_HYBRID));
+	g_hash_table_insert(str_2_enum,"_MAF_AN_HYBRID_",
+			GINT_TO_POINTER(MAF_AN_HYBRID));
+	g_hash_table_insert(str_2_enum,"_SD_MAF_HYBRID_",
+			GINT_TO_POINTER(SD_MAF_HYBRID));
+
 
 	//g_hash_table_foreach(str_2_enum,dump_hash,NULL);
 

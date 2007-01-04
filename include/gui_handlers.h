@@ -18,15 +18,16 @@
 
 /* Prototypes */
 void leave(GtkWidget *, gpointer);
-gboolean comm_port_change(GtkEditable *);
-gboolean std_button_handler(GtkWidget *, gpointer);
-gboolean std_entry_handler(GtkWidget *, gpointer);
-gboolean entry_changed_handler(GtkWidget *, gpointer );
-gboolean toggle_button_handler(GtkWidget *, gpointer);
-gboolean bitmask_button_handler(GtkWidget *, gpointer);
-gboolean spin_button_handler(GtkWidget *, gpointer);
-gboolean widget_grab(GtkWidget *, GdkEventButton *, gpointer );
-gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
+EXPORT gboolean comm_port_change(GtkEditable *);
+EXPORT gboolean std_button_handler(GtkWidget *, gpointer);
+EXPORT gboolean std_entry_handler(GtkWidget *, gpointer);
+EXPORT gboolean entry_changed_handler(GtkWidget *, gpointer );
+EXPORT gboolean toggle_button_handler(GtkWidget *, gpointer);
+EXPORT gboolean bitmask_button_handler(GtkWidget *, gpointer);
+EXPORT gboolean spin_button_handler(GtkWidget *, gpointer);
+EXPORT gboolean widget_grab(GtkWidget *, GdkEventButton *, gpointer );
+EXPORT gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
+EXPORT gboolean set_algorithm(GtkWidget *, gpointer );
 void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 void update_ve_const(void);
 void update_widget(gpointer, gpointer );

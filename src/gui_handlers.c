@@ -539,7 +539,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),"use_color");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	tmpi = (gint)strtol(text,NULL,base);
+	tmpi = (gint)g_ascii_strtoll(text,NULL,base);
 	tmpf = g_ascii_strtod(text,NULL);
 	//printf("base %i, text %s int val %i, float val %f \n",base,text,tmpi,tmpf);
 	g_free(text);
@@ -1282,15 +1282,18 @@ void update_widget(gpointer object, gpointer user_data)
 	gboolean tmp_state = FALSE;
 	gboolean new_state = FALSE;
 	gboolean state = FALSE;
+	gint algo = -0;
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
 	gchar * tmpbuf = NULL;
+	gchar **vector = NULL;
 	gchar * widget_text = NULL;
 	gdouble spin_value = 0.0; 
 	gboolean update_color = TRUE;
 	GdkColor color;
 	extern gint ** ms_data;
 	extern GHashTable *widget_group_states;
+	extern gint *algorithm;
 
 	if (leaving)
 		return;
@@ -1485,6 +1488,25 @@ void update_widget(gpointer object, gpointer user_data)
 		if (swap_list)
 			swap_labels(swap_list,new_state);
 
+		if (new_state)
+		{
+			algo = (Algorithm)g_object_get_data(G_OBJECT(widget),"algorithm");
+			if (algo > 0)
+			{
+				tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"applicable_tables");
+				vector = g_strsplit(tmpbuf,",",-1);
+				if (!vector)
+					goto noalgo;
+				i = 0;
+				while (vector[i])
+				{
+					algorithm[(gint)g_ascii_strtoll(vector[i],NULL,10)]=(Algorithm)algo;
+					i++;
+				}
+				g_strfreev(vector);
+			}
+		}
+noalgo:
 		if (toggle_groups)
 		{
 			//	printf("toggling groups\n");
@@ -1823,4 +1845,53 @@ void switch_labels(gpointer key, gpointer data)
 				gtk_label_set_text(GTK_LABEL(widget),g_object_get_data(G_OBJECT(widget),"label"));
 		}
 	}
+}
+
+
+/*!
+ \brief set_algorithm() handles the buttons that deal with the Fueling
+ algorithm, as special things need to be taken care of to enable proper
+ display of data.
+ \param widget (GtkWidget *) the toggle button that changes
+ \param data (gpointer) unused in most cases
+ \returns TRUE if handles
+ */
+EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
+{
+	gint algo = 0; 
+	gint tmpi = 0;
+	gint i = 0;
+	extern gint *algorithm;
+	gchar *tmpbuf = NULL;
+	gchar **vector = NULL;
+	extern gboolean forced_update;
+	extern GHashTable *dynamic_widgets;
+
+	if (GTK_IS_OBJECT(widget))
+	{
+		algo = (Algorithm)g_object_get_data(G_OBJECT(widget),"algorithm");
+		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"applicable_tables");
+	}
+	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
+		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
+	/* Split string to pieces to grab the list of tables this algorithm
+	 * applies to
+	 */
+	vector = g_strsplit(tmpbuf,",",-1);
+	if (!vector)
+		return FALSE;
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
+	{	/* It's pressed (or checked) */
+		i = 0;
+		while (vector[i])
+		{
+			tmpi = (gint)g_ascii_strtoll(vector[i],NULL,10);
+			algorithm[tmpi]=(Algorithm)algo;
+			i++;
+		}
+		forced_update = TRUE;
+	}
+	g_strfreev(vector);
+	return TRUE;
 }

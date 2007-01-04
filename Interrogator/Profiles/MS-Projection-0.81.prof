@@ -34,6 +34,7 @@ y_page=0
 y_base_offset=108
 y_bincount=8
 y_suffix=KPA
+an_y_suffix=TPS %
 y_conv_expr=x*1
 z_page=0
 z_base_offset=0

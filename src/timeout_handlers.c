@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <debugging.h>
+#include <defines.h>
 #include <enums.h>
 #include <gui_handlers.h>
 #include <runtime_gui.h>

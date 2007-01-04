@@ -238,6 +238,7 @@ struct Table_Params
 	gint x_base;		/*! where rpm table starts (X axis) */
 	gint x_bincount;	/*! how many RPM bins (X axis) */
 	gchar *x_suffix;	/*! text suffix used on 3D view */
+	gchar *an_x_suffix;	/*! text suffix used on 3D view */
 	gchar *x_conv_expr;	/*! x conversion expression */
 	gboolean x_disp_float;	/*! display as a float */
 	gint x_disp_precision;	/*! how many decimal places */
@@ -246,6 +247,7 @@ struct Table_Params
 	gint y_base;		/*! where load table starts  (Y Axis) */
 	gint y_bincount;	/*! how many load bins (Y axis) */
 	gchar *y_suffix;	/*! text suffix used on 3D view */
+	gchar *an_y_suffix;	/*! text suffix used on 3D view */
 	gchar *y_conv_expr;	/*! y conversion expression */
 	gboolean y_disp_float;	/*! display as a float */
 	gint y_disp_precision;	/*! how many decimal places */
@@ -253,6 +255,7 @@ struct Table_Params
 	gint z_page;		/*! what page the vetable resides in */
 	gint z_base;		/*! where the vetable starts */
 	gchar *z_suffix;	/*! text suffix used on 3D view */
+	gchar *an_z_suffix;	/*! text suffix used on 3D view */
 	gchar *z_conv_expr;	/*! z conversion expression */
 	gboolean z_disp_float;	/*! display as a float */
 	gint z_disp_precision;	/*! how many decimal places */
@@ -540,12 +543,15 @@ struct Ve_View_3D
 	gchar *x_source;
 	gchar *y_source;
 	gchar *z_source;
-	gchar *alt_x_source;
-	gchar *alt_y_source;
-	gchar *alt_z_source;
+	gchar *an_x_source;
+	gchar *an_y_source;
+	gchar *an_z_source;
 	gchar *x_suffix;
 	gchar *y_suffix;
 	gchar *z_suffix;
+	gchar *an_x_suffix;
+	gchar *an_y_suffix;
+	gchar *an_z_suffix;
 	gchar *x_conv_expr;
 	gchar *y_conv_expr;
 	gchar *z_conv_expr;

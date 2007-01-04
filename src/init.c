@@ -65,6 +65,7 @@ gint **ms_data_backup = NULL;
 GList ***ve_widgets = NULL;
 GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
+gint *algorithm = NULL;
 
 
 /*!
@@ -307,8 +308,6 @@ void mem_alloc()
 	 * download...
 	 */
 
-
-
 	if (!ms_data)
 		ms_data = g_new0(gint *, firmware->total_pages);
 	if (!ms_data_last)
@@ -322,9 +321,13 @@ void mem_alloc()
 		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
 	if (!interdep_vars)
 		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
+	if (!algorithm)
+		algorithm = g_new0(gint, firmware->total_pages);
+
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		interdep_vars[i] = g_hash_table_new(NULL,NULL);
+		algorithm[i] = SPEED_DENSITY;
 
 		if (!ms_data[i])
 			ms_data[i] = g_new0(gint, firmware->page_params[i]->length);

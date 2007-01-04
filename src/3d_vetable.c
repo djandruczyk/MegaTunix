@@ -93,12 +93,15 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"x_source"));
 	ve_view->y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"y_source"));
 	ve_view->z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"z_source"));
-	ve_view->alt_x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"alt_x_source"));
-	ve_view->alt_y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"alt_y_source"));
-	ve_view->alt_z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"alt_z_source"));
+	ve_view->an_x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"an_x_source"));
+	ve_view->an_y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"an_y_source"));
+	ve_view->an_z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"an_z_source"));
 	ve_view->x_suffix = g_strdup(firmware->table_params[table_num]->x_suffix);
+	ve_view->an_x_suffix = g_strdup(firmware->table_params[table_num]->an_x_suffix);
 	ve_view->y_suffix = g_strdup(firmware->table_params[table_num]->y_suffix);
+	ve_view->an_y_suffix = g_strdup(firmware->table_params[table_num]->an_y_suffix);
 	ve_view->z_suffix = g_strdup(firmware->table_params[table_num]->z_suffix);
+	ve_view->an_z_suffix = g_strdup(firmware->table_params[table_num]->an_z_suffix);
 
 	ve_view->x_conv_expr = g_strdup(firmware->table_params[table_num]->x_conv_expr);
 	ve_view->y_conv_expr = g_strdup(firmware->table_params[table_num]->y_conv_expr);
@@ -268,17 +271,17 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			label = gtk_label_new(NULL);
 			register_widget(g_strdup_printf("x_active_label_%i",table_num),label);
 			gtk_table_attach (GTK_TABLE (table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 			label = gtk_label_new(NULL);
 			register_widget(g_strdup_printf("y_active_label_%i",table_num),label);
 			gtk_table_attach (GTK_TABLE (table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 			label = gtk_label_new(NULL);
 			register_widget(g_strdup_printf("z_active_label_%i",table_num),label);
 			gtk_table_attach (GTK_TABLE (table), label, 0, 1, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
 			label = gtk_label_new("Runtime\nPosition");
@@ -288,17 +291,17 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			label = gtk_label_new(NULL);
 			register_widget(g_strdup_printf("x_runtime_label_%i",table_num),label);
 			gtk_table_attach (GTK_TABLE (table), label, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 			label = gtk_label_new(NULL);
 			register_widget(g_strdup_printf("y_runtime_label_%i",table_num),label);
 			gtk_table_attach (GTK_TABLE (table), label, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 			label = gtk_label_new(NULL);
 			register_widget(g_strdup_printf("z_runtime_label_%i",table_num),label);
 			gtk_table_attach (GTK_TABLE (table), label, 1, 2, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
+					(GtkAttachOptions) (GTK_EXPAND|GTK_FILL),
 					(GtkAttachOptions) (0), 0, 0);
 
 
@@ -367,9 +370,9 @@ gint free_ve3d_view(GtkWidget *widget)
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
-	g_free(ve_view->alt_x_source);
-	g_free(ve_view->alt_y_source);
-	g_free(ve_view->alt_z_source);
+	g_free(ve_view->an_x_source);
+	g_free(ve_view->an_y_source);
+	g_free(ve_view->an_z_source);
 	if(ve_view->dep_obj)
 		g_object_unref(ve_view->dep_obj);
 	free(ve_view);/* free up the memory */
@@ -766,6 +769,7 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern gint * algorithm;
 
 	dbg_func(g_strdup(__FILE__": ve3d_draw_active_indicator()\n"),OPENGL);
 
@@ -795,7 +799,10 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("y_active_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->y_suffix);
+	if (algorithm[ve_view->table_num] == ALPHA_N)
+		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->an_y_suffix);
+	else
+		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->y_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
@@ -823,6 +830,7 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gboolean state = FALSE;
 	extern GHashTable *dynamic_widgets;
 	extern gint ** ms_data;
+	extern gint *algorithm;
 
 	dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"),OPENGL);
 
@@ -834,18 +842,20 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 
 	if (ve_view->dep_obj)
 		state = check_dependancies(ve_view->dep_obj);
+	state = TRUE;
 
-	if (state && ve_view->alt_x_source)
-		lookup_current_value(ve_view->alt_x_source,&x_val);
+	if (state&&(algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_x_source))
+		lookup_current_value(ve_view->an_x_source,&x_val);
 	else
 		lookup_current_value(ve_view->x_source,&x_val);
 	
-	if (state && ve_view->alt_y_source)
-		lookup_current_value(ve_view->alt_y_source,&y_val);
+	if (state&&(algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_y_source))
+		lookup_current_value(ve_view->an_y_source,&y_val);
 	else
 		lookup_current_value(ve_view->y_source,&y_val);
-	if (state && ve_view->alt_z_source)
-		lookup_current_value(ve_view->alt_z_source,&z_val);
+
+	if (state&&(algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_z_source))
+		lookup_current_value(ve_view->an_z_source,&z_val);
 	else
 		lookup_current_value(ve_view->z_source,&z_val);
 
@@ -879,7 +889,10 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("y_runtime_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_precision,ve_view->y_suffix);
+	if (algorithm[ve_view->table_num] == ALPHA_N)
+		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_precision,ve_view->an_y_suffix);
+	else
+		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_precision,ve_view->y_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
@@ -1258,12 +1271,15 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
-	ve_view->alt_x_source = NULL;
-	ve_view->alt_y_source = NULL;
-	ve_view->alt_z_source = NULL;
+	ve_view->an_x_source = NULL;
+	ve_view->an_y_source = NULL;
+	ve_view->an_z_source = NULL;
 	ve_view->x_suffix = NULL;
 	ve_view->y_suffix = NULL;
 	ve_view->z_suffix = NULL;
+	ve_view->an_x_suffix = NULL;
+	ve_view->an_y_suffix = NULL;
+	ve_view->an_z_suffix = NULL;
 	ve_view->x_conv_expr = NULL;
 	ve_view->y_conv_expr = NULL;
 	ve_view->z_conv_expr = NULL;

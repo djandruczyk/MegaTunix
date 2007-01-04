@@ -5,14 +5,9 @@ gui_files = 	README \
 		afrtable_8x8x2.glade \
 		afrtable_8x8x2-029x.datamap \
 		afrtable_8x8e.glade \
-		afrtable_8x8e-E_1.datamap \
-		afrtable_8x8e-E_2.datamap \
 		boost_6x6x3-029x.datamap \
 		boost_6x6x3.glade \
 		boost_6x6e.glade \
-		boost_6x6e-E_1.datamap \
-		boost_6x6e-E_2.datamap \
-		boost_6x6e-E_3.datamap \
 		B_n_G_constants.glade \
 		B_n_G_constants.datamap \
 		datalogging.glade \
@@ -73,8 +68,6 @@ gui_files = 	README \
 		sparktable_12x12x2-029x.datamap \
 		sparktable_12x12x2.glade \
 		sparktable_12x12e.glade \
-		sparktable_12x12e-E_1.datamap \
-		sparktable_12x12e-E_2.datamap \
 		sparktable_8x8e.glade \
 		sparktable_8x8e-EDIS.datamap \
 		sparktable_8x8e-Std.datamap \

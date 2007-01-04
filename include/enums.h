@@ -373,4 +373,14 @@ typedef enum
 	TRIGMON_TICKLER,
 }TicklerType;
 
+typedef enum
+{
+	ALPHA_N=0x220,
+	SPEED_DENSITY,
+	MAF,
+	SD_AN_HYBRID,
+	MAF_AN_HYBRID,
+	SD_MAF_HYBRID,
+}Algorithm;
+
 #endif

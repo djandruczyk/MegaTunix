@@ -192,13 +192,13 @@ bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [SP1_3d_view_button]
-keys=page,table_num,depend_on,x_source,y_source,alt_y_source,z_source,tooltip,bind_to_list
+keys=page,table_num,depend_on,x_source,y_source,an_y_source,z_source,tooltip,bind_to_list
 key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=3
 table_num=3
 x_source=raw_rpm
 y_source=mapkpa
-alt_y_source=tpspercent
+an_y_source=tpspercent
 z_source=raw_sparkangle
 depend_on=alpha_n_button
 alpha_n_button_type=_VE_EMB_BIT_
@@ -218,13 +218,13 @@ handler=_RESCALE_TABLE_
 data=SP_SP1_rescale_spinner
 
 [SP2_3d_view_button]
-keys=page,table_num,depend_on,x_source,y_source,alt_y_source,z_source,tooltip,bind_to_list
+keys=page,table_num,depend_on,x_source,y_source,an_y_source,z_source,tooltip,bind_to_list
 key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=4
 table_num=4
 x_source=raw_rpm
 y_source=mapkpa
-alt_y_source=tpspercent
+an_y_source=tpspercent
 z_source=raw_sparkangle
 depend_on=alpha_n_button
 alpha_n_button_type=_VE_EMB_BIT_
