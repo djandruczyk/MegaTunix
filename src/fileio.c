@@ -536,7 +536,7 @@ void restore_all_ecu_settings(gchar *filename)
 					dload_val = atoi(keys[offset]);
 					if (dload_val != ms_data_last[page][offset])
 					{
-						//printf("writing data for page %i, offset %i\n",page,offset);
+	//					printf("writing data for page %i, offset %i\n",page,offset);
 						write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark, FALSE);
 						writecount++;
 					}

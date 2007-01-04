@@ -379,7 +379,7 @@ void *thread_dispatcher(gpointer data)
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		message = g_async_queue_pop(io_queue);
 
-		if (!link_up)
+		if ((!link_up) && (!offline))
 			failurecount++;
 
 		if (failurecount > 20)
@@ -449,7 +449,7 @@ void *thread_dispatcher(gpointer data)
 					readfrom_ecu(message);
 				break;
 			case WRITE_CMD:
-				if (!link_up)
+				if ((!link_up) && (!offline))
 				{
 					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tLINK DOWN, write_command requested, call aborted \n"),CRITICAL);
 					break;
