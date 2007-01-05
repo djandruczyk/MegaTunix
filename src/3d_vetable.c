@@ -827,7 +827,6 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
 	gfloat bottom = 0.0;
-	gboolean state = FALSE;
 	extern GHashTable *dynamic_widgets;
 	extern gint ** ms_data;
 	extern gint *algorithm;
@@ -840,21 +839,18 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 		return;
 	}
 
-	if (ve_view->dep_obj)
-		state = check_dependancies(ve_view->dep_obj);
-	state = TRUE;
 
-	if (state&&(algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_x_source))
+	if ((algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_x_source))
 		lookup_current_value(ve_view->an_x_source,&x_val);
 	else
 		lookup_current_value(ve_view->x_source,&x_val);
 	
-	if (state&&(algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_y_source))
+	if ((algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_y_source))
 		lookup_current_value(ve_view->an_y_source,&y_val);
 	else
 		lookup_current_value(ve_view->y_source,&y_val);
 
-	if (state&&(algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_z_source))
+	if ((algorithm[ve_view->table_num] == ALPHA_N)&&(ve_view->an_z_source))
 		lookup_current_value(ve_view->an_z_source,&z_val);
 	else
 		lookup_current_value(ve_view->z_source,&z_val);

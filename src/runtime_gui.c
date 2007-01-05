@@ -65,7 +65,6 @@ gboolean update_runtime_vars()
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
 	extern gint * algorithm;
-	gboolean state = FALSE;
 
 	if(no_update)
 		return FALSE;
@@ -90,14 +89,7 @@ gboolean update_runtime_vars()
 					G_OBJECT(tmpwidget),"ve_view");
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 			{
-				state = FALSE;
-				if (ve_view->dep_obj)
-					state = check_dependancies(ve_view->dep_obj);
-				state = TRUE;
-				if ((state) && \
-				(algorithm[ve_view->table_num] == ALPHA_N) && \
-				(ve_view->an_x_source))
-
+				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_x_source))
 				{
 					lookup_current_value(ve_view->an_x_source,&x);
 					lookup_previous_value(ve_view->an_x_source,&xl);
@@ -109,9 +101,7 @@ gboolean update_runtime_vars()
 				}
 				if ((x != xl) || (forced_update))
 					goto redraw;
-				if ((state) && \
-				(algorithm[ve_view->table_num] == ALPHA_N) && \
-				(ve_view->an_y_source))
+				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_y_source))
 				{
 					lookup_current_value(ve_view->an_y_source,&y);
 					lookup_previous_value(ve_view->an_y_source,&yl);
@@ -124,9 +114,7 @@ gboolean update_runtime_vars()
 				if ((y != yl) || (forced_update))
 					goto redraw;
 
-				if ((state) && \
-				(algorithm[ve_view->table_num] == ALPHA_N) && \
-				(ve_view->an_z_source))
+				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_z_source))
 				{
 					lookup_current_value(ve_view->an_z_source,&z);
 					lookup_previous_value(ve_view->an_z_source,&zl);
