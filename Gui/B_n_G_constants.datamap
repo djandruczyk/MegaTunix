@@ -251,7 +251,7 @@ dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
 bind_to_list=interdep_1_ctrl
 ul_complex=TRUE
-ul_conv_expr=(reqfuel_1*((injectors_1+1)/(divider_1*(alternate+1))))/10.0
+ul_conv_expr=(reqfuel_1*((injectors_1+1)/(divider_1*(alternate+1))))/10
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_,_VE_EMB_BIT_
 reqfuel_1_page=0
@@ -273,7 +273,7 @@ key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
 page=0
 offset=90
 table_num=0
-ul_conv_expr=x/10.0
+ul_conv_expr=x/10
 bind_to_list=interdep_1_ctrl
 
 [inj_open_time_spin]

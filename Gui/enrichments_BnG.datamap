@@ -281,8 +281,8 @@ keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=83
-dl_conv_expr=x*5.12
-ul_conv_expr=x/5.12
+dl_conv_expr=x*(512/100)
+ul_conv_expr=x/(512/100)
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
@@ -389,8 +389,8 @@ keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=122
-dl_conv_expr=x*51.2
-ul_conv_expr=x/51.2
+dl_conv_expr=x*(512/10)
+ul_conv_expr=x/(512/10)
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
