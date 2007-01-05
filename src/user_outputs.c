@@ -284,7 +284,8 @@ void cell_edited(GtkCellRendererText *cell,
 	temp_dep = (gboolean)g_object_get_data(G_OBJECT(object),"temp_dep");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(object),"is_float");
 	lookuptable = (gchar *)g_object_get_data(G_OBJECT(object),"lookuptable");
-	new = (gfloat)g_ascii_strtod(new_text,NULL);
+	new = (gfloat)strtod(new_text,NULL);
+
 	if (new < lower)
 		new = lower;
 	if (new > upper)
