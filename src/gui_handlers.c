@@ -539,8 +539,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),"use_color");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	tmpi = (gint)g_ascii_strtoll(text,NULL,base);
-	tmpf = g_ascii_strtod(text,NULL);
+	tmpi = (gint)strtoll(text,NULL,base);
+	tmpf = (float)strtod(text,NULL);
 	//printf("base %i, text %s int val %i, float val %f \n",base,text,tmpi,tmpf);
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 
@@ -1500,7 +1500,7 @@ void update_widget(gpointer object, gpointer user_data)
 				i = 0;
 				while (vector[i])
 				{
-					algorithm[(gint)g_ascii_strtoll(vector[i],NULL,10)]=(Algorithm)algo;
+					algorithm[(gint)strtol(vector[i],NULL,10)]=(Algorithm)algo;
 					i++;
 				}
 				g_strfreev(vector);
@@ -1886,7 +1886,7 @@ EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 		i = 0;
 		while (vector[i])
 		{
-			tmpi = (gint)g_ascii_strtoll(vector[i],NULL,10);
+			tmpi = (gint)strtol(vector[i],NULL,10);
 			algorithm[tmpi]=(Algorithm)algo;
 			i++;
 		}
