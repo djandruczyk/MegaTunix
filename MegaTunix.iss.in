@@ -1,4 +1,5 @@
 ; -- MegaTunix.iss --
+;SUFFIX=@VERSION@@WIN32_SUBRELEASE@
 
 
 [Setup]

@@ -380,7 +380,8 @@ void dash_shape_combine(GtkWidget *dash)
 	}
 	if (GTK_IS_WINDOW(dash->parent))
 	{
-#if GTK_MINOR_VERSION >= 10
+//#if GTK_MINOR_VERSION >= 10
+#ifdef HAVE_CAIRO
 		if (gtk_minor_version >= 10)
 			gtk_widget_input_shape_combine_mask(dash->parent,bitmap,0,0);
 #endif
@@ -388,7 +389,7 @@ void dash_shape_combine(GtkWidget *dash)
 	}
 	else
 	{
-#if GTK_MINOR_VERSION >= 10
+#ifdef HAVE_CAIRO
 		if (gtk_minor_version >= 10)
 			gdk_window_input_shape_combine_mask(dash->window,bitmap,0,0);
 #endif
