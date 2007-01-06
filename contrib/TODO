@@ -1,0 +1,20 @@
+Over Run Fuel cut
+Rev Limiters
+Rev Limit Style
+Tach Output Pin (should be on user outputs)
+Baro Correction
+Shift/Light/FAN (will stick on user Outputs)
+Spark Settings 
+Spark Table Selection
+Idle Advance Settings
+IAT/CLT related ignition retard
+Dwell Settings
+Stim for Wheel
+Rotary Trailing Table (6x6)
+Fuel Table selection (partially implemented in several places)
+Staged Injection 
+OverBoost Protection (might be done already on boost ctrlr)
+Traction Control
+Coolant corrected Air Density (weird setup)
+Advanced code options 
+
