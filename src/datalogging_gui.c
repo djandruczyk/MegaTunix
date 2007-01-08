@@ -288,6 +288,8 @@ void run_datalog(void)
 	gfloat value = 0.0;
 	GArray *history = NULL;
 	gint current_index = 0;
+	gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
+	gchar *tmpbuf = NULL;
 	extern GHashTable *dynamic_widgets;
 
 	if (!logging_active) /* Logging isn't enabled.... */
@@ -328,7 +330,10 @@ void run_datalog(void)
 		current_index = (gint)g_object_get_data(object,"current_index");
 		value = g_array_index(history, gfloat, current_index);
 		if ((gboolean)g_object_get_data(object,"is_float"))
-			g_string_append_printf(output,"%.3g",value);
+		{
+			tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%.3g",value);
+			g_string_append(output,tmpbuf);
+		}
 		else
 			g_string_append_printf(output,"%i",(gint)value);
 		j++;
@@ -425,6 +430,8 @@ void dump_log_to_disk(struct Io_File *iofile)
 	GString *output;
 	GObject * object = NULL;
 	GArray **histories;
+	gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
+	gchar *tmpbuf = NULL;
 	gboolean *is_floats;
 	gfloat value = 0.0;
 
@@ -451,7 +458,10 @@ void dump_log_to_disk(struct Io_File *iofile)
 		{
 			value = g_array_index(histories[i], gfloat, x);
 			if (is_floats[i])
-				g_string_append_printf(output,"%.3f",value);
+			{
+				tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%.3g",value);
+				g_string_append(output,tmpbuf);
+			}
 			else
 				g_string_append_printf(output,"%i",(gint)value);
 			j++;

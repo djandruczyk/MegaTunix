@@ -696,7 +696,7 @@ void draw_infotext()
 			info_width,h);
 
 	if (!lv_data->font_desc)
-		lv_data->font_desc = pango_font_description_from_string("courier 11");
+		lv_data->font_desc = pango_font_description_from_string("courier 9");
 	if (!lv_data->highlight_gc)
 		lv_data->highlight_gc = initialize_gc(lv_data->pixmap,HIGHLIGHT);
 	
@@ -756,7 +756,7 @@ void draw_valtext(gboolean force_draw)
 	h = lv_data->darea->allocation.height;
 
 	if (!lv_data->font_desc)
-		lv_data->font_desc = pango_font_description_from_string("courier 10");
+		lv_data->font_desc = pango_font_description_from_string("courier 9");
 	
 	val_x = 15;
 	for (i=0;i<lv_data->active_traces;i++)
@@ -784,7 +784,7 @@ void draw_valtext(gboolean force_draw)
 				v_value->ink_rect->height);
 
 		if (v_value->is_float)
-			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%.2f",val));
+			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%.3f",val));
 		else
 			layout = gtk_widget_create_pango_layout(lv_data->darea,g_strdup_printf("%i",(gint)val));
 
