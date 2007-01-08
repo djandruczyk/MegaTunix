@@ -57,6 +57,7 @@ struct Firmware_Details
 	gchar *rtv_map_file;	/*! realtime vars map filename */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
 	gchar *status_map_file;	/*! runtime status map filename */
+	gchar *signature_str;	/*! ECU Signature String */
         gint rtvars_size;       /*! Size of Realtime vars datablock */
         gint ignvars_size;      /*! Size of Realtime vars datablock */
         gint memblock_size;     /*! Size of Raw_Memory datablock */

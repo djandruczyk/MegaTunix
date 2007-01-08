@@ -71,7 +71,6 @@ typedef enum
         CELSIUS,
 	COMMA,
 	TAB,
-	SPACE,
 	USE_ALT_IAT,
 	USE_ALT_CLT,
 	REALTIME_VIEW,
@@ -84,12 +83,6 @@ typedef enum
 	START_TRIGMON_LOGGER,
 }ToggleButton;
 
-typedef enum
-{
-	MT_CLASSIC_LOG=0x70,
-	MT_FULL_LOG,
-	CUSTOM_LOG,
-}LoggingMode;
 	
 /* spinbuttons... */
 typedef enum
