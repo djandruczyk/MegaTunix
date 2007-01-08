@@ -31,7 +31,6 @@
 /* global vars (owned here...) */
 gchar *delimiter;
 gfloat cumu = 0.0;
-gint logging_mode = CUSTOM_LOG;
 gboolean begin = TRUE;
 
 /* External global vars */
@@ -79,9 +78,9 @@ void populate_dlog_choices()
 	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
 	//	logables_table = table;
 	gtk_table_set_row_spacings(GTK_TABLE(table),5);
-	gtk_table_set_col_spacings(GTK_TABLE(table),10);
+	gtk_table_set_col_spacings(GTK_TABLE(table),5);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
-	gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(vbox),table,FALSE,FALSE,0);
 
 	// Update status of the delimiter buttons...
 
@@ -94,10 +93,6 @@ void populate_dlog_choices()
 		case TAB:
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_tab_delimit_radio_button")),TRUE);
 			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_tab_delimit_radio_button")));
-			break;
-		case SPACE:
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_space_delimit_radio_button")),TRUE);
-			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_space_delimit_radio_button")));
 			break;
 		default:
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(g_hash_table_lookup(dynamic_widgets,"dlog_comma_delimit_radio_button")),TRUE);
@@ -135,8 +130,8 @@ void populate_dlog_choices()
 		if ((gboolean)g_object_get_data(object,"log_by_default")==TRUE)
 			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
-				(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
-				(GtkAttachOptions) (GTK_FILL|GTK_EXPAND|GTK_SHRINK),
+				(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
+				(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
 				0, 0);
 		j++;
 
@@ -237,6 +232,8 @@ void write_log_header(struct Io_File *iofile, gboolean override)
 	GString *output;
 	GObject * object = NULL;
 	gchar * string = NULL;
+	extern gint preferred_delimiter;
+	extern struct Firmware_Details *firmware;
 	if (!iofile)
 	{
 		dbg_func(g_strdup(__FILE__": write_log_header()\n\tIo_File pointer was undefined, returning NOW...\n"),CRITICAL);
@@ -251,13 +248,17 @@ void write_log_header(struct Io_File *iofile, gboolean override)
 	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
+	string = g_strdup_printf("\"%s\"\r\n",firmware->signature_str);
+	output = g_string_append(output,string); 
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_array_index(rtv_map->rtv_list,GObject *,i);
 		if((override) || ((gboolean)g_object_get_data(object,"being_logged")))
 		{
+			/* If space delimited, QUOTE the header names */
 			string = (gchar *)g_object_get_data(object,"dlog_field_name");
 			output = g_string_append(output,string); 
+
 			j++;
 			if (j < total_logables)
 				output = g_string_append(output,delimiter);
@@ -327,7 +328,7 @@ void run_datalog(void)
 		current_index = (gint)g_object_get_data(object,"current_index");
 		value = g_array_index(history, gfloat, current_index);
 		if ((gboolean)g_object_get_data(object,"is_float"))
-			g_string_append_printf(output,"%.3f",value);
+			g_string_append_printf(output,"%.3g",value);
 		else
 			g_string_append_printf(output,"%i",(gint)value);
 		j++;

@@ -281,13 +281,6 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 					g_free(delimiter);
 				delimiter = g_strdup("\t");
 				break;
-			case SPACE:
-				preferred_delimiter = SPACE;
-				update_logbar("dlog_view", NULL,g_strdup("Setting Log delimiter to a \"Space\"\n"),TRUE,FALSE);
-				if (delimiter)
-					g_free(delimiter);
-				delimiter = g_strdup(" ");
-				break;
 			case REALTIME_VIEW:
 				set_realtime_mode();
 				break;

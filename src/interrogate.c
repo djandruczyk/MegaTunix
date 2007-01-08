@@ -319,6 +319,8 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 		firmware = g_new0(struct Firmware_Details,1);
 
 	firmware->name = g_strdup(potential->name);
+	if (canidate->sig_str)
+		firmware->signature_str = g_strdup(canidate->sig_str);
 	firmware->tab_list = g_strsplit(potential->load_tabs,",",0);
 	firmware->tab_confs = g_strsplit(potential->tab_confs,",",0);
 	firmware->rtv_map_file = g_strdup(potential->rtv_map_file);

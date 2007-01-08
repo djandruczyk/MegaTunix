@@ -65,9 +65,7 @@ struct Log_Info * initialize_log_info(void)
 
 /*!
  \brief read_log_header() First we read the first line,  try to determine 
- if the delimiter is a COMMA, TAB or a SPACE. If we detect SPACE delimiting,  
- we need to read one dataline because the variable names can be space 
- delimited and we need to figure out how to discern thespace inthe name with the space in between variable names
+ if the delimiter is a COMMA, or a TAB. 
  \param iochannel (GIOChannel *) iochannel that represents the input file
  \param log_info (struct Log_Info *)the Log_Info structure
  */
@@ -89,7 +87,7 @@ read_again:
 	if (status == G_IO_STATUS_NORMAL) /* good read */
 	{
 		/* Nasty hack to detect a " at the beginning and skip over it
-		 * I rally should do this better,  but this works, so...
+		 * I really should do this better,  but this works, so...
 		 */
 		if (g_strrstr(a_line->str,"\"") != NULL)
 			goto read_again;
@@ -98,8 +96,6 @@ read_again:
 			delimiter = g_strdup(",");
 		else if (g_strrstr(a_line->str,"\t") != NULL)
 			delimiter = g_strdup("\t");
-		else	
-			delimiter = g_strdup(" ");
 
 		/* Store delimiter in structure */
 		log_info->delimiter = g_strdup(delimiter);

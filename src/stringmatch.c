@@ -175,14 +175,6 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(COMMA));
 	g_hash_table_insert(str_2_enum,"_TAB_",
 			GINT_TO_POINTER(TAB));
-	g_hash_table_insert(str_2_enum,"_SPACE_",
-			GINT_TO_POINTER(SPACE));
-	g_hash_table_insert(str_2_enum,"_MT_CLASSIC_LOG_",
-			GINT_TO_POINTER(MT_CLASSIC_LOG));
-	g_hash_table_insert(str_2_enum,"_MT_FULL_LOG_",
-			GINT_TO_POINTER(MT_FULL_LOG));
-	g_hash_table_insert(str_2_enum,"_CUSTOM_LOG_",
-			GINT_TO_POINTER(CUSTOM_LOG));
 	g_hash_table_insert(str_2_enum,"_REALTIME_VIEW_",
 			GINT_TO_POINTER(REALTIME_VIEW));
 	g_hash_table_insert(str_2_enum,"_PLAYBACK_VIEW_",
