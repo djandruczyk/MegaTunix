@@ -116,9 +116,9 @@ gboolean vetable_export(struct Io_File *iofile)
 		output = g_string_append(output, "EVEME 1.0\n");
 		output = g_string_append(output, "UserRev: 1.00\n");
 		if (firmware->total_tables != firmware->total_pages)
-			output = g_string_append(output, g_strdup_printf("UserComment: Table %i; %s\n",table,vex_comment));
+			output = g_string_append(output, g_strdup_printf("UserComment: Table %i; (%s) %s\n",table,firmware->table_params[table]->table_name,vex_comment));
 		else
-			output = g_string_append(output, g_strdup_printf("UserComment: %s\n",vex_comment));
+			output = g_string_append(output, g_strdup_printf("UserComment: (%s) %s\n",firmware->table_params[table]->table_name,vex_comment));
 
 		output = g_string_append(output, g_strdup_printf("Date: %i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year)));
 
