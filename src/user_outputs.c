@@ -35,6 +35,7 @@ enum
 	COL_ENTRY,
 	COL_HYS,
 	COL_ULIMIT,
+	COL_MODE,
 	COL_EDITABLE,
 	NUM_COLS
 } ;
@@ -97,7 +98,7 @@ GtkTreeModel * create_model(void)
 	GObject * object = NULL;
 	extern struct Rtv_Map *rtv_map;
 
-	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
 
 	/* Append a row and fill in some data */
 	while ((data = rtv_map->raw_list[i])!= NULL)
@@ -123,6 +124,7 @@ GtkTreeModel * create_model(void)
 				COL_ENTRY, g_strdup(""),
 				COL_HYS, g_strdup(""),
 				COL_ULIMIT, g_strdup(""),
+				COL_MODE,GTK_CELL_RENDERER_MODE_EDITABLE,
 				COL_EDITABLE,TRUE,
 				-1);
 		g_free(range);
@@ -180,6 +182,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 			"Value",  
 			renderer,
 			"text", COL_ENTRY,
+			"mode",COL_MODE,
 			"editable",COL_EDITABLE,
 			NULL);
 	gtk_tree_view_append_column (view, col);
@@ -191,7 +194,7 @@ void add_columns(GtkTreeView *view, GtkWidget *widget)
 			G_CALLBACK(cell_edited),model);
 	g_object_set_data (G_OBJECT (renderer), "column", (gint *)COL_HYS);
 	col = gtk_tree_view_column_new_with_attributes (
-			"Hysteresis",  
+			"Off Hysteresis",  
 			renderer,
 			"text", COL_HYS,
 			"editable",COL_EDITABLE,

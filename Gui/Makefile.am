@@ -63,6 +63,8 @@ gui_files = 	README \
 		projection.datamap \
 		raweditor.glade \
 		raweditor.datamap \
+		rotary-trail-029x.datamap \
+		rotary-trail.glade \
 		runtime.glade \
 		runtime.datamap \
 		sparktable_12x12x2-029x.datamap \

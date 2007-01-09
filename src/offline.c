@@ -208,7 +208,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 		label = gtk_label_new(g_strdup(potential->name));
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		button = gtk_radio_button_new(group);
-		g_object_set_data(G_OBJECT(button),"filename",g_strdup(filenames[i]));
+		g_object_set_data(G_OBJECT(button),"filename",filenames[i]);
 		g_object_set_data(G_OBJECT(button),"handler",
 				GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 		g_signal_connect(button,
@@ -239,4 +239,9 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 			return NULL;
 	}
 
+}
+
+gint ptr_sort(gconstpointer a, gconstpointer b)
+{
+	return strcmp((gchar *)a, (gchar *) b);
 }

@@ -12,7 +12,7 @@ Write_Cmd=W
 Burn_Cmd=B
 MultiPage=TRUE
 Page_Cmd=P
-TotalTables=10
+TotalTables=11
 ReadOnlyAbove=8
 # Since the first page is 0, 10 is the "eleventh" page
 ToothmonPage=9
@@ -256,6 +256,28 @@ z_suffix=KPA
 z_conv_expr=x*1
 z_disp_float=FALSE
 
+[table_10]
+table_name=Rotary Trailing, MSnSpark-Extra
+x_page=10
+x_base_offset=99
+x_bincount=6
+x_suffix=RPM
+x_conv_expr=x*100
+x_disp_float=FALSE
+y_page=10
+y_base_offset=105
+y_bincount=6
+y_suffix=KPa
+an_y_suffix=TPS ADC
+y_conv_expr=x*1
+y_disp_float=FALSE
+z_page=10
+z_base_offset=63
+z_suffix=Degrees
+z_conv_expr=(x*(352/1000))-10
+z_disp_float=TRUE
+z_precision=2
+
 [page_0]
 truepgnum=0
 length=189
@@ -320,9 +342,9 @@ RealtimeMapFile=MSnS-Extra-029x
 SliderMapFile=msns-extra-firmware
 StatusMapFile=msns-e-firmware
 
-LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,msns-e-toothtrigger,error_status
+LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,rotary-trail,msns-e-toothtrigger,error_status
 
-TabConfs=runtime,datalogging,logviewer,tools,msns-e-features-029x,msns-e-fuelconstants-029x,msns-e-idle-029x,msns-e-ego-029x,msns-e-boost-knock-029x,msns-e-water-nos-launch-029x,msns-e-crank-ase-029x,msns-e-output-pins-029x,msns-e-outputs-sel-029x,msns-e-traction-029x,msns-e-wheeldecode-029x,msns-e-advanced-029x,msns-e-accelwizard-029x,vetable_12x12x3-029x,sparktable_12x12x2-029x,afrtable_8x8x2-029x,boost_6x6x3-029x,msns-e-toothtrigger-029x,error_status
+TabConfs=runtime,datalogging,logviewer,tools,msns-e-features-029x,msns-e-fuelconstants-029x,msns-e-idle-029x,msns-e-ego-029x,msns-e-boost-knock-029x,msns-e-water-nos-launch-029x,msns-e-crank-ase-029x,msns-e-output-pins-029x,msns-e-outputs-sel-029x,msns-e-traction-029x,msns-e-wheeldecode-029x,msns-e-advanced-029x,msns-e-accelwizard-029x,vetable_12x12x3-029x,sparktable_12x12x2-029x,afrtable_8x8x2-029x,boost_6x6x3-029x,rotary-trail-029x,msns-e-toothtrigger-029x,error_status
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map
