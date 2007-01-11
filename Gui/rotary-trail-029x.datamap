@@ -48,7 +48,7 @@ raw_upper=255
 dl_conv_expr=(x+10)/(352/1000)
 ul_conv_expr=(x*(352/1000))-10
 is_float=TRUE
-precision=2
+precision=1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
@@ -89,8 +89,8 @@ bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [3d_view_button]
-keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,table_num,x_source,y_source,tooltip,bind_to_list
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=8
 table_num=10
 x_source=raw_rpm
@@ -439,6 +439,30 @@ bitmask=1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Turns on Trailing Split Support.
+
+[fc_trailing_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitval=0
+bitshift=4
+bitmask=16
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When FC Trailing is selected, Spark output C controls the Coil-Select input (See http://www.msextra.com/manuals/MS_Extra_Ignition_Hardware_Manual.htm#2rotormod for drawings), and Spark output B will send the trailing timing signal, which also looks like a dizzy signal, but will follow the offset of the main spark map from the above 6x6 table.
+
+[fd_trailing_radio_button]
+keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+page=0
+offset=11
+bitval=1
+bitshift=4
+bitmask=16
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+tooltip=When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
 
 [fixed_split_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip

@@ -258,25 +258,25 @@ z_disp_float=FALSE
 
 [table_10]
 table_name=Rotary Trailing, MSnSpark-Extra
-x_page=10
+x_page=8
 x_base_offset=99
 x_bincount=6
 x_suffix=RPM
 x_conv_expr=x*100
 x_disp_float=FALSE
-y_page=10
+y_page=8
 y_base_offset=105
 y_bincount=6
 y_suffix=KPa
 an_y_suffix=TPS ADC
 y_conv_expr=x*1
 y_disp_float=FALSE
-z_page=10
+z_page=8
 z_base_offset=63
 z_suffix=Degrees
 z_conv_expr=(x*(352/1000))-10
 z_disp_float=TRUE
-z_precision=2
+z_precision=1
 
 [page_0]
 truepgnum=0

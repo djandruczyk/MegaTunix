@@ -365,6 +365,11 @@ gboolean lookup_current_value(gchar *internal_name, gfloat *value)
 	GArray * history = NULL;
 	gint index = 0;
 	
+	if (!internal_name)
+	{
+		*value = 0.0;
+		return FALSE;
+	}
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
@@ -391,6 +396,11 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 	GArray * history = NULL;
 	gint index = 0;
 	
+	if (!internal_name)
+	{
+		*value = 0.0;
+		return FALSE;
+	}
 	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
