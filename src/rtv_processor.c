@@ -437,9 +437,10 @@ void flush_rt_arrays()
 			g_static_mutex_lock(&rtv_mutex);
 			history = (GArray *)g_object_get_data(object,"history");
 			current_index = (gint)g_object_get_data(object,"current_index");
-			g_array_free(history,TRUE);
-			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-	                g_object_set_data(object,"history",(gpointer)history);
+			/* TRuncate array,  but don't free/recreate as it
+			 * makes the logviewer explode!
+			 */
+			history = g_array_set_size(history,0);
 			g_object_set_data(object,"current_index",GINT_TO_POINTER(-1));
 			g_static_mutex_unlock(&rtv_mutex);
 	                /* bind history array to object for future retrieval */

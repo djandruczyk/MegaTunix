@@ -80,6 +80,7 @@ void set_offline_mode(void)
 
 	}
 	canidate = load_potential_match(cmd_array,filename);
+
 	load_profile_details(canidate);
 	load_lookuptables(canidate);
 	/* Set flags */
@@ -208,7 +209,7 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 		label = gtk_label_new(g_strdup(potential->name));
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		button = gtk_radio_button_new(group);
-		g_object_set_data(G_OBJECT(button),"filename",filenames[i]);
+		g_object_set_data(G_OBJECT(button),"filename",g_strdup(filenames[i]));
 		g_object_set_data(G_OBJECT(button),"handler",
 				GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 		g_signal_connect(button,
@@ -218,7 +219,6 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 		close_profile(potential);
-		
 		i++;
 	}
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);

@@ -441,8 +441,6 @@ struct Viewable_Value * build_v_value(GObject *object)
 
 	if (playback_mode)
 	{
-		/* IS it a floating point value? */
-		v_value->is_float = TRUE;
 		/* textual name of the variable we're viewing.. */
 		v_value->vname = g_strdup(g_object_get_data(object,"lview_name"));
 		/* data was already read from file and stored, copy pointer
@@ -453,7 +451,6 @@ struct Viewable_Value * build_v_value(GObject *object)
 	}
 	else
 	{
-		v_value->is_float = (gboolean)g_object_get_data(object,"is_float");;
 		// textual name of the variable we're viewing.. 
 		v_value->vname = g_strdup(g_object_get_data(object,"dlog_gui_name"));
 		/* Array to keep history for resize/redraw and export 
@@ -466,6 +463,8 @@ struct Viewable_Value * build_v_value(GObject *object)
 	/* Store pointer to object, but DO NOT FREE THIS on v_value destruction
 	 * as its the SAME one used for all Viewable_Values */
 	v_value->object = object;
+	/* IS it a floating point value? */
+	v_value->is_float = (gboolean)g_object_get_data(object,"is_float");
 	v_value->lower = (gint)g_object_get_data(object,"lower_limit");
 	v_value->upper = (gint)g_object_get_data(object,"upper_limit");
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
@@ -695,8 +694,12 @@ void draw_infotext()
 			TRUE, 0,0,
 			info_width,h);
 
+
 	if (!lv_data->font_desc)
-		lv_data->font_desc = pango_font_description_from_string("courier 9");
+	{
+		lv_data->font_desc = pango_font_description_from_string("courier");
+		pango_font_description_set_absolute_size(lv_data->font_desc,(12)*PANGO_SCALE);
+	}
 	if (!lv_data->highlight_gc)
 		lv_data->highlight_gc = initialize_gc(lv_data->pixmap,HIGHLIGHT);
 	
@@ -756,7 +759,10 @@ void draw_valtext(gboolean force_draw)
 	h = lv_data->darea->allocation.height;
 
 	if (!lv_data->font_desc)
-		lv_data->font_desc = pango_font_description_from_string("courier 9");
+	{
+		lv_data->font_desc = pango_font_description_from_string("courier");
+		pango_font_description_set_absolute_size(lv_data->font_desc,(12)*PANGO_SCALE);
+	}
 	
 	val_x = 15;
 	for (i=0;i<lv_data->active_traces;i++)
@@ -898,7 +904,9 @@ void trace_update(gboolean redraw_all)
 			v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 			len = v_value->data_array->len;
 			if (len == 0)	/* If empty */
+			{
 				return;
+			}
 			//		printf("length is %i\n", len);
 			len *= (log_pos/100.0);
 			//		printf("length after is  %i\n", len);

@@ -644,7 +644,8 @@ void load_profile_details(struct Canidate *canidate)
 	gchar ** list = NULL;
 	gint i = 0;
 
-	filename = g_strdup(canidate->filename);
+	if (canidate->filename)
+		filename = g_strdup(canidate->filename);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{	

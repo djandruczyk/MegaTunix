@@ -188,6 +188,7 @@ void read_log_data(GIOChannel *iochannel, struct Log_Info *log_info)
 	GString *a_line = g_string_new("\0");
 	gchar **data = NULL;
 	gint i = 0;
+	gint x = 0;
 	GArray *tmp_array = NULL;
 	gfloat val = 0.0;
 	GObject *object = NULL;
@@ -205,8 +206,16 @@ void read_log_data(GIOChannel *iochannel, struct Log_Info *log_info)
 			g_array_append_val(tmp_array,val);
 
 			//printf("data[%i]=%s\n",i,data[i]);
+			if (x == 0) /* only check fir first line */
+			{
+				if (g_strrstr(data[i], ".") == NULL)
+					g_object_set_data(object,"is_float", GINT_TO_POINTER(FALSE));
+				else
+					g_object_set_data(object,"is_float", GINT_TO_POINTER(TRUE));
+			}
 		}
 		g_strfreev(data);
+		x++;
 	}
 }
 
