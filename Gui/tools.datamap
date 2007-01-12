@@ -56,17 +56,19 @@ page=0
 tooltip=Sends the newly loaded (and modified if request) firmware to the ECU
 
 [enter_iat_sensor_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,sensor,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_ENTER_SENSOR_INFO_
 page=0
+sensor=IAT
 tooltip=Prompts you with a window requeting the temp/resistance pairs for your sensor.
 
 [enter_clt_sensor_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
+keys=handler,page,sensor,tooltip
+key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_ENTER_SENSOR_INFO_
 page=0
+sensor=CLT
 tooltip=Prompts you with a window requeting the temp/resistance pairs for your sensor.
 
 [use_alt_iat_check_button]

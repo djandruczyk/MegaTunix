@@ -18,7 +18,9 @@ NOTES regarding the files:
 1. The value names are CaSe SeNsItIvE, so be warned.  Ironically the
 keys themselves are not, as the string compare functions are case insensitive.
 
-2. Valid key_types are:
+2. There should be the same number of key's and key_types. The key is any text
+The key_type is special text as show below:
+  Valid key_types are:
 	_INT_		Integer value
 	_ENUM_		String represnetation of an enumeration, translated via
 			a call to "translate_string()"
@@ -34,53 +36,60 @@ keys themselves are not, as the string compare functions are case insensitive.
 			is applicable to.  This is a new addition, after
 			version 0.6.3. This prevents having 3 different rtmaps
 			for a firmware family when the only thing changed is
-			the firmware name, not the API.
+			the firmware name, not the API. ONLY FOUND in the 
+			[realtime_map] section
 	raw_list	(string) List of "internal_names" that are choices 
 			to be shown in the user controlled outputs on the
 			spark variants firmware. Only derived variables that
 			depend DIRECTLY on a SINGLE raw variable should be 
 			here,  things like high res RPM or sparkangle can
-			NOT be here as they depend on multiple inputs.
+			NOT be here as they depend on multiple inputs. ONLY
+			FOUND in hte [realtime_map] section.
 	keys		(string) list of keys, comma seperated to be loaded
-			by the main loading routine. (NOTE not all keys in
+			by the main loading routine. (NOTE: not all keys in
 			the section are listed on this line.  keys specifc to
 			complex conversions and depend_on are loaded by
 			specialized handlers.
 	key_types	(string) List of keytypes for the respective keys
 			above. 
-	internal_name	(string) name used for internal referencing
+	internal_name	(string) name for the variable internally to megatunix
+			used by the datalogger, loogviewer and Dashboard.
 	dlog_gui_name	(string) Name shown on datalogging tab
-	dlog_field_name	(string) name in datalog file for this variable
+	dlog_field_name	(string) name in datalog header for this variable
 	log_by_default	(boolean) If TRUE it gets checked by default in the 
 			datalogging tab
-	offset		(integer) offset from the beginning of raw vars 
-			block from ECU that this variable uses for its 
-			conversion
-	dl_conv_expr
+	offset		(integer) offset in bytes from the beginning of 
+			the raw vars block of data from the ECU.
+	dl_conv_expr	(string) see next line
 	ul_conv_expr	(string)  A string representation of a mathematical
 			expression. (something like x*60)  X is the value in
 			the raw data from the ECU at the offset above.
 			the "ul_" means "upload (on read from ECU) the "dl_"
 			means download (before sending TOO the ECU) the dl_
 			lines are used for sending data to the ECU regarding
-			the user controllable outputs in the spark firmwares
+			the user controllable outputs in the spark firmwares.
+			NOTE: This should be an INTEGER expression,  use of
+			decimal points is NOT allowed as they get mangled in
+			locales that use comma's instead of periods.  For 
+			expressions that require floating point convert as 
+			follows. i.e. x*0.352 becomes x*(352/1000).
 	complex_expr	(bool) If complex, call a handler that looks for the 
 			following:
 	expr_symbols	(string) comma seperated list of variable names used
 			in the complex expression
-	expr_types	(enum list) comma seperated list of enumearted types
+	expr_types	(enum list) comma seperated list of enumerated types
 			used to determine which keys to search for
 NOTE regarding complex_conversions:
-expr_symbols gives an ARBRITRATY listof names,  you can use whatever
-you want, jsut make sure you have all the necessary keys in there.
+expr_symbols gives an ARBRITRATY list of names,  you can use whatever
+you want, just make sure you have all the necessary keys in there.
 The number of keys per variable varies based on the variable type 
 which is what it's marked as in expr_types. 
 expr_types an contain one of three choices. 
  1. _VE_VAR_, meaning VE variable, which requires a page/offset 
  to resolve it. 
- 2. _VE_EMB_BIT, meaning VE_embedded bit, which requires, page,offset
- bitmask, bitshift to resolve completely
- 3. _RAW_VAR meaning a raw variable, which only requires an offset to
+ 2. _VE_EMB_BIT_, meaning VE_embedded bit, which requires page,offset,
+ bitmask, and bitshift to resolve completely
+ 3. _RAW_VAR_ meaning a raw variable, which only requires an offset to
  resolve.
 The expr_types in combination of expr_symbols determine what following
 keys will be present in the section.  If expr_symbols contains "cyls,reqfuel"
