@@ -20,6 +20,7 @@
 #include <gui_handlers.h>
 #include <gui_handlers.h>
 #include <logviewer_gui.h>
+#include <rtv_processor.h>
 #include <structures.h>
 #include <threads.h>
 #include <vetable_gui.h>
@@ -128,4 +129,96 @@ void rescale_table(gchar * widget_name)
 			}
 		}
 	}
+}
+
+void draw_ve_marker()
+{
+	gfloat x_source = 0.0;
+	gfloat y_source = 0.0;
+	GtkWidget *widget = NULL;
+	static GtkWidget *last_widget[20];
+	GtkRcStyle *style = NULL;
+	static GdkColor old_color[20];
+	gint i = 0;
+	gint table = 0;
+	gint page = 0;
+	gint base = 0;
+	gint bin = 0;
+	gint x_bin = 0;
+	gint y_bin = 0;
+	GList *list = NULL;
+	extern struct Firmware_Details *firmware;
+	extern gint ** ms_data;
+	extern GdkColor red;
+	extern GList ***ve_widgets;
+	extern gint *algorithm;
+
+
+	for (table=0;table<firmware->total_tables;table++)
+	{
+		if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_x_source))
+			lookup_current_value(firmware->table_params[table]->an_x_source,&x_source);
+		else
+			lookup_current_value(firmware->table_params[table]->x_source,&x_source);
+
+		/* Find bin corresponding to current rpm  */
+		for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
+		{
+			page = firmware->table_params[table]->x_page;
+			base = firmware->table_params[table]->x_base;
+			bin = firmware->table_params[table]->x_bincount-1;
+			if (ms_data[page][base] >= x_source)
+			{
+				bin = 0;
+				break;
+			}
+			if ((ms_data[page][base+i] < (gint)x_source) && (ms_data[page][base+i+1] >=(gint)x_source))
+			{
+				bin = i+1;
+				break;
+			}
+		}
+		x_bin = bin;
+		if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_y_source))
+			lookup_current_value(firmware->table_params[table]->an_y_source,&y_source);
+		else
+			lookup_current_value(firmware->table_params[table]->y_source,&y_source);
+		for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
+		{
+			page = firmware->table_params[table]->y_page;
+			base = firmware->table_params[table]->y_base;
+			bin = firmware->table_params[table]->y_bincount-1;
+			if (ms_data[page][base] >= y_source)
+			{
+				bin = 0;
+				break;
+			}
+			if ((ms_data[page][base+i] < (gint)y_source) && (ms_data[page][base+i+1] >=(gint)y_source))
+			{
+				bin = i+1;
+				break;
+			}
+		}
+		y_bin = bin;
+
+		/* This is a BIG ASS problem, haven't figure out an easy way to
+		 * make this work for any table yet.. so for now it's hardcoded to
+		 * this widget location scheme specific to MSnS-E 3x12 vetable
+		 */
+		list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+x_bin+(y_bin*firmware->table_params[table]->x_bincount)];
+		widget = g_list_nth_data(list,0);
+
+		/* Don't "over update" it */
+		if (widget == last_widget[table])
+			return;
+		if (last_widget[table])
+			gtk_widget_modify_base(GTK_WIDGET(last_widget[table]),GTK_STATE_NORMAL,&old_color[table]);
+		last_widget[table] = widget;
+
+		style = gtk_widget_get_modifier_style(widget);
+
+		old_color[table] = style->base[GTK_STATE_NORMAL];
+		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&red);
+	}
+
 }

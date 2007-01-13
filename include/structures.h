@@ -238,8 +238,12 @@ struct Table_Params
 	gint x_page;		/*! what page the rpm (X axis) resides in */
 	gint x_base;		/*! where rpm table starts (X axis) */
 	gint x_bincount;	/*! how many RPM bins (X axis) */
+	gchar *x_source;	/*! X datasource for 3d displays */
+	gchar *an_x_source;	/*! Alpha-N X datasource for 3d displays */
+	gchar *maf_x_source;	/*! MAF X datasource for 3d displays */
 	gchar *x_suffix;	/*! text suffix used on 3D view */
-	gchar *an_x_suffix;	/*! text suffix used on 3D view */
+	gchar *an_x_suffix;	/*! Alpha-N text suffix used on 3D view */
+	gchar *maf_x_suffix;	/*! MAF text suffix used on 3D view */
 	gchar *x_conv_expr;	/*! x conversion expression */
 	gboolean x_disp_float;	/*! display as a float */
 	gint x_disp_precision;	/*! how many decimal places */
@@ -247,16 +251,24 @@ struct Table_Params
 	gint y_page;		/*! what page the load (Y axis) resides in */
 	gint y_base;		/*! where load table starts  (Y Axis) */
 	gint y_bincount;	/*! how many load bins (Y axis) */
+	gchar *y_source;	/*! Y datasource for 3d displays */
+	gchar *an_y_source;	/*! Alpha-N Y datasource for 3d displays */
+	gchar *maf_y_source;	/*! MAF Y datasource for 3d displays */
 	gchar *y_suffix;	/*! text suffix used on 3D view */
 	gchar *an_y_suffix;	/*! text suffix used on 3D view */
+	gchar *maf_y_suffix;	/*! MAF text suffix used on 3D view */
 	gchar *y_conv_expr;	/*! y conversion expression */
 	gboolean y_disp_float;	/*! display as a float */
 	gint y_disp_precision;	/*! how many decimal places */
 
 	gint z_page;		/*! what page the vetable resides in */
 	gint z_base;		/*! where the vetable starts */
+	gchar *z_source;	/*! Z datasource for 3d displays */
+	gchar *an_z_source;	/*! Alpha-N Z datasource for 3d displays */
+	gchar *maf_z_source;	/*! MAF Z datasource for 3d displays */
 	gchar *z_suffix;	/*! text suffix used on 3D view */
 	gchar *an_z_suffix;	/*! text suffix used on 3D view */
+	gchar *maf_z_suffix;	/*! MAF text suffix used on 3D view */
 	gchar *z_conv_expr;	/*! z conversion expression */
 	gboolean z_disp_float;	/*! display as a float */
 	gint z_disp_precision;	/*! how many decimal places */

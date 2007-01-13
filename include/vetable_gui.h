@@ -20,6 +20,7 @@
 /* Prototypes */
 
 void rescale_table(gchar * );
+void draw_ve_marker(void );
 
 /* Prototypes */
 

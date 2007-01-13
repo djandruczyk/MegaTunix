@@ -90,12 +90,12 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		g_hash_table_insert(winstat,GINT_TO_POINTER(table_num), GINT_TO_POINTER(TRUE));
 
 	ve_view = initialize_ve3d_view();
-	ve_view->x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"x_source"));
-	ve_view->y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"y_source"));
-	ve_view->z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"z_source"));
-	ve_view->an_x_source = g_strdup(g_object_get_data(G_OBJECT(widget),"an_x_source"));
-	ve_view->an_y_source = g_strdup(g_object_get_data(G_OBJECT(widget),"an_y_source"));
-	ve_view->an_z_source = g_strdup(g_object_get_data(G_OBJECT(widget),"an_z_source"));
+	ve_view->x_source = g_strdup(firmware->table_params[table_num]->x_source);
+	ve_view->y_source = g_strdup(firmware->table_params[table_num]->y_source);
+	ve_view->z_source = g_strdup(firmware->table_params[table_num]->z_source);
+	ve_view->an_x_source = g_strdup(firmware->table_params[table_num]->an_x_source);
+	ve_view->an_y_source = g_strdup(firmware->table_params[table_num]->an_y_source);
+	ve_view->an_z_source = g_strdup(firmware->table_params[table_num]->an_z_source);
 	ve_view->x_suffix = g_strdup(firmware->table_params[table_num]->x_suffix);
 	ve_view->an_x_suffix = g_strdup(firmware->table_params[table_num]->an_x_suffix);
 	ve_view->y_suffix = g_strdup(firmware->table_params[table_num]->y_suffix);
