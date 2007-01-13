@@ -241,7 +241,7 @@ trypop:
 					update_comms_status();
 					break;
 				case UPD_WRITE_STATUS:
-					if (!offline)
+//					if (!offline)
 						update_write_status(message->payload);
 					break;
 				case UPD_GET_BOOT_PROMPT:
