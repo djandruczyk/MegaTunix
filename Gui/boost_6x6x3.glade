@@ -1439,7 +1439,7 @@
 				      <child>
 					<widget class="GtkLabel" id="B1_boost_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS % vs. RPM</property>
+					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS ADC vs. RPM</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1676,7 +1676,7 @@
 					  <child>
 					    <widget class="GtkLabel" id="B1_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">TPS %</property>
+					      <property name="label" translatable="yes">TPS ADC</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1702,7 +1702,7 @@
 				      <child>
 					<widget class="GtkLabel" id="B1_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">TPS % Bins</property>
+					  <property name="label" translatable="yes">TPS ADC Bins</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3279,7 +3279,7 @@ by what percentage ?</property>
 				      <child>
 					<widget class="GtkLabel" id="B2_boost_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS % vs. RPM</property>
+					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS ADC vs. RPM</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3516,7 +3516,7 @@ by what percentage ?</property>
 					  <child>
 					    <widget class="GtkLabel" id="B2_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">TPS %</property>
+					      <property name="label" translatable="yes">TPS ADC</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3542,7 +3542,7 @@ by what percentage ?</property>
 				      <child>
 					<widget class="GtkLabel" id="B2_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">TPS % Bins</property>
+					  <property name="label" translatable="yes">TPS ADC Bins</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5119,7 +5119,7 @@ by what percentage ?</property>
 				      <child>
 					<widget class="GtkLabel" id="B3_boost_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS % vs. RPM</property>
+					  <property name="label" translatable="yes">Boost Controller, KPA Target, TPS ADC vs. RPM</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5356,7 +5356,7 @@ by what percentage ?</property>
 					  <child>
 					    <widget class="GtkLabel" id="B3_load_tbl_units">
 					      <property name="visible">True</property>
-					      <property name="label" translatable="yes">TPS %</property>
+					      <property name="label" translatable="yes">TPS ADC</property>
 					      <property name="use_underline">False</property>
 					      <property name="use_markup">False</property>
 					      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5382,7 +5382,7 @@ by what percentage ?</property>
 				      <child>
 					<widget class="GtkLabel" id="B3_load_tbl_lab">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">TPS % Bins</property>
+					  <property name="label" translatable="yes">TPS ADC Bins</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">False</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
