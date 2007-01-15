@@ -187,6 +187,16 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(RUNTIME_PAGE));
 	g_hash_table_insert(str_2_enum,"_WARMUP_WIZ_PAGE_",
 			GINT_TO_POINTER(WARMUP_WIZ_PAGE));
+	g_hash_table_insert(str_2_enum,"_VETABLES_PAGE_",
+			GINT_TO_POINTER(VETABLES_PAGE));
+	g_hash_table_insert(str_2_enum,"_SPARKTABLES_PAGE_",
+			GINT_TO_POINTER(SPARKTABLES_PAGE));
+	g_hash_table_insert(str_2_enum,"_AFRTABLES_PAGE_",
+			GINT_TO_POINTER(AFRTABLES_PAGE));
+	g_hash_table_insert(str_2_enum,"_BOOSTTABLES_PAGE_",
+			GINT_TO_POINTER(BOOSTTABLES_PAGE));
+	g_hash_table_insert(str_2_enum,"_ROTARYTABLES_PAGE_",
+			GINT_TO_POINTER(ROTARYTABLES_PAGE));
 
 	/* Algorithm */
 	g_hash_table_insert(str_2_enum,"_SPEED_DENSITY_",

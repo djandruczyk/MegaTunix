@@ -1752,7 +1752,7 @@ testit:
 
 /*
  \brief page_changed() is fired off whenever a new notebook page is chosen.
- This fucntion jsutr sets a variabel markign the current page.  this is to
+ This fucntion just sets a variable marking the current page.  this is to
  prevent the runtime sliders from being updated if they aren't visible
  \param notebook (GtkNotebook *) nbotebook that emitted the event
  \param page (GtkNotebookPage *) page

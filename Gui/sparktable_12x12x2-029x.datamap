@@ -110,6 +110,12 @@ bind_to_list=spark_controls
 
 #----- Labels ----------------------------------------------------------------
 
+[topframe]
+keys=page,page_ident
+key_types=_INT_,_ENUM_
+page=3
+page_ident=_SPARKTABLES_PAGE_
+
 [topframe_title]
 keys=page,set_label
 key_types=_INT_,_STRING_

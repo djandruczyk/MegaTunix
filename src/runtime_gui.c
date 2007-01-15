@@ -138,7 +138,8 @@ breakout:
 	if (dash_gauges)
 		g_hash_table_foreach(dash_gauges,update_dash_gauge,NULL);
 
-	draw_ve_marker();
+	if ((active_page == VETABLES_PAGE) ||(active_page == SPARKTABLES_PAGE)||(active_page == AFRTABLES_PAGE)||(active_page == BOOSTTABLES_PAGE)||(active_page == ROTARYTABLES_PAGE))
+		draw_ve_marker();
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
 		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);

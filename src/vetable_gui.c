@@ -147,6 +147,9 @@ void draw_ve_marker()
 	gint bin = 0;
 	gint x_bin = 0;
 	gint y_bin = 0;
+	gfloat tmp1 = 0.0;
+	gfloat tmp2 = 0.0;
+	gfloat midpoint = 0.0;
 	GList *list = NULL;
 	extern struct Firmware_Details *firmware;
 	static void ***eval;
@@ -154,7 +157,6 @@ void draw_ve_marker()
 	extern GdkColor red;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
-
 
 
 	if (!eval)
@@ -171,12 +173,10 @@ void draw_ve_marker()
 
 		if ((!eval[table][0]) && (firmware->table_params[table]->x_conv_expr))
 		{
-			printf("creating evaluator for X for tablee %i\n",table);
 			eval[table][0] = evaluator_create(firmware->table_params[table]->x_conv_expr);
 		}
 		if ((!eval[table][1]) && (firmware->table_params[table]->y_conv_expr))
 		{
-			printf("creating evaluator for Y for tablee %i\n",table);
 			eval[table][1] = evaluator_create(firmware->table_params[table]->y_conv_expr);
 		}
 
@@ -191,7 +191,16 @@ void draw_ve_marker()
 				bin = 0;
 				break;
 			}
-			if ((evaluator_evaluate_x(eval[table][0],ms_data[page][base+i]) < (gint)x_source) && (evaluator_evaluate_x(eval[table][0],ms_data[page][base+i+1]) >=(gint)x_source))
+			tmp1 = evaluator_evaluate_x(eval[table][0],ms_data[page][base+i]);
+			tmp2 = evaluator_evaluate_x(eval[table][0],ms_data[page][base+i+1]);
+			midpoint = (tmp1+tmp2)/2.0;
+
+			if ((tmp1 < x_source) && (x_source <= midpoint))
+			{
+				bin = i;
+				break;
+			}
+			if ((x_source > midpoint) && (x_source <= tmp2))
 			{
 				bin = i+1;
 				break;
@@ -212,7 +221,16 @@ void draw_ve_marker()
 				bin = 0;
 				break;
 			}
-			if ((evaluator_evaluate_x(eval[table][1],ms_data[page][base+i]) < (gint)y_source) && (evaluator_evaluate_x(eval[table][1],ms_data[page][base+i+1]) >=(gint)y_source))
+			tmp1 = evaluator_evaluate_x(eval[table][1],ms_data[page][base+i]);
+			tmp2 = evaluator_evaluate_x(eval[table][1],ms_data[page][base+i+1]);
+			midpoint = (tmp1+tmp2)/2.0;
+
+			if ((tmp1 < y_source) && (y_source <= midpoint))
+			{
+				bin = i;
+				break;
+			}
+			if ((y_source > midpoint) && (y_source <= tmp2))
 			{
 				bin = i+1;
 				break;
