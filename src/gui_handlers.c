@@ -1559,6 +1559,8 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	extern gint **ms_data;
 	extern GList ***ve_widgets;
 
+//	printf("key event\n");
+//	printf("widget name %s\n",glade_get_widget_name(widget));
 	if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
 		lower = (gint) g_object_get_data(G_OBJECT(widget),"raw_lower");
 	if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)
@@ -1694,11 +1696,16 @@ EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer d
 	gchar * frame_name = NULL;
 	extern GHashTable *dynamic_widgets;
 
+	/* Select all chars on click */
+//	printf("selecting all chars, or so I thought....\n");
+//	gtk_editable_select_region(GTK_EDITABLE(widget),0,-1);
+
 	if ((gboolean)data == TRUE)
 		goto testit;
 
 	if (event->button != 1) // Left button click 
 		return FALSE;
+
 	if (!grab_allowed)
 		return FALSE;
 

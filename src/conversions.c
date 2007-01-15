@@ -19,6 +19,7 @@
 #include <dep_processor.h>
 #include <enums.h>
 #include <listmgmt.h>
+#include <lookuptables.h>
 #include <notifications.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_processor.h>
@@ -39,6 +40,7 @@
 gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	gint return_value = 0;
+	gint tmpi = 0;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
 	gint page = -1;
@@ -64,6 +66,12 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"dl_conv_expr");
 	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"dl_evaluator");
 
+	if ((conv_expr) && (!evaluator))
+	{
+		evaluator = evaluator_create(conv_expr);
+		assert(evaluator);
+		g_object_set_data(G_OBJECT(widget),"dl_evaluator",(gpointer)evaluator);
+	}
 	if (conv_expr == NULL)
 	{
 		dbg_func(g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value),CONVERSIONS);
@@ -77,30 +85,29 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 			dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (no eval)!!\n"),CRITICAL);
 			value = lower;
 		}
-		g_static_mutex_unlock(&mutex);
-		return ((gint)value);		
+		return_value = value;
 	}
-	if (!evaluator) 	/* if no evaluator create one */
+	else
 	{
-		evaluator = evaluator_create(conv_expr);
-		assert(evaluator);
-		g_object_set_data(G_OBJECT(widget),"dl_evaluator",(gpointer)evaluator);
-	}
-	return_value = evaluator_evaluate_x(evaluator,value)+0.001;
+		return_value = evaluator_evaluate_x(evaluator,value)+0.001;
 
-	dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value),CONVERSIONS);
+		dbg_func(g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value),CONVERSIONS);
 
-	if (return_value > upper)
-	{
-		dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (evaluated)!!\n"),CRITICAL);
-		return_value = upper;
-	}
-	if (return_value < lower)
-	{
-		dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (evaluated)!!\n"),CRITICAL);
-		return_value = lower;
+		if (return_value > upper)
+		{
+			dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 255 (evaluated)!!\n"),CRITICAL);
+			return_value = upper;
+		}
+		if (return_value < lower)
+		{
+			dbg_func(g_strdup(__FILE__": convert_before_download()\n\t WARNING value clamped at 0 (evaluated)!!\n"),CRITICAL);
+			return_value = lower;
+		}
 	}
 
+	tmpi = return_value;
+	 if (g_object_get_data(G_OBJECT(widget),"lookuptable"))
+		return_value = reverse_lookup(G_OBJECT(widget),tmpi);
 
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
@@ -120,6 +127,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
 	extern gint **ms_data;
+	gint tmpi = 0;
 	gint page = -1;
 	gint offset = -1;
 	gboolean ul_complex = FALSE;
@@ -139,9 +147,15 @@ gfloat convert_after_upload(GtkWidget * widget)
 	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"ul_conv_expr");
 	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"ul_evaluator");
 
+	if (g_object_get_data(G_OBJECT(widget),"lookuptable"))
+		tmpi = lookup_data(G_OBJECT(widget),ms_data[page][offset]);
+	else
+		tmpi = ms_data[page][offset];
+
+
 	if (conv_expr == NULL)
 	{
-		return_value = ms_data[page][offset];
+		return_value = tmpi;
 		dbg_func(g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i, value %f\n",page, offset, return_value),CONVERSIONS);
 		g_static_mutex_unlock(&mutex);
 		return (return_value);		
@@ -152,9 +166,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 		assert(evaluator);
 		g_object_set_data(G_OBJECT(widget),"ul_evaluator",(gpointer)evaluator);
 	}
-	return_value = evaluator_evaluate_x(evaluator,ms_data[page][offset])+0.001;
+	return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001;
 
-	dbg_func(g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,ms_data[page][offset],return_value),CONVERSIONS);
+	dbg_func(g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value),CONVERSIONS);
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
 }

@@ -24,7 +24,7 @@
 void load_lookuptables(struct Canidate *);
 gboolean load_table(gchar *, gchar *);
 void get_table(gpointer, gpointer, gpointer );
-gint reverse_lookup(gint , gint *);
+gint reverse_lookup(GObject *, gint );
 gfloat lookup_data(GObject *, gint );
 
 #endif

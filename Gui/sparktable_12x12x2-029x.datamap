@@ -279,6 +279,15 @@ offset=169
 group=spark_1
 use_color=FALSE
 
+[SP1_triggerangle_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,use_color
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+offset=168
+dl_conv_expr=x*(284/100)
+ul_conv_expr=x/(284/100)
+group=spark_1
+use_color=FALSE
+
 [SP2_trimangle_entry]
 keys=offset,dl_conv_expr,ul_conv_expr,use_color
 key_types=_INT_,_STRING_,_STRING_,_BOOL_
@@ -292,6 +301,15 @@ use_color=FALSE
 keys=offset,use_color
 key_types=_INT_,_BOOL_
 offset=169
+group=spark_1
+use_color=FALSE
+
+[SP2_triggerangle_entry]
+keys=offset,dl_conv_expr,ul_conv_expr,use_color
+key_types=_INT_,_STRING_,_STRING_,_BOOL_
+offset=168
+dl_conv_expr=x*(284/100)
+ul_conv_expr=x/(284/100)
 group=spark_1
 use_color=FALSE
 

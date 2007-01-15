@@ -246,31 +246,6 @@ power up.</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkRadioButton" id="no_priming_radio_button">
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="label" translatable="yes">No prime
-pulse at all.</property>
-					      <property name="use_underline">True</property>
-					      <property name="relief">GTK_RELIEF_NORMAL</property>
-					      <property name="focus_on_click">True</property>
-					      <property name="active">False</property>
-					      <property name="inconsistent">True</property>
-					      <property name="draw_indicator">True</property>
-					      <property name="group">delayed_prime_radio_button</property>
-					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 24 Apr 2005 23:09:00 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">1</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">fill</property>
-					      <property name="y_options">expand</property>
-					    </packing>
-					  </child>
-
-					  <child>
 					    <widget class="GtkRadioButton" id="prime_twice_radio_button">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
@@ -292,6 +267,30 @@ on power up</property>
 					      <property name="bottom_attach">3</property>
 					      <property name="x_options">fill</property>
 					      <property name="y_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkCheckButton" id="priming_check_button">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="label" translatable="yes">Prime
+Always</property>
+					      <property name="use_underline">True</property>
+					      <property name="relief">GTK_RELIEF_NORMAL</property>
+					      <property name="focus_on_click">True</property>
+					      <property name="active">False</property>
+					      <property name="inconsistent">True</property>
+					      <property name="draw_indicator">True</property>
+					      <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 14 Jan 2007 22:33:16 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="x_options">fill</property>
+					      <property name="y_options"></property>
 					    </packing>
 					  </child>
 					</widget>

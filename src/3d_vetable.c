@@ -648,6 +648,7 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
+	gfloat tmpf = 0.0;
 
 	dbg_func(g_strdup(__FILE__": ve3d_calculate_scaling()\n"),OPENGL);
 
@@ -678,16 +679,20 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	}
 	for (i=0;i<(ve_view->x_bincount*ve_view->y_bincount);i++) 
 	{
-		if (ms_data[z_page][z_base+i] > ve_view->z_max) 
-			ve_view->z_max = ms_data[z_page][z_base+i];
-		if (ms_data[z_page][z_base+i] < ve_view->z_min) 
-			ve_view->z_min = ms_data[z_page][z_base+i];
+		tmpf = evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+i]);
+		//tmpf = ms_data[z_page][z_base+i];
+		if (tmpf > ve_view->z_max) 
+			ve_view->z_max = tmpf;
+		if (tmpf < ve_view->z_min) 
+			ve_view->z_min = tmpf;
 	}
 
 	ve_view->x_div = ((gfloat)ve_view->x_max/(gfloat)ve_view->x_bincount);
 	ve_view->y_div = ((gfloat)ve_view->y_max/(gfloat)ve_view->y_bincount);
 	ve_view->z_div = ((gfloat)ve_view->z_max-(gfloat)ve_view->z_min)/ve_view->z_scale;	
+
 	ve_view->z_offset = ((gfloat)ve_view->z_min/ve_view->z_div);
+	//printf("z_max %f, z_min %f, z_div %f, z_offset %f\n",ve_view->z_max,ve_view->z_min,ve_view->z_div, ve_view->z_offset);
 }
 
 /*!
@@ -730,7 +735,7 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 					(gfloat)(ms_data[x_page][x_base+x])/ve_view->x_div,
 					
 					(gfloat)(ms_data[y_page][y_base+y])/ve_view->y_div, 	 	
-					((gfloat)(ms_data[z_page][z_base+(y*ve_view->y_bincount)+x])/ve_view->z_div)-ve_view->z_offset);
+					((gfloat)(evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))/ve_view->z_div)-ve_view->z_offset);
 					
 		}
 		glEnd();
@@ -745,7 +750,7 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 			glVertex3f(	
 					(gfloat)(ms_data[x_page][x_base+x])/ve_view->x_div,
 					(gfloat)(ms_data[y_page][y_base+y])/ve_view->y_div,
-					((gfloat)(ms_data[z_page][z_base+(y*ve_view->y_bincount)+x])/ve_view->z_div)-ve_view->z_offset);
+					((gfloat)(evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))/ve_view->z_div)-ve_view->z_offset);
 					
 		}
 		glEnd();
@@ -789,7 +794,7 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	glVertex3f(	
 			(gfloat)(ms_data[x_page][x_base+ve_view->active_x])/ve_view->x_div,
 			(gfloat)(ms_data[y_page][y_base+ve_view->active_y])/ve_view->y_div,	
-			((gfloat)ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]/ve_view->z_div)-ve_view->z_offset);
+			((gfloat)evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])/ve_view->z_div)-ve_view->z_offset);
 	glEnd();	
 
 	tmpbuf = g_strdup_printf("x_active_label_%i",ve_view->table_num);
@@ -894,7 +899,8 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("z_runtime_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,z_val),ve_view->z_precision,ve_view->z_suffix);
+	//value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,z_val),ve_view->z_precision,ve_view->z_suffix);
+	value = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
@@ -936,8 +942,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
 
-	top = (ve_view->z_max+10)/ve_view->z_div;
-	bottom = (ve_view->z_min-10)/ve_view->z_div;
+	top = (ve_view->z_max+((ve_view->z_max-ve_view->z_min)/5.0))/ve_view->z_div;
+	bottom = (ve_view->z_min-((ve_view->z_max-ve_view->z_min)/5.0))/ve_view->z_div;
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.7,0.7,0.7);
@@ -1032,7 +1038,7 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 			bottom - ve_view->z_offset);
 	glEnd();
 
-	/* Draw RPM and KPA labels */
+	/* Draw X and Y labels */
 	for (i=0;i<y_bincount;i++)
 	{
 		tmpf = evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i]);
@@ -1055,10 +1061,10 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 		g_free(label);
 	}
 
-	/* Draw VE labels */
+	/* Draw Z labels */
 	for (i=10*((gint)ve_view->z_min/10);i<(ve_view->z_max+10);i=i+10)
 	{
-		tmpf = evaluator_evaluate_x(ve_view->z_eval,i);
+		tmpf = i;
 		if (ve_view->z_disp_float)
 			label = g_strdup_printf("%1$.*2$f",tmpf,ve_view->z_precision);
 		else
@@ -1302,7 +1308,7 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->aspect = 1.0;
 	ve_view->h_strafe = -1.575;
 	ve_view->v_strafe = -2.2;
-	ve_view->z_scale = 4.0;
+	ve_view->z_scale = 4.2;
 	ve_view->x_div = 0.0;
 	ve_view->x_max = 0.0;
 	ve_view->x_min = 0.0;

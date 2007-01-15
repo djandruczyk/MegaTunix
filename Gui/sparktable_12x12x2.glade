@@ -5400,7 +5400,7 @@
 				    <widget class="GtkTable" id="SP1_temp_timing_controls_table0">
 				      <property name="border_width">5</property>
 				      <property name="visible">True</property>
-				      <property name="n_rows">1</property>
+				      <property name="n_rows">2</property>
 				      <property name="n_columns">4</property>
 				      <property name="homogeneous">False</property>
 				      <property name="row_spacing">0</property>
@@ -5504,6 +5504,57 @@
 					  <property name="right_attach">4</property>
 					  <property name="top_attach">0</property>
 					  <property name="bottom_attach">1</property>
+					  <property name="x_padding">7</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="label1">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Trigger Angle</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">2</property>
+					  <property name="right_attach">3</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkEntry" id="SP1_triggerangle_entry">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="editable">True</property>
+					  <property name="visibility">True</property>
+					  <property name="max_length">5</property>
+					  <property name="text" translatable="yes">0.0</property>
+					  <property name="has_frame">True</property>
+					  <property name="invisible_char">*</property>
+					  <property name="activates_default">False</property>
+					  <property name="width_chars">4</property>
+					  <signal name="activate" handler="std_entry_handler" last_modification_time="Sat, 11 Dec 2004 02:59:03 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">3</property>
+					  <property name="right_attach">4</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
 					  <property name="x_padding">7</property>
 					  <property name="y_options"></property>
 					</packing>
@@ -10931,7 +10982,7 @@ by what %</property>
 				    <widget class="GtkTable" id="SP2_temp_timing_controls_table0">
 				      <property name="border_width">5</property>
 				      <property name="visible">True</property>
-				      <property name="n_rows">1</property>
+				      <property name="n_rows">2</property>
 				      <property name="n_columns">4</property>
 				      <property name="homogeneous">False</property>
 				      <property name="row_spacing">0</property>
@@ -11035,6 +11086,57 @@ by what %</property>
 					  <property name="right_attach">4</property>
 					  <property name="top_attach">0</property>
 					  <property name="bottom_attach">1</property>
+					  <property name="x_padding">7</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkLabel" id="label2">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Trigger Angle</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_LEFT</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="left_attach">2</property>
+					  <property name="right_attach">3</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
+					  <property name="x_options">fill</property>
+					  <property name="y_options"></property>
+					</packing>
+				      </child>
+
+				      <child>
+					<widget class="GtkEntry" id="SP2_triggerangle_entry">
+					  <property name="visible">True</property>
+					  <property name="can_focus">True</property>
+					  <property name="editable">True</property>
+					  <property name="visibility">True</property>
+					  <property name="max_length">5</property>
+					  <property name="text" translatable="yes">0.0</property>
+					  <property name="has_frame">True</property>
+					  <property name="invisible_char">*</property>
+					  <property name="activates_default">False</property>
+					  <property name="width_chars">4</property>
+					  <signal name="activate" handler="std_entry_handler" last_modification_time="Sat, 11 Dec 2004 02:59:03 GMT"/>
+					  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					</widget>
+					<packing>
+					  <property name="left_attach">3</property>
+					  <property name="right_attach">4</property>
+					  <property name="top_attach">1</property>
+					  <property name="bottom_attach">2</property>
 					  <property name="x_padding">7</property>
 					  <property name="y_options"></property>
 					</packing>

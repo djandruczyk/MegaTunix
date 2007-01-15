@@ -245,7 +245,6 @@ void cell_edited(GtkCellRendererText *cell,
 	GtkTreeIter iter;
 	gboolean temp_dep;
 	extern gint temp_units;
-	GObject *dep_obj = NULL;
 	gint lower = 0;
 	gint upper = 0;
 	gfloat new = 0;
@@ -259,16 +258,10 @@ void cell_edited(GtkCellRendererText *cell,
 	gfloat x = 0.0;
 	gfloat tmpf = 0.0;
 	void * evaluator = NULL;
-	gchar * table = NULL;
-	gchar * alt_table = NULL;
-	gchar * lookuptable = NULL;
-	gint * lookup = NULL;
 	gint result = 0;
 	gint page = 0;
 	gboolean ign_parm = FALSE;
-	gboolean state = FALSE;
 	gboolean is_float = FALSE;
-	extern GHashTable *lookuptables;
 
 	column = (gint) g_object_get_data (G_OBJECT (cell), "column");
 	page = (gint) g_object_get_data(G_OBJECT(model),"page");
@@ -286,7 +279,6 @@ void cell_edited(GtkCellRendererText *cell,
 	evaluator = (void *)g_object_get_data(G_OBJECT(object),"dl_evaluator");
 	temp_dep = (gboolean)g_object_get_data(G_OBJECT(object),"temp_dep");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(object),"is_float");
-	lookuptable = (gchar *)g_object_get_data(G_OBJECT(object),"lookuptable");
 	new = (gfloat)strtod(new_text,NULL);
 
 	if (new < lower)
@@ -322,21 +314,8 @@ void cell_edited(GtkCellRendererText *cell,
 	tmpf = evaluator_evaluate_x(evaluator,x);
 	// Then if it used a lookuptable,  reverse map it if possible to 
 	// determine the ADC reading we need to send to ECU
-	if (lookuptable)
-	{
-
-		table = (gchar *)g_object_get_data(G_OBJECT(object),"lookuptable");
-		alt_table = (gchar *)g_object_get_data(G_OBJECT(object),"alt_lookuptable");
-		dep_obj = (GObject *)g_object_get_data(object,"dep_object");
-		if (dep_obj)
-			state = check_dependancies(dep_obj);
-		if (state)
-			lookup = (gint *)g_hash_table_lookup(lookuptables,alt_table);
-		else
-			lookup = (gint *)g_hash_table_lookup(lookuptables,table);
-
-		result = reverse_lookup((gint)tmpf,lookup);
-	}
+	if (g_object_get_data(object,"lookuptable"))
+		result = reverse_lookup(object,(gint)tmpf);
 	else
 		result = (gint)tmpf;
 

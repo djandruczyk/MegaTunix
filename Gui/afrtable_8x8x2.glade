@@ -2335,7 +2335,7 @@
 				      <child>
 					<widget class="GtkLabel" id="AFR1_afrtable_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Air Fuel Ratio (O&lt;sub&gt;2&lt;/sub&gt; Volts)</property>
+					  <property name="label" translatable="yes">Air Fuel Ratio (Actual AFR)</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">True</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -5127,7 +5127,7 @@ by what percentage?</property>
 				      <child>
 					<widget class="GtkLabel" id="AFR2_afrtable_label">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Air Fuel Ratio (O&lt;sub&gt;2&lt;/sub&gt; Volts)</property>
+					  <property name="label" translatable="yes">Air Fuel Ratio (Actual AFR)</property>
 					  <property name="use_underline">False</property>
 					  <property name="use_markup">True</property>
 					  <property name="justify">GTK_JUSTIFY_LEFT</property>

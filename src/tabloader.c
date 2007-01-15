@@ -208,7 +208,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
 		groupnames = parse_keys(tmpbuf,&num_groups,",");
-		dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of groups to load settigns for is %i\n",num_groups),TABLOADER);
+		dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of groups to load settings for is %i\n",num_groups),TABLOADER);
 		g_free(tmpbuf);
 	}
 	else
@@ -261,6 +261,16 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		gtk_object_sink(GTK_OBJECT(group->object));
 		// ATTEMPTED FIX FOR GLIB 2.10
 
+		/* If this widget has a "depend_on" tag we need to 
+		 * load the dependancy information  and store it for 
+		 * use when needed...
+		 */
+		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
+		{
+			load_dependancies(G_OBJECT(group->object),cfgfile,section);
+			g_free(tmpbuf);
+		}
+
 		bind_keys(group->object,cfgfile,section,group->keys,group->keytypes,group->num_keys);
 		/* Store it in the hashtable... */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
@@ -296,6 +306,10 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 		return -1;
 	}
 	/* Copy data from the group object to the */
+	/* Grab hidden data if it exists */
+	if (g_object_get_data(group->object, "dep_object"))
+		g_object_set_data(G_OBJECT(widget),"dep_object",g_object_get_data(group->object, "dep_object"));
+
 	for (i=0;i<group->num_keys;i++)
 	{
 		switch((DataType)group->keytypes[i])
@@ -308,6 +322,7 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 				break;
 			case MTX_STRING:
 				g_object_set_data(G_OBJECT(widget),group->keys[i],g_strdup(g_object_get_data(group->object,group->keys[i])));
+//				printf("setting %s on widget %s\n",group->keys[i],glade_get_widget_name(widget));
 				if (g_object_get_data(G_OBJECT(widget),"tooltip") != NULL)
 					gtk_tooltips_set_tip(tip,widget,(gchar *)g_object_get_data(G_OBJECT(widget),"tooltip"),NULL);
 				if (g_object_get_data(G_OBJECT(group->object), "bind_to_list"))

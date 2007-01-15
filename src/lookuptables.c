@@ -133,27 +133,78 @@ gboolean load_table(gchar *table_name, gchar *filename)
 
 /*!
  \brief reverse_lookup() looks for the INDEX of this value in the specified
- lookuptable.  This has a couple potentiela faults for tables that are 
- NOT 1:1 relationships and can mistakenly give the wrong value in that case
- \param value (gint) value to lookup
- \param table (gint *) pointer to lookuptable array
+ lookuptable.  This does an intersting weighted search in an attempt to handle
+ lookuptables that contain the same value in multiple places.  When it finds
+ a match it begins counting for sequential matches,  if so it increases the 
+ "weight" of that match at the startpoint.  Followinghte weight search, 
+ another iteration of the weight array to find the biggest one, and then
+ choose the midpoint of that span. (i.e. if there are 11 sequential target
+ values, we choose the middle one (6th).  This algorithm can STILL however
+ be tricked by multiple SINGLE values. in that case it'll take the last one.
+ \param object (GObject *) pointer to object.
+ \param value (gint ) value to be reverse looked up
  \returns the index closest to that data
  */
-gint reverse_lookup(gint value, gint *table)
+gint reverse_lookup(GObject *object, gint value)
 {
 	gint i = 0;
+	gint j = 0;
 	gint closest_index = 0;
-	gint minimum = 65535;
+	gint min = 0;
+	gint len = 0;
+	gint weight[255];
 
-	while (table[i])
+	extern GHashTable *lookuptables;
+	GObject *dep_obj = NULL;
+	gint *lookuptable = NULL;
+	gchar *table = NULL;
+	gchar *alt_table = NULL;
+	gboolean state = FALSE;
+
+	table = (gchar *)g_object_get_data(object,"lookuptable");
+	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
+	dep_obj = (GObject *)g_object_get_data(object,"dep_object");
+	if (dep_obj)
+		state = check_dependancies(dep_obj);
+	if (state)
+		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
+	else
+		lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+
+	len=255;
+	for (i=0;i<len;i++)
+		weight[i]=0;
+
+	for (i=0;i<len;i++)
 	{
-		if (abs(table[i]-value) < minimum)
+//		printf("counter is %i\n",i);
+		if (lookuptable[i] == value)
 		{
-			minimum = abs(table[i]-value);
-			closest_index = i;
+//			printf("match at %i\n",i);
+			j = i;
+			while (lookuptable[j] == value)
+			{
+//				printf("searching for dups to upp the weight\n");
+				weight[i]++;
+				if (j+1 == len)
+					break;
+				else
+					j++;
+			}
+			i=j;
 		}
-		i++;
 	}
+	for (i=0;i<len;i++)
+	{
+		if (weight[i] > min)
+		{
+//			printf("weight[%i]= %i greater than %i\n",i,weight[i],min);
+			min = weight[i];
+			closest_index=i+(min/2);
+		}
+	}
+
+//	printf("closest index is %i\n",closest_index);
 
 	return closest_index;
 }
@@ -184,7 +235,7 @@ gfloat lookup_data(GObject *object, gint offset)
 		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
 	else
 		lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
-	//assert(lookuptable);
+
 	if (!lookuptable)
 	{
 		dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")),CRITICAL);
