@@ -19,6 +19,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <gui_handlers.h>
+#include <mtxmatheval/mtxmatheval.h>
 #include <logviewer_gui.h>
 #include <rtv_processor.h>
 #include <structures.h>
@@ -148,18 +149,36 @@ void draw_ve_marker()
 	gint y_bin = 0;
 	GList *list = NULL;
 	extern struct Firmware_Details *firmware;
+	static void ***eval;
 	extern gint ** ms_data;
 	extern GdkColor red;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
 
 
+
+	if (!eval)
+		eval = g_new0(void **, firmware->total_tables);
+
 	for (table=0;table<firmware->total_tables;table++)
 	{
+		if (!eval[table])
+			eval[table] = g_new0(void *, 2);
 		if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_x_source))
 			lookup_current_value(firmware->table_params[table]->an_x_source,&x_source);
 		else
 			lookup_current_value(firmware->table_params[table]->x_source,&x_source);
+
+		if ((!eval[table][0]) && (firmware->table_params[table]->x_conv_expr))
+		{
+			printf("creating evaluator for X for tablee %i\n",table);
+			eval[table][0] = evaluator_create(firmware->table_params[table]->x_conv_expr);
+		}
+		if ((!eval[table][1]) && (firmware->table_params[table]->y_conv_expr))
+		{
+			printf("creating evaluator for Y for tablee %i\n",table);
+			eval[table][1] = evaluator_create(firmware->table_params[table]->y_conv_expr);
+		}
 
 		/* Find bin corresponding to current rpm  */
 		for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
@@ -167,12 +186,12 @@ void draw_ve_marker()
 			page = firmware->table_params[table]->x_page;
 			base = firmware->table_params[table]->x_base;
 			bin = firmware->table_params[table]->x_bincount-1;
-			if (ms_data[page][base] >= x_source)
+			if (evaluator_evaluate_x(eval[table][0],ms_data[page][base]) >= x_source)
 			{
 				bin = 0;
 				break;
 			}
-			if ((ms_data[page][base+i] < (gint)x_source) && (ms_data[page][base+i+1] >=(gint)x_source))
+			if ((evaluator_evaluate_x(eval[table][0],ms_data[page][base+i]) < (gint)x_source) && (evaluator_evaluate_x(eval[table][0],ms_data[page][base+i+1]) >=(gint)x_source))
 			{
 				bin = i+1;
 				break;
@@ -188,12 +207,12 @@ void draw_ve_marker()
 			page = firmware->table_params[table]->y_page;
 			base = firmware->table_params[table]->y_base;
 			bin = firmware->table_params[table]->y_bincount-1;
-			if (ms_data[page][base] >= y_source)
+			if (evaluator_evaluate_x(eval[table][1],ms_data[page][base]) >= y_source)
 			{
 				bin = 0;
 				break;
 			}
-			if ((ms_data[page][base+i] < (gint)y_source) && (ms_data[page][base+i+1] >=(gint)y_source))
+			if ((evaluator_evaluate_x(eval[table][1],ms_data[page][base+i]) < (gint)y_source) && (evaluator_evaluate_x(eval[table][1],ms_data[page][base+i+1]) >=(gint)y_source))
 			{
 				bin = i+1;
 				break;
@@ -201,10 +220,6 @@ void draw_ve_marker()
 		}
 		y_bin = bin;
 
-		/* This is a BIG ASS problem, haven't figure out an easy way to
-		 * make this work for any table yet.. so for now it's hardcoded to
-		 * this widget location scheme specific to MSnS-E 3x12 vetable
-		 */
 		list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+x_bin+(y_bin*firmware->table_params[table]->x_bincount)];
 		widget = g_list_nth_data(list,0);
 
