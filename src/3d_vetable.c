@@ -394,16 +394,14 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
 	ve_view->dt = 0.008;
-	/* ve_view->sphi = 35.0; 
-	ve_view->stheta = 75.0;  */
 	ve_view->sphi = 40.5; 
 	ve_view->stheta = 70.25; 
-	ve_view->sdepth = 7.667456;
-	ve_view->zNear = 0.8;
-	ve_view->zFar = 23;
+	ve_view->sdepth = 3.2;
+	ve_view->zNear = 0;
+	ve_view->zFar = 10.0;
+	ve_view->aspect = 1.0;
 	ve_view->h_strafe = -1.575;
 	ve_view->v_strafe = -2.2;
-	ve_view->aspect = 1.333;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 }
@@ -501,11 +499,11 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	glLoadIdentity();
 
 //	printf("sdepth %f, stheta %f, sphi %f, hstrafe %f, vstrafe %f\n",ve_view->sdepth,ve_view->stheta,ve_view->sphi,ve_view->h_strafe,ve_view->v_strafe);
-	glTranslatef(0.0,0.0,-ve_view->sdepth);
-	glRotatef(-ve_view->stheta, 1.0, 0.0, 0.0);
-	glRotatef(ve_view->sphi, 0.0, 0.0, 1.0);
-	//glTranslatef(-(gfloat)((ve_view->x_bincount/2)-0.3)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
-	glTranslatef(-(gfloat)((ve_view->x_bincount/2)-1)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
+	glTranslatef(-0.5,-0.5,-ve_view->sdepth);
+	printf("sdepth is %f\n",ve_view->sdepth);
+	glRotatef(-ve_view->stheta, 1.0, 0.5, 0.5);
+	glRotatef(ve_view->sphi, 0.5, 0.5, 1.0);
+//	glTranslatef(-(gfloat)((ve_view->x_bincount/2)-1)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
 
 	ve3d_calculate_scaling(ve_view);
 	ve3d_draw_ve_grid(ve_view);
@@ -648,6 +646,8 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
+	gfloat min = 0.0;
+	gfloat max = 0.0;
 	gfloat tmpf = 0.0;
 
 	dbg_func(g_strdup(__FILE__": ve3d_calculate_scaling()\n"),OPENGL);
@@ -660,39 +660,43 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	y_page = ve_view->y_page;
 	z_page = ve_view->z_page;
 
-	ve_view->x_max = 0;
-	ve_view->y_max = 0;
-	ve_view->z_max = 0;
-	ve_view->z_min = 255;
-	// Spark requires a divide by 2.84 to convert from ms units to degrees
-
+	min = 65535;
+	max = 0;
 	for (i=0;i<ve_view->x_bincount;i++) 
 	{
-		if (ms_data[x_page][x_base+i] > ve_view->x_max) 
-			ve_view->x_max = ms_data[x_page][x_base+i];
+		tmpf = evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i]);
+		if (tmpf > max) 
+			max = tmpf;
+		if (tmpf < min) 
+			min = tmpf;
 	}
-
+	ve_view->x_trans = min;
+	ve_view->x_scale = 1.0/(max-min);
+	min = 65535;
+	max = 0;
 	for (i=0;i<ve_view->y_bincount;i++) 
 	{
-		if (ms_data[y_page][y_base+i] > ve_view->y_max) 
-			ve_view->y_max = ms_data[y_page][y_base+i];
+		tmpf = evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i]);
+		if (tmpf > max) 
+			max = tmpf;
+		if (tmpf < min) 
+			min = tmpf;
 	}
+	ve_view->y_trans = min;
+	ve_view->y_scale = 1.0/(max-min);
+	min = 65535;
+	max = 0;
 	for (i=0;i<(ve_view->x_bincount*ve_view->y_bincount);i++) 
 	{
 		tmpf = evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+i]);
-		//tmpf = ms_data[z_page][z_base+i];
-		if (tmpf > ve_view->z_max) 
-			ve_view->z_max = tmpf;
-		if (tmpf < ve_view->z_min) 
-			ve_view->z_min = tmpf;
+		if (tmpf > max) 
+			max = tmpf;
+		if (tmpf < min) 
+			min = tmpf;
 	}
-
-	ve_view->x_div = ((gfloat)ve_view->x_max/(gfloat)ve_view->x_bincount);
-	ve_view->y_div = ((gfloat)ve_view->y_max/(gfloat)ve_view->y_bincount);
-	ve_view->z_div = ((gfloat)ve_view->z_max-(gfloat)ve_view->z_min)/ve_view->z_scale;	
-
-	ve_view->z_offset = ((gfloat)ve_view->z_min/ve_view->z_div);
-	//printf("z_max %f, z_min %f, z_div %f, z_offset %f\n",ve_view->z_max,ve_view->z_min,ve_view->z_div, ve_view->z_offset);
+	ve_view->z_trans = min-((max-min)*0.15);
+	ve_view->z_scale = 1.0/((max-min)/0.75);
+	ve_view->z_offset = 0.0;
 }
 
 /*!
@@ -710,6 +714,9 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
+	gfloat tmpf1 = 0.0;
+	gfloat tmpf2 = 0.0;
+	gfloat tmpf3 = 0.0;
 
 	dbg_func(g_strdup(__FILE__": ve3d_draw_ve_grid() \n"),OPENGL);
 
@@ -731,12 +738,12 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 		glBegin(GL_LINE_STRIP);
 		for(y=0;y<ve_view->y_bincount;y++) 
 		{
-			glVertex3f(
-					(gfloat)(ms_data[x_page][x_base+x])/ve_view->x_div,
-					
-					(gfloat)(ms_data[y_page][y_base+y])/ve_view->y_div, 	 	
-					((gfloat)(evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))/ve_view->z_div)-ve_view->z_offset);
-					
+			tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+			tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+			tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+
+			glVertex3f(tmpf1,tmpf2,tmpf3);
+
 		}
 		glEnd();
 	}
@@ -747,11 +754,10 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 		glBegin(GL_LINE_STRIP);
 		for(x=0;x<ve_view->x_bincount;x++)
 		{
-			glVertex3f(	
-					(gfloat)(ms_data[x_page][x_base+x])/ve_view->x_div,
-					(gfloat)(ms_data[y_page][y_base+y])/ve_view->y_div,
-					((gfloat)(evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))/ve_view->z_div)-ve_view->z_offset);
-					
+			tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+			tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+			tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			glVertex3f(tmpf1,tmpf2,tmpf3);	
 		}
 		glEnd();
 	}
@@ -771,6 +777,9 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
+	gfloat tmpf1 = 0.0;
+	gfloat tmpf2 = 0.0;
+	gfloat tmpf3 = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
 	extern GHashTable *dynamic_widgets;
@@ -791,10 +800,12 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	glPointSize(8.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
-	glVertex3f(	
-			(gfloat)(ms_data[x_page][x_base+ve_view->active_x])/ve_view->x_div,
-			(gfloat)(ms_data[y_page][y_base+ve_view->active_y])/ve_view->y_div,	
-			((gfloat)evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])/ve_view->z_div)-ve_view->z_offset);
+
+	tmpf1 = (evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x])-ve_view->x_trans)*ve_view->x_scale;
+	tmpf2 = (evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y])-ve_view->y_trans)*ve_view->y_scale;
+	tmpf3 = ((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])-ve_view->z_trans)*ve_view->z_scale);
+
+	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glEnd();	
 
 	tmpbuf = g_strdup_printf("x_active_label_%i",ve_view->table_num);
@@ -832,6 +843,9 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
 	gfloat bottom = 0.0;
+	gfloat tmpf1 = 0.0;
+	gfloat tmpf2 = 0.0;
+	gfloat tmpf3 = 0.0;
 	extern GHashTable *dynamic_widgets;
 	extern gint ** ms_data;
 	extern gint *algorithm;
@@ -860,46 +874,49 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	else
 		lookup_current_value(ve_view->z_source,&z_val);
 
-	bottom = (ve_view->z_min-10)/ve_view->z_div;
+	bottom = 0.0;
 	/* Render a green dot at the active VE map position */
 	glPointSize(8.0);
 	glColor3f(0.0,1.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(	
-			x_val/ve_view->x_div,
-			y_val/ve_view->y_div,	
-			(z_val/ve_view->z_div)-ve_view->z_offset);
+			(x_val-ve_view->x_trans)*ve_view->x_scale,
+			(y_val-ve_view->y_trans)*ve_view->y_scale,	
+			(z_val-ve_view->z_trans)*ve_view->z_scale);
 	glEnd();
 
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(x_val/ve_view->x_div,y_val/ve_view->y_div,(z_val/ve_view->z_div)-ve_view->z_offset);
-	glVertex3f(x_val/ve_view->x_div,y_val/ve_view->y_div,bottom - ve_view->z_offset);
-	glVertex3f((ms_data[ve_view->x_page][ve_view->x_base])/ve_view->x_div,y_val/ve_view->y_div,bottom - ve_view->z_offset);
+	tmpf1 = (x_val-ve_view->x_trans)*ve_view->x_scale;
+	tmpf2 = (y_val-ve_view->y_trans)*ve_view->y_scale;
+	tmpf3 = (z_val-ve_view->z_trans)*ve_view->z_scale;
+
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f(tmpf1,tmpf2,bottom);
+	glVertex3f((evaluator_evaluate_x(ve_view->x_eval,ms_data[ve_view->x_page][ve_view->x_base])-ve_view->x_trans)*ve_view->x_scale,tmpf2,bottom);
 	glEnd();
 
 	glBegin(GL_LINES);
-	glVertex3f(x_val/ve_view->x_div,y_val/ve_view->y_div,bottom - ve_view->z_offset);
-	glVertex3f(x_val/ve_view->x_div,(ms_data[ve_view->y_page][ve_view->y_base])/ve_view->y_div,bottom - ve_view->z_offset);
+	glVertex3f(tmpf1,tmpf2,bottom - ve_view->z_offset);
+	glVertex3f(tmpf1,(evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base])-ve_view->y_trans)*ve_view->y_scale,bottom);
 	glEnd();
 			                        
 
 	tmpbuf = g_strdup_printf("x_runtime_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->x_eval,x_val),ve_view->x_precision,ve_view->x_suffix);
+	value = g_strdup_printf("%1$.*2$f %3$s",x_val,ve_view->x_precision,ve_view->x_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("y_runtime_label_%i",ve_view->table_num);
 	if (algorithm[ve_view->table_num] == ALPHA_N)
-		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_precision,ve_view->an_y_suffix);
+		value = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->an_y_suffix);
 	else
-		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,y_val),ve_view->y_precision,ve_view->y_suffix);
+		value = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->y_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("z_runtime_label_%i",ve_view->table_num);
-	//value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,z_val),ve_view->z_precision,ve_view->z_suffix);
 	value = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
@@ -916,8 +933,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0;
 	gfloat tmpf = 0.0;
-	gfloat top = 0.0;
-	gfloat bottom = 0.0;
+	gfloat tmpf1 = 0.0;
+	gfloat tmpf2 = 0.0;
 	gchar *label;
 	extern gint **ms_data;
 	gint x_page = 0;
@@ -942,29 +959,19 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
 
-	top = (ve_view->z_max+((ve_view->z_max-ve_view->z_min)/5.0))/ve_view->z_div;
-	bottom = (ve_view->z_min-((ve_view->z_max-ve_view->z_min)/5.0))/ve_view->z_div;
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.7,0.7,0.7);
 
 	/* Draw horizontal background grid lines  
 	   starting at 0 VE and working up to VE+10% */
-	for (i=10*((gint)ve_view->z_min/10);i<(ve_view->z_max+10);i+=10)
+	for (i=0;i<=100;i+=10)
 	{
 		glBegin(GL_LINE_STRIP);
-		glVertex3f(
-				((ms_data[x_page][x_base])/ve_view->x_div),
-				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),		
-				(((gfloat)i)/ve_view->z_div)-ve_view->z_offset);
-		glVertex3f(
-				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
-				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),		
-				(((gfloat)i)/ve_view->z_div)-ve_view->z_offset);
-		glVertex3f(
-				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
-				((ms_data[y_page][y_base])/ve_view->y_div),		
-				(((gfloat)i)/ve_view->z_div)-ve_view->z_offset);
+		glVertex3f(0,1,(float)i/100.0);
+				
+		glVertex3f(1,1,(float)i/100.0);
+		glVertex3f(1,0,(float)i/100.0);
 		glEnd();	
 	}
 
@@ -972,14 +979,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	for (i=0;i<y_bincount;i++)
 	{
 		glBegin(GL_LINES);
-		glVertex3f(
-				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
-				((ms_data[y_page][y_base+i])/ve_view->y_div),		
-				bottom - ve_view->z_offset);
-		glVertex3f(
-				((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
-				((ms_data[y_page][y_base+i])/ve_view->y_div),		
-				top - ve_view->z_offset);
+		glVertex3f(1,((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale),0);
+		glVertex3f(1,((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale),1);
 		glEnd();
 	}
 
@@ -987,55 +988,25 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	for (i=0;i<x_bincount;i++)
 	{
 		glBegin(GL_LINES);
-		glVertex3f(
-				((ms_data[x_page][x_base+i])/ve_view->x_div),		
-				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-				bottom - ve_view->z_offset);
-		glVertex3f(
-				((ms_data[x_page][x_base+i])/ve_view->x_div),
-				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),		
-				top - ve_view->z_offset);
+		glVertex3f((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale,1,0);
+		glVertex3f((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale,1,1);
 		glEnd();
 	}
 
 	/* Add the back corner top lines */
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(
-			((ms_data[x_page][x_base])/ve_view->x_div),	
-			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			top - ve_view->z_offset);
-	glVertex3f(
-			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),	
-			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			top - ve_view->z_offset);
-	glVertex3f(
-			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
-			((ms_data[y_page][y_base])/ve_view->y_div),	
-			top - ve_view->z_offset);
+	glVertex3f(0,1,1);
+	glVertex3f(1,1,1);
+	glVertex3f(1,0,1);
 	glEnd();
 
 	/* Add front corner base lines */
 	glBegin(GL_LINE_STRIP);
-	glVertex3f(
-			((ms_data[x_page][x_base])/ve_view->x_div),	
-			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			bottom - ve_view->z_offset);
-	glVertex3f(
-			((ms_data[x_page][x_base])/ve_view->x_div),	
-			((ms_data[y_page][y_base])/ve_view->y_div),
-			bottom - ve_view->z_offset);
-	glVertex3f(
-			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
-			((ms_data[y_page][y_base])/ve_view->y_div),
-			bottom - ve_view->z_offset);
-	glVertex3f(
-			((ms_data[x_page][x_base+x_bincount-1])/ve_view->x_div),
-			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			bottom - ve_view->z_offset);
-	glVertex3f(
-			((ms_data[x_page][x_base])/ve_view->x_div),	
-			((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-			bottom - ve_view->z_offset);
+	glVertex3f(0,1,0);
+	glVertex3f(0,0,0);
+	glVertex3f(1,0,0);
+	glVertex3f(1,1,0);
+	glVertex3f(0,1,0);
 	glEnd();
 
 	/* Draw X and Y labels */
@@ -1043,10 +1014,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	{
 		tmpf = evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i]);
 		label = g_strdup_printf("%i",(gint)tmpf);
-		ve3d_draw_text(label,
-				((ms_data[x_page][x_base])/ve_view->x_div),
-				((ms_data[y_page][y_base+i])/ve_view->y_div),
-				bottom - ve_view->z_offset);
+		tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale);
+		ve3d_draw_text(label,0,tmpf2,0);
 		g_free(label);
 	}
 
@@ -1054,27 +1023,23 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	{
 		tmpf = evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i]);
 		label = g_strdup_printf("%i",(gint)tmpf);
-		ve3d_draw_text(label,
-				((ms_data[x_page][x_base+i])/ve_view->x_div),
-				((ms_data[y_page][y_base])/ve_view->y_div),
-				bottom - ve_view->z_offset);
+		tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale);
+		ve3d_draw_text(label,tmpf1,0,0);
 		g_free(label);
 	}
 
 	/* Draw Z labels */
-	for (i=10*((gint)ve_view->z_min/10);i<(ve_view->z_max+10);i=i+10)
+	for (i=0;i<=100;i+=10)
 	{
-		tmpf = i;
+		tmpf = (((float)i/100.0)/ve_view->z_scale)+ve_view->z_trans;
 		if (ve_view->z_disp_float)
 			label = g_strdup_printf("%1$.*2$f",tmpf,ve_view->z_precision);
 		else
 			label = g_strdup_printf("%i",(gint)tmpf);
-		ve3d_draw_text(label,
-				((ms_data[x_page][x_base])/ve_view->x_div),
-				((ms_data[y_page][y_base+y_bincount-1])/ve_view->y_div),
-				(gfloat)i/ve_view->z_div - ve_view->z_offset);
+		ve3d_draw_text(label,-0.1,1,(float)i/100.0);
 		g_free(label);
 	}
+	return;
 
 }
 
@@ -1191,7 +1156,6 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey *event, gpo
 				ve_view->active_x -= 1;
 			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			break;					
-
 		case GDK_Right:
 			dbg_func(g_strdup("\t\"RIGHT\"\n"),OPENGL);
 
@@ -1301,25 +1265,15 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->sphi = 40.5;
 	//ve_view->stheta = 75.0;
 	ve_view->stheta = 70.25;
-	//ve_view->sdepth = 7.533;
-	ve_view->sdepth = 7.667456;
-	ve_view->zNear = 0.8;
-	ve_view->zFar = 23.0;
+	ve_view->sdepth = 3.2;
+	ve_view->zNear = 0;
+	ve_view->zFar = 10.0;
 	ve_view->aspect = 1.0;
 	ve_view->h_strafe = -1.575;
 	ve_view->v_strafe = -2.2;
 	ve_view->z_scale = 4.2;
-	ve_view->x_div = 0.0;
-	ve_view->x_max = 0.0;
-	ve_view->x_min = 0.0;
 	ve_view->active_x = 0;
-	ve_view->y_div = 0.0;
-	ve_view->y_max = 0.0;
-	ve_view->y_min = 0.0;
 	ve_view->active_y = 0;
-	ve_view->z_div = 0.0;
-	ve_view->z_max = 0.0;
-	ve_view->z_min = 0.0;
 	ve_view->z_offset = 0;
 	ve_view->x_page = 0;
 	ve_view->y_page = 0;
