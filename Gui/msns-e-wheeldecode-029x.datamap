@@ -364,13 +364,15 @@ handler=_GENERIC_
 tooltip=Use the 025 style Wheel decoding algorithm.
 
 [024s9_style_radio_button]
-keys=page,offset,bitshift,bitval,bitmask,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitshift,bitval,bitmask,toggle_groups,group_states,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitshift=3
 bitval=1
 bitmask=8
+toggle_groups=025_spark
+group_states=DISABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Use the 024s9 style Wheel decoding algorithm.

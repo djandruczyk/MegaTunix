@@ -71,6 +71,12 @@ key_types=_INT_,_STRING_
 page=0
 bind_to_list=alpha-n_controls
 
+[false_trig_label]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=0
+bind_to_list=025_spark
+
 [hard_spark_base_label]
 keys=page,bind_to_list
 key_types=_INT_,_STRING_
@@ -299,28 +305,30 @@ handler=_GENERIC_
 tooltip=the MAF sensor takes care of air density differences itself and outptus appropriately scaled data. (i.e. this turns off the MS's aircorr compensation)
 
 [false_trig_no_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitval=1
 bitshift=2
 bitmask=4
+bind_to_list=025_spark
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Turns off False Trigger detection code in the firmware.
 
 [false_trig_yes_radio_button]
-keys=page,offset,bitval,bitmask,bitshift,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bitval,bitmask,bitshift,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=92
 bitval=0
 bitshift=2
 bitmask=4
+bind_to_list=025_spark
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=Turns on False Trigger detection code in the firmware.
+tooltip=Turns on False Trigger detection code in the firmware.  Filters if trigger time is too short in wheel mode.  In non-wheel mode, disables half of triggers
 
 [orfc_disabled_radio_button]
 keys=page,offset,bitval,bitmask,bitshift,toggle_groups,group_states,dl_type,handler,tooltip
