@@ -30,6 +30,7 @@
 #include <gui_handlers.h>
 #include <gtk/gtkgl.h>
 #include <listmgmt.h>
+#include <logviewer_gui.h>
 #include <../mtxmatheval/mtxmatheval.h>
 #include <notifications.h>
 #include <pango/pango-font.h>
@@ -791,6 +792,9 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
+	//GdkColor color;
+	GLfloat w = ve_view->window->allocation.width;
+	GLfloat h = ve_view->window->allocation.height;
 
 	dbg_func(g_strdup(__FILE__": ve3d_draw_ve_grid() \n"),OPENGL);
 
@@ -803,7 +807,7 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	z_page = ve_view->z_page;
 
 	glColor3f(1.0, 1.0, 1.0);
-	glLineWidth(1.5);
+	glLineWidth(MIN(w,h)/360.0);
 
 
 	/* Draw lines on RPM axis */
@@ -818,6 +822,8 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 				((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
 			tmpf3 = 
 				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			//color = get_colors_from_hue(((gfloat)ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]/256.0)*360.0,0.33, 1.0);
+			//glColor3f (color.red/65535,color.green/65535,color.blue/65535);
 			glColor3f (1.0, 1.0, tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
 
@@ -837,6 +843,8 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 				((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
 			tmpf3 = 
 				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			//color = get_colors_from_hue(((gfloat)ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]/256.0)*360.0,0.33, 1.0);
+			//glColor3f (color.red/65535.0,color.green/65535.0,color.blue/65535.0);
 			glColor3f (1.0, 1.0, tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);  
 		}
@@ -867,6 +875,8 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	gchar * value = NULL;
 	extern GHashTable *dynamic_widgets;
 	extern gint * algorithm;
+	GLfloat w = ve_view->window->allocation.width;
+	GLfloat h = ve_view->window->allocation.height;
 
 	dbg_func(g_strdup(__FILE__": ve3d_draw_active_indicator()\n"),OPENGL);
 
@@ -880,7 +890,8 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 
 
 	/* Render a red dot at the active VE map position */
-	glPointSize(8.0);
+//	glPointSize(8.0);
+	glPointSize(MIN(w,h)/55.0);
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 
@@ -934,6 +945,7 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gfloat z_val = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
+	gchar * label = NULL;
 	gfloat bottom = 0.0;
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
@@ -941,6 +953,8 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	extern GHashTable *dynamic_widgets;
 	extern gint ** ms_data;
 	extern gint *algorithm;
+	GLfloat w = ve_view->window->allocation.width;
+	GLfloat h = ve_view->window->allocation.height;
 
 	dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"),OPENGL);
 
@@ -971,7 +985,8 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 
 	bottom = 0.0;
 	/* Render a green dot at the active VE map position */
-	glPointSize(8.0);
+	glPointSize(MIN(w,h)/65.0);
+	glLineWidth(MIN(w,h)/300.0);
 	glColor3f(0.0,1.0,0.0);
 	glBegin(GL_POINTS);
 	glVertex3f(     
@@ -1005,6 +1020,14 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	g_free(tmpbuf);
 	g_free(value);
 
+	/* Live X axis marker */
+	label = g_strdup_printf("%i",(gint)x_val);
+	tmpf1 = (x_val-ve_view->x_trans)*ve_view->x_scale;
+
+	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
+	g_free(label);
+
+
 	tmpbuf = g_strdup_printf("y_runtime_label_%i",ve_view->table_num);
 	if (algorithm[ve_view->table_num] == ALPHA_N)
 		value = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->an_y_suffix);
@@ -1015,6 +1038,14 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
+
+	/* Live Y axis marker */
+	label = g_strdup_printf("%i",(gint)y_val);
+	tmpf1 = (y_val-ve_view->y_trans)*ve_view->y_scale;
+
+	ve3d_draw_text(label,-0.05,tmpf1,-0.05);
+	g_free(label);
+
 
 	tmpbuf = g_strdup_printf("z_runtime_label_%i",ve_view->table_num);
 	value = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
@@ -1034,8 +1065,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0;
 	gfloat tmpf = 0.0;
-	gfloat tmpf1 = 0.0;
-	gfloat tmpf2 = 0.0;
+	//gfloat tmpf1 = 0.0;
+	//gfloat tmpf2 = 0.0;
 	gchar *label;
 	extern gint **ms_data;
 	gint x_page = 0;
@@ -1115,6 +1146,7 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	glEnd();
 
 	/* Draw X and Y labels */
+	/*
 	for (i=0;i<y_bincount;i++)
 	{
 		tmpf = 
@@ -1122,20 +1154,19 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 		label = g_strdup_printf("%i",(gint)tmpf);
 		tmpf2 = 
 			((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale);
-		ve3d_draw_text(label,0,tmpf2,0);
+		ve3d_draw_text(label,-0.1,tmpf2,-0.05);
 		g_free(label);
 	}
 
 	for (i=0;i<x_bincount;i++)
 	{
-		tmpf = 
-			evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i]);
+		tmpf = 	evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i]);
 		label = g_strdup_printf("%i",(gint)tmpf);
-		tmpf1 = 
-			((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale);
-		ve3d_draw_text(label,tmpf1,0,0);
+		tmpf1 = (tmpf-ve_view->x_trans)*ve_view->x_scale);
+		ve3d_draw_text(label,tmpf1,-0.1,-0.05);
 		g_free(label);
 	}
+	*/
 
 	/* Draw Z labels */
 	for (i=0;i<=100;i+=10)
@@ -1158,7 +1189,7 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
  */
 void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
-	glColor3f(0.1,0.8,0.8);
+	glColor3f(0.2,0.8,0.8);
 	/* Set rendering postition */
 	glRasterPos3f (x, y, z);
 	/* Render each letter of text as stored in the display list */
@@ -1180,7 +1211,7 @@ void ve3d_load_font_metrics(void)
 	PangoFontDescription *font_desc;
 	PangoFont *font;
 	PangoFontMetrics *font_metrics;
-	gchar font_string[] = "sans 10";
+	gchar font_string[] = "sans 8";
 	gint font_height;
 
 	dbg_func(g_strdup(__FILE__": ve3d_load_font_metrics()\n"),OPENGL);
