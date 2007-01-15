@@ -538,6 +538,12 @@ struct Ve_View_3D
 	gfloat h_strafe;
 	gfloat v_strafe;
 	gfloat z_offset;
+	gfloat x_trans;
+	gfloat y_trans;
+	gfloat z_trans;
+	gfloat x_scale;
+	gfloat y_scale;
+	gfloat z_scale;
 	gfloat x_div;
 	gfloat y_div;
 	gfloat z_div;
@@ -547,12 +553,14 @@ struct Ve_View_3D
 	gint x_precision;
 	gint y_precision;
 	gint z_precision;
+	/*
 	gfloat x_max;
 	gfloat x_min;
 	gfloat y_max;
 	gfloat y_min;
 	gfloat z_max;
 	gfloat z_min;
+	*/
 	gchar *x_source;
 	gchar *y_source;
 	gchar *z_source;
@@ -585,7 +593,6 @@ struct Ve_View_3D
 	gint z_page;
 	gchar *table_name;
 	gint table_num;
-	gfloat z_scale;
 };
 
 

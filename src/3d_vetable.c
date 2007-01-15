@@ -394,7 +394,7 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
 	ve_view->dt = 0.008;
-	ve_view->sphi = 40.5; 
+	ve_view->sphi = -45;
 	ve_view->stheta = 70.25; 
 	ve_view->sdepth = 3.2;
 	ve_view->zNear = 0;
@@ -500,9 +500,9 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 
 //	printf("sdepth %f, stheta %f, sphi %f, hstrafe %f, vstrafe %f\n",ve_view->sdepth,ve_view->stheta,ve_view->sphi,ve_view->h_strafe,ve_view->v_strafe);
 	glTranslatef(-0.5,-0.5,-ve_view->sdepth);
-	printf("sdepth is %f\n",ve_view->sdepth);
-	glRotatef(-ve_view->stheta, 1.0, 0.5, 0.5);
-	glRotatef(ve_view->sphi, 0.5, 0.5, 1.0);
+	glTranslatef(0.5,0.5,0);
+	glRotatef(ve_view->sphi, 0, 0, 0);
+//glRotatef(ve_view->sphi, 0.5, 0.5, 1.0);
 //	glTranslatef(-(gfloat)((ve_view->x_bincount/2)-1)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
 
 	ve3d_calculate_scaling(ve_view);
@@ -1261,8 +1261,7 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->beginX = 0;
 	ve_view->beginY = 0;
 	ve_view->dt = 0.008;
-	//ve_view->sphi = 35.0;
-	ve_view->sphi = 40.5;
+	ve_view->sphi = -45;
 	//ve_view->stheta = 75.0;
 	ve_view->stheta = 70.25;
 	ve_view->sdepth = 3.2;
