@@ -27,12 +27,16 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	gauge = mtx_gauge_face_new();
 	gtk_container_add(GTK_CONTAINER(parent),gauge);
 	gtk_widget_show_all(parent);
+	mtx_gauge_face_redraw_canvas(MTX_GAUGE_FACE(gauge));
 
 	tmp = glade_xml_get_widget(xml,"animate_frame");
 	gtk_widget_set_sensitive(tmp,TRUE);
 
 	tmp = glade_xml_get_widget(xml,"new_gauge_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
+
+	tmp = glade_xml_get_widget(xml,"close_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,TRUE);
 
 	tmp = glade_xml_get_widget(xml,"load_gauge_menuitem");
 	gtk_widget_set_sensitive(tmp,FALSE);
@@ -43,7 +47,42 @@ EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	tmp = glade_xml_get_widget(xml,"save_as_menuitem");
 	gtk_widget_set_sensitive(tmp,TRUE);
 
-	update_attributes(xml);
+	update_attributes();
+	return (TRUE);
+}
+
+
+
+EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
+{
+	GtkWidget *tmp = NULL;
+	GladeXML *xml = glade_get_widget_tree(widget);
+	GtkWidget *parent = glade_xml_get_widget(xml,"gauge_frame");
+
+	if (GTK_IS_WIDGET(gauge))
+		gtk_widget_destroy(gauge);
+	gauge = NULL;
+
+	tmp = glade_xml_get_widget(xml,"animate_frame");
+	gtk_widget_set_sensitive(tmp,FALSE);
+
+	tmp = glade_xml_get_widget(xml,"new_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
+	tmp = glade_xml_get_widget(xml,"load_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,TRUE);
+
+	tmp = glade_xml_get_widget(xml,"close_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,FALSE);
+
+	tmp = glade_xml_get_widget(xml,"save_gauge_menuitem");
+	gtk_widget_set_sensitive(tmp,FALSE);
+
+	tmp = glade_xml_get_widget(xml,"save_as_menuitem");
+	gtk_widget_set_sensitive(tmp,FALSE);
+
+	reset_onscreen_controls();
+	gtk_widget_show_all(parent);
 	return (TRUE);
 }
 
@@ -58,6 +97,9 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 	gfloat ubound = 0.0;
 	GladeXML *xml = NULL;
 	gchar * filename = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
@@ -105,7 +147,8 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 		default:
 			break;
 	}
-	gtk_widget_destroy(dialog);
+	if (GTK_IS_WIDGET(dialog))
+		gtk_widget_destroy(dialog);
 
 	return (FALSE);
 }
@@ -116,6 +159,9 @@ EXPORT gboolean create_text_block(GtkWidget * widget, gpointer data)
 	MtxTextBlock *tblock = NULL;
 	GladeXML *xml = NULL;
 	gchar * filename = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
 	if (filename)
@@ -158,7 +204,8 @@ EXPORT gboolean create_text_block(GtkWidget * widget, gpointer data)
 		default:
 			break;
 	}
-	gtk_widget_destroy(dialog);
+	if (GTK_IS_WIDGET(dialog))
+		gtk_widget_destroy(dialog);
 
 	return (FALSE);
 }
@@ -171,7 +218,12 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	tmpi = (gint)(tmpf+0.00001);
-	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else
+		return FALSE;
 
 	if (hold_handlers)
 		return TRUE;
@@ -241,7 +293,17 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 }
 
 
-void update_attributes(GladeXML * xml)
+void reset_onscreen_controls(void)
+{
+	reset_tickmark_controls();
+	reset_text_controls();
+	reset_general_controls();
+	reset_onscreen_ranges();
+	reset_onscreen_tblocks();
+
+}
+
+void update_attributes(void)
 {
 	update_tickmark_controls();
 	update_text_controls();
@@ -262,6 +324,13 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	gchar * tmpbuf = NULL;
 
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+
 	if (hold_handlers)
 		return TRUE;
 
@@ -271,7 +340,6 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	if (tmpbuf == NULL)
 		tmpbuf = g_strdup("");
 
-	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
 
 
 	switch ((func)handler)
@@ -296,7 +364,13 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 	 * method that scales with the size of the gauge
 	 */
 	tmpbuf = g_strchomp(g_strdelimit(tmpbuf,"0123456789",' '));
-	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+
 
 	if (hold_handlers)
 		return TRUE;
@@ -320,7 +394,13 @@ EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
-	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return FALSE;
+
 	if (hold_handlers)
 		return TRUE;
 
@@ -341,6 +421,9 @@ EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
 {
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	if (hold_handlers)
 		return TRUE;
@@ -367,7 +450,7 @@ void update_onscreen_ranges()
 	GArray * array = NULL;
 	extern GladeXML *ranges_xml;
 
-	if ((!ranges_xml) || (!gauge))
+	if ((!ranges_xml) || (!GTK_IS_WIDGET(gauge)))
 		return;
 	array = mtx_gauge_face_get_color_ranges(MTX_GAUGE_FACE(gauge));
 	container = glade_xml_get_widget(ranges_xml,"color_range_viewport");
@@ -377,7 +460,7 @@ void update_onscreen_ranges()
 		return;
 	}
 	y=1;
-	if (table != NULL)
+	if (GTK_IS_WIDGET(table))
 		gtk_widget_destroy(table);
 
 	table = gtk_table_new(2,6,FALSE);
@@ -440,9 +523,33 @@ void update_onscreen_ranges()
 }
 
 
+void reset_onscreen_ranges()
+{
+	GtkWidget *container = NULL;
+	GtkWidget *widget = NULL;
+	extern GladeXML *ranges_xml;
+
+	if ((!ranges_xml))
+		return;
+	container = glade_xml_get_widget(ranges_xml,"color_range_viewport");
+	if (!GTK_IS_WIDGET(container))
+	{
+		printf("color range viewport invalid!!\n");
+		return;
+	}
+	widget= gtk_bin_get_child(GTK_BIN(container));
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_destroy(widget);
+
+	gtk_widget_show_all(container);
+}
+
+
 gboolean remove_crange(GtkWidget * widget, gpointer data)
 {
 	gint index = -1;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	index = (gint)g_object_get_data(G_OBJECT(widget),"range_index");
 	mtx_gauge_face_remove_color_range(MTX_GAUGE_FACE(gauge),index);
@@ -470,7 +577,15 @@ EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean animate_gauge(GtkWidget *widget, gpointer data)
 {
+	gfloat lower = 0.0;
+	gfloat upper = 0.0;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
 	gtk_widget_set_sensitive(widget,FALSE);
+
+	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE (gauge),&lower,&upper);
+	mtx_gauge_face_set_value(MTX_GAUGE_FACE (gauge),lower);
 	gtk_timeout_add(20,(GtkFunction)sweep_gauge, (gpointer)gauge);
 	return TRUE;
 }
@@ -484,6 +599,9 @@ gboolean sweep_gauge(gpointer data)
 	GladeXML *xml = NULL;
 	GtkWidget *button = NULL;
 	static gboolean rising = TRUE;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	GtkWidget * gauge = data;
 	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE (gauge),&lower,&upper);
@@ -536,6 +654,7 @@ void update_onscreen_tblocks()
 
 	if ((!text_xml) || (!gauge))
 		return;
+
 	array = mtx_gauge_face_get_text_blocks(MTX_GAUGE_FACE(gauge));
 	toptable = glade_xml_get_widget(text_xml,"text_blocks_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
@@ -544,11 +663,12 @@ void update_onscreen_tblocks()
 		return;
 	}
 
-	if (table)
+	if (GTK_IS_WIDGET(table))
 		gtk_widget_destroy(table);
 
 	table = gtk_table_new(2,1,FALSE);
 	gtk_table_attach_defaults(GTK_TABLE(toptable),table,0,1,1,2);
+	g_object_set_data(G_OBJECT(toptable),"layout_table",table);
 	/* Repopulate the table with the current tblocks... */
 	y=1;
 	for (i=0;i<array->len; i++)
@@ -617,6 +737,29 @@ void update_onscreen_tblocks()
 }
 
 
+void reset_onscreen_tblocks()
+{
+	GtkWidget *toptable = NULL;
+	GtkWidget *widget = NULL;
+	extern GladeXML *text_xml;
+
+	if ((!text_xml))
+		return;
+	toptable = glade_xml_get_widget(text_xml,"text_blocks_layout_table");
+	if (!GTK_IS_WIDGET(toptable))
+	{
+		printf("toptable is NOT a valid widget!!\n");
+		return;
+	}
+
+	widget = g_object_get_data(G_OBJECT(toptable),"layout_table");
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_destroy(widget);
+
+	gtk_widget_show_all(toptable);
+}
+
+
 gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
 {
 	gint index = (gint)g_object_get_data(G_OBJECT(widget),"index");
@@ -624,6 +767,8 @@ gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	GdkColor color;
 	TbField field = (TbField)data;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	switch (field)
 	{
@@ -662,6 +807,8 @@ gboolean alter_crange_data(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	GdkColor color;
 	CrField field = (CrField)data;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	switch (field)
 	{
@@ -687,6 +834,8 @@ gboolean alter_crange_data(GtkWidget *widget, gpointer data)
 gboolean remove_tblock(GtkWidget * widget, gpointer data)
 {
 	gint index = -1;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
 
 	index = (gint)g_object_get_data(G_OBJECT(widget),"tblock_index");
 	mtx_gauge_face_remove_text_block(MTX_GAUGE_FACE(gauge),index);

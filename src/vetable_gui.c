@@ -19,7 +19,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <gui_handlers.h>
-#include <mtxmatheval/mtxmatheval.h>
+#include "../mtxmatheval/mtxmatheval.h"
 #include <logviewer_gui.h>
 #include <rtv_processor.h>
 #include <structures.h>

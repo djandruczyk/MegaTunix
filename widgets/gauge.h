@@ -290,6 +290,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace *, gchar *);
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
 void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *, gboolean);
 gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *);
+void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
 
 G_END_DECLS
 

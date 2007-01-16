@@ -10,6 +10,15 @@ DefaultGroupName=MegaTunix
 UninstallDisplayIcon={app}\megatunix.exe
 Compression=lzma
 SolidCompression=yes
+; Page 0: Initial setup. Disable with DisableStartupPrompt
+DisableStartupPrompt=Yes
+; Page 3: License Agreement.  Shown if LicenseFile is set.
+; Users may proceed to the next page only if the option
+; "I accept the agreement" is selected.
+LicenseFile=.\LICENSE
+; Page 5: Information.  Shown if InfoBeforeFile is set. Name the file
+; to make it easy to recognise
+InfoBeforeFile=.\WIN_NOTES.txt
 
 [Files]
 Source: "z:\home\dave\cvs\MegaTunix\src\megatunix.exe"; DestDir: "{app}"
@@ -23,3 +32,5 @@ Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\.MegaTunix\"; Flags:
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxGaugeDesigner"; Filename: "{app}\gaugedesigner.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxDashDesigner"; Filename: "{app}\dashdesigner.exe"; WorkingDir: "{app}"
+
+

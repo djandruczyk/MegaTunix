@@ -185,6 +185,8 @@ gaugedesigner.iss
 gaugedesigner/resources.rc
 gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
+gaugedesigner/gauges/SportComp/Makefile
+gaugedesigner/gauges/UltraLite/Makefile
 src/resources.rc
 widgets/Makefile
 dashdesigner/Makefile
@@ -199,6 +201,7 @@ Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Gui/Makefile
 MegaTunix.iss
+WIN_NOTES.txt
 ])
 
 echo "

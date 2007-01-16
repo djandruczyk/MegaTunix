@@ -68,6 +68,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
 	gboolean result = FALSE;
+	extern gchar *cwd;
 
 	dash = glade_xml_get_widget(main_xml,"dashboard");
 	result = check_datasources_set(dash);
@@ -108,7 +109,18 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 
 		}
 		else
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
+		{
+			if (cwd != NULL)
+			{
+
+				vector = g_strsplit(filename,PSEP,-1);
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),cwd);
+				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
+				g_strfreev(vector);
+			}
+			else
+				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
+		}
 #endif
 	}
 	else	/* NEW Document (Save As) */

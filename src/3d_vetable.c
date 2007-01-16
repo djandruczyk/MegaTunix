@@ -561,7 +561,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 
 	glRotatef(ve_view->sphi, 0.0, 1.0, 0.0);
 	glRotatef(ve_view->stheta, 1.0, 0.0, 0.0);
-	printf ("sphi is %f\tsthetea is %f\n", ve_view->sphi, ve_view->stheta);
+//	printf ("sphi is %f\tsthetea is %f\n", ve_view->sphi, ve_view->stheta);
 	glTranslatef (-0.5, -0.5, -0.5);
 
 	ve3d_calculate_scaling(ve_view);
@@ -766,7 +766,7 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 		if (tmpf < min) 
 			min = tmpf;
 	}
-	printf ("max is %f\t min is %f\n", max, min);
+	//printf ("max is %f\t min is %f\n", max, min);
 	ve_view->z_trans = min-((max-min)*0.15);
 	ve_view->z_scale = 1.0/((max-min)/0.75);
 /* 	ve_view->z_trans = 0; */
@@ -808,7 +808,9 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	z_page = ve_view->z_page;
 
 	glColor3f(1.0, 1.0, 1.0);
-	glLineWidth(MIN(w,h)/360.0);
+	tmpf1 = (MIN(w,h)/360.0 < 1.2) ? 1.2:MIN(w,h)/360.0;
+
+	glLineWidth(tmpf1);
 
 
 	/* Draw lines on RPM axis */

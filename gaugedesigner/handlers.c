@@ -11,6 +11,8 @@ static GladeXML *tick_xml;
 static GladeXML *gen_xml;
 GladeXML *text_xml;
 GladeXML *ranges_xml;
+extern GdkColor black;
+extern GdkColor white;
 extern GtkWidget *gauge;
 extern gboolean hold_handlers;
 
@@ -21,6 +23,10 @@ EXPORT gboolean tick_attributes_handler(GtkWidget * widget, gpointer data)
 	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
 	if (created)
 	{
 		window = glade_xml_get_widget(tick_xml,"tick_settings_window");
@@ -74,9 +80,14 @@ void update_tickmark_controls()
 	gchar *tmpbuf0 = NULL;
 	gchar *tmpbuf = NULL;
 	GtkWidget * widget = NULL;
-	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
+	MtxGaugeFace *g = NULL;
 
-	if ((!tick_xml) || (!gauge))
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return;
+
+	if (!tick_xml)
 		return;
 
 	hold_handlers = TRUE;
@@ -133,6 +144,59 @@ void update_tickmark_controls()
 }
 
 
+void reset_tickmark_controls()
+{
+	GtkWidget * widget = NULL;
+
+	if ((!tick_xml) || (!gauge))
+		return;
+
+	hold_handlers = TRUE;
+	widget = glade_xml_get_widget(tick_xml,"major_ticks_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"minor_ticks_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"major_tick_len_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"major_tick_width_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"minor_tick_len_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"minor_tick_width_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"tick_inset_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"major_tick_text_inset_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(tick_xml,"major_tick_font_scale_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+	widget = glade_xml_get_widget(tick_xml,"major_tick_string_entry");
+	gtk_entry_set_text(GTK_ENTRY(widget),g_strdup(""));
+
+	widget = glade_xml_get_widget(tick_xml,"major_tick_font_button");
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup(""));
+
+	widget = glade_xml_get_widget(tick_xml,"major_tick_text_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
+
+	widget = glade_xml_get_widget(tick_xml,"major_tick_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
+
+	widget = glade_xml_get_widget(tick_xml,"minor_tick_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
+	hold_handlers = FALSE;
+
+}
+
+
 EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
@@ -140,6 +204,10 @@ EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
 	if (created)
 	{
 		window = glade_xml_get_widget(text_xml,"text_settings_window");
@@ -190,9 +258,14 @@ void update_text_controls()
 	gchar *tmpbuf0 = NULL;
 	gchar *tmpbuf = NULL;
 	GtkWidget * widget = NULL;
-	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
+	MtxGaugeFace *g = NULL;
 
-	if ((!text_xml) || (!gauge))
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return;
+
+	if (!text_xml)
 		return;
 
 	hold_handlers = TRUE;
@@ -226,6 +299,40 @@ void update_text_controls()
 }
 
 
+void reset_text_controls()
+{
+	GtkWidget * widget = NULL;
+
+	if ((!text_xml) || (!gauge))
+		return;
+
+	hold_handlers = TRUE;
+
+	widget = glade_xml_get_widget(text_xml,"precision_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(text_xml,"value_font_scale_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(text_xml,"value_xpos_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(text_xml,"value_ypos_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(text_xml,"value_font_button");
+	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget),g_strdup(""));
+
+	widget = glade_xml_get_widget(text_xml,"show_value_check");
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
+
+	widget = glade_xml_get_widget(text_xml,"value_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
+
+	hold_handlers = FALSE;
+}
+
+
 
 EXPORT gboolean general_attributes_handler(GtkWidget * widget, gpointer data)
 {
@@ -234,6 +341,10 @@ EXPORT gboolean general_attributes_handler(GtkWidget * widget, gpointer data)
 	extern GdkColor white;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
 	if (created)
 	{
 		window = glade_xml_get_widget(gen_xml,"general_settings_window");
@@ -285,9 +396,14 @@ void update_general_controls()
 	gfloat tmp1 = 0.0;
 	gfloat tmp2 = 0.0;
 	GtkWidget * widget = NULL;
-	MtxGaugeFace *g = MTX_GAUGE_FACE(gauge);
+	MtxGaugeFace *g = NULL;
 
-	if ((!gen_xml) || (!gauge))
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else 
+		return;
+
+	if (!gen_xml)
 		return;
 
 	hold_handlers = TRUE;
@@ -330,18 +446,68 @@ void update_general_controls()
 }
 
 
+void reset_general_controls()
+{
+	GtkWidget * widget = NULL;
+
+	if ((!gen_xml) || (!gauge))
+		return;
+
+	hold_handlers = TRUE;
+
+	widget = glade_xml_get_widget(gen_xml,"needle_width_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(gen_xml,"needle_tail_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(gen_xml,"start_angle_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(gen_xml,"stop_angle_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(gen_xml,"lbound_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(gen_xml,"ubound_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
+
+	widget = glade_xml_get_widget(gen_xml,"antialiased_check");
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),TRUE);
+
+	widget = glade_xml_get_widget(gen_xml,"background_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&black);
+
+	widget = glade_xml_get_widget(gen_xml,"needle_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
+
+	widget = glade_xml_get_widget(gen_xml,"gradient_begin_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&white);
+
+	widget = glade_xml_get_widget(gen_xml,"gradient_end_color_button");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget),&black);
+
+
+	hold_handlers = FALSE;
+}
+
+
 EXPORT gboolean warning_ranges_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
 	GtkWidget *window = NULL;
 	GladeXML *xml = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
 	if (created)
 	{
 		window = glade_xml_get_widget(ranges_xml,"warning_ranges_window");
 		if (GTK_IS_WIDGET(window))
 		{
-			printf("show make it re-appear\n");
 			gtk_widget_show_all(window);
 			update_text_controls();
 			return TRUE;

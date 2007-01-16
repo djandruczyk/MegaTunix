@@ -30,7 +30,6 @@ gboolean mtx_gauge_face_button_press (GtkWidget *,GdkEventButton *);
 * gboolean mtx_gauge_face_motion_event (GtkWidget *,GdkEventMotion *);
 */
 void mtx_gauge_face_size_request (GtkWidget *, GtkRequisition *);
-void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
 gboolean mtx_gauge_face_button_release (GtkWidget *,GdkEventButton *);
 void cairo_generate_gauge_background(GtkWidget *);
 void cairo_update_gauge_position (GtkWidget *);

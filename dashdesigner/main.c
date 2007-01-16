@@ -8,10 +8,14 @@
 #include <rtv_parser.h>
 
 GladeXML *main_xml = NULL;
+gchar *cwd = NULL;
+
 int main (int argc, char ** argv )
 {
 	GtkWidget *vbox;
 	gchar *filename = NULL;
+	gchar *tmpbuf = NULL;
+	gchar *dirname = NULL;
 	GtkWidget *main_window = NULL;
 
 	gtk_init (&argc, &argv);
@@ -44,6 +48,17 @@ int main (int argc, char ** argv )
 
 	retrieve_rt_vars();
 	gtk_widget_show_all(main_window);
+	if (argc == 2)
+	{
+		tmpbuf = g_get_current_dir();
+		dirname = g_path_get_dirname(argv[1]);
+		cwd = g_strconcat(tmpbuf,PSEP,dirname,NULL);
+		g_free(tmpbuf);
+		g_free(dirname);
+		if (g_file_test(argv[1],G_FILE_TEST_IS_REGULAR))
+			import_dash_xml(argv[1]);
+
+	}
 
 	gtk_main();
 	return (0);

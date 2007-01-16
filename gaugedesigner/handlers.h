@@ -26,6 +26,9 @@ EXPORT gboolean about_handler(GtkWidget *, gpointer );
 void update_tickmark_controls();
 void update_text_controls();
 void update_general_controls();
+void reset_tickmark_controls();
+void reset_text_controls();
+void reset_general_controls();
 /* Prototypes */
 
 #endif

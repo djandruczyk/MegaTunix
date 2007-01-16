@@ -70,6 +70,7 @@ typedef enum
 
 /* Prototypes */
 EXPORT gboolean create_new_gauge(GtkWidget *, gpointer );
+EXPORT gboolean close_current_gauge(GtkWidget *, gpointer );
 EXPORT gboolean create_text_block(GtkWidget *, gpointer );
 EXPORT gboolean create_color_span(GtkWidget *, gpointer );
 EXPORT gboolean entry_changed_handler(GtkWidget *, gpointer );
@@ -77,9 +78,12 @@ EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
 EXPORT gboolean change_font(GtkWidget *, gpointer );
 EXPORT gboolean xml_button_handler(GtkWidget *, gpointer );
 EXPORT gboolean animate_gauge(GtkWidget *, gpointer );
-void update_attributes();
-void update_onscreen_ranges();
-void update_onscreen_tblocks();
+void update_attributes(void);
+void reset_onscreen_controls(void);
+void reset_onscreen_ranges(void);
+void reset_onscreen_tblocks(void);
+void update_onscreen_ranges(void);
+void update_onscreen_tblocks(void);
 gboolean alter_tblock_data(GtkWidget *, gpointer );
 gboolean alter_crange_data(GtkWidget *, gpointer );
 gboolean remove_crange(GtkWidget *, gpointer );

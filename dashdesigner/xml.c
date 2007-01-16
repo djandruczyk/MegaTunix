@@ -228,6 +228,7 @@ void export_dash_xml(gchar * filename)
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
 	gchar * iname = NULL;
+	gchar ** vector = NULL;
 
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	root_node = xmlNewNode(NULL,BAD_CAST "dashboard");
@@ -264,9 +265,11 @@ void export_dash_xml(gchar * filename)
 		tmpbuf = g_strdup_printf("%i",child->y);
 		xmlNewChild(node, NULL, BAD_CAST "y_offset", BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%s",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget)));
-		xmlNewChild(node, NULL, BAD_CAST "gauge_xml_name", BAD_CAST tmpbuf);
-		g_free(tmpbuf);
+		tmpbuf = g_strrstr(mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget)),"Gauges");
+		vector = g_strsplit(tmpbuf,PSEP,2);
+		
+		xmlNewChild(node, NULL, BAD_CAST "gauge_xml_name", BAD_CAST vector[1]);
+		g_strfreev(vector);
 		state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(g_object_get_data(G_OBJECT(child->widget),"combo")),&iter);
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(g_object_get_data(G_OBJECT(child->widget),"combo")));
 		gtk_tree_model_get(model,&iter,2,&iname,-1);

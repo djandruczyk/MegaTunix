@@ -69,7 +69,15 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GtkWidget * gauge = NULL;
 	GtkWidget * table = NULL;
 	GtkWidget * window = NULL;
+	GtkWidget * notebook = NULL;
+	GtkWidget * label = NULL;
+	GtkWidget * swin = NULL;
+	GtkWidget * ebox = NULL;
 	gchar ** files = NULL;
+	gchar * path = NULL;
+	GDir *dir = NULL;
+	gchar *d_name = NULL;
+	gint t_num = -1;
 	extern GladeXML *main_xml;
 	gint i = 0;
 	if (created)
@@ -101,10 +109,34 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		return TRUE;
 
 
-	table = glade_xml_get_widget(preview_xml,"gauge_preview_table");
+	notebook = glade_xml_get_widget(preview_xml,"preview_notebook");
+	if (!notebook)
+	{
+		printf("critical error, notbook not found, EXITING!\n");
+		exit (-1);
+	}
+	path = g_build_path(PSEP,DATA_DIR,GAUGES_DATA_DIR,NULL);
 	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,NULL),g_strdup("xml"));
+	gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
+	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
 	if (files)
 	{
+		
+		ebox = gtk_event_box_new();
+		g_signal_connect(G_OBJECT(ebox),
+				"button_press_event",
+				G_CALLBACK(gauge_choice_button_event),
+				NULL);
+		swin = gtk_scrolled_window_new(NULL,NULL);
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
+				GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+		gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin),
+				ebox);
+		table = gtk_table_new(1,1,FALSE);
+		gtk_container_add(GTK_CONTAINER(ebox),table);
+		label = gtk_label_new("Unsorted");
+		t_num = gtk_notebook_append_page(GTK_NOTEBOOK(notebook),swin,label);
+		i = 0;
 		while (files[i])
 		{
 			gauge = mtx_gauge_face_new();
@@ -114,9 +146,60 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 			gtk_widget_set_usize(GTK_WIDGET(gauge),150,150);
 			i++;
 		}
-		gtk_widget_show_all(table);
 		g_strfreev(files);
+		gtk_widget_show_all(table);
 	}
+	dir = g_dir_open(path,0,NULL);
+	if (dir)
+	{
+		d_name = (gchar *)g_dir_read_name(dir);
+		while (d_name != NULL)
+		{
+			/* check for files */
+			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"));
+			if (files)
+			{
+				ebox = gtk_event_box_new();
+				g_signal_connect(G_OBJECT(ebox),
+						"button_press_event",
+						G_CALLBACK(gauge_choice_button_event),
+						NULL);
+				swin = gtk_scrolled_window_new(NULL,NULL);
+				gtk_scrolled_window_set_policy(
+						GTK_SCROLLED_WINDOW(swin),
+						GTK_POLICY_AUTOMATIC,
+						GTK_POLICY_AUTOMATIC);
+				gtk_scrolled_window_add_with_viewport(
+						GTK_SCROLLED_WINDOW(swin),
+						ebox);
+				table = gtk_table_new(1,1,FALSE);
+				gtk_container_add(GTK_CONTAINER(ebox),table);
+				label = gtk_label_new(d_name);
+				t_num = gtk_notebook_append_page(
+						GTK_NOTEBOOK(notebook),
+						swin,label);
+				i = 0;
+				while (files[i])
+				{
+					gauge = mtx_gauge_face_new();
+					gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
+					gtk_widget_realize(gauge);
+					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
+					gtk_widget_set_usize(GTK_WIDGET(gauge),150,150);
+					i++;
+				}
+				g_strfreev(files);
+			}
+			gtk_widget_show_all(table);
+			/* Get next dir... */
+			d_name = (gchar *)g_dir_read_name(dir);
+		}
+		gtk_widget_show_all(notebook);
+		while (gtk_events_pending())
+			gtk_main_iteration();
+		g_dir_close(dir);
+	}
+	g_free(path);
 	created = TRUE;
 	prop_created = TRUE;
 	return TRUE;
@@ -138,14 +221,13 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 	GtkWidget * gauge = NULL;
 	GtkTableChild *child = NULL;
 	gchar * filename = NULL;
-	gchar * tmpbuf = NULL;
 	gint row = 0;
 	extern GladeXML *main_xml;
 
 	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
 	gdk_drawable_get_size(widget->window,&width,&height);
 	
-	/* Current cursor location relatuive to upper left corner */
+	/* Current cursor location relative to upper left corner */
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
@@ -161,13 +243,13 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			child = (GtkTableChild *) g_list_nth_data(GTK_TABLE(table)->children,i);
 			if (row == child->top_attach)
-				tmpbuf = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget));
+				filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget));
 		}
 		dash =  glade_xml_get_widget(main_xml,"dashboard");
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,130,130);
-		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
-		g_free(tmpbuf);
+		if (!filename)
+			printf("Gonna crash,  can't locate file!!!!\n");
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_show_all(dash);
 		g_free(filename);

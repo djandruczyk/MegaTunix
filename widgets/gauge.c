@@ -464,12 +464,13 @@ GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge)
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (index < TB_NUM_FIELDS);
-	g_return_if_fail (index >= 0);
+	g_return_if_fail (field < TB_NUM_FIELDS);
+	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	MtxTextBlock *tblock = NULL;
 	tblock = g_array_index(gauge->t_blocks,MtxTextBlock *,index);
+	g_return_if_fail (tblock != NULL);
 	switch (field)
 	{
 		case TB_FONT_SCALE:
@@ -513,12 +514,13 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index,CrField field, void * value)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (index < CR_NUM_FIELDS);
-	g_return_if_fail (index >= 0);
+	g_return_if_fail (field < CR_NUM_FIELDS);
+	g_return_if_fail (field >= 0);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	MtxColorRange *c_range = NULL;
 	c_range = g_array_index(gauge->c_ranges,MtxColorRange *,index);
+	g_return_if_fail (c_range != NULL);
 	switch (field)
 	{
 		case CR_LOWPOINT:
@@ -1248,3 +1250,22 @@ gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *gauge)
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), FALSE);
 	return gauge->show_drag_border;
 }
+
+
+/*!
+ \brief gets called to redraw the entire display manually
+ \param gauge (MtxGaugeFace *) pointer to the gauge object
+ */
+void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
+{
+	GtkWidget *widget;
+
+	widget = GTK_WIDGET (gauge);
+
+	if (!widget->window) return;
+
+	update_gauge_position(widget);
+	gdk_window_clear(widget->window);
+}
+
+

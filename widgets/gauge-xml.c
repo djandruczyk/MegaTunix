@@ -74,7 +74,6 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gchar *tmpbuf = NULL;
-	gchar **vector = NULL;
 	//gint i = 0;
 
 	/*
@@ -109,9 +108,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		generate_gauge_background(GTK_WIDGET(gauge));
 		mtx_gauge_face_redraw_canvas (gauge);
 
-		vector = g_strsplit(filename,PSEP,-1);
-		gauge->xml_filename = g_strdup(vector[g_strv_length(vector)-1]);
-		g_strfreev(vector);
+		gauge->xml_filename = g_strdup(filename);
 	}
 	g_free(tmpbuf);
 
@@ -134,7 +131,6 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
 	MtxDispatchHelper *helper = NULL;
 	MtxXMLFuncs * xml_funcs = NULL;
-	gchar **vector = NULL;
 
 	LIBXML_TEST_VERSION;
 
@@ -194,9 +190,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	if (gauge->xml_filename)
 		g_free(gauge->xml_filename);
 
-	vector = g_strsplit(filename,PSEP,-1);
-	gauge->xml_filename = g_strdup(vector[g_strv_length(vector)-1]);
-	g_strfreev(vector);
+	gauge->xml_filename = g_strdup(filename);
 }
 
 

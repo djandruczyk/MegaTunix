@@ -5,16 +5,21 @@
 #include "../widgets/gauge.h"
 #include <getfiles.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 
 extern gboolean hold_handlers;
 extern GtkWidget *gauge;
 
 EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
-	GladeXML *xml = glade_get_widget_tree(widget);
 	GtkWidget *dialog = NULL;
+	extern gchar *cwd;
 #ifndef __WIN32__
 	gchar * tmpbuf = NULL;
 #endif
@@ -32,12 +37,20 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 	p_dir = g_strconcat(HOME(),PSEP,".MegaTunix",PSEP,GAUGES_DATA_DIR,NULL);
 #ifndef __WIN32__
 	/* System wide dir */
+	/* UNIX */
 	tmpbuf = g_strconcat(DATA_DIR,PSEP,GAUGES_DATA_DIR,NULL);
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),tmpbuf);
+	if (!cwd)
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),tmpbuf);
+	else
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),cwd);
 	g_free(tmpbuf);
 #else
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),p_dir);
+	/* Windows */
+	if (!cwd)
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),p_dir);
+	else
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),cwd);
 #endif
 	/* Personal dir */
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),p_dir,NULL);
@@ -53,13 +66,14 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 			create_new_gauge(widget,NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		//printf("loading gauge file %s\n",filename);
-		update_attributes(xml);
-		update_onscreen_ranges(widget);
-		update_onscreen_tblocks(widget);
+		update_attributes();
+		update_onscreen_ranges();
+		update_onscreen_tblocks();
 
 		g_free (filename);
 	}
-	gtk_widget_destroy (dialog);
+	if (GTK_IS_WIDGET(dialog))
+		gtk_widget_destroy (dialog);
 	return TRUE;
 }
 
@@ -76,6 +90,8 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
+	gchar **vector = NULL;
+	extern gchar *cwd;
 
 	if (!MTX_IS_GAUGE_FACE(gauge))
 		return FALSE;
@@ -83,7 +99,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	if (hold_handlers)
 		return TRUE;
 
-	defdir = g_strconcat(HOME(),PSEP, ".MegaTunix",PSEP,GAUGES_DATA_DIR, NULL);
+	defdir = g_build_path(PSEP,HOME(), ".MegaTunix",GAUGES_DATA_DIR, NULL);
 
 	dialog = gtk_file_chooser_dialog_new ("Save File",
 			NULL,
@@ -100,14 +116,46 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge));
 	if ((filename != NULL) && ((gint)data == FALSE)) /* Saving PRE-existin*/
 	{
-		tmpbuf = g_strconcat(defdir,PSEP,filename,NULL);
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),tmpbuf);
-		g_free(tmpbuf);
+		if (g_open(filename,O_RDWR,O_CREAT|O_APPEND) == -1)
+		{
+			/* Path was sys path, save locally (UNIX ONLY)*/
+			tmpbuf = g_strrstr(filename,"Gauges");
+			/*get pointer to point after sys path */
+			vector = g_strsplit(tmpbuf,PSEP,-1);
+			if (g_strv_length(vector) == 3) /* Themed gauge */
+			{
+				tmpbuf = g_build_path(PSEP,defdir,vector[1],NULL);
+				if (!g_file_test(tmpbuf,G_FILE_TEST_IS_DIR))
+					g_mkdir(tmpbuf,0755);
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),tmpbuf);
+				g_free(tmpbuf);
+				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[2]);
+
+			}
+			if (g_strv_length(vector) == 2) /* NOT Themed gauge */
+			{
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
+				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[1]);
+			}
+			g_strfreev(vector);
+		}
+		else
+		{
+			if (cwd != NULL)
+			{
+				vector = g_strsplit(filename,PSEP,-1);
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),cwd);
+				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
+				g_strfreev(vector);
+			}
+			else
+				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
+		}
 	}
 	else	/* NEW Document (Save As) */
 	{
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
-		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "NEW_GAUGE_NAME.xml");
+		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),"New_Gauge.xml");
 	}
 	g_free(filename);
 	g_free(defdir);
@@ -121,7 +169,8 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 
 		g_free (tmp);
 	}
-	gtk_widget_destroy (dialog);
+	if (GTK_IS_WIDGET(dialog))
+		gtk_widget_destroy (dialog);
 	return TRUE;
 
 }

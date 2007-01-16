@@ -774,7 +774,7 @@
 		      <accelerator key="N" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image100">
+			<widget class="GtkImage" id="image128">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -796,7 +796,7 @@
 		      <accelerator key="L" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image101">
+			<widget class="GtkImage" id="image129">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -810,6 +810,15 @@
 		  </child>
 
 		  <child>
+		    <widget class="GtkImageMenuItem" id="close_gauge_menuitem">
+		      <property name="visible">True</property>
+		      <property name="label">gtk-close</property>
+		      <property name="use_stock">True</property>
+		      <signal name="activate" handler="close_current_gauge" last_modification_time="Tue, 16 Jan 2007 19:40:34 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
 		    <widget class="GtkImageMenuItem" id="save_gauge_menuitem">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Save Gauge</property>
@@ -818,7 +827,7 @@
 		      <accelerator key="S" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image102">
+			<widget class="GtkImage" id="image130">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -840,7 +849,7 @@
 		      <accelerator key="A" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image103">
+			<widget class="GtkImage" id="image131">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save-as</property>
 			  <property name="icon_size">1</property>
@@ -890,7 +899,7 @@
 		      <accelerator key="G" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image104">
+			<widget class="GtkImage" id="image132">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-color-picker</property>
 			  <property name="icon_size">1</property>
@@ -912,7 +921,7 @@
 		      <accelerator key="X" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image105">
+			<widget class="GtkImage" id="image133">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-italic</property>
 			  <property name="icon_size">1</property>
@@ -934,7 +943,7 @@
 		      <accelerator key="T" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image106">
+			<widget class="GtkImage" id="image134">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-remove</property>
 			  <property name="icon_size">1</property>
@@ -956,7 +965,7 @@
 		      <accelerator key="W" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image107">
+			<widget class="GtkImage" id="image135">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>

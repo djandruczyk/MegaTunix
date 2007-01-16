@@ -1302,23 +1302,6 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 
 
 /*!
- \brief gets called to redraw the entire display manually
- \param gauge (MtxGaugeFace *) pointer to the gauge object
- */
-void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
-{
-	GtkWidget *widget;
-
-	widget = GTK_WIDGET (gauge);
-
-	if (!widget->window) return;
-
-	update_gauge_position(widget);
-	gdk_window_clear(widget->window);
-}
-
-
-/*!
  \brief handler called when a button is released,  currently unused 
  \param gauge (GtkWidget *) pointer to the gauge widget
  \param event (GdkEventButton *) struct containing details on the button(s) 
