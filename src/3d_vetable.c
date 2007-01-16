@@ -546,8 +546,6 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
 		return FALSE;
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//      gluPerspective(64.0, ve_view->aspect, ve_view->zNear, ve_view->zFar);
@@ -555,11 +553,11 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	glLoadIdentity();
 
 	//      printf("sdepth %f, stheta %f, sphi %f, hstrafe %f, vstrafe %f\n",ve_view->sdepth,ve_view->stheta,ve_view->sphi,ve_view->h_strafe,ve_view->v_strafe);
-	
+
 	//      glTranslatef(-0.5,-0.5,-ve_view->sdepth);
 	//      glTranslatef(0.5,0.5,0);
 	//      glTranslatef(-(gfloat)((ve_view->x_bincount/2)-1)-ve_view->h_strafe, -(gfloat)((ve_view->y_bincount)/2-1)-ve_view->v_strafe, -2.0);
-	
+
 
 	glRotatef(ve_view->sphi, 0.0, 1.0, 0.0);
 	glRotatef(ve_view->stheta, 1.0, 0.0, 0.0);
@@ -768,8 +766,11 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 		if (tmpf < min) 
 			min = tmpf;
 	}
+	printf ("max is %f\t min is %f\n", max, min);
 	ve_view->z_trans = min-((max-min)*0.15);
 	ve_view->z_scale = 1.0/((max-min)/0.75);
+/* 	ve_view->z_trans = 0; */
+/* 	ve_view->z_scale = 1.0 / 255.0; */
 	ve_view->z_offset = 0.0;
 }
 
@@ -781,6 +782,7 @@ VEtable grid
 void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 {
 	extern gint **ms_data;
+	GdkColor color;
 	gint x = 0;
 	gint y = 0;
 	gint x_page = 0;
@@ -792,7 +794,6 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
-	//GdkColor color;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
@@ -822,9 +823,14 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 				((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
 			tmpf3 = 
 				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
-			//color = get_colors_from_hue(((gfloat)ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]/256.0)*360.0,0.33, 1.0);
-			//glColor3f (color.red/65535,color.green/65535,color.blue/65535);
-			glColor3f (1.0, 1.0, tmpf3);
+
+			//this crazy tranformation is required  because of the weird trasnformation you have
+			//up above.  the VE table is colored based on scale out of 0 - 255, as opposed
+			//to the weird scaling up above.  so you can either undo it here like i did, or
+			//change the transformation up above, or perhaps both
+			color = get_colors_from_hue ((((tmpf3 / ve_view->z_scale) + ve_view->z_trans) / 255.0)* 360.0, 0.33, 1.0);
+			//unsigned short(2-byte) glcolor call, values range from 0 to 65535
+			glColor3us (color.red, color.green, color.blue);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
 
 		}
@@ -843,10 +849,9 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 				((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
 			tmpf3 = 
 				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
-			//color = get_colors_from_hue(((gfloat)ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]/256.0)*360.0,0.33, 1.0);
-			//glColor3f (color.red/65535.0,color.green/65535.0,color.blue/65535.0);
-			glColor3f (1.0, 1.0, tmpf3);
-			glVertex3f(tmpf1,tmpf2,tmpf3);  
+			color = get_colors_from_hue ((((tmpf3 / ve_view->z_scale) + ve_view->z_trans) / 255.0) * 360.0, 0.33, 1.0);
+			glColor3us (color.red, color.green, color.blue);
+			glVertex3f(tmpf1,tmpf2,tmpf3);
 		}
 		glEnd();
 	}
@@ -1415,7 +1420,7 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->beginY = 0;
 	ve_view->dt = 0.008;
 	ve_view->sphi = 18.5;
-	ve_view->stheta = -77.25; 
+	ve_view->stheta = -77.25;
 	ve_view->sdepth = 3.2;
 	ve_view->zNear = 0;
 	ve_view->zFar = 10.0;
