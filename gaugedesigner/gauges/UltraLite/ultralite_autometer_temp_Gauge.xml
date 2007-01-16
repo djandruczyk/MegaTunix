@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE gauge SYSTEM "mtxgauge.dtd">
+<gauge>
+  <bg_color>62965 62965 62965</bg_color>
+  <needle_color>61019 15359 2737</needle_color>
+  <needle_tail>0.250000</needle_tail>
+  <needle_width>0.047000</needle_width>
+  <majtick_color>1360 754 754</majtick_color>
+  <mintick_color>4835 3621 3621</mintick_color>
+  <value_font_color>2643 2643 2643</value_font_color>
+  <major_tick_text_color>2721 1507 1507</major_tick_text_color>
+  <gradient_begin_color>47288 47288 47288</gradient_begin_color>
+  <gradient_end_color>47288 47288 47288</gradient_end_color>
+  <precision>2</precision>
+  <width>348</width>
+  <height>212</height>
+  <start_deg>-193.086777</start_deg>
+  <stop_deg>-151.833817</stop_deg>
+  <start_radian>3.370000</start_radian>
+  <stop_radian>6.020000</stop_radian>
+  <lbound>100.000000</lbound>
+  <ubound>250.000000</ubound>
+  <value_font>arial Bold</value_font>
+  <value_font_scale>0.200000</value_font_scale>
+  <value_str_xpos>0.000000</value_str_xpos>
+  <value_str_ypos>0.240000</value_str_ypos>
+  <antialias>1</antialias>
+  <show_value>0</show_value>
+  <tick_inset>0.294000</tick_inset>
+  <major_ticks>5</major_ticks>
+  <major_tick_len>0.170000</major_tick_len>
+  <major_tick_width>0.200000</major_tick_width>
+  <major_tick_text_font>Arial Black</major_tick_text_font>
+  <major_tick_text></major_tick_text>
+  <major_tick_text_inset>0.000000</major_tick_text_inset>
+  <major_tick_text_scale>0.150000</major_tick_text_scale>
+  <minor_ticks>1</minor_ticks>
+  <minor_tick_len>0.074000</minor_tick_len>
+  <minor_tick_width>0.075000</minor_tick_width>
+  <text_block>
+    <font>arial Bold</font>
+    <text>WATER</text>
+    <font_scale>0.242000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>0.442000</y_pos>
+    <color>2192 979 979</color>
+  </text_block>
+  <text_block>
+    <font>Eras Demi ITC</font>
+    <text>Auto Meter</text>
+    <font_scale>0.105000</font_scale>
+    <x_pos>0.010000</x_pos>
+    <y_pos>-0.118000</y_pos>
+    <color>5285 5285 5285</color>
+  </text_block>
+  <text_block>
+    <font>Sans</font>
+    <text>______</text>
+    <font_scale>0.097000</font_scale>
+    <x_pos>-0.141000</x_pos>
+    <y_pos>-0.073000</y_pos>
+    <color>1057 1057 1057</color>
+  </text_block>
+  <text_block>
+    <font>Eras Demi ITC</font>
+    <text>I</text>
+    <font_scale>0.093000</font_scale>
+    <x_pos>0.017000</x_pos>
+    <y_pos>-0.098000</y_pos>
+    <color>9141 6714 6714</color>
+  </text_block>
+  <text_block>
+    <font>Sans</font>
+    <text>temp</text>
+    <font_scale>0.136000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>0.617000</y_pos>
+    <color>2721 1507 1507</color>
+  </text_block>
+  <text_block>
+    <font>Rockwell</font>
+    <text>ULTRALITE</text>
+    <font_scale>0.075000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>-0.300000</y_pos>
+    <color>6195 4375 4375</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>250</text>
+    <font_scale>0.130000</font_scale>
+    <x_pos>0.750000</x_pos>
+    <y_pos>-0.025000</y_pos>
+    <color>4835 3621 3621</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>100</text>
+    <font_scale>0.130000</font_scale>
+    <x_pos>-0.750000</x_pos>
+    <y_pos>-0.025000</y_pos>
+    <color>6352 2104 2104</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>150</text>
+    <font_scale>0.130000</font_scale>
+    <x_pos>-0.500000</x_pos>
+    <y_pos>-0.600000</y_pos>
+    <color>4160 1126 1126</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>180</text>
+    <font_scale>0.130000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>-0.800000</y_pos>
+    <color>6274 3240 3240</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>210</text>
+    <font_scale>0.130000</font_scale>
+    <x_pos>0.460000</x_pos>
+    <y_pos>-0.625000</y_pos>
+    <color>4913 2486 2486</color>
+  </text_block>
+  <text_block>
+    <font>Arial</font>
+    <text>O</text>
+    <font_scale>0.025000</font_scale>
+    <x_pos>-0.035000</x_pos>
+    <y_pos>0.700000</y_pos>
+    <color>5745 2711 2711</color>
+  </text_block>
+  <text_block>
+    <font>Arial</font>
+    <text>F</text>
+    <font_scale>0.075000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>0.717000</y_pos>
+    <color>3249 2036 2036</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>o</text>
+    <font_scale>0.250000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>0.000000</y_pos>
+    <color>60909 15420 2827</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>o</text>
+    <font_scale>0.150000</font_scale>
+    <x_pos>0.650000</x_pos>
+    <y_pos>0.321000</y_pos>
+    <color>4081 2261 2261</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>o</text>
+    <font_scale>0.150000</font_scale>
+    <x_pos>-0.650000</x_pos>
+    <y_pos>0.321000</y_pos>
+    <color>3249 2036 2036</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>o</text>
+    <font_scale>0.250000</font_scale>
+    <x_pos>0.650000</x_pos>
+    <y_pos>0.321000</y_pos>
+    <color>1889 1282 1282</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>o</text>
+    <font_scale>0.250000</font_scale>
+    <x_pos>-0.650000</x_pos>
+    <y_pos>0.321000</y_pos>
+    <color>1586 1586 1586</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>I</text>
+    <font_scale>0.150000</font_scale>
+    <x_pos>0.650000</x_pos>
+    <y_pos>0.321000</y_pos>
+    <color>3856 1429 1429</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>I</text>
+    <font_scale>0.150000</font_scale>
+    <x_pos>-0.650000</x_pos>
+    <y_pos>0.321000</y_pos>
+    <color>4160 1126 1126</color>
+  </text_block>
+  <text_block>
+    <font>Arial Black</font>
+    <text>PRO-COMP</text>
+    <font_scale>0.085000</font_scale>
+    <x_pos>0.025000</x_pos>
+    <y_pos>-0.375000</y_pos>
+    <color>2721 1507 1507</color>
+  </text_block>
+</gauge>
