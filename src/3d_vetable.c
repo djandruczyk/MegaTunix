@@ -826,13 +826,14 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 			tmpf3 = 
 				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
 
-			//this crazy tranformation is required  because of the weird trasnformation you have
-			//up above.  the VE table is colored based on scale out of 0 - 255, as opposed
-			//to the weird scaling up above.  so you can either undo it here like i did, or
-			//change the transformation up above, or perhaps both
-			color = get_colors_from_hue ((((tmpf3 / ve_view->z_scale) + ve_view->z_trans) / 255.0)* 360.0, 0.33, 1.0);
-			//unsigned short(2-byte) glcolor call, values range from 0 to 65535
-			glColor3us (color.red, color.green, color.blue);
+			////this crazy tranformation is required  because of the weird trasnformation you have
+			////up above.  the VE table is colored based on scale out of 0 - 255, as opposed
+			////to the weird scaling up above.  so you can either undo it here like i did, or
+			////change the transformation up above, or perhaps both
+			//color = ((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]) / 255.0) * 360);
+			////unsigned short(2-byte) glcolor call, values range from 0 to 65535
+			//glColor3us (color.red, color.green, color.blue);
+			glColor3f (1.0, 1.0, tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
 
 		}
@@ -851,8 +852,9 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 				((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
 			tmpf3 = 
 				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
-			color = get_colors_from_hue ((((tmpf3 / ve_view->z_scale) + ve_view->z_trans) / 255.0) * 360.0, 0.33, 1.0);
-			glColor3us (color.red, color.green, color.blue);
+			//color = ((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]) / 255.0) * 360);
+                        //glColor3us (color.red, color.green, color.blue);
+			glColor3f (1.0, 1.0, tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
 		}
 		glEnd();
