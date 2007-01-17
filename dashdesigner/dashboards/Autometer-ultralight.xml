@@ -27,7 +27,7 @@
     <x_offset>509</x_offset>
     <y_offset>159</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_dc_Gauge.xml</gauge_xml_name>
-    <datasource>dcycle</datasource>
+    <datasource>dcycle1</datasource>
   </gauge>
   <gauge>
     <width>225</width>
@@ -51,7 +51,7 @@
     <x_offset>255</x_offset>
     <y_offset>158</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_PWM_Gauge.xml</gauge_xml_name>
-    <datasource>pw</datasource>
+    <datasource>pw1</datasource>
   </gauge>
   <gauge>
     <width>385</width>

@@ -539,9 +539,9 @@ log_by_default=TRUE
 [derived_32]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=vecurr
+internal_name=vecurr1
 dlog_gui_name=VE 1
-dlog_field_name=Gve
+dlog_field_name=Gve1
 offset=18
 lower_limit=0
 upper_limit=255
@@ -554,9 +554,9 @@ log_by_default=TRUE
 [derived_33]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=pw
+internal_name=pw1
 dlog_gui_name=PW 1
-dlog_field_name=PW
+dlog_field_name=PW1
 offset=14
 lower_limit=0
 upper_limit=26
@@ -569,7 +569,7 @@ log_by_default=TRUE
 [derived_34]
 keys=internal_name,dlog_gui_name,offset,complex_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_INT_,_BOOL_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=dcycle
+internal_name=dcycle1
 dlog_gui_name=Dutycycle 1
 dlog_field_name=DutyCycle1
 offset=14

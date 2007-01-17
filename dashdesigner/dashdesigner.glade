@@ -37,28 +37,6 @@
 		<widget class="GtkMenu" id="menuitem1_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="new_dash_menuitem">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_New Dash</property>
-		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="create_new_dash" last_modification_time="Tue, 02 Jan 2007 21:22:43 GMT"/>
-		      <accelerator key="N" modifiers="GDK_MOD1_MASK" signal="activate"/>
-
-		      <child internal-child="image">
-			<widget class="GtkImage" id="image58">
-			  <property name="visible">True</property>
-			  <property name="stock">gtk-new</property>
-			  <property name="icon_size">1</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-
-		  <child>
 		    <widget class="GtkImageMenuItem" id="create_preview_list">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Add a new gauge to the Dash</property>
@@ -68,7 +46,7 @@
 		      <accelerator key="A" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image59">
+			<widget class="GtkImage" id="image66">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -91,9 +69,31 @@
 		      <accelerator key="L" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image60">
+			<widget class="GtkImage" id="image67">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="close_dash_menuitem">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Close Dash</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="close_current_dash" last_modification_time="Wed, 17 Jan 2007 03:03:42 GMT"/>
+		      <accelerator key="C" modifiers="GDK_MOD1_MASK" signal="activate"/>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image68">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
@@ -114,7 +114,7 @@
 		      <accelerator key="S" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image61">
+			<widget class="GtkImage" id="image69">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save</property>
 			  <property name="icon_size">1</property>
@@ -137,7 +137,7 @@
 		      <accelerator key="A" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image62">
+			<widget class="GtkImage" id="image70">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-save-as</property>
 			  <property name="icon_size">1</property>

@@ -609,7 +609,7 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 }
 
 
-EXPORT gboolean create_new_dash(GtkWidget *widget, gchar * source)
+EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 {
 	extern GladeXML *main_xml;
 	GtkWidget *dash = NULL;
