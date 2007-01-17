@@ -733,8 +733,7 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	max = 0;
 	for (i=0;i<ve_view->x_bincount;i++) 
 	{
-		tmpf = 
-			evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i]);
+		tmpf = evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i]);
 		if (tmpf > max) 
 			max = tmpf;
 		if (tmpf < min) 
@@ -746,8 +745,7 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	max = 0;
 	for (i=0;i<ve_view->y_bincount;i++) 
 	{
-		tmpf = 
-			evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i]);
+		tmpf = evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i]);
 		if (tmpf > max) 
 			max = tmpf;
 		if (tmpf < min) 
@@ -759,8 +757,7 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	max = 0;
 	for (i=0;i<(ve_view->x_bincount*ve_view->y_bincount);i++) 
 	{
-		tmpf = 
-			evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+i]);
+		tmpf = evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+i]);
 		if (tmpf > max) 
 			max = tmpf;
 		if (tmpf < min) 
@@ -782,7 +779,7 @@ VEtable grid
 void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 {
 	extern gint **ms_data;
-	GdkColor color;
+	//GdkColor color;
 	gint x = 0;
 	gint y = 0;
 	gint x_page = 0;
@@ -819,12 +816,11 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 		glBegin(GL_LINE_STRIP);
 		for(y=0;y<ve_view->y_bincount;y++) 
 		{
-			tmpf1 = 
-				((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
-			tmpf2 = 
-				((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
-			tmpf3 = 
-				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+			tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+				
+			tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+				
+			tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
 
 			////this crazy tranformation is required  because of the weird trasnformation you have
 			////up above.  the VE table is colored based on scale out of 0 - 255, as opposed
@@ -846,15 +842,15 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 		glBegin(GL_LINE_STRIP);
 		for(x=0;x<ve_view->x_bincount;x++)
 		{
-			tmpf1 = 
-				((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
-			tmpf2 = 
-				((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
-			tmpf3 = 
-				(((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
-			//color = ((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]) / 255.0) * 360);
-                        //glColor3us (color.red, color.green, color.blue);
-			glColor3f (1.0, 1.0, tmpf3);
+			tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+x])-ve_view->x_trans)*ve_view->x_scale);
+				
+			tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+y])-ve_view->y_trans)*ve_view->y_scale);
+				
+			tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(y*ve_view->y_bincount)+x]))-ve_view->z_trans)*ve_view->z_scale);
+				
+			//color = get_colors_from_hue ((((tmpf3 / ve_view->z_scale) + ve_view->z_trans) / 255.0) * 360.0, 0.33, 1.0);
+			//glColor3us (color.red, color.green, color.blue);
+			glColor3f(1.0,1.0,tmpf3);
 			glVertex3f(tmpf1,tmpf2,tmpf3);
 		}
 		glEnd();
@@ -904,18 +900,17 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 
-	tmpf1 = 
-		(evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x])-ve_view->x_trans)*ve_view->x_scale;
-	tmpf2 = 
-		(evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y])-ve_view->y_trans)*ve_view->y_scale;
-	tmpf3 = 
-		((evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])-ve_view->z_trans)*ve_view->z_scale);
+	tmpf1 = evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x]);
+	tmpf2 = evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]);
+	tmpf3 = evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]);
 
-	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f((tmpf1-ve_view->x_trans)*ve_view->x_scale,
+		(tmpf2-ve_view->y_trans)*ve_view->y_scale,
+		(tmpf3-ve_view->z_trans)*ve_view->z_scale);
 	glEnd();        
 
 	tmpbuf = g_strdup_printf("x_active_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x]),ve_view->x_precision,ve_view->x_suffix);
+	value = g_strdup_printf("%1$.*2$f %3$s",tmpf1,ve_view->x_precision,ve_view->x_suffix);
 
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
@@ -923,10 +918,10 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 
 	tmpbuf = g_strdup_printf("y_active_label_%i",ve_view->table_num);
 	if (algorithm[ve_view->table_num] == ALPHA_N)
-		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->an_y_suffix);
+		value = g_strdup_printf("%1$.*2$f %3$s",tmpf2,ve_view->y_precision,ve_view->an_y_suffix);
 
 	else
-		value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]),ve_view->y_precision,ve_view->y_suffix);
+		value = g_strdup_printf("%1$.*2$f %3$s",tmpf2,ve_view->y_precision,ve_view->y_suffix);
 
 
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
@@ -934,7 +929,7 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("z_active_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]),ve_view->z_precision,ve_view->z_suffix);
+	value = g_strdup_printf("%1$.*2$f %3$s",tmpf3,ve_view->z_precision,ve_view->z_suffix);
 
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
@@ -959,6 +954,7 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
+	gboolean out_of_bounds = FALSE;
 	extern GHashTable *dynamic_widgets;
 	extern gint ** ms_data;
 	extern gint *algorithm;
@@ -996,29 +992,44 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	/* Render a green dot at the active VE map position */
 	glPointSize(MIN(w,h)/65.0);
 	glLineWidth(MIN(w,h)/300.0);
-	glColor3f(0.0,1.0,0.0);
-	glBegin(GL_POINTS);
-	glVertex3f(     
-			(x_val-ve_view->x_trans)*ve_view->x_scale,
-			(y_val-ve_view->y_trans)*ve_view->y_scale,      
-			(z_val-ve_view->z_trans)*ve_view->z_scale);
-	glEnd();
 
-	glBegin(GL_LINE_STRIP);
+	glColor3f(0.0,1.0,0.0);
 	tmpf1 = (x_val-ve_view->x_trans)*ve_view->x_scale;
 	tmpf2 = (y_val-ve_view->y_trans)*ve_view->y_scale;
 	tmpf3 = (z_val-ve_view->z_trans)*ve_view->z_scale;
+	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))
+		out_of_bounds = TRUE;
+	else
+		out_of_bounds = FALSE;
+
+	tmpf1 = tmpf1 > 1.0 ? 1.0:tmpf1;
+	tmpf1 = tmpf1 < 0.0 ? 0.0:tmpf1;
+	tmpf2 = tmpf2 > 1.0 ? 1.0:tmpf2;
+	tmpf2 = tmpf2 < 0.0 ? 0.0:tmpf2;
+	tmpf3 = tmpf3 > 1.0 ? 1.0:tmpf3;
+	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
+
+	glBegin(GL_POINTS);
+	glVertex3f( tmpf1,tmpf2,tmpf3);    
+	glEnd();
+
+	glBegin(GL_LINE_STRIP);
+	/* If anythign  out of bounds change color and clamp! */
+	if (out_of_bounds)
+		glColor3f(1.0,0.0,0.0);
+	else
+		glColor3f(0.0,1.0,0.0);
 
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glVertex3f(tmpf1,tmpf2,bottom);
 
-	glVertex3f((evaluator_evaluate_x(ve_view->x_eval,ms_data[ve_view->x_page][ve_view->x_base])-ve_view->x_trans)*ve_view->x_scale,tmpf2,bottom);
+	glVertex3f(0.0,tmpf2,bottom);
 	glEnd();
 
 	glBegin(GL_LINES);
 	glVertex3f(tmpf1,tmpf2,bottom - ve_view->z_offset);
 
-	glVertex3f(tmpf1,(evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base])-ve_view->y_trans)*ve_view->y_scale,bottom);
+	glVertex3f(tmpf1,0.0,bottom);
 	glEnd();
 
 
@@ -1031,7 +1042,6 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 
 	/* Live X axis marker */
 	label = g_strdup_printf("%i",(gint)x_val);
-	tmpf1 = (x_val-ve_view->x_trans)*ve_view->x_scale;
 
 	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
 	g_free(label);
@@ -1050,9 +1060,8 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 
 	/* Live Y axis marker */
 	label = g_strdup_printf("%i",(gint)y_val);
-	tmpf1 = (y_val-ve_view->y_trans)*ve_view->y_scale;
 
-	ve3d_draw_text(label,-0.05,tmpf1,-0.05);
+	ve3d_draw_text(label,-0.05,tmpf2,-0.05);
 	g_free(label);
 
 
@@ -1074,8 +1083,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0;
 	gfloat tmpf = 0.0;
-	//gfloat tmpf1 = 0.0;
-	//gfloat tmpf2 = 0.0;
+	gfloat tmpf1 = 0.0;
+	gfloat tmpf2 = 0.0;
 	gchar *label;
 	extern gint **ms_data;
 	gint x_page = 0;
@@ -1120,10 +1129,10 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	for (i=0;i<y_bincount;i++)
 	{
 		glBegin(GL_LINES);
+		tmpf2 = (evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale;
 
-		glVertex3f(1,((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale),0);
-
-		glVertex3f(1,((evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+i])-ve_view->y_trans)*ve_view->y_scale),1);
+		glVertex3f(1,tmpf2,0);
+		glVertex3f(1,tmpf2,1);
 		glEnd();
 	}
 
@@ -1132,9 +1141,10 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	{
 		glBegin(GL_LINES);
 
-		glVertex3f((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale,1,0);
+		tmpf1 = (evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale;
+		glVertex3f(tmpf1,1,0);
 
-		glVertex3f((evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+i])-ve_view->x_trans)*ve_view->x_scale,1,1);
+		glVertex3f(tmpf1,1,1);
 		glEnd();
 	}
 

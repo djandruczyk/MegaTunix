@@ -65,10 +65,12 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	GtkWidget *dialog = NULL;
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
+	gboolean result = FALSE;
+#ifndef __WIN32__
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
-	gboolean result = FALSE;
 	extern gchar *cwd;
+#endif
 
 	dash = glade_xml_get_widget(main_xml,"dashboard");
 	result = check_datasources_set(dash);
