@@ -117,7 +117,7 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 #keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 keys=page,table_num,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=0
 table_num=0
 #x_source=raw_rpm
@@ -137,7 +137,7 @@ data=VE1_rescale_spinner
 
 [rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=0
 table_num=0
 

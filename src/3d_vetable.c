@@ -82,7 +82,8 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 		dbg_func(g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"),CRITICAL);
 		return FALSE;
 	}
-	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 
 	if (winstat == NULL)
 		winstat = g_hash_table_new(NULL,NULL);

@@ -57,10 +57,11 @@ tooltip=The Rotary Trailing Entries are the values of Rotary Trailing in degrees
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
-key_types=_INT_,_ENUM_
+keys=page,page_ident,table_num
+key_types=_INT_,_ENUM_,_STRING_
 page=7
 page_ident=_ROTARYTABLES_PAGE_
+table_num=10
 
 [title]
 keys=page,set_label
@@ -126,7 +127,7 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 #keys=page,table_num,x_source,y_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=8
 table_num=10
 #x_source=raw_rpm
@@ -146,7 +147,7 @@ data=RO_rescale_spinner
 
 [rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=8
 table_num=10
 

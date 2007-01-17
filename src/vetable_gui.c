@@ -66,7 +66,9 @@ void rescale_table(gchar * widget_name)
 
 	scaler = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
-	table_num = (gint)g_object_get_data(G_OBJECT(scaler),"table_num");
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(scaler),"table_num");
+	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+
 	z_base = firmware->table_params[table_num]->z_base;
 	x_bins = firmware->table_params[table_num]->x_bincount;
 	y_bins = firmware->table_params[table_num]->y_bincount;
@@ -157,12 +159,14 @@ void draw_ve_marker()
 	extern GdkColor red;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
+	extern gint active_table;
 
 
 	if (!eval)
 		eval = g_new0(void **, firmware->total_tables);
 
-	for (table=0;table<firmware->total_tables;table++)
+	table = active_table;
+//	for (table=0;table<firmware->total_tables;table++)
 	{
 		if (!eval[table])
 			eval[table] = g_new0(void *, 2);

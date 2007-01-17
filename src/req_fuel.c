@@ -120,7 +120,9 @@ gboolean reqd_fuel_popup(GtkWidget * widget)
 
 	popup = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	reqd_fuel->popup = popup;	
-	reqd_fuel->table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");	
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+	reqd_fuel->table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+
 	tmpbuf = g_strdup_printf("Required Fuel Calculator for Page %i\n",reqd_fuel->page);
 	gtk_window_set_title(GTK_WINDOW(popup),tmpbuf);
 	g_free(tmpbuf);

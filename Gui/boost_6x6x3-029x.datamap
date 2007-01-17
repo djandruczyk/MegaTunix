@@ -52,13 +52,34 @@ handler=_GENERIC_
 use_color=TRUE
 tooltip=The Boost Entries are the values of Boost in KPA that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
+#----- Widgets ----------------------------------------------------------------
+
+[B1_vbox1]
+keys=page,table_num
+key_types=_INT_,_STRING_
+page=7
+table_num=7
+
+[B2_vbox1]
+keys=page,table_num
+key_types=_INT_,_STRING_
+page=7
+table_num=8
+
+[B3_vbox1]
+keys=page,table_num
+key_types=_INT_,_STRING_
+page=7
+table_num=9
+
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
-key_types=_INT_,_ENUM_
+keys=page,page_ident,sub-notebook
+key_types=_INT_,_ENUM_,_STRING_
 page=7
 page_ident=_BOOSTTABLES_PAGE_
+sub-notebook=BT_notebook1
 
 [B1_title]
 keys=page,set_label
@@ -156,7 +177,7 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 #keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=7
 table_num=7
 #x_source=raw_rpm
@@ -169,7 +190,7 @@ tooltip=This pops up a 3 dimensional view of the current Boost-Table.  Editing o
 #keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=7
 table_num=8
 #x_source=raw_rpm
@@ -182,7 +203,7 @@ tooltip=This pops up a 3 dimensional view of the current Boost-Table.  Editing o
 #keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=7
 table_num=9
 #x_source=raw_rpm
@@ -216,19 +237,19 @@ data=BT_B3_rescale_spinner
 
 [B1_rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=7
 table_num=7
 
 [B2_rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=7
 table_num=8
 
 [B3_rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=7
 table_num=9
 

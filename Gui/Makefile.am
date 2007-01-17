@@ -4,10 +4,8 @@ gui_files = 	README \
 		template.glade \
 		afrtable_8x8x2.glade \
 		afrtable_8x8x2-029x.datamap \
-		afrtable_8x8e.glade \
 		boost_6x6x3-029x.datamap \
 		boost_6x6x3.glade \
-		boost_6x6e.glade \
 		B_n_G_constants.glade \
 		B_n_G_constants.datamap \
 		datalogging.glade \
@@ -18,7 +16,6 @@ gui_files = 	README \
 		dt-params.datamap \
 		enrichments.glade \
 		enrichments_BnG.datamap \
-		lambdatable_8x8e.glade \
 		Dualtable-constants.glade \
 		Dualtable-constants.datamap \
 		logviewer.glade \
@@ -33,8 +30,6 @@ gui_files = 	README \
 		msns-e-accelwizard-029x.datamap \
 		msns-e-advanced.glade \
 		msns-e-advanced-029x.datamap \
-		msns-e-boost_idle.glade \
-		msns-e-boost_idle.datamap \
 		msns-e-boost-knock.glade \
 		msns-e-boost-knock-029x.datamap \
 		msns-e-crank-ase.glade \
@@ -69,7 +64,6 @@ gui_files = 	README \
 		runtime.datamap \
 		sparktable_12x12x2-029x.datamap \
 		sparktable_12x12x2.glade \
-		sparktable_12x12e.glade \
 		sparktable_8x8e.glade \
 		sparktable_8x8e-EDIS.datamap \
 		sparktable_8x8e-Std.datamap \

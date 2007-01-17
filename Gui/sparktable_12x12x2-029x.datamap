@@ -108,13 +108,27 @@ key_types=_INT_,_STRING_
 page=3
 bind_to_list=spark_controls
 
+[SP1_vbox1]
+keys=page,table_num
+key_types=_INT_,_STRING_
+page=3
+table_num=3
+
+[SP2_vbox1]
+keys=page,table_num
+key_types=_INT_,_STRING_
+page=4
+table_num=4
+
+
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
-key_types=_INT_,_ENUM_
+keys=page,page_ident,sub-notebook
+key_types=_INT_,_ENUM_,_STRING_
 page=3
 page_ident=_SPARKTABLES_PAGE_
+sub-notebook=SP_spark_notebook
 
 [topframe_title]
 keys=page,set_label
@@ -201,7 +215,7 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 #keys=page,table_num,depend_on,x_source,y_source,an_y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=3
 table_num=3
 #x_source=raw_rpm
@@ -222,7 +236,7 @@ data=SP_SP1_rescale_spinner
 #keys=page,table_num,depend_on,x_source,y_source,an_y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=4
 table_num=4
 #x_source=raw_rpm
@@ -243,13 +257,13 @@ data=SP_SP2_rescale_spinner
 
 [SP1_rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=3
 table_num=3
 
 [SP2_rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=4
 table_num=4
 

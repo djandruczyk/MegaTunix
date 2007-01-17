@@ -64,6 +64,7 @@ extern gchar * serial_port_name;
 gboolean tips_in_use;
 gint temp_units;
 gint active_page = -1;
+gint active_table = -1;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor black = { 0, 0, 0, 0};
@@ -364,6 +365,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint table_num = -1;
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
+	gchar * tmpbuf = NULL;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
@@ -415,7 +417,9 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			/* Alternate or simultaneous */
 			if (ecu_caps & MSNS_E)
 			{
-				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+				tmpbuf = (gchar *)g_object_get_data(
+						G_OBJECT(widget),"table_num");
+				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 				tmp = ms_data[page][offset];
 				tmp = tmp & ~bitmask;// clears bits 
 				tmp = tmp | (bitval << bitshift);
@@ -431,7 +435,9 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+				tmpbuf = (gchar *)g_object_get_data(
+						G_OBJECT(widget),"table_num");
+				table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 				dload_val = bitval;
 				if (dload_val == ms_data[page][offset])
 					return FALSE;
@@ -830,6 +836,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint divider_offset = 0;
 	gint table_num = -1;
 	gfloat value = 0.0;
+	gchar *tmpbuf = NULL;
 	GtkWidget * tmpwidget = NULL;
 	extern gint realtime_id;
 	extern gint **ms_data;
@@ -904,7 +911,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case REQ_FUEL_1:
 		case REQ_FUEL_2:
-			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			tmpbuf = (gchar *)g_object_get_data(
+					G_OBJECT(widget),"table_num");
+			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 			firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
 			firmware->rf_params[table_num]->req_fuel_total = value;
 			check_req_fuel_limits(table_num);
@@ -920,7 +929,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_SQUIRTS_1:
 		case NUM_SQUIRTS_2:
 			/* This actuall effects another variable */
-			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			tmpbuf = (gchar *)g_object_get_data(
+					G_OBJECT(widget),"table_num");
+			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_num_squirts = firmware->rf_params[table_num]->num_squirts;
 			firmware->rf_params[table_num]->last_divider = ms_data[page][divider_offset];
@@ -947,7 +958,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_CYLINDERS_1:
 		case NUM_CYLINDERS_2:
 			/* Updates a shared bitfield */
-			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			tmpbuf = (gchar *)g_object_get_data(
+					G_OBJECT(widget),"table_num");
+			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 			//printf("table num %i\n",table_num);
 			divider_offset = firmware->table_params[table_num]->divider_offset;
 			firmware->rf_params[table_num]->last_divider = ms_data[page][divider_offset];
@@ -986,7 +999,9 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case NUM_INJECTORS_1:
 		case NUM_INJECTORS_2:
 			/* Updates a shared bitfield */
-			table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+			tmpbuf = (gchar *)g_object_get_data(
+					G_OBJECT(widget),"table_num");
+			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 			firmware->rf_params[table_num]->last_num_inj = firmware->rf_params[table_num]->num_inj;
 			firmware->rf_params[table_num]->num_inj = tmpi;
 
@@ -1762,11 +1777,74 @@ testit:
 void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint page_ident = 0;
+	gint sub_page = 0;
+	gchar * tmpbuf = NULL;
 	extern gboolean forced_update;
+	GtkWidget *sub = NULL;
+	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	page_ident = (PageIdent)g_object_get_data(G_OBJECT(widget),"page_ident");
 	active_page = page_ident;
+
+	if (g_object_get_data(G_OBJECT(widget),"table_num"))
+	{
+		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+		active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
+		//printf("main tab change,  active_table %i\n",active_table);
+	}
+
+	if (g_object_get_data(G_OBJECT(widget),"sub-notebook"))
+	{
+		//printf(" This tab has a sub-notebook\n");
+		sub = g_hash_table_lookup(dynamic_widgets, (g_object_get_data(G_OBJECT(widget),"sub-notebook")));
+		if (GTK_IS_WIDGET(sub))
+		{
+			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
+			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
+			//printf("subtable found, searching for active page\n");
+			if (g_object_get_data(G_OBJECT(widget),"table_num"))
+			{
+				tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+				active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
+			//	printf("found it,  active table %i\n",active_table);
+			}
+			//else
+			//	printf("didn't find table_num key on subtable\n");
+		}
+	}
+
+
+	forced_update = TRUE;
+
+	return;
+}
+
+
+/*
+ \brief subtab_changed() is fired off whenever a new sub-notebook page is 
+ chosen.
+ This fucntion just sets a variable marking the current page.  this is to
+ prevent the runtime sliders from being updated if they aren't visible
+ \param notebook (GtkNotebook *) nbotebook that emitted the event
+ \param page (GtkNotebookPage *) page
+ \param page_no (guint) page number that's now active
+ \param data (gpointer) unused
+ */
+EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+{
+	gchar * tmpbuf = NULL;
+	extern gboolean forced_update;
+	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
+
+	if (!g_object_get_data(G_OBJECT(widget),"table_num"))
+		return;
+	else
+	{
+		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+		active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
+	}
+//	printf("active table changed to %i\n",active_table);
 	forced_update = TRUE;
 
 	return;

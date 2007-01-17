@@ -181,6 +181,10 @@ keys themselves are not, as the string compare functions are case insensitive.
 			basic layout done in glade and are populated with 
 			additional widgets in a more efficient manner by a 
 			function. (see memory_gui.c for details )
+	sub-notebook	(string) Special purpose key used so that the page
+			change detector can extract the active table number 
+			from the notebook tabs.  Used as a CPU saver to avoid
+			updating windows that are not visible
 
 NOTE: regaring expr_symbols and expr_types:
 	The expr_types in combination of expr_symbols determine what following

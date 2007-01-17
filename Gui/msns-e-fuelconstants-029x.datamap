@@ -22,14 +22,14 @@ bind_to_list=burners
 
 [calc_req_fuel_1_button]
 keys=page,table_num,handler
-key_types=_INT_,_INT_,_ENUM_
+key_types=_INT_,_STRING_,_ENUM_
 page=1
 table_num=0
 handler=_REQ_FUEL_POPUP_
 
 [calc_req_fuel_2_button]
 keys=page,table_num,handler
-key_types=_INT_,_INT_,_ENUM_
+key_types=_INT_,_STRING_,_ENUM_
 page=2
 table_num=1
 handler=_REQ_FUEL_POPUP_
@@ -330,7 +330,7 @@ handler=_GENERIC_
 
 [alt_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler,bind_to_list
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=1
 offset=150
 bitshift=0
@@ -343,7 +343,7 @@ bind_to_list=alt_simul
 
 [simul_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler,bind_to_list
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=1
 offset=150
 bitshift=0
@@ -358,7 +358,7 @@ bind_to_list=alt_simul
 
 [req_fuel_per_cycle_0_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=148
 table_num=0
@@ -388,7 +388,7 @@ dtmode_bitshift=4
 
 [req_fuel_per_cycle_1_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=2
 offset=148
 table_num=1
@@ -410,7 +410,7 @@ divider_offset=149
 
 [req_fuel_per_squirt_0_spin]
 keys=page,offset,table_num,ul_conv_expr,bind_to_list
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=1
 offset=148
 table_num=0
@@ -419,7 +419,7 @@ bind_to_list=interdep_0_ctrl
 
 [req_fuel_per_squirt_1_spin]
 keys=page,offset,table_num,ul_conv_expr,bind_to_list
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=2
 offset=148
 table_num=1
@@ -504,7 +504,7 @@ handler=_GENERIC_
 
 [inj_per_cycle_0_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=149
 table_num=0
@@ -524,7 +524,7 @@ divider_offset=149
 
 [inj_per_cycle_1_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=2
 offset=149
 table_num=1
@@ -544,7 +544,7 @@ divider_offset=149
 
 [num_injectors_0_spin]
 keys=page,offset,table_num,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=183
 table_num=0
@@ -564,7 +564,7 @@ injectors_bitshift=4
 
 [num_injectors_1_spin]
 keys=page,offset,table_num,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=2
 offset=183
 table_num=1
@@ -584,7 +584,7 @@ injectors_bitshift=4
 
 [num_cylinders_0_spin]
 keys=page,offset,table_num,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=182
 table_num=0
@@ -605,7 +605,7 @@ cylinders_bitshift=4
 
 [num_cylinders_1_spin]
 keys=page,offset,table_num,bitmask,bitshift,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=2
 offset=182
 table_num=1

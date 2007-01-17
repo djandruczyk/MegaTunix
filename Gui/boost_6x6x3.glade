@@ -53,9 +53,10 @@
 		      <property name="tab_pos">GTK_POS_TOP</property>
 		      <property name="scrollable">False</property>
 		      <property name="enable_popup">False</property>
+		      <signal name="switch_page" handler="subtab_changed" last_modification_time="Wed, 17 Jan 2007 16:16:11 GMT"/>
 
 		      <child>
-			<widget class="GtkVBox" id="B1_main_vbox">
+			<widget class="GtkVBox" id="B1_vbox1">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
@@ -1895,7 +1896,7 @@ by what percentage ?</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkVBox" id="B2_main_vbox">
+			<widget class="GtkVBox" id="B2_vbox1">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
@@ -3735,7 +3736,7 @@ by what percentage ?</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkVBox" id="B3_main_vbox">
+			<widget class="GtkVBox" id="B3_vbox1">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>

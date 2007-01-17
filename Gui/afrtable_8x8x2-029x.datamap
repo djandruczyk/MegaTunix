@@ -66,10 +66,11 @@ tooltip=The AFR Entries are the Air Fuel Radio values that the ECU should target
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
-key_types=_INT_,_ENUM_
+keys=page,page_ident,sub-notebook
+key_types=_INT_,_ENUM_,_STRING_
 page=6
 page_ident=_AFRTABLES_PAGE_
+sub-notebook=AFR_AFR_notebook
 
 [topframe_title]
 keys=page,set_label
@@ -154,16 +155,19 @@ an_ego_button_bitmask=16
 #----- widgets ---------------------------------------------------------------
 
 [AFR1_vbox1]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
+keys=page,bind_to_list,table_num
+key_types=_INT_,_STRING_,_STRING_
 page=6
 bind_to_list=afr1
+table_num=5
 
 [AFR2_vbox1]
-keys=page,bind_to_list
-key_types=_INT_,_STRING_
+keys=page,bind_to_list,table_num
+key_types=_INT_,_STRING_,_STRING_
 page=6
 bind_to_list=afr2,dt_controls
+table_num=6
+
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -187,7 +191,7 @@ tooltip=This button will turn red when a value is changed in the ECU's RAM but i
 #keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=6
 table_num=5
 #x_source=raw_rpm
@@ -205,7 +209,7 @@ data=AFR_AFR1_rescale_spinner
 
 [AFR2_3d_view_button]
 keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=6
 table_num=6
 x_source=raw_rpm
@@ -225,13 +229,13 @@ data=AFR_AFR2_rescale_spinner
 
 [AFR1_rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=6
 table_num=5
 
 [AFR2_rescale_spinner]
 keys=page,table_num
-key_types=_INT_,_INT_
+key_types=_INT_,_STRING_
 page=6
 table_num=6
 

@@ -54,6 +54,7 @@
 		      <property name="tab_pos">GTK_POS_TOP</property>
 		      <property name="scrollable">False</property>
 		      <property name="enable_popup">True</property>
+		      <signal name="switch_page" handler="subtab_changed" last_modification_time="Wed, 17 Jan 2007 16:18:30 GMT"/>
 
 		      <child>
 			<widget class="GtkVBox" id="VE1_vbox1">

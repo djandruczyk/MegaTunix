@@ -22,14 +22,14 @@ bind_to_list=burners
 
 [calc_req_fuel_0_button]
 keys=page,table_num,handler
-key_types=_INT_,_INT_,_ENUM_
+key_types=_INT_,_STRING_,_ENUM_
 page=0
 table_num=0
 handler=_REQ_FUEL_POPUP_
 
 [calc_req_fuel_1_button]
 keys=page,table_num,handler
-key_types=_INT_,_INT_,_ENUM_
+key_types=_INT_,_STRING_,_ENUM_
 page=1
 table_num=1
 handler=_REQ_FUEL_POPUP_
@@ -265,7 +265,7 @@ handler=_GENERIC_
 
 [req_fuel_per_cycle_0_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=90
 table_num=0
@@ -287,7 +287,7 @@ divider_1_offset=91
 
 [req_fuel_per_cycle_1_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=90
 table_num=1
@@ -309,7 +309,7 @@ divider_2_offset=91
 
 [req_fuel_per_squirt_0_spin]
 keys=page,offset,table_num,ul_conv_expr,bind_to_list
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=0
 offset=90
 table_num=0
@@ -318,7 +318,7 @@ bind_to_list=interdep_0_ctrl
 
 [req_fuel_per_squirt_1_spin]
 keys=page,offset,table_num,ul_conv_expr,bind_to_list
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=1
 offset=90
 table_num=1
@@ -403,7 +403,7 @@ handler=_GENERIC_
 
 [inj_per_cycle_0_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=91
 table_num=0
@@ -423,7 +423,7 @@ divider_1_offset=91
 
 [inj_per_cycle_1_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=91
 table_num=1
@@ -443,7 +443,7 @@ divider_2_offset=91
 
 [num_injectors_0_spin]
 keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=117
 bitmask=240
@@ -463,7 +463,7 @@ injectors_1_bitshift=4
 
 [num_injectors_1_spin]
 keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=117
 bitmask=240
@@ -483,7 +483,7 @@ injectors_2_bitshift=4
 
 [num_cylinders_0_spin]
 keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=116
 bitmask=240
@@ -503,7 +503,7 @@ cylinders_1_bitshift=4
 
 [num_cylinders_1_spin]
 keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=1
 offset=116
 bitmask=240

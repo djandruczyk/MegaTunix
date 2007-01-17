@@ -22,7 +22,7 @@ bind_to_list=burners
 
 [calc_req_fuel_button]
 keys=page,handler,table_num
-key_types=_INT_,_ENUM_,_INT_
+key_types=_INT_,_ENUM_,_STRING_
 page=0
 table_num=0
 handler=_REQ_FUEL_POPUP_
@@ -217,7 +217,7 @@ handler=_GENERIC_
 
 [simul_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=92
 bitshift=0
@@ -229,7 +229,7 @@ handler=_ALT_SIMUL_
 
 [alternate_radio_button]
 keys=page,offset,bitshift,bitval,bitmask,table_num,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=92
 bitshift=0
@@ -243,7 +243,7 @@ handler=_ALT_SIMUL_
 
 [req_fuel_per_cycle_0_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=90
 table_num=0
@@ -269,7 +269,7 @@ alternate_bitshift=0
 
 [req_fuel_per_squirt_0_spin]
 keys=page,offset,table_num,ul_conv_expr,bind_to_list
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_
 page=0
 offset=90
 table_num=0
@@ -328,7 +328,7 @@ bind_to_list=temperature
 
 [inj_per_cycle_0_spin]
 keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=91
 table_num=0
@@ -348,7 +348,7 @@ divider_1_offset=91
 
 [num_injectors_0_spin]
 keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=117
 bitmask=240
@@ -368,7 +368,7 @@ injectors_1_bitshift=4
 
 [num_cylinders_0_spin]
 keys=page,offset,bitmask,bitshift,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
-key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
 page=0
 offset=116
 bitmask=240
