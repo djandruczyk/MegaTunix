@@ -569,6 +569,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	ve3d_draw_ve_grid(ve_view);
 	ve3d_draw_active_indicator(ve_view);
 	ve3d_draw_runtime_indicator(ve_view);
+	ve3d_draw_active_vertexes_marker(ve_view);
 	ve3d_draw_axis(ve_view);
 
 	glTranslatef (0.0, 0.0, -1.0);
@@ -1517,4 +1518,168 @@ update_now:
 		}
 
 	}
+}
+
+
+void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
+{
+	gfloat x_source = 0.0;
+	gfloat y_source = 0.0;
+	gfloat tmpf1 = 0.0;
+	gfloat tmpf2 = 0.0;
+	gfloat tmpf3 = 0.0;
+	gint i = 0;
+	gint table = 0;
+	gint page = 0;
+	gint base = 0;
+	gint bin[4] = {0,0,0,0};
+	gfloat left_w = 0.0;
+	gfloat right_w = 0.0;
+	gfloat top_w = 0.0;
+	gfloat bottom_w = 0.0;
+	gfloat z_weight[4] = {0,0,0,0};
+	gfloat left = 0.0;
+	gfloat right = 0.0;
+	gfloat top = 0.0;
+	gfloat bottom = 0.0;
+	extern struct Firmware_Details *firmware;
+	static void ***eval;
+	extern gint ** ms_data;
+	extern gint *algorithm;
+	extern gint active_table;
+
+
+	if (!eval)
+		eval = g_new0(void **, firmware->total_tables);
+
+
+	table = active_table;
+	if (!eval[table])
+		eval[table] = g_new0(void *, 2);
+	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_x_source))
+		lookup_current_value(firmware->table_params[table]->an_x_source,&x_source);
+	else
+		lookup_current_value(firmware->table_params[table]->x_source,&x_source);
+
+	if ((!eval[table][0]) && (firmware->table_params[table]->x_conv_expr))
+	{
+		eval[table][0] = evaluator_create(firmware->table_params[table]->x_conv_expr);
+	}
+	if ((!eval[table][1]) && (firmware->table_params[table]->y_conv_expr))
+	{
+		eval[table][1] = evaluator_create(firmware->table_params[table]->y_conv_expr);
+	}
+
+	/* Find bin corresponding to current rpm  */
+	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
+	{
+		page = firmware->table_params[table]->x_page;
+		base = firmware->table_params[table]->x_base;
+		if (evaluator_evaluate_x(eval[table][0],ms_data[page][base]) >= x_source)
+		{
+			bin[0] = -1;
+			bin[1] = 0;
+			left_w = 1;
+			right_w = 1;
+			break;
+		}
+		left = evaluator_evaluate_x(eval[table][0],ms_data[page][base+i]);
+		right = evaluator_evaluate_x(eval[table][0],ms_data[page][base+i+1]);
+
+		if ((x_source > left) && (x_source <= right))
+		{
+			bin[0] = i;
+			bin[1] = i+1;
+
+			right_w = (float)(x_source-left)/(float)(right-left);
+			left_w = 1.0-right_w;
+			break;
+
+		}
+		if (x_source > right)
+		{
+			bin[0] = i+1;
+			bin[1] = -1;
+			left_w = 1;
+			right_w = 1;
+		}
+	}
+	//	printf("left bin %i, right bin %i, left_weight %f, right_weight %f\n",bin[0],bin[1],left_w,right_w);
+
+	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_y_source))
+		lookup_current_value(firmware->table_params[table]->an_y_source,&y_source);
+	else
+		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
+	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
+	{
+		page = firmware->table_params[table]->y_page;
+		base = firmware->table_params[table]->y_base;
+		if (evaluator_evaluate_x(eval[table][1],ms_data[page][base]) >= y_source)
+		{
+			bin[2] = -1;
+			bin[3] = 0;
+			top_w = 1;
+			bottom_w = 1;
+			break;
+		}
+		bottom = evaluator_evaluate_x(eval[table][1],ms_data[page][base+i]);
+		top = evaluator_evaluate_x(eval[table][1],ms_data[page][base+i+1]);
+
+		if ((y_source > bottom) && (y_source <= top))
+		{
+			bin[2] = i;
+			bin[3] = i+1;
+
+			top_w = (float)(y_source-bottom)/(float)(top-bottom);
+			bottom_w = 1.0-top_w;
+			break;
+
+		}
+		if (y_source > top)
+		{
+			bin[2] = i+1;
+			bin[3] = -1;
+			top_w = 1;
+			bottom_w = 1;
+		}
+	}
+	z_weight[0] = left_w*bottom_w;
+	z_weight[1] = left_w*top_w;
+	z_weight[2] = right_w*bottom_w;
+	z_weight[3] = right_w*top_w;
+
+	glBegin(GL_POINTS);
+
+	tmpf3 = z_weight[0]*1.5+0.25;
+	glColor3f(tmpf3,tmpf3,tmpf3);
+
+	tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[0]])-ve_view->x_trans)*ve_view->x_scale); 
+	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+
+	tmpf3 = z_weight[1]*1.5+0.25;
+	glColor3f(tmpf3,tmpf3,tmpf3);
+
+	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+
+	tmpf3 = z_weight[2]*1.5+0.25;
+	glColor3f(tmpf3,tmpf3,tmpf3);
+
+	tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[1]])-ve_view->x_trans)*ve_view->x_scale); 
+	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+
+	tmpf3 = z_weight[3]*1.5+0.25;
+	glColor3f(tmpf3,tmpf3,tmpf3);
+
+	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
+	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+
+	glEnd();
+
 }

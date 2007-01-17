@@ -64,6 +64,7 @@ void rescale_table(gchar * widget_name)
 	GdkColor color;
 	extern GdkColor black;
 	gboolean use_color = FALSE;
+	extern gboolean forced_update;
 
 	scaler = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
@@ -133,6 +134,7 @@ void rescale_table(gchar * widget_name)
 			}
 		}
 	}
+	forced_update = TRUE;
 }
 
 void draw_ve_marker()
@@ -169,6 +171,7 @@ void draw_ve_marker()
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
 	extern gint active_table;
+	extern gboolean forced_update;
 
 
 	if (!eval)
@@ -291,6 +294,8 @@ void draw_ve_marker()
 	/* Cheap hack to see if things changed, if not don't waste CPU time inside
 	 * of pango changing the color unnecessarily
 	 * */
+	if (forced_update)
+		goto redraw;
 	for (i=0;i<4;i++)
 	{
 		if (fabs(z_weight[i]-last_z_weight[i]) > 0.03)

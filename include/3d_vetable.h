@@ -43,6 +43,7 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *);
 void ve3d_draw_axis(struct Ve_View_3D *);
 void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);
 void ve3d_load_font_metrics(void);
+void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *);
 void reset_3d_view(GtkWidget *);
 struct Ve_View_3D * initialize_ve3d_view();
 void update_ve3d_if_necessary(int , int );
