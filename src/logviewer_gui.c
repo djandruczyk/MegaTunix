@@ -698,7 +698,7 @@ void draw_infotext()
 	if (!lv_data->font_desc)
 	{
 		lv_data->font_desc = pango_font_description_from_string("courier");
-		pango_font_description_set_absolute_size(lv_data->font_desc,(12)*PANGO_SCALE);
+		pango_font_description_set_size(lv_data->font_desc,(12)*PANGO_SCALE);
 	}
 	if (!lv_data->highlight_gc)
 		lv_data->highlight_gc = initialize_gc(lv_data->pixmap,HIGHLIGHT);
@@ -761,7 +761,7 @@ void draw_valtext(gboolean force_draw)
 	if (!lv_data->font_desc)
 	{
 		lv_data->font_desc = pango_font_description_from_string("courier");
-		pango_font_description_set_absolute_size(lv_data->font_desc,(12)*PANGO_SCALE);
+		pango_font_description_set_size(lv_data->font_desc,(12)*PANGO_SCALE);
 	}
 	
 	val_x = 15;
