@@ -173,6 +173,8 @@ void draw_ve_marker()
 	extern gint active_table;
 	extern gboolean forced_update;
 
+	if ((active_table < 0 )||(active_table > (firmware->total_tables-1)))
+		return;
 
 	if (!eval)
 		eval = g_new0(void **, firmware->total_tables);
@@ -197,6 +199,7 @@ void draw_ve_marker()
 	}
 
 	table = active_table;
+
 	if (!eval[table])
 		eval[table] = g_new0(void *, 2);
 	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_x_source))

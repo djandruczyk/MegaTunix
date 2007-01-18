@@ -38,7 +38,7 @@ gboolean ve3d_key_press_event (GtkWidget *, GdkEventKey *, gpointer);
 gboolean ve3d_button_press_event(GtkWidget *, GdkEventButton *, gpointer);
 void ve3d_calculate_scaling(struct Ve_View_3D *);
 void ve3d_draw_ve_grid(struct Ve_View_3D *);
-void ve3d_draw_active_indicator(struct Ve_View_3D *);
+void ve3d_draw_edit_indicator(struct Ve_View_3D *);
 void ve3d_draw_runtime_indicator(struct Ve_View_3D *);
 void ve3d_draw_axis(struct Ve_View_3D *);
 void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);

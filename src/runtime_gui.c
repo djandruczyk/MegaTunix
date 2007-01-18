@@ -21,6 +21,7 @@
 #include <enums.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
+#include <math.h>
 #include <mode_select.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
@@ -99,7 +100,7 @@ gboolean update_runtime_vars()
 					lookup_current_value(ve_view->x_source,&x);
 					lookup_previous_value(ve_view->x_source,&xl);
 				}
-				if ((x != xl) || (forced_update))
+				if (((fabs(x-xl)/x) > 0.01) || (forced_update))
 					goto redraw;
 				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_y_source))
 				{
@@ -111,7 +112,7 @@ gboolean update_runtime_vars()
 					lookup_current_value(ve_view->y_source,&y);
 					lookup_previous_value(ve_view->y_source,&yl);
 				}
-				if ((y != yl) || (forced_update))
+				if (((fabs(y-yl)/y) > 0.01) || (forced_update))
 					goto redraw;
 
 				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_z_source))
@@ -124,9 +125,10 @@ gboolean update_runtime_vars()
 					lookup_current_value(ve_view->z_source,&z);
 					lookup_previous_value(ve_view->z_source,&zl);
 				}
-				if ((z != zl) || (forced_update))
+				if (((fabs(z-zl)/z) > 0.01) || (forced_update))
 					goto redraw;
 				goto breakout;
+
 redraw:
 				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			}
@@ -138,7 +140,7 @@ breakout:
 	if (dash_gauges)
 		g_hash_table_foreach(dash_gauges,update_dash_gauge,NULL);
 
-	if ((active_page == VETABLES_PAGE) ||(active_page == SPARKTABLES_PAGE)||(active_page == AFRTABLES_PAGE)||(active_page == BOOSTTABLES_PAGE)||(active_page == ROTARYTABLES_PAGE))
+	if ((active_page == VETABLES_PAGE) ||(active_page == SPARKTABLES_PAGE)||(active_page == AFRTABLES_PAGE)||(active_page == BOOSTTABLES_PAGE)||(active_page == ROTARYTABLES_PAGE) || (forced_update))
 		draw_ve_marker();
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
@@ -161,7 +163,6 @@ breakout:
 		forced_update = TRUE;
 	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
 	g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
-	forced_update=FALSE;
 
 	if (count > 60 )
 		count = 0;

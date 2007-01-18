@@ -32,6 +32,7 @@
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <../mtxmatheval/mtxmatheval.h>
+#include <math.h>
 #include <notifications.h>
 #include <pango/pango-font.h>
 #include <rtv_processor.h>
@@ -529,8 +530,9 @@ we don't
  */
 gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	extern gboolean forced_update;
+	//extern gboolean forced_update;
 	struct Ve_View_3D *ve_view = NULL;
+
 	ve_view = (struct Ve_View_3D 
 			*)g_object_get_data(G_OBJECT(widget),"ve_view");
 
@@ -567,8 +569,8 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 
 	ve3d_calculate_scaling(ve_view);
 	ve3d_draw_ve_grid(ve_view);
-	ve3d_draw_active_indicator(ve_view);
 	ve3d_draw_runtime_indicator(ve_view);
+	ve3d_draw_edit_indicator(ve_view);
 	ve3d_draw_active_vertexes_marker(ve_view);
 	ve3d_draw_axis(ve_view);
 
@@ -585,7 +587,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 
-	forced_update = TRUE;
+	//forced_update = TRUE;
 	return TRUE; 
 }
 
@@ -860,13 +862,13 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 }
 
 /*!
- \brief ve3d_draw_active_indicator is called during rerender and draws 
+ \brief ve3d_draw_edit_indicator is called during rerender and draws 
 the
  red dot which tells where changes will be made to the table by the 
 user.  
  The user moves this with the arrow keys..
  */
-void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
+void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 {
 	extern gint **ms_data;
 	gint x_page = 0;
@@ -885,7 +887,7 @@ void ve3d_draw_active_indicator(struct Ve_View_3D *ve_view)
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
-	dbg_func(g_strdup(__FILE__": ve3d_draw_active_indicator()\n"),OPENGL);
+	dbg_func(g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"),OPENGL);
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -1281,6 +1283,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	struct Ve_View_3D *ve_view = NULL;
 	extern gint **ms_data;
 	extern struct Firmware_Details *firmware;
+	extern gboolean forced_update;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
@@ -1392,6 +1395,7 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"),OPENGL);
 
 		write_ve_const(widget,z_page,offset,dload_val,firmware->page_params[z_page]->is_spark, TRUE);
+		forced_update = TRUE;
 	}
 
 	return TRUE;
@@ -1650,31 +1654,31 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 
 	glBegin(GL_POINTS);
 
-	tmpf3 = z_weight[0]*1.5+0.25;
-	glColor3f(tmpf3,tmpf3,tmpf3);
+	tmpf3 = z_weight[0]*1.35;
+	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
 	tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[0]])-ve_view->x_trans)*ve_view->x_scale); 
 	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 
-	tmpf3 = z_weight[1]*1.5+0.25;
-	glColor3f(tmpf3,tmpf3,tmpf3);
+	tmpf3 = z_weight[1]*1.35;
+	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
 	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[0]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 
-	tmpf3 = z_weight[2]*1.5+0.25;
-	glColor3f(tmpf3,tmpf3,tmpf3);
+	tmpf3 = z_weight[2]*1.35;
+	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
 	tmpf1 = ((evaluator_evaluate_x(ve_view->x_eval,ms_data[ve_view->x_page][ve_view->x_base+bin[1]])-ve_view->x_trans)*ve_view->x_scale); 
 	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[2]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[2]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 
-	tmpf3 = z_weight[3]*1.5+0.25;
-	glColor3f(tmpf3,tmpf3,tmpf3);
+	tmpf3 = z_weight[3]*1.35;
+	glColor3f(tmpf3,1.0-tmpf3,1.0-tmpf3);
 
 	tmpf2 = ((evaluator_evaluate_x(ve_view->y_eval,ms_data[ve_view->y_page][ve_view->y_base+bin[3]])-ve_view->y_trans)*ve_view->y_scale); 
 	tmpf3 = (((evaluator_evaluate_x(ve_view->z_eval,ms_data[ve_view->z_page][ve_view->z_base+(bin[3]*ve_view->y_bincount)+bin[1]]))-ve_view->z_trans)*ve_view->z_scale);
