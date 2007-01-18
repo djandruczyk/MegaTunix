@@ -32,5 +32,7 @@ Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\.MegaTunix\"; Flags:
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxGaugeDesigner"; Filename: "{app}\gaugedesigner.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxDashDesigner"; Filename: "{app}\dashdesigner.exe"; WorkingDir: "{app}"
+Name: "{userdesktop}\MegaTunix @VERSION@"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 
 

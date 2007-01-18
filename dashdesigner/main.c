@@ -6,6 +6,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 #include <rtv_parser.h>
+#include <xml.h>
 
 GladeXML *main_xml = NULL;
 gchar *cwd = NULL;

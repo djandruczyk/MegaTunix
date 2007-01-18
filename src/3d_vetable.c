@@ -77,6 +77,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	extern struct Firmware_Details *firmware;
 	extern gboolean gl_ability;
 	gint table_num =  -1;
+	extern gboolean forced_update;
 
 	if (!gl_ability)
 	{
@@ -384,6 +385,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	gtk_widget_show_all(window);
 
+	forced_update = TRUE;
 	return TRUE;
 }
 
