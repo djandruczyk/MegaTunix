@@ -2,78 +2,78 @@
 <!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
 <dashboard>
   <dash_geometry>
-    <width>1024</width>
-    <height>738</height>
+    <width>714</width>
+    <height>575</height>
   </dash_geometry>
   <gauge>
-    <width>312</width>
-    <height>220</height>
-    <x_offset>46</x_offset>
-    <y_offset>264</y_offset>
+    <width>171</width>
+    <height>164</height>
+    <x_offset>44</x_offset>
+    <y_offset>207</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_AE_Gauge.xml</gauge_xml_name>
     <datasource>tpsaccel</datasource>
   </gauge>
   <gauge>
-    <width>299</width>
-    <height>223</height>
-    <x_offset>676</x_offset>
-    <y_offset>266</y_offset>
+    <width>192</width>
+    <height>167</height>
+    <x_offset>488</x_offset>
+    <y_offset>199</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_afr_Gauge.xml</gauge_xml_name>
     <datasource>afr</datasource>
   </gauge>
   <gauge>
-    <width>238</width>
-    <height>223</height>
-    <x_offset>509</x_offset>
-    <y_offset>159</y_offset>
+    <width>175</width>
+    <height>171</height>
+    <x_offset>360</x_offset>
+    <y_offset>78</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_dc_Gauge.xml</gauge_xml_name>
     <datasource>dcycle1</datasource>
   </gauge>
   <gauge>
-    <width>225</width>
-    <height>219</height>
-    <x_offset>101</x_offset>
-    <y_offset>44</y_offset>
+    <width>166</width>
+    <height>160</height>
+    <x_offset>4</x_offset>
+    <y_offset>6</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_map_Gauge.xml</gauge_xml_name>
     <datasource>mapkpa</datasource>
   </gauge>
   <gauge>
-    <width>250</width>
-    <height>219</height>
-    <x_offset>705</x_offset>
-    <y_offset>490</y_offset>
+    <width>165</width>
+    <height>178</height>
+    <x_offset>511</x_offset>
+    <y_offset>362</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_MAT_Gauge.xml</gauge_xml_name>
     <datasource>matdeg</datasource>
   </gauge>
   <gauge>
-    <width>296</width>
-    <height>224</height>
-    <x_offset>255</x_offset>
-    <y_offset>158</y_offset>
+    <width>214</width>
+    <height>166</height>
+    <x_offset>150</x_offset>
+    <y_offset>81</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_PWM_Gauge.xml</gauge_xml_name>
     <datasource>pw1</datasource>
   </gauge>
   <gauge>
-    <width>385</width>
-    <height>345</height>
-    <x_offset>324</x_offset>
-    <y_offset>361</y_offset>
+    <width>256</width>
+    <height>276</height>
+    <x_offset>231</x_offset>
+    <y_offset>246</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_rpm_Gauge.xml</gauge_xml_name>
     <datasource>rpm</datasource>
   </gauge>
   <gauge>
-    <width>218</width>
-    <height>261</height>
-    <x_offset>96</x_offset>
-    <y_offset>465</y_offset>
+    <width>161</width>
+    <height>191</height>
+    <x_offset>50</x_offset>
+    <y_offset>361</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_temp_Gauge.xml</gauge_xml_name>
     <datasource>cltdeg</datasource>
   </gauge>
   <gauge>
-    <width>219</width>
-    <height>224</height>
-    <x_offset>719</x_offset>
-    <y_offset>42</y_offset>
+    <width>180</width>
+    <height>172</height>
+    <x_offset>521</x_offset>
+    <y_offset>3</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_volts_Gauge.xml</gauge_xml_name>
     <datasource>battvolt</datasource>
   </gauge>
