@@ -115,7 +115,11 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		printf("critical error, notbook not found, EXITING!\n");
 		exit (-1);
 	}
+#ifdef __WIN32__
+	path = g_build_path(PSEP,HOME(),".MegaTunix",GAUGES_DATA_DIR,NULL);
+#else
 	path = g_build_path(PSEP,DATA_DIR,GAUGES_DATA_DIR,NULL);
+#endif
 	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,NULL),g_strdup("xml"));
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
