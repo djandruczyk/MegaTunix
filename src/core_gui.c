@@ -18,7 +18,10 @@
 #include <defines.h>
 #include <enums.h>
 #include <general_gui.h>
+#include <glade/glade.h>
 #include <gui_handlers.h>
+#include <getfiles.h>
+#include <stdlib.h>
 #include <tuning_gui.h>
 
 
@@ -60,8 +63,34 @@ int setup_gui()
 	GtkWidget *hbox = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *button = NULL;
+	gchar *filename = NULL;
+	GladeXML *xml = NULL;
 	gint i=0;
 
+	filename = get_file(g_build_filename(GUI_DATA_DIR,"main.glade",NULL),NULL);
+	if (!filename)
+	{
+		printf("Can't locate primary glade file!!!!\n");
+		exit(-1);
+	}
+	else
+		xml = glade_xml_new(filename, "mtx_main_window",NULL);
+	g_free(filename);
+
+	glade_xml_signal_autoconnect(xml);
+
+	main_window = glade_xml_get_widget(xml,"mtx_main_window");
+	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
+	gtk_widget_set_size_request(main_window,def_width,def_height);
+	gtk_window_set_default_size(GTK_WINDOW(main_window),width,height);
+	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix "VERSION);
+	gtk_widget_realize(main_window);
+
+	tip = gtk_tooltips_new();
+
+	vbox = glade_xml_get_widget(xml,"mtx_top_vbox");
+
+	/*
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
 	gtk_widget_set_size_request(main_window,def_width,def_height);
@@ -79,6 +108,7 @@ int setup_gui()
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(main_window),vbox);
+	*/
 
 	notebook = gtk_notebook_new ();
 	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);

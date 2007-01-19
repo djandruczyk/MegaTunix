@@ -1,6 +1,7 @@
 guidir = $(datadir)/MegaTunix/$(GUI_DATA_DIR)
 
 gui_files = 	README \
+		main.glade \
 		template.glade \
 		afrtable_8x8x2.glade \
 		afrtable_8x8x2-029x.datamap \

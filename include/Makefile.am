@@ -33,6 +33,7 @@ headers = \
         logviewer_gui.h \
         lookuptables.h \
         main.h \
+	menu_handlers.h \
         memory_gui.h \
         mode_select.h \
         ms_structures.h \

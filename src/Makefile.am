@@ -38,6 +38,7 @@ megatunix_SOURCES = \
 	logviewer_gui.c \
 	lookuptables.c \
 	main.c \
+	menu_handlers.c \
 	memory_gui.c \
 	mode_select.c \
 	notifications.c \

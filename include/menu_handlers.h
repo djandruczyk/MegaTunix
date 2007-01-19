@@ -11,15 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __ABOUT_H__
-#define __ABOUT_H__
+#ifndef __MENU_HANDLERS_H__
+#define __MENU_HANDLERS_H__
 
 #include <defines.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void build_about(GtkWidget *);
-EXPORT gboolean about_popup(GtkWidget *, gpointer );
+EXPORT gboolean jump_to_tab(GtkWidget *, gpointer );
+EXPORT gboolean settings_transfer(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif
