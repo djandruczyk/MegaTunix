@@ -4,13 +4,13 @@ AC_INIT(src/main.c)
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
-MTX_MICRO_VERSION=4
+MTX_MICRO_VERSION=5
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
 
 AC_CONFIG_SUBDIRS(src/main.c)
-AM_INIT_AUTOMAKE(megatunix, 0.9.4)
+AM_INIT_AUTOMAKE(megatunix, 0.9.5)
 #AC_CONFIG_HEADERS(config.h)
 AM_CONFIG_HEADER(config.h)
 
@@ -187,6 +187,7 @@ gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
 gaugedesigner/gauges/SportComp/Makefile
 gaugedesigner/gauges/UltraLite/Makefile
+gaugedesigner/gauges/Cobalt/Makefile
 src/resources.rc
 widgets/Makefile
 dashdesigner/Makefile

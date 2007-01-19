@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE gauge SYSTEM "mtxgauge.dtd">
+<gauge>
+  <bg_color>0 0 0</bg_color>
+  <needle_color>61019 15359 2737</needle_color>
+  <needle_tail>0.000000</needle_tail>
+  <needle_width>0.045000</needle_width>
+  <majtick_color>58339 58339 58339</majtick_color>
+  <mintick_color>58339 58339 58339</mintick_color>
+  <value_font_color>52428 52428 52428</value_font_color>
+  <major_tick_text_color>55704 55704 55704</major_tick_text_color>
+  <gradient_begin_color>65535 65535 65535</gradient_begin_color>
+  <gradient_end_color>0 0 0</gradient_end_color>
+  <precision>2</precision>
+  <width>585</width>
+  <height>432</height>
+  <start_deg>-135.218033</start_deg>
+  <stop_deg>-269.781921</stop_deg>
+  <start_radian>2.360000</start_radian>
+  <stop_radian>7.068583</stop_radian>
+  <lbound>8.000000</lbound>
+  <ubound>18.000000</ubound>
+  <value_font>arial Bold</value_font>
+  <value_font_scale>0.220000</value_font_scale>
+  <value_str_xpos>0.000000</value_str_xpos>
+  <value_str_ypos>0.350000</value_str_ypos>
+  <antialias>1</antialias>
+  <show_value>1</show_value>
+  <tick_inset>0.150000</tick_inset>
+  <major_ticks>11</major_ticks>
+  <major_tick_len>0.130000</major_tick_len>
+  <major_tick_width>0.220000</major_tick_width>
+  <major_tick_text_font>Crillee</major_tick_text_font>
+  <major_tick_text>8,,10,,12,,14,,16,,18 </major_tick_text>
+  <major_tick_text_inset>0.030000</major_tick_text_inset>
+  <major_tick_text_scale>0.150000</major_tick_text_scale>
+  <minor_ticks>3</minor_ticks>
+  <minor_tick_len>0.050000</minor_tick_len>
+  <minor_tick_width>0.120000</minor_tick_width>
+  <text_block>
+    <font>Crillee</font>
+    <text>VOLTS</text>
+    <font_scale>0.150000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>0.610000</y_pos>
+    <color>55769 55769 55769</color>
+  </text_block>
+  <text_block>
+    <font>Crillee</font>
+    <text>COBALT</text>
+    <font_scale>0.120000</font_scale>
+    <x_pos>0.000000</x_pos>
+    <y_pos>-0.286000</y_pos>
+    <color>55769 55769 55769</color>
+  </text_block>
+  <color_range>
+    <lowpoint>8.000000</lowpoint>
+    <highpoint>18.000000</highpoint>
+    <lwidth>0.035000</lwidth>
+    <inset>0.740000</inset>
+    <color>0 18247 43947</color>
+  </color_range>
+</gauge>
