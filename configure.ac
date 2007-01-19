@@ -188,6 +188,7 @@ gaugedesigner/gauges/Makefile
 gaugedesigner/gauges/SportComp/Makefile
 gaugedesigner/gauges/UltraLite/Makefile
 gaugedesigner/gauges/Cobalt/Makefile
+gaugedesigner/gauges/Impact/Makefile
 src/resources.rc
 widgets/Makefile
 dashdesigner/Makefile

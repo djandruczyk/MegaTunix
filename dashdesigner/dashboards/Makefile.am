@@ -3,7 +3,8 @@ dashesdir = $(datadir)/MegaTunix/$(DASHES_DATA_DIR)
 dashes_files = 	\
 		Default_Dash.xml \
 		Autometer-ultralight.xml \
-		Cobalt_Dash.xml
+		Cobalt_Dash.xml \
+		Impact_Dash.xml
 
 dashes_DATA = $(dashes_files)
 
