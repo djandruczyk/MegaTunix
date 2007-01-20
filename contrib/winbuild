@@ -33,4 +33,4 @@ cross-configure &&
 	make -j5 && \
 	./contrib/builder
 . uncross
-make clean
+make distclean

@@ -29,6 +29,17 @@ static struct
 	{"ecu_errors_menuitem",ERROR_STATUS_TAB},
 };
 
+static struct 
+{
+	const gchar *item;
+	FioAction action;
+}fio_items[] = {
+	{"import_tables_menuitem",VEX_IMPORT},
+	{"export_tables_menuitem",VEX_EXPORT},
+	{"restore_ecu_menuitem",ECU_RESTORE},
+	{"backup_ecu_menuitem",ECU_BACKUP},
+};
+
 void setup_menu_handlers(GladeXML *xml)
 {
 	GtkWidget *item = NULL;
@@ -40,6 +51,13 @@ void setup_menu_handlers(GladeXML *xml)
 		if (GTK_IS_WIDGET(item))
 			g_object_set_data(G_OBJECT(item),"target_tab",
 					GINT_TO_POINTER(items[i].tab));
+	}
+	for (i=0;i< (sizeof(fio_items)/sizeof(fio_items[0]));i++)
+	{
+		item = glade_xml_get_widget(xml,fio_items[i].item);
+		if (GTK_IS_WIDGET(item))
+			g_object_set_data(G_OBJECT(item),"fio_action",
+					GINT_TO_POINTER(fio_items[i].action));
 	}
 }
 
@@ -76,12 +94,29 @@ EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 }
 
 /*!
- \brief General purpose handler to take car of menu initiated settings 
+ \brief General purpose handler to take care of menu initiated settings 
  transfers like VEX import/export and ECU backup/restore
  */
 EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
-	printf("settings_transfer needs a little work\n");
+	FioAction action = -1;
+	action = (FioAction)g_object_get_data(G_OBJECT(widget),"fio_action");
+
+	switch (action)
+	{
+		case VEX_IMPORT:
+			printf("vex_import\n");
+			break;
+		case VEX_EXPORT:
+			printf("vex_export\n");
+			break;
+		case ECU_BACKUP:
+			printf("ecu_backup\n");
+			break;
+		case ECU_RESTORE:
+			printf("ecu_restore\n");
+			break;
+	}
 	return TRUE;
 }
 

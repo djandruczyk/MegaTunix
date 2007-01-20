@@ -384,4 +384,12 @@ typedef enum
 	SD_MAF_HYBRID,
 }Algorithm;
 
+typedef enum
+{
+	VEX_IMPORT=0x230,
+	VEX_EXPORT,
+	ECU_BACKUP,
+	ECU_RESTORE,
+}FioAction;
+
 #endif

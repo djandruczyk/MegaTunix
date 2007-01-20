@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Linux Megasquirt tuning software
+ * Linux Megasquirt Tuning software
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -63,7 +63,7 @@ EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 		gchar *authors[] = {"David J. Andruczyk",NULL};
 		gchar *artists[] = {"Dale Anderson\nChristopher Mire\nTrent Stromkins\nWayne (TurboCamaro)\n71jeep",NULL};
 		gtk_show_about_dialog(NULL,
-				"name","MegaTunix tuning Software",
+				"name","MegaTunix Tuning Software",
 				"version",VERSION,
 				"copyright","David J. Andruczyk(2007)",
 				"comments","MegaTunix is a Graphical Tuning software designed to make it easy and intuitive to tune your MegaSquirt powered vehicle",
