@@ -97,26 +97,6 @@ int setup_gui()
 
 	vbox = glade_xml_get_widget(xml,"mtx_top_vbox");
 
-	/*
-	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
-	gtk_widget_set_size_request(main_window,def_width,def_height);
-	gtk_window_set_default_size(GTK_WINDOW(main_window),width,height);
-	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix "VERSION);
-	gtk_container_set_border_width(GTK_CONTAINER(main_window),0);
-	g_signal_connect(G_OBJECT(main_window),"destroy_event",
-			G_CALLBACK(leave),NULL);
-	g_signal_connect(G_OBJECT(main_window),"delete_event",
-			G_CALLBACK(leave),NULL);
-
-	gtk_widget_realize(main_window);
-
-	tip = gtk_tooltips_new();
-
-	vbox = gtk_vbox_new(FALSE,0);
-	gtk_container_add(GTK_CONTAINER(main_window),vbox);
-	*/
-
 	notebook = gtk_notebook_new ();
 	register_widget("toplevel_notebook",notebook);
 	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
