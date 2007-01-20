@@ -66,10 +66,10 @@ tooltip=The AFR Entries are the Air Fuel Radio values that the ECU should target
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident,sub-notebook
+keys=page,tab_ident,sub-notebook
 key_types=_INT_,_ENUM_,_STRING_
 page=6
-page_ident=_AFRTABLES_PAGE_
+tab_ident=_AFRTABLES_TAB_
 sub-notebook=AFR_AFR_notebook
 
 [topframe_title]

@@ -142,15 +142,15 @@ breakout:
 	if (dash_gauges)
 		g_hash_table_foreach(dash_gauges,update_dash_gauge,NULL);
 
-	if ((active_page == VETABLES_PAGE) ||(active_page == SPARKTABLES_PAGE)||(active_page == AFRTABLES_PAGE)||(active_page == BOOSTTABLES_PAGE)||(active_page == ROTARYTABLES_PAGE) || (forced_update))
+	if ((active_page == VETABLES_TAB) ||(active_page == SPARKTABLES_TAB)||(active_page == AFRTABLES_TAB)||(active_page == BOOSTTABLES_TAB)||(active_page == ROTARYTABLES_TAB) || (forced_update))
 		draw_ve_marker();
 	/* Update all the dynamic RT Sliders */
-	if (active_page == RUNTIME_PAGE)	/* Runtime display is visible */
+	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
 		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
-	if (active_page == ENRICHMENTS_PAGE)	/* Enrichments display is up */
+	if (active_page == ENRICHMENTS_TAB)	/* Enrichments display is up */
 		g_hash_table_foreach(enr_sliders,rt_update_values,NULL);
 
-	if (active_page == WARMUP_WIZ_PAGE)	/* Warmup wizard is visible */
+	if (active_page == WARMUP_WIZ_TAB)	/* Warmup wizard is visible */
 	{
 		g_hash_table_foreach(ww_sliders,rt_update_values,NULL);
 

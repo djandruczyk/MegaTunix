@@ -399,10 +399,14 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 
 	if (GTK_IS_CONTAINER(widget))
+	{
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
+	}
 	section = (char *)glade_get_widget_name(widget);
 	if (section == NULL)
+	{
 		return;
+	}
 	g_object_set_data(G_OBJECT(widget),"name",g_strdup(section));
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{

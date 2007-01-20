@@ -75,10 +75,10 @@ table_num=9
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident,sub-notebook
+keys=page,tab_ident,sub-notebook
 key_types=_INT_,_ENUM_,_STRING_
 page=7
-page_ident=_BOOSTTABLES_PAGE_
+tab_ident=_BOOSTTABLES_TAB_
 sub-notebook=BT_notebook1
 
 [B1_title]

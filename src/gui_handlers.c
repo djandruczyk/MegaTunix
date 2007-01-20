@@ -1776,7 +1776,7 @@ testit:
  */
 void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
-	gint page_ident = 0;
+	gint tab_ident = 0;
 	gint sub_page = 0;
 	gchar * tmpbuf = NULL;
 	extern gboolean forced_update;
@@ -1784,8 +1784,8 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 	extern GHashTable *dynamic_widgets;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
-	page_ident = (PageIdent)g_object_get_data(G_OBJECT(widget),"page_ident");
-	active_page = page_ident;
+	tab_ident = (TabIdent)g_object_get_data(G_OBJECT(widget),"tab_ident");
+	active_page = tab_ident;
 
 	if (g_object_get_data(G_OBJECT(widget),"table_num"))
 	{

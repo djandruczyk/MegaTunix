@@ -40,7 +40,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 			case MTX_INT:
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),KEYPARSER);
 					g_object_set_data(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
@@ -52,7 +52,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
 					tmpi = translate_string(tmpbuf);
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),KEYPARSER);
 					g_object_set_data(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
@@ -64,7 +64,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),KEYPARSER);
 					g_object_set_data(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
@@ -77,7 +77,7 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 			case MTX_STRING:
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),TABLOADER);
+					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),KEYPARSER);
 					tmpstr = g_object_get_data(object,keys[i]);
 					/* If data already on widget, append
 					 * new data and store */

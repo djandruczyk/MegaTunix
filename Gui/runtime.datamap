@@ -21,10 +21,10 @@ page=0
 #------ Gui objects ---------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
+keys=page,tab_ident
 key_types=_INT_,_ENUM_
 page=0
-page_ident=_RUNTIME_PAGE_
+tab_ident=_RUNTIME_TAB_
 
 #------- Runtime Status Indicators ------------------------------------------
 

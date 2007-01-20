@@ -50,10 +50,10 @@ tooltip=The VE Entries control how much fuel is injected into the engine. They r
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
+keys=page,tab_ident
 key_types=_INT_,_ENUM_
 page=1
-page_ident=_VETABLES_PAGE_
+tab_ident=_VETABLES_TAB_
 
 [topframe_title]
 keys=page,set_label

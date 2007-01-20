@@ -74,9 +74,9 @@ gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
 	keytypes = (gint *)g_malloc0(ct*sizeof(gint));	
 	while (vector[i])
 	{
-		dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttrying to translate %s\n",vector[i]),TABLOADER);
+		dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttrying to translate %s\n",vector[i]),KEYPARSER);
 		keytypes[i] = translate_string(vector[i]);
-		dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttranslated value of %s is %i\n",vector[i],keytypes[i]),TABLOADER);
+		dbg_func(g_strdup_printf(__FILE__": parse_keytypes()\n\ttranslated value of %s is %i\n",vector[i],keytypes[i]),KEYPARSER);
 		i++;
 	}
 	g_strfreev(vector);

@@ -58,10 +58,10 @@ tooltip=The Spark Advance Entries control the engine igntion timing.  The values
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
+keys=page,tab_ident
 key_types=_INT_,_ENUM_
 page=3
-page_ident=_SPARKTABLES_PAGE_
+tab_ident=_SPARKTABLES_TAB_
 
 [topframe_title]
 keys=page,set_label

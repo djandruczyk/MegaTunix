@@ -3,13 +3,13 @@
 [global]
 description=Object data map for Warmup Wizard
 tab_name=_Warmup Wizard
-page_ident=_WARMUP_WIZ_PAGE_
+tab_ident=_WARMUP_WIZ_TAB_
 
 [topframe]
-keys=page,page_ident
+keys=page,tab_ident
 key_types=_INT_,_ENUM_
 page=0
-page_ident=_WARMUP_WIZ_PAGE_
+tab_ident=_WARMUP_WIZ_TAB_
 
 #----- Buttons ---------------------------------------------------------------
 

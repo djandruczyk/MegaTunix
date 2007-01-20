@@ -4,6 +4,14 @@
 description=Object data map for MSnS-E Error status...
 tab_name=_Error Status
 
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=page,tab_ident
+key_types=_INT_,_ENUM_
+page=0
+tab_ident=_ERROR_STATUS_TAB_
+
 #----- Buttons ---------------------------------------------------------------
 
 [error_status_reboot_button]

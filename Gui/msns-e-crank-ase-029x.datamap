@@ -38,10 +38,10 @@ use_color=TRUE
 #----- Widgets ---------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident
+keys=page,tab_ident
 key_types=_INT_,_ENUM_
 page=4
-page_ident=_ENRICHMENTS_PAGE_
+tab_ident=_ENRICHMENTS_TAB_
 
 [clt_iat_params_hbox]
 keys=page,bind_to_list
@@ -56,24 +56,24 @@ page=0
 bind_to_list=spark_controls
 
 [clt_vscale]
-keys=page,bind_to_list,temp_dep,post_function_with_arg,source,page_ident
+keys=page,bind_to_list,temp_dep,post_function_with_arg,source,tab_ident
 key_types=_INT_,_STRING_,_BOOL_,_STRING_,_STRING_,_ENUM_
 page=8
 bind_to_list=temperature
 temp_dep=TRUE
 post_function_with_arg=register_rt_range
 source=cltdeg
-page_ident=_ENRICHMENTS_PAGE_
+tab_ident=_ENRICHMENTS_TAB_
 
 [mat_vscale]
-keys=page,bind_to_list,temp_dep,post_function_with_arg,source,page_ident
+keys=page,bind_to_list,temp_dep,post_function_with_arg,source,tab_ident
 key_types=_INT_,_STRING_,_BOOL_,_STRING_,_STRING_,_ENUM_
 page=8
 bind_to_list=temperature
 temp_dep=TRUE
 post_function_with_arg=register_rt_range
 source=matdeg
-page_ident=_ENRICHMENTS_PAGE_
+tab_ident=_ENRICHMENTS_TAB_
 
 #----- Buttons ----------------------------------------------------------------
 

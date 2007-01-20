@@ -14,6 +14,7 @@
 #include <about_gui.h>
 #include <comms_gui.h>
 #include <config.h>
+#include <configfile.h>
 #include <core_gui.h>
 #include <defines.h>
 #include <enums.h>
@@ -21,8 +22,12 @@
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <getfiles.h>
+#include <menu_handlers.h>
 #include <stdlib.h>
+#include <structures.h>
+#include <tabloader.h>
 #include <tuning_gui.h>
+#include <widgetmgmt.h>
 
 
 
@@ -42,11 +47,11 @@ static struct
 	gchar *frame_name;	/* Textual name at the top of the frame */
 	void (*Function) (GtkWidget *);	/* builder function */
 	gchar *tab_name;	/* The Tab textual name for the main gui */
-	PageIdent page_ident;	/* Page Identifier... */
+	TabIdent tab_ident;	/* Tab Identifier... */
 } notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",ABOUT_PAGE},
-{ "General MegaTunix Settings", build_general, "_General",GENERAL_PAGE},
-{ "MegaSquirt Communications Parameters", build_comms, "_Communications",COMMS_PAGE},
+{ "About MegaTunix", build_about, "_About",ABOUT_TAB},
+{ "General MegaTunix Settings", build_general, "_General",GENERAL_TAB},
+{ "MegaSquirt Communications Parameters", build_comms, "_Communications",COMMS_TAB},
 };
 
 static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
@@ -76,6 +81,8 @@ int setup_gui()
 	else
 		xml = glade_xml_new(filename, "mtx_main_window",NULL);
 	g_free(filename);
+
+	setup_menu_handlers(xml);
 
 	glade_xml_signal_autoconnect(xml);
 
@@ -111,6 +118,7 @@ int setup_gui()
 	*/
 
 	notebook = gtk_notebook_new ();
+	register_widget("toplevel_notebook",notebook);
 	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
 	gtk_notebook_popup_enable(GTK_NOTEBOOK(notebook));
@@ -125,7 +133,7 @@ int setup_gui()
 
 		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
 
-		g_object_set_data(G_OBJECT(frame),"page_ident",GINT_TO_POINTER(notebook_tabs[i].page_ident));
+		g_object_set_data(G_OBJECT(frame),"tab_ident",GINT_TO_POINTER(notebook_tabs[i].tab_ident));
 		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
 	}
 	g_signal_connect(G_OBJECT(notebook),"switch-page",

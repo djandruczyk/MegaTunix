@@ -124,10 +124,10 @@ table_num=4
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident,sub-notebook
+keys=page,tab_ident,sub-notebook
 key_types=_INT_,_ENUM_,_STRING_
 page=3
-page_ident=_SPARKTABLES_PAGE_
+tab_ident=_SPARKTABLES_TAB_
 sub-notebook=SP_spark_notebook
 
 [topframe_title]

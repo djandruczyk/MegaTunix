@@ -74,14 +74,13 @@ void dbg_func(gchar *str, Dbg_Class class)
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
 
-	g_static_mutex_lock(&dbg_mutex);
-
 	if (!dbgfile)
 	{
 		g_free(str);
-		g_static_mutex_unlock(&dbg_mutex);
 		return;
 	}
+
+	g_static_mutex_lock(&dbg_mutex);
 
 	if ((dbg_lvl & class))
 	{

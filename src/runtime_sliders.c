@@ -94,7 +94,7 @@ void load_sliders()
 			if (!cfg_read_string(cfgfile,section,"source",&source))
 				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 
-			slider = add_slider(ctrl_name,table,0,row,source,RUNTIME_PAGE);
+			slider = add_slider(ctrl_name,table,0,row,source,RUNTIME_TAB);
 			if (slider)
 			{
 				if (g_hash_table_lookup(rt_sliders,ctrl_name)==NULL)
@@ -126,7 +126,7 @@ do_ww_sliders:
 			if (!cfg_read_string(cfgfile,section,"source",&source))
 				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 
-			slider = add_slider(ctrl_name,table,0,row,source,WARMUP_WIZ_PAGE);
+			slider = add_slider(ctrl_name,table,0,row,source,WARMUP_WIZ_TAB);
 			if (slider)
 			{
 				if (g_hash_table_lookup(ww_sliders,ctrl_name)==NULL)
@@ -208,7 +208,7 @@ void load_ve3d_sliders(gint table_num)
 			if (!cfg_read_string(cfgfile,section,"source",&source))
 				dbg_func(g_strdup_printf(__FILE__": load_sliders()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
 
-			slider = add_slider(ctrl_name,table,table_num,row,source,VE3D_VIEWER_PAGE);
+			slider = add_slider(ctrl_name,table,table_num,row,source,VE3D_VIEWER_TAB);
 			if (slider)
 			{
 				if (g_hash_table_lookup(ve3d_sliders[table_num],ctrl_name)==NULL)
@@ -237,10 +237,10 @@ finish_off:
  bound to. (used for the sliders on the 3D view)
  \param row (gint) row of the table (tbl) that this slider goes on
  \param source (gchar *) data source for this slider 
- \param ident (PageIdent) enumeration of the page this slider goes on
+ \param ident (TabIdent) enumeration of the page this slider goes on
  \returns a Struct Rt_Slider *
  */
-struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, PageIdent ident)
+struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
 	struct Rt_Slider *slider = NULL;
 	GtkWidget *label = NULL;
@@ -273,11 +273,11 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	slider->history = (GArray *) g_object_get_data(object,"history");
 	slider->object = object;
 
-	if (ident == RUNTIME_PAGE)
+	if (ident == RUNTIME_TAB)
 		name = g_strdup_printf("runtime_rt_table%i",slider->tbl);
-	else if (ident == WARMUP_WIZ_PAGE)
+	else if (ident == WARMUP_WIZ_TAB)
 		name = g_strdup_printf("ww_rt_table%i",slider->tbl);
-	else if (ident == VE3D_VIEWER_PAGE)
+	else if (ident == VE3D_VIEWER_TAB)
 		name = g_strdup_printf("ve3d_rt_table%i_%i",slider->tbl,slider->table_num);
 	else
 	{
@@ -309,7 +309,7 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 
-	if ((ident == RUNTIME_PAGE) || (ident == VE3D_VIEWER_PAGE))
+	if ((ident == RUNTIME_TAB) || (ident == VE3D_VIEWER_TAB))
 	{
 		if (((tbl+1) % 2) == 0)
 			gtk_size_group_add_widget(size_group_right,hbox);
@@ -352,7 +352,7 @@ EXPORT void register_rt_range(GtkWidget * widget)
 	extern struct Rtv_Map *rtv_map;
 	struct Rt_Slider *slider = g_malloc0(sizeof(struct Rt_Slider));
 	gchar * source = (gchar *)g_object_get_data(G_OBJECT(widget),"source");
-	PageIdent ident = (PageIdent)g_object_get_data(G_OBJECT(widget),"page_ident");
+	TabIdent ident = (TabIdent)g_object_get_data(G_OBJECT(widget),"tab_ident");
 		
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 
@@ -380,13 +380,13 @@ EXPORT void register_rt_range(GtkWidget * widget)
 
 	switch (ident)
 	{
-		case RUNTIME_PAGE:
+		case RUNTIME_TAB:
 			g_hash_table_insert(rt_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
 			break;
-		case ENRICHMENTS_PAGE:
+		case ENRICHMENTS_TAB:
 			g_hash_table_insert(enr_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
 			break;
-		case WARMUP_WIZ_PAGE:
+		case WARMUP_WIZ_TAB:
 			g_hash_table_insert(ww_sliders,g_strdup(slider->ctrl_name),(gpointer)slider);
 			break;
 		default:

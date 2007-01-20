@@ -16,8 +16,10 @@
 
 #include <defines.h>
 #include <gtk/gtk.h>
+#include <glade/glade.h>
 
 /* Prototypes */
+void setup_menu_handlers(GladeXML *);
 EXPORT gboolean jump_to_tab(GtkWidget *, gpointer );
 EXPORT gboolean settings_transfer(GtkWidget *, gpointer );
 /* Prototypes */

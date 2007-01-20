@@ -57,10 +57,10 @@ tooltip=The Rotary Trailing Entries are the values of Rotary Trailing in degrees
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=page,page_ident,table_num
+keys=page,tab_ident,table_num
 key_types=_INT_,_ENUM_,_STRING_
 page=7
-page_ident=_ROTARYTABLES_PAGE_
+tab_ident=_ROTARYTABLES_TAB_
 table_num=10
 
 [title]
