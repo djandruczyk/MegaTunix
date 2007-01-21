@@ -44,35 +44,46 @@ gboolean check_dependancies(GObject *object )
 
 	num_deps = (gint)g_object_get_data(object,"num_deps");
 	deps = g_object_get_data(object,"deps");
+//	printf("number of deps %i, %i\n",num_deps,g_strv_length(deps));
 	for (i=0;i<num_deps;i++)
 	{
+//		printf("dep name %s\n",deps[i]);
 		tmpbuf = g_strdup_printf("%s_type",deps[i]);
 		type = (gint)g_object_get_data(object,tmpbuf);
 		g_free(tmpbuf);
 		if (type == VE_EMB_BIT)
 		{
+//			printf("VE_EMB_BIT\n");
 			tmpbuf = g_strdup_printf("%s_page",deps[i]);
 			page = (gint)g_object_get_data(object,tmpbuf);
+//			printf("page %i\n",page);
 			g_free(tmpbuf);
 
 			tmpbuf = g_strdup_printf("%s_offset",deps[i]);
 			offset = (gint)g_object_get_data(object,tmpbuf);
+//			printf("offset %i\n",offset);
 			g_free(tmpbuf);
 
 			tmpbuf = g_strdup_printf("%s_bitshift",deps[i]);
 			bitshift = (gint)g_object_get_data(object,tmpbuf);
+//			printf("bitshift %i\n",bitshift);
 			g_free(tmpbuf);
 
 			tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
 			bitmask = (gint)g_object_get_data(object,tmpbuf);
+//			printf("bitmask %i\n",bitmask);
 			g_free(tmpbuf);
 
 			tmpbuf = g_strdup_printf("%s_bitval",deps[i]);
 			bitval = (gint)g_object_get_data(object,tmpbuf);
+//			printf("bitval %i\n",bitval);
 			g_free(tmpbuf);
 
 			if (!(((ms_data[page][offset]) & bitmask) >> bitshift) == bitval)	
+			{
+//				printf("dep_proc returning FALSE\n");
 				return FALSE;
+			}
 		}
 /*		else if (type == VE_VAR)
 		{
@@ -86,5 +97,6 @@ gboolean check_dependancies(GObject *object )
 		}
 */
 	}
+//	printf("dep_proc returning TRUE\n");
 	return TRUE;
 }

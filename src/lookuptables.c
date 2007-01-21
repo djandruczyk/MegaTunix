@@ -229,12 +229,26 @@ gfloat lookup_data(GObject *object, gint offset)
 	table = (gchar *)g_object_get_data(object,"lookuptable");
 	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
 	dep_obj = (GObject *)g_object_get_data(object,"dep_object");
-	if (dep_obj)
-		state = check_dependancies(dep_obj);
-	if (state)
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
+	/*
+	if (GTK_IS_OBJECT(dep_obj))
+		printf("checking dependancy\n");
 	else
+		printf("no dependancy\n");
+	*/
+	if (dep_obj)
+	{
+		state = check_dependancies(dep_obj);
+	}
+	if (state)
+	{
+		//printf("ALTERNATE\n");
+		lookuptable = (gint *)g_hash_table_lookup(lookuptables,alt_table);	
+	}
+	else
+	{
+		//printf("NORMAL\n");
 		lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+	}
 
 	if (!lookuptable)
 	{

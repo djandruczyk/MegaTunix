@@ -140,7 +140,7 @@ void process_rt_vars(void *incoming)
 			if (g_object_get_data(object,"lookuptable"))
 			{
 				dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset),COMPLEX_EXPR);
-			x = lookup_data(object,raw_realtime[offset]);
+				x = lookup_data(object,raw_realtime[offset]);
 			}
 			else
 			{
