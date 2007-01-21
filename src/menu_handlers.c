@@ -16,6 +16,7 @@
 #include <enums.h>
 #include <menu_handlers.h>
 
+
 static struct 
 {
 	const gchar *item;
@@ -25,6 +26,7 @@ static struct
 	{"spark_tuning_menuitem",SPARKTABLES_TAB},
 	{"afr_tuning_menuitem",AFRTABLES_TAB},
 	{"boost_tuning_menuitem",BOOSTTABLES_TAB},
+	{"rotary_tuning_menuitem",ROTARYTABLES_TAB},
 	{"runtime_vars_menuitem",RUNTIME_TAB},
 	{"ecu_errors_menuitem",ERROR_STATUS_TAB},
 };
@@ -40,10 +42,14 @@ static struct
 	{"backup_ecu_menuitem",ECU_BACKUP},
 };
 
-void setup_menu_handlers(GladeXML *xml)
+void setup_menu_handlers()
 {
 	GtkWidget *item = NULL;
 	gint i = 0;
+	GladeXML *xml = NULL;
+	extern GtkWidget *main_window;
+
+	xml = glade_get_widget_tree(main_window);
 	
 	for (i=0;i< (sizeof(items)/sizeof(items[0]));i++)
 	{
@@ -51,6 +57,8 @@ void setup_menu_handlers(GladeXML *xml)
 		if (GTK_IS_WIDGET(item))
 			g_object_set_data(G_OBJECT(item),"target_tab",
 					GINT_TO_POINTER(items[i].tab));
+		if (!check_tab_existance(items[i].tab))
+			gtk_widget_set_sensitive(item,FALSE);
 	}
 	for (i=0;i< (sizeof(fio_items)/sizeof(fio_items[0]));i++)
 	{
@@ -77,11 +85,15 @@ EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 	notebook = g_hash_table_lookup(dynamic_widgets, "toplevel_notebook");
 	if (!GTK_IS_NOTEBOOK(notebook))
 		return FALSE;
+	if (!g_object_get_data(G_OBJECT(widget),"target_tab"))
+		return FALSE;
 	target = (TabIdent)g_object_get_data(G_OBJECT(widget),"target_tab");
 	total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 	for (i=0;i<total;i++)
 	{
 		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
+		if (!g_object_get_data(G_OBJECT(child),"tab_ident"))
+			continue;
 		c_tab = (TabIdent)g_object_get_data(G_OBJECT(child),"tab_ident");
 		if (c_tab == target)
 		{
@@ -118,5 +130,36 @@ EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 			break;
 	}
 	return TRUE;
+}
+
+/*!
+ \brief General purpose handler to take care of menu initiated settings 
+ transfers like VEX import/export and ECU backup/restore
+ */
+gboolean check_tab_existance(TabIdent target)
+{
+	extern GHashTable *dynamic_widgets;
+	GtkWidget *notebook = NULL;
+	TabIdent c_tab = 0;
+	gint total = 0;
+	GtkWidget * child = NULL;
+	gint i = 0;
+	
+	notebook = g_hash_table_lookup(dynamic_widgets, "toplevel_notebook");
+	if (!GTK_IS_NOTEBOOK(notebook))
+		return FALSE;
+	total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
+	for (i=0;i<total;i++)
+	{
+		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
+		if (!g_object_get_data(G_OBJECT(child),"tab_ident"))
+			continue;
+		c_tab = (TabIdent)g_object_get_data(G_OBJECT(child),"tab_ident");
+		if (c_tab == target)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 

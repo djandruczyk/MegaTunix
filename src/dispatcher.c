@@ -26,6 +26,7 @@
 #include <interrogate.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
+#include <menu_handlers.h>
 #include <mode_select.h>
 #include <notifications.h>
 #include <post_process.h>
@@ -175,6 +176,8 @@ trypop:
 						set_title(g_strdup("Loading Gui Tabs..."));
 						load_gui_tabs();
 						reset_temps(GINT_TO_POINTER(temp_units));
+						setup_menu_handlers();
+
 						set_title(g_strdup("Gui Tabs Loaded..."));
 					}
 					break;

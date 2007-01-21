@@ -141,7 +141,7 @@ bitmask=4
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 algorithm=_SPEED_DENSITY_
-applicable_tables=0,2,3,4
+applicable_tables=0,2,3,4,10
 tooltip=Sets the Fueling mode to be Speed Density (primary inputs are RPM, manifold pressure and intake air temp)
 
 [alpha_n_1_radio_button]
@@ -157,7 +157,7 @@ group_states=ENABLED
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 algorithm=_ALPHA_N_
-applicable_tables=0,2,3,4
+applicable_tables=0,2,3,4,10
 swap_labels=VE_VE1_load_tbl_lab,VE_VE1_load_tbl_units,VE_VE2_load_tbl_lab,VE_VE2_load_tbl_units,VE_VE3_load_tbl_lab,VE_VE3_load_tbl_units,SP_SP1_load_tbl_lab,SP_SP1_load_tbl_units,SP_SP2_load_tbl_lab,SP_SP2_load_tbl_units,RO_load_tbl_lab,RO_load_tbl_units
 tooltip=Sets the Fueling mode to be Alpha-N (primary inputs are RPM (the "N") and Throttle Position (the "Alpha"))
 

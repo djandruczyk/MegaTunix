@@ -4,6 +4,13 @@
 description=Object data map for Datalogging for all firmwares
 tab_name=_DataLogging
 
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=page,tab_ident
+key_types=_INT_,_ENUM_
+page=0
+tab_ident=_DATALOGGING_TAB_
 #----- Buttons ---------------------------------------------------------------
 	
 [dlog_select_log_button]

@@ -82,7 +82,6 @@ int setup_gui()
 		xml = glade_xml_new(filename, "mtx_main_window",NULL);
 	g_free(filename);
 
-	setup_menu_handlers(xml);
 
 	glade_xml_signal_autoconnect(xml);
 
