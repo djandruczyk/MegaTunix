@@ -29,6 +29,11 @@ struct _MtxFileIO
 	gchar *title;			/* Choser title */
 };
 
+/* Static private functions */
+#if GTK_MINOR_VERSION >= 8
+GtkFileChooserConfirmation confirm_overwrite_callback (GtkFileChooser *, gpointer );
+#endif
+
 /* Prototypes */
 gchar ** get_files(gchar *, gchar *);
 gchar * get_file(gchar *, gchar *);

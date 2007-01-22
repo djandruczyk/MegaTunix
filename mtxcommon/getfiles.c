@@ -18,14 +18,15 @@
 #include <enums.h>
 #include <getfiles.h>
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <glib/gstdio.h>
+#ifndef __WIN32__
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#endif
 #include <structures.h>
 
-/* Static private functions */
-static GtkFileChooserConfirmation confirm_overwrite_callback (GtkFileChooser *, gpointer );
 
 
 
@@ -280,7 +281,8 @@ gchar * choose_file(MtxFileIO *data)
 	return (filename);
 }
 
-static GtkFileChooserConfirmation
+#if GTK_MINOR_VERSION >= 8
+GtkFileChooserConfirmation
 confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 {
 	GtkWidget *dialog = NULL;
@@ -324,6 +326,7 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 	}
 	return GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
 }
+#endif
 
 
 void free_mtxfileio(MtxFileIO *data)
