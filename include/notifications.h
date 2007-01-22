@@ -24,12 +24,10 @@ void set_widget_color(gpointer, gpointer );
 void update_logbar(gchar *, gchar *, gchar *, gboolean, gboolean);
 void no_ms_connection(void);
 void warn_user(gchar *);
-void warn_input_file_not_exist(FileIoType, gchar *);
 void set_title(gchar *);
 void conn_warning(void);
 void kill_conn_warning(void);
 
-gboolean warn_file_not_empty(FileIoType,gchar *);
 gint close_dialog(GtkWidget *, gpointer);
 gint dialog_response(GtkWidget *, gpointer );
 /* Prototypes */

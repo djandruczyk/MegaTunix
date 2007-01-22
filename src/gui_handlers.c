@@ -90,7 +90,7 @@ void leave(GtkWidget *widget, gpointer data)
 	extern gboolean interrogated;
 	extern GAsyncQueue *dispatch_queue;
 	extern GAsyncQueue *io_queue;
-	struct Io_File * iofile = NULL;
+	GIOChannel * iochannel = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gint count = 0;
 
@@ -121,13 +121,13 @@ void leave(GtkWidget *widget, gpointer data)
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"),CRITICAL);
 	if (dynamic_widgets)
 	{
-		if (g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button"))
-			iofile = (struct Io_File *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
+		if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
+			iochannel = (GIOChannel *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button")),"data");
 	}
 
-	if (iofile)	
-		close_file(iofile);
-	dbg_func(g_strdup_printf(__FILE__": LEAVE() after iofile\n"),CRITICAL);
+	if (iochannel)	
+		g_io_channel_shutdown(iochannel,TRUE,NULL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() after iochannel\n"),CRITICAL);
 
 
 	/* Commits any pending data to ECU flash */
@@ -706,11 +706,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case BURN_MS_FLASH:
 			io_cmd(IO_BURN_MS_FLASH,NULL);
 			break;
-		case DLOG_DUMP_INTERNAL:
-			if (offline)
-				break;
-			present_filesavebox(DATALOG_INT_DUMP,(gpointer)widget);
-			break;
 		case DLOG_SELECT_ALL:
 			dlog_select_all();
 			break;
@@ -720,18 +715,7 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case DLOG_SELECT_DEFAULTS:
 			dlog_select_defaults();
 			break;
-		case SELECT_DLOG_EXP:
-			if (offline)
-				break;
-			present_filesavebox(DATALOG_EXPORT,(gpointer)widget);
-			break;
-		case SELECT_DLOG_IMP:
-			reset_logviewer_state();
-			free_log_info();
-			present_filesavebox(DATALOG_IMPORT,(gpointer)widget);
-			break;
 		case SELECT_FIRMWARE_LOAD:
-			present_filesavebox(FIRMWARE_LOAD,(gpointer)widget);
 			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"multitherm_table")),TRUE);
 			gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets,"download_fw_button")),TRUE);
 			break;
@@ -749,7 +733,6 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			if (offline)
 				break;
 			stop_datalogging();
-			close_file(obj_data);
 			break;
 		case START_DATALOGGING:
 			if (offline)
@@ -761,28 +744,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			stop_datalogging();
 			break;
-		case EXPORT_VETABLE:
-			if (!interrogated)
-				break;
-			present_filesavebox(VE_EXPORT,(gpointer)widget);
-			break;
-		case IMPORT_VETABLE:
-			if (!interrogated)
-				break;
-			present_filesavebox(VE_IMPORT,(gpointer)widget);
-			break;
 		case REVERT_TO_BACKUP:
 			revert_to_previous_data();
-			break;
-		case BACKUP_ALL:
-			if (!interrogated)
-				break;
-			present_filesavebox(FULL_BACKUP,(gpointer)widget);
-			break;
-		case RESTORE_ALL:
-			if (!interrogated)
-				break;
-			present_filesavebox(FULL_RESTORE,(gpointer)widget);
 			break;
 		case SELECT_PARAMS:
 			if (!interrogated)

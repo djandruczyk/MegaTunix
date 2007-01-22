@@ -35,14 +35,6 @@ handler=_STOP_PLAYBACK_
 page=0
 tooltip=Stops datalog playback
 
-[logviewer_select_logfile_button]
-keys=handler,page,tooltip
-key_types=_ENUM_,_INT_,_STRING_
-handler=_SELECT_DLOG_IMP_
-page=0
-tooltip=This will prompt you with a file chooser to select a datalog to open.
-
-
 [logviewer_select_params_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_

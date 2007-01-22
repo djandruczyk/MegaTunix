@@ -16,9 +16,24 @@
 
 #include <gtk/gtk.h>
 
+typedef struct _MtxFileIO MtxFileIO;
+
+struct _MtxFileIO
+{
+	GtkFileChooserAction action;	/* Action, save,open, etc.. */
+	gchar *filter;			/* File filter string */
+	gchar *stub_path;		/* starting path to set filesel to */
+	gchar **shortcut_folders;	/* CSV list of ADDITIONAL shortcut 
+					   folders */
+	gchar *filename;		/* Filename to save (save ONLY) */
+	gchar *title;			/* Choser title */
+};
+
 /* Prototypes */
 gchar ** get_files(gchar *, gchar *);
 gchar * get_file(gchar *, gchar *);
+gchar * choose_file(MtxFileIO *);
+void free_mtxfileio(MtxFileIO *);
 /* Prototypes */
 
 #endif

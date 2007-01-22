@@ -16,11 +16,13 @@
 #include <debugging.h>
 #include <enums.h>
 #include <fileio.h>
+#include <getfiles.h>
 #include <gui_handlers.h>
 #include <keyparser.h>
 #include <logviewer_core.h>
 #include <logviewer_gui.h>
 #include <math.h>
+#include <notifications.h>
 #include <string.h>
 #include <structures.h>
 #include <tabloader.h>
@@ -28,22 +30,67 @@
 struct Log_Info *log_info = NULL;
 
 
+
+/*! 
+ \brief select_datalog_for_import() loads a datalog file for playback
+ \param widget Calling widget
+ \param data  unused
+ */
+
+EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
+{
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
+	GIOChannel *iochannel = NULL;
+
+	reset_logviewer_state();
+	free_log_info();
+
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->stub_path = g_strdup("MTX_Datalogs");
+	fileio->title = g_strdup("Choose a datalog to view");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+
+	filename = choose_file(fileio);
+	if (filename == NULL)
+	{
+		update_logbar("dlog_view",g_strdup("warning"),g_strdup("NO FILE opened for normal datalogging!\n"),TRUE,FALSE);
+		return FALSE;
+	}
+
+	iochannel = g_io_channel_new_file(filename, "r+",NULL);
+	if (!iochannel)
+	{
+		update_logbar("dlog_view",g_strdup("warning"),g_strdup("File open FAILURE! \n"),TRUE,FALSE);
+		return FALSE;
+	}
+
+	update_logbar("dlog_view",NULL,g_strdup("DataLog ViewFile Opened\n"),TRUE,FALSE);
+	load_logviewer_file(iochannel);
+	g_io_channel_shutdown(iochannel,FALSE,NULL);
+
+	update_logbar("dlog_view",NULL,g_strdup("LogView File Closed\n"),TRUE,FALSE);
+	free_mtxfileio(fileio);
+	return TRUE;
+}
+
+
 /*! 
  \brief load_logviewer_file() loads a datalog file for playback
- \param iofile (struct Io_File *) The Io_File representing the datastream
+ \param iochannel The IO channel representing the source file
  */
-void load_logviewer_file(struct Io_File *iofile)
+void load_logviewer_file(GIOChannel *iochannel)
 {
-	if (!iofile)
+	if (!iochannel)
 	{
 		dbg_func(g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"),CRITICAL);
 		return;
 	}
 	log_info = initialize_log_info();
-	read_log_header(iofile->iochannel, log_info);
-	read_log_data(iofile->iochannel, log_info);
+	read_log_header(iochannel, log_info);
+	read_log_data(iochannel, log_info);
 	populate_limits(log_info);
-	close_file(iofile);
 	return;
 }
 

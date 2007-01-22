@@ -19,10 +19,8 @@
 #include <structures.h>
 
 /* Prototypes */
-void present_filesavebox(FileIoType, gpointer );
-void truncate_file(FileIoType, gchar *);
-void close_file(struct Io_File * );
-void check_filename(GtkWidget *, GtkFileSelection *);
+EXPORT gboolean select_file_for_ecu_backup(GtkWidget *, gpointer );
+EXPORT gboolean select_file_for_ecu_restore(GtkWidget *, gpointer );
 void backup_all_ecu_settings(gchar  *);
 void restore_all_ecu_settings(gchar  *);
 /* Prototypes */

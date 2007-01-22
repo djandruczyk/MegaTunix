@@ -18,7 +18,8 @@
 #include <structures.h>
 
 /* Prototypes */
-void load_logviewer_file(struct Io_File * );
+EXPORT gboolean select_datalog_for_import(GtkWidget *, gpointer );
+void load_logviewer_file(GIOChannel * );
 void read_log_header(GIOChannel *, struct Log_Info * );
 void read_log_data(GIOChannel *, struct Log_Info * );
 struct Log_Info * initialize_log_info(void);

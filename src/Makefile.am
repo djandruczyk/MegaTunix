@@ -67,7 +67,7 @@ megatunix_SOURCES = \
 	widgetmgmt.c \
 	winserialio.c
 
-megatunix_DEPENDENCIES = @WIN32_RESOURCES@
+megatunix_DEPENDENCIES = @WIN32_RESOURCES@  ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la ../mtxmatheval/libmtxmatheval.la
 
 resources.o:
 	$(WINDRES) -i resources.rc -o resources.o

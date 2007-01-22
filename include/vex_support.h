@@ -19,8 +19,10 @@
 #include <structures.h>
 
 /* Prototypes */
-gboolean vetable_export(struct Io_File *);
-gboolean vetable_import(struct Io_File *);
+EXPORT gboolean select_vex_for_export(GtkWidget *, gpointer );
+EXPORT gboolean select_vex_for_import(GtkWidget *, gpointer );
+gboolean vetable_export(GIOChannel *);
+gboolean vetable_import(GIOChannel *);
 GIOStatus process_vex_line();
 GIOStatus process_vex_range(struct Vex_Import *, ImportParserArg, gchar *, GIOChannel * );
 GIOStatus process_vex_table(struct Vex_Import *, gchar *, GIOChannel * );

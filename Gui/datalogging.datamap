@@ -13,18 +13,6 @@ page=0
 tab_ident=_DATALOGGING_TAB_
 #----- Buttons ---------------------------------------------------------------
 	
-[dlog_select_log_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
-handler=_SELECT_DLOG_EXP_
-page=0
-
-[dlog_close_log_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
-handler=_CLOSE_LOGFILE_
-page=0
-
 [dlog_select_all_but]
 keys=handler,page
 key_types=_ENUM_,_INT_
@@ -55,12 +43,6 @@ key_types=_ENUM_,_INT_
 handler=_TAB_
 page=0
 
-[dlog_space_delimit_radio_button]
-keys=handler,page
-key_types=_ENUM_,_INT_
-handler=_SPACE_
-page=0
-
 [dlog_start_logging_button]
 keys=handler,page
 key_types=_ENUM_,_INT_
@@ -74,9 +56,8 @@ handler=_STOP_DATALOGGING_
 page=0
 
 [dlog_dump_internal_but]
-keys=handler,page,tooltip
-key_types=_ENUM_,_INT_,_STRING_
-handler=_DLOG_DUMP_INTERNAL_
+keys=page,tooltip
+key_types=_INT_,_STRING_
 page=0
 tooltip="Write internal log to disk" is a new feature.  By default megatunix will record ALL variables read while the Realtime reader is running, even if you do NOT have datalogging enabled.  This button dumps that to disk as a std logfile of ALL variables.  It can be loaded in megatunix's logviewer for playback if desired... 
 

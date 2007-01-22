@@ -18,6 +18,7 @@
 #include <enums.h>
 #include <errno.h>
 #include <fileio.h>
+#include <getfiles.h>
 #include <glib.h>
 #include <gui_handlers.h>
 #include <math.h>
@@ -183,6 +184,7 @@ void start_datalogging(void)
 void stop_datalogging()
 {
 	extern GHashTable *dynamic_widgets;
+	GIOChannel *iochannel = NULL;
 
 	logging_active = FALSE;
 
@@ -192,7 +194,20 @@ void stop_datalogging()
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_format_delimit_hbox1"),TRUE);
 	if (g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"))
 		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button"),TRUE);
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_stop_logging_button"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_stop_logging_button"),FALSE);
+	if (g_hash_table_lookup(dynamic_widgets,"dlog_start_logging_button"))
+		gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_start_logging_button"),FALSE);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,"dlog_file_label")),"No Log Selected Yet");
+
+
 	update_logbar("dlog_view",NULL,g_strdup("DataLogging Stopped...\n"),TRUE,FALSE);
+	iochannel = (GIOChannel *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button")),"data");
+	if (iochannel)
+		g_io_channel_shutdown(iochannel,TRUE,NULL);
+
+	g_object_set_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button")),"data",NULL);
+
 	return;
 }
 
@@ -223,7 +238,7 @@ gboolean log_value_set(GtkWidget * widget, gpointer data)
  \param override (gboolean),  if true ALL variabels are logged, if FALSE
  only selected variabels are logged
  */
-void write_log_header(struct Io_File *iofile, gboolean override)
+void write_log_header(GIOChannel *iochannel, gboolean override)
 {
 	gint i = 0;
 	gint j = 0;
@@ -234,9 +249,9 @@ void write_log_header(struct Io_File *iofile, gboolean override)
 	gchar * string = NULL;
 	extern gint preferred_delimiter;
 	extern struct Firmware_Details *firmware;
-	if (!iofile)
+	if (!iochannel)
 	{
-		dbg_func(g_strdup(__FILE__": write_log_header()\n\tIo_File pointer was undefined, returning NOW...\n"),CRITICAL);
+		dbg_func(g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"),CRITICAL);
 		return;
 	}
 	/* Count total logable variables */
@@ -265,7 +280,7 @@ void write_log_header(struct Io_File *iofile, gboolean override)
 		}
 	}
 	output = g_string_append(output,"\r\n");
-	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
 	g_string_free(output,TRUE);
 
 }
@@ -280,10 +295,9 @@ void run_datalog(void)
 	gint i = 0;
 	gint j = 0;
 	gsize count = 0;
-	void *data;
 	gint total_logables = 0;
 	GString *output;
-	struct Io_File *iofile = NULL;
+	GIOChannel *iochannel = NULL;
 	GObject *object = NULL;
 	gfloat value = 0.0;
 	GArray *history = NULL;
@@ -295,10 +309,8 @@ void run_datalog(void)
 	if (!logging_active) /* Logging isn't enabled.... */
 		return;
 
-	data =  g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_close_log_button")),"data");
-	if (data != NULL)
-		iofile = (struct Io_File *)data;
-	else
+	iochannel = (GIOChannel *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button")),"data");
+	if (!iochannel)
 	{
 		dbg_func(g_strdup(__FILE__": run_datalog()\n\tIo_File undefined, returning NOW!!!\n"),CRITICAL);
 		return;
@@ -315,7 +327,7 @@ void run_datalog(void)
 
 	if (header_needed)
 	{
-		write_log_header((void *)iofile, FALSE);
+		write_log_header(iochannel, FALSE);
 		header_needed = FALSE;
 		begin = TRUE;
 	}
@@ -345,7 +357,7 @@ void run_datalog(void)
 			output = g_string_append(output,delimiter);
 	}
 	output = g_string_append(output,"\r\n");
-	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
 	g_string_free(output,TRUE);
 
 }
@@ -417,11 +429,78 @@ void dlog_select_defaults(void)
 }
 
 
+EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
+{
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
+	GIOChannel *iochannel = NULL;
+	extern GHashTable *dynamic_widgets;
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->stub_path = g_strdup("MTX_Datalogs");
+	fileio->title = g_strdup("Choose a filename for datalog export");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
+
+	filename = choose_file(fileio);
+	if (filename == NULL)
+	{
+		update_logbar("dlog_view",g_strdup("warning"),g_strdup("NO FILE opened for normal datalogging!\n"),TRUE,FALSE);
+		return FALSE;
+	}
+
+	iochannel = g_io_channel_new_file(filename, "a+",NULL);
+	if (!iochannel)
+	{
+		update_logbar("dlog_view",g_strdup("warning"),g_strdup("File open FAILURE! \n"),TRUE,FALSE);
+		return FALSE;
+	}
+
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_stop_logging_button"),TRUE);
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"dlog_start_logging_button"),TRUE);
+	g_object_set_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button")),"data",(gpointer)iochannel);
+	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,"dlog_file_label")),g_filename_to_utf8(filename,-1,NULL,NULL,NULL));
+	update_logbar("dlog_view",NULL,g_strdup("DataLog File Opened\n"),TRUE,FALSE);
+
+	free_mtxfileio(fileio);
+	return TRUE;
+}
+
+
+
+EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
+{
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
+	GIOChannel *iochannel = NULL;
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->stub_path = g_strdup("MTX_Datalogs");
+	fileio->title = g_strdup("Choose a filename for internal datalog export");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
+
+	filename = choose_file(fileio);
+	if (filename == NULL)
+	{
+		update_logbar("dlog_view",g_strdup("warning"),g_strdup("NO FILE opened for internal log export,  aborting dump!\n"),TRUE,FALSE);
+		return FALSE;
+	}
+
+	iochannel = g_io_channel_new_file(filename, "a+",NULL);
+	if (iochannel)
+		update_logbar("dlog_view",NULL,g_strdup("File opened successfully for internal log dump\n"),TRUE,FALSE);
+	dump_log_to_disk(iochannel);
+	g_io_channel_shutdown(iochannel,TRUE,NULL);
+	update_logbar("dlog_view",NULL,g_strdup("Internal datalog successfully dumped to disk\n"),TRUE,FALSE);
+	free_mtxfileio(fileio);
+	return TRUE;
+
+}
+
 /*!
  \brief dump_log_to_disk() dumps the contents of the RTV arrays to disk as a
  datalog file
  */
-void dump_log_to_disk(struct Io_File *iofile)
+void dump_log_to_disk(GIOChannel *iochannel)
 {
 	gint i = 0;
 	gint x = 0;
@@ -439,7 +518,7 @@ void dump_log_to_disk(struct Io_File *iofile)
 
 	output = g_string_sized_new(1024); 
 
-	write_log_header((void *)iofile, TRUE);
+	write_log_header(iochannel, TRUE);
 
 	histories = g_new0(GArray *,rtv_map->derived_total);
 	is_floats = g_new0(gboolean ,rtv_map->derived_total);
@@ -474,11 +553,10 @@ void dump_log_to_disk(struct Io_File *iofile)
 		}
 		output = g_string_append(output,"\r\n");
 	}
-	g_io_channel_write_chars(iofile->iochannel,output->str,output->len,&count,NULL);
+	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
 	g_free(is_floats);
 	g_free(histories);
 	g_string_free(output,TRUE);
 	start_tickler(RTV_TICKLER);
-	close_file(iofile);
 
 }
