@@ -145,7 +145,9 @@ void draw_ve_marker()
 	static GtkWidget ***last_widgets = NULL;
 	static gint **last = NULL;
 	static GdkColor ** old_colors = NULL;
+	static GdkColor ** old_fg = NULL;
 	static GdkColor color= { 0, 0,16384,16384};
+	extern GdkColor white;
 	GtkRcStyle *style = NULL;
 	gint i = 0;
 	gint j = 0;
@@ -196,6 +198,13 @@ void draw_ve_marker()
 		old_colors = g_new0(GdkColor *, firmware->total_tables);
 		for (i=0;i<firmware->total_tables;i++)
 			old_colors[i] = g_new0(GdkColor , firmware->table_params[i]->x_bincount * firmware->table_params[i]->y_bincount);
+	}
+
+	if (!old_fg)
+	{
+		old_fg = g_new0(GdkColor *, firmware->total_tables);
+		for (i=0;i<firmware->total_tables;i++)
+			old_fg[i] = g_new0(GdkColor , firmware->table_params[i]->x_bincount * firmware->table_params[i]->y_bincount);
 	}
 
 	table = active_table;
@@ -339,6 +348,7 @@ redraw:
 		//			{
 //				printf("setting to normal coord %i\n",last[table][i]);
 				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+				gtk_widget_modify_fg(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_fg[table][last[table][i]]);
 				last_widgets[table][last[table][i]] = NULL;
 				//	}
 				//}
@@ -360,10 +370,12 @@ redraw:
 		style = gtk_widget_get_modifier_style(widget);
 
 		old_colors[table][z_bin[i]] = style->base[GTK_STATE_NORMAL];
+		old_fg[table][z_bin[i]] = style->fg[GTK_STATE_NORMAL];
 		color.red = z_weight[i]*32768 +32767;
-		color.green = z_weight[i]*32768 +32767;
-		color.blue = z_weight[i]*32768 +32767;
+		color.green = (1.0-z_weight[i])*65535 +0;
+		color.blue = (1.0-z_weight[i])*32768 +0;
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		gtk_widget_modify_fg(GTK_WIDGET(widget),GTK_STATE_NORMAL,&white);
 		last_z_weight[i] = z_weight[i];
 	}
 
