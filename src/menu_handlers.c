@@ -14,7 +14,9 @@
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
+#include <fileio.h>
 #include <menu_handlers.h>
+#include <vex_support.h>
 
 
 static struct 
@@ -117,16 +119,16 @@ EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 	switch (action)
 	{
 		case VEX_IMPORT:
-			printf("vex_import\n");
+			select_vex_for_import(NULL,NULL);
 			break;
 		case VEX_EXPORT:
-			printf("vex_export\n");
+			select_vex_for_export(NULL,NULL);
 			break;
 		case ECU_BACKUP:
-			printf("ecu_backup\n");
+			select_file_for_ecu_backup(NULL,NULL);
 			break;
 		case ECU_RESTORE:
-			printf("ecu_restore\n");
+			select_file_for_ecu_restore(NULL,NULL);
 			break;
 	}
 	return TRUE;
