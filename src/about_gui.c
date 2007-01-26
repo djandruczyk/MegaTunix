@@ -66,7 +66,7 @@ EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 				"name","MegaTunix Tuning Software",
 				"version",VERSION,
 				"copyright","David J. Andruczyk(2007)",
-				"comments","MegaTunix is a Graphical Tuning software designed to make it easy and intuitive to tune your MegaSquirt powered vehicle",
+				"comments","MegaTunix is a Graphical Tuning software designed to make it easy and (hopefully) intuitive to tune your MegaSquirt powered vehicle.  Please send suggestions to the author for ways to improve MegaTunix.",
 				"license","GNU GPL v2",
 				"website","http://megatunix.sourceforge.net",
 				"authors",authors,
