@@ -10,8 +10,10 @@ Rt_Cmd_Key=CMD_UPPER_R
 VE_Cmd_Key=CMD_UPPER_V
 Write_Cmd=W
 Burn_Cmd=B
-MultiPage=TRUE
+Chunk_Write_Cmd=X
 Page_Cmd=P
+MultiPage=TRUE
+ChunkWriteSupport=TRUE
 TotalTables=11
 ReadOnlyAbove=8
 # Since the first page is 0, 10 is the "eleventh" page

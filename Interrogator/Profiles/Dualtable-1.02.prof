@@ -12,8 +12,9 @@ Raw_Mem_Cmd_Key=CMD_UPPER_F0
 Write_Cmd=W
 Burn_Cmd=B
 Page_Cmd=P
-MultiPage=TRUE
 Page_Cmd=P
+MultiPage=TRUE
+ChunkWriteSupport=FALSE
 TotalTables=2
 TotalPages=2
 

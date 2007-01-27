@@ -20,11 +20,9 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
-#ifndef __WIN32__
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#endif
 #include <structures.h>
 
 

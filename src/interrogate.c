@@ -327,14 +327,20 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	firmware->sliders_map_file = g_strdup(potential->sliders_map_file);
 	firmware->status_map_file = g_strdup(potential->status_map_file);
 	firmware->multi_page = potential->multi_page;
+	firmware->chunk_support = potential->chunk_support;
 	firmware->total_tables = potential->total_tables;
 	firmware->total_pages = potential->total_pages;
 	firmware->ro_above = potential->ro_above;
 	firmware->trigmon_page = potential->trigmon_page;
 	firmware->toothmon_page = potential->toothmon_page;
-	firmware->write_cmd = g_strdup(potential->write_cmd);
-	firmware->burn_cmd = g_strdup(potential->burn_cmd);
-	firmware->page_cmd = g_strdup(potential->page_cmd);
+	if (potential->write_cmd)
+		firmware->write_cmd = g_strdup(potential->write_cmd);
+	if (potential->burn_cmd)
+		firmware->burn_cmd = g_strdup(potential->burn_cmd);
+	if (potential->page_cmd)
+		firmware->page_cmd = g_strdup(potential->page_cmd);
+	if (potential->chunk_write_cmd)
+		firmware->chunk_write_cmd = g_strdup(potential->chunk_write_cmd);
 
 	/* Allocate RAM for the Req_Fuel_Params structures. */
 	firmware->rf_params = g_new0(struct Req_Fuel_Params *,firmware->total_tables);
@@ -566,6 +572,8 @@ void close_profile(struct Canidate *canidate)
 		g_free(canidate->raw_mem_cmd_key);
 	if (canidate->write_cmd)
 		g_free(canidate->write_cmd);
+	if (canidate->chunk_write_cmd)
+		g_free(canidate->chunk_write_cmd);
 	if (canidate->burn_cmd)
 		g_free(canidate->burn_cmd);
 	if (canidate->page_cmd)
@@ -674,6 +682,15 @@ void load_profile_details(struct Canidate *canidate)
 			if(!cfg_read_string(cfgfile,"parameters","Page_Cmd",
 						&canidate->page_cmd))
 				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"Page_Cmd\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+		}
+		if(!cfg_read_boolean(cfgfile,"parameters","ChunkWriteSupport",
+					&canidate->chunk_support))
+			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"ChunkWriteSupport\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
+		if (canidate->chunk_support)
+		{
+			if(!cfg_read_string(cfgfile,"parameters","Chunk_Write_Cmd",
+						&canidate->chunk_write_cmd))
+				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"Chunk_Write_Cmd\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 		}
 		if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 					&canidate->total_pages))

@@ -11,8 +11,9 @@ VE_Cmd_Key=CMD_UPPER_V
 Ign_Cmd_Key=CMD_UPPER_I
 Write_Cmd=W
 Burn_Cmd=B
-MultiPage=TRUE
 Page_Cmd=P
+MultiPage=TRUE
+ChunkWriteSupport=FALSE
 TotalTables=2
 TotalPages=2
 

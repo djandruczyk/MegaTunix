@@ -11,6 +11,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkFrame" id="topframe">
@@ -63,6 +68,8 @@
 		    <widget class="GtkEventBox" id="trace_slider_ebox">
 		      <property name="visible">True</property>
 		      <property name="events">GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+		      <property name="visible_window">True</property>
+		      <property name="above_child">False</property>
 		      <signal name="key_press_event" handler="slider_key_press_event" last_modification_time="Sun, 23 Jan 2005 02:11:30 GMT"/>
 
 		      <child>
@@ -140,6 +147,7 @@
 			  <property name="label" translatable="yes">Realtime Mode</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -159,6 +167,7 @@
 			  <property name="label" translatable="yes">Playback Mode</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
@@ -190,9 +199,10 @@
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Select log to playback</property>
+			  <property name="label" translatable="yes">Select logfile</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="select_datalog_for_import" last_modification_time="Sun, 21 Jan 2007 17:47:30 GMT"/>
 			</widget>
 			<packing>
@@ -206,9 +216,10 @@
 			<widget class="GtkButton" id="logviewer_select_params_button">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Select variables to view</property>
+			  <property name="label" translatable="yes">Select variables</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 27 Nov 2004 17:47:54 GMT"/>
 			</widget>
 			<packing>
@@ -238,6 +249,7 @@
 			  <property name="label" translatable="yes">Start reading RT Vars</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 27 Nov 2004 17:49:59 GMT"/>
 			</widget>
 			<packing>
@@ -254,6 +266,7 @@
 			  <property name="label" translatable="yes">Stop reading RT Vars</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="std_button_handler" last_modification_time="Sat, 27 Nov 2004 17:50:20 GMT"/>
 			</widget>
 			<packing>
@@ -351,6 +364,7 @@
 			  <property name="label" translatable="yes">Start Playback</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="std_button_handler" last_modification_time="Sun, 09 Jan 2005 16:27:24 GMT"/>
 			</widget>
 			<packing>
@@ -367,6 +381,7 @@
 			  <property name="label" translatable="yes">Stop Playback</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
 			  <signal name="clicked" handler="std_button_handler" last_modification_time="Sun, 09 Jan 2005 16:14:07 GMT"/>
 			</widget>
 			<packing>

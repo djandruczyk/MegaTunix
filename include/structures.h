@@ -62,11 +62,13 @@ struct Firmware_Details
         gint ignvars_size;      /*! Size of Realtime vars datablock */
         gint memblock_size;     /*! Size of Raw_Memory datablock */
 	gboolean multi_page;	/*! Multi-page firmware */
+	gboolean chunk_support;	/*! Supports Chunk Write */
 	gint total_pages;	/*! How many pages do we handle? */
 	gint total_tables;	/*! How many tables do we handle? */
 	gint ro_above;		/*! Read Only debug pages above this one */
 	gint trigmon_page;	/*! Trigger Monitor RO Page */
 	gint toothmon_page;	/*! Tooth Monitor RO Page */
+	gchar *chunk_write_cmd;	/*! Command to send to chunk write data... */
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gchar *page_cmd;	/*! Command to send to change pages ... */
@@ -301,10 +303,12 @@ struct Canidate
 	gchar *ve_cmd_key;	/*! string key to hashtable for VE command */
 	gchar *ign_cmd_key;	/*! string key to hashtable for Ign command */
 	gchar *raw_mem_cmd_key;	/*! string key to hashtable for RAW command */
+	gchar *chunk_write_cmd;	/*! Command to send to write data... */
 	gchar *write_cmd;	/*! Command to send to write data... */
 	gchar *burn_cmd;	/*! Command to send to burn data... */
 	gchar *page_cmd;	/*! Command to send to change pages... */
 	gboolean multi_page;	/*! Multi-page firmware */
+	gboolean chunk_support;	/*! Chunk Write supported firmware */
 	gint ro_above;		/*! Debug pages above this one */
 	gint trigmon_page;	/*! Trigger Monitor RO Page */
 	gint toothmon_page;	/*! Tooth Monitor RO Page */
