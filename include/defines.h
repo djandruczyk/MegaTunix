@@ -35,6 +35,7 @@
 /* Download modes */
 #define IMMEDIATE		0x10
 #define DEFERRED		0x11
+#define IGNORED			0x12
 
 
 /* For datalogging and Logviewer */

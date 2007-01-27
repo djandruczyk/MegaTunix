@@ -60,6 +60,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(IMMEDIATE));
 	g_hash_table_insert(str_2_enum,"_DEFERRED_",
 			GINT_TO_POINTER(DEFERRED));
+	g_hash_table_insert(str_2_enum,"_IGNORED_",
+			GINT_TO_POINTER(IGNORED));
 
 	/* Complex Expressions (RT Vars)*/
 	g_hash_table_insert(str_2_enum,"_VE_EMB_BIT_",
@@ -73,6 +75,8 @@ void build_string_2_enum_table()
 	/* Signal handler mapping */
 	g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
 			GINT_TO_POINTER(ALT_SIMUL));
+	g_hash_table_insert(str_2_enum,"_REQFUEL_RESCALE_TABLE_",
+			GINT_TO_POINTER(REQFUEL_RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_RESCALE_TABLE_",
 			GINT_TO_POINTER(RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",
@@ -93,6 +97,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(NUM_INJECTORS_1));
 	g_hash_table_insert(str_2_enum,"_NUM_INJECTORS_2_",
 			GINT_TO_POINTER(NUM_INJECTORS_2));
+	g_hash_table_insert(str_2_enum,"_LOCKED_REQ_FUEL_",
+			GINT_TO_POINTER(LOCKED_REQ_FUEL));
 	g_hash_table_insert(str_2_enum,"_REQ_FUEL_1_",
 			GINT_TO_POINTER(REQ_FUEL_1));
 	g_hash_table_insert(str_2_enum,"_REQ_FUEL_2_",

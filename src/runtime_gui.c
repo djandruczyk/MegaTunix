@@ -67,6 +67,8 @@ gboolean update_runtime_vars()
 	static gboolean conn_status = FALSE;
 	extern gint * algorithm;
 
+	if (!firmware)
+		return FALSE;
 	if(no_update)
 		return FALSE;
 

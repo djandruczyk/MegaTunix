@@ -61,6 +61,7 @@ typedef enum
 	SELECT_PARAMS,
 	REQ_FUEL_POPUP,
 	RESCALE_TABLE,
+	REQFUEL_RESCALE_TABLE,
 }StdButton;
 
 /* Toggle/Radio buttons */
@@ -93,6 +94,7 @@ typedef enum
 	REQ_FUEL_RATED_PRESSURE,
 	REQ_FUEL_ACTUAL_PRESSURE,
 	REQ_FUEL_AFR,
+	LOCKED_REQ_FUEL,
 	REQ_FUEL_1,
 	REQ_FUEL_2,
 	SER_INTERVAL_DELAY,
@@ -114,7 +116,7 @@ typedef enum
 /* Runtime Status flags */
 typedef enum 
 {       
-	STAT_CONNECTED, 
+	STAT_CONNECTED = 0, 
         STAT_CRANKING, 
         STAT_RUNNING, 
         STAT_WARMUP, 

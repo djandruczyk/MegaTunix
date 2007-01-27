@@ -2,7 +2,7 @@
 applicable_firmwares=MegaSquirtnSpark-Extra 029x
 raw_total=39
 derived_total=55
-raw_list=raw_secl,barocount,barovolt,barokpa,mapcount,mapvolt,mapkpa,matcount,matvolt,matdeg,cltcount,cltvolt,cltdeg,tpscount,tpsvolt,tpspercent,battcount,battvolt,o2count,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
+raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle
 
 [derived_0]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,special,is_float,tooltip,lower_limit,upper_limit,log_by_default
@@ -186,8 +186,8 @@ log_by_default=FALSE
 [derived_11]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=tpscount
-dlog_gui_name=TPS Counts
+internal_name=tpsadc
+dlog_gui_name=TPS ADC
 dlog_field_name=TPScounts
 offset=7
 lower_limit=0
@@ -195,14 +195,14 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="TPS Counts" is the raw ADC counts from the Throttle Position sensor reading. Range is 0-255 counts, resolution of 1 counts
+tooltip="TPS ADC" is the raw ADC counts from the Throttle Position sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_12]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=mapcount
-dlog_gui_name=MAP Counts
+internal_name=mapadc
+dlog_gui_name=MAP ADC
 dlog_field_name=MAPcounts
 offset=4
 lower_limit=0
@@ -210,14 +210,14 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="MAP Counts" is the raw ADC counts from the Manifold Absolute Pressure sensor reading. Range is 0-255 counts, resolution of 1 counts
+tooltip="MAP ADC" is the raw ADC counts from the Manifold Absolute Pressure sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_13]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=barocount
-dlog_gui_name=BARO Counts
+internal_name=baroadc
+dlog_gui_name=BARO ADC
 dlog_field_name=BAROcounts
 offset=3
 lower_limit=0
@@ -225,14 +225,14 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="BARO Counts" is the raw ADC counts from the Manifold Absolute Pressure sensor when read at ECU powerup for Baro correction. Range is 0-255 counts, resolution of 1 counts
+tooltip="BARO ADC" is the raw ADC counts from the Manifold Absolute Pressure sensor when read at ECU powerup for Baro correction. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_14]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=matcount
-dlog_gui_name=MAT Counts
+internal_name=matadc
+dlog_gui_name=MAT ADC
 dlog_field_name=MATcounts
 offset=5
 lower_limit=0
@@ -240,14 +240,14 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="MAT Counts" is the raw ADC counts from the Manifold Air Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
+tooltip="MAT ADC" is the raw ADC counts from the Manifold Air Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_15]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=cltcount
-dlog_gui_name=CLT Counts
+internal_name=cltadc
+dlog_gui_name=CLT ADC
 dlog_field_name=CLTcounts
 offset=6
 lower_limit=0
@@ -255,7 +255,7 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="CLT Counts" is the raw ADC counts from the Engine Coolant Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
+tooltip="CLT ADC" is the raw ADC counts from the Engine Coolant Temperature sensor reading. Range is 0-255 counts, resolution of 1 counts
 log_by_default=FALSE
 
 [derived_16]
@@ -270,7 +270,7 @@ upper_limit=100
 dl_conv_expr=(x/100)*255
 ul_conv_expr=(x/255)*100
 is_float=TRUE
-tooltip="TPS %" is the Throttle Position in percentage of open (based on counts, a count of 255 is equal to 100% open).
+tooltip="TPS %" is the Throttle Position in percentage of open (based on counts, a adc of 255 is equal to 100% open).
 log_by_default=TRUE
 
 # derived 17 has issues in MSnS-Extra due to using alternative MAP sensors
@@ -375,8 +375,8 @@ log_by_default=TRUE
 [derived_22]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=o2count
-dlog_gui_name=O<sub>2</sub> Counts
+internal_name=o2adc
+dlog_gui_name=O<sub>2</sub> ADC
 dlog_field_name=O2counts
 offset=9
 lower_limit=0
@@ -384,7 +384,7 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="O2 Counts" is the raw ADC counts for the Exhaust Gas Oxygen reading, Range 0-255, resolution 1 count
+tooltip="O2 ADC" is the raw ADC counts for the Exhaust Gas Oxygen reading, Range 0-255, resolution 1 adc
 log_by_default=FALSE
 
 [derived_23]
@@ -453,8 +453,8 @@ log_by_default=FALSE
 [derived_26]
 keys=internal_name,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,is_float,tooltip,lower_limit,upper_limit,log_by_default
 key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_INT_,_INT_,_BOOL_
-internal_name=battcount
-dlog_gui_name=BATT Counts
+internal_name=battadc
+dlog_gui_name=BATT ADC
 dlog_field_name=BATTcounts
 offset=8
 lower_limit=0
@@ -462,7 +462,7 @@ upper_limit=255
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 is_float=FALSE
-tooltip="BATT Counts" is the raw ADC counts for the Battery Voltage input, Range 0-255, resolution 1 count
+tooltip="BATT ADC" is the raw ADC counts for the Battery Voltage input, Range 0-255, resolution 1 adc
 log_by_default=FALSE
 
 [derived_27]

@@ -67,6 +67,7 @@ gint active_page = -1;
 gint active_table = -1;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
+GdkColor blue = { 0, 0, 0, 65535};
 GdkColor black = { 0, 0, 0, 0};
 
 gboolean paused_handlers = FALSE;
@@ -645,7 +646,10 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	switch ((StdButton)handler)
 	{
 		case RESCALE_TABLE:
-			rescale_table(obj_data);
+			rescale_table(widget);
+			break;
+		case REQFUEL_RESCALE_TABLE:
+			reqfuel_rescale_table(widget);
 			break;
 		case INTERROGATE_ECU:
 			set_title(g_strdup("User initiated interrogation..."));
@@ -881,6 +885,13 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			firmware->rf_params[table_num]->req_fuel_total = value;
 			check_req_fuel_limits(table_num);
 			break;
+		case LOCKED_REQ_FUEL:
+			tmpbuf = (gchar *)g_object_get_data(
+					G_OBJECT(widget),"table_num");
+			table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),firmware->rf_params[table_num]->req_fuel_total);
+			break;
+
 		case LOGVIEW_ZOOM:
 			lv_zoom = tmpi;
 			tmpwidget = g_hash_table_lookup(dynamic_widgets,"logviewer_trace_darea");	
@@ -1602,6 +1613,10 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			break;
 		case GDK_plus:
 		case GDK_KP_Add:
+		case GDK_KP_Equal:
+		case GDK_equal:
+		case GDK_Q:
+		case GDK_q:
 			if (reverse_keys)
 			{
 				if (value >= (lower+1))
@@ -1619,6 +1634,8 @@ EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 			retval = TRUE;
 			break;
 		case GDK_minus:
+		case GDK_W:
+		case GDK_w:
 		case GDK_KP_Subtract:
 			if (reverse_keys)
 			{

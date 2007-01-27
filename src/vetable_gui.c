@@ -22,7 +22,9 @@
 #include "../mtxmatheval/mtxmatheval.h"
 #include <logviewer_gui.h>
 #include <math.h>
+#include <req_fuel.h>
 #include <rtv_processor.h>
+#include <stdlib.h>
 #include <structures.h>
 #include <threads.h>
 #include <vetable_gui.h>
@@ -35,7 +37,7 @@
  that was used. From this widget we extract the table number and other 
  needed data to properly do the rescaling.
  */
-void rescale_table(gchar * widget_name)
+void rescale_table(GtkWidget *widget)
 {
 	extern struct Firmware_Details *firmware;
 	extern GList ***ve_widgets;
@@ -51,7 +53,7 @@ void rescale_table(gchar * widget_name)
 	gboolean ign_parm = FALSE;
 	extern gint **ms_data;
 	GtkWidget *scaler = NULL;
-	GtkWidget *widget = NULL;
+	GtkWidget *tmpwidget = NULL;
 	gchar * tmpbuf = NULL;
 	GList *list = NULL;
 	gfloat percentage = 0.0;
@@ -62,9 +64,12 @@ void rescale_table(gchar * widget_name)
 	gfloat value = 0.0;
 	gfloat real_value = 0.0;
 	GdkColor color;
+	gchar *widget_name = NULL;
 	extern GdkColor black;
 	gboolean use_color = FALSE;
 	extern gboolean forced_update;
+
+	widget_name = (gchar *) g_object_get_data(G_OBJECT(widget),"data");
 
 	scaler = g_hash_table_lookup(dynamic_widgets,widget_name);
 	g_return_if_fail(GTK_IS_WIDGET(scaler));
@@ -84,17 +89,17 @@ void rescale_table(gchar * widget_name)
 			list = g_list_first(list);
 			for (j=0;j<g_list_length(list);j++)
 			{
-				widget = (GtkWidget *)g_list_nth_data(list,j);
-				if ((gboolean)g_object_get_data(G_OBJECT(widget),"marked"))
+				tmpwidget = (GtkWidget *)g_list_nth_data(list,j);
+				if ((gboolean)g_object_get_data(G_OBJECT(tmpwidget),"marked"))
 				{
-					ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
-					page = (gint)g_object_get_data(G_OBJECT(widget),"page");
-					offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-					use_color = (gint)g_object_get_data(G_OBJECT(widget),"use_color");
-					if (g_object_get_data(G_OBJECT(widget),"raw_upper") != NULL)
-						raw_upper = (gint)g_object_get_data(G_OBJECT(widget),"raw_upper");
-					if (g_object_get_data(G_OBJECT(widget),"raw_lower") != NULL)
-						raw_lower = (gint)g_object_get_data(G_OBJECT(widget),"raw_lower");
+					ign_parm = (gboolean)g_object_get_data(G_OBJECT(tmpwidget),"ign_parm");
+					page = (gint)g_object_get_data(G_OBJECT(tmpwidget),"page");
+					offset = (gint)g_object_get_data(G_OBJECT(tmpwidget),"offset");
+					use_color = (gint)g_object_get_data(G_OBJECT(tmpwidget),"use_color");
+					if (g_object_get_data(G_OBJECT(tmpwidget),"raw_upper") != NULL)
+						raw_upper = (gint)g_object_get_data(G_OBJECT(tmpwidget),"raw_upper");
+					if (g_object_get_data(G_OBJECT(tmpwidget),"raw_lower") != NULL)
+						raw_lower = (gint)g_object_get_data(G_OBJECT(tmpwidget),"raw_lower");
 					value = ms_data[page][offset];
 					value = (value*percentage)/100.0;
 					if (value < raw_lower)
@@ -112,21 +117,21 @@ void rescale_table(gchar * widget_name)
 					old = ms_data[page][offset];
 					ms_data[page][offset] = value;
 
-					real_value = convert_after_upload(widget);
+					real_value = convert_after_upload(tmpwidget);
 					ms_data[page][offset] = old;
 
 					tmpbuf = g_strdup_printf("%i",(gint)real_value);
-					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
 					g_free(tmpbuf);
 
-					write_ve_const(widget, page, offset, (gint)value, ign_parm, TRUE);
-					gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-					widget_grab(widget,NULL,GINT_TO_POINTER(TRUE));
+					write_ve_const(tmpwidget, page, offset, (gint)value, ign_parm, TRUE);
+					gtk_widget_modify_text(tmpwidget,GTK_STATE_NORMAL,&black);
+					widget_grab(tmpwidget,NULL,GINT_TO_POINTER(TRUE));
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(scaler),100.0);
 					if (use_color)
 					{
 						color = get_colors_from_hue(((gfloat)value/256.0)*360.0,0.33, 1.0);
-						gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+						gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
 					}
 
 
@@ -136,6 +141,151 @@ void rescale_table(gchar * widget_name)
 	}
 	forced_update = TRUE;
 }
+
+/*!
+ \brief reqfuel_rescale_table() is called to rescale a VEtable based on a
+ newly sent reqfuel variable.
+ \param widget_name (gchar *) is the widget name of the scaler widget 
+ that was used. From this widget we extract the table number and other 
+ needed data to properly do the rescaling.
+ */
+void reqfuel_rescale_table(GtkWidget *widget)
+{
+	extern struct Firmware_Details *firmware;
+	extern GList ***ve_widgets;
+	extern GHashTable *dynamic_widgets;
+	gint table_num = -1;
+	gint z_base = -1;
+	gint z_page = -1;
+	gint x_bins = -1;
+	gint y_bins = -1;
+	gint old = 0;
+	gint page = 0;
+	gint offset = 0;
+	gboolean ign_parm = FALSE;
+	extern gint **ms_data;
+	GtkWidget *tmpwidget = NULL;
+	gchar * tmpbuf = NULL;
+	GList *list = NULL;
+	gfloat percentage = 0.0;
+	gint i = 0;
+	gint j = 0;
+	gint x = 0;
+	gchar **vector = NULL;
+	gint raw_lower = 0;
+	gint raw_upper = 255;
+	gfloat value = 0.0;
+	gfloat real_value = 0.0;
+	gfloat new_reqfuel = 0.0;
+	GdkColor color;
+	extern GdkColor black;
+	gboolean use_color = FALSE;
+	extern gboolean forced_update;
+
+	g_return_if_fail(GTK_IS_WIDGET(widget));
+	if (!g_object_get_data(G_OBJECT(widget),"applicable_tables"))
+	{
+		printf("applicable tables not defined!!!\n");
+		return;
+	}
+	if (!g_object_get_data(G_OBJECT(widget),"table_num"))
+	{
+		printf("table_num not defined!!!\n");
+		return;
+	}
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"applicable_tables");
+	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"data");
+	tmpwidget = g_hash_table_lookup(dynamic_widgets,tmpbuf);
+	g_return_if_fail(GTK_IS_WIDGET(tmpwidget));
+//	new_reqfuel = gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));
+	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
+	new_reqfuel = (gfloat)g_ascii_strtod(tmpbuf,NULL);
+	percentage = firmware->rf_params[table_num]->req_fuel_total/new_reqfuel;
+
+	firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
+        firmware->rf_params[table_num]->req_fuel_total = new_reqfuel;
+	check_req_fuel_limits(table_num);
+
+
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"applicable_tables");
+	vector = g_strsplit(tmpbuf,",",-1);
+	if (!vector)
+		return;
+
+	for (x=0;x<g_strv_length(vector);x++)
+	{
+		table_num = (gint)strtol(vector[x],NULL,10);
+
+		z_base = firmware->table_params[table_num]->z_base;
+		x_bins = firmware->table_params[table_num]->x_bincount;
+		y_bins = firmware->table_params[table_num]->y_bincount;
+		z_page = firmware->table_params[table_num]->z_page;
+
+		for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
+		{
+			if (NULL != (list = ve_widgets[z_page][i]))
+			{
+				list = g_list_first(list);
+				for (j=0;j<g_list_length(list);j++)
+				{
+					tmpwidget = (GtkWidget *)g_list_nth_data(list,j);
+					if (GTK_IS_ENTRY(tmpwidget))
+					{
+						ign_parm = (gboolean)g_object_get_data(G_OBJECT(tmpwidget),"ign_parm");
+						page = (gint)g_object_get_data(G_OBJECT(tmpwidget),"page");
+						offset = (gint)g_object_get_data(G_OBJECT(tmpwidget),"offset");
+						use_color = (gint)g_object_get_data(G_OBJECT(tmpwidget),"use_color");
+						if (g_object_get_data(G_OBJECT(tmpwidget),"raw_upper") != NULL)
+							raw_upper = (gint)g_object_get_data(G_OBJECT(tmpwidget),"raw_upper");
+						if (g_object_get_data(G_OBJECT(tmpwidget),"raw_lower") != NULL)
+							raw_lower = (gint)g_object_get_data(G_OBJECT(tmpwidget),"raw_lower");
+						value = ms_data[page][offset];
+						value *= percentage;
+						if (value < raw_lower)
+							value = raw_lower;
+						if (value > raw_upper)
+							value = raw_upper;
+
+						/* What we are doing is doing the 
+						 * forware/reverse conversion which
+						 * will give us an exact value if the 
+						 * user inputs something in
+						 * between,  thus we can reset the 
+						 * display to a sane value...
+						 */
+						old = ms_data[page][offset];
+						ms_data[page][offset] = value;
+
+						real_value = convert_after_upload(tmpwidget);
+						ms_data[page][offset] = old;
+
+						tmpbuf = g_strdup_printf("%i",(gint)real_value);
+						gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
+						g_free(tmpbuf);
+
+						write_ve_const(tmpwidget, page, offset, (gint)value, ign_parm, TRUE);
+						gtk_widget_modify_text(tmpwidget,GTK_STATE_NORMAL,&black);
+						if (use_color)
+						{
+							color = get_colors_from_hue(((gfloat)value/256.0)*360.0,0.33, 1.0);
+							gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
+						}
+
+
+					}
+				}
+			}
+		}
+	}
+//	io_cmd(IO_UPDATE_VE_CONST,NULL);
+	g_strfreev(vector);
+	forced_update = TRUE;
+}
+
+
+
 
 void draw_ve_marker()
 {

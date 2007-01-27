@@ -1354,6 +1354,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_plus:
 		case GDK_KP_Add:
 		case GDK_KP_Equal:
+		case GDK_Q:
+		case GDK_q:
 		case GDK_equal:
 			dbg_func(g_strdup("\t\"PLUS\"\n"),OPENGL);
 
@@ -1377,6 +1379,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 
 		case GDK_minus:
+		case GDK_W:
+		case GDK_w:
 		case GDK_KP_Subtract:
 			dbg_func(g_strdup("\t\"MINUS\"\n"),OPENGL);
 

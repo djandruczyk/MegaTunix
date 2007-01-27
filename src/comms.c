@@ -163,7 +163,12 @@ void update_write_status(struct Output_Data *data)
 	for (i=0;i<g_list_length(ve_widgets[data->page][data->offset]);i++)
 	{
 		if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[data->page][data->offset],i)),"dl_type") != DEFERRED)
+		{
+//			printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[data->page][data->offset],i)));
 			update_widget(g_list_nth_data(ve_widgets[data->page][data->offset],i),NULL);
+		}
+//		else
+			//printf("NOT updating widget %s because it's defered\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[data->page][data->offset],i)));
 	}
 
 	update_ve3d_if_necessary(data->page,data->offset);

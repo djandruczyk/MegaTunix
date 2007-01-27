@@ -19,7 +19,8 @@
 
 /* Prototypes */
 
-void rescale_table(gchar * );
+void rescale_table(GtkWidget * );
+void reqfuel_rescale_table(GtkWidget * );
 void draw_ve_marker(void );
 
 /* Prototypes */
