@@ -408,7 +408,7 @@ tooltip=Enables the use of constant Baro correction. NOTE: THIS REQUIRES the fit
 
 #----- Spinbuttons ----------------------------------------------------------
 
-[barocorr_max_kpa_spin]
+[barocorr_max_adc_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
@@ -417,9 +417,9 @@ dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=The upper limit for the barocorrection factor in KPa. useful to prevent bad running in case of ECU hiccup/reset.
+tooltip=The upper limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
-[barocorr_min_kpa_spin]
+[barocorr_min_adc_spin]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
@@ -428,7 +428,7 @@ dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
-tooltip=The lower limit for the barocorrection factor in KPa. useful to prevent bad running in case of ECU hiccup/reset.
+tooltip=The lower limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
 [soft_revlimit_rpm_spin]
 keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip

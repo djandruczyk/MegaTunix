@@ -89,7 +89,7 @@
 					      <property name="n_rows">8</property>
 					      <property name="n_columns">1</property>
 					      <property name="homogeneous">False</property>
-					      <property name="row_spacing">0</property>
+					      <property name="row_spacing">2</property>
 					      <property name="column_spacing">0</property>
 
 					      <child>
@@ -524,7 +524,7 @@
 					      <property name="n_rows">9</property>
 					      <property name="n_columns">2</property>
 					      <property name="homogeneous">False</property>
-					      <property name="row_spacing">0</property>
+					      <property name="row_spacing">2</property>
 					      <property name="column_spacing">0</property>
 
 					      <child>
@@ -835,8 +835,8 @@
 						  <property name="right_attach">2</property>
 						  <property name="top_attach">3</property>
 						  <property name="bottom_attach">4</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">fill</property>
+						  <property name="x_options">shrink|fill</property>
+						  <property name="y_options">expand|shrink|fill</property>
 						</packing>
 					      </child>
 					    </widget>
@@ -863,7 +863,7 @@
 					</widget>
 					<packing>
 					  <property name="padding">0</property>
-					  <property name="expand">False</property>
+					  <property name="expand">True</property>
 					  <property name="fill">True</property>
 					</packing>
 				      </child>
@@ -894,7 +894,7 @@
 					      <property name="n_rows">26</property>
 					      <property name="n_columns">2</property>
 					      <property name="homogeneous">False</property>
-					      <property name="row_spacing">0</property>
+					      <property name="row_spacing">2</property>
 					      <property name="column_spacing">0</property>
 
 					      <child>
@@ -1698,7 +1698,7 @@
 					  <property name="n_rows">4</property>
 					  <property name="n_columns">5</property>
 					  <property name="homogeneous">False</property>
-					  <property name="row_spacing">0</property>
+					  <property name="row_spacing">2</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
