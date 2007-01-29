@@ -73,6 +73,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GtkWidget * label = NULL;
 	GtkWidget * swin = NULL;
 	GtkWidget * ebox = NULL;
+	GtkWidget * vbox = NULL;
 	gchar ** files = NULL;
 	gchar * path = NULL;
 	GDir *dir = NULL;
@@ -136,8 +137,10 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 				GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 		gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(swin),
 				ebox);
+		vbox = gtk_vbox_new(FALSE,0);
+		gtk_container_add(GTK_CONTAINER(ebox),vbox);
 		table = gtk_table_new(1,1,FALSE);
-		gtk_container_add(GTK_CONTAINER(ebox),table);
+		gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
 		label = gtk_label_new("Unsorted");
 		t_num = gtk_notebook_append_page(GTK_NOTEBOOK(notebook),swin,label);
 		i = 0;
@@ -147,7 +150,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 			gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
 			gtk_widget_realize(gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
-			gtk_widget_set_usize(GTK_WIDGET(gauge),150,150);
+			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 			i++;
 		}
 		g_strfreev(files);
@@ -176,8 +179,10 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 				gtk_scrolled_window_add_with_viewport(
 						GTK_SCROLLED_WINDOW(swin),
 						ebox);
+				vbox = gtk_vbox_new(FALSE,0);
+				gtk_container_add(GTK_CONTAINER(ebox),vbox);
 				table = gtk_table_new(1,1,FALSE);
-				gtk_container_add(GTK_CONTAINER(ebox),table);
+				gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
 				label = gtk_label_new(d_name);
 				t_num = gtk_notebook_append_page(
 						GTK_NOTEBOOK(notebook),
@@ -189,7 +194,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 					gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
 					gtk_widget_realize(gauge);
 					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
-					gtk_widget_set_usize(GTK_WIDGET(gauge),150,150);
+					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 					i++;
 				}
 				g_strfreev(files);
@@ -199,8 +204,12 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 			d_name = (gchar *)g_dir_read_name(dir);
 		}
 		gtk_widget_show_all(notebook);
-		while (gtk_events_pending())
+		/*
+		while (gdk_events_pending())
+		{
 			gtk_main_iteration();
+		}
+		*/
 		g_dir_close(dir);
 	}
 	g_free(path);
