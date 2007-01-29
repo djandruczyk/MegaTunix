@@ -813,7 +813,8 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	glColor3f(1.0, 1.0, 1.0);
 	tmpf1 = (MIN(w,h)/360.0 < 1.2) ? 1.2:MIN(w,h)/360.0;
 
-	glLineWidth(tmpf1);
+	//glLineWidth(tmpf1);
+	glLineWidth(1.25);
 
 
 	/* Draw lines on RPM axis */
@@ -882,6 +883,7 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
+	gfloat bottom = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * value = NULL;
 	extern GHashTable *dynamic_widgets;
@@ -906,14 +908,29 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 	glColor3f(1.0,0.0,0.0);
 	glBegin(GL_POINTS);
 
-	tmpf1 = evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x]);
-	tmpf2 = evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y]);
-	tmpf3 = evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x]);
+	tmpf1 = (evaluator_evaluate_x(ve_view->x_eval,ms_data[x_page][x_base+ve_view->active_x])-ve_view->x_trans)*ve_view->x_scale;
+	tmpf2 = (evaluator_evaluate_x(ve_view->y_eval,ms_data[y_page][y_base+ve_view->active_y])-ve_view->y_trans)*ve_view->y_scale;
+	tmpf3 = (evaluator_evaluate_x(ve_view->z_eval,ms_data[z_page][z_base+(ve_view->active_y*ve_view->y_bincount)+ve_view->active_x])-ve_view->z_trans)*ve_view->z_scale;
 
-	glVertex3f((tmpf1-ve_view->x_trans)*ve_view->x_scale,
-		(tmpf2-ve_view->y_trans)*ve_view->y_scale,
-		(tmpf3-ve_view->z_trans)*ve_view->z_scale);
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+		
 	glEnd();        
+
+	glBegin(GL_LINE_STRIP);
+	glColor3f(1.0,0.0,0.0);
+
+	glVertex3f(tmpf1,tmpf2,tmpf3);
+	glVertex3f(tmpf1,tmpf2,bottom);
+
+	glVertex3f(0.0,tmpf2,bottom);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex3f(tmpf1,tmpf2,bottom - ve_view->z_offset);
+
+	glVertex3f(tmpf1,0.0,bottom);
+	glEnd();
+
 
 	tmpbuf = g_strdup_printf("x_active_label_%i",ve_view->table_num);
 	value = g_strdup_printf("%1$.*2$f %3$s",tmpf1,ve_view->x_precision,ve_view->x_suffix);

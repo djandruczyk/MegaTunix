@@ -514,7 +514,33 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 	output->offset = offset;
 	output->value = value;
 	output->ign_parm = ign_parm;
+	output->mode = MTX_SINGLE_WRITE;
 	output->queue_update = queue_update;
+	io_cmd(IO_WRITE_DATA,output);
+	return;
+}
+
+
+/*!
+ \brief chunk_write() gets called to send a block of values to the ECU.
+ \param page (gint) page in which the value refers to.
+ \param offset (gint) offset from the beginning of the page that this data
+ refers to.
+ \param len (gint) lenght of block to sent
+ \param data (guchar) the block of data to be sent
+ a horrible stall when doing an ECU restore or batch load...
+ */
+void chunk_write(gint page, gint offset, gint len, guchar * data)
+{
+	struct Output_Data *output = NULL;
+
+	dbg_func(g_strdup_printf(__FILE__": chunk_write()\n\t Sending page %i, offset %i, len %i, data %p\n",page,offset,len,data),SERIAL_WR);
+	output = g_new0(struct Output_Data, 1);
+	output->page = page;
+	output->offset = offset;
+	output->len = len;
+	output->data = data;
+	output->mode = MTX_CHUNK_WRITE;
 	io_cmd(IO_WRITE_DATA,output);
 	return;
 }
@@ -661,19 +687,19 @@ void *restore_update(gpointer data)
 	gint remaining_xfers = max_xfers;
 	gint last_xferd = max_xfers;
 
-	thread_update_logbar("tools_view","warning",g_strdup_printf("Need to Send %i Variables to the ECU, please be patient.\n",max_xfers/2),TRUE,FALSE);
+	thread_update_logbar("tools_view","warning",g_strdup_printf("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n",max_xfers),TRUE,FALSE);
 	while (remaining_xfers > 5)
 	{
 		remaining_xfers = g_async_queue_length(io_queue);
 		g_usleep(5000);
-		if (remaining_xfers <= (last_xferd-100))
+		if (remaining_xfers <= (last_xferd-50))
 		{
-			thread_update_logbar("tools_view",NULL,g_strdup_printf("Approximately %i Variables to send, please wait\n",remaining_xfers/2),TRUE,FALSE);
+			thread_update_logbar("tools_view",NULL,g_strdup_printf("Approximately %i Transactions remaining, please wait\n",remaining_xfers),TRUE,FALSE);
 			last_xferd = remaining_xfers;
 		}
 
 	}
-	thread_update_logbar("tools_view","warning",g_strdup_printf("Restore of approximately %i variables to your ECU is complete\n",max_xfers/2),TRUE,FALSE);
+	thread_update_logbar("tools_view","warning",g_strdup_printf("All Transactions complete\n"),TRUE,FALSE);
 
 	return NULL;
 }

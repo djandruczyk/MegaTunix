@@ -394,4 +394,10 @@ typedef enum
 	ECU_RESTORE,
 }FioAction;
 
+typedef enum
+{
+	MTX_SINGLE_WRITE=0x240,
+	MTX_CHUNK_WRITE,
+}WriteMode;
+
 #endif

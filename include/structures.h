@@ -456,8 +456,11 @@ struct Output_Data
 	gint page;		/*! Page in ECU */
 	gint offset;		/*! Offset in block */
 	gint value;		/*! Value to send */
+	gint len;		/*! Length of chunk write block */
+	guchar *data;		/*! Block of data for chunk write */
 	gboolean ign_parm;	/*! Ignition parameter, True or False */
 	gboolean queue_update;	/*! If true queues a member widget update */
+	WriteMode mode;		/*! Write mode enum */
 };
 
 

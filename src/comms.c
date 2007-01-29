@@ -202,21 +202,23 @@ void update_write_status(struct Output_Data *data)
 void writeto_ecu(struct Io_Message *message)
 {
 	extern gboolean connected;
-	struct Output_Data *data = message->payload;
+	struct Output_Data *output = message->payload;
 
-	gint page = data->page;
+	gint page = output->page;
 	gint truepgnum = message->truepgnum;
-	gint offset = data->offset;
-	gint value = data->value;
-	gboolean ign_parm = data->ign_parm;
+	gint offset = output->offset;
+	gint value = output->value;
+	gboolean ign_parm = output->ign_parm;
 	gint highbyte = 0;
 	gint lowbyte = 0;
 	gboolean twopart = 0;
 	gint res = 0;
 	gint count = 0;
 	gchar * err_text = NULL;
-	char lbuff[3] = {0, 0, 0};
+	gint i = 0;
+	char *lbuff = NULL;
 	gchar * write_cmd = NULL;
+	gchar * chunk_write_cmd = NULL;
 	extern struct Firmware_Details *firmware;
 	extern struct Serial_Params *serial_params;
 	extern gint **ms_data;
@@ -228,7 +230,16 @@ void writeto_ecu(struct Io_Message *message)
 	if (offline)
 	{
 		//printf ("OFFLINE writing value at %i,%i [%i]\n",page,offset,value);
-		ms_data[page][offset] = value;
+		switch (output->mode)
+		{
+			case MTX_SINGLE_WRITE:
+				ms_data[page][offset] = value;
+				break;
+			case MTX_CHUNK_WRITE:
+				for (i=0;i<=output->len;i++)
+					ms_data[page][offset+i] = output->data[i];
+				break;
+		}
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if offline */
 	}
@@ -238,12 +249,24 @@ void writeto_ecu(struct Io_Message *message)
 		return;		/* can't write anything if disconnected */
 	}
 	if ((!firmware->multi_page) && (page > 0))
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO!!!\n"),CRITICAL);
+	{
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO, ABORTING WRITE!!!\n"),CRITICAL);
+		g_static_mutex_unlock(&mutex);
+		return;
+	}
 
+	if (output->mode == MTX_SINGLE_WRITE)
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Mem Offset %i, Value %i\n",page,offset,value),SERIAL_WR);
+	else if (output->mode == MTX_CHUNK_WRITE)
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCHUNK Write, Page, %i, Mem Offset %i, length %i\n",page,offset,output->len),SERIAL_WR);
+	else
+	{
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tNO output mode defined, aborting!!\n"),CRITICAL);
+		g_static_mutex_unlock(&mutex);
+		return;
+	}
 
-	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Mem Offset %i, Value %i\n",page,offset,value),SERIAL_WR);
-
-	if (value > 255)
+	if ((value > 255) && (output->mode == MTX_SINGLE_WRITE))
 	{
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tLarge value being sent: %i, to page %i, offset %i\n",value,page,offset),SERIAL_WR);
 
@@ -252,7 +275,7 @@ void writeto_ecu(struct Io_Message *message)
 		twopart = TRUE;
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tHighbyte: %i, Lowbyte %i\n",highbyte,lowbyte),SERIAL_WR);
 	}
-	if (value < 0)
+	if ((value < 0) && (output->mode == MTX_SINGLE_WRITE))
 	{
 		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n"),CRITICAL);
 		g_static_mutex_unlock(&mutex);
@@ -262,56 +285,96 @@ void writeto_ecu(struct Io_Message *message)
 	if ((firmware->multi_page ) && (message->need_page_change)) 
 		set_ms_page(truepgnum);
 
+
 	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
 
-	if (ign_parm)
+	if ((ign_parm) && (output->mode == MTX_SINGLE_WRITE))
 		write_cmd = g_strdup("J");
 	else
 		write_cmd = g_strdup(firmware->write_cmd);
 
-	lbuff[0]=offset;
-	if (twopart)
+	if (output->mode == MTX_SINGLE_WRITE)
 	{
-		lbuff[1]=highbyte;
-		lbuff[2]=lowbyte;
-		count = 3;
-		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 16 bit value to ECU\n"),SERIAL_WR);
+		if (twopart)
+		{
+			count = 3;
+			lbuff = g_new0(char,count);
+			lbuff[0]=offset;
+			lbuff[1]=highbyte;
+			lbuff[2]=lowbyte;
+			dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 16 bit value to ECU\n"),SERIAL_WR);
+		}
+		else
+		{
+			count = 2;
+			lbuff = g_new0(char,count);
+			lbuff[0]=offset;
+			lbuff[1]=value;
+			dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n"),SERIAL_WR);
+		}
+
+		g_static_mutex_lock(&comms_mutex);
+		res = write (serial_params->fd,write_cmd,1);	/* Send write command */
+		if (res != 1 )
+		{
+			err_text = (gchar *)g_strerror(errno);
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED, ERROR \"%s\"!!!\n",write_cmd,err_text),CRITICAL);
+		}
+		else
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd),SERIAL_WR);
+		res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
+		g_static_mutex_unlock(&comms_mutex);
+		if (res != count )
+		{
+			err_text = (gchar *)g_strerror(errno);
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED, ERROR \"%s\"!!!\n",err_text),CRITICAL);
+		}
+		else
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
+
+		g_free(lbuff);
+		ms_data[page][offset] = value;
+
+		g_free(write_cmd);
+
 	}
-	else
+	else if (output->mode == MTX_CHUNK_WRITE)
 	{
-		lbuff[1]=value;
-		count = 2;
-		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n"),SERIAL_WR);
+		g_static_mutex_lock(&comms_mutex);
+		/* Initiate chunk write */
+		res = write (serial_params->fd,firmware->chunk_write_cmd,1);
+		if (res != 1 )
+		{
+			err_text = (gchar *)g_strerror(errno);
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite command \"%s\" FAILED, ERROR \"%s\"!!!\n",chunk_write_cmd,err_text),CRITICAL);
+		}
+
+		/* count is len+2 cause we need two bytes for offset and len*/
+		count = output->len+2;
+		lbuff = g_new0(char,count);
+		lbuff[0]=offset;
+		lbuff[1]=output->len;
+		for(i=0;i<output->len;i++)
+		{
+			ms_data[page][offset+i] = output->data[i];
+			lbuff[2+i] = output->data[i];
+		}
+		res = write (serial_params->fd,lbuff,count);	/* Send write command */
+		g_static_mutex_unlock(&comms_mutex);
+		if (res != count )
+		{
+			err_text = (gchar *)g_strerror(errno);
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite offset+count+data of length \"%i\", (%i) FAILED, ERROR \"%s\"!!!\n",count,res,err_text),CRITICAL);
+		}
+		else
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tChunk write of offset+count+data to ECU succeeded\n"),SERIAL_WR);
+		g_free(lbuff);
 	}
 
-	g_static_mutex_lock(&comms_mutex);
-	res = write (serial_params->fd,write_cmd,1);	/* Send write command */
-	if (res != 1 )
-	{
-		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED, ERROR \"%s\"!!!\n",write_cmd,err_text),CRITICAL);
-	}
-	else
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd),SERIAL_WR);
-	res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
-	g_static_mutex_unlock(&comms_mutex);
-	if (res != count )
-	{
-		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED, ERROR \"%s\"!!!\n",err_text),CRITICAL);
-	}
-	else
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
-
-	ms_data[page][offset] = value;
-
-	g_free(write_cmd);
+	/*is this really needed??? */
+//	g_usleep(5000);
 
 	g_static_mutex_unlock(&mutex);
-
-	/*is this reall needed??? */
-	g_usleep(5000);
-
 	return;
 }
 

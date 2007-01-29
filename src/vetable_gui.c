@@ -172,6 +172,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	gint j = 0;
 	gint x = 0;
 	gchar **vector = NULL;
+	guchar *data = NULL;
 	gint raw_lower = 0;
 	gint raw_upper = 255;
 	gfloat value = 0.0;
@@ -222,6 +223,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 		x_bins = firmware->table_params[table_num]->x_bincount;
 		y_bins = firmware->table_params[table_num]->y_bincount;
 		z_page = firmware->table_params[table_num]->z_page;
+		data = g_new0(guchar, x_bins*y_bins);
 
 		for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
 		{
@@ -265,7 +267,8 @@ void reqfuel_rescale_table(GtkWidget *widget)
 						gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
 						g_free(tmpbuf);
 
-						write_ve_const(tmpwidget, page, offset, (gint)value, ign_parm, TRUE);
+						//write_ve_const(tmpwidget, page, offset, (gint)value, ign_parm, TRUE);
+						data[i] = (guchar)value;
 						gtk_widget_modify_text(tmpwidget,GTK_STATE_NORMAL,&black);
 						if (use_color)
 						{
@@ -278,6 +281,7 @@ void reqfuel_rescale_table(GtkWidget *widget)
 				}
 			}
 		}
+		chunk_write(z_page,z_base,x_bins*y_bins,data);
 	}
 //	io_cmd(IO_UPDATE_VE_CONST,NULL);
 	g_strfreev(vector);

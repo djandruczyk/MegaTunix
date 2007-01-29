@@ -162,6 +162,7 @@ void restore_all_ecu_settings(gchar *filename)
 	gint writecount = 0;
 	gint tmpi = 0;
 	gchar *tmpbuf = NULL;
+	guchar *data = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
 	gint dload_val = 0;
@@ -197,14 +198,25 @@ void restore_all_ecu_settings(gchar *filename)
 				keys = parse_keys(tmpbuf,&num_keys,",");
 				if (num_keys != firmware->page_params[page]->length)
 					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[page]->length),CRITICAL);
-				for (offset=0;offset<num_keys;offset++)
+				if (firmware->chunk_support)
 				{
-					dload_val = atoi(keys[offset]);
-					if (dload_val != ms_data_last[page][offset])
+					data = g_new(guchar, firmware->page_params[page]->length);
+					for (offset=0;offset<num_keys;offset++)
+						data[offset]=(guchar)atoi(keys[offset]);
+					chunk_write(page,0,num_keys,data);
+
+				}
+				else
+				{
+					for (offset=0;offset<num_keys;offset++)
 					{
-	//					printf("writing data for page %i, offset %i\n",page,offset);
-						write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark, FALSE);
-						writecount++;
+						dload_val = atoi(keys[offset]);
+						if (dload_val != ms_data_last[page][offset])
+						{
+							//					printf("writing data for page %i, offset %i\n",page,offset);
+							write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark, FALSE);
+							writecount++;
+						}
 					}
 				}
 
