@@ -305,6 +305,7 @@ gboolean vetable_import(GIOChannel *iochannel)
 		dbg_func(g_strdup_printf(__FILE__": vetable_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve),CRITICAL);
 		return FALSE;
 	}
+	io_cmd(IO_UPDATE_VE_CONST,NULL);
 	return TRUE;
 }
 
@@ -799,11 +800,12 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	extern gint ** ms_data;
 	extern gint ** ms_data_last;
 	extern gint ** ms_data_backup;
+	guchar *data = NULL;
+	gint total = 0;
 	gint page = -1;
 	gint base = 0;
 	gboolean is_spark = 0;
 	gint table = -1;
-	gint writecount = 0;
 	extern struct Firmware_Details *firmware;
 
 	/* Since we assume the page is where the table is this can cause
@@ -836,54 +838,66 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 		memcpy(ms_data_backup[i], ms_data[i],sizeof(gint)*firmware->page_params[i]->length);
 	}
 
-
 	page = firmware->table_params[table]->x_page;
 	base = firmware->table_params[table]->x_base;
 	is_spark = firmware->page_params[firmware->table_params[table]->x_page]->is_spark;
-	for (i=0;i<vex->total_x_bins;i++)
+	if (firmware->chunk_support)
 	{
-		if (vex->x_bins[i] != ms_data_last[page][base+i])
+		total = (vex->total_x_bins);
+		data = g_new0(guchar, total);
+		for (i=0;i<total;i++)
+			data[i]=(guchar)vex->x_bins[i];
+		chunk_write(page,base,total,data);
+	}
+	else
+	{
+		for (i=0;i<vex->total_x_bins;i++)
 		{
-			write_ve_const(NULL,page,base+i,vex->x_bins[i],is_spark, TRUE);
-			writecount++;
+			if (vex->x_bins[i] != ms_data_last[page][base+i])
+				write_ve_const(NULL,page,base+i,vex->x_bins[i],is_spark, TRUE);
 		}
 	}
-	if (writecount > 0)
-		io_cmd(IO_BURN_MS_FLASH,NULL);
 
-	writecount = 0;
 
 	page = firmware->table_params[table]->y_page;
 	base = firmware->table_params[table]->y_base;
 	is_spark = firmware->page_params[firmware->table_params[table]->y_page]->is_spark;
-	for (i=0;i<vex->total_y_bins;i++)
+	if (firmware->chunk_support)
 	{
-		if (vex->y_bins[i] != ms_data_last[page][base+i])
+		total = (vex->total_y_bins);
+		data = g_new0(guchar, total);
+		for (i=0;i<total;i++)
+			data[i]=(guchar)vex->y_bins[i];
+		chunk_write(page,base,total,data);
+	}
+	else
+	{
+		for (i=0;i<vex->total_y_bins;i++)
 		{
-			write_ve_const(NULL,page,base+i,vex->y_bins[i],is_spark, TRUE);
-			writecount++;
+			if (vex->y_bins[i] != ms_data_last[page][base+i])
+				write_ve_const(NULL,page,base+i,vex->y_bins[i],is_spark, TRUE);
 		}
 	}
-	if (writecount > 0)
-		io_cmd(IO_BURN_MS_FLASH,NULL);
-
-	writecount = 0;
 
 	page = firmware->table_params[table]->z_page;
 	base = firmware->table_params[table]->z_base;
 	is_spark = firmware->page_params[firmware->table_params[table]->z_page]->is_spark;
-	for (i=0;i<((vex->total_y_bins)*(vex->total_x_bins));i++)
+	if (firmware->chunk_support)
 	{
-		if (vex->tbl_bins[i] != ms_data_last[page][base+i])
+		total = (vex->total_y_bins)*(vex->total_x_bins);
+		data = g_new0(guchar, total);
+		for (i=0;i<total;i++)
+			data[i]=(guchar)vex->tbl_bins[i];
+		chunk_write(page,base,total,data);
+	}
+	else
+	{
+		for (i=0;i<((vex->total_y_bins)*(vex->total_x_bins));i++)
 		{
-			write_ve_const(NULL,page,base+i,vex->tbl_bins[i],is_spark, TRUE);
-			writecount++;
+			if (vex->tbl_bins[i] != ms_data_last[page][base+i])
+				write_ve_const(NULL,page,base+i,vex->tbl_bins[i],is_spark, TRUE);
 		}
 	}
-	if (writecount > 0)
-		io_cmd(IO_BURN_MS_FLASH,NULL);
-
-	writecount = 0;
 
 	update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex->page),TRUE,FALSE);
 }
@@ -897,6 +911,8 @@ void revert_to_previous_data()
 {
 	gint i=0;
 	gint j=0;
+	gint total = 0;
+	guchar *data = NULL;
 	/* Called to back out a load of a VEtable from VEX import */
 	extern gint ** ms_data;
 	extern gint ** ms_data_backup;
@@ -905,12 +921,24 @@ void revert_to_previous_data()
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		for (j = 0;j<firmware->page_params[i]->length;j++)
+		if (firmware->chunk_support)
 		{
-			if (ms_data_backup[i][j] != ms_data[i][j])
+			total = firmware->page_params[i]->length;
+			data = g_new0(guchar,total);
+			for (j=0;j<total;j++)
+				data[j]=ms_data_backup[i][j];
+			chunk_write(i,0,total,data);
+
+		}
+		else
+		{
+			for (j = 0;j<firmware->page_params[i]->length;j++)
 			{
-				ms_data[i][j] = ms_data_backup[i][j];
-				write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark, FALSE);
+				if (ms_data_backup[i][j] != ms_data[i][j])
+				{
+					ms_data[i][j] = ms_data_backup[i][j];
+					write_ve_const(NULL,i,j,ms_data_backup[i][j],firmware->page_params[i]->is_spark, FALSE);
+				}
 			}
 		}
 		memcpy(ms_data[i], ms_data_backup[i], sizeof(gint)*firmware->page_params[i]->length);

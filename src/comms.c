@@ -188,6 +188,9 @@ void update_write_status(struct Output_Data *data)
 			return;
 		}
 	}
+	/* If pchunk dwrite data bound,  FREE IT */
+	if (data->data)
+		g_free(data->data);
 
 	set_group_color(BLACK,"burners");
 
@@ -372,7 +375,7 @@ void writeto_ecu(struct Io_Message *message)
 	}
 
 	/*is this really needed??? */
-//	g_usleep(5000);
+	g_usleep(5000);
 
 	g_static_mutex_unlock(&mutex);
 	return;

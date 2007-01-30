@@ -649,7 +649,7 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 	dbg_func(g_strdup(__FILE__": ve3d_button_press_event()\n"),OPENGL);
 
-	//      gtk_widget_grab_focus (widget);
+	gtk_widget_grab_focus (widget);
 
 	if (event->button != 0)
 	{
@@ -880,6 +880,7 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
+	gfloat tmp = 0.0;
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
 	gfloat tmpf3 = 0.0;
@@ -933,18 +934,20 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 
 
 	tmpbuf = g_strdup_printf("x_active_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",tmpf1,ve_view->x_precision,ve_view->x_suffix);
+	tmp = (tmpf1/ve_view->x_scale)+ve_view->x_trans;
+	value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->x_precision,ve_view->x_suffix);
 
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("y_active_label_%i",ve_view->table_num);
+	tmp = (tmpf2/ve_view->y_scale)+ve_view->y_trans;
 	if (algorithm[ve_view->table_num] == ALPHA_N)
-		value = g_strdup_printf("%1$.*2$f %3$s",tmpf2,ve_view->y_precision,ve_view->an_y_suffix);
+		value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->an_y_suffix);
 
 	else
-		value = g_strdup_printf("%1$.*2$f %3$s",tmpf2,ve_view->y_precision,ve_view->y_suffix);
+		value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->y_suffix);
 
 
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
@@ -952,7 +955,8 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 	g_free(value);
 
 	tmpbuf = g_strdup_printf("z_active_label_%i",ve_view->table_num);
-	value = g_strdup_printf("%1$.*2$f %3$s",tmpf3,ve_view->z_precision,ve_view->z_suffix);
+	tmp = (tmpf3/ve_view->z_scale)+ve_view->z_trans;
+	value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->z_precision,ve_view->z_suffix);
 
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
 	g_free(tmpbuf);
