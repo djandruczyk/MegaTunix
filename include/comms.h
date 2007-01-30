@@ -25,7 +25,7 @@ void update_write_status(struct Output_Data *);	/* gui updater for write status 
 void readfrom_ecu(struct Io_Message *);	/* Function to get data FROM ecu */
 void writeto_ecu(struct Io_Message *);	/* Func to send data to the ECU */
 void burn_ecu_flash(void);		/* run after burn completion */
-void set_ms_page(guint8);			/* Sets the ECU page */
+void set_ms_page(guint8);	/* Sets the ECU page */
 /* Prototypes */
 
 #endif

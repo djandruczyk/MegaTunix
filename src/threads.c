@@ -541,6 +541,7 @@ void chunk_write(gint page, gint offset, gint len, guchar * data)
 	output->len = len;
 	output->data = data;
 	output->mode = MTX_CHUNK_WRITE;
+	output->queue_update = TRUE;
 	io_cmd(IO_WRITE_DATA,output);
 	return;
 }

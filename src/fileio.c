@@ -159,7 +159,6 @@ void restore_all_ecu_settings(gchar *filename)
 	gchar * section = NULL;
 	gint page = 0;
 	gint offset = 0;
-	gint writecount = 0;
 	gint tmpi = 0;
 	gchar *tmpbuf = NULL;
 	guchar *data = NULL;
@@ -188,7 +187,6 @@ void restore_all_ecu_settings(gchar *filename)
 			if ((firmware->ro_above > 0 ) && (page > firmware->ro_above))
 				break;
 
-			writecount = 0;
 			section = g_strdup_printf("page_%i",page);
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
 				if (tmpi != firmware->page_params[page]->length)
@@ -215,7 +213,6 @@ void restore_all_ecu_settings(gchar *filename)
 						{
 							//					printf("writing data for page %i, offset %i\n",page,offset);
 							write_ve_const(NULL,page,offset,dload_val,firmware->page_params[page]->is_spark, FALSE);
-							writecount++;
 						}
 					}
 				}
@@ -223,8 +220,6 @@ void restore_all_ecu_settings(gchar *filename)
 				g_strfreev(keys);
 				g_free(tmpbuf);
 			}
-			if (writecount > 0)
-				io_cmd(IO_BURN_MS_FLASH,NULL);
 		}
 		start_restore_monitor();
 	}

@@ -158,7 +158,15 @@ void update_write_status(struct Output_Data *data)
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 
+	
+	if ((data->data) && (data->mode == MTX_CHUNK_WRITE))
+	{
+		g_free(data->data);
+		return;
+	}
+
 	paused_handlers = TRUE;
+
 	//printf ("page %i, offset %i\n",data->page,data->offset);
 	for (i=0;i<g_list_length(ve_widgets[data->page][data->offset]);i++)
 	{
@@ -189,9 +197,6 @@ void update_write_status(struct Output_Data *data)
 		}
 	}
 	/* If pchunk dwrite data bound,  FREE IT */
-	if (data->data)
-		g_free(data->data);
-
 	set_group_color(BLACK,"burners");
 
 	return;
@@ -221,7 +226,6 @@ void writeto_ecu(struct Io_Message *message)
 	gint i = 0;
 	char *lbuff = NULL;
 	gchar * write_cmd = NULL;
-	gchar * chunk_write_cmd = NULL;
 	extern struct Firmware_Details *firmware;
 	extern struct Serial_Params *serial_params;
 	extern gint **ms_data;
@@ -289,6 +293,7 @@ void writeto_ecu(struct Io_Message *message)
 		set_ms_page(truepgnum);
 
 
+
 	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
 
 	if ((ign_parm) && (output->mode == MTX_SINGLE_WRITE))
@@ -349,8 +354,10 @@ void writeto_ecu(struct Io_Message *message)
 		if (res != 1 )
 		{
 			err_text = (gchar *)g_strerror(errno);
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite command \"%s\" FAILED, ERROR \"%s\"!!!\n",chunk_write_cmd,err_text),CRITICAL);
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite command \"%s\" FAILED, ERROR \"%s\"!!!\n",firmware->chunk_write_cmd,err_text),CRITICAL);
 		}
+		else
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tChunk write of \"%s\" to ECU succeeded\n",firmware->chunk_write_cmd),SERIAL_WR);
 
 		/* count is len+2 cause we need two bytes for offset and len*/
 		count = output->len+2;
@@ -372,6 +379,7 @@ void writeto_ecu(struct Io_Message *message)
 		else
 			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tChunk write of offset+count+data to ECU succeeded\n"),SERIAL_WR);
 		g_free(lbuff);
+		g_usleep(100000);
 	}
 
 	/*is this really needed??? */
@@ -523,7 +531,7 @@ void readfrom_ecu(struct Io_Message *message)
  the firmware. set_ms_page will check to see if any outstanding data has 
  been sent to the current page, but NOT burned to flash befpre changing pages
  in that case it will burn the flash before changing the page. 
- \param ms_page (gint) the page to set to
+ \param ms_page (guint8) the page to set to
  */
 void set_ms_page(guint8 ms_page)
 {
@@ -543,9 +551,8 @@ void set_ms_page(guint8 ms_page)
 		goto skipburn;
 //	printf("last page %i, ms_page %i, memcpy results for last page %i, memcmp results for current page %i\n",last_page, ms_page, memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length),memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length));
 
-	if ((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0))))
+	if (((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0)))))
 	{
-	//	printf("burning flash\n");
 		burn_ecu_flash();
 	}
 skipburn:
