@@ -38,6 +38,7 @@
 #include <serialio.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <structures.h>
 #include <tabloader.h>
 #include <t-logger.h>
@@ -482,9 +483,38 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
  */
 EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
+	gchar *tmpbuf = NULL;
+	gchar * text = NULL;
+	gint i=0;
+	gint count = 0;
+
 	if ((paused_handlers) || (!ready))
 		return TRUE;
 
+	text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
+	tmpbuf = g_new0(gchar,strlen(text));
+	for (i=0;i<strlen(text);i++)
+	{
+		if ((g_ascii_isdigit(text[i])) || (text[i] == '.'))
+		{
+			tmpbuf[count++] = text[i];
+		}
+		else
+			printf("text[%i] is %c\n",i,text[i]);
+	}
+	if ((text) && (tmpbuf))
+	{
+		g_signal_handlers_block_by_func (G_OBJECT (widget),
+				G_CALLBACK (entry_changed_handler),
+				data);
+		gtk_entry_set_text (GTK_ENTRY(widget), tmpbuf);
+		g_signal_handlers_unblock_by_func (G_OBJECT (widget),
+				G_CALLBACK (entry_changed_handler),
+				data);
+	}
+	g_signal_stop_emission_by_name (G_OBJECT (widget), "changed");
+
+	g_free (tmpbuf);
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	return TRUE;
