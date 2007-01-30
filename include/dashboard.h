@@ -14,6 +14,7 @@
 #ifndef __DASHBOARD_H__
 #define __DASHBOARD_H__
 
+#include <defines.h>
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -36,6 +37,7 @@ void initialize_dashboards(void);
 gboolean present_dash_filechooser(GtkWidget *, gpointer );
 gboolean remove_dashcluster(gpointer, gpointer , gpointer );
 gboolean dummy(GtkWidget *,gpointer );
+EXPORT void create_gauge(GtkWidget *);
 /* Prototypes */
 
 #endif

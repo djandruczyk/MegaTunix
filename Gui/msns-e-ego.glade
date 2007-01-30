@@ -31,7 +31,7 @@
 	  <property name="spacing">0</property>
 
 	  <child>
-	    <widget class="GtkScrolledWindow" id="scrolledwindow1">
+	    <widget class="GtkScrolledWindow" id="ego_scrolledwindow1">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -40,12 +40,12 @@
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkViewport" id="viewport1">
+		<widget class="GtkViewport" id="ego_viewport1">
 		  <property name="visible">True</property>
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox8">
+		    <widget class="GtkHBox" id="ego_hbox1">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
@@ -1247,7 +1247,7 @@
 				      <property name="spacing">0</property>
 
 				      <child>
-					<widget class="GtkHBox" id="target_affr_hbox1">
+					<widget class="GtkHBox" id="target_afr_hbox1">
 					  <property name="visible">True</property>
 					  <property name="homogeneous">True</property>
 					  <property name="spacing">0</property>
@@ -1674,7 +1674,7 @@
 				      </child>
 
 				      <child>
-					<widget class="GtkHBox" id="hbox8">
+					<widget class="GtkHBox" id="ego_hbox8">
 					  <property name="visible">True</property>
 					  <property name="homogeneous">True</property>
 					  <property name="spacing">0</property>

@@ -46,7 +46,7 @@
 		  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox3">
+		    <widget class="GtkHBox" id="ae_hbox1">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
@@ -58,7 +58,7 @@
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox2">
+			    <widget class="GtkHBox" id="ae_hbox2">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
@@ -2339,7 +2339,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkHBox" id="hbox3">
+			    <widget class="GtkHBox" id="ae_hbox4">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
@@ -2352,7 +2352,7 @@
 				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				  <child>
-				    <widget class="GtkHBox" id="hbox1">
+				    <widget class="GtkHBox" id="ae_hbox5">
 				      <property name="visible">True</property>
 				      <property name="homogeneous">True</property>
 				      <property name="spacing">0</property>

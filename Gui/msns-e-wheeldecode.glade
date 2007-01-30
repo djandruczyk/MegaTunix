@@ -25,7 +25,7 @@
       <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
       <child>
-	<widget class="GtkVBox" id="vbox3">
+	<widget class="GtkVBox" id="wh_vbox1">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
@@ -45,7 +45,7 @@
 		  <property name="shadow_type">GTK_SHADOW_IN</property>
 
 		  <child>
-		    <widget class="GtkHBox" id="hbox1">
+		    <widget class="GtkHBox" id="wh_hbox1">
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
@@ -58,7 +58,7 @@
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkVBox" id="vbox3">
+			    <widget class="GtkVBox" id="wh_vbox3">
 			      <property name="visible">True</property>
 			      <property name="homogeneous">False</property>
 			      <property name="spacing">0</property>
@@ -2472,7 +2472,7 @@ Missing Teeth:</property>
 				      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				      <child>
-					<widget class="GtkHBox" id="hbox1">
+					<widget class="GtkHBox" id="wh_hbox2">
 					  <property name="visible">True</property>
 					  <property name="homogeneous">True</property>
 					  <property name="spacing">0</property>

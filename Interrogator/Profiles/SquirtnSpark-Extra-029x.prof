@@ -319,7 +319,7 @@ z_source=
 z_suffix=Degrees
 z_conv_expr=(x*(352/1000))-10
 z_disp_float=TRUE
-z_precision=1
+z_disp_precision=1
 
 [page_0]
 truepgnum=0

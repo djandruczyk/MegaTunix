@@ -496,11 +496,7 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	for (i=0;i<strlen(text);i++)
 	{
 		if ((g_ascii_isdigit(text[i])) || (text[i] == '.'))
-		{
 			tmpbuf[count++] = text[i];
-		}
-		else
-			printf("text[%i] is %c\n",i,text[i]);
 	}
 	if ((text) && (tmpbuf))
 	{

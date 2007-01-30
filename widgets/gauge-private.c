@@ -654,6 +654,8 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	w = widget->allocation.width;
 	h = widget->allocation.height;
 
+	if (!gauge->bg_pixmap)
+		return;
 	/* get a cairo_t */
 	cr = gdk_cairo_create (gauge->bg_pixmap);
 	/* Background set to black */
@@ -895,7 +897,12 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	GdkColor *e_color;
 	PangoRectangle logical_rect;
 
+
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
+
+	if (!gauge->bg_pixmap)
+		return;
+
 	w = widget->allocation.width;
 	h = widget->allocation.height;
 
@@ -1337,6 +1344,6 @@ gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
  */
 void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
-	requisition->width = 80;
-	requisition->height = 80;
+	requisition->width = 10;
+	requisition->height = 10;
 }

@@ -25,7 +25,7 @@
       <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
       <child>
-	<widget class="GtkScrolledWindow" id="scrolledwindow1">
+	<widget class="GtkScrolledWindow" id="er_scrolledwindow1">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
 	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -34,12 +34,12 @@
 	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkViewport" id="viewport1">
+	    <widget class="GtkViewport" id="er_viewport1">
 	      <property name="visible">True</property>
 	      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox1">
+		<widget class="GtkHBox" id="er_hbox1">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">0</property>

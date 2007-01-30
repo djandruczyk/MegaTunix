@@ -573,3 +573,22 @@ gboolean dummy(GtkWidget *widget,gpointer data)
 {
 	return TRUE;
 }
+
+
+EXPORT void create_gauge(GtkWidget *widget)
+{
+	GtkWidget * gauge = NULL;
+	gchar * xml_name = NULL;
+	gchar * filename = NULL;
+	gauge = mtx_gauge_face_new();
+	gtk_container_add(GTK_CONTAINER(widget),gauge);
+	xml_name = g_object_get_data(G_OBJECT(widget),"gaugexml");
+	if (xml_name)
+		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,xml_name,NULL),NULL);
+	if (filename)
+	{
+		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
+		g_free(filename);
+	}
+	g_object_set_data(G_OBJECT(gauge),"datasource",g_object_get_data(G_OBJECT(widget),"datasource"));
+}

@@ -25,7 +25,7 @@
       <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
       <child>
-	<widget class="GtkVBox" id="vbox3">
+	<widget class="GtkVBox" id="adv_vbox1">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">0</property>
@@ -953,7 +953,7 @@
 					  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 					  <child>
-					    <widget class="GtkVBox" id="vbox4">
+					    <widget class="GtkVBox" id="adv_vbox2">
 					      <property name="visible">True</property>
 					      <property name="homogeneous">False</property>
 					      <property name="spacing">0</property>
@@ -1411,7 +1411,7 @@
 					  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 					  <child>
-					    <widget class="GtkVBox" id="vbox3">
+					    <widget class="GtkVBox" id="adv_vbox3">
 					      <property name="visible">True</property>
 					      <property name="homogeneous">False</property>
 					      <property name="spacing">0</property>

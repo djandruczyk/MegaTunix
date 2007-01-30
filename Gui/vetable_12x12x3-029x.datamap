@@ -460,6 +460,14 @@ key_types=_INT_,_STRING_
 page=3
 table_num=2
 
+[gaugeframe1]
+keys=page,post_function_with_arg,gaugexml,datasource
+key_types=_INT_,_STRING_,_STRING_,_STRING_
+page=1
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=rpm
+
 #----- Rescale Entries ------------------------------------------------------
 
 [VE1_rescale_spinner]
