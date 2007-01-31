@@ -123,6 +123,7 @@ void build_comms(GtkWidget *parent_frame)
 
 	entry = gtk_entry_new();
 	register_widget("comms_serial_port_entry",entry);
+	g_object_set_data(G_OBJECT(entry), "entry_type", GINT_TO_POINTER(MTX_STRING));
 	if (serial_port_name)
 		gtk_entry_set_text(GTK_ENTRY(entry),serial_port_name);
 	gtk_editable_set_editable(GTK_EDITABLE(entry), TRUE);

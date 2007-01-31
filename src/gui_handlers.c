@@ -504,6 +504,11 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
+	if (MTX_STRING == (gint)g_object_get_data(G_OBJECT(widget),"entry_type"))
+	{
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+		return TRUE;
+	}
 
 	text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 	tmpbuf = g_new0(gchar,strlen(text));
