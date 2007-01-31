@@ -63,10 +63,11 @@ gint **ms_data = NULL;
 gint **ms_data_last = NULL;
 gint **ms_data_backup = NULL;
 GList ***ve_widgets = NULL;
-GList *tab_gauges = NULL;
+GList **tab_gauges = NULL;
 GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
 gint *algorithm = NULL;
+gboolean *tracking_focus = NULL;
 
 
 /*!
@@ -325,12 +326,19 @@ void mem_alloc()
 	if (!interdep_vars)
 		interdep_vars = g_new0(GHashTable *,firmware->total_pages);
 	if (!algorithm)
-		algorithm = g_new0(gint, firmware->total_pages);
+		algorithm = g_new0(gint, firmware->total_tables);
+	if (!tracking_focus)
+		tracking_focus = g_new0(gboolean, firmware->total_tables);
+
+	for (i=0;i<firmware->total_tables;i++)
+	{
+		tab_gauges[i] = NULL;
+		algorithm[i] = SPEED_DENSITY;
+	}
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		interdep_vars[i] = g_hash_table_new(NULL,NULL);
-		algorithm[i] = SPEED_DENSITY;
 
 		if (!ms_data[i])
 			ms_data[i] = g_new0(gint, firmware->page_params[i]->length);

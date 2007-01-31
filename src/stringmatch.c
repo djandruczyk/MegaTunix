@@ -175,6 +175,8 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(USE_ALT_IAT));
 	g_hash_table_insert(str_2_enum,"_USE_ALT_CLT_",
 			GINT_TO_POINTER(USE_ALT_CLT));
+	g_hash_table_insert(str_2_enum,"_TRACKING_FOCUS_",
+			GINT_TO_POINTER(TRACKING_FOCUS));
 
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",

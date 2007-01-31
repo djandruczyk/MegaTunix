@@ -187,6 +187,20 @@ page=6
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
+[AFR1_tracking_checkbutton]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_TRACKING_FOCUS_
+page=1
+table_num=5
+
+[AFR2_tracking_checkbutton]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_TRACKING_FOCUS_
+page=1
+table_num=6
+
 [AFR1_3d_view_button]
 #keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_

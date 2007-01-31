@@ -255,6 +255,27 @@ page=1
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
+[VE1_tracking_checkbutton]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_TRACKING_FOCUS_
+page=1
+table_num=0
+
+[VE2_tracking_checkbutton]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_TRACKING_FOCUS_
+page=1
+table_num=1
+
+[VE3_tracking_checkbutton]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_TRACKING_FOCUS_
+page=1
+table_num=2
+
 [VE1_3d_view_button]
 #keys=page,table_num,x_source,y_source,an_y_source,z_source,tooltip,bind_to_list
 #key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
@@ -464,7 +485,7 @@ table_num=2
 
 [VE1_gaugeframe1]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 post_function_with_arg=create_gauge
@@ -473,7 +494,7 @@ datasource=rpm
 
 [VE1_gaugeframe2]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 post_function_with_arg=create_gauge
@@ -482,7 +503,7 @@ datasource=tpsadc
 
 [VE1_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 post_function_with_arg=create_gauge
@@ -491,7 +512,7 @@ datasource=mapkpa
 
 [VE1_gaugeframe4]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 post_function_with_arg=create_gauge
@@ -500,7 +521,7 @@ datasource=egocorr
 
 [VE1_gaugeframe5]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=0
 post_function_with_arg=create_gauge
@@ -509,7 +530,7 @@ datasource=afr
 
 [VE2_gaugeframe1]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
 post_function_with_arg=create_gauge
@@ -518,7 +539,7 @@ datasource=rpm
 
 [VE2_gaugeframe2]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
 post_function_with_arg=create_gauge
@@ -527,7 +548,7 @@ datasource=tpsadc
 
 [VE2_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
 post_function_with_arg=create_gauge
@@ -536,7 +557,7 @@ datasource=mapkpa
 
 [VE2_gaugeframe4]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
 post_function_with_arg=create_gauge
@@ -545,7 +566,7 @@ datasource=egocorr
 
 [VE2_gaugeframe5]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=1
 post_function_with_arg=create_gauge
@@ -554,7 +575,7 @@ datasource=afr
 
 [VE3_gaugeframe1]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=2
 post_function_with_arg=create_gauge
@@ -563,7 +584,7 @@ datasource=rpm
 
 [VE3_gaugeframe2]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=2
 post_function_with_arg=create_gauge
@@ -572,7 +593,7 @@ datasource=tpsadc
 
 [VE3_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=2
 post_function_with_arg=create_gauge
@@ -581,7 +602,7 @@ datasource=mapkpa
 
 [VE3_gaugeframe4]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=2
 post_function_with_arg=create_gauge
@@ -590,7 +611,7 @@ datasource=egocorr
 
 [VE3_gaugeframe5]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
-key_types=_INT_,_STRING_,_STRING_,_STRING_,_INT_
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
 table_num=2
 post_function_with_arg=create_gauge

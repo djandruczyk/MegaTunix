@@ -578,6 +578,7 @@ EXPORT void create_gauge(GtkWidget *widget)
 	GtkWidget * gauge = NULL;
 	gchar * xml_name = NULL;
 	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
 	gint table_num = -1;
 	extern GList **tab_gauges;
 
@@ -592,8 +593,9 @@ EXPORT void create_gauge(GtkWidget *widget)
 		g_free(filename);
 	}
 	g_object_set_data(G_OBJECT(gauge),"datasource",g_object_get_data(G_OBJECT(widget),"datasource"));
-	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
-	tab_gauges[table_num] = g_list_append(tab_gauges[table_num],gauge);
+	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+	tab_gauges[table_num] = g_list_prepend(tab_gauges[table_num],gauge);
 }
 
 void update_tab_gauges()
@@ -608,6 +610,8 @@ void update_tab_gauges()
 	gint i = 0;
 	GList *list = NULL;
 	
+	if ((!tab_gauges) || (active_table < 0))
+		return;
 	list = g_list_first(tab_gauges[active_table]);
 	for (i=0;i<g_list_length(list);i++)
 	{

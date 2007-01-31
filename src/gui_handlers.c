@@ -226,9 +226,11 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	void *obj_data = NULL;
 	gint handler = 0; 
+	gchar * tmpbuf = NULL;
 	extern gint preferred_delimiter;
 	extern gchar *offline_firmware_choice;
 	extern gboolean forced_update;
+	extern gboolean *tracking_focus;
 	extern GHashTable *dynamic_widgets;
 
 	if (GTK_IS_OBJECT(widget))
@@ -238,6 +240,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	}
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
 		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
+	//printf("toggle_handler for %s\n",(gchar *)glade_get_widget_name(widget));
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
@@ -247,6 +250,10 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				if(offline_firmware_choice)
 					g_free(offline_firmware_choice);
 				offline_firmware_choice = g_strdup(g_object_get_data(G_OBJECT(widget),"filename"));	
+				break;
+			case TRACKING_FOCUS:
+				tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+				tracking_focus[(gint)g_ascii_strtod(tmpbuf,NULL)] = TRUE;
 				break;
 			case TOOLTIPS_STATE:
 				gtk_tooltips_enable(tip);
@@ -305,12 +312,19 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				bind_ttm_to_page((gint)g_object_get_data(G_OBJECT(widget),"page"));
 				start_tickler(TRIGMON_TICKLER);
 				break;
+			default:
+				break;
 		}
 	}
 	else
 	{	/* not pressed */
 		switch ((ToggleButton)handler)
 		{
+			case TRACKING_FOCUS:
+				tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+				tracking_focus[(gint)g_ascii_strtod(tmpbuf,NULL)] = FALSE;
+				
+				break;
 			case TOOLTIPS_STATE:
 				gtk_tooltips_disable(tip);
 				tips_in_use = FALSE;

@@ -320,6 +320,8 @@ void draw_ve_marker()
 	gfloat right = 0.0;
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
+	gfloat max = 0.0;
+	gint heaviest = -1;
 	GList *list = NULL;
 	extern struct Firmware_Details *firmware;
 	static void ***eval;
@@ -328,6 +330,7 @@ void draw_ve_marker()
 	extern gint *algorithm;
 	extern gint active_table;
 	extern gboolean forced_update;
+	extern gboolean *tracking_focus;
 
 	if ((active_table < 0 )||(active_table > (firmware->total_tables-1)))
 		return;
@@ -460,6 +463,7 @@ void draw_ve_marker()
 	/* Cheap hack to see if things changed, if not don't waste CPU time inside
 	 * of pango changing the color unnecessarily
 	 * */
+
 	if (forced_update)
 		goto redraw;
 	for (i=0;i<4;i++)
@@ -477,19 +481,19 @@ redraw:
 	if ((bin[0] == -1) || (bin[2] == -1))
 		z_bin[0] = -1;
 	else
-		z_bin[0] = firmware->table_params[table]->z_base+bin[0]+(bin[2]*firmware->table_params[table]->x_bincount);
+		z_bin[0] = bin[0]+(bin[2]*firmware->table_params[table]->x_bincount);
 	if ((bin[0] == -1) || (bin[3] == -1))
 		z_bin[1] = -1;
 	else
-		z_bin[1] = firmware->table_params[table]->z_base+bin[0]+(bin[3]*firmware->table_params[table]->x_bincount);
+		z_bin[1] = bin[0]+(bin[3]*firmware->table_params[table]->x_bincount);
 	if ((bin[1] == -1) || (bin[2] == -1))
 		z_bin[2] = -1;
 	else
-		z_bin[2]= firmware->table_params[table]->z_base+bin[1]+(bin[2]*firmware->table_params[table]->x_bincount);
+		z_bin[2] = bin[1]+(bin[2]*firmware->table_params[table]->x_bincount);
 	if ((bin[1] == -1) || (bin[3] == -1))
 		z_bin[3] = -1;
 	else
-		z_bin[3]= firmware->table_params[table]->z_base+bin[1]+(bin[3]*firmware->table_params[table]->x_bincount);
+		z_bin[3] = bin[1]+(bin[3]*firmware->table_params[table]->x_bincount);
 	for (i=0;i<4;i++)
 	{
 		for (j=0;j<4;j++)
@@ -510,13 +514,24 @@ redraw:
 		}
 	}
 
+	max=0;
+	for (i=0;i<4;i++)
+	{
+		if (z_weight[i] > max)
+		{
+			max = z_weight[i];
+			heaviest = i;
+		}
+	}
 	for (i=0;i<4;i++)
 	{
 		if (z_bin[i] == -1)
 			continue;
-		list = ve_widgets[firmware->table_params[table]->z_page][z_bin[i]];
+		list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+z_bin[i]];
 		widget = g_list_nth_data(list,0);
 
+		if ((i == heaviest) && (tracking_focus[table]))
+			gtk_widget_grab_focus(widget);
 
 		last_widgets[table][z_bin[i]] = widget;
 		last[table][i] = z_bin[i];
@@ -524,6 +539,7 @@ redraw:
 		style = gtk_widget_get_modifier_style(widget);
 
 		old_colors[table][z_bin[i]] = style->base[GTK_STATE_NORMAL];
+	//	printf("table %i, zbin[%i] %i\n",table,i,z_bin[i]);
 		old_fg[table][z_bin[i]] = style->fg[GTK_STATE_NORMAL];
 		color.red = z_weight[i]*32768 +32767;
 		color.green = (1.0-z_weight[i])*65535 +0;

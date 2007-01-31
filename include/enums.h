@@ -68,6 +68,7 @@ typedef enum
 typedef enum
 {
 	TOOLTIPS_STATE=0x50,
+	TRACKING_FOCUS,
         FAHRENHEIT,
         CELSIUS,
 	COMMA,
