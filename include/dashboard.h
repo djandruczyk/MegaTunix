@@ -38,6 +38,7 @@ gboolean present_dash_filechooser(GtkWidget *, gpointer );
 gboolean remove_dashcluster(gpointer, gpointer , gpointer );
 gboolean dummy(GtkWidget *,gpointer );
 EXPORT void create_gauge(GtkWidget *);
+void update_tab_gauges(void);
 /* Prototypes */
 
 #endif

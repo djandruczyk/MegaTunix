@@ -63,6 +63,7 @@ gint **ms_data = NULL;
 gint **ms_data_last = NULL;
 gint **ms_data_backup = NULL;
 GList ***ve_widgets = NULL;
+GList *tab_gauges = NULL;
 GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
 gint *algorithm = NULL;
@@ -316,6 +317,8 @@ void mem_alloc()
 		ms_data_backup = g_new0(gint *, firmware->total_pages);
 	if (!ve_widgets)
 		ve_widgets = g_new0(GList **, firmware->total_pages);
+	if (!tab_gauges)
+		tab_gauges = g_new0(GList *, firmware->total_tables);
 	if (!widget_group_states)
 		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);

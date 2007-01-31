@@ -98,8 +98,6 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		window = glade_xml_get_widget(prop_xml,"property_editor_window");
 		if (GTK_IS_WIDGET(window))
 			gtk_widget_show_all(window);
-		else
-			printf("widget clobbered\n");
 	}
 	else
 	{
@@ -124,6 +122,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,NULL),g_strdup("xml"));
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
+	gtk_widget_show_all(notebook);
 	if (files)
 	{
 		
@@ -143,18 +142,19 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
 		label = gtk_label_new("Unsorted");
 		t_num = gtk_notebook_append_page(GTK_NOTEBOOK(notebook),swin,label);
+		gtk_widget_show_all(notebook);
 		i = 0;
 		while (files[i])
 		{
 			gauge = mtx_gauge_face_new();
 			gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
-			gtk_widget_realize(gauge);
+	//		gtk_widget_realize(gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
+			gtk_widget_show(gauge);
 			i++;
 		}
 		g_strfreev(files);
-		gtk_widget_show_all(table);
 	}
 	dir = g_dir_open(path,0,NULL);
 	if (dir)
@@ -188,14 +188,18 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 						GTK_NOTEBOOK(notebook),
 						swin,label);
 				i = 0;
+				gtk_widget_show_all(ebox);
 				while (files[i])
 				{
 					gauge = mtx_gauge_face_new();
 					gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
-					gtk_widget_realize(gauge);
+//					gtk_widget_realize(gauge);
 					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
+					gtk_widget_show(gauge);
 					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 					i++;
+					if (gtk_events_pending())
+						gtk_main_iteration();
 				}
 				g_strfreev(files);
 			}

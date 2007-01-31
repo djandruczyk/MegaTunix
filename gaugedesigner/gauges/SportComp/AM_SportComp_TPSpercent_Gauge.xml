@@ -14,24 +14,24 @@
   <precision>0</precision>
   <width>178</width>
   <height>162</height>
-  <start_deg>-135.000000</start_deg>
-  <stop_deg>-270.000000</stop_deg>
-  <start_radian>2.356194</start_radian>
-  <stop_radian>7.068583</stop_radian>
+  <start_deg>-135.218033</start_deg>
+  <stop_deg>-265.852417</stop_deg>
+  <start_radian>2.360000</start_radian>
+  <stop_radian>7.000000</stop_radian>
   <lbound>0.000000</lbound>
-  <ubound>255.000000</ubound>
+  <ubound>100.000000</ubound>
   <value_font>arial Bold</value_font>
-  <value_font_scale>0.200000</value_font_scale>
+  <value_font_scale>0.190000</value_font_scale>
   <value_str_xpos>0.000000</value_str_xpos>
-  <value_str_ypos>0.420000</value_str_ypos>
+  <value_str_ypos>0.450000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
   <tick_inset>0.150000</tick_inset>
-  <major_ticks>18</major_ticks>
+  <major_ticks>11</major_ticks>
   <major_tick_len>0.120000</major_tick_len>
   <major_tick_width>0.200000</major_tick_width>
   <major_tick_text_font>Arial Bold</major_tick_text_font>
-  <major_tick_text>0, ,30, ,60, ,90, ,120, ,150, ,180, ,210, , 240,255</major_tick_text>
+  <major_tick_text>0,10,20,30,40,50,60,70,80,90,100</major_tick_text>
   <major_tick_text_inset>0.010000</major_tick_text_inset>
   <major_tick_text_scale>0.138000</major_tick_text_scale>
   <minor_ticks>4</minor_ticks>
@@ -39,16 +39,16 @@
   <minor_tick_width>0.120000</minor_tick_width>
   <text_block>
     <font>arial Bold</font>
-    <text>MAP</text>
-    <font_scale>0.150000</font_scale>
+    <text>Throttle Pos.</text>
+    <font_scale>0.146000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.620000</y_pos>
     <color>55769 55769 55769</color>
   </text_block>
   <text_block>
     <font>arial Bold</font>
-    <text>kPa</text>
-    <font_scale>0.120000</font_scale>
+    <text>%</text>
+    <font_scale>0.129000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.755000</y_pos>
     <color>55769 55769 55769</color>

@@ -20,6 +20,7 @@
 #include <gauge.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <rtv_processor.h>
 #include <structures.h>
 
 
@@ -197,9 +198,6 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 		gtk_widget_set_usize(gauge,width,height);
 		g_free(filename);
 		g_object_set_data(G_OBJECT(gauge),"datasource",g_strdup(datasource));
-		/* Cheat to get property window created... */
-//		create_preview_list(NULL,NULL);
-//		update_properties(gauge,GAUGE_ADD);
 		g_free(xml_name);
 		g_free(datasource);
 		gtk_widget_show_all(dash);
@@ -580,6 +578,9 @@ EXPORT void create_gauge(GtkWidget *widget)
 	GtkWidget * gauge = NULL;
 	gchar * xml_name = NULL;
 	gchar * filename = NULL;
+	gint table_num = -1;
+	extern GList **tab_gauges;
+
 	gauge = mtx_gauge_face_new();
 	gtk_container_add(GTK_CONTAINER(widget),gauge);
 	xml_name = g_object_get_data(G_OBJECT(widget),"gaugexml");
@@ -591,4 +592,31 @@ EXPORT void create_gauge(GtkWidget *widget)
 		g_free(filename);
 	}
 	g_object_set_data(G_OBJECT(gauge),"datasource",g_object_get_data(G_OBJECT(widget),"datasource"));
+	table_num = (gint)g_object_get_data(G_OBJECT(widget),"table_num");
+	tab_gauges[table_num] = g_list_append(tab_gauges[table_num],gauge);
+}
+
+void update_tab_gauges()
+{
+	extern gint active_table;
+	extern GList **tab_gauges;
+	GtkWidget *gauge = NULL;
+	gchar * source = NULL;
+	gfloat current = 0.0;
+	gfloat previous = 0.0;
+	extern gboolean forced_update;
+	gint i = 0;
+	GList *list = NULL;
+	
+	list = g_list_first(tab_gauges[active_table]);
+	for (i=0;i<g_list_length(list);i++)
+	{
+		gauge = g_list_nth_data(list,i);
+		source = g_object_get_data(G_OBJECT(gauge),"datasource");
+		lookup_current_value(source,&current);
+		lookup_previous_value(source,&previous);
+		if ((current != previous) || (forced_update))
+			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
+	}
+
 }
