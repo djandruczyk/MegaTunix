@@ -71,29 +71,28 @@ void comms_test()
 	extern gint failurecount;
 	static GStaticMutex comm_test_mutex = G_STATIC_MUTEX_INIT;
 
-	g_static_mutex_lock(&serio_mutex);
 	//printf("comms_test\n");
 	if (!serial_params)
 		return;
-	
+
+	g_static_mutex_lock(&serio_mutex);
+	g_static_mutex_lock(&comm_test_mutex);
 	if (offline)
 	{
 		queue_function(g_strdup("kill_conn_warning"));
 		connected = FALSE;
-		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&comm_test_mutex);
+		g_static_mutex_unlock(&serio_mutex);
 		return;
 	}
 
-	/* If serial control struct exists, 
-	 * but we don't have connected status, try to reset connection */
+	/* If serial not open */
 	if (!serial_params->open)
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		thread_update_logbar("comms_view","warning",g_strdup("Serial Port is NOT opened can NOT check ecu comms...\n"),TRUE,FALSE);
-		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&comm_test_mutex);
-
+		g_static_mutex_unlock(&serio_mutex);
 		return;
 	}
 
@@ -102,12 +101,10 @@ void comms_test()
 
 	/* Flush the toilet.... */
 	g_static_mutex_unlock(&serio_mutex);
-	if (serial_params->fd)
-		flush_serial(serial_params->fd, TCIOFLUSH);	
+	flush_serial(serial_params->fd, TCIOFLUSH);	
 	g_static_mutex_lock(&serio_mutex);
 
 	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
-	g_static_mutex_lock(&comm_test_mutex);
 	g_static_mutex_lock(&comms_mutex);
 	if (write(serial_params->fd,"C",1) != 1)
 	{
@@ -117,15 +114,16 @@ void comms_test()
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),TRUE,FALSE);
 		//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text);
 		g_static_mutex_unlock(&serio_mutex);
-		if (serial_params->fd)
-			flush_serial(serial_params->fd, TCIOFLUSH);
+		flush_serial(serial_params->fd, TCIOFLUSH);
 		connected = FALSE;
 		failurecount++;
 		g_static_mutex_unlock(&comm_test_mutex);
 		return;
 	}
 	g_static_mutex_unlock(&comms_mutex);
+	g_static_mutex_unlock(&serio_mutex);
 	result = handle_ecu_data(C_TEST,NULL);
+	g_static_mutex_lock(&serio_mutex);
 	if (result)	// Success
 	{
 		connected = TRUE;
@@ -146,8 +144,7 @@ void comms_test()
 	}
 	/* Flush the toilet again.... */
 	g_static_mutex_unlock(&serio_mutex);
-	if (serial_params->fd)
-		flush_serial(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_unlock(&comm_test_mutex);
 	return;
 }
@@ -440,9 +437,7 @@ void burn_ecu_flash()
 		return;
 	}
 	g_static_mutex_unlock(&serio_mutex);
-	if (serial_params->fd)
-		flush_serial(serial_params->fd, TCIOFLUSH);
-
+	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
@@ -456,8 +451,7 @@ void burn_ecu_flash()
 
 	dbg_func(g_strdup(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"),SERIAL_WR);
 	g_static_mutex_unlock(&serio_mutex);
-	if (serial_params->fd)
-		flush_serial(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_lock(&serio_mutex);
 copyover:
 	/* sync temp buffer with current burned settings */
@@ -501,8 +495,7 @@ void readfrom_ecu(struct Io_Message *message)
 	g_static_mutex_lock(&mutex);
 
 	/* Flush serial port... */
-	if (serial_params->fd)
-		flush_serial(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 	result = write(serial_params->fd,
@@ -533,11 +526,16 @@ void readfrom_ecu(struct Io_Message *message)
 	}
 
 	if (message->handler != -1)
+	{
+		g_static_mutex_unlock(&serio_mutex);
 		result = handle_ecu_data(message->handler,message);
+		g_static_mutex_lock(&serio_mutex);
+	}
 	else
 	{
 		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is undefined, author brainfart, EXITING!\n"),CRITICAL);
 		g_static_mutex_unlock(&serio_mutex);
+		g_static_mutex_unlock(&mutex);
 		exit (-1);
 	}
 	if (result)

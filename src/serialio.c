@@ -58,11 +58,11 @@ gboolean open_serial(gchar * port_name)
 	gchar * err_text = NULL;
 
 	g_static_mutex_lock(&serio_mutex);
+	g_static_mutex_lock(&comms_mutex);
 	//printf("Opening serial port %s\n",port_name);
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
-	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
 	fd = open(device, O_RDWR | O_NOCTTY | O_BINARY );
 #else
@@ -100,8 +100,8 @@ gboolean open_serial(gchar * port_name)
 
 	g_free(device);
 	//printf("open_serial returning\n");
-	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&comms_mutex);
+	g_static_mutex_unlock(&serio_mutex);
 	return link_up;
 }
 	
@@ -122,7 +122,7 @@ void flush_serial(gint fd, gint type)
 	if (fd)
 		win32_flush_serial(fd, type);
 #else
-	if (serial_params->fd)
+	if ((serial_params) && (serial_params->fd))
 		tcflush(serial_params->fd, type);
 #endif	
 	g_static_mutex_unlock(&serio_mutex);
@@ -179,9 +179,9 @@ void setup_serial_params()
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&comms_mutex);
-	if (serial_params->fd)
-		flush_serial(serial_params->fd, TCIOFLUSH);
+	flush_serial(serial_params->fd, TCIOFLUSH);
 
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);

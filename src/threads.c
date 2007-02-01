@@ -406,6 +406,7 @@ void *thread_dispatcher(gpointer data)
 		switch ((CmdType)message->command)
 		{
 			case OPEN_SERIAL:
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\t Open Serial case entered\n"),THREADS);
 				if (link_up)
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tOpen Serial called but port is already OPEN, ERROR!\n"),SERIAL_RD|SERIAL_WR|THREADS);
 				else
@@ -413,20 +414,24 @@ void *thread_dispatcher(gpointer data)
 						setup_serial_params();
 					else
 						queue_function(g_strdup("conn_warning"));
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\t Open Serial case leaving\n"),THREADS);
 				break;
 			case CLOSE_SERIAL:
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\t Close Serial case entered\n"),THREADS);
 				if (!link_up)
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tClose Serial called but port is already closed, ERROR!\n"),SERIAL_RD|SERIAL_WR|THREADS);
 				else
 					close_serial();
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\t Close Serial case leaving\n"),THREADS);
 				break;
 			case INTERROGATION:
-				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogate_ecu requested\n"),SERIAL_RD|SERIAL_WR|THREADS);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogation case entered\n"),THREADS);
 				if (!link_up)
 				{
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Interrogate_ecu requested, aborting call\n"),CRITICAL);
 					thread_update_logbar("interr_view","warning",g_strdup("Interrogation failed due to disconnected Serial Link. Check COMMS Tab...\n"),FALSE,FALSE);
 					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Disconnected link, check Communications tab..."));
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogation case leaving, link NOT up\n"),THREADS);
 					break;
 				}
 				if ((connected) && (!offline))
@@ -440,28 +445,36 @@ void *thread_dispatcher(gpointer data)
 					thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("Not Connected, Check Serial Parameters..."));
 					thread_update_logbar("interr_view","warning",g_strdup("Interrogation failed due to Link Problem. Check COMMS Tab...\n"),FALSE,FALSE);
 
-					}
+				}
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tInterrogation case leaving\n"),THREADS);
 				break;
 			case COMMS_TEST:
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tcomms_test case entered\n"),THREADS);
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tcomms_test requested \n"),SERIAL_RD|SERIAL_WR|THREADS);
 				comms_test();
 				if (!connected)
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tComms Test failed, NOT Connected!!\n"),CRITICAL);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tcomms_test case leaving\n"),THREADS);
 				break;
 			case READ_CMD:
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tread_cmd case entered\n"),THREADS);
 				if (!link_up)
 				{
 					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tLINK DOWN, read_command requested, call aborted \n"),CRITICAL);
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tread_cmd case leaving early, link down\n"),THREADS);
 					break;
 				}
 				dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tread_command requested (%s)\n",handler_types[message->handler]),SERIAL_RD|THREADS);
 				if (connected)
 					readfrom_ecu(message);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tread_cmd case leaving\n"),THREADS);
 				break;
 			case WRITE_CMD:
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_cmd case entered\n"),THREADS);
 				if ((!link_up) && (!offline))
 				{
 					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tLINK DOWN, write_command requested, call aborted \n"),CRITICAL);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_cmd case leaving early, link down and not in offline mode\n"),THREADS);
 					break;
 				}
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_command requested\n"),SERIAL_WR|THREADS);
@@ -469,11 +482,14 @@ void *thread_dispatcher(gpointer data)
 					writeto_ecu(message);
 				else
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twriteto_ecu skipped, NOT Connected!!\n"),CRITICAL);
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\twrite_cmd case leaving\n"),THREADS);
 				break;
 			case BURN_CMD:
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_cmd case entered\n"),THREADS);
 				if (!link_up)
 				{
 					dbg_func(g_strdup_printf(__FILE__": thread_dispatcher()\n\tLINK DOWN, burn_command requested, call aborted \n"),CRITICAL);
+					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_cmd case leaving early, link down\n"),THREADS);
 					break;
 				}
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_command requested\n"),SERIAL_WR|THREADS);
@@ -482,6 +498,7 @@ void *thread_dispatcher(gpointer data)
 				else
 					dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_ecu_flash skipped, NOT Connected!!\n"),CRITICAL);
 
+				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tburn_cmd case leaving\n"),THREADS);
 				break;
 			case NULL_CMD:
 				dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\tnull_command requested\n"),THREADS);

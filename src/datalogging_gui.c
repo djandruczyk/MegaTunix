@@ -186,6 +186,8 @@ void stop_datalogging()
 {
 	extern GHashTable *dynamic_widgets;
 	GIOChannel *iochannel = NULL;
+	if (!logging_active)
+		return;
 
 	logging_active = FALSE;
 

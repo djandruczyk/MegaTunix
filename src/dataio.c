@@ -33,6 +33,7 @@ gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
 extern GStaticMutex comms_mutex;
+extern GStaticMutex serio_mutex;
 
 
 /*!
@@ -77,6 +78,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_read = 0;
 			total_wanted = 1024;
 			zerocount = 0;
+			g_static_mutex_lock(&serio_mutex);
 			g_static_mutex_lock(&comms_mutex);
 			while (total_read < total_wanted )
 			{
@@ -97,6 +99,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 			}
 			g_static_mutex_unlock(&comms_mutex);
+			g_static_mutex_unlock(&serio_mutex);
 			flush_serial(serial_params->fd, TCIOFLUSH);
 			break;
 		case C_TEST:
@@ -109,6 +112,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = 1;
 			zerocount = 0;
 
+			g_static_mutex_lock(&serio_mutex);
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
@@ -137,6 +141,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				}
 			}
 			g_static_mutex_unlock(&comms_mutex);
+			g_static_mutex_unlock(&serio_mutex);
 			if (bad_read)
 			{
 				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),CRITICAL);
@@ -155,6 +160,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_read=0;
 			total_wanted=1024;
 			zerocount=0;
+			g_static_mutex_lock(&serio_mutex);
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
@@ -179,6 +185,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 					break;
 			}
 			g_static_mutex_unlock(&comms_mutex);
+			g_static_mutex_unlock(&serio_mutex);
 			dump_output(total_read,buf);
 			flush_serial(serial_params->fd, TCIOFLUSH);
 			if (total_read <= 1)
@@ -202,6 +209,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->rtvars_size;
 			zerocount = 0;
 
+			g_static_mutex_lock(&serio_mutex);
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
@@ -230,6 +238,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				}
 			}
 			g_static_mutex_unlock(&comms_mutex);
+			g_static_mutex_unlock(&serio_mutex);
 			if (bad_read)
 			{
 				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"),IO_PROCESS);
@@ -275,6 +284,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->page_params[message->page]->length;
 			zerocount = 0;
 
+			g_static_mutex_lock(&serio_mutex);
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
@@ -303,6 +313,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				}
 			}
 			g_static_mutex_unlock(&comms_mutex);
+			g_static_mutex_unlock(&serio_mutex);
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
@@ -329,6 +340,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			total_wanted = firmware->memblock_size;
 			zerocount = 0;
 
+			g_static_mutex_lock(&serio_mutex);
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
@@ -356,6 +368,7 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				}
 			}
 			g_static_mutex_unlock(&comms_mutex);
+			g_static_mutex_unlock(&serio_mutex);
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
