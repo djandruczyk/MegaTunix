@@ -83,6 +83,8 @@ gboolean open_serial(gchar * port_name)
 		/* FAILURE */
 		/* An Error occurred opening the port */
 		link_up = FALSE;
+		if (serial_params->port_name)
+			g_free(serial_params->port_name);
 		serial_params->port_name = NULL;
 		serial_params->open = FALSE;
 		serial_params->fd = -1;

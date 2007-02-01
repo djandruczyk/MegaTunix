@@ -31,7 +31,7 @@
   <major_tick_len>0.120000</major_tick_len>
   <major_tick_width>0.200000</major_tick_width>
   <major_tick_text_font>Arial Bold</major_tick_text_font>
-  <major_tick_text>0,,30,,60,,90,,120,,150,,180,,210,,240,255</major_tick_text>
+  <major_tick_text>0, ,30, ,60, ,90, ,120, ,150, ,180, ,210, ,240,255</major_tick_text>
   <major_tick_text_inset>0.010000</major_tick_text_inset>
   <major_tick_text_scale>0.138000</major_tick_text_scale>
   <minor_ticks>4</minor_ticks>

@@ -764,9 +764,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	if (gauge->txt_str[MAJ_TICK])
 	{
 		vector = g_strsplit(gauge->txt_str[MAJ_TICK],",",-1);
-		while (vector[i])
-			i++;
-		count=i;
+		count = g_strv_length(vector);
 		cairo_select_font_face (cr, gauge->font_str[MAJ_TICK], CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
 		cairo_set_font_size (cr, (gauge->radius * gauge->font_scale[MAJ_TICK]));
 	}
@@ -784,7 +782,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter),
 				gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter));
 		cairo_stroke (cr);
-		if ((vector) && (i < count) && (vector[i])) /* If not null */
+		if ((vector) && (i < count)) /* If not null */
 		{
 			cairo_save(cr);
 			cairo_set_source_rgb (cr, 
@@ -1135,15 +1133,12 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	if (gauge->txt_str[MAJ_TICK])
 	{
 		vector = g_strsplit(gauge->txt_str[MAJ_TICK],",",-1);
-		while (vector[i])
-			i++;
-		count=i;
+		count = g_strv_length(vector);
 		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[MAJ_TICK],(gint)(gauge->radius*gauge->font_scale[MAJ_TICK]));
 		gauge->font_desc = pango_font_description_from_string(tmpbuf);
 		g_free(tmpbuf);
 		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
 	}
-
 
 	counter = gauge->start_radian;
 	for (i=0;i<gauge->major_ticks;i++)
@@ -1162,7 +1157,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->yc + (gauge->radius - insetfrom) * sin (counter),
 				gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter)),
 				gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter)));
-		if ((vector) && (i < count) && (vector[i])) /* If not null */
+		if ((vector) && (i < count)) /* If not null */
 		{
 			gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MAJ_TICK_TEXT_FONT]);
 			pango_layout_set_text(gauge->layout,vector[i],-1);

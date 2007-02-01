@@ -37,6 +37,8 @@
  that was used. From this widget we extract the table number and other 
  needed data to properly do the rescaling.
  */
+static gboolean color_changed = FALSE;
+
 void rescale_table(GtkWidget *widget)
 {
 	extern struct Firmware_Details *firmware;
@@ -121,7 +123,14 @@ void rescale_table(GtkWidget *widget)
 					ms_data[page][offset] = old;
 
 					tmpbuf = g_strdup_printf("%i",(gint)real_value);
+					g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
+							G_CALLBACK (entry_changed_handler),
+							NULL);
 					gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
+					g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
+							G_CALLBACK (entry_changed_handler),
+							NULL);
+
 					g_free(tmpbuf);
 
 					write_ve_const(tmpwidget, page, offset, (gint)value, ign_parm, TRUE);
@@ -200,13 +209,13 @@ void reqfuel_rescale_table(GtkWidget *widget)
 	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"data");
 	tmpwidget = g_hash_table_lookup(dynamic_widgets,tmpbuf);
 	g_return_if_fail(GTK_IS_WIDGET(tmpwidget));
-//	new_reqfuel = gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));
+	//	new_reqfuel = gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
 	new_reqfuel = (gfloat)g_ascii_strtod(tmpbuf,NULL);
 	percentage = firmware->rf_params[table_num]->req_fuel_total/new_reqfuel;
 
 	firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
-        firmware->rf_params[table_num]->req_fuel_total = new_reqfuel;
+	firmware->rf_params[table_num]->req_fuel_total = new_reqfuel;
 	check_req_fuel_limits(table_num);
 
 
@@ -264,10 +273,17 @@ void reqfuel_rescale_table(GtkWidget *widget)
 						ms_data[page][offset] = old;
 
 						tmpbuf = g_strdup_printf("%i",(gint)real_value);
+						g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
+								G_CALLBACK (entry_changed_handler),
+								NULL);
 						gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
+						g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
+								G_CALLBACK (entry_changed_handler),
+								NULL);
 						g_free(tmpbuf);
 
-						//write_ve_const(tmpwidget, page, offset, (gint)value, ign_parm, TRUE);
+						if (!firmware->chunk_support)
+							write_ve_const(tmpwidget, page, offset, (gint)value, ign_parm, TRUE);
 						data[i] = (guchar)value;
 						gtk_widget_modify_text(tmpwidget,GTK_STATE_NORMAL,&black);
 						if (use_color)
@@ -281,10 +297,12 @@ void reqfuel_rescale_table(GtkWidget *widget)
 				}
 			}
 		}
-		chunk_write(z_page,z_base,x_bins*y_bins,data);
+		if (firmware->chunk_support)
+			chunk_write(z_page,z_base,x_bins*y_bins,data);
 	}
-//	io_cmd(IO_UPDATE_VE_CONST,NULL);
+	//	io_cmd(IO_UPDATE_VE_CONST,NULL);
 	g_strfreev(vector);
+	color_changed = TRUE;
 	forced_update = TRUE;
 }
 
@@ -302,6 +320,9 @@ void draw_ve_marker()
 	static GdkColor ** old_fg = NULL;
 	static GdkColor color= { 0, 0,16384,16384};
 	extern GdkColor white;
+	GdkColor newcolor;
+	gfloat value = 0.0;
+	extern gint **ms_data;
 	GtkRcStyle *style = NULL;
 	gint i = 0;
 	gint j = 0;
@@ -505,7 +526,15 @@ redraw:
 		//			if (z_bin[k] != last[table][i])
 		//			{
 //				printf("setting to normal coord %i\n",last[table][i]);
-				gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+				if (color_changed)
+				{
+					value = ms_data[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+z_bin[i]];
+					newcolor = get_colors_from_hue(((gfloat)value/256.0)*360.0,0.33, 1.0);
+					gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&newcolor);
+				}
+				else
+					gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+
 				gtk_widget_modify_fg(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_fg[table][last[table][i]]);
 				last_widgets[table][last[table][i]] = NULL;
 				//	}
@@ -513,6 +542,7 @@ redraw:
 			}
 		}
 	}
+	color_changed = FALSE;
 
 	max=0;
 	for (i=0;i<4;i++)
@@ -530,7 +560,7 @@ redraw:
 		list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+z_bin[i]];
 		widget = g_list_nth_data(list,0);
 
-		if ((i == heaviest) && (tracking_focus[table]))
+		if ((i == heaviest) && (tracking_focus[table]) && (widget != last_widgets[table][z_bin[i]]))
 			gtk_widget_grab_focus(widget);
 
 		last_widgets[table][z_bin[i]] = widget;

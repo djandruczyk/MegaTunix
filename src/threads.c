@@ -371,12 +371,15 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *dispatch_queue;
 	extern gboolean link_up;
 	extern gchar * serial_port_name;
+	extern gboolean leaving;
 	struct Io_Message *message = NULL;	
 
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (1)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
+		if (leaving)
+			g_thread_exit(0);
 		message = g_async_queue_pop(io_queue);
 
 		if ((!link_up) && (!offline))

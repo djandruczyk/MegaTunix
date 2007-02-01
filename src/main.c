@@ -35,7 +35,7 @@
 
 extern gint temp_units;
 extern struct Serial_Params *serial_params;
-GThread * io_thread = NULL;
+GThread * thread_dispatcher_id = NULL;
 gboolean ready = FALSE;
 gint statuscounts_id = -1;
 gint dispatcher_id = -1;
@@ -87,8 +87,7 @@ gint main(gint argc, gchar ** argv)
 	setup_gui();		
 
 	/* Startup the serial General I/O handler.... */
-	//io_thread = g_thread_create(thread_dispatcher,
-	g_thread_create(thread_dispatcher,
+	thread_dispatcher_id = g_thread_create(thread_dispatcher,
 			NULL, // Thread args
 			TRUE, // Joinable
 			NULL); //GError Pointer

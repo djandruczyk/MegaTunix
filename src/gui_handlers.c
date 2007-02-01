@@ -511,6 +511,8 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	}
 
 	text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
+	if (!text)
+		return TRUE;
 	tmpbuf = g_new0(gchar,strlen(text));
 	for (i=0;i<strlen(text);i++)
 	{

@@ -38,7 +38,7 @@ void open_debugfile()
 	g_static_mutex_lock(&dbg_mutex);
 	if(!dbgfile)
 	{
-		filename = g_strconcat(HOME(), PSEP, "MTXlog.txt",NULL);
+		filename = g_build_filename(HOME(), "MTXlog.txt",NULL);
 		dbgfile = fopen(filename,"w");
 		g_free(filename);
 		if (dbgfile)
