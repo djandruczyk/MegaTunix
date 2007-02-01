@@ -72,11 +72,18 @@ void comms_test()
 	static GStaticMutex comm_test_mutex = G_STATIC_MUTEX_INIT;
 
 	//printf("comms_test\n");
+	dbg_func(g_strdup(__FILE__": comms_test()\n\t Entered...\n"),SERIAL_RD);
 	if (!serial_params)
+	{
+		dbg_func(g_strdup(__FILE__": comms_test()\n\t no Serial Params, leaving comms_test()...\n"),SERIAL_RD);
 		return;
+	}
 
+	dbg_func(g_strdup(__FILE__": comms_test()\n\t Before locking serio_mutex\n"),SERIAL_RD);
 	g_static_mutex_lock(&serio_mutex);
+	dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking serio_mutex\n"),SERIAL_RD);
 	g_static_mutex_lock(&comm_test_mutex);
+	dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking comm_text_mutex\n"),SERIAL_RD);
 	if (offline)
 	{
 		queue_function(g_strdup("kill_conn_warning"));

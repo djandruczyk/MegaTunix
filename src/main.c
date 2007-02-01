@@ -37,7 +37,6 @@ extern gint temp_units;
 extern struct Serial_Params *serial_params;
 GThread * thread_dispatcher_id = NULL;
 gboolean ready = FALSE;
-gint statuscounts_id = -1;
 gint dispatcher_id = -1;
 gboolean gl_ability = FALSE;
 struct Serial_Params *serial_params;
@@ -99,9 +98,6 @@ gint main(gint argc, gchar ** argv)
 	/* Kickoff fast interrogation */
 	gtk_timeout_add(250,(GtkFunction)early_interrogation,NULL);
 
-	/* Startup status counters timeout handler... */
-	/* Run it about 10 times/second.. proc use seems negligable... */
-	statuscounts_id = gtk_timeout_add(100,(GtkFunction)update_errcounts,NULL);
 	ready = TRUE;
 	gdk_threads_enter();
 	gtk_main();

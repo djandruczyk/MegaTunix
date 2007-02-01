@@ -12,6 +12,7 @@
  */
 
 #include <comms.h>
+#include <comms_gui.h>
 #include <config.h>
 #include <conversions.h>
 #include <dashboard.h>
@@ -51,6 +52,7 @@ extern gboolean connected;			/* valid connection with MS */
 extern gboolean offline;			/* Offline mode */
 extern gboolean tabs_loaded;			/* Tabs loaded? */
 extern gboolean interrogated;			/* valid detection with MS */
+gint statuscounts_id = -1;
 
 
 /*!
@@ -77,7 +79,7 @@ gboolean dispatcher(gpointer data)
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gboolean forced_update;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 	extern gint mem_view_style[];
 	extern GHashTable *dynamic_widgets;
 
@@ -93,13 +95,13 @@ trypop:
 		return TRUE;
 	}
 
-	if (leaving)
-		return TRUE;
 	if (message->funcs != NULL)
 	{
 		len = message->funcs->len;
 		for (i=0;i<len;i++)
 		{
+			if (leaving)
+				return TRUE;
 			val = g_array_index(message->funcs,UpdateFunction, i);
 
 			switch ((UpdateFunction)val)
@@ -211,8 +213,11 @@ trypop:
 				case UPD_REENABLE_GET_DATA_BUTTONS:
 					g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
 					break;
-				case UPD_START_REALTIME:
+				case UPD_START_STATUSCOUNTS:
 					if ((connected) && (interrogated))
+						 statuscounts_id = gtk_timeout_add(100,(GtkFunction)update_errcounts,NULL);
+					break;
+				case UPD_START_REALTIME:
 						start_tickler(RTV_TICKLER);
 					break;
 				case UPD_REALTIME:
@@ -283,7 +288,11 @@ trypop:
 
 			gdk_threads_enter();
 			while (gtk_events_pending())
+			{
+				if (leaving)
+					break;
 				gtk_main_iteration();
+			}
 			gdk_threads_leave();
 		}
 	}

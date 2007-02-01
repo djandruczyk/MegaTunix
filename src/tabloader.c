@@ -56,7 +56,7 @@ gboolean load_gui_tabs(void)
 	GHashTable *groups = NULL;
 	struct BindGroup *bindgroup = NULL;
 	extern GtkWidget * notebook;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 
 	if (!firmware)
 		return FALSE;

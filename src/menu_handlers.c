@@ -50,7 +50,7 @@ void setup_menu_handlers()
 	gint i = 0;
 	GladeXML *xml = NULL;
 	extern GtkWidget *main_window;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 
 	if ((!main_window) || (leaving))
 		return;

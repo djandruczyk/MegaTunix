@@ -17,7 +17,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <signal name="delete_event" handler="leave" last_modification_time="Fri, 19 Jan 2007 21:07:52 GMT"/>
-  <signal name="destroy_event" handler="leave" last_modification_time="Fri, 19 Jan 2007 21:07:58 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="mtx_top_vbox">

@@ -215,6 +215,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_LOAD_RT_TEXT;
 				g_array_append_val(message->funcs,tmp);
+				tmp = UPD_START_STATUSCOUNTS;
+				g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;
 			g_array_append_val(message->funcs,tmp);
@@ -373,7 +375,7 @@ void *thread_dispatcher(gpointer data)
 	extern GAsyncQueue *dispatch_queue;
 	extern gboolean link_up;
 	extern gchar * serial_port_name;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 	struct Io_Message *message = NULL;	
 
 	/* Endless Loop, wait for message, processs and repeat... */
@@ -400,7 +402,10 @@ void *thread_dispatcher(gpointer data)
 			failurecount = 0;
 		}
 		if ((!connected) && (link_up) && (!offline))
+		{
+			dbg_func(g_strdup(__FILE__": thread_dispatcher()\n\t Not connected but link up and not offline, forcing automatic comms test\n"),THREADS);
 			comms_test();
+		}
 
 
 		switch ((CmdType)message->command)

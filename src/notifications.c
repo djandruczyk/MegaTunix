@@ -143,8 +143,13 @@ void  update_logbar(
 	gpointer result = NULL;
 	GtkWidget * widget = NULL;
 	extern GHashTable *dynamic_widgets;
+	extern volatile gboolean leaving;
+
+	if (leaving)
+		return;
 
 	widget = (GtkWidget *)g_hash_table_lookup(dynamic_widgets,view_name);
+
 	if (!widget)
 		return;
 	if (!GTK_IS_OBJECT(widget))
@@ -283,7 +288,7 @@ void set_title(gchar * text)
 {
 	extern GtkWidget *main_window;
 	gchar * tmpbuf = NULL;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 
 	if ((!main_window) || (leaving))
 		return;

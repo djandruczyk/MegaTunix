@@ -41,7 +41,7 @@ void load_sliders()
 	ConfigFile *cfgfile = NULL;
 	struct Rt_Slider *slider = NULL;
 	extern struct Firmware_Details *firmware;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 	gchar *filename = NULL;
 	gint count = 0;
 	gint table = 0;

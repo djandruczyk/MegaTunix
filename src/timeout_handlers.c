@@ -84,7 +84,7 @@ void start_tickler(TicklerType type)
 void stop_tickler(TicklerType type)
 {
 	extern struct Serial_Params *serial_params;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 	switch (type)
 	{
 		case RTV_TICKLER:

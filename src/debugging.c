@@ -73,10 +73,7 @@ void dbg_func(gchar *str, Dbg_Class class)
 	extern gboolean use_timestamps;
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
-	extern gboolean leaving;
 
-//	if (leaving)
-//		return;
 	if (!dbgfile)
 	{
 		g_free(str);

@@ -193,7 +193,7 @@ void convert_temps(gpointer widget, gpointer units)
 	gboolean state = FALSE;
 	gint widget_temp = -1;
 	extern GdkColor black;
-	extern gboolean leaving;
+	extern volatile gboolean leaving;
 
 	/* If this widgt depends on anything call check_dependancy which will
 	 * return TRUE/FALSE.  True if what it depends on is in the matching

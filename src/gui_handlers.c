@@ -73,7 +73,7 @@ GdkColor black = { 0, 0, 0, 0};
 
 gboolean paused_handlers = FALSE;
 static gboolean err_flag = FALSE;
-gboolean leaving = FALSE;
+volatile gboolean leaving = FALSE;
 
 
 /*!
@@ -90,7 +90,6 @@ void leave(GtkWidget *widget, gpointer data)
 	extern GStaticMutex serio_mutex;
 	extern GStaticMutex comms_mutex;
 	extern GStaticMutex rtv_mutex;
-	extern GStaticMutex dbg_mutex;
 	extern gboolean connected;
 	extern gboolean interrogated;
 	extern GAsyncQueue *dispatch_queue;
@@ -101,13 +100,20 @@ void leave(GtkWidget *widget, gpointer data)
 
 	if (leaving)
 		return;
-	save_config();
+	leaving = TRUE;
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() configuration saved\n"),CRITICAL);
 
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() before mutex\n"),CRITICAL);
 	g_static_mutex_lock(&mutex);
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after mutex\n"),CRITICAL);
+
+	save_config();
+
+	if (statuscounts_id)
+		gtk_timeout_remove(statuscounts_id);
+	statuscounts_id = 0;
+
 	/* Stop timeout functions */
-	leaving = TRUE;
 
 	stop_tickler(RTV_TICKLER);
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"),CRITICAL);
@@ -117,10 +123,6 @@ void leave(GtkWidget *widget, gpointer data)
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_trigmon\n"),CRITICAL);
 	stop_tickler(LV_PLAYBACK_TICKLER);
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_lv_playback\n"),CRITICAL);
-
-	if (statuscounts_id)
-		gtk_timeout_remove(statuscounts_id);
-	statuscounts_id = 0;
 
 	stop_datalogging();
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"),CRITICAL);
@@ -173,7 +175,7 @@ void leave(GtkWidget *widget, gpointer data)
 	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_unlock(&serio_mutex);
 	mem_dealloc();
-	dbg_func(g_strdup_printf(__FILE__": LEAVE() config saved, mem deallocated, closing log and exiting\n"),CRITICAL);
+	dbg_func(g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"),CRITICAL);
 	close_debugfile();
 	g_static_mutex_unlock(&mutex);
 	gtk_main_quit();

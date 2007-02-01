@@ -171,6 +171,7 @@ void setup_serial_params()
 	if (serial_params->open == FALSE)
 		return;
 	//printf("setup_serial_params entered\n");
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
 	win32_setup_serial_params();
