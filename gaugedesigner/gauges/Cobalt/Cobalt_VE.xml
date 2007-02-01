@@ -31,7 +31,7 @@
   <major_tick_len>0.130000</major_tick_len>
   <major_tick_width>0.220000</major_tick_width>
   <major_tick_text_font>Crillee</major_tick_text_font>
-  <major_tick_text>0,,20,,40,,60,,80,,100,,120,,140</major_tick_text>
+  <major_tick_text>0, ,20, ,40, ,60, ,80, ,100, ,120, ,140</major_tick_text>
   <major_tick_text_inset>0.030000</major_tick_text_inset>
   <major_tick_text_scale>0.130000</major_tick_text_scale>
   <minor_ticks>4</minor_ticks>
