@@ -50,7 +50,10 @@ void setup_menu_handlers()
 	gint i = 0;
 	GladeXML *xml = NULL;
 	extern GtkWidget *main_window;
+	extern gboolean leaving;
 
+	if ((!main_window) || (leaving))
+		return;
 	xml = glade_get_widget_tree(main_window);
 	
 	for (i=0;i< (sizeof(items)/sizeof(items[0]));i++)

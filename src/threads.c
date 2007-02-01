@@ -213,6 +213,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 				g_array_append_val(message->funcs,tmp);
 				tmp = UPD_LOAD_RT_SLIDERS;
 				g_array_append_val(message->funcs,tmp);
+				tmp = UPD_LOAD_RT_TEXT;
+				g_array_append_val(message->funcs,tmp);
 			}
 			tmp = UPD_READ_VE_CONST;
 			g_array_append_val(message->funcs,tmp);
@@ -379,7 +381,12 @@ void *thread_dispatcher(gpointer data)
 	{
 		//printf("thread_dispatch_queue length is %i\n",g_async_queue_length(io_queue));
 		if (leaving)
+		{
+			/* drain queue and exit thread */
+			while (g_async_queue_try_pop(io_queue) != NULL)
+			{}
 			g_thread_exit(0);
+		}
 		message = g_async_queue_pop(io_queue);
 
 		if ((!link_up) && (!offline))

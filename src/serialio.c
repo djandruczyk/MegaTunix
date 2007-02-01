@@ -40,6 +40,7 @@ struct Serial_Params *serial_params;
 gboolean connected = FALSE;
 gboolean link_up = FALSE;
 GStaticMutex comms_mutex = G_STATIC_MUTEX_INIT;
+GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
 
 /*!
  \brief open_serial() called to open the serial port, updates textviews on the
@@ -56,6 +57,7 @@ gboolean open_serial(gchar * port_name)
 	gchar *device = NULL;	/* temporary unix name of the serial port */
 	gchar * err_text = NULL;
 
+	g_static_mutex_lock(&serio_mutex);
 	//printf("Opening serial port %s\n",port_name);
 	device = g_strdup(port_name);
 	/* Open Read/Write and NOT as the controlling TTY */
@@ -98,6 +100,7 @@ gboolean open_serial(gchar * port_name)
 
 	g_free(device);
 	//printf("open_serial returning\n");
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&comms_mutex);
 	return link_up;
 }
@@ -113,12 +116,16 @@ gboolean open_serial(gchar * port_name)
  */
 void flush_serial(gint fd, gint type)
 {
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 #ifdef __WIN32__
-	win32_flush_serial(fd, type);
+	if (fd)
+		win32_flush_serial(fd, type);
 #else
-	tcflush(serial_params->fd, type);
+	if (serial_params->fd)
+		tcflush(serial_params->fd, type);
 #endif	
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&comms_mutex);
 }
 
@@ -173,7 +180,10 @@ void setup_serial_params()
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
 	g_static_mutex_unlock(&comms_mutex);
-	flush_serial(serial_params->fd, TCIOFLUSH);
+	if (serial_params->fd)
+		flush_serial(serial_params->fd, TCIOFLUSH);
+
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 
 	/* Sets up serial port for the modes we want to use. 
@@ -230,6 +240,7 @@ void setup_serial_params()
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->newtio);
 
 #endif
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&comms_mutex);
 	return;
 }
@@ -241,14 +252,17 @@ void setup_serial_params()
  */
 void close_serial()
 {
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 	if (!serial_params)
 	{
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&comms_mutex);
 		return;
 	}
 	if (serial_params->open == FALSE)
 	{
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&comms_mutex);
 		return;
 	}
@@ -269,6 +283,7 @@ void close_serial()
 	/* An Closing the comm port */
 	dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"),SERIAL_RD|SERIAL_WR);
 	thread_update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&comms_mutex);
 	return;
 }

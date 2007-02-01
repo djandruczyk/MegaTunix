@@ -51,6 +51,7 @@ megatunix_SOURCES = \
 	runtime_gui.c \
 	runtime_sliders.c \
 	runtime_status.c \
+	runtime_text.c \
 	serialio.c \
 	stringmatch.c \
 	tabloader.c \

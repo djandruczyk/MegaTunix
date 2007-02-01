@@ -47,6 +47,7 @@ headers = \
         runtime_gui.h \
         runtime_sliders.h \
         runtime_status.h \
+        runtime_text.h \
         serialio.h \
 	stringmatch.h \
         structures.h \

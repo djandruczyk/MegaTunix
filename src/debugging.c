@@ -23,7 +23,7 @@
 gint dbg_lvl = 0;
 
 static FILE * dbgfile = NULL;
-static GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
+GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 
 /*!
  \brief open_debugfile() opens the file that holds debugging information.
@@ -73,7 +73,10 @@ void dbg_func(gchar *str, Dbg_Class class)
 	extern gboolean use_timestamps;
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
+	extern gboolean leaving;
 
+//	if (leaving)
+//		return;
 	if (!dbgfile)
 	{
 		g_free(str);
@@ -82,7 +85,7 @@ void dbg_func(gchar *str, Dbg_Class class)
 
 	g_static_mutex_lock(&dbg_mutex);
 
-	if ((dbg_lvl & class))
+	if ((dbgfile) && (dbg_lvl & class))
 	{
 		if (use_timestamps)
 		{
@@ -94,8 +97,8 @@ void dbg_func(gchar *str, Dbg_Class class)
 		}
 		else
 			g_fprintf(dbgfile,str);
+		fflush(dbgfile);
+		g_free(str);
 	}
-	fflush(dbgfile);
-	g_free(str);
 	g_static_mutex_unlock(&dbg_mutex);
 }

@@ -41,6 +41,7 @@ void load_sliders()
 	ConfigFile *cfgfile = NULL;
 	struct Rt_Slider *slider = NULL;
 	extern struct Firmware_Details *firmware;
+	extern gboolean leaving;
 	gchar *filename = NULL;
 	gint count = 0;
 	gint table = 0;
@@ -52,7 +53,7 @@ void load_sliders()
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
 
-	if (!tabs_loaded)
+	if ((!tabs_loaded) || (!firmware) || (leaving))
 		return;
 	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
 	{

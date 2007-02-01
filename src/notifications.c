@@ -283,6 +283,10 @@ void set_title(gchar * text)
 {
 	extern GtkWidget *main_window;
 	gchar * tmpbuf = NULL;
+	extern gboolean leaving;
+
+	if ((!main_window) || (leaving))
+		return;
 	tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
 
 	gtk_window_set_title(GTK_WINDOW(main_window),tmpbuf);

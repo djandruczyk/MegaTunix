@@ -32,6 +32,7 @@
 #include <3d_vetable.h>
 
 extern GStaticMutex comms_mutex;
+extern GStaticMutex serio_mutex;
 
 /*!
  \brief update_comms_status updates the Gui with the results of the comms
@@ -70,15 +71,16 @@ void comms_test()
 	extern gint failurecount;
 	static GStaticMutex comm_test_mutex = G_STATIC_MUTEX_INIT;
 
+	g_static_mutex_lock(&serio_mutex);
 	//printf("comms_test\n");
 	if (!serial_params)
 		return;
-	g_static_mutex_lock(&comm_test_mutex);
 	
 	if (offline)
 	{
 		queue_function(g_strdup("kill_conn_warning"));
 		connected = FALSE;
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&comm_test_mutex);
 		return;
 	}
@@ -89,6 +91,7 @@ void comms_test()
 	{
 		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
 		thread_update_logbar("comms_view","warning",g_strdup("Serial Port is NOT opened can NOT check ecu comms...\n"),TRUE,FALSE);
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&comm_test_mutex);
 
 		return;
@@ -98,9 +101,13 @@ void comms_test()
 	//toggle_serial_control_lines();
 
 	/* Flush the toilet.... */
-	flush_serial(serial_params->fd, TCIOFLUSH);	
+	g_static_mutex_unlock(&serio_mutex);
+	if (serial_params->fd)
+		flush_serial(serial_params->fd, TCIOFLUSH);	
+	g_static_mutex_lock(&serio_mutex);
 
 	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
+	g_static_mutex_lock(&comm_test_mutex);
 	g_static_mutex_lock(&comms_mutex);
 	if (write(serial_params->fd,"C",1) != 1)
 	{
@@ -109,7 +116,9 @@ void comms_test()
 		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),CRITICAL);
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),TRUE,FALSE);
 		//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text);
-		flush_serial(serial_params->fd, TCIOFLUSH);
+		g_static_mutex_unlock(&serio_mutex);
+		if (serial_params->fd)
+			flush_serial(serial_params->fd, TCIOFLUSH);
 		connected = FALSE;
 		failurecount++;
 		g_static_mutex_unlock(&comm_test_mutex);
@@ -136,7 +145,9 @@ void comms_test()
 		thread_update_logbar("comms_view","warning",g_strdup_printf("I/O with ECU Timeout\n"),TRUE,FALSE);
 	}
 	/* Flush the toilet again.... */
-	flush_serial(serial_params->fd, TCIOFLUSH);
+	g_static_mutex_unlock(&serio_mutex);
+	if (serial_params->fd)
+		flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_unlock(&comm_test_mutex);
 	return;
 }
@@ -232,6 +243,7 @@ void writeto_ecu(struct Io_Message *message)
 	extern gboolean offline;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&mutex);
 
 	if (offline)
@@ -247,17 +259,20 @@ void writeto_ecu(struct Io_Message *message)
 					ms_data[page][offset+i] = output->data[i];
 				break;
 		}
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if offline */
 	}
 	if (!connected)
 	{
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;		/* can't write anything if disconnected */
 	}
 	if ((!firmware->multi_page) && (page > 0))
 	{
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO, ABORTING WRITE!!!\n"),CRITICAL);
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
@@ -269,6 +284,7 @@ void writeto_ecu(struct Io_Message *message)
 	else
 	{
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tNO output mode defined, aborting!!\n"),CRITICAL);
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
@@ -285,14 +301,16 @@ void writeto_ecu(struct Io_Message *message)
 	if ((value < 0) && (output->mode == MTX_SINGLE_WRITE))
 	{
 		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n"),CRITICAL);
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
 
+
+	g_static_mutex_unlock(&serio_mutex);
 	if ((firmware->multi_page ) && (message->need_page_change)) 
 		set_ms_page(truepgnum);
-
-
+	g_static_mutex_lock(&serio_mutex);
 
 	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
 
@@ -385,6 +403,7 @@ void writeto_ecu(struct Io_Message *message)
 	/*is this really needed??? */
 	g_usleep(5000);
 
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
 	return;
 }
@@ -407,6 +426,7 @@ void burn_ecu_flash()
 	extern gboolean connected;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&mutex);
 
 	if (offline)
@@ -415,11 +435,15 @@ void burn_ecu_flash()
 	if (!connected)
 	{
 		dbg_func(g_strdup(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n"),CRITICAL);
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
-	flush_serial(serial_params->fd, TCIOFLUSH);
+	g_static_mutex_unlock(&serio_mutex);
+	if (serial_params->fd)
+		flush_serial(serial_params->fd, TCIOFLUSH);
 
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 	res = write (serial_params->fd,firmware->burn_cmd,1);  /* Send Burn command */
 	g_static_mutex_unlock(&comms_mutex);
@@ -431,13 +455,16 @@ void burn_ecu_flash()
 	g_usleep(100000);
 
 	dbg_func(g_strdup(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"),SERIAL_WR);
-
-	flush_serial(serial_params->fd, TCIOFLUSH);
+	g_static_mutex_unlock(&serio_mutex);
+	if (serial_params->fd)
+		flush_serial(serial_params->fd, TCIOFLUSH);
+	g_static_mutex_lock(&serio_mutex);
 copyover:
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
 		memcpy(ms_data_last[i],ms_data[i],sizeof(gint)*firmware->page_params[i]->length);
 
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
 	return;
 }
@@ -474,7 +501,9 @@ void readfrom_ecu(struct Io_Message *message)
 	g_static_mutex_lock(&mutex);
 
 	/* Flush serial port... */
-	flush_serial(serial_params->fd, TCIOFLUSH);
+	if (serial_params->fd)
+		flush_serial(serial_params->fd, TCIOFLUSH);
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&comms_mutex);
 	result = write(serial_params->fd,
 			message->out_str,
@@ -508,6 +537,7 @@ void readfrom_ecu(struct Io_Message *message)
 	else
 	{
 		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is undefined, author brainfart, EXITING!\n"),CRITICAL);
+		g_static_mutex_unlock(&serio_mutex);
 		exit (-1);
 	}
 	if (result)
@@ -522,6 +552,7 @@ void readfrom_ecu(struct Io_Message *message)
 		serial_params->errcount++;
 		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),IO_PROCESS);
 	}
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
 }
 
@@ -545,6 +576,7 @@ void set_ms_page(guint8 ms_page)
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	//printf("fed_page %i, last_page %i\n",ms_page,last_page);
+	g_static_mutex_lock(&serio_mutex);
 	g_static_mutex_lock(&mutex);
 
 	if ((ms_page > firmware->ro_above) || (last_page > firmware->ro_above))
@@ -553,12 +585,15 @@ void set_ms_page(guint8 ms_page)
 
 	if (((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0)))))
 	{
+		g_static_mutex_unlock(&serio_mutex);
 		burn_ecu_flash();
+		g_static_mutex_lock(&serio_mutex);
 	}
 skipburn:
 	if (ms_page == last_page)
 	{
 	//	printf("no need to change the page again as it's already %i\n",ms_page);
+		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 
 		return;
@@ -584,7 +619,7 @@ skipburn:
 	last_page = ms_page;
 	g_usleep(100000);
 
-
+	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
 	return;
 

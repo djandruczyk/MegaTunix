@@ -51,6 +51,7 @@ gboolean update_runtime_vars()
 {
 	gint i = 0;
 	struct Ve_View_3D * ve_view = NULL;
+	extern GHashTable *rtt_hash;
 	extern GHashTable *rt_sliders;
 	extern GHashTable *enr_sliders;
 	extern GHashTable *ww_sliders;
@@ -149,6 +150,7 @@ breakout:
 		draw_ve_marker();
 		update_tab_gauges();
 	}
+	g_hash_table_foreach(rtt_hash,rtt_update_values,NULL);
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
 		g_hash_table_foreach(rt_sliders,rt_update_values,NULL);
@@ -352,5 +354,80 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	slider->rate = rate;
 	slider->count = count;
 	slider->last_upd = last_upd;
+	return;
+}
+
+
+/*!
+ \brief rtt_update_values() is called for each runtime text to update
+ it's label (label is periodic and not every time due to pango
+ speed problems)
+ \param key (gpointer) unused
+ \param value (gpointer) pointer to Rt_Slider
+ \param data (gpointer) unused
+ */
+void rtt_update_values(gpointer key, gpointer value, gpointer data)
+{
+	struct Rt_Text *rtt = (struct Rt_Text *)value;
+	gint count = rtt->count;
+	gint rate = rtt->rate;
+	gint last_upd = rtt->last_upd;
+	gint current_index = 0;
+	gfloat current = 0.0;
+	gfloat previous = 0.0;
+	GArray *history = NULL;
+	gchar * tmpbuf = NULL;
+	gboolean is_float = FALSE;
+
+	history = (GArray *)g_object_get_data(rtt->object,"history");
+	current_index = (gint)g_object_get_data(rtt->object,"current_index");
+	is_float = (gboolean)g_object_get_data(rtt->object,"is_float");
+	g_static_mutex_lock(&rtv_mutex);
+	current = g_array_index(history, gfloat, current_index);
+	if (current_index > 0)
+		current_index-=1;
+	previous = g_array_index(history, gfloat, current_index);
+	g_static_mutex_unlock(&rtv_mutex);
+
+	if ((current != previous) || (forced_update))
+	{
+		/* If changed by more than 5% or has been at least 5 
+		 * times withot an update or forced_update is set
+		 * */
+		if ((rtt->textval) && ((abs(count-last_upd) > 3) || (forced_update)))
+		{
+			if (is_float)
+				tmpbuf = g_strdup_printf("%.2f",current);
+			else
+				tmpbuf = g_strdup_printf("%i",(gint)current);
+
+			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+			g_free(tmpbuf);
+			last_upd = count;
+		}
+	}
+	else if (rtt->textval && ((abs(count-last_upd)%30) == 0))
+	{
+		if (is_float)
+			tmpbuf = g_strdup_printf("%.2f",current);
+		else
+			tmpbuf = g_strdup_printf("%i",(gint)current);
+
+		gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
+		g_free(tmpbuf);
+		last_upd = count;
+	}
+
+	rate++;
+	if (rate > 25)
+		rate = 25;
+	if (last_upd > 5000)
+		last_upd = 0;
+	count++;
+	if (count > 5000)
+		count = 0;
+	rtt->rate = rate;
+	rtt->count = count;
+	rtt->last_upd = last_upd;
 	return;
 }

@@ -56,6 +56,7 @@ struct Firmware_Details
 	gchar **tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! realtime vars map filename */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
+	gchar *rtt_map_file;	/*! runtime text map filename */
 	gchar *status_map_file;	/*! runtime status map filename */
 	gchar *signature_str;	/*! ECU Signature String */
         gint rtvars_size;       /*! Size of Realtime vars datablock */
@@ -153,6 +154,7 @@ struct Dash_Gauge
 	GtkWidget *dash;		/* pointer to gauge parent */
 };
 
+
 /*! 
  \brief The Rt_Slider struct contains info on the runtime display tab sliders
  as they are now stored in the config file and adjustable in position
@@ -179,6 +181,25 @@ struct Rt_Slider
 	gint rate;		/*! used to making sure things update */
 	gint last_upd;		/*! used to making sure things update */
 	SliderType class;	/*! Slider type... */
+};
+
+
+/*! 
+ \brief The Rt_Text struct contains info on the floating runtime var text 
+ display
+ */
+struct Rt_Text
+{
+	gchar *ctrl_name;	/*! Ctrl name in config file (key in hash) */
+	GtkWidget *parent;	/*! Parent of the table below  */
+	GtkWidget *name_label;	/*! Label in runtime display */
+	GtkWidget *textval;	/*! Label in runtime display */
+	gchar *friendly_name;	/*! text for Label above */
+	GArray *history;	/*! where the data is from */
+	GObject *object;	/*! object of obsession.... */
+	gint count;		/*! used to making sure things update */
+	gint rate;		/*! used to making sure things update */
+	gint last_upd;		/*! used to making sure things update */
 };
 
 
@@ -297,6 +318,7 @@ struct Canidate
 	gchar *tab_confs;	/*! Tab configuration files */
 	gchar *rtv_map_file;	/*! name of realtime vars map file */
 	gchar *sliders_map_file;/*! runtime sliders map filename */
+	gchar *rtt_map_file;	/*! runtime text map filename */
 	gchar *status_map_file;	/*! runtime status map filename */
 	Capability capabilities;/*! Bitmask of capabilities.... */
 	gchar *rt_cmd_key;	/*! string key to hashtable for RT command */

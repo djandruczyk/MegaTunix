@@ -87,7 +87,10 @@ void leave(GtkWidget *widget, gpointer data)
 	extern GHashTable *dynamic_widgets;
 	extern gint dispatcher_id;
 	extern gint statuscounts_id;
+	extern GStaticMutex serio_mutex;
+	extern GStaticMutex comms_mutex;
 	extern GStaticMutex rtv_mutex;
+	extern GStaticMutex dbg_mutex;
 	extern gboolean connected;
 	extern gboolean interrogated;
 	extern GAsyncQueue *dispatch_queue;
@@ -140,6 +143,13 @@ void leave(GtkWidget *widget, gpointer data)
 
 	io_cmd(IO_CLOSE_SERIAL,NULL);
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() after close_serial\n"),CRITICAL);
+	if (dispatcher_id)
+		gtk_timeout_remove(dispatcher_id);
+	dispatcher_id = 0;
+
+	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait till 
+	// runtime gui is finished updating
+	g_static_mutex_unlock(&rtv_mutex); 
 
 	/* This makes us wait until the dispatch queue finishes */
 	while ((g_async_queue_length(io_queue) > 0) && (count < 30))
@@ -157,15 +167,11 @@ void leave(GtkWidget *widget, gpointer data)
 		count++;
 	}
 
-	if (dispatcher_id)
-		gtk_timeout_remove(dispatcher_id);
-	dispatcher_id = 0;
-
-	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait till 
-	// runtime gui is finished updating
-	g_static_mutex_unlock(&rtv_mutex); 
-
 	/* Free all buffers */
+	g_static_mutex_lock(&comms_mutex);
+	g_static_mutex_unlock(&comms_mutex);
+	g_static_mutex_lock(&serio_mutex);
+	g_static_mutex_unlock(&serio_mutex);
 	mem_dealloc();
 	dbg_func(g_strdup_printf(__FILE__": LEAVE() config saved, mem deallocated, closing log and exiting\n"),CRITICAL);
 	close_debugfile();

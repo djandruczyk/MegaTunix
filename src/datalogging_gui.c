@@ -65,8 +65,9 @@ void populate_dlog_choices()
 	extern gint preferred_delimiter;
 	extern gboolean tabs_loaded;
 	extern gboolean rtvars_loaded;
+	extern gboolean leaving;
 
-	if (!tabs_loaded)
+	if ((!tabs_loaded) || (leaving))
 		return;
 	if (!rtvars_loaded)
 	{

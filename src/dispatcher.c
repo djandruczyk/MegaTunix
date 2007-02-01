@@ -32,6 +32,7 @@
 #include <post_process.h>
 #include <runtime_gui.h>
 #include <runtime_sliders.h>
+#include <runtime_text.h>
 #include <runtime_status.h>
 #include <rtv_map_loader.h>
 #include <serialio.h>
@@ -76,12 +77,13 @@ gboolean dispatcher(gpointer data)
 	extern gint temp_units;
 	extern gboolean paused_handlers;
 	extern gboolean forced_update;
+	extern gboolean leaving;
 	extern gint mem_view_style[];
 	extern GHashTable *dynamic_widgets;
 
 	if (!dispatch_queue) /*queue not built yet... */
 		return TRUE;
-	/* Endless Loop, wiat for message, processs and repeat... */
+	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
 	//printf("dispatch queue length is %i\n",g_async_queue_length(dispatch_queue));
 	message = g_async_queue_try_pop(dispatch_queue);
@@ -91,6 +93,8 @@ trypop:
 		return TRUE;
 	}
 
+	if (leaving)
+		return TRUE;
 	if (message->funcs != NULL)
 	{
 		len = message->funcs->len;
@@ -162,6 +166,15 @@ trypop:
 						set_title(g_strdup("RT Sliders Loaded..."));
 					}
 					break;
+				case UPD_LOAD_RT_TEXT:
+					if ((connected) && (interrogated))
+					{
+						set_title(g_strdup("Loading RT Text..."));
+						load_rt_text();
+						reset_temps(GINT_TO_POINTER(temp_units));
+						set_title(g_strdup("RT Text Loaded..."));
+					}
+					break;
 				case UPD_LOAD_REALTIME_MAP:
 					if ((interrogated) && ((connected) || (offline)))
 					{
@@ -190,6 +203,8 @@ trypop:
 					}
 					break;
 				case UPD_REENABLE_INTERROGATE_BUTTON:
+					if (leaving)
+						break;
 					if(!offline)
 						gtk_widget_set_sensitive(GTK_WIDGET(g_hash_table_lookup(dynamic_widgets, "interrogate_button")),TRUE);
 					break;
