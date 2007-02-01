@@ -52,6 +52,7 @@ EXPORT void finish_raweditor(void)
 	extern struct Firmware_Details *firmware;
 	extern GHashTable *dynamic_widgets;
 	extern GList *** ve_widgets;
+	extern volatile gboolean leaving;
 
 	top = g_hash_table_lookup(dynamic_widgets,"raweditor_top_vbox1");
 	if (!GTK_IS_WIDGET(top))
@@ -146,7 +147,14 @@ EXPORT void finish_raweditor(void)
 		}
 		gdk_threads_enter();
 		while (gtk_events_pending ())
+		{
+			if (leaving)
+			{
+				gdk_threads_leave();
+				return;
+			}
 			gtk_main_iteration ();
+		}
 		gdk_threads_leave();
 	}
 	gtk_widget_show_all(top);

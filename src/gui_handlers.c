@@ -149,11 +149,10 @@ void leave(GtkWidget *widget, gpointer data)
 		gtk_timeout_remove(dispatcher_id);
 	dispatcher_id = 0;
 
-	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait till 
-	// runtime gui is finished updating
-	g_static_mutex_unlock(&rtv_mutex); 
+	g_static_mutex_lock(&rtv_mutex);  // <-- this  makes us wait 
+	g_static_mutex_unlock(&rtv_mutex); // now unlock
 
-	/* This makes us wait until the dispatch queue finishes */
+	/* This makes us wait until the io queue finishes */
 	while ((g_async_queue_length(io_queue) > 0) && (count < 30))
 	{
 		dbg_func(g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_queue)),CRITICAL);
@@ -1167,8 +1166,11 @@ void update_ve_const()
 	union config12 cfg12;
 	extern gint **ms_data;
 	extern gint ecu_caps;
+	extern volatile gboolean leaving;
 	extern struct Firmware_Details *firmware;
 
+	if (leaving)
+		return;
 
 	/* DualTable Fuel Calculations
 	 * DT code no longer uses the "alternate" firing mode as each table
@@ -1202,6 +1204,7 @@ void update_ve_const()
 	 */
 
 	/* All Tables */
+
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		//printf("\n");
@@ -1270,9 +1273,11 @@ void update_ve_const()
 
 	for (page=0;page<firmware->total_pages;page++)
 	{
+		if ((leaving) || (!firmware))
+			return;
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
 		{
-			if (leaving)
+			if ((leaving) || (!firmware))
 				return;
 			if (ve_widgets[page][offset] != NULL)
 				g_list_foreach(ve_widgets[page][offset],
@@ -1331,6 +1336,7 @@ void update_widget(gpointer object, gpointer user_data)
 	extern gint ** ms_data;
 	extern GHashTable *widget_group_states;
 	extern gint *algorithm;
+	extern volatile gboolean leaving;
 
 	if (leaving)
 		return;
@@ -1340,8 +1346,16 @@ void update_widget(gpointer object, gpointer user_data)
 	{
 		gdk_threads_enter();
 		while (gtk_events_pending())
+		{
+			if (leaving)
+			{
+				gdk_threads_leave();
+				return;
+			}
 			gtk_main_iteration();
+		}
 		gdk_threads_leave();
+
 	}
 	if (!GTK_IS_OBJECT(widget))
 		return;

@@ -102,6 +102,7 @@ trypop:
 		{
 			if (leaving)
 				return TRUE;
+
 			val = g_array_index(message->funcs,UpdateFunction, i);
 
 			switch ((UpdateFunction)val)
@@ -290,12 +291,16 @@ trypop:
 			while (gtk_events_pending())
 			{
 				if (leaving)
-					break;
+				{
+					gdk_threads_leave();
+					goto dealloc;
+				}
 				gtk_main_iteration();
 			}
 			gdk_threads_leave();
 		}
 	}
+dealloc:
 	dealloc_message(message);
 	//printf ("deallocation of dispatch message complete\n");
 	count++;
