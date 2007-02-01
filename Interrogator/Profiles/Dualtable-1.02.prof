@@ -93,7 +93,9 @@ CMD_UPPER_F0=255
 [gui]
 RealtimeMapFile=DT-std
 SliderMapFile=dt-firmware
+RuntimeTextMapFile=std-firmware
 StatusMapFile=std-firmware
+
 LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments,vetable_8x8e,vetable_8x8e,tools,memviewer,warmupwizard,raweditor
 TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8e-BnG,vetable_8x8e-DT_2,tools,memviewer,warmupwizard,raweditor
 

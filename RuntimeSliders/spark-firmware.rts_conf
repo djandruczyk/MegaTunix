@@ -23,16 +23,16 @@ row=2
 source=rpm
 
 [rt_slider_3]
-slider_name=pw
+slider_name=pw1
 table=0
 row=3
-source=pw
+source=pw1
 
 [rt_slider_4]
-slider_name=dutycycle
+slider_name=dutycycle1
 table=0
 row=4
-source=dcycle
+source=dcycle1
 
 [rt_slider_5]
 slider_name=o2_volts
@@ -95,10 +95,10 @@ row=0
 source=gammae
 
 [rt_slider_15]
-slider_name=ve
+slider_name=ve1
 table=3
 row=1
-source=vecurr
+source=vecurr1
 
 [rt_slider_16]
 slider_name=ve
