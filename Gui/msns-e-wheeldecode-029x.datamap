@@ -588,11 +588,14 @@ handler=_GENERIC_
 dl_type=_IMMEDIATE_
 tooltip=The total number of teeth including the "missing" ones.  I.e a 36-1 tooth wheel has spaces for 36 evenly spaced teeth, even though 1 is missing, so it technically has 35 teeth,  but you would enter "36" in this field, as the wheel is spaced out for 36 teeth.
 
-[trigger_angle_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,spconfig_offset,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+[trigger_angle_entry]
+keys=page,offset,base,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,spconfig_offset,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=3
 offset=168
+base=10
+precision=2
+is_float=TRUE
 dl_conv_expr=x*(284/100)
 ul_conv_expr=x/(284/100)
 dl_type=_IMMEDIATE_
@@ -600,11 +603,14 @@ handler=_TRIGGER_ANGLE_
 spconfig_offset=173
 tooltip=This the amount of degree's BTDC that the triggers come at. i.e. to allow the maxiumum timing advance you want the trigger to arrive before your maximum spark advance plus a cushion of 10-20 deg. So if you max advance is 40 deg, a trigger angle of 60deg is safe.  NOTE: this differs somewhat from megatune which has only a 0-90 deg angle range of this control and an additional bitfield.  MegaTunix handles this cleanly with one control with a 0-135 deg range.
 
-[crank_angle_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[crank_angle_entry]
+keys=page,offset,base,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=171
+base=10
+precision=2
+is_float=TRUE
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
 dl_type=_IMMEDIATE_
@@ -612,11 +618,14 @@ ign_parm=TRUE
 handler=_GENERIC_
 tooltip=This is the Crank Timing (when not using trigger return)
 
-[fixed_angle_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[fixed_angle_entry]
+keys=page,offset,base,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=169
+base=10
+precision=2
+is_float=TRUE
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
 dl_type=_IMMEDIATE_
@@ -624,11 +633,14 @@ ign_parm=TRUE
 handler=_GENERIC_
 tooltip=This control locks out the Spark table and holds the timing ridgly at this value. Setting this to -10 UNLOCKS the timing control and lets it use the spark tables.
 
-[wheel_trim_angle_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[trim_angle_entry]
+keys=page,offset,base,precision,is_float,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=170
+base=10
+precision=2
+is_float=TRUE
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 dl_type=_IMMEDIATE_

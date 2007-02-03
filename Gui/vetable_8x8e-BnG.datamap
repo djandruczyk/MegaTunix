@@ -47,6 +47,53 @@ handler=_GENERIC_
 use_color=TRUE
 tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
+#----- Widgets ---------------------------------------------------------------
+
+[VE1_gaugeframe1]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=0
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=rpm
+
+[VE1_gaugeframe2]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=0
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
+datasource=tpsadc
+
+[VE1_gaugeframe3]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=0
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
+datasource=mapkpa
+
+[VE1_gaugeframe4]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=0
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
+datasource=egocorr
+
+[VE1_gaugeframe5]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=0
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
+datasource=afr
+
 #----- Labels ----------------------------------------------------------------
 
 [topframe]

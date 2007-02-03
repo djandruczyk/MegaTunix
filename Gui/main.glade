@@ -62,6 +62,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="vetable_tuning_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">_VE Tables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:45:09 GMT"/>
@@ -83,6 +84,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="spark_tuning_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">_Spark Tables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:46:30 GMT"/>
@@ -104,6 +106,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="afr_tuning_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">_AFR Tables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
@@ -125,6 +128,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="boost_tuning_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">_Boost Tables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 22:07:29 GMT"/>
@@ -146,6 +150,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="rotary_tuning_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">_Rotary Trailing Tables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="jump_to_tab" last_modification_time="Sun, 21 Jan 2007 14:47:42 GMT"/>
@@ -180,6 +185,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="runtime_vars_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">_Runtime Variables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:53:08 GMT"/>
@@ -201,6 +207,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="ecu_errors_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">ECU _Errors</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="jump_to_tab" last_modification_time="Fri, 19 Jan 2007 21:54:39 GMT"/>
@@ -235,6 +242,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="import_tables_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">I_mport Tables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
@@ -256,6 +264,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="export_tables_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">E_xport Tables</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
@@ -277,6 +286,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="restore_ecu_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">Restore ECU</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>
@@ -298,6 +308,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="backup_ecu_menuitem">
 		      <property name="visible">True</property>
+		      <property name="sensitive">False</property>
 		      <property name="label" translatable="yes">_Backup ECU</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="settings_transfer" last_modification_time="Fri, 19 Jan 2007 22:09:33 GMT"/>

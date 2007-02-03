@@ -559,14 +559,18 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	gint handler = -1;
 	gchar *text = NULL;
 	gchar *tmpbuf = NULL;
-	gfloat tmpf = 0;
-	gint tmpi = 0;
-	gint page = 0;
-	gint base = 0;
-	gint old = 0;
-	gint offset = 0;
-	gint dload_val = 0;
-	gint precision = 0;
+	gfloat tmpf = -1;
+	gint tmpi = -1;
+	gint tmp = -1;
+	gint page = -1;
+	gint base = -1;
+	gint old = -1;
+	gint offset = -1;
+	gint dload_val = -1;
+	gint dl_type = -1;
+	gint precision = -1;
+	gint spconfig_offset = -1;
+	gint oddfire_bit_offset = -1;
 	gfloat real_value = 0.0;
 	gboolean is_float = FALSE;
 	gboolean ign_parm = FALSE;
@@ -583,7 +587,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	handler = (StdButton)g_object_get_data(G_OBJECT(widget),"handler");
+	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	base = (gint)g_object_get_data(G_OBJECT(widget),"base");
@@ -607,53 +611,148 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 		g_free(tmpbuf);
 	}
-	if (base == 10)
+	switch ((SpinButton)handler)
 	{
-		if (is_float)
-			dload_val = convert_before_download(widget,tmpf);
-		else
-			dload_val = convert_before_download(widget,tmpi);
-	}
-	else if (base == 16)
-		dload_val = convert_before_download(widget,tmpi);
-	else
-	{
-		dbg_func(g_strdup_printf(__FILE__": std_entry_handler()\n\tBase of textentry \"%i\" is invalid!!!\n",base),CRITICAL);
-		return TRUE;
-	}
-	/* What we are doing is doing the forware/reverse conversion which
-	 * will give us an exact value if the user inputs something in
-	 * between,  thus we can reset the display to a sane value...
-	 */
-	old = ms_data[page][offset];
-	ms_data[page][offset] = dload_val;
+		case GENERIC:
+			if (base == 10)
+			{
+				if (is_float)
+					dload_val = convert_before_download(widget,tmpf);
+				else
+					dload_val = convert_before_download(widget,tmpi);
+			}
+			else if (base == 16)
+				dload_val = convert_before_download(widget,tmpi);
+			else
+			{
+				dbg_func(g_strdup_printf(__FILE__": std_entry_handler()\n\tBase of textentry \"%i\" is invalid!!!\n",base),CRITICAL);
+				return TRUE;
+			}
+			/* What we are doing is doing the forware/reverse conversion which
+			 * will give us an exact value if the user inputs something in
+			 * between,  thus we can reset the display to a sane value...
+			 */
+			old = ms_data[page][offset];
+			ms_data[page][offset] = dload_val;
 
-	real_value = convert_after_upload(widget);
-	ms_data[page][offset] = old;
+			real_value = convert_after_upload(widget);
+			ms_data[page][offset] = old;
 
-	if (is_float)
-	{
-		tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
-		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-		g_free(tmpbuf);
-	}
-	else
-	{
-		if (base == 10)
-		{
-			tmpbuf = g_strdup_printf("%i",(gint)real_value);
-			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-			g_free(tmpbuf);
-		}
-		else
-		{
-			tmpbuf = g_strdup_printf("%.2X",(gint)real_value);
-			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-			g_free(tmpbuf);
-		}
+			if (is_float)
+			{
+				tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
+				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+				g_free(tmpbuf);
+			}
+			else
+			{
+				if (base == 10)
+				{
+					tmpbuf = g_strdup_printf("%i",(gint)real_value);
+					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					g_free(tmpbuf);
+				}
+				else
+				{
+					tmpbuf = g_strdup_printf("%.2X",(gint)real_value);
+					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					g_free(tmpbuf);
+				}
+			}
+			break;
+
+		case TRIGGER_ANGLE:
+			spconfig_offset = (gint)g_object_get_data(G_OBJECT(widget),"spconfig_offset");
+			if (spconfig_offset == 0)
+			{
+				dbg_func(g_strdup(__FILE__": std_entry_handler()\n\tERROR Trigger Angle entry call, but spconfig_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
+				dl_type = 0;  
+				break;
+
+			}
+			if (tmpf > 112.15)	/* Extra long trigger needed */	
+			{
+				tmp = ms_data[page][spconfig_offset];
+				tmp = tmp & ~0x3; /*clears lower 2 bits */
+				tmp = tmp | (1 << 1);	/* Set xlong_trig */
+				//ms_data[page][spconfig_offset] = tmp;
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm, TRUE);
+				tmpf -= 45.0;
+				dload_val = convert_before_download(widget,tmpf);
+			}
+			else if (tmpf > 89.65) /* Long trigger needed */
+			{
+				tmp = ms_data[page][spconfig_offset];
+				tmp = tmp & ~0x3; /*clears lower 2 bits */
+				tmp = tmp | (1 << 0);	/* Set long_trig */
+				//ms_data[page][spconfig_offset] = tmp;
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm, TRUE);
+				tmpf -= 22.5;
+				dload_val = convert_before_download(widget,tmpf);
+			}
+			else	// tmpf <= 89.65 degrees, no long trigger
+			{
+				tmp = ms_data[page][spconfig_offset];
+				tmp = tmp & ~0x3; /*clears lower 2 bits */
+				//ms_data[page][spconfig_offset] = tmp;
+				write_ve_const(widget, page, spconfig_offset, tmp, ign_parm, TRUE);
+				dload_val = convert_before_download(widget,tmpf);
+			}
+
+			break;
+
+		case ODDFIRE_ANGLE:
+			oddfire_bit_offset = (gint)g_object_get_data(G_OBJECT(widget),"oddfire_bit_offset");
+			if (oddfire_bit_offset == 0)
+			{
+				dbg_func(g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"),CRITICAL);
+				dl_type = 0;  
+				break;
+
+			}
+			if (tmpf > 90)	/*  */	
+			{
+				tmp = ms_data[page][oddfire_bit_offset];
+				tmp = tmp & ~0x7; /*clears lower 3 bits */
+				tmp = tmp | (1 << 2);	/* Set +90 */
+				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
+				tmpf -= 90.0;
+				dload_val = convert_before_download(widget,tmpf);
+			}
+			else if (tmpf > 45) /* */
+			{
+				tmp = ms_data[page][oddfire_bit_offset];
+				tmp = tmp & ~0x7; /*clears lower 3 bits */
+				tmp = tmp | (1 << 1);	/* Set +45 */
+				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
+				tmpf -= 45.0;
+				dload_val = convert_before_download(widget,tmpf);
+			}
+			else	// tmpf <= 45 degrees, 
+			{
+				tmp = ms_data[page][oddfire_bit_offset];
+				tmp = tmp & ~0x7; /*clears lower 3 bits */
+				write_ve_const(widget, page, oddfire_bit_offset, tmp, ign_parm, TRUE);
+				dload_val = convert_before_download(widget,tmpf);
+			}
+
+			break;
+		default:
+			/* We don't care about anything else for now... */
+			break;
+
 	}
 
-	write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
+
+	if (dl_type == IMMEDIATE)
+	{
+		/* If data has NOT changed,  don't bother updating 
+		 *                  * and wasting time.
+		 *                                   */
+		if (dload_val != ms_data[page][offset])
+			write_ve_const(widget, page, offset, dload_val, ign_parm, TRUE);
+	}
+
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 
 	if (use_color)
@@ -1406,48 +1505,113 @@ void update_widget(gpointer object, gpointer user_data)
 	// update widget whether spin,radio or checkbutton  (check encompases radio)
 	if ((GTK_IS_ENTRY(widget)) && (!GTK_IS_SPIN_BUTTON(widget)))
 	{
-		widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-		update_color = TRUE;
-		if (base == 10)
+		if ((int)g_object_get_data(G_OBJECT(widget),"handler") == ODDFIRE_ANGLE)
 		{
-			if (is_float)
+			oddfire_bit_offset = (gint)g_object_get_data(G_OBJECT(widget),"oddfire_bit_offset");
+			if (oddfire_bit_offset == 0)
+				return;
+			switch (ms_data[page][oddfire_bit_offset])
 			{
-				tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
-				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
-					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else
-					update_color = FALSE;
-				g_free(tmpbuf);
+				case 4:
+					if (is_float)
+						tmpbuf = g_strdup_printf("%1$.*2$f",value+90,precision);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)value+90);
+					break;
+				case 2:
+					if (is_float)
+						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)value+45);
+					break;
+				case 0:
+					if (is_float)
+						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)value);
+					break;
+				default:
+					dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_bit_offset at ms_data[%i][%i], ERROR\n",page,oddfire_bit_offset),CRITICAL);
+
 			}
-			else
-			{
-				tmpbuf = g_strdup_printf("%i",(gint)value);
-				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
-					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-				else
-					update_color = FALSE;
-				g_free(tmpbuf);
-			}
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
 		}
-		else if (base == 16)
+		else if ((int)g_object_get_data(G_OBJECT(widget),"handler") == TRIGGER_ANGLE)
 		{
-			tmpbuf = g_strdup_printf("%.2X",(gint)value);
-			if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
-				gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-			else
-				update_color = FALSE;
+			spconfig_offset = (gint)g_object_get_data(G_OBJECT(widget),"spconfig_offset");
+			switch ((ms_data[page][spconfig_offset] & 0x03))
+			{
+				case 2:
+					if (is_float)
+						tmpbuf = g_strdup_printf("%1$.*2$f",value+45,precision);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)value+45);
+					break;
+				case 1:
+					if (is_float)
+						tmpbuf = g_strdup_printf("%1$.*2$f",value+22.5,precision);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)(value+22.5));
+					break;
+				case 0:
+					if (is_float)
+						tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)value);
+					break;
+				default:
+					dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ms_data[%i][%i], ERROR\n",page,spconfig_offset),CRITICAL);
+
+			}
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
 		}
 		else
-			dbg_func(g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"),CRITICAL);
-
-		if ((use_color) && (update_color))
 		{
-			color = get_colors_from_hue(((gfloat)ms_data[page][offset]/256.0)*360.0,0.33, 1.0);
-			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+			widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
+			update_color = TRUE;
+			if (base == 10)
+			{
+				if (is_float)
+				{
+					tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
+					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+						gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					else
+						update_color = FALSE;
+					g_free(tmpbuf);
+				}
+				else
+				{
+					tmpbuf = g_strdup_printf("%i",(gint)value);
+					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+						gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+					else
+						update_color = FALSE;
+					g_free(tmpbuf);
+				}
+			}
+			else if (base == 16)
+			{
+				tmpbuf = g_strdup_printf("%.2X",(gint)value);
+				if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+					gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+				else
+					update_color = FALSE;
+				g_free(tmpbuf);
+			}
+			else
+				dbg_func(g_strdup(__FILE__": update_widget()\n\t base for nemeric textentry is not 10 or 16, ERROR\n"),CRITICAL);
+
+			if ((use_color) && (update_color))
+			{
+				color = get_colors_from_hue(((gfloat)ms_data[page][offset]/256.0)*360.0,0.33, 1.0);
+				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);	
+			}
+			if (update_color)
+				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		}
-		if (update_color)
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	}
 	else if (GTK_IS_SPIN_BUTTON(widget))
 	{

@@ -192,7 +192,6 @@ trypop:
 						set_title(g_strdup("Loading Gui Tabs..."));
 						load_gui_tabs();
 						reset_temps(GINT_TO_POINTER(temp_units));
-						setup_menu_handlers();
 
 						set_title(g_strdup("Gui Tabs Loaded..."));
 					}
@@ -232,6 +231,7 @@ trypop:
 						update_ve_const();
 
 					paused_handlers = FALSE;
+					setup_menu_handlers();
 					set_title(g_strdup("Ready..."));
 					break;
 				case UPD_TRIGTOOTHMON:

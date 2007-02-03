@@ -64,13 +64,18 @@ void setup_menu_handlers()
 					GINT_TO_POINTER(items[i].tab));
 		if (!check_tab_existance(items[i].tab))
 			gtk_widget_set_sensitive(item,FALSE);
+		else
+			gtk_widget_set_sensitive(item,TRUE);
 	}
 	for (i=0;i< (sizeof(fio_items)/sizeof(fio_items[0]));i++)
 	{
 		item = glade_xml_get_widget(xml,fio_items[i].item);
 		if (GTK_IS_WIDGET(item))
+		{
 			g_object_set_data(G_OBJECT(item),"fio_action",
 					GINT_TO_POINTER(fio_items[i].action));
+			gtk_widget_set_sensitive(item,TRUE);
+		}
 	}
 }
 
