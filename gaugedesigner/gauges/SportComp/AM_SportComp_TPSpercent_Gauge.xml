@@ -21,9 +21,9 @@
   <lbound>0.000000</lbound>
   <ubound>100.000000</ubound>
   <value_font>arial Bold</value_font>
-  <value_font_scale>0.190000</value_font_scale>
+  <value_font_scale>0.200000</value_font_scale>
   <value_str_xpos>0.000000</value_str_xpos>
-  <value_str_ypos>0.450000</value_str_ypos>
+  <value_str_ypos>0.350000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
   <tick_inset>0.150000</tick_inset>
@@ -40,7 +40,7 @@
   <text_block>
     <font>arial Bold</font>
     <text>Throttle Pos.</text>
-    <font_scale>0.146000</font_scale>
+    <font_scale>0.141000</font_scale>
     <x_pos>0.000000</x_pos>
     <y_pos>0.620000</y_pos>
     <color>55769 55769 55769</color>

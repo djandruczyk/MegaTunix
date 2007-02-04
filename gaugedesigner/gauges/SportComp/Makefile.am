@@ -10,6 +10,7 @@ gauges_files = 	\
 		AM_SportComp_Fuel_Gauge.xml \
 		AM_SportComp_MAP_Gauge.xml \
 		AM_SportComp_MAT_Gauge.xml \
+		AM_SportComp_O2Volt_Gauge.xml \
 		AM_SportComp_PW_Gauge.xml \
 		AM_SportComp_RPM_Gauge.xml \
 		AM_SportComp_TPSADC_Gauge.xml \

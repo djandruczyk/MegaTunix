@@ -231,13 +231,6 @@ trypop:
 					setup_menu_handlers();
 					set_title(g_strdup("Ready..."));
 					break;
-				case UPD_FORCE_TABLE_UPDATE:
-					set_title(g_strdup_printf("Updating Table %i...",(gint)message->payload));
-					paused_handlers = TRUE;
-					force_update_table((gint)message->payload);
-					paused_handlers = FALSE;
-					set_title(g_strdup("Ready..."));
-					break;
 				case UPD_TRIGTOOTHMON:
 					crunch_trigtooth_data(message->page);
 					update_trigtooth_display(message->page);

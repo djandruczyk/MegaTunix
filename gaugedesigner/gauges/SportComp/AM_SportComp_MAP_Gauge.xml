@@ -23,7 +23,7 @@
   <value_font>arial Bold</value_font>
   <value_font_scale>0.200000</value_font_scale>
   <value_str_xpos>0.000000</value_str_xpos>
-  <value_str_ypos>0.420000</value_str_ypos>
+  <value_str_ypos>0.350000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
   <tick_inset>0.150000</tick_inset>

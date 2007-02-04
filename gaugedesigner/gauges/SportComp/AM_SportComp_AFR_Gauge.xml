@@ -12,8 +12,8 @@
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>2</precision>
-  <width>288</width>
-  <height>479</height>
+  <width>178</width>
+  <height>162</height>
   <start_deg>-135.000000</start_deg>
   <stop_deg>-270.000000</stop_deg>
   <start_radian>2.356194</start_radian>
@@ -23,7 +23,7 @@
   <value_font>arial Bold</value_font>
   <value_font_scale>0.200000</value_font_scale>
   <value_str_xpos>0.000000</value_str_xpos>
-  <value_str_ypos>0.430000</value_str_ypos>
+  <value_str_ypos>0.350000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
   <tick_inset>0.150000</tick_inset>
@@ -33,7 +33,7 @@
   <major_tick_text_font>Arial Bold</major_tick_text_font>
   <major_tick_text>10,11,12,13,14,15,16,17,18,19,20</major_tick_text>
   <major_tick_text_inset>0.010000</major_tick_text_inset>
-  <major_tick_text_scale>0.148000</major_tick_text_scale>
+  <major_tick_text_scale>0.138000</major_tick_text_scale>
   <minor_ticks>4</minor_ticks>
   <minor_tick_len>0.065000</minor_tick_len>
   <minor_tick_width>0.120000</minor_tick_width>

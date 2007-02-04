@@ -2885,6 +2885,129 @@ most &quot;Weight&quot;</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox3">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR1_gaugeframe1">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR1_gaugeframe2">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR1_gaugeframe3">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR1_gaugeframe4">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0.5</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR1_gaugeframe5">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
 			</widget>
 			<packing>
 			  <property name="tab_expand">False</property>
@@ -5738,6 +5861,129 @@ most &quot;Weight&quot;</property>
 			    <packing>
 			      <property name="padding">0</property>
 			      <property name="expand">False</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox4">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR2_gaugeframe1">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR2_gaugeframe2">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR2_gaugeframe3">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR2_gaugeframe4">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0.5</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkAspectFrame" id="AFR2_gaugeframe5">
+				  <property name="visible">True</property>
+				  <property name="label_xalign">0</property>
+				  <property name="label_yalign">0.5</property>
+				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="ratio">1</property>
+				  <property name="obey_child">True</property>
+
+				  <child>
+				    <placeholder/>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
 			      <property name="fill">True</property>
 			    </packing>
 			  </child>
