@@ -138,9 +138,6 @@ trypop:
 						case MTX_TITLE:
 							set_title(g_strdup(w_update->msg));
 							break;
-							//						case MTX_SPINBUTTON:
-							//							gtk_label_set_text(GTK_LABEL(widget),w_update->msg);
-							//							break;
 					}
 					dealloc_w_update(w_update);
 					message->payload = NULL;
@@ -232,6 +229,13 @@ trypop:
 
 					paused_handlers = FALSE;
 					setup_menu_handlers();
+					set_title(g_strdup("Ready..."));
+					break;
+				case UPD_FORCE_TABLE_UPDATE:
+					set_title(g_strdup_printf("Updating Table %i...",(gint)message->payload));
+					paused_handlers = TRUE;
+					force_update_table((gint)message->payload);
+					paused_handlers = FALSE;
 					set_title(g_strdup("Ready..."));
 					break;
 				case UPD_TRIGTOOTHMON:

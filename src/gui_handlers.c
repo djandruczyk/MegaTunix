@@ -388,10 +388,13 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gint table_num = -1;
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
+	gchar * update_table = NULL;
 	gchar * tmpbuf = NULL;
+	struct Io_Message *message = NULL;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
+	extern GAsyncQueue *dispatch_queue;
 	extern GHashTable **interdep_vars;
 	extern struct Firmware_Details *firmware;
 
@@ -414,6 +417,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	swap_list = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_labels");
 	set_labels = (gchar *)g_object_get_data(G_OBJECT(widget),"set_widgets_label");
+	update_table = (gchar *)g_object_get_data(G_OBJECT(widget),"update_table");
 
 	// If it's a check button then it's state is dependant on the button's state
 	if (!GTK_IS_RADIO_BUTTON(widget))
@@ -484,6 +488,22 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		set_widget_labels(set_labels);
 	if (swap_list)
 		swap_labels(swap_list,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+	/* MUST use dispatcher, as the update functions run outside of the
+	 * normal GTK+ context, so if we were to call it direct we'd get a 
+	 * deadlock due to gtk_threads_enter/leave() calls,  so we use the
+	 * dispatch queue to let it run in the corrent "state"....
+	 */
+	if (update_table)
+	{
+		printf("updating table %s\n",update_table);
+		message = initialize_io_message();
+		message->payload = update_table;
+		message->command = NULL_CMD;
+		message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+		tmp = UPD_FORCE_TABLE_UPDATE;
+		g_array_append_val(message->funcs,tmp);
+		g_async_queue_push(dispatch_queue,(gpointer)message);
+	}
 
 	if (dl_type == IMMEDIATE)
 	{
@@ -1385,6 +1405,44 @@ void update_ve_const()
 	}
 	
 
+}
+
+
+/*!
+ \brief force_update_table() updates a subset of widgets (specifically ONLY
+ the Z axis widgets) of a table on screen.
+ \param table_num, integer number of the table in question
+ */
+void force_update_table(gchar * table)
+{
+	gint offset = -1;
+	gint page = -1;
+	gint table_num = -1;
+	extern gint **ms_data;
+	extern volatile gboolean leaving;
+	extern GList ***ve_widgets;
+	extern struct Firmware_Details *firmware;
+	gint base = 0;
+	gint length = 0;
+
+	if (leaving)
+		return;
+	if (page > firmware->total_pages)
+	       return;
+	table_num = (gint)g_ascii_strtod(table,NULL);
+	if ((table_num < 0) || (table_num > (firmware->total_tables-1)))
+		return;
+	base = firmware->table_params[table_num]->z_base;
+	length = firmware->table_params[table_num]->x_bincount *
+		firmware->table_params[table_num]->y_bincount;
+	page =  firmware->table_params[table_num]->z_page;
+	for (offset=base;offset<base+length;offset++)
+	{
+		if ((leaving) || (!firmware))
+			return;
+		if (ve_widgets[page][offset] != NULL)
+			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+	}	
 }
 
 
