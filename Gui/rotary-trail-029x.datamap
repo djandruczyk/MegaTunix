@@ -54,8 +54,36 @@ handler=_GENERIC_
 use_color=TRUE
 tooltip=The Rotary Trailing Entries are the values of Rotary Trailing in degrees that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
-#----- Widgets ----------------------------------------------------------------
+#----- Gauges --------------------------------------------------------------
 
+[gaugeframe1]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=10
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=rpm
+
+[gaugeframe2]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=10
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
+datasource=tpsadc
+
+[gaugeframe3]
+keys=page,post_function_with_arg,gaugexml,datasource,table_num
+key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
+page=1
+table_num=10
+post_function_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
+datasource=mapkpa
+
+#----- Widgets ----------------------------------------------------------------
 
 [topframe]
 keys=page,tab_ident,table_num
