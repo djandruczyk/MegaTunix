@@ -270,7 +270,10 @@ gchar * choose_file(MtxFileIO *data)
 	}
 #endif
 
-	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
+#if GTK_MINOR_VERSION >= 6
+	if (gtk_minor_version >= 6)
+		gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
+#endif
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
