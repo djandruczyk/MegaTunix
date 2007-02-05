@@ -95,10 +95,10 @@ LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments,msnedis-3.0.x
 TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,msnedis-3.0.x_ignition,vetable_8x8e-BnG,sparktable_8x8e-EDIS,tools,warmupwizard,raweditor
 
 [lookuptables]
-tables=mat_table,clt_table,nbo2_table,wbo2_table,115_map,250_map
+tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map
 mat_table=matfactor.inc
 clt_table=cltfactor.inc
 nbo2_table=NBafr100.inc
 wbo2_table=DIYWB.inc
-115_map=kpafactor.inc
-250_map=kpafactor.inc
+na_map=kpafactor4115.inc
+boosted_map=kpafactor4250.inc

@@ -319,7 +319,7 @@ void draw_ve_marker()
 	static GdkColor ** old_colors = NULL;
 	static GdkColor ** old_fg = NULL;
 	static GdkColor color= { 0, 0,16384,16384};
-	extern GdkColor white;
+	//extern GdkColor white;
 	GdkColor newcolor;
 	gfloat value = 0.0;
 	extern gint **ms_data;
@@ -412,7 +412,7 @@ void draw_ve_marker()
 		{
 			bin[0] = -1;
 			bin[1] = 0;
-			left_w = 1;
+			left_w = 0;
 			right_w = 1;
 			break;
 		}
@@ -434,7 +434,7 @@ void draw_ve_marker()
 			bin[0] = i+1;
 			bin[1] = -1;
 			left_w = 1;
-			right_w = 1;
+			right_w = 0;
 		}
 	}
 //	printf("left bin %i, right bin %i, left_weight %f, right_weight %f\n",bin[0],bin[1],left_w,right_w);
@@ -452,7 +452,7 @@ void draw_ve_marker()
 			bin[2] = -1;
 			bin[3] = 0;
 			top_w = 1;
-			bottom_w = 1;
+			bottom_w = 0;
 			break;
 		}
 		bottom = evaluator_evaluate_x(eval[table][1],ms_data[page][base+i]);
@@ -472,7 +472,7 @@ void draw_ve_marker()
 		{
 			bin[2] = i+1;
 			bin[3] = -1;
-			top_w = 1;
+			top_w = 0;
 			bottom_w = 1;
 		}
 	}
@@ -481,15 +481,15 @@ void draw_ve_marker()
 	z_weight[2] = right_w*bottom_w;
 	z_weight[3] = right_w*top_w;
 
-	/* Cheap hack to see if things changed, if not don't waste CPU time inside
-	 * of pango changing the color unnecessarily
+	/* Cheap hack to see if things changed, if not don't 
+	 * waste CPU time inside of pango changing the color unnecessarily
 	 * */
 
 	if (forced_update)
 		goto redraw;
 	for (i=0;i<4;i++)
 	{
-		if (fabs(z_weight[i]-last_z_weight[i]) > 0.03)
+		if ((fabs(z_weight[i]-last_z_weight[i]) > 0.03))
 			goto redraw;
 	}
 	for (i=0;i<4;i++)
@@ -533,9 +533,11 @@ redraw:
 					gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&newcolor);
 				}
 				else
+				{
 					gtk_widget_modify_base(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+				}
 
-				gtk_widget_modify_fg(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_fg[table][last[table][i]]);
+//				gtk_widget_modify_fg(GTK_WIDGET(last_widgets[table][last[table][i]]),GTK_STATE_NORMAL,&old_fg[table][last[table][i]]);
 				last_widgets[table][last[table][i]] = NULL;
 				//	}
 				//}
@@ -553,6 +555,9 @@ redraw:
 			heaviest = i;
 		}
 	}
+	for (i=0;i<4;i++)
+		last_z_weight[i] = z_weight[i];
+
 	for (i=0;i<4;i++)
 	{
 		if (z_bin[i] == -1)
@@ -575,8 +580,7 @@ redraw:
 		color.green = (1.0-z_weight[i])*65535 +0;
 		color.blue = (1.0-z_weight[i])*32768 +0;
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
-		gtk_widget_modify_fg(GTK_WIDGET(widget),GTK_STATE_NORMAL,&white);
-		last_z_weight[i] = z_weight[i];
+//		gtk_widget_modify_fg(GTK_WIDGET(widget),GTK_STATE_NORMAL,&white);
 	}
 
 }

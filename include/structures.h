@@ -204,19 +204,6 @@ struct Rt_Text
 
 
 /*! 
- \brief the Default_Limits struct maps field names to limits. used for 
- importing datalogs from megatune mainly as that peice of work 
- uses different field names per log type/version.
- */
-struct Default_Limits
-{
-	gchar *field;		/*! Field name */
-	gfloat lower;		/*! Lower Limit */
-	gfloat upper;		/*! Upper Limit */
-};
-
-
-/*! 
  \brief The Log_Info datastructure is populated when a datalog file is opened
  for viewing in the Datalog viewer.
  */

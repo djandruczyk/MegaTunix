@@ -74,13 +74,14 @@ resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
 
 #megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@  -L../custom-widgets -lmtxcustom -L../mtxmatheval -lmtxmatheval -lfl
-megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxgauge.la @EXTRA_LIBS@ @WIN32_RESOURCES@
+megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxgauge.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
 
 megatunix_LDFLAGS = 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
 AM_CFLAGS = $(COMMON_FLAGS) -Wall 
+AM_CPPFLAGS = $(COMMON_FLAGS) -Wall 
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
