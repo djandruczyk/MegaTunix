@@ -183,7 +183,6 @@ include/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
-gaugedesigner.iss
 gaugedesigner/resources.rc
 gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
