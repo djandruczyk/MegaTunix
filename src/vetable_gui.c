@@ -24,6 +24,7 @@
 #include <math.h>
 #include <req_fuel.h>
 #include <rtv_processor.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <structures.h>
 #include <threads.h>
