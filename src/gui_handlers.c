@@ -82,7 +82,7 @@ volatile gboolean leaving = FALSE;
  \param widget (GtkWidget *) unused
  \param data (gpointer) unused
  */
-void leave(GtkWidget *widget, gpointer data)
+EXPORT void leave(GtkWidget *widget, gpointer data)
 {
 	extern GHashTable *dynamic_widgets;
 	extern gint dispatcher_id;
@@ -2234,5 +2234,12 @@ EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 		forced_update = TRUE;
 	}
 	g_strfreev(vector);
+	return TRUE;
+}
+
+
+
+EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
+{
 	return TRUE;
 }

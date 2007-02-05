@@ -479,6 +479,7 @@ offset=26
 group=triggers
 
 [trigger_spin_3]
+keys=offset
 key_types=_INT_
 offset=27
 group=triggers

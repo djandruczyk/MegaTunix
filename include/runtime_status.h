@@ -20,7 +20,6 @@
 
 /* Prototypes */
 void load_status(void );
-gboolean prevent_close(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif

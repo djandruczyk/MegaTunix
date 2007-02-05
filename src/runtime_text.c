@@ -17,6 +17,7 @@
 #include <getfiles.h>
 #include <glade/glade-xml.h>
 #include <glib.h>
+#include <gui_handlers.h>
 #include <runtime_status.h>
 #include <runtime_text.h>
 #include <stdio.h>

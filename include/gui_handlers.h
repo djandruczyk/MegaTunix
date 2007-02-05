@@ -14,10 +14,12 @@
 #ifndef __GUI_HANDLERS_H__
 #define __GUI_HANDLERS_H__
 
+#include <defines.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void leave(GtkWidget *, gpointer);
+EXPORT gboolean prevent_close(GtkWidget *, gpointer );
+EXPORT void leave(GtkWidget *, gpointer);
 EXPORT gboolean comm_port_change(GtkEditable *);
 EXPORT gboolean std_button_handler(GtkWidget *, gpointer);
 EXPORT gboolean std_entry_handler(GtkWidget *, gpointer);

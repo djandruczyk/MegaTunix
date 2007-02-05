@@ -19,6 +19,7 @@
 #include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
+#include <gui_handlers.h>
 #include <runtime_status.h>
 #include <structures.h>
 #include <widgetmgmt.h>
@@ -188,7 +189,3 @@ void load_status(void)
 	return;
 }
 
-gboolean prevent_close(GtkWidget *widget, gpointer data)
-{
-	return TRUE;
-}
