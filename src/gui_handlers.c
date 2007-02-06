@@ -516,6 +516,7 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	gchar *tmpbuf = NULL;
 	gchar * text = NULL;
 	gint i=0;
+	gboolean go_red = TRUE;
 	gint count = 0;
 
 	if ((paused_handlers) || (!ready))
@@ -532,8 +533,10 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	tmpbuf = g_new0(gchar,strlen(text));
 	for (i=0;i<strlen(text);i++)
 	{
-		if ((g_ascii_isdigit(text[i])) || (text[i] == '.'))
+		if ((g_ascii_isdigit(text[i])) || (text[i] == '.') || (text[i] == ','))
 			tmpbuf[count++] = text[i];
+		else
+			go_red=FALSE;
 	}
 	if ((text) && (tmpbuf))
 	{
@@ -549,7 +552,8 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 
 	g_free (tmpbuf);
 
-	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+	if (go_red)
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	return TRUE;
 }
 
@@ -597,6 +601,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	handler = (SpinButton)g_object_get_data(G_OBJECT(widget),"handler");
+	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
 	base = (gint)g_object_get_data(G_OBJECT(widget),"base");
