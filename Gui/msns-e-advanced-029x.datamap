@@ -408,33 +408,36 @@ tooltip=Enables the use of constant Baro correction. NOTE: THIS REQUIRES the fit
 
 #----- Spinbuttons ----------------------------------------------------------
 
-[barocorr_max_adc_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[barocorr_max_adc_entry]
+keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=82
+base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The upper limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
-[barocorr_min_adc_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[barocorr_min_adc_entry]
+keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=83
+base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The lower limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
-[soft_revlimit_rpm_spin]
-keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[soft_revlimit_rpm_entry]
+keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=2
+base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=1
@@ -443,11 +446,14 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The soft revlimit point where only spark is retarded to try to limit engien RPM.
 
-[soft_revlimit_sparkangle_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[soft_revlimit_sparkangle_entry]
+keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=3
+base=10
+is_float=TRUE
+precision=2
 dl_conv_expr=(x/(352/1000))+(284/10)
 ul_conv_expr=(x-(284/10))*(352/1000)
 bind_to_list=spark_controls
@@ -455,11 +461,14 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The spark advance to run on the soft revlimiter.
 
-[soft_revlimit_max_time_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[soft_revlimit_max_time_entry]
+keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=157
+base=10
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 bind_to_list=spark_controls
@@ -467,22 +476,24 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Amount of time to run on the soft limitera. If this timeout is exceeded the hard limiter will kick in, even if hte hard revlimit RPM has not yet been reached.
 
-[hard_revlimit_rpm_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[hard_revlimit_rpm_entry]
+keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=6
+base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Hard revlimiter RPM threshold.  when this is exceeded the hard revlimit params take effect whether that be spark drop, fuel drop or both.
 
-[hard_spark_base_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[hard_spark_base_entry]
+keys=page,offset,base,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=78
+base=10
 dl_conv_expr=x+1
 ul_conv_expr=x-1
 raw_upper=20
@@ -491,78 +502,86 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the round robin spark drop routine.  Typically you should set this to one MORE than the total number of cylinders the engine has.
 
-[hard_spark_cut_spin]
-keys=page,offset,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[hard_spark_cut_entry]
+keys=page,offset,base,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=45
+base=10
 raw_upper=20
 bind_to_list=spark_controls,nonedis_controls,limit_spark_ctrls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the number of sparks to drop for ever number of sparks in the Base sparks variable above,  so if you have a 4 cyle engine set base sparks to 5 and this to one, it'll do an evenly balanced round robin spark drop. Use a higher number for more spark drop and more engien power cutoff.
 
-[staging_transition_spin]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[staging_transition_entry]
+keys=page,offset,base,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=80
+base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This sets the threshold point at which to enable injector staging. This is a raw units control, and thus is either "RPM/100", "KPa" or "TPSADC" as selected by the above buttons.
 
-[staging_off_delta_spin]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[staging_off_delta_entry]
+keys=page,offset,base,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=81
+base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This sets the off delta point at which to disable injector staging. This is a raw units control, and thus its units are either "RPM/100", "KPa" or "TPSADC" as selected by the above buttons.
 
-[staging_scale_spin]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[staging_scale_entry]
+keys=page,offset,base,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=79
+base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the scaling factor used for injector scaling.  This value is calculated by  dividing the total flow of the Primary injectors (on inj channel 1) by the TOTAL injector flow of both the primaries and secondaries, and then taking that quantitiy and multiplying by 512.  ((prim_flow/(prim_flow+sec_flow))*512)
 
-[staging_delay_spin]
-keys=page,offset,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[staging_delay_entry]
+keys=page,offset,base,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=179
+base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This control sets the number of engine cycles at which point staging is phased in.
 
-[sec_staging_thresh_spin]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[sec_staging_thresh_entry]
+keys=page,offset,base,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=180
+base=10
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This control sets the threshold where the manifold pressure needs to be exceeded along with the above staging params to enable injector staging.
 
-[sec_staging_delta_spin]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[sec_staging_delta_entry]
+keys=page,offset,base,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=181
+base=10
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This control sets the Off delta where the manifold pressure needs to drop by this amount below the above threshold before injector staging is turned off.
 
-[orfc_rpm_spin]
-keys=page,offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[orfc_rpm_entry]
+keys=page,offset,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=71
+base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=10
@@ -571,11 +590,12 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.
 
-[orfc_map_spin]
-keys=page,offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[orfc_map_entry]
+keys=page,offset,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=72
+base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_lower=0
@@ -584,11 +604,12 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.  This value is in KPa.
 
-[orfc_tps_spin]
-keys=page,offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[orfc_tps_entry]
+keys=page,offset,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=73
+base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_lower=0
@@ -597,11 +618,12 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in RAW ADC counts
 
-[orfc_clt_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,temp_dep,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_STRING_
+[orfc_clt_entry]
+keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,temp_dep,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=182
+base=10
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
@@ -610,11 +632,12 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in Degrees (check general tab for temp scale in use )
 
-[orfc_time_spin]
-keys=page,offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[orfc_time_entry]
+keys=page,offset,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=130
+base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_lower=0
