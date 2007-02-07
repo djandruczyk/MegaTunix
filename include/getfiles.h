@@ -21,9 +21,10 @@ typedef struct _MtxFileIO MtxFileIO;
 struct _MtxFileIO
 {
 	GtkFileChooserAction action;	/* Action, save,open, etc.. */
-	gchar *filter;			/* File filter string */
-	gchar *stub_path;		/* starting path to set filesel to */
-	gchar **shortcut_folders;	/* CSV list of ADDITIONAL shortcut 
+	gchar *filter;			/* CSV pairs of File filter string */
+	gchar *default_path;		/* default path to set filesel to */
+	gchar *external_path;		/* external path rel to homedir */
+	gchar *shortcut_folders;	/* CSV list of ADDITIONAL shortcut 
 					   folders */
 	gchar *filename;		/* Filename to save (save ONLY) */
 	gchar *title;			/* Choser title */

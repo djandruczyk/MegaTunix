@@ -440,7 +440,7 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	extern GHashTable *dynamic_widgets;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->stub_path = g_strdup("MTX_Datalogs");
+	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for datalog export");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
@@ -477,7 +477,7 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	GIOChannel *iochannel = NULL;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->stub_path = g_strdup("MTX_Datalogs");
+	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for internal datalog export");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 

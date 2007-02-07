@@ -18,54 +18,22 @@ extern GtkWidget *gauge;
 
 EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *dialog = NULL;
-	extern gchar *cwd;
-#ifndef __WIN32__
-	gchar * tmpbuf = NULL;
-#endif
-	gchar * p_dir = NULL;
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
+
 	if (hold_handlers)
 		return TRUE;
 
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->default_path = g_strdup("Gauges");
+	fileio->title = g_strdup("Select Gauge to Open");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
+	fileio->shortcut_folders = g_strdup("Gauges");
 
-	dialog = gtk_file_chooser_dialog_new ("Open File",
-			NULL,
-			GTK_FILE_CHOOSER_ACTION_OPEN,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-			NULL);
-	p_dir = g_strconcat(HOME(),PSEP,".MegaTunix",PSEP,GAUGES_DATA_DIR,NULL);
-#ifndef __WIN32__
-	/* System wide dir */
-	/* UNIX */
-	tmpbuf = g_strconcat(DATA_DIR,PSEP,GAUGES_DATA_DIR,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
-	if (!cwd)
-		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),tmpbuf);
-	else
-		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),cwd);
-	g_free(tmpbuf);
-#else
-	/* Windows */
-	if (!cwd)
-		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),p_dir);
-	else
-		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),cwd);
-#endif
-	/* Personal dir */
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),p_dir,NULL);
-	g_free(p_dir);
-	setup_file_filters(GTK_FILE_CHOOSER(dialog));
-
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
-#endif
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+	filename = choose_file(fileio);
+	if (filename)
 	{
-		gchar *filename;
-
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if (!gauge)
 			create_new_gauge(widget,NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
@@ -73,11 +41,9 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 		update_attributes();
 		update_onscreen_ranges();
 		update_onscreen_tblocks();
-
 		g_free (filename);
 	}
-	if (GTK_IS_WIDGET(dialog))
-		gtk_widget_destroy (dialog);
+	free_mtxfileio(fileio);
 	return TRUE;
 }
 
@@ -90,12 +56,11 @@ EXPORT gboolean save_as_handler(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *dialog = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
 	gchar **vector = NULL;
-	extern gchar *cwd;
+	MtxFileIO *fileio = NULL;
 
 	if (!MTX_IS_GAUGE_FACE(gauge))
 		return FALSE;
@@ -105,80 +70,29 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 
 	defdir = g_build_path(PSEP,HOME(), ".MegaTunix",GAUGES_DATA_DIR, NULL);
 
-	dialog = gtk_file_chooser_dialog_new ("Save File",
-			NULL,
-			GTK_FILE_CHOOSER_ACTION_SAVE,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-			NULL);
-	setup_file_filters(GTK_FILE_CHOOSER(dialog));
-#if GTK_MINOR_VERSION >= 8
-	if (gtk_minor_version >= 8)
-		gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-#endif
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->title = g_strdup("Save Dashboard to File");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
+	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
 
 	filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge));
-	if ((filename != NULL) && ((gint)data == FALSE)) /* Saving PRE-existin*/
+	fileio->filename = filename;
+	tmpbuf = g_strrstr(filename,"Gauges");
+	vector = g_strsplit(tmpbuf,PSEP,-1);
+	if (g_strv_length(vector) == 3) /* Themed gauge */
+		fileio->default_path = g_build_path(PSEP,GAUGES_DATA_DIR,vector[1],NULL);
+	else if (g_strv_length(vector) == 2)
+		fileio->default_path = g_strdup(GAUGES_DATA_DIR);
+	g_strfreev(vector);
+
+	filename = choose_file(fileio);
+	if (filename)
 	{
-		if (g_open(filename,O_RDWR,O_CREAT|O_APPEND) == -1)
-		{
-			/* Path was sys path, save locally (UNIX ONLY)*/
-			tmpbuf = g_strrstr(filename,"Gauges");
-			/*get pointer to point after sys path */
-			vector = g_strsplit(tmpbuf,PSEP,-1);
-			if (g_strv_length(vector) == 3) /* Themed gauge */
-			{
-				tmpbuf = g_build_path(PSEP,defdir,vector[1],NULL);
-				if (!g_file_test(tmpbuf,G_FILE_TEST_IS_DIR))
-					g_mkdir(tmpbuf,0755);
-				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),tmpbuf);
-				g_free(tmpbuf);
-				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[2]);
-
-			}
-			if (g_strv_length(vector) == 2) /* NOT Themed gauge */
-			{
-				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
-				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[1]);
-			}
-			g_strfreev(vector);
-		}
-		else
-		{
-			if (cwd != NULL)
-			{
-				vector = g_strsplit(filename,PSEP,-1);
-				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),cwd);
-				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
-				g_strfreev(vector);
-			}
-			else
-				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
-		}
+		mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),filename);
+		g_free (filename);
 	}
-	else	/* NEW Document (Save As) */
-	{
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
-		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog),"New_Gauge.xml");
-	}
-	g_free(filename);
-	g_free(defdir);
-
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
-#endif
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-	{
-		gchar *tmp;
-
-		tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-		mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),tmp);
-
-		g_free (tmp);
-	}
-	if (GTK_IS_WIDGET(dialog))
-		gtk_widget_destroy (dialog);
+	free_mtxfileio(fileio);
 	return TRUE;
 
 }

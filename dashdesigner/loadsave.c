@@ -11,47 +11,24 @@
 
 EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *dialog = NULL;
-#ifndef __WIN32__
-	gchar * tmpbuf = NULL;
-#endif
-	gchar * p_dir = NULL;
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
 
-	dialog = gtk_file_chooser_dialog_new ("Open File",
-			NULL,
-			GTK_FILE_CHOOSER_ACTION_OPEN,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-			NULL);
-	p_dir = g_strconcat(HOME(),PSEP,".MegaTunix",PSEP,DASHES_DATA_DIR,NULL);
-#ifndef __WIN32__
-	/* System wide dir */
-	tmpbuf = g_strconcat(DATA_DIR,PSEP,DASHES_DATA_DIR,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),tmpbuf);
-	g_free(tmpbuf);
-#else
-	printf("setting current folder to %s\n",p_dir);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),p_dir);
-#endif
-	/* Personal dir */
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),p_dir,NULL);
-	g_free(p_dir);
-	setup_file_filters(GTK_FILE_CHOOSER(dialog));
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->default_path = g_strdup("Dashboards");
+	fileio->title = g_strdup("Select Dashboard to Open");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
+	fileio->shortcut_folders = g_strdup("Dashboards");
 
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
-#endif
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+
+	filename = choose_file(fileio);
+	if (filename)
 	{
-		gchar *filename;
-
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		import_dash_xml(filename);
 		g_free (filename);
 	}
-	gtk_widget_destroy (dialog);
+	free_mtxfileio(fileio);
 	return TRUE;
 }
 
@@ -64,90 +41,36 @@ EXPORT gboolean save_as_handler(GtkWidget *widget, gpointer data)
 
 EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 {
+	MtxFileIO *fileio = NULL;
 	extern GladeXML *main_xml;
-	GtkWidget *dash;
-	GtkWidget *dialog = NULL;
-	gchar * filename = NULL;
-	gchar *defdir = NULL;
+	gchar *filename = NULL;
 	gboolean result = FALSE;
-#ifndef __WIN32__
-	gchar *tmpbuf = NULL;
-	gchar **vector = NULL;
-	extern gchar *cwd;
-#endif
+	GtkWidget *dash;
+
 
 	dash = glade_xml_get_widget(main_xml,"dashboard");
 	result = check_datasources_set(dash);
 	if (!result)
 		return FALSE;
 
-	defdir = g_strconcat(HOME(),PSEP, ".MegaTunix",PSEP,DASHES_DATA_DIR, NULL);
-
-	dialog = gtk_file_chooser_dialog_new ("Save File",
-			NULL,
-			GTK_FILE_CHOOSER_ACTION_SAVE,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-			NULL);
-	setup_file_filters(GTK_FILE_CHOOSER(dialog));
-#if GTK_MINOR_VERSION >= 8
-	if (gtk_minor_version >= 8)
-		gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
-#endif
 
 	filename = g_object_get_data(G_OBJECT(dash),"dash_xml_filename");
-	if ((filename != NULL) && ((gint)data == FALSE)) /* Saving PRE-existin*/
-	{
-#ifdef __WIN32__
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
-#else
-		/* Check to see if file is a SYSTEM file,  if so we can't 
-		 * write there so jump to suers personal stash instead....
-		 */
-		if (g_strrstr(filename,DATA_DIR) != NULL)
-		{
-			vector = g_strsplit(filename,PSEP,-1);
-			tmpbuf = g_strconcat(defdir,PSEP,vector[g_strv_length(vector)-1],NULL);
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
-			g_strfreev(vector);
-			g_free(tmpbuf);
 
-		}
-		else
-		{
-			if (cwd != NULL)
-			{
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->default_path = g_strdup("Dashboards");
+	fileio->filename = filename;
+	fileio->title = g_strdup("Save Dashboard to File");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
+	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
 
-				vector = g_strsplit(filename,PSEP,-1);
-				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),cwd);
-				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
-				g_strfreev(vector);
-			}
-			else
-				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),filename);
-		}
-#endif
-	}
-	else	/* NEW Document (Save As) */
-	{
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
-		gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "NEW_DASH_NAME.xml");
-	}
-	g_free(defdir);
 
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
-#endif
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+	filename = choose_file(fileio);
+	if (filename)
 	{
-		gchar *tmp;
-		tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-		export_dash_xml(tmp);
-		g_free (tmp);
+		export_dash_xml(filename);
+		g_free (filename);
 	}
-	gtk_widget_destroy (dialog);
+	free_mtxfileio(fileio);
 	return TRUE;
 
 }

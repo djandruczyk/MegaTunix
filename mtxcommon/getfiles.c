@@ -81,7 +81,11 @@ gchar ** get_files(gchar *pathstub, gchar * extension)
 	g_dir_close(dir);
 
 	syspath:
+#ifdef __WIN32__
+	parent = g_build_path(PSEP,HOME(),"dist",NULL);
+#else
 	parent = gbr_find_data_dir(DATA_DIR);
+#endif
 	path = g_build_filename(parent,pathstub,NULL);
 	g_free(parent);
 	dir = g_dir_open(path,0,NULL);
@@ -161,7 +165,11 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 	else 
 	{
 		g_free(filename);
+#ifdef __WIN32__
+		dir = g_build_path(PSEP,HOME(),"dist",NULL);
+#else
 		dir = gbr_find_data_dir(DATA_DIR);
+#endif
 		filename = g_build_filename(dir,file,NULL);
 
 		g_free(dir);
@@ -187,14 +195,17 @@ gchar * choose_file(MtxFileIO *data)
 	GtkWidget *dialog = NULL;
 	GtkFileFilter *filter = NULL;
 	gchar * path = NULL;
+	gchar * defdir = NULL;
 	gchar *filename = NULL;
+	gchar *tmpbuf = NULL;
+	gchar **vector = NULL;
 	gint i = 0;
 
 	/*
 	printf("choose_file\n");
 	printf("filter %s\n",data->filter);
 	printf("filename %s\n",data->filename);
-	printf("stub_path %s\n",data->stub_path);
+	printf("default_path %s\n",data->default_path);
 	printf("title %s\n",data->title);
 	*/
 	if (!data->title)
@@ -208,15 +219,55 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				NULL);
+		if (data->default_path)
+		{
+#ifdef __WIN32__	/* Disallows modifying distributed files */
+			path = g_build_path(PSEP,HOME(),"dist",data->default_path,NULL);
+#else
+			path = g_build_path(PSEP,DATA_DIR,data->default_path,NULL);
+#endif
+			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
+			g_free(path);
+		}
 	}
 	else if (data->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
+
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				NULL,
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-				NULL);
+				NULL);	
+		defdir = g_build_path(PSEP,HOME(), ".MegaTunix",data->default_path, NULL);
+		if (!g_file_test(defdir,G_FILE_TEST_IS_DIR))
+			g_mkdir(defdir,0755);
+		/* If filename passed check/adj path */
+		if (data->filename)
+		{
+#ifdef __WIN32__	/* Disallows modifying distributed files */
+			if (g_strrstr(data->filename,"dist") != NULL)
+#else
+				if (g_strrstr(data->filename,DATA_DIR) != NULL)
+#endif
+				{
+					vector = g_strsplit(data->filename,PSEP,-1);
+					tmpbuf = g_strconcat(defdir,PSEP,vector[g_strv_length(vector)-1],NULL);
+					gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
+					gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
+					g_strfreev(vector);
+					g_free(tmpbuf);
+
+				}
+				else
+					gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),data->filename);
+		}
+		else
+		{
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
+			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled.xml");
+		}
+
 	}
 	else
 		return NULL;
@@ -224,42 +275,51 @@ gchar * choose_file(MtxFileIO *data)
 	if (data->shortcut_folders)
 	{
 		
-		for (i=0;i<g_strv_length(data->shortcut_folders);i++)
+		vector = g_strsplit(data->shortcut_folders,",",-1);
+		for (i=0;i<g_strv_length(vector);i++)
 		{
-#ifndef __WIN32__
-			path = g_build_path(PSEP,DATA_DIR,data->shortcut_folders[i],NULL);
+			/* For differences in system path between win32/unix */
+#ifdef __WIN32__
+			path = g_build_path(PSEP,HOME(),"dist",vector[i],NULL);
+#else
+			path = g_build_path(PSEP,DATA_DIR,vector[i],NULL);
+#endif
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
-#endif
-			path = g_build_path(PSEP,HOME(),".MegaTunix",data->shortcut_folders[i],NULL);
+			path = g_build_path(PSEP,HOME(),".MegaTunix",vector[i],NULL);
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
 		}
+		g_strfreev(vector);
 	}
-	/* If stub path switch to that place */
-	if (data->stub_path)
+	/* If default path switch to that place */
+	if ((data->external_path) && (!(data->default_path)))
 	{
-		path = g_build_path(PSEP,HOME(),data->stub_path,NULL);
+		path = g_build_path(PSEP,HOME(),data->external_path,NULL);
 		if (!g_file_test(path,G_FILE_TEST_IS_DIR))
 			g_mkdir(path,0755);
 		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
 		g_free(path);
+
 	}
-	else
-		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),HOME());
 
 	/* If filters, assign them */
 	if (data->filter)
 	{
-		filter = gtk_file_filter_new();
-		gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),"*.*");
-		gtk_file_filter_set_name(GTK_FILE_FILTER(filter),"All Files");
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
-		filter = gtk_file_filter_new();
-		gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),data->filter);
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
+		vector = g_strsplit(data->filter,",",-1);
+		if (g_strv_length(vector)%2 > 0)
+			goto afterfilter;
+		for (i=0;i<g_strv_length(vector);i+=2)
+		{
+			filter = gtk_file_filter_new();
+			gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),vector[i]);
+			gtk_file_filter_set_name(GTK_FILE_FILTER(filter),vector[i+1]);
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
+		}
 		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),filter);
+		g_strfreev(vector);
 	}
+	afterfilter:
 	/* Turn on overwriteconfirmation */
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
@@ -316,7 +376,6 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 		{
 			gtk_widget_destroy(dialog);
 			result = g_remove(filename);
-			if (result == 0)
 				return GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
 		}
 		else
@@ -338,11 +397,13 @@ void free_mtxfileio(MtxFileIO *data)
 		g_free(data->title);
 	if (data->filename)
 		g_free(data->filename);
-	if (data->stub_path)
-		g_free(data->stub_path);
+	if (data->external_path)
+		g_free(data->external_path);
+	if (data->default_path)
+		g_free(data->default_path);
 	if (data->filter)
 		g_free(data->filter);
 	if (data->shortcut_folders)
-		g_strfreev(data->shortcut_folders);
+		g_free(data->shortcut_folders);
 	return;
 }

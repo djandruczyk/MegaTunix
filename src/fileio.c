@@ -48,11 +48,10 @@ EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->stub_path = g_strdup("MTX_ecu_snapshots");
+	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->title = g_strdup("Save your ECU Settings to file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
-	fileio->shortcut_folders = g_new0(gchar *, 1);
-	fileio->shortcut_folders[0] = g_strdup("ecu_snapshots");
+	fileio->shortcut_folders = g_strdup("MTX_ecu_snapshots");
 
 	filename = choose_file(fileio);
 	if (filename == NULL)
@@ -80,13 +79,10 @@ EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->stub_path = g_strdup("MTX_ecu_snapshots");
+	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->title = g_strdup("Restore your ECU Settings from which file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
-	fileio->shortcut_folders = g_new0(gchar *, 2);
-	fileio->shortcut_folders[0] = g_strdup("ecu_snapshots");
-	fileio->shortcut_folders[1] = g_strdup("MTX_ecu_snapshots");
-
+	fileio->shortcut_folders = g_strdup("MTX_ecu_snapshots");
 
 	filename = choose_file(fileio);
 	if (filename == NULL)

@@ -434,7 +434,7 @@ void initialize_dashboards()
 	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_1_label");
 	if ((GTK_IS_LABEL(label)) && (cluster_1_name != NULL) && (g_ascii_strcasecmp(cluster_1_name,"") != 0))
 	{
-		//printf("cluster_1_name is \"%s\"\n",cluster_1_name);
+		printf("cluster_1_name is \"%s\"\n",cluster_1_name);
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_1_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_1_name),GINT_TO_POINTER(1));
 	}
@@ -442,7 +442,7 @@ void initialize_dashboards()
 	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_2_label");
 	if ((GTK_IS_LABEL(label)) && (cluster_2_name != NULL) && (g_ascii_strcasecmp(cluster_2_name,"") != 0))
 	{
-		//printf("cluster_2_name is \"%s\"\n",cluster_2_name);
+		printf("cluster_2_name is \"%s\"\n",cluster_2_name);
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_2_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_2_name),GINT_TO_POINTER(2));
 	}
@@ -451,58 +451,35 @@ void initialize_dashboards()
 
 gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *dialog = NULL;
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
 	GtkWidget *label = NULL;
-	gchar * tmpbuf = NULL;
-	gchar * filename = NULL;
-	gint response = 0;
+	extern gboolean interrogated;
+
+	if (!interrogated)
+		return FALSE;
 	extern GHashTable *dash_gauges;
 
-	dialog = gtk_file_chooser_dialog_new("Open Dashboard",
-			NULL,
-			GTK_FILE_CHOOSER_ACTION_OPEN,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-			NULL);
-#ifdef __WIN32__
-	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
-			tmpbuf);
-	g_free(tmpbuf);
-#else
-	tmpbuf = g_build_path(PSEP,DATA_DIR,DASHES_DATA_DIR,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),
-			tmpbuf);
-	g_free(tmpbuf);
-#endif
-	tmpbuf = g_build_path(PSEP,HOME(),".MegaTunix",DASHES_DATA_DIR,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),tmpbuf,NULL);
-	g_free(tmpbuf);
-	GtkFileFilter * filter = NULL;
-	filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),"*.*");
-	gtk_file_filter_set_name(GTK_FILE_FILTER(filter),"All Files");
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
-	filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),"*.xml");
-	gtk_file_filter_set_name(GTK_FILE_FILTER(filter),"XML Files");
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
-	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),filter);
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->default_path = g_strdup("Dashboards");
+	fileio->title = g_strdup("Select Dashboard to Open");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
+	fileio->shortcut_folders = g_strdup("Dashboards");
 
-	response = gtk_dialog_run (GTK_DIALOG (dialog));
-	if (response == GTK_RESPONSE_ACCEPT)
+
+	filename = choose_file(fileio);
+	if (filename)
 	{
-
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if (dash_gauges)
 			g_hash_table_foreach_remove(dash_gauges,remove_dashcluster,data);
 		label = g_object_get_data(G_OBJECT(widget),"label");
-		gtk_label_set_text(GTK_LABEL(label),filename);
+		if (GTK_IS_LABEL(label))
+			gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(filename,-1,NULL,NULL,NULL));
 		load_dashboard(filename,data);
 	}
 
-	gtk_widget_destroy (dialog);
+	free_mtxfileio(fileio);
 
 	return TRUE;
 }

@@ -68,7 +68,7 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->stub_path = g_strdup("MTX_VexFiles");
+	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
@@ -108,7 +108,7 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->stub_path = g_strdup("MTX_VexFiles");
+	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Select your VEX file to import");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 

@@ -115,7 +115,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		exit (-1);
 	}
 #ifdef __WIN32__
-	path = g_build_path(PSEP,HOME(),".MegaTunix",GAUGES_DATA_DIR,NULL);
+	path = g_build_path(PSEP,HOME(),"dist",GAUGES_DATA_DIR,NULL);
 #else
 	path = g_build_path(PSEP,DATA_DIR,GAUGES_DATA_DIR,NULL);
 #endif

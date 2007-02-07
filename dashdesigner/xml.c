@@ -53,6 +53,20 @@ void import_dash_xml(gchar * filename)
 	load_elements(dash,root_element);
 
 	g_object_set_data(G_OBJECT(dash),"dash_xml_filename",g_strdup(filename));
+	/*free the document */
+	xmlFreeDoc(doc);
+
+	/*
+	 *Free the global variables that may
+	 *have been allocated by the parser.
+	 */
+	xmlCleanupParser();
+
+	/*
+	 * this is to debug memory for regression tests
+	 */
+	xmlMemoryDump();
+
 	return ;
 }
 

@@ -48,7 +48,7 @@ EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->stub_path = g_strdup("MTX_Datalogs");
+	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a datalog to view");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 

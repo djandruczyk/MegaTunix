@@ -161,7 +161,8 @@ gboolean cfg_read_string(ConfigFile * cfg, gchar * section, gchar * key, gchar *
 		return FALSE;
 	if (!(line = cfg_find_string(sect, key)))
 		return FALSE;
-	*value = g_strdup(line->value);
+	//*value = g_strdup(line->value);
+	*value = g_strcompress(line->value);
 	return TRUE;
 }
 
@@ -436,10 +437,13 @@ static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value)
 {
 	ConfigLine *line;
+	gchar * tmpbuf = NULL;
 
 	line = g_malloc0(sizeof (ConfigLine));
 	line->key = g_strchug(g_strchomp(g_strdup(key)));
-	line->value = g_strchug(g_strchomp(g_strdup(value)));
+	tmpbuf = g_strchug(g_strchomp(g_strdup(value)));
+	line->value = g_strescape(tmpbuf,NULL);
+	g_free(tmpbuf);
 	section->lines = g_list_prepend(section->lines, line);
 
 	return line;
