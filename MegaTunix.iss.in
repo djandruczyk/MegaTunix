@@ -26,7 +26,7 @@ Source: "z:\home\dave\cvs\MegaTunix\widgets\demo.exe"; DestDir: "{app}"
 Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.exe"; DestDir: "{app}"
 Source: "z:\home\dave\cvs\MegaTunix\dashdesigner\dashdesigner.exe"; DestDir: "{app}"
 ; Source: "z:\home\dave\win32\config"; DestDir: "{app}\.MegaTunix"
-Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs
+Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Permissions: everyone-readonly Flags: recursesubdirs
 
 [Icons]
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
