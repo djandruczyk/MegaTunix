@@ -39,6 +39,11 @@
  needed data to properly do the rescaling.
  */
 static gboolean color_changed = FALSE;
+enum
+{
+	_X_=0,
+	_Y_
+};
 
 void rescale_table(GtkWidget *widget)
 {
@@ -395,13 +400,13 @@ void draw_ve_marker()
 	else
 		lookup_current_value(firmware->table_params[table]->x_source,&x_source);
 
-	if ((!eval[table][0]) && (firmware->table_params[table]->x_conv_expr))
+	if ((!eval[table][_X_]) && (firmware->table_params[table]->x_conv_expr))
 	{
-		eval[table][0] = evaluator_create(firmware->table_params[table]->x_conv_expr);
+		eval[table][_X_] = evaluator_create(firmware->table_params[table]->x_conv_expr);
 	}
-	if ((!eval[table][1]) && (firmware->table_params[table]->y_conv_expr))
+	if ((!eval[table][_Y_]) && (firmware->table_params[table]->y_conv_expr))
 	{
-		eval[table][1] = evaluator_create(firmware->table_params[table]->y_conv_expr);
+		eval[table][_Y_] = evaluator_create(firmware->table_params[table]->y_conv_expr);
 	}
 
 	/* Find bin corresponding to current rpm  */
@@ -409,7 +414,7 @@ void draw_ve_marker()
 	{
 		page = firmware->table_params[table]->x_page;
 		base = firmware->table_params[table]->x_base;
-		if (evaluator_evaluate_x(eval[table][0],ms_data[page][base]) >= x_source)
+		if (evaluator_evaluate_x(eval[table][_X_],ms_data[page][base]) >= x_source)
 		{
 			bin[0] = -1;
 			bin[1] = 0;
@@ -417,8 +422,8 @@ void draw_ve_marker()
 			right_w = 1;
 			break;
 		}
-		left = evaluator_evaluate_x(eval[table][0],ms_data[page][base+i]);
-		right = evaluator_evaluate_x(eval[table][0],ms_data[page][base+i+1]);
+		left = evaluator_evaluate_x(eval[table][_X_],ms_data[page][base+i]);
+		right = evaluator_evaluate_x(eval[table][_X_],ms_data[page][base+i+1]);
 
 		if ((x_source > left) && (x_source <= right))
 		{
@@ -448,7 +453,7 @@ void draw_ve_marker()
 	{
 		page = firmware->table_params[table]->y_page;
 		base = firmware->table_params[table]->y_base;
-		if (evaluator_evaluate_x(eval[table][1],ms_data[page][base]) >= y_source)
+		if (evaluator_evaluate_x(eval[table][_Y_],ms_data[page][base]) >= y_source)
 		{
 			bin[2] = -1;
 			bin[3] = 0;
@@ -456,8 +461,8 @@ void draw_ve_marker()
 			bottom_w = 0;
 			break;
 		}
-		bottom = evaluator_evaluate_x(eval[table][1],ms_data[page][base+i]);
-		top = evaluator_evaluate_x(eval[table][1],ms_data[page][base+i+1]);
+		bottom = evaluator_evaluate_x(eval[table][_Y_],ms_data[page][base+i]);
+		top = evaluator_evaluate_x(eval[table][_Y_],ms_data[page][base+i+1]);
 
 		if ((y_source > bottom) && (y_source <= top))
 		{

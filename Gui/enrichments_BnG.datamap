@@ -150,37 +150,43 @@ bind_to_list=temperature
 
 #----- Spin Buttons ----------------------------------------------------------
 
-[cpulse_neg40_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[cpulse_neg40_entry]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=64
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[cpulse_pos170_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[cpulse_pos170_entry]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=65
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[prime_pulse_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[prime_pulse_entry]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=119
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[afterstart_enrich_%_spin]
+[afterstart_enrich_%_entry]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -188,7 +194,7 @@ offset=66
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[afterstart_enrich_numcycles_spin]
+[afterstart_enrich_numcycles_entry]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -196,7 +202,7 @@ offset=67
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_1]
+[warmup_entry_1]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -204,7 +210,7 @@ offset=68
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_2]
+[warmup_entry_2]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -212,7 +218,7 @@ offset=69
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_3]
+[warmup_entry_3]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -220,7 +226,7 @@ offset=70
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_4]
+[warmup_entry_4]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -228,7 +234,7 @@ offset=71
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_5]
+[warmup_entry_5]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -236,7 +242,7 @@ offset=72
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_6]
+[warmup_entry_6]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -244,7 +250,7 @@ offset=73
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_7]
+[warmup_entry_7]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -252,7 +258,7 @@ offset=74
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_8]
+[warmup_entry_8]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -260,7 +266,7 @@ offset=75
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_9]
+[warmup_entry_9]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -268,7 +274,7 @@ offset=76
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[warmup_spin_10]
+[warmup_entry_10]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -276,37 +282,43 @@ offset=77
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accel_tpstrigthresh_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[accel_tpstrigthresh_entry]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=83
+is_float=TRUE
+precision=1
 dl_conv_expr=x*(512/100)
 ul_conv_expr=x/(512/100)
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accel_enrich_duration_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[accel_enrich_duration_entry]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=84
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accel_cold_enrich_addon_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[accel_cold_enrich_addon_entry]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=82
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accel_cold_enrich_multiplier_spin]
+[accel_cold_enrich_multiplier_entry]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -314,47 +326,55 @@ offset=123
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accelbins_spin_1]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[accelbins_entry_1]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=78
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accelbins_spin_2]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[accelbins_entry_2]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=79
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accelbins_spin_3]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[accelbins_entry_3]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=80
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accelbins_spin_4]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[accelbins_entry_4]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=81
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[accel_decel_fuel_cut_spin]
+[accel_decel_fuel_cut_entry]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -362,7 +382,7 @@ offset=85
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[ego_active_temp_spin]
+[ego_active_temp_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,temp_dep,bind_to_list
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_,_STRING_
 page=0
@@ -374,7 +394,7 @@ handler=_GENERIC_
 temp_dep=TRUE
 bind_to_list=temperature
 
-[ego_active_rpm_spin]
+[ego_active_rpm_entry]
 keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
 key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
@@ -384,17 +404,19 @@ ul_conv_expr=x*100
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[ego_switching_voltage_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+[ego_switching_voltage_entry]
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=122
+is_float=TRUE
+precision=2
 dl_conv_expr=x*(512/10)
 ul_conv_expr=x/(512/10)
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[ego_step_percent_spin]
+[ego_step_percent_entry]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -402,7 +424,7 @@ offset=88
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[ego_ign_events_spin]
+[ego_ign_events_entry]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0
@@ -410,7 +432,7 @@ offset=87
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
-[ego_limit_spin]
+[ego_limit_entry]
 keys=page,offset,dl_type,handler
 key_types=_INT_,_INT_,_ENUM_,_ENUM_
 page=0

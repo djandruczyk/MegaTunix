@@ -1,6 +1,6 @@
 [global]
 description=Runtime Text definitions for std firmwares (B&G code)
-rtt_total=23
+rtt_total=20
 
 [rt_text_0]
 int_name=rpm
@@ -47,50 +47,38 @@ int_name=dc1
 source=dcycle1
 
 [rt_text_11]
-int_name=pw2
-source=pw2
-
-[rt_text_12]
-int_name=dc2
-source=dcycle2
-
-[rt_text_13]
 int_name=o2_volts
 source=o2volt
 
-[rt_text_14]
+[rt_text_12]
 int_name=AFR
 source=afr
 
-[rt_text_15]
+[rt_text_13]
 int_name=aircorr
 source=aircorr
 
-[rt_text_16]
+[rt_text_14]
 int_name=warmcorr
 source=warmcorr
 
-[rt_text_17]
+[rt_text_15]
 int_name=egocorr
 source=egocorr
 
-[rt_text_18]
+[rt_text_16]
 int_name=barocorr
 source=barocorr
 
-[rt_text_19]
+[rt_text_17]
 int_name=gammae
 source=gammae
 
-[rt_text_20]
+[rt_text_18]
 int_name=ve1
 source=vecurr1
 
-[rt_text_21]
-int_name=ve2
-source=vecurr2
-
-[rt_text_22]
+[rt_text_19]
 int_name=sparkangle
 source=sparkangle
 

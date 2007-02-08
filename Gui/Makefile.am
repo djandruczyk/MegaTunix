@@ -76,6 +76,7 @@ gui_files = 	README \
 		vetable_12x12x3.glade \
 		vetable_8x8e.glade \
 		vetable_8x8e-BnG.datamap \
+		vetable_8x8e-DT_1.datamap \
 		vetable_8x8e-DT_2.datamap \
 		warmupwizard.datamap \
 		warmupwizard.glade 

@@ -131,7 +131,7 @@ struct Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
 	{
-		dbg_func(g_strdup_printf(__FILE__": add_slider()\n\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
+		dbg_func(g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
 		return NULL;
 	}
 

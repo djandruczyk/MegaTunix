@@ -577,19 +577,21 @@
 					      </child>
 
 					      <child>
-						<widget class="GtkSpinButton" id="cranking_thresh_spin">
-						  <property name="width_request">55</property>
+						<widget class="GtkEntry" id="cranking_thresh_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="climb_rate">100</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">100 100 25500 100 1000 1000</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 00:46:35 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">3</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						</widget>
@@ -598,8 +600,7 @@
 						  <property name="right_attach">1</property>
 						  <property name="top_attach">1</property>
 						  <property name="bottom_attach">2</property>
-						  <property name="y_padding">2</property>
-						  <property name="x_options">expand</property>
+						  <property name="x_options"></property>
 						  <property name="y_options"></property>
 						</packing>
 					      </child>
@@ -679,19 +680,21 @@
 					      </child>
 
 					      <child>
-						<widget class="GtkSpinButton" id="hard_revlimit_spin">
-						  <property name="width_request">55</property>
+						<widget class="GtkEntry" id="hard_revlimit_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="climb_rate">100</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">100 100 25500 100 1000 1000</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 00:46:35 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">5</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						</widget>
@@ -700,8 +703,7 @@
 						  <property name="right_attach">1</property>
 						  <property name="top_attach">1</property>
 						  <property name="bottom_attach">2</property>
-						  <property name="y_padding">2</property>
-						  <property name="x_options">expand</property>
+						  <property name="x_options"></property>
 						  <property name="y_options"></property>
 						</packing>
 					      </child>
@@ -872,73 +874,21 @@
 					  <property name="column_spacing">5</property>
 
 					  <child>
-					    <widget class="GtkSpinButton" id="shift_light_upper_thresh_spin">
-					      <property name="width_request">55</property>
+					    <widget class="GtkEntry" id="launch_ctrl_revlimit_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="climb_rate">100</property>
-					      <property name="digits">0</property>
-					      <property name="numeric">True</property>
-					      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-					      <property name="snap_to_ticks">False</property>
-					      <property name="wrap">False</property>
-					      <property name="adjustment">100 100 25500 100 1000 1000</property>
-					      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 00:52:53 GMT"/>
-					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
-					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">1</property>
-					      <property name="top_attach">2</property>
-					      <property name="bottom_attach">3</property>
-					      <property name="x_options">fill</property>
-					      <property name="y_options">expand</property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkSpinButton" id="shift_light_lower_thresh_spin">
-					      <property name="width_request">55</property>
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="climb_rate">100</property>
-					      <property name="digits">0</property>
-					      <property name="numeric">True</property>
-					      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-					      <property name="snap_to_ticks">False</property>
-					      <property name="wrap">False</property>
-					      <property name="adjustment">100 100 25500 100 1000 1000</property>
-					      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 00:52:53 GMT"/>
-					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
-					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-					    </widget>
-					    <packing>
-					      <property name="left_attach">0</property>
-					      <property name="right_attach">1</property>
-					      <property name="top_attach">1</property>
-					      <property name="bottom_attach">2</property>
-					      <property name="x_options">fill</property>
-					      <property name="y_options">expand</property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkSpinButton" id="launch_ctrl_revlimit_spin">
-					      <property name="width_request">55</property>
-					      <property name="visible">True</property>
-					      <property name="can_focus">True</property>
-					      <property name="climb_rate">100</property>
-					      <property name="digits">0</property>
-					      <property name="numeric">True</property>
-					      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-					      <property name="snap_to_ticks">False</property>
-					      <property name="wrap">False</property>
-					      <property name="adjustment">100 100 25500 100 1000 1000</property>
-					      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 00:52:53 GMT"/>
-					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 					    </widget>
@@ -947,7 +897,65 @@
 					      <property name="right_attach">1</property>
 					      <property name="top_attach">0</property>
 					      <property name="bottom_attach">1</property>
-					      <property name="x_options">fill</property>
+					      <property name="x_options"></property>
+					      <property name="y_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="shift_light_lower_thresh_entry">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">1</property>
+					      <property name="bottom_attach">2</property>
+					      <property name="x_options"></property>
+					      <property name="y_options">expand</property>
+					    </packing>
+					  </child>
+
+					  <child>
+					    <widget class="GtkEntry" id="shift_light_upper_thresh_entry">
+					      <property name="visible">True</property>
+					      <property name="can_focus">True</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="editable">True</property>
+					      <property name="visibility">True</property>
+					      <property name="max_length">5</property>
+					      <property name="text" translatable="yes">0</property>
+					      <property name="has_frame">True</property>
+					      <property name="invisible_char">*</property>
+					      <property name="activates_default">False</property>
+					      <property name="width_chars">5</property>
+					      <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+					      <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+					      <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+					      <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					      <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+					    </widget>
+					    <packing>
+					      <property name="left_attach">0</property>
+					      <property name="right_attach">1</property>
+					      <property name="top_attach">2</property>
+					      <property name="bottom_attach">3</property>
+					      <property name="x_options"></property>
 					      <property name="y_options">expand</property>
 					    </packing>
 					  </child>
@@ -1209,7 +1217,6 @@ Actuator Speed</property>
 
 					  <child>
 					    <widget class="GtkTable" id="boost_ctrl_PID_table">
-					      <property name="border_width">7</property>
 					      <property name="visible">True</property>
 					      <property name="n_rows">3</property>
 					      <property name="n_columns">2</property>
@@ -1218,9 +1225,9 @@ Actuator Speed</property>
 					      <property name="column_spacing">6</property>
 
 					      <child>
-						<widget class="GtkLabel" id="diff_gain_label">
+						<widget class="GtkLabel" id="upd_rate_label">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Diff. Gain (%)</property>
+						  <property name="label" translatable="yes">Upd. Rate (ms.)</property>
 						  <property name="use_underline">False</property>
 						  <property name="use_markup">False</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1234,10 +1241,9 @@ Actuator Speed</property>
 						<packing>
 						  <property name="left_attach">0</property>
 						  <property name="right_attach">1</property>
-						  <property name="top_attach">2</property>
-						  <property name="bottom_attach">3</property>
+						  <property name="top_attach">0</property>
+						  <property name="bottom_attach">1</property>
 						  <property name="x_options">fill</property>
-						  <property name="y_options">fill</property>
 						</packing>
 					      </child>
 
@@ -1261,14 +1267,13 @@ Actuator Speed</property>
 						  <property name="top_attach">1</property>
 						  <property name="bottom_attach">2</property>
 						  <property name="x_options">fill</property>
-						  <property name="y_options">fill</property>
 						</packing>
 					      </child>
 
 					      <child>
-						<widget class="GtkLabel" id="upd_rate_label">
+						<widget class="GtkLabel" id="diff_gain_label">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Upd. Rate (ms.)</property>
+						  <property name="label" translatable="yes">Diff. Gain (%)</property>
 						  <property name="use_underline">False</property>
 						  <property name="use_markup">False</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1282,27 +1287,28 @@ Actuator Speed</property>
 						<packing>
 						  <property name="left_attach">0</property>
 						  <property name="right_attach">1</property>
-						  <property name="top_attach">0</property>
-						  <property name="bottom_attach">1</property>
+						  <property name="top_attach">2</property>
+						  <property name="bottom_attach">3</property>
 						  <property name="x_options">fill</property>
-						  <property name="y_options">fill</property>
 						</packing>
 					      </child>
 
 					      <child>
-						<widget class="GtkSpinButton" id="update_rate_spin">
-						  <property name="width_request">50</property>
+						<widget class="GtkEntry" id="update_rate_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="climb_rate">1</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">1 0 255 1 10 10</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 01:08:54 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">3</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						</widget>
@@ -1311,25 +1317,27 @@ Actuator Speed</property>
 						  <property name="right_attach">2</property>
 						  <property name="top_attach">0</property>
 						  <property name="bottom_attach">1</property>
-						  <property name="x_options">fill</property>
+						  <property name="x_options"></property>
 						  <property name="y_options"></property>
 						</packing>
 					      </child>
 
 					      <child>
-						<widget class="GtkSpinButton" id="prop_gain_spin">
-						  <property name="width_request">50</property>
+						<widget class="GtkEntry" id="prop_gain_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="climb_rate">1</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">1 0 255 1 10 10</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 01:08:54 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">3</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						</widget>
@@ -1338,25 +1346,27 @@ Actuator Speed</property>
 						  <property name="right_attach">2</property>
 						  <property name="top_attach">1</property>
 						  <property name="bottom_attach">2</property>
-						  <property name="x_options">fill</property>
+						  <property name="x_options"></property>
 						  <property name="y_options"></property>
 						</packing>
 					      </child>
 
 					      <child>
-						<widget class="GtkSpinButton" id="diff_gain_spin">
-						  <property name="width_request">50</property>
+						<widget class="GtkEntry" id="diff_gain_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="climb_rate">1</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">1 0 255 1 10 10</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Thu, 16 Sep 2004 01:08:54 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">3</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						</widget>
@@ -1365,7 +1375,7 @@ Actuator Speed</property>
 						  <property name="right_attach">2</property>
 						  <property name="top_attach">2</property>
 						  <property name="bottom_attach">3</property>
-						  <property name="x_options">fill</property>
+						  <property name="x_options"></property>
 						  <property name="y_options"></property>
 						</packing>
 					      </child>
@@ -1542,100 +1552,21 @@ Actuator Speed</property>
 					      <property name="column_spacing">5</property>
 
 					      <child>
-						<widget class="GtkSpinButton" id="slow_idle_temp_spin">
-						  <property name="width_request">55</property>
+						<widget class="GtkEntry" id="fast_idle_temp_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="climb_rate">1</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">1 -40 215 1 10 10</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Fri, 17 Sep 2004 23:29:40 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
-						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">1</property>
-						  <property name="top_attach">2</property>
-						  <property name="bottom_attach">3</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">expand</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkSpinButton" id="fast_idle_speed_spin">
-						  <property name="width_request">55</property>
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="climb_rate">10</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">1800 0 2550 10 100 100</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Fri, 17 Sep 2004 23:29:40 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
-						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">1</property>
-						  <property name="top_attach">1</property>
-						  <property name="bottom_attach">2</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">expand</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkSpinButton" id="slow_idle_speed_spin">
-						  <property name="width_request">55</property>
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="climb_rate">10</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">900 0 2550 10 100 100</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Fri, 17 Sep 2004 23:29:40 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
-						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-						</widget>
-						<packing>
-						  <property name="left_attach">0</property>
-						  <property name="right_attach">1</property>
-						  <property name="top_attach">3</property>
-						  <property name="bottom_attach">4</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">expand</property>
-						</packing>
-					      </child>
-
-					      <child>
-						<widget class="GtkSpinButton" id="fast_idle_temp_spin">
-						  <property name="width_request">55</property>
-						  <property name="visible">True</property>
-						  <property name="can_focus">True</property>
-						  <property name="climb_rate">1</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">1 -40 215 1 10 10</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Fri, 17 Sep 2004 23:29:40 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">3</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						</widget>
@@ -1644,25 +1575,114 @@ Actuator Speed</property>
 						  <property name="right_attach">1</property>
 						  <property name="top_attach">0</property>
 						  <property name="bottom_attach">1</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">expand</property>
+						  <property name="x_options"></property>
+						  <property name="y_options"></property>
 						</packing>
 					      </child>
 
 					      <child>
-						<widget class="GtkSpinButton" id="idle_tps_threshold_spin">
-						  <property name="width_request">55</property>
+						<widget class="GtkEntry" id="fast_idle_speed_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="climb_rate">1</property>
-						  <property name="digits">0</property>
-						  <property name="numeric">True</property>
-						  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-						  <property name="snap_to_ticks">False</property>
-						  <property name="wrap">False</property>
-						  <property name="adjustment">1 0 255 1 10 10</property>
-						  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Fri, 17 Sep 2004 23:29:40 GMT"/>
-						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:21:48 GMT"/>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">4</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
+						  <property name="top_attach">1</property>
+						  <property name="bottom_attach">2</property>
+						  <property name="x_options"></property>
+						  <property name="y_options"></property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkEntry" id="slow_idle_temp_entry">
+						  <property name="visible">True</property>
+						  <property name="can_focus">True</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">4</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
+						  <property name="top_attach">2</property>
+						  <property name="bottom_attach">3</property>
+						  <property name="x_options"></property>
+						  <property name="y_options"></property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkEntry" id="slow_idle_speed_entry">
+						  <property name="visible">True</property>
+						  <property name="can_focus">True</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">4</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+						</widget>
+						<packing>
+						  <property name="left_attach">0</property>
+						  <property name="right_attach">1</property>
+						  <property name="top_attach">3</property>
+						  <property name="bottom_attach">4</property>
+						  <property name="x_options"></property>
+						  <property name="y_options"></property>
+						</packing>
+					      </child>
+
+					      <child>
+						<widget class="GtkEntry" id="idle_tps_threshold_entry">
+						  <property name="visible">True</property>
+						  <property name="can_focus">True</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="editable">True</property>
+						  <property name="visibility">True</property>
+						  <property name="max_length">4</property>
+						  <property name="text" translatable="yes">0</property>
+						  <property name="has_frame">True</property>
+						  <property name="invisible_char">*</property>
+						  <property name="activates_default">False</property>
+						  <property name="width_chars">5</property>
+						  <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+						  <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+						  <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
 						  <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						  <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
 						</widget>
@@ -1671,8 +1691,8 @@ Actuator Speed</property>
 						  <property name="right_attach">1</property>
 						  <property name="top_attach">4</property>
 						  <property name="bottom_attach">5</property>
-						  <property name="x_options">fill</property>
-						  <property name="y_options">expand</property>
+						  <property name="x_options"></property>
+						  <property name="y_options"></property>
 						</packing>
 					      </child>
 					    </widget>
@@ -1696,7 +1716,7 @@ Actuator Speed</property>
 					      <child>
 						<widget class="GtkLabel" id="fast_idle_temp_label">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Fast Idle Temp</property>
+						  <property name="label" translatable="yes">Fast Idle Temp (cold)</property>
 						  <property name="use_underline">False</property>
 						  <property name="use_markup">False</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1743,7 +1763,7 @@ Actuator Speed</property>
 					      <child>
 						<widget class="GtkLabel" id="slow_idle_temp_label">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Slow Idle Temp</property>
+						  <property name="label" translatable="yes">Slow Idle Temp (hot)</property>
 						  <property name="use_underline">False</property>
 						  <property name="use_markup">False</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1791,7 +1811,7 @@ Actuator Speed</property>
 					      <child>
 						<widget class="GtkLabel" id="idle_tps_threshold_label">
 						  <property name="visible">True</property>
-						  <property name="label" translatable="yes">Idle Threshold (TPS %)</property>
+						  <property name="label" translatable="yes">Idle Threshold (TPSADC )</property>
 						  <property name="use_underline">False</property>
 						  <property name="use_markup">False</property>
 						  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1901,7 +1921,7 @@ Actuator Speed</property>
 		  <property name="column_spacing">5</property>
 
 		  <child>
-		    <widget class="GtkButton" id="dtp_burn_data_button">
+		    <widget class="GtkButton" id="burn_data_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Permanently Store Data in ECU</property>
@@ -1921,7 +1941,7 @@ Actuator Speed</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkButton" id="dtp_get_data_button">
+		    <widget class="GtkButton" id="get_data_button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Get Data from ECU</property>

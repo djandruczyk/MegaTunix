@@ -23,7 +23,7 @@ bind_to_list=burners
 
 #----- Spinbuttons ----------------------------------------------------------
 
-[staging_on_spin]
+[staging_on_entry]
 keys=page,offset,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
@@ -32,7 +32,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the value in RAW ADC counts that the throttle must be above to enable staging. This value must be HIGHER than the Staging Shutoff Point.
 
-[staging_off_spin]
+[staging_off_entry]
 keys=page,offset,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
@@ -41,7 +41,7 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the value in RAW ADC counts that the throttle must be BELOW to disdable staging. This value must be LESS than the Staging Trigger Point.
 
-[openloop_thresh_spin]
+[openloop_thresh_entry]
 keys=page,offset,dl_type,handler,tooltip
 key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0

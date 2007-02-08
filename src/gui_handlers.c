@@ -20,6 +20,7 @@
 #include <enums.h>
 #include <fileio.h>
 #include <gdk/gdkkeysyms.h>
+#include <glade/glade.h>
 #include <gui_handlers.h>
 #include <glib.h>
 #include <init.h>
@@ -1771,9 +1772,13 @@ void update_widget(gpointer object, gpointer user_data)
 			if (algo > 0)
 			{
 				tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"applicable_tables");
-				vector = g_strsplit(tmpbuf,",",-1);
-				if (!vector)
+				if (!tmpbuf)
+				{
+					dbg_func(g_strdup_printf(__FILE__": update_widget()\n\t Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n",(gchar *)glade_get_widget_name(widget)),CRITICAL);
 					goto noalgo;
+				}
+
+				vector = g_strsplit(tmpbuf,",",-1);
 				i = 0;
 				while (vector[i])
 				{
@@ -2066,7 +2071,6 @@ void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, g
 	{
 		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
 		active_table = (gint)g_ascii_strtod(tmpbuf,NULL);
-		//printf("main tab change,  active_table %i\n",active_table);
 	}
 
 	if (g_object_get_data(G_OBJECT(widget),"sub-notebook"))

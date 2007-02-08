@@ -1,9 +1,9 @@
-# DualTable VEtable, (page 1), used by DT firmwares
+# DT VEtable 1, (page 0),
 
 [global]
-description=Object data map for VE-Table 2, 8x8 (page 1)
-tab_name=_VE Table(2)
-id_prefix=VE2_
+description=Object data map for DT VE-Table 1 (page 0)
+tab_name=_VE Table(1)
+id_prefix=VE1_
 groups=load,rpm,vetable
 
 #----- Groups ----------------------------------------------------------------
@@ -11,7 +11,7 @@ groups=load,rpm,vetable
 [load]
 keys=page,raw_lower,raw_upper,is_float,dl_type,handler,use_color,tooltip
 key_types=_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
-page=1
+page=0
 raw_lower=0
 raw_upper=255
 is_float=FALSE
@@ -23,7 +23,7 @@ tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM b
 [rpm]
 keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler,use_color,tooltip
 key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
-page=1
+page=0
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x/100
@@ -37,7 +37,7 @@ tooltip=The RPM bins in combination with the LOAD bins on the left side of the V
 [vetable]
 keys=page,raw_lower,raw_upper,is_float,dl_type,handler,use_color,tooltip
 key_types=_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
-page=1
+page=0
 raw_lower=0
 raw_upper=255
 is_float=FALSE
@@ -51,15 +51,15 @@ tooltip=The VE Entries control how much fuel is injected into the engine. They r
 [topframe]
 keys=page,tab_ident,table_num
 key_types=_INT_,_ENUM_,_STRING_
-page=1
+page=0
 tab_ident=_VETABLES_TAB_
-table_num=1
+table_num=0
 
 [VE1_gaugeframe1]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
-table_num=1
+table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
@@ -68,7 +68,7 @@ datasource=rpm
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
-table_num=1
+table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
 datasource=tpsadc
@@ -77,7 +77,7 @@ datasource=tpsadc
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
-table_num=1
+table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
 datasource=mapkpa
@@ -86,7 +86,7 @@ datasource=mapkpa
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
-table_num=1
+table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
 datasource=egocorr
@@ -95,7 +95,7 @@ datasource=egocorr
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
 page=1
-table_num=1
+table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr
@@ -105,19 +105,19 @@ datasource=afr
 [topframe_title]
 keys=page,set_label
 key_types=_INT_,_STRING_
-page=1
-set_label=MegaSquirt VE-Table 2 (DualTable)
+page=0
+set_label=MegaSquirt VE-Table 1
 
 [title]
 keys=page,set_label
 key_types=_INT_,_STRING_
-page=1
-set_label=VE Table 2 (DualTable)
+page=0
+set_label=VE Table 1
 
 [load_tbl_lab]
 keys=page,label,alt_label,depend_on
 key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=alpha_n_button
@@ -131,7 +131,7 @@ alpha_n_button_bitval=1
 [load_tbl_units]
 keys=page,label,alt_label,depend_on
 key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 label=Kpa
 alt_label=TPSADC
 depend_on=alpha_n_button
@@ -148,7 +148,7 @@ alpha_n_button_bitval=1
 keys=handler,page,bind_to_list,tooltip
 key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_READ_VE_CONST_
-page=1
+page=0
 bind_to_list=get_data_buttons
 tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
 
@@ -156,57 +156,61 @@ tooltip=This button retrieves the VE/Constants block of data (all pages) and upd
 keys=handler,page,bind_to_list,tooltip
 key_types=_ENUM_,_INT_,_STRING_,_STRING_
 handler=_BURN_MS_FLASH_
-page=1
+page=0
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
 [3d_view_button]
+#keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 keys=page,table_num,tooltip,bind_to_list
+#key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 key_types=_INT_,_STRING_,_STRING_,_STRING_
-page=1
-table_num=1
+page=0
+table_num=0
+#x_source=raw_rpm
+#y_source=mapkpa
+#z_source=vecurr
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [recalc_scaling_button]
 keys=page,handler,data
 key_types=_INT_,_ENUM_,_STRING_
-page=1
+page=0
 handler=_RESCALE_TABLE_
-data=VE2_rescale_spinner
+data=VE1_rescale_spinner
 
 [reqfuel_rescale_button]
 keys=page,handler,data,table_num,applicable_tables
 key_types=_INT_,_ENUM_,_STRING_,_STRING_,_STRING_
 page=1
-table_num=1
-applicable_tables=1
+table_num=0
+applicable_tables=0
 handler=_REQFUEL_RESCALE_TABLE_
-data=VE2_new_reqfuel_entry
+data=VE1_new_reqfuel_entry
 
 [tracking_checkbutton]
 keys=handler,page,table_num
 key_types=_ENUM_,_INT_,_STRING_
 handler=_TRACKING_FOCUS_
 page=1
-table_num=1
-
+table_num=0
 
 #----- Rescale Entries ------------------------------------------------------
 
 [rescale_spinner]
 keys=page,table_num
 key_types=_INT_,_STRING_
-page=1
-table_num=1
+page=0
+table_num=0
 
 #----- MAIN VETable Container ------------------------------------------------
 
 [main_vetable]
 keys=page,rescaler_frame
 key_types=_INT_,_STRING_
-page=1
-rescaler_frame=VE2_rescale_frame
+page=0
+rescaler_frame=VE1_rescale_frame
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------
 
@@ -697,24 +701,24 @@ group=vetable
 [curr_reqfuel_entry]
 keys=page,offset,is_float,precision,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
 key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_BOOL_,_STRING_
-page=1
+page=0
 offset=90
-table_num=1
+table_num=0
 is_float=TRUE
 precision=1
 dl_type=_IGNORED_
-handler=_LOCKED_REQ_FUEL_
-bind_to_list=interdep_1_ctrl
+handler=_LOCKED_REQ_FUEL__
+bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
-ul_conv_expr=(reqfuel_2*((injectors_2+1)/divider_2))/10
-expr_symbols=reqfuel_2,injectors_2,divider_2
+ul_conv_expr=(reqfuel_1*((injectors_1+1)/divider_1))/10
+expr_symbols=reqfuel_1,injectors_1,divider_1
 expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_
-reqfuel_2_page=1
-reqfuel_2_offset=90
-injectors_2_page=1
-injectors_2_offset=117
-injectors_2_bitmask=240
-injectors_2_bitshift=4
-divider_2_page=1
-divider_2_offset=91
+reqfuel_1_page=0
+reqfuel_1_offset=90
+injectors_1_page=0
+injectors_1_offset=117
+injectors_1_bitmask=240
+injectors_1_bitshift=4
+divider_1_page=0
+divider_1_offset=91
 

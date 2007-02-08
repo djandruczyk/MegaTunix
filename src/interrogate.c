@@ -698,6 +698,7 @@ void load_profile_details(struct Canidate *canidate)
 		if(!cfg_read_int(cfgfile,"parameters","TotalPages",
 					&canidate->total_pages))
 			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"TotalPages\" value not found in interrogation profile, ERROR\n"),CRITICAL);
+		cfg_read_int(cfgfile,"parameters","ReadOnlyAbove",&canidate->ro_above);
 		if(!cfg_read_int(cfgfile,"parameters","TotalTables",
 					&canidate->total_tables))
 			dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"),CRITICAL);
@@ -783,8 +784,6 @@ void load_profile_details(struct Canidate *canidate)
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_offset\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
 					if(!cfg_read_int(cfgfile,section,"dtmode_page",&canidate->table_params[i]->dtmode_page))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"dtmode_page\" flag not found in interrogation profile, ERROR\n"),CRITICAL);
-					if(!cfg_read_int(cfgfile,"parameters","ReadOnlyAbove",&canidate->ro_above))
-						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"ReadOnlyAbove\" value not found in interrogation profile, ERROR\n"),CRITICAL);
 					if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&canidate->trigmon_page))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"),CRITICAL);
 					if(!cfg_read_int(cfgfile,"parameters","ToothmonPage",&canidate->toothmon_page))

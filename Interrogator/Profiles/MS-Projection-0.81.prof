@@ -42,7 +42,7 @@ an_y_suffix=TPS ADC
 y_conv_expr=x*1
 z_page=0
 z_base_offset=0
-z_source=vecurr
+z_source=vecurr1
 z_suffix=VE %
 z_conv_expr=x*1
 
@@ -60,8 +60,8 @@ SliderMapFile=std-firmware
 RuntimeTextMapFile=std-firmware
 StatusMapFile=std-firmware
 
-LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments,vetable_8x8e,tools,warmupwizard,projection,raweditor
-TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8e-BnG,tools,warmupwizard,projection,raweditor
+LoadTabs=runtime,datalogging,logviewer,B_n_G_constants,enrichments,vetable_8x8e,tools,warmupwizard,projection
+TabConfs=runtime,datalogging,logviewer,B_n_G_constants,enrichments_BnG,vetable_8x8e-BnG,tools,warmupwizard,projection
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

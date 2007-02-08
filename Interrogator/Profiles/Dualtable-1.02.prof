@@ -12,8 +12,8 @@ Raw_Mem_Cmd_Key=CMD_UPPER_F0
 Write_Cmd=W
 Burn_Cmd=B
 Page_Cmd=P
-Page_Cmd=P
 MultiPage=TRUE
+ReadOnlyAbove=1
 ChunkWriteSupport=FALSE
 TotalTables=2
 TotalPages=2
@@ -37,12 +37,13 @@ y_page=0
 y_base_offset=108
 y_bincount=8
 y_source=mapkpa
+an_y_source=tpsadc
 y_suffix=KPA
 an_y_suffix=TPS ADC
 y_conv_expr=x*1
 z_page=0
 z_base_offset=0
-z_source=vecurr
+z_source=vecurr1
 z_suffix=VE %
 z_conv_expr=x*1
 
@@ -96,8 +97,8 @@ SliderMapFile=dt-firmware
 RuntimeTextMapFile=std-firmware
 StatusMapFile=std-firmware
 
-LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments,vetable_8x8e,vetable_8x8e,tools,memviewer,warmupwizard,raweditor
-TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8e-BnG,vetable_8x8e-DT_2,tools,memviewer,warmupwizard,raweditor
+LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments,vetable_8x8e,vetable_8x8e,tools,memviewer,warmupwizard
+TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8e-DT_1,vetable_8x8e-DT_2,tools,memviewer,warmupwizard
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map
