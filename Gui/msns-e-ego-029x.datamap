@@ -398,6 +398,7 @@ page=2
 offset=187
 base=10
 is_float=TRUE
+precision=2
 dl_conv_expr=x*(512/10)
 ul_conv_expr=x/(512/10)
 dl_type=_IMMEDIATE_

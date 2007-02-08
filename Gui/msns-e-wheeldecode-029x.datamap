@@ -465,126 +465,127 @@ tooltip=Sets the spark output dwell to 50% DC.
 
 #----- SpinButtons -----------------------------------------------------------
 
-[trigger_spin_1]
+[trigger_entry_1]
 keys=offset
 key_types=_INT_
 offset=25
 group=triggers
 
 
-[trigger_spin_2]
+[trigger_entry_2]
 keys=offset
 key_types=_INT_
 offset=26
 group=triggers
 
-[trigger_spin_3]
+[trigger_entry_3]
 keys=offset
 key_types=_INT_
 offset=27
 group=triggers
 
-[trigger_spin_4]
+[trigger_entry_4]
 keys=offset
 key_types=_INT_
 offset=28
 group=triggers
 
-[trigger_spin_5]
+[trigger_entry_5]
 keys=offset
 key_types=_INT_
 offset=145
 group=triggers
 
-[trigger_spin_6]
+[trigger_entry_6]
 keys=offset
 key_types=_INT_
 offset=146
 group=triggers
 
-[return_spin_1]
+[return_entry_1]
 keys=offset
 key_types=_INT_
 offset=29
 group=trig_ret
 
-[return_spin_2]
+[return_entry_2]
 keys=offset
 key_types=_INT_
 offset=30
 group=trig_ret
 
-[return_spin_3]
+[return_entry_3]
 keys=offset
 key_types=_INT_
 offset=31
 group=trig_ret
 
-[return_spin_4]
+[return_entry_4]
 keys=offset
 key_types=_INT_
 offset=32
 group=trig_ret
 
-[return_spin_5]
+[return_entry_5]
 keys=offset
 key_types=_INT_
 offset=147
 group=trig_ret
 
-[return_spin_6]
+[return_entry_6]
 keys=offset
 key_types=_INT_
 offset=148
 group=trig_ret
 
-[oddfire_offset_spin_1]
+[oddfire_offset_entry_1]
 keys=offset,oddfire_bit_offset
 key_types=_INT_,_INT_
 offset=167
 group=oddfire
 oddfire_bit_offset=166
 
-[oddfire_offset_spin_2]
+[oddfire_offset_entry_2]
 keys=offset,oddfire_bit_offset
 key_types=_INT_,_INT_
 offset=169
 group=oddfire
 oddfire_bit_offset=168
 
-[oddfire_offset_spin_3]
+[oddfire_offset_entry_3]
 keys=offset,oddfire_bit_offset
 key_types=_INT_,_INT_
 offset=171
 group=oddfire
 oddfire_bit_offset=170
 
-[oddfire_offset_spin_4]
+[oddfire_offset_entry_4]
 keys=offset,oddfire_bit_offset
 key_types=_INT_,_INT_
 offset=173
 group=oddfire
 oddfire_bit_offset=172
 
-[oddfire_offset_spin_5]
+[oddfire_offset_entry_5]
 keys=offset,oddfire_bit_offset
 key_types=_INT_,_INT_
 offset=175
 group=oddfire
 oddfire_bit_offset=174
 
-[oddfire_offset_spin_6]
+[oddfire_offset_entry_6]
 keys=offset,oddfire_bit_offset
 key_types=_INT_,_INT_
 offset=177
 group=oddfire
 oddfire_bit_offset=176
 
-[trig_wheel_teeth_spin]
-keys=page,offset,handler,dl_type,tooltip
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[trig_wheel_teeth_entry]
+keys=page,offset,base,handler,dl_type,tooltip
+key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=90
+base=10
 handler=_GENERIC_
 dl_type=_IMMEDIATE_
 tooltip=The total number of teeth including the "missing" ones.  I.e a 36-1 tooth wheel has spaces for 36 evenly spaced teeth, even though 1 is missing, so it technically has 35 teeth,  but you would enter "36" in this field, as the wheel is spaced out for 36 teeth.
@@ -649,33 +650,40 @@ ign_parm=TRUE
 handler=_GENERIC_
 tooltip=This is global offset for the crank table, to shift all values one way or another.
 
-[ign_hold_spin]
-keys=page,offset,raw_lower,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+[ign_hold_entry]
+keys=page,offset,base,raw_lower,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=3
 offset=172
+base=10
 raw_lower=0
 raw_upper=100
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Holds off ignition for x number of triggers to allow engine RPM to stabilize a bit when cranking just starts.  Helps eliminiate screwy initial spark timing
 
-[crankdwell_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[crankdwell_entry]
+keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=110
+base=10
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the ignition dwell during cranking. 
 
-[rundwell_spin]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
+[rundwell_entry]
+keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=111
+base=10
+is_float=TRUE
+precision=1
 dl_conv_expr=x*10
 ul_conv_expr=x/10
 raw_upper=80
@@ -683,11 +691,14 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the ignition dwell during normal engine running. 
 
-[min_discharge_spin]
-keys=page,offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[min_discharge_entry]
+keys=page,offset,base,is_float,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=143
+base=10
+is_float=TRUE
+precision=1
 raw_lower=0
 raw_upper=15
 dl_conv_expr=x*10
@@ -696,11 +707,12 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the time allowed between ignition events for the plug to fire before the coil is allowed to recharge. This can limit dwell at high RPM's.
 
-[s4w_num_steps_spin]
-keys=page,offset,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+[s4w_num_steps_entry]
+keys=page,offset,base,raw_lower,raw_upper,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=13
+base=10
 raw_upper=6
 raw_lower=1
 bind_to_list=s4w_controls

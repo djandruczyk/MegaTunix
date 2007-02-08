@@ -946,7 +946,7 @@ TPS</property>
 					      </child>
 
 					      <child>
-						<widget class="GtkEntry" id="crank_entry_7">
+						<widget class="GtkEntry" id="crank_entry_6">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
 						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
