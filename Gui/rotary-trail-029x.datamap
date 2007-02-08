@@ -9,10 +9,9 @@ groups=load,rpm,table
 #----- Groups ----------------------------------------------------------------
 
 [load]
-keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler,use_color,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler,use_color,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
 page=8
-base=10
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x*1
@@ -24,10 +23,9 @@ use_color=TRUE
 tooltip=The LOAD (TPS/KPA) bins in combination with the RPM bins on the bottom of the Rotary Trailing Table define the vertexes (points on the map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler,use_color,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler,use_color,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
 page=8
-base=10
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x/100
@@ -39,10 +37,9 @@ use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the Rotary Trailing-Table define the vertexes (points on the Rotary Trailing map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [table]
-keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,precision,dl_type,handler,use_color,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_INT_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,precision,dl_type,handler,use_color,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_INT_,_ENUM_,_ENUM_,_BOOL_,_STRING_
 page=8
-base=10
 raw_lower=0
 raw_upper=255
 dl_conv_expr=(x+10)/(352/1000)
@@ -556,11 +553,10 @@ handler=_GENERIC_
 tooltip=When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
 
 [fixed_split_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=112
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=(x+10)/(352/1000)

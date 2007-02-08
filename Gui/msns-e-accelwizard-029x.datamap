@@ -254,11 +254,10 @@ tooltip=Turns off decel enrichment above the setpoint to the right.
 #----- Spinbuttons ----------------------------------------------------------
 
 [map_ae_rate_4_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=168
-base=10
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 raw_lower=0
@@ -266,11 +265,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [map_ae_rate_3_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=167
-base=10
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 raw_lower=0
@@ -278,11 +276,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [map_ae_rate_2_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=166
-base=10
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 raw_lower=0
@@ -290,11 +287,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [map_ae_rate_1_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=165
-base=10
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 raw_lower=0
@@ -302,11 +298,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [map_ae_pw_4_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=172
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -316,11 +311,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [map_ae_pw_3_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=171
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -330,11 +324,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [map_ae_pw_2_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=170
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -344,11 +337,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [map_ae_pw_1_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=169
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -358,11 +350,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_rate_4_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=164
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -372,11 +363,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_rate_3_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=163
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -386,11 +376,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_rate_2_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=162
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -400,11 +389,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_rate_1_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=161
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -414,11 +402,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_pw_4_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=176
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -428,11 +415,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_pw_3_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=175
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -442,11 +428,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_pw_2_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=174
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -456,11 +441,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [tps_ae_pw_1_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=173
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -470,11 +454,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_rate_4_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=152
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=0
@@ -482,11 +465,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_rate_3_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=151
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=0
@@ -494,11 +476,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_rate_2_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=150
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=0
@@ -506,11 +487,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_rate_1_entry]
-keys=page,offset,base,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=149
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=0
@@ -518,11 +498,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_pw_4_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=156
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -532,11 +511,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_pw_3_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=155
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -546,11 +524,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_pw_2_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=154
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -560,11 +537,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [rpm_ae_pw_1_entry]
-keys=page,offset,base,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
+keys=page,offset,is_float,precision,raw_lower,dl_conv_expr,ul_conv_expr,dl_type,handler
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_
 page=0
 offset=153
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -574,11 +550,10 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [ae_end_decay_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=183
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -588,11 +563,10 @@ handler=_GENERIC_
 tooltip=Accel Value at end of AE pulse decay.
 
 [ae_rpm_mapdot_thresh_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=91
-base=10
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 dl_type=_IMMEDIATE_
@@ -600,11 +574,10 @@ handler=_GENERIC_
 tooltip=FIXME
 
 [mapdot_thresh_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=91
-base=10
 dl_conv_expr=x/10
 ul_conv_expr=x*10
 bind_to_list=map_ae_controls
@@ -613,11 +586,10 @@ handler=_GENERIC_
 tooltip=FIXME
 
 [ae_rpm_accel_time_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=179
-base=10
 is_float=TUE
 precision=1
 dl_conv_expr=x*10
@@ -627,11 +599,10 @@ handler=_GENERIC_
 tooltip=Accel enrichment time.
 
 [accel_time_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=179
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -652,11 +623,10 @@ tooltip=Accel enrichment time.
 #tooltip=The amount of accel enrich when timer has run. (FIXME!!)
 
 [ae_rpm_tps_thresh_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=178
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -666,11 +636,10 @@ handler=_GENERIC_
 tooltip=Minimum TPS rate of change to trigger accel enrichment. Helps to minimize false triggers from noise.
 
 [tpsdot_thresh_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=178
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x/(1953125/10000000)
@@ -681,11 +650,10 @@ handler=_GENERIC_
 tooltip=Minimum TPS rate of change to trigger accel enrichment. Helps to minimize false triggers from noise.
 
 [decel_fuel_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=180
-base=10
 dl_conv_expr=x/1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -693,11 +661,10 @@ handler=_GENERIC_
 tooltip=The amount of fuel to cut during decel.  100% means cut NO fuel, 0% means cut ALL fuel, anything OVER 100 means ADD fuel.
 
 [cold_enrich_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=177
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -707,11 +674,10 @@ handler=_GENERIC_
 tooltip=Amount of enrich to add in MS when cold.
 
 [cold_accel_mult_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=181
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -719,11 +685,10 @@ handler=_GENERIC_
 tooltip=Cold Accel multiplier (percentage), 100 equals NO change, greater than 100 means more fuel, less than 100 means less fuel.
 
 [ae_decel_setpoint_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=129
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 bind_to_list=ae_decel_cutoff

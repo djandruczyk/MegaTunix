@@ -517,11 +517,10 @@ tooltip=Enabled Shiftlight functionality
 #------ Spin Buttons --------------------------------------------------------
 
 [shift_lower_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=18
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=0
@@ -533,11 +532,10 @@ handler=_GENERIC_
 tooltip=The lower threshold for the Shiftlight.
 
 [shift_high_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=19
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=0
@@ -549,11 +547,10 @@ handler=_GENERIC_
 tooltip=The lower threshold for the Shiftlight.
 
 [efan_ontemp_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=74
-base=10
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
@@ -563,11 +560,10 @@ handler=_GENERIC_
 tooltip=The temp at which the cooling fan turns ON at.
 
 [efan_offtemp_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=75
-base=10
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE

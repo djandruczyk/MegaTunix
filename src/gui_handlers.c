@@ -533,7 +533,7 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 	tmpbuf = g_new0(gchar,strlen(text));
 	for (i=0;i<strlen(text);i++)
 	{
-		if ((g_ascii_isdigit(text[i])) || (text[i] == '.') || (text[i] == ','))
+		if ((g_ascii_isdigit(text[i])) || (text[i] == '.') || (text[i] == ',') || (text[i] == '-'))
 			tmpbuf[count++] = text[i];
 		else
 			go_red=FALSE;
@@ -604,7 +604,10 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	dl_type = (gint) g_object_get_data(G_OBJECT(widget),"dl_type");
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-	base = (gint)g_object_get_data(G_OBJECT(widget),"base");
+	if (!g_object_get_data(G_OBJECT(widget),"base"))
+		base = 10;
+	else
+		base = (gint)g_object_get_data(G_OBJECT(widget),"base");
 	ign_parm = (gboolean)g_object_get_data(G_OBJECT(widget),"ign_parm");
 	precision = (gint)g_object_get_data(G_OBJECT(widget),"precision");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(widget),"is_float");
@@ -1530,8 +1533,12 @@ void update_widget(gpointer object, gpointer user_data)
 			"bitshift");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),
 			"bitmask");
-	base = (gint)g_object_get_data(G_OBJECT(widget),
+	if (!g_object_get_data(G_OBJECT(widget),"base"))
+		base = 10;
+	else
+		base = (gint)g_object_get_data(G_OBJECT(widget),
 			"base");
+
 	precision = (gint)g_object_get_data(G_OBJECT(widget),
 			"precision");
 	temp_dep = (gboolean)g_object_get_data(G_OBJECT(widget),

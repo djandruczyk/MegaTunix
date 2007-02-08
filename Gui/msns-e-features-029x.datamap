@@ -651,11 +651,10 @@ handler=_GENERIC_
 tooltip=Traction control is accomplished by multiple levels of control.  Spark retard, spark cut, and fuel enrichment are able to be used to aid in traction control. See the Traction Tab for the rest of the controls...
 
 [edis_multispark_limit_entry]
-keys=page,offset,base,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=21
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_upper=25
@@ -665,11 +664,10 @@ handler=_GENERIC_
 tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multispark helps improve combustion and emissions at low RPM's.
 
 [fuel_switch_delay_entry]
-keys=page,offset,base,is_float,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=93
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -681,11 +679,10 @@ handler=_GENERIC_
 tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the fuel tables are transitioned from VE1 to VE3.
 
 [spark_switch_delay_entry]
-keys=page,offset,base,is_float,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=87
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10

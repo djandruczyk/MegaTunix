@@ -418,11 +418,10 @@ tooltip=When this is set traction control retard, enrichment and spark drop will
 #----- Spin Buttons ----------------------------------------------------------
 
 [traction_rpm1s_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=94
-base=10
 is_float=TRUE
 precision=1
 raw_upper=200
@@ -433,11 +432,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_rpm2s_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=95
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -448,11 +446,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_rpm3s_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=96
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -463,11 +460,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_rpm4s_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=97
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -478,11 +474,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_retard1_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=99
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -494,11 +489,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard2_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=100
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -510,11 +504,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard3_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=101
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -526,11 +519,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard4_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=102
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -542,11 +534,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_sp_cut1_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=103
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_upper=2
@@ -556,11 +547,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_sp_cut2_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=104
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_upper=2
@@ -570,11 +560,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_sp_cut3_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=105
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_upper=2
@@ -584,11 +573,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS),  then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_sp_cut4_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,raw_upper,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_INT_,_STRING_
 page=0
 offset=106
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 raw_upper=2
@@ -598,11 +586,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_cyc1_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=112
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -610,11 +597,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [traction_cyc2_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=113
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -622,11 +608,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [traction_cyc3_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=114
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -634,11 +619,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [traction_cyc4_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=115
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -646,11 +630,10 @@ handler=_GENERIC_
 tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [vss_sensor_diff_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=119
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -660,11 +643,10 @@ handler=_GENERIC_
 tooltip=Sets the differential (%) in VSS inputs (from drive to undriven wheels) to trigger traction control activation.
 
 [vss_low_slip_thresh_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=120
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -674,11 +656,10 @@ handler=_GENERIC_
 tooltip=Sets the low slip threshold
 
 [vss_half_slip_thresh_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=123
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(39216/100000)
@@ -688,11 +669,10 @@ handler=_GENERIC_
 tooltip=Sets the half slip threshold (I'm not too sure on this one)
 
 [vss_max_undriven_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=118
-base=10
 is_float=TRUE
 precision=3
 dl_conv_expr=x/(196/10000)
@@ -702,11 +682,10 @@ handler=_GENERIC_
 tooltip=Sets the undriven VSS sensor maximum input voltage.  This is useful to constrain traction control within a low and high speed range. (see http://megasquirt.sf.net/extra/antirev.html
 
 [vss_min_undriven_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=117
-base=10
 is_float=TRUE
 precision=3
 dl_conv_expr=x/(196/10000)
@@ -716,11 +695,10 @@ handler=_GENERIC_
 tooltip=Sets the undriven VSS sensor minimum input voltage.  This is useful to constrain traction control within a low and high speed range. (see http://megasquirt.sf.net/extra/antirev.html
 
 [rpmdot_threshold_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=98
-base=10
 dl_conv_expr=x/1000
 ul_conv_expr=x*1000
 raw_lower=1

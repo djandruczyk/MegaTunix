@@ -9,10 +9,9 @@ groups=load,rpm,afrtable1,afrtable2
 #----- Groups ----------------------------------------------------------------
 
 [load]
-keys=page,base,raw_lower,raw_upper,is_float,dl_type,handler,use_color,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+keys=page,raw_lower,raw_upper,is_float,dl_type,handler,use_color,tooltip
+key_types=_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
 page=6
-base=10
 raw_lower=0
 raw_upper=255
 is_float=FALSE
@@ -22,10 +21,9 @@ use_color=TRUE
 tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler,use_color,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
+keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,is_float,dl_type,handler,use_color,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
 page=6
-base=10
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x/100
@@ -37,10 +35,9 @@ use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the AFR-Table define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the AFR map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [afrtable1]
-keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,lookuptable,alt_lookuptable,depend_on,is_float,dl_type,handler,precision,use_color,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_INT_,_BOOL_,_STRING_
+keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,lookuptable,alt_lookuptable,depend_on,is_float,dl_type,handler,precision,use_color,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_INT_,_BOOL_,_STRING_
 page=6
-base=10
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x*10
@@ -62,10 +59,9 @@ use_color=TRUE
 tooltip=The AFR Entries are the Air Fuel Radio values that the ECU should target.  The values are in O2 sensor VOLTS, not in actual AFR as the AFR reading is heavily dependant on having the proper lookup table selected, it was chosen to display the values in volts instead as that removes the ambiguity of "Do I have the right lookup table selected??".  The ECU will use these values after several conditions have been met including minimum RPM, coolant temp, engine runtime etc.. The ecu will attempt to keep the mixture set so that the O2 reading stays at the targeted value.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [afrtable2]
-keys=page,base,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,lookuptable,alt_lookuptable,depend_on,is_float,dl_type,handler,precision,use_color,tooltip
-key_types=_INT_,_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_INT_,_BOOL_,_STRING_
+keys=page,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,lookuptable,alt_lookuptable,depend_on,is_float,dl_type,handler,precision,use_color,tooltip
+key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_ENUM_,_ENUM_,_INT_,_BOOL_,_STRING_
 page=6
-base=10
 raw_lower=0
 raw_upper=255
 dl_conv_expr=x*10

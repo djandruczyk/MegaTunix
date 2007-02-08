@@ -9,19 +9,17 @@ groups=warmup,crank,ase
 #----- Groups -----------------------------------------------------------------
 
 [warmup]
-keys=page,base,dl_type,handler,use_color
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,dl_type,handler,use_color
+key_types=_INT_,_ENUM_,_ENUM_,_BOOL_
 page=8
-base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
 
 [crank]
-keys=page,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,use_color
-key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
+keys=page,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,use_color
+key_types=_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_BOOL_
 page=8
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -31,10 +29,9 @@ handler=_GENERIC_
 use_color=TRUE
 
 [ase]
-keys=page,base,dl_type,handler,use_color
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_BOOL_
+keys=page,dl_type,handler,use_color
+key_types=_INT_,_ENUM_,_ENUM_,_BOOL_
 page=5
-base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
@@ -472,11 +469,10 @@ bind_to_list=temperature
 #----- Spin Buttons ----------------------------------------------------------
 
 [crank_rpm_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=43
-base=10
 dl_conv_expr=x/100
 ul_conv_expr=x*100
 raw_lower=1
@@ -486,21 +482,19 @@ handler=_GENERIC_
 tooltip=This is the RPM at which the ECU considers the engine to be Running, below this rpm the engine is considered cranking.  This is important as during cranking the injectors are fired based on the cranking table alone.  During normal engine running the pulsewidth of the injectors is based on all the other sensor inputs and  the VEtable, NOT the fixed cranking table.
 
 [flood_clear_tps_entry]
-keys=page,offset,base,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=44
-base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The Flood Clear TPS Threshold is the value at which if the throttle is above this point (in ADC counts) during cranking (only!) the ECU will stop all injection events in order to allow the engine to recover from a flooded situation.
 
 [fixed_prime_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,bind_to_list,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,bind_to_list,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_
 page=8
 offset=45
-base=10
 is_float=TRUE
 precision=1
 dl_conv_expr=x*10
@@ -511,32 +505,29 @@ bind_to_list=fixed_priming
 tooltip=The amount of fuel injected as a priming pulse before engine is even started. This can aid cold starting for some engine/injection configurations.
 
 [ase_total_time_entry]
-keys=page,offset,base,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_
 page=5
 offset=178
-base=10
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=The amount of time in either seconds or engine cycles that ASE decay will take to turn off.  Max values are 255 seconds (4 min 15 sec) or 255 engine cycles (depends on RPM). 
 
 [ase_fixed_hold_entry]
-keys=page,offset,base,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=5
 offset=180
-base=10
 bind_to_list=fixed_decay,fixed_map
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=This is the amount of time to hold ASE FIXED after engien start.  Once this timer expires, ASE will decay to zero in the remaining time left as defined by ASE Total Decay Time as long as that is greater than the value of this control
 
 [clt_setpoint_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_INT_,_INT_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=5
 offset=181
-base=10
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 raw_lower=30
@@ -548,11 +539,10 @@ handler=_GENERIC_
 tooltip=The coolant temp must be BELOW this value for MAP hold to be enabled during startup.  If the temp is above this value MAP holding will not be used. MAP holding is used to stabilize the afterstart period when the engine is cold to prevent stalling,  after the ASE hold time expires the running MAP value will be used.
 
 [fixed_map_ase_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=5
 offset=182
-base=10
 dl_conv_expr=(x*(965/1000))+9
 ul_conv_expr=(x/(965/1000))-9
 bind_to_list=fixed_map
@@ -561,22 +551,20 @@ handler=_GENERIC_
 tooltip=This is the Fixed MAP Value to use during ASE decay hold.
 
 [extra_fuel_mult_entry]
-keys=page,offset,base,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=8
 offset=46
-base=10
 bind_to_list=xtra_crank
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 tooltip=Increases the cranking fuel by the following percentage.  i.e if cranking PW is 10 ms and you set the control to 150%, the the cranking pulsewidth becomes 15ms.
 
 [iat_ign_adv_temp_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=48
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -584,11 +572,10 @@ handler=_GENERIC_
 tooltip=When below the cooltant setpoint the ignition timing will be advanced 1 degree for each amount below this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 60 deg, the timing will be advanced by 4 degrees.
 
 [iat_ret_temp_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=50
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
@@ -596,11 +583,10 @@ handler=_GENERIC_
 tooltip=When above the Intake Air Temp (IAT) setpoint the ignition timing will be retarded 1 degree for each amount above this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 160 deg, the timing will be retarded by 6 degrees.
 
 [iat_ign_adv_clt_temp_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=47
-base=10
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
@@ -610,11 +596,10 @@ handler=_GENERIC_
 tooltip=This is the coolant temp setpoint for CLT Based advanced. CLT Advance won't take effect unless the coolant temp is BELOW this setpoint by at least the amount of the "Add 1 deg adv every...." control above.
 
 [iat_temp_thresh_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=52
-base=10
 dl_conv_expr=x+40
 ul_conv_expr=x-40
 temp_dep=TRUE
@@ -624,11 +609,10 @@ handler=_GENERIC_
 tooltip=This is the Intake Air temp setpoint for IAT Based ignition retard. IAT Retard won't take effect unless the Intake air temp is above the this threshold by the amount above AND the Manifold (MAP) pressure exceeeds the setpoint above.
 
 [iat_max_adv_entry]
-keys=page,offset,base,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,is_float,precision,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_BOOL_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=49
-base=10
 is_float=TRUE
 precision=2
 dl_conv_expr=x/(352/1000)
@@ -638,11 +622,10 @@ handler=_GENERIC_
 tooltip=This is the Maximum allowed additional timing advance to be added on by the clt based advance.
 
 [iat_ret_map_setpoint_entry]
-keys=page,offset,base,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
-key_types=_INT_,_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
+keys=page,offset,dl_conv_expr,ul_conv_expr,dl_type,handler,tooltip
+key_types=_INT_,_INT_,_STRING_,_STRING_,_ENUM_,_ENUM_,_STRING_
 page=0
 offset=51
-base=10
 dl_conv_expr=x*1
 ul_conv_expr=x*1
 dl_type=_IMMEDIATE_
