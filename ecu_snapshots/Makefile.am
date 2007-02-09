@@ -9,7 +9,7 @@ snapshots_files = 	\
 		MSnS-E-029t \
 		MSnS-Extra-HighRes-09a \
 		MSnSpark-3.0.1 \
-		Rover-3.0.x \
+		Rover-3.0.x 
 
 
 snapshots_DATA = $(snapshots_files)
