@@ -82,7 +82,7 @@ EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
 	fileio->external_path = g_strdup("MTX_ecu_snapshots");
 	fileio->title = g_strdup("Restore your ECU Settings from which file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
-	fileio->shortcut_folders = g_strdup("MTX_ecu_snapshots");
+	fileio->shortcut_folders = g_strdup("ecu_snapshots,MTX_ecu_snapshots");
 
 	filename = choose_file(fileio);
 	if (filename == NULL)

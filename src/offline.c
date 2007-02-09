@@ -183,9 +183,9 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	dialog = gtk_dialog_new_with_buttons("Select Firmware",
 				GTK_WINDOW(dialog_window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_STOCK_OK,
+				"Load",
 				GTK_RESPONSE_OK,
-				GTK_STOCK_CANCEL,
+				"Abort",
 				GTK_RESPONSE_CANCEL,
 				NULL);
 
