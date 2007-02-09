@@ -434,7 +434,6 @@ void initialize_dashboards()
 	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_1_label");
 	if ((GTK_IS_LABEL(label)) && (cluster_1_name != NULL) && (g_ascii_strcasecmp(cluster_1_name,"") != 0))
 	{
-		printf("cluster_1_name is \"%s\"\n",cluster_1_name);
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_1_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_1_name),GINT_TO_POINTER(1));
 	}
@@ -442,7 +441,6 @@ void initialize_dashboards()
 	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_2_label");
 	if ((GTK_IS_LABEL(label)) && (cluster_2_name != NULL) && (g_ascii_strcasecmp(cluster_2_name,"") != 0))
 	{
-		printf("cluster_2_name is \"%s\"\n",cluster_2_name);
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_2_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_2_name),GINT_TO_POINTER(2));
 	}
