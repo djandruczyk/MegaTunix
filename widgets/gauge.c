@@ -335,6 +335,7 @@ gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge)
  \param lwidth (gfloat) percentage of radius that determines the width of the range line
  \param inset (gfloat) percentage of radius that determines the inset from the edge
  */
+/*DEPRECATED!!! 
 void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat upper, GdkColor color, gfloat lwidth, gfloat inset)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -350,6 +351,7 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat up
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
 }
+*/
 
 
 /*!
@@ -364,6 +366,8 @@ void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat lower, gfloat up
  \param y_pos, gfloat,  position in relation to center, 0 == center -1 = top
  border, +1 = bottom.  refernces the CENTER of the textblock
  */
+/* DEPRECATED!!
+ *
 void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *font, gchar *text, gfloat font_scale, GdkColor color, gfloat x_pos, gfloat y_pos)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
@@ -380,6 +384,7 @@ void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *font, gchar *text
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
 }
+*/
 
 
 /*!
@@ -430,6 +435,41 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
 
 
 /*!
+ \brief adds a new tick group from the struct passed
+ \param gauge, MtxGaugeFace * pointer to gauge
+ \param tblock, MtxTickGroup * pointer to tick group struct to copy
+ \returns index of where this text block is stored...
+ */
+gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgroup)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),-1);
+
+	g_object_freeze_notify (G_OBJECT (gauge));
+	MtxTickGroup * new_tgroup = g_new0(MtxTickGroup, 1);
+	new_tgroup->font = g_strdup(tgroup->font);
+	new_tgroup->text = g_strdup(tgroup->text);
+	new_tgroup->tick_color = tgroup->tick_color;
+	new_tgroup->text_color = tgroup->text_color;
+	new_tgroup->font_scale = tgroup->font_scale;
+	new_tgroup->tick_inset = tgroup->tick_inset;
+	new_tgroup->text_inset = tgroup->text_inset;
+	new_tgroup->tick_width = tgroup->tick_width;
+	new_tgroup->tick_length = tgroup->tick_length;
+	new_tgroup->start_angle = tgroup->stop_angle;
+	new_tgroup->num_ticks = tgroup->num_ticks;
+	new_tgroup->skip_mode = tgroup->skip_mode;
+	new_tgroup->initial_skip = tgroup->initial_skip;
+	new_tgroup->ticks_before_skip = tgroup->ticks_before_skip;
+	new_tgroup->skip_count = tgroup->skip_count;
+	g_array_append_val(gauge->tick_groups,new_tgroup);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return gauge->tick_groups->len-1;
+}
+
+
+/*!
  \brief returns the array of ranges to the requestor
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the ranges,  DO NOT FREE THIS.
@@ -450,6 +490,18 @@ GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
 	return gauge->t_blocks;
+}
+
+
+/*!
+ \brief returns the array of tickgroups to the requestor
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \returns GArray * of the tickgroups,  DO NOT FREE THIS.
+ */
+GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
+	return gauge->tick_groups;
 }
 
 
@@ -492,6 +544,86 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 		case TB_TEXT:
 			g_free(tblock->text);
 			tblock->text = g_strdup(value);
+			break;
+		default:
+			break;
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+}
+
+
+/*!
+ \brief changes a tick group field by passing in an index 
+ to the tick group and the field name to change
+ \param gauge  pointer to gauge object
+ \param index, index of the tickgroup
+ \param field,  enumeration of the field to change
+ \param value, new value
+ */
+void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (field < TG_NUM_FIELDS);
+	g_return_if_fail (field >= 0);
+	g_object_freeze_notify (G_OBJECT (gauge));
+
+	MtxTickGroup *tgroup = NULL;
+	tgroup = g_array_index(gauge->tick_groups,MtxTickGroup *,index);
+	g_return_if_fail (tgroup != NULL);
+	switch (field)
+	{
+		case TG_FONT:
+			g_free(tgroup->font);
+			tgroup->font = g_strdup(value);
+			break;
+		case TG_TEXT:
+			g_free(tgroup->text);
+			tgroup->text = g_strdup(value);
+			break;
+		case TG_TICK_COLOR:
+			tgroup->tick_color = *(GdkColor *)value;
+			break;
+		case TG_TEXT_COLOR:
+			tgroup->text_color = *(GdkColor *)value;
+			break;
+		case TG_FONT_SCALE:
+			tgroup->font_scale = *(gfloat *)value;
+			break;
+		case TG_TICK_INSET:
+			tgroup->tick_inset = *(gfloat *)value;
+			break;
+		case TG_TEXT_INSET:
+			tgroup->text_inset = *(gfloat *)value;
+			break;
+		case TG_TICK_WIDTH:
+			tgroup->tick_width = *(gfloat *)value;
+			break;
+		case TG_TICK_LENGTH:
+			tgroup->tick_length = *(gfloat *)value;
+			break;
+		case TG_START_ANGLE:
+			tgroup->start_angle = *(gfloat *)value;
+			break;
+		case TG_STOP_ANGLE:
+			tgroup->stop_angle = *(gfloat *)value;
+			break;
+		case TG_NUM_TICKS:
+			tgroup->num_ticks = *(gint *)value;
+			break;
+		case TG_SKIP_MODE:
+			tgroup->skip_mode = *(gboolean *)value;
+			break;
+		case TG_INITIAL_SKIP:
+			tgroup->initial_skip = *(gint *)value;
+			break;
+		case TG_TICKS_B4_SKIP:
+			tgroup->ticks_before_skip = *(gint *)value;
+			break;
+		case TG_SKIP_COUNT:
+			tgroup->skip_count = *(gint *)value;
 			break;
 		default:
 			break;
@@ -598,6 +730,32 @@ void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge)
 
 
 /*!
+ \brief clears all tick groups from the gauge
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ */
+void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge)
+{
+	gint i = 0;
+	MtxTextBlock *tgroup = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	for (i=gauge->tick_groups->len-1;i>=0;i--)
+	{
+		tgroup = g_array_index(gauge->tick_groups,MtxTextBlock *, i);
+		gauge->tick_groups = g_array_remove_index(gauge->tick_groups,i);
+		g_free(tgroup->font);
+		g_free(tgroup->text);
+		g_free(tgroup);
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+}
+
+
+
+/*!
  \brief clears a specific color range based on index passed
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
@@ -641,6 +799,35 @@ void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index)
 			g_free(tblock->font);
 			g_free(tblock->text);
 			g_free(tblock);
+		}
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+
+}
+
+
+/*!
+ \brief clears a specific tick_group based on index passed
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \param index gint index of the one we want to remove.
+ */
+void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index)
+{
+	MtxTextBlock *tgroup = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if ((index <= gauge->tick_groups->len) && (index >= 0 ))
+	{
+		tgroup = g_array_index(gauge->tick_groups,MtxTextBlock *, index);
+		g_array_remove_index(gauge->tick_groups,index);
+		if (tgroup)
+		{
+			g_free(tgroup->font);
+			g_free(tgroup->text);
+			g_free(tgroup);
 		}
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));

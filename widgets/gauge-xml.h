@@ -31,11 +31,13 @@ void output_xml(GtkWidget * );
 void mtx_gauge_color_range_export(MtxDispatchHelper *);
 void mtx_gauge_color_export(MtxDispatchHelper *);
 void mtx_gauge_text_block_export(MtxDispatchHelper *);
+void mtx_gauge_tick_group_export(MtxDispatchHelper *);
 void mtx_gauge_gfloat_export(MtxDispatchHelper *);
 void mtx_gauge_gint_export(MtxDispatchHelper *);
 void mtx_gauge_gchar_export(MtxDispatchHelper *);
 void mtx_gauge_color_range_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_text_block_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_tick_group_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_color_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_gfloat_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_gint_import(MtxGaugeFace *, xmlNode *, gpointer);
@@ -85,6 +87,7 @@ static const struct
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_len"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"minor_tick_width"},
 	{ mtx_gauge_text_block_import, mtx_gauge_text_block_export,"text_block"},
+	{ mtx_gauge_tick_group_import, mtx_gauge_tick_group_export,"tick_group"},
 	{ mtx_gauge_color_range_import, mtx_gauge_color_range_export,"color_range"},
 };
 

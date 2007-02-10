@@ -39,6 +39,7 @@ typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
 typedef struct _MtxColorRange		MtxColorRange;
 typedef struct _MtxTextBlock		MtxTextBlock;
+typedef struct _MtxTickGroup		MtxTickGroup;
 typedef struct _MtxXMLFuncs		MtxXMLFuncs;
 typedef struct _MtxDispatchHelper	MtxDispatchHelper;
 
@@ -85,6 +86,33 @@ struct _MtxTextBlock
 	gfloat y_pos;
 };
 
+/*! \struct _MtxTickGroup
+ * \brief
+ * _MtxTickGroup is a container structure that holds all the info needed for
+ * a group of tickmarks.  This is added to allow multiple groups of tickmarks
+ * that share a common set of attributes.  There is no limit (Aside from RAM)
+ * to the number of tickgroups you can have in a gauge. This allows for max
+ * flexibility in gauge design
+ */
+struct _MtxTickGroup
+{
+	gchar *font;
+	gchar *text;
+	GdkColor tick_color;
+	GdkColor text_color;
+	gfloat font_scale;
+	gfloat tick_inset;
+	gfloat text_inset;
+	gfloat tick_width;
+	gfloat tick_length;
+	gfloat start_angle;
+	gfloat stop_angle;
+	gint num_ticks;
+	gboolean skip_mode;
+	gint initial_skip;
+	gint ticks_before_skip;
+	gint skip_count;
+};
 
 
 /*! \struct _MtxXMLFuncs
@@ -124,7 +152,7 @@ typedef enum
 	NUM_TEXTS
 }TextIndex;
 
-/* Text Block enumeration for the individula fields */
+/* Text Block enumeration for the individual fields */
 typedef enum
 {
 	TB_FONT_SCALE = 0,
@@ -136,7 +164,31 @@ typedef enum
 	TB_NUM_FIELDS,
 }TbField;
 
-/* Color Range enumeration for the individula fields */
+/* Tick Group enumeration for the individual fields */
+typedef enum
+{
+	TG_FONT = 0,
+	TG_TEXT,
+	TG_TICK_COLOR,
+	TG_TEXT_COLOR,
+	TG_FONT_SCALE,
+	TG_TICK_INSET,
+	TG_TEXT_INSET,
+	TG_TICK_WIDTH,
+	TG_TICK_LENGTH,
+	TG_START_ANGLE,
+	TG_STOP_ANGLE,
+	TG_NUM_TICKS,
+	TG_SKIP_MODE,
+	TG_INITIAL_SKIP,
+	TG_TICKS_B4_SKIP,
+	TG_SKIP_COUNT,
+	TG_NUM_FIELDS,
+}TgField;
+
+
+
+/* Color Range enumeration for the individual fields */
 typedef enum
 {
 	CR_LOWPOINT = 0,
@@ -181,6 +233,8 @@ struct _MtxGaugeFace
 	gfloat text_ypos[NUM_TEXTS];/* Array of X offsets for strings */
 	GArray *t_blocks;	/* Array of MtxTextBlock structs */
 	GArray *c_ranges;	/* Array of MtxColorRange structs */
+	GArray *ranges;		/*! Array to contain the ranges */
+	GArray *tick_groups;	/*! Array to contain the tik groups */
 	gint precision;		/*! number of decimal places for val */
 	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
 	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
@@ -205,7 +259,6 @@ struct _MtxGaugeFace
 	gint needle_polygon_points;
 	GdkPoint needle_coords[4];	/*! 4 point needle for now */
 	GdkPoint last_needle_coords[4];	/*! 4 point needle for now */
-	GArray *ranges;		/*! Array to contain the ranges */
 };
 
 struct _MtxGaugeFaceClass
@@ -223,19 +276,29 @@ void mtx_gauge_face_set_show_value (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *, gchar *, gfloat,GdkColor, gfloat, gfloat);
+/* DEPRECATED 
+ *void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
+ */
+GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
+void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField field, void * value);
+gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
+void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
+/* DEPRECATED
+ * void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *, gchar *, gfloat,GdkColor, gfloat, gfloat);
+ */
+GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
-
-void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField field, void * value);
-void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
-gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
-GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
-GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index);
-void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge);
-void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
+
+GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge);
+void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value);
+gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *);
+void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge);
+
 void mtx_gauge_face_set_text (MtxGaugeFace *gauge, TextIndex index, gchar * str);
 gchar * mtx_gauge_face_get_text (MtxGaugeFace *gauge, TextIndex index);
 void mtx_gauge_face_set_str_pos (MtxGaugeFace *gauge, TextIndex index, gfloat value1, gfloat value2);
