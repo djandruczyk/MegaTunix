@@ -485,7 +485,7 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 	for (i=0;i<helper->gauge->tick_groups->len;i++)
 	{
 		tgroup = g_array_index(helper->gauge->tick_groups,MtxTickGroup *, i);
-		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "text_block",NULL );
+		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "tick_group",NULL );
 				
 		tmpbuf = g_strdup_printf("%s",tgroup->font);
 		xmlNewChild(node, NULL, BAD_CAST "font",
