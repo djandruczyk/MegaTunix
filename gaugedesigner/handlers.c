@@ -10,13 +10,14 @@
 static GladeXML *tick_xml;
 static GladeXML *gen_xml;
 GladeXML *text_xml;
+GladeXML *tick_groups_xml;
 GladeXML *ranges_xml;
 extern GdkColor black;
 extern GdkColor white;
 extern GtkWidget *gauge;
 extern gboolean hold_handlers;
 
-EXPORT gboolean tick_attributes_handler(GtkWidget * widget, gpointer data)
+EXPORT gboolean legacy_tick_attributes_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
@@ -247,6 +248,53 @@ EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 	created = TRUE;
 	update_text_controls();
 	update_onscreen_tblocks();
+	return TRUE;
+}
+
+
+EXPORT gboolean tick_groups_handler(GtkWidget * widget, gpointer data)
+{
+	static gboolean created = FALSE;
+	gchar * filename = NULL;
+	extern GdkColor white;
+	GtkWidget *window = NULL;
+	GtkWidget *dummy = NULL;
+	GladeXML *xml = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	if (created)
+	{
+		window = glade_xml_get_widget(tick_groups_xml,"tick_group_settings_window");
+		if (GTK_IS_WIDGET(window))
+		{
+			printf("show make it re-appear\n");
+			gtk_widget_show_all(window);
+			return TRUE;
+		}
+
+	}
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+	{
+		xml = glade_xml_new(filename, "tick_group_settings_window", NULL);
+		g_free(filename);
+	}
+	else
+	{
+		printf("can't load XML, ERROR!\n");
+		exit(-2);
+	}
+
+	glade_xml_signal_autoconnect(xml);
+	dummy = glade_xml_get_widget(xml,"tg_skip_mode_cbutton");
+	if (GTK_IS_WIDGET(dummy))
+		g_object_set_data(G_OBJECT(dummy),"target_table",glade_xml_get_widget(xml,"tg_skip_params_table"));
+
+	tick_groups_xml = xml;
+	created = TRUE;
+	update_onscreen_tgroups();
 	return TRUE;
 }
 

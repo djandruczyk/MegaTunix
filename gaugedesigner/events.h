@@ -78,16 +78,21 @@ EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
 EXPORT gboolean change_font(GtkWidget *, gpointer );
 EXPORT gboolean xml_button_handler(GtkWidget *, gpointer );
 EXPORT gboolean animate_gauge(GtkWidget *, gpointer );
+EXPORT gboolean toggle_skip_params(GtkWidget *, gpointer );
 void update_attributes(void);
 void reset_onscreen_controls(void);
 void reset_onscreen_ranges(void);
 void reset_onscreen_tblocks(void);
+void reset_onscreen_tgroups(void);
 void update_onscreen_ranges(void);
 void update_onscreen_tblocks(void);
+void update_onscreen_tgroups(void);
 gboolean alter_tblock_data(GtkWidget *, gpointer );
 gboolean alter_crange_data(GtkWidget *, gpointer );
+gboolean alter_tgroup_data(GtkWidget *, gpointer );
 gboolean remove_crange(GtkWidget *, gpointer );
 gboolean remove_tblock(GtkWidget *, gpointer );
+gboolean remove_tgroup(GtkWidget *, gpointer );
 gboolean sweep_gauge(gpointer data);
 /* Prototypes */
 
