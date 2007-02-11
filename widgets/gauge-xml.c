@@ -98,6 +98,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		g_object_freeze_notify(G_OBJECT(gauge));
 		mtx_gauge_face_remove_all_text_blocks(gauge);
 		mtx_gauge_face_remove_all_color_ranges(gauge);
+		mtx_gauge_face_remove_all_tick_groups(gauge);
 		load_elements(gauge, root_element);
 		gauge->xc = gauge->w / 2;
 		gauge->yc = gauge->h / 2;

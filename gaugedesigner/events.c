@@ -1050,7 +1050,7 @@ void reset_onscreen_tblocks()
 	GtkWidget *widget = NULL;
 	extern GladeXML *text_xml;
 
-	if ((!text_xml))
+	if ((!text_xml) || (!gauge))
 		return;
 	toptable = glade_xml_get_widget(text_xml,"text_blocks_layout_table");
 	if (!GTK_IS_WIDGET(toptable))

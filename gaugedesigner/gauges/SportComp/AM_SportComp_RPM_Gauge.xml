@@ -12,8 +12,8 @@
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>0</precision>
-  <width>303</width>
-  <height>309</height>
+  <width>318</width>
+  <height>283</height>
   <start_deg>-135.000000</start_deg>
   <stop_deg>-270.000000</stop_deg>
   <start_radian>2.356194</start_radian>
@@ -27,7 +27,7 @@
   <antialias>1</antialias>
   <show_value>1</show_value>
   <tick_inset>0.150000</tick_inset>
-  <major_ticks>17</major_ticks>
+  <major_ticks>0</major_ticks>
   <major_tick_len>0.120000</major_tick_len>
   <major_tick_width>0.220000</major_tick_width>
   <major_tick_text_font>Arial Bold</major_tick_text_font>
@@ -61,6 +61,25 @@
     <y_pos>-0.230000</y_pos>
     <color>55769 55769 55769</color>
   </text_block>
+  <tick_group>
+    <font>Sans</font>
+    <font_scale>0.205000</font_scale>
+    <text>0, ,1, ,2, ,3, ,4, ,5, ,6, ,7, ,8</text>
+    <text_inset>0.280000</text_inset>
+    <text_color>55769 55769 55769</text_color>
+    <num_maj_ticks>17</num_maj_ticks>
+    <maj_tick_color>52428 52428 52428</maj_tick_color>
+    <maj_tick_inset>0.150000</maj_tick_inset>
+    <maj_tick_length>0.120000</maj_tick_length>
+    <maj_tick_width>0.220000</maj_tick_width>
+    <num_min_ticks>4</num_min_ticks>
+    <min_tick_color>52428 52428 52428</min_tick_color>
+    <min_tick_inset>0.150000</min_tick_inset>
+    <min_tick_length>0.050000</min_tick_length>
+    <min_tick_width>0.120000</min_tick_width>
+    <start_angle>2.356194</start_angle>
+    <stop_angle>7.068583</stop_angle>
+  </tick_group>
   <color_range>
     <lowpoint>5500.000000</lowpoint>
     <highpoint>6200.000000</highpoint>
