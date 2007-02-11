@@ -214,7 +214,6 @@ EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 		window = glade_xml_get_widget(text_xml,"text_settings_window");
 		if (GTK_IS_WIDGET(window))
 		{
-			printf("show make it re-appear\n");
 			gtk_widget_show_all(window);
 			update_text_controls();
 			return TRUE;
@@ -268,7 +267,6 @@ EXPORT gboolean tick_groups_handler(GtkWidget * widget, gpointer data)
 		window = glade_xml_get_widget(tick_groups_xml,"tick_group_settings_window");
 		if (GTK_IS_WIDGET(window))
 		{
-			printf("show make it re-appear\n");
 			gtk_widget_show_all(window);
 			return TRUE;
 		}
@@ -393,7 +391,6 @@ EXPORT gboolean general_attributes_handler(GtkWidget * widget, gpointer data)
 		window = glade_xml_get_widget(gen_xml,"general_settings_window");
 		if (GTK_IS_WIDGET(window))
 		{
-			printf("show make it re-appear\n");
 			gtk_widget_show_all(window);
 			update_text_controls();
 			return TRUE;

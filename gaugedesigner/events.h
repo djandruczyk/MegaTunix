@@ -53,6 +53,8 @@ typedef enum
 	NEEDLE_WIDTH,
 	PRECISION,
 	AA,
+	ADJ_UNIT_PARTNER,
+	ADJ_ANGLE_PARTNER,
 }func;
 
 typedef enum

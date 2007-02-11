@@ -642,9 +642,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	gfloat rad = 0.0;
 	gfloat subcounter = 0;
 	gchar ** vector = NULL;
-	gfloat inset = 0;
-	gfloat insetfrom = 0;
-	gfloat mintick_inset = 0;
+	gfloat inset = 0.0;
+	gfloat insetfrom = 0.0;
+	gfloat mintick_inset = 0.0;
 	gfloat lwidth = 0.0;
 	gfloat angle1, angle2;
 	cairo_pattern_t *gradient = NULL;
@@ -966,6 +966,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gint redstep = 0;
 	gint greenstep = 0;
 	gint bluestep = 0;
+	gfloat mintick_inset = 0.0;
 	gfloat angle1 = 0.0;
 	gfloat angle2 = 0.0;
 	gfloat start_pos = 0.0;
@@ -1312,7 +1313,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		counter = tgroup->start_angle;
 		for (j=0;j<tgroup->num_maj_ticks;j++)
 		{
-			inset = (gint) (tgroup->maj_tick_length * gauge->radius);
+			inset = tgroup->maj_tick_length * gauge->radius;
 			lwidth = (gauge->radius/10)*tgroup->maj_tick_width < 1 ? 1: (gauge->radius/10)*tgroup->maj_tick_width;
 			gdk_gc_set_line_attributes(gauge->gc,lwidth,
 					GDK_LINE_SOLID,
@@ -1346,8 +1347,9 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			/* Now the minor ticks... */
 			if ((tgroup->num_min_ticks > 0) && (j < (tgroup->num_maj_ticks-1)))
 			{
+				mintick_inset = gauge->radius * tgroup->min_tick_inset;
 				gdk_gc_set_rgb_fg_color(gauge->gc,&tgroup->min_tick_color);
-				inset = (gint) (tgroup->min_tick_length * gauge->radius);
+				inset = tgroup->min_tick_length * gauge->radius;
 				lwidth = (gauge->radius/10)*tgroup->min_tick_width < 1 ? 1: (gauge->radius/10)*tgroup->min_tick_width;
 				gdk_gc_set_line_attributes(gauge->gc,lwidth,
 						GDK_LINE_SOLID,
@@ -1358,10 +1360,10 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 					subcounter = k*radians_per_minor_tick;
 					gdk_draw_line(gauge->bg_pixmap,gauge->gc,
 
-							gauge->xc + (gauge->radius - insetfrom) * cos (counter+subcounter),
-							gauge->yc + (gauge->radius - insetfrom) * sin (counter+subcounter),
-							gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter+subcounter)),
-							gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter+subcounter)));
+							gauge->xc + (gauge->radius - mintick_inset) * cos (counter+subcounter),
+							gauge->yc + (gauge->radius - mintick_inset) * sin (counter+subcounter),
+							gauge->xc + ((gauge->radius - mintick_inset - inset) * cos (counter+subcounter)),
+							gauge->yc + ((gauge->radius - mintick_inset - inset) * sin (counter+subcounter)));
 
 				}
 
