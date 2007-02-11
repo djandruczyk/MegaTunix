@@ -354,36 +354,38 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 		{
 			if (g_strcasecmp((gchar *)cur_node->name,"font") == 0)
 				mtx_gauge_gchar_import(gauge, cur_node,&tgroup->font);
-			if (g_strcasecmp((gchar *)cur_node->name,"text") == 0)
-				mtx_gauge_gchar_import(gauge, cur_node,&tgroup->text);
-			if (g_strcasecmp((gchar *)cur_node->name,"tick_color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&tgroup->tick_color);
-			if (g_strcasecmp((gchar *)cur_node->name,"text_color") == 0)
-				mtx_gauge_color_import(gauge, cur_node,&tgroup->text_color);
 			if (g_strcasecmp((gchar *)cur_node->name,"font_scale") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->font_scale);
-			if (g_strcasecmp((gchar *)cur_node->name,"tick_inset") == 0)
-				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->tick_inset);
+			if (g_strcasecmp((gchar *)cur_node->name,"text") == 0)
+				mtx_gauge_gchar_import(gauge, cur_node,&tgroup->text);
+			if (g_strcasecmp((gchar *)cur_node->name,"text_color") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->text_color);
 			if (g_strcasecmp((gchar *)cur_node->name,"text_inset") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->text_inset);
-			if (g_strcasecmp((gchar *)cur_node->name,"tick_width") == 0)
-				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->tick_width);
-			if (g_strcasecmp((gchar *)cur_node->name,"tick_length") == 0)
-				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->tick_length);
+			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_color") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->maj_tick_color);
+			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_color") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&tgroup->min_tick_color);
+			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_inset") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->maj_tick_inset);
+			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_inset") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->min_tick_inset);
+			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_length") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->maj_tick_length);
+			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_length") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->min_tick_length);
+			if (g_strcasecmp((gchar *)cur_node->name,"maj_tick_width") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->maj_tick_width);
+			if (g_strcasecmp((gchar *)cur_node->name,"min_tick_width") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->min_tick_width);
 			if (g_strcasecmp((gchar *)cur_node->name,"start_angle") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->start_angle);
 			if (g_strcasecmp((gchar *)cur_node->name,"stop_angle") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->stop_angle);
-			if (g_strcasecmp((gchar *)cur_node->name,"num_ticks") == 0)
-				mtx_gauge_gint_import(gauge, cur_node,&tgroup->num_ticks);
-			if (g_strcasecmp((gchar *)cur_node->name,"skip_mode") == 0)
-				mtx_gauge_gint_import(gauge, cur_node,&tgroup->skip_mode);
-			if (g_strcasecmp((gchar *)cur_node->name,"initial_skip") == 0)
-				mtx_gauge_gint_import(gauge, cur_node,&tgroup->initial_skip);
-			if (g_strcasecmp((gchar *)cur_node->name,"ticks_before_skip") == 0)
-				mtx_gauge_gint_import(gauge, cur_node,&tgroup->ticks_before_skip);
-			if (g_strcasecmp((gchar *)cur_node->name,"skip_count") == 0)
-				mtx_gauge_gint_import(gauge, cur_node,&tgroup->skip_count);
+			if (g_strcasecmp((gchar *)cur_node->name,"num_maj_ticks") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&tgroup->num_maj_ticks);
+			if (g_strcasecmp((gchar *)cur_node->name,"num_min_ticks") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&tgroup->num_min_ticks);
 		}
 		cur_node = cur_node->next;
 	}
@@ -491,15 +493,16 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "font",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",tgroup->font_scale);
+		xmlNewChild(node, NULL, BAD_CAST "font_scale",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%s",tgroup->text);
 		xmlNewChild(node, NULL, BAD_CAST "text",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%i %i %i", 
-				tgroup->tick_color.red, 
-				tgroup->tick_color.green, 
-				tgroup->tick_color.blue); 
-		xmlNewChild(node, NULL, BAD_CAST "tick_color",
+		tmpbuf = g_strdup_printf("%f",tgroup->text_inset);
+		xmlNewChild(node, NULL, BAD_CAST "text_inset",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%i %i %i", 
@@ -509,24 +512,50 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "text_color",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%f",tgroup->font_scale);
-		xmlNewChild(node, NULL, BAD_CAST "font_scale",
+		tmpbuf = g_strdup_printf("%i",tgroup->num_maj_ticks);
+		xmlNewChild(node, NULL, BAD_CAST "num_maj_ticks",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%f",tgroup->tick_inset);
-		xmlNewChild(node, NULL, BAD_CAST "tick_inset",
+		tmpbuf = g_strdup_printf("%i %i %i", 
+				tgroup->maj_tick_color.red, 
+				tgroup->maj_tick_color.green, 
+				tgroup->maj_tick_color.blue); 
+		xmlNewChild(node, NULL, BAD_CAST "maj_tick_color",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%f",tgroup->text_inset);
-		xmlNewChild(node, NULL, BAD_CAST "text_inset",
+		tmpbuf = g_strdup_printf("%f",tgroup->maj_tick_inset);
+		xmlNewChild(node, NULL, BAD_CAST "maj_tick_inset",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%f",tgroup->tick_width);
-		xmlNewChild(node, NULL, BAD_CAST "tick_width",
+		tmpbuf = g_strdup_printf("%f",tgroup->maj_tick_length);
+		xmlNewChild(node, NULL, BAD_CAST "maj_tick_length",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%f",tgroup->tick_length);
-		xmlNewChild(node, NULL, BAD_CAST "tick_length",
+		tmpbuf = g_strdup_printf("%f",tgroup->maj_tick_width);
+		xmlNewChild(node, NULL, BAD_CAST "maj_tick_width",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%i",tgroup->num_min_ticks);
+		xmlNewChild(node, NULL, BAD_CAST "num_min_ticks",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%i %i %i", 
+				tgroup->min_tick_color.red, 
+				tgroup->min_tick_color.green, 
+				tgroup->min_tick_color.blue); 
+		xmlNewChild(node, NULL, BAD_CAST "min_tick_color",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",tgroup->min_tick_inset);
+		xmlNewChild(node, NULL, BAD_CAST "min_tick_inset",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",tgroup->min_tick_length);
+		xmlNewChild(node, NULL, BAD_CAST "min_tick_length",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",tgroup->min_tick_width);
+		xmlNewChild(node, NULL, BAD_CAST "min_tick_width",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",tgroup->start_angle);
@@ -535,26 +564,6 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%f",tgroup->stop_angle);
 		xmlNewChild(node, NULL, BAD_CAST "stop_angle",
-				BAD_CAST tmpbuf);
-		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%i",tgroup->num_ticks);
-		xmlNewChild(node, NULL, BAD_CAST "num_ticks",
-				BAD_CAST tmpbuf);
-		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%i",tgroup->skip_mode);
-		xmlNewChild(node, NULL, BAD_CAST "skip_mode",
-				BAD_CAST tmpbuf);
-		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%i",tgroup->initial_skip);
-		xmlNewChild(node, NULL, BAD_CAST "initial_skip",
-				BAD_CAST tmpbuf);
-		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%i",tgroup->ticks_before_skip);
-		xmlNewChild(node, NULL, BAD_CAST "ticks_before_skip",
-				BAD_CAST tmpbuf);
-		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%i",tgroup->skip_count);
-		xmlNewChild(node, NULL, BAD_CAST "skip_count",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 

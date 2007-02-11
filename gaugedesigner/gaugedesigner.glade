@@ -7,7 +7,7 @@
   <property name="visible">True</property>
   <property name="title" translatable="yes">Warning Range Creator</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_CENTER</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">True</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -332,7 +332,7 @@
   <property name="visible">True</property>
   <property name="title" translatable="yes">Text Block Creator</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_CENTER</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">True</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -3263,7 +3263,7 @@
   <property name="visible">True</property>
   <property name="title" translatable="yes">Tick Group Creator</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_CENTER</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">True</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -3463,7 +3463,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.255 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -3485,7 +3485,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0.135000005364 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -3673,8 +3673,8 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			<widget class="GtkTable" id="table39">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
-			  <property name="n_rows">2</property>
-			  <property name="n_columns">4</property>
+			  <property name="n_rows">7</property>
+			  <property name="n_columns">5</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">0</property>
 			  <property name="column_spacing">0</property>
@@ -3682,7 +3682,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label148">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Tick Inset</property>
+			      <property name="label" translatable="yes">Inset</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3694,10 +3694,10 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="ypad">0</property>
 			    </widget>
 			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">1</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
+			      <property name="left_attach">1</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
 			      <property name="x_options">expand</property>
 			      <property name="y_options"></property>
 			    </packing>
@@ -3706,7 +3706,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label149">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Tick Width</property>
+			      <property name="label" translatable="yes">Width</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3718,10 +3718,10 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="ypad">0</property>
 			    </widget>
 			    <packing>
-			      <property name="left_attach">1</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
+			      <property name="left_attach">2</property>
+			      <property name="right_attach">3</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
 			      <property name="x_options">expand</property>
 			      <property name="y_options"></property>
 			    </packing>
@@ -3730,7 +3730,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label150">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Tick Length</property>
+			      <property name="label" translatable="yes">Length</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3742,10 +3742,10 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="ypad">0</property>
 			    </widget>
 			    <packing>
-			      <property name="left_attach">2</property>
-			      <property name="right_attach">3</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
+			      <property name="left_attach">3</property>
+			      <property name="right_attach">4</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
 			      <property name="x_options">expand</property>
 			      <property name="y_options"></property>
 			    </packing>
@@ -3754,7 +3754,351 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label158">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Tick Color</property>
+			      <property name="label" translatable="yes">Color</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">4</property>
+			      <property name="right_attach">5</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_maj_tick_inset_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">0.0010000000475</property>
+			      <property name="digits">3</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">1</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">2</property>
+			      <property name="bottom_attach">3</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_maj_tick_width_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">0.0010000000475</property>
+			      <property name="digits">3</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">0.20000000298 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">2</property>
+			      <property name="right_attach">3</property>
+			      <property name="top_attach">2</property>
+			      <property name="bottom_attach">3</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_maj_tick_length_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">0.0010000000475</property>
+			      <property name="digits">3</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">0.10000000149 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">3</property>
+			      <property name="right_attach">4</property>
+			      <property name="top_attach">2</property>
+			      <property name="bottom_attach">3</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkColorButton" id="tg_maj_tick_colorbutton">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="use_alpha">False</property>
+			      <property name="focus_on_click">True</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">4</property>
+			      <property name="right_attach">5</property>
+			      <property name="top_attach">2</property>
+			      <property name="bottom_attach">3</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label162">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">&lt;b&gt;MAJOR&lt;/b&gt; Ticks</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">True</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">5</property>
+			      <property name="top_attach">0</property>
+			      <property name="bottom_attach">1</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_num_maj_ticks_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">True</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">11 0 100 1 10 10</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">2</property>
+			      <property name="bottom_attach">3</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label164">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Total Ticks</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label163">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">&lt;b&gt;MINOR&lt;/b&gt; Ticks</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">True</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">5</property>
+			      <property name="top_attach">4</property>
+			      <property name="bottom_attach">5</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHSeparator" id="hseparator13">
+			      <property name="visible">True</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">5</property>
+			      <property name="top_attach">3</property>
+			      <property name="bottom_attach">4</property>
+			      <property name="x_options">fill</property>
+			      <property name="y_options">fill</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkColorButton" id="tg_min_tick_colorbutton">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="use_alpha">False</property>
+			      <property name="focus_on_click">True</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">4</property>
+			      <property name="right_attach">5</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_min_tick_length_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">0.0010000000475</property>
+			      <property name="digits">3</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">0.0500000007451 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">3</property>
+			      <property name="right_attach">4</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_min_tick_width_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">0.0010000000475</property>
+			      <property name="digits">3</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">0.0649999976158 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">2</property>
+			      <property name="right_attach">3</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_min_tick_inset_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">0.0010000000475</property>
+			      <property name="digits">3</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">False</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">0.17499999702 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">1</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkSpinButton" id="tg_num_min_ticks_spin">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="climb_rate">1</property>
+			      <property name="digits">0</property>
+			      <property name="numeric">True</property>
+			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			      <property name="snap_to_ticks">True</property>
+			      <property name="wrap">False</property>
+			      <property name="adjustment">4 0 100 1 10 10</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="x_options"></property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label169">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Color</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">4</property>
+			      <property name="right_attach">5</property>
+			      <property name="top_attach">5</property>
+			      <property name="bottom_attach">6</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label168">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Length</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3768,91 +4112,80 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			    <packing>
 			      <property name="left_attach">3</property>
 			      <property name="right_attach">4</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
+			      <property name="top_attach">5</property>
+			      <property name="bottom_attach">6</property>
 			      <property name="x_options">expand</property>
 			      <property name="y_options"></property>
 			    </packing>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="tg_tick_inset_spin">
+			    <widget class="GtkLabel" id="label167">
 			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.0010000000475</property>
-			      <property name="digits">3</property>
-			      <property name="numeric">True</property>
-			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
+			      <property name="label" translatable="yes">Width</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0.0399999991059 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">1</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_options"></property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkSpinButton" id="tg_tick_width_spin">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.0010000000475</property>
-			      <property name="digits">3</property>
-			      <property name="numeric">True</property>
-			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
-			      <property name="wrap">False</property>
-			      <property name="adjustment">0.0399999991059 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">1</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_options"></property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkSpinButton" id="tg_tick_length_spin">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.0010000000475</property>
-			      <property name="digits">3</property>
-			      <property name="numeric">True</property>
-			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
-			      <property name="wrap">False</property>
-			      <property name="adjustment">0.119999997318 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
 			      <property name="right_attach">3</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_options"></property>
+			      <property name="top_attach">5</property>
+			      <property name="bottom_attach">6</property>
+			      <property name="x_options">expand</property>
 			      <property name="y_options"></property>
 			    </packing>
 			  </child>
 
 			  <child>
-			    <widget class="GtkColorButton" id="tg_tick_colorbutton">
+			    <widget class="GtkLabel" id="label166">
 			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="use_alpha">False</property>
-			      <property name="focus_on_click">True</property>
+			      <property name="label" translatable="yes">Inset</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
 			    </widget>
 			    <packing>
-			      <property name="left_attach">3</property>
-			      <property name="right_attach">4</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
+			      <property name="left_attach">1</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">5</property>
+			      <property name="bottom_attach">6</property>
+			      <property name="x_options">expand</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label165">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">Total Ticks</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">5</property>
+			      <property name="bottom_attach">6</property>
 			      <property name="x_options">expand</property>
 			      <property name="y_options"></property>
 			    </packing>
@@ -3887,8 +4220,8 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			<widget class="GtkTable" id="table36">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
-			  <property name="n_rows">4</property>
-			  <property name="n_columns">3</property>
+			  <property name="n_rows">2</property>
+			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">3</property>
 			  <property name="column_spacing">10</property>
@@ -3896,7 +4229,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label151">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Start Angle</property>
+			      <property name="label" translatable="yes">Start Angle (rad)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3920,7 +4253,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label152">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Stop Angle</property>
+			      <property name="label" translatable="yes">Stop Angle (rad)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3934,30 +4267,6 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			    <packing>
 			      <property name="left_attach">1</property>
 			      <property name="right_attach">2</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
-			      <property name="x_options">expand</property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkLabel" id="label153">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes"># of Ticks</property>
-			      <property name="use_underline">False</property>
-			      <property name="use_markup">False</property>
-			      <property name="justify">GTK_JUSTIFY_LEFT</property>
-			      <property name="wrap">False</property>
-			      <property name="selectable">False</property>
-			      <property name="xalign">0</property>
-			      <property name="yalign">0.5</property>
-			      <property name="xpad">0</property>
-			      <property name="ypad">0</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">2</property>
-			      <property name="right_attach">3</property>
 			      <property name="top_attach">0</property>
 			      <property name="bottom_attach">1</property>
 			      <property name="x_options">expand</property>
@@ -3997,7 +4306,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 -10 10 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">4.74974513054e-07 -10 10 0.0010000000475 0.00999999977648 0.00999999977648</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -4006,265 +4315,6 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			      <property name="bottom_attach">2</property>
 			      <property name="x_options"></property>
 			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkSpinButton" id="tg_num_ticks_spin">
-			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="climb_rate">1</property>
-			      <property name="digits">0</property>
-			      <property name="numeric">True</property>
-			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-			      <property name="snap_to_ticks">False</property>
-			      <property name="wrap">False</property>
-			      <property name="adjustment">0 0 100 1 10 10</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">2</property>
-			      <property name="right_attach">3</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="x_options"></property>
-			      <property name="y_options"></property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkHSeparator" id="hseparator12">
-			      <property name="visible">True</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">3</property>
-			      <property name="top_attach">2</property>
-			      <property name="bottom_attach">3</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options">fill</property>
-			    </packing>
-			  </child>
-
-			  <child>
-			    <widget class="GtkTable" id="table37">
-			      <property name="visible">True</property>
-			      <property name="n_rows">2</property>
-			      <property name="n_columns">2</property>
-			      <property name="homogeneous">False</property>
-			      <property name="row_spacing">3</property>
-			      <property name="column_spacing">0</property>
-
-			      <child>
-				<widget class="GtkLabel" id="label154">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Skip Mode</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">0</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">1</property>
-				  <property name="x_options">fill</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkCheckButton" id="tg_skip_mode_cbutton">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes"></property>
-				  <property name="use_underline">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				  <property name="active">False</property>
-				  <property name="inconsistent">False</property>
-				  <property name="draw_indicator">True</property>
-				  <signal name="toggled" handler="toggle_skip_params" last_modification_time="Sat, 10 Feb 2007 21:43:19 GMT"/>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="x_options"></property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkTable" id="tg_skip_params_table">
-				  <property name="visible">True</property>
-				  <property name="sensitive">False</property>
-				  <property name="n_rows">2</property>
-				  <property name="n_columns">3</property>
-				  <property name="homogeneous">False</property>
-				  <property name="row_spacing">0</property>
-				  <property name="column_spacing">0</property>
-
-				  <child>
-				    <widget class="GtkLabel" id="label155">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Initial Skip</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">0</property>
-				      <property name="right_attach">1</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkLabel" id="label156">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Ticks before skip</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkLabel" id="label157">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Skip Count</property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_LEFT</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">2</property>
-				      <property name="right_attach">3</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				      <property name="x_options">expand</property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkSpinButton" id="tg_initial_skip_spin">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="climb_rate">1</property>
-				      <property name="digits">0</property>
-				      <property name="numeric">True</property>
-				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				      <property name="snap_to_ticks">False</property>
-				      <property name="wrap">False</property>
-				      <property name="adjustment">0 0 100 1 10 10</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">0</property>
-				      <property name="right_attach">1</property>
-				      <property name="top_attach">1</property>
-				      <property name="bottom_attach">2</property>
-				      <property name="x_options"></property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkSpinButton" id="tg_ticks_before_skip_spin">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="climb_rate">1</property>
-				      <property name="digits">0</property>
-				      <property name="numeric">True</property>
-				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				      <property name="snap_to_ticks">False</property>
-				      <property name="wrap">False</property>
-				      <property name="adjustment">0 0 100 1 10 10</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">1</property>
-				      <property name="bottom_attach">2</property>
-				      <property name="x_options"></property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkSpinButton" id="tg_skip_count_spin">
-				      <property name="visible">True</property>
-				      <property name="can_focus">True</property>
-				      <property name="climb_rate">1</property>
-				      <property name="digits">0</property>
-				      <property name="numeric">True</property>
-				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
-				      <property name="snap_to_ticks">False</property>
-				      <property name="wrap">False</property>
-				      <property name="adjustment">0 0 100 1 10 10</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">2</property>
-				      <property name="right_attach">3</property>
-				      <property name="top_attach">1</property>
-				      <property name="bottom_attach">2</property>
-				      <property name="x_options"></property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">0</property>
-				  <property name="bottom_attach">2</property>
-				  <property name="y_options">fill</property>
-				</packing>
-			      </child>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">0</property>
-			      <property name="right_attach">3</property>
-			      <property name="top_attach">3</property>
-			      <property name="bottom_attach">4</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options">fill</property>
 			    </packing>
 			  </child>
 			</widget>

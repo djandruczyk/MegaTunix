@@ -258,7 +258,6 @@ EXPORT gboolean tick_groups_handler(GtkWidget * widget, gpointer data)
 	gchar * filename = NULL;
 	extern GdkColor white;
 	GtkWidget *window = NULL;
-	GtkWidget *dummy = NULL;
 	GladeXML *xml = NULL;
 
 	if (!GTK_IS_WIDGET(gauge))
@@ -288,10 +287,6 @@ EXPORT gboolean tick_groups_handler(GtkWidget * widget, gpointer data)
 	}
 
 	glade_xml_signal_autoconnect(xml);
-	dummy = glade_xml_get_widget(xml,"tg_skip_mode_cbutton");
-	if (GTK_IS_WIDGET(dummy))
-		g_object_set_data(G_OBJECT(dummy),"target_table",glade_xml_get_widget(xml,"tg_skip_params_table"));
-
 	tick_groups_xml = xml;
 	created = TRUE;
 	update_onscreen_tgroups();

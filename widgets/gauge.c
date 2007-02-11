@@ -446,21 +446,23 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
 
 	g_object_freeze_notify (G_OBJECT (gauge));
 	MtxTickGroup * new_tgroup = g_new0(MtxTickGroup, 1);
-	new_tgroup->font = g_strdup(tgroup->font);
 	new_tgroup->text = g_strdup(tgroup->text);
-	new_tgroup->tick_color = tgroup->tick_color;
 	new_tgroup->text_color = tgroup->text_color;
-	new_tgroup->font_scale = tgroup->font_scale;
-	new_tgroup->tick_inset = tgroup->tick_inset;
 	new_tgroup->text_inset = tgroup->text_inset;
-	new_tgroup->tick_width = tgroup->tick_width;
-	new_tgroup->tick_length = tgroup->tick_length;
-	new_tgroup->start_angle = tgroup->stop_angle;
-	new_tgroup->num_ticks = tgroup->num_ticks;
-	new_tgroup->skip_mode = tgroup->skip_mode;
-	new_tgroup->initial_skip = tgroup->initial_skip;
-	new_tgroup->ticks_before_skip = tgroup->ticks_before_skip;
-	new_tgroup->skip_count = tgroup->skip_count;
+	new_tgroup->font = g_strdup(tgroup->font);
+	new_tgroup->font_scale = tgroup->font_scale;
+	new_tgroup->num_maj_ticks = tgroup->num_maj_ticks;
+	new_tgroup->maj_tick_color = tgroup->maj_tick_color;
+	new_tgroup->maj_tick_inset = tgroup->maj_tick_inset;
+	new_tgroup->maj_tick_length = tgroup->maj_tick_length;
+	new_tgroup->maj_tick_width = tgroup->maj_tick_width;
+	new_tgroup->num_min_ticks = tgroup->num_min_ticks;
+	new_tgroup->min_tick_color = tgroup->min_tick_color;
+	new_tgroup->min_tick_inset = tgroup->min_tick_inset;
+	new_tgroup->min_tick_length = tgroup->min_tick_length;
+	new_tgroup->min_tick_width = tgroup->min_tick_width;
+	new_tgroup->start_angle = tgroup->start_angle;
+	new_tgroup->stop_angle = tgroup->stop_angle;
 	g_array_append_val(gauge->tick_groups,new_tgroup);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
@@ -583,47 +585,50 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 			g_free(tgroup->text);
 			tgroup->text = g_strdup(value);
 			break;
-		case TG_TICK_COLOR:
-			tgroup->tick_color = *(GdkColor *)value;
-			break;
 		case TG_TEXT_COLOR:
 			tgroup->text_color = *(GdkColor *)value;
-			break;
-		case TG_FONT_SCALE:
-			tgroup->font_scale = *(gfloat *)value;
-			break;
-		case TG_TICK_INSET:
-			tgroup->tick_inset = *(gfloat *)value;
 			break;
 		case TG_TEXT_INSET:
 			tgroup->text_inset = *(gfloat *)value;
 			break;
-		case TG_TICK_WIDTH:
-			tgroup->tick_width = *(gfloat *)value;
+		case TG_FONT_SCALE:
+			tgroup->font_scale = *(gfloat *)value;
 			break;
-		case TG_TICK_LENGTH:
-			tgroup->tick_length = *(gfloat *)value;
+		case TG_NUM_MAJ_TICKS:
+			tgroup->num_maj_ticks = (gint)(*(gfloat *)value);
+			break;
+		case TG_MAJ_TICK_COLOR:
+			tgroup->maj_tick_color = *(GdkColor *)value;
+			break;
+		case TG_MAJ_TICK_INSET:
+			tgroup->maj_tick_inset = *(gfloat *)value;
+			break;
+		case TG_MAJ_TICK_WIDTH:
+			tgroup->maj_tick_width = *(gfloat *)value;
+			break;
+		case TG_MAJ_TICK_LENGTH:
+			tgroup->maj_tick_length = *(gfloat *)value;
+			break;
+		case TG_NUM_MIN_TICKS:
+			tgroup->num_min_ticks = (gint)(*(gfloat *)value);
+			break;
+		case TG_MIN_TICK_COLOR:
+			tgroup->min_tick_color = *(GdkColor *)value;
+			break;
+		case TG_MIN_TICK_INSET:
+			tgroup->min_tick_inset = *(gfloat *)value;
+			break;
+		case TG_MIN_TICK_WIDTH:
+			tgroup->min_tick_width = *(gfloat *)value;
+			break;
+		case TG_MIN_TICK_LENGTH:
+			tgroup->min_tick_length = *(gfloat *)value;
 			break;
 		case TG_START_ANGLE:
 			tgroup->start_angle = *(gfloat *)value;
 			break;
 		case TG_STOP_ANGLE:
 			tgroup->stop_angle = *(gfloat *)value;
-			break;
-		case TG_NUM_TICKS:
-			tgroup->num_ticks = *(gint *)value;
-			break;
-		case TG_SKIP_MODE:
-			tgroup->skip_mode = *(gboolean *)value;
-			break;
-		case TG_INITIAL_SKIP:
-			tgroup->initial_skip = *(gint *)value;
-			break;
-		case TG_TICKS_B4_SKIP:
-			tgroup->ticks_before_skip = *(gint *)value;
-			break;
-		case TG_SKIP_COUNT:
-			tgroup->skip_count = *(gint *)value;
 			break;
 		default:
 			break;

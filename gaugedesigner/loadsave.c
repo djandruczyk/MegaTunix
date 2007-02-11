@@ -77,14 +77,22 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
 
 	filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge));
-	fileio->filename = filename;
-	tmpbuf = g_strrstr(filename,"Gauges");
-	vector = g_strsplit(tmpbuf,PSEP,-1);
-	if (g_strv_length(vector) == 3) /* Themed gauge */
-		fileio->default_path = g_build_path(PSEP,GAUGES_DATA_DIR,vector[1],NULL);
-	else if (g_strv_length(vector) == 2)
+	if (!filename)
+	{
+		fileio->filename = NULL;
 		fileio->default_path = g_strdup(GAUGES_DATA_DIR);
-	g_strfreev(vector);
+	}
+	else
+	{
+		fileio->filename = filename;
+		tmpbuf = g_strrstr(filename,"Gauges");
+		vector = g_strsplit(tmpbuf,PSEP,-1);
+		if (g_strv_length(vector) == 3) /* Themed gauge */
+			fileio->default_path = g_build_path(PSEP,GAUGES_DATA_DIR,vector[1],NULL);
+		else if (g_strv_length(vector) == 2)
+			fileio->default_path = g_strdup(GAUGES_DATA_DIR);
+		g_strfreev(vector);
+	}
 
 	filename = choose_file(fileio);
 	if (filename)

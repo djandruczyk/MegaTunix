@@ -96,10 +96,10 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->precision = 2;
 	gauge->start_radian = 0.75 * M_PI;//M_PI is left, 0 is right
 	gauge->stop_radian = 2.25 * M_PI;
-	gauge->major_ticks = 9;
+	gauge->major_ticks = 0; 	/* Deprecated for new style.. */
 	gauge->font_str[MAJ_TICK] = g_strdup("Bitstream Vera Sans");
 	gauge->font_scale[MAJ_TICK] = 0.135;
-	gauge->minor_ticks = 3;  /* B S S S B S S S B  tick style */
+	gauge->minor_ticks = 0;  /* B S S S B S S S B  tick style */
 	gauge->tick_inset = 0.15;    /* how much in from gauge radius fortick */
 	gauge->major_tick_text_inset = 0.030;    /* how much in from gauge radius for tick text */
 	gauge->major_tick_len = 0.1; /* 1 = 100% of radius, so 0.1 = 10% */
@@ -636,19 +636,22 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	gint h = 0;
 	gint i = 0;
 	gint j = 0;
+	gint k = 0;
 	gint count = 0;
 	gfloat counter = 0;
 	gfloat rad = 0.0;
 	gfloat subcounter = 0;
 	gchar ** vector = NULL;
-	gint inset = 0;
-	gint insetfrom = 0;
+	gfloat inset = 0;
+	gfloat insetfrom = 0;
+	gfloat mintick_inset = 0;
 	gfloat lwidth = 0.0;
 	gfloat angle1, angle2;
 	cairo_pattern_t *gradient = NULL;
 	cairo_text_extents_t extents;
 	MtxColorRange *range = NULL;
 	MtxTextBlock *tblock = NULL;
+	MtxTickGroup *tgroup = NULL;
 
 	MtxGaugeFace * gauge = (MtxGaugeFace *)widget;
 
@@ -750,7 +753,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	}
 
-	/* gauge ticks */
+	/* OLD STYLE gauge ticks */
 	cairo_set_source_rgb (cr, gauge->colors[COL_MAJ_TICK].red/65535.0,
 			gauge->colors[COL_MAJ_TICK].green/65535.0,
 			gauge->colors[COL_MAJ_TICK].blue/65535.0);
@@ -772,7 +775,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	for (i=0;i<gauge->major_ticks;i++)
 	{
-		inset = (gint) (gauge->major_tick_len * gauge->radius);
+		inset = gauge->major_tick_len * gauge->radius;
 
 		lwidth = (gauge->radius/10)*gauge->major_tick_width < 1 ? 1: (gauge->radius/10)*gauge->major_tick_width;
 		cairo_set_line_width (cr, lwidth);
@@ -795,7 +798,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 			 * rectangle of text on screen */
 			rad = sqrt(pow(extents.width,2)+pow(extents.height,2))/2.0;
 			cairo_move_to (cr,
-					gauge->xc + (gauge->radius - insetfrom - inset - gauge->major_tick_text_inset*gauge->radius - rad) * cos (counter) - extents.width/2.0,
+					gauge->xc + (gauge->radius - insetfrom - inset - gauge->major_tick_text_inset*gauge->radius - rad) * cos (counter) - extents.width/2.0 - extents.x_bearing,
 					gauge->yc + (gauge->radius - insetfrom - inset -  gauge->major_tick_text_inset*gauge->radius - rad) * sin (counter) + extents.height/2.0);
 			cairo_show_text (cr, vector[i]);
 			cairo_restore(cr);
@@ -808,7 +811,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 					gauge->colors[COL_MIN_TICK].red/65535.0,
 					gauge->colors[COL_MIN_TICK].green/65535.0,
 					gauge->colors[COL_MIN_TICK].blue/65535.0);
-			inset = (gint) (gauge->minor_tick_len * gauge->radius);
+			inset = gauge->minor_tick_len * gauge->radius;
 			lwidth = (gauge->radius/10)*gauge->minor_tick_width < 1 ? 1: (gauge->radius/10)*gauge->minor_tick_width;
 			cairo_set_line_width (cr, lwidth);
 			for (j=1;j<=gauge->minor_ticks;j++)
@@ -827,6 +830,88 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		counter += radians_per_major_tick;
 	}
 	g_strfreev(vector);
+
+	/* NEW STYLE Gauge tick groups */
+	for (i=0;i<gauge->tick_groups->len;i++)
+	{
+		tgroup = g_array_index(gauge->tick_groups,MtxTickGroup *, i);
+		cairo_set_source_rgb (cr, 
+				tgroup->maj_tick_color.red/65535.0,
+				tgroup->maj_tick_color.green/65535.0,
+				tgroup->maj_tick_color.blue/65535.0);
+
+		radians_per_major_tick = (tgroup->stop_angle - tgroup->start_angle)/(float)(tgroup->num_maj_ticks-1);
+		radians_per_minor_tick = radians_per_major_tick/(float)(1+tgroup->num_min_ticks);
+
+		insetfrom = gauge->radius * tgroup->maj_tick_inset;
+		counter = tgroup->start_angle;
+		if (tgroup->text)
+		{
+			vector = g_strsplit(tgroup->text,",",-1);
+			count = g_strv_length(vector);
+			cairo_select_font_face (cr, tgroup->font, CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+			cairo_set_font_size (cr, (gauge->radius * tgroup->font_scale));
+		}
+		for (j=0;j<tgroup->num_maj_ticks;j++)
+		{
+			inset = tgroup->maj_tick_length * gauge->radius;
+
+			lwidth = (gauge->radius/10)*tgroup->maj_tick_width < 1 ? 1: (gauge->radius/10)*tgroup->maj_tick_width;
+			cairo_set_line_width (cr, lwidth);
+			cairo_move_to (cr,
+					gauge->xc + (gauge->radius - insetfrom) * cos (counter),
+					gauge->yc + (gauge->radius - insetfrom) * sin (counter));
+			cairo_line_to (cr,
+					gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter),
+					gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter));
+			cairo_stroke (cr);
+			if ((vector) && (j < count)) /* If not null */
+			{
+				cairo_save(cr);
+				cairo_set_source_rgb (cr, 
+						tgroup->text_color.red/65535.0,
+						tgroup->text_color.green/65535.0,
+						tgroup->text_color.blue/65535.0);
+				cairo_text_extents (cr, vector[j], &extents);
+				/* Gets the radius of a circle that encompasses the 
+				 * rectangle of text on screen */
+				rad = sqrt(pow(extents.width,2)+pow(extents.height,2))/2.0;
+				cairo_move_to (cr,
+						gauge->xc + (gauge->radius - tgroup->text_inset*gauge->radius - rad) * cos (counter) - extents.width/2.0-extents.x_bearing,
+						gauge->yc + (gauge->radius - tgroup->text_inset*gauge->radius - rad) * sin (counter) + extents.height/2.0);
+				cairo_show_text (cr, vector[j]);
+				cairo_restore(cr);
+			}
+			/* minor ticks */
+			if ((tgroup->num_min_ticks > 0) && (j < (tgroup->num_maj_ticks-1)))
+			{
+				cairo_save (cr); /* stack-pen-size */
+				cairo_set_source_rgb (cr,
+						tgroup->min_tick_color.red/65535.0,
+						tgroup->min_tick_color.green/65535.0,
+						tgroup->min_tick_color.blue/65535.0);
+				inset = tgroup->min_tick_length * gauge->radius;
+				mintick_inset = gauge->radius * tgroup->min_tick_inset;
+				lwidth = (gauge->radius/10)*tgroup->min_tick_width < 1 ? 1: (gauge->radius/10)*tgroup->min_tick_width;
+				cairo_set_line_width (cr, lwidth);
+				for (k=1;k<=tgroup->num_min_ticks;k++)
+				{
+					subcounter = k*radians_per_minor_tick;
+					cairo_move_to (cr,
+							gauge->xc + (gauge->radius - mintick_inset) * cos (counter+subcounter),
+							gauge->yc + (gauge->radius - mintick_inset) * sin (counter+subcounter));
+					cairo_line_to (cr,
+							gauge->xc + (gauge->radius - mintick_inset - inset) * cos (counter+subcounter),
+							gauge->yc + (gauge->radius - mintick_inset - inset) * sin (counter+subcounter));
+					cairo_stroke (cr);
+				}
+				cairo_restore (cr); /* stack-pen-size */
+			}
+
+			counter += radians_per_major_tick;
+		}
+		g_strfreev(vector);
+	}
 
 	/* Render all the text blocks */
 	for (i=0;i<gauge->t_blocks->len;i++)
@@ -866,6 +951,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gint h = 0;
 	gint i = 0;
 	gint j = 0;
+	gint k = 0;
 	gint count = 0;
 	gfloat rad = 0.0;
 	gchar **vector = NULL;
@@ -891,6 +977,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gint b_sign = 0;
 	MtxColorRange *range = NULL;
 	MtxTextBlock *tblock = NULL;
+	MtxTickGroup *tgroup = NULL;
 	GdkColor color;
 	GdkColor *b_color;
 	GdkColor *e_color;
@@ -1124,7 +1211,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	}
 
 
-	/* gauge ticks */
+	/* OLD STYLE gauge ticks */
 	radians_per_major_tick = (gauge->stop_radian - gauge->start_radian)/(float)(gauge->major_ticks-1);
 	radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
 	/* Major ticks first */
@@ -1200,6 +1287,88 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		}
 		counter += radians_per_major_tick;
 
+	}
+
+	/* NEW STYLE gauge ticks */
+	for (i=0;i<gauge->tick_groups->len;i++)
+	{
+		tgroup = g_array_index(gauge->tick_groups,MtxTickGroup *, i);
+		radians_per_major_tick = (tgroup->stop_angle - tgroup->start_angle)/(float)(tgroup->num_maj_ticks-1);
+		radians_per_minor_tick = radians_per_major_tick/(float)(1+tgroup->num_min_ticks);
+		/* Major ticks first */
+		insetfrom = gauge->radius * tgroup->maj_tick_inset;
+		count = 0;
+		i=0;
+		if (tgroup->text)
+		{
+			vector = g_strsplit(tgroup->text,",",-1);
+			count = g_strv_length(vector);
+			tmpbuf = g_strdup_printf("%s %i",tgroup->font,(gint)(gauge->radius*tgroup->font_scale));
+			gauge->font_desc = pango_font_description_from_string(tmpbuf);
+			g_free(tmpbuf);
+			pango_layout_set_font_description(gauge->layout,gauge->font_desc);
+		}
+
+		counter = tgroup->start_angle;
+		for (j=0;j<tgroup->num_maj_ticks;j++)
+		{
+			inset = (gint) (tgroup->maj_tick_length * gauge->radius);
+			lwidth = (gauge->radius/10)*tgroup->maj_tick_width < 1 ? 1: (gauge->radius/10)*tgroup->maj_tick_width;
+			gdk_gc_set_line_attributes(gauge->gc,lwidth,
+					GDK_LINE_SOLID,
+					GDK_CAP_BUTT,
+					GDK_JOIN_BEVEL);
+
+			gdk_gc_set_rgb_fg_color(gauge->gc,&tgroup->maj_tick_color);
+			gdk_draw_line(gauge->bg_pixmap,gauge->gc,
+
+					gauge->xc + (gauge->radius - insetfrom) * cos (counter),
+					gauge->yc + (gauge->radius - insetfrom) * sin (counter),
+					gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter)),
+					gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter)));
+			if ((vector) && (j < count)) /* If not null */
+			{
+				gdk_gc_set_rgb_fg_color(gauge->gc,&tgroup->text_color);
+				pango_layout_set_text(gauge->layout,vector[j],-1);
+				pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
+
+				rad = sqrt(pow(logical_rect.width,2)+pow(logical_rect.height,2))/2.0;
+				/* Fudge factor due to differenced ins pango vs
+				 * cairo font extents/rectangles
+				 */
+				rad*=0.55;
+
+				gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
+						gauge->xc + (gauge->radius - tgroup->text_inset*gauge->radius - rad) * cos (counter) - (logical_rect.width/2),
+						gauge->yc + (gauge->radius - tgroup->text_inset*gauge->radius - rad) * sin (counter) - (logical_rect.height/2),gauge->layout);
+			}
+
+			/* Now the minor ticks... */
+			if ((tgroup->num_min_ticks > 0) && (j < (tgroup->num_maj_ticks-1)))
+			{
+				gdk_gc_set_rgb_fg_color(gauge->gc,&tgroup->min_tick_color);
+				inset = (gint) (tgroup->min_tick_length * gauge->radius);
+				lwidth = (gauge->radius/10)*tgroup->min_tick_width < 1 ? 1: (gauge->radius/10)*tgroup->min_tick_width;
+				gdk_gc_set_line_attributes(gauge->gc,lwidth,
+						GDK_LINE_SOLID,
+						GDK_CAP_BUTT,
+						GDK_JOIN_BEVEL);
+				for (k=1;k<=tgroup->num_min_ticks;k++)
+				{
+					subcounter = k*radians_per_minor_tick;
+					gdk_draw_line(gauge->bg_pixmap,gauge->gc,
+
+							gauge->xc + (gauge->radius - insetfrom) * cos (counter+subcounter),
+							gauge->yc + (gauge->radius - insetfrom) * sin (counter+subcounter),
+							gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter+subcounter)),
+							gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter+subcounter)));
+
+				}
+
+			}
+			counter += radians_per_major_tick;
+
+		}
 	}
 
 	/* text Blocks */

@@ -219,6 +219,12 @@ EXPORT gboolean create_tick_group(GtkWidget * widget, gpointer data)
 	MtxTickGroup *tgroup = NULL;
 	GladeXML *xml = NULL;
 	gchar * filename = NULL;
+	gfloat tmp1 = 0.0;
+	gfloat tmp2 = 0.0;
+	MtxGaugeFace *g = NULL;
+	
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
 
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -237,10 +243,18 @@ EXPORT gboolean create_tick_group(GtkWidget * widget, gpointer data)
 
 	glade_xml_signal_autoconnect(xml);
 	dialog = glade_xml_get_widget(xml,"tgroup_dialog");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_colorbutton")),&black);
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_tick_colorbutton")),&black);
-	dummy = glade_xml_get_widget(xml,"tg_skip_mode_cbutton");
-	g_object_set_data(G_OBJECT(dummy),"target_table",glade_xml_get_widget(xml,"tg_skip_params_table"));
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_colorbutton")),&white);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_colorbutton")),&white);
+	if (MTX_IS_GAUGE_FACE(g))
+	{
+		mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
+		dummy = glade_xml_get_widget(xml,"tg_start_angle_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tmp1);
+		dummy = glade_xml_get_widget(xml,"tg_stop_angle_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tmp2);
+	}
+
 
 	if (!GTK_IS_WIDGET(dialog))
 	{
@@ -255,20 +269,21 @@ EXPORT gboolean create_tick_group(GtkWidget * widget, gpointer data)
 			tgroup->font = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(glade_xml_get_widget(xml,"tg_tick_fontbutton")));
 			tgroup->font = g_strchomp(g_strdelimit(tgroup->font,"0123456789",' '));
 			tgroup->text = gtk_editable_get_chars(GTK_EDITABLE(glade_xml_get_widget(xml,"tg_tick_textentry")),0,-1);
-			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_tick_colorbutton")),&tgroup->tick_color);
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_colorbutton")),&tgroup->text_color);
 			tgroup->font_scale = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_font_scale_spin")));
-			tgroup->tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_tick_inset_spin")));
 			tgroup->text_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_text_inset_spin")));
-			tgroup->tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_tick_width_spin")));
-			tgroup->tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_tick_length_spin")));
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_colorbutton")),&tgroup->maj_tick_color);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_colorbutton")),&tgroup->min_tick_color);
+			tgroup->maj_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_inset_spin")));
+			tgroup->min_tick_inset = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_inset_spin")));
+			tgroup->maj_tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_width_spin")));
+			tgroup->min_tick_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_width_spin")));
+			tgroup->maj_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_length_spin")));
+			tgroup->min_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_length_spin")));
 			tgroup->start_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_start_angle_spin")));
 			tgroup->stop_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_stop_angle_spin")));
-			tgroup->num_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_ticks_spin")));
-			tgroup->initial_skip = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_initial_skip_spin")));
-			tgroup->ticks_before_skip = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_ticks_before_skip_spin")));
-			tgroup->skip_count = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_skip_count_spin")));
-			tgroup->skip_mode = (gint)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(xml,"tg_skip_mode_cbutton")));
+			tgroup->num_maj_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_maj_ticks_spin")));
+			tgroup->num_min_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_min_ticks_spin")));
 
 			mtx_gauge_face_set_tick_group_struct(MTX_GAUGE_FACE(gauge),tgroup);
 			g_free(tgroup->text);
@@ -887,17 +902,17 @@ void update_onscreen_tgroups()
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(dummy),"font_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_FONT));
 
+		/* Font Scale*/
+		dummy = glade_xml_get_widget(xml,"tg_font_scale_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->font_scale);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_FONT_SCALE));
+
 		/* Text entry */
 		dummy = glade_xml_get_widget(xml,"tg_tick_textentry");
 		gtk_entry_set_text(GTK_ENTRY(dummy),tgroup->text);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(dummy),"changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT));
-
-		/* Tick Color*/
-		dummy = glade_xml_get_widget(xml,"tg_tick_colorbutton");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->tick_color);
-		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TICK_COLOR));
 
 		/* Text Color*/
 		dummy = glade_xml_get_widget(xml,"tg_text_colorbutton");
@@ -905,35 +920,59 @@ void update_onscreen_tgroups()
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT_COLOR));
 
-		/* Font Scale*/
-		dummy = glade_xml_get_widget(xml,"tg_font_scale_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->font_scale);
-		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_FONT_SCALE));
-
-		/* Tick Inset*/
-		dummy = glade_xml_get_widget(xml,"tg_tick_inset_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->tick_inset);
-		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TICK_INSET));
-
 		/* Text Inset*/
 		dummy = glade_xml_get_widget(xml,"tg_text_inset_spin");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->text_inset);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TEXT_INSET));
 
-		/* Tick Width*/
-		dummy = glade_xml_get_widget(xml,"tg_tick_width_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->tick_width);
+		/* Major Tick Color*/
+		dummy = glade_xml_get_widget(xml,"tg_maj_tick_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->maj_tick_color);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TICK_WIDTH));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MAJ_TICK_COLOR));
 
-		/* Tick Length*/
-		dummy = glade_xml_get_widget(xml,"tg_tick_length_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->tick_length);
+		/* Minor Tick Color*/
+		dummy = glade_xml_get_widget(xml,"tg_min_tick_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&tgroup->min_tick_color);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TICK_LENGTH));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MIN_TICK_COLOR));
+
+		/* Major Tick Inset*/
+		dummy = glade_xml_get_widget(xml,"tg_maj_tick_inset_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->maj_tick_inset);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MAJ_TICK_INSET));
+
+		/* Minor Tick Inset*/
+		dummy = glade_xml_get_widget(xml,"tg_min_tick_inset_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->min_tick_inset);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MIN_TICK_INSET));
+
+		/* Major Tick Width*/
+		dummy = glade_xml_get_widget(xml,"tg_maj_tick_width_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->maj_tick_width);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MAJ_TICK_WIDTH));
+
+		/* Minor Tick Width*/
+		dummy = glade_xml_get_widget(xml,"tg_min_tick_width_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->min_tick_width);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MIN_TICK_WIDTH));
+
+		/* Major Tick Length*/
+		dummy = glade_xml_get_widget(xml,"tg_maj_tick_length_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->maj_tick_length);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MAJ_TICK_LENGTH));
+
+		/* Minor Tick Length*/
+		dummy = glade_xml_get_widget(xml,"tg_min_tick_length_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->min_tick_length);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_MIN_TICK_LENGTH));
 
 		/* Start Angle*/
 		dummy = glade_xml_get_widget(xml,"tg_start_angle_spin");
@@ -947,51 +986,21 @@ void update_onscreen_tgroups()
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_STOP_ANGLE));
 
-		/* Num Ticks*/
-		dummy = glade_xml_get_widget(xml,"tg_num_ticks_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->num_ticks);
+		/* Num Major Ticks*/
+		dummy = glade_xml_get_widget(xml,"tg_num_maj_ticks_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->num_maj_ticks);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_NUM_TICKS));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_NUM_MAJ_TICKS));
 
-		/* Initial Skip*/
-		dummy = glade_xml_get_widget(xml,"tg_initial_skip_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->initial_skip);
+		/* Num Minor Ticks*/
+		dummy = glade_xml_get_widget(xml,"tg_num_min_ticks_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->num_min_ticks);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_INITIAL_SKIP));
-
-		/* Ticks before skip*/
-		dummy = glade_xml_get_widget(xml,"tg_ticks_before_skip_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->ticks_before_skip);
-		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_TICKS_B4_SKIP));
-
-		/* Skip Count*/
-		dummy = glade_xml_get_widget(xml,"tg_skip_count_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->ticks_before_skip);
-		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_SKIP_COUNT));
-
-		/* Skip Mode*/
-		dummy = glade_xml_get_widget(xml,"tg_skip_mode_cbutton");
-		g_object_set_data(G_OBJECT(dummy),"target_table",glade_xml_get_widget(xml,"tg_skip_params_table"));
-		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"toggled", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_SKIP_MODE));
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(dummy),tgroup->skip_mode);
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_NUM_MIN_TICKS));
 
 	}
 	g_free(filename);
 	gtk_widget_show_all(toptable);
-}
-
-
-EXPORT gboolean toggle_skip_params(GtkWidget *widget, gpointer data)
-{
-	GtkWidget * target = NULL;
-	target = g_object_get_data(G_OBJECT(widget),"target_table");
-	if (!GTK_IS_WIDGET(target))
-		return FALSE;
-	gtk_widget_set_sensitive(target,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-	return TRUE;
 }
 
 
@@ -1094,21 +1103,22 @@ gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
 	switch (field)
 	{
 		case TG_FONT_SCALE:
-		case TG_TICK_INSET:
 		case TG_TEXT_INSET:
-		case TG_TICK_WIDTH:
-		case TG_TICK_LENGTH:
+		case TG_MAJ_TICK_INSET:
+		case TG_MIN_TICK_INSET:
+		case TG_MAJ_TICK_WIDTH:
+		case TG_MAJ_TICK_LENGTH:
+		case TG_MIN_TICK_WIDTH:
+		case TG_MIN_TICK_LENGTH:
 		case TG_START_ANGLE:
 		case TG_STOP_ANGLE:
-		case TG_NUM_TICKS:
-		case TG_SKIP_MODE:
-		case TG_INITIAL_SKIP:
-		case TG_TICKS_B4_SKIP:
-		case TG_SKIP_COUNT:
+		case TG_NUM_MAJ_TICKS:
+		case TG_NUM_MIN_TICKS:
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_tick_group(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
-		case TG_TICK_COLOR:
+		case TG_MAJ_TICK_COLOR:
+		case TG_MIN_TICK_COLOR:
 		case TG_TEXT_COLOR:
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 			mtx_gauge_face_alter_tick_group(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);

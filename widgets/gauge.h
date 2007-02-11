@@ -98,20 +98,21 @@ struct _MtxTickGroup
 {
 	gchar *font;
 	gchar *text;
-	GdkColor tick_color;
 	GdkColor text_color;
 	gfloat font_scale;
-	gfloat tick_inset;
 	gfloat text_inset;
-	gfloat tick_width;
-	gfloat tick_length;
+	gint num_maj_ticks;
+	GdkColor maj_tick_color;
+	gfloat maj_tick_inset;
+	gfloat maj_tick_width;
+	gfloat maj_tick_length;
+	gint num_min_ticks;
+	GdkColor min_tick_color;
+	gfloat min_tick_inset;
+	gfloat min_tick_width;
+	gfloat min_tick_length;
 	gfloat start_angle;
 	gfloat stop_angle;
-	gint num_ticks;
-	gboolean skip_mode;
-	gint initial_skip;
-	gint ticks_before_skip;
-	gint skip_count;
 };
 
 
@@ -169,20 +170,21 @@ typedef enum
 {
 	TG_FONT = 0,
 	TG_TEXT,
-	TG_TICK_COLOR,
 	TG_TEXT_COLOR,
 	TG_FONT_SCALE,
-	TG_TICK_INSET,
 	TG_TEXT_INSET,
-	TG_TICK_WIDTH,
-	TG_TICK_LENGTH,
+	TG_NUM_MAJ_TICKS,
+	TG_MAJ_TICK_COLOR,
+	TG_MAJ_TICK_INSET,
+	TG_MAJ_TICK_LENGTH,
+	TG_MAJ_TICK_WIDTH,
+	TG_NUM_MIN_TICKS,
+	TG_MIN_TICK_COLOR,
+	TG_MIN_TICK_INSET,
+	TG_MIN_TICK_LENGTH,
+	TG_MIN_TICK_WIDTH,
 	TG_START_ANGLE,
 	TG_STOP_ANGLE,
-	TG_NUM_TICKS,
-	TG_SKIP_MODE,
-	TG_INITIAL_SKIP,
-	TG_TICKS_B4_SKIP,
-	TG_SKIP_COUNT,
 	TG_NUM_FIELDS,
 }TgField;
 
