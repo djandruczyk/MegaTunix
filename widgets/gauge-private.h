@@ -38,6 +38,7 @@ void gdk_update_gauge_position (GtkWidget *);
 void mtx_gauge_face_init_colors(MtxGaugeFace *);
 void mtx_gauge_face_init_name_bindings(MtxGaugeFace *);
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *);
+void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *);
 
 
 #endif

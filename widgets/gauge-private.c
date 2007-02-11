@@ -127,6 +127,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
 	gauge->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	gauge->tick_groups = g_array_new(FALSE,TRUE,sizeof(MtxTickGroup *));
+	mtx_gauge_face_init_default_tick_group(gauge);
 	mtx_gauge_face_init_colors(gauge);
 	mtx_gauge_face_init_name_bindings(gauge);
 	mtx_gauge_face_init_xml_hash(gauge);
@@ -244,6 +245,36 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 }
 
 
+/*!
+ \brief creates a default tick group (replacing old tick system)
+ \param widget (GtkWidget *) pointer to the gauge object
+ */
+void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
+{
+	MtxTickGroup *tgroup = NULL;
+	GdkColor white = { 0, 65535, 65535, 65535};
+
+	tgroup = g_new0(MtxTickGroup, 1);
+	tgroup->num_maj_ticks = 9;
+	tgroup->num_min_ticks = 4;
+	tgroup->start_angle = gauge->start_radian;
+	tgroup->stop_angle = gauge->stop_radian;
+	tgroup->maj_tick_inset = 0.15;
+	tgroup->maj_tick_width = 0.175;
+	tgroup->maj_tick_length = 0.110;
+	tgroup->min_tick_inset = 0.175;
+	tgroup->min_tick_length = 0.05;
+	tgroup->min_tick_width = 0.10;
+	tgroup->maj_tick_color = white;
+	tgroup->min_tick_color = white;
+	tgroup->font = g_strdup("Arial");
+	tgroup->font_scale = 0.135;
+	tgroup->text_inset = 0.255;
+	tgroup->text = g_strdup("");
+	tgroup->text_color = white;
+	g_array_append_val(gauge->tick_groups,tgroup);
+
+}
 /*!
  \brief updates the gauge position,  This is the CAIRO implementation that
  looks a bit nicer, though is a little bit slower
