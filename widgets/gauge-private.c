@@ -108,6 +108,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->minor_tick_width = 0.1;/* 1 = 10% of radius, so 0.1 = 1% */
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tail = 0.083;  /* % of radius */
+	gauge->needle_length = 0.850; /* % of radius */
 	gauge->font_str[VALUE] = g_strdup("Bitstream Vera Sans");
 	gauge->text_xpos[VALUE] = 0.0;
 	gauge->text_ypos[VALUE] = 0.40;
@@ -287,6 +288,9 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	gfloat tmpf = 0.0;
 	gfloat needle_pos = 0.0;
 	gchar * message = NULL;
+	gchar * tmpbuf = NULL;
+	cairo_font_weight_t weight;
+	cairo_font_slant_t slant;
 	gint i = 0;
 	gfloat n_width = 0.0;
 	gfloat n_tail = 0.0;
@@ -315,8 +319,19 @@ void cairo_update_gauge_position (GtkWidget *widget)
 		cairo_set_source_rgb (cr, gauge->colors[COL_VALUE_FONT].red/65535.0,
 				gauge->colors[COL_VALUE_FONT].green/65535.0,
 				gauge->colors[COL_VALUE_FONT].blue/65535.0);
-		cairo_select_font_face (cr, gauge->font_str[VALUE], CAIRO_FONT_SLANT_NORMAL,
-				CAIRO_FONT_WEIGHT_NORMAL);
+		tmpbuf = g_utf8_strup(gauge->font_str[VALUE],-1);
+		if (g_strrstr(tmpbuf,"BOLD"))
+			weight = CAIRO_FONT_WEIGHT_BOLD;
+		else
+			weight = CAIRO_FONT_WEIGHT_NORMAL;
+		if (g_strrstr(tmpbuf,"OBLIQUE"))
+			slant = CAIRO_FONT_SLANT_OBLIQUE;
+		else if (g_strrstr(tmpbuf,"ITALIC"))
+			slant = CAIRO_FONT_SLANT_ITALIC;
+		else
+			slant = CAIRO_FONT_SLANT_NORMAL;
+		g_free(tmpbuf);
+		cairo_select_font_face (cr, gauge->font_str[VALUE],  slant, weight);
 
 		cairo_set_font_size (cr, (gauge->radius * gauge->font_scale[VALUE]));
 
@@ -326,7 +341,7 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 		cairo_move_to (cr, 
 				gauge->xc-(extents.width/2 + extents.x_bearing)+(gauge->text_xpos[VALUE]*gauge->radius),
-			       	gauge->yc-(extents.height/2 + extents.y_bearing)+(gauge->text_ypos[VALUE]*gauge->radius));
+				gauge->yc-(extents.height/2 + extents.y_bearing)+(gauge->text_ypos[VALUE]*gauge->radius));
 		cairo_show_text (cr, message);
 		g_free(message);
 
@@ -345,7 +360,7 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 	n_width = gauge->needle_width * gauge->radius;
 	n_tail = gauge->needle_tail * gauge->radius;
-	n_tip = gauge->radius * 0.850;
+	n_tip = gauge->needle_length * gauge->radius;
 	xc = gauge->xc;
 	yc = gauge->yc;
 
@@ -415,7 +430,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 		gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_VALUE_FONT]);
 		message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
 
-		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[VALUE],(gint)(gauge->radius *gauge->font_scale[VALUE]));
+		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[VALUE],(gint)(gauge->radius *gauge->font_scale[VALUE]*0.82));
 		gauge->font_desc = pango_font_description_from_string(tmpbuf);
 		g_free(tmpbuf);
 		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
@@ -444,7 +459,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	yc= gauge->yc;
 	n_width = gauge->needle_width * gauge->radius;
 	n_tail = gauge->needle_tail * gauge->radius;
-	n_tip = gauge->radius * 0.850;
+	n_tip = gauge->needle_length * gauge->radius;
 
 	/* Four POINT needle,  point 0 is the tip (easiest to find) */
 	for (i=0;i<4;i++)
@@ -663,6 +678,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	gfloat arc = 0.0;
 	gfloat radians_per_major_tick = 0.0;
 	gfloat radians_per_minor_tick = 0.0;
+	cairo_font_weight_t weight;
+	cairo_font_slant_t slant;
+	gchar * tmpbuf = NULL;
 	gint w = 0;
 	gint h = 0;
 	gint i = 0;
@@ -800,7 +818,19 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	{
 		vector = g_strsplit(gauge->txt_str[MAJ_TICK],",",-1);
 		count = g_strv_length(vector);
-		cairo_select_font_face (cr, gauge->font_str[MAJ_TICK], CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+		tmpbuf = g_utf8_strup(gauge->font_str[MAJ_TICK],-1);
+		if (g_strrstr(tmpbuf,"BOLD"))
+			weight = CAIRO_FONT_WEIGHT_BOLD;
+		else
+			weight = CAIRO_FONT_WEIGHT_NORMAL;
+		if (g_strrstr(tmpbuf,"OBLIQUE"))
+			slant = CAIRO_FONT_SLANT_OBLIQUE;
+		else if (g_strrstr(tmpbuf,"ITALIC"))
+			slant = CAIRO_FONT_SLANT_ITALIC;
+		else
+			slant = CAIRO_FONT_SLANT_NORMAL;
+		g_free(tmpbuf);
+		cairo_select_font_face (cr, gauge->font_str[MAJ_TICK], slant ,weight);
 		cairo_set_font_size (cr, (gauge->radius * gauge->font_scale[MAJ_TICK]));
 	}
 
@@ -880,7 +910,19 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		{
 			vector = g_strsplit(tgroup->text,",",-1);
 			count = g_strv_length(vector);
-			cairo_select_font_face (cr, tgroup->font, CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+			tmpbuf = g_utf8_strup(tgroup->font,-1);
+			if (g_strrstr(tmpbuf,"BOLD"))
+				weight = CAIRO_FONT_WEIGHT_BOLD;
+			else
+				weight = CAIRO_FONT_WEIGHT_NORMAL;
+			if (g_strrstr(tmpbuf,"OBLIQUE"))
+				slant = CAIRO_FONT_SLANT_OBLIQUE;
+			else if (g_strrstr(tmpbuf,"ITALIC"))
+				slant = CAIRO_FONT_SLANT_ITALIC;
+			else
+				slant = CAIRO_FONT_SLANT_NORMAL;
+			g_free(tmpbuf);
+			cairo_select_font_face (cr, tgroup->font, slant, weight);
 			cairo_set_font_size (cr, (gauge->radius * tgroup->font_scale));
 		}
 		for (j=0;j<tgroup->num_maj_ticks;j++)
@@ -953,13 +995,25 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				tblock->color.green/65535.0,
 				tblock->color.blue/65535.0);
 
-		cairo_select_font_face (cr, tblock->font, CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
+		tmpbuf = g_utf8_strup(tblock->font,-1);
+		if (g_strrstr(tmpbuf,"BOLD"))
+			weight = CAIRO_FONT_WEIGHT_BOLD;
+		else
+			weight = CAIRO_FONT_WEIGHT_NORMAL;
+		if (g_strrstr(tmpbuf,"OBLIQUE"))
+			slant = CAIRO_FONT_SLANT_OBLIQUE;
+		else if (g_strrstr(tmpbuf,"ITALIC"))
+			slant = CAIRO_FONT_SLANT_ITALIC;
+		else
+			slant = CAIRO_FONT_SLANT_NORMAL;
+		g_free(tmpbuf);
+		cairo_select_font_face (cr, tblock->font, slant, weight);
 
 		cairo_set_font_size (cr, (gauge->radius * tblock->font_scale));
 		cairo_text_extents (cr, tblock->text, &extents);
 		cairo_move_to (cr, 
 				gauge->xc-(extents.width/2 + extents.x_bearing)+(tblock->x_pos*gauge->radius),
-			       	gauge->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*gauge->radius));
+				gauge->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*gauge->radius));
 		cairo_show_text (cr, tblock->text);
 	}
 
@@ -1254,7 +1308,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	{
 		vector = g_strsplit(gauge->txt_str[MAJ_TICK],",",-1);
 		count = g_strv_length(vector);
-		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[MAJ_TICK],(gint)(gauge->radius*gauge->font_scale[MAJ_TICK]));
+		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[MAJ_TICK],(gint)(gauge->radius*gauge->font_scale[MAJ_TICK]*0.82));
 		gauge->font_desc = pango_font_description_from_string(tmpbuf);
 		g_free(tmpbuf);
 		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
@@ -1287,7 +1341,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			/* Fudge factor due to differenced ins pango vs
 			 * cairo font extents/rectangles
 			 */
-			rad*=0.55;
+			rad*=0.62;
 
 			gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
 					gauge->xc + (gauge->radius - insetfrom - inset - gauge->major_tick_text_inset*gauge->radius - rad) * cos (counter) - (logical_rect.width/2),
@@ -1330,12 +1384,11 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		/* Major ticks first */
 		insetfrom = gauge->radius * tgroup->maj_tick_inset;
 		count = 0;
-		i=0;
 		if (tgroup->text)
 		{
 			vector = g_strsplit(tgroup->text,",",-1);
 			count = g_strv_length(vector);
-			tmpbuf = g_strdup_printf("%s %i",tgroup->font,(gint)(gauge->radius*tgroup->font_scale));
+			tmpbuf = g_strdup_printf("%s %i",tgroup->font,(gint)(gauge->radius*tgroup->font_scale*0.82));
 			gauge->font_desc = pango_font_description_from_string(tmpbuf);
 			g_free(tmpbuf);
 			pango_layout_set_font_description(gauge->layout,gauge->font_desc);
@@ -1368,7 +1421,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				/* Fudge factor due to differenced ins pango vs
 				 * cairo font extents/rectangles
 				 */
-				rad*=0.55;
+				rad*=0.62;
 
 				gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
 						gauge->xc + (gauge->radius - tgroup->text_inset*gauge->radius - rad) * cos (counter) - (logical_rect.width/2),
@@ -1409,7 +1462,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	{
 		tblock = g_array_index(gauge->t_blocks,MtxTextBlock *, i);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&tblock->color);
-		tmpbuf = g_strdup_printf("%s %i",tblock->font,(gint)(gauge->radius*tblock->font_scale));
+		tmpbuf = g_strdup_printf("%s %i",tblock->font,(gint)(gauge->radius*tblock->font_scale*0.82));
 		gauge->font_desc = pango_font_description_from_string(tmpbuf);
 		g_free(tmpbuf);
 		pango_layout_set_font_description(gauge->layout,gauge->font_desc);

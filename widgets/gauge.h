@@ -258,6 +258,7 @@ struct _MtxGaugeFace
 	gfloat tick_inset;	/*! Percentage of radius to start tickmark @ */
 	gfloat needle_width;	/*! % of radius Needle width @ spin axis */
 	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
+	gfloat needle_length;	/*! % of rad length of main needle */
 	gint needle_polygon_points;
 	GdkPoint needle_coords[4];	/*! 4 point needle for now */
 	GdkPoint last_needle_coords[4];	/*! 4 point needle for now */
