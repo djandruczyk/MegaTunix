@@ -1181,7 +1181,7 @@ Threshold (ms.)</property>
 						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
-						      <property name="max_length">3</property>
+						      <property name="max_length">4</property>
 						      <property name="text" translatable="yes">0</property>
 						      <property name="has_frame">True</property>
 						      <property name="invisible_char">*</property>
@@ -1798,7 +1798,7 @@ Threshold (ms.)</property>
 						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
-						      <property name="max_length">3</property>
+						      <property name="max_length">4</property>
 						      <property name="text" translatable="yes">0</property>
 						      <property name="has_frame">True</property>
 						      <property name="invisible_char">*</property>
