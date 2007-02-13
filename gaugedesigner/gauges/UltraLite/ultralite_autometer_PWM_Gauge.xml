@@ -12,8 +12,8 @@
   <gradient_begin_color>47288 47288 47288</gradient_begin_color>
   <gradient_end_color>47288 47288 47288</gradient_end_color>
   <precision>2</precision>
-  <width>178</width>
-  <height>162</height>
+  <width>272</width>
+  <height>238</height>
   <start_deg>-192.513809</start_deg>
   <stop_deg>-152.406784</stop_deg>
   <start_radian>3.360000</start_radian>
@@ -27,7 +27,7 @@
   <antialias>1</antialias>
   <show_value>1</show_value>
   <tick_inset>0.294000</tick_inset>
-  <major_ticks>14</major_ticks>
+  <major_ticks>0</major_ticks>
   <major_tick_len>0.170000</major_tick_len>
   <major_tick_width>0.200000</major_tick_width>
   <major_tick_text_font>Arial Black</major_tick_text_font>
@@ -84,118 +84,6 @@
     <x_pos>0.000000</x_pos>
     <y_pos>-0.300000</y_pos>
     <color>6195 4375 4375</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>2</text>
-    <font_scale>0.140000</font_scale>
-    <x_pos>-0.730000</x_pos>
-    <y_pos>-0.350000</y_pos>
-    <color>5902 440 440</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>4</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>-0.675000</x_pos>
-    <y_pos>-0.480000</y_pos>
-    <color>3856 1429 1429</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>6</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>-0.575000</x_pos>
-    <y_pos>-0.575000</y_pos>
-    <color>13232 4737 4737</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>8</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>-0.460000</x_pos>
-    <y_pos>-0.675000</y_pos>
-    <color>4913 2486 2486</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>10</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>-0.300000</x_pos>
-    <y_pos>-0.750000</y_pos>
-    <color>3934 294 294</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>12</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>-0.125000</x_pos>
-    <y_pos>-0.800000</y_pos>
-    <color>5520 1879 1879</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>14</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>0.075000</x_pos>
-    <y_pos>-0.800000</y_pos>
-    <color>6430 969 969</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>16</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>0.275000</x_pos>
-    <y_pos>-0.757000</y_pos>
-    <color>6880 2633 2633</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>18</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>0.425000</x_pos>
-    <y_pos>-0.661000</y_pos>
-    <color>8613 6186 6186</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>22</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>0.668000</x_pos>
-    <y_pos>-0.444000</y_pos>
-    <color>4688 1654 1654</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>20</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>0.566000</x_pos>
-    <y_pos>-0.558000</y_pos>
-    <color>9601 4140 4140</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>24</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>0.728000</x_pos>
-    <y_pos>-0.315000</y_pos>
-    <color>6802 3768 3768</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>0</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>-0.800000</x_pos>
-    <y_pos>-0.100000</y_pos>
-    <color>1360 754 754</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>26</text>
-    <font_scale>0.130000</font_scale>
-    <x_pos>0.769000</x_pos>
-    <y_pos>-0.100000</y_pos>
-    <color>9004 509 509</color>
   </text_block>
   <text_block>
     <font>Arial Black</font>
@@ -261,4 +149,23 @@
     <y_pos>-0.375000</y_pos>
     <color>6499 4071 4071</color>
   </text_block>
+  <tick_group>
+    <font>Arial Black</font>
+    <font_scale>0.118000</font_scale>
+    <text> 0, 2, 4, 6, 8,10,12,14,16,18,20,22,24,26</text>
+    <text_inset>0.096000</text_inset>
+    <text_color>2570 1285 1285</text_color>
+    <num_maj_ticks>14</num_maj_ticks>
+    <maj_tick_color>1285 514 514</maj_tick_color>
+    <maj_tick_inset>0.272000</maj_tick_inset>
+    <maj_tick_length>0.170000</maj_tick_length>
+    <maj_tick_width>0.200000</maj_tick_width>
+    <num_min_ticks>1</num_min_ticks>
+    <min_tick_color>4626 3598 3598</min_tick_color>
+    <min_tick_inset>0.294000</min_tick_inset>
+    <min_tick_length>0.074000</min_tick_length>
+    <min_tick_width>0.075000</min_tick_width>
+    <start_angle>3.360000</start_angle>
+    <stop_angle>6.020000</stop_angle>
+  </tick_group>
 </gauge>

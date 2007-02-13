@@ -514,47 +514,11 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
  */
 EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
-	gchar *tmpbuf = NULL;
-	gchar * text = NULL;
-	gint i=0;
-	gboolean go_red = TRUE;
-	gint count = 0;
-
 	if ((paused_handlers) || (!ready))
 		return TRUE;
-	if (MTX_STRING == (gint)g_object_get_data(G_OBJECT(widget),"entry_type"))
-	{
-		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
-		return TRUE;
-	}
 
-	text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-	if (!text)
-		return TRUE;
-	tmpbuf = g_new0(gchar,strlen(text));
-	for (i=0;i<strlen(text);i++)
-	{
-		if ((g_ascii_isdigit(text[i])) || (text[i] == '.') || (text[i] == ',') || (text[i] == '-'))
-			tmpbuf[count++] = text[i];
-		else
-			go_red=FALSE;
-	}
-	if ((text) && (tmpbuf))
-	{
-		g_signal_handlers_block_by_func (G_OBJECT (widget),
-				G_CALLBACK (entry_changed_handler),
-				data);
-		gtk_entry_set_text (GTK_ENTRY(widget), tmpbuf);
-		g_signal_handlers_unblock_by_func (G_OBJECT (widget),
-				G_CALLBACK (entry_changed_handler),
-				data);
-	}
-	g_signal_stop_emission_by_name (G_OBJECT (widget), "changed");
+	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 
-	g_free (tmpbuf);
-
-	if (go_red)
-		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	return TRUE;
 }
 
@@ -615,8 +579,8 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),"use_color");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	tmpi = (gint)strtoll(text,NULL,base);
-	tmpf = (float)strtod(text,NULL);
+	tmpi = (gint)g_ascii_strtoll(text,NULL,base);
+	tmpf = (gfloat)g_ascii_strtod(text,NULL);
 	//printf("base %i, text %s int val %i, float val %f \n",base,text,tmpi,tmpf);
 	g_free(text);
 	/* This isn't quite correct, as the base can either be base10 
