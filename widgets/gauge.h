@@ -34,6 +34,85 @@ G_BEGIN_DECLS
 
 
 #define DRAG_BORDER 7
+/* MtxPolyType enumeration,  for polygon support */
+typedef enum
+{
+	MTX_CIRCLE = 0,
+	MTX_ARC,
+	MTX_SQUARE,
+	MTX_RECTANGLE,
+	MTX_GENPOLY,
+	NUM_POLYS,
+}MtxPolyType;
+
+
+/*! ColorIndex enum,  for indexing into the color arrays */
+typedef enum  
+{
+	COL_BG = 0,
+	COL_NEEDLE,
+	COL_VALUE_FONT,
+	COL_GRADIENT_BEGIN,
+	COL_GRADIENT_END,
+	NUM_COLORS
+}ColorIndex;
+
+
+/*! TextIndex enum,  for indexing into the textblock arrays */
+typedef enum	
+{
+	VALUE = 0,
+	NUM_TEXTS
+}TextIndex;
+
+
+/* Text Block enumeration for the individual fields */
+typedef enum
+{
+	TB_FONT_SCALE = 0,
+	TB_X_POS,
+	TB_Y_POS,
+	TB_COLOR,
+	TB_FONT,
+	TB_TEXT,
+	TB_NUM_FIELDS,
+}TbField;
+
+
+/* Tick Group enumeration for the individual fields */
+typedef enum
+{
+	TG_FONT = 0,
+	TG_TEXT,
+	TG_TEXT_COLOR,
+	TG_FONT_SCALE,
+	TG_TEXT_INSET,
+	TG_NUM_MAJ_TICKS,
+	TG_MAJ_TICK_COLOR,
+	TG_MAJ_TICK_INSET,
+	TG_MAJ_TICK_LENGTH,
+	TG_MAJ_TICK_WIDTH,
+	TG_NUM_MIN_TICKS,
+	TG_MIN_TICK_COLOR,
+	TG_MIN_TICK_INSET,
+	TG_MIN_TICK_LENGTH,
+	TG_MIN_TICK_WIDTH,
+	TG_START_ANGLE,
+	TG_STOP_ANGLE,
+	TG_NUM_FIELDS,
+}TgField;
+
+
+/* Color Range enumeration for the individual fields */
+typedef enum
+{
+	CR_LOWPOINT = 0,
+	CR_HIGHPOINT,
+	CR_COLOR,
+	CR_LWIDTH,
+	CR_INSET,
+	CR_NUM_FIELDS,
+}CrField;
 
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
@@ -42,6 +121,13 @@ typedef struct _MtxTextBlock		MtxTextBlock;
 typedef struct _MtxTickGroup		MtxTickGroup;
 typedef struct _MtxXMLFuncs		MtxXMLFuncs;
 typedef struct _MtxDispatchHelper	MtxDispatchHelper;
+typedef struct _MtxPoint		MtxPoint;
+typedef struct _MtxPolygon		MtxPolygon;
+typedef struct _MtxCircle		MtxCircle;
+typedef struct _MtxArc			MtxArc;
+typedef struct _MtxCircle		MtxSquare;
+typedef struct _MtxRect			MtxRect;
+typedef struct _MtxGenPoly		MtxGenPoly;
 
 
 struct _MtxDispatchHelper
@@ -116,6 +202,110 @@ struct _MtxTickGroup
 };
 
 
+/*! \struct _MtxPoint
+ * \brief
+ * _MtxPoint houses a coordinate in gauge space in float point coords which
+ * are percentages of radius to keep everything scalable
+ */
+struct _MtxPoint
+{
+	gfloat x;		/* X val as % of gauge radius */
+	gfloat y;		/* Y val as % of gauge radius */
+};
+
+/*! \struct _MtxPolygon
+ * \brief
+ * _MtxPolygon is a container struct that holds an identifier (enum) and a 
+ * void * for the the actualy polygon data (the struct will be casted in the
+ * code to the right type to get to the correct data...
+ */
+struct _MtxPolygon
+{
+	MtxPolyType poly;
+	void *poly_data;
+};
+
+
+/*! \struct _MtxCircle MtxCirle and MtxSquare point to this
+ * \brief
+ * _MtxCircle contains the info needed to create a circle on the gauge.
+ * Values are in floating point as they are percentages of gauge radius so
+ * that things are fully scalable
+ */
+struct _MtxCircle
+{
+	/* All float values excpet for angles are percentages of radius,
+	 * with respect to the center of the gauge
+	 * so an x value of 0 is the CENTER, a value of -1 is the left border
+	 * and +1 is the right border.
+	 */
+	gfloat x_center;	/* X center */
+	gfloat y_center;	/* Y center */
+	gfloat radius;		/* radius of circle as a % fo gauge radius */
+	gboolean filled;	/* Filled or empty? */
+	GdkColor color;		/* Color */
+};
+
+
+/*! \struct _MtxArc
+ * \brief
+ * _MtxArc contains the info needed to create an arc on the gauge.
+ * Values are in floating point as they are percentages of gauge radius so
+ * that things are fully scalable
+ */
+struct _MtxArc
+{
+	/* All float values excpet for angles are percentages of radius,
+	 * with respect to the center of the gauge
+	 * so an x value of 0 is the CENTER, a value of -1 is the left border
+	 * and +1 is the right border.
+	 */
+	gfloat x;		/* Left edge of bounding rectangle */
+	gfloat y;		/* Right edge of bounding rectangle */
+	gfloat width;		/* width of bounding rectangle */
+	gfloat height;		/* height of bounding rectangle */
+	gfloat start_angle;	/* 0 deg is "3 O'Clock" CCW rotation */
+	gfloat end_angle;	/* Angle relative to start_angle */
+	gboolean filled;	/* Filled or empty? */
+	GdkColor color;		/* Color */
+};
+
+
+/*! \struct _MtxRectangle
+ * \brief
+ * _MtxRectangle contains the info needed to create a rect on the gauge.
+ * Values are in floating point as they are percentages of gauge radius so
+ * that things are fully scalable
+ */
+struct _MtxRectangle
+{
+	/* All float values excpet for angles are percentages of radius,
+	 * with respect to the center of the gauge
+	 * so an x value of 0 is the CENTER, a value of -1 is the left border
+	 * and +1 is the right border.
+	 */
+	gfloat x;		/* Top left edge x coord (% of rad) */
+	gfloat y;		/* Top left edge y coord (% of rad) */
+	gfloat width;		/* Width */
+	gfloat height;		/* Height */
+	gboolean filled;	/* Filled or empty? */
+	GdkColor color;		/* Color */
+};
+
+/*! \struct _MtxGenPoly
+ * \brief
+ * _MtxGenPoly is a container structure for generic polygons that can't be
+ * described by the generic choice above. It allows for any number of points
+ * with one fixed color, in a filled or unfilled state.
+ */
+struct _MtxGenPoly
+{
+	gint num_points;	/* Number of points */
+	MtxPoint *points;	/* Dynamic array of points */
+	gboolean filled;	/* Filled or empty? */
+	GdkColor color;		/* Color */
+};
+
 /*! \struct _MtxXMLFuncs
  * \brief This small container struct is used to store a set of import and 
  * export functions use by the XML code to export or import gauge settings
@@ -132,70 +322,6 @@ struct _MtxXMLFuncs
 	gchar * varname;
 	gpointer dest_var;
 };
-
-typedef enum  
-{
-	COL_BG = 0,
-	COL_NEEDLE,
-	COL_VALUE_FONT,
-	COL_GRADIENT_BEGIN,
-	COL_GRADIENT_END,
-	NUM_COLORS
-}ColorIndex;
-
-typedef enum	
-{
-	VALUE = 0,
-	NUM_TEXTS
-}TextIndex;
-
-/* Text Block enumeration for the individual fields */
-typedef enum
-{
-	TB_FONT_SCALE = 0,
-	TB_X_POS,
-	TB_Y_POS,
-	TB_COLOR,
-	TB_FONT,
-	TB_TEXT,
-	TB_NUM_FIELDS,
-}TbField;
-
-/* Tick Group enumeration for the individual fields */
-typedef enum
-{
-	TG_FONT = 0,
-	TG_TEXT,
-	TG_TEXT_COLOR,
-	TG_FONT_SCALE,
-	TG_TEXT_INSET,
-	TG_NUM_MAJ_TICKS,
-	TG_MAJ_TICK_COLOR,
-	TG_MAJ_TICK_INSET,
-	TG_MAJ_TICK_LENGTH,
-	TG_MAJ_TICK_WIDTH,
-	TG_NUM_MIN_TICKS,
-	TG_MIN_TICK_COLOR,
-	TG_MIN_TICK_INSET,
-	TG_MIN_TICK_LENGTH,
-	TG_MIN_TICK_WIDTH,
-	TG_START_ANGLE,
-	TG_STOP_ANGLE,
-	TG_NUM_FIELDS,
-}TgField;
-
-
-
-/* Color Range enumeration for the individual fields */
-typedef enum
-{
-	CR_LOWPOINT = 0,
-	CR_HIGHPOINT,
-	CR_COLOR,
-	CR_LWIDTH,
-	CR_INSET,
-	CR_NUM_FIELDS,
-}CrField;
 
 struct _MtxGaugeFace
 {//public data

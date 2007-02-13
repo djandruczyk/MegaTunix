@@ -579,7 +579,7 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	use_color = (gboolean)g_object_get_data(G_OBJECT(widget),"use_color");
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	tmpi = (gint)g_ascii_strtoll(text,NULL,base);
+	tmpi = (gint)strtol(text,NULL,base);
 	tmpf = (gfloat)g_ascii_strtod(text,NULL);
 	//printf("base %i, text %s int val %i, float val %f \n",base,text,tmpi,tmpf);
 	g_free(text);
