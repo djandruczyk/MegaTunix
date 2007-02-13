@@ -5,15 +5,12 @@
   <needle_color>44253 0 0</needle_color>
   <needle_tail>0.020000</needle_tail>
   <needle_width>0.032000</needle_width>
-  <majtick_color>65535 65535 65535</majtick_color>
-  <mintick_color>44204 0 0</mintick_color>
   <value_font_color>65535 65535 65535</value_font_color>
-  <major_tick_text_color>65535 65535 65535</major_tick_text_color>
   <gradient_begin_color>57607 57607 57607</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>1</precision>
-  <width>350</width>
-  <height>344</height>
+  <width>226</width>
+  <height>198</height>
   <start_deg>-135.218033</start_deg>
   <stop_deg>-265.852417</stop_deg>
   <start_radian>1.580000</start_radian>
@@ -26,17 +23,6 @@
   <value_str_ypos>0.394000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
-  <tick_inset>0.146000</tick_inset>
-  <major_ticks>0</major_ticks>
-  <major_tick_len>0.113000</major_tick_len>
-  <major_tick_width>0.209000</major_tick_width>
-  <major_tick_text_font>Impact</major_tick_text_font>
-  <major_tick_text>0, ,2, ,4, ,6, ,8, ,10, ,12, ,14, ,16, ,18, ,20, ,22, ,24, ,26</major_tick_text>
-  <major_tick_text_inset>0.026000</major_tick_text_inset>
-  <major_tick_text_scale>0.168000</major_tick_text_scale>
-  <minor_ticks>0</minor_ticks>
-  <minor_tick_len>0.054000</minor_tick_len>
-  <minor_tick_width>0.125000</minor_tick_width>
   <text_block>
     <font>Impact</font>
     <text>PULSE</text>

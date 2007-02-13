@@ -20,12 +20,6 @@
 
 typedef enum
 {
-	MAJ_TICKS=0x10,
-	MIN_TICKS,
-	MAJ_TICK_LEN,
-	MIN_TICK_LEN,
-	MAJ_TICK_WIDTH,
-	MIN_TICK_WIDTH,
 	NAME_XPOS,
 	NAME_YPOS,
 	UNITS_XPOS,
@@ -33,22 +27,18 @@ typedef enum
 	VALUE_XPOS,
 	VALUE_YPOS,
 	TICK_INSET,
-	MAJOR_TICK_TEXT_INSET,
 	START_ANGLE,
 	STOP_ANGLE,
 	LBOUND,
 	UBOUND,
 	NAME_STR,
 	UNITS_STR,
-	MAJ_TICK_STR,
 	NAME_SCALE,
 	UNITS_SCALE,
 	VALUE_SCALE,
-	MAJ_TICK_SCALE,
 	NAME_FONT,
 	UNITS_FONT,
 	VALUE_FONT,
-	MAJ_TICK_FONT,
 	NEEDLE_TAIL,
 	NEEDLE_WIDTH,
 	PRECISION,
@@ -75,7 +65,6 @@ EXPORT gboolean create_new_gauge(GtkWidget *, gpointer );
 EXPORT gboolean close_current_gauge(GtkWidget *, gpointer );
 EXPORT gboolean create_text_block(GtkWidget *, gpointer );
 EXPORT gboolean create_color_span(GtkWidget *, gpointer );
-EXPORT gboolean entry_changed_handler(GtkWidget *, gpointer );
 EXPORT gboolean set_antialiased_mode(GtkWidget *, gpointer );
 EXPORT gboolean change_font(GtkWidget *, gpointer );
 EXPORT gboolean xml_button_handler(GtkWidget *, gpointer );

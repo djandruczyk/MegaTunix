@@ -5,15 +5,12 @@
   <needle_color>61019 15359 2737</needle_color>
   <needle_tail>0.150000</needle_tail>
   <needle_width>0.070000</needle_width>
-  <majtick_color>52428 52428 52428</majtick_color>
-  <mintick_color>52428 52428 52428</mintick_color>
   <value_font_color>52428 52428 52428</value_font_color>
-  <major_tick_text_color>55704 55704 55704</major_tick_text_color>
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>0</precision>
-  <width>318</width>
-  <height>283</height>
+  <width>226</width>
+  <height>198</height>
   <start_deg>-135.218033</start_deg>
   <stop_deg>-265.852417</stop_deg>
   <start_radian>2.360000</start_radian>
@@ -26,17 +23,6 @@
   <value_str_ypos>0.350000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
-  <tick_inset>0.150000</tick_inset>
-  <major_ticks>0</major_ticks>
-  <major_tick_len>0.120000</major_tick_len>
-  <major_tick_width>0.200000</major_tick_width>
-  <major_tick_text_font>Arial Bold</major_tick_text_font>
-  <major_tick_text>0,10,20,30,40,50,60,70,80,90,100</major_tick_text>
-  <major_tick_text_inset>0.010000</major_tick_text_inset>
-  <major_tick_text_scale>0.138000</major_tick_text_scale>
-  <minor_ticks>4</minor_ticks>
-  <minor_tick_len>0.065000</minor_tick_len>
-  <minor_tick_width>0.120000</minor_tick_width>
   <text_block>
     <font>arial Bold</font>
     <text>Throttle Pos.</text>

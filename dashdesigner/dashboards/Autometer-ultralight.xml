@@ -16,7 +16,7 @@
   <gauge>
     <width>192</width>
     <height>167</height>
-    <x_offset>488</x_offset>
+    <x_offset>485</x_offset>
     <y_offset>199</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_afr_Gauge.xml</gauge_xml_name>
     <datasource>afr</datasource>
@@ -32,16 +32,16 @@
   <gauge>
     <width>166</width>
     <height>160</height>
-    <x_offset>4</x_offset>
-    <y_offset>6</y_offset>
+    <x_offset>14</x_offset>
+    <y_offset>21</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_map_Gauge.xml</gauge_xml_name>
     <datasource>mapkpa</datasource>
   </gauge>
   <gauge>
     <width>165</width>
     <height>178</height>
-    <x_offset>511</x_offset>
-    <y_offset>362</y_offset>
+    <x_offset>501</x_offset>
+    <y_offset>361</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_MAT_Gauge.xml</gauge_xml_name>
     <datasource>matdeg</datasource>
   </gauge>
@@ -54,10 +54,10 @@
     <datasource>pw1</datasource>
   </gauge>
   <gauge>
-    <width>256</width>
-    <height>276</height>
-    <x_offset>231</x_offset>
-    <y_offset>246</y_offset>
+    <width>281</width>
+    <height>300</height>
+    <x_offset>214</x_offset>
+    <y_offset>228</y_offset>
     <gauge_xml_name>UltraLite/ultralite_autometer_rpm_Gauge.xml</gauge_xml_name>
     <datasource>rpm</datasource>
   </gauge>

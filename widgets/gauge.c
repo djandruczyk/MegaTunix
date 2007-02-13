@@ -116,9 +116,10 @@ gchar * mtx_gauge_face_get_font (MtxGaugeFace *gauge, TextIndex index)
 
 
 /*!
- \brief sets the gauge major tick font scale as a percentage of radius
+ \brief sets the gauge font scale as a percentage of radius
  \param gauge (MtxGaugeFace *) pointer to gauge
- \param scale (gdfloat) major tick font scale as a percentage of radius
+ \param index (TextIndex) index into internall array to correspond scale 
+ \param scale (gdfloat) font scale as a percentage of radius
  */
 void mtx_gauge_face_set_font_scale (MtxGaugeFace *gauge, TextIndex index, gfloat scale)
 {
@@ -133,9 +134,10 @@ void mtx_gauge_face_set_font_scale (MtxGaugeFace *gauge, TextIndex index, gfloat
 
 
 /*!
- \brief returns the current major tick font scale as a percentage of radius
+ \brief returns the current font scale as a percentage of radius
  \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) major tick font scale as a percentage of radius
+ \params index (TextIndex) index to internal array
+ \returns (gfloat) font scale as a percentage of radius
  */
 gfloat mtx_gauge_face_get_font_scale (MtxGaugeFace *gauge, TextIndex index)
 {
@@ -144,34 +146,6 @@ gfloat mtx_gauge_face_get_font_scale (MtxGaugeFace *gauge, TextIndex index)
 	return gauge->font_scale[index];
 }
 
-
-/*!
- \brief sets the major tick tet inset as a percentage of the gauge radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param inset (gfloat) major tick text inset as a percentage of gauge radius
- */
-void mtx_gauge_face_set_major_tick_text_inset (MtxGaugeFace *gauge, gfloat inset)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->major_tick_text_inset = inset;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief returns the major tick text inset percentage
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns the value for the major tick text inset as a percentage of the 
- gauge radius
- */
-gfloat mtx_gauge_face_get_major_tick_text_inset (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->major_tick_text_inset;
-}
 
 
 /*!
@@ -1002,71 +976,6 @@ gboolean mtx_gauge_face_get_span_deg(MtxGaugeFace *gauge, gfloat *value1, gfloat
 
 
 /*!
- \brief Sets the total number of major ticks for a gauge
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param ticks (gint) number of ticks to use i nthe gauge
- */
-void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->major_ticks = ticks;
-	generate_gauge_background(GTK_WIDGET(gauge));
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief Sets the length of the major ticks as a percentage of the radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param len (gfloat) value (0-1.0) multiple by the gauge radius to determine
- the major tick length (fully scalable solution)
- */
-void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat len)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->major_tick_len = len;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-	gdk_window_clear(GTK_WIDGET(gauge)->window);
-}
-
-
-/*!
- \brief Sets the width of the major ticks as a percentage of 1/10th the radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param width (gfloat) value (0-1.0) multiple by the 1/10th the gauge radius to 
- determine the major tick width (fully scalable solution)
- */
-void mtx_gauge_face_set_major_tick_width (MtxGaugeFace *gauge, gfloat width)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->major_tick_width = width;
-	generate_gauge_background(GTK_WIDGET(gauge));
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief returns the tick inset percentage
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns the value for the tick inset as a percentage of the gauge radius
- */
-gfloat mtx_gauge_face_get_tick_inset (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->tick_inset;
-}
-
-
-/*!
  \brief returns the current needle width 
  \param gauge (MtxGaugeFace *) pointer to gauge
  \returns (gfloat) the needle width as a percentage of gauge radius
@@ -1087,148 +996,6 @@ gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
 	return gauge->needle_tail;
-}
-
-
-
-/*!
- \brief returns the current number of major tickmarks
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gint) number of major tickmarks
- */
-int mtx_gauge_face_get_major_ticks (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->major_ticks;
-}
-
-
-/*!
- \brief returns the current major tick length as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) major tick length as a percentage of radius
- */
-gfloat mtx_gauge_face_get_major_tick_len (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->major_tick_len;
-}
-
-
-/*!
- \brief returns the current major tick width as a percentage of 1/10th radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) major tick width as a percentage of 1/10th the radius
- */
-gfloat mtx_gauge_face_get_major_tick_width (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->major_tick_width;
-}
-
-
-/*!
- \brief returns the current minor tick width as a percentage of 1/10th radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) minor tick width as a percentage of 1/10th the radius
- */
-gfloat mtx_gauge_face_get_minor_tick_width (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->minor_tick_width;
-}
-
-
-/*!
- \brief sets the number of minor ticks.  This number is the number of baby 
- ticks IN BETWEEN any two major ticks,  NOT the TOTAL number of minor ticks
- for the entire gauge.
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param ticks (int) number of minor ticks between any two major ticks.
- */
-void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->minor_ticks = ticks;
-	generate_gauge_background(GTK_WIDGET(gauge));
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief returns the current number of minor tickmarks
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gint) number of minor tickmarks
- */
-int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->minor_ticks;
-}
-
-/*!
- \brief returns the current minor tick length as a percentage of radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \returns (gfloat) minor tick length as a percentage of radius
- */
-gfloat mtx_gauge_face_get_minor_tick_len (MtxGaugeFace *gauge)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), -1);
-	return gauge->minor_tick_len;
-}
-
-
-/*!
- \brief sets the minor tick length as a percentage of the gauge radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param len (gfloat) length of minor ticks as a percentage of gauge radius
- */
-void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat len)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->minor_tick_len = len;
-	generate_gauge_background(GTK_WIDGET(gauge));
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief Sets the width of the minor ticks as a percentage of 1/10th the radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param width (gfloat) value (0-1.0) multiple by the 1/10th the gauge radius to 
- determine the major tick width (fully scalable solution)
- */
-void mtx_gauge_face_set_minor_tick_width (MtxGaugeFace *gauge, gfloat width)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->minor_tick_width = width;
-	generate_gauge_background(GTK_WIDGET(gauge));
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief sets the tick inset as a percentage of the gauge radius
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param inset (gfloat) tick inset as a percentage of gauge radius
- */
-void mtx_gauge_face_set_tick_inset (MtxGaugeFace *gauge, gfloat inset)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->tick_inset = inset;
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
 }
 
 

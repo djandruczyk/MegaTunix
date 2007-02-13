@@ -333,24 +333,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	switch (handler)
 	{
-		case MAJ_TICKS:
-			mtx_gauge_face_set_major_ticks(g,tmpi);
-			break;
-		case MIN_TICKS:
-			mtx_gauge_face_set_minor_ticks(g,tmpi);
-			break;
-		case MAJ_TICK_LEN:
-			mtx_gauge_face_set_major_tick_len(g,tmpf);
-			break;
-		case MIN_TICK_LEN:
-			mtx_gauge_face_set_minor_tick_len(g,tmpf);
-			break;
-		case MAJ_TICK_WIDTH:
-			mtx_gauge_face_set_major_tick_width(g,tmpf);
-			break;
-		case MIN_TICK_WIDTH:
-			mtx_gauge_face_set_minor_tick_width(g,tmpf);
-			break;
 		case VALUE_XPOS:
 			mtx_gauge_face_set_str_xpos(g, VALUE, tmpf);
 			break;
@@ -372,12 +354,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case PRECISION:
 			mtx_gauge_face_set_precision(g,tmpf);
 			break;
-		case TICK_INSET:
-			mtx_gauge_face_set_tick_inset(g,tmpf);
-			break;
-		case MAJOR_TICK_TEXT_INSET:
-			mtx_gauge_face_set_major_tick_text_inset(g,tmpf);
-			break;
 		case NEEDLE_WIDTH:
 			mtx_gauge_face_set_needle_width(g,tmpf);
 			break;
@@ -386,9 +362,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case VALUE_SCALE:
 			mtx_gauge_face_set_font_scale(g, VALUE, tmpf);
-			break;
-		case MAJ_TICK_SCALE:
-			mtx_gauge_face_set_font_scale(g, MAJ_TICK, tmpf);
 			break;
 		case ADJ_UNIT_PARTNER:
 			partner = g_object_get_data(G_OBJECT(widget),"partner");
@@ -417,7 +390,6 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 void reset_onscreen_controls(void)
 {
-	reset_tickmark_controls();
 	reset_text_controls();
 	reset_general_controls();
 	reset_onscreen_ranges();
@@ -428,7 +400,6 @@ void reset_onscreen_controls(void)
 
 void update_attributes(void)
 {
-	update_tickmark_controls();
 	update_text_controls();
 	update_general_controls();
 	update_onscreen_ranges();
@@ -441,41 +412,6 @@ EXPORT gboolean entry_change_color(GtkWidget * widget, gpointer data)
 {
         gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	return TRUE;
-
-}
-EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
-{
-	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
-	gchar * tmpbuf = NULL;
-
-	MtxGaugeFace *g = NULL;
-
-	if (GTK_IS_WIDGET(gauge))
-		g = MTX_GAUGE_FACE(gauge);
-	else 
-		return FALSE;
-
-	if (hold_handlers)
-		return TRUE;
-
-        gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-
-	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	if (tmpbuf == NULL)
-		tmpbuf = g_strdup("");
-
-
-
-	switch ((func)handler)
-	{
-		case MAJ_TICK_STR:
-			mtx_gauge_face_set_text(g, MAJ_TICK, tmpbuf);
-			break;
-		default:
-			break;
-	}
-	g_free(tmpbuf);
-	return (TRUE);
 
 }
 
@@ -503,9 +439,6 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 	{
 		case VALUE_FONT:
 			mtx_gauge_face_set_font(g, VALUE, tmpbuf);
-			break;
-		case MAJ_TICK_FONT:
-			mtx_gauge_face_set_font(g, MAJ_TICK, tmpbuf);
 			break;
 		default:
 			break;

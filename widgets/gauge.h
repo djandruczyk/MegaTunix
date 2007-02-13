@@ -137,10 +137,7 @@ typedef enum
 {
 	COL_BG = 0,
 	COL_NEEDLE,
-	COL_MAJ_TICK,
-	COL_MIN_TICK,
 	COL_VALUE_FONT,
-	COL_MAJ_TICK_TEXT_FONT,
 	COL_GRADIENT_BEGIN,
 	COL_GRADIENT_END,
 	NUM_COLORS
@@ -149,7 +146,6 @@ typedef enum
 typedef enum	
 {
 	VALUE = 0,
-	MAJ_TICK,
 	NUM_TEXTS
 }TextIndex;
 
@@ -248,14 +244,6 @@ struct _MtxGaugeFace
 	gfloat span;		/*! Span from lbound to ubound */
 	gboolean antialias;	/*! AA Flag (used in Cairo ONLY */
 	gboolean show_value;	/*! Show the Valueon screen or not */
-	gint major_ticks;	/*! Number of MAJOR ticks */
-	gfloat major_tick_text_inset;	/*! Major Tick text_inset % of rad */
-	gfloat major_tick_len;	/*! Major Tick length (% of radius 0-1.0) */
-	gfloat major_tick_width;/*! Maj tick width as (1/10 percent of radius */
-	gint minor_ticks;	/*! Number of MINOR ticks PER pair of major's*/
-	gfloat minor_tick_len;	/*! Minor tick length (% of radius 0-1.0) */
-	gfloat minor_tick_width;/*! Maj tick width as (1/10 percent of radius */
-	gfloat tick_inset;	/*! Percentage of radius to start tickmark @ */
 	gfloat needle_width;	/*! % of radius Needle width @ spin axis */
 	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
 	gfloat needle_length;	/*! % of rad length of main needle */
@@ -314,27 +302,11 @@ void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value
 gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
 void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat );
 void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat );
-void mtx_gauge_face_set_major_ticks (MtxGaugeFace *gauge, int ticks);
-int mtx_gauge_face_get_major_ticks (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_major_tick_len (MtxGaugeFace *gauge, gfloat );
-gfloat mtx_gauge_face_get_major_tick_len (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_major_tick_width (MtxGaugeFace *gauge, gfloat );
-gfloat mtx_gauge_face_get_major_tick_width (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_major_tick_str (MtxGaugeFace *gauge, gchar * str);
-gchar * mtx_gauge_face_get_major_tick_str (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_font(MtxGaugeFace *gauge, TextIndex index, gchar * font_name);
 gchar * mtx_gauge_face_get_font(MtxGaugeFace *gauge, TextIndex index);
 
 void mtx_gauge_face_set_font_scale (MtxGaugeFace *gauge, TextIndex, gfloat scale);
 gfloat mtx_gauge_face_get_font_scale (MtxGaugeFace *gauge, TextIndex);
-void mtx_gauge_face_set_major_tick_text_inset (MtxGaugeFace *gauge, gfloat inset);
-gfloat mtx_gauge_face_get_major_tick_text_inset (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_minor_tick_len (MtxGaugeFace *gauge, gfloat );
-gfloat mtx_gauge_face_get_minor_tick_len (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_minor_tick_width (MtxGaugeFace *gauge, gfloat );
-gfloat mtx_gauge_face_get_minor_tick_width (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_minor_ticks (MtxGaugeFace *gauge, int ticks);
-int mtx_gauge_face_get_minor_ticks (MtxGaugeFace *gauge);
 gboolean mtx_gauge_face_get_span_rad (MtxGaugeFace *gauge, gfloat *start_radian, gfloat *stop_radian);
 gboolean mtx_gauge_face_get_span_deg (MtxGaugeFace *gauge, gfloat *start_deg, gfloat *stop_deg);
 void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, gfloat start_radian, gfloat stop_radian);
@@ -343,8 +315,6 @@ void mtx_gauge_face_set_lspan_rad (MtxGaugeFace *gauge, gfloat start_radian);
 void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, gfloat start_deg);
 void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, gfloat stop_radian);
 void mtx_gauge_face_set_uspan_deg (MtxGaugeFace *gauge, gfloat stop_deg);
-void mtx_gauge_face_set_tick_inset (MtxGaugeFace *gauge, gfloat inset);
-gfloat mtx_gauge_face_get_tick_inset (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_needle_width (MtxGaugeFace *gauge, gfloat width);
 gfloat mtx_gauge_face_get_needle_width (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat width);

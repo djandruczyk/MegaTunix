@@ -96,16 +96,6 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->precision = 2;
 	gauge->start_radian = 0.75 * M_PI;//M_PI is left, 0 is right
 	gauge->stop_radian = 2.25 * M_PI;
-	gauge->major_ticks = 0; 	/* Deprecated for new style.. */
-	gauge->font_str[MAJ_TICK] = g_strdup("Bitstream Vera Sans");
-	gauge->font_scale[MAJ_TICK] = 0.135;
-	gauge->minor_ticks = 0;  /* B S S S B S S S B  tick style */
-	gauge->tick_inset = 0.15;    /* how much in from gauge radius fortick */
-	gauge->major_tick_text_inset = 0.030;    /* how much in from gauge radius for tick text */
-	gauge->major_tick_len = 0.1; /* 1 = 100% of radius, so 0.1 = 10% */
-	gauge->minor_tick_len = 0.05;/* 1 = 100% of radius, so 0.1 = 10% */
-	gauge->major_tick_width = 0.175; /* 1 = 10% of radius, so 0.1 = 1% */
-	gauge->minor_tick_width = 0.1;/* 1 = 10% of radius, so 0.1 = 1% */
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tail = 0.083;  /* % of radius */
 	gauge->needle_length = 0.850; /* % of radius */
@@ -140,10 +130,7 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 {
 	g_object_set_data(G_OBJECT(gauge),"bg_color", &gauge->colors[COL_BG]);
 	g_object_set_data(G_OBJECT(gauge),"needle_color", &gauge->colors[COL_NEEDLE]);
-	g_object_set_data(G_OBJECT(gauge),"majtick_color", &gauge->colors[COL_MAJ_TICK]);
-	g_object_set_data(G_OBJECT(gauge),"mintick_color", &gauge->colors[COL_MIN_TICK]);
 	g_object_set_data(G_OBJECT(gauge),"value_font_color", &gauge->colors[COL_VALUE_FONT]);
-	g_object_set_data(G_OBJECT(gauge),"major_tick_text_color", &gauge->colors[COL_MAJ_TICK_TEXT_FONT]);
 	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", &gauge->colors[COL_GRADIENT_BEGIN]);
 	g_object_set_data(G_OBJECT(gauge),"gradient_end_color", &gauge->colors[COL_GRADIENT_END]);
 	g_object_set_data(G_OBJECT(gauge),"needle_width", &gauge->needle_width);
@@ -163,18 +150,6 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", &gauge->text_ypos[VALUE]);
 	g_object_set_data(G_OBJECT(gauge),"antialias", &gauge->antialias);
 	g_object_set_data(G_OBJECT(gauge),"show_value", &gauge->show_value);
-	g_object_set_data(G_OBJECT(gauge),"tick_inset", &gauge->tick_inset);
-	g_object_set_data(G_OBJECT(gauge),"major_ticks", &gauge->major_ticks);
-	g_object_set_data(G_OBJECT(gauge),"major_tick_len", &gauge->major_tick_len);
-	g_object_set_data(G_OBJECT(gauge),"major_tick_width", &gauge->major_tick_width);
-	g_object_set_data(G_OBJECT(gauge),"major_tick_text_font", &gauge->font_str[MAJ_TICK]);
-	g_object_set_data(G_OBJECT(gauge),"major_tick_text_scale", &gauge->font_scale[MAJ_TICK]);
-	g_object_set_data(G_OBJECT(gauge),"major_tick_text", &gauge->txt_str[MAJ_TICK]);
-	g_object_set_data(G_OBJECT(gauge),"major_tick_text_inset", &gauge->major_tick_text_inset);
-
-	g_object_set_data(G_OBJECT(gauge),"minor_ticks", &gauge->minor_ticks);
-	g_object_set_data(G_OBJECT(gauge),"minor_tick_len", &gauge->minor_tick_len);
-	g_object_set_data(G_OBJECT(gauge),"minor_tick_width", &gauge->minor_tick_width);
 }
 
 /*!
@@ -218,22 +193,10 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	gauge->colors[COL_NEEDLE].red=1.0*65535;
 	gauge->colors[COL_NEEDLE].green=1.0*65535;
 	gauge->colors[COL_NEEDLE].blue=1.0*65535;
-	/*! Major Ticks */
-	gauge->colors[COL_MAJ_TICK].red=0.8*65535;
-	gauge->colors[COL_MAJ_TICK].green=0.8*65535;
-	gauge->colors[COL_MAJ_TICK].blue=0.8*65535;
-	/*! Minor Ticks */
-	gauge->colors[COL_MIN_TICK].red=0.8*65535;
-	gauge->colors[COL_MIN_TICK].green=0.8*65535;
-	gauge->colors[COL_MIN_TICK].blue=0.8*65535;
 	/*! Units Font*/
 	gauge->colors[COL_VALUE_FONT].red=0.8*65535;
 	gauge->colors[COL_VALUE_FONT].green=0.8*65535;
 	gauge->colors[COL_VALUE_FONT].blue=0.8*65535;
-	/*! Major Tick Text Strings Font */
-	gauge->colors[COL_MAJ_TICK_TEXT_FONT].red=0.85*65535;
-	gauge->colors[COL_MAJ_TICK_TEXT_FONT].green=0.85*65535;
-	gauge->colors[COL_MAJ_TICK_TEXT_FONT].blue=0.85*65535;
 	/*! Gradient Color Begin */
 	gauge->colors[COL_GRADIENT_BEGIN].red=0.85*65535;
 	gauge->colors[COL_GRADIENT_BEGIN].green=0.85*65535;
@@ -802,96 +765,6 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	}
 
-	/* OLD STYLE gauge ticks */
-	cairo_set_source_rgb (cr, gauge->colors[COL_MAJ_TICK].red/65535.0,
-			gauge->colors[COL_MAJ_TICK].green/65535.0,
-			gauge->colors[COL_MAJ_TICK].blue/65535.0);
-	radians_per_major_tick = (gauge->stop_radian - gauge->start_radian)/(float)(gauge->major_ticks-1);
-	radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
-	/* Major ticks first */
-	insetfrom = gauge->radius * gauge->tick_inset;
-
-	counter = gauge->start_radian;
-	count = 0;
-	i = 0;
-	if (gauge->txt_str[MAJ_TICK])
-	{
-		vector = g_strsplit(gauge->txt_str[MAJ_TICK],",",-1);
-		count = g_strv_length(vector);
-		tmpbuf = g_utf8_strup(gauge->font_str[MAJ_TICK],-1);
-		if (g_strrstr(tmpbuf,"BOLD"))
-			weight = CAIRO_FONT_WEIGHT_BOLD;
-		else
-			weight = CAIRO_FONT_WEIGHT_NORMAL;
-		if (g_strrstr(tmpbuf,"OBLIQUE"))
-			slant = CAIRO_FONT_SLANT_OBLIQUE;
-		else if (g_strrstr(tmpbuf,"ITALIC"))
-			slant = CAIRO_FONT_SLANT_ITALIC;
-		else
-			slant = CAIRO_FONT_SLANT_NORMAL;
-		g_free(tmpbuf);
-		cairo_select_font_face (cr, gauge->font_str[MAJ_TICK], slant ,weight);
-		cairo_set_font_size (cr, (gauge->radius * gauge->font_scale[MAJ_TICK]));
-	}
-
-	for (i=0;i<gauge->major_ticks;i++)
-	{
-		inset = gauge->major_tick_len * gauge->radius;
-
-		lwidth = (gauge->radius/10)*gauge->major_tick_width < 1 ? 1: (gauge->radius/10)*gauge->major_tick_width;
-		cairo_set_line_width (cr, lwidth);
-		cairo_move_to (cr,
-				gauge->xc + (gauge->radius - insetfrom) * cos (counter),
-				gauge->yc + (gauge->radius - insetfrom) * sin (counter));
-		cairo_line_to (cr,
-				gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter),
-				gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter));
-		cairo_stroke (cr);
-		if ((vector) && (i < count)) /* If not null */
-		{
-			cairo_save(cr);
-			cairo_set_source_rgb (cr, 
-				gauge->colors[COL_MAJ_TICK_TEXT_FONT].red/65535.0,
-				gauge->colors[COL_MAJ_TICK_TEXT_FONT].green/65535.0,
-				gauge->colors[COL_MAJ_TICK_TEXT_FONT].blue/65535.0);
-			cairo_text_extents (cr, vector[i], &extents);
-			/* Gets the radius of a circle that encompasses the 
-			 * rectangle of text on screen */
-			rad = sqrt(pow(extents.width,2)+pow(extents.height,2))/2.0;
-			cairo_move_to (cr,
-					gauge->xc + (gauge->radius - insetfrom - inset - gauge->major_tick_text_inset*gauge->radius - rad) * cos (counter) - extents.width/2.0 - extents.x_bearing,
-					gauge->yc + (gauge->radius - insetfrom - inset -  gauge->major_tick_text_inset*gauge->radius - rad) * sin (counter) + extents.height/2.0);
-			cairo_show_text (cr, vector[i]);
-			cairo_restore(cr);
-		}
-		/* minor ticks */
-		if ((gauge->minor_ticks > 0) && (i < (gauge->major_ticks-1)))
-		{
-			cairo_save (cr); /* stack-pen-size */
-			cairo_set_source_rgb (cr, 
-					gauge->colors[COL_MIN_TICK].red/65535.0,
-					gauge->colors[COL_MIN_TICK].green/65535.0,
-					gauge->colors[COL_MIN_TICK].blue/65535.0);
-			inset = gauge->minor_tick_len * gauge->radius;
-			lwidth = (gauge->radius/10)*gauge->minor_tick_width < 1 ? 1: (gauge->radius/10)*gauge->minor_tick_width;
-			cairo_set_line_width (cr, lwidth);
-			for (j=1;j<=gauge->minor_ticks;j++)
-			{
-				subcounter = j*radians_per_minor_tick;
-				cairo_move_to (cr,
-						gauge->xc + (gauge->radius - insetfrom) * cos (counter+subcounter),
-						gauge->yc + (gauge->radius - insetfrom) * sin (counter+subcounter));
-				cairo_line_to (cr,
-						gauge->xc + (gauge->radius - insetfrom - inset) * cos (counter+subcounter),
-						gauge->yc + (gauge->radius - insetfrom - inset) * sin (counter+subcounter));
-				cairo_stroke (cr);
-			}
-			cairo_restore (cr); /* stack-pen-size */
-		}
-		counter += radians_per_major_tick;
-	}
-	g_strfreev(vector);
-
 	/* NEW STYLE Gauge tick groups */
 	for (i=0;i<gauge->tick_groups->len;i++)
 	{
@@ -1296,84 +1169,6 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				span);
 	}
 
-
-	/* OLD STYLE gauge ticks */
-	radians_per_major_tick = (gauge->stop_radian - gauge->start_radian)/(float)(gauge->major_ticks-1);
-	radians_per_minor_tick = radians_per_major_tick/(float)(1+gauge->minor_ticks);
-	/* Major ticks first */
-	insetfrom = gauge->radius * gauge->tick_inset;
-	count = 0;
-	i=0;
-	if (gauge->txt_str[MAJ_TICK])
-	{
-		vector = g_strsplit(gauge->txt_str[MAJ_TICK],",",-1);
-		count = g_strv_length(vector);
-		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[MAJ_TICK],(gint)(gauge->radius*gauge->font_scale[MAJ_TICK]*0.82));
-		gauge->font_desc = pango_font_description_from_string(tmpbuf);
-		g_free(tmpbuf);
-		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
-	}
-
-	counter = gauge->start_radian;
-	for (i=0;i<gauge->major_ticks;i++)
-	{
-		inset = (gint) (gauge->major_tick_len * gauge->radius);
-		lwidth = (gauge->radius/10)*gauge->major_tick_width < 1 ? 1: (gauge->radius/10)*gauge->major_tick_width;
-		gdk_gc_set_line_attributes(gauge->gc,lwidth,
-				GDK_LINE_SOLID,
-				GDK_CAP_BUTT,
-				GDK_JOIN_BEVEL);
-
-		gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MAJ_TICK]);
-		gdk_draw_line(gauge->bg_pixmap,gauge->gc,
-
-				gauge->xc + (gauge->radius - insetfrom) * cos (counter),
-				gauge->yc + (gauge->radius - insetfrom) * sin (counter),
-				gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter)),
-				gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter)));
-		if ((vector) && (i < count)) /* If not null */
-		{
-			gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MAJ_TICK_TEXT_FONT]);
-			pango_layout_set_text(gauge->layout,vector[i],-1);
-			pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
-
-			rad = sqrt(pow(logical_rect.width,2)+pow(logical_rect.height,2))/2.0;
-			/* Fudge factor due to differenced ins pango vs
-			 * cairo font extents/rectangles
-			 */
-			rad*=0.62;
-
-			gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
-					gauge->xc + (gauge->radius - insetfrom - inset - gauge->major_tick_text_inset*gauge->radius - rad) * cos (counter) - (logical_rect.width/2),
-					gauge->yc + (gauge->radius - insetfrom - inset -  gauge->major_tick_text_inset*gauge->radius - rad) * sin (counter) - (logical_rect.height/2),gauge->layout);
-		}
-
-		/* Now the minor ticks... */
-		if ((gauge->minor_ticks > 0) && (i < (gauge->major_ticks-1)))
-		{
-			gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_MIN_TICK]);
-			inset = (gint) (gauge->minor_tick_len * gauge->radius);
-			lwidth = (gauge->radius/10)*gauge->minor_tick_width < 1 ? 1: (gauge->radius/10)*gauge->minor_tick_width;
-			gdk_gc_set_line_attributes(gauge->gc,lwidth,
-					GDK_LINE_SOLID,
-					GDK_CAP_BUTT,
-					GDK_JOIN_BEVEL);
-			for (j=1;j<=gauge->minor_ticks;j++)
-			{
-				subcounter = j*radians_per_minor_tick;
-				gdk_draw_line(gauge->bg_pixmap,gauge->gc,
-
-						gauge->xc + (gauge->radius - insetfrom) * cos (counter+subcounter),
-						gauge->yc + (gauge->radius - insetfrom) * sin (counter+subcounter),
-						gauge->xc + ((gauge->radius - insetfrom - inset) * cos (counter+subcounter)),
-						gauge->yc + ((gauge->radius - insetfrom - inset) * sin (counter+subcounter)));
-
-			}
-
-		}
-		counter += radians_per_major_tick;
-
-	}
 
 	/* NEW STYLE gauge ticks */
 	for (i=0;i<gauge->tick_groups->len;i++)

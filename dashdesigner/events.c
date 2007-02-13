@@ -80,6 +80,8 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	gchar *d_name = NULL;
 	gint t_num = -1;
 	extern GladeXML *main_xml;
+	GdkColor white = { 0, 65535, 65535, 65535};
+	GdkColor home_color = {0, 62000, 59000, 65535};
 	gint i = 0;
 	if (created)
 	{
@@ -191,10 +193,16 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 				gtk_widget_show_all(ebox);
 				while (files[i])
 				{
+					ebox = gtk_event_box_new();
+					gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
 					gauge = mtx_gauge_face_new();
-					gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
-//					gtk_widget_realize(gauge);
+					gtk_container_add(GTK_CONTAINER(ebox),gauge);
+//					gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
 					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
+					if (g_strrstr(files[i],".MegaTunix"))
+						gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
+					else
+						gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
 					gtk_widget_show(gauge);
 					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 					i++;
