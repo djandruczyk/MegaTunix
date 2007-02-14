@@ -25,7 +25,6 @@ Source: "z:\home\dave\cvs\MegaTunix\src\megatunix.exe"; DestDir: "{app}"; Flags:
 Source: "z:\home\dave\cvs\MegaTunix\widgets\demo.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\cvs\MegaTunix\gaugedesigner\gaugedesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\cvs\MegaTunix\dashdesigner\dashdesigner.exe"; DestDir: "{app}"; Flags: ignoreversion
-; Source: "z:\home\dave\win32\config"; DestDir: "{app}\.MegaTunix"
 Source: "z:\usr\local\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]

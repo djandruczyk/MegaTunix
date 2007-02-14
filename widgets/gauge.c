@@ -33,6 +33,7 @@
 #include <gauge.h>
 #include <gauge-private.h>
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <glib/gprintf.h>
 #include <glib-object.h>
 #include <math.h>
@@ -40,42 +41,6 @@
 #include <time.h>
 #include <string.h>
 
-
-
-/*!
- \brief sets the text string for the passed in index. Index is an enumeration
- \see TextIndex
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param TextIndex  enumeration to know where to store the new string
- \param string (gchar *) string to store
- */
-void mtx_gauge_face_set_text(MtxGaugeFace *gauge, TextIndex index, gchar * str)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (index < NUM_TEXTS);
-	g_object_freeze_notify (G_OBJECT (gauge));
-	if (gauge->txt_str[index])
-		g_free(gauge->txt_str[index]);
-	gauge->txt_str[index] = g_strdup(str);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief gets the text string for the passed in index. Index is an enumeration
- \see TextIndex
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param TextIndex  enumeration to know where to store the new string
- \returns a copy of the string,  free it when done.
- */
-gchar * mtx_gauge_face_get_text (MtxGaugeFace *gauge,TextIndex index)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
-	g_return_val_if_fail (index < NUM_TEXTS,NULL);
-	return g_strdup(gauge->txt_str[index]);
-}
 
 
 /*!
@@ -445,6 +410,58 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
 }
 
 
+
+/*!
+ \brief adds a polygon from the struct passed
+ \param gauge, MtxGaugeFace * pointer to gauge
+ \param tblock, MtxPolygon * pointer to polygon struct to copy
+ \returns index of where this text block is stored...
+ */
+gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
+{
+	gint size = 0;
+	MtxGenPoly * new = NULL;
+	MtxGenPoly * temp = NULL;
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),-1);
+
+	g_object_freeze_notify (G_OBJECT (gauge));
+	MtxPolygon * new_poly = g_new0(MtxPolygon, 1);
+	new_poly->type = poly->type;
+	/* Get size of struct to copy */
+	switch(poly->type)
+	{
+		case MTX_SQUARE:
+		case MTX_CIRCLE:
+			size = sizeof(MtxCircle);
+			break;
+		case MTX_ARC:
+			size = sizeof(MtxArc);
+			break;
+		case MTX_RECTANGLE:
+			size = sizeof(MtxRectangle);
+			break;
+		case MTX_GENPOLY:
+			size = sizeof(MtxGenPoly);
+			break;
+		default:
+			break;
+	}
+	new_poly->data = g_memdup(poly->data,size);
+	/* Generic polygons have a dynmically allocated part,  copy it */
+	if (poly->type == MTX_GENPOLY)
+	{
+		new = (MtxGenPoly *)new_poly->data;
+		temp = (MtxGenPoly *)poly->data;
+		new->points = g_memdup(temp->points,sizeof(MtxPoint)*temp->num_points);
+	}
+	g_array_append_val(gauge->polygons,new_poly);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return gauge->polygons->len-1;
+}
+
+
 /*!
  \brief returns the array of ranges to the requestor
  \param gauge (MtxGaugeFace *), pointer to gauge object
@@ -482,7 +499,19 @@ GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge)
 
 
 /*!
- \brief changes a text blcok field by passing in an index 
+ \brief returns the array of polygons to the requestor
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \returns GArray * of the polygons,  DO NOT FREE THIS.
+ */
+GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),NULL);
+	return gauge->polygons;
+}
+
+
+/*!
+ \brief changes a text block field by passing in an index 
  to the test block and the field name to change
  \param gauge  pointer to gauge object
  \param index, index of the textblock
@@ -614,6 +643,161 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 }
 
 
+
+/*!
+ \brief changes a polygon field by passing in an index 
+ to the polygon and the field name to change
+ \param gauge  pointer to gauge object
+ \param index, index of the tickgroup
+ \param field,  enumeration of the field to change
+ \param value, new value
+ */
+void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField field, void * value)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_if_fail (field < POLY_NUM_FIELDS);
+	g_return_if_fail (field >= 0);
+	g_object_freeze_notify (G_OBJECT (gauge));
+
+	MtxPolygon *poly = NULL;
+	gboolean skip_update = FALSE;
+	MtxGenPoly *gdata = NULL;
+	MtxCircle *cdata = NULL;
+	MtxRectangle *rdata = NULL;
+	MtxArc *adata = NULL;
+
+	poly = g_array_index(gauge->polygons,MtxPolygon *,index);
+	g_return_if_fail (poly != NULL);
+	switch (poly->type)
+	{
+		case MTX_SQUARE:
+		case MTX_CIRCLE:
+			cdata = (MtxCircle *)poly->data;
+			break;
+		case MTX_RECTANGLE:
+			rdata = (MtxRectangle *)poly->data;
+			break;
+		case MTX_ARC:
+			adata = (MtxArc *)poly->data;
+			break;
+		case MTX_GENPOLY:
+			gdata = (MtxGenPoly *)poly->data;
+			break;
+		default:
+			break;
+	}
+	switch (field)
+	{
+		case POLY_COLOR:
+			poly->color = *(GdkColor *)value;
+			break;
+		case POLY_X:
+			switch (poly->type)
+			{
+				case MTX_SQUARE:
+				case MTX_CIRCLE:
+					cdata->x = *(gfloat *)value;
+					break;
+				case MTX_ARC:
+					adata->x = *(gfloat *)value;
+					break;
+				case MTX_RECTANGLE:
+					rdata->x = *(gfloat *)value;
+					break;
+				default:
+					break;
+			}
+			break;
+		case POLY_Y:
+			switch (poly->type)
+			{
+				case MTX_SQUARE:
+				case MTX_CIRCLE:
+					cdata->y = *(gfloat *)value;
+					break;
+				case MTX_ARC:
+					adata->y = *(gfloat *)value;
+					break;
+				case MTX_RECTANGLE:
+					rdata->y = *(gfloat *)value;
+					break;
+				default:
+					break;
+			}
+			break;
+		case POLY_WIDTH:
+			switch (poly->type)
+			{
+				case MTX_ARC:
+					adata->width = *(gfloat *)value;
+					break;
+				case MTX_RECTANGLE:
+					rdata->width = *(gfloat *)value;
+					break;
+				default:
+					break;
+			}
+			break;
+		case POLY_HEIGHT:
+			switch (poly->type)
+			{
+				case MTX_ARC:
+					adata->height = *(gfloat *)value;
+					break;
+				case MTX_RECTANGLE:
+					rdata->height = *(gfloat *)value;
+					break;
+				default:
+					break;
+			}
+			break;
+		case POLY_RADIUS:
+			switch (poly->type)
+			{
+				case MTX_CIRCLE:
+				case MTX_SQUARE:
+					cdata->radius = *(gfloat *)value;
+					break;
+				default:
+					break;
+			}
+		case POLY_START_ANGLE:
+			if (poly->type == MTX_ARC)
+				adata->start_angle = *(gfloat *)value;
+			break;
+		case POLY_SWEEP_ANGLE:
+			if (poly->type == MTX_ARC)
+				adata->sweep_angle = *(gfloat *)value;
+			break;
+		case POLY_NUM_POINTS:
+			if (poly->type == MTX_GENPOLY)
+				gdata->num_points = (gint)(*(gfloat *)value);
+			skip_update = TRUE;
+			break;
+		case POLY_FILLED:
+			poly->filled = (gint)(*(gfloat *)value);
+			break;
+		case POLY_POINTS:
+			if (poly->type == MTX_GENPOLY)
+			{
+				if (gdata->points)
+					g_free(gdata->points);
+				gdata->points = g_memdup(value,gdata->num_points);
+			}
+			break;
+		default:
+			break;
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	if (!skip_update)
+	{
+		generate_gauge_background(GTK_WIDGET(gauge));
+		mtx_gauge_face_redraw_canvas (gauge);
+	}
+	return;
+}
+
+
 /*!
  \brief changes a color range field by passing in an index 
  to the test block and the field name to change
@@ -733,6 +917,35 @@ void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge)
 }
 
 
+/*!
+ \brief clears all polygons from the gauge
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ */
+void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
+{
+	gint i = 0;
+	MtxPolygon *poly = NULL;
+	MtxGenPoly *gpoly = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	for (i=gauge->polygons->len-1;i>=0;i--)
+	{
+		poly = g_array_index(gauge->polygons,MtxPolygon *, i);
+		gauge->polygons = g_array_remove_index(gauge->polygons,i);
+		if (poly->type == MTX_GENPOLY)
+		{
+			gpoly = (MtxGenPoly *)poly->data;
+			if (gpoly->points)
+				g_free(gpoly->points);
+		}
+		g_free(poly->data);
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+}
+
 
 /*!
  \brief clears a specific color range based on index passed
@@ -816,6 +1029,39 @@ void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index)
 
 }
 
+
+/*!
+ \brief clears a specific polygon based on index passed
+ \param gauge (MtxGaugeFace *), pointer to gauge object
+ \param index gint index of the one we want to remove.
+ */
+void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
+{
+	MtxPolygon *poly = NULL;
+	MtxGenPoly *gpoly = NULL;
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if ((index <= gauge->polygons->len) && (index >= 0 ))
+	{
+		poly = g_array_index(gauge->polygons,MtxPolygon *, index);
+		g_array_remove_index(gauge->polygons,index);
+		if (poly)
+		{
+			if (poly->type == MTX_GENPOLY)
+			{
+				gpoly = (MtxGenPoly *)poly->data;
+				if (gpoly->points)
+					g_free(gpoly->points);
+			}
+			g_free(poly);
+		}
+	}
+	g_object_thaw_notify (G_OBJECT (gauge));
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+	return;
+
+}
 
 
 /*!

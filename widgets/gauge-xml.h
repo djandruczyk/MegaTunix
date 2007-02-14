@@ -32,16 +32,22 @@ void mtx_gauge_color_range_export(MtxDispatchHelper *);
 void mtx_gauge_color_export(MtxDispatchHelper *);
 void mtx_gauge_text_block_export(MtxDispatchHelper *);
 void mtx_gauge_tick_group_export(MtxDispatchHelper *);
+void mtx_gauge_polygon_export(MtxDispatchHelper *);
 void mtx_gauge_gfloat_export(MtxDispatchHelper *);
 void mtx_gauge_gint_export(MtxDispatchHelper *);
 void mtx_gauge_gchar_export(MtxDispatchHelper *);
 void mtx_gauge_color_range_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_text_block_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_tick_group_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_polygon_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_color_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_gfloat_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_gint_import(MtxGaugeFace *, xmlNode *, gpointer);
 void mtx_gauge_gchar_import(MtxGaugeFace *, xmlNode *, gpointer);
+void mtx_gauge_poly_generic_import(MtxGaugeFace *, xmlNode *, gpointer );
+void mtx_gauge_poly_arc_import(MtxGaugeFace *, xmlNode *, gpointer );
+void mtx_gauge_poly_circle_import(MtxGaugeFace *, xmlNode *, gpointer );
+void mtx_gauge_poly_rectangle_import(MtxGaugeFace *, xmlNode *, gpointer );
 
 /** Structure used to streamline the xml import/export */
 static const struct
@@ -72,9 +78,10 @@ static const struct
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_str_ypos"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"antialias"},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"show_value"},
+	{ mtx_gauge_color_range_import, mtx_gauge_color_range_export,"color_range"},
 	{ mtx_gauge_text_block_import, mtx_gauge_text_block_export,"text_block"},
 	{ mtx_gauge_tick_group_import, mtx_gauge_tick_group_export,"tick_group"},
-	{ mtx_gauge_color_range_import, mtx_gauge_color_range_export,"color_range"},
+	{ mtx_gauge_polygon_import, mtx_gauge_polygon_export,"polygon"},
 };
 
 

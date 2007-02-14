@@ -398,6 +398,200 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 }
 
 
+void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
+{
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_polygon_import, xml node is empty!!\n");
+		return;
+	}
+	xmlNode *cur_node = NULL;
+	MtxPolygon *poly = NULL;
+	gchar * polytype = NULL;
+
+	poly = g_new0(MtxPolygon, 1);
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"color") == 0)
+				mtx_gauge_color_import(gauge, cur_node,&poly->color);
+			if (g_strcasecmp((gchar *)cur_node->name,"filled") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&poly->filled);
+			if (g_strcasecmp((gchar *)cur_node->name,"PolyType") == 0)
+			{
+				if ((!cur_node->children) || (!(node->children->type == XML_TEXT_NODE)))
+					return;
+				polytype = g_strdup((gchar*)cur_node->children->content);
+				if (g_strcasecmp((gchar *)polytype,"Circle") == 0)
+					mtx_gauge_poly_circle_import(gauge, cur_node,&poly);
+				if (g_strcasecmp((gchar *)polytype,"Arc") == 0)
+					mtx_gauge_poly_arc_import(gauge, cur_node,&poly);
+				if (g_strcasecmp((gchar *)polytype,"Rectangle") == 0)
+					mtx_gauge_poly_rectangle_import(gauge, cur_node,&poly);
+				if (g_strcasecmp((gchar *)polytype,"GenPolygon") == 0)
+					mtx_gauge_poly_generic_import(gauge, cur_node,&poly);
+				g_free(polytype);
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	g_array_append_val(gauge->polygons,poly);
+}
+
+
+void mtx_gauge_poly_circle_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
+{
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_polygon_import, xml node is empty!!\n");
+		return;
+	}
+	xmlNode *cur_node = NULL;
+	MtxPolygon *poly = (MtxPolygon *) dest;
+	poly->data = g_new0(MtxCircle, 1);
+	MtxCircle *data = (MtxCircle *) poly->data;
+
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"x") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->x);
+			if (g_strcasecmp((gchar *)cur_node->name,"y") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->y);
+			if (g_strcasecmp((gchar *)cur_node->name,"radius") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->radius);
+		}
+		cur_node = cur_node->next;
+	}
+	g_array_append_val(gauge->polygons,poly);
+}
+
+
+void mtx_gauge_poly_rectangle_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
+{
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_polygon_import, xml node is empty!!\n");
+		return;
+	}
+	xmlNode *cur_node = NULL;
+	MtxPolygon *poly = (MtxPolygon *) dest;
+	poly->data = g_new0(MtxRectangle, 1);
+	MtxRectangle *data = (MtxRectangle *) poly->data;
+
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"x") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->x);
+			if (g_strcasecmp((gchar *)cur_node->name,"y") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->y);
+			if (g_strcasecmp((gchar *)cur_node->name,"width") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->width);
+			if (g_strcasecmp((gchar *)cur_node->name,"height") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->height);
+		}
+		cur_node = cur_node->next;
+	}
+	g_array_append_val(gauge->polygons,poly);
+}
+
+
+void mtx_gauge_poly_arc_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
+{
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_polygon_import, xml node is empty!!\n");
+		return;
+	}
+	xmlNode *cur_node = NULL;
+	MtxPolygon *poly = (MtxPolygon *) dest;
+	poly->data = g_new0(MtxArc, 1);
+	MtxArc *data = (MtxArc *) poly->data;
+
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"x") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->x);
+			if (g_strcasecmp((gchar *)cur_node->name,"y") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->y);
+			if (g_strcasecmp((gchar *)cur_node->name,"width") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->width);
+			if (g_strcasecmp((gchar *)cur_node->name,"height") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->height);
+			if (g_strcasecmp((gchar *)cur_node->name,"start_angle") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->start_angle);
+			if (g_strcasecmp((gchar *)cur_node->name,"sweep_angle") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->sweep_angle);
+		}
+		cur_node = cur_node->next;
+	}
+	g_array_append_val(gauge->polygons,poly);
+}
+
+
+void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
+{
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_polygon_import, xml node is empty!!\n");
+		return;
+	}
+	gint i = 0;
+	gchar *tmpbuf = NULL;
+	gchar **x_vector = NULL;
+	gchar **y_vector = NULL;
+	xmlNode *cur_node = NULL;
+	MtxPolygon *poly = (MtxPolygon *) dest;
+	poly->data = g_new0(MtxGenPoly, 1);
+	MtxGenPoly *data = (MtxGenPoly *) poly->data;
+
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"num_points") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&data->num_points);
+			data->points = g_new0(MtxPoint, data->num_points);
+			if (g_strcasecmp((gchar *)cur_node->name,"x_coords") == 0)
+				mtx_gauge_gchar_import(gauge, cur_node,&tmpbuf);
+			x_vector = g_strsplit(tmpbuf," ", -1);
+			g_free(tmpbuf);
+			if (g_strcasecmp((gchar *)cur_node->name,"y_coords") == 0)
+				mtx_gauge_gchar_import(gauge, cur_node,&tmpbuf);
+			y_vector = g_strsplit(tmpbuf," ", -1);
+			g_free(tmpbuf);
+			if ((g_strv_length(x_vector) != data->num_points) || (g_strv_length(y_vector) != data->num_points))
+			{
+				printf("XML error,  num_points != num of X or Y coords!\n ABORTING\n");
+				return;
+			}
+			for (i=0;i<data->num_points;i++)
+			{
+				data->points[i].x = g_ascii_strtod(x_vector[i],NULL);
+				data->points[i].y = g_ascii_strtod(y_vector[i],NULL);
+			}
+			g_strfreev(x_vector);
+			g_strfreev(y_vector);
+			
+
+		}
+		cur_node = cur_node->next;
+	}
+	g_array_append_val(gauge->polygons,poly);
+}
+
+
 void mtx_gauge_color_range_export(MtxDispatchHelper * helper)
 {
 	gint i = 0;
@@ -493,7 +687,7 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 	{
 		tgroup = g_array_index(helper->gauge->tick_groups,MtxTickGroup *, i);
 		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "tick_group",NULL );
-				
+
 		tmpbuf = g_strdup_printf("%s",tgroup->font);
 		xmlNewChild(node, NULL, BAD_CAST "font",
 				BAD_CAST tmpbuf);
@@ -572,6 +766,143 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 
+	}
+}
+
+
+void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
+{
+	gint i = 0;
+	gchar * tmpbuf = NULL;
+	GString *string = NULL;
+	MtxPolygon *poly = NULL;
+	MtxArc * adata = NULL;
+	MtxCircle * cdata = NULL;
+	MtxRectangle * rdata = NULL;
+	MtxGenPoly * gdata = NULL;
+	xmlNodePtr node = NULL;
+
+	for (i=0;i<helper->gauge->polygons->len;i++)
+	{
+		poly = g_array_index(helper->gauge->polygons,MtxPolygon *, i);
+		node = xmlNewChild(helper->root_node, NULL, BAD_CAST "tick_group",NULL );
+
+		tmpbuf = g_strdup_printf("%i %i %i", 
+				poly->color.red, 
+				poly->color.green, 
+				poly->color.blue); 
+		xmlNewChild(node, NULL, BAD_CAST "color",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%i",poly->filled);
+		xmlNewChild(node, NULL, BAD_CAST "filled",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		switch (poly->type)
+		{
+			case MTX_CIRCLE:
+				tmpbuf = g_strdup("Circle");
+				xmlNewChild(node, NULL, BAD_CAST "PolyType",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",cdata->x);
+				xmlNewChild(node, NULL, BAD_CAST "x",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",cdata->y);
+				xmlNewChild(node, NULL, BAD_CAST "y",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",cdata->radius);
+				xmlNewChild(node, NULL, BAD_CAST "radius",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				break;
+			case MTX_RECTANGLE:
+				tmpbuf = g_strdup("Rectangle");
+				xmlNewChild(node, NULL, BAD_CAST "PolyType",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",rdata->x);
+				xmlNewChild(node, NULL, BAD_CAST "x",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",rdata->y);
+				xmlNewChild(node, NULL, BAD_CAST "y",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",rdata->width);
+				xmlNewChild(node, NULL, BAD_CAST "width",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",rdata->height);
+				xmlNewChild(node, NULL, BAD_CAST "height",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				break;
+			case MTX_ARC:
+				tmpbuf = g_strdup("Arc");
+				xmlNewChild(node, NULL, BAD_CAST "PolyType",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",adata->x);
+				xmlNewChild(node, NULL, BAD_CAST "x",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",adata->y);
+				xmlNewChild(node, NULL, BAD_CAST "y",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",adata->width);
+				xmlNewChild(node, NULL, BAD_CAST "width",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",adata->height);
+				xmlNewChild(node, NULL, BAD_CAST "height",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",adata->start_angle);
+				xmlNewChild(node, NULL, BAD_CAST "start_angle",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%f",adata->sweep_angle);
+				xmlNewChild(node, NULL, BAD_CAST "sweep_angle",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				break;
+			case MTX_GENPOLY:
+				tmpbuf = g_strdup("Arc");
+				xmlNewChild(node, NULL, BAD_CAST "PolyType",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("%i",gdata->num_points);
+				xmlNewChild(node, NULL, BAD_CAST "num_points",
+						BAD_CAST tmpbuf);
+				g_free(tmpbuf);
+				string = g_string_new(NULL);
+				for (i=0;i<gdata->num_points;i++)
+				{
+					g_string_printf(string,"%f",gdata->points[i].x);
+					if (i < (gdata->num_points-2))
+						g_string_printf(string," ");
+				}
+				xmlNewChild(node, NULL, BAD_CAST "x_coords",
+						BAD_CAST string->str);
+				g_string_free(string,TRUE);
+				string = g_string_new(NULL);
+				for (i=0;i<gdata->num_points;i++)
+				{
+					g_string_printf(string,"%f",gdata->points[i].y);
+					if (i < (gdata->num_points-2))
+						g_string_printf(string," ");
+				}
+				xmlNewChild(node, NULL, BAD_CAST "y_coords",
+						BAD_CAST string->str);
+				g_string_free(string,TRUE);
+				break;
+			default:
+				break;
+		}
 	}
 }
 

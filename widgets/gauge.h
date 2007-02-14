@@ -79,6 +79,24 @@ typedef enum
 }TbField;
 
 
+/* Polygon enumeration for the individual fields */
+typedef enum
+{
+	POLY_COLOR = 0,
+	POLY_X,
+	POLY_Y,
+	POLY_WIDTH,
+	POLY_HEIGHT,
+	POLY_RADIUS,
+	POLY_POINTS,
+	POLY_FILLED,
+	POLY_START_ANGLE,
+	POLY_SWEEP_ANGLE,
+	POLY_NUM_POINTS,
+	POLY_NUM_FIELDS,
+}PolyField;
+
+
 /* Tick Group enumeration for the individual fields */
 typedef enum
 {
@@ -125,8 +143,8 @@ typedef struct _MtxPoint		MtxPoint;
 typedef struct _MtxPolygon		MtxPolygon;
 typedef struct _MtxCircle		MtxCircle;
 typedef struct _MtxArc			MtxArc;
-typedef struct _MtxCircle		MtxSquare;
-typedef struct _MtxRect			MtxRect;
+typedef struct _MtxRectangle		MtxSquare;
+typedef struct _MtxRectangle		MtxRectangle;
 typedef struct _MtxGenPoly		MtxGenPoly;
 
 
@@ -221,12 +239,14 @@ struct _MtxPoint
  */
 struct _MtxPolygon
 {
-	MtxPolyType poly;
-	void *poly_data;
+	MtxPolyType type;		/* Enum type */
+	gboolean filled;		/* Filled or not? */
+	GdkColor color;			/* Color */
+	void *data;			/* point to datastruct */
 };
 
 
-/*! \struct _MtxCircle MtxCirle and MtxSquare point to this
+/*! \struct _MtxCircle 
  * \brief
  * _MtxCircle contains the info needed to create a circle on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -239,11 +259,9 @@ struct _MtxCircle
 	 * so an x value of 0 is the CENTER, a value of -1 is the left border
 	 * and +1 is the right border.
 	 */
-	gfloat x_center;	/* X center */
-	gfloat y_center;	/* Y center */
+	gfloat x;		/* X center */
+	gfloat y;		/* Y center */
 	gfloat radius;		/* radius of circle as a % fo gauge radius */
-	gboolean filled;	/* Filled or empty? */
-	GdkColor color;		/* Color */
 };
 
 
@@ -265,13 +283,11 @@ struct _MtxArc
 	gfloat width;		/* width of bounding rectangle */
 	gfloat height;		/* height of bounding rectangle */
 	gfloat start_angle;	/* 0 deg is "3 O'Clock" CCW rotation */
-	gfloat end_angle;	/* Angle relative to start_angle */
-	gboolean filled;	/* Filled or empty? */
-	GdkColor color;		/* Color */
+	gfloat sweep_angle;	/* Angle relative to start_angle */
 };
 
 
-/*! \struct _MtxRectangle
+/*! \struct _MtxRectangle _MtxSquare
  * \brief
  * _MtxRectangle contains the info needed to create a rect on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -288,8 +304,6 @@ struct _MtxRectangle
 	gfloat y;		/* Top left edge y coord (% of rad) */
 	gfloat width;		/* Width */
 	gfloat height;		/* Height */
-	gboolean filled;	/* Filled or empty? */
-	GdkColor color;		/* Color */
 };
 
 /*! \struct _MtxGenPoly
@@ -302,8 +316,6 @@ struct _MtxGenPoly
 {
 	gint num_points;	/* Number of points */
 	MtxPoint *points;	/* Dynamic array of points */
-	gboolean filled;	/* Filled or empty? */
-	GdkColor color;		/* Color */
 };
 
 /*! \struct _MtxXMLFuncs
@@ -330,6 +342,11 @@ struct _MtxGaugeFace
 	GdkPixmap *pixmap;	/*! Update/backing pixmap */
 	GdkPixmap *bg_pixmap;	/*! Static rarely changing pixmap */
 	GArray * xmlfunc_array; /*! Array list mapping varnames to xml */
+	GArray *t_blocks;	/* Array of MtxTextBlock structs */
+	GArray *c_ranges;	/* Array of MtxColorRange structs */
+	GArray *ranges;		/*! Array to contain the ranges */
+	GArray *tick_groups;	/*! Array to contain the tick groups */
+	GArray *polygons;	/*! Array to contain polygon defs */
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
 				   *  parsing functions */
 	gchar * xml_filename;	/*! Filename of XML for this gauge  */
@@ -355,10 +372,6 @@ struct _MtxGaugeFace
 	gfloat font_scale[NUM_TEXTS];/* Array of font scales */
 	gfloat text_xpos[NUM_TEXTS];/* Array of X offsets for strings */
 	gfloat text_ypos[NUM_TEXTS];/* Array of X offsets for strings */
-	GArray *t_blocks;	/* Array of MtxTextBlock structs */
-	GArray *c_ranges;	/* Array of MtxColorRange structs */
-	GArray *ranges;		/*! Array to contain the ranges */
-	GArray *tick_groups;	/*! Array to contain the tik groups */
 	gint precision;		/*! number of decimal places for val */
 	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
 	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
@@ -393,28 +406,33 @@ void mtx_gauge_face_set_show_value (MtxGaugeFace *gauge, gboolean value);
 gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
-/* DEPRECATED 
- *void mtx_gauge_face_set_color_range(MtxGaugeFace *gauge, gfloat, gfloat, GdkColor, gfloat, gfloat);
- */
+
+/* Color Ranges */
 GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_color_range(MtxGaugeFace *gauge, gint index, CrField field, void * value);
 gint mtx_gauge_face_set_color_range_struct(MtxGaugeFace *gauge, MtxColorRange *);
 void mtx_gauge_face_remove_color_range(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_color_ranges(MtxGaugeFace *gauge);
-/* DEPRECATED
- * void mtx_gauge_face_set_text_block(MtxGaugeFace *gauge, gchar *, gchar *, gfloat,GdkColor, gfloat, gfloat);
- */
+/* Text Blocks */
 GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
 void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge);
 
+/* Tick Groups */
 GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value);
 gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *);
 void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge);
+
+/* Polygons */
+GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge);
+void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index, PolyField field, void * value);
+gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *);
+void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index);
+void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge);
 
 void mtx_gauge_face_set_text (MtxGaugeFace *gauge, TextIndex index, gchar * str);
 gchar * mtx_gauge_face_get_text (MtxGaugeFace *gauge, TextIndex index);

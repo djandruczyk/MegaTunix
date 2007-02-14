@@ -118,6 +118,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
 	gauge->t_blocks = g_array_new(FALSE,TRUE,sizeof(MtxTextBlock *));
 	gauge->tick_groups = g_array_new(FALSE,TRUE,sizeof(MtxTickGroup *));
+	gauge->polygons = g_array_new(FALSE,TRUE,sizeof(MtxPolygon *));
 	mtx_gauge_face_init_default_tick_group(gauge);
 	mtx_gauge_face_init_colors(gauge);
 	mtx_gauge_face_init_name_bindings(gauge);
