@@ -10,6 +10,7 @@
 static GladeXML *gen_xml;
 GladeXML *text_xml;
 GladeXML *tick_groups_xml;
+GladeXML *polygons_xml;
 GladeXML *ranges_xml;
 extern GdkColor black;
 extern GdkColor white;
@@ -17,7 +18,7 @@ extern GtkWidget *gauge;
 extern gboolean hold_handlers;
 
 
-EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
+EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
@@ -70,7 +71,7 @@ EXPORT gboolean text_attributes_handler(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean tick_groups_handler(GtkWidget * widget, gpointer data)
+EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
@@ -107,6 +108,47 @@ EXPORT gboolean tick_groups_handler(GtkWidget * widget, gpointer data)
 	tick_groups_xml = xml;
 	created = TRUE;
 	update_onscreen_tgroups();
+	return TRUE;
+}
+
+
+EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
+{
+	static gboolean created = FALSE;
+	gchar * filename = NULL;
+	extern GdkColor white;
+	GtkWidget *window = NULL;
+	GladeXML *xml = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	if (created)
+	{
+		window = glade_xml_get_widget(tick_groups_xml,"gauge_polygons_window");
+		if (GTK_IS_WIDGET(window))
+		{
+			gtk_widget_show_all(window);
+			return TRUE;
+		}
+
+	}
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+	{
+		xml = glade_xml_new(filename, "gauge_polygons_window", NULL);
+		g_free(filename);
+	}
+	else
+	{
+		printf("can't load XML, ERROR!\n");
+		exit(-2);
+	}
+
+	glade_xml_signal_autoconnect(xml);
+	polygons_xml = xml;
+	created = TRUE;
+	update_onscreen_polygons();
 	return TRUE;
 }
 
@@ -194,7 +236,7 @@ void reset_text_controls()
 
 
 
-EXPORT gboolean general_attributes_handler(GtkWidget * widget, gpointer data)
+EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
@@ -352,7 +394,7 @@ void reset_general_controls()
 }
 
 
-EXPORT gboolean warning_ranges_handler(GtkWidget * widget, gpointer data)
+EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
 {
 	static gboolean created = FALSE;
 	gchar * filename = NULL;
@@ -393,7 +435,7 @@ EXPORT gboolean warning_ranges_handler(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
-EXPORT gboolean about_handler(GtkWidget *widget, gpointer data)
+EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 {
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)

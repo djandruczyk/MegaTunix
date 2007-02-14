@@ -87,7 +87,7 @@ EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
+EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *spinner = NULL;
@@ -154,7 +154,14 @@ EXPORT gboolean create_color_span(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean create_text_block(GtkWidget * widget, gpointer data)
+EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
+{
+	printf("create_polygon_event() NOT implemented yet\n");
+	return TRUE;
+}
+
+
+EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
 	MtxTextBlock *tblock = NULL;
@@ -212,7 +219,7 @@ EXPORT gboolean create_text_block(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean create_tick_group(GtkWidget * widget, gpointer data)
+EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *dummy = NULL;
@@ -791,6 +798,12 @@ void update_onscreen_tblocks()
 		y+=2;
 	}
 	gtk_widget_show_all(toptable);
+}
+
+
+void update_onscreen_polygons()
+{
+	printf("update_onscreen_polygons() is not implemented yet\n");
 }
 
 

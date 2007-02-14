@@ -19,15 +19,15 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-EXPORT gboolean text_attributes_handler(GtkWidget *, gpointer );
-EXPORT gboolean tick_groups_handler(GtkWidget *, gpointer );
-EXPORT gboolean general_attributes_handler(GtkWidget *, gpointer );
-EXPORT gboolean warning_ranges_handler(GtkWidget *, gpointer );
-EXPORT gboolean about_handler(GtkWidget *, gpointer );
+EXPORT gboolean text_attributes_menu_handler(GtkWidget *, gpointer );
+EXPORT gboolean tick_groups_menu_handler(GtkWidget *, gpointer );
+EXPORT gboolean general_attributes_menu_handler(GtkWidget *, gpointer );
+EXPORT gboolean warning_ranges_menu_handler(GtkWidget *, gpointer );
+EXPORT gboolean polygon_menu_handler(GtkWidget *, gpointer );
+EXPORT gboolean about_menu_handler(GtkWidget *, gpointer );
 void update_text_controls();
 void update_general_controls();
 void reset_text_controls();
-void reset_tick_group_controls();
 void reset_general_controls();
 /* Prototypes */
 
