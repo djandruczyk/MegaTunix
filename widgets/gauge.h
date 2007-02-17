@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 /* MtxPolyType enumeration,  for polygon support */
 typedef enum
 {
-	MTX_CIRCLE = 0,
+	MTX_CIRCLE = 0xaa,
 	MTX_ARC,
 	MTX_SQUARE,
 	MTX_RECTANGLE,

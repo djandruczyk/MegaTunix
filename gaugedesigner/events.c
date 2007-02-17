@@ -154,9 +154,134 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
+EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 {
-	printf("create_polygon_event() NOT implemented yet\n");
+	GtkWidget *dialog = NULL;
+	MtxPolygon *poly = NULL;
+	GladeXML *xml = NULL;
+	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
+	gchar * up = NULL;
+	gchar * xn = NULL;
+	gchar * yn = NULL;
+	GtkWidget *dummy = NULL;
+	gint i = 0;
+	MtxPoint * points = NULL;
+	void * data = NULL;
+	GHashTable *hash = NULL;
+
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (filename)
+	{
+		xml = glade_xml_new(filename, "polygon_dialog", NULL);
+	}
+	else
+	{
+		printf("Can't locate primary glade file!!!!\n");
+		exit(-1);
+	}
+
+	glade_xml_signal_autoconnect(xml);
+	dialog = glade_xml_get_widget(xml,"polygon_dialog");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_colorbutton")),&white);
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"poly_combobox")),"container",glade_xml_get_widget(xml,"polygon_details_ebox"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"points_table",glade_xml_get_widget(xml,"generic_points_table"));
+	hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"points_hash",hash);
+	g_free(filename);
+	if (!GTK_IS_WIDGET(dialog))
+	{
+		return FALSE;
+	}
+
+	gint result = gtk_dialog_run(GTK_DIALOG(dialog));
+	switch (result)
+	{
+		case GTK_RESPONSE_APPLY:
+			poly = g_new0(MtxPolygon, 1);
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_colorbutton")),&poly->color);
+			poly->filled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(xml,"poly_filled_cbutton")));
+			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"poly_combobox")));
+			up = g_ascii_strup(tmpbuf,-1);
+			g_free(tmpbuf);
+			if (g_strcasecmp(up,"CIRCLE") == 0)
+			{
+				poly->type = MTX_CIRCLE;
+				data = g_new0(MtxCircle, 1);
+				poly->data = data;
+				((MtxCircle *)data)->x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"circle_x_center_spin")));
+				((MtxCircle *)data)->y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"circle_y_center_spin")));
+				((MtxCircle *)data)->radius = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"circle_radius_spin")));
+			}
+			if (g_strcasecmp(up,"ARC") == 0)
+			{
+				poly->type = MTX_ARC;
+				data = g_new0(MtxArc, 1);
+				poly->data = data;
+				((MtxArc *)data)->x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_x_left_spin")));
+				((MtxArc *)data)->y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_y_left_spin")));
+				((MtxArc *)data)->width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_width_spin")));
+				((MtxArc *)data)->height = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_height_spin")));
+				((MtxArc *)data)->start_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_start_spin")));
+				((MtxArc *)data)->sweep_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_sweep_spin")));
+			}
+			if (g_strcasecmp(up,"RECTANGLE") == 0)
+			{
+				poly->type = MTX_RECTANGLE;
+				data = g_new0(MtxRectangle, 1);
+				poly->data = data;
+				((MtxRectangle *)data)->x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"rect_x_left_spin")));
+				((MtxRectangle *)data)->y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"rect_y_left_spin")));
+				((MtxRectangle *)data)->width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"rect_width_spin")));
+				((MtxRectangle *)data)->height = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"rect_height_spin")));
+			}
+			if (g_strcasecmp(up,"GENERIC") == 0)
+			{
+				poly->type = MTX_GENPOLY;
+				data = g_new0(MtxGenPoly, 1);
+				poly->data = data;
+				((MtxGenPoly *)data)->num_points = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"num_points_spin")));
+				hash = (GHashTable *)g_object_get_data(G_OBJECT(glade_xml_get_widget(xml,"num_points_spin")),"points_hash");
+				if (((MtxGenPoly *)data)->num_points > 0)
+				{
+					points = g_new0(MtxPoint, ((MtxGenPoly *)data)->num_points);
+					for (i=0;i<((MtxGenPoly *)data)->num_points;i++)
+					{
+						xn = g_strdup_printf("generic_x_%i_spin",i);
+						yn = g_strdup_printf("generic_y_%i_spin",i);
+						dummy = g_hash_table_lookup(hash,xn);
+						g_free(xn);
+						if (GTK_IS_SPIN_BUTTON(dummy))
+							points[i].x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(xn));
+						dummy = g_hash_table_lookup(hash,yn);
+						g_free(yn);
+						if (GTK_IS_SPIN_BUTTON(dummy))
+							points[i].y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(xn));
+					}
+				}
+			}
+			if (hash)
+				g_hash_table_destroy(hash);
+			g_free(up);
+
+			mtx_gauge_face_set_polygon_struct(MTX_GAUGE_FACE(gauge),poly);
+			if ((poly->type == MTX_GENPOLY) && (((MtxGenPoly *)(poly->data))->num_points > 0))
+				g_free(((MtxGenPoly *)(poly->data))->points);
+			if (poly->data)
+				g_free(poly->data);
+			g_free(poly);
+			//update_onscreen_polygons();
+
+			break;
+		default:
+			break;
+	}
+	if (GTK_IS_WIDGET(dialog))
+		gtk_widget_destroy(dialog);
+
 	return TRUE;
 }
 
@@ -1185,3 +1310,53 @@ gboolean remove_tgroup(GtkWidget * widget, gpointer data)
 }
 
 
+gboolean polygon_type_changed_event(GtkWidget *widget, gpointer data)
+{
+	gchar *filename = NULL;
+	GladeXML *xml = NULL;
+	gchar * tmpbuf = NULL;
+	gchar * up = NULL;
+	GtkWidget *container = NULL;
+	GtkWidget *circle_ctrls = NULL;
+	GtkWidget *arc_ctrls = NULL;
+	GtkWidget *rect_ctrls = NULL;
+	GtkWidget *generic_ctrls = NULL;
+	MtxPolyType type = -1;
+
+	printf("combobox changed\n");
+	tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(widget));
+	container = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"container");
+	filename = (gchar *)g_object_get_data(G_OBJECT(widget),"glade_file");
+	up = g_ascii_strup(tmpbuf,-1);
+	xml = glade_get_widget_tree(widget);
+	arc_ctrls = glade_xml_get_widget(xml,"arc_polygon_table");
+	circle_ctrls = glade_xml_get_widget(xml,"circle_polygon_table");
+	rect_ctrls = glade_xml_get_widget(xml,"rectangle_polygon_table");
+	generic_ctrls = glade_xml_get_widget(xml,"generic_polygon_table");
+	gtk_widget_hide_all(arc_ctrls);
+	gtk_widget_hide_all(circle_ctrls);
+	gtk_widget_hide_all(rect_ctrls);
+	gtk_widget_hide_all(generic_ctrls);
+	if (g_strcasecmp(up,"CIRCLE") == 0 )
+	{
+		type = MTX_CIRCLE;
+		gtk_widget_show_all(circle_ctrls);
+	}
+	if (g_strcasecmp(up,"ARC") == 0 )
+	{
+		type = MTX_ARC;
+		gtk_widget_show_all(arc_ctrls);
+	}
+	if (g_strcasecmp(up,"RECTANGLE") == 0 )
+	{
+		type = MTX_RECTANGLE;
+		gtk_widget_show_all(rect_ctrls);
+	}
+	if (g_strcasecmp(up,"GENERIC") == 0 )
+	{
+		type = MTX_GENPOLY;
+		gtk_widget_show_all(generic_ctrls);
+	}
+	
+	return TRUE;
+}

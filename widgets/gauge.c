@@ -427,6 +427,8 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	g_object_freeze_notify (G_OBJECT (gauge));
 	MtxPolygon * new_poly = g_new0(MtxPolygon, 1);
 	new_poly->type = poly->type;
+	new_poly->color = poly->color;
+	new_poly->filled = poly->filled;
 	/* Get size of struct to copy */
 	switch(poly->type)
 	{
@@ -661,128 +663,70 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 
 	MtxPolygon *poly = NULL;
 	gboolean skip_update = FALSE;
-	MtxGenPoly *gdata = NULL;
-	MtxCircle *cdata = NULL;
-	MtxRectangle *rdata = NULL;
-	MtxArc *adata = NULL;
+	void *data = NULL;
 
 	poly = g_array_index(gauge->polygons,MtxPolygon *,index);
 	g_return_if_fail (poly != NULL);
-	switch (poly->type)
-	{
-		case MTX_SQUARE:
-		case MTX_CIRCLE:
-			cdata = (MtxCircle *)poly->data;
-			break;
-		case MTX_RECTANGLE:
-			rdata = (MtxRectangle *)poly->data;
-			break;
-		case MTX_ARC:
-			adata = (MtxArc *)poly->data;
-			break;
-		case MTX_GENPOLY:
-			gdata = (MtxGenPoly *)poly->data;
-			break;
-		default:
-			break;
-	}
+	data = poly->data;
 	switch (field)
 	{
 		case POLY_COLOR:
 			poly->color = *(GdkColor *)value;
 			break;
+		case POLY_FILLED:
+			poly->filled = (gint)(*(gfloat *)value);
+			break;
 		case POLY_X:
-			switch (poly->type)
-			{
-				case MTX_SQUARE:
-				case MTX_CIRCLE:
-					cdata->x = *(gfloat *)value;
-					break;
-				case MTX_ARC:
-					adata->x = *(gfloat *)value;
-					break;
-				case MTX_RECTANGLE:
-					rdata->x = *(gfloat *)value;
-					break;
-				default:
-					break;
-			}
+			if ((poly->type == MTX_SQUARE) || (poly->type == MTX_CIRCLE))
+				((MtxCircle *)data)->x = *(gfloat *)value;
+			if (poly->type == MTX_ARC)
+				((MtxArc *)data)->x = *(gfloat *)value;
+			if (poly->type == MTX_RECTANGLE)
+				((MtxRectangle *)data)->x = *(gfloat *)value;
 			break;
 		case POLY_Y:
-			switch (poly->type)
-			{
-				case MTX_SQUARE:
-				case MTX_CIRCLE:
-					cdata->y = *(gfloat *)value;
-					break;
-				case MTX_ARC:
-					adata->y = *(gfloat *)value;
-					break;
-				case MTX_RECTANGLE:
-					rdata->y = *(gfloat *)value;
-					break;
-				default:
-					break;
-			}
+			if ((poly->type == MTX_SQUARE) || (poly->type == MTX_CIRCLE))
+				((MtxCircle *)data)->y = *(gfloat *)value;
+			if (poly->type == MTX_ARC)
+				((MtxArc *)data)->y = *(gfloat *)value;
+			if (poly->type == MTX_RECTANGLE)
+				((MtxRectangle *)data)->y = *(gfloat *)value;
 			break;
 		case POLY_WIDTH:
-			switch (poly->type)
-			{
-				case MTX_ARC:
-					adata->width = *(gfloat *)value;
-					break;
-				case MTX_RECTANGLE:
-					rdata->width = *(gfloat *)value;
-					break;
-				default:
-					break;
-			}
+			if (poly->type == MTX_ARC)
+				((MtxArc *)data)->width = *(gfloat *)value;
+			if (poly->type == MTX_RECTANGLE)
+				((MtxRectangle *)data)->width = *(gfloat *)value;
 			break;
 		case POLY_HEIGHT:
-			switch (poly->type)
-			{
-				case MTX_ARC:
-					adata->height = *(gfloat *)value;
-					break;
-				case MTX_RECTANGLE:
-					rdata->height = *(gfloat *)value;
-					break;
-				default:
-					break;
-			}
+			if (poly->type == MTX_ARC)
+				((MtxArc *)data)->height = *(gfloat *)value;
+			if (poly->type == MTX_RECTANGLE)
+				((MtxRectangle *)data)->height = *(gfloat *)value;
 			break;
 		case POLY_RADIUS:
-			switch (poly->type)
-			{
-				case MTX_CIRCLE:
-				case MTX_SQUARE:
-					cdata->radius = *(gfloat *)value;
-					break;
-				default:
-					break;
-			}
+			if ((poly->type == MTX_SQUARE) || (poly->type == MTX_CIRCLE))
+				((MtxCircle *)data)->radius = *(gfloat *)value;
+			break;
 		case POLY_START_ANGLE:
 			if (poly->type == MTX_ARC)
-				adata->start_angle = *(gfloat *)value;
+				((MtxArc *)data)->start_angle = *(gfloat *)value;
 			break;
 		case POLY_SWEEP_ANGLE:
 			if (poly->type == MTX_ARC)
-				adata->sweep_angle = *(gfloat *)value;
+				((MtxArc *)data)->sweep_angle = *(gfloat *)value;
 			break;
 		case POLY_NUM_POINTS:
 			if (poly->type == MTX_GENPOLY)
-				gdata->num_points = (gint)(*(gfloat *)value);
+				((MtxGenPoly *)data)->num_points = (gint)(*(gfloat *)value);
 			skip_update = TRUE;
-			break;
-		case POLY_FILLED:
-			poly->filled = (gint)(*(gfloat *)value);
 			break;
 		case POLY_POINTS:
 			if (poly->type == MTX_GENPOLY)
 			{
-				if (gdata->points)
-					g_free(gdata->points);
-				gdata->points = g_memdup(value,gdata->num_points);
+				if (((MtxGenPoly *)data)->points)
+					g_free(((MtxGenPoly *)data)->points);
+				((MtxGenPoly *)data)->points = g_memdup(value,((MtxGenPoly *)data)->num_points);
 			}
 			break;
 		default:
@@ -925,7 +869,6 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
 {
 	gint i = 0;
 	MtxPolygon *poly = NULL;
-	MtxGenPoly *gpoly = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
 	for (i=gauge->polygons->len-1;i>=0;i--)
@@ -934,9 +877,8 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
 		gauge->polygons = g_array_remove_index(gauge->polygons,i);
 		if (poly->type == MTX_GENPOLY)
 		{
-			gpoly = (MtxGenPoly *)poly->data;
-			if (gpoly->points)
-				g_free(gpoly->points);
+			if (((MtxGenPoly *)poly->data)->points)
+				g_free(((MtxGenPoly *)poly->data)->points);
 		}
 		g_free(poly->data);
 	}
@@ -1038,7 +980,6 @@ void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, gint index)
 void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
 {
 	MtxPolygon *poly = NULL;
-	MtxGenPoly *gpoly = NULL;
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
 	if ((index <= gauge->polygons->len) && (index >= 0 ))
@@ -1049,9 +990,8 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index)
 		{
 			if (poly->type == MTX_GENPOLY)
 			{
-				gpoly = (MtxGenPoly *)poly->data;
-				if (gpoly->points)
-					g_free(gpoly->points);
+				if (((MtxGenPoly *)poly->data)->points)
+					g_free(((MtxGenPoly *)poly->data)->points);
 			}
 			g_free(poly);
 		}
