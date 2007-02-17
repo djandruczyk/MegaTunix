@@ -541,46 +541,57 @@ void mtx_gauge_poly_arc_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest
 
 void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 {
-	if (!node->children)
-	{
-		printf("ERROR, mtx_gauge_poly_generic_import, xml node is empty!!\n");
-		return;
-	}
 	gint i = 0;
 	gchar *tmpbuf = NULL;
 	gchar **x_vector = NULL;
 	gchar **y_vector = NULL;
 	xmlNode *cur_node = NULL;
-	MtxGenPoly *data = (MtxGenPoly *) dest;
+	MtxGenPoly *data = NULL;
+	data = (MtxGenPoly *) dest;
 
 	cur_node = node->children;
+	if (!node->children)
+	{
+		printf("ERROR, mtx_gauge_poly_generic_import, xml node is empty!!\n");
+		return;
+	}
 	while (cur_node->next)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
 			if (g_strcasecmp((gchar *)cur_node->name,"num_points") == 0)
-				mtx_gauge_gfloat_import(gauge, cur_node,&data->num_points);
-			data->points = g_new0(MtxPoint, data->num_points);
+			{
+				mtx_gauge_gint_import(gauge, cur_node,&data->num_points);
+				data->points = g_new0(MtxPoint, data->num_points);
+			}
 			if (g_strcasecmp((gchar *)cur_node->name,"x_coords") == 0)
+			{
 				mtx_gauge_gchar_import(gauge, cur_node,&tmpbuf);
-			x_vector = g_strsplit(tmpbuf," ", -1);
-			g_free(tmpbuf);
+				x_vector = g_strsplit(tmpbuf," ", -1);
+				g_free(tmpbuf);
+				for (i=0;i<g_strv_length(x_vector);i++)
+				{
+					printf("x_vector[%i] is %s\n",i,x_vector[i]);
+					data->points[i].x = g_ascii_strtod(x_vector[i],NULL);
+					printf("x_vector[%i] is %f\n",i,data->points[i].x);
+				}
+				g_strfreev(x_vector);
+				tmpbuf = NULL;
+			}
 			if (g_strcasecmp((gchar *)cur_node->name,"y_coords") == 0)
+			{
 				mtx_gauge_gchar_import(gauge, cur_node,&tmpbuf);
-			y_vector = g_strsplit(tmpbuf," ", -1);
-			g_free(tmpbuf);
-			if ((g_strv_length(x_vector) != data->num_points) || (g_strv_length(y_vector) != data->num_points))
-			{
-				printf("XML error,  num_points != num of X or Y coords!\n ABORTING\n");
-				return;
+				y_vector = g_strsplit(tmpbuf," ", -1);
+				g_free(tmpbuf);
+				for (i=0;i<g_strv_length(y_vector);i++)
+				{
+					printf("y_vector[%i] is %s\n",i,y_vector[i]);
+					data->points[i].y = g_ascii_strtod(y_vector[i],NULL);
+					printf("y_vector[%i] is %f\n",i,data->points[i].y);
+				}
+				g_strfreev(y_vector);
+				tmpbuf = NULL;
 			}
-			for (i=0;i<data->num_points;i++)
-			{
-				data->points[i].x = g_ascii_strtod(x_vector[i],NULL);
-				data->points[i].y = g_ascii_strtod(y_vector[i],NULL);
-			}
-			g_strfreev(x_vector);
-			g_strfreev(y_vector);
 
 
 		}
@@ -869,6 +880,7 @@ void mtx_gauge_poly_generic_export(xmlNodePtr root_node, MtxPolygon* poly)
 	string = g_string_new(NULL);
 	for (i=0;i<data->num_points;i++)
 	{
+		printf("x_points[%i] is %f\n",i,data->points[i].x);
 		tmpbuf = g_strdup_printf("%f",data->points[i].x);
 		g_string_append(string,tmpbuf);
 		g_free(tmpbuf);
@@ -881,6 +893,7 @@ void mtx_gauge_poly_generic_export(xmlNodePtr root_node, MtxPolygon* poly)
 	string = g_string_new(NULL);
 	for (i=0;i<data->num_points;i++)
 	{
+		printf("y_points[%i] is %f\n",i,data->points[i].y);
 		tmpbuf = g_strdup_printf("%f",data->points[i].y);
 		g_string_append(string,tmpbuf);
 		g_free(tmpbuf);
