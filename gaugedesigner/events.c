@@ -243,11 +243,12 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 				poly->type = MTX_GENPOLY;
 				data = g_new0(MtxGenPoly, 1);
 				poly->data = data;
-				((MtxGenPoly *)data)->num_points = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"num_points_spin")));
-				hash = (GHashTable *)g_object_get_data(G_OBJECT(glade_xml_get_widget(xml,"num_points_spin")),"points_hash");
+				((MtxGenPoly *)data)->num_points = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"generic_num_points_spin")));
+				hash = (GHashTable *)g_object_get_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"points_hash");
 				if (((MtxGenPoly *)data)->num_points > 0)
 				{
 					points = g_new0(MtxPoint, ((MtxGenPoly *)data)->num_points);
+					((MtxGenPoly *)data)->points = points;
 					for (i=0;i<((MtxGenPoly *)data)->num_points;i++)
 					{
 						xn = g_strdup_printf("generic_x_%i_spin",i);
@@ -255,11 +256,11 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 						dummy = g_hash_table_lookup(hash,xn);
 						g_free(xn);
 						if (GTK_IS_SPIN_BUTTON(dummy))
-							points[i].x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(xn));
+							points[i].x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(dummy));
 						dummy = g_hash_table_lookup(hash,yn);
 						g_free(yn);
 						if (GTK_IS_SPIN_BUTTON(dummy))
-							points[i].y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(xn));
+							points[i].y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(dummy));
 					}
 				}
 			}
@@ -1358,5 +1359,132 @@ gboolean polygon_type_changed_event(GtkWidget *widget, gpointer data)
 		gtk_widget_show_all(generic_ctrls);
 	}
 	
+	return TRUE;
+}
+
+
+gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *table = NULL;
+	GtkWidget *dummy = NULL;
+	GtkWidget *dummy1 = NULL;
+	GtkWidget *dummy2 = NULL;
+	GHashTable *hash = NULL;
+	gchar *xn = NULL;
+	gchar *yn = NULL;
+	gchar *ln = NULL;
+	gint num_points = -1;
+	gint i = 0;
+	gint rows = 0;
+
+	table = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"points_table");
+	hash = (GHashTable *)g_object_get_data(G_OBJECT(widget),"points_hash");
+	num_points = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+
+	rows = ((GtkTable *)table)->nrows;
+	//printf("num_points %i,  table rows %i\n",num_points,rows);
+	if (num_points == 0)
+		return TRUE;
+	if (num_points == rows)
+	{
+		for (i=0;i<rows;i++)
+		{
+			ln = g_strdup_printf("index_%i_label",i);
+			dummy = g_hash_table_lookup(hash,ln);
+			xn = g_strdup_printf("generic_x_%i_spin",i);
+			dummy1 = g_hash_table_lookup(hash,xn);
+			yn = g_strdup_printf("generic_y_%i_spin",i);
+			dummy2 = g_hash_table_lookup(hash,yn);
+			if (!GTK_IS_LABEL(dummy))
+			{
+				dummy = gtk_label_new(g_strdup_printf("%i",i+1));
+				gtk_table_attach(GTK_TABLE(table),dummy,0,1,i,i+1,0,0,15,0);
+				g_hash_table_insert(hash,g_strdup(ln),dummy);
+			}
+			if (!GTK_IS_SPIN_BUTTON(dummy1))
+			{
+				dummy1 = gtk_spin_button_new_with_range(0,1,0.001);
+				gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy1),3);
+				gtk_table_attach(GTK_TABLE(table),dummy1,1,2,i,i+1,0,0,0,0);
+				g_hash_table_insert(hash,g_strdup(xn),dummy1);
+			}
+			if (!GTK_IS_SPIN_BUTTON(dummy2))
+			{
+				dummy2 = gtk_spin_button_new_with_range(0,1,0.001);
+				gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy2),3);
+				gtk_table_attach(GTK_TABLE(table),dummy2,2,3,i,i+1,0,0,0,0);
+				g_hash_table_insert(hash,g_strdup(yn),dummy2);
+			}
+			g_free(ln);
+			g_free(xn);
+			g_free(yn);
+
+		}
+
+	}
+	/* If we are shrinking the table,  remove entries from hashtable
+	 * and then resize table destroying the widgets */
+	else if (rows > num_points)
+	{
+//		printf("rows > num_points\n");
+		for (i=rows;i>num_points;i--)
+		{
+			xn = g_strdup_printf("generic_x_%i_spin",i-1);
+			dummy = g_hash_table_lookup(hash,xn);
+			if (GTK_IS_SPIN_BUTTON(dummy))
+				gtk_widget_destroy(dummy);
+
+			yn = g_strdup_printf("generic_y_%i_spin",i-1);
+			dummy = g_hash_table_lookup(hash,yn);
+			if (GTK_IS_SPIN_BUTTON(dummy))
+				gtk_widget_destroy(dummy);
+
+			ln = g_strdup_printf("index_%i_label",i-1);
+			dummy = g_hash_table_lookup(hash,ln);
+			if (GTK_IS_LABEL(dummy))
+				gtk_widget_destroy(dummy);
+
+			g_hash_table_remove(hash,xn);
+			g_hash_table_remove(hash,yn);
+			g_hash_table_remove(hash,ln);
+			g_free(xn);
+			g_free(yn);
+			g_free(ln);
+//			printf("removing controls on row %i\n",i);
+		}
+		gtk_table_resize(GTK_TABLE(table),num_points,3);
+//		printf("table shoulda been resized to %i,3\n",num_points);
+	}
+	else if (num_points > rows)
+	{
+//		printf("num_points > rows\n");
+		gtk_table_resize(GTK_TABLE(table),num_points,3);
+		for (i=rows;i<num_points;i++)
+		{
+//			printf("creating new sets of spinners for row %i\n",i+1);
+			dummy = gtk_spin_button_new_with_range(0,1,0.001);
+			gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy),3);
+			xn = g_strdup_printf("generic_x_%i_spin",i);
+			gtk_table_attach(GTK_TABLE(table),dummy,1,2,i,i+1,0,0,0,0);
+			g_hash_table_insert(hash,g_strdup(xn),dummy);
+
+			dummy = gtk_spin_button_new_with_range(0,1,0.001);
+			gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy),3);
+			yn = g_strdup_printf("generic_y_%i_spin",i);
+			gtk_table_attach(GTK_TABLE(table),dummy,2,3,i,i+1,0,0,0,0);
+			g_hash_table_insert(hash,g_strdup(yn),dummy);
+
+			dummy = gtk_label_new(g_strdup_printf("%i",i+1));
+			ln = g_strdup_printf("index_%i_label",i);
+			gtk_table_attach(GTK_TABLE(table),dummy,0,1,i,i+1,0,0,15,0);
+			g_hash_table_insert(hash,g_strdup(ln),dummy);
+			g_free(xn);
+			g_free(yn);
+			g_free(ln);
+		}
+
+	}
+	gtk_widget_show_all(table);
+
 	return TRUE;
 }

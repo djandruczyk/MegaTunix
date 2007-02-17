@@ -344,7 +344,6 @@ struct _MtxGaugeFace
 	GArray * xmlfunc_array; /*! Array list mapping varnames to xml */
 	GArray *t_blocks;	/* Array of MtxTextBlock structs */
 	GArray *c_ranges;	/* Array of MtxColorRange structs */
-	GArray *ranges;		/*! Array to contain the ranges */
 	GArray *tick_groups;	/*! Array to contain the tick groups */
 	GArray *polygons;	/*! Array to contain polygon defs */
 	GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml 
