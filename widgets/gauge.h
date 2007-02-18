@@ -39,7 +39,6 @@ typedef enum
 {
 	MTX_CIRCLE = 0xaa,
 	MTX_ARC,
-	MTX_SQUARE,
 	MTX_RECTANGLE,
 	MTX_GENPOLY,
 	NUM_POLYS,

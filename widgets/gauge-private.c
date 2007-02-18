@@ -935,9 +935,12 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gint r_sign = 0;
 	gint g_sign = 0;
 	gint b_sign = 0;
+	gint num_points = 0;
 	MtxColorRange *range = NULL;
 	MtxTextBlock *tblock = NULL;
 	MtxTickGroup *tgroup = NULL;
+	MtxPolygon *poly = NULL;
+	GdkPoint *points = NULL;
 	GdkColor color;
 	GdkColor *b_color;
 	GdkColor *e_color;
@@ -1269,6 +1272,61 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gauge->xc-(logical_rect.width/2)+(tblock->x_pos*gauge->radius),
 				gauge->yc-(logical_rect.height/2)+(tblock->y_pos*gauge->radius),gauge->layout);
 	}
+	/* Polygons */
+	for (i=0;i<gauge->polygons->len;i++)
+	{
+		poly = g_array_index(gauge->polygons,MtxPolygon *, i);
+		gdk_gc_set_rgb_fg_color(gauge->gc,&poly->color);
+		switch (poly->type)
+		{
+			case MTX_CIRCLE:
+				gdk_draw_arc(gauge->bg_pixmap, gauge->gc,
+						poly->filled,
+						gauge->xc+((MtxCircle *)poly->data)->x*gauge->radius-(((MtxCircle *)poly->data)->radius*gauge->radius),
+						gauge->yc+((MtxCircle *)poly->data)->y*gauge->radius-(((MtxCircle *)poly->data)->radius*gauge->radius),
+						2*((MtxCircle *)poly->data)->radius*gauge->radius,
+						2*((MtxCircle *)poly->data)->radius*gauge->radius,
+						0,360*64);
+				break;
+			case MTX_RECTANGLE:
+				gdk_draw_rectangle(gauge->bg_pixmap,
+						gauge->gc,
+						poly->filled, 
+						gauge->xc+((MtxRectangle *)poly->data)->x*gauge->radius,
+						gauge->yc+((MtxRectangle *)poly->data)->y*gauge->radius,
+						((MtxRectangle *)poly->data)->width*gauge->radius,
+						((MtxRectangle *)poly->data)->height*gauge->radius);
+				break;
+			case MTX_ARC:
+				gdk_draw_arc(gauge->bg_pixmap, gauge->gc,
+						poly->filled,
+						gauge->xc+((MtxArc *)poly->data)->x*gauge->radius-(((MtxArc *)poly->data)->width*gauge->radius),
+						gauge->yc+((MtxArc *)poly->data)->x*gauge->radius-(((MtxArc *)poly->data)->height*gauge->radius),
+						2*((MtxArc *)poly->data)->width*gauge->radius,
+						2*((MtxArc *)poly->data)->height*gauge->radius,
+						((MtxArc *)poly->data)->start_angle,
+						((MtxArc *)poly->data)->sweep_angle*64);
+				break;
+			case MTX_GENPOLY:
+				num_points = ((MtxGenPoly *)poly->data)->num_points;
+				points = g_new0(GdkPoint, num_points);
+				for (j=0;j<num_points;j++)
+				{
+					points[j].x = gauge->xc + (((MtxGenPoly *)poly->data)->points[j].x * gauge->radius);
+					points[j].y = gauge->yc + (((MtxGenPoly *)poly->data)->points[j].y * gauge->radius);
+				}
+				gdk_draw_polygon(gauge->bg_pixmap,
+						gauge->gc,
+						poly->filled,
+						points,
+						num_points);
+				g_free(points);
+				break;
+			default:
+				break;
+		}
+	}
+
 
 }
 

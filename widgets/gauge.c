@@ -432,7 +432,6 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	/* Get size of struct to copy */
 	switch(poly->type)
 	{
-		case MTX_SQUARE:
 		case MTX_CIRCLE:
 			size = sizeof(MtxCircle);
 			break;
@@ -678,7 +677,7 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 			poly->filled = (gint)(*(gfloat *)value);
 			break;
 		case POLY_X:
-			if ((poly->type == MTX_SQUARE) || (poly->type == MTX_CIRCLE))
+			if (poly->type == MTX_CIRCLE)
 				((MtxCircle *)data)->x = *(gfloat *)value;
 			if (poly->type == MTX_ARC)
 				((MtxArc *)data)->x = *(gfloat *)value;
@@ -686,7 +685,7 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 				((MtxRectangle *)data)->x = *(gfloat *)value;
 			break;
 		case POLY_Y:
-			if ((poly->type == MTX_SQUARE) || (poly->type == MTX_CIRCLE))
+			if (poly->type == MTX_CIRCLE)
 				((MtxCircle *)data)->y = *(gfloat *)value;
 			if (poly->type == MTX_ARC)
 				((MtxArc *)data)->y = *(gfloat *)value;
@@ -706,7 +705,7 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 				((MtxRectangle *)data)->height = *(gfloat *)value;
 			break;
 		case POLY_RADIUS:
-			if ((poly->type == MTX_SQUARE) || (poly->type == MTX_CIRCLE))
+			if (poly->type == MTX_CIRCLE)
 				((MtxCircle *)data)->radius = *(gfloat *)value;
 			break;
 		case POLY_START_ANGLE:
