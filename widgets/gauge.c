@@ -726,7 +726,7 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 			{
 				if (((MtxGenPoly *)data)->points)
 					g_free(((MtxGenPoly *)data)->points);
-				((MtxGenPoly *)data)->points = g_memdup(value,((MtxGenPoly *)data)->num_points);
+				((MtxGenPoly *)data)->points = g_memdup(value,((MtxGenPoly *)data)->num_points *sizeof(MtxPoint));
 			}
 			break;
 		default:

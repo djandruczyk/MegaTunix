@@ -570,11 +570,7 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 				x_vector = g_strsplit(tmpbuf," ", -1);
 				g_free(tmpbuf);
 				for (i=0;i<g_strv_length(x_vector);i++)
-				{
-					printf("x_vector[%i] is %s\n",i,x_vector[i]);
 					data->points[i].x = g_ascii_strtod(x_vector[i],NULL);
-					printf("x_vector[%i] is %f\n",i,data->points[i].x);
-				}
 				g_strfreev(x_vector);
 				tmpbuf = NULL;
 			}
@@ -584,11 +580,7 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 				y_vector = g_strsplit(tmpbuf," ", -1);
 				g_free(tmpbuf);
 				for (i=0;i<g_strv_length(y_vector);i++)
-				{
-					printf("y_vector[%i] is %s\n",i,y_vector[i]);
 					data->points[i].y = g_ascii_strtod(y_vector[i],NULL);
-					printf("y_vector[%i] is %f\n",i,data->points[i].y);
-				}
 				g_strfreev(y_vector);
 				tmpbuf = NULL;
 			}
