@@ -274,7 +274,7 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 			if (poly->data)
 				g_free(poly->data);
 			g_free(poly);
-			//update_onscreen_polygons();
+			update_onscreen_polygons();
 
 			break;
 		default:
@@ -528,6 +528,7 @@ void reset_onscreen_controls(void)
 	reset_onscreen_ranges();
 	reset_onscreen_tblocks();
 	reset_onscreen_tgroups();
+	reset_onscreen_polygons();
 	return;
 }
 
@@ -711,7 +712,6 @@ void update_onscreen_ranges()
 	}
 	gtk_widget_show_all(container);
 }
-
 
 void reset_onscreen_ranges()
 {
@@ -927,12 +927,6 @@ void update_onscreen_tblocks()
 }
 
 
-void update_onscreen_polygons()
-{
-	printf("update_onscreen_polygons() is not implemented yet\n");
-}
-
-
 void update_onscreen_tgroups()
 {
 	GtkWidget *toptable = NULL;
@@ -1116,6 +1110,246 @@ void update_onscreen_tgroups()
 }
 
 
+void update_onscreen_polygons()
+{
+	GtkWidget *toptable = NULL;
+	static GtkWidget *table = NULL;
+	GtkWidget *subtable = NULL;
+	GtkWidget *button = NULL;
+	GtkWidget *frame = NULL;
+	GtkWidget *dummy = NULL;
+	GtkWidget *notebook = NULL;
+	GHashTable *hash = NULL;
+	GladeXML *xml = NULL;
+	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
+	gint i = 0;
+	gint j = 0;
+	MtxPolygon *poly = NULL;
+	GArray * array = NULL;
+	extern GladeXML *polygons_xml;
+
+	if ((!polygons_xml) || (!gauge))
+		return;
+
+	array = mtx_gauge_face_get_polygons(MTX_GAUGE_FACE(gauge));
+
+	toptable = glade_xml_get_widget(polygons_xml,"polygons_layout_table");
+	if (!GTK_IS_WIDGET(toptable))
+	{
+		printf("toptable is NOT a valid widget!!\n");
+		return;
+	}
+
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"gaugedesigner.glade",NULL),NULL);
+	if (!filename)
+	{
+		printf("Can't locate primary glade file!!!!\n");
+		return;
+	}
+
+
+	if (GTK_IS_WIDGET(table))
+		gtk_widget_destroy(table);
+
+	table = gtk_table_new(2,1,FALSE);
+	gtk_table_set_row_spacings(GTK_TABLE(table),5);
+	gtk_table_attach_defaults(GTK_TABLE(toptable),table,0,1,1,2);
+	g_object_set_data(G_OBJECT(toptable),"layout_table",table);
+	gtk_widget_show_all(toptable);
+	gdk_flush();
+	/* Repopulate the table with the current polygons... */
+	for (i=0;i<array->len; i++)
+	{
+		frame = gtk_frame_new(NULL);
+		gtk_widget_show(frame);
+		//		gtk_container_set_border_width(GTK_CONTAINER(frame),5);
+		gtk_table_attach(GTK_TABLE(table),frame,0,1,i,i+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,5,0);
+		poly = g_array_index(array,MtxPolygon *, i);
+		subtable = gtk_table_new(1,2,FALSE);
+		gtk_container_add(GTK_CONTAINER(frame),subtable);
+		gtk_widget_show(subtable);
+
+		button = gtk_check_button_new();
+		g_object_set_data(G_OBJECT(button),"polygon_index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(button),"toggled", G_CALLBACK(remove_polygon),NULL);
+		gtk_table_attach(GTK_TABLE(subtable),button,0,1,0,1,GTK_SHRINK,GTK_FILL,0,0);
+		gtk_widget_show(button);
+		//		gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
+		/* Load glade template */
+		xml = glade_xml_new(filename, "polygon_notebook", NULL);
+		notebook = glade_xml_get_widget(xml,"polygon_notebook");
+		gtk_table_attach(GTK_TABLE(subtable),notebook,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
+		gtk_widget_show(notebook);
+		gdk_flush();
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"poly_combobox")),"container",glade_xml_get_widget(xml,"polygon_details_ebox"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"points_table",glade_xml_get_widget(xml,"generic_points_table"));
+		hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"points_hash",hash);
+		dummy = glade_xml_get_widget(xml,"arc_polygon_table");
+		gtk_widget_hide_all(dummy);
+		dummy = glade_xml_get_widget(xml,"circle_polygon_table");
+		gtk_widget_hide_all(dummy);
+		dummy = glade_xml_get_widget(xml,"rectangle_polygon_table");
+		gtk_widget_hide_all(dummy);
+		dummy = glade_xml_get_widget(xml,"generic_polygon_table");
+		gtk_widget_hide_all(dummy);
+		glade_xml_signal_autoconnect(xml);
+
+		/* Colorbutton*/
+		dummy = glade_xml_get_widget(xml,"polygon_colorbutton");
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(dummy),&poly->color);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"color_set", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_COLOR));
+
+		/* Filled Checkbutton*/
+		dummy = glade_xml_get_widget(xml,"poly_filled_cbutton");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(dummy),poly->filled);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"toggled", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_FILLED));
+
+
+		if (poly->type == MTX_CIRCLE)
+		{
+			dummy = glade_xml_get_widget(xml,"poly_combobox");
+			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),0);
+			gtk_widget_show_all(glade_xml_get_widget(xml,"circle_polygon_table"));
+			/* Update circle controls */
+			/* X Center */
+			dummy = glade_xml_get_widget(xml,"circle_x_center_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxCircle *)poly->data)->x);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_X));
+
+			/* Y Center */
+			dummy = glade_xml_get_widget(xml,"circle_y_center_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxCircle *)poly->data)->y);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_Y));
+
+			/* Radius */
+			dummy = glade_xml_get_widget(xml,"circle_radius_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxCircle *)poly->data)->radius);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_RADIUS));
+		}
+		if (poly->type == MTX_RECTANGLE)
+		{
+			dummy = glade_xml_get_widget(xml,"poly_combobox");
+			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),2);
+			gtk_widget_show_all(glade_xml_get_widget(xml,"rectangle_polygon_table"));
+			/* Update Rectangle controls */
+			/* Upper left X */
+			dummy = glade_xml_get_widget(xml,"rect_x_left_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxRectangle *)poly->data)->x);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_X));
+
+			/* Upper Left Y */
+			dummy = glade_xml_get_widget(xml,"rect_y_left_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxRectangle *)poly->data)->y);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_Y));
+
+			/* Width */
+			dummy = glade_xml_get_widget(xml,"rect_width_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxRectangle *)poly->data)->width);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_WIDTH));
+
+			/* Height */
+			dummy = glade_xml_get_widget(xml,"rect_height_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxRectangle *)poly->data)->height);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_HEIGHT));
+		}
+
+		if (poly->type == MTX_ARC)
+		{
+			dummy = glade_xml_get_widget(xml,"poly_combobox");
+			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),1);
+			gtk_widget_show_all(glade_xml_get_widget(xml,"arc_polygon_table"));
+			/* Update Arc controls */
+			/* Upper left X */
+			dummy = glade_xml_get_widget(xml,"arc_x_left_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->x);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_X));
+
+			/* Upper Left Y */
+			dummy = glade_xml_get_widget(xml,"arc_y_left_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->y);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_Y));
+
+			/* Width */
+			dummy = glade_xml_get_widget(xml,"arc_width_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->width);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_WIDTH));
+
+			/* Height */
+			dummy = glade_xml_get_widget(xml,"arc_height_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->height);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_HEIGHT));
+
+			/* Start Angle */
+			dummy = glade_xml_get_widget(xml,"arc_start_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->height);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_START_ANGLE));
+
+			/* Sweep Angle */
+			dummy = glade_xml_get_widget(xml,"arc_sweep_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->height);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_SWEEP_ANGLE));
+		}
+		if (poly->type == MTX_GENPOLY)
+		{
+			dummy = glade_xml_get_widget(xml,"poly_combobox");
+			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),3);
+			gtk_widget_show_all(glade_xml_get_widget(xml,"generic_polygon_table"));
+			/* Update Generic Polygon controls */
+
+
+			/* Number of Generic Polygon vertexes */
+			dummy = glade_xml_get_widget(xml,"generic_num_points_spin");
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->num_points);
+			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_NUM_POINTS));
+			for (j=0;j<((MtxGenPoly *)poly->data)->num_points;j++)
+			{
+				tmpbuf = g_strdup_printf("generic_x_%i_spin",j);
+				dummy = g_hash_table_lookup(hash,tmpbuf);
+				if (GTK_IS_SPIN_BUTTON(dummy))
+				{
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->points[j].x);
+					g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+					g_object_set_data(G_OBJECT(dummy),"num_points_spin",glade_xml_get_widget(xml,"generic_num_points_spin"));
+					g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
+				}
+				g_free(tmpbuf);
+				tmpbuf = g_strdup_printf("generic_y_%i_spin",j);
+				dummy = g_hash_table_lookup(hash,tmpbuf);
+				if (GTK_IS_SPIN_BUTTON(dummy))
+				{
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->points[j].y);
+					g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+					g_object_set_data(G_OBJECT(dummy),"num_points_spin",glade_xml_get_widget(xml,"generic_num_points_spin"));
+					g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
+				}
+				g_free(tmpbuf);
+
+			}
+		}
+
+	}
+	g_free(filename);
+}
+
+
 void reset_onscreen_tblocks()
 {
 	GtkWidget *toptable = NULL;
@@ -1148,6 +1382,29 @@ void reset_onscreen_tgroups()
 	if ((!tick_groups_xml))
 		return;
 	toptable = glade_xml_get_widget(tick_groups_xml,"tick_groups_layout_table");
+	if (!GTK_IS_WIDGET(toptable))
+	{
+		printf("toptable is NOT a valid widget!!\n");
+		return;
+	}
+
+	widget = g_object_get_data(G_OBJECT(toptable),"layout_table");
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_destroy(widget);
+
+	gtk_widget_show_all(toptable);
+}
+
+
+void reset_onscreen_polygons()
+{
+	GtkWidget *toptable = NULL;
+	GtkWidget *widget = NULL;
+	extern GladeXML *polygons_xml;
+
+	if ((!polygons_xml))
+		return;
+	toptable = glade_xml_get_widget(polygons_xml,"polygons_layout_table");
 	if (!GTK_IS_WIDGET(toptable))
 	{
 		printf("toptable is NOT a valid widget!!\n");
@@ -1254,6 +1511,72 @@ gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
 }
 
 
+gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
+{
+	gint index = (gint)g_object_get_data(G_OBJECT(widget),"index");
+	gfloat value = 0.0;
+	GHashTable *hash = NULL;
+	GtkWidget *tmpwidget = NULL;
+	gint i = 0;
+	gint num_points = 0;
+	MtxPoint *points = NULL;
+	GtkWidget *dummy = NULL;
+	gchar * tmpbuf = NULL;
+	GdkColor color;
+	PolyField field = (PolyField)data;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	switch (field)
+	{
+		case POLY_X:
+		case POLY_Y:
+		case POLY_WIDTH:
+		case POLY_HEIGHT:
+		case POLY_RADIUS:
+		case POLY_START_ANGLE:
+		case POLY_SWEEP_ANGLE:
+		case POLY_NUM_POINTS:
+			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
+			break;
+		case POLY_FILLED:
+			value = (float)gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
+			break;
+		case POLY_COLOR:
+			gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
+			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&color);
+			break;
+		case POLY_POINTS:
+			tmpwidget = g_object_get_data(G_OBJECT(widget),"num_points_spin");
+			num_points = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(tmpwidget));
+			hash = (GHashTable *)g_object_get_data(G_OBJECT(tmpwidget),"points_hash");
+			points = g_new0(MtxPoint, num_points);
+			for (i=0;i<num_points;i++)
+			{
+				tmpbuf =  g_strdup_printf("generic_x_%i_spin",i);
+				dummy = g_hash_table_lookup(hash,tmpbuf);
+				if (GTK_IS_SPIN_BUTTON(dummy))
+					points[i].x = gtk_spin_button_get_value(GTK_SPIN_BUTTON(dummy));
+				g_free(tmpbuf);
+				tmpbuf =  g_strdup_printf("generic_y_%i_spin",i);
+				dummy = g_hash_table_lookup(hash,tmpbuf);
+				if (GTK_IS_SPIN_BUTTON(dummy))
+					points[i].y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(dummy));
+				g_free(tmpbuf);
+			}
+			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)points);
+			g_free(points);
+
+		default:
+			break;
+
+	}
+	return TRUE;
+}
+
+
 gboolean alter_crange_data(GtkWidget *widget, gpointer data)
 {
 	gint index = (gint)g_object_get_data(G_OBJECT(widget),"index");
@@ -1310,6 +1633,19 @@ gboolean remove_tgroup(GtkWidget * widget, gpointer data)
 	return TRUE;
 }
 
+gboolean remove_polygon(GtkWidget * widget, gpointer data)
+{
+	gint index = -1;
+	if (!GTK_IS_WIDGET(gauge))
+		return FALSE;
+
+	index = (gint)g_object_get_data(G_OBJECT(widget),"polygon_index");
+	mtx_gauge_face_remove_polygon(MTX_GAUGE_FACE(gauge),index);
+	update_onscreen_polygons();
+
+	return TRUE;
+}
+
 
 gboolean polygon_type_changed_event(GtkWidget *widget, gpointer data)
 {
@@ -1324,7 +1660,6 @@ gboolean polygon_type_changed_event(GtkWidget *widget, gpointer data)
 	GtkWidget *generic_ctrls = NULL;
 	MtxPolyType type = -1;
 
-	printf("combobox changed\n");
 	tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(widget));
 	container = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"container");
 	filename = (gchar *)g_object_get_data(G_OBJECT(widget),"glade_file");

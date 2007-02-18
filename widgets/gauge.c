@@ -455,7 +455,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 		new = (MtxGenPoly *)new_poly->data;
 		temp = (MtxGenPoly *)poly->data;
 		new->points = g_memdup(temp->points,sizeof(MtxPoint)*temp->num_points);
-		printf("copied over %i MTxPoints (%i bytes) \n",temp->num_points,sizeof(MtxPoint)*temp->num_points);
+		//printf("copied over %i MTxPoints (%i bytes) \n",temp->num_points,sizeof(MtxPoint)*temp->num_points);
 	}
 	g_array_append_val(gauge->polygons,new_poly);
 	g_object_thaw_notify (G_OBJECT (gauge));

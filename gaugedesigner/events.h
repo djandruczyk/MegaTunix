@@ -76,6 +76,7 @@ void reset_onscreen_controls(void);
 void reset_onscreen_ranges(void);
 void reset_onscreen_tblocks(void);
 void reset_onscreen_tgroups(void);
+void reset_onscreen_polygons(void);
 void update_onscreen_ranges(void);
 void update_onscreen_tblocks(void);
 void update_onscreen_tgroups(void);
@@ -83,9 +84,11 @@ void update_onscreen_polygons(void);
 gboolean alter_tblock_data(GtkWidget *, gpointer );
 gboolean alter_crange_data(GtkWidget *, gpointer );
 gboolean alter_tgroup_data(GtkWidget *, gpointer );
+gboolean alter_polygon_data(GtkWidget *, gpointer );
 gboolean remove_crange(GtkWidget *, gpointer );
 gboolean remove_tblock(GtkWidget *, gpointer );
 gboolean remove_tgroup(GtkWidget *, gpointer );
+gboolean remove_polygon(GtkWidget *, gpointer );
 gboolean sweep_gauge(gpointer data);
 /* Prototypes */
 

@@ -125,7 +125,7 @@ EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
 
 	if (created)
 	{
-		window = glade_xml_get_widget(tick_groups_xml,"gauge_polygons_window");
+		window = glade_xml_get_widget(polygons_xml,"gauge_polygons_window");
 		if (GTK_IS_WIDGET(window))
 		{
 			gtk_widget_show_all(window);
