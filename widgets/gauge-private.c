@@ -640,6 +640,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 #ifdef HAVE_CAIRO
 	cairo_t *cr = NULL;
 	gfloat arc = 0.0;
+	double dashes[2] = {1.0,1.0};
 	gfloat radians_per_major_tick = 0.0;
 	gfloat radians_per_minor_tick = 0.0;
 	cairo_font_weight_t weight;
@@ -650,6 +651,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	gint i = 0;
 	gint j = 0;
 	gint k = 0;
+	gint num_points = 0;
 	gint count = 0;
 	gfloat counter = 0;
 	gfloat rad = 0.0;
@@ -662,6 +664,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	gfloat angle1, angle2;
 	cairo_pattern_t *gradient = NULL;
 	cairo_text_extents_t extents;
+	MtxPolygon *poly = NULL;
 	MtxColorRange *range = NULL;
 	MtxTextBlock *tblock = NULL;
 	MtxTickGroup *tgroup = NULL;
@@ -705,7 +708,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	/* Outside gradient ring */
 	gradient = cairo_pattern_create_linear(gauge->xc+(0.707*gauge->xc),
-		 	gauge->yc-(0.707*gauge->yc),
+			gauge->yc-(0.707*gauge->yc),
 			gauge->xc-(0.707*gauge->xc),
 			gauge->yc+(0.707*gauge->yc));
 	cairo_pattern_add_color_stop_rgb(gradient, 0, 
@@ -723,7 +726,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 	/* Inside gradient ring */
 	gradient = cairo_pattern_create_linear(gauge->xc-(0.707*gauge->xc),
-		 	gauge->yc+(0.707*gauge->yc),
+			gauge->yc+(0.707*gauge->yc),
 			gauge->xc+(0.707*gauge->xc),
 			gauge->yc-(0.707*gauge->yc));
 	cairo_pattern_add_color_stop_rgb(gradient, 0, 
@@ -891,6 +894,82 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		cairo_show_text (cr, tblock->text);
 	}
 
+	/* Polygons */
+	for (i=0;i<gauge->polygons->len;i++)
+	{
+		poly = g_array_index(gauge->polygons,MtxPolygon *, i);
+		cairo_set_source_rgb(cr,
+				poly->color.red/65535.0,
+				poly->color.green/65535.0,
+				poly->color.blue/65535.0);
+		lwidth = gauge->radius*poly->line_width < 1 ? 1: gauge->radius*poly->line_width;
+		cairo_set_line_width (cr, lwidth);
+		cairo_set_line_join(cr,poly->join_style);
+		switch (poly->line_style)
+		{
+			case GDK_LINE_SOLID:
+				cairo_set_dash(cr,0,0,0);
+				break;
+			case GDK_LINE_ON_OFF_DASH:
+				cairo_set_dash(cr,dashes,2,0);
+				break;
+			default:
+				break;
+		}
+		switch (poly->type)
+		{
+			case MTX_CIRCLE:
+				cairo_arc(cr,
+						gauge->xc+((MtxCircle *)poly->data)->x*gauge->radius,
+						gauge->yc+((MtxCircle *)poly->data)->y*gauge->radius,
+						((MtxCircle *)poly->data)->radius*gauge->radius,
+						0,2*M_PI);
+				break;
+			case MTX_RECTANGLE:
+				cairo_rectangle(cr,
+						gauge->xc+((MtxRectangle *)poly->data)->x*gauge->radius,
+						gauge->yc+((MtxRectangle *)poly->data)->y*gauge->radius,
+						((MtxRectangle *)poly->data)->width*gauge->radius,
+						((MtxRectangle *)poly->data)->height*gauge->radius);
+				break;
+			case MTX_ARC:
+				cairo_save(cr);
+				cairo_translate(cr,
+						gauge->xc+((MtxArc *)poly->data)->x*gauge->radius-((((MtxArc *)poly->data)->width*gauge->radius)/2.0),
+						gauge->xc+((MtxArc *)poly->data)->y*gauge->radius-((((MtxArc *)poly->data)->height*gauge->radius)/2.0));
+				cairo_scale(cr,1.0/((((MtxArc *)poly->data)->height*gauge->radius)/2.0),1.0/((((MtxArc *)poly->data)->width*gauge->radius)/2.0));
+				cairo_arc(cr,
+						0,
+						0,
+						1,
+						((MtxArc *)poly->data)->start_angle * (M_PI/180.0),-(((MtxArc *)poly->data)->sweep_angle+((MtxArc *)poly->data)->start_angle)*(M_PI/180));
+				cairo_restore(cr);
+				break;
+			case MTX_GENPOLY:
+				num_points = ((MtxGenPoly *)poly->data)->num_points;
+				cairo_move_to(cr,
+						gauge->xc + (((MtxGenPoly *)poly->data)->points[0].x * gauge->radius),
+						gauge->yc + (((MtxGenPoly *)poly->data)->points[0].y * gauge->radius));
+				for (j=1;j<num_points;j++)
+				{
+
+					cairo_line_to(cr,
+							gauge->xc + (((MtxGenPoly *)poly->data)->points[j].x * gauge->radius),
+							gauge->yc + (((MtxGenPoly *)poly->data)->points[j].y * gauge->radius));
+
+
+				}
+				cairo_fill_preserve(cr);
+
+				break;
+			default:
+				break;
+		}
+		if (poly->filled)
+			cairo_fill(cr);
+		else
+			cairo_stroke(cr);
+	}
 	cairo_destroy (cr);
 #endif
 }
@@ -1277,6 +1356,11 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	{
 		poly = g_array_index(gauge->polygons,MtxPolygon *, i);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&poly->color);
+		gdk_gc_set_line_attributes(gauge->gc,
+				poly->line_width*gauge->radius,
+				poly->line_style,
+				GDK_CAP_BUTT,
+				poly->join_style);
 		switch (poly->type)
 		{
 			case MTX_CIRCLE:

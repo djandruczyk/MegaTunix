@@ -676,6 +676,15 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 		case POLY_FILLED:
 			poly->filled = (gint)(*(gfloat *)value);
 			break;
+		case POLY_LINESTYLE:
+			poly->line_style = (gint)(*(gfloat *)value);
+			break;
+		case POLY_JOINSTYLE:
+			poly->join_style = (gint)(*(gfloat *)value);
+			break;
+		case POLY_LINEWIDTH:
+			poly->line_width = *(gfloat *)value;
+			break;
 		case POLY_X:
 			if (poly->type == MTX_CIRCLE)
 				((MtxCircle *)data)->x = *(gfloat *)value;

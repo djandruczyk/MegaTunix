@@ -82,6 +82,9 @@ typedef enum
 typedef enum
 {
 	POLY_COLOR = 0,
+	POLY_LINEWIDTH,
+	POLY_LINESTYLE,
+	POLY_JOINSTYLE,
 	POLY_X,
 	POLY_Y,
 	POLY_WIDTH,
@@ -241,6 +244,9 @@ struct _MtxPolygon
 	MtxPolyType type;		/* Enum type */
 	gboolean filled;		/* Filled or not? */
 	GdkColor color;			/* Color */
+	gfloat line_width;		/* % of radius, clamped at 1 pixel */
+	GdkLineStyle line_style;	/* Line Style */
+	GdkJoinStyle join_style;	/* Join Style */
 	void *data;			/* point to datastruct */
 };
 

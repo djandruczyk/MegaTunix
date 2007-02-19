@@ -419,6 +419,12 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest)
 				mtx_gauge_color_import(gauge, cur_node,&poly->color);
 			if (g_strcasecmp((gchar *)cur_node->name,"filled") == 0)
 				mtx_gauge_gint_import(gauge, cur_node,&poly->filled);
+			if (g_strcasecmp((gchar *)cur_node->name,"line_width") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&poly->line_width);
+			if (g_strcasecmp((gchar *)cur_node->name,"line_style") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&poly->line_style);
+			if (g_strcasecmp((gchar *)cur_node->name,"join_style") == 0)
+				mtx_gauge_gint_import(gauge, cur_node,&poly->join_style);
 			if (g_strcasecmp((gchar *)cur_node->name,"Circle") == 0)
 			{
 				poly->data = g_new0(MtxCircle,1);
@@ -872,7 +878,6 @@ void mtx_gauge_poly_generic_export(xmlNodePtr root_node, MtxPolygon* poly)
 	string = g_string_new(NULL);
 	for (i=0;i<data->num_points;i++)
 	{
-		printf("x_points[%i] is %f\n",i,data->points[i].x);
 		tmpbuf = g_strdup_printf("%f",data->points[i].x);
 		g_string_append(string,tmpbuf);
 		g_free(tmpbuf);
@@ -885,7 +890,6 @@ void mtx_gauge_poly_generic_export(xmlNodePtr root_node, MtxPolygon* poly)
 	string = g_string_new(NULL);
 	for (i=0;i<data->num_points;i++)
 	{
-		printf("y_points[%i] is %f\n",i,data->points[i].y);
 		tmpbuf = g_strdup_printf("%f",data->points[i].y);
 		g_string_append(string,tmpbuf);
 		g_free(tmpbuf);
@@ -920,6 +924,18 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 		g_free(tmpbuf);
 		tmpbuf = g_strdup_printf("%i",poly->filled);
 		xmlNewChild(node, NULL, BAD_CAST "filled",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%f",poly->line_width);
+		xmlNewChild(node, NULL, BAD_CAST "line_width",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%i",poly->line_style);
+		xmlNewChild(node, NULL, BAD_CAST "line_style",
+				BAD_CAST tmpbuf);
+		g_free(tmpbuf);
+		tmpbuf = g_strdup_printf("%i",poly->join_style);
+		xmlNewChild(node, NULL, BAD_CAST "join_style",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 		switch (poly->type)

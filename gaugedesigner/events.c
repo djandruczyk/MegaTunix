@@ -161,7 +161,6 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 	GladeXML *xml = NULL;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
-	gchar * up = NULL;
 	gchar * xn = NULL;
 	gchar * yn = NULL;
 	GtkWidget *dummy = NULL;
@@ -204,10 +203,25 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 			poly = g_new0(MtxPolygon, 1);
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_colorbutton")),&poly->color);
 			poly->filled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(xml,"poly_filled_cbutton")));
-			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"poly_combobox")));
-			up = g_ascii_strup(tmpbuf,-1);
+			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"line_style_combobox")));
+			if (g_strcasecmp(tmpbuf,"Solid") == 0)
+				poly->line_style = GDK_LINE_SOLID;
+			if (g_strcasecmp(tmpbuf,"On Off Dash") == 0)
+				poly->line_style = GDK_LINE_ON_OFF_DASH;
+			if (g_strcasecmp(tmpbuf,"Double Dash") == 0)
+				poly->line_style = GDK_LINE_DOUBLE_DASH;
 			g_free(tmpbuf);
-			if (g_strcasecmp(up,"CIRCLE") == 0)
+			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"join_style_combobox")));
+			if (g_strcasecmp(tmpbuf,"Miter") == 0)
+				poly->line_style = GDK_JOIN_MITER;
+			if (g_strcasecmp(tmpbuf,"Round") == 0)
+				poly->line_style = GDK_JOIN_ROUND;
+			if (g_strcasecmp(tmpbuf,"Bevel") == 0)
+				poly->line_style = GDK_JOIN_BEVEL;
+			g_free(tmpbuf);
+			poly->line_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"line_width_spin")));
+			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"poly_combobox")));
+			if (g_strcasecmp(tmpbuf,"CIRCLE") == 0)
 			{
 				poly->type = MTX_CIRCLE;
 				data = g_new0(MtxCircle, 1);
@@ -216,7 +230,7 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 				((MtxCircle *)data)->y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"circle_y_center_spin")));
 				((MtxCircle *)data)->radius = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"circle_radius_spin")));
 			}
-			if (g_strcasecmp(up,"ARC") == 0)
+			if (g_strcasecmp(tmpbuf,"ARC") == 0)
 			{
 				poly->type = MTX_ARC;
 				data = g_new0(MtxArc, 1);
@@ -228,7 +242,7 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 				((MtxArc *)data)->start_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_start_spin")));
 				((MtxArc *)data)->sweep_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"arc_sweep_spin")));
 			}
-			if (g_strcasecmp(up,"RECTANGLE") == 0)
+			if (g_strcasecmp(tmpbuf,"RECTANGLE") == 0)
 			{
 				poly->type = MTX_RECTANGLE;
 				data = g_new0(MtxRectangle, 1);
@@ -238,7 +252,7 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 				((MtxRectangle *)data)->width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"rect_width_spin")));
 				((MtxRectangle *)data)->height = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"rect_height_spin")));
 			}
-			if (g_strcasecmp(up,"GENERIC") == 0)
+			if (g_strcasecmp(tmpbuf,"GENERIC") == 0)
 			{
 				poly->type = MTX_GENPOLY;
 				data = g_new0(MtxGenPoly, 1);
@@ -264,9 +278,9 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 					}
 				}
 			}
+			g_free(tmpbuf);
 			if (hash)
 				g_hash_table_destroy(hash);
-			g_free(up);
 
 			mtx_gauge_face_set_polygon_struct(MTX_GAUGE_FACE(gauge),poly);
 			if ((poly->type == MTX_GENPOLY) && (((MtxGenPoly *)(poly->data))->num_points > 0))
@@ -1208,6 +1222,21 @@ void update_onscreen_polygons()
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(dummy),"toggled", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_FILLED));
 
+		/* Line Style Combobox */
+		dummy = glade_xml_get_widget(xml,"line_style_combobox");
+		gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),poly->line_style);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_LINESTYLE));
+		/* Joint Style Combobox */
+		dummy = glade_xml_get_widget(xml,"join_style_combobox");
+		gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),poly->join_style);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_JOINSTYLE));
+		/* Line Width */
+		dummy = glade_xml_get_widget(xml,"line_width_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),poly->line_width);
+		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_LINEWIDTH));
 
 		if (poly->type == MTX_CIRCLE)
 		{
@@ -1296,13 +1325,13 @@ void update_onscreen_polygons()
 
 			/* Start Angle */
 			dummy = glade_xml_get_widget(xml,"arc_start_spin");
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->height);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->start_angle);
 			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_START_ANGLE));
 
 			/* Sweep Angle */
 			dummy = glade_xml_get_widget(xml,"arc_sweep_spin");
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->height);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxArc *)poly->data)->sweep_angle);
 			g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_SWEEP_ANGLE));
 		}
@@ -1534,6 +1563,12 @@ gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
 
 	switch (field)
 	{
+		case POLY_LINESTYLE:
+		case POLY_JOINSTYLE:
+			value = (gfloat)gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
+			break;
+			
 		case POLY_X:
 		case POLY_Y:
 		case POLY_WIDTH:
@@ -1542,6 +1577,7 @@ gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
 		case POLY_START_ANGLE:
 		case POLY_SWEEP_ANGLE:
 		case POLY_NUM_POINTS:
+		case POLY_LINEWIDTH:
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 			mtx_gauge_face_alter_polygon(MTX_GAUGE_FACE(gauge),index,field,(void *)&value);
 			break;
