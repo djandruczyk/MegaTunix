@@ -1133,6 +1133,7 @@ void update_onscreen_polygons()
 	GtkWidget *frame = NULL;
 	GtkWidget *dummy = NULL;
 	GtkWidget *notebook = NULL;
+	GtkWidget *tmpwidget = NULL;
 	GHashTable *hash = NULL;
 	GladeXML *xml = NULL;
 	gchar * filename = NULL;
@@ -1241,7 +1242,13 @@ void update_onscreen_polygons()
 		if (poly->type == MTX_CIRCLE)
 		{
 			dummy = glade_xml_get_widget(xml,"poly_combobox");
-			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),0);
+			gtk_widget_destroy(dummy);
+			dummy = gtk_label_new(NULL);
+			gtk_label_set_markup(GTK_LABEL(dummy),"<b>Circle</b>");
+			tmpwidget =  glade_xml_get_widget(xml,"polygon_details_table");
+			gtk_table_attach(GTK_TABLE(tmpwidget),dummy,0,1,1,2,GTK_FILL,GTK_FILL,0,0);
+			gtk_widget_show(dummy);
+//			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),0);
 			gtk_widget_show_all(glade_xml_get_widget(xml,"circle_polygon_table"));
 			/* Update circle controls */
 			/* X Center */
@@ -1265,7 +1272,13 @@ void update_onscreen_polygons()
 		if (poly->type == MTX_RECTANGLE)
 		{
 			dummy = glade_xml_get_widget(xml,"poly_combobox");
-			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),2);
+			gtk_widget_destroy(dummy);
+			dummy = gtk_label_new(NULL);
+			gtk_label_set_markup(GTK_LABEL(dummy),"<b>Rectangle</b>");
+			tmpwidget =  glade_xml_get_widget(xml,"polygon_details_table");
+			gtk_table_attach(GTK_TABLE(tmpwidget),dummy,0,1,1,2,GTK_FILL,GTK_FILL,0,0);
+			gtk_widget_show(dummy);
+
 			gtk_widget_show_all(glade_xml_get_widget(xml,"rectangle_polygon_table"));
 			/* Update Rectangle controls */
 			/* Upper left X */
@@ -1296,7 +1309,13 @@ void update_onscreen_polygons()
 		if (poly->type == MTX_ARC)
 		{
 			dummy = glade_xml_get_widget(xml,"poly_combobox");
-			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),1);
+			gtk_widget_destroy(dummy);
+			dummy = gtk_label_new(NULL);
+			gtk_label_set_markup(GTK_LABEL(dummy),"<b>Arc</b>");
+			tmpwidget =  glade_xml_get_widget(xml,"polygon_details_table");
+			gtk_table_attach(GTK_TABLE(tmpwidget),dummy,0,1,1,2,GTK_FILL,GTK_FILL,0,0);
+			gtk_widget_show(dummy);
+
 			gtk_widget_show_all(glade_xml_get_widget(xml,"arc_polygon_table"));
 			/* Update Arc controls */
 			/* Upper left X */
@@ -1338,7 +1357,13 @@ void update_onscreen_polygons()
 		if (poly->type == MTX_GENPOLY)
 		{
 			dummy = glade_xml_get_widget(xml,"poly_combobox");
-			gtk_combo_box_set_active(GTK_COMBO_BOX(dummy),3);
+			gtk_widget_destroy(dummy);
+			dummy = gtk_label_new(NULL);
+			gtk_label_set_markup(GTK_LABEL(dummy),"<b>Generic Polygon</b>");
+			tmpwidget =  glade_xml_get_widget(xml,"polygon_details_table");
+			gtk_table_attach(GTK_TABLE(tmpwidget),dummy,0,1,1,2,GTK_FILL,GTK_FILL,0,0);
+			gtk_widget_show(dummy);
+
 			gtk_widget_show_all(glade_xml_get_widget(xml,"generic_polygon_table"));
 			/* Update Generic Polygon controls */
 
