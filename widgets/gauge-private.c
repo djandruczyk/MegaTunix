@@ -640,7 +640,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 #ifdef HAVE_CAIRO
 	cairo_t *cr = NULL;
 	gfloat arc = 0.0;
-	double dashes[2] = {1.0,1.0};
+	double dashes[2] = {4.0,4.0};
 	gfloat radians_per_major_tick = 0.0;
 	gfloat radians_per_minor_tick = 0.0;
 	cairo_font_weight_t weight;
@@ -935,14 +935,21 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 			case MTX_ARC:
 				cairo_save(cr);
 				cairo_translate(cr,
-						gauge->xc+((MtxArc *)poly->data)->x*gauge->radius-((((MtxArc *)poly->data)->width*gauge->radius)/2.0),
-						gauge->xc+((MtxArc *)poly->data)->y*gauge->radius-((((MtxArc *)poly->data)->height*gauge->radius)/2.0));
-				cairo_scale(cr,1.0/((((MtxArc *)poly->data)->height*gauge->radius)/2.0),1.0/((((MtxArc *)poly->data)->width*gauge->radius)/2.0));
-				cairo_arc(cr,
-						0,
-						0,
-						1,
-						((MtxArc *)poly->data)->start_angle * (M_PI/180.0),-(((MtxArc *)poly->data)->sweep_angle+((MtxArc *)poly->data)->start_angle)*(M_PI/180));
+						gauge->xc+(((MtxArc *)poly->data)->x*gauge->radius),
+						gauge->yc+(((MtxArc *)poly->data)->y*gauge->radius));
+				cairo_scale(cr,
+						((MtxArc *)poly->data)->width*gauge->radius,
+						((MtxArc *)poly->data)->height*gauge->radius);
+				cairo_arc_negative(cr,
+						0.0,
+						0.0,
+						1.0,
+						-((MtxArc *)poly->data)->start_angle * (M_PI/180.0),-(((MtxArc *)poly->data)->sweep_angle+((MtxArc *)poly->data)->start_angle)*(M_PI/180));
+				if (poly->filled)
+				{
+					cairo_line_to(cr,0,0);
+					cairo_close_path(cr);
+				}
 				cairo_restore(cr);
 				break;
 			case MTX_GENPOLY:
@@ -959,8 +966,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 
 				}
-				cairo_fill_preserve(cr);
-
+				cairo_close_path(cr);
 				break;
 			default:
 				break;
@@ -1385,7 +1391,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				gdk_draw_arc(gauge->bg_pixmap, gauge->gc,
 						poly->filled,
 						gauge->xc+((MtxArc *)poly->data)->x*gauge->radius-(((MtxArc *)poly->data)->width*gauge->radius),
-						gauge->yc+((MtxArc *)poly->data)->x*gauge->radius-(((MtxArc *)poly->data)->height*gauge->radius),
+						gauge->yc+((MtxArc *)poly->data)->y*gauge->radius-(((MtxArc *)poly->data)->height*gauge->radius),
 						2*((MtxArc *)poly->data)->width*gauge->radius,
 						2*((MtxArc *)poly->data)->height*gauge->radius,
 						((MtxArc *)poly->data)->start_angle,
