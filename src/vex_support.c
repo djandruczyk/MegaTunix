@@ -70,6 +70,8 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
+	fileio->default_filename= g_strdup("VEX_Backup.vex");
+	fileio->default_extension= g_strdup("vex");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
 	filename = choose_file(fileio);

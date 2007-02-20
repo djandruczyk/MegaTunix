@@ -73,8 +73,10 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->title = g_strdup("Save Dashboard to File");
-	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
+	fileio->default_filename = g_strdup("Untitled-Gauge.xml");
+	fileio->default_extension = g_strdup("xml");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
 	filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge));
 	if (!filename)

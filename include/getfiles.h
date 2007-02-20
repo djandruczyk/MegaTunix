@@ -26,6 +26,8 @@ struct _MtxFileIO
 	gchar *external_path;		/* external path rel to homedir */
 	gchar *shortcut_folders;	/* CSV list of ADDITIONAL shortcut 
 					   folders */
+	gchar *default_extension;	/* Default file extension */
+	gchar *default_filename;	/* If no name passed,suggest this name*/
 	gchar *filename;		/* Filename to save (save ONLY) */
 	gchar *title;			/* Choser title */
 };

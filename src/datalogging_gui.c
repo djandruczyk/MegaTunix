@@ -442,6 +442,8 @@ EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for datalog export");
+	fileio->default_filename= g_strdup("Untitled.log");
+	fileio->default_extension= g_strdup("log");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
 	filename = choose_file(fileio);
@@ -479,6 +481,8 @@ EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_Datalogs");
 	fileio->title = g_strdup("Choose a filename for internal datalog export");
+	fileio->default_filename= g_strdup("Untitled.log");
+	fileio->default_extension= g_strdup("log");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
 	filename = choose_file(fileio);

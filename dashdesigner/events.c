@@ -141,6 +141,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		vbox = gtk_vbox_new(FALSE,0);
 		gtk_container_add(GTK_CONTAINER(ebox),vbox);
 		table = gtk_table_new(1,1,FALSE);
+		g_object_set_data(G_OBJECT(ebox),"table",table);
 		gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
 		label = gtk_label_new("Unsorted");
 		t_num = gtk_notebook_append_page(GTK_NOTEBOOK(notebook),swin,label);
@@ -148,9 +149,10 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		i = 0;
 		while (files[i])
 		{
+			ebox = gtk_event_box_new();
+			gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
 			gauge = mtx_gauge_face_new();
-			gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
-	//		gtk_widget_realize(gauge);
+			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 			gtk_widget_show(gauge);
@@ -185,6 +187,7 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 				gtk_container_add(GTK_CONTAINER(ebox),vbox);
 				table = gtk_table_new(1,1,FALSE);
 				gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
+				g_object_set_data(G_OBJECT(ebox),"table",table);
 				label = gtk_label_new(d_name);
 				t_num = gtk_notebook_append_page(
 						GTK_NOTEBOOK(notebook),
@@ -197,7 +200,6 @@ EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 					gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
 					gauge = mtx_gauge_face_new();
 					gtk_container_add(GTK_CONTAINER(ebox),gauge);
-//					gtk_table_attach_defaults(GTK_TABLE(table),gauge,0,1,i,i+1);
 					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),files[i]);
 					if (g_strrstr(files[i],".MegaTunix"))
 						gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
@@ -256,9 +258,12 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
-	table = gtk_bin_get_child(GTK_BIN(widget));
-	if(GTK_IS_TABLE(table))
+	table = g_object_get_data(G_OBJECT(widget),"table");
+
+	if (GTK_IS_TABLE(table))
 		total_gauges = g_list_length(GTK_TABLE(table)->children);
+	else
+		return FALSE;
 
 	row = (gint)(((float)y_cur/(float)height)*(float)total_gauges);
 
@@ -268,7 +273,10 @@ EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			child = (GtkTableChild *) g_list_nth_data(GTK_TABLE(table)->children,i);
 			if (row == child->top_attach)
-				filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget));
+			{
+				if (GTK_IS_EVENT_BOX(child->widget))
+					filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gtk_bin_get_child(GTK_BIN(child->widget))));
+			}
 		}
 		dash =  glade_xml_get_widget(main_xml,"dashboard");
 		gauge = mtx_gauge_face_new();
@@ -561,7 +569,6 @@ void update_properties(GtkWidget * widget, Choice choice)
 
 	if (choice == GAUGE_ADD)
 	{
-//		printf ("gauge add\n");
 		table = gtk_table_new(3,2,FALSE);
 		gtk_container_set_border_width(GTK_CONTAINER(table),5);
 		entry = gtk_entry_new();

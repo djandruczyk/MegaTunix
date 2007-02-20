@@ -662,8 +662,9 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	MtxPolygon *poly = NULL;
-	gboolean skip_update = FALSE;
 	void *data = NULL;
+	gint i = 0;
+	gint num_points = 0;
 
 	poly = g_array_index(gauge->polygons,MtxPolygon *,index);
 	g_return_if_fail (poly != NULL);
@@ -727,8 +728,16 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 			break;
 		case POLY_NUM_POINTS:
 			if (poly->type == MTX_GENPOLY)
+			{
+				num_points = ((MtxGenPoly *)data)->num_points;
 				((MtxGenPoly *)data)->num_points = (gint)(*(gfloat *)value);
-			skip_update = TRUE;
+				((MtxGenPoly *)data)->points = g_renew(MtxPoint,((MtxGenPoly *)data)->points,((MtxGenPoly *)data)->num_points);
+				for (i=num_points;i<((MtxGenPoly *)data)->num_points;i++)
+				{
+					((MtxGenPoly *)data)->points[i].x = 0.0;
+					((MtxGenPoly *)data)->points[i].y = 0.0;
+				}
+			}
 			break;
 		case POLY_POINTS:
 			if (poly->type == MTX_GENPOLY)
@@ -742,11 +751,8 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 			break;
 	}
 	g_object_thaw_notify (G_OBJECT (gauge));
-	if (!skip_update)
-	{
-		generate_gauge_background(GTK_WIDGET(gauge));
-		mtx_gauge_face_redraw_canvas (gauge);
-	}
+	generate_gauge_background(GTK_WIDGET(gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
 	return;
 }
 

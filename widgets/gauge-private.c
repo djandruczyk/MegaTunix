@@ -893,6 +893,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				gauge->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*gauge->radius));
 		cairo_show_text (cr, tblock->text);
 	}
+	cairo_stroke(cr);
 
 	/* Polygons */
 	for (i=0;i<gauge->polygons->len;i++)
@@ -954,17 +955,16 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				break;
 			case MTX_GENPOLY:
 				num_points = ((MtxGenPoly *)poly->data)->num_points;
+				if (num_points < 1)
+					break;
 				cairo_move_to(cr,
 						gauge->xc + (((MtxGenPoly *)poly->data)->points[0].x * gauge->radius),
 						gauge->yc + (((MtxGenPoly *)poly->data)->points[0].y * gauge->radius));
 				for (j=1;j<num_points;j++)
 				{
-
 					cairo_line_to(cr,
 							gauge->xc + (((MtxGenPoly *)poly->data)->points[j].x * gauge->radius),
 							gauge->yc + (((MtxGenPoly *)poly->data)->points[j].y * gauge->radius));
-
-
 				}
 				cairo_close_path(cr);
 				break;
@@ -1539,6 +1539,6 @@ gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
  */
 void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
-	requisition->width = 10;
-	requisition->height = 10;
+	requisition->width = 75;
+	requisition->height = 75;
 }

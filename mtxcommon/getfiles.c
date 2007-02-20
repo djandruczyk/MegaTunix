@@ -202,12 +202,12 @@ gchar * choose_file(MtxFileIO *data)
 	gint i = 0;
 
 	/*
-	printf("choose_file\n");
-	printf("filter %s\n",data->filter);
-	printf("filename %s\n",data->filename);
-	printf("default_path %s\n",data->default_path);
-	printf("title %s\n",data->title);
-	*/
+	   printf("choose_file\n");
+	   printf("filter %s\n",data->filter);
+	   printf("filename %s\n",data->filename);
+	   printf("default_path %s\n",data->default_path);
+	   printf("title %s\n",data->title);
+	   */
 	if (!data->title)
 		data->title = g_strdup("Open File");
 
@@ -265,7 +265,7 @@ gchar * choose_file(MtxFileIO *data)
 		else
 		{
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
-			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), "Untitled.xml");
+			gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), data->default_filename );
 		}
 
 	}
@@ -274,7 +274,7 @@ gchar * choose_file(MtxFileIO *data)
 	/* Add shortcut folders... */
 	if (data->shortcut_folders)
 	{
-		
+
 		vector = g_strsplit(data->shortcut_folders,",",-1);
 		for (i=0;i<g_strv_length(vector);i++)
 		{
@@ -319,7 +319,7 @@ gchar * choose_file(MtxFileIO *data)
 		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),filter);
 		g_strfreev(vector);
 	}
-	afterfilter:
+afterfilter:
 	/* Turn on overwriteconfirmation */
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
@@ -336,7 +336,16 @@ gchar * choose_file(MtxFileIO *data)
 #endif
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+	if ((data->action == GTK_FILE_CHOOSER_ACTION_SAVE) && (data->default_extension))
+	{
+		if(!g_str_has_suffix (tmpbuf,data->default_extension))
+			filename = g_strjoin(".",tmpbuf,data->default_extension,NULL);
+		else
+			filename = g_strdup(tmpbuf);
+	}
+	else
+		filename = g_strdup(tmpbuf);
 	gtk_widget_destroy (dialog);
 
 	return (filename);
@@ -405,5 +414,9 @@ void free_mtxfileio(MtxFileIO *data)
 		g_free(data->filter);
 	if (data->shortcut_folders)
 		g_free(data->shortcut_folders);
+	if (data->default_filename)
+		g_free(data->default_filename);
+	if (data->default_extension)
+		g_free(data->default_extension);
 	return;
 }

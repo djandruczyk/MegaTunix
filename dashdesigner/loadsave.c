@@ -17,9 +17,9 @@ EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->default_path = g_strdup("Dashboards");
 	fileio->title = g_strdup("Select Dashboard to Open");
-	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
 	fileio->shortcut_folders = g_strdup("Dashboards");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 
 
 	filename = choose_file(fileio);
@@ -60,8 +60,10 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	fileio->default_path = g_strdup("Dashboards");
 	fileio->filename = filename;
 	fileio->title = g_strdup("Save Dashboard to File");
-	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
+	fileio->default_filename = g_strdup("Untitled-Dash.xml");
+	fileio->default_extension = g_strdup("xml");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
 
 
 	filename = choose_file(fileio);

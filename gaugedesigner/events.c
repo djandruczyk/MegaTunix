@@ -204,21 +204,27 @@ EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer wdata)
 			gtk_color_button_get_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"polygon_colorbutton")),&poly->color);
 			poly->filled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(xml,"poly_filled_cbutton")));
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"line_style_combobox")));
-			if (g_strcasecmp(tmpbuf,"Solid") == 0)
+			if (!tmpbuf)
 				poly->line_style = GDK_LINE_SOLID;
-			if (g_strcasecmp(tmpbuf,"On Off Dash") == 0)
+			else if (g_strcasecmp(tmpbuf,"Solid") == 0)
+				poly->line_style = GDK_LINE_SOLID;
+			else if (g_strcasecmp(tmpbuf,"On Off Dash") == 0)
 				poly->line_style = GDK_LINE_ON_OFF_DASH;
-			if (g_strcasecmp(tmpbuf,"Double Dash") == 0)
+			else if (g_strcasecmp(tmpbuf,"Double Dash") == 0)
 				poly->line_style = GDK_LINE_DOUBLE_DASH;
-			g_free(tmpbuf);
+			if(tmpbuf)
+				g_free(tmpbuf);
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"join_style_combobox")));
-			if (g_strcasecmp(tmpbuf,"Miter") == 0)
+			if (!tmpbuf)
 				poly->line_style = GDK_JOIN_MITER;
-			if (g_strcasecmp(tmpbuf,"Round") == 0)
+			else if (g_strcasecmp(tmpbuf,"Miter") == 0)
+				poly->line_style = GDK_JOIN_MITER;
+			else if (g_strcasecmp(tmpbuf,"Round") == 0)
 				poly->line_style = GDK_JOIN_ROUND;
-			if (g_strcasecmp(tmpbuf,"Bevel") == 0)
+			else if (g_strcasecmp(tmpbuf,"Bevel") == 0)
 				poly->line_style = GDK_JOIN_BEVEL;
-			g_free(tmpbuf);
+			if(tmpbuf)
+				g_free(tmpbuf);
 			poly->line_width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"line_width_spin")));
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(glade_xml_get_widget(xml,"poly_combobox")));
 			if (g_strcasecmp(tmpbuf,"CIRCLE") == 0)
@@ -1199,6 +1205,7 @@ void update_onscreen_polygons()
 		gdk_flush();
 		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"poly_combobox")),"container",glade_xml_get_widget(xml,"polygon_details_ebox"));
 		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"points_table",glade_xml_get_widget(xml,"generic_points_table"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"live",GINT_TO_POINTER(TRUE));
 		hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"generic_num_points_spin")),"points_hash",hash);
 		dummy = glade_xml_get_widget(xml,"arc_polygon_table");
@@ -1779,11 +1786,15 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 	gchar *yn = NULL;
 	gchar *ln = NULL;
 	gint num_points = -1;
+	gint index = 0;
 	gint i = 0;
 	gint rows = 0;
+	gboolean live = FALSE;
 
 	table = (GtkWidget *)g_object_get_data(G_OBJECT(widget),"points_table");
 	hash = (GHashTable *)g_object_get_data(G_OBJECT(widget),"points_hash");
+	live = (gboolean)g_object_get_data(G_OBJECT(widget),"live");
+	index = (gint)g_object_get_data(G_OBJECT(widget),"index");
 	num_points = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 
 	rows = ((GtkTable *)table)->nrows;
@@ -1809,14 +1820,28 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 			if (!GTK_IS_SPIN_BUTTON(dummy1))
 			{
 				dummy1 = gtk_spin_button_new_with_range(-1,1,0.001);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy1),0.0);
 				gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy1),3);
+				if (live)
+				{
+					g_object_set_data(G_OBJECT(dummy1),"num_points_spin",widget);
+					g_object_set_data(G_OBJECT(dummy1),"index",GINT_TO_POINTER(index));
+					g_signal_connect(G_OBJECT(dummy1),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
+				}
 				gtk_table_attach(GTK_TABLE(table),dummy1,1,2,i,i+1,0,0,0,0);
 				g_hash_table_insert(hash,g_strdup(xn),dummy1);
 			}
 			if (!GTK_IS_SPIN_BUTTON(dummy2))
 			{
 				dummy2 = gtk_spin_button_new_with_range(-1,1,0.001);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy2),0.0);
 				gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy2),3);
+				if (live)
+				{
+					g_object_set_data(G_OBJECT(dummy2),"num_points_spin",widget);
+					g_object_set_data(G_OBJECT(dummy2),"index",GINT_TO_POINTER(index));
+					g_signal_connect(G_OBJECT(dummy2),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
+				}
 				gtk_table_attach(GTK_TABLE(table),dummy2,2,3,i,i+1,0,0,0,0);
 				g_hash_table_insert(hash,g_strdup(yn),dummy2);
 			}
@@ -1871,7 +1896,14 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 			if (!GTK_IS_SPIN_BUTTON(g_hash_table_lookup(hash,xn)))
 			{
 				dummy = gtk_spin_button_new_with_range(-1,1,0.001);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),0.0);
 				gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy),3);
+				if (live)
+				{
+					g_object_set_data(G_OBJECT(dummy),"num_points_spin",widget);
+					g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(index));
+					g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
+				}
 				gtk_table_attach(GTK_TABLE(table),dummy,1,2,i,i+1,0,0,0,0);
 				g_hash_table_insert(hash,g_strdup(xn),dummy);
 			}
@@ -1880,7 +1912,14 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 			if (!GTK_IS_SPIN_BUTTON(g_hash_table_lookup(hash,yn)))
 			{
 				dummy = gtk_spin_button_new_with_range(-1,1,0.001);
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),0.0);
 				gtk_spin_button_set_digits(GTK_SPIN_BUTTON(dummy),3);
+				if (live)
+				{
+					g_object_set_data(G_OBJECT(dummy),"num_points_spin",widget);
+					g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(index));
+					g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
+				}
 				gtk_table_attach(GTK_TABLE(table),dummy,2,3,i,i+1,0,0,0,0);
 				g_hash_table_insert(hash,g_strdup(yn),dummy);
 			}
