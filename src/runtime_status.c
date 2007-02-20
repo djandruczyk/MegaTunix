@@ -34,6 +34,7 @@ gint status_x_origin = 100;
 gint status_y_origin = 100;
 gint status_width = 50;
 gint status_height = 100;
+extern gint dbg_lvl;
 
 void load_status(void)
 {
@@ -59,14 +60,10 @@ void load_status(void)
 	GtkWidget * table;
 	GdkColor color;
 
-//	if (!firmware)
-//	{
-//		dbg_func(g_strdup_printf(__FILE__": firmware pointer is UNDEFINED,\n\texiting status window creation routine!!!!\n"),CRITICAL);
-//		return;
-//	}
 	if (!firmware->status_map_file)
 	{
-		dbg_func(g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
 		return;
 	}
 
@@ -76,7 +73,8 @@ void load_status(void)
 	{
 		if(!cfg_read_int(cfgfile,"global","total_status",&count))
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_status()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t could NOT read \"total_status\" value from\n\t file \"%s\"\n",filename));
 			return;
 		}
 
@@ -104,13 +102,20 @@ void load_status(void)
 			section = g_strdup_printf("status_%i",i);
 			if (!cfg_read_string(cfgfile,section,"create_label",&tmpbuf))
 			{
-				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"create_label\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"create_label\" from section \"%s\" in file\n\t%s\n",section,filename));
 				break;
 			}
 			if (!cfg_read_int(cfgfile,section,"row",&row))
-				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"row\" number from section \"%s\" in file\n\t%s\n",section,filename));
+			}
 			if (!cfg_read_int(cfgfile,section,"col",&col))
-				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"col\" number from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"col\" number from section \"%s\" in file\n\t%s\n",section,filename));
+			}
 			frame = gtk_frame_new(NULL);
 			gtk_frame_set_shadow_type(GTK_FRAME(frame),GTK_SHADOW_ETCHED_IN);
 			gtk_table_attach(GTK_TABLE(table),frame,
@@ -138,7 +143,10 @@ void load_status(void)
 
 			gtk_container_add(GTK_CONTAINER(frame),label);
 			if (!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
-				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
+			}
 			else
 			{
 				keys = parse_keys(tmpbuf,&num_keys,",");
@@ -146,7 +154,10 @@ void load_status(void)
 			}
 
 			if (!cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
-				dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_status()\n\t Failed reading \"keys\" from section \"%s\" in file\n\t%s\n",section,filename));
+			}
 			else
 			{
 				key_types = parse_keytypes(tmpbuf,&num_keytypes,",");
@@ -183,7 +194,10 @@ void load_status(void)
 
 	}
 	else
-		dbg_func(g_strdup_printf(__FILE__": load_status()\n\tCould not load %s\n",filename),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": load_status()\n\tCould not load %s\n",filename));
+	}
 
 	g_free(filename);
 	return;

@@ -30,6 +30,7 @@
 #include <tag_loader.h>
 
 GHashTable *dynamic_widgets = NULL;
+extern gint dbg_lvl;
 
 /*!
  \brief populate_master() stores a pointer to all of the glade loaded 
@@ -77,7 +78,10 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 	if (!g_hash_table_lookup(dynamic_widgets,fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
-		dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
+	}
 
 	g_free(prefix);
 	g_free(fullname);
@@ -100,7 +104,8 @@ void register_widget(gchar *name, GtkWidget * widget)
 	{
 		
 		g_hash_table_replace(dynamic_widgets,g_strdup(name),(gpointer)widget);
-		dbg_func(g_strdup_printf(__FILE__": register_widget()\n\tWidget named \"%s\" already exists in master table replacing it!\n",name),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": register_widget()\n\tWidget named \"%s\" already exists in master table replacing it!\n",name));
 	}
 	else
 		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
@@ -195,7 +200,8 @@ void set_widget_labels(gchar *input)
 	vector = parse_keys(input,&count,",");
 	if (count%2 != 0)
 	{
-		dbg_func(g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
 		return;
 	}
 	for(i=0;i<count;i+=2)
@@ -204,7 +210,10 @@ void set_widget_labels(gchar *input)
 		if ((widget) && (GTK_IS_LABEL(widget)))
 			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
 		else
-			dbg_func(g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]),CRITICAL);
+		{
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
+		}
 	}
 	g_strfreev(vector);
 

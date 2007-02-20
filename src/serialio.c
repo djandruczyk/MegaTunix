@@ -41,6 +41,7 @@ gboolean connected = FALSE;
 gboolean link_up = FALSE;
 GStaticMutex comms_mutex = G_STATIC_MUTEX_INIT;
 GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
+extern gint dbg_lvl;
 
 /*!
  \brief open_serial() called to open the serial port, updates textviews on the
@@ -76,7 +77,8 @@ gboolean open_serial(gchar * port_name)
 		serial_params->open = TRUE;
 		link_up = TRUE;
 		serial_params->fd = fd;
-		dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device),SERIAL_RD|SERIAL_WR);
+		if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
+			dbg_func(g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",device));
 		thread_update_logbar("comms_view",NULL,g_strdup_printf("%s Opened Successfully\n",device),TRUE,FALSE);
 		thread_update_widget(g_strdup("comms_serial_port_entry"),MTX_ENTRY,g_strdup(port_name));
 	}
@@ -92,7 +94,8 @@ gboolean open_serial(gchar * port_name)
 		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
 		//printf("Error Opening \"%s\", Error Code: \"%s\"\n",device,g_strdup(err_text));
-		dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text),CRITICAL);
+		if (dbg_lvl & (SERIAL_RD|SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",device,err_text));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("Error Opening \"%s\", Error Code: \"%s\"\n",device,err_text));
 
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error Opening \"%s\", Error Code: %s \n",device,err_text),TRUE,FALSE);
@@ -282,7 +285,8 @@ void close_serial()
 	link_up = FALSE;
 
 	/* An Closing the comm port */
-	dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"),SERIAL_RD|SERIAL_WR);
+	if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
+		dbg_func(g_strdup(__FILE__": close_serial()\n\tCOM Port Closed\n"));
 	thread_update_logbar("comms_view",NULL,g_strdup_printf("COM Port Closed\n"),TRUE,FALSE);
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&comms_mutex);

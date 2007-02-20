@@ -25,6 +25,7 @@
 
 
 
+extern gint dbg_lvl;
 /*!
  \brief load_tags() loads tags from the datamap file in reference to a 
  textview.  A tag defines a set of attributes that can be applied to
@@ -58,7 +59,8 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 		key = g_strdup_printf("%s",tagnames[i]);
 		if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_tag()\n\t Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n",key,section),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": load_tag()\n\t Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n",key,section));
 			exit (-5);
 		}
 		else
@@ -67,7 +69,8 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 			g_free(tmpbuf);
 			if (num_attrs%2)
 			{
-				dbg_func(g_strdup_printf(__FILE__": load_tags()\n\t numer of attributes is incorrect for widget \"%s\", key \"%s\" \n",section,key),CRITICAL);
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_tags()\n\t numer of attributes is incorrect for widget \"%s\", key \"%s\" \n",section,key));
 				return;
 			}
 			switch (num_attrs)
@@ -82,7 +85,8 @@ void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 					gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);
 					break;
 				default:
-					dbg_func(g_strdup(__FILE__": load_tags()\n\t numer of attributes is too many, 3 pairs of attribute pairs per tag is the maximum supported\n"),CRITICAL);
+					if (dbg_lvl & CRITICAL)
+						dbg_func(g_strdup(__FILE__": load_tags()\n\t numer of attributes is too many, 3 pairs of attribute pairs per tag is the maximum supported\n"));
 
 			}
 			

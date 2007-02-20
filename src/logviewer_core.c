@@ -28,6 +28,7 @@
 #include <tabloader.h>
 
 struct Log_Info *log_info = NULL;
+extern gint dbg_lvl;
 
 
 
@@ -84,7 +85,8 @@ void load_logviewer_file(GIOChannel *iochannel)
 {
 	if (!iochannel)
 	{
-		dbg_func(g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"));
 		return;
 	}
 	log_info = initialize_log_info();

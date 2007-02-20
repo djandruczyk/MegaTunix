@@ -20,7 +20,7 @@
 /* Prototypes */
 void close_debugfile(void);
 void open_debugfile(void);
-void dbg_func(gchar *, Dbg_Class);
+void dbg_func(gchar *);
 /* Prototypes */
 
 #endif

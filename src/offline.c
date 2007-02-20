@@ -31,6 +31,7 @@
 
 gchar * offline_firmware_choice = NULL;
 gboolean offline = FALSE;
+extern gint dbg_lvl;
 
 
 /*!
@@ -174,7 +175,8 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 	filenames = get_files(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),g_strdup("prof"));
 	if (!filenames)
 	{
-		dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
 		return NULL;
 	}
 
@@ -200,7 +202,8 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 		potential = load_potential_match(cmd_array,filenames[i]);
 		if (!potential)
 		{
-			dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"));
 			i++;
 			continue;
 		}

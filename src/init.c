@@ -57,6 +57,7 @@ extern gint interval_min;
 extern gint interval_step;
 extern gint interval_max;
 extern GtkWidget *main_window;
+extern gint dbg_lvl;
 extern struct Serial_Params *serial_params;
 /* Support up to "x" page firmware.... */
 gint **ms_data = NULL;
@@ -164,7 +165,8 @@ gboolean read_config(void)
 	else
 	{
 		serial_params->port_name = g_strdup(DEFAULT_PORT);
-		dbg_func(g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"));
 		g_free(filename);
 		save_config();
 		return FALSE;	/* No file found */

@@ -23,6 +23,7 @@
 #endif
 
 extern struct Serial_Params *serial_params;
+extern gint dbg_lvl;
 /*
 void win32_open_comm_port()
 {
@@ -52,7 +53,8 @@ void win32_setup_serial_params()
 
 	if(baudrate < BAUDRATE)
 	{
-		dbg_func(g_strdup_printf(__FILE__": win32_setup_serial_params()\n\tBaudrate incorrectly set to %i, forcing 9600\n",baudrate),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": win32_setup_serial_params()\n\tBaudrate incorrectly set to %i, forcing 9600\n",baudrate));
 		baudrate = BAUDRATE;
 	}
 
@@ -78,7 +80,10 @@ void win32_setup_serial_params()
 
 	// Set the port properties and write the string out the port.
 	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&dcb) == 0)
-		dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
+	}
 
 	/* Set timeout params in a fashion that mimics linux behavior */
 	timeouts.ReadIntervalTimeout         = 0;
@@ -139,7 +144,10 @@ void win32_toggle_serial_control_lines()
 
 	// Set the port properties to toggle the HW control lines 
 	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&dcb) == 0)
-		dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
+	}
 
 	/* Set timeout params in a fashion that mimics linux behavior */
 	timeouts.ReadIntervalTimeout         = 0;
@@ -152,7 +160,10 @@ void win32_toggle_serial_control_lines()
 	Sleep (500); /* wait half second */
 	// Set the port properties back to megatunix defaults
 	if(SetCommState((HANDLE) _get_osfhandle (serial_params->fd) ,&olddcb) == 0)
-		dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
+	}
 
 	Sleep (10000); /* wait 5 seconds for device to relink */
 	return;

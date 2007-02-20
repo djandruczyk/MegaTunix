@@ -23,6 +23,7 @@
 #include <structures.h>
 
 GHashTable *lookuptables = NULL;
+extern gint dbg_lvl;
 
 
 /*!
@@ -66,7 +67,8 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 	}
 	if (!status)
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table_name),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table_name));
 		exit (-2);
 	}
 
@@ -97,7 +99,10 @@ gboolean load_table(gchar *table_name, gchar *filename)
 	iochannel = g_io_channel_new_file(filename,"r", NULL);
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(g_strdup(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n"),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n"));
+	}
 	while (go)	
 	{
 		a_line = g_string_new("\0");
@@ -252,7 +257,8 @@ gfloat lookup_data(GObject *object, gint offset)
 
 	if (!lookuptable)
 	{
-		dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")));
 		return 0.0;
 	}
 	return lookuptable[offset];

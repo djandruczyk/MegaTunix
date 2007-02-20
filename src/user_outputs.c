@@ -40,6 +40,7 @@ enum
 	NUM_COLS
 } ;
 
+extern gint dbg_lvl;
 
 /*!
  \brief build_model_and_view() is called to create the model and view for
@@ -56,7 +57,8 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 
 	if (!rtvars_loaded)
 	{
-		dbg_func(g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 
@@ -297,8 +299,11 @@ void cell_edited(GtkCellRendererText *cell,
 	{
 		evaluator = evaluator_create(g_object_get_data(G_OBJECT(object),"dl_conv_expr"));
 		if (!evaluator)
-			dbg_func(g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)g_object_get_data(G_OBJECT(object),"dl_conv_expr")),CRITICAL);
-		g_object_set_data(object,"dl_evaluator",(gpointer)evaluator);
+		{
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)g_object_get_data(G_OBJECT(object),"dl_conv_expr")));
+			g_object_set_data(object,"dl_evaluator",(gpointer)evaluator);
+		}
 	}
 	// First conver to fahrenheit temp scale if temp dependant 
 	if (temp_dep)
@@ -399,14 +404,18 @@ void update_model_from_view(GtkWidget * widget)
 				expr = g_object_get_data(object,"ul_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")),CRITICAL);
+					if (dbg_lvl & CRITICAL)
+						dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")));
 					exit (-3);
 				}
 				evaluator = evaluator_create(expr);
 				if (!evaluator)
-					dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr),CRITICAL);
+				{
+					if (dbg_lvl & CRITICAL)
+						dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+					g_object_set_data(object,"ul_evaluator",evaluator);
+				}
 				assert(evaluator);
-				g_object_set_data(object,"ul_evaluator",evaluator);
 
 			}
 			else

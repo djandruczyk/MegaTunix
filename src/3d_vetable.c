@@ -46,6 +46,7 @@
 #include <widgetmgmt.h>
 
 static GLuint font_list_base;
+extern gint dbg_lvl;
 
 
 #define DEFAULT_WIDTH  475
@@ -81,7 +82,8 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	if (!gl_ability)
 	{
-		dbg_func(g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"));
 		return FALSE;
 	}
 	tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
@@ -474,7 +476,8 @@ GdkGLConfig* get_gl_config(void)
 			GDK_GL_MODE_DOUBLE);
 	if (gl_config == NULL)
 	{
-		dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"));
 
 		/* Try single-buffered visual */
 		gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
@@ -484,7 +487,8 @@ GdkGLConfig* get_gl_config(void)
 			/* Should make a non-GL basic drawing area version 
 			   instead of dumping the user out of here, or at least 
 			   render a non-GL found text on the drawing area */
-			dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** No appropriate OpenGL-capable visual found. EXITING!!\n"),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup(__FILE__": get_gl_config()\n\t*** No appropriate OpenGL-capable visual found. EXITING!!\n"));
 			exit (-1);
 		}
 	}
@@ -506,7 +510,8 @@ gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpoin
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
 
-	dbg_func(g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -538,7 +543,8 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 	ve_view = (struct Ve_View_3D 
 			*)g_object_get_data(G_OBJECT(widget),"ve_view");
 
-	dbg_func(g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
 
 	//      if (!GTK_WIDGET_HAS_FOCUS(widget)){
 	//              gtk_widget_grab_focus(widget);
@@ -566,7 +572,7 @@ gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer da
 
 	glRotatef(ve_view->sphi, 0.0, 1.0, 0.0);
 	glRotatef(ve_view->stheta, 1.0, 0.0, 0.0);
-//	printf ("sphi is %f\tsthetea is %f\n", ve_view->sphi, ve_view->stheta);
+	//	printf ("sphi is %f\tsthetea is %f\n", ve_view->sphi, ve_view->stheta);
 	glTranslatef (-0.5, -0.5, -0.5);
 
 	ve3d_calculate_scaling(ve_view);
@@ -606,7 +612,8 @@ gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpoi
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
 
-	dbg_func(g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
 
 	// Left Button
 	if (event->state & GDK_BUTTON1_MASK)
@@ -647,7 +654,8 @@ gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoin
 {
 	struct Ve_View_3D *ve_view;
 	ve_view = (struct Ve_View_3D *)g_object_get_data(G_OBJECT(widget),"ve_view");
-	dbg_func(g_strdup(__FILE__": ve3d_button_press_event()\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_button_press_event()\n"));
 
 	gtk_widget_grab_focus (widget);
 
@@ -673,7 +681,8 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 	GdkGLProc proc = NULL;
 
-	dbg_func(g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
@@ -685,8 +694,10 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 	{
 		/* glPolygonOffset */
 		proc = gdk_gl_get_proc_address ("glPolygonOffset");
-		if (proc == NULL) {
-			dbg_func(g_strdup(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n"),CRITICAL);
+		if (proc == NULL) 
+		{
+			if (dbg_lvl & (OPENGL|CRITICAL))
+				dbg_func(g_strdup(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n"));
 			exit (-11);
 		}
 	}
@@ -725,7 +736,8 @@ void ve3d_calculate_scaling(struct Ve_View_3D *ve_view)
 	gfloat max = 0.0;
 	gfloat tmpf = 0.0;
 
-	dbg_func(g_strdup(__FILE__": ve3d_calculate_scaling()\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -800,7 +812,8 @@ void ve3d_draw_ve_grid(struct Ve_View_3D *ve_view)
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
-	dbg_func(g_strdup(__FILE__": ve3d_draw_ve_grid() \n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -892,7 +905,8 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
-	dbg_func(g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -988,11 +1002,13 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
 
-	dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
 
 	if (!ve_view->z_source)
 	{
-		dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"),CRITICAL);
+		if (dbg_lvl & (OPENGL|CRITICAL))
+			dbg_func(g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
 		return;
 	}
 
@@ -1123,7 +1139,8 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	gint y_bincount = 0;
 	gint z_base = 0;
 
-	dbg_func(g_strdup(__FILE__": ve3d_draw_axis()\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_draw_axis()\n"));
 
 	x_base = ve_view->x_base;
 	y_base = ve_view->y_base;
@@ -1260,7 +1277,8 @@ void ve3d_load_font_metrics(void)
 	gchar font_string[] = "sans 8";
 	gint font_height;
 
-	dbg_func(g_strdup(__FILE__": ve3d_load_font_metrics()\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_load_font_metrics()\n"));
 
 	font_list_base = (GLuint) glGenLists (128);
 	font_desc = pango_font_description_from_string (font_string);
@@ -1268,7 +1286,8 @@ void ve3d_load_font_metrics(void)
 			(int)font_list_base);
 	if (font == NULL)
 	{
-		dbg_func(g_strdup_printf(__FILE__": ve3d_load_font_metrics()\n\tCan't load font '%s' CRITICAL FAILURE\n",font_string),CRITICAL);
+		if (dbg_lvl & (OPENGL|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": ve3d_load_font_metrics()\n\tCan't load font '%s' CRITICAL FAILURE\n",font_string));
 
 		exit (-1);
 	}
@@ -1310,7 +1329,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	ve_view = (struct Ve_View_3D *)g_object_get_data(
 			G_OBJECT(widget),"ve_view");
 
-	dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n"),OPENGL);
+	if (dbg_lvl & OPENGL)
+		dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n"));
 
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
@@ -1328,7 +1348,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	switch (event->keyval)
 	{
 		case GDK_Up:
-			dbg_func(g_strdup("\t\"UP\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"UP\"\n"));
 
 			if (ve_view->active_y < (y_bincount-1))
 				ve_view->active_y += 1;
@@ -1337,7 +1358,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;
 
 		case GDK_Down:
-			dbg_func(g_strdup("\t\"DOWN\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"DOWN\"\n"));
 
 			if (ve_view->active_y > 0)
 				ve_view->active_y -= 1;
@@ -1346,7 +1368,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;                          
 
 		case GDK_Left:
-			dbg_func(g_strdup("\t\"LEFT\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"LEFT\"\n"));
 
 			if (ve_view->active_x > 0)
 				ve_view->active_x -= 1;
@@ -1354,7 +1377,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					&ve_view->drawing_area->allocation, FALSE);
 			break;                                  
 		case GDK_Right:
-			dbg_func(g_strdup("\t\"RIGHT\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"RIGHT\"\n"));
 
 			if (ve_view->active_x < (x_bincount-1))
 				ve_view->active_x += 1;
@@ -1363,7 +1387,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;                          
 
 		case GDK_Page_Up:
-			dbg_func(g_strdup("\t\"Page Up\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"Page Up\"\n"));
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] <= 245)
@@ -1378,7 +1403,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_Q:
 		case GDK_q:
 		case GDK_equal:
-			dbg_func(g_strdup("\t\"PLUS\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"PLUS\"\n"));
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] < 255)
@@ -1388,7 +1414,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			break;                          
 		case GDK_Page_Down:
-			dbg_func(g_strdup("\t\"Page Down\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"Page Down\"\n"));
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] >= 10)
@@ -1403,7 +1430,8 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_W:
 		case GDK_w:
 		case GDK_KP_Subtract:
-			dbg_func(g_strdup("\t\"MINUS\"\n"),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup("\t\"MINUS\"\n"));
 
 			offset = z_base+(ve_view->active_y*y_bincount)+ve_view->active_x;
 			if (ms_data[z_page][offset] > 0)
@@ -1414,12 +1442,14 @@ EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;                                                  
 
 		default:
-			dbg_func(g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval),OPENGL);
+			if (dbg_lvl & OPENGL)
+				dbg_func(g_strdup_printf(__FILE__": ve3d_key_press_event()\n\tKeypress not handled, code: %#.4X\"\n",event->keyval));
 			return FALSE;
 	}
 	if (update_widgets)
 	{
-		dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"),OPENGL);
+		if (dbg_lvl & OPENGL)
+			dbg_func(g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
 		write_ve_const(widget,z_page,offset,dload_val,firmware->page_params[z_page]->is_spark, TRUE);
 		forced_update = TRUE;

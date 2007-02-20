@@ -24,6 +24,7 @@
 #include <structures.h>
 
 
+extern gint dbg_lvl;
 /*!
  \brief load_dashboard() loads hte specified dashboard configuration file
  and initializes the dash.
@@ -275,7 +276,8 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 		rtv_obj = g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!G_IS_OBJECT(rtv_obj))
 		{
-			dbg_func(g_strdup_printf(__FILE__": link_dash_datasourcesn\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": link_dash_datasourcesn\tBad things man, object doesn't exist for %s\n",source));
 			continue ;
 		}
 		d_gauge = g_new0(struct Dash_Gauge, 1);

@@ -32,6 +32,7 @@ gint ms_reset_count;
 gint ms_goodread_count;
 gint ms_ve_goodread_count;
 gint just_starting;
+extern gint dbg_lvl;
 extern GStaticMutex comms_mutex;
 extern GStaticMutex serio_mutex;
 
@@ -63,7 +64,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
-	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n"),IO_PROCESS);
+	if (dbg_lvl & IO_PROCESS)
+		dbg_func(g_strdup("\n"__FILE__": handle_ecu_data()\tENTERED...\n\n"));
 
 	/* different cases whether we're doing 
 	 * realtime, VE/constants, or I/O test 
@@ -82,7 +84,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while (total_read < total_wanted )
 			{
-				dbg_func(g_strdup_printf(__FILE__"\tNULL_HANDLER requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tNULL_HANDLER requesting %i bytes\n",total_wanted-total_read));
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -94,7 +97,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				if (res == 0) /* No data condition */
 					zerocount++;
 
-				dbg_func(g_strdup_printf(__FILE__"\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tNULL_HANDLER read %i bytes, running total %i\n",res,total_read));
 				if (zerocount > 1)  /* 2 bad reads, abort */
 					break;
 			}
@@ -116,7 +120,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf(__FILE__"\tC_TEST requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tC_TEST requesting %i bytes\n",total_wanted-total_read));
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -126,14 +131,16 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				if (res < 0) /* I/O Error */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf(__FILE__"\tC_TEST I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					if (dbg_lvl & (IO_PROCESS|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__"\tC_TEST I/O ERROR: \"%s\"\n",err_text));
 					bad_read = TRUE;
 					break;
 				}
 				if (res == 0)
 					zerocount++;
 
-				dbg_func(g_strdup_printf(__FILE__"\tC_TEST read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tC_TEST read %i bytes, running total %i\n",res,total_read));
 				if (zerocount > 2)  /* 2 bad reads, abort */
 				{
 					bad_read = TRUE;
@@ -144,7 +151,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_unlock(&serio_mutex);
 			if (bad_read)
 			{
-				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"),CRITICAL);
+				if (dbg_lvl & (IO_PROCESS|CRITICAL))
+					dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading ECU Clock (C_TEST)\n"));
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -164,7 +172,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR requesting %i bytes\n",total_wanted-total_read));
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -174,13 +183,15 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				if (res < 0) /* ERROR */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					if (dbg_lvl & (IO_PROCESS|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR I/O ERROR: \"%s\"\n",err_text));
 					break;
 				}
 				if (res == 0) /* No Data avail */
 					zerocount++;
 
-				dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tGET_ERROR read %i bytes, running total %i\n",res,total_read));
 				if (zerocount > 1)  // 2 bad reads, abort
 					break;
 			}
@@ -213,7 +224,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf(__FILE__"\tRT_VARS requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tRT_VARS requesting %i bytes\n",total_wanted-total_read));
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -223,14 +235,15 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				if (res < 0) /* ERROR */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf(__FILE__"\tRT_VARS I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					if (dbg_lvl & (IO_PROCESS|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__"\tRT_VARS I/O ERROR: \"%s\"\n",err_text));
 					bad_read = TRUE;
 					break;
 				}
 				if (res == 0) /* No Data avail */
 					zerocount++;
 
-				dbg_func(g_strdup_printf(__FILE__"\tRT_VARS read %i bytes, running total %i\n",res,total_read),IO_PROCESS);
+				dbg_func(g_strdup_printf(__FILE__"\tRT_VARS read %i bytes, running total %i\n",res,total_read));
 				if (zerocount > 1)  // 2 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -241,8 +254,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_unlock(&serio_mutex);
 			if (bad_read)
 			{
-				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"),IO_PROCESS);
-				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"),CRITICAL);
+				if (dbg_lvl & (IO_PROCESS|CRITICAL))
+					dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\tError reading Real-Time Variables \n"));
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -288,7 +301,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK, page %i, requesting %i bytes\n",message->page,total_wanted-total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK, page %i, requesting %i bytes\n",message->page,total_wanted-total_read));
 
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
@@ -298,14 +312,16 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				if (res < 0) /* ERROR */
 				{
 					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					if (dbg_lvl & (IO_PROCESS|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK I/O ERROR: \"%s\"\n",err_text));
 					bad_read = TRUE;
 					break;
 				}
 				if (res == 0) /* NO data avail */
 					zerocount++;
 
-				dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tVE_BLOCK read %i bytes, running total: %i\n",res,total_read));
 				if (zerocount > 1)  // 2 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -317,8 +333,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup_printf(__FILE__": handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),IO_PROCESS);
-				dbg_func(g_strdup_printf(__FILE__": handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page),CRITICAL);
+				if (dbg_lvl & (IO_PROCESS|CRITICAL))
+					dbg_func(g_strdup_printf(__FILE__": handle_ecu_data()\n\tError reading VE-Block Constants for page %i\n",message->page));
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -344,7 +360,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			g_static_mutex_lock(&comms_mutex);
 			while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 			{
-				dbg_func(g_strdup_printf(__FILE__"\tRAW_MEMORY_DUMP requesting %i bytes\n",total_wanted-total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tRAW_MEMORY_DUMP requesting %i bytes\n",total_wanted-total_read));
 				total_read += res = read(serial_params->fd,
 						ptr+total_read,
 						total_wanted-total_read);
@@ -352,15 +369,17 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				// Increment bad read counter....
 				if (res < 0) /* ERROR condition */
 				{
-					err_text = (gchar *)g_strerror(errno);
-					dbg_func(g_strdup_printf(__FILE__"\tRAW_MEMORY_DUMP I/O ERROR: \"%s\"\n",err_text),CRITICAL);
+					if (dbg_lvl & (IO_PROCESS|CRITICAL))
+						err_text = (gchar *)g_strerror(errno);
+					dbg_func(g_strdup_printf(__FILE__"\tRAW_MEMORY_DUMP I/O ERROR: \"%s\"\n",err_text));
 					bad_read = TRUE;
 					break;
 				}
 				if (res == 0) /* NO data condition */
 					zerocount++;
 
-				dbg_func(g_strdup_printf(__FILE__"\tread %i bytes, running total: %i\n",res,total_read),IO_PROCESS);
+				if (dbg_lvl & IO_PROCESS)
+					dbg_func(g_strdup_printf(__FILE__"\tread %i bytes, running total: %i\n",res,total_read));
 				if (zerocount > 2)  // 3 bad reads, abort
 				{
 					bad_read = TRUE;
@@ -372,8 +391,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			/* the number of bytes expected for raw data read */
 			if (bad_read)
 			{
-				dbg_func(g_strdup(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n"),IO_PROCESS);
-				dbg_func(g_strdup(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n"),CRITICAL);
+				if (dbg_lvl & (IO_PROCESS|CRITICAL))
+					dbg_func(g_strdup(__FILE__"handle_ecu_data()\n\tError reading Raw Memory Block\n"));
 				flush_serial(serial_params->fd, TCIOFLUSH);
 				serial_params->errcount++;
 				state = FALSE;
@@ -383,13 +402,14 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			dump_output(total_read,buf);
 			break;
 		default:
-			dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\timproper case, contact author!\n"),CRITICAL);
+			if (dbg_lvl & (IO_PROCESS|CRITICAL))
+				dbg_func(g_strdup(__FILE__": handle_ecu_data()\n\timproper case, contact author!\n"));
 			state = FALSE;
 			break;
 	}
 jumpout:
-
-	dbg_func(g_strdup("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n"),IO_PROCESS);
+	if (dbg_lvl & IO_PROCESS)
+		dbg_func(g_strdup("\n"__FILE__": handle_ecu_data\tLEAVING...\n\n"));
 	g_static_mutex_unlock(&mutex);
 	return state;
 }
@@ -409,16 +429,23 @@ void dump_output(gint total_read, guchar *buf)
 	p = buf;
 	if (total_read > 0)
 	{
-		dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's were sent\n"),SERIAL_RD);
-		dbg_func(g_strdup_printf("Data is in HEX!!\n"),SERIAL_RD);
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's were sent\n"));
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup_printf("Data is in HEX!!\n"));
 		p = buf;
 		for (j=0;j<total_read;j++)
 		{
-			dbg_func(g_strdup_printf("%.2x ", p[j]),SERIAL_RD);
+			if (dbg_lvl & SERIAL_RD)
+				dbg_func(g_strdup_printf("%.2x ", p[j]));
 			if (!((j+1)%8))
-				dbg_func(g_strdup("\n"),SERIAL_RD);
+			{
+				if (dbg_lvl & SERIAL_RD)
+					dbg_func(g_strdup("\n"));
+			}
 		}
-		dbg_func(g_strdup("\n\n"),SERIAL_RD);
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup("\n\n"));
 	}
 
 }

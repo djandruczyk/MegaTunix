@@ -26,7 +26,7 @@
 #include <widgetmgmt.h>
 
 GHashTable *rtt_hash = NULL;
-
+extern gint dbg_lvl;
 
 /*!
  \brief load_rt_text() is called to load up the runtime text configurations
@@ -56,7 +56,8 @@ void load_rt_text()
 	{
 		if (rtt_hash)
 			rtt_hash = NULL;
-		dbg_func(g_strdup(__FILE__": load_rt_text()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": load_rt_text()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	if (!rtt_hash)
@@ -68,7 +69,8 @@ void load_rt_text()
 	{
 		if(!cfg_read_int(cfgfile,"global","rtt_total",&count))
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_rtt()\n\t could NOT read \"rtt_total\" value from\n\t file \"%s\"\n",filename),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": load_rtt()\n\t could NOT read \"rtt_total\" value from\n\t file \"%s\"\n",filename));
 			return;
 		}
 		window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -86,9 +88,15 @@ void load_rt_text()
 			rt_text = NULL;
 			section = g_strdup_printf("rt_text_%i",i);
 			if(!cfg_read_string(cfgfile,section,"int_name",&ctrl_name))
-				dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Failed reading \"int_name\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Failed reading \"int_name\" from section \"%s\" in file\n\t%s\n",section,filename));
+			}
 			if (!cfg_read_string(cfgfile,section,"source",&source))
-				dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Failed reading \"source\" from section \"%s\" in file\n\t%s\n",section,filename));
+			}
 
 			rt_text = add_rtt(vbox,ctrl_name,source);
 			if (rt_text)
@@ -105,7 +113,10 @@ void load_rt_text()
 		g_free(cfgfile);
 	}
 	else
-		dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": load_rt_text()\n\t Filename \"%s\" NOT FOUND Critical error!!\n\n",filename));
+	}
 	g_free(filename);
 }
 
@@ -131,7 +142,8 @@ struct Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!G_IS_OBJECT(object))
 	{
-		dbg_func(g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
 		return NULL;
 	}
 

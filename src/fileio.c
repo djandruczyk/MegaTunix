@@ -37,6 +37,7 @@
 #endif
 
 
+extern gint dbg_lvl;
 
 EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 {
@@ -171,7 +172,8 @@ void restore_all_ecu_settings(gchar *filename)
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
 		if (g_strcasecmp(tmpbuf,firmware->name) != 0)
 		{
-			dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name));
 			update_logbar("tools_view","warning",g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tFirmware name mismatch: \"%s\" != \"%s\",\ncannot load this file for restoration\n",tmpbuf,firmware->name),TRUE,FALSE);
 			if (tmpbuf)
 				g_free(tmpbuf);
@@ -188,12 +190,18 @@ void restore_all_ecu_settings(gchar *filename)
 			section = g_strdup_printf("page_%i",page);
 			if(cfg_read_int(cfgfile,section,"num_variables",&tmpi))
 				if (tmpi != firmware->page_params[page]->length)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[page]->length),CRITICAL);
+				{
+					if (dbg_lvl & CRITICAL)
+						dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n",tmpi,firmware->page_params[page]->length));
+				}
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
 				keys = parse_keys(tmpbuf,&num_keys,",");
 				if (num_keys != firmware->page_params[page]->length)
-					dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[page]->length),CRITICAL);
+				{
+					if (dbg_lvl & CRITICAL)
+						dbg_func(g_strdup_printf(__FILE__": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n",num_keys,firmware->page_params[page]->length));
+				}
 				if (firmware->chunk_support)
 				{
 					data = g_new(guchar, firmware->page_params[page]->length);

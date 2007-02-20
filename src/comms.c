@@ -33,6 +33,7 @@
 
 extern GStaticMutex comms_mutex;
 extern GStaticMutex serio_mutex;
+extern gint dbg_lvl;
 
 /*!
  \brief update_comms_status updates the Gui with the results of the comms
@@ -72,18 +73,23 @@ void comms_test()
 	static GStaticMutex comm_test_mutex = G_STATIC_MUTEX_INIT;
 
 	//printf("comms_test\n");
-	dbg_func(g_strdup(__FILE__": comms_test()\n\t Entered...\n"),SERIAL_RD);
+	if (dbg_lvl & SERIAL_RD)
+		dbg_func(g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
 	{
-		dbg_func(g_strdup(__FILE__": comms_test()\n\t no Serial Params, leaving comms_test()...\n"),SERIAL_RD);
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup(__FILE__": comms_test()\n\t no Serial Params, leaving comms_test()...\n"));
 		return;
 	}
 
-	dbg_func(g_strdup(__FILE__": comms_test()\n\t Before locking serio_mutex\n"),SERIAL_RD);
+	if (dbg_lvl & SERIAL_RD)
+		dbg_func(g_strdup(__FILE__": comms_test()\n\t Before locking serio_mutex\n"));
 	g_static_mutex_lock(&serio_mutex);
-	dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking serio_mutex\n"),SERIAL_RD);
+	if (dbg_lvl & SERIAL_RD)
+		dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking serio_mutex\n"));
 	g_static_mutex_lock(&comm_test_mutex);
-	dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking comm_text_mutex\n"),SERIAL_RD);
+	if (dbg_lvl & SERIAL_RD)
+		dbg_func(g_strdup(__FILE__": comms_test()\n\t After locking comm_text_mutex\n"));
 	if (offline)
 	{
 		queue_function(g_strdup("kill_conn_warning"));
@@ -96,7 +102,8 @@ void comms_test()
 	/* If serial not open */
 	if (!serial_params->open)
 	{
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"),CRITICAL);
+		if (dbg_lvl & (SERIAL_RD|CRITICAL))
+			dbg_func(g_strdup(__FILE__": comms_test()\n\tSerial Port is NOT opened can NOT check ecu comms...\n"));
 		thread_update_logbar("comms_view","warning",g_strdup("Serial Port is NOT opened can NOT check ecu comms...\n"),TRUE,FALSE);
 		g_static_mutex_unlock(&comm_test_mutex);
 		g_static_mutex_unlock(&serio_mutex);
@@ -111,13 +118,15 @@ void comms_test()
 	flush_serial(serial_params->fd, TCIOFLUSH);	
 	g_static_mutex_lock(&serio_mutex);
 
-	dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"),SERIAL_RD);
+	if (dbg_lvl & SERIAL_RD)
+		dbg_func(g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
 	g_static_mutex_lock(&comms_mutex);
 	if (write(serial_params->fd,"C",1) != 1)
 	{
 		g_static_mutex_unlock(&comms_mutex);
 		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),CRITICAL);
+		if (dbg_lvl & (SERIAL_RD|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text),TRUE,FALSE);
 		//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text);
 		g_static_mutex_unlock(&serio_mutex);
@@ -134,7 +143,8 @@ void comms_test()
 	if (result)	// Success
 	{
 		connected = TRUE;
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"),SERIAL_RD);
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successfull\n"));
 		queue_function(g_strdup("kill_conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup("ECU Connected..."));
 		thread_update_logbar("comms_view",NULL,g_strdup_printf("ECU Comms Test Successfull\n"),TRUE,FALSE);
@@ -146,7 +156,8 @@ void comms_test()
 		connected = FALSE;
 		queue_function(g_strdup("conn_warning"));
 		thread_update_widget(g_strdup("titlebar"),MTX_TITLE,g_strdup_printf("COMMS ISSUES: Check COMMS tab"));
-		dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"),IO_PROCESS);
+		if (dbg_lvl & (SERIAL_RD|IO_PROCESS))
+			dbg_func(g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
 		thread_update_logbar("comms_view","warning",g_strdup_printf("I/O with ECU Timeout\n"),TRUE,FALSE);
 	}
 	/* Flush the toilet again.... */
@@ -173,7 +184,7 @@ void update_write_status(struct Output_Data *data)
 	extern GList ***ve_widgets;
 	extern gboolean paused_handlers;
 
-	
+
 	if ((data->data) && (data->mode == MTX_CHUNK_WRITE))
 	{
 		g_free(data->data);
@@ -187,11 +198,11 @@ void update_write_status(struct Output_Data *data)
 	{
 		if ((gint)g_object_get_data(G_OBJECT(g_list_nth_data(ve_widgets[data->page][data->offset],i)),"dl_type") != DEFERRED)
 		{
-//			printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[data->page][data->offset],i)));
+			//			printf("updating widget %s\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[data->page][data->offset],i)));
 			update_widget(g_list_nth_data(ve_widgets[data->page][data->offset],i),NULL);
 		}
-//		else
-			//printf("NOT updating widget %s because it's defered\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[data->page][data->offset],i)));
+		//		else
+		//printf("NOT updating widget %s because it's defered\n",(gchar *)glade_get_widget_name(g_list_nth_data(ve_widgets[data->page][data->offset],i)));
 	}
 
 	update_ve3d_if_necessary(data->page,data->offset);
@@ -275,19 +286,27 @@ void writeto_ecu(struct Io_Message *message)
 	}
 	if ((!firmware->multi_page) && (page > 0))
 	{
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO, ABORTING WRITE!!!\n"),CRITICAL);
+		if (dbg_lvl & (SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCRITICAL ERROR, Firmware is NOT multi-page, yet page is greater than ZERO, ABORTING WRITE!!!\n"));
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
 	}
 
 	if (output->mode == MTX_SINGLE_WRITE)
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Mem Offset %i, Value %i\n",page,offset,value),SERIAL_WR);
+	{
+		if (dbg_lvl & SERIAL_WR)
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Mem Offset %i, Value %i\n",page,offset,value));
+	}
 	else if (output->mode == MTX_CHUNK_WRITE)
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCHUNK Write, Page, %i, Mem Offset %i, length %i\n",page,offset,output->len),SERIAL_WR);
+	{
+		if (dbg_lvl & SERIAL_WR)
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tCHUNK Write, Page, %i, Mem Offset %i, length %i\n",page,offset,output->len));
+	}
 	else
 	{
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tNO output mode defined, aborting!!\n"),CRITICAL);
+		if (dbg_lvl & (SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tNO output mode defined, aborting!!\n"));
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
@@ -295,16 +314,19 @@ void writeto_ecu(struct Io_Message *message)
 
 	if ((value > 255) && (output->mode == MTX_SINGLE_WRITE))
 	{
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tLarge value being sent: %i, to page %i, offset %i\n",value,page,offset),SERIAL_WR);
+		if (dbg_lvl & SERIAL_WR)
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tLarge value being sent: %i, to page %i, offset %i\n",value,page,offset));
 
 		highbyte = (value & 0xff00) >> 8;
 		lowbyte = value & 0x00ff;
 		twopart = TRUE;
-		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tHighbyte: %i, Lowbyte %i\n",highbyte,lowbyte),SERIAL_WR);
+		if (dbg_lvl & SERIAL_WR)
+			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tHighbyte: %i, Lowbyte %i\n",highbyte,lowbyte));
 	}
 	if ((value < 0) && (output->mode == MTX_SINGLE_WRITE))
 	{
-		dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n"),CRITICAL);
+		if (dbg_lvl & (SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n"));
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
@@ -316,7 +338,8 @@ void writeto_ecu(struct Io_Message *message)
 		set_ms_page(truepgnum);
 	g_static_mutex_lock(&serio_mutex);
 
-	dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm),SERIAL_WR);
+	if (dbg_lvl & SERIAL_WR)
+		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm));
 
 	if ((ign_parm) && (output->mode == MTX_SINGLE_WRITE))
 		write_cmd = g_strdup("J");
@@ -332,7 +355,8 @@ void writeto_ecu(struct Io_Message *message)
 			lbuff[0]=offset;
 			lbuff[1]=highbyte;
 			lbuff[2]=lowbyte;
-			dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 16 bit value to ECU\n"),SERIAL_WR);
+			if (dbg_lvl & SERIAL_WR)
+				dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 16 bit value to ECU\n"));
 		}
 		else
 		{
@@ -340,7 +364,8 @@ void writeto_ecu(struct Io_Message *message)
 			lbuff = g_new0(char,count);
 			lbuff[0]=offset;
 			lbuff[1]=value;
-			dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n"),SERIAL_WR);
+			if (dbg_lvl & SERIAL_WR)
+				dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tSending 8 bit value to ECU\n"));
 		}
 
 		g_static_mutex_lock(&comms_mutex);
@@ -348,19 +373,27 @@ void writeto_ecu(struct Io_Message *message)
 		if (res != 1 )
 		{
 			err_text = (gchar *)g_strerror(errno);
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED, ERROR \"%s\"!!!\n",write_cmd,err_text),CRITICAL);
+			if (dbg_lvl & (SERIAL_WR|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending write command \"%s\" FAILED, ERROR \"%s\"!!!\n",write_cmd,err_text));
 		}
 		else
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd),SERIAL_WR);
+		{
+			if (dbg_lvl & SERIAL_WR)
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of write command \"%s\" to ECU succeeded\n",write_cmd));
+		}
 		res = write (serial_params->fd,lbuff,count);	/* Send offset+data */
 		g_static_mutex_unlock(&comms_mutex);
 		if (res != count )
 		{
 			err_text = (gchar *)g_strerror(errno);
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED, ERROR \"%s\"!!!\n",err_text),CRITICAL);
+			if (dbg_lvl & (SERIAL_WR|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending offset+data FAILED, ERROR \"%s\"!!!\n",err_text));
 		}
 		else
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"),SERIAL_WR);
+		{
+			if (dbg_lvl & SERIAL_WR)
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending of offset+data to ECU succeeded\n"));
+		}
 
 		g_free(lbuff);
 		ms_data[page][offset] = value;
@@ -376,10 +409,14 @@ void writeto_ecu(struct Io_Message *message)
 		if (res != 1 )
 		{
 			err_text = (gchar *)g_strerror(errno);
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite command \"%s\" FAILED, ERROR \"%s\"!!!\n",firmware->chunk_write_cmd,err_text),CRITICAL);
+			if (dbg_lvl & (SERIAL_WR|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite command \"%s\" FAILED, ERROR \"%s\"!!!\n",firmware->chunk_write_cmd,err_text));
 		}
 		else
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tChunk write of \"%s\" to ECU succeeded\n",firmware->chunk_write_cmd),SERIAL_WR);
+		{
+			if (dbg_lvl & SERIAL_WR)
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tChunk write of \"%s\" to ECU succeeded\n",firmware->chunk_write_cmd));
+		}
 
 		/* count is len+2 cause we need two bytes for offset and len*/
 		count = output->len+2;
@@ -396,10 +433,14 @@ void writeto_ecu(struct Io_Message *message)
 		if (res != count )
 		{
 			err_text = (gchar *)g_strerror(errno);
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite offset+count+data of length \"%i\", (%i) FAILED, ERROR \"%s\"!!!\n",count,res,err_text),CRITICAL);
+			if (dbg_lvl & (SERIAL_WR|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSending chunkwrite offset+count+data of length \"%i\", (%i) FAILED, ERROR \"%s\"!!!\n",count,res,err_text));
 		}
 		else
-			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tChunk write of offset+count+data to ECU succeeded\n"),SERIAL_WR);
+		{
+			if (dbg_lvl & SERIAL_WR)
+				dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tChunk write of offset+count+data to ECU succeeded\n"));
+		}
 		g_free(lbuff);
 		g_usleep(100000);
 	}
@@ -438,7 +479,8 @@ void burn_ecu_flash()
 
 	if (!connected)
 	{
-		dbg_func(g_strdup(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n"),CRITICAL);
+		if (dbg_lvl & (SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup(__FILE__": burn_ms_flahs()\n\t NOT connected, can't burn flash, returning immediately\n"));
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return;
@@ -452,11 +494,13 @@ void burn_ecu_flash()
 	if (res != 1)
 	{
 		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, ERROR \"%s\"\n",err_text),CRITICAL);
+		if (dbg_lvl & (SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, ERROR \"%s\"\n",err_text));
 	}
 	g_usleep(100000);
 
-	dbg_func(g_strdup(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"),SERIAL_WR);
+	if (dbg_lvl & SERIAL_WR)
+		dbg_func(g_strdup(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"));
 	g_static_mutex_unlock(&serio_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_lock(&serio_mutex);
@@ -512,11 +556,13 @@ void readfrom_ecu(struct Io_Message *message)
 	if (result != message->out_len)	
 	{
 		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite command to ECU failed, ERROR \"%s\"\n",err_text),CRITICAL);
+		if (dbg_lvl & (SERIAL_RD|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite command to ECU failed, ERROR \"%s\"\n",err_text));
 	}
 
 	else
-		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str),SERIAL_WR);
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str));
 
 	if (message->handler == RAW_MEMORY_DUMP)
 	{
@@ -526,10 +572,14 @@ void readfrom_ecu(struct Io_Message *message)
 		if (result < 1)
 		{
 			err_text = (gchar *)g_strerror(errno);
-			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed, ERROR \"%s\"\n",err_text),CRITICAL);
+			if (dbg_lvl & (SERIAL_RD|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed, ERROR \"%s\"\n",err_text));
 		}
 		else
-			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset of \"%i\" for raw mem cmd succeeded\n",message->offset),SERIAL_WR);
+		{
+			if (dbg_lvl & SERIAL_RD)
+				dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset of \"%i\" for raw mem cmd succeeded\n",message->offset));
+		}
 	}
 
 	if (message->handler != -1)
@@ -540,7 +590,8 @@ void readfrom_ecu(struct Io_Message *message)
 	}
 	else
 	{
-		dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is undefined, author brainfart, EXITING!\n"),CRITICAL);
+		if (dbg_lvl & (SERIAL_RD|CRITICAL))
+			dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is undefined, author brainfart, EXITING!\n"));
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		exit (-1);
@@ -548,14 +599,16 @@ void readfrom_ecu(struct Io_Message *message)
 	if (result)
 	{
 		connected = TRUE;
-		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tDone Reading %s\n",handler_types[message->handler]),SERIAL_RD);
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tDone Reading %s\n",handler_types[message->handler]));
 
 	}
 	else
 	{
 		connected = FALSE;
 		serial_params->errcount++;
-		dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)),IO_PROCESS);
+		if (dbg_lvl & SERIAL_RD)
+			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)));
 	}
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
@@ -586,7 +639,7 @@ void set_ms_page(guint8 ms_page)
 
 	if ((ms_page > firmware->ro_above) || (last_page > firmware->ro_above))
 		goto skipburn;
-//	printf("last page %i, ms_page %i, memcpy results for last page %i, memcmp results for current page %i\n",last_page, ms_page, memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length),memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length));
+	//	printf("last page %i, ms_page %i, memcpy results for last page %i, memcmp results for current page %i\n",last_page, ms_page, memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length),memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length));
 
 	if (((ms_page != last_page) && (((memcmp(ms_data_last[last_page],ms_data[last_page],sizeof(gint)*firmware->page_params[last_page]->length) != 0)) || ((memcmp(ms_data_last[ms_page],ms_data[ms_page],sizeof(gint)*firmware->page_params[ms_page]->length) != 0)))))
 	{
@@ -597,28 +650,31 @@ void set_ms_page(guint8 ms_page)
 skipburn:
 	if (ms_page == last_page)
 	{
-	//	printf("no need to change the page again as it's already %i\n",ms_page);
+		//	printf("no need to change the page again as it's already %i\n",ms_page);
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
 
 		return;
 	}
 
-	dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd),SERIAL_WR);
-	
+	if (dbg_lvl & SERIAL_WR)
+		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tSetting Page to \"%i\" with \"%s\" command...\n",ms_page,firmware->page_cmd));
+
 	g_static_mutex_lock(&comms_mutex);
 	res = write(serial_params->fd,firmware->page_cmd,1);
 	if (res != 1)
 	{
 		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU, ERROR \"%s\" \n",firmware->page_cmd,err_text),CRITICAL);
+		if (dbg_lvl & (SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU, ERROR \"%s\" \n",firmware->page_cmd,err_text));
 	}
 	res = write(serial_params->fd,&ms_page,1);
 	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
 	{
 		err_text = (gchar *)g_strerror(errno);
-		dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i, ERROR \"%s\"\n",ms_page,err_text),CRITICAL);
+		if (dbg_lvl & (SERIAL_WR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE changing page on ECU to %i, ERROR \"%s\"\n",ms_page,err_text));
 	}
 
 	last_page = ms_page;

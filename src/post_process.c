@@ -20,6 +20,7 @@
 #include <post_process.h>
 
 static GArray * raw_memory_data;
+extern gint dbg_lvl;
 
 
 /*!
@@ -90,7 +91,8 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 				tmpbuf = get_bin(value);
 				break;
 			default:
-				//				dbg_func(g_strdup(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n"),CRITICAL);
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup(__FILE__": update_raw_memory_view(), style invalid, assuming HEX\n"));
 				tmpbuf = g_strdup_printf("%.2X",value);
 				break;
 

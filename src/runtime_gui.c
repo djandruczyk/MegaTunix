@@ -36,6 +36,7 @@ extern gboolean forced_update;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
+extern gint dbg_lvl;
 GHashTable *dash_gauges = NULL;
 
 gboolean forced_update = TRUE;
@@ -162,7 +163,10 @@ breakout:
 		g_hash_table_foreach(ww_sliders,rt_update_values,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
-			dbg_func(g_strdup(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n"),CRITICAL);
+		{
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup(__FILE__": update_runtime_vars()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
+		}
 		if ((coolant != last_coolant) || (forced_update))
 			warmwizard_update_status(coolant);
 		last_coolant = coolant;
@@ -233,11 +237,17 @@ void rt_update_status(gpointer key, gpointer data)
 	if (lookup_current_value(source,&tmpf))
 		value = (gint) tmpf;
 	else
-		dbg_func(g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source));
+	}
 	if (lookup_previous_value(source,&tmpf))
 		previous_value = (gint) tmpf;
 	else
-		dbg_func(g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get previous value for %s\n",source),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get previous value for %s\n",source));
+	}
 
 	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");

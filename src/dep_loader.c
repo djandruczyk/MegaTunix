@@ -25,6 +25,7 @@
 
 
 
+extern gint dbg_lvl;
 /*!
  \brief load_dependancies() is called when a "depend_on" key is found in
  a datamap or realtimemap, and triggers the loading of al lthe keys/values that
@@ -48,7 +49,8 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 	
 	if (!cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t CAn't find \"depend_on\" in the \"[%s]\" section, exiting!\n",section),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t CAn't find \"depend_on\" in the \"[%s]\" section, exiting!\n",section));
 		exit (-4);
 	}
 	else
@@ -69,7 +71,8 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 		key = g_strdup_printf("%s_type",deps[i]);
 		if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n",key,section),CRITICAL);
+			if (dbg_lvl & CRITICAL)
+				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n",key,section));
 			exit (-4);
 		}
 		else
@@ -83,31 +86,46 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 		{
 			key = g_strdup_printf("%s_page",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+			}
 			else
 				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_offset",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+			}
 			else
 				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitshift",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+			}
 			else
 				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitmask",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+			}
 			else
 				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_bitval",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+			}
 			else
 				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
@@ -117,13 +135,19 @@ void load_dependancies(GObject *object, ConfigFile *cfgfile,gchar * section)
 		{
 			key = g_strdup_printf("%s_page",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+			}
 			else
 				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
 			key = g_strdup_printf("%s_offset",deps[i]);
 			if (!cfg_read_int(cfgfile,section,key,&tmpi))
-				dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": load_dependancy()\n\t Key \"%s\" NOT FOUND in section \"[%s]\"!!\n",key,section));
+			}
 			else
 				g_object_set_data(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);

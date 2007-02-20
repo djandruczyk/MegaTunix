@@ -25,6 +25,7 @@
 #include <widgetmgmt.h>
 
 
+extern gint dbg_lvl;
 //	load_keys(widget,cfgfile,section,keys,keytypes,num_keys);
 void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint * keytypes, gint num_keys)
 {
@@ -40,31 +41,40 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 			case MTX_INT:
 				if (cfg_read_int(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),KEYPARSER);
+					if (dbg_lvl & KEYPARSER)
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
 					g_object_set_data(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+				{
+					if (dbg_lvl & (KEYPARSER|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
+				}
 				break;
 			case MTX_ENUM:
 				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
 					tmpi = translate_string(tmpbuf);
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),KEYPARSER);
+					if (dbg_lvl & KEYPARSER)
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
 					g_object_set_data(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
 					g_free(tmpbuf);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+				{
+					if (dbg_lvl & (KEYPARSER|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
+				}
 				break;
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section),KEYPARSER);
+					if (dbg_lvl & KEYPARSER)
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
 					g_object_set_data(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
@@ -72,12 +82,16 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 						load_complex_params(object,cfgfile,section);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+				{
+					if (dbg_lvl & (KEYPARSER|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
+				}
 				break;
 			case MTX_STRING:
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section),KEYPARSER);
+					if (dbg_lvl & KEYPARSER)
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[i],tmpbuf,section));
 					tmpstr = g_object_get_data(object,keys[i]);
 					/* If data already on widget, append
 					 * new data and store */
@@ -96,7 +110,10 @@ void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** ke
 					g_free(tmpbuf);
 				}
 				else
-					dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section),CRITICAL);
+				{
+					if (dbg_lvl & (KEYPARSER|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__": bind_keys()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[i],section));
+				}
 				break;
 
 		}

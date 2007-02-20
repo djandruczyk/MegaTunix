@@ -29,6 +29,7 @@ gint playback_id = 0;
 gint toothmon_id = 0;
 gint trigmon_id = 0;
 
+extern gint dbg_lvl;
 
 /*!
  \brief start_tickler() starts up a GTK+ timeout function based on the
@@ -56,19 +57,28 @@ void start_tickler(TicklerType type)
 			if (playback_id == 0)
 				playback_id = g_timeout_add(24,(GtkFunction)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
 			else
-				dbg_func(g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
+			}
 			break;
 		case TOOTHMON_TICKLER:
 			if (toothmon_id == 0)
 				toothmon_id = g_timeout_add(500,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			else
-				dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
+			}
 			break;
 		case TRIGMON_TICKLER:
 			if (trigmon_id == 0)
 				trigmon_id = g_timeout_add(500,(GtkFunction)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
 			else
-				dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"),CRITICAL);
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
+			}
 			break;
 
 	}
@@ -152,7 +162,8 @@ gboolean signal_read_rtvars()
 	if (length > 1)
 		return TRUE;
 
-	dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"),SERIAL_RD|SERIAL_WR);
+	if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
+		dbg_func(g_strdup(__FILE__": signal_read_rtvars()\n\tsending message to thread to read RT vars\n"));
 
 	if (!rtvars_loaded)
 		return TRUE;
@@ -169,7 +180,8 @@ gboolean signal_read_rtvars()
  */
 gboolean signal_toothtrig_read(TicklerType type)
 {
-	dbg_func(g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"),SERIAL_RD|SERIAL_WR);
+	if (dbg_lvl & (SERIAL_RD|SERIAL_WR))
+		dbg_func(g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
 
 	switch (type)
 	{

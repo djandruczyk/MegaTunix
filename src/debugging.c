@@ -48,6 +48,7 @@ void open_debugfile()
 			tm = localtime(t);
 			g_free(t);
 			g_fprintf(dbgfile,"Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
+
 		}
 	}
 	g_static_mutex_unlock(&dbg_mutex);
@@ -68,7 +69,7 @@ void close_debugfile()
  \param str (gchar *) message to print out
  \param class (Dbg_Class enumeration) the debug level
  */
-void dbg_func(gchar *str, Dbg_Class class)
+void dbg_func(gchar *str)
 {
 	extern gboolean use_timestamps;
 	static struct tm *tm = NULL;
@@ -82,7 +83,7 @@ void dbg_func(gchar *str, Dbg_Class class)
 
 	g_static_mutex_lock(&dbg_mutex);
 
-	if ((dbgfile) && (dbg_lvl & class))
+	if (dbgfile)
 	{
 		if (use_timestamps)
 		{

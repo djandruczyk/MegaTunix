@@ -36,6 +36,7 @@ gboolean begin = TRUE;
 
 /* External global vars */
 extern gint ready;
+extern gint dbg_lvl;
 extern struct Rtv_Map *rtv_map;
 
 /* Static vars to all functions in this file... */
@@ -71,7 +72,8 @@ void populate_dlog_choices()
 		return;
 	if (!rtvars_loaded)
 	{
-		dbg_func(g_strdup(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": populate_dlog_choices()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 
@@ -254,7 +256,8 @@ void write_log_header(GIOChannel *iochannel, gboolean override)
 	extern struct Firmware_Details *firmware;
 	if (!iochannel)
 	{
-		dbg_func(g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"));
 		return;
 	}
 	/* Count total logable variables */
@@ -315,7 +318,8 @@ void run_datalog(void)
 	iochannel = (GIOChannel *) g_object_get_data(G_OBJECT(g_hash_table_lookup(dynamic_widgets,"dlog_select_log_button")),"data");
 	if (!iochannel)
 	{
-		dbg_func(g_strdup(__FILE__": run_datalog()\n\tIo_File undefined, returning NOW!!!\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": run_datalog()\n\tIo_File undefined, returning NOW!!!\n"));
 		return;
 	}
 

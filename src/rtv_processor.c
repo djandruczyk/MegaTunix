@@ -32,6 +32,7 @@
 
 
 extern GStaticMutex rtv_mutex;
+extern gint dbg_lvl;
 /*!
  \brief process_rt_vars() processes incoming realtime variables. It's a pretty
  complex function so read the sourcecode.. ;)
@@ -68,7 +69,8 @@ void process_rt_vars(void *incoming)
 	num_raw = firmware->rtvars_size;
 	if (num_raw != rtv_map->raw_total)
 	{
-		dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tlength of buffer(%i) and realtime map raw_length(%i)\n\tDO NOT match, critical ERROR!\n",num_raw,rtv_map->raw_total),CRITICAL);
+		if (dbg_lvl & (COMPLEX_EXPR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tlength of buffer(%i) and realtime map raw_length(%i)\n\tDO NOT match, critical ERROR!\n",num_raw,rtv_map->raw_total));
 		return;
 	}
 	/* Store timestamps in ringbuffer */
@@ -88,7 +90,7 @@ void process_rt_vars(void *incoming)
 
 		thread_update_logbar("dlog_view",NULL,g_strdup_printf("Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n",rtv_map->ts_array->len,hours,minutes,seconds),FALSE,FALSE);
 	}
-	
+
 	for (i=0;i<num_raw;i++)
 	{
 		/* Get list of derived vars for raw offset "i" */
@@ -103,7 +105,8 @@ void process_rt_vars(void *incoming)
 			object=(GObject *)g_list_nth_data(list,j);
 			if (!object)
 			{
-				dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Object bound to list at offset %i is invalid!!!!\n",i),CRITICAL);
+				if (dbg_lvl & (COMPLEX_EXPR|CRITICAL))
+					dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Object bound to list at offset %i is invalid!!!!\n",i));
 				continue;
 			}
 			temp_dep = (gboolean)g_object_get_data(object,"temp_dep");
@@ -119,12 +122,16 @@ void process_rt_vars(void *incoming)
 				expr = g_object_get_data(object,"ul_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")),CRITICAL);
+					if (dbg_lvl & (COMPLEX_EXPR|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")));
 					exit (-3);
 				}
 				evaluator = evaluator_create(expr);
 				if (!evaluator)
-					dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr),CRITICAL);
+				{
+					if (dbg_lvl & (COMPLEX_EXPR|CRITICAL))
+						dbg_func(g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+				}
 				assert(evaluator);
 				g_object_set_data(object,"ul_evaluator",evaluator);
 			}
@@ -139,17 +146,20 @@ void process_rt_vars(void *incoming)
 
 			if (g_object_get_data(object,"lookuptable"))
 			{
-				dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset),COMPLEX_EXPR);
+				if (dbg_lvl & COMPLEX_EXPR)
+					dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset));
 				x = lookup_data(object,raw_realtime[offset]);
 			}
 			else
 			{
-				dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset),COMPLEX_EXPR);
+				if (dbg_lvl & COMPLEX_EXPR)
+					dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));
 				x = raw_realtime[offset];
 			}
 
 
-			dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator)),COMPLEX_EXPR);
+			if (dbg_lvl & COMPLEX_EXPR)
+				dbg_func(g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator)));
 			tmpf = evaluator_evaluate_x(evaluator,x);
 store_it:
 			if (temp_dep)
@@ -213,8 +223,8 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	expr_types = (gint *)g_object_get_data(object,"expr_types");
 	total_symbols = (gint)g_object_get_data(object,"total_symbols");
 
-	names = g_malloc0(total_symbols*sizeof(gchar *));
-	values = g_malloc0(total_symbols*sizeof(gdouble));
+	names = g_new0(gchar *, total_symbols);
+	values = g_new0(gdouble, total_symbols);
 
 	for (i=0;i<total_symbols;i++)
 	{
@@ -239,7 +249,8 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)(((ms_data[page][offset])&bitmask) >> bitshift);
-				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]),COMPLEX_EXPR);
+				if (dbg_lvl & COMPLEX_EXPR)
+					dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case VE_VAR:
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
@@ -250,7 +261,8 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)ms_data[page][offset];
-				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]),COMPLEX_EXPR);
+				if (dbg_lvl & COMPLEX_EXPR)
+					dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_VAR:
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
@@ -258,10 +270,12 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)raw_data[offset];
-				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]),COMPLEX_EXPR);
+				if (dbg_lvl & COMPLEX_EXPR)
+					dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:
-				dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"),CRITICAL);
+				if (dbg_lvl & (COMPLEX_EXPR|CRITICAL))
+					dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"));
 				break;
 		}
 
@@ -270,40 +284,44 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	{
 		evaluator = (void *)g_object_get_data(object,"ul_evaluator");
 		if (!evaluator)
+		{
 			evaluator = evaluator_create(g_object_get_data(object,"ul_conv_expr"));
-		g_object_set_data(object,"ul_evaluator",evaluator);
+			g_object_set_data(object,"ul_evaluator",evaluator);
+
+		}
 	}
 	else if (type == DOWNLOAD)
 	{
 		evaluator = (void *)g_object_get_data(object,"dl_evaluator");
 		if (!evaluator)
+		{
 			evaluator = evaluator_create(g_object_get_data(object,"dl_conv_expr"));
-		g_object_set_data(object,"dl_evaluator",evaluator);
+			g_object_set_data(object,"dl_evaluator",evaluator);
+		}
 	}
 	else
-		dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
+	{
+		if (dbg_lvl & (COMPLEX_EXPR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+	}
 	if (!evaluator)
 	{
-		dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))),CRITICAL);
+		if (dbg_lvl & (COMPLEX_EXPR|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
 		exit (-1);
 	}
 
 	assert(evaluator);
-	/* AMD65 debug statement,  strange segfault here...
-	 
-	printf("%s\n",evaluator_get_string(evaluator));
-	for (i=0;i<total_symbols;i++)
-		printf("symbol %s, value %f\n",names[i],values[i]);
-	printf("\n");
-	*/
-	
+
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
 	for (i=0;i<total_symbols;i++)
 	{
-		dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]),COMPLEX_EXPR);
+		if (dbg_lvl & COMPLEX_EXPR)
+			dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]));
 		g_free(names[i]);
 	}
-	dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\texpression is %s\n",evaluator_get_string(evaluator)),COMPLEX_EXPR);
+	if (dbg_lvl & COMPLEX_EXPR)
+		dbg_func(g_strdup_printf(__FILE__": handle_complex_expr()\n\texpression is %s\n",evaluator_get_string(evaluator)));
 	g_free(names);
 	g_free(values);
 	return result;
@@ -346,7 +364,10 @@ gfloat handle_special(GObject *object,gchar *handler_name)
 
 	}
 	else
-		dbg_func(g_strdup_printf(__FILE__": handle_special()\n\t handler name is not recognized, \"%s\"\n",handler_name),CRITICAL);
+	{
+		if(dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": handle_special()\n\t handler name is not recognized, \"%s\"\n",handler_name));
+	}
 	return 0.0;
 }
 

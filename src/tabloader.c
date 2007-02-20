@@ -34,6 +34,7 @@
 #include <widgetmgmt.h>
 
 gboolean tabs_loaded = FALSE;
+extern gint dbg_lvl;
 
 
 /*!
@@ -73,7 +74,8 @@ gboolean load_gui_tabs(void)
 		map_file = get_file(g_strconcat(GUI_DATA_DIR,PSEP,firmware->tab_confs[i],NULL),g_strdup("datamap"));
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
 			update_logbar("interr_view","warning",g_strdup_printf("Glade File: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
@@ -82,7 +84,8 @@ gboolean load_gui_tabs(void)
 		}
 		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]),CRITICAL);
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_list[i]));
 			update_logbar("interr_view","warning",g_strdup_printf("Datamap File: "),FALSE,FALSE);
 			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE);
 			update_logbar("interr_view","warning",g_strdup_printf("  is MISSING!\n"),FALSE,FALSE);
@@ -110,12 +113,14 @@ gboolean load_gui_tabs(void)
 
 			populate_master(topframe,(gpointer)cfgfile);
 
-			dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name),TABLOADER);
+			if (dbg_lvl & TABLOADER)
+				dbg_func(g_strdup_printf(__FILE__": load_gui_tabs()\n\t Tab %s successfully loaded...\n\n",tab_name));
 			g_free(tab_name);
 
 			if (topframe == NULL)
 			{
-				dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n"),CRITICAL);
+				if (dbg_lvl & (TABLOADER|CRITICAL))
+					dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
 				return FALSE;
 			}
 			else
@@ -163,7 +168,8 @@ gboolean load_gui_tabs(void)
 	}
 	update_logbar("interr_view","warning",g_strdup_printf("Tab Loading Complete! "),FALSE,FALSE);
 	tabs_loaded = TRUE;
-	dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n"),TABLOADER);
+	if (dbg_lvl & TABLOADER)
+		dbg_func(g_strdup(__FILE__": load_gui_tabs()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
 	return TRUE;
 }
@@ -213,7 +219,8 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
 		groupnames = parse_keys(tmpbuf,&num_groups,",");
-		dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of groups to load settings for is %i\n",num_groups),TABLOADER);
+		if (dbg_lvl & TABLOADER)
+			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of groups to load settings for is %i\n",num_groups));
 		g_free(tmpbuf);
 	}
 	else
@@ -229,29 +236,34 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
 			group->keys = parse_keys(tmpbuf,&group->num_keys,",");
-			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys),TABLOADER);
+			if (dbg_lvl & TABLOADER)
+				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys));
 			g_free(tmpbuf);
 		}
 		else
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"keys\" section NOT found, aborting this group %s\n",section),TABLOADER);
+			if (dbg_lvl & TABLOADER)
+				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"keys\" section NOT found, aborting this group %s\n",section));
 			continue;
 		}
 		if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 		{
 			group->keytypes = parse_keytypes(tmpbuf,&group->num_keytypes,",");
-			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keytypes for section %s is %i\n",section,group->num_keytypes),TABLOADER);
+			if (dbg_lvl & TABLOADER)
+				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keytypes for section %s is %i\n",section,group->num_keytypes));
 			g_free(tmpbuf);
 		}
 		else
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"key_types\" section NOT found, aborting this group %s\n",section),TABLOADER);
+			if (dbg_lvl & TABLOADER)
+				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\t\"key_types\" section NOT found, aborting this group %s\n",section));
 			continue;
 		}
 
 		if (group->num_keytypes != group->num_keys)
 		{
-			dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename),CRITICAL);
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s in file %s, CRITICAL!!!\n",group->num_keys,group->num_keytypes,section,cfgfile->filename));
 			g_strfreev(group->keys);
 			g_free(group->keytypes);
 			return NULL;
@@ -307,7 +319,8 @@ gint bind_group_data(GtkWidget *widget, GHashTable *groups, gchar *groupname)
 	group = g_hash_table_lookup(groups,groupname);
 	if (!group)
 	{
-		dbg_func(g_strdup_printf(__FILE__": bind_group_data()\n\t group \"%s\" not found in hashtable\n",groupname),CRITICAL);
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": bind_group_data()\n\t group \"%s\" not found in hashtable\n",groupname));
 		return -1;
 	}
 	/* Copy data from the group object to the */
@@ -416,7 +429,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys,",");
-		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys for %s is %i\n",section,num_keys),TABLOADER);
+		if (dbg_lvl & TABLOADER)
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys for %s is %i\n",section,num_keys));
 		g_free(tmpbuf);
 	}
 	else
@@ -425,7 +439,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	if(cfg_read_string(cfgfile,section,"key_types",&tmpbuf))
 	{
 		keytypes = parse_keytypes(tmpbuf, &num_keytypes,",");
-		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumberk of keytypes for %s is %i\n",section,num_keys),TABLOADER);
+		if (dbg_lvl & TABLOADER)
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumberk of keytypes for %s is %i\n",section,num_keys));
 		g_free(tmpbuf);
 	}
 	else
@@ -433,7 +448,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if (num_keytypes != num_keys)
 	{
-		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",num_keys,num_keytypes,section),CRITICAL);
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys (%i) and keytypes(%i) does\n\tNOT match for widget %s, CRITICAL!!!\n",num_keys,num_keytypes,section));
 		g_strfreev(keys);
 		g_free(keytypes);
 		return;
@@ -446,8 +462,11 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 
 	if ((!cfg_read_int(cfgfile,section,"page",&page)) && (page == -1))
-		dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section),CRITICAL);	
+	{
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
 
+	}
 	/* Bind widgets to lists if thy have the bind_to_list flag set...
 	*/
 	tmpbuf = NULL;
@@ -524,7 +543,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		{
 			if (offset >= firmware->page_params[page]->length)
 			{
-				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  ther eis a bug with this datamap widgt %s, at offset %i...\n\n",section,offset),CRITICAL);
+				if (dbg_lvl & (TABLOADER|CRITICAL))
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  ther eis a bug with this datamap widgt %s, at offset %i...\n\n",section,offset));
 			}
 			else
 			{
@@ -534,7 +554,10 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 			}
 		}
 		else
-			dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset),CRITICAL);
+		{
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset));
+		}
 
 
 	}
@@ -558,7 +581,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	g_free(keytypes);
 	g_strfreev(keys);
-	dbg_func(g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"),TABLOADER);
+	if (dbg_lvl & TABLOADER)
+		dbg_func(g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
 }
 
 
@@ -575,18 +599,26 @@ void run_post_function(gchar * function_name)
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module)
-		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
 	if (!g_module_symbol(module,function_name,(void *)&function))
 	{
-		dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()),CRITICAL);
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()));
 		if (!g_module_close(module))
-			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+		{
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		}
 	}
 	else
 	{
 		function();
 		if (!g_module_close(module))
-			dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+		{
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": run_post_function()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		}
 	}
 }
 
@@ -607,17 +639,27 @@ void run_post_function_with_arg(gchar * function_name, GtkWidget *widget)
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module)
-		dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()),CRITICAL);
+	{
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tUnable to call g_module_open, error: %s\n",g_module_error()));
+	}
 	if (!g_module_symbol(module,function_name,(void *)&function))
 	{
-		dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()),CRITICAL);
+		if (dbg_lvl & (TABLOADER|CRITICAL))
+			dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",function_name,g_module_error()));
 		if (!g_module_close(module))
-			dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+		{
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		}
 	}
 	else
 	{
 		function(widget);
 		if (!g_module_close(module))
-			dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()),CRITICAL);
+		{
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": run_post_function_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
+		}
 	}
 }

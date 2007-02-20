@@ -31,6 +31,7 @@
 #include <serialio.h>
 
 gchar *vex_comment;
+extern gint dbg_lvl;
 
 /*!
  \brief import_handlers structure is used to hold the list of string 
@@ -237,7 +238,10 @@ gboolean vetable_export(GIOChannel *iochannel)
 	status = g_io_channel_write_chars(
 			iochannel,output->str,output->len,&count,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(g_strdup(__FILE__": vetable_export()\n\tError exporting VEX file\n"),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": vetable_export()\n\tError exporting VEX file\n"));
+	}
 	g_string_free(output,TRUE);
 
 	update_logbar("tools_view",NULL,g_strdup("VE-Table(s) Exported Successfully\n"),TRUE,FALSE);
@@ -266,7 +270,8 @@ gboolean vetable_import(GIOChannel *iochannel)
 
 	if (!iochannel)
 	{
-		dbg_func(g_strdup(__FILE__": vetable_import()\n\tIOChannel undefined, returning!!\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": vetable_import()\n\tIOChannel undefined, returning!!\n"));
 		return FALSE;
 	}
 	vex = g_new0(struct Vex_Import, 1);
@@ -274,7 +279,10 @@ gboolean vetable_import(GIOChannel *iochannel)
 	//reset_import_flags();
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
-		dbg_func(g_strdup(__FILE__": vetable_import()\n\tError seeking to beginning of the file\n"),CRITICAL);
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": vetable_import()\n\tError seeking to beginning of the file\n"));
+	}
 	/* process lines while we can */
 	while (go)
 	{
@@ -304,7 +312,8 @@ gboolean vetable_import(GIOChannel *iochannel)
 
 	if (status == G_IO_STATUS_ERROR)
 	{
-		dbg_func(g_strdup_printf(__FILE__": vetable_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": vetable_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
 		return FALSE;
 	}
 	io_cmd(IO_UPDATE_VE_CONST,NULL);
@@ -336,7 +345,8 @@ GIOStatus process_vex_line(struct Vex_Import * vex, GIOChannel *iochannel)
 				status = handler_dispatch(vex, import_handlers[i].function, import_handlers[i].parsetag,a_line->str, iochannel);
 				if (status != G_IO_STATUS_NORMAL)
 				{
-					dbg_func(g_strdup(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n"),CRITICAL);
+					if (dbg_lvl & CRITICAL)
+						dbg_func(g_strdup(__FILE__": process_vex_line()\n\tVEX_line parsing ERROR\n"));
 					return status;
 				}
 				goto breakout;
@@ -404,7 +414,8 @@ GIOStatus process_header(struct Vex_Import *vex, ImportParserArg arg, gchar * st
 
 	if (!string)
 	{
-		dbg_func(g_strdup(__FILE__": process_header()\n\t String passed was NULL\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": process_header()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, " ", 2);
@@ -457,7 +468,8 @@ GIOStatus process_page(struct Vex_Import *vex, gchar *string)
 
 	if (!string)
 	{
-		dbg_func(g_strdup(__FILE__": process_page()\n\t String passed was NULL\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": process_page()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, " ", 2);	
@@ -581,7 +593,8 @@ GIOStatus process_vex_range(struct Vex_Import *vex, ImportParserArg arg, gchar *
 
 	if (!string)
 	{
-		dbg_func(g_strdup(__FILE__": process_vex_range()\n\t String passed was NULL\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": process_vex_range()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	str_array = g_strsplit(string, "[", 2);
@@ -671,7 +684,8 @@ GIOStatus process_vex_table(struct Vex_Import *vex, gchar * string, GIOChannel *
 
 	if (!string)
 	{
-		dbg_func(g_strdup(__FILE__": process_vex_table()\n\t String passed was NULL\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": process_vex_table()\n\t String passed was NULL\n"));
 		return G_IO_STATUS_ERROR;
 	}
 	/* Get first number of [  x][  y] in the string line */
@@ -818,7 +832,8 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	table = vex->table;
 	if ((table < 0) || (table >= firmware->total_tables))
 	{
-		dbg_func(g_strdup(__FILE__": feed_import_data_to_ecu()\n\ttable passed is out of range\n"),CRITICAL);
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": feed_import_data_to_ecu()\n\ttable passed is out of range\n"));
 		return;
 	}
 	/* If dimensions do NOT match, ABORT!!! */
