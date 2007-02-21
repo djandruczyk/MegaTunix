@@ -20,18 +20,6 @@
 
 typedef enum
 {
-	VALUE_XPOS,
-	VALUE_YPOS,
-	START_ANGLE,
-	SWEEP_ANGLE,
-	LBOUND,
-	UBOUND,
-	VALUE_SCALE,
-	VALUE_FONT,
-	NEEDLE_TAIL,
-	NEEDLE_WIDTH,
-	PRECISION,
-	AA,
 	ADJ_LOW_UNIT_PARTNER,
 	ADJ_HIGH_UNIT_PARTNER,
 	ADJ_START_ANGLE_PARTNER,
@@ -43,12 +31,6 @@ typedef enum
 	IMPORT_XML = 0x1AA,
 	EXPORT_XML
 }StdButton;
-
-typedef enum
-{
-	ANTIALIAS = 0x1BB,
-	SHOW_VALUE,
-}CheckButton;
 
 
 /* Prototypes */
@@ -72,6 +54,8 @@ void update_onscreen_ranges(void);
 void update_onscreen_tblocks(void);
 void update_onscreen_tgroups(void);
 void update_onscreen_polygons(void);
+gboolean tg_spin_button_handler(GtkWidget *, gpointer );
+gboolean generic_spin_button_handler(GtkWidget *, gpointer );
 gboolean alter_tblock_data(GtkWidget *, gpointer );
 gboolean alter_crange_data(GtkWidget *, gpointer );
 gboolean alter_tgroup_data(GtkWidget *, gpointer );

@@ -134,11 +134,11 @@ typedef enum
 	LBOUND,
 	UBOUND,
 	VALUE_FONTSCALE,
-	VALUE_FONT,
 	VALUE_XPOS,
 	VALUE_YPOS,
 	NEEDLE_TAIL,
-	NEEDLE_LEN,
+	NEEDLE_LENGTH,
+	NEEDLE_WIDTH,
 	NEEDLE_TIP_WIDTH,
 	NEEDLE_TAIL_WIDTH,
 	PRECISION,
@@ -429,6 +429,9 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfl
 
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
+
+void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
+gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 
 /* Color Ranges */
 GArray * mtx_gauge_face_get_color_ranges(MtxGaugeFace *gauge);

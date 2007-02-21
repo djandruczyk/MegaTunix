@@ -110,6 +110,34 @@ void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 
 
 /*!
+ \brief gets a newly allocated copy of the value font.  Free when done.
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ */
+gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
+{
+	g_return_val_if_fail ((MTX_IS_GAUGE_FACE (gauge)),NULL);
+	return	g_strdup(gauge->value_font);
+}
+
+
+/*!
+ \brief sets the current value_font 
+ \param gauge (MtxGaugeFace *) pointer to gauge
+ \param value (gfloat) new value
+ */
+void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
+{
+	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_object_freeze_notify (G_OBJECT (gauge));
+	if (gauge->value_font)
+		g_free(gauge->value_font);
+	gauge->value_font = g_strdup(new);
+	g_object_thaw_notify (G_OBJECT (gauge));
+	mtx_gauge_face_redraw_canvas (gauge);
+}
+
+
+/*!
  \brief adds a new color range between the limits specified in the struct passed
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param range (MtxColorRange*) pointer to color range struct to copy
@@ -325,8 +353,11 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 		case NEEDLE_TAIL:
 			gauge->needle_tail = value;
 			break;
-		case NEEDLE_LEN:
+		case NEEDLE_LENGTH:
 			gauge->needle_length = value;
+			break;
+		case NEEDLE_WIDTH:
+			gauge->needle_width = value;
 			break;
 		case NEEDLE_TIP_WIDTH:
 			gauge->needle_tip_width = value;
@@ -343,12 +374,6 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 		case VALUE_YPOS:
 			gauge->value_ypos = value;
 			break;
-			/*
-		case VALUE_FONT:
-			g_free(gauge->value_font);
-			gauge->value_font = g_strdup(value);
-			break;
-			*/
 		case PRECISION:
 			gauge->precision = (gint)value;
 			break;
@@ -398,8 +423,11 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 		case NEEDLE_TAIL:
 			*value = gauge->needle_tail;
 			break;
-		case NEEDLE_LEN:
+		case NEEDLE_LENGTH:
 			*value = gauge->needle_length;
+			break;
+		case NEEDLE_WIDTH:
+			*value = gauge->needle_width;
 			break;
 		case NEEDLE_TIP_WIDTH:
 			*value = gauge->needle_tip_width;
@@ -416,11 +444,6 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 		case VALUE_YPOS:
 			*value = gauge->value_ypos;
 			break;
-			/*
-		case VALUE_FONT:
-			value = g_strdup(gauge->value_font);
-			break;
-			*/
 		case PRECISION:
 			*value = (gfloat)gauge->precision;
 			break;

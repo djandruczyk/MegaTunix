@@ -123,7 +123,8 @@ EXPORT gboolean create_color_span_event(GtkWidget * widget, gpointer data)
 	}
 
 	/* Set the controls to sane ranges corresponding to the gauge */
-	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE(gauge),&lbound,&ubound);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lbound);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &ubound);
 	spinner = glade_xml_get_widget(xml,"range_lowpoint_spin");
 	gtk_spin_button_set_range(GTK_SPIN_BUTTON(spinner),lbound,ubound);
 	spinner = glade_xml_get_widget(xml,"range_highpoint_spin");
@@ -413,7 +414,8 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"handler", GINT_TO_POINTER(ADJ_SWEEP_ANGLE_PARTNER));
 	if (MTX_IS_GAUGE_FACE(g))
 	{
-		mtx_gauge_face_get_angle_span(g,&tmp1,&tmp2);
+		mtx_gauge_face_get_attribute(g,START_ANGLE,&tmp1);
+		mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&tmp2);
 		dummy = glade_xml_get_widget(xml,"tg_start_angle_spin");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tmp1);
 		dummy = glade_xml_get_widget(xml,"tg_sweep_angle_spin");
@@ -466,7 +468,26 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 }
 
 
-EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
+EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
+{
+	gfloat tmpf = 0.0;
+	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
+	MtxGaugeFace *g = NULL;
+
+	if (GTK_IS_WIDGET(gauge))
+		g = MTX_GAUGE_FACE(gauge);
+	else
+		return FALSE;
+
+	if (hold_handlers)
+		return TRUE;
+	mtx_gauge_face_set_attribute(g,handler,tmpf);
+	return TRUE;
+}
+
+
+EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
@@ -494,45 +515,17 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	switch (handler)
 	{
-		case VALUE_XPOS:
-			mtx_gauge_face_set_str_xpos(g, VALUE, tmpf);
-			break;
-		case VALUE_YPOS:
-			mtx_gauge_face_set_str_ypos(g, VALUE, tmpf);
-			break;
-		case START_ANGLE:
-			mtx_gauge_face_set_start_angle(g,tmpf);
-			break;
-		case SWEEP_ANGLE:
-			mtx_gauge_face_set_sweep_angle(g,tmpf);
-			break;
-		case LBOUND:
-			mtx_gauge_face_set_lbound(g,tmpf);
-			break;
-		case UBOUND:
-			mtx_gauge_face_set_ubound(g,tmpf);
-			break;
-		case PRECISION:
-			mtx_gauge_face_set_precision(g,tmpf);
-			break;
-		case NEEDLE_WIDTH:
-			mtx_gauge_face_set_needle_width(g,tmpf);
-			break;
-		case NEEDLE_TAIL:
-			mtx_gauge_face_set_needle_tail(g,tmpf);
-			break;
-		case VALUE_SCALE:
-			mtx_gauge_face_set_font_scale(g, VALUE, tmpf);
-			break;
 		case ADJ_LOW_UNIT_PARTNER:
 			lowpartner = g_object_get_data(G_OBJECT(widget),"lowpartner");
 			highpartner = g_object_get_data(G_OBJECT(widget),"highpartner");
 			if ((!GTK_IS_WIDGET(lowpartner)) || 
 					(!GTK_IS_WIDGET(highpartner)))
 				break;
-			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
 			percent = (tmpf-angle)/(sweep);
-			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
 			newval = ((ubound-lbound)*percent)+lbound;
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(lowpartner),newval);
 			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(g_object_get_data(G_OBJECT(widget),"high_angle")));
@@ -545,9 +538,11 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(g_object_get_data(G_OBJECT(widget),"low_angle")));
 			if (!GTK_IS_WIDGET(highpartner))
 				break;
-			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
 			percent = tmpf/sweep+((tmp3-angle)/sweep);
-			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
 			newval = ((ubound-lbound)*percent)+lbound;
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
 			break;
@@ -555,9 +550,11 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			lowpartner = g_object_get_data(G_OBJECT(widget),"lowpartner");
 			if (!GTK_IS_WIDGET(lowpartner))
 				break;
-			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
 			percent = (tmpf-lbound)/(ubound-lbound);
-			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
 			newval = ((sweep)*percent)+angle;
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(lowpartner),newval);
 			break;
@@ -566,9 +563,11 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (!GTK_IS_WIDGET(highpartner))
 				break;
 			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(g_object_get_data(G_OBJECT(widget),"start_angle")));
-			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
+			mtx_gauge_face_get_attribute(g,UBOUND,&ubound);
 			percent = (tmpf-lbound)/(ubound-lbound);
-			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			mtx_gauge_face_get_attribute(g,START_ANGLE,&angle);
+			mtx_gauge_face_get_attribute(g,SWEEP_ANGLE,&sweep);
 			newval = ((percent*sweep)+angle)-tmp3;
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
 			break;
@@ -608,7 +607,6 @@ EXPORT gboolean entry_change_color(GtkWidget * widget, gpointer data)
 
 EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 {
-	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	gchar * tmpbuf = NULL;
 	tmpbuf = (gchar *)gtk_font_button_get_font_name (GTK_FONT_BUTTON(widget));
 	/* Strip out the font size as the gauge lib uses a different scaling
@@ -622,18 +620,10 @@ EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 	else 
 		return FALSE;
 
-
 	if (hold_handlers)
 		return TRUE;
 
-	switch ((func)handler)
-	{
-		case VALUE_FONT:
-			mtx_gauge_face_set_font(g, VALUE, tmpbuf);
-			break;
-		default:
-			break;
-	}
+	mtx_gauge_face_set_value_font(g, tmpbuf);
 	return TRUE;
 }
 
@@ -652,16 +642,7 @@ EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 	if (hold_handlers)
 		return TRUE;
 
-	switch (handler)
-	{
-		case ANTIALIAS:
-			mtx_gauge_face_set_antialias(g,state);
-			break;
-		case SHOW_VALUE:
-			mtx_gauge_face_set_show_value(g,state);
-			break;
-
-	}
+	mtx_gauge_face_set_attribute(g,handler, state);
 
 	return TRUE;
 }
@@ -735,7 +716,8 @@ void update_onscreen_ranges()
 		g_object_set_data(G_OBJECT(button),"range_index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(button),"toggled", G_CALLBACK(remove_crange),NULL);
 		gtk_table_attach(GTK_TABLE(table),button,0,1,y,y+1,GTK_SHRINK,GTK_SHRINK,0,0);
-		mtx_gauge_face_get_bounds(MTX_GAUGE_FACE(gauge),&low,&high);
+		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &low);
+		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &high);
 		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),range->lowpoint);
@@ -831,7 +813,8 @@ EXPORT gboolean animate_gauge(GtkWidget *widget, gpointer data)
 
 	gtk_widget_set_sensitive(widget,FALSE);
 
-	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE (gauge),&lower,&upper);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);
 	mtx_gauge_face_set_value(MTX_GAUGE_FACE (gauge),lower);
 	gtk_timeout_add(20,(GtkFunction)sweep_gauge, (gpointer)gauge);
 	return TRUE;
@@ -851,7 +834,8 @@ gboolean sweep_gauge(gpointer data)
 		return FALSE;
 
 	GtkWidget * gauge = data;
-	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE (gauge),&lower,&upper);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);
 	interval = (upper-lower)/100.0;
 	cur_val = mtx_gauge_face_get_value(MTX_GAUGE_FACE (gauge));
 	if (cur_val >= upper)

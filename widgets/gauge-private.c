@@ -97,6 +97,8 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->start_angle = -225; // *lower left quadrant
 	gauge->sweep_angle = 270; // CW sweep
 	gauge->needle_width = 0.05;  /* % of radius */
+	gauge->needle_tip_width = 0.0;
+	gauge->needle_tail_width = 0.0;
 	gauge->needle_tail = 0.083;  /* % of radius */
 	gauge->needle_length = 0.850; /* % of radius */
 	gauge->value_font = g_strdup("Bitstream Vera Sans");
@@ -132,6 +134,9 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"value_font_color", &gauge->colors[COL_VALUE_FONT]);
 	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", &gauge->colors[COL_GRADIENT_BEGIN]);
 	g_object_set_data(G_OBJECT(gauge),"gradient_end_color", &gauge->colors[COL_GRADIENT_END]);
+	g_object_set_data(G_OBJECT(gauge),"needle_length", &gauge->needle_length);
+	g_object_set_data(G_OBJECT(gauge),"needle_tip_width", &gauge->needle_tip_width);
+	g_object_set_data(G_OBJECT(gauge),"needle_tail_width", &gauge->needle_tail_width);
 	g_object_set_data(G_OBJECT(gauge),"needle_width", &gauge->needle_width);
 	g_object_set_data(G_OBJECT(gauge),"needle_tail", &gauge->needle_tail);
 	g_object_set_data(G_OBJECT(gauge),"precision", &gauge->precision);

@@ -62,8 +62,11 @@ static const struct
 } xml_functions[] = {
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"bg_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"needle_color"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_length"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_tail"},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_width"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_tip_width"},
+	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"needle_tail_width"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"value_font_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_begin_color"},
 	{ mtx_gauge_color_import, mtx_gauge_color_export,"gradient_end_color"},
