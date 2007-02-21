@@ -1307,7 +1307,7 @@
 			  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
-			  <property name="adjustment">0.15000000596 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			  <property name="adjustment">0.15000000596 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 13 Dec 2006 21:39:02 GMT"/>
 			</widget>
 			<packing>
@@ -1376,7 +1376,7 @@
 			  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
-			  <property name="adjustment">0 0 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			  <property name="adjustment">0 -1 1 0.0010000000475 0.00999999977648 0.00999999977648</property>
 			  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 13 Dec 2006 21:38:45 GMT"/>
 			</widget>
 			<packing>
@@ -1677,7 +1677,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label4">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Start angle in radians</property>
+		  <property name="label" translatable="yes">Start angle in deg.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1700,7 +1700,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label14">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Stop angle in radians</property>
+		  <property name="label" translatable="yes">Stop angle in deg.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1862,13 +1862,13 @@
 		<widget class="GtkSpinButton" id="start_angle_spin">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="climb_rate">0.0010000000475</property>
-		  <property name="digits">3</property>
+		  <property name="climb_rate">0.10000000149</property>
+		  <property name="digits">1</property>
 		  <property name="numeric">True</property>
 		  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		  <property name="snap_to_ticks">False</property>
 		  <property name="wrap">False</property>
-		  <property name="adjustment">0 -10 10 0.0010000000475 0.00999999977648 0.00999999977648</property>
+		  <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
 		  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:31 GMT"/>
 		</widget>
 		<packing>
@@ -1882,16 +1882,16 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkSpinButton" id="stop_angle_spin">
+		<widget class="GtkSpinButton" id="sweep_angle_spin">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="climb_rate">0.0010000000475</property>
-		  <property name="digits">3</property>
+		  <property name="climb_rate">0.10000000149</property>
+		  <property name="digits">1</property>
 		  <property name="numeric">True</property>
 		  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		  <property name="snap_to_ticks">False</property>
 		  <property name="wrap">False</property>
-		  <property name="adjustment">0 -10 10 0.0010000000475 0.00999999977648 0.00999999977648</property>
+		  <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
 		  <signal name="value_changed" handler="spin_button_handler" last_modification_time="Wed, 11 Oct 2006 18:31:42 GMT"/>
 		</widget>
 		<packing>
@@ -3452,7 +3452,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label152">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Stop Angle</property>
+			      <property name="label" translatable="yes">Sweep Angle</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3477,13 +3477,13 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			    <widget class="GtkSpinButton" id="tg_start_angle_spin">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.0010000000475</property>
-			      <property name="digits">3</property>
+			      <property name="climb_rate">0.10000000149</property>
+			      <property name="digits">1</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">0 -10 10 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 11 Feb 2007 15:49:49 GMT"/>
 			    </widget>
 			    <packing>
@@ -3497,16 +3497,16 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkSpinButton" id="tg_stop_angle_spin">
+			    <widget class="GtkSpinButton" id="tg_sweep_angle_spin">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="climb_rate">0.0010000000475</property>
-			      <property name="digits">3</property>
+			      <property name="climb_rate">0.10000000149</property>
+			      <property name="digits">1</property>
 			      <property name="numeric">True</property>
 			      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 			      <property name="snap_to_ticks">False</property>
 			      <property name="wrap">False</property>
-			      <property name="adjustment">4.74974513054e-07 -10 10 0.0010000000475 0.00999999977648 0.00999999977648</property>
+			      <property name="adjustment">0 -360 360 0.10000000149 1 1</property>
 			      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sun, 11 Feb 2007 15:49:58 GMT"/>
 			    </widget>
 			    <packing>
@@ -3522,7 +3522,7 @@ for gauges that have a scale change (vac/boost gauges)</property>
 			  <child>
 			    <widget class="GtkLabel" id="label170">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Angular span (Radians)</property>
+			      <property name="label" translatable="yes">Angular span (deg.)</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>

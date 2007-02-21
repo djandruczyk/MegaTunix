@@ -399,20 +399,24 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_text_colorbutton")),&white);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_colorbutton")),&white);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_colorbutton")),&white);
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"partner",glade_xml_get_widget(xml,"tg_lowpoint_spin"));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"handler", GINT_TO_POINTER(ADJ_UNIT_PARTNER));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_stop_angle_spin")),"partner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_stop_angle_spin")),"handler", GINT_TO_POINTER(ADJ_UNIT_PARTNER));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"partner",glade_xml_get_widget(xml,"tg_start_angle_spin"));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"handler", GINT_TO_POINTER(ADJ_ANGLE_PARTNER));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"partner",glade_xml_get_widget(xml,"tg_stop_angle_spin"));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"handler", GINT_TO_POINTER(ADJ_ANGLE_PARTNER));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"lowpartner",glade_xml_get_widget(xml,"tg_lowpoint_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"highpartner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"high_angle",glade_xml_get_widget(xml,"tg_sweep_angle_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"handler", GINT_TO_POINTER(ADJ_LOW_UNIT_PARTNER));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"highpartner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"low_angle",glade_xml_get_widget(xml,"tg_start_angle_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"handler", GINT_TO_POINTER(ADJ_HIGH_UNIT_PARTNER));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"lowpartner",glade_xml_get_widget(xml,"tg_start_angle_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"handler", GINT_TO_POINTER(ADJ_START_ANGLE_PARTNER));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"highpartner",glade_xml_get_widget(xml,"tg_sweep_angle_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"start_angle",glade_xml_get_widget(xml,"tg_start_angle_spin"));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"handler", GINT_TO_POINTER(ADJ_SWEEP_ANGLE_PARTNER));
 	if (MTX_IS_GAUGE_FACE(g))
 	{
-		mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
+		mtx_gauge_face_get_angle_span(g,&tmp1,&tmp2);
 		dummy = glade_xml_get_widget(xml,"tg_start_angle_spin");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tmp1);
-		dummy = glade_xml_get_widget(xml,"tg_stop_angle_spin");
+		dummy = glade_xml_get_widget(xml,"tg_sweep_angle_spin");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tmp2);
 	}
 
@@ -442,7 +446,7 @@ EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
 			tgroup->maj_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_maj_tick_length_spin")));
 			tgroup->min_tick_length = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_min_tick_length_spin")));
 			tgroup->start_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_start_angle_spin")));
-			tgroup->stop_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_stop_angle_spin")));
+			tgroup->sweep_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_sweep_angle_spin")));
 			tgroup->num_maj_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_maj_ticks_spin")));
 			tgroup->num_min_ticks = (gint)gtk_spin_button_get_value(GTK_SPIN_BUTTON(glade_xml_get_widget(xml,"tg_num_min_ticks_spin")));
 
@@ -466,11 +470,15 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
-	gfloat tmp1 = 0.0;
-	gfloat tmp2 = 0.0;
+	gfloat lbound = 0.0;
+	gfloat ubound = 0.0;
+	gfloat angle = 0.0;
+	gfloat sweep = 0.0;
+	gfloat tmp3 = 0.0;
 	gfloat percent = 0.0;
 	gfloat newval = 0.0;
-	GtkWidget *partner = NULL;
+	GtkWidget *lowpartner = NULL;
+	GtkWidget *highpartner = NULL;
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
 	tmpi = (gint)(tmpf+0.00001);
@@ -493,10 +501,10 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			mtx_gauge_face_set_str_ypos(g, VALUE, tmpf);
 			break;
 		case START_ANGLE:
-			mtx_gauge_face_set_lspan_rad(g,tmpf);
+			mtx_gauge_face_set_start_angle(g,tmpf);
 			break;
-		case STOP_ANGLE:
-			mtx_gauge_face_set_uspan_rad(g,tmpf);
+		case SWEEP_ANGLE:
+			mtx_gauge_face_set_sweep_angle(g,tmpf);
 			break;
 		case LBOUND:
 			mtx_gauge_face_set_lbound(g,tmpf);
@@ -516,25 +524,53 @@ EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		case VALUE_SCALE:
 			mtx_gauge_face_set_font_scale(g, VALUE, tmpf);
 			break;
-		case ADJ_UNIT_PARTNER:
-			partner = g_object_get_data(G_OBJECT(widget),"partner");
-			if (!GTK_IS_WIDGET(partner))
+		case ADJ_LOW_UNIT_PARTNER:
+			lowpartner = g_object_get_data(G_OBJECT(widget),"lowpartner");
+			highpartner = g_object_get_data(G_OBJECT(widget),"highpartner");
+			if ((!GTK_IS_WIDGET(lowpartner)) || 
+					(!GTK_IS_WIDGET(highpartner)))
 				break;
-			mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
-			percent = (tmpf-tmp1)/(tmp2-tmp1);
-			mtx_gauge_face_get_bounds(g,&tmp1,&tmp2);
-			newval = ((tmp2-tmp1)*percent) +tmp1;
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(partner),newval);
+			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			percent = (tmpf-angle)/(sweep);
+			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			newval = ((ubound-lbound)*percent)+lbound;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(lowpartner),newval);
+			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(g_object_get_data(G_OBJECT(widget),"high_angle")));
+			percent = tmp3/sweep+((tmpf-angle)/sweep);
+			newval = ((ubound-lbound)*percent)+lbound;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
 			break;
-		case ADJ_ANGLE_PARTNER:
-			partner = g_object_get_data(G_OBJECT(widget),"partner");
-			if (!GTK_IS_WIDGET(partner))
+		case ADJ_HIGH_UNIT_PARTNER:
+			highpartner = g_object_get_data(G_OBJECT(widget),"highpartner");
+			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(g_object_get_data(G_OBJECT(widget),"low_angle")));
+			if (!GTK_IS_WIDGET(highpartner))
 				break;
-			mtx_gauge_face_get_bounds(g,&tmp1,&tmp2);
-			percent = (tmpf-tmp1)/(tmp2-tmp1);
-			mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
-			newval = ((tmp2-tmp1)*percent) +tmp1;
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(partner),newval);
+			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			percent = tmpf/sweep+((tmp3-angle)/sweep);
+			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			newval = ((ubound-lbound)*percent)+lbound;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
+			break;
+		case ADJ_START_ANGLE_PARTNER:
+			lowpartner = g_object_get_data(G_OBJECT(widget),"lowpartner");
+			if (!GTK_IS_WIDGET(lowpartner))
+				break;
+			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			percent = (tmpf-lbound)/(ubound-lbound);
+			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			newval = ((sweep)*percent)+angle;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(lowpartner),newval);
+			break;
+		case ADJ_SWEEP_ANGLE_PARTNER:
+			highpartner = g_object_get_data(G_OBJECT(widget),"highpartner");
+			if (!GTK_IS_WIDGET(highpartner))
+				break;
+			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(g_object_get_data(G_OBJECT(widget),"start_angle")));
+			mtx_gauge_face_get_bounds(g,&lbound,&ubound);
+			percent = (tmpf-lbound)/(ubound-lbound);
+			mtx_gauge_face_get_angle_span(g,&angle,&sweep);
+			newval = ((percent*sweep)+angle)-tmp3;
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
 			break;
 	}
 	return (TRUE);
@@ -559,6 +595,7 @@ void update_attributes(void)
 	update_onscreen_ranges();
 	update_onscreen_tblocks();
 	update_onscreen_tgroups();
+	update_onscreen_polygons();
 	return;
 }
 
@@ -1010,14 +1047,18 @@ void update_onscreen_tgroups()
 		xml = glade_xml_new(filename, "tgroup_main_table", NULL);
 		tg_main_table = glade_xml_get_widget(xml,"tgroup_main_table");
 		gtk_table_attach(GTK_TABLE(subtable),tg_main_table,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"partner",glade_xml_get_widget(xml,"tg_lowpoint_spin"));
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"handler", GINT_TO_POINTER(ADJ_UNIT_PARTNER));
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_stop_angle_spin")),"partner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_stop_angle_spin")),"handler", GINT_TO_POINTER(ADJ_UNIT_PARTNER));
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"partner",glade_xml_get_widget(xml,"tg_start_angle_spin"));
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"handler", GINT_TO_POINTER(ADJ_ANGLE_PARTNER));
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"partner",glade_xml_get_widget(xml,"tg_stop_angle_spin"));
-		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"handler", GINT_TO_POINTER(ADJ_ANGLE_PARTNER));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"lowpartner",glade_xml_get_widget(xml,"tg_lowpoint_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"highpartner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"high_angle",glade_xml_get_widget(xml,"tg_sweep_angle_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_start_angle_spin")),"handler", GINT_TO_POINTER(ADJ_LOW_UNIT_PARTNER));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"highpartner",glade_xml_get_widget(xml,"tg_highpoint_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"low_angle",glade_xml_get_widget(xml,"tg_start_angle_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_sweep_angle_spin")),"handler", GINT_TO_POINTER(ADJ_HIGH_UNIT_PARTNER));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"lowpartner",glade_xml_get_widget(xml,"tg_start_angle_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_lowpoint_spin")),"handler", GINT_TO_POINTER(ADJ_START_ANGLE_PARTNER));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"highpartner",glade_xml_get_widget(xml,"tg_sweep_angle_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"start_angle",glade_xml_get_widget(xml,"tg_start_angle_spin"));
+		g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"tg_highpoint_spin")),"handler", GINT_TO_POINTER(ADJ_SWEEP_ANGLE_PARTNER));
 		glade_xml_signal_autoconnect(xml);
 
 		/* fontbutton */
@@ -1107,10 +1148,10 @@ void update_onscreen_tgroups()
 		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_START_ANGLE));
 
 		/* Stop Angle*/
-		dummy = glade_xml_get_widget(xml,"tg_stop_angle_spin");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->stop_angle);
+		dummy = glade_xml_get_widget(xml,"tg_sweep_angle_spin");
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),tgroup->sweep_angle);
 		g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(i));
-		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_STOP_ANGLE));
+		g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_tgroup_data),GINT_TO_POINTER(TG_SWEEP_ANGLE));
 
 		/* Num Major Ticks*/
 		dummy = glade_xml_get_widget(xml,"tg_num_maj_ticks_spin");
@@ -1381,6 +1422,8 @@ void update_onscreen_polygons()
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->num_points);
 			g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_NUM_POINTS));
 			gdk_flush();
+			while (gtk_events_pending())
+				gtk_main_iteration();
 			for (j=0;j<((MtxGenPoly *)poly->data)->num_points;j++)
 			{
 				tmpbuf = g_strdup_printf("generic_x_%i_spin",j);
@@ -1546,7 +1589,7 @@ gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
 		case TG_MIN_TICK_WIDTH:
 		case TG_MIN_TICK_LENGTH:
 		case TG_START_ANGLE:
-		case TG_STOP_ANGLE:
+		case TG_SWEEP_ANGLE:
 		case TG_NUM_MAJ_TICKS:
 		case TG_NUM_MIN_TICKS:
 			value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
@@ -1902,7 +1945,6 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 				{
 					g_object_set_data(G_OBJECT(dummy),"num_points_spin",widget);
 					g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(index));
-					g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
 				}
 				gtk_table_attach(GTK_TABLE(table),dummy,1,2,i,i+1,0,0,0,0);
 				g_hash_table_insert(hash,g_strdup(xn),dummy);
@@ -1918,7 +1960,6 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 				{
 					g_object_set_data(G_OBJECT(dummy),"num_points_spin",widget);
 					g_object_set_data(G_OBJECT(dummy),"index",GINT_TO_POINTER(index));
-					g_signal_connect(G_OBJECT(dummy),"value_changed", G_CALLBACK(alter_polygon_data),GINT_TO_POINTER(POLY_POINTS));
 				}
 				gtk_table_attach(GTK_TABLE(table),dummy,2,3,i,i+1,0,0,0,0);
 				g_hash_table_insert(hash,g_strdup(yn),dummy);

@@ -40,7 +40,7 @@ int main (int argc, char **argv)
 	 * reverse sign on the deg version,  because of the fact that the
 	 * rendering routiens do things ass backwards
 	 */
-	mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),0 , 1.5 * M_PI);
+	mtx_gauge_face_set_angle_span (MTX_GAUGE_FACE (gauge),0 , 270);
 //	mtx_gauge_face_set_span_deg (MTX_GAUGE_FACE (gauge),0 , -270);
 	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
 	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.0*M_PI,  .25*M_PI);

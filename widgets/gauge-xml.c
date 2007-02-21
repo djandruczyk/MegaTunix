@@ -53,7 +53,9 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 			 * passed is null and handle it appropriately
 			 */ 
 			if (xml_funcs) 
+			{
 				xml_funcs->import_func(gauge,cur_node,xml_funcs->dest_var);
+			}
 
 		}
 
@@ -386,8 +388,8 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->min_tick_width);
 			if (g_strcasecmp((gchar *)cur_node->name,"start_angle") == 0)
 				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->start_angle);
-			if (g_strcasecmp((gchar *)cur_node->name,"stop_angle") == 0)
-				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->stop_angle);
+			if (g_strcasecmp((gchar *)cur_node->name,"sweep_angle") == 0)
+				mtx_gauge_gfloat_import(gauge, cur_node,&tgroup->sweep_angle);
 			if (g_strcasecmp((gchar *)cur_node->name,"num_maj_ticks") == 0)
 				mtx_gauge_gint_import(gauge, cur_node,&tgroup->num_maj_ticks);
 			if (g_strcasecmp((gchar *)cur_node->name,"num_min_ticks") == 0)
@@ -576,7 +578,9 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 				x_vector = g_strsplit(tmpbuf," ", -1);
 				g_free(tmpbuf);
 				for (i=0;i<g_strv_length(x_vector);i++)
+				{
 					data->points[i].x = g_ascii_strtod(x_vector[i],NULL);
+				}
 				g_strfreev(x_vector);
 				tmpbuf = NULL;
 			}
@@ -586,7 +590,9 @@ void mtx_gauge_poly_generic_import(MtxGaugeFace *gauge, xmlNode *node, gpointer 
 				y_vector = g_strsplit(tmpbuf," ", -1);
 				g_free(tmpbuf);
 				for (i=0;i<g_strv_length(y_vector);i++)
+				{
 					data->points[i].y = g_ascii_strtod(y_vector[i],NULL);
+				}
 				g_strfreev(y_vector);
 				tmpbuf = NULL;
 			}
@@ -767,8 +773,8 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 		xmlNewChild(node, NULL, BAD_CAST "start_angle",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
-		tmpbuf = g_strdup_printf("%f",tgroup->stop_angle);
-		xmlNewChild(node, NULL, BAD_CAST "stop_angle",
+		tmpbuf = g_strdup_printf("%f",tgroup->sweep_angle);
+		xmlNewChild(node, NULL, BAD_CAST "sweep_angle",
 				BAD_CAST tmpbuf);
 		g_free(tmpbuf);
 

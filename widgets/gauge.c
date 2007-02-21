@@ -401,7 +401,7 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
 	new_tgroup->min_tick_length = tgroup->min_tick_length;
 	new_tgroup->min_tick_width = tgroup->min_tick_width;
 	new_tgroup->start_angle = tgroup->start_angle;
-	new_tgroup->stop_angle = tgroup->stop_angle;
+	new_tgroup->sweep_angle = tgroup->sweep_angle;
 	g_array_append_val(gauge->tick_groups,new_tgroup);
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
@@ -632,8 +632,8 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 		case TG_START_ANGLE:
 			tgroup->start_angle = *(gfloat *)value;
 			break;
-		case TG_STOP_ANGLE:
-			tgroup->stop_angle = *(gfloat *)value;
+		case TG_SWEEP_ANGLE:
+			tgroup->sweep_angle = *(gfloat *)value;
 			break;
 		default:
 			break;
@@ -1144,34 +1144,17 @@ gboolean mtx_gauge_face_get_bounds(MtxGaugeFace *gauge, gfloat *value1, gfloat *
 
 
 /*!
- \brief retreives the angular span in radians by passing in pointers to 
- two gfloats
- \param gauge (MtxGaugeFace *) pointer to gauge
- \param value1 (gfloat) pointer to a gfloat to store the lower point angle
- \param value2 (gfloat) pointer to a gfloat to store the upper point angle
- \returns TRUE always
- */
-gboolean mtx_gauge_face_get_span_rad(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
-{
-	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
-	*value1 = gauge->start_radian;
-	*value2 = gauge->stop_radian;
-	return TRUE;
-}
-
-
-/*!
  \brief retreives the angular span in degrees by passing in pointers to two gfloats
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param value1 (gfloat) pointer to a gfloat to store the lower point angle
  \param value2 (gfloat) pointer to a gfloat to store the upper point angle
  \returns TRUE always
  */
-gboolean mtx_gauge_face_get_span_deg(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
+gboolean mtx_gauge_face_get_angle_span(MtxGaugeFace *gauge, gfloat *value1, gfloat *value2)
 {
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
-	*value1 = gauge->start_deg;
-	*value2 = gauge->stop_deg;
+	*value1 = gauge->start_angle;
+	*value2 = gauge->sweep_angle;
 	return TRUE;
 }
 
@@ -1233,80 +1216,20 @@ void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat len)
 
 
 /*!
- \brief Changes the angular span of the gauge in CAIRO STYLE units (CW 
- inscreaing, units in radians,  0 deg is at 3 o'clock position) Right now all
- gauges are assumed to have clockwise rotation with increasing value
- \param gauge (MtxGaugeFace *) pointer to the gauge
- \param start_radian (gfloat) start angle in radians
- \param stop_radian (gfloat) stop angle in radians
- */
-void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, gfloat start_radian, gfloat stop_radian)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->start_radian = start_radian;
-	gauge->stop_radian = stop_radian;
-	/* For some un know ndamn reason,  GDK draws it's arcs
-	 * counterclockwisein units of 1/64th fo a degree, whereas cairo
-	 * doe it clockwise in radians. At least they start at the same place
-	 * "3 O'clock" 
-	 * */
-	gauge->start_deg = -((start_radian/M_PI) *180.0);
-	gauge->stop_deg = -(((stop_radian-start_radian)/M_PI) *180.0);
-	g_object_thaw_notify (G_OBJECT (gauge));
-	generate_gauge_background(GTK_WIDGET(gauge));
-	mtx_gauge_face_redraw_canvas (gauge);
-}
-
-
-/*!
- \brief Changes the angular span of the gauge in CAIRO STYLE units (CW 
- inscreaing, units in radians,  0 deg is at 3 o'clock position) Right now all
- gauges are assumed to have clockwise rotation with increasing value
- \param gauge (MtxGaugeFace *) pointer to the gauge
- \param start_radian (gfloat) start angle in radians
- */
-void mtx_gauge_face_set_lspan_rad (MtxGaugeFace *gauge, gfloat start_radian)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_span_rad (gauge, start_radian, gauge->stop_radian);
-}
-
-
-/*!
- \brief Changes the angular span of the gauge in CAIRO STYLE units (CW 
- inscreaing, units in radians,  0 deg is at 3 o'clock position) Right now all
- gauges are assumed to have clockwise rotation with increasing value
- \param gauge (MtxGaugeFace *) pointer to the gauge
- \param stop_radian (gfloat) stop angle in radians
- */
-void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, gfloat stop_radian)
-{
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_span_rad (gauge, gauge->start_radian, stop_radian);
-}
-
-/*!
  \brief Changes the angular span of the gauge in GDK STYLE units (CCW 
  inscreaing, units in degrees,  0 deg is at 3 o'clock position) Right now all
  gauges are assumed to have clockwise rotation with increasing value
  \param gauge (MtxGaugeFace *) pointer to the gauge
- \param start_deg (gfloat) start angle in degrees
- \param stop_deg (gfloat) stop angle in degrees
+ \param start_angle (gfloat) start angle in degrees
+ \param sweep_angle (gfloat) sweep angle in degrees, positive being CW, 
+ negative being CCW rotation
  */
-void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, gfloat start_deg, gfloat stop_deg)
+void mtx_gauge_face_set_angle_span (MtxGaugeFace *gauge, gfloat start_angle, gfloat sweep_angle)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
 	g_object_freeze_notify (G_OBJECT (gauge));
-	gauge->start_deg = start_deg;
-	gauge->stop_deg = stop_deg;
-	/* For some un know ndamn reason,  GDK draws it's arcs
-	 * counterclockwisein units of 1/64th fo a degree, whereas cairo
-	 * doe it clockwise in radians. At least they start at the same place
-	 * "3 O'clock" 
-	 * */
-	gauge->start_radian = -start_deg*M_PI/180.0;
-	gauge->stop_radian = -stop_deg*M_PI/180.0;
+	gauge->start_angle = start_angle;
+	gauge->sweep_angle = sweep_angle;
 	g_object_thaw_notify (G_OBJECT (gauge));
 	generate_gauge_background(GTK_WIDGET(gauge));
 	mtx_gauge_face_redraw_canvas (gauge);
@@ -1318,12 +1241,12 @@ void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, gfloat start_deg, gfloat 
  inscreaing, units in degrees,  0 deg is at 3 o'clock position) Right now all
  gauges are assumed to have clockwise rotation with increasing value
  \param gauge (MtxGaugeFace *) pointer to the gauge
- \param start_deg (gfloat) start angle in degrees
+ \param start_angle (gfloat) start angle in degrees
  */
-void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, gfloat start_deg)
+void mtx_gauge_face_set_start_angle (MtxGaugeFace *gauge, gfloat start_angle)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_span_deg (gauge, start_deg, gauge->stop_deg);
+	mtx_gauge_face_set_angle_span (gauge, start_angle, gauge->sweep_angle);
 }
 
 
@@ -1332,12 +1255,12 @@ void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, gfloat start_deg)
  inscreaing, units in degrees,  0 deg is at 3 o'clock position) Right now all
  gauges are assumed to have clockwise rotation with increasing value
  \param gauge (MtxGaugeFace *) pointer to the gauge
- \param stop_deg (gfloat) stop angle in degrees
+ \param sweep_angle (gfloat) stop angle in degrees
  */
-void mtx_gauge_face_set_uspan_deg (MtxGaugeFace *gauge, gfloat stop_deg)
+void mtx_gauge_face_set_sweep_angle (MtxGaugeFace *gauge, gfloat sweep_angle)
 {
 	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	mtx_gauge_face_set_span_deg (gauge, gauge->start_deg, stop_deg);
+	mtx_gauge_face_set_angle_span (gauge, gauge->start_angle, sweep_angle);
 }
 
 

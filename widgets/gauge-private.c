@@ -94,8 +94,8 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->lbound = 0.0;
 	gauge->ubound = 100.0;
 	gauge->precision = 2;
-	gauge->start_radian = 0.75 * M_PI;//M_PI is left, 0 is right
-	gauge->stop_radian = 2.25 * M_PI;
+	gauge->start_angle = -225; // *lower left quadrant
+	gauge->sweep_angle = 270; // CW sweep
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tail = 0.083;  /* % of radius */
 	gauge->needle_length = 0.850; /* % of radius */
@@ -111,8 +111,6 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->antialias = FALSE;
 #endif
 	gauge->show_value = TRUE;
-	gauge->start_deg = -((gauge->start_radian/M_PI) *180.0);
-	gauge->stop_deg = -(((gauge->stop_radian-gauge->start_radian)/M_PI) *180.0);
 	gauge->colormap = gdk_colormap_get_system();
 	gauge->gc = NULL;
 	gauge->c_ranges = g_array_new(FALSE,TRUE,sizeof(MtxColorRange *));
@@ -139,10 +137,8 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"precision", &gauge->precision);
 	g_object_set_data(G_OBJECT(gauge),"width", &gauge->w);
 	g_object_set_data(G_OBJECT(gauge),"height", &gauge->h);
-	g_object_set_data(G_OBJECT(gauge),"start_deg", &gauge->start_deg);
-	g_object_set_data(G_OBJECT(gauge),"stop_deg", &gauge->stop_deg);
-	g_object_set_data(G_OBJECT(gauge),"start_radian", &gauge->start_radian);
-	g_object_set_data(G_OBJECT(gauge),"stop_radian", &gauge->stop_radian);
+	g_object_set_data(G_OBJECT(gauge),"main_start_angle", &gauge->start_angle);
+	g_object_set_data(G_OBJECT(gauge),"main_sweep_angle", &gauge->sweep_angle);
 	g_object_set_data(G_OBJECT(gauge),"lbound", &gauge->lbound);
 	g_object_set_data(G_OBJECT(gauge),"ubound", &gauge->ubound);
 	g_object_set_data(G_OBJECT(gauge),"value_font", &gauge->font_str[VALUE]);
@@ -222,8 +218,8 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 	tgroup = g_new0(MtxTickGroup, 1);
 	tgroup->num_maj_ticks = 9;
 	tgroup->num_min_ticks = 4;
-	tgroup->start_angle = gauge->start_radian;
-	tgroup->stop_angle = gauge->stop_radian;
+	tgroup->start_angle = gauge->start_angle;
+	tgroup->sweep_angle = gauge->sweep_angle;
 	tgroup->maj_tick_inset = 0.15;
 	tgroup->maj_tick_width = 0.175;
 	tgroup->maj_tick_length = 0.110;
@@ -248,7 +244,6 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 void cairo_update_gauge_position (GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
-	gfloat radian_span = 0.0;
 	gfloat tmpf = 0.0;
 	gfloat needle_pos = 0.0;
 	gchar * message = NULL;
@@ -313,9 +308,9 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	}
 
 	/* gauge hands */
-	radian_span = (gauge->stop_radian - gauge->start_radian);
 	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
-	needle_pos = gauge->start_radian+(tmpf*radian_span)+M_PI/2.0;
+	needle_pos = (gauge->start_angle+(tmpf*gauge->sweep_angle))*(M_PI/180);
+
 
 	cairo_set_source_rgb (cr, gauge->colors[COL_NEEDLE].red/65535.0,
 				gauge->colors[COL_NEEDLE].green/65535.0,
@@ -335,16 +330,16 @@ void cairo_update_gauge_position (GtkWidget *widget)
 		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
 		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
 	}
-	gauge->needle_coords[0].x = xc + (n_tip) * sin (needle_pos);
-	gauge->needle_coords[0].y = yc + (n_tip) * -cos (needle_pos);
+	gauge->needle_coords[0].x = xc + (n_tip) * cos (needle_pos);
+	gauge->needle_coords[0].y = yc + (n_tip) * sin (needle_pos);
 
-	gauge->needle_coords[1].x = xc + (n_width) *cos(needle_pos);
-	gauge->needle_coords[1].y = yc + (n_width) *sin(needle_pos);
+	gauge->needle_coords[1].x = xc + (n_width) * sin(needle_pos);
+	gauge->needle_coords[1].y = yc + (n_width) * -cos(needle_pos);
 
-	gauge->needle_coords[2].x = xc + (n_tail) * -sin (needle_pos);
-	gauge->needle_coords[2].y = yc + (n_tail) * cos (needle_pos);
-	gauge->needle_coords[3].x = xc - (n_width) * cos (needle_pos);
-	gauge->needle_coords[3].y = yc - (n_width) * sin (needle_pos);
+	gauge->needle_coords[2].x = xc + (n_tail) * -cos (needle_pos);
+	gauge->needle_coords[2].y = yc + (n_tail) * -sin (needle_pos);
+	gauge->needle_coords[3].x = xc + (n_width) * -sin (needle_pos);
+	gauge->needle_coords[3].y = yc + (n_width) * cos (needle_pos);
 	gauge->needle_polygon_points = 4;
 
 	cairo_move_to (cr, gauge->needle_coords[0].x,gauge->needle_coords[0].y);
@@ -364,11 +359,11 @@ void cairo_update_gauge_position (GtkWidget *widget)
  */
 void gdk_update_gauge_position (GtkWidget *widget)
 {
+#ifndef HAVE_CAIRO
 	gint i= 0;
 	gfloat xc = 0.0;
 	gfloat yc = 0.0;
 	gfloat tmpf = 0.0;
-	gfloat radian_span = 0.0;
 	gfloat needle_pos = 0.0;
 	gint n_width = 0;
 	gint n_tail = 0;
@@ -413,12 +408,8 @@ void gdk_update_gauge_position (GtkWidget *widget)
 			GDK_JOIN_ROUND);
 
 	/* gauge hands */
-	radian_span = (gauge->stop_radian - gauge->start_radian);
 	tmpf = (gauge->value-gauge->lbound)/(gauge->ubound-gauge->lbound);
-	needle_pos = gauge->start_radian+(tmpf*radian_span)+M_PI/2.0;
-	//	printf("start_rad %f, stop_rad %f\n",gauge->start_radian, gauge->stop_radian);
-	//	printf("tmpf %f, radian span %f, position, %f\n",tmpf,radian_span,needle_pos);
-
+	needle_pos = (gauge->start_angle+(tmpf*gauge->sweep_angle))*(M_PI/180.0);
 	xc= gauge->xc;
 	yc= gauge->yc;
 	n_width = gauge->needle_width * gauge->radius;
@@ -431,16 +422,16 @@ void gdk_update_gauge_position (GtkWidget *widget)
 		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
 		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
 	}
-	gauge->needle_coords[0].x = xc + (n_tip) * sin (needle_pos);
-	gauge->needle_coords[0].y = yc + (n_tip) * -cos (needle_pos);
+	gauge->needle_coords[0].x = xc + (n_tip) * cos (needle_pos);
+	gauge->needle_coords[0].y = yc + (n_tip) * sin (needle_pos);
 
-	gauge->needle_coords[1].x = xc + (n_width) *cos(needle_pos);
-	gauge->needle_coords[1].y = yc + (n_width) *sin(needle_pos);
+	gauge->needle_coords[1].x = xc + (n_width) * sin(needle_pos);
+	gauge->needle_coords[1].y = yc + (n_width) * -cos(needle_pos);
 
-	gauge->needle_coords[2].x = xc + (n_tail) * -sin (needle_pos);
-	gauge->needle_coords[2].y = yc + (n_tail) * cos (needle_pos);
-	gauge->needle_coords[3].x = xc - (n_width) * cos (needle_pos);
-	gauge->needle_coords[3].y = yc - (n_width) * sin (needle_pos);
+	gauge->needle_coords[2].x = xc + (n_tail) * -cos (needle_pos);
+	gauge->needle_coords[2].y = yc + (n_tail) * -sin (needle_pos);
+	gauge->needle_coords[3].x = xc + (n_width) * -sin (needle_pos);
+	gauge->needle_coords[3].y = yc + (n_width) * cos (needle_pos);
 	gauge->needle_polygon_points = 4;
 
 	/* Draw the needle */
@@ -448,7 +439,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	gdk_draw_polygon(gauge->pixmap,
 			gauge->gc,
 			TRUE,gauge->needle_coords,4);
-
+#endif
 }
 
 
@@ -639,10 +630,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 {
 #ifdef HAVE_CAIRO
 	cairo_t *cr = NULL;
-	gfloat arc = 0.0;
 	double dashes[2] = {4.0,4.0};
-	gfloat radians_per_major_tick = 0.0;
-	gfloat radians_per_minor_tick = 0.0;
+	gfloat deg_per_major_tick = 0.0;
+	gfloat deg_per_minor_tick = 0.0;
 	cairo_font_weight_t weight;
 	cairo_font_slant_t slant;
 	gchar * tmpbuf = NULL;
@@ -750,7 +740,6 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 	cairo_fill(cr);
 
 	/* The warning color ranges */
-	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
 	for (i=0;i<gauge->c_ranges->len;i++)
 	{
 		range = g_array_index(gauge->c_ranges,MtxColorRange *, i);
@@ -759,11 +748,11 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				range->color.blue/65535.0);
 		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
 		angle1 = (range->lowpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
-		angle2= (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
+		angle2 = (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
 		//printf("gauge color range should be from %f, to %f of full scale\n",angle1, angle2);
 		lwidth = gauge->radius*range->lwidth < 1 ? 1: gauge->radius*range->lwidth;
 		cairo_set_line_width (cr, lwidth);
-		cairo_arc(cr, gauge->xc, gauge->yc, (range->inset * gauge->radius),gauge->start_radian+(angle1*(gauge->stop_radian-gauge->start_radian)), gauge->start_radian+(angle2*(gauge->stop_radian-gauge->start_radian)));
+		cairo_arc(cr, gauge->xc, gauge->yc, (range->inset * gauge->radius),(gauge->start_angle+(angle1*(gauge->sweep_angle)))*(M_PI/180.0), (gauge->start_angle+(angle2*(gauge->sweep_angle)))*(M_PI/180.0));
 
 		cairo_stroke(cr);
 
@@ -778,11 +767,11 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				tgroup->maj_tick_color.green/65535.0,
 				tgroup->maj_tick_color.blue/65535.0);
 
-		radians_per_major_tick = (tgroup->stop_angle - tgroup->start_angle)/(float)(tgroup->num_maj_ticks-1);
-		radians_per_minor_tick = radians_per_major_tick/(float)(1+tgroup->num_min_ticks);
+		deg_per_major_tick = (tgroup->sweep_angle)/(float)(tgroup->num_maj_ticks-1);
+		deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
 
 		insetfrom = gauge->radius * tgroup->maj_tick_inset;
-		counter = tgroup->start_angle;
+		counter = tgroup->start_angle *(M_PI/180.0);
 		if (tgroup->text)
 		{
 			vector = g_strsplit(tgroup->text,",",-1);
@@ -846,7 +835,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				cairo_set_line_width (cr, lwidth);
 				for (k=1;k<=tgroup->num_min_ticks;k++)
 				{
-					subcounter = k*radians_per_minor_tick;
+					subcounter = (k*deg_per_minor_tick)*(M_PI/180.0);
 					cairo_move_to (cr,
 							gauge->xc + (gauge->radius - mintick_inset) * cos (counter+subcounter),
 							gauge->yc + (gauge->radius - mintick_inset) * sin (counter+subcounter));
@@ -858,7 +847,7 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				cairo_restore (cr); /* stack-pen-size */
 			}
 
-			counter += radians_per_major_tick;
+			counter += (deg_per_major_tick)*(M_PI/180);
 		}
 		g_strfreev(vector);
 	}
@@ -941,11 +930,11 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 				cairo_scale(cr,
 						((MtxArc *)poly->data)->width*gauge->radius,
 						((MtxArc *)poly->data)->height*gauge->radius);
-				cairo_arc_negative(cr,
+				cairo_arc(cr,
 						0.0,
 						0.0,
 						1.0,
-						-((MtxArc *)poly->data)->start_angle * (M_PI/180.0),-(((MtxArc *)poly->data)->sweep_angle+((MtxArc *)poly->data)->start_angle)*(M_PI/180));
+						((MtxArc *)poly->data)->start_angle * (M_PI/180.0),(((MtxArc *)poly->data)->sweep_angle+((MtxArc *)poly->data)->start_angle)*(M_PI/180));
 				if (poly->filled)
 				{
 					cairo_line_to(cr,0,0);
@@ -989,8 +978,9 @@ void cairo_generate_gauge_background(GtkWidget *widget)
  */
 void gdk_generate_gauge_background(GtkWidget *widget)
 {
-	gfloat radians_per_major_tick = 0.0;
-	gfloat radians_per_minor_tick = 0.0;
+#ifndef HAVE_CAIRO
+	gfloat deg_per_major_tick = 0.0;
+	gfloat deg_per_minor_tick = 0.0;
 	gint w = 0;
 	gint h = 0;
 	gint i = 0;
@@ -1000,7 +990,6 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 	gfloat rad = 0.0;
 	gchar **vector = NULL;
 	gint lwidth = 0;
-	gfloat arc = 0.0;
 	gint inset = 0;
 	gint insetfrom = 0;
 	gfloat tmpf = 0.0;
@@ -1227,22 +1216,21 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			0,360*64);
 
 	/* The warning color ranges */
-	arc = (gauge->stop_radian - gauge->start_radian) / (2 * M_PI);
 	for (i=0;i<gauge->c_ranges->len;i++)
 	{
 		range = g_array_index(gauge->c_ranges,MtxColorRange *, i);
 		gdk_gc_set_rgb_fg_color(gauge->gc,&range->color);
 		/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
-		span = gauge->stop_radian - gauge->start_radian;
+		span = gauge->sweep_angle;
 		angle1 = (range->lowpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
 		angle2 = (range->highpoint-gauge->lbound)/(gauge->ubound-gauge->lbound);
 
-		/* positions of the range in radians */
-		start_pos = gauge->start_radian+(angle1*span);
-		stop_pos = gauge->start_radian+(angle2*span);
+		/* positions of the range in degrees */
+		start_pos = gauge->start_angle+(angle1*span);
+		stop_pos = gauge->start_angle+(angle2*span);
 		/* Converted to funky GDK units */
-		start_angle = -start_pos*(180/M_PI)*64;
-		span = - (stop_pos-start_pos)*(180/M_PI)*64;
+		start_angle = -start_pos*64;
+		span = -(stop_pos-start_pos)*64;
 
 		lwidth = gauge->radius*range->lwidth < 1 ? 1: gauge->radius*range->lwidth;
 		gdk_gc_set_line_attributes(gauge->gc,lwidth,
@@ -1258,13 +1246,12 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				span);
 	}
 
-
 	/* NEW STYLE gauge ticks */
 	for (i=0;i<gauge->tick_groups->len;i++)
 	{
 		tgroup = g_array_index(gauge->tick_groups,MtxTickGroup *, i);
-		radians_per_major_tick = (tgroup->stop_angle - tgroup->start_angle)/(float)(tgroup->num_maj_ticks-1);
-		radians_per_minor_tick = radians_per_major_tick/(float)(1+tgroup->num_min_ticks);
+		deg_per_major_tick = tgroup->sweep_angle/(float)(tgroup->num_maj_ticks-1);
+		deg_per_minor_tick = deg_per_major_tick/(float)(1+tgroup->num_min_ticks);
 		/* Major ticks first */
 		insetfrom = gauge->radius * tgroup->maj_tick_inset;
 		count = 0;
@@ -1278,7 +1265,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			pango_layout_set_font_description(gauge->layout,gauge->font_desc);
 		}
 
-		counter = tgroup->start_angle;
+		counter = (tgroup->start_angle)*(M_PI/180);
 		for (j=0;j<tgroup->num_maj_ticks;j++)
 		{
 			inset = tgroup->maj_tick_length * gauge->radius;
@@ -1325,7 +1312,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 						GDK_JOIN_BEVEL);
 				for (k=1;k<=tgroup->num_min_ticks;k++)
 				{
-					subcounter = k*radians_per_minor_tick;
+					subcounter = (k*deg_per_minor_tick)*(M_PI/180);
 					gdk_draw_line(gauge->bg_pixmap,gauge->gc,
 
 							gauge->xc + (gauge->radius - mintick_inset) * cos (counter+subcounter),
@@ -1336,7 +1323,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 				}
 
 			}
-			counter += radians_per_major_tick;
+			counter += (deg_per_major_tick)*(M_PI/180);
 
 		}
 	}
@@ -1394,8 +1381,8 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 						gauge->yc+((MtxArc *)poly->data)->y*gauge->radius-(((MtxArc *)poly->data)->height*gauge->radius),
 						2*((MtxArc *)poly->data)->width*gauge->radius,
 						2*((MtxArc *)poly->data)->height*gauge->radius,
-						((MtxArc *)poly->data)->start_angle,
-						((MtxArc *)poly->data)->sweep_angle*64);
+						-((MtxArc *)poly->data)->start_angle*64,
+						-((MtxArc *)poly->data)->sweep_angle*64);
 				break;
 			case MTX_GENPOLY:
 				num_points = ((MtxGenPoly *)poly->data)->num_points;
@@ -1417,7 +1404,7 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		}
 	}
 
-
+#endif
 }
 
 

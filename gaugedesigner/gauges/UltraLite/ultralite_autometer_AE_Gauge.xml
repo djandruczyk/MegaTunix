@@ -11,8 +11,8 @@
   <precision>3</precision>
   <width>226</width>
   <height>198</height>
-  <start_deg>-191.367905</start_deg>
-  <stop_deg>-156.990433</stop_deg>
+  <start_angle>-191.367905</start_angle>
+  <sweep_angle>-156.990433</sweep_angle>
   <start_radian>3.340000</start_radian>
   <stop_radian>6.080000</stop_radian>
   <lbound>100.000000</lbound>
@@ -176,6 +176,6 @@
     <min_tick_length>0.074000</min_tick_length>
     <min_tick_width>0.065000</min_tick_width>
     <start_angle>3.340000</start_angle>
-    <stop_angle>6.080000</stop_angle>
+    <sweep_angle>6.080000</sweep_angle>
   </tick_group>
 </gauge>

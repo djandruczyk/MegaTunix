@@ -118,7 +118,7 @@ typedef enum
 	TG_MIN_TICK_LENGTH,
 	TG_MIN_TICK_WIDTH,
 	TG_START_ANGLE,
-	TG_STOP_ANGLE,
+	TG_SWEEP_ANGLE,
 	TG_NUM_FIELDS,
 }TgField;
 
@@ -218,7 +218,7 @@ struct _MtxTickGroup
 	gfloat min_tick_width;
 	gfloat min_tick_length;
 	gfloat start_angle;
-	gfloat stop_angle;
+	gfloat sweep_angle;
 };
 
 
@@ -377,10 +377,8 @@ struct _MtxGaugeFace
 	gfloat text_xpos[NUM_TEXTS];/* Array of X offsets for strings */
 	gfloat text_ypos[NUM_TEXTS];/* Array of X offsets for strings */
 	gint precision;		/*! number of decimal places for val */
-	gfloat start_deg; 	/*! GDK Start point in degrees (CCW) */
-	gfloat stop_deg;	/*! GDK Stop point in degrees (CCW) */
-	gfloat start_radian;	/*! CAIRO Start angle in radians (CW) */
-	gfloat stop_radian;	/*! CAIRO Stop Angle in radians (CW) */
+	gfloat start_angle; 	/*! Start point, (Cairo, CW rotation) */
+	gfloat sweep_angle;	/*! Sweep of gauge (cairo, CW increasing) */
 	gfloat value;		/*! Value represneting needle position */
 	gfloat lbound;		/*! Lower Bound to clamp at */
 	gfloat ubound;		/*! Upper Bound to Clamp at */
@@ -391,8 +389,13 @@ struct _MtxGaugeFace
 	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
 	gfloat needle_length;	/*! % of rad length of main needle */
 	gint needle_polygon_points;
+#ifdef HAVE_CAIRO
+	MtxPoint needle_coords[4];	/*! 4 point needle for now */
+	MtxPoint last_needle_coords[4];	/*! 4 point needle for now */
+#else
 	GdkPoint needle_coords[4];	/*! 4 point needle for now */
 	GdkPoint last_needle_coords[4];	/*! 4 point needle for now */
+#endif
 };
 
 struct _MtxGaugeFaceClass
@@ -455,14 +458,10 @@ gchar * mtx_gauge_face_get_font(MtxGaugeFace *gauge, TextIndex index);
 
 void mtx_gauge_face_set_font_scale (MtxGaugeFace *gauge, TextIndex, gfloat scale);
 gfloat mtx_gauge_face_get_font_scale (MtxGaugeFace *gauge, TextIndex);
-gboolean mtx_gauge_face_get_span_rad (MtxGaugeFace *gauge, gfloat *start_radian, gfloat *stop_radian);
-gboolean mtx_gauge_face_get_span_deg (MtxGaugeFace *gauge, gfloat *start_deg, gfloat *stop_deg);
-void mtx_gauge_face_set_span_rad (MtxGaugeFace *gauge, gfloat start_radian, gfloat stop_radian);
-void mtx_gauge_face_set_span_deg (MtxGaugeFace *gauge, gfloat start_deg, gfloat stop_deg);
-void mtx_gauge_face_set_lspan_rad (MtxGaugeFace *gauge, gfloat start_radian);
-void mtx_gauge_face_set_lspan_deg (MtxGaugeFace *gauge, gfloat start_deg);
-void mtx_gauge_face_set_uspan_rad (MtxGaugeFace *gauge, gfloat stop_radian);
-void mtx_gauge_face_set_uspan_deg (MtxGaugeFace *gauge, gfloat stop_deg);
+gboolean mtx_gauge_face_get_angle_span (MtxGaugeFace *gauge, gfloat *start_angle, gfloat *sweep_angle);
+void mtx_gauge_face_set_angle_span (MtxGaugeFace *gauge, gfloat start_angle, gfloat sweep_angle);
+void mtx_gauge_face_set_start_angle (MtxGaugeFace *gauge, gfloat start_angle);
+void mtx_gauge_face_set_sweep_angle (MtxGaugeFace *gauge, gfloat sweep_angle);
 void mtx_gauge_face_set_needle_width (MtxGaugeFace *gauge, gfloat width);
 gfloat mtx_gauge_face_get_needle_width (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat width);

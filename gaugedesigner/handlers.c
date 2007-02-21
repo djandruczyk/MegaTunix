@@ -275,7 +275,7 @@ EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer dat
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_tail_spin")),"handler",GINT_TO_POINTER(NEEDLE_TAIL));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_WIDTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"start_angle_spin")),"handler",GINT_TO_POINTER(START_ANGLE));
-	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"stop_angle_spin")),"handler",GINT_TO_POINTER(STOP_ANGLE));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"sweep_angle_spin")),"handler",GINT_TO_POINTER(SWEEP_ANGLE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"lbound_spin")),"handler",GINT_TO_POINTER(LBOUND));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"ubound_spin")),"handler",GINT_TO_POINTER(UBOUND));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"antialiased_check")),"handler",GINT_TO_POINTER(AA));
@@ -315,11 +315,11 @@ void update_general_controls()
 	widget = glade_xml_get_widget(gen_xml,"needle_tail_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),mtx_gauge_face_get_needle_tail(g));
 
-	mtx_gauge_face_get_span_rad(g,&tmp1,&tmp2);
+	mtx_gauge_face_get_angle_span(g,&tmp1,&tmp2);
 	widget = glade_xml_get_widget(gen_xml,"start_angle_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
-	widget = glade_xml_get_widget(gen_xml,"stop_angle_spin");
+	widget = glade_xml_get_widget(gen_xml,"sweep_angle_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp2);
 
 	mtx_gauge_face_get_bounds(g,&tmp1,&tmp2);
@@ -365,7 +365,7 @@ void reset_general_controls()
 	widget = glade_xml_get_widget(gen_xml,"start_angle_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
-	widget = glade_xml_get_widget(gen_xml,"stop_angle_spin");
+	widget = glade_xml_get_widget(gen_xml,"sweep_angle_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),0);
 
 	widget = glade_xml_get_widget(gen_xml,"lbound_spin");
