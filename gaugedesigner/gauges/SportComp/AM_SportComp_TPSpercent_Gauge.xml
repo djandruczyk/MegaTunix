@@ -9,12 +9,10 @@
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>0</precision>
-  <width>226</width>
-  <height>198</height>
-  <start_angle>-135.218033</start_angle>
-  <sweep_angle>-265.852417</sweep_angle>
-  <start_radian>2.360000</start_radian>
-  <stop_radian>7.000000</stop_radian>
+  <width>357</width>
+  <height>379</height>
+  <main_start_angle>135.000000</main_start_angle>
+  <main_sweep_angle>270.000000</main_sweep_angle>
   <lbound>0.000000</lbound>
   <ubound>100.000000</ubound>
   <value_font>arial Bold</value_font>
@@ -48,7 +46,7 @@
     <color>55769 55769 55769</color>
   </text_block>
   <tick_group>
-    <font>Sans</font>
+    <font>Arial Bold</font>
     <font_scale>0.135000</font_scale>
     <text>0,10,20,30,40,50,60,70,80,90,100</text>
     <text_inset>0.280000</text_inset>
@@ -63,7 +61,7 @@
     <min_tick_inset>0.150000</min_tick_inset>
     <min_tick_length>0.065000</min_tick_length>
     <min_tick_width>0.120000</min_tick_width>
-    <start_angle>2.360000</start_angle>
-    <sweep_angle>7.000000</sweep_angle>
+    <start_angle>135.000000</start_angle>
+    <sweep_angle>270.000000</sweep_angle>
   </tick_group>
 </gauge>

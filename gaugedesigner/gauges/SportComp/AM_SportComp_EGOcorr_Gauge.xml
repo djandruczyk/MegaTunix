@@ -9,12 +9,10 @@
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>0</precision>
-  <width>226</width>
-  <height>198</height>
-  <start_angle>-135.218033</start_angle>
-  <sweep_angle>-265.852417</sweep_angle>
-  <start_radian>2.360000</start_radian>
-  <stop_radian>7.000000</stop_radian>
+  <width>357</width>
+  <height>379</height>
+  <main_start_angle>135.000000</main_start_angle>
+  <main_sweep_angle>270.000000</main_sweep_angle>
   <lbound>50.000000</lbound>
   <ubound>150.000000</ubound>
   <value_font>arial Bold</value_font>
@@ -23,6 +21,27 @@
   <value_str_ypos>0.350000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
+  <color_range>
+    <lowpoint>50.000000</lowpoint>
+    <highpoint>70.000000</highpoint>
+    <lwidth>0.080000</lwidth>
+    <inset>0.820000</inset>
+    <color>63636 2956 2956</color>
+  </color_range>
+  <color_range>
+    <lowpoint>130.000000</lowpoint>
+    <highpoint>150.000000</highpoint>
+    <lwidth>0.080000</lwidth>
+    <inset>0.820000</inset>
+    <color>65535 0 0</color>
+  </color_range>
+  <color_range>
+    <lowpoint>90.000000</lowpoint>
+    <highpoint>110.000000</highpoint>
+    <lwidth>0.040000</lwidth>
+    <inset>0.834000</inset>
+    <color>547 64740 3249</color>
+  </color_range>
   <text_block>
     <font>arial Bold</font>
     <text>EGO Correction</text>
@@ -63,28 +82,7 @@
     <min_tick_inset>0.150000</min_tick_inset>
     <min_tick_length>0.065000</min_tick_length>
     <min_tick_width>0.108000</min_tick_width>
-    <start_angle>2.360000</start_angle>
-    <sweep_angle>7.000000</sweep_angle>
+    <start_angle>135.000000</start_angle>
+    <sweep_angle>270.000000</sweep_angle>
   </tick_group>
-  <color_range>
-    <lowpoint>50.000000</lowpoint>
-    <highpoint>70.000000</highpoint>
-    <lwidth>0.080000</lwidth>
-    <inset>0.820000</inset>
-    <color>63636 2956 2956</color>
-  </color_range>
-  <color_range>
-    <lowpoint>130.000000</lowpoint>
-    <highpoint>150.000000</highpoint>
-    <lwidth>0.080000</lwidth>
-    <inset>0.820000</inset>
-    <color>65535 0 0</color>
-  </color_range>
-  <color_range>
-    <lowpoint>90.000000</lowpoint>
-    <highpoint>110.000000</highpoint>
-    <lwidth>0.040000</lwidth>
-    <inset>0.834000</inset>
-    <color>547 64740 3249</color>
-  </color_range>
 </gauge>

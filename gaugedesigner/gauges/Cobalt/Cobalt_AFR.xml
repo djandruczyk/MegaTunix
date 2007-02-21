@@ -9,12 +9,10 @@
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>1</precision>
-  <width>226</width>
-  <height>198</height>
-  <start_angle>-135.000000</start_angle>
-  <sweep_angle>-270.000000</sweep_angle>
-  <start_radian>2.356194</start_radian>
-  <stop_radian>7.068583</stop_radian>
+  <width>354</width>
+  <height>254</height>
+  <main_start_angle>135.000000</main_start_angle>
+  <main_sweep_angle>270.000000</main_sweep_angle>
   <lbound>10.000000</lbound>
   <ubound>20.000000</ubound>
   <value_font>arial Bold</value_font>
@@ -23,6 +21,34 @@
   <value_str_ypos>0.650000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
+  <color_range>
+    <lowpoint>10.000000</lowpoint>
+    <highpoint>20.000000</highpoint>
+    <lwidth>0.035000</lwidth>
+    <inset>0.740000</inset>
+    <color>0 18247 43947</color>
+  </color_range>
+  <color_range>
+    <lowpoint>10.000000</lowpoint>
+    <highpoint>13.700000</highpoint>
+    <lwidth>0.060000</lwidth>
+    <inset>0.825000</inset>
+    <color>65535 0 0</color>
+  </color_range>
+  <color_range>
+    <lowpoint>13.700000</lowpoint>
+    <highpoint>15.700000</highpoint>
+    <lwidth>0.060000</lwidth>
+    <inset>0.825000</inset>
+    <color>877 65535 0</color>
+  </color_range>
+  <color_range>
+    <lowpoint>15.700000</lowpoint>
+    <highpoint>20.000000</highpoint>
+    <lwidth>0.060000</lwidth>
+    <inset>0.825000</inset>
+    <color>62865 31750 0</color>
+  </color_range>
   <text_block>
     <font>Crillee</font>
     <text>AIR/FUEL</text>
@@ -55,35 +81,7 @@
     <min_tick_inset>0.150000</min_tick_inset>
     <min_tick_length>0.050000</min_tick_length>
     <min_tick_width>0.120000</min_tick_width>
-    <start_angle>-135.0</start_angle>
-    <sweep_angle>-270.0</sweep_angle>
+    <start_angle>135.000000</start_angle>
+    <sweep_angle>270.000000</sweep_angle>
   </tick_group>
-  <color_range>
-    <lowpoint>10.000000</lowpoint>
-    <highpoint>20.000000</highpoint>
-    <lwidth>0.035000</lwidth>
-    <inset>0.740000</inset>
-    <color>0 18247 43947</color>
-  </color_range>
-  <color_range>
-    <lowpoint>10.000000</lowpoint>
-    <highpoint>13.700000</highpoint>
-    <lwidth>0.060000</lwidth>
-    <inset>0.825000</inset>
-    <color>65535 0 0</color>
-  </color_range>
-  <color_range>
-    <lowpoint>13.700000</lowpoint>
-    <highpoint>15.700000</highpoint>
-    <lwidth>0.060000</lwidth>
-    <inset>0.825000</inset>
-    <color>877 65535 0</color>
-  </color_range>
-  <color_range>
-    <lowpoint>15.700000</lowpoint>
-    <highpoint>20.000000</highpoint>
-    <lwidth>0.060000</lwidth>
-    <inset>0.825000</inset>
-    <color>62865 31750 0</color>
-  </color_range>
 </gauge>

@@ -9,12 +9,10 @@
   <gradient_begin_color>47288 47288 47288</gradient_begin_color>
   <gradient_end_color>47288 47288 47288</gradient_end_color>
   <precision>2</precision>
-  <width>226</width>
-  <height>198</height>
-  <start_angle>-194.805649</start_angle>
-  <sweep_angle>-148.969025</sweep_angle>
-  <start_radian>3.400000</start_radian>
-  <stop_radian>6.000000</stop_radian>
+  <width>357</width>
+  <height>379</height>
+  <main_start_angle>-170.000000</main_start_angle>
+  <main_sweep_angle>160.000000</main_sweep_angle>
   <lbound>0.000000</lbound>
   <ubound>160.000000</ubound>
   <value_font>arial Bold</value_font>
@@ -76,64 +74,8 @@
     <text>0</text>
     <font_scale>0.150000</font_scale>
     <x_pos>-0.765000</x_pos>
-    <y_pos>-0.100000</y_pos>
+    <y_pos>-0.050000</y_pos>
     <color>3249 2036 2036</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>I</text>
-    <font_scale>0.150000</font_scale>
-    <x_pos>0.650000</x_pos>
-    <y_pos>0.321000</y_pos>
-    <color>7791 1723 1723</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>I</text>
-    <font_scale>0.150000</font_scale>
-    <x_pos>-0.650000</x_pos>
-    <y_pos>0.321000</y_pos>
-    <color>4081 2261 2261</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>o</text>
-    <font_scale>0.150000</font_scale>
-    <x_pos>0.650000</x_pos>
-    <y_pos>0.321000</y_pos>
-    <color>4385 1957 1957</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>o</text>
-    <font_scale>0.150000</font_scale>
-    <x_pos>-0.650000</x_pos>
-    <y_pos>0.321000</y_pos>
-    <color>4003 3396 3396</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>o</text>
-    <font_scale>0.250000</font_scale>
-    <x_pos>0.650000</x_pos>
-    <y_pos>0.321000</y_pos>
-    <color>4160 1126 1126</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>o</text>
-    <font_scale>0.250000</font_scale>
-    <x_pos>-0.650000</x_pos>
-    <y_pos>0.321000</y_pos>
-    <color>5745 2711 2711</color>
-  </text_block>
-  <text_block>
-    <font>Arial Black</font>
-    <text>o</text>
-    <font_scale>0.250000</font_scale>
-    <x_pos>0.000000</x_pos>
-    <y_pos>0.000000</y_pos>
-    <color>60909 15420 2827</color>
   </text_block>
   <text_block>
     <font>Arial Black</font>
@@ -148,7 +90,7 @@
     <text>160</text>
     <font_scale>0.150000</font_scale>
     <x_pos>0.749000</x_pos>
-    <y_pos>-0.100000</y_pos>
+    <y_pos>-0.050000</y_pos>
     <color>1285 514 514</color>
   </text_block>
   <tick_group>
@@ -167,7 +109,43 @@
     <min_tick_inset>0.316000</min_tick_inset>
     <min_tick_length>0.074000</min_tick_length>
     <min_tick_width>0.075000</min_tick_width>
-    <start_angle>3.400000</start_angle>
-    <sweep_angle>6.000000</sweep_angle>
+    <start_angle>-170.000000</start_angle>
+    <sweep_angle>160.000000</sweep_angle>
   </tick_group>
+  <polygon>
+    <color>0 0 0</color>
+    <filled>1</filled>
+    <line_width>0.000000</line_width>
+    <line_style>0</line_style>
+    <join_style>0</join_style>
+    <Circle>
+      <x>0.650000</x>
+      <y>0.320000</y>
+      <radius>0.070000</radius>
+    </Circle>
+  </polygon>
+  <polygon>
+    <color>0 0 0</color>
+    <filled>1</filled>
+    <line_width>0.000000</line_width>
+    <line_style>0</line_style>
+    <join_style>0</join_style>
+    <Circle>
+      <x>-0.650000</x>
+      <y>0.320000</y>
+      <radius>0.070000</radius>
+    </Circle>
+  </polygon>
+  <polygon>
+    <color>61166 15163 2570</color>
+    <filled>1</filled>
+    <line_width>0.000000</line_width>
+    <line_style>0</line_style>
+    <join_style>0</join_style>
+    <Circle>
+      <x>0.000000</x>
+      <y>0.000000</y>
+      <radius>0.070000</radius>
+    </Circle>
+  </polygon>
 </gauge>

@@ -9,18 +9,32 @@
   <gradient_begin_color>57607 57607 57607</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>0</precision>
-  <width>226</width>
-  <height>198</height>
-  <start_angle>-135.000000</start_angle>
-  <sweep_angle>-270.000000</sweep_angle>
+  <width>357</width>
+  <height>379</height>
+  <main_start_angle>135.000000</main_start_angle>
+  <main_sweep_angle>270.000000</main_sweep_angle>
   <lbound>0.000000</lbound>
   <ubound>100.000000</ubound>
   <value_font>Impact</value_font>
   <value_font_scale>0.200000</value_font_scale>
-  <value_str_xpos>0.424000</value_str_xpos>
-  <value_str_ypos>0.394000</value_str_ypos>
+  <value_str_xpos>0.000000</value_str_xpos>
+  <value_str_ypos>-0.104000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
+  <color_range>
+    <lowpoint>0.000000</lowpoint>
+    <highpoint>100.000000</highpoint>
+    <lwidth>0.020000</lwidth>
+    <inset>0.829000</inset>
+    <color>1799 2056 25186</color>
+  </color_range>
+  <color_range>
+    <lowpoint>0.000000</lowpoint>
+    <highpoint>100.000000</highpoint>
+    <lwidth>0.017000</lwidth>
+    <inset>0.794000</inset>
+    <color>1799 2056 25186</color>
+  </color_range>
   <text_block>
     <font>Impact</font>
     <text>FUEL</text>
@@ -69,21 +83,7 @@
     <min_tick_inset>0.146000</min_tick_inset>
     <min_tick_length>0.054000</min_tick_length>
     <min_tick_width>0.125000</min_tick_width>
-    <start_angle>-135.0</start_angle>
-    <sweep_angle>-270.0</sweep_angle>
+    <start_angle>135.000000</start_angle>
+    <sweep_angle>270.000000</sweep_angle>
   </tick_group>
-  <color_range>
-    <lowpoint>0.000000</lowpoint>
-    <highpoint>100.000000</highpoint>
-    <lwidth>0.020000</lwidth>
-    <inset>0.829000</inset>
-    <color>1799 2056 25186</color>
-  </color_range>
-  <color_range>
-    <lowpoint>0.000000</lowpoint>
-    <highpoint>100.000000</highpoint>
-    <lwidth>0.017000</lwidth>
-    <inset>0.794000</inset>
-    <color>1799 2056 25186</color>
-  </color_range>
 </gauge>

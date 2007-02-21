@@ -9,12 +9,10 @@
   <gradient_begin_color>65535 65535 65535</gradient_begin_color>
   <gradient_end_color>0 0 0</gradient_end_color>
   <precision>0</precision>
-  <width>226</width>
-  <height>198</height>
-  <start_angle>-135.000000</start_angle>
-  <sweep_angle>-270.000000</sweep_angle>
-  <start_radian>2.356194</start_radian>
-  <stop_radian>7.068583</stop_radian>
+  <width>357</width>
+  <height>379</height>
+  <main_start_angle>135.000000</main_start_angle>
+  <main_sweep_angle>270.000000</main_sweep_angle>
   <lbound>0.000000</lbound>
   <ubound>8000.000000</ubound>
   <value_font>arial Bold</value_font>
@@ -23,6 +21,20 @@
   <value_str_ypos>0.350000</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
+  <color_range>
+    <lowpoint>5500.000000</lowpoint>
+    <highpoint>6200.000000</highpoint>
+    <lwidth>0.070000</lwidth>
+    <inset>0.800000</inset>
+    <color>65194 50970 11930</color>
+  </color_range>
+  <color_range>
+    <lowpoint>6200.000000</lowpoint>
+    <highpoint>8000.000000</highpoint>
+    <lwidth>0.070000</lwidth>
+    <inset>0.800000</inset>
+    <color>60666 19164 7316</color>
+  </color_range>
   <text_block>
     <font>arial Bold</font>
     <text>RPM</text>
@@ -63,21 +75,7 @@
     <min_tick_inset>0.150000</min_tick_inset>
     <min_tick_length>0.050000</min_tick_length>
     <min_tick_width>0.120000</min_tick_width>
-    <start_angle>2.356194</start_angle>
-    <sweep_angle>7.068583</sweep_angle>
+    <start_angle>135.000000</start_angle>
+    <sweep_angle>270.000000</sweep_angle>
   </tick_group>
-  <color_range>
-    <lowpoint>5500.000000</lowpoint>
-    <highpoint>6200.000000</highpoint>
-    <lwidth>0.070000</lwidth>
-    <inset>0.800000</inset>
-    <color>65194 50970 11930</color>
-  </color_range>
-  <color_range>
-    <lowpoint>6200.000000</lowpoint>
-    <highpoint>8000.000000</highpoint>
-    <lwidth>0.070000</lwidth>
-    <inset>0.800000</inset>
-    <color>60666 19164 7316</color>
-  </color_range>
 </gauge>
