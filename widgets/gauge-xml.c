@@ -76,8 +76,6 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gchar *tmpbuf = NULL;
-	gfloat tmp1 = 0.0;
-	gfloat tmp2 = 0.0;
 	//gint i = 0;
 
 	/*
@@ -112,8 +110,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		if (GTK_IS_WINDOW(GTK_WIDGET(gauge)->parent))
 			gtk_window_resize((GtkWindow *)(((GtkWidget *)gauge)->parent),gauge->w,gauge->h);
 		generate_gauge_background(GTK_WIDGET(gauge));
-		mtx_gauge_face_get_bounds(MTX_GAUGE_FACE(gauge),&tmp1,&tmp2);
-		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmp1);
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),gauge->lbound);
 		mtx_gauge_face_redraw_canvas (gauge);
 
 		gauge->xml_filename = g_strdup(filename);

@@ -57,14 +57,6 @@ typedef enum
 }ColorIndex;
 
 
-/*! TextIndex enum,  for indexing into the textblock arrays */
-typedef enum	
-{
-	VALUE = 0,
-	NUM_TEXTS
-}TextIndex;
-
-
 /* Text Block enumeration for the individual fields */
 typedef enum
 {
@@ -133,6 +125,28 @@ typedef enum
 	CR_INSET,
 	CR_NUM_FIELDS,
 }CrField;
+
+/* General Attributes enumeration */
+typedef enum
+{
+	START_ANGLE = 0,
+	SWEEP_ANGLE,
+	LBOUND,
+	UBOUND,
+	VALUE_FONTSCALE,
+	VALUE_FONT,
+	VALUE_XPOS,
+	VALUE_YPOS,
+	NEEDLE_TAIL,
+	NEEDLE_LEN,
+	NEEDLE_TIP_WIDTH,
+	NEEDLE_TAIL_WIDTH,
+	PRECISION,
+	ANTIALIAS,
+	SHOW_VALUE,
+	NUM_ATTRIBUTES,
+}MtxGenAttr;
+
 
 typedef struct _MtxGaugeFace		MtxGaugeFace;
 typedef struct _MtxGaugeFaceClass	MtxGaugeFaceClass;
@@ -371,11 +385,11 @@ struct _MtxGaugeFace
 	GdkColormap *colormap;	/*! Colormap for GC's */
 	GdkColor colors[NUM_COLORS]; /*! Array of colors for specific
 					     parts of a gauge object */
-	gchar *txt_str[NUM_TEXTS];	/* Array of Text strings */
-	gchar *font_str[NUM_TEXTS];	/* Array of Font name strings */
-	gfloat font_scale[NUM_TEXTS];/* Array of font scales */
-	gfloat text_xpos[NUM_TEXTS];/* Array of X offsets for strings */
-	gfloat text_ypos[NUM_TEXTS];/* Array of X offsets for strings */
+	gchar *txt_str;		/* Array of Text strings */
+	gchar *value_font;	/* Array of Font name strings */
+	gfloat value_font_scale;/* Array of font scales */
+	gfloat value_xpos;	/* Array of X offsets for strings */
+	gfloat value_ypos;	/* Array of X offsets for strings */
 	gint precision;		/*! number of decimal places for val */
 	gfloat start_angle; 	/*! Start point, (Cairo, CW rotation) */
 	gfloat sweep_angle;	/*! Sweep of gauge (cairo, CW increasing) */
@@ -388,6 +402,8 @@ struct _MtxGaugeFace
 	gfloat needle_width;	/*! % of radius Needle width @ spin axis */
 	gfloat needle_tail;	/*! % of rad Length of "backside" of needle */
 	gfloat needle_length;	/*! % of rad length of main needle */
+	gfloat needle_tip_width;/*! % of rad width of needle tip */
+	gfloat needle_tail_width;/*! % of rad width of needle tip */
 	gint needle_polygon_points;
 #ifdef HAVE_CAIRO
 	MtxPoint needle_coords[4];	/*! 4 point needle for now */
@@ -407,10 +423,10 @@ GType mtx_gauge_face_get_type (void) G_GNUC_CONST;
 void generate_gauge_background(GtkWidget *);
 void update_gauge_position (GtkWidget *);
 GtkWidget* mtx_gauge_face_new ();
-void mtx_gauge_face_set_antialias (MtxGaugeFace *gauge, gboolean value);
-gboolean mtx_gauge_face_get_antialias (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_show_value (MtxGaugeFace *gauge, gboolean value);
-gboolean mtx_gauge_face_get_show_value (MtxGaugeFace *gauge);
+
+void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat value);
+gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat * value);
+
 void mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 float mtx_gauge_face_get_value (MtxGaugeFace *gauge);
 
@@ -441,31 +457,6 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *);
 void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, gint index);
 void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge);
 
-void mtx_gauge_face_set_text (MtxGaugeFace *gauge, TextIndex index, gchar * str);
-gchar * mtx_gauge_face_get_text (MtxGaugeFace *gauge, TextIndex index);
-void mtx_gauge_face_set_str_pos (MtxGaugeFace *gauge, TextIndex index, gfloat value1, gfloat value2);
-void mtx_gauge_face_set_str_xpos (MtxGaugeFace *gauge, TextIndex index, gfloat );
-void mtx_gauge_face_set_str_ypos (MtxGaugeFace *gauge, TextIndex index, gfloat );
-gboolean mtx_gauge_face_get_str_pos (MtxGaugeFace *gauge, TextIndex index, gfloat *value1, gfloat *value2);
-void mtx_gauge_face_set_precision(MtxGaugeFace *gauge, gint);
-gint mtx_gauge_face_get_precision(MtxGaugeFace *gauge);
-void mtx_gauge_face_set_bounds (MtxGaugeFace *gauge, gfloat value1, gfloat value2);
-gboolean mtx_gauge_face_get_bounds (MtxGaugeFace *gauge, gfloat *value1, gfloat *value2);
-void mtx_gauge_face_set_lbound (MtxGaugeFace *gauge, gfloat );
-void mtx_gauge_face_set_ubound (MtxGaugeFace *gauge, gfloat );
-void mtx_gauge_face_set_font(MtxGaugeFace *gauge, TextIndex index, gchar * font_name);
-gchar * mtx_gauge_face_get_font(MtxGaugeFace *gauge, TextIndex index);
-
-void mtx_gauge_face_set_font_scale (MtxGaugeFace *gauge, TextIndex, gfloat scale);
-gfloat mtx_gauge_face_get_font_scale (MtxGaugeFace *gauge, TextIndex);
-gboolean mtx_gauge_face_get_angle_span (MtxGaugeFace *gauge, gfloat *start_angle, gfloat *sweep_angle);
-void mtx_gauge_face_set_angle_span (MtxGaugeFace *gauge, gfloat start_angle, gfloat sweep_angle);
-void mtx_gauge_face_set_start_angle (MtxGaugeFace *gauge, gfloat start_angle);
-void mtx_gauge_face_set_sweep_angle (MtxGaugeFace *gauge, gfloat sweep_angle);
-void mtx_gauge_face_set_needle_width (MtxGaugeFace *gauge, gfloat width);
-gfloat mtx_gauge_face_get_needle_width (MtxGaugeFace *gauge);
-void mtx_gauge_face_set_needle_tail (MtxGaugeFace *gauge, gfloat width);
-gfloat mtx_gauge_face_get_needle_tail (MtxGaugeFace *gauge);
 void mtx_gauge_face_set_color (MtxGaugeFace *gauge, ColorIndex index, GdkColor color);
 GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, ColorIndex index);
 void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);

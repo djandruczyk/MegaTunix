@@ -99,10 +99,10 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tail = 0.083;  /* % of radius */
 	gauge->needle_length = 0.850; /* % of radius */
-	gauge->font_str[VALUE] = g_strdup("Bitstream Vera Sans");
-	gauge->text_xpos[VALUE] = 0.0;
-	gauge->text_ypos[VALUE] = 0.40;
-	gauge->font_scale[VALUE] = 0.2;
+	gauge->value_font = g_strdup("Bitstream Vera Sans");
+	gauge->value_xpos = 0.0;
+	gauge->value_ypos = 0.40;
+	gauge->value_font_scale = 0.2;
 	gauge->span = gauge->ubound - gauge->lbound;
 #ifdef HAVE_CAIRO
 	gauge->cr = NULL;
@@ -141,10 +141,10 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"main_sweep_angle", &gauge->sweep_angle);
 	g_object_set_data(G_OBJECT(gauge),"lbound", &gauge->lbound);
 	g_object_set_data(G_OBJECT(gauge),"ubound", &gauge->ubound);
-	g_object_set_data(G_OBJECT(gauge),"value_font", &gauge->font_str[VALUE]);
-	g_object_set_data(G_OBJECT(gauge),"value_font_scale", &gauge->font_scale[VALUE]);
-	g_object_set_data(G_OBJECT(gauge),"value_str_xpos", &gauge->text_xpos[VALUE]);
-	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", &gauge->text_ypos[VALUE]);
+	g_object_set_data(G_OBJECT(gauge),"value_font", &gauge->value_font);
+	g_object_set_data(G_OBJECT(gauge),"value_font_scale", &gauge->value_font_scale);
+	g_object_set_data(G_OBJECT(gauge),"value_str_xpos", &gauge->value_xpos);
+	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", &gauge->value_ypos);
 	g_object_set_data(G_OBJECT(gauge),"antialias", &gauge->antialias);
 	g_object_set_data(G_OBJECT(gauge),"show_value", &gauge->show_value);
 }
@@ -278,7 +278,7 @@ void cairo_update_gauge_position (GtkWidget *widget)
 		cairo_set_source_rgb (cr, gauge->colors[COL_VALUE_FONT].red/65535.0,
 				gauge->colors[COL_VALUE_FONT].green/65535.0,
 				gauge->colors[COL_VALUE_FONT].blue/65535.0);
-		tmpbuf = g_utf8_strup(gauge->font_str[VALUE],-1);
+		tmpbuf = g_utf8_strup(gauge->value_font,-1);
 		if (g_strrstr(tmpbuf,"BOLD"))
 			weight = CAIRO_FONT_WEIGHT_BOLD;
 		else
@@ -290,17 +290,17 @@ void cairo_update_gauge_position (GtkWidget *widget)
 		else
 			slant = CAIRO_FONT_SLANT_NORMAL;
 		g_free(tmpbuf);
-		cairo_select_font_face (cr, gauge->font_str[VALUE],  slant, weight);
+		cairo_select_font_face (cr, gauge->value_font,  slant, weight);
 
-		cairo_set_font_size (cr, (gauge->radius * gauge->font_scale[VALUE]));
+		cairo_set_font_size (cr, (gauge->radius * gauge->value_font_scale));
 
 		message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
 
 		cairo_text_extents (cr, message, &extents);
 
 		cairo_move_to (cr, 
-				gauge->xc-(extents.width/2 + extents.x_bearing)+(gauge->text_xpos[VALUE]*gauge->radius),
-				gauge->yc-(extents.height/2 + extents.y_bearing)+(gauge->text_ypos[VALUE]*gauge->radius));
+				gauge->xc-(extents.width/2 + extents.x_bearing)+(gauge->value_xpos*gauge->radius),
+				gauge->yc-(extents.height/2 + extents.y_bearing)+(gauge->value_ypos*gauge->radius));
 		cairo_show_text (cr, message);
 		g_free(message);
 

@@ -34,27 +34,16 @@ int main (int argc, char **argv)
 	gtk_widget_realize(gauge);
 	gtk_widget_show_all (window);
 
-	mtx_gauge_face_set_bounds (MTX_GAUGE_FACE (gauge), 0.0, 8000.0);
+	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),LBOUND, 0.0);
+	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),UBOUND, 8000.0);
 	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge), 0.0);
-	/* the nest two are the same thing in different units.  NOTE the
-	 * reverse sign on the deg version,  because of the fact that the
-	 * rendering routiens do things ass backwards
-	 */
-	mtx_gauge_face_set_angle_span (MTX_GAUGE_FACE (gauge),0 , 270);
-//	mtx_gauge_face_set_span_deg (MTX_GAUGE_FACE (gauge),0 , -270);
-	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.25*M_PI,  .25*M_PI);
-	//mtx_gauge_face_set_span_rad (MTX_GAUGE_FACE (gauge),  -1.0*M_PI,  .25*M_PI);
-	mtx_gauge_face_set_antialias (MTX_GAUGE_FACE (gauge), TRUE);
-	//mtx_gauge_face_set_show_value (MTX_GAUGE_FACE (gauge), FALSE);
-	//mtx_gauge_face_set_units_str (MTX_GAUGE_FACE (gauge), "Units");
+	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),START_ANGLE, 135.0);
+	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),SWEEP_ANGLE, 270.0);
+	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), ANTIALIAS, (gfloat)TRUE);
 	GdkColor color = { 0, 50000,50000,0};
-//	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 6000, 7000, color, 0.06, 0.785);;
 	color.red = 50000;
 	color.green = 0;
-//	mtx_gauge_face_set_text_block(MTX_GAUGE_FACE(gauge),"Bitstream Vera Sans", "NAME", 0.15, color,0,-0.35);
-//	mtx_gauge_face_set_color_range(MTX_GAUGE_FACE(gauge), 7000, 8000, color, 0.06, 0.785);;
-	mtx_gauge_face_set_precision (MTX_GAUGE_FACE (gauge), 0);
-
+	mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), PRECISION, (gfloat)1);
 	gtk_timeout_add(20,(GtkFunction)update_gauge,(gpointer)gauge);
 
 
@@ -93,7 +82,8 @@ gboolean update_gauge(gpointer data)
 
 	GtkWidget * gauge = data;
 	interval = (upper-lower)/100.0;
-	mtx_gauge_face_get_bounds(MTX_GAUGE_FACE (gauge),&lower,&upper);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
+	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);
 	cur_val = mtx_gauge_face_get_value(MTX_GAUGE_FACE (gauge));
 	if (cur_val >= upper)
 		rising = FALSE;
