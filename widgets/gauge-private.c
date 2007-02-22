@@ -259,6 +259,8 @@ void cairo_update_gauge_position (GtkWidget *widget)
 	gfloat n_width = 0.0;
 	gfloat n_tail = 0.0;
 	gfloat n_tip = 0.0;
+	gfloat tip_width = 0.0;
+	gfloat tail_width = 0.0;
 	gfloat xc = 0.0;
 	gfloat yc = 0.0;
 	cairo_t *cr = NULL;
@@ -318,41 +320,49 @@ void cairo_update_gauge_position (GtkWidget *widget)
 
 
 	cairo_set_source_rgb (cr, gauge->colors[COL_NEEDLE].red/65535.0,
-				gauge->colors[COL_NEEDLE].green/65535.0,
-				gauge->colors[COL_NEEDLE].blue/65535.0);
+			gauge->colors[COL_NEEDLE].green/65535.0,
+			gauge->colors[COL_NEEDLE].blue/65535.0);
 	cairo_set_line_width (cr, 1);
 
 	n_width = gauge->needle_width * gauge->radius;
 	n_tail = gauge->needle_tail * gauge->radius;
 	n_tip = gauge->needle_length * gauge->radius;
+	tip_width = gauge->needle_tip_width * gauge->radius;
+	tail_width = gauge->needle_tail_width * gauge->radius;
 	xc = gauge->xc;
 	yc = gauge->yc;
 
 	/* STORE needle coordinates to make the expese event a LOT more 
 	 * efficient */
-	for (i=0;i<4;i++)
+	for (i=0;i<6;i++)
 	{
 		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
 		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
 	}
-	gauge->needle_coords[0].x = xc + (n_tip) * cos (needle_pos);
-	gauge->needle_coords[0].y = yc + (n_tip) * sin (needle_pos);
+	gauge->needle_coords[0].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * -sin(needle_pos));
+	gauge->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
+	gauge->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
+	gauge->needle_coords[1].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * -cos(needle_pos));
+	
+	 gauge->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
+	 gauge->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
 
-	gauge->needle_coords[1].x = xc + (n_width) * sin(needle_pos);
-	gauge->needle_coords[1].y = yc + (n_width) * -cos(needle_pos);
+	 gauge->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
+	 gauge->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
+	 gauge->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
+	 gauge->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
+	 gauge->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
+	 gauge->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
+	 gauge->needle_polygon_points = 6;
 
-	gauge->needle_coords[2].x = xc + (n_tail) * -cos (needle_pos);
-	gauge->needle_coords[2].y = yc + (n_tail) * -sin (needle_pos);
-	gauge->needle_coords[3].x = xc + (n_width) * -sin (needle_pos);
-	gauge->needle_coords[3].y = yc + (n_width) * cos (needle_pos);
-	gauge->needle_polygon_points = 4;
-
-	cairo_move_to (cr, gauge->needle_coords[0].x,gauge->needle_coords[0].y);
-	cairo_line_to (cr, gauge->needle_coords[1].x,gauge->needle_coords[1].y);
-	cairo_line_to (cr, gauge->needle_coords[2].x,gauge->needle_coords[2].y);
-	cairo_line_to (cr, gauge->needle_coords[3].x,gauge->needle_coords[3].y);
-	cairo_fill_preserve (cr);
-	cairo_destroy(cr);
+	 cairo_move_to (cr, gauge->needle_coords[0].x,gauge->needle_coords[0].y);
+	 cairo_line_to (cr, gauge->needle_coords[1].x,gauge->needle_coords[1].y);
+	 cairo_line_to (cr, gauge->needle_coords[2].x,gauge->needle_coords[2].y);
+	 cairo_line_to (cr, gauge->needle_coords[3].x,gauge->needle_coords[3].y);
+	 cairo_line_to (cr, gauge->needle_coords[4].x,gauge->needle_coords[4].y);
+	 cairo_line_to (cr, gauge->needle_coords[5].x,gauge->needle_coords[5].y);
+	 cairo_fill_preserve (cr);
+	 cairo_destroy(cr);
 #endif
 }
 
@@ -373,6 +383,8 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	gint n_width = 0;
 	gint n_tail = 0;
 	gint n_tip = 0;
+	gint tip_width = 0;
+	gint tail_width = 0;
 	gchar * message = NULL;
 	gchar * tmpbuf = NULL;
 	PangoRectangle logical_rect;
@@ -394,7 +406,7 @@ void gdk_update_gauge_position (GtkWidget *widget)
 		gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_VALUE_FONT]);
 		message = g_strdup_printf("%.*f", gauge->precision,gauge->value);
 
-		tmpbuf = g_strdup_printf("%s %i",gauge->font_str[VALUE],(gint)(gauge->radius *gauge->font_scale[VALUE]*0.82));
+		tmpbuf = g_strdup_printf("%s %i",gauge->value_font,(gint)(gauge->radius *gauge->value_font_scale*0.82));
 		gauge->font_desc = pango_font_description_from_string(tmpbuf);
 		g_free(tmpbuf);
 		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
@@ -403,8 +415,8 @@ void gdk_update_gauge_position (GtkWidget *widget)
 		g_free(message);
 
 		gdk_draw_layout(gauge->pixmap,gauge->gc,
-				gauge->xc-(logical_rect.width/2)+(gauge->text_xpos[VALUE]*gauge->radius),
-				gauge->yc-(logical_rect.height/2)+(gauge->text_ypos[VALUE]*gauge->radius),gauge->layout);
+				gauge->xc-(logical_rect.width/2)+(gauge->value_xpos*gauge->radius),
+				gauge->yc-(logical_rect.height/2)+(gauge->value_ypos*gauge->radius),gauge->layout);
 	}
 
 	gdk_gc_set_line_attributes(gauge->gc,1,
@@ -420,30 +432,37 @@ void gdk_update_gauge_position (GtkWidget *widget)
 	n_width = gauge->needle_width * gauge->radius;
 	n_tail = gauge->needle_tail * gauge->radius;
 	n_tip = gauge->needle_length * gauge->radius;
+	tip_width = gauge->needle_tip_width * gauge->radius;
+	tail_width = gauge->needle_tail_width * gauge->radius;
 
 	/* Four POINT needle,  point 0 is the tip (easiest to find) */
-	for (i=0;i<4;i++)
+	for (i=0;i<6;i++)
 	{
 		gauge->last_needle_coords[i].x = gauge->needle_coords[i].x;
 		gauge->last_needle_coords[i].y = gauge->needle_coords[i].y;
 	}
-	gauge->needle_coords[0].x = xc + (n_tip) * cos (needle_pos);
-	gauge->needle_coords[0].y = yc + (n_tip) * sin (needle_pos);
+	gauge->needle_coords[0].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * -sin(needle_pos));
+	gauge->needle_coords[0].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * cos(needle_pos));
+	gauge->needle_coords[1].x = xc + ((n_tip) * cos (needle_pos))+((tip_width) * sin(needle_pos));
+	gauge->needle_coords[1].y = yc + ((n_tip) * sin (needle_pos))+((tip_width) * -cos(needle_pos));
+	
+	 gauge->needle_coords[2].x = xc + (n_width) * sin(needle_pos);
+	 gauge->needle_coords[2].y = yc + (n_width) * -cos(needle_pos);
 
-	gauge->needle_coords[1].x = xc + (n_width) * sin(needle_pos);
-	gauge->needle_coords[1].y = yc + (n_width) * -cos(needle_pos);
-
-	gauge->needle_coords[2].x = xc + (n_tail) * -cos (needle_pos);
-	gauge->needle_coords[2].y = yc + (n_tail) * -sin (needle_pos);
-	gauge->needle_coords[3].x = xc + (n_width) * -sin (needle_pos);
-	gauge->needle_coords[3].y = yc + (n_width) * cos (needle_pos);
-	gauge->needle_polygon_points = 4;
+	 gauge->needle_coords[3].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * sin (needle_pos));
+	 gauge->needle_coords[3].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * -cos (needle_pos));
+	 gauge->needle_coords[4].x = xc + ((n_tail) * -cos (needle_pos))+((tail_width) * -sin (needle_pos));
+	 gauge->needle_coords[4].y = yc + ((n_tail) * -sin (needle_pos))+((tail_width) * cos (needle_pos));
+	 gauge->needle_coords[5].x = xc + (n_width) * -sin (needle_pos);
+	 gauge->needle_coords[5].y = yc + (n_width) * cos (needle_pos);
+	 gauge->needle_polygon_points = 6;
 
 	/* Draw the needle */
 	gdk_gc_set_rgb_fg_color(gauge->gc,&gauge->colors[COL_NEEDLE]);
 	gdk_draw_polygon(gauge->pixmap,
 			gauge->gc,
-			TRUE,gauge->needle_coords,4);
+			TRUE,gauge->needle_coords,
+			gauge->needle_polygon_points);
 #endif
 }
 

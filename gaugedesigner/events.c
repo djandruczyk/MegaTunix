@@ -472,6 +472,11 @@ EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;
 	tmpf = (gfloat)gtk_spin_button_get_value((GtkSpinButton *)widget);
+	if (!g_object_get_data(G_OBJECT(widget),"handler"))
+	{
+		printf("control %s has no handler\n",(gchar *)glade_get_widget_name(widget));
+		return FALSE;
+	}
 	gint handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	MtxGaugeFace *g = NULL;
 

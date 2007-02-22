@@ -129,7 +129,8 @@ typedef enum
 /* General Attributes enumeration */
 typedef enum
 {
-	START_ANGLE = 0,
+	DUMMY = 0,
+	START_ANGLE,
 	SWEEP_ANGLE,
 	LBOUND,
 	UBOUND,
@@ -406,11 +407,11 @@ struct _MtxGaugeFace
 	gfloat needle_tail_width;/*! % of rad width of needle tip */
 	gint needle_polygon_points;
 #ifdef HAVE_CAIRO
-	MtxPoint needle_coords[4];	/*! 4 point needle for now */
-	MtxPoint last_needle_coords[4];	/*! 4 point needle for now */
+	MtxPoint needle_coords[6];	/*! 6 point needle for now */
+	MtxPoint last_needle_coords[6];	/*! 6 point needle for now */
 #else
-	GdkPoint needle_coords[4];	/*! 4 point needle for now */
-	GdkPoint last_needle_coords[4];	/*! 4 point needle for now */
+	GdkPoint needle_coords[6];	/*! 6 point needle for now */
+	GdkPoint last_needle_coords[6];	/*! 6 point needle for now */
 #endif
 };
 

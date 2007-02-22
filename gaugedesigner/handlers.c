@@ -275,7 +275,10 @@ EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer dat
 
 	glade_xml_signal_autoconnect(xml);
 
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_length_spin")),"handler",GINT_TO_POINTER(NEEDLE_LENGTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_tail_spin")),"handler",GINT_TO_POINTER(NEEDLE_TAIL));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_tip_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_TIP_WIDTH));
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_tail_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_TAIL_WIDTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"needle_width_spin")),"handler",GINT_TO_POINTER(NEEDLE_WIDTH));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"start_angle_spin")),"handler",GINT_TO_POINTER(START_ANGLE));
 	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"sweep_angle_spin")),"handler",GINT_TO_POINTER(SWEEP_ANGLE));
@@ -312,8 +315,20 @@ void update_general_controls()
 
 	hold_handlers = TRUE;
 
+	widget = glade_xml_get_widget(gen_xml,"needle_length_spin");
+	mtx_gauge_face_get_attribute(g,NEEDLE_LENGTH,&tmp1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+
 	widget = glade_xml_get_widget(gen_xml,"needle_width_spin");
 	mtx_gauge_face_get_attribute(g,NEEDLE_WIDTH,&tmp1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+
+	widget = glade_xml_get_widget(gen_xml,"needle_tip_width_spin");
+	mtx_gauge_face_get_attribute(g,NEEDLE_TIP_WIDTH,&tmp1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
+
+	widget = glade_xml_get_widget(gen_xml,"needle_tail_width_spin");
+	mtx_gauge_face_get_attribute(g,NEEDLE_TAIL_WIDTH,&tmp1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
 	widget = glade_xml_get_widget(gen_xml,"needle_tail_spin");
