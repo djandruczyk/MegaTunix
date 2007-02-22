@@ -338,7 +338,7 @@
   <property name="width_request">275</property>
   <property name="height_request">185</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Gauge Property Editor</property>
+  <property name="title" translatable="yes">Gauge DataSources</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
