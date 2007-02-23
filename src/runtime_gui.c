@@ -327,7 +327,6 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		/* If changed by more than 5% or has been at least 5 
 		 * times withot an update or forced_update is set
 		 * */
-		
 		if ((slider->textval) && ((abs(count-last_upd) > 3) || (forced_update)))
 		{
 			if (is_float)

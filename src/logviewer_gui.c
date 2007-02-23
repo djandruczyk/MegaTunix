@@ -457,8 +457,7 @@ struct Viewable_Value * build_v_value(GObject *object)
 		/* data was already read from file and stored, copy pointer
 		 * over to v_value so it can be drawn...
 		 */
-		tmp_array = (GArray *)g_object_get_data(object,"data_array");
-		v_value->data_array = tmp_array;
+		v_value->data_source = g_strdup("data_array");
 	}
 	else
 	{
@@ -469,7 +468,7 @@ struct Viewable_Value * build_v_value(GObject *object)
 		 * enough size to prevent reallocating memory too often. 
 		 * (more initial mem usage,  but less calls to malloc...
 		 */
-		v_value->data_array = (GArray *)g_object_get_data(object,"history");
+		v_value->data_source = g_strdup("history");
 	}
 	/* Store pointer to object, but DO NOT FREE THIS on v_value destruction
 	 * as its the SAME one used for all Viewable_Values */
@@ -763,6 +762,7 @@ void draw_valtext(gboolean force_draw)
 	gint info_ctr = 0;
 	gint h = 0;
 	gint i = 0;
+	GArray *array = NULL;
 	struct Viewable_Value *v_value = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = lv_data->pixmap;
@@ -783,9 +783,10 @@ void draw_valtext(gboolean force_draw)
 		val_y = info_ctr + 1;
 
 		last_index = v_value->last_index;
-		val = g_array_index(v_value->data_array,gfloat,last_index);
-		if (v_value->data_array->len > 1)
-			last_val = g_array_index(v_value->data_array,gfloat,last_index-1);
+		array = g_object_get_data(G_OBJECT(v_value->object),v_value->data_source);
+		val = g_array_index(array,gfloat,last_index);
+		if (array->len > 1)
+			last_val = g_array_index(array,gfloat,last_index-1);
 		/* IF this value matches the last one,  don't bother
 		 * updating the text as there's no point... */
 		if ((val == last_val) && (!force_draw) && (!v_value->force_update))
@@ -888,6 +889,7 @@ void trace_update(gboolean redraw_all)
 	gint x = 0;
 	gfloat log_pos = 0.0;
 	gfloat newpos = 0.0;
+	GArray *array = NULL;
 	GdkPoint pts[2048]; // Bad idea as static...
 	struct Viewable_Value *v_value = NULL;
 	static gulong sig_id = 0;
@@ -913,7 +915,8 @@ void trace_update(gboolean redraw_all)
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-			len = v_value->data_array->len;
+			array = g_object_get_data(G_OBJECT(v_value->object),v_value->data_source);
+			len = array->len;
 			if (len == 0)	/* If empty */
 			{
 				return;
@@ -932,7 +935,7 @@ void trace_update(gboolean redraw_all)
 			//
 			for (x=0;x<total;x++)
 			{
-				val = g_array_index(v_value->data_array,gfloat,len-1-x);
+				val = g_array_index(array,gfloat,len-1-x);
 				percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
 				pts[x].x = w-(x*lv_zoom)-1;
 				pts[x].y = (gint) (percent*(h-2))+1;
@@ -972,12 +975,13 @@ void trace_update(gboolean redraw_all)
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
+			array = g_object_get_data(G_OBJECT(v_value->object),v_value->data_source);
 			last_index = v_value->last_index;
-			if(last_index >= v_value->data_array->len)
+			if(last_index >= array->len)
 				return;
 
 			//printf("got data from array at index %i\n",last_index+1);
-			val = g_array_index(v_value->data_array,gfloat,last_index+1);
+			val = g_array_index(array,gfloat,last_index+1);
 			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
 			if (val > (v_value->max))
 				v_value->max = val;
@@ -995,7 +999,7 @@ void trace_update(gboolean redraw_all)
 			v_value->last_index = last_index + 1;
 			if (adj_scale)
 			{
-				newpos = 100.0*((gfloat)(v_value->last_index)/(gfloat)v_value->data_array->len);
+				newpos = 100.0*((gfloat)(v_value->last_index)/(gfloat)array->len);
 				blocked=TRUE;
 				gtk_range_set_value(GTK_RANGE(scale),newpos);
 				blocked=FALSE;
@@ -1025,9 +1029,9 @@ void trace_update(gboolean redraw_all)
 	for (i=0;i<g_list_length(lv_data->tlist);i++)
 	{
 		v_value = (struct Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-		history = v_value->data_array;
+		array = g_object_get_data(G_OBJECT(v_value->object),v_value->data_source);
 		current_index = (gint)g_object_get_data(v_value->object,"current_index");
-		val = g_array_index(history,gfloat, current_index);
+		val = g_array_index(array,gfloat, current_index);
 
 		if (val > (v_value->max))
 			v_value->max = val;
@@ -1040,7 +1044,7 @@ void trace_update(gboolean redraw_all)
 		/* If watching at the edge (full realtime) */
 		if (log_pos == 100)
 		{
-			v_value->last_index = v_value->data_array->len-1;
+			v_value->last_index = array->len-1;
 			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
 			gdk_draw_line(pixmap,
 					v_value->trace_gc,
@@ -1051,9 +1055,9 @@ void trace_update(gboolean redraw_all)
 		{	/* Watching somewhat behind realtime... */
 			last_index = v_value->last_index;
 
-			last_val = g_array_index(v_value->data_array,gfloat,last_index);
+			last_val = g_array_index(array,gfloat,last_index);
 			last_percent = 1.0-(last_val/(float)(v_value->upper-v_value->lower));
-			val = g_array_index(v_value->data_array,gfloat,last_index+1);
+			val = g_array_index(array,gfloat,last_index+1);
 			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
 
 			v_value->last_index = last_index + 1;
@@ -1063,7 +1067,7 @@ void trace_update(gboolean redraw_all)
 					w-1,(gint)(percent*(h-2))+1);
 			if (adj_scale)
 			{
-				newpos = 100.0*((gfloat)v_value->last_index/(gfloat)v_value->data_array->len);
+				newpos = 100.0*((gfloat)v_value->last_index/(gfloat)array->len);
 				blocked = TRUE;
 				gtk_range_set_value(GTK_RANGE(scale),newpos);
 				blocked = FALSE;

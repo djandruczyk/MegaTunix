@@ -135,6 +135,7 @@ struct Viewable_Value
 	gboolean highlight;		/*! flag it highlight it.. */
 	gint last_y;			/*! Last point on screen of trace */
 	gint last_index;		/*! latest entryu into data array */
+	gchar *data_source;		/*! Textual name of source */
 	gfloat min;			/*! for auto-scaling */
 	gfloat max;			/*! for auto-scaling */
 	gfloat lower;			/*! hard limits to use for scaling */

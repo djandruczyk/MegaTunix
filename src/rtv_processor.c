@@ -437,7 +437,7 @@ gboolean lookup_previous_value(gchar *internal_name, gfloat *value)
 
 
 /*!
- \brief fluish_rt_arrays() flushed the history buffers for all the realtime
+ \brief flush_rt_arrays() flushed the history buffers for all the realtime
  variables
  */
 void flush_rt_arrays()
@@ -471,7 +471,9 @@ void flush_rt_arrays()
 			/* TRuncate array,  but don't free/recreate as it
 			 * makes the logviewer explode!
 			 */
-			history = g_array_set_size(history,0);
+			g_array_free(history,TRUE);
+			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+			g_object_set_data(object,"history",(gpointer)history);
 			g_object_set_data(object,"current_index",GINT_TO_POINTER(-1));
 			g_static_mutex_unlock(&rtv_mutex);
 	                /* bind history array to object for future retrieval */
