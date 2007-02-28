@@ -94,7 +94,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	gauge->lbound = 0.0;
 	gauge->ubound = 100.0;
 	gauge->precision = 2;
-	gauge->start_angle = -225; // *lower left quadrant
+	gauge->start_angle = 135; // *lower left quadrant
 	gauge->sweep_angle = 270; // CW sweep
 	gauge->needle_width = 0.05;  /* % of radius */
 	gauge->needle_tip_width = 0.0;

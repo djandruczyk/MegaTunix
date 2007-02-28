@@ -271,6 +271,7 @@ EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* It's pressed (or checked) */
 		switch ((ToggleButton)handler)
 		{
+
 			case OFFLINE_FIRMWARE_CHOICE:
 				if(offline_firmware_choice)
 					g_free(offline_firmware_choice);
@@ -407,11 +408,13 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	gchar * swap_list = NULL;
 	gchar * set_labels = NULL;
 	gchar * table_2_update = NULL;
+	gchar * group_2_update = NULL;
 	gchar * tmpbuf = NULL;
 	extern gint dbg_lvl;
 	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
+	extern volatile gchar *load_key;
 	extern struct Firmware_Details *firmware;
 
 	if ((paused_handlers) || (!ready))
@@ -433,6 +436,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	handler = (gint)g_object_get_data(G_OBJECT(widget),"handler");
 	swap_list = (gchar *)g_object_get_data(G_OBJECT(widget),"swap_labels");
 	set_labels = (gchar *)g_object_get_data(G_OBJECT(widget),"set_widgets_label");
+	group_2_update = (gchar *)g_object_get_data(G_OBJECT(widget),"group_2_update");
 	table_2_update = (gchar *)g_object_get_data(G_OBJECT(widget),"update_table");
 
 	// If it's a check button then it's state is dependant on the button's state
@@ -440,6 +444,13 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	switch ((SpinButton)handler)
 	{
+		case MAP_SENSOR_TYPE:
+//			printf("MAP SENSOR CHANGE\n");
+			if (load_key)
+				g_free((gchar *)load_key);
+			load_key = g_strdup(g_object_get_data(G_OBJECT(widget),"load_key"));
+//			printf("new key %s\n",load_key);
+			/* Fall through */
 		case GENERIC:
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
@@ -512,6 +523,11 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	 */
 	if (table_2_update)
 		g_timeout_add(2000,force_update_table,table_2_update);
+	
+	/* Update controls that are dependant on a controls state...
+	 * In this case, MAP sensor related ctrls */
+	if (group_2_update)
+		g_timeout_add(2000,trigger_group_update,group_2_update);
 
 	if (dl_type == IMMEDIATE)
 	{
@@ -1396,6 +1412,18 @@ void update_ve_const()
 
 }
 
+
+/*!
+ \brief trigger_group_update() updates a subset of widgets (any widgets in
+ the group name passed. This runs as a timeout delayed asynchronously from
+ when the ctrl is modified, to prevent a deadlock.
+ \param data, string name of list of controls
+ */
+gboolean trigger_group_update(gpointer data)
+{
+	g_list_foreach(get_list((gchar *)data),update_widget,NULL);
+	return FALSE;/* Make it cancel and not run again till called */
+}
 
 /*!
  \brief force_update_table() updates a subset of widgets (specifically ONLY

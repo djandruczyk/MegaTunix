@@ -34,6 +34,7 @@ void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 EXPORT void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 void update_ve_const(void);
 gboolean force_update_table(gpointer);
+gboolean trigger_group_update(gpointer );
 void update_widget(gpointer, gpointer );
 void switch_labels(gpointer , gpointer );
 void swap_labels(gchar *, gboolean );

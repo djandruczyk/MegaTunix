@@ -30,6 +30,7 @@
 
 
 extern gint dbg_lvl;
+volatile gchar *load_key = NULL;
 /*!
  \brief convert_before_download() converts the value passed using the
  conversions bound to the widget
@@ -48,6 +49,12 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	gint offset = -1;
 	gint lower = -1;
 	gint upper = -1;
+	gint i = 0;
+	GHashTable *hash = NULL;
+	gchar *key_list = NULL;
+	gchar *expr_list = NULL;
+	gchar **keys = NULL;
+	gchar **exprs = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -64,16 +71,50 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"dl_conv_expr");
-	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"dl_evaluator");
-
-	if ((conv_expr) && (!evaluator))
+	if (g_object_get_data(G_OBJECT(widget),"multi_expr_keys"))
 	{
-		evaluator = evaluator_create(conv_expr);
-		assert(evaluator);
-		g_object_set_data(G_OBJECT(widget),"dl_evaluator",(gpointer)evaluator);
+		if (!g_object_get_data(G_OBJECT(widget),"dl_eval_hash"))
+		{
+			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
+			key_list = g_object_get_data(G_OBJECT(widget),"multi_expr_keys");
+			expr_list = g_object_get_data(G_OBJECT(widget),"dl_conv_exprs");
+			keys = g_strsplit(key_list,",",-1);
+			exprs = g_strsplit(expr_list,",",-1);
+			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(exprs));i++)
+			{
+				evaluator = evaluator_create(exprs[i]);
+				g_hash_table_insert(hash,g_strdup(keys[i]),evaluator);
+			}
+			g_strfreev(keys);
+			g_strfreev(exprs);
+
+			g_object_set_data(G_OBJECT(widget),"dl_eval_hash",hash);
+		}
+		hash = g_object_get_data(G_OBJECT(widget),"dl_eval_hash");
+		if (!load_key)
+			evaluator = g_hash_table_lookup(hash,"DEFAULT");
+		else
+		{
+		//	printf("searching for evaluator for key %s\n",load_key);
+			evaluator = g_hash_table_lookup(hash,(gchar *)load_key);
+			if (!evaluator)   /* Try default key */
+				evaluator = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		
 	}
-	if (conv_expr == NULL)
+	else
+	{
+		conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"dl_conv_expr");
+		evaluator = (void *)g_object_get_data(G_OBJECT(widget),"dl_evaluator");
+
+		if ((conv_expr) && (!evaluator))
+		{
+			evaluator = evaluator_create(conv_expr);
+			assert(evaluator);
+			g_object_set_data(G_OBJECT(widget),"dl_evaluator",(gpointer)evaluator);
+		}
+	}
+	if (!evaluator)
 	{
 		if (dbg_lvl & CONVERSIONS)
 			dbg_func(g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value));
@@ -138,6 +179,12 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gint page = -1;
 	gint offset = -1;
 	gboolean ul_complex = FALSE;
+	gint i = 0;
+	GHashTable *hash = NULL;
+	gchar *key_list = NULL;
+	gchar *expr_list = NULL;
+	gchar **keys = NULL;
+	gchar **exprs = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -151,28 +198,62 @@ gfloat convert_after_upload(GtkWidget * widget)
 
 	page = (gint)g_object_get_data(G_OBJECT(widget),"page");
 	offset = (gint)g_object_get_data(G_OBJECT(widget),"offset");
-	conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"ul_conv_expr");
-	evaluator = (void *)g_object_get_data(G_OBJECT(widget),"ul_evaluator");
+	if (g_object_get_data(G_OBJECT(widget),"multi_expr_keys"))
+	{
+		if (!g_object_get_data(G_OBJECT(widget),"ul_eval_hash"))
+		{
+			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
+			key_list = g_object_get_data(G_OBJECT(widget),"multi_expr_keys");
+			expr_list = g_object_get_data(G_OBJECT(widget),"ul_conv_exprs");
+			keys = g_strsplit(key_list,",",-1);
+			exprs = g_strsplit(expr_list,",",-1);
+			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(exprs));i++)
+			{
+				evaluator = evaluator_create(exprs[i]);
+				g_hash_table_insert(hash,g_strdup(keys[i]),evaluator);
+			}
+			g_strfreev(keys);
+			g_strfreev(exprs);
 
+			g_object_set_data(G_OBJECT(widget),"ul_eval_hash",hash);
+		}
+		hash = g_object_get_data(G_OBJECT(widget),"ul_eval_hash");
+		if (!load_key)
+			evaluator = g_hash_table_lookup(hash,"DEFAULT");
+		else
+		{
+//			printf("searching for evaluator for key %s\n",load_key);
+			evaluator = g_hash_table_lookup(hash,(gchar *)load_key);
+			if (!evaluator)   /* Try default key */
+				evaluator = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		
+	}
+	else
+	{
+		conv_expr = (gchar *)g_object_get_data(G_OBJECT(widget),"ul_conv_expr");
+		evaluator = (void *)g_object_get_data(G_OBJECT(widget),"ul_evaluator");
+		if ((conv_expr) && (!evaluator)) 	/* if no evaluator create one */
+		{
+			evaluator = evaluator_create(conv_expr);
+			assert(evaluator);
+			g_object_set_data(G_OBJECT(widget),"ul_evaluator",(gpointer)evaluator);
+		}
+
+	}
 	if (g_object_get_data(G_OBJECT(widget),"lookuptable"))
 		tmpi = lookup_data(G_OBJECT(widget),ms_data[page][offset]);
 	else
 		tmpi = ms_data[page][offset];
 
 
-	if (conv_expr == NULL)
+	if (!evaluator)
 	{
 		return_value = tmpi;
 		if (dbg_lvl & CONVERSIONS)
 			dbg_func(g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i, value %f\n",page, offset, return_value));
 		g_static_mutex_unlock(&mutex);
 		return (return_value);		
-	}
-	if (!evaluator) 	/* if no evaluator create one */
-	{
-		evaluator = evaluator_create(conv_expr);
-		assert(evaluator);
-		g_object_set_data(G_OBJECT(widget),"ul_evaluator",(gpointer)evaluator);
 	}
 	return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001;
 

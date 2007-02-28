@@ -541,12 +541,15 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 		 * offset, thus we can have multiple on screen controls bound
 		 * to single data offset in the ECU
 		 */
+		if (page < 0)
+			if (dbg_lvl & (TABLOADER|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 		if (page < firmware->total_pages)
 		{
 			if (offset >= firmware->page_params[page]->length)
 			{
 				if (dbg_lvl & (TABLOADER|CRITICAL))
-					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  ther eis a bug with this datamap widgt %s, at offset %i...\n\n",section,offset));
+					dbg_func(g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 			}
 			else
 			{
