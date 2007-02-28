@@ -42,7 +42,7 @@
 	      <child>
 		<widget class="GtkViewport" id="msns_viewport1">
 		  <property name="visible">True</property>
-		  <property name="shadow_type">GTK_SHADOW_IN</property>
+		  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		  <child>
 		    <widget class="GtkHBox" id="msns_hbox1">

@@ -36,7 +36,6 @@
 
 extern gint ecu_caps;
 extern gboolean connected;
-extern GtkWidget *ms_ecu_revision_entry;
 extern GtkTextBuffer *textbuffer;
 extern GtkWidget *interr_view;
 extern gint dbg_lvl;

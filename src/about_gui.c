@@ -21,6 +21,19 @@
 /*!
  \brief build_about makes the about tab and presents the MegaTunix logo
  */
+void install_logo(GtkWidget *alignment)
+{
+	GdkPixbuf *pixbuf;
+	GtkWidget *image;
+
+	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
+	image = gtk_image_new_from_pixbuf(pixbuf);
+	gtk_container_add (GTK_CONTAINER (alignment), image);
+	return;
+
+}
+
+
 void build_about(GtkWidget *frame)
 {
 	gchar *tmpbuf = NULL;

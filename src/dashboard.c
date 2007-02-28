@@ -449,7 +449,7 @@ void initialize_dashboards()
 }
 
 
-gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
+EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -499,7 +499,7 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	label = g_object_get_data(G_OBJECT(widget),"label");
 	if (GTK_IS_WIDGET(label))
 	{
-		gtk_label_set_text(GTK_LABEL(label),"Choose a Dash File");
+		gtk_label_set_text(GTK_LABEL(label),"Choose a Dashboard File");
 		if ((gint)data == 1)
 		{
 			if (cluster_1_name)

@@ -21,6 +21,7 @@
 void close_debugfile(void);
 void open_debugfile(void);
 void dbg_func(gchar *);
+void populate_debugging(GtkWidget *);
 /* Prototypes */
 
 #endif

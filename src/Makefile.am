@@ -26,7 +26,6 @@ megatunix_SOURCES = \
 	dispatcher.c \
 	fileio.c \
 	firmware.c \
-	general_gui.c \
 	gui_handlers.c \
 	init.c \
 	interrogate.c \

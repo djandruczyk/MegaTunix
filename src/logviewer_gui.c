@@ -442,7 +442,6 @@ struct Viewable_Value * build_v_value(GObject *object)
 {
 	struct Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
-	GArray *tmp_array = NULL;
 
 	pixmap = lv_data->pixmap;
 
@@ -878,7 +877,6 @@ void trace_update(gboolean redraw_all)
 	gfloat last_val = 0.0;
 	gfloat percent = 0.0;
 	gfloat last_percent = 0.0;
-	GArray *history = NULL;
 	gint current_index = 0;
 	gint len = 0;
 	gint lo_width;

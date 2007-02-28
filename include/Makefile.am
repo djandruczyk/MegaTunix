@@ -19,7 +19,6 @@ headers = \
 	enums.h \
 	fileio.h \
 	firmware.h \
-	general_gui.h \
 	getfiles.h \
         gui_handlers.h \
         init.h \

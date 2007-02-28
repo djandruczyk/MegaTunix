@@ -17,7 +17,6 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void build_comms(GtkWidget *);
 gboolean update_errcounts(void);
 gboolean reset_errcounts(GtkWidget *);
 /* Prototypes */

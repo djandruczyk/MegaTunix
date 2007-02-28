@@ -139,7 +139,30 @@ void comms_test()
 	g_static_mutex_unlock(&comms_mutex);
 	g_static_mutex_unlock(&serio_mutex);
 	result = handle_ecu_data(C_TEST,NULL);
-	g_static_mutex_lock(&serio_mutex);
+	if (!result) // Failure,  Attempt MS-II method
+	{
+		g_static_mutex_lock(&serio_mutex);
+		g_static_mutex_lock(&comms_mutex);
+		//if (write(serial_params->fd,"C",1) != 1)
+		if (write(serial_params->fd,"c",1) != 1)
+		{
+			g_static_mutex_unlock(&comms_mutex);
+			err_text = (gchar *)g_strerror(errno);
+			if (dbg_lvl & (SERIAL_RD|CRITICAL))
+				dbg_func(g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
+			thread_update_logbar("comms_view","warning",g_strdup_printf("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text),TRUE,FALSE);
+			//printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text);
+			g_static_mutex_unlock(&serio_mutex);
+			flush_serial(serial_params->fd, TCIOFLUSH);
+			connected = FALSE;
+			failurecount++;
+			g_static_mutex_unlock(&comm_test_mutex);
+			return;
+		}
+		g_static_mutex_unlock(&comms_mutex);
+		g_static_mutex_unlock(&serio_mutex);
+		result = handle_ecu_data(C_TEST,NULL);
+	}
 	if (result)	// Success
 	{
 		connected = TRUE;
@@ -161,7 +184,6 @@ void comms_test()
 		thread_update_logbar("comms_view","warning",g_strdup_printf("I/O with ECU Timeout\n"),TRUE,FALSE);
 	}
 	/* Flush the toilet again.... */
-	g_static_mutex_unlock(&serio_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);
 	g_static_mutex_unlock(&comm_test_mutex);
 	return;

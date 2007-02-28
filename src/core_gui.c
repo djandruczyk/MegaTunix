@@ -16,12 +16,14 @@
 #include <config.h>
 #include <configfile.h>
 #include <core_gui.h>
+#include <dashboard.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
-#include <general_gui.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <getfiles.h>
+#include <logo.h>
 #include <menu_handlers.h>
 #include <stdlib.h>
 #include <structures.h>
@@ -41,20 +43,6 @@ gint main_y_origin = 0;
 extern gboolean tips_in_use;
 GtkWidget *main_window = NULL;
 GtkTooltips *tip = NULL;
-GtkWidget *notebook = NULL;
-static struct 
-{
-	gchar *frame_name;	/* Textual name at the top of the frame */
-	void (*Function) (GtkWidget *);	/* builder function */
-	gchar *tab_name;	/* The Tab textual name for the main gui */
-	TabIdent tab_ident;	/* Tab Identifier... */
-} notebook_tabs[] = { 
-{ "About MegaTunix", build_about, "_About",ABOUT_TAB},
-{ "General MegaTunix Settings", build_general, "_General",GENERAL_TAB},
-{ "MegaSquirt Communications Parameters", build_comms, "_Communications",COMMS_TAB},
-};
-
-static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
 
 
 /*!
@@ -63,14 +51,8 @@ static int num_tabs = sizeof(notebook_tabs) / sizeof(notebook_tabs[0]);
  */
 int setup_gui()
 {
-	GtkWidget *frame = NULL;
-	GtkWidget *label = NULL;
-	GtkWidget *hbox = NULL;
-	GtkWidget *vbox = NULL;
-	GtkWidget *button = NULL;
 	gchar *filename = NULL;
 	GladeXML *xml = NULL;
-	gint i=0;
 
 	filename = get_file(g_build_filename(GUI_DATA_DIR,"main.glade",NULL),NULL);
 	if (!filename)
@@ -85,46 +67,14 @@ int setup_gui()
 
 	glade_xml_signal_autoconnect(xml);
 
+	tip = gtk_tooltips_new();
 	main_window = glade_xml_get_widget(xml,"mtx_main_window");
+	finalize_core_gui(xml);
 	gtk_window_move((GtkWindow *)main_window, main_x_origin, main_y_origin);
 	gtk_widget_set_size_request(main_window,def_width,def_height);
 	gtk_window_resize(GTK_WINDOW(main_window),width,height);
 	gtk_window_set_title(GTK_WINDOW(main_window),"MegaTunix "VERSION);
 
-	tip = gtk_tooltips_new();
-
-	vbox = glade_xml_get_widget(xml,"mtx_top_vbox");
-
-	notebook = gtk_notebook_new ();
-	register_widget("toplevel_notebook",notebook);
-	gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
-	gtk_notebook_set_scrollable(GTK_NOTEBOOK(notebook),TRUE);
-	gtk_notebook_popup_enable(GTK_NOTEBOOK(notebook));
-	gtk_box_pack_start(GTK_BOX(vbox),notebook,TRUE,TRUE,0);
-
-	for (i=0;i<num_tabs;i++)
-	{
-		frame = gtk_frame_new (notebook_tabs[i].frame_name);
-		gtk_container_set_border_width (GTK_CONTAINER (frame), 0);
-
-		notebook_tabs[i].Function(frame);
-
-		label = gtk_label_new_with_mnemonic (notebook_tabs[i].tab_name);
-
-		g_object_set_data(G_OBJECT(frame),"tab_ident",GINT_TO_POINTER(notebook_tabs[i].tab_ident));
-		gtk_notebook_append_page (GTK_NOTEBOOK (notebook), frame, label);
-	}
-	g_signal_connect(G_OBJECT(notebook),"switch-page",
-			G_CALLBACK(page_changed),NULL);
-
-	hbox = gtk_hbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(vbox),hbox,FALSE,FALSE,0);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox),5);
-
-	button = gtk_button_new_with_label("            Exit           ");
-	gtk_box_pack_start(GTK_BOX(hbox),button,FALSE,FALSE,0);
-	g_signal_connect(G_OBJECT(button),"pressed",
-			G_CALLBACK(leave),NULL);
 
 	if(tips_in_use)
 		gtk_tooltips_enable(tip);
@@ -134,4 +84,201 @@ int setup_gui()
 	gtk_widget_show_all(main_window);
 
 	return TRUE;
+}
+
+
+void finalize_core_gui(GladeXML * xml)
+{
+	/* Initializes base gui and installs things like the logo and
+	 * other dynamic bits that can't be set via glade statically 
+	 */
+	GtkTextBuffer * textbuffer = NULL;
+	GtkWidget *alignment = NULL;
+	GtkWidget *button = NULL;
+	GtkWidget *cbutton = NULL;
+	GtkWidget *ebox = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *widget = NULL;
+	GtkWidget *image = NULL;
+	GdkPixbuf *pixbuf = NULL;
+	gchar * tmpbuf = NULL;
+	extern gint temp_units;
+	extern gboolean tips_in_use;
+	extern gchar * cluster_1_name;
+	extern gchar * cluster_2_name;
+	extern gchar * serial_port_name;
+
+	widget = glade_xml_get_widget(xml,"toplevel_notebook");
+	register_widget("toplevel_notebook",widget);
+	/* Set about tab title */
+	label = glade_xml_get_widget(xml,"about_title_label");
+	tmpbuf = g_strdup_printf("MegaTunix %s Tuning Software for Unix-class OS's",VERSION);
+	gtk_label_set_text(GTK_LABEL(label),tmpbuf);
+	g_free(tmpbuf);
+
+	/* Load Main MegaTunix logo */
+	alignment = glade_xml_get_widget(xml,"logo_alignment");
+	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
+	image = gtk_image_new_from_pixbuf(pixbuf);
+	gtk_container_add (GTK_CONTAINER (alignment), image);
+
+	/* Set about tab identifier */
+	g_object_set_data(G_OBJECT(glade_xml_get_widget(xml,"about_frame")),"tab_ident",GINT_TO_POINTER(ABOUT_TAB));
+
+	/* General Tab, Tooltips */
+	button = glade_xml_get_widget(xml,"tooltips_cbutton");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(TOOLTIPS_STATE));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),tips_in_use);
+
+	/* General Tab, Temp Scales */
+	button = glade_xml_get_widget(xml,"fahrenheit_rbutton");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(FAHRENHEIT));
+	if (temp_units == FAHRENHEIT)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+
+	button = glade_xml_get_widget(xml,"celsius_rbutton");
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(CELSIUS));
+	if (temp_units == CELSIUS)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+
+	/* General Tab, Dashboard Ebox */
+	ebox = glade_xml_get_widget(xml,"dash_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"This box provides your choice for the active dashboard to be used",NULL);
+
+	/* General Tab, Dashboard 1 */
+	button = glade_xml_get_widget(xml,"dash1_choice_button");
+	cbutton = glade_xml_get_widget(xml,"dash1_cbutton");
+	g_signal_connect(G_OBJECT(cbutton),"toggled",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
+	if ((cluster_1_name) && (g_ascii_strcasecmp(cluster_1_name,"") !=0))
+		gtk_button_set_label(GTK_BUTTON(button),cluster_1_name);
+	else
+		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
+
+	g_object_set_data(G_OBJECT(button),"label",gtk_bin_get_child(GTK_BIN(button)));
+	g_object_set_data(G_OBJECT(cbutton),"label",gtk_bin_get_child(GTK_BIN(button)));
+#if GTK_MINOR_VERSION >= 6
+	if (gtk_minor_version >= 6)
+		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+#endif
+	register_widget("dash_cluster_1_label",label);
+	/* Bind signal to the button to choose a new dash */
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(present_dash_filechooser),
+			GINT_TO_POINTER(1));
+
+	/* General Tab, Dashboard 2 */
+	button = glade_xml_get_widget(xml,"dash2_choice_button");
+	cbutton = glade_xml_get_widget(xml,"dash2_cbutton");
+	g_signal_connect(G_OBJECT(cbutton),"toggled",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
+	if ((cluster_2_name) && (g_ascii_strcasecmp(cluster_2_name,"") !=0))
+		gtk_button_set_label(GTK_BUTTON(button),cluster_2_name);
+	else
+		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
+	g_object_set_data(G_OBJECT(button),"label",gtk_bin_get_child(GTK_BIN(button)));
+	g_object_set_data(G_OBJECT(cbutton),"label",gtk_bin_get_child(GTK_BIN(button)));
+#if GTK_MINOR_VERSION >= 6
+	if (gtk_minor_version >= 6)
+		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
+#endif
+	register_widget("dash_cluster_2_label",label);
+	/* Bind signal to the button to choose a new dash */
+	g_signal_connect(G_OBJECT(button),"clicked",
+			G_CALLBACK(present_dash_filechooser),
+			GINT_TO_POINTER(2));
+
+	/* General Tab, Debugging frame */
+	ebox = glade_xml_get_widget(xml,"debugging_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will be written to MTXlog.txt file in your homedir, or in C:\\program files\\megatunix on Win32 platforms...",NULL);
+	widget = glade_xml_get_widget(xml,"debugging_frame");
+	populate_debugging(widget);
+
+	/* General Tab Interrogation frame */
+	ebox = glade_xml_get_widget(xml,"ecu_info_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match.",NULL);
+
+	/* General Tab Interrogation button */
+	ebox = glade_xml_get_widget(xml,"interrogate_button_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100\% foolproof, but it works about 99.5% of hte time.  If it MIS-detects your ECU contact the developer with your firmware details.",NULL);
+	button = glade_xml_get_widget(xml,"interrogate_button");
+	register_widget("interrogate_button",button);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(INTERROGATE_ECU));
+
+	/* General Tab OFfline mode button */
+	ebox = glade_xml_get_widget(xml,"offline_mode_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"This button Enables \"Offline Mode\" so that you can load tabs specific to an ECU and set settings, modify maps without doing any Serial I/O. This will allow you to modify maps offline when not connected to the vehicle/ECU.",NULL);
+	button = glade_xml_get_widget(xml,"offline_button");
+	register_widget("offline_button",button);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(OFFLINE_MODE));
+
+	/* Interrogation results entries */
+	widget = glade_xml_get_widget(xml,"ecu_revision_entry");
+	register_widget("ecu_revision_entry",widget);
+	widget = glade_xml_get_widget(xml,"text_version_entry");
+	register_widget("text_version_entry",widget);
+	widget = glade_xml_get_widget(xml,"ecu_signature_entry");
+	register_widget("ecu_signature_entry",widget);
+
+	/* General Tab Textview */
+	ebox = glade_xml_get_widget(xml,"interrogation_status_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100\% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"R\", which returns the extended runtime variables (only supported by a subset of firmwares, like MSnS-Extra \n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"T\" command (Text version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU (DT Firmwares only).",NULL);
+
+	widget = glade_xml_get_widget(xml,"interr_view");
+	register_widget("interr_view",widget);
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+	gtk_text_buffer_create_tag(textbuffer,
+			"warning",
+			"foreground",
+			"red", NULL);
+	gtk_text_buffer_create_tag(textbuffer,
+			"info",
+			"foreground",
+			"dark green", NULL);
+
+	/* COMMS Tab Commport frame */
+	ebox = glade_xml_get_widget(xml,"commport_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"Sets the comm port to use. Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)",NULL);
+	/* COMMS Tab commport entry */
+	widget = glade_xml_get_widget(xml,"commport_entry");
+	register_widget("comms_serial_port_entry",widget);
+	if (serial_port_name)
+		gtk_entry_set_text(GTK_ENTRY(widget),serial_port_name);
+
+	/* COMMS Tab Test ECU Comms button */
+	widget = glade_xml_get_widget(xml,"test_comms_button");
+	g_object_set_data(G_OBJECT(widget),"handler",GINT_TO_POINTER(CHECK_ECU_COMMS));
+
+	/* COMMS Tab Read delay subtable */
+	ebox = glade_xml_get_widget(xml,"read_delay_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"Sets the time delay between read attempts for getting the RealTime variables from the ECU, typically should be set around 50 for about 12-18 reads per second from the ECU. Lower values will update things faster but wll use more CPU resources.  This will control the rate at which the Runtime Display page updates.",NULL);
+
+	/* COMMS Tab Start/Stop RT buttons */
+	button = glade_xml_get_widget(xml,"start_rt_button");
+	register_widget("comms_start_rt_button",button);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(START_REALTIME));
+	button = glade_xml_get_widget(xml,"stop_rt_button");
+	register_widget("comms_stop_rt_button",button);
+	g_object_set_data(G_OBJECT(button),"handler",GINT_TO_POINTER(STOP_REALTIME));
+
+	/* COMMS Tab Stats Frame */
+	ebox = glade_xml_get_widget(xml,"ms_stats_ebox");
+	gtk_tooltips_set_tip(tip,ebox,"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable or wireless connection between this host computer and the MS.",NULL);
+
+	/* COMMS Tab Stats Entries */
+	widget = glade_xml_get_widget(xml,"comms_vecount_entry");
+	register_widget("comms_vecount_entry",widget);
+	widget = glade_xml_get_widget(xml,"comms_rtcount_entry");
+	register_widget("comms_rtcount_entry",widget);
+	widget = glade_xml_get_widget(xml,"comms_sioerr_entry");
+	register_widget("comms_sioerr_entry",widget);
+	widget = glade_xml_get_widget(xml,"comms_reset_entry");
+	register_widget("comms_reset_entry",widget);
+
+	widget = glade_xml_get_widget(xml,"serial_status_view");
+	register_widget("comms_view",widget);
+	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+	gtk_text_buffer_create_tag(textbuffer,
+			"warning",
+			"foreground",
+			"red", NULL);
+
 }

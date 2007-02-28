@@ -56,8 +56,9 @@ gboolean load_gui_tabs(void)
 	GtkWidget *topframe = NULL;
 	GHashTable *groups = NULL;
 	struct BindGroup *bindgroup = NULL;
-	extern GtkWidget * notebook;
+	GtkWidget * notebook;
 	extern volatile gboolean leaving;
+	extern GHashTable *dynamic_widgets;
 
 	if (!firmware)
 		return FALSE;
@@ -67,6 +68,7 @@ gboolean load_gui_tabs(void)
 		return FALSE;
 
 	bindgroup = g_new0(struct BindGroup,1);
+	notebook = g_hash_table_lookup(dynamic_widgets,"toplevel_notebook");
 
 	while (firmware->tab_list[i])
 	{

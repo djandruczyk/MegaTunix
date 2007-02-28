@@ -219,7 +219,7 @@ void save_config(void)
 		gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
 		cfg_write_int(cfgfile, "Window", "width", tmp_width);
 		cfg_write_int(cfgfile, "Window", "height", tmp_height);
-		gdk_window_get_position(main_window->window,&x,&y);
+		gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
 		cfg_write_int(cfgfile, "Window", "main_x_origin", x);
 		cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		if (g_hash_table_lookup(dynamic_widgets,"status_window"))

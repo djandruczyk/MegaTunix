@@ -15,9 +15,11 @@
 #define __CORE_GUI_H__
 
 #include <gtk/gtk.h>
+#include <glade/glade.h>
 
 /* Prototypes */
 gint setup_gui(void);
+void finalize_core_gui(GladeXML *);
 /* Prototypes */
 
 #endif

@@ -236,7 +236,6 @@ gboolean comm_port_change(GtkEditable *editable)
 		update_logbar("comms_view","warning",g_strdup_printf("\"%s\" File not found\n",port),TRUE,FALSE);
 	}
 
-
 	g_free(port);
 	return TRUE;
 }

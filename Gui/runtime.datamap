@@ -28,13 +28,13 @@ tab_ident=_RUNTIME_TAB_
 
 #------- Runtime Status Indicators ------------------------------------------
 
-[runtime_connected_label]
-keys=page,bind_to_list,active_fg,inactive_fg
-key_types=_INT_,_STRING_,_STRING_,_STRING_
-active_fg=red
-inactive_fg=dim grey
-page=0
-bind_to_list=connected_widgets
+#[runtime_connected_label]
+#keys=page,bind_to_list,active_fg,inactive_fg
+#key_types=_INT_,_STRING_,_STRING_,_STRING_
+#active_fg=red
+#inactive_fg=dim grey
+#page=0
+#bind_to_list=connected_widgets
 
 [runtime_cranking_label]
 keys=page,bind_to_list,source,bitval,bitshift,bitmask,active_fg,inactive_fg
