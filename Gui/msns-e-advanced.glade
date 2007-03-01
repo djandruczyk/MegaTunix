@@ -1090,7 +1090,7 @@
 						  <child>
 						    <widget class="GtkLabel" id="barocorr_min_label">
 						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Max ADC for Baro Correction</property>
+						      <property name="label" translatable="yes">Max KPa for Baro Correction</property>
 						      <property name="use_underline">False</property>
 						      <property name="use_markup">False</property>
 						      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1113,7 +1113,7 @@
 						  <child>
 						    <widget class="GtkLabel" id="min_kpa_label">
 						      <property name="visible">True</property>
-						      <property name="label" translatable="yes">Min ADC for Baro Correction</property>
+						      <property name="label" translatable="yes">Min KPa for Baro Correction</property>
 						      <property name="use_underline">False</property>
 						      <property name="use_markup">False</property>
 						      <property name="justify">GTK_JUSTIFY_LEFT</property>

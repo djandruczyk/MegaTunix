@@ -97,27 +97,42 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 		}
 		hash = g_object_get_data(G_OBJECT(widget),"dl_eval_hash");
 		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
-		table_num = (gint)strtol(tmpbuf,NULL,10);
-		switch (algorithm[table_num])
+		if (tmpbuf)
+			table_num = (gint)strtol(tmpbuf,NULL,10);
+		if (table_num == -1)
 		{
-			case SPEED_DENSITY:
-				if (!load_source)
-					evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				else
-				{
-					evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
-					if (!evaluator)
-						evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				break;
-			case ALPHA_N:
+			if (!load_source)
 				evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				break;
-			case MAF:
-				evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
+			else
+			{
+				evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
 				if (!evaluator)
 					evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				break;
+			}
+		}
+		else
+		{
+			switch (algorithm[table_num])
+			{
+				case SPEED_DENSITY:
+					if (!load_source)
+						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					else
+					{
+						evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+						if (!evaluator)
+							evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					}
+					break;
+				case ALPHA_N:
+					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					break;
+				case MAF:
+					evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if (!evaluator)
+						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					break;
+			}
 		}
 	}
 	else
@@ -204,7 +219,7 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gchar **keys = NULL;
 	gchar **exprs = NULL;
 	gchar * tmpbuf = NULL;
-	gint table_num = 0;
+	gint table_num = -1;
 	extern gint *algorithm;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -240,27 +255,42 @@ gfloat convert_after_upload(GtkWidget * widget)
 		}
 		hash = g_object_get_data(G_OBJECT(widget),"ul_eval_hash");
 		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
-		table_num = (gint)strtol(tmpbuf,NULL,10);
-		switch (algorithm[table_num])
+		if (tmpbuf)
+			table_num = (gint)strtol(tmpbuf,NULL,10);
+		if (table_num == -1)
 		{
-			case SPEED_DENSITY:
-				if (!load_source)
-					evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				else
-				{
-					evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
-					if (!evaluator)
-						evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				break;
-			case ALPHA_N:
+			if (!load_source)
 				evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				break;
-			case MAF:
-				evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
+			else
+			{
+				evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
 				if (!evaluator)
 					evaluator = g_hash_table_lookup(hash,"DEFAULT");
-				break;
+			}
+		}
+		else
+		{
+			switch (algorithm[table_num])
+			{
+				case SPEED_DENSITY:
+					if (!load_source)
+						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					else
+					{
+						evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+						if (!evaluator)
+							evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					}
+					break;
+				case ALPHA_N:
+					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					break;
+				case MAF:
+					evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if (!evaluator)
+						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					break;
+			}
 		}
 	}
 	else

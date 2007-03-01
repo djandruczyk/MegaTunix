@@ -4,7 +4,7 @@
 description=Object data map for Boost Tables
 tab_name=_Boost Tables
 id_prefix=BT_
-groups=load,rpm,table
+groups=load,rpm,table_1,table_2,table_3
 
 #----- Groups ----------------------------------------------------------------
 
@@ -37,7 +37,22 @@ handler=_GENERIC_
 use_color=TRUE
 tooltip=The RPM bins in combination with the LOAD bins on the left side of the Boost-Table define the vertexes (points on the Boost map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
-[table]
+[table_1]
+keys=page,is_float,dl_type,handler,use_color,table_num,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+page=7
+is_float=FALSE
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+use_color=TRUE
+table_num=7
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression
+tooltip=The Boost Entries are the values of Boost in KPA that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+[table_2]
 keys=page,raw_lower,raw_upper,is_float,dl_type,handler,use_color,tooltip
 key_types=_INT_,_INT_,_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_
 page=7
@@ -47,6 +62,21 @@ is_float=FALSE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
+tooltip=The Boost Entries are the values of Boost in KPA that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+[table_3]
+keys=page,is_float,dl_type,handler,use_color,table_num,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+page=7
+is_float=FALSE
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+use_color=TRUE
+table_num=9
+multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
+dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+bind_to_list=multi_expression
 tooltip=The Boost Entries are the values of Boost in KPA that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- Gauges --------------------------------------------------------------
@@ -284,41 +314,26 @@ page=7
 table_num=9
 
 [B1_3d_view_button]
-#keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
-#key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=7
 table_num=7
-#x_source=raw_rpm
-#y_source=tpscount
-#z_source=mapkpa
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Boost-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [B2_3d_view_button]
-#keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
-#key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=7
 table_num=8
-#x_source=raw_rpm
-#y_source=tpscount
-#z_source=mapkpa
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Boost-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [B3_3d_view_button]
-#keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
-#key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=7
 table_num=9
-#x_source=raw_rpm
-#y_source=tpscount
-#z_source=mapkpa
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current Boost-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
@@ -609,646 +624,646 @@ group=rpm
 keys=offset
 key_types=_INT_
 offset=0
-group=table
+group=table_1
 
 [B1_boost_entry_(1,0)]
 keys=offset
 key_types=_INT_
 offset=1
-group=table
+group=table_1
 
 [B1_boost_entry_(2,0)]
 keys=offset
 key_types=_INT_
 offset=2
-group=table
+group=table_1
 
 [B1_boost_entry_(3,0)]
 keys=offset
 key_types=_INT_
 offset=3
-group=table
+group=table_1
 
 [B1_boost_entry_(4,0)]
 keys=offset
 key_types=_INT_
 offset=4
-group=table
+group=table_1
 
 [B1_boost_entry_(5,0)]
 keys=offset
 key_types=_INT_
 offset=5
-group=table
+group=table_1
 
 [B1_boost_entry_(0,1)]
 keys=offset
 key_types=_INT_
 offset=6
-group=table
+group=table_1
 
 [B1_boost_entry_(1,1)]
 keys=offset
 key_types=_INT_
 offset=7
-group=table
+group=table_1
 
 [B1_boost_entry_(2,1)]
 keys=offset
 key_types=_INT_
 offset=8
-group=table
+group=table_1
 
 [B1_boost_entry_(3,1)]
 keys=offset
 key_types=_INT_
 offset=9
-group=table
+group=table_1
 
 [B1_boost_entry_(4,1)]
 keys=offset
 key_types=_INT_
 offset=10
-group=table
+group=table_1
 
 [B1_boost_entry_(5,1)]
 keys=offset
 key_types=_INT_
 offset=11
-group=table
+group=table_1
 
 [B1_boost_entry_(0,2)]
 keys=offset
 key_types=_INT_
 offset=12
-group=table
+group=table_1
 
 [B1_boost_entry_(1,2)]
 keys=offset
 key_types=_INT_
 offset=13
-group=table
+group=table_1
 
 [B1_boost_entry_(2,2)]
 keys=offset
 key_types=_INT_
 offset=14
-group=table
+group=table_1
 
 [B1_boost_entry_(3,2)]
 keys=offset
 key_types=_INT_
 offset=15
-group=table
+group=table_1
 
 [B1_boost_entry_(4,2)]
 keys=offset
 key_types=_INT_
 offset=16
-group=table
+group=table_1
 
 [B1_boost_entry_(5,2)]
 keys=offset
 key_types=_INT_
 offset=17
-group=table
+group=table_1
 
 [B1_boost_entry_(0,3)]
 keys=offset
 key_types=_INT_
 offset=18
-group=table
+group=table_1
 
 [B1_boost_entry_(1,3)]
 keys=offset
 key_types=_INT_
 offset=19
-group=table
+group=table_1
 
 [B1_boost_entry_(2,3)]
 keys=offset
 key_types=_INT_
 offset=20
-group=table
+group=table_1
 
 [B1_boost_entry_(3,3)]
 keys=offset
 key_types=_INT_
 offset=21
-group=table
+group=table_1
 
 [B1_boost_entry_(4,3)]
 keys=offset
 key_types=_INT_
 offset=22
-group=table
+group=table_1
 
 [B1_boost_entry_(5,3)]
 keys=offset
 key_types=_INT_
 offset=23
-group=table
+group=table_1
 
 [B1_boost_entry_(0,4)]
 keys=offset
 key_types=_INT_
 offset=24
-group=table
+group=table_1
 
 [B1_boost_entry_(1,4)]
 keys=offset
 key_types=_INT_
 offset=25
-group=table
+group=table_1
 
 [B1_boost_entry_(2,4)]
 keys=offset
 key_types=_INT_
 offset=26
-group=table
+group=table_1
 
 [B1_boost_entry_(3,4)]
 keys=offset
 key_types=_INT_
 offset=27
-group=table
+group=table_1
 
 [B1_boost_entry_(4,4)]
 keys=offset
 key_types=_INT_
 offset=28
-group=table
+group=table_1
 
 [B1_boost_entry_(5,4)]
 keys=offset
 key_types=_INT_
 offset=29
-group=table
+group=table_1
 
 [B1_boost_entry_(0,5)]
 keys=offset
 key_types=_INT_
 offset=30
-group=table
+group=table_1
 
 [B1_boost_entry_(1,5)]
 keys=offset
 key_types=_INT_
 offset=31
-group=table
+group=table_1
 
 [B1_boost_entry_(2,5)]
 keys=offset
 key_types=_INT_
 offset=32
-group=table
+group=table_1
 
 [B1_boost_entry_(3,5)]
 keys=offset
 key_types=_INT_
 offset=33
-group=table
+group=table_1
 
 [B1_boost_entry_(4,5)]
 keys=offset
 key_types=_INT_
 offset=34
-group=table
+group=table_1
 
 [B1_boost_entry_(5,5)]
 keys=offset
 key_types=_INT_
 offset=35
-group=table
+group=table_1
 
 [B2_boost_entry_(0,0)]
 keys=offset
 key_types=_INT_
 offset=48
-group=table
+group=table_2
 
 [B2_boost_entry_(1,0)]
 keys=offset
 key_types=_INT_
 offset=49
-group=table
+group=table_2
 
 [B2_boost_entry_(2,0)]
 keys=offset
 key_types=_INT_
 offset=50
-group=table
+group=table_2
 
 [B2_boost_entry_(3,0)]
 keys=offset
 key_types=_INT_
 offset=51
-group=table
+group=table_2
 
 [B2_boost_entry_(4,0)]
 keys=offset
 key_types=_INT_
 offset=52
-group=table
+group=table_2
 
 [B2_boost_entry_(5,0)]
 keys=offset
 key_types=_INT_
 offset=53
-group=table
+group=table_2
 
 [B2_boost_entry_(0,1)]
 keys=offset
 key_types=_INT_
 offset=54
-group=table
+group=table_2
 
 [B2_boost_entry_(1,1)]
 keys=offset
 key_types=_INT_
 offset=55
-group=table
+group=table_2
 
 [B2_boost_entry_(2,1)]
 keys=offset
 key_types=_INT_
 offset=56
-group=table
+group=table_2
 
 [B2_boost_entry_(3,1)]
 keys=offset
 key_types=_INT_
 offset=57
-group=table
+group=table_2
 
 [B2_boost_entry_(4,1)]
 keys=offset
 key_types=_INT_
 offset=58
-group=table
+group=table_2
 
 [B2_boost_entry_(5,1)]
 keys=offset
 key_types=_INT_
 offset=59
-group=table
+group=table_2
 
 [B2_boost_entry_(0,2)]
 keys=offset
 key_types=_INT_
 offset=60
-group=table
+group=table_2
 
 [B2_boost_entry_(1,2)]
 keys=offset
 key_types=_INT_
 offset=61
-group=table
+group=table_2
 
 [B2_boost_entry_(2,2)]
 keys=offset
 key_types=_INT_
 offset=62
-group=table
+group=table_2
 
 [B2_boost_entry_(3,2)]
 keys=offset
 key_types=_INT_
 offset=63
-group=table
+group=table_2
 
 [B2_boost_entry_(4,2)]
 keys=offset
 key_types=_INT_
 offset=64
-group=table
+group=table_2
 
 [B2_boost_entry_(5,2)]
 keys=offset
 key_types=_INT_
 offset=65
-group=table
+group=table_2
 
 [B2_boost_entry_(0,3)]
 keys=offset
 key_types=_INT_
 offset=66
-group=table
+group=table_2
 
 [B2_boost_entry_(1,3)]
 keys=offset
 key_types=_INT_
 offset=67
-group=table
+group=table_2
 
 [B2_boost_entry_(2,3)]
 keys=offset
 key_types=_INT_
 offset=68
-group=table
+group=table_2
 
 [B2_boost_entry_(3,3)]
 keys=offset
 key_types=_INT_
 offset=69
-group=table
+group=table_2
 
 [B2_boost_entry_(4,3)]
 keys=offset
 key_types=_INT_
 offset=70
-group=table
+group=table_2
 
 [B2_boost_entry_(5,3)]
 keys=offset
 key_types=_INT_
 offset=71
-group=table
+group=table_2
 
 [B2_boost_entry_(0,4)]
 keys=offset
 key_types=_INT_
 offset=72
-group=table
+group=table_2
 
 [B2_boost_entry_(1,4)]
 keys=offset
 key_types=_INT_
 offset=73
-group=table
+group=table_2
 
 [B2_boost_entry_(2,4)]
 keys=offset
 key_types=_INT_
 offset=74
-group=table
+group=table_2
 
 [B2_boost_entry_(3,4)]
 keys=offset
 key_types=_INT_
 offset=75
-group=table
+group=table_2
 
 [B2_boost_entry_(4,4)]
 keys=offset
 key_types=_INT_
 offset=76
-group=table
+group=table_2
 
 [B2_boost_entry_(5,4)]
 keys=offset
 key_types=_INT_
 offset=77
-group=table
+group=table_2
 
 [B2_boost_entry_(0,5)]
 keys=offset
 key_types=_INT_
 offset=78
-group=table
+group=table_2
 
 [B2_boost_entry_(1,5)]
 keys=offset
 key_types=_INT_
 offset=79
-group=table
+group=table_2
 
 [B2_boost_entry_(2,5)]
 keys=offset
 key_types=_INT_
 offset=80
-group=table
+group=table_2
 
 [B2_boost_entry_(3,5)]
 keys=offset
 key_types=_INT_
 offset=81
-group=table
+group=table_2
 
 [B2_boost_entry_(4,5)]
 keys=offset
 key_types=_INT_
 offset=82
-group=table
+group=table_2
 
 [B2_boost_entry_(5,5)]
 keys=offset
 key_types=_INT_
 offset=83
-group=table
+group=table_2
 
 [B3_boost_entry_(0,0)]
 keys=offset
 key_types=_INT_
 offset=96
-group=table
+group=table_3
 
 [B3_boost_entry_(1,0)]
 keys=offset
 key_types=_INT_
 offset=97
-group=table
+group=table_3
 
 [B3_boost_entry_(2,0)]
 keys=offset
 key_types=_INT_
 offset=98
-group=table
+group=table_3
 
 [B3_boost_entry_(3,0)]
 keys=offset
 key_types=_INT_
 offset=99
-group=table
+group=table_3
 
 [B3_boost_entry_(4,0)]
 keys=offset
 key_types=_INT_
 offset=100
-group=table
+group=table_3
 
 [B3_boost_entry_(5,0)]
 keys=offset
 key_types=_INT_
 offset=101
-group=table
+group=table_3
 
 [B3_boost_entry_(0,1)]
 keys=offset
 key_types=_INT_
 offset=102
-group=table
+group=table_3
 
 [B3_boost_entry_(1,1)]
 keys=offset
 key_types=_INT_
 offset=103
-group=table
+group=table_3
 
 [B3_boost_entry_(2,1)]
 keys=offset
 key_types=_INT_
 offset=104
-group=table
+group=table_3
 
 [B3_boost_entry_(3,1)]
 keys=offset
 key_types=_INT_
 offset=105
-group=table
+group=table_3
 
 [B3_boost_entry_(4,1)]
 keys=offset
 key_types=_INT_
 offset=106
-group=table
+group=table_3
 
 [B3_boost_entry_(5,1)]
 keys=offset
 key_types=_INT_
 offset=107
-group=table
+group=table_3
 
 [B3_boost_entry_(0,2)]
 keys=offset
 key_types=_INT_
 offset=108
-group=table
+group=table_3
 
 [B3_boost_entry_(1,2)]
 keys=offset
 key_types=_INT_
 offset=109
-group=table
+group=table_3
 
 [B3_boost_entry_(2,2)]
 keys=offset
 key_types=_INT_
 offset=110
-group=table
+group=table_3
 
 [B3_boost_entry_(3,2)]
 keys=offset
 key_types=_INT_
 offset=111
-group=table
+group=table_3
 
 [B3_boost_entry_(4,2)]
 keys=offset
 key_types=_INT_
 offset=112
-group=table
+group=table_3
 
 [B3_boost_entry_(5,2)]
 keys=offset
 key_types=_INT_
 offset=113
-group=table
+group=table_3
 
 [B3_boost_entry_(0,3)]
 keys=offset
 key_types=_INT_
 offset=114
-group=table
+group=table_3
 
 [B3_boost_entry_(1,3)]
 keys=offset
 key_types=_INT_
 offset=115
-group=table
+group=table_3
 
 [B3_boost_entry_(2,3)]
 keys=offset
 key_types=_INT_
 offset=116
-group=table
+group=table_3
 
 [B3_boost_entry_(3,3)]
 keys=offset
 key_types=_INT_
 offset=117
-group=table
+group=table_3
 
 [B3_boost_entry_(4,3)]
 keys=offset
 key_types=_INT_
 offset=118
-group=table
+group=table_3
 
 [B3_boost_entry_(5,3)]
 keys=offset
 key_types=_INT_
 offset=119
-group=table
+group=table_3
 
 [B3_boost_entry_(0,4)]
 keys=offset
 key_types=_INT_
 offset=120
-group=table
+group=table_3
 
 [B3_boost_entry_(1,4)]
 keys=offset
 key_types=_INT_
 offset=121
-group=table
+group=table_3
 
 [B3_boost_entry_(2,4)]
 keys=offset
 key_types=_INT_
 offset=122
-group=table
+group=table_3
 
 [B3_boost_entry_(3,4)]
 keys=offset
 key_types=_INT_
 offset=123
-group=table
+group=table_3
 
 [B3_boost_entry_(4,4)]
 keys=offset
 key_types=_INT_
 offset=124
-group=table
+group=table_3
 
 [B3_boost_entry_(5,4)]
 keys=offset
 key_types=_INT_
 offset=125
-group=table
+group=table_3
 
 [B3_boost_entry_(0,5)]
 keys=offset
 key_types=_INT_
 offset=126
-group=table
+group=table_3
 
 [B3_boost_entry_(1,5)]
 keys=offset
 key_types=_INT_
 offset=127
-group=table
+group=table_3
 
 [B3_boost_entry_(2,5)]
 keys=offset
 key_types=_INT_
 offset=128
-group=table
+group=table_3
 
 [B3_boost_entry_(3,5)]
 keys=offset
 key_types=_INT_
 offset=129
-group=table
+group=table_3
 
 [B3_boost_entry_(4,5)]
 keys=offset
 key_types=_INT_
 offset=130
-group=table
+group=table_3
 
 [B3_boost_entry_(5,5)]
 keys=offset
 key_types=_INT_
 offset=131
-group=table
+group=table_3

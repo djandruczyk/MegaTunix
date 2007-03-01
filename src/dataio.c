@@ -243,7 +243,8 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 				if (res == 0) /* No Data avail */
 					zerocount++;
 
-				dbg_func(g_strdup_printf(__FILE__"\tRT_VARS read %i bytes, running total %i\n",res,total_read));
+				if (dbg_lvl & (IO_PROCESS))
+					dbg_func(g_strdup_printf(__FILE__"\tRT_VARS read %i bytes, running total %i\n",res,total_read));
 				if (zerocount > 1)  // 2 bad reads, abort
 				{
 					bad_read = TRUE;
