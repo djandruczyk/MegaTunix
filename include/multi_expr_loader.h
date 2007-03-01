@@ -11,22 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __USER_OUTPUTS_H__
-#define __USER_OUTPUTS_H__
+#ifndef __MULTI_EXPR_LOADER_H__
+#define __MULTI_EXPR_LOADER_H__
 
+#include <configfile.h>
 #include <gtk/gtk.h>
+#include <structures.h>
 
 /* Prototypes */
-void build_model_and_view(GtkWidget *);
-GtkTreeModel * create_model(void);
-void add_columns (GtkTreeView *, GtkWidget *);
-void update_model_from_view(GtkWidget * );
-void cell_edited(GtkCellRendererText *, const gchar * ,const gchar * ,gpointer );
-gboolean force_view_recompute();
-gboolean deferred_model_update(GtkWidget * );
-
-
-		
+void load_multi_expressions(GObject * ,ConfigFile * ,gchar * );
+void free_multi_expr(gpointer);
 
 /* Prototypes */
 

@@ -41,7 +41,15 @@ enum
 } ;
 
 extern gint dbg_lvl;
+static GList *views = NULL;
 
+gboolean force_view_recompute()
+{
+	gint i = 0;
+	for (i=0;i<g_list_length(views);i++)
+		update_model_from_view(g_list_nth_data(views,i));
+	return FALSE;
+}
 /*!
  \brief build_model_and_view() is called to create the model and view for
  a preexisting textview. Currently used to generate the User controlled outputs
@@ -54,6 +62,7 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 	extern gboolean rtvars_loaded;
 	GtkWidget *view = NULL;
 	GtkTreeModel *model = NULL;
+
 
 	if (!rtvars_loaded)
 	{
@@ -71,6 +80,7 @@ EXPORT void build_model_and_view(GtkWidget * widget)
 	g_object_set_data(G_OBJECT(model),"page",g_object_get_data(G_OBJECT(widget),"page"));
 
 	view = gtk_tree_view_new_with_model(model);
+	views = g_list_append(views,view);
 	g_object_set_data(G_OBJECT(model),"view",(gpointer)view);
 	gtk_container_add(GTK_CONTAINER(widget),view);
 	g_object_unref(model);
@@ -116,7 +126,10 @@ GtkTreeModel * create_model(void)
 			continue;
 		lower = (gint) g_object_get_data(object,"lower_limit"); 
 		upper = (gint) g_object_get_data(object,"upper_limit"); 
-		range = g_strdup_printf("%i-%i",lower,upper);
+		if ((!g_object_get_data(object,"lower_limit")) && (!g_object_get_data(object,"upper_limit")))
+			range = g_strdup_printf("Varies");
+		else
+			range = g_strdup_printf("%i-%i",lower,upper);
 
 		gtk_list_store_append (model, &iter);
 		gtk_list_store_set (model, &iter,
@@ -264,6 +277,9 @@ void cell_edited(GtkCellRendererText *cell,
 	gint page = 0;
 	gboolean ign_parm = FALSE;
 	gboolean is_float = FALSE;
+	struct MultiExpr *multi = NULL;
+	GHashTable *hash = NULL;
+	extern volatile gchar * load_source;
 
 	column = (gint) g_object_get_data (G_OBJECT (cell), "column");
 	page = (gint) g_object_get_data(G_OBJECT(model),"page");
@@ -275,54 +291,86 @@ void cell_edited(GtkCellRendererText *cell,
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter, COL_OBJECT, &object, -1);
 
-	lower = (gint) g_object_get_data(G_OBJECT(object),"lower_limit");
-	upper = (gint) g_object_get_data(G_OBJECT(object),"upper_limit");
 	rt_offset = (gint) g_object_get_data(G_OBJECT(object),"offset");
-	evaluator = (void *)g_object_get_data(G_OBJECT(object),"dl_evaluator");
-	temp_dep = (gboolean)g_object_get_data(G_OBJECT(object),"temp_dep");
 	is_float = (gboolean)g_object_get_data(G_OBJECT(object),"is_float");
 	new = (gfloat)strtod(new_text,NULL);
-
-	if (new < lower)
-		new = lower;
-	if (new > upper)
-		new = upper;
-
-	if (is_float)
-		gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-				g_strdup_printf("%.2f",new), -1);
-	else
-		gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-				g_strdup_printf("%i",(gint)new), -1);
-
-	if (!evaluator)
+	if (g_object_get_data(G_OBJECT(object),"multi_expr_hash"))
 	{
-		evaluator = evaluator_create(g_object_get_data(G_OBJECT(object),"dl_conv_expr"));
+		hash = g_object_get_data(G_OBJECT(object),"multi_expr_hash");
+		multi = (struct MultiExpr *)g_hash_table_lookup(hash,(gchar *)load_source);
+		if (!multi)
+			return;
+		if (new < multi->lower_limit)
+			new = multi->lower_limit;
+		if (new > multi->upper_limit)
+			new = multi->upper_limit;
+
+		if (is_float)
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
+					g_strdup_printf("%.2f",new), -1);
+		else
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
+					g_strdup_printf("%i",(gint)new), -1);
+
+		// Then evaluate it in reverse....
+		tmpf = evaluator_evaluate_x(multi->dl_eval,new);
+		// Then if it used a lookuptable,  reverse map it if possible to 
+		// determine the ADC reading we need to send to ECU
+		if (multi->lookuptable)
+			result = direct_reverse_lookup(multi->lookuptable,(gint)tmpf);
+		else
+			result = (gint)tmpf;
+
+	}
+	else
+	{
+
+		lower = (gint) g_object_get_data(G_OBJECT(object),"lower_limit");
+		upper = (gint) g_object_get_data(G_OBJECT(object),"upper_limit");
+		evaluator = (void *)g_object_get_data(G_OBJECT(object),"dl_evaluator");
+		temp_dep = (gboolean)g_object_get_data(G_OBJECT(object),"temp_dep");
+
+		if (new < lower)
+			new = lower;
+		if (new > upper)
+			new = upper;
+
+		if (is_float)
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
+					g_strdup_printf("%.2f",new), -1);
+		else
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
+					g_strdup_printf("%i",(gint)new), -1);
+
 		if (!evaluator)
 		{
-			if (dbg_lvl & CRITICAL)
-				dbg_func(g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)g_object_get_data(G_OBJECT(object),"dl_conv_expr")));
-			g_object_set_data(object,"dl_evaluator",(gpointer)evaluator);
+			evaluator = evaluator_create(g_object_get_data(G_OBJECT(object),"dl_conv_expr"));
+			if (!evaluator)
+			{
+				if (dbg_lvl & CRITICAL)
+					dbg_func(g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)g_object_get_data(G_OBJECT(object),"dl_conv_expr")));
+				g_object_set_data(object,"dl_evaluator",(gpointer)evaluator);
+			}
 		}
-	}
-	// First conver to fahrenheit temp scale if temp dependant 
-	if (temp_dep)
-	{
-		if (temp_units == CELSIUS)
-			x = (new*9.0/5.0)+32;
+		// First conver to fahrenheit temp scale if temp dependant 
+		if (temp_dep)
+		{
+			if (temp_units == CELSIUS)
+				x = (new*9.0/5.0)+32;
+			else
+				x = new;
+		}
 		else
 			x = new;
+		// Then evaluate it in reverse....
+		tmpf = evaluator_evaluate_x(evaluator,x);
+		// Then if it used a lookuptable,  reverse map it if possible to 
+		// determine the ADC reading we need to send to ECU
+		if (g_object_get_data(object,"lookuptable"))
+			result = reverse_lookup(object,(gint)tmpf);
+		else
+			result = (gint)tmpf;
 	}
-	else
-		x = new;
-	// Then evaluate it in reverse....
-	tmpf = evaluator_evaluate_x(evaluator,x);
-	// Then if it used a lookuptable,  reverse map it if possible to 
-	// determine the ADC reading we need to send to ECU
-	if (g_object_get_data(object,"lookuptable"))
-		result = reverse_lookup(object,(gint)tmpf);
-	else
-		result = (gint)tmpf;
 
 	switch (column)
 	{
@@ -375,6 +423,9 @@ void update_model_from_view(GtkWidget * widget)
 	extern gint ** ms_data;
 	extern gint temp_units;
 	gchar * tmpbuf = NULL;
+	GHashTable *hash = NULL;
+	struct MultiExpr * multi = NULL;
+	extern volatile gchar * load_source;
 
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
@@ -398,59 +449,24 @@ void update_model_from_view(GtkWidget * widget)
 		{
 			is_float =(gboolean)g_object_get_data(object,"is_float");
 			temp_dep =(gboolean)g_object_get_data(object,"temp_dep");
-			evaluator =(void *)g_object_get_data(object,"ul_evaluator");
-			if (!evaluator) /* Not created yet */
+			if (g_object_get_data(object,"multi_expr_hash"))
 			{
-				expr = g_object_get_data(object,"ul_conv_expr");
-				if (expr == NULL)
-				{
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")));
-					exit (-3);
-				}
-				evaluator = evaluator_create(expr);
-				if (!evaluator)
-				{
-					if (dbg_lvl & CRITICAL)
-						dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-					g_object_set_data(object,"ul_evaluator",evaluator);
-				}
+				hash = g_object_get_data(object,"multi_expr_hash");
+				if(load_source)
+					multi = (struct MultiExpr *)g_hash_table_lookup(hash,(gchar *)load_source);
+				else
+					multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
+				if (!multi)
+					continue;
+
+				evaluator = multi->ul_eval;
 				assert(evaluator);
 
-			}
-			else
-				assert(evaluator);
-
-			/* TEXT ENTRY part */
-			if (g_object_get_data(object,"lookuptable"))
-				x = lookup_data(object,cur_val);
-			else
-				x = cur_val;
-			tmpf = evaluator_evaluate_x(evaluator,x);
-			if (temp_dep)
-			{
-				if (temp_units == CELSIUS)
-					result = (tmpf-32)*(5.0/9.0);
+				/* TEXT ENTRY part */
+				if (multi->lookuptable)
+					x = direct_lookup_data(multi->lookuptable,cur_val);
 				else
-					result = tmpf;
-			}
-			else
-				result = tmpf;
-			if (is_float)
-				tmpbuf =  g_strdup_printf("%.2f",result);
-			else
-				tmpbuf =  g_strdup_printf("%i",(gint)result);
-
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
-			g_free(tmpbuf);
-
-			/* HYSTERESIS VALUE */
-			if (g_object_get_data(G_OBJECT(model),"hys_offset") != NULL)
-			{
-				if (g_object_get_data(object,"lookuptable"))
-					x = lookup_data(object,hys_val);
-				else
-					x = hys_val;
+					x = cur_val;
 				tmpf = evaluator_evaluate_x(evaluator,x);
 				if (temp_dep)
 				{
@@ -461,22 +477,97 @@ void update_model_from_view(GtkWidget * widget)
 				}
 				else
 					result = tmpf;
-
 				if (is_float)
-					tmpbuf = g_strdup_printf("%.2f",result);
+					tmpbuf =  g_strdup_printf("%.2f",result);
 				else
-					tmpbuf = g_strdup_printf("%i",(gint)result);
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
+					tmpbuf =  g_strdup_printf("%i",(gint)result);
+
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
 				g_free(tmpbuf);
 
+				/* HYSTERESIS VALUE */
+				if (g_object_get_data(G_OBJECT(model),"hys_offset") != NULL)
+				{
+					if (multi->lookuptable)
+						x = direct_lookup_data(multi->lookuptable,hys_val);
+					else
+						x = hys_val;
+					tmpf = evaluator_evaluate_x(evaluator,x);
+					if (temp_dep)
+					{
+						if (temp_units == CELSIUS)
+							result = (tmpf-32)*(5.0/9.0);
+						else
+							result = tmpf;
+					}
+					else
+						result = tmpf;
+
+					if (is_float)
+						tmpbuf = g_strdup_printf("%.2f",result);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)result);
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
+					g_free(tmpbuf);
+
+				}
+				/* UPPER LIMIT VALUE */
+				if (g_object_get_data(G_OBJECT(model),"ulimit_offset") != NULL)
+				{
+					if (multi->lookuptable)
+						x = direct_lookup_data(multi->lookuptable,ulimit_val);
+					else
+						x = ulimit_val;
+					tmpf = evaluator_evaluate_x(evaluator,x);
+					if (temp_dep)
+					{
+						if (temp_units == CELSIUS)
+							result = (tmpf-32)*(5.0/9.0);
+						else
+							result = tmpf;
+					}
+					else
+						result = tmpf;
+
+					if (is_float)
+						tmpbuf = g_strdup_printf("%.2f",result);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)result);
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
+					g_free(tmpbuf);
+				}
 			}
-			/* UPPER LIMIT VALUE */
-			if (g_object_get_data(G_OBJECT(model),"ulimit_offset") != NULL)
+
+			else /* Non multi-expression variable */
 			{
-				if (g_object_get_data(object,"lookuptable"))
-					x = lookup_data(object,ulimit_val);
+				evaluator =(void *)g_object_get_data(object,"ul_evaluator");
+				if (!evaluator) /* Not created yet */
+				{
+					expr = g_object_get_data(object,"ul_conv_expr");
+					if (expr == NULL)
+					{
+						if (dbg_lvl & CRITICAL)
+							dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)g_object_get_data(object,"internal_name")));
+						exit (-3);
+					}
+					evaluator = evaluator_create(expr);
+					if (!evaluator)
+					{
+						if (dbg_lvl & CRITICAL)
+							dbg_func(g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
+						g_object_set_data(object,"ul_evaluator",evaluator);
+					}
+					assert(evaluator);
+
+				}
 				else
-					x = ulimit_val;
+					assert(evaluator);
+
+				/* TEXT ENTRY part */
+				if (g_object_get_data(object,"lookuptable"))
+					x = lookup_data(object,cur_val);
+				else
+					x = cur_val;
 				tmpf = evaluator_evaluate_x(evaluator,x);
 				if (temp_dep)
 				{
@@ -487,13 +578,65 @@ void update_model_from_view(GtkWidget * widget)
 				}
 				else
 					result = tmpf;
-
 				if (is_float)
-					tmpbuf = g_strdup_printf("%.2f",result);
+					tmpbuf =  g_strdup_printf("%.2f",result);
 				else
-					tmpbuf = g_strdup_printf("%i",(gint)result);
-				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
+					tmpbuf =  g_strdup_printf("%i",(gint)result);
+
+				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
 				g_free(tmpbuf);
+
+				/* HYSTERESIS VALUE */
+				if (g_object_get_data(G_OBJECT(model),"hys_offset") != NULL)
+				{
+					if (g_object_get_data(object,"lookuptable"))
+						x = lookup_data(object,hys_val);
+					else
+						x = hys_val;
+					tmpf = evaluator_evaluate_x(evaluator,x);
+					if (temp_dep)
+					{
+						if (temp_units == CELSIUS)
+							result = (tmpf-32)*(5.0/9.0);
+						else
+							result = tmpf;
+					}
+					else
+						result = tmpf;
+
+					if (is_float)
+						tmpbuf = g_strdup_printf("%.2f",result);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)result);
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
+					g_free(tmpbuf);
+
+				}
+				/* UPPER LIMIT VALUE */
+				if (g_object_get_data(G_OBJECT(model),"ulimit_offset") != NULL)
+				{
+					if (g_object_get_data(object,"lookuptable"))
+						x = lookup_data(object,ulimit_val);
+					else
+						x = ulimit_val;
+					tmpf = evaluator_evaluate_x(evaluator,x);
+					if (temp_dep)
+					{
+						if (temp_units == CELSIUS)
+							result = (tmpf-32)*(5.0/9.0);
+						else
+							result = tmpf;
+					}
+					else
+						result = tmpf;
+
+					if (is_float)
+						tmpbuf = g_strdup_printf("%.2f",result);
+					else
+						tmpbuf = g_strdup_printf("%i",(gint)result);
+					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
+					g_free(tmpbuf);
+				}
 			}
 
 			/* Scroll the treeview s othe current one is in view */

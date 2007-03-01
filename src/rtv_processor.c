@@ -345,8 +345,6 @@ gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *
 {
 	extern volatile gchar * load_source;
 	struct MultiExpr *multi = NULL;
-	extern GHashTable *lookuptables;
-	gint *lookuptable = NULL;
 	gint offset = 0;
 	gfloat result = 0.0;
 	gfloat x = 0.0;
@@ -361,13 +359,7 @@ gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *
 
 	offset = (gint)g_object_get_data(object,"offset");
 	if (multi->lookuptable)
-	{
-		lookuptable = (gint *)g_hash_table_lookup(lookuptables,multi->lookuptable);	
-		if (lookuptable)
-			x = lookuptable[raw_realtime[offset]];
-		else
-			x = (float)raw_realtime[offset];
-	}
+		x = direct_lookup_data(multi->lookuptable,raw_realtime[offset]);
 	else
 		x = (float)raw_realtime[offset];
 

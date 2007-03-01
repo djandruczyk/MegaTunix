@@ -244,8 +244,6 @@ gfloat convert_after_upload(GtkWidget * widget)
 		switch (algorithm[table_num])
 		{
 			case SPEED_DENSITY:
-				printf("table %i, SD\n",table_num);
-				printf("load_source %s\n",load_source);
 				if (!load_source)
 					evaluator = g_hash_table_lookup(hash,"DEFAULT");
 				else
@@ -256,11 +254,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 				}
 				break;
 			case ALPHA_N:
-				printf("table %i, AN\n",table_num);
 				evaluator = g_hash_table_lookup(hash,"DEFAULT");
 				break;
 			case MAF:
-				printf("table %i, MAF\n",table_num);
 				evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
 				if (!evaluator)
 					evaluator = g_hash_table_lookup(hash,"DEFAULT");

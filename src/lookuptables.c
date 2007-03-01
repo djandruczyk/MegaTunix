@@ -182,14 +182,14 @@ gint reverse_lookup(GObject *object, gint value)
 
 	for (i=0;i<len;i++)
 	{
-//		printf("counter is %i\n",i);
+		//		printf("counter is %i\n",i);
 		if (lookuptable[i] == value)
 		{
-//			printf("match at %i\n",i);
+			//			printf("match at %i\n",i);
 			j = i;
 			while (lookuptable[j] == value)
 			{
-//				printf("searching for dups to upp the weight\n");
+				//				printf("searching for dups to upp the weight\n");
 				weight[i]++;
 				if (j+1 == len)
 					break;
@@ -203,13 +203,67 @@ gint reverse_lookup(GObject *object, gint value)
 	{
 		if (weight[i] > min)
 		{
-//			printf("weight[%i]= %i greater than %i\n",i,weight[i],min);
+			//			printf("weight[%i]= %i greater than %i\n",i,weight[i],min);
 			min = weight[i];
 			closest_index=i+(min/2);
 		}
 	}
 
-//	printf("closest index is %i\n",closest_index);
+	//	printf("closest index is %i\n",closest_index);
+
+	return closest_index;
+}
+
+gint direct_reverse_lookup(gchar *table, gint value)
+{
+	gint i = 0;
+	gint j = 0;
+	gint closest_index = 0;
+	gint min = 0;
+	gint len = 0;
+	gint weight[255];
+
+	extern GHashTable *lookuptables;
+	gint *lookuptable = NULL;
+
+	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+	if (!lookuptable)
+		return value;
+
+	len=255;
+	for (i=0;i<len;i++)
+		weight[i]=0;
+
+	for (i=0;i<len;i++)
+	{
+		//		printf("counter is %i\n",i);
+		if (lookuptable[i] == value)
+		{
+			//			printf("match at %i\n",i);
+			j = i;
+			while (lookuptable[j] == value)
+			{
+				//				printf("searching for dups to upp the weight\n");
+				weight[i]++;
+				if (j+1 == len)
+					break;
+				else
+					j++;
+			}
+			i=j;
+		}
+	}
+	for (i=0;i<len;i++)
+	{
+		if (weight[i] > min)
+		{
+			//			printf("weight[%i]= %i greater than %i\n",i,weight[i],min);
+			min = weight[i];
+			closest_index=i+(min/2);
+		}
+	}
+
+	//	printf("closest index is %i\n",closest_index);
 
 	return closest_index;
 }
@@ -235,11 +289,11 @@ gfloat lookup_data(GObject *object, gint offset)
 	alt_table = (gchar *)g_object_get_data(object,"alt_lookuptable");
 	dep_obj = (GObject *)g_object_get_data(object,"dep_object");
 	/*
-	if (GTK_IS_OBJECT(dep_obj))
-		printf("checking dependancy\n");
-	else
-		printf("no dependancy\n");
-	*/
+	   if (GTK_IS_OBJECT(dep_obj))
+	   printf("checking dependancy\n");
+	   else
+	   printf("no dependancy\n");
+	   */
 	if (dep_obj)
 	{
 		state = check_dependancies(dep_obj);
@@ -260,6 +314,22 @@ gfloat lookup_data(GObject *object, gint offset)
 		if (dbg_lvl & CRITICAL)
 			dbg_func(g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) g_object_get_data(object,"internal_name")));
 		return 0.0;
+	}
+	return lookuptable[offset];
+}
+
+
+
+gfloat direct_lookup_data(gchar *table, gint offset)
+{
+	extern GHashTable *lookuptables;
+	gint *lookuptable = NULL;
+
+	lookuptable = (gint *)g_hash_table_lookup(lookuptables,table);	
+
+	if (!lookuptable)
+	{
+		return offset;
 	}
 	return lookuptable[offset];
 }

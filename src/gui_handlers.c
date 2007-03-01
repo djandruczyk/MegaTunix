@@ -529,7 +529,10 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	/* Update controls that are dependant on a controls state...
 	 * In this case, MAP sensor related ctrls */
 	if (group_2_update)
+	{
+		g_timeout_add(2000,force_view_recompute,NULL);
 		g_timeout_add(2000,trigger_group_update,group_2_update);
+	}
 
 	if (dl_type == IMMEDIATE)
 	{
@@ -1803,6 +1806,7 @@ void update_widget(gpointer object, gpointer user_data)
 					g_free((gchar *)load_source);
 				load_source = g_strdup(g_object_get_data(G_OBJECT(widget),"load_source"));
 			}
+			g_timeout_add(2000,force_view_recompute,NULL);
 			g_timeout_add(2000,trigger_group_update,group_2_update);
 		}
 
