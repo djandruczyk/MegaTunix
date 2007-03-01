@@ -11,14 +11,15 @@ groups=load_1,rpm_1,spark_1,load_2,rpm_2,spark_2
 #----- Group config ----------------------------------------------------------
 
 [load_1]
-keys=page,dl_type,handler,raw_lower,raw_upper,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
+keys=page,dl_type,handler,raw_lower,raw_upper,table_num,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=3
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 raw_lower=0
 raw_upper=255
 use_color=TRUE
+table_num=3
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000),x/(1961/100000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000),x*(1961/100000)
@@ -54,14 +55,15 @@ use_color=TRUE
 tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_2]
-keys=page,dl_type,handler,raw_lower,raw_upper,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
-key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
+keys=page,dl_type,handler,raw_lower,raw_upper,table_num,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,use_color,bind_to_list,tooltip
+key_types=_INT_,_ENUM_,_ENUM_,_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_BOOL_,_STRING_,_STRING_
 page=4
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 raw_lower=0
 raw_upper=255
 use_color=TRUE
+table_num=4
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000),x/(1961/100000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000),x*(1961/100000)

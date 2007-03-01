@@ -39,6 +39,7 @@ megatunix_SOURCES = \
 	main.c \
 	menu_handlers.c \
 	memory_gui.c \
+	multi_expr_loader.c \
 	mode_select.c \
 	notifications.c \
 	offline.c \

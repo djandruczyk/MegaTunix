@@ -36,6 +36,7 @@ headers = \
         memory_gui.h \
         mode_select.h \
         ms_structures.h \
+        multi_expr_loader.h \
         notifications.h \
 	offline.h \
         post_process.h \

@@ -32,7 +32,6 @@ extern gint dbg_lvl;
 gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 {
 	gchar **result = NULL;	
-	gint i = 0;
 	if (!string)
 	{
 		if (dbg_lvl & (KEYPARSER|CRITICAL))
@@ -40,11 +39,8 @@ gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
 		*count = 0;
 		return NULL;
 	}
-
 	result = g_strsplit(string,delimiter,0);
-	while (result[i])
-		i++;
-	*count = i;	
+	*count = g_strv_length(result);
 	return result;
 }
 

@@ -693,4 +693,20 @@ struct TTMon_Data
 
 };
 
+
+/*!
+ * \brief MultiExpr is a container struct used for Realtime var processing
+ * for vars that depend on ECU state (MAP, need to know current sensor)
+ */
+struct MultiExpr
+{
+	gint lower_limit;
+	gint upper_limit;
+	gchar *lookuptable;
+	gchar *dl_conv_expr;
+	gchar *ul_conv_expr;
+	void *dl_eval;
+	void *ul_eval;
+};
+
 #endif

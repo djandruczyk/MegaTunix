@@ -414,7 +414,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
-	extern volatile gchar *load_key;
+	extern volatile gchar *load_source;
 	extern struct Firmware_Details *firmware;
 
 	if ((paused_handlers) || (!ready))
@@ -445,12 +445,14 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	switch ((SpinButton)handler)
 	{
 		case MAP_SENSOR_TYPE:
-//			printf("MAP SENSOR CHANGE\n");
-			if (load_key)
-				g_free((gchar *)load_key);
-			load_key = g_strdup(g_object_get_data(G_OBJECT(widget),"load_key"));
-//			printf("new key %s\n",load_key);
-			/* Fall through */
+			//printf("MAP SENSOR CHANGE\n");
+			if (g_object_get_data(G_OBJECT(widget),"load_source"))
+			{
+				if (load_source)
+					g_free((gchar *)load_source);
+				load_source = g_strdup(g_object_get_data(G_OBJECT(widget),"load_source"));
+			}
+			/* FAll Through */
 		case GENERIC:
 			tmp = ms_data[page][offset];
 			tmp = tmp & ~bitmask;	//clears bits 
@@ -1507,6 +1509,7 @@ void update_widget(gpointer object, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	gchar **vector = NULL;
 	gchar * widget_text = NULL;
+	gchar * group_2_update = NULL;
 	gdouble spin_value = 0.0; 
 	gboolean update_color = TRUE;
 	GdkColor color;
@@ -1514,6 +1517,7 @@ void update_widget(gpointer object, gpointer user_data)
 	extern GHashTable *widget_group_states;
 	extern gint *algorithm;
 	extern volatile gboolean leaving;
+	extern volatile gchar * load_source;
 
 	if (leaving)
 		return;
@@ -1557,7 +1561,7 @@ void update_widget(gpointer object, gpointer user_data)
 		base = 10;
 	else
 		base = (gint)g_object_get_data(G_OBJECT(widget),
-			"base");
+				"base");
 
 	precision = (gint)g_object_get_data(G_OBJECT(widget),
 			"precision");
@@ -1575,6 +1579,8 @@ void update_widget(gpointer object, gpointer user_data)
 			"swap_labels");
 	set_labels = (gchar *)g_object_get_data(G_OBJECT(widget),
 			"set_widgets_label");
+	group_2_update = (gchar *)g_object_get_data(G_OBJECT(widget),
+			"group_2_update");
 
 	value = convert_after_upload(widget);  
 
@@ -1789,6 +1795,16 @@ void update_widget(gpointer object, gpointer user_data)
 			set_widget_labels(set_labels);
 		if (swap_list)
 			swap_labels(swap_list,new_state);
+		if ((new_state) && (group_2_update))
+		{
+			if (g_object_get_data(G_OBJECT(widget),"load_source"))
+			{
+				if (load_source)
+					g_free((gchar *)load_source);
+				load_source = g_strdup(g_object_get_data(G_OBJECT(widget),"load_source"));
+			}
+			g_timeout_add(2000,trigger_group_update,group_2_update);
+		}
 
 		if (new_state)
 		{
@@ -1835,6 +1851,7 @@ noalgo:
 			//	printf ("DONE!\n\n\n");
 			g_strfreev(groups);
 		}
+
 	}
 	else if (GTK_IS_SCROLLED_WINDOW(widget))
 	{
@@ -1847,7 +1864,7 @@ noalgo:
 		 */
 		update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
 	}
-
+	/* IF control has groups linked to it's state, adjust */
 
 }
 

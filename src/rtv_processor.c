@@ -60,6 +60,7 @@ void process_rt_vars(void *incoming)
 	gint current_index;
 	GArray *history = NULL;
 	gchar *special = NULL;
+	GHashTable *hash = NULL;
 	GTimeVal curr;
 	GTimeVal begin;
 	gint hours = 0;
@@ -116,6 +117,13 @@ void process_rt_vars(void *incoming)
 				tmpf = handle_special(object,special);
 				goto store_it;
 			}
+			hash = (GHashTable *)g_object_get_data(object,"multi_expr_hash");
+			if (hash)
+			{
+				tmpf = handle_multi_expression(object,raw_realtime,hash);
+				goto store_it;
+			}
+
 			evaluator = (void *)g_object_get_data(object,"ul_evaluator");
 			if (!evaluator)
 			{
@@ -326,6 +334,49 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
 	g_free(values);
 	return result;
 }
+
+/*!
+ \brief handle_multi_expression() is used to handle RT Vars that take
+ multiple possible conversions based on ECU state
+ \param object (GObject *) object representing this derived variable
+ \param handler_name (gchar *) string name of special handler case to be done
+ */
+gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *hash)
+{
+	extern volatile gchar * load_source;
+	struct MultiExpr *multi = NULL;
+	extern GHashTable *lookuptables;
+	gint *lookuptable = NULL;
+	gint offset = 0;
+	gfloat result = 0.0;
+	gfloat x = 0.0;
+
+	multi = (struct MultiExpr *)g_hash_table_lookup(hash,(gchar *)load_source);
+	if (!multi)
+	{
+		if (dbg_lvl & COMPLEX_EXPR)
+			dbg_func(g_strdup_printf(__FILE__": handle_multi_expression()\n\t data struct NOT found for key \"%s\"\n",load_source));
+		return 0.0;
+	}
+
+	offset = (gint)g_object_get_data(object,"offset");
+	if (multi->lookuptable)
+	{
+		lookuptable = (gint *)g_hash_table_lookup(lookuptables,multi->lookuptable);	
+		if (lookuptable)
+			x = lookuptable[raw_realtime[offset]];
+		else
+			x = (float)raw_realtime[offset];
+	}
+	else
+		x = (float)raw_realtime[offset];
+
+	 result = evaluator_evaluate_x(multi->ul_eval,x);
+
+	 return result;
+}
+
+
 
 
 /*!

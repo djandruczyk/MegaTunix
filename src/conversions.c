@@ -24,13 +24,14 @@
 #include "../mtxmatheval/mtxmatheval.h"
 #include <rtv_processor.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <structures.h>
 #include <tabloader.h>
 
 
 
 extern gint dbg_lvl;
-volatile gchar *load_key = NULL;
+volatile gchar *load_source = NULL;
 /*!
  \brief convert_before_download() converts the value passed using the
  conversions bound to the widget
@@ -55,6 +56,10 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar *expr_list = NULL;
 	gchar **keys = NULL;
 	gchar **exprs = NULL;
+	gint table_num = 0;
+	gchar *tmpbuf = NULL;
+	extern gint *algorithm;
+
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -91,16 +96,29 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 			g_object_set_data(G_OBJECT(widget),"dl_eval_hash",hash);
 		}
 		hash = g_object_get_data(G_OBJECT(widget),"dl_eval_hash");
-		if (!load_key)
-			evaluator = g_hash_table_lookup(hash,"DEFAULT");
-		else
+		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+		table_num = (gint)strtol(tmpbuf,NULL,10);
+		switch (algorithm[table_num])
 		{
-		//	printf("searching for evaluator for key %s\n",load_key);
-			evaluator = g_hash_table_lookup(hash,(gchar *)load_key);
-			if (!evaluator)   /* Try default key */
+			case SPEED_DENSITY:
+				if (!load_source)
+					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				else
+				{
+					evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+					if (!evaluator)
+						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				break;
+			case ALPHA_N:
 				evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				break;
+			case MAF:
+				evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
+				if (!evaluator)
+					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				break;
 		}
-		
 	}
 	else
 	{
@@ -185,6 +203,9 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gchar *expr_list = NULL;
 	gchar **keys = NULL;
 	gchar **exprs = NULL;
+	gchar * tmpbuf = NULL;
+	gint table_num = 0;
+	extern gint *algorithm;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 	g_static_mutex_lock(&mutex);
@@ -218,16 +239,33 @@ gfloat convert_after_upload(GtkWidget * widget)
 			g_object_set_data(G_OBJECT(widget),"ul_eval_hash",hash);
 		}
 		hash = g_object_get_data(G_OBJECT(widget),"ul_eval_hash");
-		if (!load_key)
-			evaluator = g_hash_table_lookup(hash,"DEFAULT");
-		else
+		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
+		table_num = (gint)strtol(tmpbuf,NULL,10);
+		switch (algorithm[table_num])
 		{
-//			printf("searching for evaluator for key %s\n",load_key);
-			evaluator = g_hash_table_lookup(hash,(gchar *)load_key);
-			if (!evaluator)   /* Try default key */
+			case SPEED_DENSITY:
+				printf("table %i, SD\n",table_num);
+				printf("load_source %s\n",load_source);
+				if (!load_source)
+					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				else
+				{
+					evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+					if (!evaluator)
+						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				break;
+			case ALPHA_N:
+				printf("table %i, AN\n",table_num);
 				evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				break;
+			case MAF:
+				printf("table %i, MAF\n",table_num);
+				evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
+				if (!evaluator)
+					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				break;
 		}
-		
 	}
 	else
 	{

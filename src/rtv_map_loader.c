@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <dep_loader.h>
+#include <multi_expr_loader.h>
 #include <enums.h>
 #include <getfiles.h>
 #include <keyparser.h>
@@ -205,6 +206,11 @@ gboolean load_realtime_map(void )
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
 	                load_dependancies(G_OBJECT(object),cfgfile,section);
+			g_free(tmpbuf);
+		}
+		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
+		{
+			load_multi_expressions(G_OBJECT(object),cfgfile,section);
 			g_free(tmpbuf);
 		}
 		for (j=0;j<num_keys;j++)
