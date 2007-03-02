@@ -552,9 +552,6 @@ struct Table_Params * initialize_table_params(void)
 	table_params->x_precision = 0;
 	table_params->y_precision = 0;
 	table_params->z_precision = 0;
-	table_params->x_float = FALSE;
-	table_params->y_float = FALSE;
-	table_params->z_float = FALSE;
 	table_params->x_suffix = NULL;
 	table_params->y_suffix = NULL;
 	table_params->z_suffix = NULL;

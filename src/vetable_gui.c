@@ -422,6 +422,8 @@ void draw_ve_marker()
 			if(!multi)
 				multi = g_hash_table_lookup(hash,"DEFAULT");
 		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
 
 		eval[table][_X_] = multi->evaluator;
 		lookup_current_value(multi->source,&x_source);
@@ -452,6 +454,9 @@ void draw_ve_marker()
 			if(!multi)
 				multi = g_hash_table_lookup(hash,"DEFAULT");
 		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+
 		if (!multi)
 			printf("multi is null!!\n");
 

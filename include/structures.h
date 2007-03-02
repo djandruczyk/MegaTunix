@@ -257,14 +257,12 @@ struct Table_Params
 	gchar *x_sources;	/*! comma sep list of sources */
 	gchar *x_suffixes;	/*! comma sep list of suffixes */
 	gchar *x_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *x_floats;	/*! comma sep list of display as a float */
 	gchar *x_precisions;	/*! comma sep list of precisions */
 	GHashTable *x_multi_hash;/*! Hash table to store the above */
 	gchar *x_source;	/*! X datasource for 3d displays */
 	gchar *x_suffix;	/*! text suffix used on 3D view */
 	gchar *x_conv_expr;	/*! x conversion expression */
 	void *x_eval;		/*! evaluator for x variable */
-	gboolean x_float;	/*! display as a float */
 	gint x_precision;	/*! how many decimal places */
 
 	gint y_page;		/*! what page the load (Y axis) resides in */
@@ -278,14 +276,12 @@ struct Table_Params
 	gchar *y_sources;	/*! comma sep list of sources */
 	gchar *y_suffixes;	/*! comma sep list of suffixes */
 	gchar *y_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *y_floats;	/*! comma sep list of display as a float */
 	gchar *y_precisions;	/*! comma sep list of precisions */
 	GHashTable *y_multi_hash;/*! Hash table to store the above */
 	gchar *y_source;	/*! Y datasource for 3d displays */
 	gchar *y_suffix;	/*! text suffix used on 3D view */
 	gchar *y_conv_expr;	/*! y conversion expression */
 	void *y_eval;		/*! evaluator for y variable */
-	gboolean y_float;	/*! display as a float */
 	gint y_precision;	/*! how many decimal places */
 
 	gint z_page;		/*! what page the vetable resides in */
@@ -298,14 +294,12 @@ struct Table_Params
 	gchar *z_sources;	/*! comma sep list of sources */
 	gchar *z_suffixes;	/*! comma sep list of suffixes */
 	gchar *z_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *z_floats;	/*! comma sep list of display as a float */
 	gchar *z_precisions;	/*! comma sep list of precisions */
 	GHashTable *z_multi_hash;/*! Hash table to store the above */
 	gchar *z_source;	/*! Z datasource for 3d displays */
 	gchar *z_suffix;	/*! text suffix used on 3D view */
 	gchar *z_conv_expr;	/*! z conversion expression */
 	void *z_eval;		/*! evaluator for z variable */
-	gboolean z_float;	/*! display as a float */
 	gint z_precision;	/*! how many decimal places */
 	gchar *table_name;	/*! Name for the 3D Table editor title */
 };
@@ -588,9 +582,6 @@ struct Ve_View_3D
 	gfloat x_div;
 	gfloat y_div;
 	gfloat z_div;
-	gboolean x_float;
-	gboolean y_float;
-	gboolean z_float;
 	gint x_precision;
 	gint y_precision;
 	gint z_precision;
@@ -744,8 +735,7 @@ struct MultiSource
 	gchar *conv_expr;	/* conversion expression ms units to real */
 	void * evaluator;	/* evaluator pointer */
 	gchar * suffix;		/* textual suffix for this evaluator*/
-	gboolean is_float;	/* Display as float? */
-	gint precision;		/* Precisoin for floating point */
+	gint precision;		/* Precision for floating point */
 };
 
 #endif
