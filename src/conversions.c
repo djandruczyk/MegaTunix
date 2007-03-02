@@ -31,7 +31,6 @@
 
 
 extern gint dbg_lvl;
-volatile gchar *load_source = NULL;
 /*!
  \brief convert_before_download() converts the value passed using the
  conversions bound to the widget
@@ -58,6 +57,9 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar **exprs = NULL;
 	gint table_num = 0;
 	gchar *tmpbuf = NULL;
+	gchar * source_key = NULL;
+	gchar * hash_key = NULL;
+	extern GHashTable *sources_hash;
 	extern gint *algorithm;
 
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -96,16 +98,20 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 			g_object_set_data(G_OBJECT(widget),"dl_eval_hash",hash);
 		}
 		hash = g_object_get_data(G_OBJECT(widget),"dl_eval_hash");
+		source_key = g_object_get_data(G_OBJECT(widget),"source_key");
+		if (!source_key)
+			printf("big problem, source key is undefined!!\n");
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
 		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
 		if (tmpbuf)
 			table_num = (gint)strtol(tmpbuf,NULL,10);
 		if (table_num == -1)
 		{
-			if (!load_source)
+			if (!hash_key)
 				evaluator = g_hash_table_lookup(hash,"DEFAULT");
 			else
 			{
-				evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+				evaluator = g_hash_table_lookup(hash,(gchar *)hash_key);
 				if (!evaluator)
 					evaluator = g_hash_table_lookup(hash,"DEFAULT");
 			}
@@ -115,11 +121,11 @@ gint convert_before_download(GtkWidget *widget, gfloat value)
 			switch (algorithm[table_num])
 			{
 				case SPEED_DENSITY:
-					if (!load_source)
+					if (!hash_key)
 						evaluator = g_hash_table_lookup(hash,"DEFAULT");
 					else
 					{
-						evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+						evaluator = g_hash_table_lookup(hash,(gchar *)hash_key);
 						if (!evaluator)
 							evaluator = g_hash_table_lookup(hash,"DEFAULT");
 					}
@@ -213,13 +219,16 @@ gfloat convert_after_upload(GtkWidget * widget)
 	gint offset = -1;
 	gboolean ul_complex = FALSE;
 	gint i = 0;
+	gint table_num = -1;
 	GHashTable *hash = NULL;
 	gchar *key_list = NULL;
 	gchar *expr_list = NULL;
 	gchar **keys = NULL;
 	gchar **exprs = NULL;
 	gchar * tmpbuf = NULL;
-	gint table_num = -1;
+	gchar * source_key = NULL;
+	gchar * hash_key = NULL;
+	extern GHashTable *sources_hash;
 	extern gint *algorithm;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -254,16 +263,20 @@ gfloat convert_after_upload(GtkWidget * widget)
 			g_object_set_data(G_OBJECT(widget),"ul_eval_hash",hash);
 		}
 		hash = g_object_get_data(G_OBJECT(widget),"ul_eval_hash");
+		source_key = g_object_get_data(G_OBJECT(widget),"source_key");
+		if (!source_key)
+			printf("big problem, source key is undefined!!\n");
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
 		tmpbuf = (gchar *)g_object_get_data(G_OBJECT(widget),"table_num");
 		if (tmpbuf)
 			table_num = (gint)strtol(tmpbuf,NULL,10);
 		if (table_num == -1)
 		{
-			if (!load_source)
+			if (!hash_key)
 				evaluator = g_hash_table_lookup(hash,"DEFAULT");
 			else
 			{
-				evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+				evaluator = g_hash_table_lookup(hash,hash_key);
 				if (!evaluator)
 					evaluator = g_hash_table_lookup(hash,"DEFAULT");
 			}
@@ -273,11 +286,11 @@ gfloat convert_after_upload(GtkWidget * widget)
 			switch (algorithm[table_num])
 			{
 				case SPEED_DENSITY:
-					if (!load_source)
+					if (!hash_key)
 						evaluator = g_hash_table_lookup(hash,"DEFAULT");
 					else
 					{
-						evaluator = g_hash_table_lookup(hash,(gchar *)load_source);
+						evaluator = g_hash_table_lookup(hash,hash_key);
 						if (!evaluator)
 							evaluator = g_hash_table_lookup(hash,"DEFAULT");
 					}

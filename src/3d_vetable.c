@@ -100,72 +100,85 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 
 
 	ve_view = initialize_ve3d_view();
-	ve_view->x_source = 
-		g_strdup(firmware->table_params[table_num]->x_source);
-	ve_view->y_source = 
-		g_strdup(firmware->table_params[table_num]->y_source);
-	ve_view->z_source = 
-		g_strdup(firmware->table_params[table_num]->z_source);
-	ve_view->an_x_source = 
-		g_strdup(firmware->table_params[table_num]->an_x_source);
-	ve_view->an_y_source = 
-		g_strdup(firmware->table_params[table_num]->an_y_source);
-	ve_view->an_z_source = 
-		g_strdup(firmware->table_params[table_num]->an_z_source);
-	ve_view->x_suffix = 
-		g_strdup(firmware->table_params[table_num]->x_suffix);
-	ve_view->an_x_suffix = 
-		g_strdup(firmware->table_params[table_num]->an_x_suffix);
-	ve_view->y_suffix = 
-		g_strdup(firmware->table_params[table_num]->y_suffix);
-	ve_view->an_y_suffix = 
-		g_strdup(firmware->table_params[table_num]->an_y_suffix);
-	ve_view->z_suffix = 
-		g_strdup(firmware->table_params[table_num]->z_suffix);
-	ve_view->an_z_suffix = 
-		g_strdup(firmware->table_params[table_num]->an_z_suffix);
+	if (firmware->table_params[table_num]->x_multi_source)
+	{
+		ve_view->x_multi_source = firmware->table_params[table_num]->x_multi_source;
+		ve_view->x_data_key = firmware->table_params[table_num]->x_data_key;
+		ve_view->x_multi_hash = firmware->table_params[table_num]->x_multi_hash;
+	}
+	else
+	{
+		ve_view->x_source = 
+			g_strdup(firmware->table_params[table_num]->x_source);
+		ve_view->x_suffix = 
+			g_strdup(firmware->table_params[table_num]->x_suffix);
+		ve_view->x_conv_expr = 
+			g_strdup(firmware->table_params[table_num]->x_conv_expr);
+		ve_view->x_eval = evaluator_create(ve_view->x_conv_expr);
+		assert(ve_view->x_eval);
+		ve_view->x_disp_float = 
+			firmware->table_params[table_num]->x_disp_float;
+		ve_view->x_precision = 
+			firmware->table_params[table_num]->x_disp_precision;
+	}
+	if (firmware->table_params[table_num]->y_multi_source)
+        {
+		ve_view->y_multi_source = firmware->table_params[table_num]->y_multi_source;
+		ve_view->y_data_key = firmware->table_params[table_num]->y_data_key;
+		ve_view->y_multi_hash = firmware->table_params[table_num]->y_multi_hash;
+	}
+	else
+	{
+		ve_view->y_source = 
+			g_strdup(firmware->table_params[table_num]->y_source);
+		ve_view->y_suffix = 
+			g_strdup(firmware->table_params[table_num]->y_suffix);
+		ve_view->y_conv_expr = 
+			g_strdup(firmware->table_params[table_num]->y_conv_expr);
+		ve_view->y_eval = evaluator_create(ve_view->y_conv_expr);
+		assert(ve_view->y_eval);
+		ve_view->y_disp_float = 
+			firmware->table_params[table_num]->y_disp_float;
+		ve_view->y_precision = 
+			firmware->table_params[table_num]->y_disp_precision;
+	}
+	if (firmware->table_params[table_num]->z_multi_source)
+        {
+		ve_view->z_multi_source = firmware->table_params[table_num]->z_multi_source;
+		ve_view->z_data_key = firmware->table_params[table_num]->z_data_key;
+		ve_view->z_multi_hash = firmware->table_params[table_num]->z_multi_hash;
+	}
+	else
+	{
+		ve_view->z_source = 
+			g_strdup(firmware->table_params[table_num]->z_source);
+		ve_view->z_suffix = 
+			g_strdup(firmware->table_params[table_num]->z_suffix);
 
-	ve_view->x_conv_expr = 
-		g_strdup(firmware->table_params[table_num]->x_conv_expr);
-	ve_view->y_conv_expr = 
-		g_strdup(firmware->table_params[table_num]->y_conv_expr);
-	ve_view->z_conv_expr = 
-		g_strdup(firmware->table_params[table_num]->z_conv_expr);
-	ve_view->x_eval = evaluator_create(ve_view->x_conv_expr);
-	ve_view->y_eval = evaluator_create(ve_view->y_conv_expr);
-	ve_view->z_eval = evaluator_create(ve_view->z_conv_expr);
-	assert(ve_view->x_eval);
-	assert(ve_view->y_eval);
-	assert(ve_view->z_eval);
+		ve_view->z_conv_expr = 
+			g_strdup(firmware->table_params[table_num]->z_conv_expr);
+		ve_view->z_eval = evaluator_create(ve_view->z_conv_expr);
+		assert(ve_view->z_eval);
+		ve_view->z_disp_float = 
+			firmware->table_params[table_num]->z_disp_float;
+		ve_view->z_precision = 
+			firmware->table_params[table_num]->z_disp_precision;
+	}
 
 	ve_view->z_page = firmware->table_params[table_num]->z_page;
 	ve_view->z_base = firmware->table_params[table_num]->z_base;
-	ve_view->z_disp_float = 
-		firmware->table_params[table_num]->z_disp_float;
-	ve_view->z_precision = 
-		firmware->table_params[table_num]->z_disp_precision;
 
 	ve_view->x_page = firmware->table_params[table_num]->x_page;
 	ve_view->x_base = firmware->table_params[table_num]->x_base;
 	ve_view->x_bincount = firmware->table_params[table_num]->x_bincount;
-	ve_view->x_disp_float = 
-		firmware->table_params[table_num]->x_disp_float;
-	ve_view->x_precision = 
-		firmware->table_params[table_num]->x_disp_precision;
 
 	ve_view->y_page = firmware->table_params[table_num]->y_page;
 	ve_view->y_base = firmware->table_params[table_num]->y_base;
 	ve_view->y_bincount = firmware->table_params[table_num]->y_bincount; 
-	ve_view->y_disp_float = 
-		firmware->table_params[table_num]->y_disp_float;
-	ve_view->y_precision = 
-		firmware->table_params[table_num]->y_disp_precision;
 
 	ve_view->table_name = 
 		g_strdup(firmware->table_params[table_num]->table_name);
 	ve_view->table_num = table_num;
-
-	ve_view->dep_obj = g_object_get_data(G_OBJECT(widget),"dep_object");
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), ve_view->table_name);
@@ -428,11 +441,12 @@ gint free_ve3d_view(GtkWidget *widget)
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
-	g_free(ve_view->an_x_source);
-	g_free(ve_view->an_y_source);
-	g_free(ve_view->an_z_source);
-	if(ve_view->dep_obj)
-		g_object_unref(ve_view->dep_obj);
+	if (ve_view->x_data_key)
+		g_free(ve_view->x_data_key);
+	if (ve_view->y_data_key)
+		g_free(ve_view->y_data_key);
+	if (ve_view->z_data_key)
+		g_free(ve_view->z_data_key);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 
@@ -957,10 +971,12 @@ void ve3d_draw_edit_indicator(struct Ve_View_3D *ve_view)
 
 	tmpbuf = g_strdup_printf("y_active_label_%i",ve_view->table_num);
 	tmp = (tmpf2/ve_view->y_scale)+ve_view->y_trans;
+	/*
 	if (algorithm[ve_view->table_num] == ALPHA_N)
 		value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->an_y_suffix);
 
 	else
+	*/
 		value = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->y_suffix);
 
 
@@ -1012,23 +1028,29 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 		return;
 	}
 
+	/*
 
 	if ((algorithm[ve_view->table_num] == 
 				ALPHA_N)&&(ve_view->an_x_source))
 		lookup_current_value(ve_view->an_x_source,&x_val);
 	else
+	*/
 		lookup_current_value(ve_view->x_source,&x_val);
 
+		/*
 	if ((algorithm[ve_view->table_num] == 
 				ALPHA_N)&&(ve_view->an_y_source))
 		lookup_current_value(ve_view->an_y_source,&y_val);
 	else
+	*/
 		lookup_current_value(ve_view->y_source,&y_val);
 
+		/*
 	if ((algorithm[ve_view->table_num] == 
 				ALPHA_N)&&(ve_view->an_z_source))
 		lookup_current_value(ve_view->an_z_source,&z_val);
 	else
+	*/
 		lookup_current_value(ve_view->z_source,&z_val);
 
 	bottom = 0.0;
@@ -1091,10 +1113,12 @@ void ve3d_draw_runtime_indicator(struct Ve_View_3D *ve_view)
 
 
 	tmpbuf = g_strdup_printf("y_runtime_label_%i",ve_view->table_num);
+	/*
 	if (algorithm[ve_view->table_num] == ALPHA_N)
 		value = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->an_y_suffix);
 
 	else
+	*/
 		value = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->y_suffix);
 
 	gtk_label_set_text(GTK_LABEL(g_hash_table_lookup(dynamic_widgets,tmpbuf)),value);
@@ -1472,18 +1496,15 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
-	ve_view->an_x_source = NULL;
-	ve_view->an_y_source = NULL;
-	ve_view->an_z_source = NULL;
 	ve_view->x_suffix = NULL;
 	ve_view->y_suffix = NULL;
 	ve_view->z_suffix = NULL;
-	ve_view->an_x_suffix = NULL;
-	ve_view->an_y_suffix = NULL;
-	ve_view->an_z_suffix = NULL;
 	ve_view->x_conv_expr = NULL;
 	ve_view->y_conv_expr = NULL;
 	ve_view->z_conv_expr = NULL;
+	ve_view->x_data_key = NULL;
+	ve_view->y_data_key = NULL;
+	ve_view->z_data_key = NULL;
 	ve_view->x_eval = NULL;
 	ve_view->y_eval = NULL;
 	ve_view->z_eval = NULL;
@@ -1517,7 +1538,6 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->x_bincount = 0;
 	ve_view->y_bincount = 0;
 	ve_view->table_name = NULL;
-	ve_view->dep_obj = NULL;
 	return ve_view;
 }
 
@@ -1617,9 +1637,11 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 	table = active_table;
 	if (!eval[table])
 		eval[table] = g_new0(void *, 2);
+	/*
 	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_x_source))
 		lookup_current_value(firmware->table_params[table]->an_x_source,&x_source);
 	else
+	*/
 		lookup_current_value(firmware->table_params[table]->x_source,&x_source);
 
 	if ((!eval[table][0]) && (firmware->table_params[table]->x_conv_expr))
@@ -1667,9 +1689,11 @@ void ve3d_draw_active_vertexes_marker(struct Ve_View_3D *ve_view)
 	}
 	//	printf("left bin %i, right bin %i, left_weight %f, right_weight %f\n",bin[0],bin[1],left_w,right_w);
 
+	/*
 	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_y_source))
 		lookup_current_value(firmware->table_params[table]->an_y_source,&y_source);
 	else
+	*/
 		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{

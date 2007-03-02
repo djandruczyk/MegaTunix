@@ -157,3 +157,15 @@ void free_multi_expr(gpointer data)
 	if (multi->ul_eval)
 		evaluator_destroy(multi->ul_eval);
 }
+
+
+void free_multi_source(gpointer data)
+{
+	struct MultiSource *multi = (struct MultiSource *)data;
+	if (multi->conv_expr)
+		g_free(multi->conv_expr);	
+	if (multi->evaluator)
+		evaluator_destroy(multi->evaluator);
+	if (multi->suffix)
+		g_free(multi->suffix);
+}

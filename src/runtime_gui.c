@@ -96,24 +96,28 @@ gboolean update_runtime_vars()
 					G_OBJECT(tmpwidget),"ve_view");
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 			{
+				/*
 				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_x_source))
 				{
 					lookup_current_value(ve_view->an_x_source,&x);
 					lookup_previous_value(ve_view->an_x_source,&xl);
 				}
 				else
+				*/
 				{
 					lookup_current_value(ve_view->x_source,&x);
 					lookup_previous_value(ve_view->x_source,&xl);
 				}
 				if (((fabs(x-xl)/x) > 0.01) || (forced_update))
 					goto redraw;
+				/*
 				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_y_source))
 				{
 					lookup_current_value(ve_view->an_y_source,&y);
 					lookup_previous_value(ve_view->an_y_source,&yl);
 				}
 				else
+				*/
 				{
 					lookup_current_value(ve_view->y_source,&y);
 					lookup_previous_value(ve_view->y_source,&yl);
@@ -121,12 +125,14 @@ gboolean update_runtime_vars()
 				if (((fabs(y-yl)/y) > 0.01) || (forced_update))
 					goto redraw;
 
+				/*
 				if ((algorithm[ve_view->table_num] == ALPHA_N) && (ve_view->an_z_source))
 				{
 					lookup_current_value(ve_view->an_z_source,&z);
 					lookup_previous_value(ve_view->an_z_source,&zl);
 				}
 				else
+				*/
 				{
 					lookup_current_value(ve_view->z_source,&z);
 					lookup_previous_value(ve_view->z_source,&zl);

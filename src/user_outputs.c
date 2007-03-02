@@ -275,11 +275,13 @@ void cell_edited(GtkCellRendererText *cell,
 	void * evaluator = NULL;
 	gint result = 0;
 	gint page = 0;
+	gchar *key = NULL;
+	gchar *hash_key = NULL;
 	gboolean ign_parm = FALSE;
 	gboolean is_float = FALSE;
 	struct MultiExpr *multi = NULL;
 	GHashTable *hash = NULL;
-	extern volatile gchar * load_source;
+	extern GHashTable *sources_hash;
 
 	column = (gint) g_object_get_data (G_OBJECT (cell), "column");
 	page = (gint) g_object_get_data(G_OBJECT(model),"page");
@@ -297,7 +299,18 @@ void cell_edited(GtkCellRendererText *cell,
 	if (g_object_get_data(G_OBJECT(object),"multi_expr_hash"))
 	{
 		hash = g_object_get_data(G_OBJECT(object),"multi_expr_hash");
-		multi = (struct MultiExpr *)g_hash_table_lookup(hash,(gchar *)load_source);
+		key = (gchar *)g_object_get_data(G_OBJECT(object),"source_key");
+		if (key)
+		{
+			hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
+			if (hash_key)
+				multi = (struct MultiExpr *)g_hash_table_lookup(hash,hash_key);
+			else
+				multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
+
+		}
+		else
+			multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 		if (!multi)
 			return;
 		if (new < multi->lower_limit)
@@ -423,10 +436,11 @@ void update_model_from_view(GtkWidget * widget)
 	extern gint ** ms_data;
 	extern gint temp_units;
 	gchar * tmpbuf = NULL;
+	gchar * key = NULL;
+	gchar * hash_key = NULL;
 	GHashTable *hash = NULL;
 	struct MultiExpr * multi = NULL;
-	extern volatile gchar * load_source;
-
+	extern GHashTable *sources_hash;
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
 		return;
@@ -452,8 +466,15 @@ void update_model_from_view(GtkWidget * widget)
 			if (g_object_get_data(object,"multi_expr_hash"))
 			{
 				hash = g_object_get_data(object,"multi_expr_hash");
-				if(load_source)
-					multi = (struct MultiExpr *)g_hash_table_lookup(hash,(gchar *)load_source);
+				key = (gchar *)g_object_get_data(object,"source_key");
+				if (key)
+				{
+					hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
+					if (hash_key)
+						multi = (struct MultiExpr *)g_hash_table_lookup(hash,hash_key);
+					else
+						multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
+				}
 				else
 					multi = (struct MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 				if (!multi)

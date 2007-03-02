@@ -395,9 +395,11 @@ void draw_ve_marker()
 
 	if (!eval[table])
 		eval[table] = g_new0(void *, 2);
+	/*
 	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_x_source))
 		lookup_current_value(firmware->table_params[table]->an_x_source,&x_source);
 	else
+	*/
 		lookup_current_value(firmware->table_params[table]->x_source,&x_source);
 
 	if ((!eval[table][_X_]) && (firmware->table_params[table]->x_conv_expr))
@@ -445,9 +447,11 @@ void draw_ve_marker()
 	}
 //	printf("left bin %i, right bin %i, left_weight %f, right_weight %f\n",bin[0],bin[1],left_w,right_w);
 
+	/*
 	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_y_source))
 		lookup_current_value(firmware->table_params[table]->an_y_source,&y_source);
 	else
+	*/
 		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{

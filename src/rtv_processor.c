@@ -343,17 +343,21 @@ gfloat handle_complex_expr(GObject *object, void * incoming,ConvType type)
  */
 gfloat handle_multi_expression(GObject *object,guchar* raw_realtime,GHashTable *hash)
 {
-	extern volatile gchar * load_source;
 	struct MultiExpr *multi = NULL;
 	gint offset = 0;
 	gfloat result = 0.0;
 	gfloat x = 0.0;
+	gchar *key = NULL;
+	gchar *hash_key = NULL;
+	extern GHashTable *sources_hash;
 
-	multi = (struct MultiExpr *)g_hash_table_lookup(hash,(gchar *)load_source);
+	key = (gchar *)g_object_get_data(object,"source_key");
+	hash_key  = (gchar *)g_hash_table_lookup(sources_hash,key);
+	multi = (struct MultiExpr *)g_hash_table_lookup(hash,hash_key);
 	if (!multi)
 	{
 		if (dbg_lvl & COMPLEX_EXPR)
-			dbg_func(g_strdup_printf(__FILE__": handle_multi_expression()\n\t data struct NOT found for key \"%s\"\n",load_source));
+			dbg_func(g_strdup_printf(__FILE__": handle_multi_expression()\n\t data struct NOT found for key \"%s\"\n",hash_key));
 		return 0.0;
 	}
 

@@ -21,6 +21,7 @@
 /* Prototypes */
 void load_multi_expressions(GObject * ,ConfigFile * ,gchar * );
 void free_multi_expr(gpointer);
+void free_multi_source(gpointer);
 
 /* Prototypes */
 

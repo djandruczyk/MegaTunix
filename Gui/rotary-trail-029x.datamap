@@ -9,14 +9,15 @@ groups=load,rpm,table
 #----- Groups ----------------------------------------------------------------
 
 [load]
-keys=page,is_float,dl_type,handler,use_color,table_num,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,is_float,dl_type,handler,use_color,table_num,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_BOOL_,_ENUM_,_ENUM_,_BOOL_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=8
 is_float=FALSE
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
 use_color=TRUE
 table_num=10
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)

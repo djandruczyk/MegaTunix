@@ -685,10 +685,11 @@ handler=_GENERIC_
 tooltip=Cold Accel multiplier (percentage), 100 equals NO change, greater than 100 means more fuel, less than 100 means less fuel.
 
 [ae_decel_setpoint_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=129
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)

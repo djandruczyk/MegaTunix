@@ -71,6 +71,7 @@ GList ***ve_widgets = NULL;
 GList **tab_gauges = NULL;
 GHashTable **interdep_vars = NULL;
 GHashTable *widget_group_states = NULL;
+GHashTable *sources_hash = NULL;
 gint *algorithm = NULL;
 gboolean *tracking_focus = NULL;
 
@@ -363,6 +364,8 @@ void mem_alloc()
 		ve_widgets = g_new0(GList **, firmware->total_pages);
 	if (!tab_gauges)
 		tab_gauges = g_new0(GList *, firmware->total_tables);
+	if (!sources_hash)
+		sources_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 	if (!widget_group_states)
 		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
@@ -483,6 +486,8 @@ void mem_dealloc()
 	}
 	if(widget_group_states)
 		g_hash_table_destroy(widget_group_states);
+	if(sources_hash)
+		g_hash_table_destroy(sources_hash);
 }
 
 

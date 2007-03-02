@@ -539,10 +539,11 @@ handler=_GENERIC_
 tooltip=The coolant temp must be BELOW this value for MAP hold to be enabled during startup.  If the temp is above this value MAP holding will not be used. MAP holding is used to stabilize the afterstart period when the engine is cold to prevent stalling,  after the ASE hold time expires the running MAP value will be used.
 
 [fixed_map_ase_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=5
 offset=182
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=(x*(965/1000))+9,(x*(965/1000))+9,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=(x/(965/1000))-9,(x/(965/1000))-9,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
@@ -623,10 +624,11 @@ handler=_GENERIC_
 tooltip=This is the Maximum allowed additional timing advance to be added on by the clt based advance.
 
 [iat_ret_map_setpoint_entry]
-keys=page,offset,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=51
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)

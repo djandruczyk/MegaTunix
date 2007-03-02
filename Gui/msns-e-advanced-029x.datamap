@@ -409,10 +409,11 @@ tooltip=Enables the use of constant Baro correction. NOTE: THIS REQUIRES the fit
 #----- Spinbuttons ----------------------------------------------------------
 
 [barocorr_max_adc_entry]
-keys=page,offset,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=82
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
@@ -422,10 +423,11 @@ handler=_GENERIC_
 tooltip=The upper limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
 [barocorr_min_adc_entry]
-keys=page,offset,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=83
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
@@ -547,10 +549,11 @@ handler=_GENERIC_
 tooltip=This control sets the number of engine cycles at which point staging is phased in.
 
 [sec_staging_thresh_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=3
 offset=180
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
@@ -560,10 +563,11 @@ handler=_GENERIC_
 tooltip=This control sets the threshold where the manifold pressure needs to be exceeded along with the above staging params to enable injector staging.
 
 [sec_staging_delta_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=3
 offset=181
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
@@ -586,10 +590,11 @@ handler=_GENERIC_
 tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.
 
 [orfc_map_entry]
-keys=page,offset,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
-key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+key_types=_INT_,_INT_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=72
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)

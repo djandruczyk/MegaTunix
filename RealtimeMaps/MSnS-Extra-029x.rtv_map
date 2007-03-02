@@ -274,12 +274,13 @@ tooltip="TPS %" is the Throttle Position in percentage of open (based on counts,
 log_by_default=TRUE
 
 [derived_17]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,multi_expr_keys,is_float,tooltip,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_,_STRING_,_BOOL_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,source_key,multi_expr_keys,is_float,tooltip,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_BOOL_
 internal_name=mapkpa
 dlog_gui_name=MAP kPa
 dlog_field_name=MAPkpa
 offset=4
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 lower_limits=0,0,20,20
 upper_limits=115,250,308,416
@@ -291,12 +292,13 @@ tooltip="MAP KPA" is the Manifold Absolute Pressure in KPA (Kilopascals), 100KPA
 log_by_default=TRUE
 
 [derived_18]
-keys=internal_name,dlog_gui_name,dlog_field_name,offset,multi_expr_keys,is_float,tooltip,log_by_default
-key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_BOOL_,_STRING_,_BOOL_
+keys=internal_name,dlog_gui_name,dlog_field_name,offset,source_key,multi_expr_keys,is_float,tooltip,log_by_default
+key_types=_STRING_,_STRING_,_STRING_,_INT_,_STRING_,_STRING_,_BOOL_,_STRING_,_BOOL_
 internal_name=barokpa
 dlog_gui_name=BARO kPa
 dlog_field_name=BAROkpa
 offset=3
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 lower_limits=0,0,20,20
 upper_limits=115,250,308,416

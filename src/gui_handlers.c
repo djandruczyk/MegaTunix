@@ -414,8 +414,8 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern gint ecu_caps;
 	extern gint **ms_data;
 	extern GHashTable **interdep_vars;
-	extern volatile gchar *load_source;
 	extern struct Firmware_Details *firmware;
+	extern GHashTable *sources_hash;
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -446,11 +446,10 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	{
 		case MAP_SENSOR_TYPE:
 			//printf("MAP SENSOR CHANGE\n");
-			if (g_object_get_data(G_OBJECT(widget),"load_source"))
+			if ((g_object_get_data(G_OBJECT(widget),"source_key")) && (g_object_get_data(G_OBJECT(widget),"source_value")))
 			{
-				if (load_source)
-					g_free((gchar *)load_source);
-				load_source = g_strdup(g_object_get_data(G_OBJECT(widget),"load_source"));
+		//		printf("key %s value %s\n",(gchar *)g_object_get_data(G_OBJECT(widget),"source_key"),(gchar *)g_object_get_data(G_OBJECT(widget),"source_value"));
+				g_hash_table_replace(sources_hash,g_strdup(g_object_get_data(G_OBJECT(widget),"source_key")),g_strdup(g_object_get_data(G_OBJECT(widget),"source_value")));
 			}
 			/* FAll Through */
 		case GENERIC:
@@ -1520,7 +1519,7 @@ void update_widget(gpointer object, gpointer user_data)
 	extern GHashTable *widget_group_states;
 	extern gint *algorithm;
 	extern volatile gboolean leaving;
-	extern volatile gchar * load_source;
+	extern GHashTable *sources_hash;
 
 	if (leaving)
 		return;
@@ -1800,11 +1799,11 @@ void update_widget(gpointer object, gpointer user_data)
 			swap_labels(swap_list,new_state);
 		if ((new_state) && (group_2_update))
 		{
-			if (g_object_get_data(G_OBJECT(widget),"load_source"))
+			if ((g_object_get_data(G_OBJECT(widget),"source_key")) && (g_object_get_data(G_OBJECT(widget),"source_value")))
 			{
-				if (load_source)
-					g_free((gchar *)load_source);
-				load_source = g_strdup(g_object_get_data(G_OBJECT(widget),"load_source"));
+			//	printf("key %s value %s\n",(gchar *)g_object_get_data(G_OBJECT(widget),"source_key"),(gchar *)g_object_get_data(G_OBJECT(widget),"source_value"));
+				g_hash_table_replace(sources_hash,g_strdup(g_object_get_data(G_OBJECT(widget),"source_key")),g_strdup(g_object_get_data(G_OBJECT(widget),"source_value")));
+
 			}
 			g_timeout_add(2000,force_view_recompute,NULL);
 			g_timeout_add(2000,trigger_group_update,group_2_update);

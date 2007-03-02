@@ -383,10 +383,11 @@ handler=_GENERIC_
 tooltip=When IAT (Intake Air Temp, MAT) is ABOVE this value and the next two conditions are met, water injection will be enabled...
 
 [water_inj_kpa_setpoint_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=62
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
@@ -531,10 +532,11 @@ handler=_GENERIC_
 tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a soark firmware.
 
 [nos_antilag_min_kpa_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=85
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
@@ -544,10 +546,11 @@ handler=_GENERIC_
 tooltip=This control and the next one down determine the range of manifold pressures in which NOS antilag can be used.
 
 [nos_antilag_max_kpa_entry]
-keys=page,offset,bind_to_list,dl_type,handler,tooltip,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
-key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_
+keys=page,offset,bind_to_list,dl_type,handler,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+key_types=_INT_,_INT_,_STRING_,_ENUM_,_ENUM_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 page=0
 offset=86
+source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
