@@ -35,6 +35,10 @@ gint baudrate = BAUDRATE;
 gchar * serial_port_name = NULL;
 gchar * cluster_1_name = NULL;
 gchar * cluster_2_name = NULL;
+gint cluster_1_x_origin = 0;
+gint cluster_1_y_origin = 0;
+gint cluster_2_x_origin = 0;
+gint cluster_2_y_origin = 0;
 extern gint dbg_lvl;
 gint ecu_caps = 0;	/* Assume stock B&G code */
 extern GStaticMutex comms_mutex;
@@ -131,10 +135,20 @@ gboolean read_config(void)
 		cfg_read_boolean(cfgfile, "Global", "Tooltips", &tips_in_use);
 		cfg_read_int(cfgfile, "Global", "Temp_Scale", &temp_units);
 		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
-		cfg_read_string(cfgfile, "Global", "dash_cluster_1", 
+		cfg_read_string(cfgfile, "Dashboards", "dash_cluster_1", 
 				&cluster_1_name);
-		cfg_read_string(cfgfile, "Global", "dash_cluster_2", 
+		if (cluster_1_name)
+		{
+			cfg_read_int(cfgfile, "Dashboards", "dash_1_x_origin", &cluster_1_x_origin);
+			cfg_read_int(cfgfile, "Dashboards", "dash_1_y_origin", &cluster_1_y_origin);
+		}
+		cfg_read_string(cfgfile, "Dashboards", "dash_cluster_2", 
 				&cluster_2_name);
+		if (cluster_2_name)
+		{
+			cfg_read_int(cfgfile, "Dashboards", "dash_2_x_origin", &cluster_2_x_origin);
+			cfg_read_int(cfgfile, "Dashboards", "dash_2_y_origin", &cluster_2_y_origin);
+		}
 		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
 		cfg_read_int(cfgfile, "Window", "status_width", &status_width);
 		cfg_read_int(cfgfile, "Window", "status_height", &status_height);
@@ -184,6 +198,7 @@ gboolean read_config(void)
 void save_config(void)
 {
 	gchar *filename = NULL;
+	GtkWidget *widget = NULL;
 	int x,y,tmp_width,tmp_height;
 	ConfigFile *cfgfile;
 	extern gboolean ready;
@@ -205,13 +220,39 @@ void save_config(void)
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", temp_units);
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
 	if (cluster_1_name)
-		cfg_write_string(cfgfile, "Global", "dash_cluster_1", cluster_1_name);
+	{
+		cfg_write_string(cfgfile, "Dashboards", "dash_cluster_1", cluster_1_name);
+		widget =  g_hash_table_lookup(dynamic_widgets,cluster_1_name);
+		if (GTK_IS_WIDGET(widget))
+		{
+			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
+			cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
+			cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
+		}
+	}
 	else
-		cfg_remove_key(cfgfile, "Global", "dash_cluster_1");
+	{
+		cfg_remove_key(cfgfile, "Dashboards", "dash_cluster_1");
+		cfg_remove_key(cfgfile, "Dashboards", "dash_1_x_origin");
+		cfg_remove_key(cfgfile, "Dashboards", "dash_1_y_origin");
+	}
 	if (cluster_2_name)
-		cfg_write_string(cfgfile, "Global", "dash_cluster_2", cluster_2_name);
+	{
+		cfg_write_string(cfgfile, "Dashboards", "dash_cluster_2", cluster_2_name);
+		widget =  g_hash_table_lookup(dynamic_widgets,cluster_2_name);
+		if (GTK_IS_WIDGET(widget))
+		{
+			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
+			cfg_write_int(cfgfile, "Dashboards", "dash_2_x_origin", x);
+			cfg_write_int(cfgfile, "Dashboards", "dash_2_y_origin", y);
+		}
+	}
 	else
-		cfg_remove_key(cfgfile, "Global", "dash_cluster_2");
+	{
+		cfg_remove_key(cfgfile, "Dashboards", "dash_cluster_2");
+		cfg_remove_key(cfgfile, "Dashboards", "dash_2_x_origin");
+		cfg_remove_key(cfgfile, "Dashboards", "dash_2_y_origin");
+	}
 				
 
 	if (ready)

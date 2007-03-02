@@ -22,6 +22,7 @@
 #include <libxml/tree.h>
 #include <rtv_processor.h>
 #include <structures.h>
+#include <widgetmgmt.h>
 
 
 extern gint dbg_lvl;
@@ -60,6 +61,7 @@ void load_dashboard(gchar *filename, gpointer data)
 		return;
 	}
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	register_widget(filename,window);
 	gtk_window_set_title(GTK_WINDOW(window),"Dash Cluster");
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 //	gtk_window_set_type_hint(GTK_WINDOW(window),GDK_WINDOW_TYPE_HINT_UTILITY);
@@ -431,6 +433,10 @@ void initialize_dashboards()
 	GtkWidget * label = NULL;
 	extern gchar * cluster_1_name;
 	extern gchar * cluster_2_name;
+	extern gint cluster_1_x_origin;
+	extern gint cluster_1_y_origin;
+	extern gint cluster_2_x_origin;
+	extern gint cluster_2_y_origin;
 	extern GHashTable *dynamic_widgets;
 
 	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_1_label");
@@ -438,6 +444,7 @@ void initialize_dashboards()
 	{
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_1_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_1_name),GINT_TO_POINTER(1));
+		gtk_window_move((GtkWindow *)g_hash_table_lookup(dynamic_widgets,cluster_1_name), cluster_1_x_origin, cluster_1_y_origin);
 	}
 
 	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_2_label");
@@ -445,6 +452,7 @@ void initialize_dashboards()
 	{
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_2_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_2_name),GINT_TO_POINTER(2));
+		gtk_window_move((GtkWindow *)g_hash_table_lookup(dynamic_widgets,cluster_2_name), cluster_2_x_origin, cluster_2_y_origin);
 	}
 }
 
