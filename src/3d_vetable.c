@@ -103,7 +103,7 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 	if (firmware->table_params[table_num]->x_multi_source)
 	{
 		ve_view->x_multi_source = firmware->table_params[table_num]->x_multi_source;
-		ve_view->x_data_key = firmware->table_params[table_num]->x_data_key;
+		ve_view->x_source_key = firmware->table_params[table_num]->x_source_key;
 		ve_view->x_multi_hash = firmware->table_params[table_num]->x_multi_hash;
 	}
 	else
@@ -116,15 +116,15 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			g_strdup(firmware->table_params[table_num]->x_conv_expr);
 		ve_view->x_eval = evaluator_create(ve_view->x_conv_expr);
 		assert(ve_view->x_eval);
-		ve_view->x_disp_float = 
-			firmware->table_params[table_num]->x_disp_float;
+		ve_view->x_float = 
+			firmware->table_params[table_num]->x_float;
 		ve_view->x_precision = 
-			firmware->table_params[table_num]->x_disp_precision;
+			firmware->table_params[table_num]->x_precision;
 	}
 	if (firmware->table_params[table_num]->y_multi_source)
         {
 		ve_view->y_multi_source = firmware->table_params[table_num]->y_multi_source;
-		ve_view->y_data_key = firmware->table_params[table_num]->y_data_key;
+		ve_view->y_source_key = firmware->table_params[table_num]->y_source_key;
 		ve_view->y_multi_hash = firmware->table_params[table_num]->y_multi_hash;
 	}
 	else
@@ -137,15 +137,15 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			g_strdup(firmware->table_params[table_num]->y_conv_expr);
 		ve_view->y_eval = evaluator_create(ve_view->y_conv_expr);
 		assert(ve_view->y_eval);
-		ve_view->y_disp_float = 
-			firmware->table_params[table_num]->y_disp_float;
+		ve_view->y_float = 
+			firmware->table_params[table_num]->y_float;
 		ve_view->y_precision = 
-			firmware->table_params[table_num]->y_disp_precision;
+			firmware->table_params[table_num]->y_precision;
 	}
 	if (firmware->table_params[table_num]->z_multi_source)
         {
 		ve_view->z_multi_source = firmware->table_params[table_num]->z_multi_source;
-		ve_view->z_data_key = firmware->table_params[table_num]->z_data_key;
+		ve_view->z_source_key = firmware->table_params[table_num]->z_source_key;
 		ve_view->z_multi_hash = firmware->table_params[table_num]->z_multi_hash;
 	}
 	else
@@ -159,10 +159,10 @@ EXPORT gint create_ve3d_view(GtkWidget *widget, gpointer data)
 			g_strdup(firmware->table_params[table_num]->z_conv_expr);
 		ve_view->z_eval = evaluator_create(ve_view->z_conv_expr);
 		assert(ve_view->z_eval);
-		ve_view->z_disp_float = 
-			firmware->table_params[table_num]->z_disp_float;
+		ve_view->z_float = 
+			firmware->table_params[table_num]->z_float;
 		ve_view->z_precision = 
-			firmware->table_params[table_num]->z_disp_precision;
+			firmware->table_params[table_num]->z_precision;
 	}
 
 	ve_view->z_page = firmware->table_params[table_num]->z_page;
@@ -441,12 +441,12 @@ gint free_ve3d_view(GtkWidget *widget)
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
-	if (ve_view->x_data_key)
-		g_free(ve_view->x_data_key);
-	if (ve_view->y_data_key)
-		g_free(ve_view->y_data_key);
-	if (ve_view->z_data_key)
-		g_free(ve_view->z_data_key);
+	if (ve_view->x_source_key)
+		g_free(ve_view->x_source_key);
+	if (ve_view->y_source_key)
+		g_free(ve_view->y_source_key);
+	if (ve_view->z_source_key)
+		g_free(ve_view->z_source_key);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 
@@ -1259,7 +1259,7 @@ void ve3d_draw_axis(struct Ve_View_3D *ve_view)
 	for (i=0;i<=100;i+=10)
 	{
 		tmpf = (((float)i/100.0)/ve_view->z_scale)+ve_view->z_trans;
-		if (ve_view->z_disp_float)
+		if (ve_view->z_float)
 			label = g_strdup_printf("%1$.*2$f",tmpf,ve_view->z_precision);
 		else
 			label = g_strdup_printf("%i",(gint)tmpf);
@@ -1502,15 +1502,15 @@ struct Ve_View_3D * initialize_ve3d_view()
 	ve_view->x_conv_expr = NULL;
 	ve_view->y_conv_expr = NULL;
 	ve_view->z_conv_expr = NULL;
-	ve_view->x_data_key = NULL;
-	ve_view->y_data_key = NULL;
-	ve_view->z_data_key = NULL;
+	ve_view->x_source_key = NULL;
+	ve_view->y_source_key = NULL;
+	ve_view->z_source_key = NULL;
 	ve_view->x_eval = NULL;
 	ve_view->y_eval = NULL;
 	ve_view->z_eval = NULL;
-	ve_view->x_disp_float = FALSE;
-	ve_view->y_disp_float = FALSE;
-	ve_view->z_disp_float = FALSE;
+	ve_view->x_float = FALSE;
+	ve_view->y_float = FALSE;
+	ve_view->z_float = FALSE;
 	ve_view->x_precision = 0;
 	ve_view->y_precision = 0;
 	ve_view->z_precision = 0;

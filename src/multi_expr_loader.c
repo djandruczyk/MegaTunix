@@ -162,6 +162,8 @@ void free_multi_expr(gpointer data)
 void free_multi_source(gpointer data)
 {
 	struct MultiSource *multi = (struct MultiSource *)data;
+	if (multi->source)
+		g_free(multi->source);	
 	if (multi->conv_expr)
 		g_free(multi->conv_expr);	
 	if (multi->evaluator)

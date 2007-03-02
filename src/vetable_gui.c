@@ -350,20 +350,26 @@ void draw_ve_marker()
 	gfloat max = 0.0;
 	gint heaviest = -1;
 	GList *list = NULL;
-	extern struct Firmware_Details *firmware;
 	static void ***eval;
+	extern struct Firmware_Details *firmware;
 	extern gint ** ms_data;
 	extern GList ***ve_widgets;
 	extern gint *algorithm;
 	extern gint active_table;
 	extern gboolean forced_update;
 	extern gboolean *tracking_focus;
+	extern GHashTable *sources_hash;
+	gchar *key = NULL;
+	gchar *hash_key = NULL;
+	GHashTable *hash = NULL;
+	struct MultiSource *multi = NULL;
 
 	if ((active_table < 0 )||(active_table > (firmware->total_tables-1)))
 		return;
 
 	if (!eval)
 		eval = g_new0(void **, firmware->total_tables);
+
 
 	if (!last)
 	{
@@ -392,25 +398,71 @@ void draw_ve_marker()
 	}
 
 	table = active_table;
-
 	if (!eval[table])
 		eval[table] = g_new0(void *, 2);
-	/*
-	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_x_source))
-		lookup_current_value(firmware->table_params[table]->an_x_source,&x_source);
+
+	if (firmware->table_params[table]->x_multi_source)
+	{
+		printf("x_multi_source for table %i\n",table);
+		hash = firmware->table_params[table]->x_multi_hash;
+		key = firmware->table_params[table]->x_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[table] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[table] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[table] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+
+		eval[table][_X_] = multi->evaluator;
+		lookup_current_value(multi->source,&x_source);
+	}
 	else
-	*/
+	{
+		eval[table][_X_] = firmware->table_params[table]->x_eval;
 		lookup_current_value(firmware->table_params[table]->x_source,&x_source);
-
-	if ((!eval[table][_X_]) && (firmware->table_params[table]->x_conv_expr))
-	{
-		eval[table][_X_] = evaluator_create(firmware->table_params[table]->x_conv_expr);
-	}
-	if ((!eval[table][_Y_]) && (firmware->table_params[table]->y_conv_expr))
-	{
-		eval[table][_Y_] = evaluator_create(firmware->table_params[table]->y_conv_expr);
 	}
 
+	if (firmware->table_params[table]->y_multi_source)
+	{
+		hash = firmware->table_params[table]->y_multi_hash;
+		key = firmware->table_params[table]->y_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[table] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[table] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[table] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		if (!multi)
+			printf("multi is null!!\n");
+
+		eval[table][_Y_] = multi->evaluator;
+		lookup_current_value(multi->source,&y_source);
+	}
+	else
+	{
+		eval[table][_Y_] = firmware->table_params[table]->y_eval;
+		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
+	}
 	/* Find bin corresponding to current rpm  */
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
@@ -447,12 +499,6 @@ void draw_ve_marker()
 	}
 //	printf("left bin %i, right bin %i, left_weight %f, right_weight %f\n",bin[0],bin[1],left_w,right_w);
 
-	/*
-	if ((algorithm[table] == ALPHA_N) && (firmware->table_params[table]->an_y_source))
-		lookup_current_value(firmware->table_params[table]->an_y_source,&y_source);
-	else
-	*/
-		lookup_current_value(firmware->table_params[table]->y_source,&y_source);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
 		page = firmware->table_params[table]->y_page;

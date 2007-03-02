@@ -281,13 +281,15 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 	gchar **sources = NULL;
 	gchar **suffixes = NULL;
 	gchar **conv_exprs = NULL;
-	gchar **disp_floats = NULL;
+	gchar **floats = NULL;
 	gchar **precisions = NULL;
+	gchar **expr_keys = NULL;
 	gint len1 = 0;
 	gint len2 = 0;
 	gint len3 = 0;
 	gint len4 = 0;
 	gint len5 = 0;
+	gint len6 = 0;
 	gint j = 0;
 	extern struct Io_Cmds *cmds;
 
@@ -402,96 +404,117 @@ gboolean determine_ecu(struct Canidate *canidate, GArray *cmd_array, GHashTable 
 		if (firmware->table_params[i]->x_multi_source)
 		{
 			firmware->table_params[i]->x_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			expr_keys = g_strsplit(firmware->table_params[i]->x_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->x_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->x_suffixes,",",-1);
 			conv_exprs = g_strsplit(firmware->table_params[i]->x_conv_exprs,",",-1);
-			disp_floats = g_strsplit(firmware->table_params[i]->x_disp_floats,",",-1);
+			floats = g_strsplit(firmware->table_params[i]->x_floats,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->x_precisions,",",-1);
-			len1 = g_strv_length(sources);
-			len2 = g_strv_length(suffixes);
-			len3 = g_strv_length(conv_exprs);
-			len4 = g_strv_length(disp_floats);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+			len1 = g_strv_length(expr_keys);
+			len2 = g_strv_length(sources);
+			len3 = g_strv_length(suffixes);
+			len4 = g_strv_length(conv_exprs);
+			len5 = g_strv_length(floats);
+			len6 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(struct MultiSource,1);
+				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
 				multi->suffix = g_strdup(suffixes[j]);
-				multi->disp_float = (gboolean)strtol(disp_floats[j],NULL,10);
+				multi->is_float = (gboolean)strtol(floats[j],NULL,10);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
-				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(sources[j]),(gpointer)multi);
+				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
+			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
 			g_strfreev(conv_exprs);
-			g_strfreev(disp_floats);
+			g_strfreev(floats);
 			g_strfreev(precisions);
 		}
+		else
+			firmware->table_params[i]->x_eval = evaluator_create(firmware->table_params[i]->x_conv_expr);
+		/* Check for multi source table handling */
 		if (firmware->table_params[i]->y_multi_source)
 		{
 			firmware->table_params[i]->y_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			expr_keys = g_strsplit(firmware->table_params[i]->y_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->y_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->y_suffixes,",",-1);
 			conv_exprs = g_strsplit(firmware->table_params[i]->y_conv_exprs,",",-1);
-			disp_floats = g_strsplit(firmware->table_params[i]->y_disp_floats,",",-1);
+			floats = g_strsplit(firmware->table_params[i]->y_floats,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->y_precisions,",",-1);
-			len1 = g_strv_length(sources);
-			len2 = g_strv_length(suffixes);
-			len3 = g_strv_length(conv_exprs);
-			len4 = g_strv_length(disp_floats);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+			len1 = g_strv_length(expr_keys);
+			len2 = g_strv_length(sources);
+			len3 = g_strv_length(suffixes);
+			len4 = g_strv_length(conv_exprs);
+			len5 = g_strv_length(floats);
+			len6 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(struct MultiSource,1);
+				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
 				multi->suffix = g_strdup(suffixes[j]);
-				multi->disp_float = (gboolean)strtol(disp_floats[j],NULL,10);
+				multi->is_float = (gboolean)strtol(floats[j],NULL,10);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
-				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(sources[j]),(gpointer)multi);
+				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
+			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
 			g_strfreev(conv_exprs);
-			g_strfreev(disp_floats);
+			g_strfreev(floats);
 			g_strfreev(precisions);
 		}
+		else
+			firmware->table_params[i]->y_eval = evaluator_create(firmware->table_params[i]->y_conv_expr);
+	
+		/* Check for multi source table handling */
 		if (firmware->table_params[i]->z_multi_source)
 		{
 			firmware->table_params[i]->z_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			expr_keys = g_strsplit(firmware->table_params[i]->z_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->z_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->z_suffixes,",",-1);
 			conv_exprs = g_strsplit(firmware->table_params[i]->z_conv_exprs,",",-1);
-			disp_floats = g_strsplit(firmware->table_params[i]->z_disp_floats,",",-1);
+			floats = g_strsplit(firmware->table_params[i]->z_floats,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->z_precisions,",",-1);
-			len1 = g_strv_length(sources);
-			len2 = g_strv_length(suffixes);
-			len3 = g_strv_length(conv_exprs);
-			len4 = g_strv_length(disp_floats);
-			len5 = g_strv_length(precisions);
-			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+			len1 = g_strv_length(expr_keys);
+			len2 = g_strv_length(sources);
+			len3 = g_strv_length(suffixes);
+			len4 = g_strv_length(conv_exprs);
+			len5 = g_strv_length(floats);
+			len6 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf("length mismatch!\n");
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(struct MultiSource,1);
+				multi->source = g_strdup(sources[j]);
 				multi->conv_expr = g_strdup(conv_exprs[j]);
 				multi->evaluator = evaluator_create(multi->conv_expr);
 				multi->suffix = g_strdup(suffixes[j]);
-				multi->disp_float = (gboolean)strtol(disp_floats[j],NULL,10);
+				multi->is_float = (gboolean)strtol(floats[j],NULL,10);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
-				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(sources[j]),(gpointer)multi);
+				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
+			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
 			g_strfreev(conv_exprs);
-			g_strfreev(disp_floats);
+			g_strfreev(floats);
 			g_strfreev(precisions);
 		}
+		else
+			firmware->table_params[i]->z_eval = evaluator_create(firmware->table_params[i]->z_conv_expr);
 	
 	}
 
@@ -1090,10 +1113,15 @@ void load_profile_details(struct Canidate *canidate)
 				 * evaluators,  we do that in the final copy
 				 * over to the firmware struct
 				 */
-				if(!cfg_read_string(cfgfile,section,"x_data_key",&canidate->table_params[i]->x_data_key))
+				if(!cfg_read_string(cfgfile,section,"x_multi_expr_keys",&canidate->table_params[i]->x_multi_expr_keys))
 				{
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
-						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_data_key\" variable not found in interrogation profile, ERROR\n"));
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"x_source_key",&canidate->table_params[i]->x_source_key))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_source_key\" variable not found in interrogation profile, ERROR\n"));
 				}
 				if(!cfg_read_string(cfgfile,section,"x_sources",&canidate->table_params[i]->x_sources))
 				{
@@ -1110,8 +1138,16 @@ void load_profile_details(struct Canidate *canidate)
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
 				}
-
-
+				if(!cfg_read_string(cfgfile,section,"x_floats",&canidate->table_params[i]->x_floats))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_floats\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"x_precisions",&canidate->table_params[i]->x_precisions))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_precisions\" variable not found in interrogation profile, ERROR\n"));
+				}
 			}
 			else
 			{
@@ -1137,10 +1173,15 @@ void load_profile_details(struct Canidate *canidate)
 				 * evaluators,  we do that in the final copy
 				 * over to the firmware struct
 				 */
-				if(!cfg_read_string(cfgfile,section,"y_data_key",&canidate->table_params[i]->y_data_key))
+				if(!cfg_read_string(cfgfile,section,"y_multi_expr_keys",&canidate->table_params[i]->y_multi_expr_keys))
 				{
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
-						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_data_key\" variable not found in interrogation profile, ERROR\n"));
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"y_source_key",&canidate->table_params[i]->y_source_key))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_source_key\" variable not found in interrogation profile, ERROR\n"));
 				}
 				if(!cfg_read_string(cfgfile,section,"y_sources",&canidate->table_params[i]->y_sources))
 				{
@@ -1156,6 +1197,16 @@ void load_profile_details(struct Canidate *canidate)
 				{
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"y_floats",&canidate->table_params[i]->y_floats))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_floats\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"y_precisions",&canidate->table_params[i]->y_precisions))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_precisions\" variable not found in interrogation profile, ERROR\n"));
 				}
 
 			}
@@ -1183,10 +1234,15 @@ void load_profile_details(struct Canidate *canidate)
 				 * evaluators,  we do that in the final copy
 				 * over to the firmware struct
 				 */
-				if(!cfg_read_string(cfgfile,section,"z_data_key",&canidate->table_params[i]->z_data_key))
+				if(!cfg_read_string(cfgfile,section,"z_multi_expr_keys",&canidate->table_params[i]->z_multi_expr_keys))
 				{
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
-						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_data_key\" variable not found in interrogation profile, ERROR\n"));
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_multi_expr_keys\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"z_source_key",&canidate->table_params[i]->z_source_key))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_source_key\" variable not found in interrogation profile, ERROR\n"));
 				}
 				if(!cfg_read_string(cfgfile,section,"z_sources",&canidate->table_params[i]->z_sources))
 				{
@@ -1202,6 +1258,16 @@ void load_profile_details(struct Canidate *canidate)
 				{
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_conv_exprs\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"z_floats",&canidate->table_params[i]->z_floats))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_floats\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_string(cfgfile,section,"z_precisions",&canidate->table_params[i]->z_precisions))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_precisions\" variable not found in interrogation profile, ERROR\n"));
 				}
 
 			}
@@ -1223,31 +1289,31 @@ void load_profile_details(struct Canidate *canidate)
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 				}
 			}
-			if(cfg_read_boolean(cfgfile,section,"x_disp_float",&canidate->table_params[i]->x_disp_float))
+			if(cfg_read_boolean(cfgfile,section,"x_float",&canidate->table_params[i]->x_float))
 			{
-				if (canidate->table_params[i]->x_disp_float)	
-					if(!cfg_read_int(cfgfile,section,"x_disp_precision",&canidate->table_params[i]->x_disp_precision))
+				if (canidate->table_params[i]->x_float)	
+					if(!cfg_read_int(cfgfile,section,"x_precision",&canidate->table_params[i]->x_precision))
 					{
 						if (dbg_lvl & (INTERROGATOR|CRITICAL))
-							dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_disp_precision\" variable not found in interrogation profile, ERROR\n"));
+							dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile, ERROR\n"));
 					}
 			}
-			if(cfg_read_boolean(cfgfile,section,"y_disp_float",&canidate->table_params[i]->y_disp_float))
+			if(cfg_read_boolean(cfgfile,section,"y_float",&canidate->table_params[i]->y_float))
 			{
-				if (canidate->table_params[i]->y_disp_float)	
-					if(!cfg_read_int(cfgfile,section,"y_disp_precision",&canidate->table_params[i]->y_disp_precision))
+				if (canidate->table_params[i]->y_float)	
+					if(!cfg_read_int(cfgfile,section,"y_precision",&canidate->table_params[i]->y_precision))
 					{
 						if (dbg_lvl & (INTERROGATOR|CRITICAL))
-						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_disp_precision\" variable not found in interrogation profile, ERROR\n"));
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile, ERROR\n"));
 					}
 			}
-			if(cfg_read_boolean(cfgfile,section,"z_disp_float",&canidate->table_params[i]->z_disp_float))
+			if(cfg_read_boolean(cfgfile,section,"z_float",&canidate->table_params[i]->z_float))
 			{
-				if (canidate->table_params[i]->z_disp_float)	
-					if(!cfg_read_int(cfgfile,section,"z_disp_precision",&canidate->table_params[i]->z_disp_precision))
+				if (canidate->table_params[i]->z_float)	
+					if(!cfg_read_int(cfgfile,section,"z_precision",&canidate->table_params[i]->z_precision))
 					{
 						if (dbg_lvl & (INTERROGATOR|CRITICAL))
-							dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_disp_precision\" variable not found in interrogation profile, ERROR\n"));
+							dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile, ERROR\n"));
 					}
 			}
 			if(!cfg_read_string(cfgfile,section,"table_name",&canidate->table_params[i]->table_name))
