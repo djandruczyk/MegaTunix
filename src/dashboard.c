@@ -106,6 +106,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	dash_shape_combine(dash);
 
 
+//	gtk_window_move((GtkWindow *)g_hash_table_lookup(dynamic_widgets,filename), cluster_1_x_origin, cluster_1_y_origin);
 	gtk_widget_show_all(window);
 	g_free(filename);
 }
@@ -444,7 +445,6 @@ void initialize_dashboards()
 	{
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_1_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_1_name),GINT_TO_POINTER(1));
-		gtk_window_move((GtkWindow *)g_hash_table_lookup(dynamic_widgets,cluster_1_name), cluster_1_x_origin, cluster_1_y_origin);
 	}
 
 	label = g_hash_table_lookup(dynamic_widgets,"dash_cluster_2_label");
@@ -452,7 +452,6 @@ void initialize_dashboards()
 	{
 		gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(cluster_2_name,-1,NULL,NULL,NULL));
 		load_dashboard(g_strdup(cluster_2_name),GINT_TO_POINTER(2));
-		gtk_window_move((GtkWindow *)g_hash_table_lookup(dynamic_widgets,cluster_2_name), cluster_2_x_origin, cluster_2_y_origin);
 	}
 }
 

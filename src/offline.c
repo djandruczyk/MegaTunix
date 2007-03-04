@@ -21,10 +21,13 @@
 #include <interrogate.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
+#include "../mtxmatheval/mtxmatheval.h"
 #include <mode_select.h>
+#include <multi_expr_loader.h>
 #include <offline.h>
 #include <rtv_map_loader.h>
 #include <string.h>
+#include <stdlib.h>
 #include <tabloader.h>
 #include <threads.h>
 
@@ -51,6 +54,19 @@ void set_offline_mode(void)
 	extern struct Firmware_Details *firmware;
 	extern gint ecu_caps;
 	extern gboolean interrogated;
+	gchar **sources = NULL;
+	gchar **suffixes = NULL;
+	gchar **conv_exprs = NULL;
+	gchar **precisions = NULL;
+	gchar **expr_keys = NULL;
+	gint len1 = 0;
+	gint len2 = 0;
+	gint len3 = 0;
+	gint len4 = 0;
+	gint len5 = 0;
+	struct MultiSource *multi = NULL;
+	gint j = 0;
+
 	gint i = 0;
 
 	offline = TRUE;
@@ -117,6 +133,111 @@ void set_offline_mode(void)
 		firmware->rf_params[i]->num_cyls=1;
 		firmware->rf_params[i]->num_squirts=1;
 		firmware->rf_params[i]->num_inj=1;
+		/* Check for multi source table handling */
+		if (firmware->table_params[i]->x_multi_source)
+		{
+			firmware->table_params[i]->x_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			expr_keys = g_strsplit(firmware->table_params[i]->x_multi_expr_keys,",",-1);
+			sources = g_strsplit(firmware->table_params[i]->x_sources,",",-1);
+			suffixes = g_strsplit(firmware->table_params[i]->x_suffixes,",",-1);
+			conv_exprs = g_strsplit(firmware->table_params[i]->x_conv_exprs,",",-1);
+			precisions = g_strsplit(firmware->table_params[i]->x_precisions,",",-1);
+			len1 = g_strv_length(expr_keys);
+			len2 = g_strv_length(sources);
+			len3 = g_strv_length(suffixes);
+			len4 = g_strv_length(conv_exprs);
+			len5 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+				printf("length mismatch!\n");
+			for (j=0;j<len1;j++)
+			{
+				multi = g_new0(struct MultiSource,1);
+				multi->source = g_strdup(sources[j]);
+				multi->conv_expr = g_strdup(conv_exprs[j]);
+				multi->evaluator = evaluator_create(multi->conv_expr);
+				multi->suffix = g_strdup(suffixes[j]);
+				multi->precision = (gint)strtol(precisions[j],NULL,10);
+				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
+			}
+			g_strfreev(expr_keys);
+			g_strfreev(sources);
+			g_strfreev(suffixes);
+			g_strfreev(conv_exprs);
+			g_strfreev(precisions);
+		}
+		else
+			firmware->table_params[i]->x_eval = evaluator_create(firmware->table_params[i]->x_conv_expr);
+		/* Check for multi source table handling */
+		if (firmware->table_params[i]->y_multi_source)
+		{
+			firmware->table_params[i]->y_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			expr_keys = g_strsplit(firmware->table_params[i]->y_multi_expr_keys,",",-1);
+			sources = g_strsplit(firmware->table_params[i]->y_sources,",",-1);
+			suffixes = g_strsplit(firmware->table_params[i]->y_suffixes,",",-1);
+			conv_exprs = g_strsplit(firmware->table_params[i]->y_conv_exprs,",",-1);
+			precisions = g_strsplit(firmware->table_params[i]->y_precisions,",",-1);
+			len1 = g_strv_length(expr_keys);
+			len2 = g_strv_length(sources);
+			len3 = g_strv_length(suffixes);
+			len4 = g_strv_length(conv_exprs);
+			len5 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+				printf("length mismatch!\n");
+			for (j=0;j<len1;j++)
+			{
+				multi = g_new0(struct MultiSource,1);
+				multi->source = g_strdup(sources[j]);
+				multi->conv_expr = g_strdup(conv_exprs[j]);
+				multi->evaluator = evaluator_create(multi->conv_expr);
+				multi->suffix = g_strdup(suffixes[j]);
+				multi->precision = (gint)strtol(precisions[j],NULL,10);
+				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
+			}
+			g_strfreev(expr_keys);
+			g_strfreev(sources);
+			g_strfreev(suffixes);
+			g_strfreev(conv_exprs);
+			g_strfreev(precisions);
+		}
+		else
+			firmware->table_params[i]->y_eval = evaluator_create(firmware->table_params[i]->y_conv_expr);
+
+		/* Check for multi source table handling */
+		if (firmware->table_params[i]->z_multi_source)
+		{
+			firmware->table_params[i]->z_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source);
+			expr_keys = g_strsplit(firmware->table_params[i]->z_multi_expr_keys,",",-1);
+			sources = g_strsplit(firmware->table_params[i]->z_sources,",",-1);
+			suffixes = g_strsplit(firmware->table_params[i]->z_suffixes,",",-1);
+			conv_exprs = g_strsplit(firmware->table_params[i]->z_conv_exprs,",",-1);
+			precisions = g_strsplit(firmware->table_params[i]->z_precisions,",",-1);
+			len1 = g_strv_length(expr_keys);
+			len2 = g_strv_length(sources);
+			len3 = g_strv_length(suffixes);
+			len4 = g_strv_length(conv_exprs);
+			len5 = g_strv_length(precisions);
+			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5))
+				printf("length mismatch!\n");
+			for (j=0;j<len1;j++)
+			{
+				multi = g_new0(struct MultiSource,1);
+				multi->source = g_strdup(sources[j]);
+				multi->conv_expr = g_strdup(conv_exprs[j]);
+				multi->evaluator = evaluator_create(multi->conv_expr);
+				multi->suffix = g_strdup(suffixes[j]);
+				multi->precision = (gint)strtol(precisions[j],NULL,10);
+				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
+			}
+			g_strfreev(expr_keys);
+			g_strfreev(sources);
+			g_strfreev(suffixes);
+			g_strfreev(conv_exprs);
+			g_strfreev(precisions);
+		}
+		else
+			firmware->table_params[i]->z_eval = evaluator_create(firmware->table_params[i]->z_conv_expr);
+
+
 	}
 
 	firmware->page_params = g_new0(struct Page_Params *,firmware->total_pages);

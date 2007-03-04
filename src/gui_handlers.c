@@ -416,6 +416,7 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 	extern GHashTable **interdep_vars;
 	extern struct Firmware_Details *firmware;
 	extern GHashTable *sources_hash;
+	extern gint baudrate;
 
 	if ((paused_handlers) || (!ready))
 		return TRUE;
@@ -444,6 +445,12 @@ EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	switch ((SpinButton)handler)
 	{
+		case BAUD_CHANGE:
+			if (g_object_get_data(G_OBJECT(widget),"new_baudrate"))
+				baudrate = (gint)g_object_get_data(G_OBJECT(widget),"new_baudrate");
+			io_cmd(IO_CLOSE_SERIAL,NULL);
+			io_cmd(IO_OPEN_SERIAL,g_strdup(serial_port_name));
+			break;
 		case MAP_SENSOR_TYPE:
 			//printf("MAP SENSOR CHANGE\n");
 			if ((g_object_get_data(G_OBJECT(widget),"source_key")) && (g_object_get_data(G_OBJECT(widget),"source_value")))
