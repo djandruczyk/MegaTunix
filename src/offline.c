@@ -15,6 +15,7 @@
 #include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
+#include <fileio.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <init.h>
@@ -23,6 +24,7 @@
 #include <lookuptables.h>
 #include "../mtxmatheval/mtxmatheval.h"
 #include <mode_select.h>
+#include <notifications.h>
 #include <multi_expr_loader.h>
 #include <offline.h>
 #include <rtv_map_loader.h>
@@ -266,7 +268,7 @@ void set_offline_mode(void)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
-	select_file_for_ecu_restore(NULL,NULL);
+	offline_ecu_restore(NULL,NULL);
 
 }
 
@@ -370,4 +372,32 @@ gchar * present_firmware_choices(GArray *cmd_array, GHashTable *cmd_details)
 gint ptr_sort(gconstpointer a, gconstpointer b)
 {
 	return strcmp((gchar *)a, (gchar *) b);
+}
+
+
+gboolean offline_ecu_restore(GtkWidget *widget, gpointer data)
+{
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
+	extern gboolean interrogated;
+
+	if (!interrogated)
+		return FALSE;
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->external_path = g_strdup("MTX_ecu_snapshots");
+	fileio->title = g_strdup("Offline mode REQUIRES you to load ECU Settings from a file");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+	fileio->shortcut_folders = g_strdup("ecu_snapshots,MTX_ecu_snapshots");
+
+	while (!filename)
+		filename = choose_file(fileio);
+
+
+	update_logbar("tools_view",NULL,g_strdup("Full Restore of ECU Initiated\n"),TRUE,FALSE);
+	restore_all_ecu_settings(filename);
+	g_free(filename);
+	free_mtxfileio(fileio);
+	return TRUE;
+
 }

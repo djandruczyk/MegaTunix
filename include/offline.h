@@ -20,6 +20,7 @@
 void set_offline_mode(void);
 gchar * present_firmware_choices(GArray *, GHashTable *);
 gint ptr_sort(gconstpointer , gconstpointer );
+gboolean offline_ecu_restore(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif
