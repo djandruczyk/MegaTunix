@@ -171,6 +171,7 @@ void toggle_serial_control_lines()
  */
 void setup_serial_params()
 {
+	guint baud = 0;
 	if (serial_params->open == FALSE)
 		return;
 	//printf("setup_serial_params entered\n");
@@ -208,8 +209,13 @@ void setup_serial_params()
 	 */
 
 	/* Set baud (posix way) */
-	cfsetispeed(&serial_params->newtio, baudrate);
-	cfsetospeed(&serial_params->newtio, baudrate);
+
+	if (baudrate == 9600)
+		baud = B9600;
+	else if (baudrate == 115200)
+		baud = B115200;
+	cfsetispeed(&serial_params->newtio, baud);
+	cfsetospeed(&serial_params->newtio, baud);
 
 	/* Mask and set to 8N1 mode... */
 	serial_params->newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);

@@ -107,6 +107,7 @@ void finalize_core_gui(GladeXML * xml)
 	extern gchar * cluster_1_name;
 	extern gchar * cluster_2_name;
 	extern gchar * serial_port_name;
+	extern gint baudrate;
 
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
@@ -242,6 +243,28 @@ void finalize_core_gui(GladeXML * xml)
 	register_widget("comms_serial_port_entry",widget);
 	if (serial_port_name)
 		gtk_entry_set_text(GTK_ENTRY(widget),serial_port_name);
+
+	/* COMMS Baud radio buttons */
+	widget = glade_xml_get_widget(xml,"9600-baud-rbutton");
+	register_widget("9600-baud-rbutton",widget);
+	g_object_set_data(G_OBJECT(widget),"handler",GINT_TO_POINTER(BAUD_CHANGE));
+	g_object_set_data(G_OBJECT(widget),"new_baud",GINT_TO_POINTER(9600));
+	if (baudrate == 9600)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
+	}
+
+	widget = glade_xml_get_widget(xml,"115200-baud-rbutton");
+	register_widget("115200-baud-rbutton",widget);
+	g_object_set_data(G_OBJECT(widget),"handler",GINT_TO_POINTER(BAUD_CHANGE));
+	g_object_set_data(G_OBJECT(widget),"new_baud",GINT_TO_POINTER(115200));
+	if (baudrate == 115200)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
+	}
+
 
 	/* COMMS Tab Test ECU Comms button */
 	widget = glade_xml_get_widget(xml,"test_comms_button");

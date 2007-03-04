@@ -86,9 +86,9 @@ gboolean update_runtime_vars()
 		conn_status = connected;
 		forced_update = TRUE;
 	}
-	if ((count > 60) && (!forced_update))
-		forced_update = TRUE;
-		
+//	if ((count > 60) && (!forced_update))
+//		forced_update = TRUE;
+
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)
 	{
@@ -336,17 +336,17 @@ void rt_update_status(gpointer key, gpointer data)
 	bitval = (gint)g_object_get_data(G_OBJECT(widget),"bitval");
 	bitmask = (gint)g_object_get_data(G_OBJECT(widget),"bitmask");
 	bitshift = (gint)g_object_get_data(G_OBJECT(widget),"bitshift");
-	
+
 
 	/// if the value hasn't changed, don't bother continuing 
 	if (((value & bitmask) == (previous_value & bitmask)) && (!forced_update))
 		return;	
-	
-		if (((value & bitmask) >> bitshift) == bitval) // enable it
-			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-		else	// disable it..
-			gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
-		
+
+	if (((value & bitmask) >> bitshift) == bitval) // enable it
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
+	else	// disable it..
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+
 	last_source = source;
 }
 
@@ -380,7 +380,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 	current_index = (gint)g_object_get_data(slider->object,"current_index");
 	is_float = (gboolean)g_object_get_data(slider->object,"is_float");
 	g_static_mutex_lock(&rtv_mutex);
-//	printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);
+	//	printf("runtime_gui history length is %i, current index %i\n",history->len,current_index);
 	current = g_array_index(history, gfloat, current_index);
 	if (current_index > 0)
 		current_index-=1;
@@ -389,7 +389,7 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
-	
+
 	if ((current != previous) || (forced_update))
 	{
 		percentage = (current-lower)/(upper-lower);
@@ -404,9 +404,9 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 				break;
 			case MTX_RANGE:
 				gtk_range_set_value(GTK_RANGE(slider->pbar),current);
-					break;
+				break;
 		}
-		
+
 
 		/* If changed by more than 5% or has been at least 5 
 		 * times withot an update or forced_update is set
@@ -472,6 +472,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	gchar * tmpbuf = NULL;
 	gboolean is_float = FALSE;
 
+
 	history = (GArray *)g_object_get_data(rtt->object,"history");
 	current_index = (gint)g_object_get_data(rtt->object,"current_index");
 	is_float = (gboolean)g_object_get_data(rtt->object,"is_float");
@@ -487,7 +488,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		/* If changed by more than 5% or has been at least 5 
 		 * times withot an update or forced_update is set
 		 * */
-	//	if ((rtt->textval) && ((abs(count-last_upd) > 3) || (forced_update)))
+		//if ((rtt->textval) && ((abs(count-last_upd) > 2) || (forced_update)))
 		{
 			if (is_float)
 				tmpbuf = g_strdup_printf("%.2f",current);

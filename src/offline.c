@@ -266,6 +266,8 @@ void set_offline_mode(void)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
+	select_file_for_ecu_restore(NULL,NULL);
+
 }
 
 

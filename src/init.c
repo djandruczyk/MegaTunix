@@ -31,7 +31,7 @@ gint major_ver;
 gint minor_ver;
 gint micro_ver;
 gint preferred_delimiter;
-gint baudrate = BAUDRATE;
+gint baudrate;
 gchar * serial_port_name = NULL;
 gchar * cluster_1_name = NULL;
 gchar * cluster_2_name = NULL;
@@ -103,6 +103,7 @@ void init(void)
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS V 1.x and 2.x */
 	serial_params->read_wait = 30;	/* delay between reads in milliseconds */
+	baudrate = 9600;	/* default to MS-I */
 
 	/* Set flags to clean state */
 	just_starting = TRUE; 	/* to handle initial errors */
@@ -167,6 +168,8 @@ gboolean read_config(void)
 				&serial_port_name);
 		cfg_read_int(cfgfile, "Serial", "read_delay", 
 				&serial_params->read_wait);
+		cfg_read_int(cfgfile, "Serial", "baudrate", 
+				&baudrate);
 		cfg_read_int(cfgfile, "Logviewer", "zoom", &lv_zoom);
 		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
 		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
@@ -281,6 +284,8 @@ void save_config(void)
 				serial_params->port_name);
 	cfg_write_int(cfgfile, "Serial", "read_delay", 
 			serial_params->read_wait);
+	cfg_write_int(cfgfile, "Serial", "baudrate", baudrate);
+			
 	cfg_write_int(cfgfile, "Logviewer", "zoom", lv_zoom);
 	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
 	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);

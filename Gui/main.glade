@@ -690,6 +690,7 @@
 
 			      <child>
 				<widget class="GtkHBox" id="hbox5">
+				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="homogeneous">True</property>
 				  <property name="spacing">5</property>
@@ -1465,7 +1466,7 @@ Detect</property>
 					  <property name="active">False</property>
 					  <property name="inconsistent">True</property>
 					  <property name="draw_indicator">True</property>
-					  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 27 Feb 2007 23:39:59 GMT"/>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 04 Mar 2007 20:08:37 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">2</property>
@@ -1487,9 +1488,10 @@ Detect</property>
 					  <property name="relief">GTK_RELIEF_NORMAL</property>
 					  <property name="focus_on_click">True</property>
 					  <property name="active">True</property>
-					  <property name="inconsistent">False</property>
+					  <property name="inconsistent">True</property>
 					  <property name="draw_indicator">True</property>
-					  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 27 Feb 2007 23:39:40 GMT"/>
+					  <property name="group">auto-baud-rbutton</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 04 Mar 2007 20:08:17 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">0</property>
@@ -1502,9 +1504,8 @@ Detect</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkRadioButton" id="115200-baud_rbutton">
+					<widget class="GtkRadioButton" id="115200-baud-rbutton">
 					  <property name="visible">True</property>
-					  <property name="sensitive">False</property>
 					  <property name="can_focus">True</property>
 					  <property name="label" translatable="yes">115200
 (MS-II)</property>
@@ -1514,7 +1515,8 @@ Detect</property>
 					  <property name="active">False</property>
 					  <property name="inconsistent">True</property>
 					  <property name="draw_indicator">True</property>
-					  <signal name="toggled" handler="toggle_button_handler" last_modification_time="Tue, 27 Feb 2007 23:39:49 GMT"/>
+					  <property name="group">auto-baud-rbutton</property>
+					  <signal name="toggled" handler="bitmask_button_handler" last_modification_time="Sun, 04 Mar 2007 20:08:30 GMT"/>
 					</widget>
 					<packing>
 					  <property name="left_attach">1</property>
