@@ -148,6 +148,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message = initialize_io_message();
 			message->command = NULL_CMD;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_BURN_MS_FLASH;
+			g_array_append_val(message->funcs,tmp);
 			tmp = UPD_GET_BOOT_PROMPT;
 			g_array_append_val(message->funcs,tmp);
 			tmp = UPD_REBOOT_GET_ERROR;

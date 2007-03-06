@@ -303,6 +303,7 @@ typedef enum
 	UPD_TRIGTOOTHMON,
 	UPD_INITIALIZE_DASH,
 	UPD_RUN_COMMS_TEST,
+	UPD_BURN_MS_FLASH,
 }UpdateFunction;
 
 typedef enum
