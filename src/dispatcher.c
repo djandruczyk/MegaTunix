@@ -53,6 +53,7 @@ extern gboolean offline;			/* Offline mode */
 extern gboolean tabs_loaded;			/* Tabs loaded? */
 extern gboolean interrogated;			/* valid detection with MS */
 gint statuscounts_id = -1;
+gboolean force_page_change = FALSE;
 
 
 /*!
@@ -286,6 +287,9 @@ trypop:
 					break;
 				case UPD_FORCE_UPDATE:
 					forced_update = TRUE;
+					break;
+				case UPD_FORCE_PAGE_CHANGE:
+					force_page_change = TRUE;
 					break;
 				case UPD_INITIALIZE_DASH:
 					initialize_dashboards();

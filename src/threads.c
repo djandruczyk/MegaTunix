@@ -191,6 +191,8 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message->out_len = 1;
 			message->handler = NULL_HANDLER;
 			message->funcs = g_array_new(FALSE,TRUE,sizeof(gint));
+			tmp = UPD_FORCE_PAGE_CHANGE;
+			g_array_append_val(message->funcs,tmp);
 			g_async_queue_push(io_queue,(gpointer)message);
 			break;
 

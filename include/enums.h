@@ -304,6 +304,7 @@ typedef enum
 	UPD_INITIALIZE_DASH,
 	UPD_RUN_COMMS_TEST,
 	UPD_BURN_MS_FLASH,
+	UPD_FORCE_PAGE_CHANGE,
 }UpdateFunction;
 
 typedef enum
