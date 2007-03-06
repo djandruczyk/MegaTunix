@@ -258,6 +258,10 @@ trypop:
 					if ((connected) && (interrogated))
 						run_datalog();
 					break;
+				case UPD_RUN_COMMS_TEST:
+					if (connected)
+						io_cmd(IO_COMMS_TEST,NULL);
+					break;
 				case UPD_COMMS_STATUS:
 					update_comms_status();
 					break;

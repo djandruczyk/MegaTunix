@@ -206,9 +206,18 @@ gboolean handle_ecu_data(InputHandler handler, struct Io_Message * message)
 			}
 
 			if (g_utf8_validate(((gchar *)buf)+1,total_read-1,NULL))
+			{
 				thread_update_logbar("error_status_view",NULL,g_strndup(((gchar *)buf)+1,total_read-1),FALSE,FALSE);
+				if (dbg_lvl & (IO_PROCESS|SERIAL_RD))
+					dbg_func(g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",g_strndup(((gchar *)buf)+1,total_read-1)));
+
+			}
 			else
+			{
 				thread_update_logbar("error_status_view",NULL,g_strdup("The data that came back was jibberish, try rebooting again.\n"),FALSE,FALSE);
+				if (dbg_lvl & (IO_PROCESS|SERIAL_RD))
+					dbg_func(g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",g_strndup(((gchar *)buf)+1,total_read-1)));
+			}
 			break;
 
 		case REALTIME_VARS:
@@ -430,11 +439,13 @@ void dump_output(gint total_read, guchar *buf)
 	p = buf;
 	if (total_read > 0)
 	{
-		if (dbg_lvl & SERIAL_RD)
-			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's were sent\n"));
-		if (dbg_lvl & SERIAL_RD)
-			dbg_func(g_strdup_printf("Data is in HEX!!\n"));
 		p = buf;
+		if (dbg_lvl & SERIAL_RD)
+		{
+			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
+			dbg_func(g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",g_strndup(((gchar *)buf),total_read)));
+			dbg_func(g_strdup_printf("Data is in HEX!!\n"));
+		}
 		for (j=0;j<total_read;j++)
 		{
 			if (dbg_lvl & SERIAL_RD)

@@ -468,7 +468,7 @@ void writeto_ecu(struct Io_Message *message)
 	}
 
 	/*is this really needed??? */
-	g_usleep(5000);
+//	g_usleep(5000);
 
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
@@ -519,7 +519,7 @@ void burn_ecu_flash()
 		if (dbg_lvl & (SERIAL_WR|CRITICAL))
 			dbg_func(g_strdup_printf(__FILE__": burn_ecu_flash()\n\tBurn Failure, ERROR \"%s\"\n",err_text));
 	}
-	g_usleep(100000);
+	g_usleep(250000);
 
 	if (dbg_lvl & SERIAL_WR)
 		dbg_func(g_strdup(__FILE__": burn_ecu_flash()\n\tBurn to Flash\n"));
@@ -578,12 +578,12 @@ void readfrom_ecu(struct Io_Message *message)
 	if (result != message->out_len)	
 	{
 		err_text = (gchar *)g_strerror(errno);
-		if (dbg_lvl & (SERIAL_RD|CRITICAL))
+		if (dbg_lvl & (SERIAL_RD|SERIAL_WR|CRITICAL))
 			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite command to ECU failed, ERROR \"%s\"\n",err_text));
 	}
 
 	else
-		if (dbg_lvl & SERIAL_RD)
+		if (dbg_lvl & (SERIAL_WR|SERIAL_RD))
 			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tSent %s to the ECU\n",message->out_str));
 
 	if (message->handler == RAW_MEMORY_DUMP)
@@ -594,12 +594,12 @@ void readfrom_ecu(struct Io_Message *message)
 		if (result < 1)
 		{
 			err_text = (gchar *)g_strerror(errno);
-			if (dbg_lvl & (SERIAL_RD|CRITICAL))
+			if (dbg_lvl & (SERIAL_WR|SERIAL_RD|CRITICAL))
 				dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset for raw mem cmd to ECU failed, ERROR \"%s\"\n",err_text));
 		}
 		else
 		{
-			if (dbg_lvl & SERIAL_RD)
+			if (dbg_lvl & (SERIAL_WR|SERIAL_RD))
 				dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\twrite of offset of \"%i\" for raw mem cmd succeeded\n",message->offset));
 		}
 	}
@@ -612,7 +612,7 @@ void readfrom_ecu(struct Io_Message *message)
 	}
 	else
 	{
-		if (dbg_lvl & (SERIAL_RD|CRITICAL))
+		if (dbg_lvl & (SERIAL_RD|SERIAL_WR|CRITICAL))
 			dbg_func(g_strdup(__FILE__": readfrom_ecu()\n\t message->handler is undefined, author brainfart, EXITING!\n"));
 		g_static_mutex_unlock(&serio_mutex);
 		g_static_mutex_unlock(&mutex);
@@ -621,7 +621,7 @@ void readfrom_ecu(struct Io_Message *message)
 	if (result)
 	{
 		connected = TRUE;
-		if (dbg_lvl & SERIAL_RD)
+		if (dbg_lvl & (SERIAL_WR|SERIAL_RD))
 			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tDone Reading %s\n",handler_types[message->handler]));
 
 	}
@@ -629,7 +629,7 @@ void readfrom_ecu(struct Io_Message *message)
 	{
 		connected = FALSE;
 		serial_params->errcount++;
-		if (dbg_lvl & SERIAL_RD)
+		if (dbg_lvl & (SERIAL_WR|SERIAL_RD))
 			dbg_func(g_strdup_printf(__FILE__": readfrom_ecu()\n\tError reading data: %s\n",g_strerror(errno)));
 	}
 	g_static_mutex_unlock(&serio_mutex);
@@ -691,6 +691,7 @@ skipburn:
 			dbg_func(g_strdup_printf(__FILE__": set_ms_page()\n\tFAILURE sending \"%s\" (change page) command to ECU, ERROR \"%s\" \n",firmware->page_cmd,err_text));
 	}
 	res = write(serial_params->fd,&ms_page,1);
+	g_usleep(100000);
 	g_static_mutex_unlock(&comms_mutex);
 	if (res != 1)
 	{
@@ -700,7 +701,6 @@ skipburn:
 	}
 
 	last_page = ms_page;
-	g_usleep(100000);
 
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);

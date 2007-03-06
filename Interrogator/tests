@@ -63,7 +63,7 @@ cmd_desc=Runtime Vars (MSnS-Extra)
 store_data=FALSE
 
 [test_05]
-raw_cmd=v040100
+raw_cmd=V040100
 cmd_length=7
 cmd_desc=MS-II VE/Constants
 store_data=FALSE

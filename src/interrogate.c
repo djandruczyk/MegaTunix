@@ -180,13 +180,13 @@ void interrogate_ecu()
 		if (total_read > 0)
 		{
 			thread_update_logbar("interr_view",NULL,g_strdup_printf("Command \"%s\" (%s), returned %i bytes\n",cmd->string, cmd->desc,total_read),FALSE,FALSE);
-
+			p = buf;
 			if (dbg_lvl & (SERIAL_RD|INTERROGATOR))
 			{
 				dbg_func(g_strdup_printf(__FILE__": interrogate_ecu()\n\tRead the following from the %s command\n",cmd->string));
+				dbg_func(g_strdup_printf(__FILE__": interrogate.c()\n\tDumping Output string: \"%s\"\n",g_strndup(((gchar *)buf),total_read)));
 				dbg_func(g_strdup("Data is in HEX!!\n"));
 			}
-			p = buf;
 			for (j=0;j<total_read;j++)
 			{
 				if (dbg_lvl & (SERIAL_RD|INTERROGATOR))
@@ -1147,6 +1147,11 @@ void load_profile_details(struct Canidate *canidate)
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 				}
+				if(!cfg_read_int(cfgfile,section,"x_precision",&canidate->table_params[i]->x_precision))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile, ERROR\n"));
+				}
 			}
 			if(cfg_read_boolean(cfgfile,section,"y_multi_source",&canidate->table_params[i]->y_multi_source))
 			{
@@ -1202,6 +1207,11 @@ void load_profile_details(struct Canidate *canidate)
 				{
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_conv_expr\" variable not found in interrogation profile, ERROR\n"));
+				}
+				if(!cfg_read_int(cfgfile,section,"y_precision",&canidate->table_params[i]->y_precision))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile, ERROR\n"));
 				}
 			}
 			if(cfg_read_boolean(cfgfile,section,"z_multi_source",&canidate->table_params[i]->z_multi_source))
@@ -1259,21 +1269,11 @@ void load_profile_details(struct Canidate *canidate)
 					if (dbg_lvl & (INTERROGATOR|CRITICAL))
 						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_conv_expr\" variable not found in interrogation profile, ERROR\n"));
 				}
-			}
-			if(!cfg_read_int(cfgfile,section,"x_precision",&canidate->table_params[i]->x_precision))
-			{
-				if (dbg_lvl & (INTERROGATOR|CRITICAL))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"x_precision\" variable not found in interrogation profile, ERROR\n"));
-			}
-			if(!cfg_read_int(cfgfile,section,"y_precision",&canidate->table_params[i]->y_precision))
-			{
-				if (dbg_lvl & (INTERROGATOR|CRITICAL))
-				dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"y_precision\" variable not found in interrogation profile, ERROR\n"));
-			}
-			if(!cfg_read_int(cfgfile,section,"z_precision",&canidate->table_params[i]->z_precision))
-			{
-				if (dbg_lvl & (INTERROGATOR|CRITICAL))
-					dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile, ERROR\n"));
+				if(!cfg_read_int(cfgfile,section,"z_precision",&canidate->table_params[i]->z_precision))
+				{
+					if (dbg_lvl & (INTERROGATOR|CRITICAL))
+						dbg_func(g_strdup(__FILE__": load_profile_details()\n\t\"z_precision\" variable not found in interrogation profile, ERROR\n"));
+				}
 			}
 			if(!cfg_read_string(cfgfile,section,"table_name",&canidate->table_params[i]->table_name))
 			{

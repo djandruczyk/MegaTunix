@@ -1,6 +1,6 @@
 [global]
 description=Status boxes configuration for MSnS-E firmware
-total_status=18
+total_status=19
 
 [status_0]
 create_label=CONNECTED
@@ -249,4 +249,18 @@ source=portd
 bitval=0
 bitshift=1
 bitmask=2
+
+[status_18]
+create_label=ECU ERROR!!!
+active_fg=red
+inactive_fg=dim grey
+col=0
+row=18
+keys=bind_to_list,bitval,bitshift,bitmask,source
+key_types=_STRING_,_INT_,_INT_,_INT_,_STRING_
+bind_to_list=runtime_status
+source=portc
+bitval=1
+bitshift=7
+bitmask=128
 

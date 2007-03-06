@@ -86,8 +86,8 @@ gboolean update_runtime_vars()
 		conn_status = connected;
 		forced_update = TRUE;
 	}
-//	if ((count > 60) && (!forced_update))
-//		forced_update = TRUE;
+	if ((count > 60) && (!forced_update))
+		forced_update = TRUE;
 
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)

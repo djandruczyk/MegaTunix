@@ -180,7 +180,7 @@ void update_text_controls()
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 
 	mtx_gauge_face_get_attribute(g, VALUE_XPOS, &tmp1);
-	mtx_gauge_face_get_attribute(g, VALUE_YPOS, &tmp1);
+	mtx_gauge_face_get_attribute(g, VALUE_YPOS, &tmp2);
 	widget = glade_xml_get_widget(text_xml,"value_xpos_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),tmp1);
 	widget = glade_xml_get_widget(text_xml,"value_ypos_spin");
