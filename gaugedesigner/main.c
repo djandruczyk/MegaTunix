@@ -10,6 +10,7 @@
 
 extern GtkWidget *gauge;
 gchar * cwd = NULL;
+gboolean direct_path = FALSE;
 
 int main (int argc, char ** argv )
 {
@@ -50,7 +51,10 @@ int main (int argc, char ** argv )
 		g_free(dirname);
 		create_new_gauge(tmp,NULL);
 		if (g_file_test(argv[1],G_FILE_TEST_IS_REGULAR))
+		{
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
+			direct_path = TRUE;
+		}
 	}
 
 	g_free(filename);

@@ -16,6 +16,7 @@ gboolean hold_handlers = FALSE;
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
+extern gboolean direct_path;
 
 
 
@@ -82,6 +83,7 @@ EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
 	gtk_widget_set_sensitive(tmp,FALSE);
 
 	reset_onscreen_controls();
+	direct_path = FALSE;
 	gtk_widget_show_all(parent);
 	return (TRUE);
 }

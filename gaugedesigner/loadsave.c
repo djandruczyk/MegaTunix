@@ -15,6 +15,7 @@
 
 extern gboolean hold_handlers;
 extern GtkWidget *gauge;
+extern gboolean direct_path;
 
 EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 {
@@ -60,6 +61,7 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	gchar * filename = NULL;
 	gchar *defdir = NULL;
 	gchar **vector = NULL;
+	gint len = 0;
 	MtxFileIO *fileio = NULL;
 
 	if (!MTX_IS_GAUGE_FACE(gauge))
@@ -86,14 +88,31 @@ EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-		fileio->filename = filename;
-		tmpbuf = g_strrstr(filename,"Gauges");
-		vector = g_strsplit(tmpbuf,PSEP,-1);
-		if (g_strv_length(vector) == 3) /* Themed gauge */
-			fileio->default_path = g_build_path(PSEP,GAUGES_DATA_DIR,vector[1],NULL);
-		else if (g_strv_length(vector) == 2)
-			fileio->default_path = g_strdup(GAUGES_DATA_DIR);
-		g_strfreev(vector);
+		if (direct_path)
+		{
+			fileio->filename = g_build_path(PSEP,g_get_current_dir(),filename,NULL);
+			vector = g_strsplit(filename,PSEP,-1);
+			len = g_strv_length(vector);
+			g_free(vector[len-1]);
+			vector[len-1] = NULL;
+			tmpbuf = g_strjoinv(PSEP,vector);
+			fileio->default_path = g_build_path(PSEP,g_get_current_dir(),tmpbuf,NULL);
+			g_free(tmpbuf);
+
+			g_strfreev(vector);
+		}
+		else
+		{
+
+			fileio->filename = filename;
+			tmpbuf = g_strrstr(filename,"Gauges");
+			vector = g_strsplit(tmpbuf,PSEP,-1);
+			if (g_strv_length(vector) == 3) /* Themed gauge */
+				fileio->default_path = g_build_path(PSEP,GAUGES_DATA_DIR,vector[1],NULL);
+			else if (g_strv_length(vector) == 2)
+				fileio->default_path = g_strdup(GAUGES_DATA_DIR);
+			g_strfreev(vector);
+		}
 	}
 
 	filename = choose_file(fileio);

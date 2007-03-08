@@ -704,6 +704,7 @@ skipburn:
 
 	g_static_mutex_unlock(&serio_mutex);
 	g_static_mutex_unlock(&mutex);
+	force_page_change = FALSE;
 	return;
 
 }

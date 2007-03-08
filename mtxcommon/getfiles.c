@@ -336,16 +336,18 @@ afterfilter:
 #endif
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-	if ((data->action == GTK_FILE_CHOOSER_ACTION_SAVE) && (data->default_extension))
 	{
-		if(!g_str_has_suffix (tmpbuf,data->default_extension))
-			filename = g_strjoin(".",tmpbuf,data->default_extension,NULL);
+		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		if ((data->action == GTK_FILE_CHOOSER_ACTION_SAVE) && (data->default_extension))
+		{
+			if(!g_str_has_suffix (tmpbuf,data->default_extension))
+				filename = g_strjoin(".",tmpbuf,data->default_extension,NULL);
+			else
+				filename = g_strdup(tmpbuf);
+		}
 		else
 			filename = g_strdup(tmpbuf);
 	}
-	else
-		filename = g_strdup(tmpbuf);
 	gtk_widget_destroy (dialog);
 
 	return (filename);

@@ -67,6 +67,25 @@
     <start_angle>135.000000</start_angle>
     <sweep_angle>270.000000</sweep_angle>
   </tick_group>
+  <tick_group>
+    <font>Arial Bold</font>
+    <font_scale>0.088000</font_scale>
+    <text>0.5,1.5,2.5,3.5,4.5</text>
+    <text_inset>0.263000</text_inset>
+    <text_color>52428 52428 52428</text_color>
+    <num_maj_ticks>5</num_maj_ticks>
+    <maj_tick_color>65535 65535 65535</maj_tick_color>
+    <maj_tick_inset>0.000000</maj_tick_inset>
+    <maj_tick_length>0.000000</maj_tick_length>
+    <maj_tick_width>0.000000</maj_tick_width>
+    <num_min_ticks>0</num_min_ticks>
+    <min_tick_color>65535 65535 65535</min_tick_color>
+    <min_tick_inset>0.175000</min_tick_inset>
+    <min_tick_length>0.050000</min_tick_length>
+    <min_tick_width>0.065000</min_tick_width>
+    <start_angle>162.000000</start_angle>
+    <sweep_angle>216.000000</sweep_angle>
+  </tick_group>
   <polygon>
     <color>61166 15163 2570</color>
     <filled>1</filled>

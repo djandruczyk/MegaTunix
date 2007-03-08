@@ -1677,18 +1677,18 @@ void update_widget(gpointer object, gpointer user_data)
 				if (is_float)
 				{
 					tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
-//					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 						gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-//					else
+					else
 						update_color = FALSE;
 					g_free(tmpbuf);
 				}
 				else
 				{
 					tmpbuf = g_strdup_printf("%i",(gint)value);
-//					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
+					if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 						gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-//					else
+					else
 						update_color = FALSE;
 					g_free(tmpbuf);
 				}
