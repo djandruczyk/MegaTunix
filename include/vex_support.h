@@ -20,9 +20,13 @@
 
 /* Prototypes */
 EXPORT gboolean select_vex_for_export(GtkWidget *, gpointer );
-EXPORT gboolean select_vex_for_import(GtkWidget *, gpointer );
-gboolean vetable_export(GIOChannel *);
-gboolean vetable_import(GIOChannel *);
+EXPORT gboolean select_vex_for_export(GtkWidget *, gpointer );
+gboolean all_table_export(GIOChannel *);
+gboolean all_table_import(GIOChannel *);
+void single_table_export(GIOChannel *, gint );
+void single_table_import(GIOChannel *, gint );
+void select_table_for_export(gint);
+void select_table_for_import(gint);
 GIOStatus process_vex_line();
 GIOStatus process_vex_range(struct Vex_Import *, ImportParserArg, gchar *, GIOChannel * );
 GIOStatus process_vex_table(struct Vex_Import *, gchar *, GIOChannel * );

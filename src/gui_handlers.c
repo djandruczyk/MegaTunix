@@ -809,6 +809,8 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	/* get any datastructures attached to the widget */
 	void *obj_data = NULL;
 	gint handler = -1;
+	gint tmpi = 0;
+	gchar * tmpbuf = NULL;
 	gboolean restart = FALSE;
 	extern gint realtime_id;
 	extern gboolean no_update;
@@ -831,6 +833,22 @@ EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	switch ((StdButton)handler)
 	{
+		case EXPORT_SINGLE_TABLE:
+			tmpbuf = g_object_get_data(G_OBJECT(widget),"table_num");
+			if (tmpbuf)
+			{
+				tmpi = (gint)strtol(tmpbuf,NULL,10);
+				select_table_for_export(tmpi);
+			}
+			break;
+		case IMPORT_SINGLE_TABLE:
+			tmpbuf = g_object_get_data(G_OBJECT(widget),"table_num");
+			if (tmpbuf)
+			{
+				tmpi = (gint)strtol(tmpbuf,NULL,10);
+				select_table_for_import(tmpi);
+			}
+			break;
 		case RESCALE_TABLE:
 			rescale_table(widget);
 			break;

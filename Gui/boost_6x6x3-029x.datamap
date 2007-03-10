@@ -276,6 +276,24 @@ key_types=_INT_,_STRING_
 page=7
 bind_to_list=boost_controls
 
+[B1_tracking_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=7
+bind_to_list=boost_controls
+
+[B2_tracking_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=7
+bind_to_list=boost_controls
+
+[B3_tracking_frame]
+keys=page,bind_to_list
+key_types=_INT_,_STRING_
+page=7
+bind_to_list=boost_controls
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]
@@ -301,6 +319,20 @@ handler=_TRACKING_FOCUS_
 page=7
 table_num=7
 
+[B1_export_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_EXPORT_SINGLE_TABLE_
+page=7
+table_num=7
+
+[B1_import_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_IMPORT_SINGLE_TABLE_
+page=7
+table_num=7
+
 [B2_tracking_checkbutton]
 keys=handler,page,table_num
 key_types=_ENUM_,_INT_,_STRING_
@@ -308,10 +340,38 @@ handler=_TRACKING_FOCUS_
 page=7
 table_num=8
 
+[B2_export_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_EXPORT_SINGLE_TABLE_
+page=7
+table_num=8
+
+[B2_import_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_IMPORT_SINGLE_TABLE_
+page=7
+table_num=8
+
 [B3_tracking_checkbutton]
 keys=handler,page,table_num
 key_types=_ENUM_,_INT_,_STRING_
 handler=_TRACKING_FOCUS_
+page=7
+table_num=9
+
+[B3_export_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_EXPORT_SINGLE_TABLE_
+page=7
+table_num=9
+
+[B3_import_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_IMPORT_SINGLE_TABLE_
 page=7
 table_num=9
 

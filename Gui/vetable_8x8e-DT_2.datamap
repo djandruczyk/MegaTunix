@@ -160,6 +160,20 @@ page=1
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
+[export_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_EXPORT_SINGLE_TABLE_
+page=1
+table_num=1
+
+[import_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_IMPORT_SINGLE_TABLE_
+page=1
+table_num=1
+
 [3d_view_button]
 keys=page,table_num,tooltip,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_STRING_

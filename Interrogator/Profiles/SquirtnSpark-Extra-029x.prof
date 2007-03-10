@@ -96,7 +96,7 @@ z_conv_expr=x*1
 z_precision=0
 
 [table_2]
-table_name=Fuel VE Table 3, MSnSpark-Extra
+table_name=Fuel VE-Table 3, MSnSpark-Extra
 x_page=5
 x_base_offset=144
 x_bincount=12
@@ -252,7 +252,7 @@ z_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(21
 z_precisions=0,0,0,0
 
 [table_8]
-table_name=Boost Table 2, Duty Cycle Target: RPM vs TPS, MSnSpark-Extra
+table_name=Boost Table 2, DC Target: RPM vs TPS, MSnSpark-Extra
 x_page=7
 x_base_offset=84
 x_bincount=6
@@ -275,7 +275,7 @@ z_conv_expr=(x/255)*100
 z_precision=1
 
 [table_9]
-table_name=Second Boost Table switched on demand, MSnSpark-Extra
+table_name=Boost Table 3, switched on demand, MSnSpark-Extra
 x_page=7
 x_base_offset=132
 x_bincount=6

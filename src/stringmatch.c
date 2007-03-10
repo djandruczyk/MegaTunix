@@ -80,6 +80,10 @@ void build_string_2_enum_table()
 			GINT_TO_POINTER(REQFUEL_RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_RESCALE_TABLE_",
 			GINT_TO_POINTER(RESCALE_TABLE));
+	g_hash_table_insert(str_2_enum,"_EXPORT_SINGLE_TABLE_",
+			GINT_TO_POINTER(EXPORT_SINGLE_TABLE));
+	g_hash_table_insert(str_2_enum,"_IMPORT_SINGLE_TABLE_",
+			GINT_TO_POINTER(IMPORT_SINGLE_TABLE));
 	g_hash_table_insert(str_2_enum,"_MAP_SENSOR_TYPE_",
 			GINT_TO_POINTER(MAP_SENSOR_TYPE));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",

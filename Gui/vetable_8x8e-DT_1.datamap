@@ -58,7 +58,7 @@ table_num=0
 [VE1_gaugeframe1]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
@@ -67,7 +67,7 @@ datasource=rpm
 [VE1_gaugeframe2]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSADC_Gauge.xml
@@ -76,7 +76,7 @@ datasource=tpsadc
 [VE1_gaugeframe3]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_MAP_Gauge.xml
@@ -85,7 +85,7 @@ datasource=mapkpa
 [VE1_gaugeframe4]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
@@ -94,7 +94,7 @@ datasource=egocorr
 [VE1_gaugeframe5]
 keys=page,post_function_with_arg,gaugexml,datasource,table_num
 key_types=_INT_,_STRING_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 table_num=0
 post_function_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
@@ -160,16 +160,25 @@ page=0
 bind_to_list=burners
 tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
+[export_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_EXPORT_SINGLE_TABLE_
+page=0
+table_num=0
+
+[import_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_IMPORT_SINGLE_TABLE_
+page=0
+table_num=0
+
 [3d_view_button]
-#keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
 keys=page,table_num,tooltip,bind_to_list
-#key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=0
 table_num=0
-#x_source=raw_rpm
-#y_source=mapkpa
-#z_source=vecurr
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
@@ -183,7 +192,7 @@ data=VE1_rescale_spinner
 [reqfuel_rescale_button]
 keys=page,handler,data,table_num,applicable_tables
 key_types=_INT_,_ENUM_,_STRING_,_STRING_,_STRING_
-page=1
+page=0
 table_num=0
 applicable_tables=0
 handler=_REQFUEL_RESCALE_TABLE_
@@ -193,7 +202,7 @@ data=VE1_new_reqfuel_entry
 keys=handler,page,table_num
 key_types=_ENUM_,_INT_,_STRING_
 handler=_TRACKING_FOCUS_
-page=1
+page=0
 table_num=0
 
 #----- Rescale Entries ------------------------------------------------------

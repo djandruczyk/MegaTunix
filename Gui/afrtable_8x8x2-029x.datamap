@@ -358,6 +358,20 @@ handler=_TRACKING_FOCUS_
 page=1
 table_num=5
 
+[AFR1_export_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_EXPORT_SINGLE_TABLE_
+page=1
+table_num=5
+
+[AFR1_import_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_IMPORT_SINGLE_TABLE_
+page=1
+table_num=5
+
 [AFR2_tracking_checkbutton]
 keys=handler,page,table_num
 key_types=_ENUM_,_INT_,_STRING_
@@ -365,16 +379,25 @@ handler=_TRACKING_FOCUS_
 page=1
 table_num=6
 
+[AFR2_export_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_EXPORT_SINGLE_TABLE_
+page=1
+table_num=6
+
+[AFR2_import_button]
+keys=handler,page,table_num
+key_types=_ENUM_,_INT_,_STRING_
+handler=_IMPORT_SINGLE_TABLE_
+page=1
+table_num=6
+
 [AFR1_3d_view_button]
-#keys=page,table_num,x_source,y_source,z_source,tooltip,bind_to_list
-#key_types=_INT_,_INT_,_STRING_,_STRING_,_STRING_,_STRING_,_STRING_
 keys=page,table_num,tooltip,bind_to_list
 key_types=_INT_,_STRING_,_STRING_,_STRING_
 page=6
 table_num=5
-#x_source=raw_rpm
-#y_source=mapkpa
-#z_source=o2count
 bind_to_list=3d_buttons
 tooltip=This pops up a 3 dimensional view of the current AFR-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 

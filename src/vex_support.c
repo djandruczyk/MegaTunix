@@ -92,10 +92,56 @@ EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 		update_logbar("tools_view",NULL,g_strdup("VEX File Opened. VEX Comment undefined, exporting without one.\n"),TRUE,FALSE);
 	else
 		update_logbar("tools_view",NULL,g_strdup("VEX File Opened. VEX Comment already stored.\n"),TRUE,FALSE);
-	vetable_export(iochannel);
+	all_table_export(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
 	free_mtxfileio(fileio);
 	return TRUE;
+}
+
+void select_table_for_export(gint table_num)
+{
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
+	GIOChannel *iochannel = NULL;
+	extern gboolean interrogated;
+	extern struct Firmware_Details *firmware;
+
+	if (!interrogated)
+		return;
+
+	if ((table_num < 0) || (table_num >= firmware->total_tables))
+	{
+		return;
+	}
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->title = g_strdup("Save your VEX file");
+	fileio->default_filename= g_strdup_printf("%s.vex",g_strdelimit(firmware->table_params[table_num]->table_name," ",'_'));
+	fileio->default_extension= g_strdup("vex");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
+
+	filename = choose_file(fileio);
+	if (filename == NULL)
+	{
+		update_logbar("tools_view",g_strdup("warning"),g_strdup("NO FILE chosen for VEX export\n"),TRUE,FALSE);
+		return;
+	}
+
+	iochannel = g_io_channel_new_file(filename, "a+",NULL);
+	if (!iochannel)
+	{
+		update_logbar("tools_view",g_strdup("warning"),g_strdup("File open FAILURE! \n"),TRUE,FALSE);
+		return;
+	}
+	if (vex_comment == NULL)
+		update_logbar("tools_view",NULL,g_strdup("VEX File Opened. VEX Comment undefined, exporting without one.\n"),TRUE,FALSE);
+	else
+		update_logbar("tools_view",NULL,g_strdup("VEX File Opened. VEX Comment already stored.\n"),TRUE,FALSE);
+	single_table_export(iochannel,table_num);
+	g_io_channel_shutdown(iochannel,TRUE,NULL);
+	free_mtxfileio(fileio);
+	return;
 }
 
 
@@ -131,25 +177,70 @@ EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 	update_logbar("tools_view",NULL,g_strdup("VEX File Closed\n"),TRUE,FALSE);
 	gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
 
-	vetable_import(iochannel);
+	all_table_import(iochannel);
 	g_io_channel_shutdown(iochannel,TRUE,NULL);
 	free_mtxfileio(fileio);
 	return TRUE;
 }
 
 
+void select_table_for_import(gint table_num)
+{
+	MtxFileIO *fileio = NULL;
+	gchar *filename = NULL;
+	GIOChannel *iochannel = NULL;
+	extern GHashTable *dynamic_widgets;
+	extern gboolean interrogated;
+	extern struct Firmware_Details *firmware;
+
+	if (!interrogated)
+		return;
+
+	if ((table_num < 0) || (table_num >= firmware->total_tables))
+	{
+		return;
+	}
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->title = g_strdup("Select your VEX file to import");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+
+	filename = choose_file(fileio);
+	if (filename == NULL)
+	{
+		update_logbar("tools_view",g_strdup("warning"),g_strdup("NO FILE chosen for VEX import\n"),TRUE,FALSE);
+		return;
+	}
+
+	iochannel = g_io_channel_new_file(filename, "r+",NULL);
+	if (!iochannel)
+	{
+		update_logbar("tools_view",g_strdup("warning"),g_strdup("File open FAILURE! \n"),TRUE,FALSE);
+		return;
+	}
+	update_logbar("tools_view",NULL,g_strdup("VEX File Closed\n"),TRUE,FALSE);
+	gtk_entry_set_text(GTK_ENTRY(g_hash_table_lookup(dynamic_widgets,"tools_vex_comment_entry")),"");
+
+	single_table_import(iochannel,table_num);
+	g_io_channel_shutdown(iochannel,TRUE,NULL);
+	free_mtxfileio(fileio);
+	return;
+}
+
+
 /*!
- \brief vetable_export() is the export function to dump all Tables to a "vex"
+ \brief all_table_export() is the export function to dump all Tables to a "vex"
  file.  It has been modified to handler multiple tables per page.  
  There is a major problem with this in that the currect VEX 1.0 spec 
  doesn't allow for multiple tables per page, so import is likely to be 
  a problem.
  \param iochannel a pointer to the output channel 
  to write the data to.
- \see vetable_import
+ \see all_table_import
  \returns TRUE on success, FALSE on failure
  */
-gboolean vetable_export(GIOChannel *iochannel)
+gboolean all_table_export(GIOChannel *iochannel)
 {
 	struct tm *tm = NULL;
 	time_t *t = NULL;
@@ -240,7 +331,7 @@ gboolean vetable_export(GIOChannel *iochannel)
 	if (status != G_IO_STATUS_NORMAL)
 	{
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": vetable_export()\n\tError exporting VEX file\n"));
+			dbg_func(g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
 	}
 	g_string_free(output,TRUE);
 
@@ -254,14 +345,123 @@ gboolean vetable_export(GIOChannel *iochannel)
 
 
 /*!
- \brief vetable_import() is called to import Tables from a file.  
+ \brief single_table_export() is the export function to dump one Tables
+ to a "vex" file.  
+ \param iochannel a pointer to the output channel 
+ \param table_num, integer number of table to export
+ \see single_table_import
+ \returns TRUE on success, FALSE on failure
+ */
+void single_table_export(GIOChannel *iochannel, gint table_num)
+{
+	struct tm *tm = NULL;
+	time_t *t = NULL;
+	gint i = 0;
+	gint j = 0;
+	gint table = -1;
+	gsize count = 0;
+	gint index = 0;
+	gint y_page = 0;
+	gint z_page = 0;
+	gint x_page = 0;
+	gint y_base = 0;
+	gint z_base = 0;
+	gint x_base = 0;
+	gint x_bincount = 0;
+	gint y_bincount = 0;
+	extern gint ** ms_data;
+	extern struct Firmware_Details *firmware;
+	GIOStatus status;
+	GString *output = NULL;
+
+
+	/* For Page 0.... */
+	output = g_string_sized_new(64); /*pre-allocate 64 chars */
+	//printf("total tables %i\n",firmware->total_tables);
+	//
+	table = table_num;
+	z_page = firmware->table_params[table]->z_page;
+	x_page = firmware->table_params[table]->x_page;
+	y_page = firmware->table_params[table]->y_page;
+	z_base = firmware->table_params[table]->z_base;
+	y_base = firmware->table_params[table]->y_base;
+	x_base = firmware->table_params[table]->x_base;
+	y_bincount = firmware->table_params[table]->y_bincount;
+	x_bincount = firmware->table_params[table]->x_bincount;
+
+	t = g_malloc(sizeof(time_t));
+	time(t);
+	tm = localtime(t);
+	g_free(t);
+	if (vex_comment == NULL)
+		vex_comment = g_strdup("No comment given");
+
+	output = g_string_append(output, "EVEME 1.0\n");
+	output = g_string_append(output, "UserRev: 1.00\n");
+	output = g_string_append(output, g_strdup_printf("UserComment: Table %i; (%s) %s\n",table,firmware->table_params[table]->table_name,vex_comment));
+	output = g_string_append(output, g_strdup_printf("Date: %i-%.2i-%i\n",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year)));
+
+	output = g_string_append(output, g_strdup_printf("Time: %.2i:%.2i\n",tm->tm_hour,tm->tm_min));
+	output = g_string_append(output, g_strdup_printf("Page %i\n",z_page));
+	output = g_string_append(output, g_strdup_printf("VE Table RPM Range              [%2i]\n",x_bincount));
+
+	for (i=0;i<x_bincount;i++)
+		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ms_data[x_page][x_base+i]));
+
+	output = g_string_append(output, g_strdup_printf("VE Table Load Range (MAP)       [%2i]\n",y_bincount));
+	for (i=0;i<y_bincount;i++)
+		output = g_string_append(output,g_strdup_printf("   [%3d] = %3d\n",i,ms_data[y_page][y_base+i]));
+
+	output = g_string_append(output, g_strdup_printf("VE Table                        [%3i][%3i]\n",x_bincount,y_bincount));
+	output = g_string_append(output, "           ");
+	for (i=0;i<x_bincount;i++)
+	{
+		output = g_string_append(output, g_strdup_printf("[%3d]",i));
+		if (i < (x_bincount-1))
+			output = g_string_append(output, " ");
+	}
+	output = g_string_append(output, "\n");
+	index = 0;
+	for (i=0;i<x_bincount;i++)
+	{
+		output = g_string_append(output,g_strdup_printf("   [%3d] =",i));
+		for (j=0;j<y_bincount;j++)
+		{
+			if (j == 0)
+				output = g_string_append (output,g_strdup_printf("  %3d",ms_data[z_page][index+z_base]));
+			else
+				output = g_string_append (output,g_strdup_printf("   %3d",ms_data[z_page][index+z_base]));
+			index++;
+		}
+		output = g_string_append(output,"\n");
+	}
+	status = g_io_channel_write_chars(
+			iochannel,output->str,output->len,&count,NULL);
+	if (status != G_IO_STATUS_NORMAL)
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": all_table_export()\n\tError exporting VEX file\n"));
+	}
+	g_string_free(output,TRUE);
+
+	update_logbar("tools_view",NULL,g_strdup("VE-Table(s) Exported Successfully\n"),TRUE,FALSE);
+
+	if (vex_comment)
+		g_free(vex_comment);
+	vex_comment = NULL;
+	return; /* return TRUE on success, FALSE on failure */
+}
+
+
+/*!
+ \brief all_table_import() is called to import Tables from a file.  
  There currently exists a big problem in that newer firmwares (msns-extra 
  and MS-II) have multiple tables per page and the VEX 1.0 spec does NOT 
  account for that. 
  \param iochannel pointer to the output channel to read 
  the data from.
  */
-gboolean vetable_import(GIOChannel *iochannel)
+gboolean all_table_import(GIOChannel *iochannel)
 {
 	gboolean go=TRUE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
@@ -271,17 +471,18 @@ gboolean vetable_import(GIOChannel *iochannel)
 	if (!iochannel)
 	{
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": vetable_import()\n\tIOChannel undefined, returning!!\n"));
+			dbg_func(g_strdup(__FILE__": all_table_import()\n\tIOChannel undefined, returning!!\n"));
 		return FALSE;
 	}
 	vex = g_new0(struct Vex_Import, 1);
+	vex->table = -1;
 
 	//reset_import_flags();
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
 	{
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup(__FILE__": vetable_import()\n\tError seeking to beginning of the file\n"));
+			dbg_func(g_strdup(__FILE__": all_table_import()\n\tError seeking to beginning of the file\n"));
 	}
 	/* process lines while we can */
 	while (go)
@@ -304,6 +505,7 @@ gboolean vetable_import(GIOChannel *iochannel)
 			feed_import_data_to_ecu(vex);
 			dealloc_vex_struct(vex);
 			vex = g_new0(struct Vex_Import, 1);
+			vex->table = -1;
 		}
 	}
 	dealloc_vex_struct(vex);
@@ -313,11 +515,80 @@ gboolean vetable_import(GIOChannel *iochannel)
 	if (status == G_IO_STATUS_ERROR)
 	{
 		if (dbg_lvl & CRITICAL)
-			dbg_func(g_strdup_printf(__FILE__": vetable_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
+			dbg_func(g_strdup_printf(__FILE__": all_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
 		return FALSE;
 	}
 	io_cmd(IO_UPDATE_VE_CONST,NULL);
 	return TRUE;
+}
+
+
+/*!
+ \brief single_table_import() is called to import a single from a file.  
+ There currently exists a big problem in that newer firmwares (msns-extra 
+ and MS-II) have multiple tables per page and the VEX 1.0 spec does NOT 
+ account for that. 
+ \param iochannel pointer to the output channel to read 
+ \param table_num,  table number to import
+ the data from.
+ */
+void single_table_import(GIOChannel *iochannel, gint table_num)
+{
+	gboolean go=TRUE;
+	GIOStatus status = G_IO_STATUS_NORMAL;
+	struct Vex_Import *vex = NULL;
+	extern GHashTable *dynamic_widgets;
+
+	if (!iochannel)
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": single_table_import()\n\tIOChannel undefined, returning!!\n"));
+		return;
+	}
+	vex = g_new0(struct Vex_Import, 1);
+	vex->table = table_num;
+
+	//reset_import_flags();
+	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
+	if (status != G_IO_STATUS_NORMAL)
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup(__FILE__": single_table_import()\n\tError seeking to beginning of the file\n"));
+	}
+	/* process lines while we can */
+	while (go)
+	{
+		status = process_vex_line(vex,iochannel);
+		if ((status == G_IO_STATUS_EOF)||(status == G_IO_STATUS_ERROR))
+		{
+			go = FALSE;
+			break;
+		}
+		/* This check means we got 1 whole ve/spark table, so we feed
+		 * it to the ECU and exit
+		 */
+		if ((status != G_IO_STATUS_EOF) 
+				& (vex->got_page) 
+				& (vex->got_load) 
+				& (vex->got_rpm) 
+				& (vex->got_ve))
+		{
+			feed_import_data_to_ecu(vex);
+			go = FALSE;
+		}
+	}
+	dealloc_vex_struct(vex);
+
+	gtk_widget_set_sensitive(g_hash_table_lookup(dynamic_widgets,"tools_undo_vex_button"),TRUE);
+
+	if (status == G_IO_STATUS_ERROR)
+	{
+		if (dbg_lvl & CRITICAL)
+			dbg_func(g_strdup_printf(__FILE__": single_table_import()\n\tRead was unsuccessful. %i %i %i %i \n",vex->got_page, vex->got_load, vex->got_rpm, vex->got_ve));
+		return;
+	}
+	io_cmd(IO_UPDATE_VE_CONST,NULL);
+	return;
 }
 
 
@@ -508,25 +779,28 @@ GIOStatus process_table(struct Vex_Import *vex)
 
 	/* Search for out magic semicolon, if missing AND multi-table/page
 	 * firmware, ABORT */
-	if ((!g_strrstr(vex->comment,";")) && (firmware->total_tables == firmware->total_tables))
+	if ((vex->table < 0) && (vex->table >= firmware->total_tables))
 	{
-		update_logbar("tools_view","warning",g_strdup("VEX Import: Multi Table per page firmware,\nbut Table number is not defined in comment field, load aborted!!!\n"),TRUE,FALSE);
-		return G_IO_STATUS_ERROR;
-	}
+		if ((!g_strrstr(vex->comment,";")) && (firmware->total_tables == firmware->total_tables))
+		{
+			update_logbar("tools_view","warning",g_strdup("VEX Import: Multi Table per page firmware,\nbut Table number is not defined in comment field, load aborted!!!\n"),TRUE,FALSE);
+			return G_IO_STATUS_ERROR;
+		}
 
-	string = g_strsplit(vex->comment,";",-1);
-	if ((string[0] == NULL) || (!g_strrstr(string[0],"Table")))
-	{
-		update_logbar("tools_view","warning",g_strdup("VEX Import: Multi Table per page firmware,\n\tbut Table number is not defined in comment field, load aborted!!!\n"),TRUE,FALSE);
-		vex->table = -1;
-		g_strfreev(string);
-		return G_IO_STATUS_ERROR;
-	}
-	else
-	{
-		/* the +5 gets us past theword "Table" */
-		vex->table = (gint)g_ascii_strtod(string[0]+5,NULL);
-		g_strfreev(string);
+		string = g_strsplit(vex->comment,";",-1);
+		if ((string[0] == NULL) || (!g_strrstr(string[0],"Table")))
+		{
+			update_logbar("tools_view","warning",g_strdup("VEX Import: Multi Table per page firmware,\n\tbut Table number is not defined in comment field, load aborted!!!\n"),TRUE,FALSE);
+			vex->table = -1;
+			g_strfreev(string);
+			return G_IO_STATUS_ERROR;
+		}
+		else
+		{
+			/* the +5 gets us past theword "Table" */
+			vex->table = (gint)g_ascii_strtod(string[0]+5,NULL);
+			g_strfreev(string);
+		}
 	}
 
 	update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: Table %i\n",vex->table),TRUE,FALSE);
@@ -839,12 +1113,12 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 	/* If dimensions do NOT match, ABORT!!! */
 	if (firmware->table_params[table]->x_bincount != vex->total_x_bins)
 	{
-		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins),TRUE,FALSE);
+		update_logbar("tools_view","warning",g_strdup_printf("VEX Import: number of RPM bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->x_bincount,vex->total_x_bins),TRUE,FALSE);
 		return;
 	}
 	if (firmware->table_params[table]->y_bincount != vex->total_y_bins)
 	{
-		update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins),TRUE,FALSE);
+		update_logbar("tools_view","warning",g_strdup_printf("VEX Import: number of LOAD bins inside VEXfile and FIRMWARE DO NOT MATCH (%i!=%i), aborting!!!\n",firmware->table_params[table]->y_bincount,vex->total_y_bins),TRUE,FALSE);
 		return;
 	}
 
@@ -915,6 +1189,7 @@ void feed_import_data_to_ecu(struct Vex_Import *vex)
 				write_ve_const(NULL,page,base+i,vex->tbl_bins[i],is_spark, TRUE);
 		}
 	}
+	io_cmd(IO_BURN_MS_FLASH,NULL);
 
 	update_logbar("tools_view",NULL,g_strdup_printf("VEX Import: VEtable on page %i updated with data from the VEX file\n",vex->page),TRUE,FALSE);
 }
