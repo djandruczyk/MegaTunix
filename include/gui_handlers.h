@@ -30,7 +30,7 @@ EXPORT gboolean spin_button_handler(GtkWidget *, gpointer);
 EXPORT gboolean widget_grab(GtkWidget *, GdkEventButton *, gpointer );
 EXPORT gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
 EXPORT gboolean set_algorithm(GtkWidget *, gpointer );
-void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
+EXPORT void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 EXPORT void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 void update_ve_const(void);
 gboolean force_update_table(gpointer);

@@ -2127,7 +2127,7 @@ testit:
  \param page_no (guint) page number that's now active
  \param data (gpointer) unused
  */
-void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+EXPORT void page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint tab_ident = 0;
 	gint sub_page = 0;
