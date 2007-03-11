@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dashboard SYSTEM "mtxdashboard.dtd">
+<dashboard>
+  <dash_geometry>
+    <width>478</width>
+    <height>517</height>
+  </dash_geometry>
+  <gauge>
+    <width>156</width>
+    <height>156</height>
+    <x_offset>316</x_offset>
+    <y_offset>296</y_offset>
+    <gauge_xml_name>SportComp/AM_SportComp_AFR_Gauge.xml</gauge_xml_name>
+    <datasource>afr</datasource>
+  </gauge>
+  <gauge>
+    <width>312</width>
+    <height>321</height>
+    <x_offset>2</x_offset>
+    <y_offset>171</y_offset>
+    <gauge_xml_name>SportComp/AM_SportComp_RPM_Gauge.xml</gauge_xml_name>
+    <datasource>rpm</datasource>
+  </gauge>
+  <gauge>
+    <width>138</width>
+    <height>158</height>
+    <x_offset>286</x_offset>
+    <y_offset>-3</y_offset>
+    <gauge_xml_name>SportComp/AM_SportComp_Advance_Gauge.xml</gauge_xml_name>
+    <datasource>sparkangle</datasource>
+  </gauge>
+  <gauge>
+    <width>149</width>
+    <height>144</height>
+    <x_offset>-1</x_offset>
+    <y_offset>44</y_offset>
+    <gauge_xml_name>SportComp/AM_SportComp_MAP_Gauge.xml</gauge_xml_name>
+    <datasource>mapkpa</datasource>
+  </gauge>
+  <gauge>
+    <width>148</width>
+    <height>166</height>
+    <x_offset>325</x_offset>
+    <y_offset>136</y_offset>
+    <gauge_xml_name>SportComp/AM_SportComp_CLT_degC_Gauge.xml</gauge_xml_name>
+    <datasource>cltdeg</datasource>
+  </gauge>
+  <gauge>
+    <width>142</width>
+    <height>137</height>
+    <x_offset>144</x_offset>
+    <y_offset>16</y_offset>
+    <gauge_xml_name>SportComp/AM_SportComp_MAT_degC_Gauge.xml</gauge_xml_name>
+    <datasource>matdeg</datasource>
+  </gauge>
+</dashboard>

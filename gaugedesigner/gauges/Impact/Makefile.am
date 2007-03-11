@@ -11,6 +11,8 @@ gauges_files = 	\
 		Impact_MAT_Gauge.xml \
 		Impact_PW_Gauge.xml \
 		Impact_VE_Gauge.xml \
+		Impact_CLT_degC_Gauge.xml \
+		Impact_MAT_degC_Gauge.xml \
 		Impact_rpm_Gauge.xml
 
 

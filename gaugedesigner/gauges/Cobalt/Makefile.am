@@ -11,6 +11,8 @@ gauges_files = 	\
 		Cobalt_Volts.xml \
 		Cobalt_Boost.xml \
 		Cobalt_MAP.xml \
+		Cobalt_CLT_degC.xml \
+		Cobalt_MAT_degC.xml \
 		Cobalt_RPM.xml 
 
 gauges_DATA = $(gauges_files)
