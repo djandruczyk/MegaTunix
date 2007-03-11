@@ -157,6 +157,7 @@ void finalize_core_gui(GladeXML * xml)
 
 	g_object_set_data(G_OBJECT(button),"label",gtk_bin_get_child(GTK_BIN(button)));
 	g_object_set_data(G_OBJECT(cbutton),"label",gtk_bin_get_child(GTK_BIN(button)));
+	label  = gtk_bin_get_child(GTK_BIN(button));
 #if GTK_MINOR_VERSION >= 6
 	if (gtk_minor_version >= 6)
 		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
@@ -177,6 +178,7 @@ void finalize_core_gui(GladeXML * xml)
 		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
 	g_object_set_data(G_OBJECT(button),"label",gtk_bin_get_child(GTK_BIN(button)));
 	g_object_set_data(G_OBJECT(cbutton),"label",gtk_bin_get_child(GTK_BIN(button)));
+	label  = gtk_bin_get_child(GTK_BIN(button));
 #if GTK_MINOR_VERSION >= 6
 	if (gtk_minor_version >= 6)
 		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
