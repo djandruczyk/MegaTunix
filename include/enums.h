@@ -406,7 +406,7 @@ typedef enum
 
 typedef enum
 {
-	MTX_SINGLE_WRITE=0x240,
+	MTX_SIMPLE_WRITE=0x240,
 	MTX_CHUNK_WRITE,
 }WriteMode;
 

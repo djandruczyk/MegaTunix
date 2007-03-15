@@ -124,7 +124,7 @@ void io_cmd(Io_Command cmd, gpointer data)
 			message->cmd = cmd;
 			message->need_page_change = TRUE;
 			message->page = firmware->toothmon_page;
-			message->truepgnum = firmware->page_params[firmware->trigmon_page]->truepgnum;
+			message->truepgnum = firmware->page_params[firmware->toothmon_page]->truepgnum;
 			message->command = READ_CMD;
 			message->out_str = g_strdup(cmds->veconst_cmd);
 			message->out_len = cmds->ve_cmd_len;
@@ -589,7 +589,7 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
 	output->offset = offset;
 	output->value = value;
 	output->ign_parm = ign_parm;
-	output->mode = MTX_SINGLE_WRITE;
+	output->mode = MTX_SIMPLE_WRITE;
 	output->queue_update = queue_update;
 	io_cmd(IO_WRITE_DATA,output);
 	return;
@@ -601,7 +601,7 @@ void write_ve_const(GtkWidget *widget, gint page, gint offset, gint value, gbool
  \param page (gint) page in which the value refers to.
  \param offset (gint) offset from the beginning of the page that this data
  refers to.
- \param len (gint) lenght of block to sent
+ \param len (gint) length of block to sent
  \param data (guchar) the block of data to be sent
  a horrible stall when doing an ECU restore or batch load...
  */

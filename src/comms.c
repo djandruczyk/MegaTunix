@@ -288,7 +288,7 @@ void writeto_ecu(struct Io_Message *message)
 		//printf ("OFFLINE writing value at %i,%i [%i]\n",page,offset,value);
 		switch (output->mode)
 		{
-			case MTX_SINGLE_WRITE:
+			case MTX_SIMPLE_WRITE:
 				ms_data[page][offset] = value;
 				break;
 			case MTX_CHUNK_WRITE:
@@ -315,7 +315,7 @@ void writeto_ecu(struct Io_Message *message)
 		return;
 	}
 
-	if (output->mode == MTX_SINGLE_WRITE)
+	if (output->mode == MTX_SIMPLE_WRITE)
 	{
 		if (dbg_lvl & SERIAL_WR)
 			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tSerial Write, Page, %i, Mem Offset %i, Value %i\n",page,offset,value));
@@ -334,7 +334,7 @@ void writeto_ecu(struct Io_Message *message)
 		return;
 	}
 
-	if ((value > 255) && (output->mode == MTX_SINGLE_WRITE))
+	if ((value > 255) && (output->mode == MTX_SIMPLE_WRITE))
 	{
 		if (dbg_lvl & SERIAL_WR)
 			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tLarge value being sent: %i, to page %i, offset %i\n",value,page,offset));
@@ -345,7 +345,7 @@ void writeto_ecu(struct Io_Message *message)
 		if (dbg_lvl & SERIAL_WR)
 			dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tHighbyte: %i, Lowbyte %i\n",highbyte,lowbyte));
 	}
-	if ((value < 0) && (output->mode == MTX_SINGLE_WRITE))
+	if ((value < 0) && (output->mode == MTX_SIMPLE_WRITE))
 	{
 		if (dbg_lvl & (SERIAL_WR|CRITICAL))
 			dbg_func(g_strdup(__FILE__": writeto_ecu()\n\tWARNING!!, value sent is below 0\n"));
@@ -363,12 +363,12 @@ void writeto_ecu(struct Io_Message *message)
 	if (dbg_lvl & SERIAL_WR)
 		dbg_func(g_strdup_printf(__FILE__": writeto_ecu()\n\tIgnition param %i\n",ign_parm));
 
-	if ((ign_parm) && (output->mode == MTX_SINGLE_WRITE))
+	if ((ign_parm) && (output->mode == MTX_SIMPLE_WRITE))
 		write_cmd = g_strdup("J");
 	else
 		write_cmd = g_strdup(firmware->write_cmd);
 
-	if (output->mode == MTX_SINGLE_WRITE)
+	if (output->mode == MTX_SIMPLE_WRITE)
 	{
 		if (twopart)
 		{

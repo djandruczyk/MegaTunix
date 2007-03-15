@@ -123,14 +123,13 @@ void crunch_trigtooth_data(gint page)
 	gint position = ms_data[page][CTR];
 	gint count = 0;
 
-
-	/*
-	   g_printf("Counter position on page %i is %i\n",page,position);
-	   if (position > 0)
-	   g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
-	   else
-	   g_printf("data block from position 0 to 185 (93 words)\n");
-	   */
+/*
+	g_printf("Counter position on page %i is %i\n",page,position);
+	if (position > 0)
+		g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
+	else
+		g_printf("data block from position 0 to 185 (93 words)\n");
+*/
 
 	count=0;
 	for (i=0;i<93;i++)

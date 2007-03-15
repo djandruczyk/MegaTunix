@@ -481,6 +481,7 @@ struct Io_Cmds
  */
 struct Output_Data
 {
+	gint canID;		/*! CAN Module ID (MS-II ONLY) */
 	gint page;		/*! Page in ECU */
 	gint offset;		/*! Offset in block */
 	gint value;		/*! Value to send */
