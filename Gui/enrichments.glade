@@ -162,7 +162,7 @@
 					    <widget class="GtkEntry" id="cpulse_neg40_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">4</property>
@@ -191,7 +191,7 @@
 					    <widget class="GtkEntry" id="cpulse_pos170_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">4</property>
@@ -220,7 +220,7 @@
 					    <widget class="GtkEntry" id="prime_pulse_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">4</property>
@@ -350,7 +350,7 @@
 					    <widget class="GtkEntry" id="afterstart_enrich_numcycles_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -379,7 +379,7 @@
 					    <widget class="GtkEntry" id="afterstart_enrich_%_entry">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -738,7 +738,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_1">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -767,7 +767,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_2">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -796,7 +796,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_3">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -825,7 +825,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_10">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -854,7 +854,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_9">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -883,7 +883,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_8">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -912,7 +912,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_7">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -941,7 +941,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_6">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -970,7 +970,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_5">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -999,7 +999,7 @@
 					    <widget class="GtkEntry" id="warmup_entry_4">
 					      <property name="visible">True</property>
 					      <property name="can_focus">True</property>
-					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+					      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 					      <property name="editable">True</property>
 					      <property name="visibility">True</property>
 					      <property name="max_length">3</property>
@@ -1150,7 +1150,7 @@ Duration (sec)</property>
 						<widget class="GtkEntry" id="accel_tpstrigthresh_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">4</property>
@@ -1179,7 +1179,7 @@ Duration (sec)</property>
 						<widget class="GtkEntry" id="accel_enrich_duration_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">4</property>
@@ -1274,7 +1274,7 @@ Multiplier (%)</property>
 						<widget class="GtkEntry" id="accel_cold_enrich_multiplier_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">3</property>
@@ -1303,7 +1303,7 @@ Multiplier (%)</property>
 						<widget class="GtkEntry" id="accel_cold_enrich_addon_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">4</property>
@@ -1486,7 +1486,7 @@ Multiplier (%)</property>
 						    <widget class="GtkEntry" id="accelbins_entry_4">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -1515,7 +1515,7 @@ Multiplier (%)</property>
 						    <widget class="GtkEntry" id="accelbins_entry_3">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -1544,7 +1544,7 @@ Multiplier (%)</property>
 						    <widget class="GtkEntry" id="accelbins_entry_2">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -1573,7 +1573,7 @@ Multiplier (%)</property>
 						    <widget class="GtkEntry" id="accelbins_entry_1">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -1650,7 +1650,7 @@ Multiplier (%)</property>
 						<widget class="GtkEntry" id="accel_decel_fuel_cut_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">3</property>
@@ -1794,7 +1794,7 @@ Multiplier (%)</property>
 						<widget class="GtkEntry" id="ego_active_rpm_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">5</property>
@@ -1823,7 +1823,7 @@ Multiplier (%)</property>
 						<widget class="GtkEntry" id="ego_active_temp_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">3</property>
@@ -1918,7 +1918,7 @@ Voltage</property>
 						<widget class="GtkEntry" id="ego_step_percent_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">3</property>
@@ -1947,7 +1947,7 @@ Voltage</property>
 						<widget class="GtkEntry" id="ego_switching_voltage_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">4</property>
@@ -2042,7 +2042,7 @@ Between Steps</property>
 						<widget class="GtkEntry" id="ego_ign_events_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">3</property>
@@ -2071,7 +2071,7 @@ Between Steps</property>
 						<widget class="GtkEntry" id="ego_limit_entry">
 						  <property name="visible">True</property>
 						  <property name="can_focus">True</property>
-						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						  <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						  <property name="editable">True</property>
 						  <property name="visibility">True</property>
 						  <property name="max_length">3</property>

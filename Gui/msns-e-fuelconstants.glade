@@ -1330,7 +1330,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="inj_open_time_1_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -1359,7 +1359,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="batt_correction_1_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">5</property>
@@ -1388,7 +1388,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="pwm_time_thresh_1_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -1417,7 +1417,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="pwm_limit_1_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">3</property>
@@ -1947,7 +1947,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="inj_open_time_2_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -1976,7 +1976,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="batt_correction_2_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">5</property>
@@ -2005,7 +2005,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="pwm_time_thresh_2_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
@@ -2034,7 +2034,7 @@ Threshold (ms.)</property>
 						    <widget class="GtkEntry" id="pwm_limit_2_entry">
 						      <property name="visible">True</property>
 						      <property name="can_focus">True</property>
-						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK</property>
+						      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
 						      <property name="editable">True</property>
 						      <property name="visibility">True</property>
 						      <property name="max_length">4</property>
