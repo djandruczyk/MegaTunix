@@ -32,6 +32,7 @@ EXPORT gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
 EXPORT gboolean set_algorithm(GtkWidget *, gpointer );
 EXPORT void page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
 EXPORT void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
+EXPORT gboolean focus_out_handler(GtkWidget *, GdkEventFocus *, gpointer );
 void update_ve_const(void);
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer );

@@ -719,7 +719,6 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 
 
 	/* Filled Arcs */
-
 	/* Outside gradient ring */
 	gradient = cairo_pattern_create_linear(gauge->xc+(0.707*gauge->xc),
 			gauge->yc-(0.707*gauge->yc),
@@ -876,38 +875,6 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		g_strfreev(vector);
 	}
 
-	/* Render all the text blocks */
-	for (i=0;i<gauge->t_blocks->len;i++)
-	{
-		tblock = g_array_index(gauge->t_blocks,MtxTextBlock *, i);
-		cairo_set_source_rgb (cr, 
-				tblock->color.red/65535.0,
-				tblock->color.green/65535.0,
-				tblock->color.blue/65535.0);
-
-		tmpbuf = g_utf8_strup(tblock->font,-1);
-		if (g_strrstr(tmpbuf,"BOLD"))
-			weight = CAIRO_FONT_WEIGHT_BOLD;
-		else
-			weight = CAIRO_FONT_WEIGHT_NORMAL;
-		if (g_strrstr(tmpbuf,"OBLIQUE"))
-			slant = CAIRO_FONT_SLANT_OBLIQUE;
-		else if (g_strrstr(tmpbuf,"ITALIC"))
-			slant = CAIRO_FONT_SLANT_ITALIC;
-		else
-			slant = CAIRO_FONT_SLANT_NORMAL;
-		g_free(tmpbuf);
-		cairo_select_font_face (cr, tblock->font, slant, weight);
-
-		cairo_set_font_size (cr, (gauge->radius * tblock->font_scale));
-		cairo_text_extents (cr, tblock->text, &extents);
-		cairo_move_to (cr, 
-				gauge->xc-(extents.width/2 + extents.x_bearing)+(tblock->x_pos*gauge->radius),
-				gauge->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*gauge->radius));
-		cairo_show_text (cr, tblock->text);
-	}
-	cairo_stroke(cr);
-
 	/* Polygons */
 	for (i=0;i<gauge->polygons->len;i++)
 	{
@@ -989,6 +956,38 @@ void cairo_generate_gauge_background(GtkWidget *widget)
 		else
 			cairo_stroke(cr);
 	}
+	/* Render all the text blocks */
+	for (i=0;i<gauge->t_blocks->len;i++)
+	{
+		tblock = g_array_index(gauge->t_blocks,MtxTextBlock *, i);
+		cairo_set_source_rgb (cr, 
+				tblock->color.red/65535.0,
+				tblock->color.green/65535.0,
+				tblock->color.blue/65535.0);
+
+		tmpbuf = g_utf8_strup(tblock->font,-1);
+		if (g_strrstr(tmpbuf,"BOLD"))
+			weight = CAIRO_FONT_WEIGHT_BOLD;
+		else
+			weight = CAIRO_FONT_WEIGHT_NORMAL;
+		if (g_strrstr(tmpbuf,"OBLIQUE"))
+			slant = CAIRO_FONT_SLANT_OBLIQUE;
+		else if (g_strrstr(tmpbuf,"ITALIC"))
+			slant = CAIRO_FONT_SLANT_ITALIC;
+		else
+			slant = CAIRO_FONT_SLANT_NORMAL;
+		g_free(tmpbuf);
+		cairo_select_font_face (cr, tblock->font, slant, weight);
+
+		cairo_set_font_size (cr, (gauge->radius * tblock->font_scale));
+		cairo_text_extents (cr, tblock->text, &extents);
+		cairo_move_to (cr, 
+				gauge->xc-(extents.width/2 + extents.x_bearing)+(tblock->x_pos*gauge->radius),
+				gauge->yc-(extents.height/2 + extents.y_bearing)+(tblock->y_pos*gauge->radius));
+		cairo_show_text (cr, tblock->text);
+	}
+	cairo_stroke(cr);
+
 	cairo_destroy (cr);
 #endif
 }
@@ -1352,22 +1351,6 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 		}
 	}
 
-	/* text Blocks */
-	for (i=0;i<gauge->t_blocks->len;i++)
-	{
-		tblock = g_array_index(gauge->t_blocks,MtxTextBlock *, i);
-		gdk_gc_set_rgb_fg_color(gauge->gc,&tblock->color);
-		tmpbuf = g_strdup_printf("%s %i",tblock->font,(gint)(gauge->radius*tblock->font_scale*0.82));
-		gauge->font_desc = pango_font_description_from_string(tmpbuf);
-		g_free(tmpbuf);
-		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
-		pango_layout_set_text(gauge->layout,tblock->text,-1);
-		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
-
-		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
-				gauge->xc-(logical_rect.width/2)+(tblock->x_pos*gauge->radius),
-				gauge->yc-(logical_rect.height/2)+(tblock->y_pos*gauge->radius),gauge->layout);
-	}
 	/* Polygons */
 	for (i=0;i<gauge->polygons->len;i++)
 	{
@@ -1426,6 +1409,22 @@ void gdk_generate_gauge_background(GtkWidget *widget)
 			default:
 				break;
 		}
+	}
+	/* text Blocks */
+	for (i=0;i<gauge->t_blocks->len;i++)
+	{
+		tblock = g_array_index(gauge->t_blocks,MtxTextBlock *, i);
+		gdk_gc_set_rgb_fg_color(gauge->gc,&tblock->color);
+		tmpbuf = g_strdup_printf("%s %i",tblock->font,(gint)(gauge->radius*tblock->font_scale*0.82));
+		gauge->font_desc = pango_font_description_from_string(tmpbuf);
+		g_free(tmpbuf);
+		pango_layout_set_font_description(gauge->layout,gauge->font_desc);
+		pango_layout_set_text(gauge->layout,tblock->text,-1);
+		pango_layout_get_pixel_extents(gauge->layout,NULL,&logical_rect);
+
+		gdk_draw_layout(gauge->bg_pixmap,gauge->gc,
+				gauge->xc-(logical_rect.width/2)+(tblock->x_pos*gauge->radius),
+				gauge->yc-(logical_rect.height/2)+(tblock->y_pos*gauge->radius),gauge->layout);
 	}
 
 #endif

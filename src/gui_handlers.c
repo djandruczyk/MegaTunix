@@ -565,8 +565,28 @@ EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 		return TRUE;
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
+	g_object_set_data(G_OBJECT(widget),"not_sent",GINT_TO_POINTER(TRUE));
 
 	return TRUE;
+}
+
+
+/*!
+ \brief focus_out_handler() auto-sends data IF IT IS CHANGED to the ecu thus
+ hopefully ending hte user confusion about why data isn't sent.
+ \param widget (GtkWidget *) the widget being modified
+ \param event (GdkEvent *) not used
+ \param data (gpointer) not used
+ \returns FALSE
+ */
+EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpointer data)
+{
+	if (g_object_get_data(G_OBJECT(widget),"not_sent"))
+	{
+		g_object_set_data(G_OBJECT(widget),"not_sent",NULL);
+		std_entry_handler(widget, data);
+	}
+	return FALSE;
 }
 
 /*!
@@ -658,9 +678,10 @@ EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 					dbg_func(g_strdup_printf(__FILE__": std_entry_handler()\n\tBase of textentry \"%i\" is invalid!!!\n",base));
 				return TRUE;
 			}
-			/* What we are doing is doing the forware/reverse conversion which
-			 * will give us an exact value if the user inputs something in
-			 * between,  thus we can reset the display to a sane value...
+			/* What we are doing is doing the forward/reverse 
+			 * conversion which will give us an exact value 
+			 * if the user inputs something in between,  thus 
+			 * we can reset the display to a sane value...
 			 */
 			old = ms_data[page][offset];
 			ms_data[page][offset] = dload_val;
