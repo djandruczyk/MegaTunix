@@ -108,6 +108,7 @@ void finalize_core_gui(GladeXML * xml)
 	extern gchar * cluster_2_name;
 	extern gchar * serial_port_name;
 	extern gint baudrate;
+	extern struct Serial_Params *serial_params;
 
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
@@ -276,6 +277,7 @@ void finalize_core_gui(GladeXML * xml)
 	ebox = glade_xml_get_widget(xml,"read_delay_ebox");
 	gtk_tooltips_set_tip(tip,ebox,"Sets the time delay between read attempts for getting the RealTime variables from the ECU, typically should be set around 50 for about 12-18 reads per second from the ECU. Lower values will update things faster but wll use more CPU resources.  This will control the rate at which the Runtime Display page updates.",NULL);
 	widget = glade_xml_get_widget(xml,"read_delay_spin");
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),serial_params->read_wait);
 	g_object_set_data(G_OBJECT(widget),"handler",GINT_TO_POINTER(SER_INTERVAL_DELAY));
 
 	/* COMMS Tab Start/Stop RT buttons */
