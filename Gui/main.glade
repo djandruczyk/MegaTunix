@@ -1814,6 +1814,7 @@ Detect</property>
 					      <property name="snap_to_ticks">False</property>
 					      <property name="wrap">False</property>
 					      <property name="adjustment">10 0 5000 1 10 10</property>
+					      <signal name="value_changed" handler="spin_button_handler" last_modification_time="Sat, 17 Mar 2007 17:00:17 GMT"/>
 					    </widget>
 					    <packing>
 					      <property name="left_attach">1</property>

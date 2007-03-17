@@ -102,7 +102,7 @@ void init(void)
 
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS V 1.x and 2.x */
-	serial_params->read_wait = 30;	/* delay between reads in milliseconds */
+	serial_params->read_wait = 10;	/* delay between reads in milliseconds */
 	baudrate = 9600;	/* default to MS-I */
 
 	/* Set flags to clean state */
@@ -166,7 +166,7 @@ gboolean read_config(void)
 				&main_y_origin);
 		cfg_read_string(cfgfile, "Serial", "port_name", 
 				&serial_port_name);
-		cfg_read_int(cfgfile, "Serial", "read_delay", 
+		cfg_read_int(cfgfile, "Serial", "read_wait", 
 				&serial_params->read_wait);
 		cfg_read_int(cfgfile, "Serial", "baudrate", 
 				&baudrate);
@@ -282,7 +282,7 @@ void save_config(void)
 	if (serial_params->port_name)
 		cfg_write_string(cfgfile, "Serial", "port_name", 
 				serial_params->port_name);
-	cfg_write_int(cfgfile, "Serial", "read_delay", 
+	cfg_write_int(cfgfile, "Serial", "read_wait", 
 			serial_params->read_wait);
 	cfg_write_int(cfgfile, "Serial", "baudrate", baudrate);
 			
