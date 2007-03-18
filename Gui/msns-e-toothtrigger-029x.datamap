@@ -3,6 +3,7 @@
 [global]
 description=Object data map for MSnS-E 029 Tooth/Trigger monitor
 tab_name=Trigger _Monitor
+post_function=reset_ttm_buttons
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -20,17 +21,17 @@ handler=_START_TRIGMON_LOGGER_
 page=10
 tooltip=Enables Trigger Logger display
 
-[toothlogger_enable_radio_button]
+[toothlogger_disable_radio_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
-handler=_START_TOOTHMON_LOGGER_
+handler=_STOP_TOOTHMON_LOGGER_
 page=9
 tooltip=Disables Tooth Logger display
 
-[triggerlogger_enable_radio_button]
+[triggerlogger_disable_radio_button]
 keys=handler,page,tooltip
 key_types=_ENUM_,_INT_,_STRING_
-handler=_START_TRIGMON_LOGGER_
+handler=_STOP_TRIGMON_LOGGER_
 page=10
 tooltip=Disables Trigger Logger display
 

@@ -18,9 +18,10 @@
 #include <structures.h>
 
 /* Prototypes */
-void setup_logger_display(GtkWidget *);
-gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
-gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
+EXPORT void setup_logger_display(GtkWidget *);
+EXPORT void reset_ttm_buttons(void);
+EXPORT gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+EXPORT gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 void crunch_trigtooth_data(gint);
 void update_trigtooth_display(gint);
 void gdk_update_trigtooth_display(gint);

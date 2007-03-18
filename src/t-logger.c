@@ -38,8 +38,28 @@ void bind_ttm_to_page(gint page)
 	ttm_data->page = page;
 }
 
+
+EXPORT void reset_ttm_buttons()
+{
+	GtkWidget *widget = NULL;
+	extern GHashTable *dynamic_widgets;
+	widget = g_hash_table_lookup(dynamic_widgets,"toothlogger_disable_radio_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+	else
+		printf("tooth disable button not found!!!\n");
+	widget = g_hash_table_lookup(dynamic_widgets,"triggerlogger_disable_radio_button");
+	if (GTK_IS_WIDGET(widget))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+	else
+		printf("trigger disable button not found!!!\n");
+
+}
+
+
 EXPORT void setup_logger_display(GtkWidget * src_widget)
 {
+
 	ttm_data = g_new0(struct TTMon_Data,1);
 	ttm_data->page = -1;
 	ttm_data->pixmap = NULL;
