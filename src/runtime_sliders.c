@@ -350,14 +350,18 @@ struct Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint 
 	gtk_misc_set_alignment(GTK_MISC(label),0.0,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 
-	label = gtk_label_new(NULL);
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_label_set_width_chars(GTK_LABEL(label),6);
-#endif
+	//label = gtk_label_new(NULL);
+	//set_fixed_size(label,6);
+	//gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
+	
+	label = gtk_entry_new();
+	gtk_entry_set_has_frame(GTK_ENTRY(label),FALSE);
+	gtk_entry_set_width_chars(GTK_ENTRY(label),6);
+	gtk_entry_set_alignment(GTK_ENTRY(label),1);
+	gtk_widget_modify_base(GTK_WIDGET(label),GTK_STATE_NORMAL,&table->style->bg[GTK_STATE_NORMAL]);
+
 	slider->textval = label;
-	gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
-	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
 	if ((ident == RUNTIME_TAB) || (ident == VE3D_VIEWER_TAB))
 	{

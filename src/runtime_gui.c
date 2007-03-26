@@ -418,7 +418,8 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 			else
 				tmpbuf = g_strdup_printf("%i",(gint)current);
 
-			gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
+			//gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
+			gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 			g_free(tmpbuf);
 			last_upd = count;
 		}
@@ -431,7 +432,8 @@ void rt_update_values(gpointer key, gpointer value, gpointer data)
 		else
 			tmpbuf = g_strdup_printf("%i",(gint)current);
 
-		gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
+		//gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
+		gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;
 	}

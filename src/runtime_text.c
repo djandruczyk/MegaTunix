@@ -161,10 +161,7 @@ struct Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source)
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 
 	label = gtk_label_new(NULL);
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_label_set_width_chars(GTK_LABEL(label),6);
-#endif
+	set_fixed_size(label,6);
 	rtt->textval = label;
 	gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);

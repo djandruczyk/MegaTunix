@@ -218,3 +218,33 @@ void set_widget_labels(gchar *input)
 	g_strfreev(vector);
 
 }
+
+/* Calculate the bounding box for a string rendered with a widget's 
+ * default font. Set geo to a rect with 0,0 positioned on the left-hand 
+ *  baseline.
+ *   */
+void get_geo( GtkWidget *widget, const char *text, PangoRectangle *geo )
+{
+	PangoLayout *layout;
+	int width, height;
+
+	layout = gtk_widget_create_pango_layout( widget, text );
+	pango_layout_get_pixel_size( layout, &width, &height );
+	g_object_unref( layout );
+
+	/* FIXME ... we left/top to 0 for now.
+	 *          */
+	geo->width = width;
+	geo->height = height;
+}
+
+/* Set a widget to a fixed size ... width in characters.
+ *  */
+void set_fixed_size( GtkWidget *widget, int nchars )
+{
+	PangoRectangle geo;
+
+	get_geo( widget, "8", &geo );
+	gtk_widget_set_size_request( widget, geo.width * nchars, 
+			geo.height );
+}
